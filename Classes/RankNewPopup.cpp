@@ -72,7 +72,7 @@ bool RankNewPopup::init()
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 4));
 	title_back->addChild(title_label);
 	
 //<<<<<<< HEAD

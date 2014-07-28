@@ -466,7 +466,7 @@ void StageSettingPopup::itemSetting()
 			n_buy_type->setScale(0.5f);
 			n_buy_type->setPosition(ccp(12, 15));
 			n_buy->addChild(n_buy_type);
-			CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* n_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", 0/*mySD->getItemPrice(t_ic)*/)->getCString(), mySGD->getFont().c_str(), 8);
 			n_label->setAnchorPoint(ccp(0.5f, 0.5f));
 			n_label->setPosition(ccp(35, 15));
 			n_buy->addChild(n_label);
@@ -476,7 +476,7 @@ void StageSettingPopup::itemSetting()
 			s_buy_type->setScale(0.5f);
 			s_buy_type->setPosition(ccp(12, 15));
 			s_buy->addChild(s_buy_type);
-			CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", mySD->getItemPrice(t_ic))->getCString(), mySGD->getFont().c_str(), 8);
+			CCLabelTTF* s_label = CCLabelTTF::create(CCString::createWithFormat("%.0f", 0/*mySD->getItemPrice(t_ic)*/)->getCString(), mySGD->getFont().c_str(), 8);
 			s_label->setAnchorPoint(ccp(0.5f, 0.5f));
 			s_label->setPosition(ccp(35, 15));
 			s_buy->addChild(s_label);

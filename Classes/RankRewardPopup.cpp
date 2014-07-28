@@ -70,7 +70,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardTitle), mySGD->getFont().c_str(), 14);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1.5f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,3.5f));
 	title_back->addChild(title_label);
 	
 	

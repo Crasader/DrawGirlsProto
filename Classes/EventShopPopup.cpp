@@ -72,7 +72,7 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventShopTitle), mySGD->getFont().c_str(), 14);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
 	
 	CommonAnimation::applyShadow(title_label);
@@ -154,7 +154,6 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		content_node->addChild(inner, 2);
 		
 		string sale_str = NSDS_GS(kSDS_GI_shopEventRuby_int1_sale_s, i-1);
-		string price_type = NSDS_GS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1);
 		string price_key = "wonToRuby%d";
 		
 		if(!sale_str.empty())
@@ -168,12 +167,12 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			tab->addChild(sale_label);
 		}
 		
-		if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
-		{
+//		if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
+//		{
 			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 14);
 			won_label->setPosition(ccp(0, -24));
 			content_node->addChild(won_label, 3);
-		}
+//		}
 //		else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 //		{
 //			CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");

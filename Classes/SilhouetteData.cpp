@@ -466,11 +466,11 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	return return_value;
 }
 
-float SilhouetteData::getItemPrice( ITEM_CODE t_code )
+string SilhouetteData::getItemPrice( ITEM_CODE t_code )
 {
-	float return_value;
+	string return_value;
 
-	return NSDS_GI(kSDS_GI_shopItem_int1_price_i, t_code);
+	return NSDS_GS(kSDS_GI_shopItem_int1_priceName_s, t_code);
 }
 
 string SilhouetteData::getItemCurrency(ITEM_CODE t_code)

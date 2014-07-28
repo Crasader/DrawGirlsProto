@@ -286,7 +286,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 //	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-82));
 	back_in->setContentSize(CCSizeMake(502 / 2.f, 226 / 2.f));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-9));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, 83/*back_case->getContentSize().height/2.f-9*/));
 	back_case->addChild(back_in);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title.c_str(), mySGD->getFont().c_str(), 12);

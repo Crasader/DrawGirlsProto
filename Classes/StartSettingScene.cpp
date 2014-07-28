@@ -1418,159 +1418,159 @@ void StartSettingScene::itemAction(CCObject *sender)
 									
 									if(item_currency == "gold")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
-										{
+//										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
+//										{
 //											mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-mySD->getItemPrice(item_list[clicked_item_idx]));
 											buySuccessItem(clicked_item_idx, 1);
-										}
-										else
-										{
-											ASPopupView* t_popup = ASPopupView::create(-500);
-											
-											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-											if(screen_scale_x < 1.f)
-												screen_scale_x = 1.f;
-											
-											float height_value = 320.f;
-											if(myDSH->screen_convert_rate < 1.f)
-												height_value = 320.f/myDSH->screen_convert_rate;
-											
-											if(height_value < myDSH->ui_top)
-												height_value = myDSH->ui_top;
-											
-											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-											t_popup->setDimmedPosition(ccp(240, 160));
-											t_popup->setBasePosition(ccp(240, 160));
-											
-											CCNode* t_container = CCNode::create();
-											t_popup->setContainerNode(t_container);
-											addChild(t_popup, kStartSettingZorder_popup);
-											
-											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-											case_back->setPosition(ccp(0,0));
-											t_container->addChild(case_back);
-											
-											case_back->setContentSize(CCSizeMake(220, 190));
-											
-											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-											content_back->setPosition(ccp(0,25));
-											t_container->addChild(content_back);
-											
-											content_back->setContentSize(CCSizeMake(200, 120));
-											
-											CCLabelTTF* ment1_label = CCLabelTTF::create("골드가 부족합니다.", mySGD->getFont().c_str(), 15);
-											ment1_label->setPosition(ccp(0,35));
-											t_container->addChild(ment1_label);
-											
-											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
-											ment2_label->setPosition(ccp(0,15));
-											t_container->addChild(ment2_label);
-											
-											
-											
-											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-											cancel_button->setPosition(ccp(100,85));
-											cancel_button->setFunction([=](CCObject* sender)
-																	   {
-																		   is_menu_enable = true;
-																		   t_popup->removeFromParent();
-																	   });
-											t_container->addChild(cancel_button);
-											
-											
-											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-											ok_button->setPosition(ccp(0,-65));
-											ok_button->setFunction([=](CCObject* sender)
-																   {
-																	   ShopPopup* t_shop = ShopPopup::create();
-																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-																	   t_shop->targetHeartTime(heart_time);
-																	   t_shop->setShopCode(kSC_gold);
-																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-																	   addChild(t_shop, kStartSettingZorder_popup);
-																	   t_popup->removeFromParent();
-																   });
-											t_container->addChild(ok_button);
-										}
+//										}
+//										else
+//										{
+//											ASPopupView* t_popup = ASPopupView::create(-500);
+//											
+//											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//											if(screen_scale_x < 1.f)
+//												screen_scale_x = 1.f;
+//											
+//											float height_value = 320.f;
+//											if(myDSH->screen_convert_rate < 1.f)
+//												height_value = 320.f/myDSH->screen_convert_rate;
+//											
+//											if(height_value < myDSH->ui_top)
+//												height_value = myDSH->ui_top;
+//											
+//											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//											t_popup->setDimmedPosition(ccp(240, 160));
+//											t_popup->setBasePosition(ccp(240, 160));
+//											
+//											CCNode* t_container = CCNode::create();
+//											t_popup->setContainerNode(t_container);
+//											addChild(t_popup, kStartSettingZorder_popup);
+//											
+//											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//											case_back->setPosition(ccp(0,0));
+//											t_container->addChild(case_back);
+//											
+//											case_back->setContentSize(CCSizeMake(220, 190));
+//											
+//											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//											content_back->setPosition(ccp(0,25));
+//											t_container->addChild(content_back);
+//											
+//											content_back->setContentSize(CCSizeMake(200, 120));
+//											
+//											CCLabelTTF* ment1_label = CCLabelTTF::create("골드가 부족합니다.", mySGD->getFont().c_str(), 15);
+//											ment1_label->setPosition(ccp(0,35));
+//											t_container->addChild(ment1_label);
+//											
+//											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+//											ment2_label->setPosition(ccp(0,15));
+//											t_container->addChild(ment2_label);
+//											
+//											
+//											
+//											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//											cancel_button->setPosition(ccp(100,85));
+//											cancel_button->setFunction([=](CCObject* sender)
+//																	   {
+//																		   is_menu_enable = true;
+//																		   t_popup->removeFromParent();
+//																	   });
+//											t_container->addChild(cancel_button);
+//											
+//											
+//											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+//											ok_button->setPosition(ccp(0,-65));
+//											ok_button->setFunction([=](CCObject* sender)
+//																   {
+//																	   ShopPopup* t_shop = ShopPopup::create();
+//																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+//																	   t_shop->targetHeartTime(heart_time);
+//																	   t_shop->setShopCode(kSC_gold);
+//																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+//																	   addChild(t_shop, kStartSettingZorder_popup);
+//																	   t_popup->removeFromParent();
+//																   });
+//											t_container->addChild(ok_button);
+//										}
 									}
 									else if(item_currency == "ruby")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
-										{
+//										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
+//										{
 //											mySGD->setStar(mySGD->getGoodsValue(kGoodsType_ruby)-mySD->getItemPrice(item_list[clicked_item_idx]));
 											buySuccessItem(clicked_item_idx, 1);
-										}
-										else
-										{
-											ASPopupView* t_popup = ASPopupView::create(-500);
-											
-											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-											if(screen_scale_x < 1.f)
-												screen_scale_x = 1.f;
-											
-											float height_value = 320.f;
-											if(myDSH->screen_convert_rate < 1.f)
-												height_value = 320.f/myDSH->screen_convert_rate;
-											
-											if(height_value < myDSH->ui_top)
-												height_value = myDSH->ui_top;
-											
-											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-											t_popup->setDimmedPosition(ccp(240, 160));
-											t_popup->setBasePosition(ccp(240, 160));
-											
-											CCNode* t_container = CCNode::create();
-											t_popup->setContainerNode(t_container);
-											addChild(t_popup, kStartSettingZorder_popup);
-											
-											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-											case_back->setPosition(ccp(0,0));
-											t_container->addChild(case_back);
-											
-											case_back->setContentSize(CCSizeMake(220, 190));
-											
-											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-											content_back->setPosition(ccp(0,25));
-											t_container->addChild(content_back);
-											
-											content_back->setContentSize(CCSizeMake(200, 120));
-											
-											CCLabelTTF* ment1_label = CCLabelTTF::create("젬이 부족합니다.", mySGD->getFont().c_str(), 15);
-											ment1_label->setPosition(ccp(0,35));
-											t_container->addChild(ment1_label);
-											
-											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
-											ment2_label->setPosition(ccp(0,15));
-											t_container->addChild(ment2_label);
-											
-											
-											
-											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-											cancel_button->setPosition(ccp(100,85));
-											cancel_button->setFunction([=](CCObject* sender)
-																	   {
-																		   is_menu_enable = true;
-																		   t_popup->removeFromParent();
-																	   });
-											t_container->addChild(cancel_button);
-											
-											
-											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-											ok_button->setPosition(ccp(0,-65));
-											ok_button->setFunction([=](CCObject* sender)
-																   {
-																	   ShopPopup* t_shop = ShopPopup::create();
-																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-																	   t_shop->targetHeartTime(heart_time);
-																	   t_shop->setShopCode(kSC_ruby);
-																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-																	   addChild(t_shop, kStartSettingZorder_popup);
-																	   t_popup->removeFromParent();
-																   });
-											t_container->addChild(ok_button);
-										}
+//										}
+//										else
+//										{
+//											ASPopupView* t_popup = ASPopupView::create(-500);
+//											
+//											CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//											float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//											if(screen_scale_x < 1.f)
+//												screen_scale_x = 1.f;
+//											
+//											float height_value = 320.f;
+//											if(myDSH->screen_convert_rate < 1.f)
+//												height_value = 320.f/myDSH->screen_convert_rate;
+//											
+//											if(height_value < myDSH->ui_top)
+//												height_value = myDSH->ui_top;
+//											
+//											t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//											t_popup->setDimmedPosition(ccp(240, 160));
+//											t_popup->setBasePosition(ccp(240, 160));
+//											
+//											CCNode* t_container = CCNode::create();
+//											t_popup->setContainerNode(t_container);
+//											addChild(t_popup, kStartSettingZorder_popup);
+//											
+//											CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//											case_back->setPosition(ccp(0,0));
+//											t_container->addChild(case_back);
+//											
+//											case_back->setContentSize(CCSizeMake(220, 190));
+//											
+//											CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//											content_back->setPosition(ccp(0,25));
+//											t_container->addChild(content_back);
+//											
+//											content_back->setContentSize(CCSizeMake(200, 120));
+//											
+//											CCLabelTTF* ment1_label = CCLabelTTF::create("젬이 부족합니다.", mySGD->getFont().c_str(), 15);
+//											ment1_label->setPosition(ccp(0,35));
+//											t_container->addChild(ment1_label);
+//											
+//											CCLabelTTF* ment2_label = CCLabelTTF::create("구매하러 가시겠습니까?", mySGD->getFont().c_str(), 15);
+//											ment2_label->setPosition(ccp(0,15));
+//											t_container->addChild(ment2_label);
+//											
+//											
+//											
+//											CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//											cancel_button->setPosition(ccp(100,85));
+//											cancel_button->setFunction([=](CCObject* sender)
+//																	   {
+//																		   is_menu_enable = true;
+//																		   t_popup->removeFromParent();
+//																	   });
+//											t_container->addChild(cancel_button);
+//											
+//											
+//											CommonButton* ok_button = CommonButton::create("확인", 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+//											ok_button->setPosition(ccp(0,-65));
+//											ok_button->setFunction([=](CCObject* sender)
+//																   {
+//																	   ShopPopup* t_shop = ShopPopup::create();
+//																	   t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+//																	   t_shop->targetHeartTime(heart_time);
+//																	   t_shop->setShopCode(kSC_ruby);
+//																	   t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+//																	   addChild(t_shop, kStartSettingZorder_popup);
+//																	   t_popup->removeFromParent();
+//																   });
+//											t_container->addChild(ok_button);
+//										}
 									}
 
 								});

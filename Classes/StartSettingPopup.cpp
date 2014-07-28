@@ -2003,8 +2003,8 @@ void StartSettingPopup::itemAction(CCObject *sender)
 									
 									if(item_currency == "gold")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
-										{
+//										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_gold))
+//										{
 											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
@@ -2025,29 +2025,29 @@ void StartSettingPopup::itemAction(CCObject *sender)
 													is_menu_enable = true;
 												}
 											});
-										}
-										else
-										{
-											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
-																								{
-																									ShopPopup* t_shop = ShopPopup::create();
-																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									if(mySGD->is_endless_mode)
-																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
-																									else
-																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-																									t_shop->setShopCode(kSC_gold);
-																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-																									addChild(t_shop, kStartSettingPopupZorder_popup);
-																								}, [=](){is_menu_enable = true;}), 9999);
-											
-											is_menu_enable = true;
-										}
+//										}
+//										else
+//										{
+//											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_gold, [=]()
+//																								{
+//																									ShopPopup* t_shop = ShopPopup::create();
+//																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+//																									if(mySGD->is_endless_mode)
+//																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+//																									else
+//																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+//																									t_shop->setShopCode(kSC_gold);
+//																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+//																									addChild(t_shop, kStartSettingPopupZorder_popup);
+//																								}, [=](){is_menu_enable = true;}), 9999);
+//											
+//											is_menu_enable = true;
+//										}
 									}
 									else if(item_currency == "ruby")
 									{
-										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
-										{
+//										if(mySD->getItemPrice(item_list[clicked_item_idx]) <= mySGD->getGoodsValue(kGoodsType_ruby))
+//										{
 											AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 											
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
@@ -2068,24 +2068,24 @@ void StartSettingPopup::itemAction(CCObject *sender)
 													is_menu_enable = true;
 												}
 											});
-										}
-										else
-										{
-											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_ruby, [=]()
-																								{
-																									ShopPopup* t_shop = ShopPopup::create();
-																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																									if(mySGD->is_endless_mode)
-																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
-																									else
-																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-																									t_shop->setShopCode(kSC_ruby);
-																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-																									addChild(t_shop, kStartSettingPopupZorder_popup);
-																								}, [=](){is_menu_enable = true;}), 9999);
-											
-											is_menu_enable = true;
-										}
+//										}
+//										else
+//										{
+//											addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_ruby, [=]()
+//																								{
+//																									ShopPopup* t_shop = ShopPopup::create();
+//																									t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+//																									if(mySGD->is_endless_mode)
+//																										t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+//																									else
+//																										t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+//																									t_shop->setShopCode(kSC_ruby);
+//																									t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+//																									addChild(t_shop, kStartSettingPopupZorder_popup);
+//																								}, [=](){is_menu_enable = true;}), 9999);
+//											
+//											is_menu_enable = true;
+//										}
 									}
 									
 								});

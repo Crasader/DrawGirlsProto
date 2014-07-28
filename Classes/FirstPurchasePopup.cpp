@@ -73,7 +73,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-33));
 	m_container->addChild(title_label);
 	
 	
@@ -112,7 +112,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sale_arrow);
 	
 	
-	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
+	KSLabelTTF* after_price = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, kPurchaseGuideType_firstPurchase-1).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccYELLOW);
 	after_price->enableOuterStroke(ccBLACK, 0.5f);
 	after_price->setPosition(ccp(65,18));
@@ -195,7 +195,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 //	CCSprite* price_type = CCSprite::create("price_ruby_img.png");
 //	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-15,price_back->getContentSize().height/2.f));
 //	price_back->addChild(price_type);
-	KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, kPurchaseGuideType_firstPurchase-1))->getCString()).c_str(), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* price_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, kPurchaseGuideType_firstPurchase-1).c_str(), mySGD->getFont().c_str(), 15);
 	price_label->enableOuterStroke(ccBLACK, 0.5f);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);

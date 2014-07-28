@@ -84,12 +84,12 @@ private:
 	
 	int touch_priority;
 	
-	vector<KSProtectVar<int>> index_to_ruby;
-	vector<KSProtectVar<int>> index_to_gold;
-	vector<KSProtectVar<int>> index_to_heart;
-	map<int, KSProtectVar<int>> cash_to_ruby;
-	map<int, KSProtectVar<int>> ruby_to_gold;
-	map<int, KSProtectVar<int>> ruby_to_heart;
+//	vector<KSProtectVar<int>> index_to_ruby;
+//	vector<KSProtectVar<int>> index_to_gold;
+//	vector<KSProtectVar<int>> index_to_heart;
+//	map<int, KSProtectVar<int>> cash_to_ruby;
+//	map<int, KSProtectVar<int>> ruby_to_gold;
+//	map<int, KSProtectVar<int>> ruby_to_heart;
 	
 	KSProtectVar<int> card_price_high; // ruby
 	KSProtectVar<int> card_price_mid; // gold

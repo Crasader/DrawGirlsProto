@@ -166,7 +166,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	after_price_type->setPosition(ccp(10,10));
 	m_container->addChild(after_price_type);
 	
-	KSLabelTTF* after_price = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, m_type-1))->getCString()).c_str(), mySGD->getFont().c_str(), 20);
+	KSLabelTTF* after_price = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccc3(255, 170, 20));
 	after_price->enableOuterStroke(ccBLACK, 0.5f);
 	after_price->setPosition(ccp(50,10));
@@ -219,7 +219,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 //	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
-	CCLabelTTF* price_label = CCLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", NSDS_GI(kSDS_GI_shopPurchaseGuide_int1_price_i, m_type-1))->getCString()).c_str(), mySGD->getFont().c_str(), 15);
+	CCLabelTTF* price_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 15);
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+7,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
