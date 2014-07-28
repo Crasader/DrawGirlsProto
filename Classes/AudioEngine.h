@@ -288,6 +288,10 @@ public:
 			mySAE->preloadEffect("groan12.wav");
 			mySAE->preloadEffect("groan13.wav");
 			
+			mySAE->preloadEffect("se_mg_mini.mp3");
+			mySAE->preloadEffect("sg_mg_fail.mp3");
+			mySAE->preloadEffect("sg_mg_light.mp3");
+			
 			is_preloaded = true;
 		}
 	}

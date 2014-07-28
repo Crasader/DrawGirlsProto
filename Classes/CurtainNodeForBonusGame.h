@@ -13,7 +13,7 @@ USING_NS_CC;
 #include "FormSetter.h"
 #include "CommonAnimation.h"
 #include "KsLocal.h"
-
+#include "AudioEngine.h"
 
 //#include "GaBaBo.h"
 USING_NS_CC_EXT;
@@ -155,6 +155,7 @@ public:
 		m_startMenu->setFunction([=](CCObject* t){
 			if(m_startMenu->isEnabled() == false)
 				return;
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 			m_startMenu->setEnabled(false);
 			
 			CommonAnimation::closePopup(this, back, nullptr, [=](){},
@@ -346,6 +347,7 @@ public:
 		setFormSetter(contentBack);
 		showPopup(onCloseCompleted);
 		obtainReward->setFunction([=](CCObject* t){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 			CommonAnimation::closePopup(this, contentBack, nullptr, [=](){},
 																	[=](){
 																		menuAction(onOpenCompleted);

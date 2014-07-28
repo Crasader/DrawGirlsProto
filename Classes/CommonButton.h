@@ -171,7 +171,7 @@ public:
 	void setTitleColorForDisable(ccColor3B color);
 	
 	void setPrice(PriceType priceType, int price);
-	
+	void setPrice(PriceType priceType, string price);
 	int getPrice();
 	
 	PriceType getPriceType();

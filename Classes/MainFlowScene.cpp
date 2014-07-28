@@ -4305,6 +4305,7 @@ void MainFlowScene::topPuzzleMode()
 
 void MainFlowScene::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
     TRACE();
 }
 

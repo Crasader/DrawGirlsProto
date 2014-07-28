@@ -275,6 +275,7 @@ bool CardViewScene::init()
 
 void CardViewScene::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 	startTouchAction();
 	
 //	CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));

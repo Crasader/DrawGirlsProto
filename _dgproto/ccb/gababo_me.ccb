@@ -739,7 +739,7 @@
 										<key>type</key>
 										<string>Check</string>
 										<key>value</key>
-										<false/>
+										<true/>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -802,8 +802,6 @@
 										</array>
 									</dict>
 								</array>
-								<key>seqExpanded</key>
-								<true/>
 							</dict>
 						</array>
 						<key>customClass</key>
@@ -884,8 +882,6 @@
 								<true/>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -1228,7 +1224,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>12</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1459,7 +1455,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>-1</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -1918,7 +1914,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-3</real>
+									<real>-2.7209184169769287</real>
 									<real>-8</real>
 									<integer>0</integer>
 								</array>
@@ -1960,7 +1956,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>0.0</real>
+									<real>1.2857146263122559</real>
 								</array>
 							</dict>
 							<dict>
@@ -2243,8 +2239,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
-									<real>1</real>
+									<real>1.0363636016845703</real>
+									<real>1.0590909719467163</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -2504,7 +2500,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>0.0</real>
+								<real>-8</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -2752,7 +2748,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>0.0</real>
+							<real>-0.24999988079071045</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -2809,8 +2805,6 @@
 						<true/>
 					</dict>
 				</array>
-				<key>seqExpanded</key>
-				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -2942,7 +2936,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.3333333730697632</real>
+			<real>0.43333333730697632</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -2952,7 +2946,26 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>0.43333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>sg_mg_ing.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>

@@ -316,16 +316,15 @@ void CommonButton::setTitleColorForDisable(ccColor3B color){
 	m_titleColorDisable=color;
 }
 
-void CommonButton::setPrice(PriceType priceType, int price){
+
+void CommonButton::setPrice(PriceType priceType, string price){
 	m_priceType=priceType;
-	m_price = price;
-	
 	
 	if(m_priceLbl==NULL){
 		if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
 			m_priceLbl=KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
 		else
-			m_priceLbl=KSLabelTTF::create(CCString::createWithFormat("%d",m_price)->getCString(), mySGD->getFont().c_str(), 13);
+			m_priceLbl=KSLabelTTF::create(price.c_str(), mySGD->getFont().c_str(), 13);
 		
 		if(isEnabled()){
 			this->m_priceLbl->setColor(m_titleColorNomal);
@@ -413,6 +412,11 @@ void CommonButton::setPrice(PriceType priceType, int price){
 		m_priceLbl->setPositionY(getContentSize().height/2.f);
 		m_priceTypeSprite->setPositionY(getContentSize().height/2.f);
 	}
+
+}
+void CommonButton::setPrice(PriceType priceType, int price){
+		m_price = price;
+		this->setPrice(priceType, CCString::createWithFormat("%d",price)->getCString());
 }
 
 int CommonButton::getPrice(){

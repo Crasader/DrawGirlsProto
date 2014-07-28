@@ -83,6 +83,11 @@ protected:
 	CCSprite* m_tutoGababo;
 	
 	std::vector<CCNodeRGBA*> m_willToggleObjects;
+	
+public:
+	virtual SEL_CallFuncN onResolveCCBCCCallFuncSelector(CCObject * pTarget, const char* pSelectorName);
+	void firstSound();
+	void secondSound();
 };
 
 #endif

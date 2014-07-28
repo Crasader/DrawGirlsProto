@@ -676,6 +676,7 @@ bool FailPopup::init()
 
 void FailPopup::onEnterTransitionDidFinish()
 {
+    CCLayer::onEnterTransitionDidFinish();
 	LoadingLayer* t_loading = LoadingLayer::create(-9999);
 	addChild(t_loading, 9999);
 	
