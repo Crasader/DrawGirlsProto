@@ -110,8 +110,8 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12,12,2,2));
-	content_back->setContentSize(CCSizeMake(251,68));
-	content_back->setPosition(ccp(0,15));
+	content_back->setContentSize(CCSizeMake(251,113));
+	content_back->setPosition(ccp(0,-12));
 	addChild(content_back);
 	
 	

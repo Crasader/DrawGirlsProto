@@ -51,8 +51,8 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	m_container->addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-82));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-9));
+	back_in->setContentSize(CCSizeMake(251, 113));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-12));
 	back_case->addChild(back_in);
 	
 	

@@ -74,8 +74,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	setFormSetter(content_back);
-	content_back->setContentSize(CCSizeMake(245, 116));
-	content_back->setPosition(ccp(0.0,-13)); 			// dt (0.0,-4.5)
+	content_back->setContentSize(CCSizeMake(251, 113));
+	content_back->setPosition(ccp(0.0,-12)); 			// dt (0.0,-4.5)
 	t_container->addChild(content_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), titleFontSize);
@@ -201,8 +201,8 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	setFormSetter(content_back);
-	content_back->setContentSize(CCSizeMake(245, 116));
-	content_back->setPosition(ccp(0.0,-13)); 			// dt (0.0,-4.5)
+	content_back->setContentSize(CCSizeMake(251, 113));
+	content_back->setPosition(ccp(0.0,-12)); 			// dt (0.0,-4.5)
 	t_container->addChild(content_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(t_title.c_str(), mySGD->getFont().c_str(), 12);
@@ -266,8 +266,8 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 		t_container->addChild(close_button);
 		
 		
-		content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -53));
-		content_back->setPositionY(content_back->getPositionY() + 22.5f);
+		content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -50));
+		content_back->setPositionY(content_back->getPositionY() + 21.5f);
 //		case_back->setContentSize(case_back->getContentSize() + CCSizeMake(0, 30));
 	}
 	
@@ -337,7 +337,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	
 	CCScale9Sprite* content_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	setFormSetter(content_back);
-	content_back->setContentSize(CCSizeMake(245, 116));
+	content_back->setContentSize(CCSizeMake(251, 113));
 	content_back->setPosition(CCPointZero);
 	t_container->addChild(content_back);
 
@@ -373,8 +373,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 															});
 		t_container->addChild(close_button);
 		
-		content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -53));
-		content_back->setPosition(content_back->getPosition() + ccp(0,7.5f));
+		content_back->setContentSize(content_back->getContentSize() + CCSizeMake(0, -50));
+		content_back->setPosition(content_back->getPosition() + ccp(0,6.5f));
 		ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 	}
 	

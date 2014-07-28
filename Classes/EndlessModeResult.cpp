@@ -916,7 +916,8 @@ void EndlessModeResult::setMain()
 	left_back->addChild(left_total_back);
 	
 	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
-	left_total_title->setColor(ccc3(255, 170, 20));
+	left_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+//	left_total_title->setColor(ccc3(255, 170, 20));
 	left_total_title->setAnchorPoint(ccp(0,0.5f));
 	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_title);
@@ -960,7 +961,8 @@ void EndlessModeResult::setMain()
 	right_back->addChild(right_total_back);
 	
 	KSLabelTTF* right_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
-	right_total_title->setColor(ccc3(255, 170, 20));
+	right_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+//	right_total_title->setColor(ccc3(255, 170, 20));
 	right_total_title->setAnchorPoint(ccp(0,0.5f));
 	right_total_title->setPosition(ccp(8, right_total_back->getContentSize().height/2.f));
 	right_total_back->addChild(right_total_title);
@@ -1516,8 +1518,8 @@ void EndlessModeResult::startCalcAnimation()
 																						t_close_button->setEnabled(false);
 																						
 																						CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-10.f));
-																						in_back->setContentSize(out_back->getContentSize() + CCSizeMake(-50, -82.f));
+																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-12.f));
+																						in_back->setContentSize(CCSizeMake(251, 113));
 																						out_back->addChild(in_back);
 																						
 																						StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);

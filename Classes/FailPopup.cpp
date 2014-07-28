@@ -252,7 +252,8 @@ bool FailPopup::init()
 	inner_left->addChild(left_total_back);
 	
 	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
-	left_total_title->setColor(ccc3(255, 170, 20));
+	left_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+//	left_total_title->setColor(ccc3(255, 170, 20));
 	left_total_title->setAnchorPoint(ccp(0,0.5f));
 	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_title);
