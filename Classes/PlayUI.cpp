@@ -14,6 +14,7 @@
 #include "MyLocalization.h"
 #include "KSJuniorBase.h"
 #include "OnePercentTutorial.h"
+#include "CommonAnimation.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -27,9 +28,9 @@ ComboView * ComboView::create (int combo)
 }
 void ComboView::changeCombo (int combo)
 {
-	combo_label->setString(CCString::createWithFormat("%d", combo)->getCString());
-	if(!mySGD->is_endless_mode)
-		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
+	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
+//	if(!mySGD->is_endless_mode)
+//		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
 void ComboView::setPercentage (float t_percent)
 {
@@ -47,28 +48,41 @@ void ComboView::myInit (int combo)
 	
 	if(mySGD->is_endless_mode)
 	{
-		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-		combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
+		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
+		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
 		combo_label->setPosition(ccp(0,-3));
 		addChild(combo_label);
-		
-		combo_front = CCSprite::create("combo_front.png");
-		combo_front->setAnchorPoint(ccp(0.5f,0.5f));
-		combo_front->setPosition(ccp(0,-10));
-		combo_front->setScale(0.5f);
-		addChild(combo_front);
+//		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+//		combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+//		combo_label->setPosition(ccp(0,-3));
+//		addChild(combo_label);
+//		
+//		combo_front = CCSprite::create("combo_front.png");
+//		combo_front->setAnchorPoint(ccp(0.5f,0.5f));
+//		combo_front->setPosition(ccp(0,-10));
+//		combo_front->setScale(0.5f);
+//		addChild(combo_front);
 	}
 	else
 	{
-		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
-		combo_label->setAnchorPoint(ccp(1,0.5f));
+		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
+		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
+		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
 		combo_label->setPosition(ccp(-22,-17));
 		addChild(combo_label);
 		
-		combo_front = CCSprite::create("combo_front.png");
-		combo_front->setAnchorPoint(ccp(1,0.5f));
-		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
-		addChild(combo_front);
+//		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
+//		combo_label->setAnchorPoint(ccp(1,0.5f));
+//		combo_label->setPosition(ccp(-22,-17));
+//		addChild(combo_label);
+//		
+//		combo_front = CCSprite::create("combo_front.png");
+//		combo_front->setAnchorPoint(ccp(1,0.5f));
+//		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
+//		addChild(combo_front);
 	}
 }
 ComboParent * ComboParent::create (CCNode* t_score_label)
@@ -657,23 +671,24 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	
 	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
 	{
-		CCSprite* speed_label = CCSprite::create("speed_max.png");
+		KSLabelTTF* speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
+		speed_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
 		speed_label->setPosition(ccp(0,0));
+//		CCSprite* speed_label = CCSprite::create("speed_max.png");
 		addChild(speed_label);
 	}
 	else
 	{
-		CCSprite* speed_label = CCSprite::create("speed_front.png");
+		KSLabelTTF* speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
+		speed_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		speed_label->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
+		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
+//		CCSprite* speed_label = CCSprite::create("speed_front.png");
 		addChild(speed_label);
 		
-		CCLabelBMFont* bm_label = CCLabelBMFont::create(CCString::createWithFormat("%d", t_step)->getCString(), "speed_n.fnt");
-		addChild(bm_label);
-		
-		float w1 = speed_label->getContentSize().width;
-		float w2 = bm_label->getContentSize().width;
-		
-		speed_label->setPosition(ccp(-w2/2.f, 0));
-		bm_label->setPosition(ccp(w1/2.f, 0));
+		speed_label->setPosition(ccp(0, 0));
 	}
 	
 	setScale(1.f/myGD->game_scale);
@@ -810,9 +825,16 @@ AreaScroll * AreaScroll::create ()
 }
 void AreaScroll::startAction ()
 {
-	CCSprite* main_view = CCSprite::create(CCString::createWithFormat("show_area_scroll_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+	KSLabelTTF* main_view = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_unlockedAreaScroll), mySGD->getFont().c_str(), 25);
+	main_view->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	main_view->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(main_view, main_view->getFontSize());
 	main_view->setPosition(ccp(640,myDSH->ui_center_y));
 	addChild(main_view);
+	
+//	CCSprite* main_view = CCSprite::create(CCString::createWithFormat("show_area_scroll_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+//	main_view->setPosition(ccp(640,myDSH->ui_center_y));
+//	addChild(main_view);
 	
 	CCMoveTo* t_move1 = CCMoveTo::create(0.4f, ccp(240,myDSH->ui_center_y));
 	CCCallFunc* t_call1 = CCCallFunc::create(this, callfunc_selector(AreaScroll::showArrow));

@@ -3316,7 +3316,11 @@ void Maingame::showMissMissile( CCPoint t_position )
 	t_position.x += rand()%21 - 10;
 	t_position.y += rand()%21 - 10;
 
-	CCSprite* miss_label = CCSprite::create("missile_miss.png");
+	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
+	miss_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
+//	CCSprite* miss_label = CCSprite::create("missile_miss.png");
 	miss_label->setScale(1.f/myGD->game_scale);
 	miss_label->setPosition(t_position);
 	game_node->addChild(miss_label, goldZorder);

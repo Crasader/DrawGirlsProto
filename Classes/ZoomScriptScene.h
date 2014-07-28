@@ -20,6 +20,7 @@ using namespace std;
 class CommonButton;
 class MyNode;
 class EffectSprite;
+class KSLabelTTF;
 class ZoomScript : public CCLayer
 {
 public:
@@ -49,7 +50,7 @@ private:
 	CCScale9Sprite* script_case;
 	
 	CommonButton* next_button;
-	CCSprite* showtime_back;
+	KSLabelTTF* showtime_back;
 	MyNode* second_img;
 	
 	MyNode* third_img;

@@ -18,6 +18,9 @@
 #include "TouchSuctionLayer.h"
 #include "CommonButton.h"
 #include "CountingBMLabel.h"
+#include "KSLabelTTF.h"
+#include "CommonAnimation.h"
+#include "MyLocalization.h"
 
 enum CardChangePopupZorder{
 	kCardChangePopupZorder_gray = 1,
@@ -958,7 +961,12 @@ void CardChangePopup::showMissMissile(CCPoint t_position, int t_damage)
 	t_position.x += rand()%21 - 10;
 	t_position.y += rand()%21 - 10;
 	
-	CCSprite* miss_label = CCSprite::create("missile_miss.png");
+	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
+	miss_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
+	
+//	CCSprite* miss_label = CCSprite::create("missile_miss.png");
 	miss_label->setScale(0.5f);
 	miss_label->setPosition(t_position);
 	main_case->addChild(miss_label, kCardChangePopupZorder_gage);

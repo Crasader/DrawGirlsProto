@@ -1494,6 +1494,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ko->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ko->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
+	ko->setObject(CCString::create("모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다."), kMyLocalKey_scenarioMent62);
 	
 	ko->setObject(CCString::create("업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!"), kMyLocalKey_kindTutorial1);
 	ko->setObject(CCString::create("모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!"), kMyLocalKey_kindTutorial2);
@@ -1518,7 +1519,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이건 자석인가?"), kMyLocalKey_kindTutorial21);
 	ko->setObject(CCString::create("네. 게임중에 생기는 골드나 아이템을\n더 쉽게 먹을 수 있도록 도와주는\n아이템입니다."), kMyLocalKey_kindTutorial22);
 	
-	
+	ko->setObject(CCString::create("최고스피드!"), kMyLocalKey_maxSpeed);
+	ko->setObject(CCString::create("쇼타임!"), kMyLocalKey_showtime);
+	ko->setObject(CCString::create("미스"), kMyLocalKey_miss);
+	ko->setObject(CCString::create("콤보"), kMyLocalKey_combo);
+	ko->setObject(CCString::create("잠금이 해제되었습니다!"), kMyLocalKey_unlockedAreaScroll);
 	
 	
 	
@@ -1779,7 +1784,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이전액자를\n모두클리어하면\n다음액자가나타납니다."), kMyLocalKey_waitForUpdate);
 	en->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	en->setObject(CCString::create("Reward"), kMyLocalKey_reward);
-	en->setObject(CCString::create("Speed"), kMyLocalKey_speed);
+	en->setObject(CCString::create("SPEED"), kMyLocalKey_speed);
 	en->setObject(CCString::create("READY"), kMyLocalKey_ready);
 	en->setObject(CCString::create("상대찾기"), kMyLocalKey_endlessReady);
 	en->setObject(CCString::create("God"), kMyLocalKey_rankA);
@@ -2507,6 +2512,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	en->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	en->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
+	en->setObject(CCString::create("모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다."), kMyLocalKey_scenarioMent62);
 	
 	en->setObject(CCString::create("업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!"), kMyLocalKey_kindTutorial1);
 	en->setObject(CCString::create("모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!"), kMyLocalKey_kindTutorial2);
@@ -2530,6 +2536,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("게임중에 아이템이 두배로 더 많이\n나오도록 해주는 인법서군요.\n많은 도움이 될겁니다."), kMyLocalKey_kindTutorial20);
 	en->setObject(CCString::create("이건 자석인가?"), kMyLocalKey_kindTutorial21);
 	en->setObject(CCString::create("네. 게임중에 생기는 골드나 아이템을\n더 쉽게 먹을 수 있도록 도와주는\n아이템입니다."), kMyLocalKey_kindTutorial22);
+	
+	en->setObject(CCString::create("MAX"), kMyLocalKey_maxSpeed);
+	en->setObject(CCString::create("SHOW TIME"), kMyLocalKey_showtime);
+	en->setObject(CCString::create("MISS"), kMyLocalKey_miss);
+	en->setObject(CCString::create("COMBO"), kMyLocalKey_combo);
+	en->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -2797,7 +2809,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이전액자를\n모두클리어하면\n다음액자가나타납니다."), kMyLocalKey_waitForUpdate);
 	ja->setObject(CCString::create("I'll wait!\n My collection\nof pictures of it!"), kMyLocalKey_diaryNoImg);
 	ja->setObject(CCString::create("Reward"), kMyLocalKey_reward);
-	ja->setObject(CCString::create("Speed"), kMyLocalKey_speed);
+	ja->setObject(CCString::create("SPEED"), kMyLocalKey_speed);
 	ja->setObject(CCString::create("Ready"), kMyLocalKey_ready);
 	ja->setObject(CCString::create("상대찾기"), kMyLocalKey_endlessReady);
 	ja->setObject(CCString::create("God"), kMyLocalKey_rankA);
@@ -3538,6 +3550,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ja->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ja->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
+	ja->setObject(CCString::create("모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다."), kMyLocalKey_scenarioMent62);
 	
 	ja->setObject(CCString::create("업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!"), kMyLocalKey_kindTutorial1);
 	ja->setObject(CCString::create("모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!"), kMyLocalKey_kindTutorial2);
@@ -3561,6 +3574,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("게임중에 아이템이 두배로 더 많이\n나오도록 해주는 인법서군요.\n많은 도움이 될겁니다."), kMyLocalKey_kindTutorial20);
 	ja->setObject(CCString::create("이건 자석인가?"), kMyLocalKey_kindTutorial21);
 	ja->setObject(CCString::create("네. 게임중에 생기는 골드나 아이템을\n더 쉽게 먹을 수 있도록 도와주는\n아이템입니다."), kMyLocalKey_kindTutorial22);
+	
+	ja->setObject(CCString::create("MAX"), kMyLocalKey_maxSpeed);
+	ja->setObject(CCString::create("SHOW TIME"), kMyLocalKey_showtime);
+	ja->setObject(CCString::create("MISS"), kMyLocalKey_miss);
+	ja->setObject(CCString::create("COMBO"), kMyLocalKey_combo);
+	ja->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

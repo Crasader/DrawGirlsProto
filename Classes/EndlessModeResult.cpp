@@ -1466,9 +1466,15 @@ void EndlessModeResult::startCalcAnimation()
 																																										
 																					typing_box->showAnimation(0.3f);
 																					
-																					function<void()> end_func3 = [=]()
+																					function<void()> end_func4 = [=]()
 																					{
 																						myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+																						
+																						ikaruga->setVisible(false);
+																						
+																						typing_box->setTouchOffScrollAndButton();
+																						typing_box->setTouchSuction(false);
+																						typing_box->setVisible(false);
 																						
 //																						t_gray->removeFromParent();
 																						
@@ -1528,6 +1534,15 @@ void EndlessModeResult::startCalcAnimation()
 																						in_back->addChild(t_content_label);
 																						
 																						CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
+																					};
+																					
+																					function<void()> end_func3 = [=]()
+																					{
+																						ikaruga->setVisible(true);
+																						
+																						typing_box->setVisible(true);
+																						typing_box->setTouchSuction(true);
+																						typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent62), end_func4);
 																					};
 																					
 																					function<void()> end_func2 = [=]()

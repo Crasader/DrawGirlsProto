@@ -936,6 +936,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_scenarioMent59,
 	kMyLocalKey_scenarioMent60,
 	kMyLocalKey_scenarioMent61,
+	kMyLocalKey_scenarioMent62,
 	
 	
 	kMyLocalKey_kindTutorial1,
@@ -960,6 +961,12 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_kindTutorial20,
 	kMyLocalKey_kindTutorial21,
 	kMyLocalKey_kindTutorial22,
+	
+	kMyLocalKey_maxSpeed,
+	kMyLocalKey_showtime,
+	kMyLocalKey_miss,
+	kMyLocalKey_combo,
+	kMyLocalKey_unlockedAreaScroll,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

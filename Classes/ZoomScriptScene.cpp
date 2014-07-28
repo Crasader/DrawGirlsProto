@@ -20,6 +20,7 @@
 #include "MyLocalization.h"
 #include "RankUpPopup.h"
 #include "FormSetter.h"
+#include "CommonAnimation.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -355,7 +356,10 @@ void ZoomScript::menuAction(CCObject *sender)
 		if(is_showtime)
 		{
 			AudioEngine::sharedInstance()->playEffect("ment_showtime.mp3");
-			showtime_back = CCSprite::create("showtime_back.png");
+			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
+			showtime_back->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+			showtime_back->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+			CommonAnimation::applyBigShadow(showtime_back, showtime_back->getFontSize());
 			showtime_back->setScale(10.f);
 			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
 			showtime_back->setOpacity(0);
