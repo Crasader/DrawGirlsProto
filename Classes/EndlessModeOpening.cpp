@@ -1223,7 +1223,7 @@ void EndlessModeOpening::failAction()
 	addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_endlessDownloadFail), [=]()
 							   {
 								   startDownload();
-							   }));
+							   }, CCPointZero));
 }
 
 void EndlessModeOpening::successGetStageInfo()
