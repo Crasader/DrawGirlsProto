@@ -123,6 +123,7 @@ void KsLocal::ko()
 																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
+	obj[LK::kLinked] = "연결됨";
 	
 	m_mapper[__FUNCTION__] = obj;
 }
@@ -182,6 +183,7 @@ void KsLocal::en()
 																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
+	obj[LK::kLinked] = "연결됨";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
@@ -240,5 +242,6 @@ void KsLocal::ja()
 																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
+	obj[LK::kLinked] = "연결됨";
 	m_mapper[__FUNCTION__] = obj;
 }
