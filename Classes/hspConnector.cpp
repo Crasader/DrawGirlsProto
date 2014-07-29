@@ -526,8 +526,47 @@ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(
 #endif
 }
 
+double hspConnector::getScreenRealWidth()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jint ret = -1;
+	JniMethodInfo t;
+	CCLog("getScreenRealWidth");
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getScreenRealWidth", "()D")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID);
+		CCLog("ret = %d ", ret);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	return (double)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return 1;
+	// not implementation
+	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+	
+}
 
-
+double hspConnector::getScreenRealHeight()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jint ret = -1;
+	JniMethodInfo t;
+	CCLog("getScreenRealHeight");
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getScreenRealHeight", "()D")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		ret = t.env->CallStaticDoubleMethod(t.classID, t.methodID);
+		CCLog("ret = %d ", ret);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	return (double)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return 1;
+	// not implementation
+	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+	
+}
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
@@ -778,6 +817,7 @@ int hspConnector::getLoginType()
 #endif
 	
 }
+
 void hspConnector::openHSPNotice()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
