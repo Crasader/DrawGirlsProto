@@ -255,7 +255,10 @@ public:
 			mySAE->preloadEffect("groan8.mp3");
 			mySAE->preloadEffect("groan9.mp3");
 			
-			mySAE->preloadEffect("se_mg_mini.mp3");
+			mySAE->preloadEffect("sg_mg_win1.mp3");
+			mySAE->preloadEffect("sg_mg_win2.mp3");
+			mySAE->preloadEffect("sg_mg_win3.mp3");
+			mySAE->preloadEffect("sg_mg_draw.mp3");
 			mySAE->preloadEffect("sg_mg_fail.mp3");
 			mySAE->preloadEffect("sg_mg_light.mp3");
 			

@@ -71,30 +71,30 @@ public:
 		m_gameCode = gameCode;
 		m_onPressStartButton = onPressStartButton;
 		setTouchEnabled(true);
-		m_leftCurtain = CCSprite::create("curtain_left.png");
-		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
-		m_leftCurtain->setPosition(ccp(-80, 160));
-		addChild(m_leftCurtain, kBonusGameZorder_curtain);
-
-		m_rightCurtain = CCSprite::create("curtain_left.png");
-		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		m_rightCurtain->setFlipX(true);
-		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
-		m_rightCurtain->setPosition(ccp(560,160));
-		addChild(m_rightCurtain, kBonusGameZorder_curtain);
-
-		// 커튼 없애기
-		m_leftCurtain->setVisible(false);
-		m_rightCurtain->setVisible(false);
-		/*
+//		m_leftCurtain = CCSprite::create("curtain_left.png");
+//		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
+//		m_leftCurtain->setPosition(ccp(-80, 160));
+//		addChild(m_leftCurtain, kBonusGameZorder_curtain);
+//
+//		m_rightCurtain = CCSprite::create("curtain_left.png");
+//		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		m_rightCurtain->setFlipX(true);
+//		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
+//		m_rightCurtain->setPosition(ccp(560,160));
+//		addChild(m_rightCurtain, kBonusGameZorder_curtain);
+//
+//		// 커튼 없애기
+//		m_leftCurtain->setVisible(false);
+//		m_rightCurtain->setVisible(false);
+//		/*
+//		 
 		 
 		 
 		 
 		 
 		 
-		 
-		 */
+		// */
 		
 		float height_value = 320.f;
 		if(myDSH->screen_convert_rate < 1.f)
@@ -249,20 +249,20 @@ public:
 		m_onCloseCompleted = onCloseCompleted;
 		m_onOpenCompleted = onOpenCompleted;
 		setTouchEnabled(true);
-		m_leftCurtain = CCSprite::create("curtain_left.png");
-		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
-		m_leftCurtain->setPosition(ccp(-80, 160));
-		addChild(m_leftCurtain, kBonusGameZorder_curtain);
+//		m_leftCurtain = CCSprite::create("curtain_left.png");
+//		m_leftCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		m_leftCurtain->setAnchorPoint(ccp(1.f, 0.5f));
+//		m_leftCurtain->setPosition(ccp(-80, 160));
+//		addChild(m_leftCurtain, kBonusGameZorder_curtain);
 		
-		m_rightCurtain = CCSprite::create("curtain_left.png");
-		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
-		m_rightCurtain->setFlipX(true);
-		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
-		m_rightCurtain->setPosition(ccp(560,160));
-		addChild(m_rightCurtain, kBonusGameZorder_curtain);
-		m_leftCurtain->setVisible(false);
-		m_rightCurtain->setVisible(false);
+//		m_rightCurtain = CCSprite::create("curtain_left.png");
+//		m_rightCurtain->setScale(1.f/myDSH->screen_convert_rate * ((myDSH->puzzle_ui_top < 320.f ? 320.f : myDSH->puzzle_ui_top)/320.f));
+//		m_rightCurtain->setFlipX(true);
+//		m_rightCurtain->setAnchorPoint(ccp(0.f, 0.5f));
+//		m_rightCurtain->setPosition(ccp(560,160));
+//		addChild(m_rightCurtain, kBonusGameZorder_curtain);
+//		m_leftCurtain->setVisible(false);
+//		m_rightCurtain->setVisible(false);
 
 		float height_value = 320.f;
 		if(myDSH->screen_convert_rate < 1.f)
@@ -311,7 +311,7 @@ public:
 		contentBack->addChild(rLabel);
 	
 		// 보상선물은 선물함에서... 메시지인데 일단 없앰.
-		StyledLabelTTF* comment = StyledLabelTTF::create("", mySGD->getFont().c_str(),
+		StyledLabelTTF* comment = StyledLabelTTF::create(getLocal(LK::kBonusCong), mySGD->getFont().c_str(),
 																										 13.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);
 		comment->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, -12.5 + 10.f));
@@ -384,19 +384,19 @@ public:
 	void startGame()
 	{
 		removeFromParent();
-		m_leftCurtain->setVisible(false);
-		m_rightCurtain->setVisible(false);
+//		m_leftCurtain->setVisible(false);
+//		m_rightCurtain->setVisible(false);
 //		m_titleBonusGame->removeFromParent();
 //		m_contentBack->removeFromParent();
 		// mini_game->startGame();
 	}
 	void showPopup(std::function<void(void)> callback)
 	{
-		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(240,160));
-		m_leftCurtain->runAction(left_move);
-
-		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(240,160));
-		m_rightCurtain->runAction(right_move);
+//		CCMoveTo* left_move = CCMoveTo::create(0.3f, ccp(240,160));
+//		m_leftCurtain->runAction(left_move);
+//
+//		CCMoveTo* right_move = CCMoveTo::create(0.3f, ccp(240,160));
+//		m_rightCurtain->runAction(right_move);
 
 //		if(m_titleBonusGame)
 //		{
@@ -453,8 +453,8 @@ public:
 	}
 protected:
 	int m_touchPriority;
-	CCSprite* m_leftCurtain;
-	CCSprite* m_rightCurtain;
+	//CCSprite* m_leftCurtain;
+	//CCSprite* m_rightCurtain;
 //	CCSprite* m_titleBonusGame;
 	KSLabelTTF* m_titleStr;
 //	CCScale9Sprite* m_contentBack;
