@@ -28,6 +28,8 @@ public:
 	virtual void setEnableItalic(float value = 30.f);
 	virtual void setDisableItalic();
 	virtual void setOpacity(GLubyte opacity);
+	virtual void setOpacityOuterStroke(GLubyte opa);
+	
 	virtual void setColor(ccColor3B t_color);
 	virtual void draw(void);
 	virtual void setGradientColor(const ccColor4B& start, const ccColor4B& end, const CCPoint& v);
