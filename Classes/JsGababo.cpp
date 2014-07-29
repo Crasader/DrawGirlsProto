@@ -714,7 +714,6 @@ void JsGababo::onPressConfirm(CCObject* t)
 	};
 	if(m_currentJudge == "draw")
 	{
-		AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 		m_ba->setEnabled(false);
 		m_ga->setEnabled(false);
 		m_bo->setEnabled(false);
@@ -922,6 +921,7 @@ void JsGababo::showHandsMotionWrapper()
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
+					AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 					m_resultStamp = result_stamp;
 					//					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
@@ -1066,6 +1066,7 @@ void JsGababo::showHandsMotionWrapper()
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
 					CCSprite* result_stamp = CCSprite::create("endless_loser.png");
+					AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 					m_resultStamp = result_stamp;
 //					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
@@ -1081,7 +1082,6 @@ void JsGababo::showHandsMotionWrapper()
 }
 void JsGababo::showResult()
 {
-	AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
 	BonusGameReward gr1 = m_rewards[m_winCount];
 	//	gr1.spriteName = "shop_ruby2.png";
 	//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
