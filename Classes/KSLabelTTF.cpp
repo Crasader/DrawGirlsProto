@@ -49,6 +49,8 @@ void KSLabelTTF::setGradientColor(const ccColor4B& start, const ccColor4B& end, 
 											
 void KSLabelTTF::draw(void)
 {
+//	CCLabelTTF::draw();
+//	return;
 	CC_PROFILER_START_CATEGORY(kCCProfilerCategorySprite, "CCSprite - draw");
 	
 	CCAssert(!m_pobBatchNode, "If CCSprite is being rendered by CCSpriteBatchNode, CCSprite#draw SHOULD NOT be called");
@@ -91,9 +93,9 @@ void KSLabelTTF::draw(void)
 	
 //	m_sBlendFunc.src = CC_BLEND_SRC;
 //	m_sBlendFunc.dst = CC_BLEND_DST;
-	m_sBlendFunc.src = GL_SRC_ALPHA;
-	m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
+//	m_sBlendFunc.src = GL_SRC_ALPHA;
+//	m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
+//	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	
 	CHECK_GL_ERROR_DEBUG();
