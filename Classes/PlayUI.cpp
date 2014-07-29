@@ -1395,12 +1395,133 @@ void PlayUI::addResultClearCCB()
 
 void PlayUI::addResultCCB(string ccb_filename)
 {
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	result_sprite = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(ccb_filename.c_str(),this));
-	result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
-	addChild(result_sprite);
-	reader->release();
+	if(ccb_filename == "ui_missonfail.ccbi")
+	{
+		KSLabelTTF* mission_fail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleMissionfail), mySGD->getFont().c_str(), 45);
+		mission_fail_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+		mission_fail_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+		mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93));
+		mission_fail_label->setOpacity(0);
+		addChild(mission_fail_label);
+		
+		CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
+		
+		mission_fail_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
+																   {
+																	   float convert_t;
+																	   if (t < 1 / 2.75)
+																	   {
+																		   convert_t = 7.5625f * t * t;
+																	   } else if (t < 2 / 2.75)
+																	   {
+																		   t -= 1.5f / 2.75f;
+																		   convert_t = 7.5625f * t * t + 0.75f;
+																	   } else if(t < 2.5 / 2.75)
+																	   {
+																		   t -= 2.25f / 2.75f;
+																		   convert_t = 7.5625f * t * t + 0.9375f;
+																	   }
+																	   
+																	   t -= 2.625f / 2.75f;
+																	   convert_t = 7.5625f * t * t + 0.984375f;
+																	   
+																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
+																	   mission_fail_label->setOpacity(t*255);
+																   }, [=](float t)
+																   {
+																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y));
+																	   mission_fail_label->setOpacity(255);
+																	   
+																	   mission_fail_label->addChild(KSTimer::create(32.f/30.f, [=]()
+																													{
+																														mission_fail_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																												   {
+																																													   mission_fail_label->setScale(1.f+t*0.6f);
+																																													   mission_fail_label->setOpacity(255-t*255);
+																																												   }, [=](float t)
+																																												   {
+																																													   mission_fail_label->setScale(1.6f);
+																																													   mission_fail_label->setOpacity(0);
+																																													   
+																																													   mission_fail_label->removeFromParent();
+																																												   }));
+																													}));
+																   }));
+	}
+	else if(ccb_filename == "ui_stageclear.ccbi")
+	{
+		KSLabelTTF* stage_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 45);
+		stage_clear_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		stage_clear_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+		stage_clear_label->setPosition(ccp(240,myDSH->ui_center_y));
+		stage_clear_label->setScale(1.8f);
+		stage_clear_label->setOpacity(0);
+		addChild(stage_clear_label);
+		
+		CommonAnimation::applyBigShadow(stage_clear_label, stage_clear_label->getFontSize());
+		
+		stage_clear_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																   {
+																	   stage_clear_label->setScale(1.8f-0.8f*t);
+																	   stage_clear_label->setOpacity(t*255);
+																   }, [=](float t)
+																   {
+																	   stage_clear_label->setScale(1.8f-0.8f*t);
+																	   stage_clear_label->setOpacity(255);
+																	   
+																	   stage_clear_label->addChild(KSTimer::create(42.f/30.f, [=]()
+																													{
+																														stage_clear_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 10.f/30.f, [=](float t)
+																																												   {
+																																													   stage_clear_label->setScale(1.f+t*0.6f);
+																																													   stage_clear_label->setOpacity(255-t*255);
+																																												   }, [=](float t)
+																																												   {
+																																													   stage_clear_label->setScale(1.6f);
+																																													   stage_clear_label->setOpacity(0);
+																																													   
+																																													   stage_clear_label->removeFromParent();
+																																												   }));
+																													}));
+																   }));
+		
+		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(20);
+		t_particle->setPositionType(kCCPositionTypeRelative);
+		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+		t_particle->setEmissionRate(50.00);
+		t_particle->setAngle(90);						//
+		t_particle->setAngleVar(10.0);
+		t_particle->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
+		ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+		t_particle->setBlendFunc(blendFunc);
+		t_particle->setDuration(-1.0);
+		t_particle->setEmitterMode(kCCParticleModeGravity);
+		t_particle->setStartColor(ccc4f(1.f, 0.8353f, 0.188f, 0.5f));
+		t_particle->setStartColorVar(ccc4f(0, 0, 0, 0));
+		t_particle->setEndColor(ccc4f(0, 0, 0, 0));
+		t_particle->setEndColorVar(ccc4f(0, 0, 0, 0));
+		t_particle->setStartSize(15.00);
+		t_particle->setStartSizeVar(5.0);
+		t_particle->setEndSize(0.0);
+		t_particle->setEndSizeVar(0.0);
+		t_particle->setGravity(ccp(0,0));
+		t_particle->setRadialAccel(0.0);
+		t_particle->setRadialAccelVar(0.0);
+		t_particle->setSpeed(0);
+		t_particle->setSpeedVar(0.0);
+		t_particle->setTangentialAccel(0);
+		t_particle->setTangentialAccelVar(0);
+		t_particle->setTotalParticles(20);
+		t_particle->setLife(0.50);
+		t_particle->setLifeVar(1.0);
+		t_particle->setStartSpin(0.0);
+		t_particle->setStartSpinVar(40.0);
+		t_particle->setEndSpin(0.0);
+		t_particle->setEndSpinVar(40.0);
+		t_particle->setPosition(ccpFromSize(stage_clear_label->getContentSize()/2.f));
+		t_particle->setPosVar(ccp(140,20));
+		stage_clear_label->addChild(t_particle);
+	}
 }
 
 void PlayUI::conditionClear ()
@@ -1430,25 +1551,83 @@ void PlayUI::conditionClear ()
 //	condition_clear->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 //	addChild(condition_clear);
 	
-	CCNode* success_node = CCNode::create();
-	success_node->setPosition(ccp(240,myDSH->ui_center_y));
-	addChild(success_node);
-	
-	
-	CCSprite* success_ccb = KS::loadCCBI<CCSprite*>(this, "ui_missonsuccess.ccbi").first;
-	success_node->addChild(success_ccb);
-	
 	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3", false, true);
 	
-	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
-	CCCallFunc* t_call = CCCallFunc::create(success_node, callfunc_selector(CCNode::removeFromParent));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-	success_node->runAction(t_seq);
+	KSLabelTTF* mission_complete_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionComplete), mySGD->getFont().c_str(), 40);
+	mission_complete_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	mission_complete_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	mission_complete_label->setPosition(ccp(240-200,myDSH->ui_center_y));
+	mission_complete_label->setOpacity(0);
+	addChild(mission_complete_label);
+	
+	CommonAnimation::applyBigShadow(mission_complete_label, mission_complete_label->getFontSize());
+	
+	mission_complete_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t)
+															  {
+																  mission_complete_label->setPosition(ccp(240-200+200*t,myDSH->ui_center_y));
+																  mission_complete_label->setOpacity(t*255);
+															  }, [=](float t)
+															  {
+																  mission_complete_label->setPosition(ccp(240,myDSH->ui_center_y));
+																  mission_complete_label->setOpacity(255);
+																  
+																  mission_complete_label->addChild(KSTimer::create(29.f/30.f, [=]()
+																											  {
+																												  mission_complete_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t)
+																																											{
+																																												mission_complete_label->setPosition(ccp(240+200*t,myDSH->ui_center_y));
+																																												mission_complete_label->setOpacity(255-t*255);
+																																											}, [=](float t)
+																																											{
+																																												mission_complete_label->setPosition(ccp(240+200,myDSH->ui_center_y));
+																																												mission_complete_label->setOpacity(0);
+																																												
+																																												mission_complete_label->removeFromParent();
+																																											}));
+																											  }));
+															  }));
+	
+//	CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(20);
+//	t_particle->setPositionType(kCCPositionTypeRelative);
+//	t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//	t_particle->setEmissionRate(50.00);
+//	t_particle->setAngle(90);						//
+//	t_particle->setAngleVar(10.0);
+//	t_particle->setBlendFunc(ccBlendFunc{GL_ONE, GL_ONE});
+//	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+//	t_particle->setBlendFunc(blendFunc);
+//	t_particle->setDuration(-1.0);
+//	t_particle->setEmitterMode(kCCParticleModeGravity);
+//	t_particle->setStartColor(ccc4f(1.f, 0.8353f, 0.188f, 0.5f));
+//	t_particle->setStartColorVar(ccc4f(0, 0, 0, 0));
+//	t_particle->setEndColor(ccc4f(0, 0, 0, 0));
+//	t_particle->setEndColorVar(ccc4f(0, 0, 0, 0));
+//	t_particle->setStartSize(15.00);
+//	t_particle->setStartSizeVar(5.0);
+//	t_particle->setEndSize(0.0);
+//	t_particle->setEndSizeVar(0.0);
+//	t_particle->setGravity(ccp(0,0));
+//	t_particle->setRadialAccel(0.0);
+//	t_particle->setRadialAccelVar(0.0);
+//	t_particle->setSpeed(0);
+//	t_particle->setSpeedVar(0.0);
+//	t_particle->setTangentialAccel(0);
+//	t_particle->setTangentialAccelVar(0);
+//	t_particle->setTotalParticles(20);
+//	t_particle->setLife(0.50);
+//	t_particle->setLifeVar(1.0);
+//	t_particle->setStartSpin(0.0);
+//	t_particle->setStartSpinVar(40.0);
+//	t_particle->setEndSpin(0.0);
+//	t_particle->setEndSpinVar(40.0);
+//	t_particle->setPosition(ccpFromSize(stage_clear_label->getContentSize()/2.f));
+//	t_particle->setPosVar(ccp(140,20));
+//	stage_clear_label->addChild(t_particle);
 }
 void PlayUI::conditionFail ()
 {
 //	((CCMenu*)getChildByTag(kCT_UI_clrCdtIcon))->setEnabled(false);
-//	
+//
 //	CCSprite* condition_fail = CCSprite::create("condition_fail.png");
 //	condition_fail->setPosition(getChildByTag(kCT_UI_clrCdtIcon)->getPosition());
 //	addChild(condition_fail);
@@ -2444,12 +2623,14 @@ void PlayUI::counting ()
 				//			}
 				
 				
-				KSLabelTTF* time_over_label = KSLabelTTF::create("TIME OVER", mySGD->getFont().c_str(), 45);
+				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
 				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 				time_over_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
 				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 				time_over_label->setOpacity(0);
 				addChild(time_over_label);
+				
+				CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
 				
 				time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
 																		{
@@ -2806,8 +2987,8 @@ void PlayUI::nextScene ()
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreData)].append(int(mySGD->getScore()));
 		mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_isChangedScore)] = false;
 	}
-	
-	result_sprite->setVisible(false);
+	if(result_sprite)
+		result_sprite->setVisible(false);
 	myGD->communication("Main_gameover");
 }
 void PlayUI::catchSubCumber ()
@@ -2849,6 +3030,8 @@ void PlayUI::myInit ()
 	isGameover = false;
 	
 	is_on_clear_time_event = false;
+	
+	result_sprite = NULL;
 	
 	bomb_img = NULL;
 	ing_bomb_value = 0;

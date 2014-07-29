@@ -1524,7 +1524,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("미스"), kMyLocalKey_miss);
 	ko->setObject(CCString::create("콤보"), kMyLocalKey_combo);
 	ko->setObject(CCString::create("잠금이 해제되었습니다!"), kMyLocalKey_unlockedAreaScroll);
-	
+	ko->setObject(CCString::create("미션성공!"), kMyLocalKey_missionComplete);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -2542,6 +2542,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("MISS"), kMyLocalKey_miss);
 	en->setObject(CCString::create("COMBO"), kMyLocalKey_combo);
 	en->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
+	en->setObject(CCString::create("MISSION COMPLETE"), kMyLocalKey_missionComplete);
+	
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
 //	en->setObject(CCString::create("Touch the screen."), kMyLocalKey_touchPlease);
@@ -3580,6 +3582,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("MISS"), kMyLocalKey_miss);
 	ja->setObject(CCString::create("COMBO"), kMyLocalKey_combo);
 	ja->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
+	ja->setObject(CCString::create("MISSION COMPLETE"), kMyLocalKey_missionComplete);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

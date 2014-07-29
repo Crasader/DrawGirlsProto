@@ -252,6 +252,11 @@ private:
 	bool isDisableDrawButton;
 	bool isDisableLineOver;
 	bool isJoystickCenterNotFixed;
+	double TouchOutWidth;
+	double JOYSTICK_FOLLOW_DISTANCE;
+	
+	double minimumDistanceJ;
+	double JoystickCenterLimit;
 	
 	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
