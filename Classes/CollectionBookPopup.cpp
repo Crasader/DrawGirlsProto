@@ -28,6 +28,7 @@
 #include "FormSetter.h"
 #include "TouchSuctionLayer.h"
 #include "CardGiftPopup.h"
+#include "ASPopupView.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -207,14 +208,17 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  
 						  is_menu_enable = false;
 						  
-						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;}, [=]()
-						  {
-							  is_menu_enable = true;
-							  CCNode* t_node = CCNode::create();
-							  t_node->setTag(kCBP_MT_close);
-							  menuAction(t_node);
-						  });
-						  addChild(t_popup, 999);
+						  addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 999);;
+						  
+//						  close cbt
+//						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;}, [=]()
+//						  {
+//							  is_menu_enable = true;
+//							  CCNode* t_node = CCNode::create();
+//							  t_node->setTag(kCBP_MT_close);
+//							  menuAction(t_node);
+//						  });
+//						  addChild(t_popup, 999);
 					  });
 	gift->setPosition(ccp(115,32));
 	target->addChild(gift, 1, kCBP_MT_gift);

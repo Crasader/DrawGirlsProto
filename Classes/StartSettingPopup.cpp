@@ -2435,6 +2435,10 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 											  }
 										  }));
 	
+	Json::Value cle_param;
+	cle_param["memberID"] = myHSP->getMemberID();
+	t_command_list.push_back(CommandParam("checkLoginEvent", cle_param, nullptr));
+	
 	if(mySGD->is_endless_mode)
 	{
 		Json::Value endless_param;

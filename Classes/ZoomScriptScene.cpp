@@ -357,7 +357,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		{
 			AudioEngine::sharedInstance()->playEffect("ment_showtime.mp3");
 			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
-			showtime_back->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+			showtime_back->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 			showtime_back->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 			CommonAnimation::applyBigShadow(showtime_back, showtime_back->getFontSize());
 			showtime_back->setScale(10.f);

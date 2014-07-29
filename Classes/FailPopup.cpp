@@ -262,7 +262,7 @@ bool FailPopup::init()
 	start_total_left_content = "0";
 	
 	left_total_content = KSLabelTTF::create(start_total_left_content.c_str(), mySGD->getFont().c_str(), 15);
-	left_total_content->setColor(ccc3(255, 170, 20));
+	left_total_content->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	left_total_content->setAnchorPoint(ccp(1,0.5f));
 	left_total_content->setPosition(ccp(left_total_back->getContentSize().width-8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_content);

@@ -2226,7 +2226,7 @@ void Maingame::gameover()
 		
 		KSLabelTTF* game_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleGameover), mySGD->getFont().c_str(), 45);
 		game_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-		game_over_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+		game_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 		game_over_label->setOpacity(0);
 		myUI->addChild(game_over_label);
@@ -3318,7 +3318,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 	t_position.y += rand()%21 - 10;
 
 	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
-	miss_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	miss_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
 //	CCSprite* miss_label = CCSprite::create("missile_miss.png");
@@ -3370,7 +3370,7 @@ void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
 	game_node->addChild(container, goldZorder);
 	
 	combo_value_img = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), t_combo_value), mySGD->getFont().c_str(), 30);
-	combo_value_img->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	combo_value_img->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	combo_value_img->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(combo_value_img, combo_value_img->getFontSize());
 	combo_value_img->setPosition(ccp(0,0));

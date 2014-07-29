@@ -628,7 +628,7 @@ bool OptionPopup::init()
 	info_back->addChild(id_label);
 	
 	
-	KSLabelTTF* my_id_label = KSLabelTTF::create(KS::longLongToStrForDG(mySGD->user_index).c_str(), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* my_id_label = KSLabelTTF::create(myHSP->getSocialID()/*KS::longLongToStrForDG(mySGD->user_index)*/.c_str(), mySGD->getFont().c_str(), 11.5f);
 	my_id_label->setColor(ccc3(54, 36, 148));
 	my_id_label->disableOuterStroke();
 	my_id_label->setAnchorPoint(ccp(0,0.5));

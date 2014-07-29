@@ -49,7 +49,7 @@ void ComboView::myInit (int combo)
 	if(mySGD->is_endless_mode)
 	{
 		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
-		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
 		combo_label->setPosition(ccp(0,0));
@@ -68,7 +68,7 @@ void ComboView::myInit (int combo)
 	else
 	{
 		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
-		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
 		combo_label->setAnchorPoint(ccp(1,0.5f));
@@ -673,7 +673,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
 	{
 		KSLabelTTF* speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
-		speed_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		speed_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
 		speed_label->setPosition(ccp(0,0));
@@ -683,7 +683,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	else
 	{
 		KSLabelTTF* speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
-		speed_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+		speed_label->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
 //		CCSprite* speed_label = CCSprite::create("speed_front.png");
@@ -808,7 +808,7 @@ void TakeCoin::startMyAction()
 	addChild(take_coin_node);
 	
 	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
-	ment->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	ment->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 	ment->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(ment, ment->getFontSize());
 	ment->setBlendFunc({GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
@@ -846,7 +846,7 @@ void TakeCoin::startMyAction()
 												 }));
 	
 	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
-	light->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	light->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 	light->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 //	CommonAnimation::applyBigShadow(light, light->getFontSize());
 	light->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
@@ -1031,7 +1031,7 @@ AreaScroll * AreaScroll::create ()
 void AreaScroll::startAction ()
 {
 	KSLabelTTF* main_view = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_unlockedAreaScroll), mySGD->getFont().c_str(), 25);
-	main_view->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	main_view->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	main_view->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(main_view, main_view->getFontSize());
 	main_view->setPosition(ccp(640,myDSH->ui_center_y));
@@ -1098,13 +1098,90 @@ ChangeCard * ChangeCard::create ()
 void ChangeCard::startMyAction()
 {
 	unschedule(schedule_selector(ChangeCard::startMyAction));
-	CCSprite* change_card = KS::loadCCBI<CCSprite*>(this, "ui_cardchange.ccbi").first;
-	addChild(change_card);
 	
-	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-	runAction(t_seq);
+	KSLabelTTF* card_change_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
+	card_change_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.3), true);
+	card_change_label->setGradientColor(ccc4(255, 155, 255, 255), ccc4(145, 45, 215, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
+	card_change_label->setPosition(ccp(0,30));
+	card_change_label->setScale(1.5f);
+	card_change_label->setOpacity(0);
+	addChild(card_change_label);
+	
+	card_change_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+															  {
+																  card_change_label->setPosition(ccp(0,30-30*t));
+																  card_change_label->setScale(1.5f-0.5f*t);
+																  card_change_label->setOpacity(255*t);
+															  }, [=](float t)
+															  {
+																  card_change_label->setPosition(ccp(0,20));
+																  card_change_label->setScale(1.f);
+																  card_change_label->setOpacity(255);
+																  
+																  card_change_label->addChild(KSTimer::create(22.f/30.f, [=]()
+																											  {
+																												  card_change_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																											{
+																																												card_change_label->setPosition(ccp(0,30*t));
+																																												card_change_label->setScale(1.f+0.6f*t);
+																																												card_change_label->setOpacity(255-255*t);
+																																											}, [=](float t)
+																																											{
+																																												card_change_label->setPosition(ccp(0,30*t));
+																																												card_change_label->setScale(1.f+0.6f*t);
+																																												card_change_label->setOpacity(255-255*t);
+																																												removeFromParent();
+																																											}));
+																											  }));
+															  }));
+	
+	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
+	light->enableOuterStroke(ccBLACK, 2.5f, int(255*0.3), true);
+	light->setGradientColor(ccc4(255, 155, 255, 255), ccc4(145, 45, 215, 255), ccp(0,-1));
+//	CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
+	light->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
+	light->setOpacity(0);
+	light->setPosition(ccpFromSize(card_change_label->getContentSize()/2.f));
+	card_change_label->addChild(light);
+	
+	function<void(function<void()>)> lighting_func = [=](function<void()> end_func)
+	{
+		light->addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+													  {
+														  light->setOpacity(255*t);
+													  }, [=](float t)
+													  {
+														  light->setOpacity(255*t);
+														  light->addChild(KSTimer::create(2.f/30.f, [=]()
+																						  {
+																							  end_func();
+																						  }));
+													  }));
+	};
+	
+	lighting_func([=]()
+				  {
+					  lighting_func([=]()
+									{
+										lighting_func([=]()
+													  {
+														  lighting_func([=]()
+																		{
+																			light->removeFromParent();
+																		});
+													  });
+									});
+				  });
+	
+	
+//	CCSprite* change_card = KS::loadCCBI<CCSprite*>(this, "ui_cardchange.ccbi").first;
+//	addChild(change_card);
+//	
+//	CCDelayTime* t_delay = CCDelayTime::create(1.2f);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//	runAction(t_seq);
 }
 void ChangeCard::myInit ()
 {
@@ -1604,7 +1681,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	{
 		KSLabelTTF* mission_fail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleMissionfail), mySGD->getFont().c_str(), 45);
 		mission_fail_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-		mission_fail_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+		mission_fail_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 		mission_fail_label->setOpacity(0);
 		addChild(mission_fail_label);
@@ -1657,7 +1734,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	{
 		KSLabelTTF* stage_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 45);
 		stage_clear_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-		stage_clear_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+		stage_clear_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 		stage_clear_label->setPosition(ccp(240,myDSH->ui_center_y));
 		stage_clear_label->setScale(1.8f);
 		stage_clear_label->setOpacity(0);
@@ -1760,7 +1837,7 @@ void PlayUI::conditionClear ()
 	
 	KSLabelTTF* mission_complete_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionComplete), mySGD->getFont().c_str(), 40);
 	mission_complete_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-	mission_complete_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	mission_complete_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	mission_complete_label->setPosition(ccp(240-200,myDSH->ui_center_y));
 	mission_complete_label->setOpacity(0);
 	addChild(mission_complete_label);
@@ -2280,7 +2357,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	addChild(t_node);
 	
 	KSLabelTTF* combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), cnt*5), mySGD->getFont().c_str(), 30);
-	combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
 	combo_label->setPosition(ccp(0,0));
@@ -2867,7 +2944,7 @@ void PlayUI::counting ()
 				
 				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
 				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-				time_over_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+				time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 				time_over_label->setOpacity(0);
 				addChild(time_over_label);

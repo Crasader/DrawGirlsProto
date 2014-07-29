@@ -89,7 +89,7 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 							});
 	main_case->addChild(close_menu);
 	
-	StyledLabelTTF* my_id_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardGiftMyID), KS::longLongToStrForDG(mySGD->user_index).c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* my_id_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardGiftMyID), myDSH->getStringForKey(kDSH_Key_nick)/*KS::longLongToStrForDG(mySGD->user_index)*/.c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	my_id_label->setAnchorPoint(ccp(0.5f,0.5f));
 	my_id_label->setPosition(ccp(main_inner->getContentSize().width/2.f, 95));
 	main_inner->addChild(my_id_label);
@@ -143,17 +143,17 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 										result_label->setVisible(true);
 										return;
 									}
-								   else if(KS::strToLongLongForDG(input_text->getText()) <= 0)
-									{
-										if(found_back)
-										{
-											found_back->setVisible(false);
-										}
-										
-										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_invalidID));
-										result_label->setVisible(true);
-										return;
-									}
+//								   else if(KS::strToLongLongForDG(input_text->getText()) <= 0)
+//									{
+//										if(found_back)
+//										{
+//											found_back->setVisible(false);
+//										}
+//										
+//										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_invalidID));
+//										result_label->setVisible(true);
+//										return;
+//									}
 								   
 								   is_menu_enable = false;
 								   
@@ -170,7 +170,8 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 								   string input_data = input_text->getText();
 								   
 								   Json::Value t_param;
-								   t_param["userIndex"] = KS::strToLongLongForDG(input_data);
+//								   t_param["userIndex"] = KS::strToLongLongForDG(input_data);
+								   t_param["nick"] = input_data;//myDSH->getStringForKey(kDSH_Key_nick);
 								   
 								   myHSP->command("getuserdata", t_param, json_selector(this, CardGiftPopup::resultGetUserData));
 							   });
