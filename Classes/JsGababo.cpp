@@ -828,20 +828,20 @@ void JsGababo::showHandsMotionWrapper()
 		if(m_winCount == 0)
 		{
 			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
-			ProbSelector ps = {70.f, 15.f, 50.f};
+			ProbSelector ps = {50, 30, 20};
 //			ProbSelector ps = {70.f, 100000.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
 		{
 			// 이길 확률 60% 질 확률 20% 비길 확률 60%
-			ProbSelector ps = {60.f, 20.f, 60.f};
+			ProbSelector ps =  {30,40,30};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 2)
 		{
 			// 이길 확률 50 % 질 확률 25% 비길 확률 30%
-			ProbSelector ps = {50.f, 25.f, 30.f};
+			ProbSelector ps = {20, 60, 20};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		
