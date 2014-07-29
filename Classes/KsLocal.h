@@ -50,7 +50,8 @@ enum class LK
 	kCantLinking,
 	kRetryLinking,
 	kAccountDesc,
-	kLinkingCommand
+	kLinkingCommand,
+	kLinked
 };
 class KsLocal
 {

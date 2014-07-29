@@ -41,7 +41,7 @@
 #include "Terms.h"
 #include "AccountManagerPopup.h"
 #include "StyledLabelTTF.h"
-
+#include "OnePercentTutorial.h"
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -88,6 +88,14 @@ bool OptionPopup::init()
 	{
 		return false;
 	}
+	
+//	KSLabelTTF* timeOver = KSLabelTTF::create("타임오버", mySGD->getFont().c_str(), 45.f);
+//	
+//	timeOver->enableOuterStroke(ccc3(0, 0, 0), 2.5f, 190, true);
+//	timeOver->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0, -1));
+//	CommonAnimation::applyBigShadow(timeOver, timeOver->getFontSize());
+//	addChild(timeOver, 999999);
+//	timeOver->setPosition(ccp(240, 160));
 	
 //	Terms* terms = Terms::create(-999999, [=](){
 //		CCLog("END!!!!!");
@@ -168,6 +176,8 @@ bool OptionPopup::init()
 //	}
 //	OnePercentGame* opg = OnePercentGame::create(0.998, nullptr, nullptr);
 //	addChild(opg, 9999);
+//	OnePercentTutorial* opt = OnePercentTutorial::create(0.99, nullptr, nullptr);
+//	addChild(opt, 9999);
 	
 
 //	KSLabelTTF* gradient = KSLabelTTF::create("총점", mySGD->getFont().c_str(), 25.f);
@@ -1127,7 +1137,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_community)
 	{
-		myHSP->openHSPUrl("http://cafe.naver.com/ddmkskdemo");
+		myHSP->openHSPUrl("http://cafe.naver.com/ddmksk");
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tip)

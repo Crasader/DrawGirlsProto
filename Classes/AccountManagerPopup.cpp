@@ -145,7 +145,17 @@ bool AccountManagerPopup::init(int touchP)
 																							 mySGD->getFont().c_str(), 10.f);
 	googleGuide->setPosition(ccp(67, 98.f));
 	front->addChild(googleGuide);
-	CommonButton* googleLogin = CommonButton::create(getLocal(LK::kGoogleButton), 14.f, CCSizeMake(101, 60),
+	
+	std::string gButtonLbl;
+	if(loginType == HSPLoginTypeGOOGLE) // 구글 로긴 타입임.
+	{
+		gButtonLbl = getLocal(LK::kLinked);
+	}
+	else
+	{
+		gButtonLbl = getLocal(LK::kGoogleButton);
+	}
+	CommonButton* googleLogin = CommonButton::create(gButtonLbl.c_str(), 14.f, CCSizeMake(101, 60),
 																										 CommonButtonAchievement, touchP - 1);
 	
 	googleLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -7.5f + 6 - 4.5f + 10.5f));
@@ -162,7 +172,16 @@ bool AccountManagerPopup::init(int touchP)
 	facebookGuide->setPosition(ccp(67, 33));
 	front->addChild(facebookGuide);
 	
-	CommonButton* facebookLogin = CommonButton::create(getLocal(LK::kFacebookButton), 14.f, CCSizeMake(101, 60),
+	std::string fButtonLbl;
+	if(loginType == HSPLoginTypeFACEBOOK)
+	{
+		fButtonLbl = getLocal(LK::kLinked);
+	}
+	else
+	{
+		fButtonLbl = getLocal(LK::kFacebookButton);
+	}
+	CommonButton* facebookLogin = CommonButton::create(fButtonLbl.c_str(), 14.f, CCSizeMake(101, 60),
 																										 CommonButtonAchievement, touchP - 1);
 	
 	facebookLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -79 + 4.5f + 14.5f));
@@ -195,14 +214,15 @@ bool AccountManagerPopup::init(int touchP)
 				
 				toAnotherAccount->setContainerNode(back);
 //				back->setContentSize(CCSizeMake(550 / 2.f, 432 / 2.f));
-				front->setContentSize(CCSizeMake(251,113));
+				front->setContentSize(CCSizeMake(251, 128));
 				
 				
 				back->addChild(front);
-				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,-8));
+				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
 
 				//					toAnotherAccount->addChild(back);
 				//					CommonAnimation::openPopup(this, back, nullptr);
+				
 				
 				KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
 //				titleLbl->setColor(ccc3(255, 170, 20));
@@ -287,9 +307,12 @@ bool AccountManagerPopup::init(int touchP)
 			}
 			else
 			{
+				auto st = StyledLabelTTF::create(getLocal(LK::kNetworkError),
+															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				
+				st->setAnchorPoint(ccp(0.5f, 0.5f));
 				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "LQError",
-																												 StyledLabelTTF::create(getLocal(LK::kNetworkError),
-																																								mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+																												 st, nullptr);
 				addChild(alert);
 			}
 		});
@@ -327,7 +350,7 @@ bool AccountManagerPopup::init(int touchP)
 		ASPopupView* warningPopup = ASPopupView::createDimmed(touchP - 2);
 		
 		warningPopup->getDimmedSprite()->setVisible(false);
-		addChild(warningPopup);
+		managerPopup->addChild(warningPopup);
 
 		auto back = CCSprite::create("popup_large_back.png");
 
@@ -339,12 +362,12 @@ bool AccountManagerPopup::init(int touchP)
 		warningPopup->setContainerNode(back);
 		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
 		//	back->setContentSize(CCSizeMake(200, 200));
-		front->setContentSize(CCSizeMake(251, 113));
+		front->setContentSize(CCSizeMake(251, 141));
 
 
 		back->addChild(front);
 
-		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,-12));
+		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
 
 		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
 		//	titleLbl->setColor(ccc3(255, 170, 20));
@@ -407,12 +430,21 @@ bool AccountManagerPopup::init(int touchP)
 			doLogin(hspmap, willSaveLogin);
 		}
 	};
-	facebookLogin->setFunction([=](CCObject*){
-		tryLogin(HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
-	});
-	googleLogin->setFunction([=](CCObject*){
-		tryLogin(HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
-	});
+	
+	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
+	{
+		facebookLogin->setFunction([=](CCObject*){
+			tryLogin(HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
+		});
+	}
+	
+	if(loginType != HSPLoginTypeGOOGLE) // 구글로그인이 안되어있는 경우에만...
+	{
+		googleLogin->setFunction([=](CCObject*){
+			tryLogin(HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
+		});
+
+	}
 	
 	
 	setFormSetter(front);

@@ -492,9 +492,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 			else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 			CCLOG("not enough condition");
 		}
 	}
@@ -1788,7 +1788,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(touch_priority-10, "젬이 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(touch_priority-10, "젬이 부족합니다.", [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardMid)
@@ -1889,7 +1889,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(touch_priority-10, "골드가 부족합니다.", [=](){is_menu_enable = true;}), kSP_Z_popup);
+			addChild(ASPopupView::getCommonNoti(touch_priority-10, "골드가 부족합니다.", [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 		}
 	}
 	else if(tag == kSP_MT_cardLow)
