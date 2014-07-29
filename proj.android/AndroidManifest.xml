@@ -38,39 +38,6 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
             android:name="com.facebook.LoginActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
-        <!-- kamcord -->
-         <activity
-            android:name="com.kamcord.android.KamcordActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:windowActionBar="false" >
-        </activity>
-        
-        <activity
-            android:name="com.kamcord.android.ReplayActivity"
-            android:label="Watch"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:launchMode="singleTask"
-            android:parentActivityName="com.kamcord.android.KamcordActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kamcord.android.KamcordActivity" />
-        </activity>
-        
-        <activity
-            android:name="com.kamcord.android.WebActivity"
-            android:label="Login"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:launchMode="singleTask"
-            android:parentActivityName="com.kamcord.android.KamcordActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kamcord.android.KamcordActivity" />
-        </activity>
-        
         <!-- HSP Activity Begin -->
         <activity
             android:name="com.hangame.hsp.ui.HSPUiActivity"

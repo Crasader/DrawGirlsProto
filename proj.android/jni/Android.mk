@@ -23,27 +23,15 @@ LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../boost_1_55_0
 
 LOCAL_STATIC_LIBRARIES := curl_static_prebuilt
 
-
-LOCAL_SHARED_LIBRARIES := fiverocks_shared
-LOCAL_SHARED_LIBRARIES += libkamcord
-LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
-
-
 LOCAL_WHOLE_STATIC_LIBRARIES := cocos2dx_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocosdenshion_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_lua_static
 LOCAL_WHOLE_STATIC_LIBRARIES += box2d_static
 LOCAL_WHOLE_STATIC_LIBRARIES += chipmunk_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
-
+LOCAL_SHARED_LIBRARIES := fiverocks_shared
 
 include $(BUILD_SHARED_LIBRARY)
-
-include $(CLEAR_VARS)
-LOCAL_MODULE := libkamcord
-LOCAL_SRC_FILES := libkamcord.so
-include $(PREBUILT_SHARED_LIBRARY)
-
 $(call import-module,cocos2dx)
 $(call import-module,CocosDenshion/android)
 $(call import-module,scripting/lua/proj.android)
