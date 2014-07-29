@@ -2225,12 +2225,14 @@ void Maingame::gameover()
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		KSLabelTTF* game_over_label = KSLabelTTF::create("GAME OVER", mySGD->getFont().c_str(), 45);
+		KSLabelTTF* game_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleGameover), mySGD->getFont().c_str(), 45);
 		game_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 		game_over_label->enableOuterStroke(ccBLACK, 2.5f, 190, true);
 		game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 		game_over_label->setOpacity(0);
 		myUI->addChild(game_over_label);
+		
+		CommonAnimation::applyBigShadow(game_over_label, game_over_label->getFontSize());
 		
 		game_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
 																{

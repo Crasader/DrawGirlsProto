@@ -324,10 +324,6 @@
 
 //////////////////////////////////////////////// Joystick Button ///////////////////////////////////////////////////////////////////////////////
 
-#define minimumDistanceJ	8.f
-#define JoystickCenterLimit	30.f
-#define TouchOutWidth		10.f
-
 const float CONTROL_OUT_DISTANCE = 150.f;
 const float CONTROL_IN_TIME = 0.5f;
 
@@ -1072,8 +1068,6 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 	}
 }
 
-#define JOYSTICK_FOLLOW_DISTANCE 60
-
 void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 {
 	if(isStun)
@@ -1442,6 +1436,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	CCLayer::init();
 	
 	is_show_draw_button_tutorial = false;
+	
+	TouchOutWidth = (1.94145*10.0)/myHSP->getScreenRealHeight();
+	JOYSTICK_FOLLOW_DISTANCE = (1.94145*60.0)/myHSP->getScreenRealHeight();
+	
+	minimumDistanceJ = (1.94145*8.0)/myHSP->getScreenRealHeight();
+	JoystickCenterLimit = (1.94145*30.0)/myHSP->getScreenRealHeight();
 	
 	regular_spectrum = 70.f;
 	irregular_spectrum = 20.f;

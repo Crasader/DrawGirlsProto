@@ -20,6 +20,8 @@
 #endif
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import <sys/types.h>
+#import <sys/sysctl.h>
 //#import "KALocalUser.h"
 //#import "KAAuth.h"
 //#import "KakaoSDKViewController.h"
@@ -540,7 +542,58 @@ double hspConnector::getScreenRealWidth()
 	}
 	return (double)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	size_t size = 100;
+    char *hw_machine = (char*)malloc(size);
+    int name[] = {CTL_HW,HW_MACHINE};
+    sysctl(name, 2, hw_machine, &size, NULL, 0);
+    NSString *hardware = [NSString stringWithUTF8String:hw_machine];
+    free(hw_machine);
+    if ([hardware isEqualToString:@"iPhone1,1"])	return 2.912176;//return "iPhone 2G";
+    if ([hardware isEqualToString:@"iPhone1,2"])	return 2.912176;//return "iPhone 3G";
+    if ([hardware isEqualToString:@"iPhone2,1"])	return 2.912176;//return "iPhone 3GS";
+    if ([hardware isEqualToString:@"iPhone3,1"])	return 2.912176;//return "iPhone 4";
+    if ([hardware isEqualToString:@"iPhone3,2"])	return 2.912176;//return "iPhone 4";
+    if ([hardware isEqualToString:@"iPhone3,3"])	return 2.912176;//return "iPhone 4 (CDMA)";
+    if ([hardware isEqualToString:@"iPhone4,1"])	return 2.912176;//return "iPhone 4S"; 3.5inch 480:320 | 960:640 | 2.912176:1.94145
+    if ([hardware isEqualToString:@"iPhone5,1"])	return 3.48499;//return "iPhone 5";
+    if ([hardware isEqualToString:@"iPhone5,2"])	return 3.48499;//return "iPhone 5 (GSM+CDMA)";
+	if ([hardware isEqualToString:@"iPhone5,3"])	return 3.48499;//return "iPhone 5C";
+    if ([hardware isEqualToString:@"iPhone5,4"])	return 3.48499;//return "iPhone 5C";
+	if ([hardware isEqualToString:@"iPhone6,1"])	return 3.48499;//return "iPhone 5S";
+    if ([hardware isEqualToString:@"iPhone6,2"])	return 3.48499;//return "iPhone 5S"; 4inch 1136:640 | 3.48499:1.963375
+	
+    if ([hardware isEqualToString:@"iPod1,1"])		return 2.912176;//return "iPod Touch (1 Gen)";
+    if ([hardware isEqualToString:@"iPod2,1"])		return 2.912176;//return "iPod Touch (2 Gen)";
+    if ([hardware isEqualToString:@"iPod3,1"])		return 2.912176;//return "iPod Touch (3 Gen)";
+    if ([hardware isEqualToString:@"iPod4,1"])		return 2.912176;//return "iPod Touch (4 Gen)"; 3.5inch 480:320
+    if ([hardware isEqualToString:@"iPod5,1"])		return 3.48499;//return "iPod Touch (5 Gen)"; 4inch 1136:640
+	
+    if ([hardware isEqualToString:@"iPad1,1"])		return 7.76;//return "iPad";
+    if ([hardware isEqualToString:@"iPad1,2"])		return 7.76;//return "iPad 3G";
+    if ([hardware isEqualToString:@"iPad2,1"])		return 7.76;//return "iPad 2 (WiFi)";
+    if ([hardware isEqualToString:@"iPad2,2"])		return 7.76;//return "iPad 2";
+    if ([hardware isEqualToString:@"iPad2,3"])		return 7.76;//return "iPad 2 (CDMA)";
+    if ([hardware isEqualToString:@"iPad2,4"])		return 7.76;//return "iPad 2";
+    if ([hardware isEqualToString:@"iPad2,5"])		return 6.32;//return "iPad Mini (WiFi)";
+    if ([hardware isEqualToString:@"iPad2,6"])		return 6.32;//return "iPad Mini";
+    if ([hardware isEqualToString:@"iPad2,7"])		return 6.32;//return "iPad Mini (GSM+CDMA)";
+    if ([hardware isEqualToString:@"iPad3,1"])		return 7.76;//return "iPad 3 (WiFi)";
+    if ([hardware isEqualToString:@"iPad3,2"])		return 7.76;//return "iPad 3 (GSM+CDMA)";
+    if ([hardware isEqualToString:@"iPad3,3"])		return 7.76;//return "iPad 3";
+    if ([hardware isEqualToString:@"iPad3,4"])		return 7.76;//return "iPad 4 (WiFi)";
+    if ([hardware isEqualToString:@"iPad3,5"])		return 7.76;//return "iPad 4";
+    if ([hardware isEqualToString:@"iPad3,6"])		return 7.76;//return "iPad 4 (GSM+CDMA)";
+	if ([hardware isEqualToString:@"iPad4,1"])		return 6.32;//return "iPad Air";
+    if ([hardware isEqualToString:@"iPad4,2"])		return 6.32;//return "iPad Air (CDMA)";
+	if ([hardware isEqualToString:@"iPad4,3"])		return 6.32;//return "iPad Air China";
+	if ([hardware isEqualToString:@"iPad4,4"])		return 6.32;//return "iPad Mini 2G";
+    if ([hardware isEqualToString:@"iPad4,5"])		return 6.32;//return "iPad Mini 2G (CDMA)"; // 그냥은 9.7inch | 7.76:5.82, mini는 7.9inch 1024:768 | 6.32:4.74
+	
+    if ([hardware isEqualToString:@"i386"])			return 3.48499;//return "Simulator";
+    if ([hardware isEqualToString:@"x86_64"])		return 3.48499;//return "Simulator";
+	
+	return 3.48499;
+	
 	// not implementation
 	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
@@ -561,7 +614,58 @@ double hspConnector::getScreenRealHeight()
 	}
 	return (double)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	size_t size = 100;
+    char *hw_machine = (char*)malloc(size);
+    int name[] = {CTL_HW,HW_MACHINE};
+    sysctl(name, 2, hw_machine, &size, NULL, 0);
+    NSString *hardware = [NSString stringWithUTF8String:hw_machine];
+    free(hw_machine);
+    if ([hardware isEqualToString:@"iPhone1,1"])	return 1.94145;//return "iPhone 2G";
+    if ([hardware isEqualToString:@"iPhone1,2"])	return 1.94145;//return "iPhone 3G";
+    if ([hardware isEqualToString:@"iPhone2,1"])	return 1.94145;//return "iPhone 3GS";
+    if ([hardware isEqualToString:@"iPhone3,1"])	return 1.94145;//return "iPhone 4";
+    if ([hardware isEqualToString:@"iPhone3,2"])	return 1.94145;//return "iPhone 4";
+    if ([hardware isEqualToString:@"iPhone3,3"])	return 1.94145;//return "iPhone 4 (CDMA)";
+    if ([hardware isEqualToString:@"iPhone4,1"])	return 1.94145;//return "iPhone 4S"; 3.5inch 480:320 | 960:640 | 2.912176:1.94145
+    if ([hardware isEqualToString:@"iPhone5,1"])	return 1.963375;//return "iPhone 5";
+    if ([hardware isEqualToString:@"iPhone5,2"])	return 1.963375;//return "iPhone 5 (GSM+CDMA)";
+	if ([hardware isEqualToString:@"iPhone5,3"])	return 1.963375;//return "iPhone 5C";
+    if ([hardware isEqualToString:@"iPhone5,4"])	return 1.963375;//return "iPhone 5C";
+	if ([hardware isEqualToString:@"iPhone6,1"])	return 1.963375;//return "iPhone 5S";
+    if ([hardware isEqualToString:@"iPhone6,2"])	return 1.963375;//return "iPhone 5S"; 4inch 1136:640 | 3.48499:1.963375
+	
+    if ([hardware isEqualToString:@"iPod1,1"])		return 1.94145;//return "iPod Touch (1 Gen)";
+    if ([hardware isEqualToString:@"iPod2,1"])		return 1.94145;//return "iPod Touch (2 Gen)";
+    if ([hardware isEqualToString:@"iPod3,1"])		return 1.94145;//return "iPod Touch (3 Gen)";
+    if ([hardware isEqualToString:@"iPod4,1"])		return 1.94145;//return "iPod Touch (4 Gen)"; 3.5inch 480:320
+    if ([hardware isEqualToString:@"iPod5,1"])		return 1.963375;//return "iPod Touch (5 Gen)"; 4inch 1136:640
+	
+    if ([hardware isEqualToString:@"iPad1,1"])		return 5.82;//return "iPad";
+    if ([hardware isEqualToString:@"iPad1,2"])		return 5.82;//return "iPad 3G";
+    if ([hardware isEqualToString:@"iPad2,1"])		return 5.82;//return "iPad 2 (WiFi)";
+    if ([hardware isEqualToString:@"iPad2,2"])		return 5.82;//return "iPad 2";
+    if ([hardware isEqualToString:@"iPad2,3"])		return 5.82;//return "iPad 2 (CDMA)";
+    if ([hardware isEqualToString:@"iPad2,4"])		return 5.82;//return "iPad 2";
+    if ([hardware isEqualToString:@"iPad2,5"])		return 4.74;//return "iPad Mini (WiFi)";
+    if ([hardware isEqualToString:@"iPad2,6"])		return 4.74;//return "iPad Mini";
+    if ([hardware isEqualToString:@"iPad2,7"])		return 4.74;//return "iPad Mini (GSM+CDMA)";
+    if ([hardware isEqualToString:@"iPad3,1"])		return 5.82;//return "iPad 3 (WiFi)";
+    if ([hardware isEqualToString:@"iPad3,2"])		return 5.82;//return "iPad 3 (GSM+CDMA)";
+    if ([hardware isEqualToString:@"iPad3,3"])		return 5.82;//return "iPad 3";
+    if ([hardware isEqualToString:@"iPad3,4"])		return 5.82;//return "iPad 4 (WiFi)";
+    if ([hardware isEqualToString:@"iPad3,5"])		return 5.82;//return "iPad 4";
+    if ([hardware isEqualToString:@"iPad3,6"])		return 5.82;//return "iPad 4 (GSM+CDMA)";
+	if ([hardware isEqualToString:@"iPad4,1"])		return 4.74;//return "iPad Air";
+    if ([hardware isEqualToString:@"iPad4,2"])		return 4.74;//return "iPad Air (CDMA)";
+	if ([hardware isEqualToString:@"iPad4,3"])		return 4.74;//return "iPad Air China";
+	if ([hardware isEqualToString:@"iPad4,4"])		return 4.74;//return "iPad Mini 2G";
+    if ([hardware isEqualToString:@"iPad4,5"])		return 4.74;//return "iPad Mini 2G (CDMA)"; // 그냥은 9.7inch | 7.76:5.82, mini는 7.9inch 1024:768 | 6.32:4.74
+	
+    if ([hardware isEqualToString:@"i386"])			return 1.963375;//return "Simulator";
+    if ([hardware isEqualToString:@"x86_64"])		return 1.963375;//return "Simulator";
+	
+	return 1.963375;
+	
 	// not implementation
 	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif

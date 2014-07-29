@@ -371,6 +371,11 @@ private:
 	float regular_spectrum;
 	float irregular_spectrum;
 	
+	double TUTO_TouchOutWidth;
+	double TUTO_JOYSTICK_FOLLOW_DISTANCE;
+	double minimumDistanceJ;
+	double JoystickCenterLimit;
+	
 	bool isButtonAction;
 	
 	CCBAnimationManager* button_ani;
