@@ -640,16 +640,18 @@ bool OptionPopup::init()
 	version_label->setColor(ccc3(54, 36, 148));
 	version_label->disableOuterStroke();
 	version_label->setAnchorPoint(ccp(0,0.5f));
-	version_label->setPosition(ccp(150,info_back->getContentSize().height/2.f));
+	version_label->setPosition(ccp(175,info_back->getContentSize().height/2.f));
 	info_back->addChild(version_label, kOP_Z_back);
+	setFormSetter(version_label);
 	
 	KSLabelTTF* my_version_label = KSLabelTTF::create(GraphDog::get()->getAppVersionString().c_str(),
 																										mySGD->getFont().c_str(), 11.5f);
 	my_version_label->setColor(ccc3(54, 36, 148));
 	my_version_label->disableOuterStroke();
 	my_version_label->setAnchorPoint(ccp(0,0.5));
-	my_version_label->setPosition(ccp(200, info_back->getContentSize().height/2.f));
+	my_version_label->setPosition(ccp(228.0, info_back->getContentSize().height/2.f));
 	info_back->addChild(my_version_label, kOP_Z_content);
+	setFormSetter(my_version_label);
 	
 	
 	CCSprite* n_withdraw_img = CCSprite::create("option_withdraw.png");
