@@ -48,6 +48,8 @@ import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
+import com.kamcord.android.Kamcord;
+//import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
@@ -58,8 +60,20 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final int ANDROID_BUILD_GINGERBREAD = 9;
 	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
 	private static native int getUserState();
+	private static Cocos2dxGLSurfaceView glSurfaceView;
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		
+		Log.i("com.litqoo.dgproto", "init1 kamcord");
+		Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
+		    "Ecl3mH6WxvG8T3lsrqbtAAOBrRq1AE664D7VYpMgZ7b",
+		    "drawgirls");
+		
+		Log.i("com.litqoo.dgproto", "init2 kamcord");
+		Kamcord.initActivity(this);
+
+		Log.i("com.litqoo.dgproto", "finished kamcord");
+		
 		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -100,18 +114,48 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
 //		mGLView.setCocos2dxEditText((Cocos2dxEditText)findViewById(R.id.textField));
 	}
-	
+	  private void hideSystemUI()
+	    {
+	        // Set the IMMERSIVE flag.
+	        // Set the content to appear under the system bars so that the content
+	        // doesn't resize when the system bars hide and show.
+	        glSurfaceView.setSystemUiVisibility(
+	        		Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+	        		);
+//	                Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE 
+//	                | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//	                | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//	                | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
+//	                | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN // hide status bar
+//	                | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+	    }
+	  
+	    public void onWindowFocusChanged(boolean hasFocus)
+	    {
+	        super.onWindowFocusChanged(hasFocus);
+	        if (hasFocus)
+	        {
+	            this.hideSystemUI();
+	        }
+	    }
+	    
 	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
 		return new LuaGLSurfaceView(this);
     }
 
     static { 
     	FiveRocks.loadSharedLibrary();
+    	System.loadLibrary("kamcord");
         System.loadLibrary("cocos2dlua");
     }
     
     public Cocos2dxGLSurfaceView onCreateView() {
-    	Cocos2dxGLSurfaceView glSurfaceView = new Cocos2dxGLSurfaceView(this);
+    	glSurfaceView = new Cocos2dxGLSurfaceView(this);
     	// hspConnector should create stencil buffer
     	mGLView = glSurfaceView;
 //    	setEGLConfigChooser
