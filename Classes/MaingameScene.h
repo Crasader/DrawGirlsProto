@@ -208,8 +208,7 @@ private:
 	
 	void showMissMissile(CCPoint t_position);
 	void showDamageMissile(CCPoint t_position, int t_damage);
-	CCSprite* combo_string_img;
-	CCLabelBMFont* combo_value_img;
+	KSLabelTTF* combo_value_img;
 	void showComboImage(CCPoint t_position, int t_combo_value);
 	void removeComboImage(CCObject* t_node);
 	
