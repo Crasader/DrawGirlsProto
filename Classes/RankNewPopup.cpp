@@ -72,7 +72,7 @@ bool RankNewPopup::init()
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 4));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);
 	
 //<<<<<<< HEAD
@@ -219,7 +219,7 @@ bool RankNewPopup::init()
 	main_inner_right->addChild(barBack);
 	setFormSetter(barBack);
 	rank_table = CCTableView::create(this, CCSizeMake(540 / 2.f, 107));
-	rank_table->setPosition(ccp(-4.5, 5.5)); 			// dt (-9.5,-1.5)
+	rank_table->setPosition(ccp(-4.5, 1.5)); 			// dt (-9.5,-1.5)
 	rank_table->setDelegate(this);
 	rank_table->reloadData();
 	CCScale9Sprite* scrollBar = CCScale9Sprite::create("cardsetting_scrollbutton.png",
@@ -679,7 +679,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 	list_cell_case->setAnchorPoint(ccp(0,0));
 	list_cell_case->setContentSize(CCSizeMake(260, 31));
-	list_cell_case->setPosition(ccp(10,-3));
+	list_cell_case->setPosition(ccp(10,0));
 	cell->addChild(list_cell_case, kZ_CP_img);
 	
 	CCPoint rank_position = ccp(28, 15);
