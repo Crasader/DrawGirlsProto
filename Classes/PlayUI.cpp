@@ -52,7 +52,7 @@ void ComboView::myInit (int combo)
 		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
-		combo_label->setPosition(ccp(0,-3));
+		combo_label->setPosition(ccp(0,0));
 		addChild(combo_label);
 //		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
 //		combo_label->setAnchorPoint(ccp(0.5f,0.5f));
@@ -71,7 +71,8 @@ void ComboView::myInit (int combo)
 		combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
-		combo_label->setPosition(ccp(-22,-17));
+		combo_label->setAnchorPoint(ccp(1,0.5f));
+		combo_label->setPosition(ccp(0,0));
 		addChild(combo_label);
 		
 //		combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", combo)->getCString(), "combo.fnt");
@@ -107,7 +108,7 @@ void ComboParent::showCombo (int t_combo)
 		if(mySGD->is_endless_mode)
 			t_cv->setPosition(ccp(40,myDSH->ui_center_y+60));
 		else
-			t_cv->setPosition(ccpAdd(ccp(480-8,myDSH->ui_top-20), ccp(20,-45)));
+			t_cv->setPosition(ccp(480-8,myDSH->ui_top-65));
 		addChild(t_cv,0,1);// 1 : ComboView
 	}
 	
@@ -802,13 +803,217 @@ TakeCoin * TakeCoin::create ()
 void TakeCoin::startMyAction()
 {
 	unschedule(schedule_selector(TakeCoin::startMyAction));
-	CCSprite* take_coin = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("ui_change_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
-	addChild(take_coin);
 	
-	CCDelayTime* t_delay = CCDelayTime::create(3.f);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-	runAction(t_seq);
+	CCNode* take_coin_node = CCNode::create();
+	addChild(take_coin_node);
+	
+	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
+	ment->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	ment->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(ment, ment->getFontSize());
+	ment->setBlendFunc({GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
+	ment->setPosition(ccp(0,30));
+	ment->setScale(1.5f);
+	ment->setOpacity(0);
+	take_coin_node->addChild(ment);
+	
+	ment->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+												 {
+													 ment->setPosition(ccp(0,30-10*t));
+													 ment->setScale(1.5f-0.5f*t);
+													 ment->setOpacity(255*t);
+												 }, [=](float t)
+												 {
+													 ment->setPosition(ccp(0,30-10*t));
+													 ment->setScale(1.5f-0.5f*t);
+													 ment->setOpacity(255*t);
+													 
+													 ment->addChild(KSTimer::create(1.f, [=]()
+																					{
+																						ment->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
+																																	 {
+																																		 ment->setPosition(ccp(0,20+10*t));
+																																		 ment->setScale(1.f+0.5f*t);
+																																		 ment->setOpacity(255-255*t);
+																																	 }, [=](float t)
+																																	 {
+																																		 ment->setPosition(ccp(0,20+10*t));
+																																		 ment->setScale(1.f+0.5f*t);
+																																		 ment->setOpacity(255-255*t);
+																																		 removeFromParent();
+																																	 }));
+																					}));
+												 }));
+	
+	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
+	light->enableOuterStroke(ccBLACK, 2.5f, 190, true);
+	light->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
+//	CommonAnimation::applyBigShadow(light, light->getFontSize());
+	light->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
+	light->setPosition(ccpFromSize(ment->getContentSize()/2.f));
+	light->setOpacity(0);
+	ment->addChild(light);
+	
+	function<void(function<void()>)> lighting_func = [=](function<void()> end_func)
+	{
+		light->addChild(KSGradualValue<float>::create(0.f, 1.f, 3.f/30.f, [=](float t)
+													  {
+														  light->setOpacity(255*t);
+													  }, [=](float t)
+													  {
+														  light->setOpacity(255);
+														  light->addChild(KSTimer::create(2.f/30.f, [=]()
+																						  {
+																							  end_func();
+																						  }));
+													  }));
+	};
+	
+	light->addChild(KSTimer::create(8.f/30.f, [=]()
+									{
+										lighting_func([=]()
+													  {
+														  lighting_func([=]()
+																		{
+																			lighting_func([=]()
+																						  {
+																							  lighting_func([=]()
+																											{
+																												lighting_func([=]()
+																															  {
+																																  lighting_func([=]()
+																																				{
+																																					light->removeFromParent();
+																																				});
+																															  });
+																											});
+																						  });
+																		});
+													  });
+									}));
+	
+	function<void(CCSprite* t_target)> show_ani = [=](CCSprite* t_target)
+	{
+		t_target->addChild(KSGradualValue<float>::create(0.f, 1.f, 7.f/30.f, [=](float t)
+														 {
+															 t_target->setScale(1.6f-0.6f*t);
+															 t_target->setOpacity(255*t);
+														 }, [=](float t)
+														 {
+															 t_target->setScale(1.6f-0.6f*t);
+															 t_target->setOpacity(255*t);
+														 }));
+	};
+	
+	function<void(CCSprite* t_target)> pumping_ani = [=](CCSprite* t_target)
+	{
+		t_target->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+														 {
+															 t_target->setScale(1.f+0.4f*t);
+														 }, [=](float t)
+														 {
+															 t_target->setScale(1.4f);
+															 t_target->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
+																											  {
+																												  t_target->setScale(1.4f-0.4f*t);
+																											  }, [=](float t)
+																											  {
+																												  t_target->setScale(1.f);
+																											  }));
+														 }));
+	};
+	
+	function<void(CCSprite* t_target)> final_ani = [=](CCSprite* t_target)
+	{
+		t_target->addChild(KSGradualValue<float>::create(0.f, 1.f, 6.f/30.f, [=](float t)
+														 {
+															 t_target->setScale(1.f+0.4f*t);
+															 t_target->setOpacity(255-255*t);
+														 }, [=](float t)
+														 {
+															 t_target->setScale(1.f+0.4f*t);
+															 t_target->setOpacity(255-255*t);
+															 t_target->removeFromParent();
+														 }));
+	};
+	
+	function<void(CCSprite* t_target, float t_del)> change_ani = [=](CCSprite* t_target, float t_del)
+	{
+		show_ani(t_target);
+		
+		t_target->addChild(KSTimer::create(t_del, [=]()
+										   {
+											   pumping_ani(t_target);
+										   }));
+		
+		t_target->addChild(KSTimer::create(31.f/30.f, [=]()
+										   {
+											   final_ani(t_target);
+										   }));
+	};
+	
+	CCSprite* change_c = CCSprite::create("ui_game_change_c.png");
+	change_c->setPosition(ccp(-85,-16));
+	change_c->setScale(1.6f);
+	change_c->setOpacity(0);
+	take_coin_node->addChild(change_c);
+	
+	change_ani(change_c, 9.f/30.f);
+	
+	
+	CCSprite* change_h = CCSprite::create("ui_game_change_h.png");
+	change_h->setPosition(ccp(-51,-16));
+	change_h->setScale(1.6f);
+	change_h->setOpacity(0);
+	take_coin_node->addChild(change_h);
+	
+	change_ani(change_h, 12.f/30.f);
+	
+	
+	CCSprite* change_a = CCSprite::create("ui_game_change_a.png");
+	change_a->setPosition(ccp(-17,-16));
+	change_a->setScale(1.6f);
+	change_a->setOpacity(0);
+	take_coin_node->addChild(change_a);
+	
+	change_ani(change_a, 15.f/30.f);
+	
+	
+	CCSprite* change_n = CCSprite::create("ui_game_change_n.png");
+	change_n->setPosition(ccp(17,-16));
+	change_n->setScale(1.6f);
+	change_n->setOpacity(0);
+	take_coin_node->addChild(change_n);
+	
+	change_ani(change_n, 18.f/30.f);
+	
+	
+	CCSprite* change_g = CCSprite::create("ui_game_change_g.png");
+	change_g->setPosition(ccp(51,-16));
+	change_g->setScale(1.6f);
+	change_g->setOpacity(0);
+	take_coin_node->addChild(change_g);
+	
+	change_ani(change_g, 21.f/30.f);
+	
+	
+	CCSprite* change_e = CCSprite::create("ui_game_change_e.png");
+	change_e->setPosition(ccp(85,-16));
+	change_e->setScale(1.6f);
+	change_e->setOpacity(0);
+	take_coin_node->addChild(change_e);
+	
+	change_ani(change_e, 24.f/30.f);
+	
+	
+	
+//	CCSprite* take_coin = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("ui_change_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString()).first;
+//	addChild(take_coin);
+//	
+//	CCDelayTime* t_delay = CCDelayTime::create(3.f);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(CCNode::removeFromParent));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//	runAction(t_seq);
 }
 void TakeCoin::myInit ()
 {
@@ -2041,7 +2246,17 @@ void PlayUI::scoreAttackKeep()
 	{
 		unschedule(schedule_selector(PlayUI::scoreAttackKeep));
 
-		bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54)));
+		CCPoint recent_position = bomb_img->getPosition();
+		CCPoint after_position = ccp(0,-54);
+		CCPoint sub_position = recent_position - after_position;
+		bomb_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+														   {
+															   bomb_img->setPosition(recent_position - sub_position*t);
+														   }, [=](float t)
+														   {
+															   bomb_img->setPosition(after_position);
+														   }));
+		
 		ing_bomb_value = 0;
 		
 		myGD->communication("Main_scoreAttackMissile", score_attack_damage.getV());
@@ -2064,16 +2279,23 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	t_node->setScale(1.f/1.5f);
 	addChild(t_node);
 	
-	CCLabelBMFont* combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", cnt*5)->getCString(), "combo.fnt");
-	combo_label->setAnchorPoint(ccp(0.5f,0.5f));
-	combo_label->setPosition(ccp(0,-3));
+	KSLabelTTF* combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), cnt*5), mySGD->getFont().c_str(), 30);
+	combo_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
+	combo_label->setPosition(ccp(0,0));
 	t_node->addChild(combo_label);
 	
-	CCSprite* combo_front = CCSprite::create("combo_front.png");
-	combo_front->setAnchorPoint(ccp(0.5f,0.5f));
-	combo_front->setPosition(ccp(0,-10));
-	combo_front->setScale(0.5f);
-	t_node->addChild(combo_front);
+//	CCLabelBMFont* combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", cnt*5)->getCString(), "combo.fnt");
+//	combo_label->setAnchorPoint(ccp(0.5f,0.5f));
+//	combo_label->setPosition(ccp(0,0));
+//	t_node->addChild(combo_label);
+//	
+//	CCSprite* combo_front = CCSprite::create("combo_front.png");
+//	combo_front->setAnchorPoint(ccp(0.5f,0.5f));
+//	combo_front->setPosition(ccp(0,-10));
+//	combo_front->setScale(0.5f);
+//	t_node->addChild(combo_front);
 	
 	addChild(KSTimer::create(2.f, [=]()
 	{
@@ -2333,7 +2555,17 @@ void PlayUI::setComboCnt (int t_combo)
 				ing_bomb_value = combo_cnt%5;
 			}
 			
-			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
+			CCPoint recent_position = bomb_img->getPosition();
+			CCPoint after_position = ccp(0,-54+54.f/5.f*ing_bomb_value);
+			CCPoint sub_position = recent_position - after_position;
+			
+			bomb_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															   {
+																   bomb_img->setPosition(recent_position - sub_position*t);
+															   }, [=](float t)
+															   {
+																   bomb_img->setPosition(after_position);
+															   }));
 		}
 		
 		my_combo->showCombo(t_combo);
@@ -2357,7 +2589,17 @@ void PlayUI::setComboCnt (int t_combo)
 			if(ing_bomb_value > 5)
 				ing_bomb_value = 5;
 			
-			bomb_img->runAction(CCMoveTo::create(0.3f, ccp(0,-54+54.f/5.f*ing_bomb_value)));
+			CCPoint recent_position = bomb_img->getPosition();
+			CCPoint after_position = ccp(0,-54+54.f/5.f*ing_bomb_value);
+			CCPoint sub_position = recent_position - after_position;
+			
+			bomb_img->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+															   {
+																   bomb_img->setPosition(recent_position - sub_position*t);
+															   }, [=](float t)
+															   {
+																   bomb_img->setPosition(after_position);
+															   }));
 		}
 		myLog->addLog(kLOG_endCombo_i, myGD->getCommunication("UI_getUseTime"), before_combo);
 	}

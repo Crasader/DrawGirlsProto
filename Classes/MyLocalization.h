@@ -968,6 +968,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_combo,
 	kMyLocalKey_unlockedAreaScroll,
 	kMyLocalKey_missionComplete,
+	kMyLocalKey_collectChange,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

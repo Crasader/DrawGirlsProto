@@ -90,7 +90,6 @@ bool Maingame::init()
 	save_take_speed_up_effect = NULL;
 	
 	
-	combo_string_img = NULL;
 	combo_value_img = NULL;
 	myJack = NULL;
 	
@@ -3362,44 +3361,31 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 
 void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
 {
-	return;
-	if(combo_string_img || combo_value_img)
-	{
-		if(combo_string_img)
-			combo_string_img->getParent()->removeFromParent();
-		else if(combo_value_img)
-			combo_value_img->getParent()->removeFromParent();
-	}
+	if(combo_value_img)
+		combo_value_img->getParent()->removeFromParent();
 	
 	CCNode* container = CCNode::create();
 	container->setScale(1.f/myGD->game_scale);
 	container->setPosition(ccpAdd(t_position, ccp(0,20)));
 	game_node->addChild(container, goldZorder);
 	
-	combo_string_img = CCSprite::create("combo_front.png");
-	combo_value_img = CCLabelBMFont::create(CCString::createWithFormat("%d", t_combo_value)->getCString(), "combo.fnt");
-	combo_value_img->setAnchorPoint(ccp(0.5,0.5));
-	combo_string_img->setPosition(ccp(-combo_value_img->getContentSize().width/2.f, 0));
-	combo_value_img->setPosition(ccp(combo_string_img->getContentSize().width/2.f, 0));
-	container->addChild(combo_string_img);
+	combo_value_img = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), t_combo_value), mySGD->getFont().c_str(), 30);
+	combo_value_img->enableOuterStroke(ccBLACK, 2.5f, int(255*0.75), true);
+	combo_value_img->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
+	CommonAnimation::applyBigShadow(combo_value_img, combo_value_img->getFontSize());
+	combo_value_img->setPosition(ccp(0,0));
 	container->addChild(combo_value_img);
 	
 	CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 	CCFadeTo* t_fade1 = CCFadeTo::create(0.5f, 0);
-	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, NULL);
-	
-	CCDelayTime* t_delay2 = CCDelayTime::create(0.5f);
-	CCFadeTo* t_fade2 = CCFadeTo::create(0.5f, 0);
-	CCCallFuncO* t_call2 = CCCallFuncO::create(this, callfuncO_selector(Maingame::removeComboImage), container);
-	CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, t_call2, NULL);
+	CCCallFuncO* t_call1 = CCCallFuncO::create(this, callfuncO_selector(Maingame::removeComboImage), container);
+	CCSequence* t_seq1 = CCSequence::create(t_delay1, t_fade1, t_call1, NULL);
 	
 	combo_value_img->runAction(t_seq1);
-	combo_string_img->runAction(t_seq2);
 }
 
 void Maingame::removeComboImage(CCObject* t_node)
 {
-	combo_string_img = NULL;
 	combo_value_img = NULL;
 	((CCNode*)t_node)->removeFromParent();
 }
