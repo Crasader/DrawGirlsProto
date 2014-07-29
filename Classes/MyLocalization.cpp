@@ -1526,6 +1526,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("잠금이 해제되었습니다!"), kMyLocalKey_unlockedAreaScroll);
 	ko->setObject(CCString::create("미션성공!"), kMyLocalKey_missionComplete);
 	ko->setObject(CCString::create("체인지를 모으세요!"), kMyLocalKey_collectChange);
+	ko->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
+	ko->setObject(CCString::create("카드 체인지!"), kMyLocalKey_cardChange);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -2545,6 +2547,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
 	en->setObject(CCString::create("MISSION COMPLETE"), kMyLocalKey_missionComplete);
 	en->setObject(CCString::create("COLLECT CHANGE!!"), kMyLocalKey_collectChange);
+	en->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
+	en->setObject(CCString::create("CARD CHANGE!"), kMyLocalKey_cardChange);
 	
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -3586,6 +3590,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Scrolling is possible!"), kMyLocalKey_unlockedAreaScroll);
 	ja->setObject(CCString::create("MISSION COMPLETE"), kMyLocalKey_missionComplete);
 	ja->setObject(CCString::create("COLLECT CHANGE!!"), kMyLocalKey_collectChange);
+	ja->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
+	ja->setObject(CCString::create("CARD CHANGE!"), kMyLocalKey_cardChange);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

@@ -949,12 +949,14 @@ void ShopPopup::showPopup()
 
 void ShopPopup::endShowPopup()
 {
+	/* close cbt
 	if(!mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
 	{
 		FirstPurchasePopup* t_popup = FirstPurchasePopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=](){is_menu_enable = true;});
 		addChild(t_popup, kSP_Z_popup);
 		return;
 	}
+	 */
 	
 	is_menu_enable = true;
 }
@@ -1090,6 +1092,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 	{
 		if(recent_shop_code == kSC_ruby)
 		{
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
+			
+			/* close cbt
 			createCheckBuyPopup([=]()
 								{
 									loading_layer = LoadingLayer::create();
@@ -1166,6 +1171,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									});
 #endif
 								});
+			 */
 		}
 		else if(recent_shop_code == kSC_gold)
 		{
