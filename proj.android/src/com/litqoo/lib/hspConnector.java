@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -46,6 +47,7 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
+import android.view.WindowManager;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -458,6 +460,20 @@ public class hspConnector {
 		return HSPCore.getInstance().getMemberNo();
 	}
 
+	public static double getScreenRealWidth() {
+		DisplayMetrics dm = new DisplayMetrics();
+		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
+		double x = dm.widthPixels/dm.xdpi;
+		return x;
+	}
+	
+	public static double getScreenRealHeight() {
+		DisplayMetrics dm = new DisplayMetrics();
+		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
+		double y = dm.heightPixels/dm.ydpi;
+		return y;
+	}
+	
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
 
