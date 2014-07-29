@@ -228,10 +228,10 @@ public class hspConnector {
 											+ result);
 							JSONObject r = new JSONObject();
 							JSONObject error = new JSONObject();
-							// 매핑을 성공한 케이스
+							// 매핑을 성공한 케이스.
 							if (result.isSuccess() == true) {
 								Toast.makeText(hspConnector.sContext,
-										"Remapping Success", Toast.LENGTH_LONG)
+										"로그인 성공", Toast.LENGTH_LONG)
 										.show();
 
 							} else { // 매핑을 실패한 케이스

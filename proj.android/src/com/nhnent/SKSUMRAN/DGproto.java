@@ -48,6 +48,7 @@ import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
+//import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
@@ -60,11 +61,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	private static native int getUserState();
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+	
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 	    }
-		
+
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 	
@@ -99,6 +100,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		mGLView.setEGLContextClientVersion(2);
 //		mGLView.setCocos2dxRenderer(new Cocos2dxRenderer());
 //		mGLView.setCocos2dxEditText((Cocos2dxEditText)findViewById(R.id.textField));
+//		Kamcord.initKeyAndSecret(
+//		        "Ir45fxMERyaSCWYFnaxz8Km0I6IhtiGWtMBqFuaz7N0",
+//		        "UqS6SftTrZNWSuzP5WryaeFQK5gJ1oYFQTlMOHmctBK",
+//		        "175998");
+//		Kamcord.initActivity(this);
 	}
 	
 	public Cocos2dxGLSurfaceView onCreateGLSurfaceView() {
