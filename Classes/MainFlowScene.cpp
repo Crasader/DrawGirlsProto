@@ -2718,7 +2718,7 @@ void MainFlowScene::setBottom()
 	rank_item->setTag(kMainFlowMenuTag_rank);
 	
 	CCMenu* rank_menu = CCMenu::createWithItem(rank_item);
-	rank_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(30-240, n_rank->getContentSize().height/2.f+6));//ccp(-205, n_rank->getContentSize().height/2.f));
+	rank_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240, n_rank->getContentSize().height/2.f+6));//ccp(-205, n_rank->getContentSize().height/2.f));
 //	bottom_case->addChild(rank_menu);
 	addChild(rank_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(rank_menu);
@@ -2760,7 +2760,7 @@ void MainFlowScene::setBottom()
 	shop_item->setTag(kMainFlowMenuTag_shop);
 	
 	CCMenu* shop_menu = CCMenu::createWithItem(shop_item);
-	shop_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(27-240+214.f/4.f, n_shop->getContentSize().height/2.f+6));//ccp(-73, n_shop->getContentSize().height/2.f));
+	shop_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55, n_shop->getContentSize().height/2.f+6));//ccp(-73, n_shop->getContentSize().height/2.f));
 //	bottom_case->addChild(shop_menu);
 	addChild(shop_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(shop_menu);
@@ -2789,7 +2789,7 @@ void MainFlowScene::setBottom()
 	cardsetting_item->setTag(kMainFlowMenuTag_cardSetting);
 	
 	CCMenu* cardsetting_menu = CCMenu::createWithItem(cardsetting_item);
-	cardsetting_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(24-240+214.f/4.f*2.f, n_cardsetting->getContentSize().height/2.f+6));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
+	cardsetting_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*2.f, n_cardsetting->getContentSize().height/2.f+6));//ccp(-7, n_cardsetting->getContentSize().height/2.f));
 //	bottom_case->addChild(cardsetting_menu);
 	addChild(cardsetting_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(cardsetting_menu);
@@ -2845,7 +2845,7 @@ void MainFlowScene::setBottom()
 	mission_item->setTag(kMainFlowMenuTag_mission);
 	
 	CCMenu* mission_menu = CCMenu::createWithItem(mission_item);
-	mission_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(21-240+214.f/4.f*3.f, n_mission->getContentSize().height/2.f+6));
+	mission_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*3.f, n_mission->getContentSize().height/2.f+6));
 //	bottom_case->addChild(mission_menu);
 	addChild(mission_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(mission_menu);
@@ -2888,13 +2888,13 @@ void MainFlowScene::setBottom()
 		 
 		 */
 		
-		CCSprite* n_cgp = CCSprite::create("mainflow_event.png");
+		CCSprite* n_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
 		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 15));
 		n_cgp->addChild(n_cgp_label);
 		
-		CCSprite* s_cgp = CCSprite::create("mainflow_event.png");
+		CCSprite* s_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		s_cgp->setColor(ccGRAY);
 		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
@@ -2902,7 +2902,7 @@ void MainFlowScene::setBottom()
 		s_cgp->addChild(s_cgp_label);
 		
 		CCMenuLambda* cgp_menu = CCMenuLambda::create();
-		cgp_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(18-240+214.f, n_cgp->getContentSize().height/2.f+6));
+		cgp_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*4.f, n_cgp->getContentSize().height/2.f+6));
 		//		etc_frame->addChild(cgp_menu);
 		addChild(cgp_menu, kMainFlowZorder_uiButton);
 		bottom_list.push_back(cgp_menu);

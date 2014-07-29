@@ -485,7 +485,7 @@ void EndlessModeOpening::setMain()
 																				 
 																				 CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
 																				 ikaruga->setAnchorPoint(ccp(0,0));
-																				 ikaruga->setPosition(ccp(240-240*screen_scale_x+ikaruga->getContentSize().width*2.f/3.f, 160-160*screen_scale_y));
+																				 ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width+ikaruga->getContentSize().width*2.f/3.f, 160-160*screen_scale_y));
 																				 scenario_node->addChild(ikaruga, 1);
 																				 
 																				 TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
