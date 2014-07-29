@@ -21,10 +21,10 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 	return getCommonNoti(t_touch_priority, t_comment, [](){}, CCPointZero);
 }
 
-ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, const char* t_title, const char* t_comment)
-{
-	return getCommonNoti(t_touch_priority, t_title, t_comment, [](){});
-}
+//ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, const char* t_title, const char* t_comment)
+//{
+//	return getCommonNoti(t_touch_priority, t_title, t_comment, [](){});
+//}
 
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment)
