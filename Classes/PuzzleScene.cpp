@@ -2168,44 +2168,57 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_event)
 		{
-			CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
-				//		if(m_gameCode == kMiniGameCode_gababo)
-				{
-					Json::Value reward_info = mySGD->getAllClearReward();
-					
-					BonusGameReward gr1;
-					gr1.spriteName = "morphing_heart2.png";
-					gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
-					
-					BonusGameReward gr2;
-					gr2.spriteName = "morphing_heart2.png";
-					gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
-					BonusGameReward gr3;
-					gr3.spriteName = "morphing_heart2.png";
-					gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
-					BonusGameReward gr4;
-					gr4.spriteName = "morphing_heart2.png";
-					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
-//					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+			
+			is_menu_enable = true;
+			string serverUrl = myHSP->getServerAddress();
+			string os="ios";
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+			os="android";
+#endif
+			string lang = KS::getLocalCode();
+			string cc = myHSP->getCountryCode();
+			string tz = myHSP->getTimeZone();
+			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+			
+			
+//			CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
+//				//		if(m_gameCode == kMiniGameCode_gababo)
+//				{
+//					Json::Value reward_info = mySGD->getAllClearReward();
+//					
+//					BonusGameReward gr1;
+//					gr1.spriteName = "morphing_heart2.png";
+//					gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
+//					
+//					BonusGameReward gr2;
+//					gr2.spriteName = "morphing_heart2.png";
+//					gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
+//					BonusGameReward gr3;
+//					gr3.spriteName = "morphing_heart2.png";
+//					gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
+//					BonusGameReward gr4;
+//					gr4.spriteName = "morphing_heart2.png";
+//					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
+////					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
+////																			 {
+////																				 is_menu_enable = true;
+////																			 });
+////					addChild(gbb, (int)Curtain::kBonusGame);
+//					JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
 //																			 {
-//																				 is_menu_enable = true;
+//																				 mySGD->addChangeGoods(reward_info[t_i]["exchangeID"].asString());
+//																				 
+//																				 LoadingLayer* t_loading = LoadingLayer::create(-600);
+//																				 addChild(t_loading, 1000);
+//																				 
+//																				 tryGababoReward(t_loading, [=](){is_menu_enable = true;});
 //																			 });
 //					addChild(gbb, (int)Curtain::kBonusGame);
-					JsGababo* gbb = JsGababo::create(-500, {gr1, gr2, gr3, gr4}, [=](int t_i)
-																			 {
-																				 mySGD->addChangeGoods(reward_info[t_i]["exchangeID"].asString());
-																				 
-																				 LoadingLayer* t_loading = LoadingLayer::create(-600);
-																				 addChild(t_loading, 1000);
-																				 
-																				 tryGababoReward(t_loading, [=](){is_menu_enable = true;});
-																			 });
-					addChild(gbb, (int)Curtain::kBonusGame);
-				}
-			});
-			addChild(bonusGame, (int)Curtain::kCurtain);
-
-//			showSuccessPuzzleEffect();
+//				}
+//			});
+//			addChild(bonusGame, (int)Curtain::kCurtain);
+//
+////			showSuccessPuzzleEffect();
 		}
 		else if(tag == kPuzzleMenuTag_achieve)
 		{

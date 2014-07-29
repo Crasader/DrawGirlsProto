@@ -821,6 +821,7 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ko->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	ko->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	ko->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ko->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ko->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
@@ -1865,6 +1866,7 @@ void MyLocal::en()
 //	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	en->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	en->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	en->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	en->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	en->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
@@ -2895,6 +2897,7 @@ void MyLocal::ja()
 //	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ja->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	ja->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	ja->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ja->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ja->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
