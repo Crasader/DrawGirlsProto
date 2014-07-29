@@ -248,6 +248,10 @@ public:
 	void openHSPNotice();
 	void launchPromotion();
 	int openKakaoMsg();
+	
+	double getScreenRealWidth();
+	double getScreenRealHeight();
+	
 	//void loadMyInfo(Json::Value obj);
 	//void loadMyProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	//void loadFriendsProfile(Json::Value param,Json::Value callbackParam,jsonSelType func);

@@ -2728,7 +2728,7 @@ void EndlessModeResult::failAction()
 	addChild(ASPopupView::getCommonNoti(-1000, myLoc->getLocalForKey(kMyLocalKey_stageImgLoadFail), [=]()
 										{
 											startDownload();
-										}));
+										}, CCPointZero));
 }
 
 void EndlessModeResult::successGetStageInfo()
