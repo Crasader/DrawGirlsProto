@@ -41,6 +41,11 @@ LOCAL_MODULE := libkamcord
 LOCAL_SRC_FILES := libkamcord.so
 include $(PREBUILT_SHARED_LIBRARY)
 
+include $(CLEAR_VARS)
+LOCAL_MODULE := libkamcordcore
+LOCAL_SRC_FILES := libkamcordcore.so
+include $(PREBUILT_SHARED_LIBRARY)
+
 $(call import-module,cocos2dx)
 $(call import-module,CocosDenshion/android)
 $(call import-module,scripting/lua/proj.android)
