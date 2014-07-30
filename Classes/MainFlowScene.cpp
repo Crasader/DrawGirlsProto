@@ -3846,7 +3846,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow6 = CCSprite::create("kt_arrow_big.png");
 			t_arrow6->setScale(0.6f);
-			t_arrow6->setPosition(ccp(30,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow6->setPosition(ccp(32,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow6->setRotation(-90);
 			t_clipping->addChild(t_arrow6);
 			
@@ -3858,7 +3858,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow7 = CCSprite::create("kt_arrow_big.png");
 			t_arrow7->setScale(0.6f);
-			t_arrow7->setPosition(ccp(27+214.f/4.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow7->setPosition(ccp(32+55, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow7->setRotation(-90);
 			t_clipping->addChild(t_arrow7);
 			
@@ -3870,7 +3870,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow8 = CCSprite::create("kt_arrow_big.png");
 			t_arrow8->setScale(0.6f);
-			t_arrow8->setPosition(ccp(24+214.f/4.f*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow8->setPosition(ccp(32+55*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow8->setRotation(-90);
 			t_clipping->addChild(t_arrow8);
 			
@@ -3882,7 +3882,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow9 = CCSprite::create("kt_arrow_big.png");
 			t_arrow9->setScale(0.6f);
-			t_arrow9->setPosition(ccp(21+214.f/4.f*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow9->setPosition(ccp(32+55*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow9->setRotation(-90);
 			t_clipping->addChild(t_arrow9);
 			
@@ -3904,8 +3904,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(215, 65));
-			t_stencil3->setPosition(ccp(109,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(235, 65));
+			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			

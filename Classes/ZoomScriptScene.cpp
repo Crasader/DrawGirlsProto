@@ -244,11 +244,13 @@ void ZoomScript::startScript()
 void ZoomScript::typingAnimation()
 {
 	typing_frame++;
-	AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 	if(typing_frame <= text_length)
 	{
 		basic_string<wchar_t> result;
 		utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
+		
+		if(result[typing_frame]==' ' || result[typing_frame]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		
 		result = result.substr(0, typing_frame);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
@@ -258,7 +260,7 @@ void ZoomScript::typingAnimation()
 		if(typing_frame == text_length)
 		{
 						
-			
+			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
