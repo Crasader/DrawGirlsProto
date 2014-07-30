@@ -16,6 +16,7 @@
 #include "CommonButton.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "AudioEngine.h"
 
 ControlTipContent* ControlTipContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, int t_code)
 {
@@ -50,6 +51,8 @@ void ControlTipContent::menuAction(CCObject* sender)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	CommonAnimation::closePopup(this, this, nullptr, [=](){
 		
