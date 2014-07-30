@@ -23,7 +23,7 @@
     <string name="hsp.auth.login.hid.alert.alreadymapped">此ID已和其他Smart Hangame記錄連結。</string>
     <string name="hsp.auth.login.id.alert.alreadymapped">此ID已和其他Smart Hangame記錄連結。請用其他ID連線。</string>
     <string name="hsp.toast.auth.login.hid.alert.alreadymapped">此ID已和其他TOAST遊戲記錄連結。</string>
-    <string name="hsp.auth.punished.member.alert">因採取不正常的遊戲方式，已限制使用。\n會員編號 :</string>
+    <string name="hsp.auth.punished.member.alert">因採取不正常的遊戲方式，已限制使用。</string>
     <string name="hsp.auth.deactivated.member.alert">您的帳戶已被停用。不能再使用該服務。</string>
     <string name="hsp.auth.facebook.login.fail.alert.title">Facebook 登入失敗</string>
     <string name="hsp.auth.facebook.login.fail.alert">Facebook 認證請求失敗。</string>

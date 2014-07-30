@@ -3361,6 +3361,7 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 
 void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
 {
+	return;
 	if(combo_value_img)
 		combo_value_img->getParent()->removeFromParent();
 	
