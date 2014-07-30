@@ -23,7 +23,7 @@
     <string name="hsp.auth.login.hid.alert.alreadymapped">既に他のスマートハンゲームの記録が登録されているIDです。他のIDで登録してください。</string>
     <string name="hsp.auth.login.id.alert.alreadymapped">既に他のゲーム記録が登録されているIDです。他のIDで登録してください。</string>
     <string name="hsp.toast.auth.login.hid.alert.alreadymapped">既に他のゲーム記録が登録されているIDです。他のIDで登録してください。</string>
-    <string name="hsp.auth.punished.member.alert">禁止されている行為が確認され、利用停止されました。\nアカウント番号 : </string>
+    <string name="hsp.auth.punished.member.alert">禁止されている行為が確認され、利用停止されました。</string>
     <string name="hsp.auth.deactivated.member.alert">あなたのアカウントは無効になっている。もう、このサービスを使用することはできません。</string>
     <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
     <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>
