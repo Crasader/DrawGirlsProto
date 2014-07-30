@@ -15,6 +15,7 @@
 #include "MyLocalization.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
+#include "AudioEngine.h"
 
 PatternTutorialContent* PatternTutorialContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, const vector<int>& t_pattern_list)
 {
@@ -32,6 +33,8 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 	is_menu_enable = false;
 	
 	ing_close_cnt++;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	if(ing_close_cnt >= pattern_list.size())
 	{

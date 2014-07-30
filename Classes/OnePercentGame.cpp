@@ -613,6 +613,10 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 //					m_graphNode->setVisible(true);
 					cancel_menu->setVisible(false);
 				}
+				else if(result_data["result"]["code"] == GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+				}
 				else
 				{
 					mySGD->clearChangeGoods();
@@ -633,14 +637,15 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		}
 		else
 		{
-			ShopPopup* t_popup = ShopPopup::create();
-			t_popup->setScale(myDSH->screen_convert_rate);
-			t_popup->setShopCode(kSC_ruby);
-			t_popup->setCloseFunc([=]()
-														{
-															//																is_menu_enable = true;
-														});
-			addChild(t_popup, kOnePercentGame_Z_shop);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+//			ShopPopup* t_popup = ShopPopup::create();
+//			t_popup->setScale(myDSH->screen_convert_rate);
+//			t_popup->setShopCode(kSC_ruby);
+//			t_popup->setCloseFunc([=]()
+//														{
+//															//																is_menu_enable = true;
+//														});
+//			addChild(t_popup, kOnePercentGame_Z_shop);
 			
 		}
 	}
