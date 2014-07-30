@@ -42,7 +42,7 @@
 #include "AccountManagerPopup.h"
 #include "StyledLabelTTF.h"
 #include "OnePercentTutorial.h"
-#include "FirstPurchasePopup.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -216,9 +216,6 @@ bool OptionPopup::init()
 //	});
 	
 	setTouchEnabled(true);
-	
-	FirstPurchasePopup* t_popup = FirstPurchasePopup::create(-9999, [=](){}, [=](){});
-	addChild(t_popup, 9999);
 	
 	
 //	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
