@@ -1795,7 +1795,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														ikaruga->setVisible(false);
 																														scenario_node->addChild(ikaruga, 1);
 																														
-																														CCSprite* boy = CCSprite::create("kt_cha_asuka_1.png"); // test
+																														CCSprite* boy = CCSprite::create("kt_cha_black.png");
 																														boy->setAnchorPoint(ccp(1,0));
 																														boy->setPosition(ccp(240+240*screen_scale_x+boy->getContentSize().width, 160-160*screen_scale_y));
 																														boy->setVisible(false);
