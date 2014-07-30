@@ -3444,7 +3444,7 @@ void PlayUI::myInit ()
 	
 	if(mySGD->is_endless_mode)
 	{
-		score_label = CountingBMLabel::create("0", "endless_score.fnt", 2.f, "%d");
+		score_label = CountingBMLabel::create("0", "endless_score.fnt", 2.f, "%.0f");
 		((CountingBMLabel*)score_label)->onChangeScale(false);
 		
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");

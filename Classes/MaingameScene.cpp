@@ -793,7 +793,8 @@ void Maingame::finalSetting()
 			myGD->V_I["Main_refreshReplayPosition"] = std::bind(&Maingame::refreshReplayPosition, this, _1);
 //		}
 		
-		replay_score = CountingBMLabel::create("0", "endless_score.fnt", 2.f, "%d");
+		replay_score = CountingBMLabel::create("0", "endless_score.fnt", 2.f, "%.0f");
+		((CountingBMLabel*)replay_score)->onChangeScale(false);
 		replay_score->setPosition(ccpAdd(replay_thumb_texture->getPosition(), ccp(0,-215.f*thumb_scale+10)));
 		replay_all_node->addChild(replay_score, 99);
 		
@@ -4302,7 +4303,7 @@ void Maingame::refreshReplayScore(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)][score_index].asInt() > temp_time)
 		return;
 	
-	replay_score->setString(CCString::createWithFormat("%d", damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
+	replay_score->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
 }
 
 void Maingame::refreshReplayPosition(int temp_time)
