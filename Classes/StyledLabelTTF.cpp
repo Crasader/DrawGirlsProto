@@ -130,6 +130,10 @@ void StyledLabelTTF::updateTexture()
 				{
 					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
 				}
+				else
+				{
+					ttf->disableOuterStroke();
+				}
 				m_oneLineContainer->addChild(ttf);
 				ttf->setAnchorPoint(ccp(0.f, 0.5f));
 				ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
