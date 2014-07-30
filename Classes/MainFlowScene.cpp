@@ -3677,6 +3677,10 @@ void MainFlowScene::topOnLight()
 	{
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 1);
 		
+		mySGD->is_on_attendance = false;
+		mySGD->is_on_rank_reward = false;
+		mySGD->is_today_mission_first = false;
+		
 		CCNode* scenario_node = CCNode::create();
 		addChild(scenario_node, 9999);
 		
