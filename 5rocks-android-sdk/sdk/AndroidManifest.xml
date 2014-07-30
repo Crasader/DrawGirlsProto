@@ -3,7 +3,7 @@
   xmlns:android="http://schemas.android.com/apk/res/android"
   package="io.fiverocks.android"
   android:versionCode="0"
-  android:versionName="2.3.3">
+  android:versionName="2.4.1">
 
   <uses-sdk android:minSdkVersion="8"/>
 

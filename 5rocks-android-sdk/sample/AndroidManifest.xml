@@ -29,6 +29,12 @@
     android:label="@string/app_name"
     android:theme="@style/AppTheme">
 
+    <!-- [5Rocks] Optional meta-data to set the name of the app store which the app will be installed from.
+                  i.e. "Google", "Amazon" -->
+    <!--
+    <meta-data android:name="io.fiverocks.android.appstore" android:value="Google"/>
+    -->
+
     <!-- [5Rocks] Receiver to track a referrer of the install via the Google Play Store. -->
     <receiver
       android:name="io.fiverocks.android.InstallReferrerReceiver"
