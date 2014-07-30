@@ -360,7 +360,7 @@ namespace fiverocks {
         }
 
         /**
-         * @brief Called when a purchase has been requested.
+         * @brief Called when a reward unlock has been requested.
          * @param id
          *        the unique identifier of this reward to prevent the reuse attack
          * @param name
