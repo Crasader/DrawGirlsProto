@@ -1438,7 +1438,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할수있겠는데?!"), kMyLocalKey_scenarioMent2);
 	ko->setObject(CCString::create("안녕하세요.\n저는 한조국립대 학생 리더인 이카루가입니다."), kMyLocalKey_scenarioMent3);
 	ko->setObject(CCString::create("앗 안녕하세요.\n저는 아스카 라고합니다."), kMyLocalKey_scenarioMent4);
-	ko->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을\n 하신다는군요."), kMyLocalKey_scenarioMent5);
+	ko->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	ko->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	ko->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
 	ko->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
@@ -2460,7 +2460,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할수있겠는데?!"), kMyLocalKey_scenarioMent2);
 	en->setObject(CCString::create("안녕하세요.\n저는 한조국립대 학생 리더인 이카루가입니다."), kMyLocalKey_scenarioMent3);
 	en->setObject(CCString::create("앗 안녕하세요.\n저는 아스카 라고합니다."), kMyLocalKey_scenarioMent4);
-	en->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을 하신다는군요."), kMyLocalKey_scenarioMent5);
+	en->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	en->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	en->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
 	en->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
@@ -3504,7 +3504,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할수있겠는데?!"), kMyLocalKey_scenarioMent2);
 	ja->setObject(CCString::create("안녕하세요.\n저는 한조국립대 학생 리더인 이카루가입니다."), kMyLocalKey_scenarioMent3);
 	ja->setObject(CCString::create("앗 안녕하세요.\n저는 아스카 라고합니다."), kMyLocalKey_scenarioMent4);
-	ja->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을 하신다는군요."), kMyLocalKey_scenarioMent5);
+	ja->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	ja->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	ja->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
 	ja->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
