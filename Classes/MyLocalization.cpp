@@ -1491,7 +1491,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	ko->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	ko->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	ko->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깍을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	ko->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
 	ko->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ko->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ko->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
@@ -2513,7 +2513,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	en->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	en->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	en->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깍을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	en->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
 	en->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	en->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	en->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
@@ -3557,7 +3557,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	ja->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	ja->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	ja->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깍을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	ja->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
 	ja->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ja->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ja->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
