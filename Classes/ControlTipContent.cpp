@@ -95,12 +95,13 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 15.f); // 17.5f는 너무 큼
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 1, 190, true);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(0, 80));
 	addChild(title_label);
 	
 	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 11.5f);
+	content_label->setColor(ccc3(0, 45, 100));
 	content_label->disableOuterStroke();
 	content_label->setPosition(ccp(0, 62));
 	addChild(content_label);

@@ -262,7 +262,7 @@ void StartSettingPopup::setMain()
 		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f+9, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
-		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
+		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12.5f);
 		mission_title_label->disableOuterStroke();
 		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f) + ccp(0,1));
 		mission_title_back->addChild(mission_title_label);
@@ -742,7 +742,6 @@ void StartSettingPopup::setMain()
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
-		gacha_label->setColor(ccc3(255, 170, 20));
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
 		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, 15.f));
 		gacha_item->addChild(gacha_label);
@@ -1028,7 +1027,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
-		n_level->disableOuterStroke();
+		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -1037,7 +1036,7 @@ void StartSettingPopup::setMain()
 		s_upgrade->setColor(ccGRAY);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
-		s_level->disableOuterStroke();
+		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		

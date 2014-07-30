@@ -3672,6 +3672,13 @@ void MainFlowScene::topOnLight()
 															  }));
 	};
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+	{
+		mySGD->is_on_attendance = false;
+		mySGD->is_on_rank_reward = false;
+		mySGD->is_today_mission_first = false;
+	}
+	
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
 	{

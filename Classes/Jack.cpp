@@ -1631,6 +1631,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->addChild(warning_label);
 			
 				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
+				content_label->setColor(ccc3(20, 50, 70));
 				content_label->disableOuterStroke();
 				content_label->setAnchorPoint(ccp(0.5f,0.5f));
 				content_label->setPosition(ccp(content_back->getContentSize().width/2.f,50));
@@ -1713,6 +1714,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->addChild(warning_label);
 			
 				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
+				content_label->setColor(ccc3(20, 50, 70));
 				content_label->disableOuterStroke();
 				content_label->setAnchorPoint(ccp(0.5f,0.5f));
 				content_label->setPosition(ccp(content_back->getContentSize().width/2.f,50));
