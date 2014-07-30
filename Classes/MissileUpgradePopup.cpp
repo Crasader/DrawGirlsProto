@@ -100,6 +100,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_upgradeSubMent), mySGD->getFont().c_str(), 11);
 	sub_label->disableOuterStroke();
+	sub_label->setColor(ccc3(20, 40, 70));
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 	sub_label->setPosition(ccp(0,73));
 	m_container->addChild(sub_label);

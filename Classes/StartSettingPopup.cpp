@@ -513,7 +513,7 @@ void StartSettingPopup::setMain()
 			
 			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
 			t_arrow1->setScale(0.6f);
-			t_arrow1->setPosition(ccp(314, 210));
+			t_arrow1->setPosition(ccp(314, 221));
 			t_arrow1->setRotation(90);
 			t_clipping->addChild(t_arrow1);
 			
@@ -535,7 +535,7 @@ void StartSettingPopup::setMain()
 			
 			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 			t_stencil1->setContentSize(CCSizeMake(282, 37));
-			t_stencil1->setPosition(ccp(314, 254));
+			t_stencil1->setPosition(ccp(314, 265));
 			t_stencil_node->addChild(t_stencil1);
 			
 			CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));

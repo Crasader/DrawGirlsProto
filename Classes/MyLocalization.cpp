@@ -821,6 +821,7 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	ko->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ko->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	ko->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	ko->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ko->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ko->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
@@ -967,10 +968,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ko->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ko->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ko->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
-	ko->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
-	ko->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
-	ko->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
+	ko->setObject(CCString::create("%d Day"), kMyLocalKey_restTimeDay);
+	ko->setObject(CCString::create("%d Hour"), kMyLocalKey_restTimeHour);
+	ko->setObject(CCString::create("%d Min"), kMyLocalKey_restTimeMinute);
+	ko->setObject(CCString::create("%d Sec"), kMyLocalKey_restTimeSecond);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
 //	ko->setObject(CCString::create(""), kMyLocalKey_);
@@ -1437,7 +1438,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할수있겠는데?!"), kMyLocalKey_scenarioMent2);
 	ko->setObject(CCString::create("안녕하세요.\n저는 한조국립대 학생 리더인 이카루가입니다."), kMyLocalKey_scenarioMent3);
 	ko->setObject(CCString::create("앗 안녕하세요.\n저는 아스카 라고합니다."), kMyLocalKey_scenarioMent4);
-	ko->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을 하신다는군요."), kMyLocalKey_scenarioMent5);
+	ko->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘부탁드립니다.\n훈련전에 선생님께서 간단한 시험을\n 하신다는군요."), kMyLocalKey_scenarioMent5);
 	ko->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	ko->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
 	ko->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
@@ -1482,8 +1483,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이카루가.. 그리고\n야규, 아스카, 히바리도 마침 딱 있었네!"), kMyLocalKey_scenarioMent47);
 	ko->setObject(CCString::create("카츠라기님. 오늘 훈련은 끝났는데\n집에 안가세요?"), kMyLocalKey_scenarioMent48);
 	ko->setObject(CCString::create("어, 응.. 음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨋든 좀 더 몸을 움직이려고... 응?"), kMyLocalKey_scenarioMent49);
-	ko->setObject(CCString::create("으앙~ 마스크쓴 누나한테\n과자 뺏겼어!!"), kMyLocalKey_scenarioMent50);
-	ko->setObject(CCString::create("소매치기예요!!"), kMyLocalKey_scenarioMent51);
+	ko->setObject(CCString::create("아앗 저건뭐지?"), kMyLocalKey_scenarioMent50);
+	ko->setObject(CCString::create("소매치기예요!! 꼬마의 물건을 훔쳐가네요!!"), kMyLocalKey_scenarioMent51);
 	ko->setObject(CCString::create("아이의 즐거움을 잽싸게 뺏는\n배짱좋은 녀석이군.\n그런 썩은 자식은 우리들이 혼내줄테다!!"), kMyLocalKey_scenarioMent52);
 	ko->setObject(CCString::create("우와! 실력이 일취월장인데요?\n벌써 실력이 많이 늘었네요.\n이젠 다른사람과 대전을 해볼까요?\n \n따라오세요."), kMyLocalKey_scenarioMent53);
 	ko->setObject(CCString::create("이건 내 정보예요.\n보상내용도 나중에 확인해보세요."), kMyLocalKey_scenarioMent54);
@@ -1865,6 +1866,7 @@ void MyLocal::en()
 //	en->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	en->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	en->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	en->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	en->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	en->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	en->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
@@ -2010,10 +2012,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	en->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	en->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	en->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
-	en->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
-	en->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
-	en->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
+	en->setObject(CCString::create("%d Day"), kMyLocalKey_restTimeDay);
+	en->setObject(CCString::create("%d Hour"), kMyLocalKey_restTimeHour);
+	en->setObject(CCString::create("%d Min"), kMyLocalKey_restTimeMinute);
+	en->setObject(CCString::create("%d Sec"), kMyLocalKey_restTimeSecond);
 	
 	en->setObject(CCString::create("Do you want to exit the game?"), kMyLocalKey_exit);
 	
@@ -2442,7 +2444,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	en->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
 	en->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
-	en->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
+	en->setObject(CCString::create("다음 ▶︎"), kMyLocalKey_tutorialNextButton);
 	
 	en->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
@@ -2895,6 +2897,7 @@ void MyLocal::ja()
 //	ja->setObject(CCString::create("별 갯수는 총 10개"), kMyLocalKey_detailConditionPopupContent4);
 //	ja->setObject(CCString::create("입니다."), kMyLocalKey_detailConditionPopupContent5);
 	ja->setObject(CCString::create("결제 실패"), kMyLocalKey_failPurchase);
+	ja->setObject(CCString::create("구매 완료"), kMyLocalKey_successPurchase);
 	ja->setObject(CCString::create("지금 상점으로 이동하시겠습니까?"), kMyLocalKey_enoughtGoodsContent);
 	ja->setObject(CCString::create("포기하기"), kMyLocalKey_giveup);
 	ja->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
@@ -3043,10 +3046,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("선을 그을때 몬스터가\n선에 닿으면 파동이 생겨 죽어요!"), kMyLocalKey_dieTutorial2);
 	ja->setObject(CCString::create(""), kMyLocalKey_dieTutorial3);
 	ja->setObject(CCString::create("남은시간 "), kMyLocalKey_restTime);
-	ja->setObject(CCString::create("%dDay"), kMyLocalKey_restTimeDay);
-	ja->setObject(CCString::create("%dHour"), kMyLocalKey_restTimeHour);
-	ja->setObject(CCString::create("%dMinute"), kMyLocalKey_restTimeMinute);
-	ja->setObject(CCString::create("%dSecond"), kMyLocalKey_restTimeSecond);
+	ja->setObject(CCString::create("%d Day"), kMyLocalKey_restTimeDay);
+	ja->setObject(CCString::create("%d Hour"), kMyLocalKey_restTimeHour);
+	ja->setObject(CCString::create("%d Min"), kMyLocalKey_restTimeMinute);
+	ja->setObject(CCString::create("%d Sec"), kMyLocalKey_restTimeSecond);
 	
 		
 //	ja->setObject(CCString::create("操作方法のチュートリアルを始めます。\n真ん中の赤い丸がキャラクターです。\nキャラクターを動かせて領域の外側に移動させることも\n領域を獲得することもできます。"), kMyLocalKey_tutorial1);

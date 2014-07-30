@@ -90,7 +90,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
 	title_label->disableOuterStroke();
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 4));
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	setFormSetter(title_label);
 	title_back->addChild(title_label);
 	

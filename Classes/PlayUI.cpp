@@ -1300,8 +1300,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			if(t_p >= t_beforePercentage + 0.05f)
 			{
-				int random_value = rand()%13 + 1;
-				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("groan%d.wav", random_value)->getCString(), false);
+				int random_value = rand()%9 + 1;
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("groan%d.mp3", random_value)->getCString(), false);
 			}
 		}
 		

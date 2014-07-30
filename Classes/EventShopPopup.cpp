@@ -229,6 +229,12 @@ void EventShopPopup::menuAction(CCObject* sender)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
+	
+	addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
+	
+	
+	return;
+	
 	int tag = ((CCNode*)sender)->getTag();
 	int t_index = tag - kEventShopProductCode_1;
 	
@@ -245,7 +251,8 @@ void EventShopPopup::menuAction(CCObject* sender)
 								
 								if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								{
-									
+									mySGD->clearChangeGoods();
+									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 								}
 								else
 								{
@@ -287,6 +294,8 @@ void EventShopPopup::requestItemDelivery()
 		{
 			CCLOG("inapp success!! refresh!!!");
 			
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
+			
 			mySGD->initProperties(t["list"]);
 			//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
@@ -306,64 +315,79 @@ void EventShopPopup::requestItemDelivery()
 
 void EventShopPopup::createCheckBuyPopup(function<void()> buy_action)
 {
-	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
+//	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float height_value = 320.f;
+//	if(myDSH->screen_convert_rate < 1.f)
+//		height_value = 320.f/myDSH->screen_convert_rate;
+//	
+//	if(height_value < myDSH->ui_top)
+//		height_value = myDSH->ui_top;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, 160));
+//	t_popup->setBasePosition(ccp(240, 160));
+//	
+//	CCNode* t_container = CCNode::create();
+//	t_popup->setContainerNode(t_container);
+//	addChild(t_popup, 900);
+//	
+//	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//	case_back->setPosition(ccp(0,0));
+//	t_container->addChild(case_back);
+//	
+//	case_back->setContentSize(CCSizeMake(220, 190));
+//	
+//	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
+//	content_back->setPosition(ccp(0,25));
+//	t_container->addChild(content_back);
+//	
+//	content_back->setContentSize(CCSizeMake(200, 120));
+//	
+//	CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy),	mySGD->getFont().c_str(), 15);
+//	ment_label->setPosition(ccp(0,25));
+//	t_container->addChild(ment_label);
+//	
+//	
+//	
+//	CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//	cancel_button->setPosition(ccp(100,85));
+//	cancel_button->setFunction([=](CCObject* sender)
+//							   {
+//								   is_menu_enable = true;
+//								   t_popup->removeFromParent();
+//							   });
+//	t_container->addChild(cancel_button);
+//	
+//	
+//	CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+//	ok_button->setPosition(ccp(0,-65));
+//	ok_button->setFunction([=](CCObject* sender)
+//						   {
+//							   buy_action();
+//							   t_popup->removeFromParent();
+//						   });
+//	t_container->addChild(ok_button);
+//	
+//	
+//	
+//	
 	
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
 	
-	float height_value = 320.f;
-	if(myDSH->screen_convert_rate < 1.f)
-		height_value = 320.f/myDSH->screen_convert_rate;
-	
-	if(height_value < myDSH->ui_top)
-		height_value = myDSH->ui_top;
-	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-	t_popup->setDimmedPosition(ccp(240, 160));
-	t_popup->setBasePosition(ccp(240, 160));
-	
-	CCNode* t_container = CCNode::create();
-	t_popup->setContainerNode(t_container);
-	addChild(t_popup, 900);
-	
-	CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	case_back->setPosition(ccp(0,0));
-	t_container->addChild(case_back);
-	
-	case_back->setContentSize(CCSizeMake(220, 190));
-	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-	content_back->setPosition(ccp(0,25));
-	t_container->addChild(content_back);
-	
-	content_back->setContentSize(CCSizeMake(200, 120));
-	
-	CCLabelTTF* ment_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy),	mySGD->getFont().c_str(), 15);
-	ment_label->setPosition(ccp(0,25));
-	t_container->addChild(ment_label);
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		
+		buy_action();
+		
+	},12.f,CCPointZero,true,true,[=](){
+		is_menu_enable = true;
+	}));
 	
 	
-	
-	CommonButton* cancel_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	cancel_button->setPosition(ccp(100,85));
-	cancel_button->setFunction([=](CCObject* sender)
-							   {
-								   is_menu_enable = true;
-								   t_popup->removeFromParent();
-							   });
-	t_container->addChild(cancel_button);
-	
-	
-	CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(110, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
-	ok_button->setPosition(ccp(0,-65));
-	ok_button->setFunction([=](CCObject* sender)
-						   {
-							   buy_action();
-							   t_popup->removeFromParent();
-						   });
-	t_container->addChild(ok_button);
 }
 
 
