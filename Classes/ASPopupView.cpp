@@ -37,6 +37,25 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 																				function<void()> close_func,
 																				float titleFontSize, CCPoint t_position, bool Xbutton)
 {
+	return getCommonNoti(t_touch_priority, t_title,ment_label,close_func,titleFontSize,t_position,Xbutton,false,nullptr);
+}
+
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment,
+																				function<void()> close_func,
+																				float titleFontSize, CCPoint t_position, bool Xbutton, bool towButton,function<void()> close_func2){
+
+	KSLabelTTF* ment_label = KSLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
+	ment_label->disableOuterStroke();
+
+	return getCommonNoti(t_touch_priority, t_title,  ment_label,
+																								  close_func,
+																								  titleFontSize,  t_position,  Xbutton,  towButton,close_func2);
+}
+ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CCNode* ment_label,
+																				function<void()> close_func,
+																				float titleFontSize, CCPoint t_position, bool Xbutton, bool towButton,function<void()> close_func2){
+	
+
 	ASPopupView* t_popup = ASPopupView::create(t_touch_priority);
 	startFormSetter(t_popup);
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -120,8 +139,12 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 																CommonAnimation::closePopup(t_popup, t_container,
 																														t_popup->getDimmedSprite(), nullptr,
 																														[=](){
-																															if(close_func)
+																															if(close_func && !towButton)
 																																close_func();
+																															
+																															if(close_func && towButton)
+																																close_func2();
+																															
 																															t_popup->removeFromParent();
 																														});
 																
@@ -129,8 +152,8 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		t_container->addChild(close_button);
 		
 	}
-	else
-	{
+	
+	if((Xbutton && towButton) || !Xbutton){
 		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		setFormSetter(close_button);
 		close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));

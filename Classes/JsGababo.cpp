@@ -26,6 +26,7 @@ JsGababo::JsGababo()
 	m_stepSprite = nullptr;
 	//	m_gameStep = 1;
 	m_winCount = 0;
+	cardNo=0;
 	m_resultStamp = nullptr;
 	m_resultParticle = nullptr;
 	m_tutorialStep = 1;
@@ -292,7 +293,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	setupCongMessage();
 	
 	setupHands();
-	loadImage(1);
+	loadImage(0);
 	
 	// 튜토 보여줬다면
 	if(myDSH->getIntegerForKey(kDSH_Key_isShowGababoTutorial) && false)
@@ -401,10 +402,12 @@ void JsGababo::setupReward()
 }
 void JsGababo::loadImage(int step)
 {
+	step+=1;
+	if(!cardNo)cardNo=rand()%5 + 1;
 	if(m_stepSprite != nullptr)
 		m_stepSprite->removeFromParent();
 	m_stepSprite = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",
-																  NSDS_GI(1, kSDS_SI_level_int1_card_i, step))->getCString());
+																  NSDS_GI(cardNo, kSDS_SI_level_int1_card_i, step))->getCString());
 	
 	m_willToggleObjects.push_back(m_stepSprite);
 	// CCSprite::create(boost::str(boost::format("ga%||.png") % step).c_str());
@@ -532,7 +535,7 @@ void JsGababo::showHandsMotion(std::function<void(void)> endLeft, std::function<
 			if(endLeft) {
 				endLeft();
 			}
-			AudioEngine::sharedInstance()->playEffect("se_mg_mini.mp3");
+			
 		}
 	});
 	npcManager->runAnimationsForSequenceNamed("gababo_start");
@@ -828,7 +831,7 @@ void JsGababo::showHandsMotionWrapper()
 		if(m_winCount == 0)
 		{
 			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
-			ProbSelector ps = {50, 30, 20};
+			ProbSelector ps = {40, 30, 30};
 //			ProbSelector ps = {70.f, 100000.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
@@ -921,7 +924,7 @@ void JsGababo::showHandsMotionWrapper()
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
 					CCSprite* result_stamp = CCSprite::create("gababo_draw.png");
-					AudioEngine::sharedInstance()->playEffect("sg_mg_fail.mp3");
+					AudioEngine::sharedInstance()->playEffect("sg_mg_draw.mp3");
 					m_resultStamp = result_stamp;
 					//					result_stamp->setRotation(-15);
 					m_back->addChild(result_stamp, 3);
@@ -933,7 +936,11 @@ void JsGababo::showHandsMotionWrapper()
 			}
 			else if(D == 1) // Win
 			{
+				
 				CCLOG("win");
+				
+				
+				
 				if(m_winCount != 3)
 				{
 					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent11));
@@ -949,8 +956,10 @@ void JsGababo::showHandsMotionWrapper()
 					m_confirmButton->setEnabled(true);
 					
 					CCSprite* result_stamp = CCSprite::create("endless_winner.png");
-				
-					AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
+					int random_value = rand()%3 + 1;
+					AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("sg_mg_win%d.mp3", random_value)->getCString(),false);
+					
+					//AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
 					// YH 코드.
 					addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																								 {

@@ -85,7 +85,7 @@ void KsLocal::ko()
 																														 "<font color=#FFFFFF size=11>돈이 쏟아져요!</font>";
 	
 	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font>"
-																										 "<font color=#FFFFFF newline=15>보상선물은 선물함에서 확인하세요.</font>"
+																										 "<font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font>"
 																										 "<font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>";
 	
 	

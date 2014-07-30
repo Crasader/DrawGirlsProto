@@ -1036,6 +1036,7 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 		CCLOG("userdata was save to server");
 	}
 	else
@@ -2005,110 +2006,125 @@ void ShopPopup::menuAction(CCObject* pSender)
 
 void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 {
-	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
+//	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
+//	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float height_value = 320.f;
+//	if(myDSH->screen_convert_rate < 1.f)
+//		height_value = 320.f/myDSH->screen_convert_rate;
+//	
+//	if(height_value < myDSH->ui_top)
+//		height_value = myDSH->ui_top;
+//	
+//	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+//	t_popup->setDimmedPosition(ccp(240, 160));
+//	t_popup->setBasePosition(ccp(240, 160));
+//	
+//	CCNode* t_container = CCNode::create();
+//	t_popup->setContainerNode(t_container);
+//	addChild(t_popup, kSP_Z_popup);
+//	
+//	CCSprite* back_case = CCSprite::create("popup_small_back.png");
+//	back_case->setPosition(ccp(0,0));
+//	t_container->addChild(back_case);
+//	
+//	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-140));
+//	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+16.5f));
+//	back_case->addChild(back_in);
+//	
+//	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 12);
+//	title_label->disableOuterStroke();
+//	title_label->setAnchorPoint(ccp(0.5f,0.5f));
+//	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+//	t_container->addChild(title_label);
+//	
+//	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
+//	sub_label->disableOuterStroke();
+//	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+//	sub_label->setPosition(ccp(0,16));
+//	t_container->addChild(sub_label);
+//	
+//	CCSprite* gray = t_popup->getDimmedSprite();
+//	
+//	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
+//	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
+//	close_button->setFunction([=](CCObject* sender)
+//							  {
+//								  if(!t_popup->is_menu_enable)
+//									  return;
+//								  
+//								  t_popup->is_menu_enable = false;
+//								  
+//									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+//										
+//									}, [=](){
+//										is_menu_enable = true;
+//										t_popup->removeFromParent();
+//									});
+//							  });
+//	t_container->addChild(close_button);
+//	
+//	t_popup->button_func_list.clear();
+//	
+//	t_popup->button_func_list.push_back([=](){
+//		if(!t_popup->is_menu_enable)
+//			return;
+//		
+//		t_popup->is_menu_enable = false;
+//		
+//		CommonAnimation::closePopup(this, t_container, gray, [=](){
+//			
+//		}, [=](){
+//			buy_action();
+//			t_popup->removeFromParent();
+//		});
+//		
+//	});
+//	
+//	CCLabelTTF* t2_label = CCLabelTTF::create();
+//	
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	ok_label->disableOuterStroke();
+//	ok_label->setPosition(ccp(0,0));
+//	t2_label->addChild(ok_label);
+//	
+//	CCScale9Sprite* ok_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
+//	
+//	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
+//	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
+//	ok_button->setTag(0);
+//	ok_button->setPreferredSize(CCSizeMake(150,50));
+//	ok_button->setPosition(ccp(0,-42));
+//	t_container->addChild(ok_button);
+//	
+//	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+//	
+//	
+//	CommonAnimation::openPopup(this, t_container, gray, [=](){
+//		
+//	}, [=](){
+//		t_popup->is_menu_enable = true;
+//	});
+
+
+
 	
-	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-	if(screen_scale_x < 1.f)
-		screen_scale_x = 1.f;
-	
-	float height_value = 320.f;
-	if(myDSH->screen_convert_rate < 1.f)
-		height_value = 320.f/myDSH->screen_convert_rate;
-	
-	if(height_value < myDSH->ui_top)
-		height_value = myDSH->ui_top;
-	
-	t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-	t_popup->setDimmedPosition(ccp(240, 160));
-	t_popup->setBasePosition(ccp(240, 160));
-	
-	CCNode* t_container = CCNode::create();
-	t_popup->setContainerNode(t_container);
-	addChild(t_popup, kSP_Z_popup);
-	
-	CCSprite* back_case = CCSprite::create("popup_small_back.png");
-	back_case->setPosition(ccp(0,0));
-	t_container->addChild(back_case);
-	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(back_case->getContentSize().width-45, back_case->getContentSize().height-140));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+16.5f));
-	back_case->addChild(back_in);
-	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 12);
-	title_label->disableOuterStroke();
-	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
-	t_container->addChild(title_label);
-	
-	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
-	sub_label->disableOuterStroke();
-	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-	sub_label->setPosition(ccp(0,16));
-	t_container->addChild(sub_label);
-	
-	CCSprite* gray = t_popup->getDimmedSprite();
-	
-	CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
-	close_button->setPosition(ccp(back_case->getContentSize().width/2.f-22,back_case->getContentSize().height/2.f-25));
-	close_button->setFunction([=](CCObject* sender)
-							  {
-								  if(!t_popup->is_menu_enable)
-									  return;
-								  
-								  t_popup->is_menu_enable = false;
-								  
-									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
-										
-									}, [=](){
-										is_menu_enable = true;
-										t_popup->removeFromParent();
-									});
-							  });
-	t_container->addChild(close_button);
-	
-	t_popup->button_func_list.clear();
-	
-	t_popup->button_func_list.push_back([=](){
-		if(!t_popup->is_menu_enable)
-			return;
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realBuy),[=](){
 		
-		t_popup->is_menu_enable = false;
-		
-		CommonAnimation::closePopup(this, t_container, gray, [=](){
-			
-		}, [=](){
-			buy_action();
-			t_popup->removeFromParent();
-		});
-		
-	});
-	
-	CCLabelTTF* t2_label = CCLabelTTF::create();
-	
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
-	ok_label->disableOuterStroke();
-	ok_label->setPosition(ccp(0,0));
-	t2_label->addChild(ok_label);
-	
-	CCScale9Sprite* ok_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
-	
-	CCControlButton* ok_button = CCControlButton::create(t2_label, ok_back);
-	ok_button->addTargetWithActionForControlEvents(t_popup, cccontrol_selector(ASPopupView::buttonAction), CCControlEventTouchUpInside);
-	ok_button->setTag(0);
-	ok_button->setPreferredSize(CCSizeMake(150,50));
-	ok_button->setPosition(ccp(0,-42));
-	t_container->addChild(ok_button);
-	
-	ok_button->setTouchPriority(t_popup->getTouchPriority()-5);
+		buy_action();
+
+	},12.f,CCPointZero,true,true,[=](){
+
+		is_menu_enable = true;
+
+	}));
 	
 	
-	CommonAnimation::openPopup(this, t_container, gray, [=](){
-		
-	}, [=](){
-		t_popup->is_menu_enable = true;
-	});
 }
 
 void ShopPopup::startCardGacha()

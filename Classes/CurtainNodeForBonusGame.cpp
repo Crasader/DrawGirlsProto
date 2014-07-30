@@ -39,21 +39,33 @@ bool CurtainNodeForBonusGame::init()
 
 void CurtainNodeForBonusGame::menuAction(std::function<void(void)> callback)
 {
-	addChild(KSGradualValue<CCPoint>::create(m_leftCurtain->getPosition(), ccp(-80 - 20, 160), 0.3f, [=](CCPoint t){
-		m_leftCurtain->setPosition(t);
-	}, [=](CCPoint t){
-		m_leftCurtain->setPosition(t);
-	}));
-	addChild(KSGradualValue<CCPoint>::create(m_rightCurtain->getPosition(), ccp(560 + 20, 160), 0.3f, [=](CCPoint t){
-		m_rightCurtain->setPosition(t);
-	}, [=](CCPoint t){
-		m_rightCurtain->setPosition(t);
+	
+	addChild(KSTimer::create(0.3f, [=](){
+		
 		if(callback)
 		{
 			callback();
 		}
 		removeFromParent();
+		
 	}));
+//	addChild(KSGradualValue<CCPoint>::create(m_leftCurtain->getPosition(), ccp(-80 - 20, 160), 0.3f, [=](CCPoint t){
+//		m_leftCurtain->setPosition(t);
+//	}, [=](CCPoint t){
+//		m_leftCurtain->setPosition(t);
+//	}));
+	
+	
+//	addChild(KSGradualValue<CCPoint>::create(m_rightCurtain->getPosition(), ccp(560 + 20, 160), 0.3f, [=](CCPoint t){
+//		m_rightCurtain->setPosition(t);
+//	}, [=](CCPoint t){
+//		m_rightCurtain->setPosition(t);
+//		if(callback)
+//		{
+//			callback();
+//		}
+//		removeFromParent();
+//	}));
 	
 	
 //	if(m_titleBonusGame)
@@ -114,4 +126,7 @@ void CurtainNodeForBonusGame::menuAction(std::function<void(void)> callback)
 	// 커튼을 치기 전에 미리 생성해놈.
 	if(m_onPressStartButton)
 		m_onPressStartButton();
+	
+	
+	
 }

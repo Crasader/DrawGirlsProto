@@ -23,7 +23,7 @@
     <string name="hsp.auth.login.hid.alert.alreadymapped">这个账号已跟别的智能Hangame记录连接中.请用别的账号来连接.</string>
     <string name="hsp.auth.login.id.alert.alreadymapped">此账号已跟别的智能Hangame纪录连接.请使用不同账号。</string>
     <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
-    <string name="hsp.auth.punished.member.alert">由于不正常的行为，受到使用限制.\n会员号码 : </string>
+    <string name="hsp.auth.punished.member.alert">由于不正常的行为，受到使用限制.</string>
     <string name="hsp.auth.deactivated.member.alert">您的帐户已被停用。不能再使用该服务。</string>
     <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
     <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>

@@ -23,7 +23,7 @@
     <string name="hsp.auth.login.hid.alert.alreadymapped">The ID is already associated with a different Smart Hangame title. Please use a different ID.</string>
     <string name="hsp.auth.login.id.alert.alreadymapped">The ID is already associated with a different title. Please use a different ID.</string>
     <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
-    <string name="hsp.auth.punished.member.alert">The gameplay is restricted due to abnormal gameplay.\nMember number : </string>
+    <string name="hsp.auth.punished.member.alert">The gameplay is restricted due to abnormal gameplay.</string>
     <string name="hsp.auth.deactivated.member.alert">Your account has been deactivated. Can\'t use this service anymore.</string>
     <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
     <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>

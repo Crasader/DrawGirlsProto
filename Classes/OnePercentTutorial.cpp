@@ -70,7 +70,7 @@ bool OnePercentTutorial::init(float originalPercent,
 
 	CCSprite* katsu = CCSprite::create("kt_cha_katsuragi_1.png");
 	katsu->setScale(0.8f);
-	katsu->setPosition(ccp(-80.5, 9.5));
+	katsu->setPosition(ccp(-80.5, -5));
 	clippingNode->addChild(katsu);
 	setFormSetter(katsu);
 	//m_container->addChild(inner_back, kOnePercentTutorial_Z_back);

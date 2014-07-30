@@ -66,7 +66,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	KSLabelTTF* main_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceTitle), mySGD->getFont().c_str(), 14);
 	main_title->disableOuterStroke();
 	main_title->setAnchorPoint(ccp(0.5f,0.5f));
-	main_title->setPosition(ccp(61,back_case->getContentSize().height-22));
+	main_title->setPosition(ccp(61,back_case->getContentSize().height-24));
 	back_case->addChild(main_title);
 	setFormSetter(main_title);
 	
@@ -123,17 +123,12 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			back_case->addChild(t_back);
 		}
 		
-		KSLabelTTF* list_number = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
-		list_number->disableOuterStroke();
-		list_number->setAnchorPoint(ccp(0,0));
-		list_number->setPosition(ccp(8,37));
-		t_back->addChild(list_number);
-		
-		KSLabelTTF* list_number_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceDay), mySGD->getFont().c_str(), 8);
-		list_number_d->disableOuterStroke();
-		list_number_d->setAnchorPoint(ccp(0,0));
-		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,0));
-		list_number->addChild(list_number_d);
+
+//		KSLabelTTF* list_number_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceDay), mySGD->getFont().c_str(), 8);
+//		list_number_d->disableOuterStroke();
+//		list_number_d->setAnchorPoint(ccp(0,0));
+//		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,0));
+//		list_number->addChild(list_number_d);
 		
 		
 		CCNode* t_goods_node = getGoodsNode(mySGD->attendance_data["rewardList"][i]["type"].asString(), ccp(t_back->getContentSize().width/2.f,28));
@@ -143,9 +138,25 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		t_bottom_gray->setPosition(ccp(t_back->getContentSize().width/2.f,10));
 		t_back->addChild(t_bottom_gray);
 		
-		CCNode* bottom_node = getGoodsSmallNodeAndCount(mySGD->attendance_data["rewardList"][i]["type"].asString(), mySGD->attendance_data["rewardList"][i]["count"].asInt());
-		bottom_node->setPosition(ccpFromSize(t_bottom_gray->getContentSize()/2.f));
-		t_bottom_gray->addChild(bottom_node);
+		
+		string daystring = CCString::createWithFormat("%d%s", i+1,myLoc->getLocalForKey(kMyLocalKey_attendanceDay))->getCString();
+		KSLabelTTF* list_number = KSLabelTTF::create(daystring.c_str(), mySGD->getFont().c_str(), 10);
+		list_number->disableOuterStroke();
+		list_number->setAnchorPoint(ccp(0.5,0));
+		list_number->setPosition(ccp(t_bottom_gray->getContentSize().width/2.f,37));
+		t_back->addChild(list_number);
+		
+
+		
+		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", mySGD->attendance_data["rewardList"][i]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 10);
+		
+		t_bottom_gray->addChild(count_label);
+		
+		count_label->setPosition(ccpAdd(ccpFromSize(t_bottom_gray->getContentSize()/2.f),ccp(0,-1)));
+		
+//		CCNode* bottom_node = getGoodsSmallNodeAndCount(mySGD->attendance_data["rewardList"][i]["type"].asString(), mySGD->attendance_data["rewardList"][i]["count"].asInt());
+//		bottom_node->setPosition(ccpFromSize(t_bottom_gray->getContentSize()/2.f));
+//		t_bottom_gray->addChild(bottom_node);
 		
 //		StyledLabelTTF* script_label = StyledLabelTTF::create(CCString::createWithFormat(getGoodsTypeLocalData(mySGD->attendance_data["rewardList"][i]["type"].asString()).c_str(), mySGD->attendance_data["rewardList"][i]["count"].asInt())->getCString(),
 //															  mySGD->getFont().c_str(), 8, 999, StyledAlignment::kCenterAlignment);

@@ -61,6 +61,7 @@ protected:
 	std::vector<BonusGameReward> m_rewards;
 	CCSprite* m_stepFrame;
 	CCSprite* m_stepSprite;
+	int cardNo; 
 //	int m_gameStep; // ?
 	int m_winCount; // ?
 	CCNode* m_leftHandContainer;

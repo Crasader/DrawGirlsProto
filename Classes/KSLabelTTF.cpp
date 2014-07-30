@@ -371,6 +371,14 @@ void KSLabelTTF::setOpacity(GLubyte opacity)
 	updateColor();
 	//	updateTexture();
 }
+void KSLabelTTF::setOpacityOuterStroke(GLubyte opa)
+{
+	if(m_outerSprite)
+	{
+		m_outerSprite->setOpacity(opa);
+	}
+	updateColor();
+}
 bool KSLabelTTF::initWithString(const char *string, const char *fontName, float fontSize,
 														const cocos2d::CCSize &dimensions, CCTextAlignment hAlignment,
 														CCVerticalTextAlignment vAlignment)

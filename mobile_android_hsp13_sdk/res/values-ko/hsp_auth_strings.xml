@@ -23,7 +23,7 @@
     <string name="hsp.auth.login.hid.alert.alreadymapped">이미 다른 스마트 한게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
     <string name="hsp.auth.login.id.alert.alreadymapped">이미 다른 기록과 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요</string>
     <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
-    <string name="hsp.auth.punished.member.alert">비정상적인 게임 플레이로 이용이 제한되었습니다.\n회원번호 : </string>
+    <string name="hsp.auth.punished.member.alert">비정상적인 게임 플레이로 이용이 제한되었습니다.</string>
     <string name="hsp.auth.deactivated.member.alert">해지한 서비스입니다. 이용하실 수 없습니다.</string>
     <string name="hsp.auth.facebook.login.fail.alert.title">페이스북 로그인 실패</string>
     <string name="hsp.auth.facebook.login.fail.alert">페이스북 인증 요청에 실패하였습니다.</string>
