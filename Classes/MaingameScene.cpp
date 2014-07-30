@@ -2231,7 +2231,7 @@ void Maingame::gameover()
 		game_over_label->setOpacity(0);
 		myUI->addChild(game_over_label);
 		
-		CommonAnimation::applyBigShadow(game_over_label, game_over_label->getFontSize());
+		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(game_over_label, game_over_label->getFontSize());
 		
 		game_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
 																{
@@ -2254,10 +2254,12 @@ void Maingame::gameover()
 																	
 																	game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
 																	game_over_label->setOpacity(t*255);
+																	shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																}, [=](float t)
 																{
 																	game_over_label->setPosition(ccp(240,myDSH->ui_center_y));
 																	game_over_label->setOpacity(255);
+																	shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																	
 																	game_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
 																											  {
@@ -2265,10 +2267,12 @@ void Maingame::gameover()
 																																										  {
 																																											  game_over_label->setScale(1.f+t*0.6f);
 																																											  game_over_label->setOpacity(255-t*255);
+																																											  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																										  }, [=](float t)
 																																										  {
 																																											  game_over_label->setScale(1.6f);
 																																											  game_over_label->setOpacity(0);
+																																											  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																											  
 																																											  addChild(KSTimer::create(10.f/30.f, [=]()
 																																																	   {
@@ -3320,17 +3324,20 @@ void Maingame::showMissMissile( CCPoint t_position )
 	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
 	miss_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-	CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
 //	CCSprite* miss_label = CCSprite::create("missile_miss.png");
 	miss_label->setScale(1.f/myGD->game_scale);
 	miss_label->setPosition(t_position);
 	game_node->addChild(miss_label, goldZorder);
 
-	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCSprite::removeFromParent));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-
-	miss_label->runAction(t_seq);
+	miss_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+													   {
+														   miss_label->setOpacity(255-255*t);
+														   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+													   }, [=](float t)
+													   {
+														   miss_label->removeFromParent();
+													   }));
 }
 
 void Maingame::showDamageMissile( CCPoint t_position, int t_damage )

@@ -17,7 +17,7 @@ public:
 												std::function<void(void)> ingFunctor = nullptr, std::function<void(void)> endFunctor = nullptr);
 	static void applyShadow(KSLabelTTF* parent);
 	static void applyShadow(KSLabelTTF* parent, float shadowFontSize);
-	static void applyBigShadow(KSLabelTTF* parent, float shadowFontSize);
+	static KSLabelTTF* applyBigShadow(KSLabelTTF* parent, float shadowFontSize);
 	//virtual void registerWithTouchDispatcher();
 };
 

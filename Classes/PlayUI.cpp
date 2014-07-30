@@ -670,31 +670,45 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	
 	setPosition(CCPointZero);
 	
+	KSLabelTTF* speed_label;
+	KSLabelTTF* shadow;
+	
 	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
 	{
-		KSLabelTTF* speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
+		speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
+		shadow = CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
 		speed_label->setPosition(ccp(0,0));
 //		CCSprite* speed_label = CCSprite::create("speed_max.png");
 		addChild(speed_label);
 	}
 	else
 	{
-		KSLabelTTF* speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
+		speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
-		CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
+		shadow = CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
 //		CCSprite* speed_label = CCSprite::create("speed_front.png");
 		addChild(speed_label);
 		
 		speed_label->setPosition(ccp(0, 0));
 	}
 	
+	addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+										   {
+											   speed_label->setOpacity((1.f-t)*255);
+											   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+										   }, [=](float t)
+										   {
+											   speed_label->setOpacity(0);
+											   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+											   selfRemove();
+										   }));
+	
 	setScale(1.f/myGD->game_scale);
 	
-	startFadeOut();
+//	startFadeOut();
 }
 
 DetailWarning * DetailWarning::create (const std::string& fileName)
@@ -810,11 +824,12 @@ void TakeCoin::startMyAction()
 	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
 	ment->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 	ment->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
-	CommonAnimation::applyBigShadow(ment, ment->getFontSize());
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(ment, ment->getFontSize());
 	ment->setBlendFunc({GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
 	ment->setPosition(ccp(0,30));
 	ment->setScale(1.5f);
 	ment->setOpacity(0);
+	shadow->setOpacityOuterStroke(0);
 	take_coin_node->addChild(ment);
 	
 	ment->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
@@ -822,11 +837,13 @@ void TakeCoin::startMyAction()
 													 ment->setPosition(ccp(0,30-10*t));
 													 ment->setScale(1.5f-0.5f*t);
 													 ment->setOpacity(255*t);
+													 shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 												 }, [=](float t)
 												 {
 													 ment->setPosition(ccp(0,30-10*t));
 													 ment->setScale(1.5f-0.5f*t);
 													 ment->setOpacity(255*t);
+													 shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 													 
 													 ment->addChild(KSTimer::create(1.f, [=]()
 																					{
@@ -835,11 +852,13 @@ void TakeCoin::startMyAction()
 																																		 ment->setPosition(ccp(0,20+10*t));
 																																		 ment->setScale(1.f+0.5f*t);
 																																		 ment->setOpacity(255-255*t);
+																																		 shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																	 }, [=](float t)
 																																	 {
 																																		 ment->setPosition(ccp(0,20+10*t));
 																																		 ment->setScale(1.f+0.5f*t);
 																																		 ment->setOpacity(255-255*t);
+																																		 shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																		 removeFromParent();
 																																	 }));
 																					}));
@@ -1102,10 +1121,11 @@ void ChangeCard::startMyAction()
 	KSLabelTTF* card_change_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
 	card_change_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.3), true);
 	card_change_label->setGradientColor(ccc4(255, 155, 255, 255), ccc4(145, 45, 215, 255), ccp(0,-1));
-	CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
 	card_change_label->setPosition(ccp(0,30));
 	card_change_label->setScale(1.5f);
 	card_change_label->setOpacity(0);
+	shadow->setOpacityOuterStroke(0);
 	addChild(card_change_label);
 	
 	card_change_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
@@ -1113,11 +1133,13 @@ void ChangeCard::startMyAction()
 																  card_change_label->setPosition(ccp(0,30-30*t));
 																  card_change_label->setScale(1.5f-0.5f*t);
 																  card_change_label->setOpacity(255*t);
+																  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 															  }, [=](float t)
 															  {
 																  card_change_label->setPosition(ccp(0,20));
 																  card_change_label->setScale(1.f);
 																  card_change_label->setOpacity(255);
+																  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																  
 																  card_change_label->addChild(KSTimer::create(22.f/30.f, [=]()
 																											  {
@@ -1126,11 +1148,13 @@ void ChangeCard::startMyAction()
 																																												card_change_label->setPosition(ccp(0,30*t));
 																																												card_change_label->setScale(1.f+0.6f*t);
 																																												card_change_label->setOpacity(255-255*t);
+																																												shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																											}, [=](float t)
 																																											{
 																																												card_change_label->setPosition(ccp(0,30*t));
 																																												card_change_label->setScale(1.f+0.6f*t);
 																																												card_change_label->setOpacity(255-255*t);
+																																												shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																												removeFromParent();
 																																											}));
 																											  }));
@@ -1686,7 +1710,8 @@ void PlayUI::addResultCCB(string ccb_filename)
 		mission_fail_label->setOpacity(0);
 		addChild(mission_fail_label);
 		
-		CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
+		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
+		shadow->setOpacityOuterStroke(0);
 		
 		mission_fail_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
 																   {
@@ -1709,10 +1734,12 @@ void PlayUI::addResultCCB(string ccb_filename)
 																	   
 																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
 																	   mission_fail_label->setOpacity(t*255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																   }, [=](float t)
 																   {
 																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y));
 																	   mission_fail_label->setOpacity(255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																	   
 																	   mission_fail_label->addChild(KSTimer::create(32.f/30.f, [=]()
 																													{
@@ -1720,10 +1747,12 @@ void PlayUI::addResultCCB(string ccb_filename)
 																																												   {
 																																													   mission_fail_label->setScale(1.f+t*0.6f);
 																																													   mission_fail_label->setOpacity(255-t*255);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																												   }, [=](float t)
 																																												   {
 																																													   mission_fail_label->setScale(1.6f);
 																																													   mission_fail_label->setOpacity(0);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																													   
 																																													   mission_fail_label->removeFromParent();
 																																												   }));
@@ -1740,16 +1769,19 @@ void PlayUI::addResultCCB(string ccb_filename)
 		stage_clear_label->setOpacity(0);
 		addChild(stage_clear_label);
 		
-		CommonAnimation::applyBigShadow(stage_clear_label, stage_clear_label->getFontSize());
+		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(stage_clear_label, stage_clear_label->getFontSize());
+		shadow->setOpacityOuterStroke(0);
 		
 		stage_clear_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																   {
 																	   stage_clear_label->setScale(1.8f-0.8f*t);
 																	   stage_clear_label->setOpacity(t*255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																   }, [=](float t)
 																   {
 																	   stage_clear_label->setScale(1.8f-0.8f*t);
 																	   stage_clear_label->setOpacity(255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																	   
 																	   stage_clear_label->addChild(KSTimer::create(42.f/30.f, [=]()
 																													{
@@ -1757,10 +1789,12 @@ void PlayUI::addResultCCB(string ccb_filename)
 																																												   {
 																																													   stage_clear_label->setScale(1.f+t*0.6f);
 																																													   stage_clear_label->setOpacity(255-t*255);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																												   }, [=](float t)
 																																												   {
 																																													   stage_clear_label->setScale(1.6f);
 																																													   stage_clear_label->setOpacity(0);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																													   
 																																													   stage_clear_label->removeFromParent();
 																																												   }));
@@ -1842,16 +1876,18 @@ void PlayUI::conditionClear ()
 	mission_complete_label->setOpacity(0);
 	addChild(mission_complete_label);
 	
-	CommonAnimation::applyBigShadow(mission_complete_label, mission_complete_label->getFontSize());
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_complete_label, mission_complete_label->getFontSize());
 	
 	mission_complete_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t)
 															  {
 																  mission_complete_label->setPosition(ccp(240-200+200*t,myDSH->ui_center_y));
 																  mission_complete_label->setOpacity(t*255);
+																  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 															  }, [=](float t)
 															  {
 																  mission_complete_label->setPosition(ccp(240,myDSH->ui_center_y));
 																  mission_complete_label->setOpacity(255);
+																  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																  
 																  mission_complete_label->addChild(KSTimer::create(29.f/30.f, [=]()
 																											  {
@@ -1859,10 +1895,12 @@ void PlayUI::conditionClear ()
 																																											{
 																																												mission_complete_label->setPosition(ccp(240+200*t,myDSH->ui_center_y));
 																																												mission_complete_label->setOpacity(255-t*255);
+																																												shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																											}, [=](float t)
 																																											{
 																																												mission_complete_label->setPosition(ccp(240+200,myDSH->ui_center_y));
 																																												mission_complete_label->setOpacity(0);
+																																												shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																												
 																																												mission_complete_label->removeFromParent();
 																																											}));
@@ -2351,17 +2389,13 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	
 	int cnt = t_damage/3000;
 	
-	CCNode* t_node = CCNode::create();
-	t_node->setPosition(ccp(440,myDSH->ui_center_y+60));
-	t_node->setScale(1.f/1.5f);
-	addChild(t_node);
-	
 	KSLabelTTF* combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), cnt*5), mySGD->getFont().c_str(), 30);
 	combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
-	CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
-	combo_label->setPosition(ccp(0,0));
-	t_node->addChild(combo_label);
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
+	combo_label->setPosition(ccp(440,myDSH->ui_center_y+60));
+	combo_label->setScale(1.f/1.5f);
+	addChild(combo_label);
 	
 //	CCLabelBMFont* combo_label = CCLabelBMFont::create(CCString::createWithFormat("%d", cnt*5)->getCString(), "combo.fnt");
 //	combo_label->setAnchorPoint(ccp(0.5f,0.5f));
@@ -2378,11 +2412,13 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	{
 		addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
 											   {
-												   KS::setOpacity(t_node, 255-t*255);
+												   combo_label->setOpacity(255-t*255);
+												   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 											   }, [=](float t)
 											   {
-												   KS::setOpacity(t_node, 0);
-												   t_node->removeFromParent();
+												   combo_label->setOpacity(0);
+												   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+												   combo_label->removeFromParent();
 											   }));
 	}));
 	
@@ -2949,7 +2985,8 @@ void PlayUI::counting ()
 				time_over_label->setOpacity(0);
 				addChild(time_over_label);
 				
-				CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
+				KSLabelTTF* shadow = CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
+				shadow->setOpacityOuterStroke(0);
 				
 				time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
 																		{
@@ -2972,10 +3009,12 @@ void PlayUI::counting ()
 																			
 																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
 																			time_over_label->setOpacity(t*255);
+																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																		}, [=](float t)
 																		{
 																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
 																			time_over_label->setOpacity(255);
+																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
 																			
 																			time_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
 																													  {
@@ -2983,10 +3022,12 @@ void PlayUI::counting ()
 																																												  {
 																																													  time_over_label->setScale(1.f+t*0.6f);
 																																													  time_over_label->setOpacity(255-t*255);
+																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																												  }, [=](float t)
 																																												  {
 																																													  time_over_label->setScale(1.6f);
 																																													  time_over_label->setOpacity(0);
+																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
 																																													  
 																																													  time_over_label->removeFromParent();
 																																												  }));

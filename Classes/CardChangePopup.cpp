@@ -964,16 +964,19 @@ void CardChangePopup::showMissMissile(CCPoint t_position, int t_damage)
 	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
 	miss_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-	CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
 	
 //	CCSprite* miss_label = CCSprite::create("missile_miss.png");
 	miss_label->setScale(0.5f);
 	miss_label->setPosition(t_position);
 	main_case->addChild(miss_label, kCardChangePopupZorder_gage);
 	
-	CCFadeTo* t_fade = CCFadeTo::create(1.f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(miss_label, callfunc_selector(CCSprite::removeFromParent));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
-	
-	miss_label->runAction(t_seq);
+	miss_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
+													   {
+														   miss_label->setOpacity(255-255*t);
+														   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+													   }, [=](float t)
+													   {
+														   miss_label->removeFromParent();
+													   }));
 }

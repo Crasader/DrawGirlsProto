@@ -359,7 +359,7 @@ void ZoomScript::menuAction(CCObject *sender)
 			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
 			showtime_back->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 			showtime_back->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-			CommonAnimation::applyBigShadow(showtime_back, showtime_back->getFontSize());
+			KSLabelTTF* shadow = CommonAnimation::applyBigShadow(showtime_back, showtime_back->getFontSize());
 			showtime_back->setScale(10.f);
 			showtime_back->setPosition(ccp(240,myDSH->ui_center_y));
 			showtime_back->setOpacity(0);
@@ -376,23 +376,35 @@ void ZoomScript::menuAction(CCObject *sender)
 			CCSequence* white_paper_seq = CCSequence::createWithTwoActions(white_paper_delay, white_paper_fade);
 			white_paper->runAction(white_paper_seq);
 			
-			CCScaleTo* showtime_scale1 = CCScaleTo::create(28.f/60.f, 1.f);
-			CCDelayTime* showtime_delay1 = CCDelayTime::create(18.f/60.f);
-			CCScaleTo* showtime_scale2 = CCScaleTo::create(18.f/60.f, 12.f);
-			CCSequence* showtime_seq1 = CCSequence::create(showtime_scale1, showtime_delay1, showtime_scale2, NULL);
-			
-			CCFadeTo* showtime_fade1 = CCFadeTo::create(28.f/60.f, 255);
-			CCDelayTime* showtime_delay2 = CCDelayTime::create(18.f/60.f);
-			CCFadeTo* showtime_fade2 = CCFadeTo::create(18.f/60.f, 0);
-			CCSequence* showtime_seq2 = CCSequence::create(showtime_fade1, showtime_delay2, showtime_fade2, NULL);
-			
-			CCSpawn* showtime_spawn = CCSpawn::create(showtime_seq1, showtime_seq2, NULL);
-			CCDelayTime* showtime_delay = CCDelayTime::create(8.f/60.f);
-			
-			CCCallFunc* showtime_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeFirstAction));
-			CCSequence* showtime_seq = CCSequence::create(showtime_spawn, showtime_delay, showtime_call, NULL);
-			
-			showtime_back->runAction(showtime_seq);
+			showtime_back->addChild(KSGradualValue<float>::create(0.f, 1.f, 14.f/30.f, [=](float t)
+																  {
+																	  showtime_back->setScale(10-9*t);
+																	  showtime_back->setOpacity(255*t);
+																	  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+																  }, [=](float t)
+																  {
+																	  showtime_back->setScale(10-9*t);
+																	  showtime_back->setOpacity(255*t);
+																	  shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+																	  showtime_back->addChild(KSTimer::create(9.f/30.f, [=]()
+																											  {
+																												  showtime_back->addChild(KSGradualValue<float>::create(0.f, 1.f, 9.f/30.f, [=](float t)
+																																										{
+																																											showtime_back->setScale(1+11*t);
+																																											showtime_back->setOpacity(255*(1-t));
+																																											shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																										}, [=](float t)
+																																										{
+																																											showtime_back->setScale(1+11*t);
+																																											showtime_back->setOpacity(255*(1-t));
+																																											shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																											showtime_back->addChild(KSTimer::create(4.f/30.f, [=]()
+																																																					{
+																																																						showtimeFirstAction();
+																																																					}));
+																																										}));
+																											  }));
+																  }));
 		}
 		else
 		{
