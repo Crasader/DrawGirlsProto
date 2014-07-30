@@ -2708,12 +2708,18 @@ void MainFlowScene::showEndlessOpening()
 
 void MainFlowScene::showEndlessResult()
 {
+    TRACE();
 	puzzle_table->setTouchEnabled(false);
-	EndlessModeResult* t_popup = EndlessModeResult::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
-	addChild(t_popup, kMainFlowZorder_popup);
-	
-	refresh_ing_win_func();
+	TRACE();
+    EndlessModeResult* t_popup = EndlessModeResult::create();
+	TRACE();
+    t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
+	TRACE();
+    addChild(t_popup, kMainFlowZorder_popup);
+	TRACE();
+    if(refresh_ing_win_func != nullptr)
+        refresh_ing_win_func();
+    TRACE();
 }
 
 void MainFlowScene::bottomOpenning()
