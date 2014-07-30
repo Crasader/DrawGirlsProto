@@ -77,8 +77,10 @@ bool MainFlowScene::init()
 	kind_tutorial_pvp = nullptr;
 	
 	is_table_openning = false;
+    TRACE();
 	callTimeInfo();
 	
+    TRACE();
 	have_card_count_for_puzzle_index.clear();
 	
 	not_event_puzzle_list.clear();
@@ -112,8 +114,10 @@ bool MainFlowScene::init()
 	
 	is_puzzle_enter_list.clear();
 	
+    TRACE();
 	locked_puzzle_count = 0;
 	
+    TRACE();
 	for(int i=0;i<not_event_puzzle_list.size();i++)
 	{
 		int t_puzzle_number = not_event_puzzle_list[i];
@@ -127,6 +131,7 @@ bool MainFlowScene::init()
 		Json::Reader reader;
 		reader.parse(puzzle_condition, condition_list);
 		
+        TRACE();
 		if(condition_list.size() <= 0)
 			t_info.is_open = true;
 		
@@ -198,6 +203,7 @@ bool MainFlowScene::init()
 				}
 			}
 			
+            TRACE();
 			if(and_open)
 			{
 				t_info.is_open = true;
@@ -219,17 +225,21 @@ bool MainFlowScene::init()
 			locked_puzzle_count++;
 	}
 	
+    TRACE();
 	CCSprite* back_img = CCSprite::create("main_back.png");
 	back_img->setPosition(ccp(240,160));
 	addChild(back_img, kMainFlowZorder_back);
 	
+    TRACE();
 	start_unlock_animation = nullptr;
 	
 	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 	is_perfect_puzzle = mySGD->getIsPerfectPuzzle();
 	
+    TRACE();
 	setTable();
 	
+    TRACE();
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
@@ -245,16 +255,21 @@ bool MainFlowScene::init()
 //	back_shadow_right->setPosition(ccp(480+(screen_scale_x-1.f)*480.f/2.f,160));
 //	addChild(back_shadow_right, kMainFlowZorder_top);
 	
+    TRACE();
 	setTop();
+    TRACE();
 	setBottom();
 	
+    TRACE();
 	bool is_openning = false;
 	if(mySGD->is_endless_mode)
 	{
+        TRACE();
 		is_menu_enable = true;
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 	{
+        TRACE();
 		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 		
 		is_openning = true;
@@ -272,27 +287,34 @@ bool MainFlowScene::init()
 			if(height_value < myDSH->ui_top)
 				height_value = myDSH->ui_top;
 			
+            TRACE();
 			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
 			t_popup->setDimmedPosition(ccp(240, 160));
 			t_popup->setBasePosition(ccp(240, 160));
 			
+            TRACE();
 			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 															   {
+                                                                   TRACE();
 																   t_popup->removeFromParent();
 															   }, mySGD->getNoticeList());
 			t_popup->setContainerNode(t_container);
 			addChild(t_popup, kMainFlowZorder_popup+9999999);
 		}
 		
+        TRACE();
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		
 		is_menu_enable = true;
+        TRACE();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 	{
+        TRACE();
 		bottomOpenning();
 		topOnLight();
 		
+        TRACE();
 		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0 || (myDSH->getIntegerForKey(kDSH_Key_showedScenario)%1000 == 0 && myDSH->getIntegerForKey(kDSH_Key_showedScenario)/1000+1 == is_unlock_puzzle) || mySGD->is_on_attendance || mySGD->is_on_rank_reward || mySGD->is_today_mission_first || mySGD->is_new_puzzle_card.getV() || (myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece()))
 		{
 			is_menu_enable = false;
@@ -305,30 +327,38 @@ bool MainFlowScene::init()
 		title_name->setOpacity(255);
 		addChild(title_name, kMainFlowZorder_back);
 		
+        TRACE();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
 		CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
 		CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
 		title_name->runAction(t_seq);
+        TRACE();
 	}
 	else
 	{
+        TRACE();
 		is_menu_enable = true;
+        TRACE();
 	}
 	
 	
 	
 	
 	
+    TRACE();
 	if(mySGD->is_endless_mode)
 	{
 		mySGD->endless_my_victory_on = true;
 		is_menu_enable = false;
 		puzzle_table->setTouchEnabled(false);
 		
+        TRACE();
 		showEndlessResult();
+        TRACE();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
+        TRACE();
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		int take_level;
@@ -337,63 +367,79 @@ bool MainFlowScene::init()
 		else if(mySGD->is_exchanged)						take_level = 2;
 		else												take_level = 1;
 		
+        TRACE();
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 		}
 		
+        TRACE();
 		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 		keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 		
 		LoadingLayer* t_loading = LoadingLayer::create(-900);
 		addChild(t_loading, kMainFlowZorder_popup+1);
 		
+        TRACE();
 		updateCardHistory(t_loading);
 		
+        TRACE();
 		
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showClearPopup();
+        TRACE();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_fail)
 	{
+        TRACE();
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 		showFailPopup();
+        TRACE();
 	}
 	else
 	{
+        TRACE();
 		TutorialFlowStep recent_step = (TutorialFlowStep)myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep);
 		
 		if(recent_step == kTutorialFlowStep_puzzleClick)
 		{
+            TRACE();
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
 			t_tutorial->initStep(kTutorialFlowStep_puzzleClick);
 			addChild(t_tutorial, kMainFlowZorder_popup);
 			
+            TRACE();
 			tutorial_node = t_tutorial;
 			
 			puzzle_table->setTouchEnabled(false);
 		}
 		else if(recent_step == kTutorialFlowStep_cardCollectionClick)
 		{
+            TRACE();
 			TutorialFlowStepLayer* t_tutorial = TutorialFlowStepLayer::create();
 			t_tutorial->initStep(kTutorialFlowStep_cardCollectionClick);
 			addChild(t_tutorial, kMainFlowZorder_popup);
 			
 			tutorial_node = t_tutorial;
 			
+            TRACE();
 			puzzle_table->setTouchEnabled(false);
 		}
 		
 		if(is_unlock_puzzle > 0)
 		{
+            TRACE();
 			is_menu_enable = false;
 			puzzle_table->setTouchEnabled(false);
+            TRACE();
 		}
 		else if(is_unlock_puzzle == -1)
 		{
+            TRACE();
 			is_menu_enable = false;
 			puzzle_table->setTouchEnabled(false);
 			
+            TRACE();
 			start_unlock_animation = [=](function<void()> t_end_func)
 			{
 				ASPopupView* t_popup = ASPopupView::create(-999);
@@ -407,6 +453,7 @@ bool MainFlowScene::init()
 				if(myDSH->screen_convert_rate < 1.f)
 					height_value = 320.f/myDSH->screen_convert_rate;
 				
+                TRACE();
 				if(height_value < myDSH->ui_top)
 					height_value = myDSH->ui_top;
 				
@@ -427,6 +474,7 @@ bool MainFlowScene::init()
 				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-14));
 				back_case->addChild(back_in);
 				
+                TRACE();
 				
 				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allPuzzleClearTitle), mySGD->getFont().c_str(), 12);
 				title_label->disableOuterStroke();
@@ -441,6 +489,7 @@ bool MainFlowScene::init()
 				
 				CCSprite* gray = t_popup->getDimmedSprite();
 				
+                TRACE();
 				CommonButton* ok_button = CommonButton::createCloseButton(t_popup->getTouchPriority() - 5);
 				ok_button->setFunction([=](CCObject*){
 					if(!t_popup->is_menu_enable)
@@ -451,6 +500,7 @@ bool MainFlowScene::init()
 					CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
 						
 					}, [=](){
+                        TRACE();
 						endUnlockAnimation();
 						t_end_func();
 						t_popup->removeFromParent();
@@ -472,11 +522,14 @@ bool MainFlowScene::init()
 			mySGD->setIsUnlockPuzzle(is_unlock_puzzle);
 		}
 		
+        TRACE();
 		tableOpenning();
 		if(!is_openning)
 			topReturnMode();
+        TRACE();
 	}
 	
+    TRACE();
 //	if(!myDSH->getBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main))
 //	{
 //		myDSH->setBoolForKey(kDSH_Key_was_opened_tutorial_dimed_main, true);
@@ -1118,7 +1171,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->addChild(cell_node, 1, 1);
 	
 	
-	if(idx==not_event_puzzle_list.size()){
+	if(idx==numberOfCellsInTableView(table)-1){
 		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
 		cell_node->addChild(n_locked_back);
 		
@@ -1834,33 +1887,32 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														
 																														function<void()> end_func9 = [=]()
 																														{
-																															boy->setVisible(false);
-																															ikaruga->setVisible(true);
-																															
+																															TypingBox::changeTypingBox(typing_box2, typing_box, katsuragi, ikaruga);
 																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent51), end_func10);
 																														};
 																														
 																														function<void()> end_func8 = [=]()
 																														{
-																															katsuragi->setVisible(false);
-																															boy->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box->setVisible(true);
-																																													  typing_box->setTouchSuction(true);
-																																													  
-																																													  typing_box2->setTouchSuction(false);
-																																													  
-																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
-																																												  }));
-																															typing_box2->setTouchOffScrollAndButton();
-																															typing_box2->setVisible(false);
+																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+//																															katsuragi->setVisible(false);
+//																															boy->setVisible(true);
+//																															
+//																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																																												  {
+//																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+//																																													  
+//																																													  typing_box->setVisible(true);
+//																																													  typing_box->setTouchSuction(true);
+//																																													  
+//																																													  typing_box2->setTouchSuction(false);
+//																																													  
+//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+//																																												  }));
+//																															typing_box2->setTouchOffScrollAndButton();
+//																															typing_box2->setVisible(false);
 																														};
 																														
 																														function<void()> end_func7 = [=]()
@@ -2277,7 +2329,7 @@ unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 	int puzzle_count = not_event_puzzle_list.size();//NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
 	int view_count = puzzle_count - locked_puzzle_count;
-	view_count += mySGD->getUnlockFrameCnt();
+	view_count += mySGD->getUnlockFrameCnt() + 1;
 	
 	if(view_count > puzzle_count + 1)
 		view_count = puzzle_count + 1;
@@ -2655,12 +2707,18 @@ void MainFlowScene::showEndlessOpening()
 
 void MainFlowScene::showEndlessResult()
 {
+    TRACE();
 	puzzle_table->setTouchEnabled(false);
-	EndlessModeResult* t_popup = EndlessModeResult::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
-	addChild(t_popup, kMainFlowZorder_popup);
-	
-	refresh_ing_win_func();
+	TRACE();
+    EndlessModeResult* t_popup = EndlessModeResult::create();
+	TRACE();
+    t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
+	TRACE();
+    addChild(t_popup, kMainFlowZorder_popup);
+	TRACE();
+    if(refresh_ing_win_func != nullptr)
+        refresh_ing_win_func();
+    TRACE();
 }
 
 void MainFlowScene::bottomOpenning()
@@ -3145,7 +3203,7 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(240+menuoffset,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
+	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton2);
 	bottom_list.push_back(endless_menu);
@@ -3268,63 +3326,62 @@ void MainFlowScene::setBottom()
 	
 	
 
-	if(puzzle_number){
-		CCSprite* n_etc_img = CCSprite::create("mainflow_etc_event.png");
-		
+	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
+	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
 	//	KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
 	//	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-5,18));
 	//	n_event_ment->setAnchorPoint(ccp(1,0.5));
 	//	n_etc_img->addChild(n_event_ment);
-		
-		CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
-		n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
-		n_etc_img->addChild(n_event_ment_case);
-		
-		
-		CCSprite* s_etc_img = CCSprite::create("mainflow_etc_event.png");
+	
+	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
+	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
+	n_etc_img->addChild(n_event_ment_case);
+	
+	
+	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
+	if(puzzle_number)
 		s_etc_img->setColor(ccGRAY);
-		
+	else
+		s_etc_img->setColor(ccc3(50, 50, 50));
 	//	KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
 	//	s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,25));
 	//	s_etc_img->addChild(s_event_ment);
-		
-		CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
-		s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
-		s_etc_img->addChild(s_event_ment_case);
-		
-		
-		CCMenuLambda* etc_menu = CCMenuLambda::create();
-		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
-		//		etc_frame->addChild(etc_menu);
-		addChild(etc_menu, kMainFlowZorder_uiButton);
-		bottom_list.push_back(etc_menu);
-		
-		etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-		
-		CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
-			if(!is_menu_enable)
-				return;
-			
-			is_menu_enable = false;
-			
-		
-			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-			
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-														 {
-															 mySGD->is_before_stage_img_download = true;
-															 topOuting();
-															 bottomPuzzleMode();
-															 tableDownloading(t_func);
-														 }, [=](){puzzleLoadSuccess();});
-			addChild(t_sld, kMainFlowZorder_popup);
-		});
-		
-		etc_menu->addChild(etc_item);
-	}
+	
+	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
+	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
+	s_etc_img->addChild(s_event_ment_case);
 	
 	
+	CCMenuLambda* etc_menu = CCMenuLambda::create();
+	etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
+	//		etc_frame->addChild(etc_menu);
+	addChild(etc_menu, kMainFlowZorder_uiButton);
+	bottom_list.push_back(etc_menu);
 	
+	etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+	
+	CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
+		if(!is_menu_enable)
+			return;
+		
+		is_menu_enable = false;
+		
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+		
+		
+//			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+//
+//			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+//														 {
+//															 mySGD->is_before_stage_img_download = true;
+//															 topOuting();
+//															 bottomPuzzleMode();
+//															 tableDownloading(t_func);
+//														 }, [=](){puzzleLoadSuccess();});
+//			addChild(t_sld, kMainFlowZorder_popup);
+	});
+	
+	etc_menu->addChild(etc_item);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
@@ -3584,7 +3641,7 @@ void MainFlowScene::topOnLight()
 			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 			scenario_node->addChild(t_suction);
 			t_suction->setTouchEnabled(true);
-			
+			is_menu_enable = true;
 			t_suction->setNotSwallowRect(CCRectMake(t_stencil1->getPositionX()-t_stencil1->getContentSize().width/2.f, t_stencil1->getPositionY()-t_stencil1->getContentSize().height/2.f, t_stencil1->getContentSize().width, t_stencil1->getContentSize().height));
 			
 //			t_suction->touch_began_func = [=]()
@@ -3615,10 +3672,21 @@ void MainFlowScene::topOnLight()
 															  }));
 	};
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+	{
+		mySGD->is_on_attendance = false;
+		mySGD->is_on_rank_reward = false;
+		mySGD->is_today_mission_first = false;
+	}
+	
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
 	{
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 1);
+		
+		mySGD->is_on_attendance = false;
+		mySGD->is_on_rank_reward = false;
+		mySGD->is_today_mission_first = false;
 		
 		CCNode* scenario_node = CCNode::create();
 		addChild(scenario_node, 9999);
@@ -3846,7 +3914,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow6 = CCSprite::create("kt_arrow_big.png");
 			t_arrow6->setScale(0.6f);
-			t_arrow6->setPosition(ccp(30,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow6->setPosition(ccp(32,-(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow6->setRotation(-90);
 			t_clipping->addChild(t_arrow6);
 			
@@ -3858,7 +3926,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow7 = CCSprite::create("kt_arrow_big.png");
 			t_arrow7->setScale(0.6f);
-			t_arrow7->setPosition(ccp(27+214.f/4.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow7->setPosition(ccp(32+55, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow7->setRotation(-90);
 			t_clipping->addChild(t_arrow7);
 			
@@ -3870,7 +3938,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow8 = CCSprite::create("kt_arrow_big.png");
 			t_arrow8->setScale(0.6f);
-			t_arrow8->setPosition(ccp(24+214.f/4.f*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow8->setPosition(ccp(32+55*2.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow8->setRotation(-90);
 			t_clipping->addChild(t_arrow8);
 			
@@ -3882,7 +3950,7 @@ void MainFlowScene::topOnLight()
 			
 			CCSprite* t_arrow9 = CCSprite::create("kt_arrow_big.png");
 			t_arrow9->setScale(0.6f);
-			t_arrow9->setPosition(ccp(21+214.f/4.f*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow9->setPosition(ccp(32+55*3.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
 			t_arrow9->setRotation(-90);
 			t_clipping->addChild(t_arrow9);
 			
@@ -3904,8 +3972,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(215, 65));
-			t_stencil3->setPosition(ccp(109,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(235, 65));
+			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			
@@ -4565,8 +4633,10 @@ void MainFlowScene::setTop()
 //														return true;
 //													}));
 	
+	TRACE();
 	countingAchievement();
 	
+	TRACE();
 	
 	CCSprite* n_event = CCSprite::create("mainflow_new_event.png");
 	CCSprite* s_event = CCSprite::create("mainflow_new_event.png");
@@ -4580,7 +4650,8 @@ void MainFlowScene::setTop()
 	addChild(event_menu, kMainFlowZorder_top);
 	
 	top_list.push_back(event_menu);
-
+    
+	TRACE();
 //	CCSprite* n_tip = CCSprite::create("mainflow_tip.png");
 //	CCSprite* s_tip = CCSprite::create("mainflow_tip.png");
 //	s_tip->setColor(ccGRAY);

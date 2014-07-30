@@ -56,7 +56,7 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* title_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_cardLockedTitle), t_step)->getCString(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));

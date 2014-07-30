@@ -16,6 +16,7 @@
 #include "CommonButton.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "AudioEngine.h"
 
 ControlTipContent* ControlTipContent::create(int t_touch_priority, function<void(CCObject*)> t_selector, int t_code)
 {
@@ -50,6 +51,8 @@ void ControlTipContent::menuAction(CCObject* sender)
 		return;
 	
 	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	CommonAnimation::closePopup(this, this, nullptr, [=](){
 		
@@ -92,12 +95,13 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getTitleLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 15.f); // 17.5f는 너무 큼
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 1, 190, true);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setPosition(ccp(0, 80));
 	addChild(title_label);
 	
 	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(getContentLocalKeyForTipNumber(t_code))), mySGD->getFont().c_str(), 11.5f);
+	content_label->setColor(ccc3(0, 45, 100));
 	content_label->disableOuterStroke();
 	content_label->setPosition(ccp(0, 62));
 	addChild(content_label);

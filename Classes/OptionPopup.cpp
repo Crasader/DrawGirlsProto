@@ -42,6 +42,7 @@
 #include "AccountManagerPopup.h"
 #include "StyledLabelTTF.h"
 #include "OnePercentTutorial.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -217,17 +218,15 @@ bool OptionPopup::init()
 	setTouchEnabled(true);
 	
 	
-	
-	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-		
-		CCLOG("ok@@");
-		
-	},12.f,CCPointZero,true,true,[=](){
-		
-		CCLOG("close");
-		
-	}));
+//	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//		
+//		CCLOG("ok@@");
+//		
+//	},12.f,CCPointZero,true,true,[=](){
+//		
+//		CCLOG("close");
+//		
+//	}));
 	
 	
 	//MiniGamePopup* t_popup = MiniGamePopup::create((MiniGameCode)(kMiniGameCode_counting), nullptr);

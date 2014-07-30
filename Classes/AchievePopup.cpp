@@ -19,6 +19,7 @@
 #include "ASPopupView.h"
 #include "TypingBox.h"
 #include "CCMenuLambda.h"
+#include "GraySprite.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -115,8 +116,8 @@ bool AchievePopup::init()
 	s_allReward_label->setPosition(ccpFromSize(s_allReward_img->getContentSize()/2.f) + ccp(0,-1));
 	s_allReward_img->addChild(s_allReward_label);
 	
-	CCSprite* d_allReward_img = CCSprite::create("subbutton_pink.png");
-	d_allReward_img->setColor(ccGRAY);
+	CCSprite* d_allReward_img = GraySprite::create("subbutton_pink.png");
+	((GraySprite*)d_allReward_img)->setGray(true);
 	KSLabelTTF* d_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), mySGD->getFont().c_str(), 12.5f);
 	d_allReward_label->disableOuterStroke();
 	d_allReward_label->setPosition(ccpFromSize(d_allReward_img->getContentSize()/2.f) + ccp(0,-1));

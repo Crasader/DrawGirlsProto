@@ -240,31 +240,34 @@ bool EndlessModeResult::init()
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
-	Json::Value param;
-	param.clear();
-	param["memberID"] = myHSP->getMemberID();
-	param["score"] = int(mySGD->getScore());
-	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-	param["victory"] = left_total_score.getV() > right_total_score.getV();
-	
-	send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
-											 {
-												 TRACE();
-												 GraphDogLib::JsonToLog("finishendlessplay", result_data);
-												 TRACE();
-												 if(result_data["result"]["code"].asInt() == GDSUCCESS)
-													{
-														TRACE();
-														if(result_data["sendGift"].asBool())
-														{
-															is_menu_enable = false;
-															EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
-															addChild(t_popup, 999);
-														}
-														TRACE();
-													}
-											 }));
+	if(is_calc)
+	{
+		Json::Value param;
+		param.clear();
+		param["memberID"] = myHSP->getMemberID();
+		param["score"] = int(mySGD->getScore());
+		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+		param["victory"] = left_total_score.getV() > right_total_score.getV();
+		
+		send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
+												 {
+													 TRACE();
+													 GraphDogLib::JsonToLog("finishendlessplay", result_data);
+													 TRACE();
+													 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+													 {
+														 TRACE();
+														 if(result_data["sendGift"].asBool())
+														 {
+															 is_menu_enable = false;
+															 EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
+															 addChild(t_popup, 999);
+														 }
+														 TRACE();
+													 }
+												 }));
+	}
 	
 	if(left_total_score.getV() > right_total_score.getV() || mySGD->getIsAlwaysSavePlaydata() == 1)
 	{
@@ -2387,7 +2390,7 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
-		addChild(ASPopupView::getCommonNoti(-999, "뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), 999);
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_noti), "뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), 999);
 	}
 	TRACE();
 }
