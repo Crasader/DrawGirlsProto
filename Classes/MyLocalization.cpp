@@ -1298,7 +1298,7 @@ void MyLocal::ko()
 									 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ko->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=14>아래 게이지바에서 </font>"
-								   "<font color=#FFFFFF size=10 newline=14>분홍색 영역을 맞히면 퍼센트를</font>"
+								   "<font color=#FFFFFF size=10 newline=14>노란색 영역을 맞히면 퍼센트를</font>"
 								   "<font color=#FFFFFF size=10 newline=28>추가로 획득할 수 있어요.</font>"
 								   "<font color=#FFFFFF size=10 newline=14>기회는 총 3번 이에요!</font>"
 								   "<font color=#FFFFFF size=10 newline=14>100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
@@ -1306,7 +1306,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=11>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
 	ko->setObject(CCString::create("<font color=#FFAA14 size=11 newline=16>100%에 성공시</font><font color=#FFAA14 size=11 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=11>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=13>현재 획득 영역</font><font color=#FFFF00 size=35 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
-	ko->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>포인터가 분홍색 영역에</font>"
+	ko->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>포인터가 노란색 영역에</font>"
 								   "<font size=12 color=#FFFFFF newline=16>들어왔을 때</font><font size=12 color=#FFFFFF>멈춰 버튼을 눌러주세요!</font>"), kMyLocalKey_onePercentGame4);
 	ko->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	ko->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
@@ -2334,7 +2334,7 @@ void MyLocal::en()
 																 "<font color=#FFFFFF size=10 newline=12>100% 영역획득 할 수 있게</font>"
 																 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	en->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
-	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
+	en->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 노란색 영역을 맞히면</font>"
 								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"
 								   "<font color=#FFFFFF size=12 newline=30>기회는 총 3번 주어집니다.</font>"
 								   "<font color=#FFAA14 size=14 newline=15>자 그럼 100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
@@ -2342,7 +2342,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=12>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
 	en->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>100%에 성공시</font><font color=#FFAA14 size=12 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=12>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
 	en->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역       </font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
-	en->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>분홍색 영역에 맞게</font>"
+	en->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>노란색 영역에 맞게</font>"
 								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
 	en->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	en->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);
@@ -3378,7 +3378,7 @@ void MyLocal::ja()
 																 "<font color=#FFFFFF size=10 newline=12>100% 영역획득 할 수 있게</font>"
 																 "<font color=#FFFFFF size=10>내가 도와줄게요.</font>"), kMyLocalKey_onePercentTutorial2);
 	ja->setObject(CCString::create("다  음"), kMyLocalKey_onePercentTutorial3);
-	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 분홍색 영역을 맞히면</font>"
+	ja->setObject(CCString::create("<font color=#FFFFFF size=12 newline=16>아래 게이지바에서 노란색 영역을 맞히면</font>"
 								   "<font color=#FFAA14 size=12 newline=16>0.3%를 추가로 획득할 수 있습니다.</font>"
 								   "<font color=#FFFFFF size=12 newline=30>기회는 총 3번 주어집니다.</font>"
 								   "<font color=#FFAA14 size=14 newline=15>자 그럼 100% 에 도전해 볼까요?</font>"), kMyLocalKey_onePercentTutorial4);
@@ -3386,7 +3386,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>뽑기 기회는 단 3번!!</font><font color=#FFFFFF size=12>부족한 영역을 채워 100%에 도전하세요.</font>"), kMyLocalKey_onePercentGame1);
 	ja->setObject(CCString::create("<font color=#FFAA14 size=12 newline=16>100%에 성공시</font><font color=#FFAA14 size=12 tag=1>한 단계 높은 카드</font><font color=#FFFFFF size=12>를 획득할 수 있어요.</font>"), kMyLocalKey_onePercentGame2);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=12>현재 획득 영역</font><font color=#FFFF00 size=30 strokecolor=000 strokesize=2 tag=1>99.9%</font>"), kMyLocalKey_onePercentGame3);
-	ja->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>분홍색 영역에 맞게</font>"
+	ja->setObject(CCString::create("<font size=12 color=#FFFFFF newline=16>노란색 영역에 맞게</font>"
 								   "<font size=12 color=#FFAA14>멈춰 버튼 터치</font><font size=12 color=#FFFFFF>하세요!</font>"), kMyLocalKey_onePercentGame4);
 	ja->setObject(CCString::create("멈춰!"), kMyLocalKey_onePercentGame5);
 	ja->setObject(CCString::create("100% 실패"), kMyLocalKey_onePercentGame6);

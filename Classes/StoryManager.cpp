@@ -83,13 +83,16 @@ void StoryManager::mentAction()
 	
 	if(ing_ment_cnt%frame_value == 0)
 	{
-		if(is_on_typing_sound)
-			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+
 		
 		ment_recent_length++;
 		basic_string<wchar_t> result;
 		utf8::utf8to16(recent_ment.begin(), recent_ment.end(), back_inserter(result));
 		int ment_length = result.length();
+		
+		if(is_on_typing_sound)
+			if(result[ment_recent_length]==' ' || result[ment_recent_length]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		
 		result = result.substr(0, ment_recent_length);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
@@ -97,6 +100,11 @@ void StoryManager::mentAction()
 		
 		if(ment_recent_length >= ment_length)
 		{
+			
+			//끝날때도 한번 재생
+			if(is_on_typing_sound)
+				AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+			
 			next_label->setVisible(true);
 //			if(is_on_typing_sound)
 //				AudioEngine::sharedInstance()->stopEffect("sound_crashed_map.mp3");
