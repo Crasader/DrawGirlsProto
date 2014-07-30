@@ -53,8 +53,8 @@ import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
 
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
-	public static final String FiveRocks_AppId = "538c30c400821dfba2000001";
-	public static final String FiveRocks_AppKey = "LxsEDRsKVnr8_Qd_Uffj";
+	public static final String FiveRocks_AppId = "53c4918600821d86a400000e";
+	public static final String FiveRocks_AppKey = "bSYyKMPM-oSSEMEvOPMW";
 	public static final int ANDROID_BUILD_GINGERBREAD = 9;
 	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
 	private static native int getUserState();
