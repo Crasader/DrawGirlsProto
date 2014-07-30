@@ -1118,7 +1118,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 	cell->addChild(cell_node, 1, 1);
 	
 	
-	if(idx==not_event_puzzle_list.size()){
+	if(idx==numberOfCellsInTableView(table)-1){
 		CCSprite* n_locked_back = CCSprite::create("mainflow_puzzle_lock.png"); //mySIL->getLoadedImg("mainflow_puzzle_lock.png");
 		cell_node->addChild(n_locked_back);
 		
@@ -2277,7 +2277,7 @@ unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 	int puzzle_count = not_event_puzzle_list.size();//NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
 	int view_count = puzzle_count - locked_puzzle_count;
-	view_count += mySGD->getUnlockFrameCnt();
+	view_count += mySGD->getUnlockFrameCnt() + 1;
 	
 	if(view_count > puzzle_count + 1)
 		view_count = puzzle_count + 1;
