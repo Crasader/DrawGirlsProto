@@ -1552,7 +1552,7 @@ void Maingame::removeConditionLabel()
 		t_clipping->setAlphaThreshold(0.1f);
 		
 		CCPoint change_origin = ccp(0,0);
-		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480*screen_scale_y, 320*screen_scale_y));
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480, 320*screen_scale_y));
 		
 		CCSprite* t_gray = CCSprite::create("back_gray.png");
 		t_gray->setScaleX(screen_scale_x);
@@ -1725,7 +1725,7 @@ void Maingame::removeConditionLabel()
 		t_clipping->setAlphaThreshold(0.1f);
 		
 		CCPoint change_origin = ccp(0,0);
-		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480*screen_scale_y, 320*screen_scale_y));
+		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, 480, 320*screen_scale_y));
 		
 //		CCSprite* t_gray = CCSprite::create("back_gray.png");
 //		t_gray->setScaleY(screen_scale_y);
