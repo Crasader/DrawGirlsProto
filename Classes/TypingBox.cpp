@@ -49,7 +49,7 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	suction->setTouchEnabled(true);
 	
 	box_img = CCScale9Sprite::create(box_filename.c_str(), box_9_out, box_9_in);
-	box_img->setContentSize(CCSizeMake(box_9_in.origin.x + box_in_size.width + (box_9_out.size.width-box_9_in.origin.x-box_9_in.size.width), box_in_label.origin.y + box_in_size.height + (box_9_out.size.height-box_in_label.origin.y-box_in_label.size.height)));
+	box_img->setContentSize(CCSizeMake(box_in_label.origin.x + box_in_size.width + (box_9_out.size.width-box_in_label.origin.x-box_in_label.size.width), box_in_label.origin.y + box_in_size.height + (box_9_out.size.height-box_in_label.origin.y-box_in_label.size.height)));
 	box_img->setPosition(box_position);
 	addChild(box_img);
 	
