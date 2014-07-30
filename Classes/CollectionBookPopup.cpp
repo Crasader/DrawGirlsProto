@@ -90,7 +90,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	target->addChild(script_back);
 	
 	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 35), kCCTextAlignmentLeft);
-	r_stage_script->setPosition(ccp(25,261));
+	r_stage_script->setPosition(ccp(25,253));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_script->setAnchorPoint(ccp(0,1));

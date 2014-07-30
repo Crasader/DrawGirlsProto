@@ -1784,7 +1784,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														scenario_node->addChild(yagyu, 1);
 																														
 																														CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-																														katsuragi->setAnchorPoint(ccp(0,0));
+																														katsuragi->setAnchorPoint(ccp(1,0));
 																														katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
 																														katsuragi->setVisible(false);
 																														scenario_node->addChild(katsuragi, 1);
@@ -1796,7 +1796,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																														scenario_node->addChild(ikaruga, 1);
 																														
 																														CCSprite* boy = CCSprite::create("kt_cha_asuka_1.png"); // test
-																														boy->setAnchorPoint(ccp(0,0));
+																														boy->setAnchorPoint(ccp(1,0));
 																														boy->setPosition(ccp(240+240*screen_scale_x+boy->getContentSize().width, 160-160*screen_scale_y));
 																														boy->setVisible(false);
 																														scenario_node->addChild(boy, 1);
@@ -3177,7 +3177,7 @@ void MainFlowScene::setBottom()
 				n_win_back->addChild(n_win_label);
 				
 //				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-				n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+				n_win_back->setPosition(ccp(n_endless->getContentSize().width-50, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
@@ -3188,7 +3188,7 @@ void MainFlowScene::setBottom()
 				s_win_back->addChild(s_win_label);
 				
 //				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-				s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+				s_win_back->setPosition(ccp(s_endless->getContentSize().width-50, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 				
 				refresh_ing_win_func = [=]()
@@ -3220,7 +3220,7 @@ void MainFlowScene::setBottom()
 						n_win_back->addChild(n_win_label);
 						
 //						n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-						n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+						n_win_back->setPosition(ccp(n_endless->getContentSize().width-50, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
 						n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
 						
 						CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
@@ -3231,7 +3231,7 @@ void MainFlowScene::setBottom()
 						s_win_back->addChild(s_win_label);
 						
 //						s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-						s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+						s_win_back->setPosition(ccp(s_endless->getContentSize().width-50, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
 						s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
 					}
 				};

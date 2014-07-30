@@ -102,7 +102,7 @@ void CommonAnimation::applyShadow(KSLabelTTF* parent, float shadowFontSize)
 	parent->addChild(title_label_shadow, -1);
  
 }
-void CommonAnimation::applyBigShadow(KSLabelTTF* parent, float shadowFontSize)
+KSLabelTTF* CommonAnimation::applyBigShadow(KSLabelTTF* parent, float shadowFontSize)
 {
 	KSLabelTTF* title_label_shadow = KSLabelTTF::create(parent->getString(), mySGD->getFont().c_str(),
 																											shadowFontSize);
@@ -112,4 +112,6 @@ void CommonAnimation::applyBigShadow(KSLabelTTF* parent, float shadowFontSize)
 	
 	title_label_shadow->setPosition(ccpFromSize(parent->getContentSize()/2.f) + ccp(0, -4));
 	parent->addChild(title_label_shadow, -1);
+	
+	return title_label_shadow;
 }
