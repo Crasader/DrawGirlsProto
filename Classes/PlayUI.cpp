@@ -695,16 +695,19 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 		speed_label->setPosition(ccp(0, 0));
 	}
 	
-	addChild(KSGradualValue<float>::create(0.f, 1.f, 1.f, [=](float t)
-										   {
-											   speed_label->setOpacity((1.f-t)*255);
-											   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-										   }, [=](float t)
-										   {
-											   speed_label->setOpacity(0);
-											   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-											   selfRemove();
-										   }));
+	addChild(KSTimer::create(0.4f, [=]()
+							 {
+								 addChild(KSGradualValue<float>::create(0.f, 1.f, 0.6f, [=](float t)
+																		{
+																			speed_label->setOpacity((1.f-t)*255);
+																			shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																		}, [=](float t)
+																		{
+																			speed_label->setOpacity(0);
+																			shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																			selfRemove();
+																		}));
+							 }));
 	
 	setScale(1.f/myGD->game_scale);
 	
