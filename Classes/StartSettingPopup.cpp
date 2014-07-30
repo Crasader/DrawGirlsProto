@@ -2018,6 +2018,22 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												{
 													buySuccessItem(clicked_item_idx, 1);
 												}
+												else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+												{
+													mySGD->clearChangeGoods();
+													addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_gold, [=]()
+																										{
+																											ShopPopup* t_shop = ShopPopup::create();
+																											t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																											if(mySGD->is_endless_mode)
+																												t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																											else
+																												t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																											t_shop->setShopCode(kSC_gold);
+																											t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																											addChild(t_shop, kStartSettingPopupZorder_popup);
+																										}, [=](){is_menu_enable = true;}), 9999);
+												}
 												else
 												{
 													mySGD->clearChangeGoods();
@@ -2060,6 +2076,22 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												if(result_data["result"]["code"] == GDSUCCESS)
 												{
 													buySuccessItem(clicked_item_idx, 1);
+												}
+												else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+												{
+													mySGD->clearChangeGoods();
+													addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_ruby, [=]()
+																										{
+																											ShopPopup* t_shop = ShopPopup::create();
+																											t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+																											if(mySGD->is_endless_mode)
+																												t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																											else
+																												t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+																											t_shop->setShopCode(kSC_ruby);
+																											t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																											addChild(t_shop, kStartSettingPopupZorder_popup);
+																										}, [=](){is_menu_enable = true;}), 9999);
 												}
 												else
 												{

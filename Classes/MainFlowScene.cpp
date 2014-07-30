@@ -3584,7 +3584,7 @@ void MainFlowScene::topOnLight()
 			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
 			scenario_node->addChild(t_suction);
 			t_suction->setTouchEnabled(true);
-			
+			is_menu_enable = true;
 			t_suction->setNotSwallowRect(CCRectMake(t_stencil1->getPositionX()-t_stencil1->getContentSize().width/2.f, t_stencil1->getPositionY()-t_stencil1->getContentSize().height/2.f, t_stencil1->getContentSize().width, t_stencil1->getContentSize().height));
 			
 //			t_suction->touch_began_func = [=]()
