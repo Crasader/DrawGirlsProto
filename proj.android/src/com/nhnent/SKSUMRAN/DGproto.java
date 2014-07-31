@@ -48,7 +48,7 @@ import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
-import com.kamcord.android.Kamcord;
+//import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
@@ -64,14 +64,12 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		super.onCreate(savedInstanceState);
 		
 		Log.i("com.litqoo.dgproto", "init1 kamcord");
-		Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
+		/*Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
 		    "Ecl3mH6WxvG8T3lsrqbtAAOBrRq1AE664D7VYpMgZ7b",
 		    "drawgirls");
 		
-		Log.i("com.litqoo.dgproto", "init2 kamcord");
 		Kamcord.initActivity(this);
-
-		Log.i("com.litqoo.dgproto", "finished kamcord");
+		*/
 		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -160,7 +158,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 
     static { 
     	FiveRocks.loadSharedLibrary();
-    	System.loadLibrary("kamcord");
+    	//System.loadLibrary("kamcord");
         System.loadLibrary("cocos2dlua");
     }
     
