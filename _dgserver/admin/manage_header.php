@@ -46,7 +46,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<script src="jquery.form.js"></script>
 		<script src="lib.js" charset="UTF-8"></script>
 		<script src="LQDataTable.js" charset="UTF-8"></script>
-		<script src="LQEditor.js"></script>
+		<script src="LQEditor.js" charset="UTF-8"></script>
 		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 
@@ -105,12 +105,12 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_userInfo.php?gid=<?=$gid?>>userInfo<br>기본정보조회</a></li>
 								<li><a href=manage_modifyHistory.php?gid=<?=$gid?>>modifyHistory<br>변경내역조회</a></li>
 								<li><a href=manage_puzzleHistory.php?gid=<?=$gid?>>puzzleHistory<br>퍼즐정보</a></li>
-								<li><a href=manage_pieceHistory.php?gid=<?=$gid?>>pieceHistory<br>피스정보</a></li>
-								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>characterHistory<br>캐릭터히스토리</a></li>
-								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>cardHistory<br>카드정보</a></li>
-								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>archivementHistory<br>업적히스토리</a></li>
-								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>giftBoxHistory<br>선물함히스토리</a></li>
-								<li><a href=manage_userStorage.php?gid=<?=$gid?>>userStorage<br>보관함관리</a></li>
+								<li><a href=manage_pieceHistory.php?gid=<?=$gid?>>pieceHistory<br>보유피스</a></li>
+								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>characterHistory<br>보유캐릭터</a></li>
+								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>cardHistory<br>보유카드</a></li>
+								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>archivementHistory<br>업적진행상황</a></li>
+								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>giftBoxHistory<br>선물함</a></li>
+								<li><a href=manage_userStorage.php?gid=<?=$gid?>>userStorage<br>재화보관함</a></li>
 								<li><a href=manage_cuponHistory.php?gid=<?=$gid?>>cuponHistory<br>쿠폰사용내역</a></li>
 								<li><a href=manage_userLog.php?gid=<?=$gid?>>userLog<br>유저로그</a></li>
 								<li><a href=manage_userData.php?gid=<?=$gid?>>userdata<br>유저목록</a></li>
@@ -120,6 +120,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 							<ul class="nav">
 								<li><a href=manage_stageRank.php?gid=<?=$gid?>>stageRank<br>스테이지</a></li>
 								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>pvpRank<br>PVP</a></li>
+								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>weeklyRank<br>주간누적랭킹</a></li>
 							</ul>
 		            	</li>
 						<?php
@@ -135,6 +136,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>shopEvent<br>할인이벤트</a></li>
 								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>timeEvent<br>타임이벤트</a></li>
 								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br>출석이벤트</a></li>
+								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>attendenceEventDay<br>출석이벤트보상</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>cuponManager<br>쿠폰관리</a></li>
 								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>cuponCode<br>쿠폰코드</a></li>
 							</ul>
@@ -144,18 +146,24 @@ $left_menu[]=array("title"=>"","url"=>"");
 
 							if($admin->checkPermission("readAdmin")){
 						?>
-		            	<li>미완성
+		            	<li>관리
 							<ul class="nav">
-								<li><a href=manage_balance.php?gid=<?=$gid?>>balance<br>벨런스</a></li>
+								<li><a href=manage_commonSetting.php?gid=<?=$gid?>>CommonSetting<br>기본설정</a></li>
+								<li><a href=manage_archivement.php?gid=<?=$gid?>>archivement<br>업적</a></li>
+								<li><a href=manage_cardText.php?gid=<?=$gid?>>cardText<br>카드스크립트</a></li>
+								<li><a href=manage_shop.php?gid=<?=$gid?>>shop<br>상점</a></li>
 								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVPPlayData<br>PVP플레이데이터</a></li>
-								<li><a href=admin_help.php?gid=<?=$gid?>>EditGame<br>관리툴</a></li>
 								<li><a href=manage_adminUser.php?gid=<?=$gid?>>adminUser<br>관리자목록</a></li>
+								<li><a href=admin_help.php?gid=<?=$gid?>>EditGame<br>관리툴</a></li>
+								<li><a href=manage_balance.php?gid=<?=$gid?>>balance<br>벨런스</a></li>
 							</ul>
 						</li>
 						<?php
 							}
 						?>
+				  		<li><a href="logout.php">로그아웃</a></li>
 				  	</ul>
+
 				</div>
 			</div>
 			<div class="col-lg-10">

@@ -156,14 +156,15 @@ if(!$stopCommand){
             $p2["memberID"]= CurrentUserInfo::$memberID;
         
 
-            $r["log"] = LogManager::getLog();
+            $logs = LogManager::getLog();
 
             $p2["category"]=$a;
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $p2["output"]=$r;
+            $p2["output"]["log"]=$logs;
             $p2["execTime"]=$endTime-$startTime;
             if($a!="writelog")$command->writelog($p2);
-            LogManager::getLogAndClear();
+            $r["log"]=LogManager::getLogAndClear();
             $allResult[$cmd]= $r;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');
@@ -201,7 +202,7 @@ if(!$stopCommand){
             $allResult[$commitCmdName]=$cr;
         }
 
-         for($c=0;$c<count($param);$c++){
+        for($c=0;$c<count($param);$c++){
             $cmd = (string)$c;
             $allResult[$cmd]["transaction"]=$commitsuccess;
         }
@@ -228,7 +229,8 @@ if(!$stopCommand){
     }
     
     
-    DBManager::closeDB();
+    //DBServer::closeAllConnection();
+    DBServer::closeAllConnection();
     @mysql_close();
 
 }

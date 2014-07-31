@@ -110,14 +110,14 @@ if(!$stopCommand){
 	
 	$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 	
-	// if($mode=="nodes"){
-	// 	echo $allResult;
-	// }else{
+	 if($mode=="nodes"){
+	 	echo $allResult;
+	 }else{
 		echo base64_encode(@mcrypt_encrypt(MCRYPT_DES, $SECRETKEY,$allResult, MCRYPT_MODE_ECB))."#";		
-	//}
+	}
 	
 	
-	DBManager::closeDB();
+	DBServer::closeAllConnection();
 	@mysql_close();
 
 }
