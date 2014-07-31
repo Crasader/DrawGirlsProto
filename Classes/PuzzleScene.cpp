@@ -471,9 +471,32 @@ bool PuzzleScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		keep_card_number = 0;
+		int take_level;
+		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
+		else if(mySGD->is_showtime)							take_level = 3;
+		else if(mySGD->is_exchanged)						take_level = 2;
+		else												take_level = 1;
+		
+//		if(mySGD->isTimeEvent(kTimeEventType_card))
+//		{
+//			take_level += mySGD->getTimeEventIntValue(kTimeEventType_card);
+//			if(take_level > 4)
+//				take_level = 4;
+//		}
 		
 		bool is_not_empty_card[4] = {false,};
+		
+		clear_star_take_level = take_level;
+		clear_is_empty_star = !is_not_empty_card[take_level-1];
+		
+		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
+		{
+			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+		}
+		
+		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
+		
+		keep_card_number = 0;
 		
 		clear_is_empty_piece = true;
 		clear_is_perfect_piece = true;
@@ -504,30 +527,6 @@ bool PuzzleScene::init()
 				}
 			}
 		}
-		
-		
-		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
-		else if(mySGD->is_showtime)							take_level = 3;
-		else if(mySGD->is_exchanged)						take_level = 2;
-		else												take_level = 1;
-		
-//		if(mySGD->isTimeEvent(kTimeEventType_card))
-//		{
-//			take_level += mySGD->getTimeEventIntValue(kTimeEventType_card);
-//			if(take_level > 4)
-//				take_level = 4;
-//		}
-		
-		clear_star_take_level = take_level;
-		clear_is_empty_star = !is_not_empty_card[take_level-1];
-		
-		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
-		{
-			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
-		}
-		
-		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
 		
 		keep_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level);
 		
