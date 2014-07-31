@@ -395,7 +395,7 @@ private:
 		curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, WriteMemoryCallback);
 		curl_easy_setopt(curl_handle, CURLOPT_POST, true);
 		curl_easy_setopt(curl_handle, CURLOPT_NOSIGNAL, 1L);
-		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 100000); // 연결까지 기다릴 시간.
+		curl_easy_setopt(curl_handle, CURLOPT_CONNECTTIMEOUT_MS, 10000); // 연결까지 기다릴 시간.
 		curl_easy_setopt(curl_handle, CURLOPT_TIMEOUT_MS, 20000); //총 curl실행시간.
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPALIVE, 1);
 		curl_easy_setopt(curl_handle, CURLOPT_TCP_KEEPIDLE,5); //5초대기
