@@ -150,6 +150,8 @@ void SaveData::resetData(SaveDataFile t_sdf)
 
 void SaveData::resetData(string filename)
 {
+	CCLOG("reset info file : %s", filename.c_str());
+	
 	map<string, bool>::iterator iter;
 	iter = file_init.find(filename);
 	if(iter == file_init.end())
@@ -164,6 +166,8 @@ void SaveData::resetData(string filename)
 
 void SaveData::resetAllData()
 {
+	CCLOG("reset all info file");
+	
 	int total_file = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt);
 	for(int i=1;i<=total_file;i++)
 	{
