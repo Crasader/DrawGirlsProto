@@ -385,12 +385,15 @@ void CommonButton::setPrice(PriceType priceType, string price){
 				t_type = kGoodsType_pass5;
 			
 			CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			pass_count_case->setContentSize(CCSizeMake(20, 20));
 			pass_count_case->setPosition(ccpFromSize(m_priceTypeSprite->getContentSize()/2.f) + ccp(9,6));
 			m_priceTypeSprite->addChild(pass_count_case);
 			
 			CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(t_type)), mySGD->getFont().c_str(), 8);
 			pass_count_label->setColor(ccc3(255, 255, 255));
+			float min_width = 10+pass_count_label->getContentSize().width;
+			if(min_width < 20)
+				min_width = 20;
+			pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 			pass_count_case->addChild(pass_count_label);
 		}

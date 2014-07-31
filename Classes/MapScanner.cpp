@@ -1062,7 +1062,7 @@ void MapScanner::setTopBottomBlock()
 //		t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 		
 		t_clipping->getStencil()->setAnchorPoint(ccp(0.5,1.f));
-		t_clipping->setPosition(ccp(bottom_block_lock->getContentSize().width/2.f,bottom_block_lock->getContentSize().height-sub_value));
+		t_clipping->setPosition(ccp(bottom_block_lock->getContentSize().width/2.f,bottom_block_lock->getContentSize().height));
 		bottom_block_lock->addChild(t_clipping);
 		
 		t_clipping->setAlphaThreshold(0.1f);

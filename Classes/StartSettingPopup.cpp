@@ -1051,12 +1051,15 @@ void StartSettingPopup::setMain()
 			
 			{
 				CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				pass_count_case->setContentSize(CCSizeMake(20, 20));
 				pass_count_case->setPosition(ccpFromSize(n_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 				n_pass_ticket->addChild(pass_count_case);
 				
 				CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 				pass_count_label->setColor(ccc3(255, 255, 255));
+				float min_width = 10+pass_count_label->getContentSize().width;
+				if(min_width < 20)
+					min_width = 20;
+				pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 				pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 				pass_count_case->addChild(pass_count_label);
 			}
@@ -1072,12 +1075,15 @@ void StartSettingPopup::setMain()
 			
 			{
 				CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				pass_count_case->setContentSize(CCSizeMake(20, 20));
 				pass_count_case->setPosition(ccpFromSize(s_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 				s_pass_ticket->addChild(pass_count_case);
 				
 				CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 				pass_count_label->setColor(ccc3(255, 255, 255));
+				float min_width = 10+pass_count_label->getContentSize().width;
+				if(min_width < 20)
+					min_width = 20;
+				pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 				pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 				pass_count_case->addChild(pass_count_label);
 			}
@@ -1478,12 +1484,15 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				
 				{
 					CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-					pass_count_case->setContentSize(CCSizeMake(20, 20));
 					pass_count_case->setPosition(ccpFromSize(n_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 					n_pass_ticket->addChild(pass_count_case);
 					
 					CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 					pass_count_label->setColor(ccc3(255, 255, 255));
+					float min_width = 10+pass_count_label->getContentSize().width;
+					if(min_width < 20)
+						min_width = 20;
+					pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 					pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 					pass_count_case->addChild(pass_count_label);
 				}
@@ -1497,12 +1506,15 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				
 				{
 					CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-					pass_count_case->setContentSize(CCSizeMake(20, 20));
 					pass_count_case->setPosition(ccpFromSize(s_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 					s_pass_ticket->addChild(pass_count_case);
 					
 					CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 					pass_count_label->setColor(ccc3(255, 255, 255));
+					float min_width = 10+pass_count_label->getContentSize().width;
+					if(min_width < 20)
+						min_width = 20;
+					pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 					pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 					pass_count_case->addChild(pass_count_label);
 				}
