@@ -171,11 +171,12 @@ void StartSettingPopup::setMain()
 	left_back->addChild(left_tab);
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 12.5f);
+	tab_label->setColor(ccc3(20, 50, 70));
 	tab_label->disableOuterStroke();
 	tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
 	left_tab->addChild(tab_label);
 	
-	CommonAnimation::applyShadow(tab_label);
+//	CommonAnimation::applyShadow(tab_label);
 	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	right_back->setContentSize(CCSizeMake(280, 145));

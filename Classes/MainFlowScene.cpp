@@ -75,6 +75,7 @@ bool MainFlowScene::init()
 	setKeypadEnabled(true);
 	
 	kind_tutorial_pvp = nullptr;
+	refresh_ing_win_func = nullptr;
 	
 	is_table_openning = false;
     TRACE();
@@ -3632,10 +3633,10 @@ void MainFlowScene::topOnLight()
 			kind_tutorial_pvp = [=]()
 			{
 				skip_menu->setEnabled(false);
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
 			};
 			
 			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);

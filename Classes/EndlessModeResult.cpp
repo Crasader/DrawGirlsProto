@@ -1469,74 +1469,85 @@ void EndlessModeResult::startCalcAnimation()
 																																										
 																					typing_box->showAnimation(0.3f);
 																					
+																					function<void()> end_func5 = [=]()
+																					{
+																						is_menu_enable = true;
+																						addChild(KSTimer::create(0.1f, [=]()
+																												 {
+																													 scenario_node->removeFromParent();
+																												 }));
+																					};
+																					
 																					function<void()> end_func4 = [=]()
 																					{
 																						myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
 																						
-																						ikaruga->setVisible(false);
+																						typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), end_func5);
 																						
-																						typing_box->setTouchOffScrollAndButton();
-																						typing_box->setTouchSuction(false);
-																						typing_box->setVisible(false);
-																						
-//																						t_gray->removeFromParent();
-																						
-																						CCNode* t_popup_node = CCNode::create();
-																						t_popup_node->setPosition(ccp(240,160));
-																						addChild(t_popup_node, 9999);
-																						
-																						TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
-																						t_popup_node->addChild(t_suction);
-																						t_suction->setTouchEnabled(true);
-																						
-																						CCSprite* out_back = CCSprite::create("popup_small_back.png");
-																						out_back->setPosition(ccp(0,0));
-																						t_popup_node->addChild(out_back);
-																						
-																						KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
-																						t_title_label->disableOuterStroke();
-																						t_title_label->setPosition(ccpFromSize(out_back->getContentSize()/2.f) + ccp(-85, out_back->getContentSize().height/2.f-35));
-																						out_back->addChild(t_title_label);
-																						
-																						CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
-																						t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 22));
-																						t_close_button->setFunction([=](CCObject* sender)
-																													{
-																														if(!is_menu_enable)
-																															return;
-																														
-																														is_menu_enable = false;
-																														
-																														AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																														
-																														t_close_button->setEnabled(false);
-																														CommonAnimation::closePopup(this, t_popup_node, NULL);
-																														addChild(KSGradualValue<float>::create(255, 0, 0.25f, [=](float t)
-																																							   {
-																																							   }, [=](float t)
-																																							   {
-																																								   is_menu_enable = true;
-																																								   addChild(KSTimer::create(0.1f, [=]()
-																																															{
-																																																scenario_node->removeFromParent();
-																																															}));
-																																								   t_popup_node->removeFromParent();
-																																							   }));
-																													});
-																						out_back->addChild(t_close_button);
-																						t_close_button->setEnabled(false);
-																						
-																						CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-12.f));
-																						in_back->setContentSize(CCSizeMake(251, 113));
-																						out_back->addChild(in_back);
-																						
-																						StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																						t_content_label->setAnchorPoint(ccp(0.5f, 0.5f));
-																						t_content_label->setPosition(ccpFromSize(in_back->getContentSize()/2.f));
-																						in_back->addChild(t_content_label);
-																						
-																						CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
+//																						ikaruga->setVisible(false);
+//																						
+//																						typing_box->setTouchOffScrollAndButton();
+//																						typing_box->setTouchSuction(false);
+//																						typing_box->setVisible(false);
+//																						
+////																						t_gray->removeFromParent();
+//																						
+//																						CCNode* t_popup_node = CCNode::create();
+//																						t_popup_node->setPosition(ccp(240,160));
+//																						addChild(t_popup_node, 9999);
+//																						
+//																						TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
+//																						t_popup_node->addChild(t_suction);
+//																						t_suction->setTouchEnabled(true);
+//																						
+//																						CCSprite* out_back = CCSprite::create("popup_small_back.png");
+//																						out_back->setPosition(ccp(0,0));
+//																						t_popup_node->addChild(out_back);
+//																						
+//																						KSLabelTTF* t_title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent16), mySGD->getFont().c_str(), 15);
+//																						t_title_label->disableOuterStroke();
+//																						t_title_label->setPosition(ccpFromSize(out_back->getContentSize()/2.f) + ccp(-85, out_back->getContentSize().height/2.f-35));
+//																						out_back->addChild(t_title_label);
+//																						
+//																						CommonButton* t_close_button = CommonButton::createCloseButton(-99999);
+//																						t_close_button->setPosition(ccp(out_back->getContentSize().width - 25, out_back->getContentSize().height - 22));
+//																						t_close_button->setFunction([=](CCObject* sender)
+//																													{
+//																														if(!is_menu_enable)
+//																															return;
+//																														
+//																														is_menu_enable = false;
+//																														
+//																														AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+//																														
+//																														t_close_button->setEnabled(false);
+//																														CommonAnimation::closePopup(this, t_popup_node, NULL);
+//																														addChild(KSGradualValue<float>::create(255, 0, 0.25f, [=](float t)
+//																																							   {
+//																																							   }, [=](float t)
+//																																							   {
+//																																								   is_menu_enable = true;
+//																																								   addChild(KSTimer::create(0.1f, [=]()
+//																																															{
+//																																																scenario_node->removeFromParent();
+//																																															}));
+//																																								   t_popup_node->removeFromParent();
+//																																							   }));
+//																													});
+//																						out_back->addChild(t_close_button);
+//																						t_close_button->setEnabled(false);
+//																						
+//																						CCScale9Sprite* in_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//																						in_back->setPosition(ccp(out_back->getContentSize().width/2.f, out_back->getContentSize().height/2.f-12.f));
+//																						in_back->setContentSize(CCSizeMake(251, 113));
+//																						out_back->addChild(in_back);
+//																						
+//																						StyledLabelTTF* t_content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent17), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//																						t_content_label->setAnchorPoint(ccp(0.5f, 0.5f));
+//																						t_content_label->setPosition(ccpFromSize(in_back->getContentSize()/2.f));
+//																						in_back->addChild(t_content_label);
+//																						
+//																						CommonAnimation::openPopup(this, t_popup_node, NULL, nullptr, [=](){t_close_button->setEnabled(true);});
 																					};
 																					
 																					function<void()> end_func3 = [=]()
