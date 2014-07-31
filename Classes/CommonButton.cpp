@@ -340,7 +340,7 @@ void CommonButton::setPrice(PriceType priceType, string price){
 		if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
 			m_priceLbl->setString(myLoc->getLocalForKey(kMyLocalKey_free));
 		else
-			m_priceLbl->setString(CCString::createWithFormat("%d",m_price)->getCString());
+			m_priceLbl->setString(price.c_str());
 		
 		m_priceLbl->setFontSize(13);
 	}
