@@ -130,7 +130,7 @@ void StyledLabelTTF::updateTexture()
 				
 				if(strokeSize > 0.1f)
 				{
-					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeOpa);
+					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)),strokeSize,strokeOpa,true);
 				}
 				else
 				{
