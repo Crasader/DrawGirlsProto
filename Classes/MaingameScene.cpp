@@ -316,6 +316,8 @@ void Maingame::startStory()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		t_tb->setTouchOffScrollAndButton();
 		t_tb->setTouchSuction(false);
 		
@@ -2325,6 +2327,8 @@ void Maingame::clearScenario2()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
 		CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
@@ -3069,6 +3073,8 @@ void Maingame::failScenario2()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
 		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
 		curtain_node->setScale(myDSH->screen_convert_rate);

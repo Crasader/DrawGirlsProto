@@ -574,19 +574,19 @@ bool FailPopup::init()
 		}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
-	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
-	{
-		EventShopPopup* t_popup = EventShopPopup::create(-300, [=]()
-		{
-			if(is_today_mission_success)
-			{
-				mySGD->is_today_mission_first = false;
-				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-				addChild(t_popup, kZ_FP_popup);
-			}
-		});
-		addChild(t_popup, kZ_FP_popup+1);
-	}
+//	else if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue()) // test
+//	{
+//		EventShopPopup* t_popup = EventShopPopup::create(-300, [=]()
+//		{
+//			if(is_today_mission_success)
+//			{
+//				mySGD->is_today_mission_first = false;
+//				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+//				addChild(t_popup, kZ_FP_popup);
+//			}
+//		});
+//		addChild(t_popup, kZ_FP_popup+1);
+//	}
 	else
 	{
 		if(is_today_mission_success)
