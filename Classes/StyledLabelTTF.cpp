@@ -126,14 +126,18 @@ void StyledLabelTTF::updateTexture()
 				KSLabelTTF* ttf = KSLabelTTF::create(st.m_text.c_str(), jsonStyle.get("font", "").asString().c_str(), jsonStyle.get("size", 12.f).asFloat());
 				float strokeSize = jsonStyle.get("strokesize", 0.f).asFloat();
 				unsigned long strokeColor = jsonStyle.get("strokecolor", 0).asUInt();
+				int strokeOpa = jsonStyle.get("strokeopacity", 255).asInt();
+				
 				if(strokeSize > 0.1f)
 				{
-					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeSize);
+					ttf->enableOuterStroke(ccc3(getRed(strokeColor), getGreen(strokeColor), getBlue(strokeColor)), strokeOpa);
 				}
 				else
 				{
 					ttf->disableOuterStroke();
 				}
+				
+				
 				m_oneLineContainer->addChild(ttf);
 				ttf->setAnchorPoint(ccp(0.f, 0.5f));
 				ttf->setPosition(ccp(m_currentPosition, m_currentLinePosition));
