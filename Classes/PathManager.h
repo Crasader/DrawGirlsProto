@@ -44,15 +44,20 @@ public:
 	
 	void changeScaleImg(int changeValue, IntPoint t_p = IntPoint())
 	{
-		if(!t_p.isNull())
-		{
-			int distance = abs(myPointVector.origin.x - t_p.x) + abs(myPointVector.origin.y - t_p.y);
-			
-			if(distance < pathScale + changeValue - 1)
-				return;
-		}
+//		if(!t_p.isNull())
+//		{
+//			int distance = abs(myPointVector.origin.x - t_p.x) + abs(myPointVector.origin.y - t_p.y);
+//			
+//			if(distance < pathScale + changeValue - 1)
+//				return;
+//		}
 		
 		pathScale += changeValue;
+		pathImg->setScaleX(float(pathScale));
+	}
+	void changeScaleDirect(int set_value)
+	{
+		pathScale = set_value;
 		pathImg->setScaleX(float(pathScale));
 	}
 	
@@ -374,6 +379,22 @@ private:
 	
 	void newPathAdd(IntPointVector t_pv)
 	{
+		if(!myList.empty())
+		{
+			IntDirection t_direction = myList.back()->myPointVector.distance.getDirection();
+			IntPoint before_point = myList.back()->myPointVector.origin;
+			int before_scale;
+			if(t_direction == directionLeft || t_direction == directionRight)
+			{
+				before_scale = abs(before_point.x - t_pv.origin.x);
+			}
+			else if(t_direction == directionUp || t_direction == directionDown)
+			{
+				before_scale = abs(before_point.y - t_pv.origin.y);
+			}
+			myList.back()->changeScaleDirect(before_scale);
+		}
+		
 		PathNode* t_pn = PathNode::create(t_pv, path_color);
 		t_pn->setTag(childTagInPathParentPathNode);
 		addChild(t_pn, 1);
