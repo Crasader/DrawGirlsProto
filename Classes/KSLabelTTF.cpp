@@ -57,7 +57,6 @@ void KSLabelTTF::draw(void)
 	
 	CC_NODE_DRAW_SETUP();
 
-	
 	ccGLBindTexture2D( m_pobTexture->getName() );
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
 //	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_Color );
@@ -281,16 +280,26 @@ bool KSLabelTTF::updateTexture()
 		auto oColor = label->getColor();
 		auto oPosition = label->getPosition();
 		auto oOpacity = label->getOpacity();
-		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 , tex->getContentSize().height+m_outerStrokeSize*2);
+		float padding = 10;
+		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 + padding ,
+																									tex->getContentSize().height+m_outerStrokeSize*2 + padding);
+		
 		
 		label->setFlipY(!oFlip);
 		label->setColor(m_outerStrokeColor);
 		
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
+		
+//		setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
+//		m_sBlendFunc.src = GL_SRC_ALPHA;
+//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
 		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
+//		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
 		label->setBlendFunc(_t);
 		label->setOpacity(255);
-		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize, label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize);
+		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize + padding / 2.f,
+														 label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize + padding / 2.f);
+//		CCPoint bottomLeft = CCPointZero;
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));
 		
 		rt->begin();
@@ -299,6 +308,16 @@ bool KSLabelTTF::updateTexture()
 		//float devider = 16;
 		for (int i=0; i<360; i+=360 / devider) // you should optimize that for your needs
 		{
+			if(i == 0)
+			{
+				label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y - 30 + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
+				label->visit();
+	
+			}
+//			else
+			{
+				
+			}
 			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
 		}
@@ -397,11 +416,9 @@ bool KSLabelTTF::initWithString(const char *string, const char *fontName, float 
 		this->setString(string);
 		
 		this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
+//		setOpacityModifyRGB(false);
 		m_sBlendFunc.src = GL_SRC_ALPHA;
 		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-//		setOpacityModifyRGB(false);
-//		m_sBlendFunc.src = GL_SRC_ALPHA;
-//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
 //		setOpacityModifyRGB(false);
 		
 		return true;
