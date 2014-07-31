@@ -162,15 +162,15 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sale_arrow);
 	
 	
-	CCSprite* after_price_type = CCSprite::create("price_gold_img.png");
-	after_price_type->setPosition(ccp(10,10));
-	m_container->addChild(after_price_type);
-	
 	KSLabelTTF* after_price = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccc3(255, 170, 20));
 	after_price->enableOuterStroke(ccBLACK, 0.5f);
 	after_price->setPosition(ccp(50,10));
 	m_container->addChild(after_price);
+	
+	CCSprite* after_price_type = CCSprite::create("price_gold_img.png");
+	after_price_type->setPosition(ccp(-17,after_price->getContentSize().height/2.f));
+	after_price->addChild(after_price_type);
 	
 	
 	CCScale9Sprite* stamp_case = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -216,11 +216,11 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	purchase_label->addChild(price_back);
 	
 	CCSprite* price_type = CCSprite::create("price_gold_img.png");
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
 //	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 15);
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+7,price_back->getContentSize().height/2.f));
+	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-1,price_back->getContentSize().height/2.f));
+	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f+1,price_back->getContentSize().height/2.f));
 	price_back->addChild(price_label);
 	
 	p_label->addChild(purchase_label);

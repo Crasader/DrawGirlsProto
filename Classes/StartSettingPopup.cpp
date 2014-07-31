@@ -171,11 +171,12 @@ void StartSettingPopup::setMain()
 	left_back->addChild(left_tab);
 	
 	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 12.5f);
+	tab_label->setColor(ccc3(20, 50, 70));
 	tab_label->disableOuterStroke();
 	tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
 	left_tab->addChild(tab_label);
 	
-	CommonAnimation::applyShadow(tab_label);
+//	CommonAnimation::applyShadow(tab_label);
 	
 	CCScale9Sprite* right_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	right_back->setContentSize(CCSizeMake(280, 145));
@@ -262,7 +263,7 @@ void StartSettingPopup::setMain()
 		mission_title_back->setPosition(ccp(main_case->getContentSize().width*0.417f+9, main_case->getContentSize().height+2-25));
 		main_case->addChild(mission_title_back);
 		
-		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 10.5f);
+		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12.5f);
 		mission_title_label->disableOuterStroke();
 		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f) + ccp(0,1));
 		mission_title_back->addChild(mission_title_label);
@@ -742,7 +743,6 @@ void StartSettingPopup::setMain()
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
-		gacha_label->setColor(ccc3(255, 170, 20));
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
 		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, 15.f));
 		gacha_item->addChild(gacha_label);
@@ -1028,7 +1028,7 @@ void StartSettingPopup::setMain()
 		setFormSetter(n_upgrade);
 		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(n_level);
-		n_level->disableOuterStroke();
+		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		n_level->setPosition(ccp(70,46));
 		n_upgrade->addChild(n_level);
 		
@@ -1037,7 +1037,7 @@ void StartSettingPopup::setMain()
 		s_upgrade->setColor(ccGRAY);
 		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 		setFormSetter(s_level);
-		s_level->disableOuterStroke();
+		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		s_level->setPosition(ccp(70,46));
 		s_upgrade->addChild(s_level);
 		
@@ -1051,12 +1051,15 @@ void StartSettingPopup::setMain()
 			
 			{
 				CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				pass_count_case->setContentSize(CCSizeMake(20, 20));
 				pass_count_case->setPosition(ccpFromSize(n_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 				n_pass_ticket->addChild(pass_count_case);
 				
 				CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 				pass_count_label->setColor(ccc3(255, 255, 255));
+				float min_width = 10+pass_count_label->getContentSize().width;
+				if(min_width < 20)
+					min_width = 20;
+				pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 				pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 				pass_count_case->addChild(pass_count_label);
 			}
@@ -1072,12 +1075,15 @@ void StartSettingPopup::setMain()
 			
 			{
 				CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-				pass_count_case->setContentSize(CCSizeMake(20, 20));
 				pass_count_case->setPosition(ccpFromSize(s_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 				s_pass_ticket->addChild(pass_count_case);
 				
 				CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 				pass_count_label->setColor(ccc3(255, 255, 255));
+				float min_width = 10+pass_count_label->getContentSize().width;
+				if(min_width < 20)
+					min_width = 20;
+				pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 				pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 				pass_count_case->addChild(pass_count_label);
 			}
@@ -1478,12 +1484,15 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				
 				{
 					CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-					pass_count_case->setContentSize(CCSizeMake(20, 20));
 					pass_count_case->setPosition(ccpFromSize(n_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 					n_pass_ticket->addChild(pass_count_case);
 					
 					CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 					pass_count_label->setColor(ccc3(255, 255, 255));
+					float min_width = 10+pass_count_label->getContentSize().width;
+					if(min_width < 20)
+						min_width = 20;
+					pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 					pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 					pass_count_case->addChild(pass_count_label);
 				}
@@ -1497,12 +1506,15 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				
 				{
 					CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-					pass_count_case->setContentSize(CCSizeMake(20, 20));
 					pass_count_case->setPosition(ccpFromSize(s_pass_ticket->getContentSize()/2.f) + ccp(9,6));
 					s_pass_ticket->addChild(pass_count_case);
 					
 					CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 					pass_count_label->setColor(ccc3(255, 255, 255));
+					float min_width = 10+pass_count_label->getContentSize().width;
+					if(min_width < 20)
+						min_width = 20;
+					pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 					pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 					pass_count_case->addChild(pass_count_label);
 				}

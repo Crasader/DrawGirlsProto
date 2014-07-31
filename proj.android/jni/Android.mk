@@ -31,20 +31,24 @@ LOCAL_WHOLE_STATIC_LIBRARIES += box2d_static
 LOCAL_WHOLE_STATIC_LIBRARIES += chipmunk_static
 LOCAL_WHOLE_STATIC_LIBRARIES += cocos_extension_static
 LOCAL_SHARED_LIBRARIES := fiverocks_shared
-LOCAL_SHARED_LIBRARIES += libkamcord
-LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
+#LOCAL_SHARED_LIBRARIES += libkamcord
+#LOCAL_SHARED_LIBRARIES += libkamcordcore
+#LOCAL_HEADER_FILES := $(LOCAL_PATH)/Kamcord-C-Interface.h
+
 
 include $(BUILD_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libkamcord
-LOCAL_SRC_FILES := libkamcord.so
-include $(PREBUILT_SHARED_LIBRARY)
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := libkamcord
+#LOCAL_SRC_FILES := libkamcord.so
+#include $(PREBUILT_SHARED_LIBRARY)
 
-include $(CLEAR_VARS)
-LOCAL_MODULE := libkamcordcore
-LOCAL_SRC_FILES := libkamcordcore.so
-include $(PREBUILT_SHARED_LIBRARY)
+
+#include $(CLEAR_VARS)
+#LOCAL_MODULE := libkamcordcore
+#LOCAL_SRC_FILES := libkamcordcore.so
+#include $(PREBUILT_SHARED_LIBRARY)
+
 
 $(call import-module,cocos2dx)
 $(call import-module,CocosDenshion/android)

@@ -124,7 +124,7 @@ void GameItemBase::stopTraceCharacter()
 
 void GameItemBase::acting()
 {
-	AudioEngine::sharedInstance()->playEffect("se_item.mp3", false);
+	AudioEngine::sharedInstance()->playEffect("se_item.mp3", false, true);
 }
 
 void GameItemBase::setTakeEffectFunc(CCObject* t_effect, SEL_CallFuncCCp d_effect)
@@ -1321,7 +1321,7 @@ void FloatingCoin::traceCharacter()
 	if(getPosition().getDistanceSq(jack_position) < 2.5f)
 	{
 		stopTraceCharacter();
-		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
+		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
 		mySGD->addChangeGoodsIngameGold(m_gold);
 		
 		take_func(getPosition());
@@ -1344,7 +1344,7 @@ void FloatingCoin::takeIt()
 	
 	if(auto_take)
 	{
-		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false);
+		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
 		mySGD->addChangeGoodsIngameGold(m_gold);
 		
 		take_func(getPosition());

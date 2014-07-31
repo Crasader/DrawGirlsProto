@@ -737,7 +737,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				ing_download_per = 0;
 				download_state = KSLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
 				download_state->enableOuterStroke(ccBLACK, 1.f);
-				download_state->setPosition(ccp(240,38));
+				download_state->setPosition(ccp(240,80+20));
 				addChild(download_state, kSLD_Z_content);
 				
 				download_set.clear();
@@ -809,16 +809,14 @@ void StageListDown::startOpenning()
 	loading_character->setPosition(ccp(240,500));
 	addChild(loading_character, kSLD_Z_content);
 	
-	CCSequence* t_seq = CCSequence::createWithTwoActions(CCMoveTo::create(0.5f, ccp(240,160)), CCCallFunc::create(this, callfunc_selector(StageListDown::endOpenning)));
+	CCSequence* t_seq = CCSequence::createWithTwoActions(CCMoveTo::create(0.5f, ccp(240,160-12)), CCCallFunc::create(this, callfunc_selector(StageListDown::endOpenning)));
 	loading_character->runAction(t_seq);
 }
 
 void StageListDown::endOpenning()
 {
 	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
-//	talk_label->setHorizontalAlignment(kCCTextAlignmentLeft);
-//	talk_label->setVerticalAlignment(kCCVerticalTextAlignmentTop);
-	talk_label->enableOuterStroke(ccBLACK, 1.f);
+	talk_label->disableOuterStroke();//enableOuterStroke(ccBLACK, 1.f);
 	talk_label->setAnchorPoint(ccp(0.5,0));
 	
 	talk_box = CCScale9Sprite::create("loading_talkbox.png", CCRectMake(0, 0, 150, 64.5f), CCRectMake(50, 21.5f, 50, 21.5f));
@@ -828,7 +826,7 @@ void StageListDown::endOpenning()
 	talk_box->setVisible(false);
 	addChild(talk_box, kSLD_Z_content);
 	
-	talk_label->setPosition(ccp(240, 230));
+	talk_label->setPosition(ccp(240, 230-159));
 	addChild(talk_label);
 	
 	KS::setOpacity(talk_label, 0);
@@ -847,7 +845,7 @@ void StageListDown::endOpenning()
 	gray->removeFromParent();
 
 	progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(240,110));
+	progress_back->setPosition(ccp(240,100));
 	addChild(progress_back);
 	
 	loading_progress = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
@@ -855,7 +853,7 @@ void StageListDown::endOpenning()
 	loading_progress->setMidpoint(ccp(0,0));
 	loading_progress->setBarChangeRate(ccp(1,0));
 	loading_progress->setPercentage(0);
-	loading_progress->setPosition(ccp(240, 110));
+	loading_progress->setPosition(ccp(240, 100));
 	addChild(loading_progress);
 	
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -887,7 +885,7 @@ void StageListDown::endOpenning()
 	ing_download_per = 0;
 	download_state = KSLabelTTF::create(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString(), mySGD->getFont().c_str(), 11);
 	download_state->enableOuterStroke(ccBLACK, 1.f);
-	download_state->setPosition(ccp(240,90));
+	download_state->setPosition(ccp(240,80+20));
 	addChild(download_state, kSLD_Z_content);
 	download_set.clear();
 	
@@ -924,18 +922,18 @@ void StageListDown::outOpenning()
 	addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 										   {
 											   state_ment->setVisible(false);
-											   download_state->setPosition(ccp(240,58-200.f*t));
-											   progress_back->setPosition(ccp(240,90-200.f*t));
-											   loading_progress->setPosition(ccp(240,90-200.f*t));
-											   loading_character->setPosition(ccp(240,160+300.f*t));
+											   download_state->setPosition(ccp(240,80+20-300.f*t));
+											   progress_back->setPosition(ccp(240,100-300.f*t));
+											   loading_progress->setPosition(ccp(240,100-300.f*t));
+											   loading_character->setPosition(ccp(240,160-12+400.f*t));
 											   talk_box->setPosition(ccp(240,200+300.f*t));
 											   talk_box->setOpacity(255-t*255.f);
 										   }, [=](float t)
 										   {
-											   download_state->setPosition(ccp(240,58-200.f));
-											   progress_back->setPosition(ccp(240,90-200.f));
-											   loading_progress->setPosition(ccp(240,90-200.f));
-											   loading_character->setPosition(ccp(240,160+300.f));
+											   download_state->setPosition(ccp(240,80+20-300.f));
+											   progress_back->setPosition(ccp(240,100-300.f));
+											   loading_progress->setPosition(ccp(240,100-300.f));
+											   loading_character->setPosition(ccp(240,160-12+400.f));
 											   talk_box->setPosition(ccp(240,200+300.f));
 											   talk_box->setOpacity(0);
 											   

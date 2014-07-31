@@ -171,12 +171,15 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_back->addChild(price_type);
 		
 		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		pass_count_case->setContentSize(CCSizeMake(20, 20));
 		pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
 		price_type->addChild(pass_count_case);
 		
 		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 		pass_count_label->setColor(ccc3(255, 255, 255));
+		float min_width = 10+pass_count_label->getContentSize().width;
+		if(min_width < 20)
+			min_width = 20;
+		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 		pass_count_case->addChild(pass_count_label);
 		
@@ -489,12 +492,15 @@ void MissileUpgradePopup::setAfterUpgrade()
 			parent_node->addChild(price_type);
 			
 			CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			pass_count_case->setContentSize(CCSizeMake(20, 20));
 			pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
 			price_type->addChild(pass_count_case);
 			
 			CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass3)), mySGD->getFont().c_str(), 8);
 			pass_count_label->setColor(ccc3(255, 255, 255));
+			float min_width = 10+pass_count_label->getContentSize().width;
+			if(min_width < 20)
+				min_width = 20;
+			pass_count_case->setContentSize(CCSizeMake(min_width, 20));
 			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 			pass_count_case->addChild(pass_count_label);
 			

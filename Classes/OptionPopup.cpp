@@ -624,9 +624,16 @@ bool OptionPopup::init()
 	resetMessageMenu();
 	
 	
-	CCSprite* info_back = CCSprite::create("option_info_back.png");
-	info_back->setPosition(ccp(230, 60));
+	CCScale9Sprite* info_back = CCScale9Sprite::create("option_info_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
+	info_back->setContentSize(CCSizeMake(350, 35));
+	info_back->setPosition(ccp(272, 60));
 	main_case->addChild(info_back, kOP_Z_content);
+	
+	CCSprite* info_line = CCSprite::create("common_line.png");
+	info_line->setRotation(90);
+	info_line->setScaleX(18/info_line->getContentSize().width);
+	info_line->setPosition(ccp(220, 17.5f));
+	info_back->addChild(info_line);
 	
 	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_memberID), mySGD->getFont().c_str(), 11.5f);
 	id_label->setColor(ccc3(54, 36, 148));
@@ -648,7 +655,7 @@ bool OptionPopup::init()
 	version_label->setColor(ccc3(54, 36, 148));
 	version_label->disableOuterStroke();
 	version_label->setAnchorPoint(ccp(0,0.5f));
-	version_label->setPosition(ccp(175,info_back->getContentSize().height/2.f));
+	version_label->setPosition(ccp(225,info_back->getContentSize().height/2.f));
 	info_back->addChild(version_label, kOP_Z_back);
 	setFormSetter(version_label);
 	
@@ -657,7 +664,7 @@ bool OptionPopup::init()
 	my_version_label->setColor(ccc3(54, 36, 148));
 	my_version_label->disableOuterStroke();
 	my_version_label->setAnchorPoint(ccp(0,0.5));
-	my_version_label->setPosition(ccp(228.0, info_back->getContentSize().height/2.f));
+	my_version_label->setPosition(ccp(285.0, info_back->getContentSize().height/2.f));
 	info_back->addChild(my_version_label, kOP_Z_content);
 	setFormSetter(my_version_label);
 	
@@ -1419,7 +1426,7 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_push)					return_value = ccp(200, 100);
 	else if(t_tag == kOP_MT_message)				return_value = ccp(380, 100);
 	
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(405, 60);
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(65, 60);
 	else if(t_tag == kOP_MT_logout)			return_value = ccp(273, 43);
 	
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);
