@@ -1304,7 +1304,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
 		if(t_b)
 		{
-			AudioEngine::sharedInstance()->playEffect("se_area.mp3", false);
+			AudioEngine::sharedInstance()->playEffect("se_area.mp3", false, true);
 			
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
