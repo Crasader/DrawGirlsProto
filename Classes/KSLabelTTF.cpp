@@ -310,8 +310,8 @@ bool KSLabelTTF::updateTexture()
 		{
 			if(i == 0)
 			{
-				label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y - 30 + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
-				label->visit();
+//				label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y - 30 + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
+//				label->visit();
 	
 			}
 //			else
