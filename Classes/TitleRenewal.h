@@ -150,6 +150,10 @@ private:
 	
 	void resultGetTimeInfo(Json::Value result_data);
 	
+	int audio_preload_step;
+	void nextPreloadStep();
+	void checkThreadPreload();
+	
 	Json::Value friendList;
 	
 	void resultLoadedCardData(Json::Value result_data);

@@ -441,58 +441,102 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 }
 
+void TitleRenewalScene::nextPreloadStep()
+{
+	unschedule(schedule_selector(TitleRenewalScene::checkThreadPreload));
+	
+	audio_preload_step++;
+	
+	if(audio_preload_step > 3)
+	{
+		is_preloaded_effect = true;
+		
+		CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		
+		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+		{
+			CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+			CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			
+			CCDelayTime* t_delay = CCDelayTime::create(2.f);
+			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+			runAction(t_seq);
+		}
+	}
+	else
+	{
+		state_label->setString(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_titleTempScript1+audio_preload_step-1)));
+		AudioEngine::sharedInstance()->preloadThreadAction(audio_preload_step);
+		schedule(schedule_selector(TitleRenewalScene::checkThreadPreload));
+	}
+}
+
+void TitleRenewalScene::checkThreadPreload()
+{
+	if(AudioEngine::sharedInstance()->is_thread_preloaded)
+	{
+		nextPreloadStep();
+	}
+}
+
 void TitleRenewalScene::successLogin()
 {
 	state_label->setVisible(true);
 	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	state_label->runAction(t_repeat);
+	
+	audio_preload_step = 0;
+	
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
 //		AudioEngine::sharedInstance()->preloadEffectScene("Title");
-		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
-		
-		addChild(KSTimer::create(1.f/60.f, [=]()
-		{
-			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
-			
-			addChild(KSTimer::create(20.f/60.f, [=]()
-			{
-				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
-				
-				addChild(KSTimer::create(1.f/60.f, [=]()
-				{
-					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
-					
-					addChild(KSTimer::create(1.f/60.f, [=]()
-					{
-						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
-						
-						addChild(KSTimer::create(1.f/60.f, [=]()
-						{
-							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
-							
-							addChild(KSTimer::create(1.f/60.f, [=]()
-							{
-								is_preloaded_effect = true;
-								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-								
-								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
-								{
-									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-									
-									CCDelayTime* t_delay = CCDelayTime::create(2.f);
-									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-									runAction(t_seq);
-								}
-							}));
-						}));
-					}));
-				}));
-			}));
-		}));
+		nextPreloadStep();
+//		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
+//		
+//		addChild(KSTimer::create(1.f/60.f, [=]()
+//		{
+//			
+//			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
+//			
+//			addChild(KSTimer::create(20.f/60.f, [=]()
+//			{
+//				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
+//				
+//				addChild(KSTimer::create(1.f/60.f, [=]()
+//				{
+//					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
+//					
+//					addChild(KSTimer::create(1.f/60.f, [=]()
+//					{
+//						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
+//						
+//						addChild(KSTimer::create(1.f/60.f, [=]()
+//						{
+//							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
+//							
+//							addChild(KSTimer::create(1.f/60.f, [=]()
+//							{
+//								is_preloaded_effect = true;
+//								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//								
+//								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+//								{
+//									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+//									
+//									CCDelayTime* t_delay = CCDelayTime::create(2.f);
+//									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+//									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+//									runAction(t_seq);
+//								}
+//							}));
+//						}));
+//					}));
+//				}));
+//			}));
+//		}));
 	}));
 	
 //	if(myLog->getLogCount() > 0)
