@@ -184,14 +184,14 @@ void TypingBox::startTyping(string t_box_string, function<void()> t_end_func)
 		}
 	};
 	suction->is_on_touch_began_func = true;
-	
+	typing_sound_number = 1;
 	schedule(schedule_selector(TypingBox::typing));
 }
 
 void TypingBox::stopTyping()
 {
 	//끝날때도 한번 재생
-	AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+//	AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 	
 	unschedule(schedule_selector(TypingBox::typing));
 	is_typing = false;
@@ -221,7 +221,12 @@ void TypingBox::typing()
 			utf8::utf8to16(box_string.begin(), box_string.end(), back_inserter(t_string));
 		
 			//띄워쓰기나 줄바꿈 있을때 소리를 재생
-			if(t_string[typing_frame]==' ' || t_string[typing_frame]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+			if(!(t_string[typing_frame]==' ' || t_string[typing_frame]=='\n'))
+			{
+				AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+				if(typing_sound_number > 4)
+					typing_sound_number = 1;
+			}
 			
 			t_string = t_string.substr(0, typing_frame);
 			string conver;

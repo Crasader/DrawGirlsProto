@@ -1298,6 +1298,11 @@ void StageListDown::successAction()
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		
@@ -2004,6 +2009,11 @@ void StageListDown::startDownloadSet()
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		

@@ -63,6 +63,8 @@ private:
 	int text_length;
 	bool is_typing;
 	
+	int typing_sound_number;
+	
 	bool is_menu_enable;
 	
 	function<void()> end_func;

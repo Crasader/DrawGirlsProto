@@ -2274,6 +2274,8 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	myDSH->setIntegerForKey(kDSH_Key_showedScenario, 0); // test
+	
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
@@ -2372,6 +2374,11 @@ void TitleRenewalScene::startFileDownloadSet()
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		// divide
@@ -3046,6 +3053,11 @@ void TitleRenewalScene::successDownloadAction()
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
