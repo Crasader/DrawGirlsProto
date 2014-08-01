@@ -127,6 +127,13 @@ void KSLabelTTF::draw(void)
 }
 void KSLabelTTF::updateColor()
 {
+	
+	
+	if(m_outerSprite){
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255)m_outerSprite->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
+		else m_outerSprite->setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
+	}
+	
 	if(m_gradationMode == false)
 	{
 		CCLabelTTF::updateColor();
@@ -290,12 +297,6 @@ bool KSLabelTTF::updateTexture()
 		
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
 		
-//		setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
-//		m_sBlendFunc.src = GL_SRC_ALPHA;
-//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-//		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-		label->setBlendFunc(_t);
 		label->setOpacity(255);
 		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize + padding / 2.f,
 														 label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize + padding / 2.f);
@@ -318,14 +319,15 @@ bool KSLabelTTF::updateTexture()
 			{
 				
 			}
-			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
+			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize
+														 ,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
 		}
 	
 		// 테두리 빼고 뚫기. 투명 그라데이션 일 때만
 		if(m_gradationMode && (m_startColor.a != 255 || m_endColor.a != 255) )
 		{
-			label->setBlendFunc({GL_ZERO, GL_ONE_MINUS_SRC_ALPHA});
+			//label->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
 			label->setPosition(bottomLeft);
 			label->visit();
 			
@@ -334,11 +336,14 @@ bool KSLabelTTF::updateTexture()
 		rt->end();
 		label->setFlipY(oFlip);
 		label->setColor(oColor);
-		label->setBlendFunc(originalBlendFunc);
 		label->setOpacity(oOpacity);
 		
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
 		m_outerSprite->setOpacity(m_outerStrokeOpacity);
+		
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255)m_outerSprite->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
+		else m_outerSprite->setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
+		
 		addChild(m_outerSprite, -1);
 		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);
@@ -388,7 +393,7 @@ void KSLabelTTF::setOpacity(GLubyte opacity)
 		m_outerSprite->setOpacity(opacity);
 	}
 	updateColor();
-	//	updateTexture();
+	//updateTexture();
 }
 void KSLabelTTF::setOpacityOuterStroke(GLubyte opa)
 {
@@ -416,8 +421,8 @@ bool KSLabelTTF::initWithString(const char *string, const char *fontName, float 
 		this->setString(string);
 		
 		this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
-//		setOpacityModifyRGB(false);
-		m_sBlendFunc.src = GL_SRC_ALPHA;
+//		setOpacityModifyRGB(false);{CC_BLEND_SRC, CC_BLEND_DST}
+		m_sBlendFunc.src = GL_ONE_MINUS_SRC_ALPHA;
 		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
 //		setOpacityModifyRGB(false);
 		

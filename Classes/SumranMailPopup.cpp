@@ -810,19 +810,33 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 	//여기서 reward체크하고 다운받기~
 	
 	if(reward.isArray()){
+		Json::Value card_param;
+		int cnt = -1;
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
-				cardDown(reward[i]["count"].asInt(),func);
-				return;
+				cnt++;
+				card_param["noList"][cnt] =reward[i]["count"].asInt();
 			}
 		}
-	}
 	
+	
+		if(cnt>-1){
+			card_download_list.clear();
+			card_reduction_list.clear();
+			download_card_no = card_param["noList"][0].asInt();
+			end_func_download_card = func;
+			myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
+			return;
+		}
+	}
+	 
 	func(true);
 }
 
 void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> func){
 	if(reward.isArray()){
+		
+		
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
 				takedCard(reward[i]["count"].asInt(),func);
@@ -834,18 +848,18 @@ void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> f
 	func();
 }
 
-void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
-	//카드정보 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
-	
-	// 카드 정보 받기
-	card_download_list.clear();
-	card_reduction_list.clear();
-	download_card_no = cardNo;
-	end_func_download_card = func;
-	Json::Value card_param;
-	card_param["noList"][0] = cardNo;
-	myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
-}
+//void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
+//	//카드정보 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
+//	
+//	// 카드 정보 받기
+//	card_download_list.clear();
+//	card_reduction_list.clear();
+//	download_card_no = cardNo;
+//	end_func_download_card = func;
+//	Json::Value card_param;
+//	card_param["noList"][0] = cardNo;
+//	myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
+//}
 
 void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 {
