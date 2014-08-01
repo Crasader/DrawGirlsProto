@@ -34,6 +34,7 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 	
 	if(t_name == "Default Timeline")
 	{
+		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
 		m_container->addChild(KSGradualValue<float>::create(-0.5f, 1.f, 0.6f, [=](float t){
 			if(t >= 0)
 			{
@@ -378,7 +379,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 		
 	}, [=](){
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");
-		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
 	});
 }
 
@@ -489,7 +490,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		use_button->setVisible(false);
 		
 		question_manager->runAnimationsForSequenceNamed("Default Timeline");
-		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("se_itemgacha.mp3", false);
 	}
 	else
 	{
