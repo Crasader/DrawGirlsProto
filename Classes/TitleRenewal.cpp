@@ -1624,6 +1624,30 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		
 		mySGD->initUserdata(result_data);
 		
+		int scenario_value = myDSH->getIntegerForKey(kDSH_Key_showedScenario);
+		if(scenario_value < 1000 && mySGD->getUserdataHighPiece() >= 1)
+		{
+			scenario_value = 1000;
+		}
+		int t_loop_cnt = mySGD->getPuzzleHistorySize();
+		for(int i=0;i<t_loop_cnt;i++)
+		{
+			PuzzleHistory t_history = mySGD->getPuzzleHistoryForIndex(i);
+			int t_puzzle_number = t_history.puzzle_number.getV();
+			if(t_puzzle_number > 1 && t_history.is_open.getV() && scenario_value < 1000*t_puzzle_number)
+			{
+				scenario_value = t_puzzle_number*1000;
+			}
+		}
+		
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, scenario_value);
+		
+		int pvp_tuto_number = myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial);
+		if(mySGD->getUserdataEndlessScore() > 0 && pvp_tuto_number != -1)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+		}
+		
 		mySGD->user_index = result_data["userIndex"].asInt64();
 	}
 	else

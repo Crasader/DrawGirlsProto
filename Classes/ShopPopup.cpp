@@ -1066,8 +1066,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_ruby)
 	{
-		setShopCode(kSC_ruby);
-		is_menu_enable = true;
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+		
+//		setShopCode(kSC_ruby);
+//		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_gold)
 	{
