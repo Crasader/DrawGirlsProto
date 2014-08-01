@@ -289,6 +289,11 @@ public:
 			mySAE->preloadEffect("sg_mg_fail.mp3");
 			mySAE->preloadEffect("sg_mg_light.mp3");
 			
+			mySAE->preloadEffect("se_typing_1.mp3");
+			mySAE->preloadEffect("se_typing_2.mp3");
+			mySAE->preloadEffect("se_typing_3.mp3");
+			mySAE->preloadEffect("se_typing_4.mp3");
+			
 			is_preloaded = true;
 		}
 	}
@@ -483,6 +488,11 @@ public:
 			mySAE->preloadEffect("groan7.mp3");
 			mySAE->preloadEffect("groan8.mp3");
 			mySAE->preloadEffect("groan9.mp3");
+			
+			mySAE->preloadEffect("se_typing_1.mp3");
+			mySAE->preloadEffect("se_typing_2.mp3");
+			mySAE->preloadEffect("se_typing_3.mp3");
+			mySAE->preloadEffect("se_typing_4.mp3");
 			
 //			mySAE->preloadEffect(".mp3");
 //			mySAE->preloadEffect(".mp3");

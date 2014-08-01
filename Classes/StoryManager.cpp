@@ -63,6 +63,8 @@ void StoryManager::addMent(bool is_left, string t_name, string t_namefile, strin
 	end_func = t_end_func;
 	is_click_effect = true;
 	
+	typing_sound_number = 1;
+	
 	startMent();
 }
 
@@ -91,7 +93,14 @@ void StoryManager::mentAction()
 		int ment_length = result.length();
 		
 		if(is_on_typing_sound)
-			if(result[ment_recent_length]==' ' || result[ment_recent_length]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		{
+			if(!(result[ment_recent_length]==' ' || result[ment_recent_length]=='\n'))
+			{
+				AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+				if(typing_sound_number > 4)
+					typing_sound_number = 1;
+			}
+		}
 		
 		result = result.substr(0, ment_recent_length);
 		string conver;
@@ -102,8 +111,8 @@ void StoryManager::mentAction()
 		{
 			
 			//끝날때도 한번 재생
-			if(is_on_typing_sound)
-				AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+//			if(is_on_typing_sound)
+//				AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 			
 			next_label->setVisible(true);
 //			if(is_on_typing_sound)

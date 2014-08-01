@@ -1066,8 +1066,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_ruby)
 	{
-		setShopCode(kSC_ruby);
-		is_menu_enable = true;
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+		
+//		setShopCode(kSC_ruby);
+//		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_gold)
 	{
@@ -2444,6 +2446,11 @@ void ShopPopup::successAction()
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		// 완료

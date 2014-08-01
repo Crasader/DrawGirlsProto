@@ -894,7 +894,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 	{
 		for(int i=idx*6;i<idx*6+6 && i<mySGD->total_card_cnt;i++)
 		{
-			int card_number = i+1;
+			int card_number = NSDS_GI(kSDS_GI_serial_int1_cardNumber_i, i+1);
 			CCPoint card_position = ccp(35.f + (i-idx*6)*(70.f), cellSizeForTable(table).height/2.f);
 			
 			if(mySGD->isHasGottenCards(card_number))
@@ -928,7 +928,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				n_frame->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 				n_node->addChild(n_frame);
 				
-				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("%d", c_count), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("%d", i+1), mySGD->getFont().c_str(), 10);
 				n_label->setPosition(ccp(n_card->getContentSize().width-5, 12) + add_position);
 				n_frame->addChild(n_label);
 				
@@ -950,7 +950,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				s_frame->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 				s_node->addChild(s_frame);
 				
-				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("%d", c_count), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("%d", i+1), mySGD->getFont().c_str(), 10);
 				s_label->setPosition(ccp(s_card->getContentSize().width-5, 12) + add_position);
 				s_frame->addChild(s_label);
 				

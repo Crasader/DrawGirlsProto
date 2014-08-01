@@ -218,6 +218,7 @@ enum UserdataType
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
+	kUserdataType_endlessData_score,
 	
 	kUserdataType_achieve_mapGacha,
 	kUserdataType_achieve_noFail,
@@ -693,6 +694,7 @@ public:
 	int getUserdataEndlessIngWin();
 	void setUserdataEndlessIngWeek(int t_i);
 	int getUserdataEndlessIngWeek();
+	int getUserdataEndlessScore();
 	
 	void setUserdataAchieveMapGacha(int t_i);
 	int getUserdataAchieveMapGacha();

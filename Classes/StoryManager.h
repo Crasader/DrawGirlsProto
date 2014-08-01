@@ -48,6 +48,7 @@ private:
 	CCLabelTTF* next_label;
 	
 	bool is_click_effect;
+	int typing_sound_number;
 	
 	int m_touch_priority;
 	CCNode* ment_node;
