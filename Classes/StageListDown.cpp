@@ -815,9 +815,9 @@ void StageListDown::startOpenning()
 
 void StageListDown::endOpenning()
 {
-	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentBottom);
+	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	talk_label->disableOuterStroke();//enableOuterStroke(ccBLACK, 1.f);
-	talk_label->setAnchorPoint(ccp(0.5,0));
+	talk_label->setAnchorPoint(ccp(0.5,0.5f));
 	
 	talk_box = CCScale9Sprite::create("loading_talkbox.png", CCRectMake(0, 0, 150, 64.5f), CCRectMake(50, 21.5f, 50, 21.5f));
 	talk_box->setContentSize(CCSizeMake(100+talk_label->getContentSize().width, 43+talk_label->getContentSize().height));

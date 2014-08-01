@@ -219,22 +219,25 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 		target->addChild(not_touch_img);
 	}
 	
-	KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
-	r_sound->setColor(ccBLACK);
-	r_sound->setPosition(ccp(95,218));
-	target->addChild(r_sound);
-	
 	if(NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number) > 0)
 	{
-		CCSprite* sound_img = CCSprite::create("diary_icon_sound.png");
-		sound_img->setPosition(ccp(95,197));
-		target->addChild(sound_img);
-	}
-	else
-	{
-		CCSprite* not_sound_img = CCSprite::create("diary_icon_lock.png");
-		not_sound_img->setPosition(ccp(95,197));
-		target->addChild(not_sound_img);
+		KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
+		r_sound->setColor(ccBLACK);
+		r_sound->setPosition(ccp(95,218));
+		target->addChild(r_sound);
+		
+		if(mySGD->isCardMorphing(card_number))
+		{
+			CCSprite* sound_img = CCSprite::create("diary_icon_sound.png");
+			sound_img->setPosition(ccp(95,197));
+			target->addChild(sound_img);
+		}
+		else
+		{
+			CCSprite* not_sound_img = CCSprite::create("diary_icon_lock.png");
+			not_sound_img->setPosition(ccp(95,197));
+			target->addChild(not_sound_img);
+		}
 	}
 	
 	
