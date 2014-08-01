@@ -4041,7 +4041,7 @@ void Maingame::scoreAttackMissile(int t_damage)
 											   
 											   int before_score = atoi(replay_score->getString());
 											   damaged_score = damaged_score.getV() - t_damage;
-											   replay_score->setString(CCString::createWithFormat("%d", damaged_score.getV() + before_score)->getCString());
+											   replay_score->setString(CCString::createWithFormat("%.0f", float(damaged_score.getV() + before_score))->getCString());
 										   }));
 	
 	
@@ -4309,7 +4309,7 @@ void Maingame::refreshReplayScore(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)][score_index].asInt() > temp_time)
 		return;
 	
-	replay_score->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
+	replay_score->setString(CCString::createWithFormat("%.0f", float(damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt()))->getCString());
 }
 
 void Maingame::refreshReplayPosition(int temp_time)
