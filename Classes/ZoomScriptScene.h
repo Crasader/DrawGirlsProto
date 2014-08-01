@@ -52,6 +52,7 @@ private:
 	CommonButton* next_button;
 	KSLabelTTF* showtime_back;
 	MyNode* second_img;
+	KSLabelTTF* showtime_morphing_label;
 	
 	MyNode* third_img;
 	
