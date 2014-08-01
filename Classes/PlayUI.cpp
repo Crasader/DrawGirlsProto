@@ -1302,10 +1302,11 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		//			t_p = 0.99f;
 		myGD->communication("CP_changeMaxSize", t_p);
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
+		
+		bool is_five_percent = false;
+		
 		if(t_b)
 		{
-//			AudioEngine::sharedInstance()->playEffect("se_area.mp3", false, true);
-			
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
@@ -1327,8 +1328,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			if(t_p >= t_beforePercentage + 0.05f)
 			{
+				is_five_percent = true;
 				int random_value = rand()%9 + 1;
 				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("groan%d.mp3", random_value)->getCString(), false);
+			}
+			else
+			{
+				AudioEngine::sharedInstance()->playEffect("se_area.mp3", false, true);
 			}
 		}
 		
@@ -1371,7 +1377,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f)
 		{
-//			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
+			if(!is_five_percent)
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f);
 			
