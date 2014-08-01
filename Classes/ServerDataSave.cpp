@@ -722,6 +722,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopItem_int1_sale_s)				rv = "si%dsale";
 	else if(t_key == kSDS_GI_shopItem_int1_exchangeID_s)		rv = "si%dxcID";
 	else if(t_key == kSDS_GI_shop_isEvent_b)					rv = "sIsEv";
+	else if(t_key == kSDS_GI_serial_int1_cardNumber_i)			rv = "srl%dcd";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
