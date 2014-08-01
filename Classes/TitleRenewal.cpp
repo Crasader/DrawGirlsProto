@@ -2343,7 +2343,7 @@ void TitleRenewalScene::startFileDownloadSet()
 			
 			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			

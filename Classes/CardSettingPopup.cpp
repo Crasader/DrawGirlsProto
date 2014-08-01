@@ -298,6 +298,90 @@ bool CardSettingPopup::init()
 															  }));
 	}
 	
+//	{
+//		CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(ccsf("card%d_visible.png", 1)));
+//		target_img->setAnchorPoint(ccp(0,0));
+//		
+//		target_img->setScale(0.2f);
+//		
+//		CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+//		t_texture->setSprite(target_img);
+//		t_texture->beginWithClear(0, 0, 0, 0);
+//		t_texture->getSprite()->visit();
+//		t_texture->end();
+//		
+//		t_texture->saveToFile("test_save_card1.png", kCCImageFormatPNG);
+//		
+//		CCSprite* test_img2 = mySIL->getLoadedImg("test_save_card1.png");
+////		test_img2->setScale(0.2f/0.4f);
+//		test_img2->setPosition(ccp(130,160));
+//		addChild(test_img2, 9999);
+//	}
+//	
+//	{
+//		CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(ccsf("card%d_visible.png", 1)));
+//		target_img->setAnchorPoint(ccp(0,0));
+//		
+//		target_img->setScale(0.3f);
+//		
+//		CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+//		t_texture->setSprite(target_img);
+//		t_texture->beginWithClear(0, 0, 0, 0);
+//		t_texture->getSprite()->visit();
+//		t_texture->end();
+//		
+//		t_texture->saveToFile("test_save_card2.png", kCCImageFormatPNG);
+//		
+//		CCSprite* test_img2 = mySIL->getLoadedImg("test_save_card2.png");
+//		test_img2->setScale(0.2f/0.3f);
+//		test_img2->setPosition(ccp(200,160));
+//		addChild(test_img2, 9999);
+//	}
+//	
+//	{
+//		CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(ccsf("card%d_visible.png", 1)));
+//		target_img->setAnchorPoint(ccp(0,0));
+//		
+//		target_img->setScale(0.4f);
+//		
+//		CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+//		t_texture->setSprite(target_img);
+//		t_texture->beginWithClear(0, 0, 0, 0);
+//		t_texture->getSprite()->visit();
+//		t_texture->end();
+//		
+//		t_texture->saveToFile("test_save_card3.png", kCCImageFormatPNG);
+//		
+//		CCSprite* test_img2 = mySIL->getLoadedImg("test_save_card3.png");
+//		test_img2->setScale(0.2f/0.4f);
+//		test_img2->setPosition(ccp(270,160));
+//		addChild(test_img2, 9999);
+//	}
+//	
+//	{
+//		CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(ccsf("card%d_visible.png", 1)));
+//		target_img->setAnchorPoint(ccp(0,0));
+//		
+//		target_img->setScale(0.5f);
+//		
+//		CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+//		t_texture->setSprite(target_img);
+//		t_texture->beginWithClear(0, 0, 0, 0);
+//		t_texture->getSprite()->visit();
+//		t_texture->end();
+//		
+//		t_texture->saveToFile("test_save_card4.png", kCCImageFormatPNG);
+//		
+//		CCSprite* test_img2 = mySIL->getLoadedImg("test_save_card4.png");
+//		test_img2->setScale(0.2f/0.5f);
+//		test_img2->setPosition(ccp(340,160));
+//		addChild(test_img2, 9999);
+//	}
+//	
+//	CCSprite* test_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", 1));
+//	test_img->setPosition(ccp(410,160));
+//	test_img->setScale(0.2f);
+//	addChild(test_img, 9999);
 	
     return true;
 }
@@ -815,21 +899,38 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			if(mySGD->isHasGottenCards(card_number))
 			{
+				CardSortInfo t_info = mySGD->getHasGottenCardDataForCardNumber(card_number);
+				string case_filename;
+				CCPoint add_position = CCPointZero;
+				int c_count = t_info.count.getV();
+				if(c_count == 1)
+					case_filename = "cardsetting_on.png";
+				else
+				{
+					case_filename = "cardsetting_on_many.png";
+					add_position = ccp(-2,3);
+				}
+				
 				CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				n_clipping->setAlphaThreshold(0.1f);
 				
 				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
 																											  card_number)->getCString()));
 				n_clipping->addChild(n_card);
-				
-				CCSprite* n_frame = CCSprite::create("cardsetting_on.png");
-				n_clipping->addChild(n_frame);
 				//			n_card->setScale(0.6f);
 				
 				CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 				n_node->setOpacity(0);
-				n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
+				n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f) + add_position);
 				n_node->addChild(n_clipping);
+				
+				CCSprite* n_frame = CCSprite::create(case_filename.c_str());
+				n_frame->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
+				n_node->addChild(n_frame);
+				
+				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("%d", c_count), mySGD->getFont().c_str(), 10);
+				n_label->setPosition(ccp(n_card->getContentSize().width-5, 12) + add_position);
+				n_frame->addChild(n_label);
 				
 				CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				s_clipping->setAlphaThreshold(0.1f);
@@ -840,13 +941,18 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				s_card->setColor(ccGRAY);
 				s_clipping->addChild(s_card);
 				
-				CCSprite* s_frame = CCSprite::create("cardsetting_on.png");
-				s_clipping->addChild(s_frame);
-				
 				CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
 				s_node->setOpacity(0);
-				s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
+				s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f) + add_position);
 				s_node->addChild(s_clipping);
+				
+				CCSprite* s_frame = CCSprite::create(case_filename.c_str());
+				s_frame->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
+				s_node->addChild(s_frame);
+				
+				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("%d", c_count), mySGD->getFont().c_str(), 10);
+				s_label->setPosition(ccp(s_card->getContentSize().width-5, 12) + add_position);
+				s_frame->addChild(s_label);
 				
 				CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
 				t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);

@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 {
 	total_card_cnt = 0;
 	
+	loading_tip_back_number = 1;
+	
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
@@ -3450,6 +3452,8 @@ void StarGoldData::myInit()
 	app_version = 2;
 	
 	total_card_cnt = 0;
+	
+	loading_tip_back_number = 1;
 	
 	max_network_check_cnt = 6; // 0.5초 단위로
 	network_check_cnt = 0;
