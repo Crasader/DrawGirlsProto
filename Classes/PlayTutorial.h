@@ -445,6 +445,8 @@ public:
 	
 	static cocos2d::CCScene* scene();
 	
+	virtual void onEnterTransitionDidFinish();
+	
 	CREATE_FUNC(PlayTutorial);
 	
 private:

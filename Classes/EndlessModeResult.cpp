@@ -1027,7 +1027,7 @@ void EndlessModeResult::setMain()
 			result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 			main_case->addChild(result_stamp);
 			
-			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
+			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 			win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 			result_stamp->addChild(win_label);
 			
@@ -1217,7 +1217,7 @@ void EndlessModeResult::startCalcAnimation()
 																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 																				   main_case->addChild(result_stamp);
 																				   
-																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_ing_win.getV())->getCString(), "winfont.fnt");
+																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 																				   win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 																				   result_stamp->addChild(win_label);
 																				   

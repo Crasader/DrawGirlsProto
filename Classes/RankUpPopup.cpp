@@ -482,6 +482,12 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 			{
 				rankupAnimation();
 			}
+			else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+			{
+				mySGD->clearChangeGoods();
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+				is_menu_enable = true;
+			}
 			else
 			{
 				mySGD->clearChangeGoods();
@@ -492,160 +498,19 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 	}
 	else
 	{
-		ShopPopup* t_popup = ShopPopup::create();
-		t_popup->setScale(myDSH->screen_convert_rate);
-		t_popup->setShopCode(kSC_ruby);
-		t_popup->setCloseFunc([=]()
-							  {
-								  is_menu_enable = true;
-							  });
-		addChild(t_popup);
+		is_menu_enable = true;
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
 		
-//		t_popup = ASPopupView::create(touch_priority-200);
-//		
-//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-//		if(screen_scale_x < 1.f)
-//			screen_scale_x = 1.f;
-//		
-//		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
-//		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-//		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
-//		
-//		CCNode* t_container = CCNode::create();
-//		t_popup->setContainerNode(t_container);
-//		
-//		getParent()->addChild(t_popup, getZOrder()+1);
-//		
-//		CCScale9Sprite* case_back = CCScale9Sprite::create("popup4_case_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6, 6, 144-6, 144-6));
-//		case_back->setPosition(CCPointZero);
-//		t_container->addChild(case_back);
-//		
-//		case_back->setContentSize(CCSizeMake(250, 150));
-//		
-//		CCScale9Sprite* content_back = CCScale9Sprite::create("popup4_content_back.png", CCRectMake(0, 0, 150, 150), CCRectMake(6,6,144-6,144-6));
-//		content_back->setPosition(ccp(0,20));
-//		t_container->addChild(content_back);
-//		
-//		content_back->setContentSize(CCSizeMake(230,90));
-//		
-//		
-//		CCSprite* price_type_img1 = CCSprite::create("price_ruby_img.png");
-//		price_type_img1->setPosition(ccp(-55,35));
-//		t_container->addChild(price_type_img1);
-//		
-//		CCSprite* price_type_img2 = CCSprite::create("price_ruby_img.png");
-//		price_type_img2->setPosition(ccp(-88,17));
-//		t_container->addChild(price_type_img2);
-//		
-//		CCLabelTTF* price_value_label = CCLabelTTF::create(" 가 부족합니다.\n   10개를 구입하시겠습니까?", mySGD->getFont().c_str(), 16);
-//		price_value_label->setAnchorPoint(ccp(0,0.5f));
-//		price_value_label->setPosition(ccp(price_type_img1->getContentSize().width/2.f-35, price_type_img1->getContentSize().height/2.f-8));
-//		price_type_img1->addChild(price_value_label);
-//		
-//		
-//		CCScale9Sprite* n_cancel = CCScale9Sprite::create("popup4_orange_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
-//		n_cancel->setContentSize(CCSizeMake(95,45));
-//		CCLabelTTF* n_cancel_label = CCLabelTTF::create("취소", mySGD->getFont().c_str(), 14);
-//		n_cancel_label->setPosition(ccp(n_cancel->getContentSize().width/2.f, n_cancel->getContentSize().height/2.f));
-//		n_cancel->addChild(n_cancel_label);
-//		
-//		CCScale9Sprite* s_cancel = CCScale9Sprite::create("popup4_orange_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
-//		s_cancel->setContentSize(CCSizeMake(95,45));
-//		s_cancel->setColor(ccGRAY);
-//		CCLabelTTF* s_cancel_label = CCLabelTTF::create("취소", mySGD->getFont().c_str(), 14);
-//		s_cancel_label->setPosition(ccp(s_cancel->getContentSize().width/2.f, s_cancel->getContentSize().height/2.f));
-//		s_cancel->addChild(s_cancel_label);
-//		
-//		CCMenuItemLambda* cancel_item = CCMenuItemSpriteLambda::create(n_cancel, s_cancel, [=](CCObject* sender)
-//																	   {
-//																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-//																		   
-//																		   t_popup->removeFromParent();
-//																		   is_menu_enable = true;
-//																	   });
-//		
-//		CCMenuLambda * cancel_menu = CCMenuLambda::createWithItem(cancel_item);
-//		cancel_menu->setPosition(ccp(-52,-48));
-//		t_container->addChild(cancel_menu);
-//		cancel_menu->setTouchPriority(t_popup->getTouchPriority()-2);
-//		
-//		
-//		CCScale9Sprite* n_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
-//		n_buy->setContentSize(CCSizeMake(95,45));
-//		CCLabelTTF* n_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
-//		n_buy_label->setPosition(ccp(n_buy->getContentSize().width/2.f, n_buy->getContentSize().height/2.f));
-//		n_buy->addChild(n_buy_label);
-//		
-//		CCScale9Sprite* s_buy = CCScale9Sprite::create("popup4_green_button.png", CCRectMake(0,0,95,45), CCRectMake(6,6,89-6,39-6));
-//		s_buy->setContentSize(CCSizeMake(95,45));
-//		s_buy->setColor(ccGRAY);
-//		CCLabelTTF* s_buy_label = CCLabelTTF::create("임시 결제", mySGD->getFont().c_str(), 14);
-//		s_buy_label->setPosition(ccp(s_buy->getContentSize().width/2.f, s_buy->getContentSize().height/2.f));
-//		s_buy->addChild(s_buy_label);
-//		
-//		CCMenuItemLambda* buy_item = CCMenuItemSpriteLambda::create(n_buy, s_buy, [=](CCObject* sender)
-//																	{
-//																		CCLOG("buy!");
-//																		
-//																		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-//																		
-//																		inapp_loading = LoadingLayer::create(-9999, true);
-//																		addChild(inapp_loading);
-//																		
-//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-//																		mySGD->addChangeGoods(kGoodsType_ruby, NSDS_GI(kSDS_GI_shopRuby_int1_count_i, 0), "승급(IOS-인앱결제)", "", "", true);
-//																		mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급(IOS-소모)");
-//																		
-//																		mySGD->changeGoods([=](Json::Value result_data){
-//																			inapp_loading->removeFromParent();
-//																			if(result_data["result"]["code"].asInt() == GDSUCCESS)
-//																			{
-//																				t_popup->removeFromParent();
-//																				
-//																				rankupAnimation();
-//																			}
-//																			else
-//																			{
-//																				mySGD->clearChangeGoods();
-//																				
-//																				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-//																				
-//																				is_menu_enable = true;
-//																			}
-//																		});
-//																		
-//																		
-//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-//																		Json::Value param;
-//																		param["productid"] = mySGD->getInappProduct(0);
-//																		hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
-//																			//																				KS::KSLog("in-app test \n%", v);
-//																			if(v["issuccess"].asInt())
-//																			{
-//																				mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
-//																				requestItemDelivery();
-//																			}
-//																			else
-//																			{
-//																				inapp_loading->removeFromParent();
-//																				
-//																				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-//																				
-//																				is_menu_enable = true;
-//																			}
-//																		});
-//#endif
-//																	});
-//		
-//		CCMenuLambda* buy_menu = CCMenuLambda::createWithItem(buy_item);
-//		buy_menu->setPosition(ccp(52,-48));
-//		t_container->addChild(buy_menu);
-//		buy_menu->setTouchPriority(t_popup->getTouchPriority()-2);
-//		
-//		t_container->setScale(0);
-//		CCScaleTo* t_scale = CCScaleTo::create(0.2f, 1.f);
-//		t_container->runAction(t_scale);
+		
+//		ShopPopup* t_popup = ShopPopup::create();
+//		t_popup->setScale(myDSH->screen_convert_rate);
+//		t_popup->setShopCode(kSC_ruby);
+//		t_popup->setCloseFunc([=]()
+//							  {
+//								  is_menu_enable = true;
+//							  });
+//		addChild(t_popup);
+		
 	}
 	
 //	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");

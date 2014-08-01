@@ -1,4 +1,25 @@
 <?php
+class Infomation{
+	public static $m_serverInfo=array();
+	public static $m_shardDBInfoList=array();
+	public static $m_mainDBInfo=array();
+	public static $m_gameNo=null;
+	public static $m_httpgateway=null;
+	public static $m_gameID=null;
+	public static $m_mainTables=array();
+	public static $m_shardTables=array();
+	public static $m_secretKey;
+
+	static public function setStaticInfo($p){
+		self::$m_gameID = $p["gameID"];
+		self::$m_gameNo = $p["gameNo"];//10289;
+		self::$m_httpgateway["URL"]=$p["HTTPGATEWAY_URL"]; //"http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
+		self::$m_httpgateway["helpURL"]=$p["HTTPGATEWAY_HELP_URL"]; //"http://alpha-httpgw.hangame.com/hsp/httpgw/help.json";
+		self::$m_httpgateway["version"]=$p["HTTPGATEWAY_VERSION"];
+		self::$m_httpgateway["port"]=$p["HTTPGATEWAY_PORT"];//"18080";
+		self::$m_secretKey = $p["secretKey"];//"12345678";
+	}
+}
 
 class DBServer{
 	static public $m_serverList=array(0);
@@ -8,14 +29,14 @@ class DBServer{
 	public $m_connection=null;
 	public $m_selectedDBName=null;
 	public function __construct($host,$id,$pw){
-		LogManager::addLog("__construct server".$host.$id.$pw);
+		//LogManager::addLog("__construct server".$host.$id.$pw);
 		$this->m_host=$host;
 		$this->m_id=$id;
 		$this->m_pw=$pw;
 	}
 
 	static public function create($host,$id,$pw){
-		LogManager::addLog("create server".$host.$id.$pw);
+		//LogManager::addLog("create server".$host.$id.$pw);
 		// for($i=1;$i<count(self::$m_serverList);$i++){
 		// 	$server = $m_serverList[$i];
 		// 	if($host==$server->m_host && $id == $server->m_id){
@@ -29,29 +50,25 @@ class DBServer{
 		return $server;
 	}
 
-	static function getServer($order){
+	static public function getServer($order){
 		return $m_serverList[$order];
 	}
 
 
 	public function getConnection(){
-		LogManager::addLog("selected DB ".$this->m_selectedDBName);
-
+		
 		if(!$this->m_connection){
-			LogManager::addLog("start mysql_connect".$this->m_host.$this->m_id.$this->m_pw);
 			$this->m_connection = mysql_connect($this->m_host,$this->m_id,$this->m_pw);
-			//LogManager::addLog("result mysql_connect ".var_export($this->m_connection,true));
 			if($this->m_connection){
 				LogManager::addLog("success mysql_connect");
 			}
 		}
-		//LogManager::addLog("return connection".var_export($this->m_connection,true));
 		return $this->m_connection;
 	}
 	
 	public function closeConnection(){
 		if($this->m_connection){
-			mysql_close($this->m_connection);
+			@mysql_close($this->m_connection);
 			$this->m_connection=null;
 		}	
 	}
@@ -68,6 +85,14 @@ class DBServer{
 		}
 	}
 
+	static public function closeAllConnection(){
+		for($i=1;$i<count(self::$m_serverList);$i++){
+			$server = self::$m_serverList[$i];
+			if($server){
+				$server->closeConnection();
+			}
+		}
+	}
 }
 class DBGroup{
 	static public $m_groupList;
@@ -171,9 +196,7 @@ class DBGroup{
 
 	public function getConnectionForRead($shardKeyValue,$shardOrder=null,$cls="default"){
 		if(!$shardOrder){
-			LogManager::addLog("get cls is ".$cls);
 			if(!$this->m_getShardKeyFunc[$cls])$cls="default";
-			LogManager::addLog("set cls is ".$cls);
 			$func = $this->m_getShardKeyFunc[$cls];
 			$shardOrder = $func($shardKeyValue);
 		}
@@ -283,6 +306,7 @@ class DBSlave{
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 class DBTable2{
 	public $m__data;
+	public $m__modifyData;
 	public $m__isLoaded=false;
 	public $m__shardKeyValue=null;
 	public $m__shardOrder=null;
@@ -384,14 +408,62 @@ class DBTable2{
 		
 		return $arraydata;
 	}
+
+	public function getArrayModifyData($isIncludePrimaryKey=false){
+		$arraydata=array();
+		
+		if(!$this->m__modifyData || !is_array($this->m__modifyData))return $arraydata;
+
+		foreach($this->m__modifyData as $name=>$value){
+			if(!$keyList || in_array($name,$keyList)){
+					$arraydata[$name]=$this->m__data[$name];
+			}
+		}
+		
+		if(static::$m__primaryKey && !$isIncludePrimaryKey){
+			unset($arraydata[static::$m__primaryKey]);
+		}
+		
+		return $arraydata;
+	}
 	
 	public function updateQuery($where=false,$isIncludePrimaryKey=false){
 		if(!$where)$where = "where ".static::$m__primaryKey."=".$this->getPrimaryValue();
-		return DBManager::updateQuery(static::$m__DBTable,$this->getArrayData($isIncludePrimaryKey),$where);
+		$data = $this->getArrayModifyData($isIncludePrimaryKey); 
+		$table = static::$m__DBTable;
+		$key=array_keys($data); 
+		$query="update $table set ";
+		for($i=0;$i<count($key);$i++){
+			if(is_array($data[$key[$i]]))$data[$key[$i]] = json_encode($data[$key[$i]],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+			
+			$query.="`$key[$i]`=\"".@addslashes($data[$key[$i]])."\"";
+			if($i!=count($key)-1) $query.=",";
+		}
+		$query.=" ".$where;
+	
+		return $query;
+
 	}
 	
 	public function insertQuery($isIncludePrimaryKey=false){
-		return DBManager::insertQuery(static::$m__DBTable,$this->getArrayData($isIncludePrimaryKey));
+		$data = $this->getArrayData($isIncludePrimaryKey);
+		$table = self::getDBTable();
+		$key=array_keys($data);  
+		$query="insert into `$table` ("; 
+			for($i=0;$i<count($key);$i++){ 
+				$query.="`".$key[$i]."`"; 
+				if($i!=count($key)-1) $query.=","; 
+			} 
+	
+		$query.=") values ("; 
+		for($i=0;$i<count($key);$i++){ 
+			if(is_array($data[$key[$i]])) $data[$key[$i]]=json_encode($data[$key[$i]],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+			$query.="'".@addslashes($data[$key[$i]])."'"; 
+			if($i!=count($key)-1) $query.=","; 
+		} 
+		$query.=")"; 
+		return $query; 
+
 	}
 	
 	public function save($isIncludePrimaryKey=false){
@@ -442,6 +514,10 @@ class DBTable2{
 		return false;
 	}
 	
+	public function jsonToObj($field){
+		$this->m__data[$field]=json_decode($this->m__data[$field],true);
+	}
+
 	public function load($where){
 		self::initial();
 		LogManager::addLog("start load1 $where and ".$this->m__shardKeyValue);
@@ -564,7 +640,10 @@ class DBTable2{
 	    }else if(method_exists($this,$name)){
 	    	return $this->$name($value);
 	    }
+
 	    $this->m__data[$name]=$value;
+	    $this->m__modifyData[$name]=true;
+
 		return;	 
 	    trigger_error("Undefined property $name or method $method_name");
 	}
@@ -586,6 +665,7 @@ class DBTable2{
 	    }
 
         unset($this->m__data[$key]);
+        unset($this->m__modifyData[$key]);
     }
 	
 
@@ -724,7 +804,6 @@ class DBTable2{
 		if(static::$m__LQTableSelectQueryCustomFunction){
 			LogManager::addLog("start custom select query param is".json_encode($param));
 			$func = static::$m__LQTableSelectQueryCustomFunction;
-			LogManager::addLog("func is ".var_export($func,true));
 			$query = $func($param);
 			LogManager::addLog("custom select query : ".$query);
 		}

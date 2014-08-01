@@ -93,7 +93,17 @@ $(document).ready(function(){
 		<tr>
 			<td>최고스테이지</td><td field="highPiece" viewer='{"type":"text"}'></td>
 			<td>최고기록</td><td field="highScore" viewer='{"type":"text"}'></td>
-			<td></td><td></td>
+			<td>마지막접속<br>주간번호</td><td field="eventCheckWeek" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+		</tr>
+		<tr>
+			<td>연속출석일수</td><td field="eventAtdCount" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>출석일자</td><td field="eventCheckDate" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>오늘의미션 일자</td><td field="tm_date" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+		</tr>
+		<tr>
+			<td>오늘의미션 타입</td><td field="tm_type" viewer='{"type":"text"}'></td>
+			<td>목표</td><td field="tm_goal" viewer='{"type":"text"}'></td>
+			<td>달성</td><td field="tm_count" viewer='{"type":"text"}'></td>
 		</tr>
 	</table>
 

@@ -215,6 +215,7 @@ var getFieldInfo = function(obj){
 			result["writeFunc"] = dbFunc["write"];
 			result["updateFunc"] = dbFunc["update"];
 			result["deleteFunc"] = dbFunc["delete"];
+			result["loadFunc"] = dbFunc["load"];
 		}
 
 		result["dbClass"] = result["table"].attr("dbClass");
@@ -1174,8 +1175,11 @@ var loadDataForm = function(obj){
 	    	if(data["result"]["code"]==1){
 		    	log("LQDataForm "+j2s(data));
 				//받아온 data와 표시할정보 비교해서 뿌릴데이터모으기
-				tInfo["table"].attr("data",j2s(data["data"]));
+			
 				var rowdata = data["data"];
+				var shi =rowdata["shardIndex"];
+				delete rowdata["shardIndex"];
+				tInfo["table"].attr("data",j2s(data["data"])).attr("shardIndex",shi);
 				for(var i in rowdata){
 					var viewer = tInfo["table"].find("td[field="+i+"]").attr('viewer');
 					var viewValue = viewerSelector(viewer,rowdata[i]);
@@ -1216,7 +1220,8 @@ var loadDataTableInfo = function(obj,callFunc){
 	if(typeof(obj)=="string")obj = $("table[name="+obj+"]");
 
 	var tInfo = gf(obj);
-	var dbParam = {"gid":gid,"dbClass":tInfo["dbClass"],"param":tInfo["dbLoadParam"],"dbMode":"load"};
+
+	var dbParam = {"gid":gid,"dbClass":tInfo["dbClass"],"param":tInfo["dbLoadParam"],"dbFunc":tInfo["loadFunc"],"dbMode":"load"};
 	log(j2s(dbParam));
 	$.ajax({
 	    url : tInfo["dbSource"], 
@@ -2088,6 +2093,7 @@ var commenter_value = function(obj){
 
 var propChange = function(value){
 	switch(value){
+		case "m":return "결제";
 		case "r":return "젬";
 		case "pr":return "유료젬";
 		case "fr":return "무료젬";
@@ -2110,7 +2116,7 @@ var propChange = function(value){
 }
 
 var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
+ return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
 }
 
 var rewardViewer = function(value,option){

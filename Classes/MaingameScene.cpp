@@ -316,6 +316,8 @@ void Maingame::startStory()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		t_tb->setTouchOffScrollAndButton();
 		t_tb->setTouchSuction(false);
 		
@@ -2325,6 +2327,8 @@ void Maingame::clearScenario2()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.5f);
 		CCMoveTo* t_move1 = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y+600));
 		CCCallFunc* t_call0 = CCCallFunc::create(this, callfunc_selector(Maingame::clearScenario3));
@@ -3069,6 +3073,8 @@ void Maingame::failScenario2()
 	
 	function<void()> end_func1 = [=]()
 	{
+		t_tb->setVisible(false);
+		
 		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
 		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
 		curtain_node->setScale(myDSH->screen_convert_rate);
@@ -4035,7 +4041,7 @@ void Maingame::scoreAttackMissile(int t_damage)
 											   
 											   int before_score = atoi(replay_score->getString());
 											   damaged_score = damaged_score.getV() - t_damage;
-											   replay_score->setString(CCString::createWithFormat("%d", damaged_score.getV() + before_score)->getCString());
+											   replay_score->setString(CCString::createWithFormat("%.0f", float(damaged_score.getV() + before_score))->getCString());
 										   }));
 	
 	
@@ -4303,7 +4309,7 @@ void Maingame::refreshReplayScore(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreTime)][score_index].asInt() > temp_time)
 		return;
 	
-	replay_score->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt())->getCString());
+	replay_score->setString(CCString::createWithFormat("%.0f", float(damaged_score.getV() + mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_scoreData)][score_index].asInt()))->getCString());
 }
 
 void Maingame::refreshReplayPosition(int temp_time)

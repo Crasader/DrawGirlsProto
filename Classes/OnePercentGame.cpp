@@ -616,7 +616,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 //					m_graphNode->setVisible(true);
 					cancel_menu->setVisible(false);
 				}
-				else if(result_data["result"]["code"] == GDSUCCESS)
+				else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 				{
 					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
 				}

@@ -404,7 +404,7 @@ class kvManager{
 	}
 
 	public static function getString($key){
-		$query = mysql_query("select * from ".DBManager::getMT("keystringvalue")." where `key`='$key'",DBManager::getMainConnection());
+		$query = mysql_query("select * from `aKeyStringValue` where `key`='$key'",DBGroup::create("main")->getConnectionForReadByRand());
 		if($query)$r = mysql_fetch_array($query);
 		if($r)return $r["value"];
 		else return false;	
@@ -412,7 +412,7 @@ class kvManager{
 	
 	public static function getInt($key){
 		
-		$query = mysql_query("select * from ".DBManager::getMT("keyintvalue")." where `key`='$key'",DBManager::getMainConnection());
+		$query = mysql_query("select * from `aKeyIntValue` where `key`='$key'",DBGroup::create("main")->getConnectionForReadByRand());
 		
 		
 		if($query)$r = mysql_fetch_array($query);
@@ -423,11 +423,11 @@ class kvManager{
 	public static function increase($key){
 	
 		
-		mysql_query("UPDATE ".DBManager::getMT("keyintvalue")." SET `value`=value+1 WHERE `key`='$key'",DBManager::getMainConnection());
+		mysql_query("UPDATE `aKeyIntValue` SET `value`=value+1 WHERE `key`='$key'",DBGroup::create("main")->getConnectionForReadByRand());
 		$arows = mysql_affected_rows();
 		
 		if($arows<=0){
-			if(mysql_query("INSERT INTO ".DBManager::getMT("keyintvalue")." (`key`, `value`) VALUES ('$key', '1')",DBManager::getMainConnection())){
+			if(mysql_query("INSERT INTO `aKeyIntValue` (`key`, `value`) VALUES ('$key', '1')",DBGroup::create("main")->getConnectionForReadByRand())){
 				return true;
 			}else{
 				return false;
@@ -440,12 +440,12 @@ class kvManager{
 	public static function set($key,$value){
 		//mysql_affected_rows()
 		
-		$table = DBManager::getMT("keyintvalue");
-		if(is_string($value))$table = DBManager::getMT("keystringvalue");
+		$table = "aKeyIntValue";
+		if(is_string($value))$table = "aKeyStringValue";
 		
-		mysql_query("UPDATE $table SET `value`='$value' WHERE `key`='$key'",DBManager::getMainConnection());
+		mysql_query("UPDATE $table SET `value`='$value' WHERE `key`='$key'",DBGroup::create("main")->getConnectionForReadByRand());
 		if(mysql_affected_rows()<=0){
-			mysql_query("INSERT INTO $table (`key`, `value`) VALUES ('$key', '$value')",DBManager::getMainConnection());
+			mysql_query("INSERT INTO $table (`key`, `value`) VALUES ('$key', '$value')",DBGroup::create("main")->getConnectionForReadByRand());
 		}
 	}
 }
@@ -503,8 +503,8 @@ function reloadPuzzleInfo(){
 
 
 	//CommitManager::begin("main");
-	mysql_query("update ".DBManager::getMT("piece")." set cards='',puzzle=0,pieceNo=0",DBManager::getMainConnection());
-	mysql_query("update ".DBManager::getMT("card")." set piece=0,grade=0",DBManager::getMainConnection());
+	mysql_query("update ".Piece::getDBTable()." set cards='',puzzle=0,pieceNo=0",DBGroup::create("main")->getConnectionForWrite(1));
+	mysql_query("update ".Card::getDBTable()." set piece=0,grade=0",DBGroup::create("main")->getConnectionForWrite(1));
 
 
 	//모두세팅!!!!! 일반
@@ -512,21 +512,21 @@ function reloadPuzzleInfo(){
 	//mysql_query("update aCardTable set ability='[]'",DBManager::getMainConnection());
 
 	//퍼즐보상카드
-	$query = mysql_query("select * from ".DBManager::getMT('puzzle'),DBManager::getMainConnection());
+	$query = mysql_query("select * from ".Puzzle::getDBTable(),DBGroup::create("main")->getConnectionForReadByRand());
 	while($pData = mysql_fetch_assoc($query)){
 		$clearReward = json_decode($pData["clearReward"],true);
 		if($clearReward["normal"]){
-			mysql_query("update ".DBManager::getMT("card")." set category='nPuzzle' where no=".$clearReward["normal"],DBManager::getMainConnection());
+			mysql_query("update ".Card::getDBTable()." set category='nPuzzle' where no=".$clearReward["normal"],DBGroup::create("main")->getConnectionForWrite(1));
 		}
 
 		if($clearReward["perfect"]){
-			mysql_query("update ".DBManager::getMT("card")." set category='nPuzzle' where no=".$clearReward["perfect"],DBManager::getMainConnection());
+			mysql_query("update ".Card::getDBTable()." set category='nPuzzle' where no=".$clearReward["perfect"],DBGroup::create("main")->getConnectionForWrite(1));
 		}
 
 
 	}
 
-	$query = mysql_query("select * from ".DBManager::getMT("piece")." where no<10000 order by no asc",DBManager::getMainConnection());
+	$query = mysql_query("select * from ".Piece::getDBTable()." where no<10000 order by no asc",DBGroup::create("main")->getConnectionForReadByRand());
 	LogManager::addLog(mysql_error());
 	$puzzleOrder=1;
 	$puzzleCount=0;
@@ -537,8 +537,8 @@ function reloadPuzzleInfo(){
 	while($stageData = mysql_fetch_array($query)){
 		
 		if($puzzleCount==0){
-			$qq = "select * from ".DBManager::getMT("puzzle")." where ".DBManager::getMT("puzzle").".order=$puzzleOrder";
-			$puzzleData = mysql_fetch_assoc(mysql_query($qq,DBManager::getMainConnection()));
+			$qq = "select * from ".Puzzle::getDBTable()." where `order`=$puzzleOrder";
+			$puzzleData = mysql_fetch_assoc(mysql_query($qq,DBGroup::create("main")->getConnectionForReadByRand()));
 			$puzzlePathInfo = json_decode($puzzleData[pathInfo],true);
 			$puzzleCardInfo = json_decode($puzzleData[cardInfo],true);
 			LogManager::addLog("Q--->".$qq);
@@ -582,9 +582,9 @@ function reloadPuzzleInfo(){
 		
 		$puzzleConditionInfo[] = json_decode($cmodify,true);
 		
-		$q = "update ".DBManager::getMT("piece")." set cards='$cTxt', pieceNo=$pieceNo, puzzle=$puzzle,`condition`='".$cmodify."',`version`=`version`+1 where no=".$stageData[no];
+		$q = "update ".Piece::getDBTable()." set cards='$cTxt', pieceNo=$pieceNo, puzzle=$puzzle,`condition`='".$cmodify."',`version`=`version`+1 where no=".$stageData[no];
 		//echo $q ."<br>";
-		mysql_query($q ,DBManager::getMainConnection());
+		mysql_query($q ,DBGroup::create("main")->getConnectionForWrite(1));
 
 			LogManager::addLog("Q--->".$q );
 			LogManager::addLog("--->".mysql_error());
@@ -597,8 +597,8 @@ function reloadPuzzleInfo(){
 			$reward = $stageReward[$ci];
 			$grade = $ci+1;
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update ".DBManager::getMT("card")." set piece=".$stageData[no].",grade=$grade,category='normal' where no=".$cards[$ci]; //
-			mysql_query($qs1,DBManager::getMainConnection());
+			$qs1 = "update ".Card::getDBTable()." set piece=".$stageData[no].",grade=$grade,category='normal' where no=".$cards[$ci]; //
+			mysql_query($qs1,DBGroup::create("main")->getConnectionForWrite(1));
 			LogManager::addLog("Q--->".$qs1);
 			LogManager::addLog("--->".mysql_error());
 			//echo "<br><font color=blue>$qs1</font><br>";
@@ -612,8 +612,8 @@ function reloadPuzzleInfo(){
 		if($puzzleCount >= count($puzzlePathInfo)){
 			$cString = json_encode($puzzleConditionInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$rString = json_encode($puzzleRewardInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs = "update ".DBManager::getMT("puzzle")." set  `version`=`version`+1,conditionInfo='".$cString."',rewardInfo='".$rString."' where no=".$puzzleData[no];
-			mysql_query($qs,DBManager::getMainConnection());
+			$qs = "update ".Puzzle::getDBTable()." set  `version`=`version`+1,conditionInfo='".$cString."',rewardInfo='".$rString."' where no=".$puzzleData[no];
+			mysql_query($qs,DBGroup::create("main")->getConnectionForWrite(1));
 			LogManager::addLog("Q--->".$qs);
 			LogManager::addLog("--->".mysql_error());
 
@@ -739,225 +739,6 @@ function reloadPuzzleInfo(){
 	// 	//
 	// }
 
-
-
-
-	kvManager::increase("eventPuzzleListVer");
-	kvManager::increase("puzzleListVer");
-}
-
-
-
-function reloadBookInfo(){
-
-
-	mysql_query("update aStageTable set cards='',puzzle=0,pieceNo=0",DBManager::getMainConnection());
-	mysql_query("update aCardTable set stage=0",DBManager::getMainConnection());
-
-
-	//모두세팅!!!!! 일반
-
-	//mysql_query("update aCardTable set ability='[]'",DBManager::getMainConnection());
-
-
-	$query = mysql_query("select * from aStageTable where no<10000 order by no asc",DBManager::getMainConnection());
-	$puzzleOrder=1;
-	$puzzleCount=0;
-	$puzzleData = null;
-	$puzzlePathInfo = null;
-	$puzzleConditionInfo = array();
-	$puzzleRewardInfo = array();
-	while($stageData = mysql_fetch_array($query)){
-		
-		if($puzzleCount==0){
-			$qq = "select * from aPuzzleTable where aPuzzleTable.order=$puzzleOrder";
-			$puzzleData = mysql_fetch_assoc(mysql_query($qq,DBManager::getMainConnection()));
-			$puzzlePathInfo = json_decode($puzzleData[pathInfo],true);
-			$puzzleCardInfo = json_decode($puzzleData[cardInfo],true);
-			// echo "--->".mysql_error();
-			// echo "--->".$qq."<br>";
-			// echo"puzzle...<br>";
-			// var_dump($puzzleData);
-			// echo"puzzle...<br>";
-
-			// var_dump($puzzlePathInfo);
-			// echo"puzzle...<br>";
-
-			// var_dump($puzzleCardInfo);
-			// echo"puzzle...<br>";
-			// echo "<b><font color=green>".mysql_error()."</font></b>";
-			//퍼즐정보업뎃
-			//mysql_query("update aPuzzleTable set stageStart=".$stageData[no]." where no=".$puzzleData[no],DBManager::getMainConnection());
-
-			if(!$puzzleData){
-				//echo "stop~~!!!!!!!!!!!!!!";
-				break;
-			}
-		}
-
-		$stageReward = json_decode($stageData[rewardInfo],true);
-		$cards = $puzzleCardInfo[$puzzleCount];
-		$pieceNo = $puzzlePathInfo[$puzzleCount];
-		$puzzle = $puzzleData["no"];
-
-		$puzzleRewardInfo[] = $stageReward;
-		$cTxt = json_encode($cards,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-		
-		//스테이지 카드세팅
-
-		$cmodify='{"no":0}';
-		if($puzzleCount!=0)$cmodify = '{"no":'.($stageData[no]-1).'}';
-		
-		$puzzleConditionInfo[] = json_decode($cmodify,true);
-		
-		$q = "update aStageTable set cards='$cTxt', pieceNo=$pieceNo, puzzle=$puzzle,`condition`='".$cmodify."',`version`=`version`+1 where no=".$stageData[no];
-		//echo $q ."<br>";
-		mysql_query($q ,DBManager::getMainConnection());
-
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-
-		//카드능력치 셋팅 by 스테이지몬스터정보
-		$boss = json_decode($stageData[boss],true);
-		$cardStat = getCardMissile($boss[0],$stageData[level]);
-		for($ci=0;$ci<count($cards);$ci++){
-			$reward = $stageReward[$ci];
-			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update aCardTable set missile='".$sString."',reward=$reward,stage=".$stageData[no]." where no=".$cards[$ci];
-			mysql_query($qs1,DBManager::getMainConnection());
-			//echo "<br><font color=blue>$qs1</font><br>";
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-			//echo json_encode($cardStat,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-		}
-
-		$puzzleCount++;
-
-		if($puzzleCount >= count($puzzlePathInfo)){
-			$cString = json_encode($puzzleConditionInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$rString = json_encode($puzzleRewardInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs = "update aPuzzleTable set  `version`=`version`+1,conditionInfo='".$cString."',rewardInfo='".$rString."' where no=".$puzzleData[no];
-			mysql_query($qs,DBManager::getMainConnection());
-
-			//echo "<br><font color=red>$qs</font><br>";
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-
-			$puzzleConditionInfo=array();
-			$puzzleRewardInfo=array();
-
-			$puzzleCount=0;
-			$puzzleOrder++;
-		}
-
-		//스테이지 쭉~~ 불러와서 카드정보, 퍼즐번호 업뎃.
-		//퍼즐의 스타트스테이지업뎃
-
-		//
-	}
-
-
-	//모두세팅 이벤트 
-
-	//echo "<br>startEventsetting <br>";
-
-	$query = mysql_query("select * from aStageTable where no>10000 order by no asc",DBManager::getMainConnection());
-
-	$puzzleOrder=10001;
-	$puzzleCount=0;
-	$puzzleData = null;
-	$puzzlePathInfo = null;
-	$puzzleConditionInfo = array();
-	$puzzleRewardInfo = array();
-	while($stageData = mysql_fetch_array($query)){
-		
-		if($puzzleCount==0){
-			$qq = "select * from aPuzzleTable where aPuzzleTable.order=$puzzleOrder";
-			$puzzleData = mysql_fetch_assoc(mysql_query($qq,DBManager::getMainConnection()));
-			$puzzlePathInfo = json_decode($puzzleData[pathInfo],true);
-			$puzzleCardInfo = json_decode($puzzleData[cardInfo],true);
-			//echo "--->".mysql_error();
-			//echo "--->".$qq."<br>";
-			//echo"puzzle...<br>";
-			var_dump($puzzleData);
-			//echo"puzzle...<br>";
-
-			var_dump($puzzlePathInfo);
-			//echo"puzzle...<br>";
-
-			var_dump($puzzleCardInfo);
-			//echo"puzzle...<br>";
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-
-			//퍼즐정보업뎃
-			//mysql_query("update aPuzzleTable set stageStart=".$stageData[no]." where no=".$puzzleData[no],DBManager::getMainConnection());
-
-			if(!$puzzleData){
-				echo "stop~~!!!!!!!!!!!!!!";
-				break;
-			}
-		}
-
-		$stageReward = json_decode($stageData[rewardInfo],true);
-		$cards = $puzzleCardInfo[$puzzleCount];
-		$pieceNo = $puzzlePathInfo[$puzzleCount];
-		$puzzle = $puzzleData["no"];
-
-		$puzzleRewardInfo[] = $stageReward;
-		$cTxt = json_encode($cards,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-		
-		//스테이지 카드세팅
-
-		$cmodify='{"no":0}';
-		if($puzzleCount!=0)$cmodify = '{"no":'.($stageData[no]-1).'}';
-		
-		$puzzleConditionInfo[] = json_decode($cmodify,true);
-		
-		$q = "update aStageTable set cards='$cTxt', pieceNo=$pieceNo, puzzle=$puzzle,`condition`='".$cmodify."',`version`=`version`+1 where no=".$stageData[no];
-		//echo $q ."<br>";
-		mysql_query($q ,DBManager::getMainConnection());
-
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-		//카드능력치 셋팅 by 스테이지몬스터정보
-		$boss = json_decode($stageData[boss],true);
-		$cardStat = getCardMissile($boss[0],$stageData[level]);
-		for($ci=0;$ci<count($cards);$ci++){
-			$reward = $stageReward[$ci];
-			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs1 = "update aCardTable set missile='".$sString."',reward=$reward,stage=".$stageData[no]." where no=".$cards[$ci];
-			mysql_query($qs1,DBManager::getMainConnection());
-			//echo "<br><font color=blue>$qs1</font><br>";
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-			//echo json_encode($cardStat,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-
-		}
-
-		$puzzleCount++;
-
-		if($puzzleCount >= count($puzzlePathInfo)){
-			$cString = json_encode($puzzleConditionInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$rString = json_encode($puzzleRewardInfo,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-			$qs = "update aPuzzleTable set  `version`=`version`+1,conditionInfo='".$cString."',rewardInfo='".$rString."' where no=".$puzzleData[no];
-			mysql_query($qs,DBManager::getMainConnection());
-
-			//echo "<br><font color=red>$qs</font><br>";
-			//echo "<b><font color=green>".mysql_error()."</font></b>";
-
-			$puzzleConditionInfo=array();
-			$puzzleRewardInfo=array();
-
-			$puzzleCount=0;
-			$puzzleOrder++;
-		}
-
-		//스테이지 쭉~~ 불러와서 카드정보, 퍼즐번호 업뎃.
-		//퍼즐의 스타트스테이지업뎃
-
-		//
-	}
-
-
-
-
-	kvManager::increase("eventPuzzleListVer");
 	kvManager::increase("puzzleListVer");
 }
 

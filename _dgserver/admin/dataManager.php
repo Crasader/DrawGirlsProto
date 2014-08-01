@@ -459,7 +459,7 @@ if($mode=="update"){
 }
 
 
-DBManager::closeDB();
+DBServer::closeAllConnection();
 
 ?>
 

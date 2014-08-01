@@ -1276,10 +1276,13 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 		
 		mySGD->network_check_cnt = 0;
 		
-		setAchieveTable();
-		
-		loading_layer->removeFromParent();
-		is_menu_enable = true;
+		addChild(KSTimer::create(0.1f, [=]()
+								 {
+									 setAchieveTable();
+									 
+									 loading_layer->removeFromParent();
+									 is_menu_enable = true;
+								 }));
 	}
 	else
 	{

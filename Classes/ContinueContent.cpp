@@ -205,6 +205,15 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
 									   price_label->runAction(t_spawn2);
 								   }
+								   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+								   {
+									   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+																		   {
+																			   schedule(schedule_selector(ContinueContent::countingSchedule));
+																			   mySGD->clearChangeGoods();
+																			   is_menu_enable = true;
+																		   }), 9999);
+								   }
 								   else
 								   {
 									   schedule(schedule_selector(ContinueContent::countingSchedule));
@@ -220,20 +229,26 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 		}
 		else
 		{
-			ShopPopup* t_popup = ShopPopup::create();
-			t_popup->setScale(myDSH->screen_convert_rate);
-			t_popup->setShopCode(kSC_ruby);
-			t_popup->setCloseFunc([=]()
-								  {
-									  is_menu_enable = true;
-									  schedule(schedule_selector(ContinueContent::countingSchedule));
-								  });
-			t_popup->is_continue = true;
-			t_popup->continue_end = [=]()
-			{
-				continueAction(NULL, CCControlEventTouchUpInside);
-			};
-			getParent()->addChild(t_popup);
+			getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+															 {
+																 schedule(schedule_selector(ContinueContent::countingSchedule));
+																 is_menu_enable = true;
+															 }), 9999);
+			
+//			ShopPopup* t_popup = ShopPopup::create();
+//			t_popup->setScale(myDSH->screen_convert_rate);
+//			t_popup->setShopCode(kSC_ruby);
+//			t_popup->setCloseFunc([=]()
+//								  {
+//									  is_menu_enable = true;
+//									  schedule(schedule_selector(ContinueContent::countingSchedule));
+//								  });
+//			t_popup->is_continue = true;
+//			t_popup->continue_end = [=]()
+//			{
+//				continueAction(NULL, CCControlEventTouchUpInside);
+//			};
+//			getParent()->addChild(t_popup);
 		}
 	}
 }

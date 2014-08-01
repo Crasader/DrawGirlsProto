@@ -1951,6 +1951,12 @@ bool PlayTutorial::init()
 	return true;
 }
 
+void PlayTutorial::onEnterTransitionDidFinish()
+{
+	CCLayer::onEnterTransitionDidFinish();
+	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
+}
+
 int PlayTutorial::getRecentStep()
 {
 	return tutorial_step;
@@ -2172,6 +2178,7 @@ void PlayTutorial::nextStep()
 												  myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5);
 												  mySGD->setNextSceneName("maingame");
 												  
+												  AudioEngine::sharedInstance()->stopSound();
 												  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
 												  
 												  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();

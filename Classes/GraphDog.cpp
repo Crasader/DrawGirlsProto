@@ -246,7 +246,6 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	}
     
     if(i==0){
-        CCLOG("FUCKFUCK");
         TRACE();
 				return false;
     }
@@ -448,7 +447,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	}
 	else
 	{
-		CCLOG("fuckfuckfuck %d",resultCode);
+		CCLOG("omg %d",resultCode);
 		//resultCode = CURLE_CHUNK_FAILED;
 	}
 	

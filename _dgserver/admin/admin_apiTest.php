@@ -63,7 +63,17 @@ $(document).ready(function(){
 				    success : function(data){
 
 				    	var resultDisplay = $("td[name=resultDisplay]");
-				    	result = "요청:"+apiurl+"<br>파마메터:"+j2s(param)+"<br><br>결과:<br><textarea cols=130 rows=5>"+j2s(data["0"])+"</textarea>";
+				    	//result = "요청:"+apiurl+"<br>파마메터:"+j2s(param)+"<br><br>결과:<br><textarea cols=130 rows=5>"+j2s(data["0"])+"</textarea>";
+						result = "요청:"+apiurl+"<br>파마메터:"+j2s(param)+"<br><br>결과:<br><textarea cols=130 rows=5>"+j2s(data["0"])+"";
+						result+="\n\n\n";
+				    	for(var i=0; i<data["0"]["log"].length;i++){
+				    		result+=data["0"]["log"][i]+"\n\n";
+
+				    	}
+
+				    	result+="</textarea>";
+
+
 						resultDisplay.html(result);
 
 
@@ -304,7 +314,7 @@ $apiListStr = json_encode($apiList,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 </script> 
 <br><br>
 <h2 id="tables-contextual-classes">|최근 로그</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='{}' dbSort='{"no":"desc"}' autoSetting="true" dbLimit="10" name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserLog" dbWhere='{"id":"*"}' dbSort='{"no":"desc"}' autoSetting="true" dbLimit="10" name="datatable" border=1>
 	<thead>
 	</thead>
 	<tbody datazone>

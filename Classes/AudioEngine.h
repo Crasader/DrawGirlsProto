@@ -4,6 +4,7 @@
 #include	"cocos2d.h"
 #include	"SimpleAudioEngine.h"
 #include <algorithm>
+#include <pthread.h>
 
 using namespace cocos2d;
 using namespace CocosDenshion;
@@ -91,6 +92,32 @@ public:
 	}
 	
 	bool is_preloaded;
+	
+	void preloadThreadAction(int t_step)
+	{
+		is_thread_preloaded = false;
+		pthread_t p_thread;
+		int thr_id;
+		thr_id = pthread_create(&p_thread, NULL, preload_function, (void *)t_step);
+		if(thr_id < 0)
+		{
+			perror("thread create error : sound preload");
+			exit(0);
+		}
+	}
+	
+	bool is_thread_preloaded;
+	
+	static void* preload_function(void* data)
+	{
+		do{
+			AudioEngine::sharedInstance()->preloadEffectTitleStep((int)data);
+		}while (0);
+		
+		AudioEngine::sharedInstance()->is_thread_preloaded = true;
+		
+		return NULL;
+	}
 	
 	void preloadEffectTitleStep(int t_step)
 	{
