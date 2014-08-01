@@ -1,13 +1,6 @@
 <?php
 include "manage_header.php";
 ?>
-<script>
-var viewer_image = function(value,option){
-	value = s2j(value);
-	var neditor = $("<img>").attr("src",value["img"]).attr("width",100);
-	return neditor;
-}
-</script>
 <input name="gid" value="<?=$gid?>" type="hidden">
 
 <br><br>

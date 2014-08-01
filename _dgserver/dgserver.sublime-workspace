@@ -4,6 +4,46 @@
 		"selected_items":
 		[
 			[
+				"UserData",
+				"UserData::create"
+			],
+			[
+				"select",
+				"selectWithLQForm"
+			],
+			[
+				"getRow",
+				"getRowByQuery"
+			],
+			[
+				"Atten",
+				"AttendenceEventDay"
+			],
+			[
+				"Attende",
+				"AttendenceEventDay"
+			],
+			[
+				"GDDON",
+				"GDDONTFIND"
+			],
+			[
+				"appen",
+				"appendTo"
+			],
+			[
+				"Fa",
+				"FaultyNick::getRowByQuery"
+			],
+			[
+				"getRowByQu",
+				"getRowByQueryWithShardKey"
+			],
+			[
+				"var_",
+				"var_export"
+			],
+			[
 				"getPri",
 				"getPrimarykey"
 			],
@@ -152,10 +192,6 @@
 				"getLogAndClear"
 			],
 			[
-				"GDDON",
-				"GDDONTFINDUSER"
-			],
-			[
 				"getobj",
 				"hw_GetObjectByQuery"
 			],
@@ -222,10 +258,6 @@
 			[
 				"selectedPa",
 				"selectedPattern"
-			],
-			[
-				"appen",
-				"appendTo  (function)"
 			],
 			[
 				"outfo",
@@ -404,10 +436,6 @@
 				"getCurrentDateString"
 			],
 			[
-				"select",
-				"selectWithLQTable"
-			],
-			[
 				"getquery",
 				"getRowByQuery"
 			],
@@ -486,34 +514,6 @@
 			[
 				"make",
 				"makeReturn"
-			],
-			[
-				"result",
-				"result2"
-			],
-			[
-				"ResultStat",
-				"ResultState"
-			],
-			[
-				"Resul",
-				"ResultState"
-			],
-			[
-				"m_http",
-				"m_httpgateway"
-			],
-			[
-				"getpri",
-				"getPrimaryKey"
-			],
-			[
-				"Re",
-				"ResultState"
-			],
-			[
-				"last",
-				"lastCmdNo"
 			]
 		]
 	},
@@ -523,7 +523,7 @@
 			"file": "admin/manage_header.php",
 			"settings":
 			{
-				"buffer_size": 5935,
+				"buffer_size": 6518,
 				"line_ending": "Unix"
 			}
 		},
@@ -547,7 +547,7 @@
 			"file": "admin/LQDataTable.js",
 			"settings":
 			{
-				"buffer_size": 82231,
+				"buffer_size": 70679,
 				"line_ending": "Unix"
 			}
 		},
@@ -563,7 +563,7 @@
 			"file": "DBManagerLib.php",
 			"settings":
 			{
-				"buffer_size": 38503,
+				"buffer_size": 38602,
 				"line_ending": "Unix",
 				"name": "<?php"
 			}
@@ -644,7 +644,7 @@
 			"file": "DBManager.php",
 			"settings":
 			{
-				"buffer_size": 156373,
+				"buffer_size": 165376,
 				"line_ending": "Unix"
 			}
 		},
@@ -652,7 +652,7 @@
 			"file": "command/cmd2.php",
 			"settings":
 			{
-				"buffer_size": 182337,
+				"buffer_size": 184939,
 				"line_ending": "Unix"
 			}
 		},
@@ -684,7 +684,15 @@
 			"file": "admin/manage_userInfo.php",
 			"settings":
 			{
-				"buffer_size": 5563,
+				"buffer_size": 6176,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_commonSetting.php",
+			"settings":
+			{
+				"buffer_size": 390,
 				"line_ending": "Unix"
 			}
 		},
@@ -716,7 +724,7 @@
 			"file": "admin/admin_apiTest.php",
 			"settings":
 			{
-				"buffer_size": 8082,
+				"buffer_size": 8377,
 				"line_ending": "Unix"
 			}
 		},
@@ -882,10 +890,13 @@
 			}
 		},
 		{
+			"contents": "",
 			"file": "admin/lib.js",
+			"file_size": 2640,
+			"file_write_time": 1405900231000000,
 			"settings":
 			{
-				"buffer_size": 2624,
+				"buffer_size": 0,
 				"line_ending": "Unix"
 			}
 		},
@@ -901,7 +912,7 @@
 			"file": "command.php",
 			"settings":
 			{
-				"buffer_size": 8207,
+				"buffer_size": 8209,
 				"line_ending": "Unix"
 			}
 		},
@@ -925,7 +936,7 @@
 			"file": "DBManagerLib2.php",
 			"settings":
 			{
-				"buffer_size": 33003,
+				"buffer_size": 35014,
 				"line_ending": "Unix"
 			}
 		},
@@ -933,7 +944,7 @@
 			"file": "admin/index.php",
 			"settings":
 			{
-				"buffer_size": 42656,
+				"buffer_size": 42675,
 				"line_ending": "Unix"
 			}
 		},
@@ -942,6 +953,70 @@
 			"settings":
 			{
 				"buffer_size": 265,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/header.php",
+			"settings":
+			{
+				"buffer_size": 5072,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/LQEditor.js",
+			"settings":
+			{
+				"buffer_size": 19059,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_shopEvent.php",
+			"settings":
+			{
+				"buffer_size": 426,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_endlessPlayList.php",
+			"settings":
+			{
+				"buffer_size": 1696,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_pvpRank.php",
+			"settings":
+			{
+				"buffer_size": 3072,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_weeklyRank.php",
+			"settings":
+			{
+				"buffer_size": 3056,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_archivement.php",
+			"settings":
+			{
+				"buffer_size": 398,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_attendenceEventDay.php",
+			"settings":
+			{
+				"buffer_size": 1506,
 				"line_ending": "Unix"
 			}
 		},
@@ -965,7 +1040,7 @@
 			"file": "admin/manage_attendenceEvent.php",
 			"settings":
 			{
-				"buffer_size": 380,
+				"buffer_size": 798,
 				"line_ending": "Unix"
 			}
 		},
@@ -974,14 +1049,6 @@
 			"settings":
 			{
 				"buffer_size": 6751,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "admin/manage_shopEvent.php",
-			"settings":
-			{
-				"buffer_size": 426,
 				"line_ending": "Unix"
 			}
 		},
@@ -1042,14 +1109,6 @@
 			}
 		},
 		{
-			"file": "admin/manage_endlessPlayList.php",
-			"settings":
-			{
-				"buffer_size": 1696,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "admin/manage_stageHistory.html",
 			"settings":
 			{
@@ -1100,14 +1159,6 @@
 			}
 		},
 		{
-			"file": "admin/header.php",
-			"settings":
-			{
-				"buffer_size": 5034,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "admin/manage_cuponManager.php",
 			"settings":
 			{
@@ -1148,6 +1199,14 @@
 			}
 		},
 		{
+			"file": "admin/manage_shop.php",
+			"settings":
+			{
+				"buffer_size": 417,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "admin/manage_balance.php",
 			"settings":
 			{
@@ -1160,6 +1219,30 @@
 			"settings":
 			{
 				"buffer_size": 263,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "data.php",
+			"settings":
+			{
+				"buffer_size": 2927,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "admin/manage_cardText.php",
+			"settings":
+			{
+				"buffer_size": 1362,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "dgserver.sublime-workspace",
+			"settings":
+			{
+				"buffer_size": 566540,
 				"line_ending": "Unix"
 			}
 		},
@@ -1276,14 +1359,6 @@
 			}
 		},
 		{
-			"file": "data.php",
-			"settings":
-			{
-				"buffer_size": 2924,
-				"line_ending": "Unix"
-			}
-		},
-		{
 			"file": "admin/admin_message.php",
 			"settings":
 			{
@@ -1348,6 +1423,14 @@
 			}
 		},
 		{
+			"file": "DBManager2.php",
+			"settings":
+			{
+				"buffer_size": 20953,
+				"line_ending": "Unix"
+			}
+		},
+		{
 			"file": "admin/admin_language.php",
 			"settings":
 			{
@@ -1360,22 +1443,6 @@
 			"settings":
 			{
 				"buffer_size": 46556,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "DBManager2.php",
-			"settings":
-			{
-				"buffer_size": 20953,
-				"line_ending": "Unix"
-			}
-		},
-		{
-			"file": "admin/manage_pvpRank.php",
-			"settings":
-			{
-				"buffer_size": 3072,
 				"line_ending": "Unix"
 			}
 		}
@@ -1420,6 +1487,7 @@
 	},
 	"file_history":
 	[
+		"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/_dgserver/manage_cardText.php",
 		"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/_dgserver/un2",
 		"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/_dgserver/command/cmd2.php",
 		"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/_dgserver/DBManagerLib.php",
@@ -1520,7 +1588,7 @@
 	},
 	"find_in_files":
 	{
-		"height": 0.0,
+		"height": 93.0,
 		"where_history":
 		[
 			"",
@@ -1540,134 +1608,134 @@
 		"case_sensitive": false,
 		"find_history":
 		[
-			"getPlayDataByRandom",
-			"location.href",
-			"href",
-			".php\"",
-			".html",
-			"php",
-			"oh my god comm",
-			"LogManager",
-			"oh my god",
-			"oh my god commit fail",
-			" oh my god commit fail",
-			"m__qResult",
-			"getRowByQuery",
-			"orderDir1",
-			"changeJsonFormInput",
-			"imageSelector",
-			"imageselector\nimageselector",
-			"imageselector",
-			"stagescore",
-			"class stagesc",
+			"var_ex",
+			"addlog",
+			"\"log\"",
+			"profile",
+			"bossList",
+			"boss",
+			"getMission",
+			"usingMission",
+			"profile",
+			"dbparam",
+			"d",
+			"ar dbParam",
+			"dbLoadParam",
+			"dbFunc",
+			"imageview",
+			"languageEditor",
+			"exchangemaker",
+			"changeDis",
+			"UserIndex::creat",
 			"shardindex",
-			"selectwith",
-			"getRowByQuery",
-			"rdata",
-			"start load",
-			"UserStorage",
-			"query3 -> 3",
-			"updateuserpropertyhistory =================================",
-			"changeuserproperties",
-			"exchange",
-			"limitOfServer",
-			"$limitOfServer[$nShard]",
+			"userShardOrder",
+			"getUserIndex",
+			"selectwithlqform",
 			"shardIndex",
-			"startList",
-			"class stagescore",
-			"getShardIndexNow",
-			"$param[\"where\"][\"start\"]",
-			"class stagescore",
-			"endlessrank",
-			"stagescore",
-			"class stagescore",
-			"class shop",
-			"func",
-			"m__LQTableSelectQueryCustomFunction",
-			"setLQTableSelectQueryCustomFunction",
-			"StageScore",
-			"m__LQTableSelectQueryCustomFunction",
-			"setLQTableSelectQueryCustomFunction",
-			"cardhistory",
-			"type\":\"date",
-			"piecehistory",
-			"class piecehis",
-			"defaultdata",
-			"\"editorValue\"",
-			"requestInsert",
-			"lqadd",
-			"defaultData",
-			"w getShardkeyValue",
-			"dginfo fail",
-			"\"dbSort\"",
-			"\"dbWhere\"",
-			"editorSelector",
-			"loadDataCallBack",
-			"getobjvalue",
-			"getfield",
+			"makeDataRow",
 			"loaddatatable",
-			"setDataLoadCallBack",
-			"UserLog",
-			"getcardhis",
-			"getQueryResultWithShardKey",
-			"writelog",
-			"fail to write",
-			"userlog",
-			"getQueryResultWithShardKey",
-			"query fail",
-			"->writelog",
-			"new UserLog",
-			"UserLog",
-			"getCurrentDate",
-			"->shardIndex",
-			"getShardDBInfo",
-			"class userdata",
-			"class CuponHistory",
-			"getConnectionForWrite",
-			"removeRowByQuery",
-			"getMaster",
-			"self::getDBGroup()",
-			"getDBMaster",
-			"getMaster",
-			"getShardDBInfoList()",
-			"getShardConnectionByRandom",
-			"getShardDBInfo()",
-			"getShardDBInfo",
-			"getShardConnection()",
-			"getShardConnection",
-			"getShardIndexByNumberKey",
-			"NewShardKeyFunc",
-			"getDBIndexByShardKey",
-			"getShardIndexByNumberKey",
-			"getDBIndexByShardKey",
-			"getShardIndexByNumberKey",
-			"senditem",
-			"getShardDBInfo",
-			"getShardConnection",
-			"getShardIndexByNumberKey",
-			"dbmanager",
-			"getdbgr",
-			"static::$m__DBGroup",
-			"getDBIndexByShardKey",
-			"getDBIndexByShardString",
-			"m__DBGroup",
-			"m__shardOrder",
+			"selectWithLQForm",
+			"selectWithLQForm\nselectWithLQForm\nselectWithLQForm\nselectWithLQForm",
+			"selectWithLQForm\nselectWithLQForm\nselectWithLQForm",
+			"selectWithLQForm\nselectWithLQForm",
+			"selectWithLQForm",
+			"updateWithLQForm",
+			"todaymission",
+			"class cuponcode",
+			"propChange",
+			"exchangeviewer",
+			"class user",
+			"AttendenceEvent",
+			"finish",
+			"cuponcode",
+			"exchangeviewer",
+			"loginevent",
+			"propSelect",
+			"propselect",
+			"ajaxMakeExchangeID",
+			"exchangeID",
+			"class ",
+			"resourceSelector_value",
+			"resourceSelector",
+			"changeJsonFormInpu",
+			"resourceSelector",
+			"\"type\":\"cus",
+			"exchangema",
+			"\"type\":\"cus",
+			"getobjvalue",
+			"imageSelector_value",
+			"_value",
+			"imageSelector",
+			"imageSelectorBtn",
+			"image",
+			"<script src=\"LQDataTable.js\"></script>",
+			"class dbmanager",
+			"updatecardhis",
+			"getObjectByQuery",
+			"getArrayDataForClient",
+			"reloadPuzzleInfo",
+			"deleteWithLQTable",
+			"kvManager",
+			"class puzzle",
+			"list",
+			"listver",
+			"CurrentUserInfo",
+			"ajax",
+			"getShardKeyFunc",
+			"m_newShardKeyFunc",
+			"setNewShardKeyFunc for",
+			"setNewShardKeyFunc",
+			"newShardKeyFunc",
+			"newShardkeyFunc",
+			"createShardOrder",
+			"createShardOrde",
+			"createShardOrder",
+			"createShardOrder\ncreateShardOrder",
+			"createShardOrder",
+			"newShardKeyFunc",
+			"getshardkeyfunc",
+			"GetShardKe",
+			"m_getShardKeyFunc",
+			"join",
+			"cardVer_",
+			"createShardOrder",
+			"getDBGroup",
+			"getDBOrderByShardKey",
+			"getDBOrderByShardString",
+			"aCuponCodeTable",
+			"getDBTable",
+			"GetShardKeyFunc",
+			"getshardkeyfunc",
+			"m_getShardKeyFunc",
+			"getConnectionForRead",
+			"set select custom func for",
+			"CuponManager",
+			"class cuponcode",
+			"st get shard key func",
+			"aCuponManageTable",
 			"CuponUsedInfo",
-			"extends DBTable{",
-			"checkattendenceevent",
-			"setDBShardKeyValue",
-			"class dbtable2",
-			"__construct",
-			"UserPropertyHistory",
-			"updateuserpropertyhistory",
-			"save fail another prop",
-			"updateuserpropertyhistory",
-			"\"UserStorage\"",
-			"UserStorage",
-			"load ok, primaryke",
-			"set m__shardKeyValu",
-			"updateuserpropertyhistory",
-			"UserPropertyHistory"
+			"usecupon",
+			"set custom func",
+			" set custom func",
+			"cuponCode=",
+			"m__shardOrder",
+			"setNewShardKeyFunc",
+			"m_getShardKeyFunc",
+			"setNewShardKeyFunc",
+			"getConnectionForRead",
+			" need connection ",
+			"getDBOrderByShardKey",
+			"aCuponCodeTable",
+			"new CuponUsedInfo",
+			"setNewShardKeyFunc",
+			"cuponusedinfo",
+			"getConnectionForRead",
+			"getConnectionForWrite",
+			"getMasterConnection",
+			"setGetShardKeyFunc",
+			"getNewShardOrderByKey",
+			"setNewShardKeyFunc",
+			"ShardKeyFunc"
 		],
 		"highlight": true,
 		"in_selection": false,
@@ -1760,7 +1828,7 @@
 	"groups":
 	[
 		{
-			"selected": 51,
+			"selected": 14,
 			"sheets":
 			[
 				{
@@ -1768,15 +1836,15 @@
 					"file": "admin/manage_header.php",
 					"settings":
 					{
-						"buffer_size": 5935,
+						"buffer_size": 6518,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								178,
-								178
+								5699,
+								5699
 							]
 						],
 						"settings":
@@ -1892,8 +1960,8 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 56.0,
+						"translation.y": 1813.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2173,7 +2241,7 @@
 					"file": "admin/LQDataTable.js",
 					"settings":
 					{
-						"buffer_size": 82231,
+						"buffer_size": 70679,
 						"regions":
 						{
 							"bookmarks":
@@ -2183,12 +2251,16 @@
 								"regions":
 								[
 									[
-										39850,
-										39850
+										37556,
+										37556
 									],
 									[
-										59041,
-										59041
+										40512,
+										40512
+									],
+									[
+										59753,
+										59753
 									]
 								],
 								"scope": "bookmarks"
@@ -2197,8 +2269,8 @@
 						"selection":
 						[
 							[
-								41615,
-								41615
+								5331,
+								5331
 							]
 						],
 						"settings":
@@ -2315,7 +2387,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 20036.0,
+						"translation.y": 2831.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -2441,7 +2513,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sublime_auto_complete": true,
 							"synced": true,
@@ -2459,15 +2531,15 @@
 					"file": "DBManagerLib.php",
 					"settings":
 					{
-						"buffer_size": 38503,
+						"buffer_size": 38602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4364,
-								4364
+								4463,
+								4463
 							]
 						],
 						"settings":
@@ -2870,8 +2942,8 @@
 						"selection":
 						[
 							[
-								1695,
-								1695
+								466,
+								466
 							]
 						],
 						"settings":
@@ -3678,8 +3750,8 @@
 						"selection":
 						[
 							[
-								4233,
-								4233
+								3558,
+								3558
 							]
 						],
 						"settings":
@@ -3795,8 +3867,8 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 9.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 1210.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3806,15 +3878,15 @@
 					"file": "DBManager.php",
 					"settings":
 					{
-						"buffer_size": 156373,
+						"buffer_size": 165376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								134475,
-								134475
+								105275,
+								105275
 							]
 						],
 						"settings":
@@ -3931,7 +4003,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 54071.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -3941,15 +4013,15 @@
 					"file": "command/cmd2.php",
 					"settings":
 					{
-						"buffer_size": 182337,
+						"buffer_size": 184939,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								105913,
-								105913
+								21521,
+								21521
 							]
 						],
 						"settings":
@@ -4066,7 +4138,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 52860.0,
+						"translation.y": 11076.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -4479,15 +4551,15 @@
 					"file": "admin/manage_userInfo.php",
 					"settings":
 					{
-						"buffer_size": 5563,
+						"buffer_size": 6176,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								196,
-								196
+								4215,
+								4215
 							]
 						],
 						"settings":
@@ -4603,6 +4675,138 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
+						"translation.x": 4.0,
+						"translation.y": 1151.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "admin/manage_commonSetting.php",
+					"settings":
+					{
+						"buffer_size": 390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								390,
+								390
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
 						"translation.x": 0.0,
 						"translation.y": 0.0,
 						"zoom_level": 1.0
@@ -4610,7 +4814,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "admin/manage_userData.php",
 					"settings":
 					{
@@ -4744,7 +4948,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "admin/manage_userLog.php",
 					"settings":
 					{
@@ -4879,7 +5083,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "admin/admin_piece.php",
 					"settings":
 					{
@@ -5014,19 +5218,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "admin/admin_apiTest.php",
 					"settings":
 					{
-						"buffer_size": 8082,
+						"buffer_size": 8377,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1745,
-								1745
+								2032,
+								2032
 							]
 						],
 						"settings":
@@ -5144,13 +5348,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 653.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "admin/manage_pieceHistory.php",
 					"settings":
 					{
@@ -5270,7 +5474,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -5279,13 +5483,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 61.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "admin/manage_modifyHistory.php",
 					"settings":
 					{
@@ -5420,7 +5624,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "admin/manage_puzzleHistory.php",
 					"settings":
 					{
@@ -5431,143 +5635,8 @@
 						"selection":
 						[
 							[
-								1733,
-								1733
-							]
-						],
-						"settings":
-						{
-							"codeintel": true,
-							"codeintel_config":
-							{
-								"JavaScript":
-								{
-									"codeintel_max_recursive_dir_depth": 2.0,
-									"codeintel_scan_files_in_project": false,
-									"javascriptExtraPaths":
-									[
-									]
-								},
-								"PHP":
-								{
-									"codeintel_max_recursive_dir_depth": 5.0,
-									"codeintel_scan_files_in_project": false,
-									"phpExtraPaths":
-									[
-									]
-								},
-								"Python":
-								{
-									"env":
-									{
-									}
-								}
-							},
-							"codeintel_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_live": true,
-							"codeintel_live_enabled_languages":
-							[
-								"JavaScript",
-								"Mason",
-								"XBL",
-								"XUL",
-								"RHTML",
-								"SCSS",
-								"Python",
-								"HTML",
-								"Ruby",
-								"Python3",
-								"XML",
-								"Sass",
-								"XSLT",
-								"Django",
-								"HTML5",
-								"Perl",
-								"CSS",
-								"Twig",
-								"Less",
-								"Smarty",
-								"Node.js",
-								"Tcl",
-								"TemplateToolkit",
-								"PHP"
-							],
-							"codeintel_max_recursive_dir_depth": 10.0,
-							"codeintel_scan_exclude_dir":
-							{
-								"JavaScript":
-								[
-									"/build/",
-									"/min/"
-								]
-							},
-							"codeintel_scan_files_in_project": true,
-							"codeintel_selected_catalogs":
-							[
-								"PyWin32",
-								"jQuery",
-								"Rails"
-							],
-							"codeintel_snippets": true,
-							"codeintel_syntax_map":
-							{
-								"Python Django": "Python"
-							},
-							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
-							"remote_loading": false,
-							"sftp_duplicate_views": 0.0,
-							"sublime_auto_complete": true,
-							"synced": true,
-							"syntax": "Packages/PHP/PHP.tmLanguage",
-							"translate_tabs_to_spaces": false
-						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
-						"zoom_level": 1.0
-					},
-					"type": "text"
-				},
-				{
-					"buffer": 28,
-					"file": "admin/manage_cardHistory.php",
-					"settings":
-					{
-						"buffer_size": 2156,
-						"regions":
-						{
-						},
-						"selection":
-						[
-							[
-								1474,
-								1474
+								781,
+								781
 							]
 						],
 						"settings":
@@ -5691,6 +5760,141 @@
 				},
 				{
 					"buffer": 29,
+					"file": "admin/manage_cardHistory.php",
+					"settings":
+					{
+						"buffer_size": 2156,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								781,
+								777
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 121.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 30,
 					"file": "admin/manage_giftBoxHistory.php",
 					"settings":
 					{
@@ -5825,7 +6029,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "admin/manage_userStorage.php",
 					"settings":
 					{
@@ -5954,13 +6158,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 938.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "admin/manage_userPropertyHistory.php",
 					"settings":
 					{
@@ -6095,7 +6299,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "admin/admin_monster.php",
 					"settings":
 					{
@@ -6230,7 +6434,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "admin/admin_pattern.php",
 					"settings":
 					{
@@ -6364,7 +6568,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 34,
+					"buffer": 35,
 					"file": "admin/uploadImage.php",
 					"settings":
 					{
@@ -6493,13 +6697,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 16564.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 35,
+					"buffer": 36,
 					"file": "admin/imageSelector.php",
 					"settings":
 					{
@@ -6632,7 +6836,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "admin/admin_images.php",
 					"settings":
 					{
@@ -6760,13 +6964,13 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 166.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 38,
 					"file": "admin/jqueryupload/uploader.html",
 					"settings":
 					{
@@ -6901,7 +7105,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 38,
+					"buffer": 39,
 					"file": "admin/processupload/index.php",
 					"settings":
 					{
@@ -7034,7 +7238,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "admin/manage_timeEvent.php",
 					"settings":
 					{
@@ -7154,7 +7358,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": true,
+							"incomplete_sync": null,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -7168,7 +7372,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 40,
+					"buffer": 41,
 					"file": "DBHistory.php",
 					"settings":
 					{
@@ -7302,7 +7506,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "admin/manage_cuponCode.php",
 					"settings":
 					{
@@ -7313,8 +7517,8 @@
 						"selection":
 						[
 							[
-								639,
-								639
+								4244,
+								4244
 							]
 						],
 						"settings":
@@ -7431,13 +7635,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1456.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "admin/admin_log.php",
 					"settings":
 					{
@@ -7571,7 +7775,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "admin/manage_sendItem.php",
 					"settings":
 					{
@@ -7707,7 +7911,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "admin/processupload/processupload.php",
 					"settings":
 					{
@@ -7842,19 +8046,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "admin/lib.js",
 					"settings":
 					{
-						"buffer_size": 2624,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1143,
-								1143
+								0,
+								0
 							]
 						],
 						"settings":
@@ -7977,7 +8181,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "lib.php",
 					"settings":
 					{
@@ -7988,8 +8192,8 @@
 						"selection":
 						[
 							[
-								13931,
-								13931
+								14834,
+								14834
 							]
 						],
 						"settings":
@@ -8106,25 +8310,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 7848.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "command.php",
 					"settings":
 					{
-						"buffer_size": 8207,
+						"buffer_size": 8209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								127,
-								127
+								6803,
+								6803
 							]
 						],
 						"settings":
@@ -8242,13 +8446,13 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2409.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "admin/admin_card.php",
 					"settings":
 					{
@@ -8377,13 +8581,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 129.0,
+						"translation.y": 109.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 49,
+					"buffer": 50,
 					"file": "event.php",
 					"settings":
 					{
@@ -8503,7 +8707,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sublime_auto_complete": true,
 							"synced": true,
@@ -8511,17 +8715,17 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 50.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "DBManagerLib2.php",
 					"settings":
 					{
-						"buffer_size": 33003,
+						"buffer_size": 35014,
 						"regions":
 						{
 						},
@@ -8652,19 +8856,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "admin/index.php",
 					"settings":
 					{
-						"buffer_size": 42656,
+						"buffer_size": 42675,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								164,
-								164
+								23521,
+								23521
 							]
 						],
 						"settings":
@@ -8781,13 +8985,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 12091.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "admin/admin_character.php",
 					"settings":
 					{
@@ -8919,15 +9123,1086 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 54,
+					"file": "admin/header.php",
+					"settings":
+					{
+						"buffer_size": 5072,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								712,
+								712
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 310.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 55,
+					"file": "admin/LQEditor.js",
+					"settings":
+					{
+						"buffer_size": 19059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6905,
+								6905
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2453.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 56,
+					"file": "admin/manage_shopEvent.php",
+					"settings":
+					{
+						"buffer_size": 426,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								426,
+								426
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 57,
+					"file": "admin/manage_endlessPlayList.php",
+					"settings":
+					{
+						"buffer_size": 1696,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								1696
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 58,
+					"file": "admin/manage_pvpRank.php",
+					"settings":
+					{
+						"buffer_size": 3072,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								3072
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 59,
+					"file": "admin/manage_weeklyRank.php",
+					"settings":
+					{
+						"buffer_size": 3056,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2652,
+								2652
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 841.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 60,
+					"file": "admin/manage_archivement.php",
+					"settings":
+					{
+						"buffer_size": 398,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								398,
+								398
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 61,
+					"file": "admin/manage_attendenceEventDay.php",
+					"settings":
+					{
+						"buffer_size": 1506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1222,
+								1222
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 157.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 55,
+			"selected": 61,
 			"sheets":
 			[
 				{
-					"buffer": 53,
+					"buffer": 62,
 					"file": "admin/manage_message.php",
 					"settings":
 					{
@@ -9061,7 +10336,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 54,
+					"buffer": 63,
 					"file": "admin/admin_shop.php",
 					"settings":
 					{
@@ -9194,19 +10469,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 64,
 					"file": "admin/manage_attendenceEvent.php",
 					"settings":
 					{
-						"buffer_size": 380,
+						"buffer_size": 798,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								380,
-								380
+								798,
+								798
 							]
 						],
 						"settings":
@@ -9329,7 +10604,140 @@
 					"type": "text"
 				},
 				{
-					"buffer": 56,
+					"buffer": 61,
+					"file": "admin/manage_attendenceEventDay.php",
+					"settings":
+					{
+						"buffer_size": 1506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1466,
+								1466
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 226.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 65,
 					"file": "admin/admin_eventstage.php",
 					"settings":
 					{
@@ -9463,7 +10871,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 57,
+					"buffer": 56,
 					"file": "admin/manage_shopEvent.php",
 					"settings":
 					{
@@ -9474,8 +10882,8 @@
 						"selection":
 						[
 							[
-								377,
-								377
+								426,
+								426
 							]
 						],
 						"settings":
@@ -9596,7 +11004,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 21,
+					"buffer": 22,
 					"file": "admin/manage_userData.php",
 					"settings":
 					{
@@ -9729,7 +11137,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "admin/manage_cardHistory.php",
 					"settings":
 					{
@@ -9864,7 +11272,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 66,
 					"file": "admin/manage_stageRank.php",
 					"settings":
 					{
@@ -9993,13 +11401,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 881.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 59,
+					"buffer": 67,
 					"file": "admin/manage_character.php",
 					"settings":
 					{
@@ -10133,7 +11541,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "admin/admin_card.php",
 					"settings":
 					{
@@ -10144,8 +11552,8 @@
 						"selection":
 						[
 							[
-								677,
-								681
+								602,
+								602
 							]
 						],
 						"settings":
@@ -10268,7 +11676,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 60,
+					"buffer": 68,
 					"file": "admin/admin_commonSetting.php",
 					"settings":
 					{
@@ -10402,7 +11810,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 61,
+					"buffer": 69,
 					"file": "admin/admin_keyintvalue.php",
 					"settings":
 					{
@@ -10536,7 +11944,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 62,
+					"buffer": 70,
 					"file": "admin/admin_notice.php",
 					"settings":
 					{
@@ -10670,7 +12078,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 39,
+					"buffer": 40,
 					"file": "admin/manage_timeEvent.php",
 					"settings":
 					{
@@ -10949,8 +12357,8 @@
 						"selection":
 						[
 							[
-								351,
-								351
+								350,
+								350
 							]
 						],
 						"settings":
@@ -11206,7 +12614,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "admin/admin_piece.php",
 					"settings":
 					{
@@ -11340,7 +12748,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 52,
+					"buffer": 53,
 					"file": "admin/admin_character.php",
 					"settings":
 					{
@@ -11474,7 +12882,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "admin/admin_monster.php",
 					"settings":
 					{
@@ -11608,7 +13016,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 63,
+					"buffer": 71,
 					"file": "admin/admin_characterHistory.php",
 					"settings":
 					{
@@ -11877,7 +13285,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "admin/manage_puzzleHistory.php",
 					"settings":
 					{
@@ -12012,7 +13420,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 72,
 					"file": "admin/manage_cuponHistory.php",
 					"settings":
 					{
@@ -12132,7 +13540,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -12147,7 +13555,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 65,
+					"buffer": 57,
 					"file": "admin/manage_endlessPlayList.php",
 					"settings":
 					{
@@ -12281,7 +13689,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 66,
+					"buffer": 73,
 					"file": "admin/manage_stageHistory.html",
 					"settings":
 					{
@@ -12292,8 +13700,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								1366,
+								1366
 							]
 						],
 						"settings":
@@ -12409,13 +13817,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 207.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 67,
+					"buffer": 74,
 					"file": "admin/manage_stageHistory.php",
 					"settings":
 					{
@@ -12549,7 +13957,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "admin/manage_modifyHistory.php",
 					"settings":
 					{
@@ -12683,7 +14091,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 25,
+					"buffer": 26,
 					"file": "admin/manage_pieceHistory.php",
 					"settings":
 					{
@@ -12694,8 +14102,8 @@
 						"selection":
 						[
 							[
-								2662,
-								2613
+								1454,
+								1454
 							]
 						],
 						"settings":
@@ -12811,14 +14219,14 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 748.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 437.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 31,
+					"buffer": 32,
 					"file": "admin/manage_userPropertyHistory.php",
 					"settings":
 					{
@@ -13088,7 +14496,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 29,
+					"buffer": 30,
 					"file": "admin/manage_giftBoxHistory.php",
 					"settings":
 					{
@@ -13223,19 +14631,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 55,
+					"buffer": 64,
 					"file": "admin/manage_attendenceEvent.php",
 					"settings":
 					{
-						"buffer_size": 380,
+						"buffer_size": 798,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								380,
-								380
+								798,
+								798
 							]
 						],
 						"settings":
@@ -13632,15 +15040,15 @@
 					"file": "admin/manage_userInfo.php",
 					"settings":
 					{
-						"buffer_size": 5563,
+						"buffer_size": 6176,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2225,
-								2225
+								5512,
+								5512
 							]
 						],
 						"settings":
@@ -13756,14 +15164,14 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 3.0,
-						"translation.y": 0.0,
+						"translation.x": 1.0,
+						"translation.y": 1801.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "admin/manage_sendItem.php",
 					"settings":
 					{
@@ -13774,8 +15182,8 @@
 						"selection":
 						[
 							[
-								161,
-								161
+								5604,
+								5604
 							]
 						],
 						"settings":
@@ -13893,13 +15301,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1.0,
+						"translation.y": 2060.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 68,
+					"buffer": 75,
 					"file": "admin/jquery.form.js",
 					"settings":
 					{
@@ -14035,7 +15443,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 69,
+					"buffer": 76,
 					"file": "admin/jquery-ui-timepicker-addon.js",
 					"settings":
 					{
@@ -14170,7 +15578,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 77,
 					"file": "admin/LQDataTable.css",
 					"settings":
 					{
@@ -14181,8 +15589,8 @@
 						"selection":
 						[
 							[
-								643,
-								643
+								517,
+								517
 							]
 						],
 						"settings":
@@ -14290,7 +15698,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -14305,7 +15713,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 71,
+					"buffer": 78,
 					"file": "untitled.html",
 					"settings":
 					{
@@ -14439,19 +15847,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "admin/admin_apiTest.php",
 					"settings":
 					{
-						"buffer_size": 8082,
+						"buffer_size": 8377,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								561,
-								561
+								1668,
+								1668
 							]
 						],
 						"settings":
@@ -14568,7 +15976,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 615.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -14578,15 +15986,15 @@
 					"file": "admin/manage_header.php",
 					"settings":
 					{
-						"buffer_size": 5935,
+						"buffer_size": 6518,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								740,
-								740
+								3240,
+								3240
 							]
 						],
 						"settings":
@@ -14701,26 +16109,26 @@
 							"synced": true,
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 123.0,
+						"translation.y": 1218.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 54,
 					"file": "admin/header.php",
 					"settings":
 					{
-						"buffer_size": 5034,
+						"buffer_size": 5072,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								1037,
-								1037
+								1075,
+								1075
 							]
 						],
 						"settings":
@@ -14843,7 +16251,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 33,
+					"buffer": 34,
 					"file": "admin/admin_pattern.php",
 					"settings":
 					{
@@ -14981,15 +16389,15 @@
 					"file": "admin/LQDataTable.js",
 					"settings":
 					{
-						"buffer_size": 82231,
+						"buffer_size": 70679,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								691,
-								691
+								36592,
+								36592
 							]
 						],
 						"settings":
@@ -15106,13 +16514,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 17316.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 79,
 					"file": "admin/manage_cuponManager.php",
 					"settings":
 					{
@@ -15123,8 +16531,8 @@
 						"selection":
 						[
 							[
-								2698,
-								2698
+								3303,
+								3303
 							]
 						],
 						"settings":
@@ -15232,21 +16640,22 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
 							"synced": true,
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 696.0,
+						"translation.y": 967.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "admin/manage_cuponCode.php",
 					"settings":
 					{
@@ -15257,8 +16666,8 @@
 						"selection":
 						[
 							[
-								2541,
-								2541
+								4282,
+								4282
 							]
 						],
 						"settings":
@@ -15374,13 +16783,13 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 617.0,
+						"translation.y": 1456.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 22,
+					"buffer": 23,
 					"file": "admin/manage_userLog.php",
 					"settings":
 					{
@@ -15513,7 +16922,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 80,
 					"file": "admin/manage_footer.php",
 					"settings":
 					{
@@ -15648,7 +17057,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 75,
+					"buffer": 81,
 					"file": "admin/phpexcel/PHPExcel/Writer/Excel2007.php",
 					"settings":
 					{
@@ -15782,7 +17191,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 76,
+					"buffer": 82,
 					"file": "admin/phpexcel/PHPExcel/Reader/Excel2007.php",
 					"settings":
 					{
@@ -15920,15 +17329,15 @@
 					"file": "DBManager.php",
 					"settings":
 					{
-						"buffer_size": 156373,
+						"buffer_size": 165376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								135093,
-								135093
+								78597,
+								78603
 							]
 						],
 						"settings":
@@ -16045,13 +17454,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 54620.0,
+						"translation.y": 31924.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 77,
+					"buffer": 83,
 					"file": "admin/admin_resources.php",
 					"settings":
 					{
@@ -16184,7 +17593,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 30,
+					"buffer": 31,
 					"file": "admin/manage_userStorage.php",
 					"settings":
 					{
@@ -16323,15 +17732,15 @@
 					"file": "DBManagerLib.php",
 					"settings":
 					{
-						"buffer_size": 38503,
+						"buffer_size": 38602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								4763,
-								4780
+								2546,
+								2546
 							]
 						],
 						"settings":
@@ -16449,13 +17858,145 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 2551.0,
+						"translation.y": 1275.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 84,
+					"file": "admin/manage_shop.php",
+					"settings":
+					{
+						"buffer_size": 417,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								368,
+								368
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 47,
 					"file": "lib.php",
 					"settings":
 					{
@@ -16584,13 +18125,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 8570.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 85,
 					"file": "admin/manage_balance.php",
 					"settings":
 					{
@@ -16710,7 +18251,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -16725,19 +18266,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "admin/index.php",
 					"settings":
 					{
-						"buffer_size": 42656,
+						"buffer_size": 42675,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2055,
-								2055
+								2056,
+								2056
 							]
 						],
 						"settings":
@@ -16860,19 +18401,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "DBManagerLib2.php",
 					"settings":
 					{
-						"buffer_size": 33003,
+						"buffer_size": 35014,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2296,
-								2296
+								5183,
+								5183
 							]
 						],
 						"settings":
@@ -16989,13 +18530,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 2464.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 79,
+					"buffer": 86,
 					"file": "admin/admin_mission.php",
 					"settings":
 					{
@@ -17130,7 +18671,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "admin/admin_images.php",
 					"settings":
 					{
@@ -17268,15 +18809,15 @@
 					"file": "command/cmd2.php",
 					"settings":
 					{
-						"buffer_size": 182337,
+						"buffer_size": 184939,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								115474,
-								115474
+								87848,
+								87848
 							]
 						],
 						"settings":
@@ -17393,7 +18934,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 57604.0,
+						"translation.y": 43700.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -17532,11 +19073,679 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 46,
+					"file": "admin/lib.js",
+					"settings":
+					{
+						"buffer_size": 0,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 87,
+					"file": "data.php",
+					"settings":
+					{
+						"buffer_size": 2927,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2306,
+								2306
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": true,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1033.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 21,
+					"file": "admin/manage_commonSetting.php",
+					"settings":
+					{
+						"buffer_size": 390,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								390,
+								390
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 60,
+					"file": "admin/manage_archivement.php",
+					"settings":
+					{
+						"buffer_size": 398,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								398,
+								398
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 88,
+					"file": "admin/manage_cardText.php",
+					"settings":
+					{
+						"buffer_size": 1362,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1302,
+								1302
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 181.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		},
 		{
-			"selected": 38,
+			"selected": 7,
 			"sheets":
 			[
 				{
@@ -17544,15 +19753,15 @@
 					"file": "DBManagerLib.php",
 					"settings":
 					{
-						"buffer_size": 38503,
+						"buffer_size": 38602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								3361,
-								3361
+								28867,
+								28879
 							]
 						],
 						"settings":
@@ -17670,13 +19879,43 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1560.0,
+						"translation.y": 14878.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 80,
+					"buffer": 89,
+					"file": "dgserver.sublime-workspace",
+					"settings":
+					{
+						"buffer_size": 566540,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								32179,
+								32179
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Text/Plain text.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 25139.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 90,
 					"file": "DBManagerForManage.php",
 					"settings":
 					{
@@ -17796,7 +20035,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sublime_auto_complete": true,
 							"synced": true,
@@ -17810,7 +20049,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "lib.php",
 					"settings":
 					{
@@ -17821,8 +20060,8 @@
 						"selection":
 						[
 							[
-								13004,
-								13012
+								6091,
+								6091
 							]
 						],
 						"settings":
@@ -17938,14 +20177,14 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 2.0,
-						"translation.y": 0.0,
+						"translation.x": 0.0,
+						"translation.y": 2893.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 81,
+					"buffer": 91,
 					"file": "test.php",
 					"settings":
 					{
@@ -18214,7 +20453,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 82,
+					"buffer": 92,
 					"file": "admin/footer.php",
 					"settings":
 					{
@@ -18351,15 +20590,15 @@
 					"file": "command/cmd2.php",
 					"settings":
 					{
-						"buffer_size": 182337,
+						"buffer_size": 184939,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								150138,
-								150138
+								160257,
+								160257
 							]
 						],
 						"settings":
@@ -18476,13 +20715,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 75123.0,
+						"translation.y": 80323.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 83,
+					"buffer": 93,
 					"file": "admin/admin_book.php",
 					"settings":
 					{
@@ -18616,7 +20855,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 84,
+					"buffer": 94,
 					"file": "admin/admin_item.php",
 					"settings":
 					{
@@ -18750,7 +20989,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 79,
+					"buffer": 86,
 					"file": "admin/admin_mission.php",
 					"settings":
 					{
@@ -18885,7 +21124,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 85,
+					"buffer": 95,
 					"file": "admin/admin_movement.php",
 					"settings":
 					{
@@ -19019,7 +21258,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 86,
+					"buffer": 96,
 					"file": "admin/admin_stage.php",
 					"settings":
 					{
@@ -19153,7 +21392,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 87,
+					"buffer": 97,
 					"file": "admin/admin_statsClear.php",
 					"settings":
 					{
@@ -19287,7 +21526,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 88,
+					"buffer": 98,
 					"file": "admin/admin_theme.php",
 					"settings":
 					{
@@ -19421,7 +21660,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 89,
+					"buffer": 99,
 					"file": "admin/admin_util.php",
 					"settings":
 					{
@@ -19432,8 +21671,8 @@
 						"selection":
 						[
 							[
-								0,
-								0
+								237,
+								237
 							]
 						],
 						"settings":
@@ -19548,14 +21787,14 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage",
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.x": 4.0,
+						"translation.y": 8.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 90,
+					"buffer": 100,
 					"file": "admin/admin_worklist.html",
 					"settings":
 					{
@@ -19689,7 +21928,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 91,
+					"buffer": 101,
 					"file": "admin/admin_worklist.php",
 					"settings":
 					{
@@ -19823,19 +22062,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "command.php",
 					"settings":
 					{
-						"buffer_size": 8207,
+						"buffer_size": 8209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								5901,
-								5901
+								5903,
+								5903
 							]
 						],
 						"settings":
@@ -20094,7 +22333,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 92,
+					"buffer": 102,
 					"file": "admin/manage_goldHistory.php",
 					"settings":
 					{
@@ -20228,7 +22467,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 93,
+					"buffer": 103,
 					"file": "admin/manage_userProperty.html",
 					"settings":
 					{
@@ -20362,19 +22601,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 94,
+					"buffer": 87,
 					"file": "data.php",
 					"settings":
 					{
-						"buffer_size": 2924,
+						"buffer_size": 2927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								412,
-								412
+								886,
+								890
 							]
 						],
 						"settings":
@@ -20482,7 +22721,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sftp_duplicate_views": 0.0,
 							"sublime_auto_complete": true,
@@ -20491,13 +22730,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 410.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 78,
+					"buffer": 85,
 					"file": "admin/manage_balance.php",
 					"settings":
 					{
@@ -20636,15 +22875,15 @@
 					"file": "DBManager.php",
 					"settings":
 					{
-						"buffer_size": 156373,
+						"buffer_size": 165376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								448,
-								448
+								78531,
+								78531
 							]
 						],
 						"settings":
@@ -20761,13 +23000,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 31927.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 95,
+					"buffer": 104,
 					"file": "admin/admin_message.php",
 					"settings":
 					{
@@ -20900,7 +23139,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 96,
+					"buffer": 105,
 					"file": "admin/admin_stageScore.php",
 					"settings":
 					{
@@ -21034,7 +23273,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 97,
+					"buffer": 106,
 					"file": "admin/admin_user.php",
 					"settings":
 					{
@@ -21168,7 +23407,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 98,
+					"buffer": 107,
 					"file": "admin/admin_weeklyScore.php",
 					"settings":
 					{
@@ -21302,19 +23541,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "DBManagerLib2.php",
 					"settings":
 					{
-						"buffer_size": 33003,
+						"buffer_size": 35014,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								19548,
-								19554
+								1074,
+								1074
 							]
 						],
 						"settings":
@@ -21430,7 +23669,7 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 10687.0,
+						"translation.y": 442.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -21574,15 +23813,15 @@
 					"file": "admin/manage_header.php",
 					"settings":
 					{
-						"buffer_size": 5935,
+						"buffer_size": 6518,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								178,
-								178
+								5619,
+								5619
 							]
 						],
 						"settings":
@@ -21698,13 +23937,13 @@
 							"syntax": "Packages/PHP/PHP.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 1959.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 74,
+					"buffer": 80,
 					"file": "admin/manage_footer.php",
 					"settings":
 					{
@@ -21838,11 +24077,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 72,
+					"buffer": 54,
 					"file": "admin/header.php",
 					"settings":
 					{
-						"buffer_size": 5034,
+						"buffer_size": 5072,
 						"regions":
 						{
 						},
@@ -21972,7 +24211,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 99,
+					"buffer": 108,
 					"file": "admin/manage_attendenceEvent.html",
 					"settings":
 					{
@@ -22092,7 +24331,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sublime_auto_complete": true,
 							"synced": true,
@@ -22106,7 +24345,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 23,
+					"buffer": 24,
 					"file": "admin/admin_piece.php",
 					"settings":
 					{
@@ -22240,7 +24479,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 70,
+					"buffer": 77,
 					"file": "admin/LQDataTable.css",
 					"settings":
 					{
@@ -22378,7 +24617,7 @@
 					"file": "admin/LQDataTable.js",
 					"settings":
 					{
-						"buffer_size": 82231,
+						"buffer_size": 70679,
 						"regions":
 						{
 							"bookmarks":
@@ -22388,8 +24627,8 @@
 								"regions":
 								[
 									[
-										43571,
-										43571
+										44233,
+										44233
 									]
 								],
 								"scope": "bookmarks"
@@ -22398,8 +24637,8 @@
 						"selection":
 						[
 							[
-								73615,
-								73615
+								30190,
+								30190
 							]
 						],
 						"settings":
@@ -22516,7 +24755,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 35579.0,
+						"translation.y": 14599.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -22526,7 +24765,7 @@
 					"file": "admin/manage_userInfo.php",
 					"settings":
 					{
-						"buffer_size": 5563,
+						"buffer_size": 6176,
 						"regions":
 						{
 						},
@@ -22661,7 +24900,7 @@
 					"file": "command/cmd2.php",
 					"settings":
 					{
-						"buffer_size": 182337,
+						"buffer_size": 184939,
 						"regions":
 						{
 							"bookmarks":
@@ -22671,16 +24910,16 @@
 								"regions":
 								[
 									[
-										79958,
-										79958
+										81478,
+										81478
 									],
 									[
-										132886,
-										132886
+										134408,
+										134408
 									],
 									[
-										182337,
-										182337
+										184939,
+										184939
 									]
 								],
 								"scope": "bookmarks"
@@ -22689,8 +24928,8 @@
 						"selection":
 						[
 							[
-								163745,
-								163764
+								152540,
+								152540
 							]
 						],
 						"settings":
@@ -22807,13 +25046,148 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 82192.0,
+						"translation.y": 75883.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 100,
+					"buffer": 55,
+					"file": "admin/LQEditor.js",
+					"settings":
+					{
+						"buffer_size": 19059,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								14820,
+								14822
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/JavaScript/JavaScript.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 4514.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 109,
 					"file": "admin/path_editor/Cocos2d-html5-v2.2.min.js",
 					"settings":
 					{
@@ -22950,15 +25324,15 @@
 					"file": "DBManagerLib.php",
 					"settings":
 					{
-						"buffer_size": 38503,
+						"buffer_size": 38602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								38503,
-								38503
+								38602,
+								38602
 							]
 						],
 						"settings":
@@ -23082,11 +25456,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "command.php",
 					"settings":
 					{
-						"buffer_size": 8207,
+						"buffer_size": 8209,
 						"regions":
 						{
 						},
@@ -23352,7 +25726,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "admin/manage_puzzleHistory.php",
 					"settings":
 					{
@@ -23491,7 +25865,7 @@
 					"file": "admin/manage_userInfo.php",
 					"settings":
 					{
-						"buffer_size": 5563,
+						"buffer_size": 6176,
 						"regions":
 						{
 						},
@@ -23622,7 +25996,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 28,
+					"buffer": 29,
 					"file": "admin/manage_cardHistory.php",
 					"settings":
 					{
@@ -23751,13 +26125,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 26,
+					"buffer": 27,
 					"file": "admin/manage_modifyHistory.php",
 					"settings":
 					{
@@ -23891,7 +26265,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "admin/processupload/processupload.php",
 					"settings":
 					{
@@ -24026,7 +26400,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 43,
+					"buffer": 44,
 					"file": "admin/manage_sendItem.php",
 					"settings":
 					{
@@ -24162,11 +26536,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 24,
+					"buffer": 25,
 					"file": "admin/admin_apiTest.php",
 					"settings":
 					{
-						"buffer_size": 8082,
+						"buffer_size": 8377,
 						"regions":
 						{
 						},
@@ -24298,7 +26672,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 41,
+					"buffer": 42,
 					"file": "admin/manage_cuponCode.php",
 					"settings":
 					{
@@ -24432,7 +26806,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 101,
+					"buffer": 110,
 					"file": "admin/excel_reader2.php",
 					"settings":
 					{
@@ -24566,7 +26940,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 48,
+					"buffer": 49,
 					"file": "admin/admin_card.php",
 					"settings":
 					{
@@ -24701,7 +27075,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 32,
+					"buffer": 33,
 					"file": "admin/admin_monster.php",
 					"settings":
 					{
@@ -24970,11 +27344,11 @@
 					"type": "text"
 				},
 				{
-					"buffer": 45,
+					"buffer": 46,
 					"file": "admin/lib.js",
 					"settings":
 					{
-						"buffer_size": 2624,
+						"buffer_size": 0,
 						"regions":
 						{
 						},
@@ -25104,7 +27478,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 64,
+					"buffer": 72,
 					"file": "admin/manage_cuponHistory.php",
 					"settings":
 					{
@@ -25232,7 +27606,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 180.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -25372,7 +27746,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 102,
+					"buffer": 111,
 					"file": "admin/jqueryupload/index.html",
 					"settings":
 					{
@@ -25507,7 +27881,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 42,
+					"buffer": 43,
 					"file": "admin/admin_log.php",
 					"settings":
 					{
@@ -25641,7 +28015,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 37,
+					"buffer": 38,
 					"file": "admin/jqueryupload/uploader.html",
 					"settings":
 					{
@@ -25776,19 +28150,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 51,
+					"buffer": 52,
 					"file": "admin/index.php",
 					"settings":
 					{
-						"buffer_size": 42656,
+						"buffer_size": 42675,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								192,
-								192
+								193,
+								193
 							]
 						],
 						"settings":
@@ -25911,7 +28285,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 58,
+					"buffer": 66,
 					"file": "admin/manage_stageRank.php",
 					"settings":
 					{
@@ -26044,6 +28418,273 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 112,
+					"file": "DBManager2.php",
+					"settings":
+					{
+						"buffer_size": 20953,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								20058,
+								20058
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": true,
+							"remote_loading": false,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 61,
+					"file": "admin/manage_attendenceEventDay.php",
+					"settings":
+					{
+						"buffer_size": 1506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		},
@@ -26056,15 +28697,15 @@
 					"file": "DBManager.php",
 					"settings":
 					{
-						"buffer_size": 156373,
+						"buffer_size": 165376,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								13958,
-								13972
+								164872,
+								164872
 							]
 						],
 						"settings":
@@ -26181,14 +28822,14 @@
 							"tab_size": 4,
 							"translate_tabs_to_spaces": false
 						},
-						"translation.x": 0.0,
-						"translation.y": 6543.0,
+						"translation.x": 1393.0,
+						"translation.y": 69294.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 103,
+					"buffer": 113,
 					"file": "admin/admin_language.php",
 					"settings":
 					{
@@ -26308,7 +28949,7 @@
 								"Python Django": "Python"
 							},
 							"codeintel_tooltips": "popup",
-							"incomplete_sync": null,
+							"incomplete_sync": true,
 							"remote_loading": false,
 							"sublime_auto_complete": true,
 							"synced": true,
@@ -26333,8 +28974,8 @@
 						"selection":
 						[
 							[
-								356,
-								356
+								697,
+								697
 							]
 						],
 						"settings":
@@ -26461,15 +29102,15 @@
 					"file": "admin/LQDataTable.js",
 					"settings":
 					{
-						"buffer_size": 82231,
+						"buffer_size": 70679,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								71894,
-								71894
+								41528,
+								41528
 							]
 						],
 						"settings":
@@ -26586,13 +29227,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 34743.0,
+						"translation.y": 20326.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 44,
+					"buffer": 45,
 					"file": "admin/processupload/processupload.php",
 					"settings":
 					{
@@ -26727,7 +29368,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 36,
+					"buffer": 37,
 					"file": "admin/admin_images.php",
 					"settings":
 					{
@@ -26860,7 +29501,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 46,
+					"buffer": 47,
 					"file": "lib.php",
 					"settings":
 					{
@@ -26871,8 +29512,8 @@
 						"selection":
 						[
 							[
-								179,
-								179
+								11229,
+								11229
 							]
 						],
 						"settings":
@@ -26989,13 +29630,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6074.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 73,
+					"buffer": 79,
 					"file": "admin/manage_cuponManager.php",
 					"settings":
 					{
@@ -27123,7 +29764,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 1148.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -27264,19 +29905,19 @@
 					"type": "text"
 				},
 				{
-					"buffer": 47,
+					"buffer": 48,
 					"file": "command.php",
 					"settings":
 					{
-						"buffer_size": 8207,
+						"buffer_size": 8209,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								7466,
-								7466
+								7468,
+								7468
 							]
 						],
 						"settings":
@@ -27394,25 +30035,25 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 2898.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 94,
+					"buffer": 87,
 					"file": "data.php",
 					"settings":
 					{
-						"buffer_size": 2924,
+						"buffer_size": 2927,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								334,
-								340
+								2134,
+								2134
 							]
 						],
 						"settings":
@@ -27529,13 +30170,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 54.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 104,
+					"buffer": 114,
 					"file": "admin/jqueryupload/server/php/UploadHandler.php",
 					"settings":
 					{
@@ -27681,8 +30322,8 @@
 						"selection":
 						[
 							[
-								847,
-								847
+								4251,
+								4251
 							]
 						],
 						"settings":
@@ -27799,25 +30440,25 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 79.0,
+						"translation.y": 1742.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 50,
+					"buffer": 51,
 					"file": "DBManagerLib2.php",
 					"settings":
 					{
-						"buffer_size": 33003,
+						"buffer_size": 35014,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								20449,
-								20449
+								11794,
+								11794
 							]
 						],
 						"settings":
@@ -27934,7 +30575,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 0.0,
+						"translation.y": 6565.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -28075,7 +30716,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 105,
+					"buffer": 112,
 					"file": "DBManager2.php",
 					"settings":
 					{
@@ -28213,15 +30854,15 @@
 					"file": "DBManagerLib.php",
 					"settings":
 					{
-						"buffer_size": 38503,
+						"buffer_size": 38602,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								6061,
-								6063
+								6160,
+								6162
 							]
 						],
 						"settings":
@@ -28339,7 +30980,7 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 3101.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
@@ -28349,15 +30990,15 @@
 					"file": "command/cmd2.php",
 					"settings":
 					{
-						"buffer_size": 182337,
+						"buffer_size": 184939,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								42271,
-								42271
+								42702,
+								42702
 							]
 						],
 						"settings":
@@ -28474,13 +31115,13 @@
 							"translate_tabs_to_spaces": false
 						},
 						"translation.x": 0.0,
-						"translation.y": 21211.0,
+						"translation.y": 0.0,
 						"zoom_level": 1.0
 					},
 					"type": "text"
 				},
 				{
-					"buffer": 106,
+					"buffer": 58,
 					"file": "admin/manage_pvpRank.php",
 					"settings":
 					{
@@ -28614,7 +31255,7 @@
 					"type": "text"
 				},
 				{
-					"buffer": 27,
+					"buffer": 28,
 					"file": "admin/manage_puzzleHistory.php",
 					"settings":
 					{
@@ -28747,6 +31388,409 @@
 						"zoom_level": 1.0
 					},
 					"type": "text"
+				},
+				{
+					"buffer": 64,
+					"file": "admin/manage_attendenceEvent.php",
+					"settings":
+					{
+						"buffer_size": 798,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								469,
+								469
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 61,
+					"file": "admin/manage_attendenceEventDay.php",
+					"settings":
+					{
+						"buffer_size": 1506,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								190,
+								190
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 14.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 0,
+					"file": "admin/manage_header.php",
+					"settings":
+					{
+						"buffer_size": 6518,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								5150,
+								5150
+							]
+						],
+						"settings":
+						{
+							"codeintel": true,
+							"codeintel_config":
+							{
+								"JavaScript":
+								{
+									"codeintel_max_recursive_dir_depth": 2.0,
+									"codeintel_scan_files_in_project": false,
+									"javascriptExtraPaths":
+									[
+									]
+								},
+								"PHP":
+								{
+									"codeintel_max_recursive_dir_depth": 5.0,
+									"codeintel_scan_files_in_project": false,
+									"phpExtraPaths":
+									[
+									]
+								},
+								"Python":
+								{
+									"env":
+									{
+									}
+								}
+							},
+							"codeintel_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_live": true,
+							"codeintel_live_enabled_languages":
+							[
+								"JavaScript",
+								"Mason",
+								"XBL",
+								"XUL",
+								"RHTML",
+								"SCSS",
+								"Python",
+								"HTML",
+								"Ruby",
+								"Python3",
+								"XML",
+								"Sass",
+								"XSLT",
+								"Django",
+								"HTML5",
+								"Perl",
+								"CSS",
+								"Twig",
+								"Less",
+								"Smarty",
+								"Node.js",
+								"Tcl",
+								"TemplateToolkit",
+								"PHP"
+							],
+							"codeintel_max_recursive_dir_depth": 10.0,
+							"codeintel_scan_exclude_dir":
+							{
+								"JavaScript":
+								[
+									"/build/",
+									"/min/"
+								]
+							},
+							"codeintel_scan_files_in_project": true,
+							"codeintel_selected_catalogs":
+							[
+								"PyWin32",
+								"jQuery",
+								"Rails"
+							],
+							"codeintel_snippets": true,
+							"codeintel_syntax_map":
+							{
+								"Python Django": "Python"
+							},
+							"codeintel_tooltips": "popup",
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"sftp_duplicate_views": 0.0,
+							"sublime_auto_complete": true,
+							"synced": true,
+							"syntax": "Packages/PHP/PHP.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1914.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
 				}
 			]
 		}
@@ -28797,7 +31841,7 @@
 		"rows":
 		[
 			0.0,
-			0.390255232596,
+			0.503978058683,
 			1.0
 		]
 	},
@@ -28821,52 +31865,276 @@
 		"selected_items":
 		[
 			[
-				"dbmanager",
-				"DBManager.php"
+				"config",
+				"config.php"
 			],
 			[
 				"cmd2",
 				"command/cmd2.php"
 			],
 			[
-				"dbmana",
+				"dbmanag",
 				"DBManagerLib2.php"
 			],
 			[
-				"admin_card",
-				"admin/admin_card.php"
+				"command",
+				"command.php"
 			],
 			[
-				"manage_he",
-				"admin/manage_header.php"
+				"cmd",
+				"command/cmd2.php"
+			],
+			[
+				"dbmana",
+				"DBManager.php"
 			],
 			[
 				"index",
 				"admin/index.php"
 			],
 			[
-				"login",
-				"admin/manage_loginEvent.php"
+				"lqedi",
+				"admin/LQEditor.js"
 			],
 			[
-				"header",
-				"admin/header.php"
+				"dbm",
+				"DBManager.php"
 			],
 			[
-				"ma",
-				"admin/manage_header.php"
+				"eventday",
+				"admin/manage_attendenceEventDay.php"
+			],
+			[
+				"atten",
+				"admin/manage_attendenceEventDay.php"
+			],
+			[
+				"cardhis",
+				"admin/manage_cardHistory.php"
 			],
 			[
 				"lqdatata",
 				"admin/LQDataTable.js"
 			],
 			[
+				"manage_cardte",
+				"admin/manage_cardText.php"
+			],
+			[
+				"managehe",
+				"admin/manage_header.php"
+			],
+			[
+				"data",
+				"admin/dataManager2.php"
+			],
+			[
+				"arch",
+				"admin/manage_archivement.php"
+			],
+			[
+				"admin_card",
+				"admin/admin_card.php"
+			],
+			[
 				"manage_hea",
 				"admin/manage_header.php"
 			],
 			[
+				"manage_arch",
+				"admin/manage_archivement.php"
+			],
+			[
+				"piecehi",
+				"admin/manage_pieceHistory.php"
+			],
+			[
+				"manage_stagehi",
+				"admin/manage_stageHistory.html"
+			],
+			[
+				"lqeditor",
+				"admin/LQEditor.js"
+			],
+			[
+				"manage_comm",
+				"admin/manage_commonSetting.php"
+			],
+			[
+				"dbma",
+				"DBManager.php"
+			],
+			[
+				"dbmanage",
+				"DBManager.php"
+			],
+			[
+				"manage_he",
+				"admin/manage_header.php"
+			],
+			[
+				"pvpra",
+				"admin/manage_pvpRank.php"
+			],
+			[
+				"endle",
+				"admin/manage_endlessPlayList.php"
+			],
+			[
+				"userin",
+				"admin/manage_userInfo.php"
+			],
+			[
+				"dbman",
+				"DBManager.php"
+			],
+			[
+				"confi",
+				"config.php"
+			],
+			[
+				"apite",
+				"admin/admin_apiTest.php"
+			],
+			[
+				"manage_sho",
+				"admin/manage_shopEvent.php"
+			],
+			[
+				"common",
+				"admin/admin_commonSetting.php"
+			],
+			[
+				"dataman",
+				"admin/dataManager2.php"
+			],
+			[
+				"dbmanager",
+				"DBManager.php"
+			],
+			[
+				"lqd",
+				"admin/LQDataTable.js"
+			],
+			[
+				"lqdata",
+				"admin/LQDataTable.js"
+			],
+			[
 				"dbmanagerli",
+				"DBManagerLib2.php"
+			],
+			[
+				"manage_userin",
+				"admin/manage_userInfo.php"
+			],
+			[
+				"send",
+				"admin/manage_sendItem.php"
+			],
+			[
+				"lqed",
+				"admin/LQEditor.js"
+			],
+			[
+				"userinfo",
+				"admin/manage_userInfo.php"
+			],
+			[
+				"manage_cup",
+				"admin/manage_cuponCode.php"
+			],
+			[
+				"manage_att",
+				"admin/manage_attendenceEventDay.php"
+			],
+			[
+				"manage_cu",
+				"admin/manage_cuponManager.php"
+			],
+			[
+				"manage_cupon",
+				"admin/manage_cuponManager.php"
+			],
+			[
+				"att",
+				"admin/manage_attendenceEvent.php"
+			],
+			[
+				"pu",
+				"admin/manage_puzzleHistory.php"
+			],
+			[
+				"cha",
+				"admin/manage_characterHistory.php"
+			],
+			[
+				"cuc",
+				"admin/manage_cuponCode.php"
+			],
+			[
+				"cupon",
+				"admin/manage_cuponCode.php"
+			],
+			[
+				"puzzlehi",
+				"admin/manage_puzzleHistory.php"
+			],
+			[
+				"inde",
+				"admin/index.php"
+			],
+			[
+				"lq",
+				"admin/LQDataTable.css"
+			],
+			[
+				"lqe",
+				"admin/LQEditor.js"
+			],
+			[
+				"lqedito",
+				"admin/LQEditor.js"
+			],
+			[
+				"dbl",
 				"DBManagerLib.php"
+			],
+			[
+				"lqdatat",
+				"admin/LQDataTable.js"
+			],
+			[
+				"lib",
+				"admin/lib.js"
+			],
+			[
+				"hea",
+				"admin/header.php"
+			],
+			[
+				"",
+				"admin/LQDataTable.js"
+			],
+			[
+				"dbmanagerlib2",
+				"DBManagerLib2.php"
+			],
+			[
+				"header",
+				"admin/header.php"
+			],
+			[
+				"dbmanagerlib",
+				"DBManagerLib2.php"
+			],
+			[
+				"login",
+				"admin/manage_loginEvent.php"
+			],
+			[
+				"ma",
+				"admin/manage_header.php"
 			],
 			[
 				"manage_hear",
@@ -28885,14 +32153,6 @@
 				"admin/lib.js"
 			],
 			[
-				"lq",
-				"admin/LQDataTable.js"
-			],
-			[
-				"lqdata",
-				"admin/LQDataTable.js"
-			],
-			[
 				"manage_sta",
 				"admin/manage_stageRank.php"
 			],
@@ -28905,24 +32165,8 @@
 				"admin/manage_userStorage.php"
 			],
 			[
-				"",
-				"DBManagerLib2.php"
-			],
-			[
-				"dbmanagerlib",
-				"DBManagerLib.php"
-			],
-			[
-				"cmd",
-				"command/cmd2.php"
-			],
-			[
 				"piece",
 				"admin/manage_pieceHistory.php"
-			],
-			[
-				"dbma",
-				"DBManager.php"
 			],
 			[
 				"cardhi",
@@ -28931,14 +32175,6 @@
 			[
 				"character",
 				"admin/manage_character.php"
-			],
-			[
-				"piecehi",
-				"admin/manage_pieceHistory.php"
-			],
-			[
-				"puzzlehi",
-				"admin/manage_puzzleHistory.php"
 			],
 			[
 				"db",
@@ -28953,24 +32189,12 @@
 				"DBManagerLib2.php"
 			],
 			[
-				"command",
-				"command.php"
-			],
-			[
-				"confi",
-				"config.php"
-			],
-			[
 				"dbmanager.ph",
 				"DBManager.php"
 			],
 			[
 				"join",
 				"admin/jqueryupload/index.html"
-			],
-			[
-				"dbmanagerlib2",
-				"DBManagerLib2.php"
 			],
 			[
 				"dbli",
@@ -28981,16 +32205,8 @@
 				"DBManagerLib.php"
 			],
 			[
-				"dbman",
-				"DBManager.php"
-			],
-			[
 				"dblib2",
 				"DBManagerLib2.php"
-			],
-			[
-				"dbl",
-				"DBManagerLib.php"
 			],
 			[
 				"manager",
@@ -29011,14 +32227,6 @@
 			[
 				"admin_mission",
 				"admin/admin_mission.php"
-			],
-			[
-				"dbmanage",
-				"DBManager.php"
-			],
-			[
-				"inde",
-				"admin/index.php"
 			],
 			[
 				"card",
@@ -29047,10 +32255,6 @@
 			[
 				"logine",
 				"admin/manage_loginEvent.php"
-			],
-			[
-				"lib",
-				"lib.php"
 			],
 			[
 				"dblib",
@@ -29093,10 +32297,6 @@
 				"admin/manage_balance.php"
 			],
 			[
-				"config",
-				"config.php"
-			],
-			[
 				"upload",
 				"admin/jqueryupload/server/php/UploadHandler.php"
 			],
@@ -29105,16 +32305,8 @@
 				"admin/dataManager2.php"
 			],
 			[
-				"dataman",
-				"admin/dataManager2.php"
-			],
-			[
 				"data.php",
 				"data.php"
-			],
-			[
-				"hea",
-				"admin/manage_header.php"
 			],
 			[
 				"manage_no",
@@ -29123,10 +32315,6 @@
 			[
 				"admin",
 				"admin/admin.php"
-			],
-			[
-				"userin",
-				"admin/manage_userInfo.php"
 			],
 			[
 				"uerinfo",
@@ -29169,10 +32357,6 @@
 				"admin/manage_userStorage.php"
 			],
 			[
-				"manage_userin",
-				"admin/manage_userInfo.php"
-			],
-			[
 				"manage",
 				"admin/manage_header.php"
 			],
@@ -29191,146 +32375,6 @@
 			[
 				"userstora",
 				"admin/manage_userStorage.php"
-			],
-			[
-				"giftbox",
-				"admin/manage_giftBoxHistory.php"
-			],
-			[
-				"archi",
-				"admin/manage_archivementHistory.php"
-			],
-			[
-				"arhiv",
-				"admin/manage_archivementHistory.php"
-			],
-			[
-				"char",
-				"admin/manage_characterHistory.php"
-			],
-			[
-				"manage_cuponm",
-				"admin/manage_cuponManager.php"
-			],
-			[
-				"index.php",
-				"admin/index.php"
-			],
-			[
-				"datamana",
-				"admin/dataManager2.php"
-			],
-			[
-				"datama",
-				"admin/dataManager.php"
-			],
-			[
-				"datamanger",
-				"admin/dataManager2.php"
-			],
-			[
-				"untit",
-				"admin/jqueryupload/server/php/files/thum/untitled file"
-			],
-			[
-				"dbmanag",
-				"DBManager.php"
-			],
-			[
-				"lib.p",
-				"lib.php"
-			],
-			[
-				"logineve",
-				"admin/manage_loginEvent.php"
-			],
-			[
-				"admin_mon",
-				"admin/admin_monster.php"
-			],
-			[
-				"admin_resources",
-				"admin/admin_resources.php"
-			],
-			[
-				"admin_ima",
-				"admin/admin_images.php"
-			],
-			[
-				"admin_rs",
-				"admin/admin_resources.php"
-			],
-			[
-				"datasele",
-				"admin/dataSelector.php"
-			],
-			[
-				"mons",
-				"admin/admin_monster.php"
-			],
-			[
-				"admin_images",
-				"admin/admin_images.php"
-			],
-			[
-				"cuponcode",
-				"admin/manage_cuponCode.php"
-			],
-			[
-				"sendite",
-				"admin/manage_sendItem.php"
-			],
-			[
-				"send",
-				"admin/manage_sendItem.php"
-			],
-			[
-				"sendi",
-				"admin/manage_sendItem.php"
-			],
-			[
-				"excel",
-				"admin/phpexcel/PHPExcel/Reader/Excel2007.php"
-			],
-			[
-				"exce",
-				"admin/excel_reader2.php"
-			],
-			[
-				"excel2",
-				"admin/excel_reader2.php"
-			],
-			[
-				"pro",
-				"admin/processupload/processupload.php"
-			],
-			[
-				"p",
-				"admin/processupload/processupload.php"
-			],
-			[
-				"manage_send",
-				"admin/manage_sendItem.php"
-			],
-			[
-				"processupload.php",
-				"admin/processupload/processupload.php"
-			],
-			[
-				"sendim",
-				"admin/manage_sendItem.php"
-			],
-			[
-				"manage_foo",
-				"admin/manage_footer.php"
-			],
-			[
-				"modfiy",
-				"admin/manage_modifyHistory.php"
-			],
-			[
-				"senditem",
-				"admin/manage_sendItem.php"
 			]
 		],
 		"width": 0.0

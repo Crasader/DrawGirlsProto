@@ -33,6 +33,9 @@ if($admin->isLogined() && !$_GET["mode"]){
  //echo LogManager::printLog();
 // echo "<br><br>";
 // var_dump(DBGroup::create("user"));
+
+
+
 ?>
 <html>
 <head>
@@ -836,7 +839,7 @@ $missionList[6]=json_decode('{"type":6,"option":{}}',true); // 결벽주의자
 $missionList[7]=json_decode('{"type":7,"option":{"sec":70}}',true); // 비지니스맨
 
 
-$usingMission=array(2,4,7);
+$usingMission=array(2,4,7,0);
 
 function getMission($stageNo,$stageLevel){
 	global $usingMission,$missionList;
@@ -1114,7 +1117,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 $bossData = array();
 
 
-$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 order by no asc",DBManager::getMainConnection());
+$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 and autoLevel=1 order by no asc",DBManager::getMainConnection());
 while($data = mysql_fetch_array($result)){
 	//$data[level] = ceil($data[no]/5);
 	$data[level] = $data[no];
