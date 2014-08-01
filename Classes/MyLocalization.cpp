@@ -1166,10 +1166,10 @@ void MyLocal::ko()
 	 
 	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	ko->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
-	ko->setObject(CCString::create("<font color=#FFFFFF>남은 판수 </font>"
-																								"<font color=#FFAA14 size=12>%d회 / </font>"
-																								"<font color=#FFFFFF>성공시 </font>"
-																								"<font color=#FFAA14 size=12>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
+	ko->setObject(CCString::create("<font color=#FFFFFF strokesize=1 >남은 판수 </font>"
+																								"<font color=#FFAA14 size=12 strokesize=1>%d회 / </font>"
+																								"<font color=#FFFFFF strokesize=1>성공시 </font>"
+																								"<font color=#FFAA14 size=12 strokesize=1>%.1f%% 획득</font>"), kMyLocalKey_onePercentDesc2);
 	
 	ko->setObject(CCString::create("대전상대를 찾는 중입니다."), kMyLocalKey_rivalSearch);
 	
