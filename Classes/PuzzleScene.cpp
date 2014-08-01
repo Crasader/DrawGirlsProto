@@ -492,6 +492,11 @@ bool PuzzleScene::init()
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
+			clear_is_perfect_piece = true;
+		}
+		else
+		{
+			clear_is_perfect_piece = false;
 		}
 		
 		mySGD->addHasGottenCardNumber(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level));
@@ -499,7 +504,6 @@ bool PuzzleScene::init()
 		keep_card_number = 0;
 		
 		clear_is_empty_piece = true;
-		clear_is_perfect_piece = true;
 		int played_stage_number = mySD->getSilType();
 		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
 		for(int i=1;i<=stage_card_count;i++)
