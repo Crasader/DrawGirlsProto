@@ -2274,8 +2274,6 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
-	myDSH->setIntegerForKey(kDSH_Key_showedScenario, 0); // test
-	
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());

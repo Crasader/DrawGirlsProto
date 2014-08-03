@@ -1162,7 +1162,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	ko->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
-	ko->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	ko->setObject(CCString::create("연승 정보는 유지되며, 다시 PvP 도전 시\n저장된 연승에 이어서 플레이할 수 있습니다."), kMyLocalKey_endlessKeepWinContent);
 	 
 	ko->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	ko->setObject(CCString::create("닉네임 오류"), kMyLocalKey_nicknameError);
@@ -1284,7 +1284,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	ko->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ko->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	ko->setObject(CCString::create("연승에 도전하시면 생명의 돌을\n받을 수 있어요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ko->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
 	ko->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
@@ -1427,12 +1427,13 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	ko->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
-	ko->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	ko->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	ko->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	ko->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ko->setObject(CCString::create("<font size=13 strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ko->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ko->setObject(CCString::create("<font size=12>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	ko->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ko->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ko->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ko->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ko->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ko->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	ko->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	ko->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);
@@ -1441,7 +1442,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘 부탁 드립니다.\n훈련 전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	ko->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	ko->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
-	ko->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
+	ko->setObject(CCString::create("시노비 결계 속에서 대전하는 법을\n익히시면 됩니다."), kMyLocalKey_scenarioMent8);
 	ko->setObject(CCString::create("네. 그러면 잘 부탁 드리겠습니다."), kMyLocalKey_scenarioMent9);
 	ko->setObject(CCString::create("그전에 간단히 메뉴들을 소개해 드릴께요."), kMyLocalKey_scenarioMent10);
 	ko->setObject(CCString::create("숙지하겠습니다."), kMyLocalKey_scenarioMent11);
@@ -1491,7 +1492,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	ko->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	ko->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	ko->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	ko->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수가 추가됩니다."), kMyLocalKey_scenarioMent58);
 	ko->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ko->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ko->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
@@ -2196,7 +2197,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	en->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
-	en->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	en->setObject(CCString::create("연승 정보는 유지되며, 다시 PvP 도전 시\n저장된 연승에 이어서 플레이할 수 있습니다."), kMyLocalKey_endlessKeepWinContent);
 	
 	en->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	
@@ -2322,7 +2323,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	en->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	en->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	en->setObject(CCString::create("연승에 도전하시면 생명의 돌을\n받을 수 있어요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	en->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
 	en->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
@@ -2450,12 +2451,13 @@ void MyLocal::en()
 	en->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
-	en->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	en->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	en->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	en->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	en->setObject(CCString::create("<font size=13  strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	en->setObject(CCString::create("<font size=13> strokesize=0이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	en->setObject(CCString::create("<font size=12>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	en->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	en->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	en->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	en->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	en->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	en->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	en->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	en->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);
@@ -2464,7 +2466,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘 부탁 드립니다.\n훈련 전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	en->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	en->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
-	en->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
+	en->setObject(CCString::create("시노비 결계 속에서 대전하는 법을\n익히시면 됩니다."), kMyLocalKey_scenarioMent8);
 	en->setObject(CCString::create("네. 그러면 잘 부탁 드리겠습니다."), kMyLocalKey_scenarioMent9);
 	en->setObject(CCString::create("그전에 간단히 메뉴들을 소개해 드릴께요."), kMyLocalKey_scenarioMent10);
 	en->setObject(CCString::create("숙지하겠습니다."), kMyLocalKey_scenarioMent11);
@@ -2514,7 +2516,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	en->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	en->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	en->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	en->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수가 추가됩니다."), kMyLocalKey_scenarioMent58);
 	en->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	en->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	en->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
@@ -3241,7 +3243,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("대전패배"), kMyLocalKey_endlessKeepWin);
 	
 	ja->setObject(CCString::create("연승저장"), kMyLocalKey_endlessKeepWinTitle);
-	ja->setObject(CCString::create("연승 정보는 유지됩니다."), kMyLocalKey_endlessKeepWinContent);
+	ja->setObject(CCString::create("연승 정보는 유지되며, 다시 PvP 도전 시\n저장된 연승에 이어서 플레이할 수 있습니다."), kMyLocalKey_endlessKeepWinContent);
 	
 	ja->setObject(CCString::create("%d연승 도전"), kMyLocalKey_endlessReadyIngWin);
 	
@@ -3367,7 +3369,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	ja->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ja->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	ja->setObject(CCString::create("연승에 도전하시면 생명의 돌을\n받을 수 있어요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ja->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
 	ja->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
@@ -3495,12 +3497,13 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	ja->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
-	ja->setObject(CCString::create("<font size=12>PVP랭킹은 연승이 중요해요.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	ja->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	ja->setObject(CCString::create("<font size=12>PVP점수는 기본주간랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	ja->setObject(CCString::create("<font size=12>랭킹은 매주 갱신됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ja->setObject(CCString::create("<font size=13 strokesize=0>무한모드 점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ja->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ja->setObject(CCString::create("<font size=12>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
+	ja->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ja->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ja->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ja->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ja->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ja->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	ja->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	ja->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);
@@ -3509,7 +3512,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("네. 전설의 닌자 한조님의 손녀라고\n들었습니다. 잘 부탁 드립니다.\n훈련 전에 선생님께서 간단한 시험을\n하신다는군요."), kMyLocalKey_scenarioMent5);
 	ja->setObject(CCString::create("으윽, 시험은 그다지 좋아하지 않지만\n알겠습니다."), kMyLocalKey_scenarioMent6);
 	ja->setObject(CCString::create("어떤 시험인가요?"), kMyLocalKey_scenarioMent7);
-	ja->setObject(CCString::create("선생님이 둔갑술로 움직이는\n허수아비 인형을 쓰러뜨리면 됩니다."), kMyLocalKey_scenarioMent8);
+	ja->setObject(CCString::create("시노비 결계 속에서 대전하는 법을\n익히시면 됩니다."), kMyLocalKey_scenarioMent8);
 	ja->setObject(CCString::create("네. 그러면 잘 부탁 드리겠습니다."), kMyLocalKey_scenarioMent9);
 	ja->setObject(CCString::create("그전에 간단히 메뉴들을 소개해 드릴께요."), kMyLocalKey_scenarioMent10);
 	ja->setObject(CCString::create("숙지하겠습니다."), kMyLocalKey_scenarioMent11);
@@ -3559,7 +3562,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠."), kMyLocalKey_scenarioMent55);
 	ja->setObject(CCString::create("제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요."), kMyLocalKey_scenarioMent56);
 	ja->setObject(CCString::create("아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요."), kMyLocalKey_scenarioMent57);
-	ja->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!"), kMyLocalKey_scenarioMent58);
+	ja->setObject(CCString::create("폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수가 추가됩니다."), kMyLocalKey_scenarioMent58);
 	ja->setObject(CCString::create("행운을 빌어요."), kMyLocalKey_scenarioMent59);
 	ja->setObject(CCString::create("첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만.."), kMyLocalKey_scenarioMent60);
 	ja->setObject(CCString::create("PVP가 끝나면 이곳으로 와요."), kMyLocalKey_scenarioMent61);
