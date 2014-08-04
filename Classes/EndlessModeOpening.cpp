@@ -100,7 +100,7 @@ void EndlessModeOpening::setMain()
 	main_case->addChild(title_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 14);
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1.5f));
 	title_back->addChild(title_label);
@@ -178,6 +178,7 @@ void EndlessModeOpening::setMain()
 	tipBack->setPosition(ccp(main_case->getContentSize().width*0.417f, main_case->getContentSize().height+2-25));
 	main_case->addChild(tipBack);
 	KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
+	tipLbl->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 //	tipLbl->disableOuterStroke();
 	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f + ccp(0,1));
 	tipBack->addChild(tipLbl);
@@ -189,7 +190,7 @@ void EndlessModeOpening::setMain()
 	
 	
 	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 12);
-	left_title->disableOuterStroke();
+	left_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	left_title->setAnchorPoint(ccp(0.5f,0.5f));
 	left_title->setPosition(ccp(40,left_back->getContentSize().height-15));
 	left_back->addChild(left_title);
@@ -202,13 +203,13 @@ void EndlessModeOpening::setMain()
 	left_back->addChild(rest_back);
 	
 	rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTime), mySGD->getFont().c_str(), 11);
-	rest_time_title->disableOuterStroke();
+	rest_time_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	rest_time_title->setAnchorPoint(ccp(0.5f,0.5f));
 	rest_back->addChild(rest_time_title);
 	
 	rest_time_value = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), 0), mySGD->getFont().c_str(), 11);
+	rest_time_value->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	rest_time_value->setVisible(false);
-	rest_time_value->disableOuterStroke();
 	rest_time_value->setAnchorPoint(ccp(0.5f,0.5f));
 	rest_back->addChild(rest_time_value);
 	
@@ -237,13 +238,13 @@ void EndlessModeOpening::setMain()
 	
 	CCSprite* n_info = CCSprite::create("endless_bt_down.png");
 	KSLabelTTF* n_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
-	n_info_label->disableOuterStroke();
+	n_info_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_info_label->setPosition(ccpFromSize(n_info->getContentSize()/2.f));
 	n_info->addChild(n_info_label);
 	CCSprite* s_info = CCSprite::create("endless_bt_down.png");
 	s_info->setColor(ccGRAY);
 	KSLabelTTF* s_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
-	s_info_label->disableOuterStroke();
+	s_info_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_info_label->setPosition(ccpFromSize(s_info->getContentSize()/2.f));
 	s_info->addChild(s_info_label);
 	CCSprite* d_info = CCSprite::create("endless_bt_up.png");
@@ -270,13 +271,13 @@ void EndlessModeOpening::setMain()
 	
 	CCSprite* n_reward = CCSprite::create("endless_bt_down.png");
 	KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
-	n_reward_label->disableOuterStroke();
+	n_reward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_reward_label->setPosition(ccpFromSize(n_reward->getContentSize()/2.f));
 	n_reward->addChild(n_reward_label);
 	CCSprite* s_reward = CCSprite::create("endless_bt_down.png");
 	s_reward->setColor(ccGRAY);
 	KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
-	s_reward_label->disableOuterStroke();
+	s_reward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_reward_label->setPosition(ccpFromSize(s_reward->getContentSize()/2.f));
 	s_reward->addChild(s_reward_label);
 	CCSprite* d_reward = CCSprite::create("endless_bt_up.png");
@@ -313,7 +314,7 @@ void EndlessModeOpening::setMain()
 	graph_img->addChild(rank_percent_case);
 	
 	percent_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
-	percent_label->disableOuterStroke();
+	percent_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	percent_label->setOpacity(0);
 	percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1,
 																 rank_percent_case->getContentSize().height/2.f-3));
@@ -326,7 +327,7 @@ void EndlessModeOpening::setMain()
 	right_info_node->addChild(record_back);
 	
 	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 11);
-	record_title->disableOuterStroke();
+	record_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	record_title->setAnchorPoint(ccp(0,0.5f));
 	record_title->setPosition(ccp(5, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_title);
@@ -338,13 +339,13 @@ void EndlessModeOpening::setMain()
 	right_info_node->addChild(highscore_back);
 	
 	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 11);
-	highscore_title->disableOuterStroke();
+	highscore_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
 	highscore_title->setPosition(ccp(5, highscore_back->getContentSize().height/2.f));
 	highscore_back->addChild(highscore_title);
 	
 	highscore_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 11);
-	highscore_content->disableOuterStroke();
+	highscore_content->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	highscore_content->setAnchorPoint(ccp(1,0.5f));
 	highscore_content->setPosition(ccp(highscore_back->getContentSize().width-5,
 																		 highscore_back->getContentSize().height/2.f));
@@ -356,13 +357,13 @@ void EndlessModeOpening::setMain()
 	right_info_node->addChild(straight_back);
 	
 	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 11);
-	straight_title->disableOuterStroke();
+	straight_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	straight_title->setAnchorPoint(ccp(0,0.5f));
 	straight_title->setPosition(ccp(5, straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_title);
 	
 	straight_content = KSLabelTTF::create("", mySGD->getFont().c_str(), 11);
-	straight_content->disableOuterStroke();
+	straight_content->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	straight_content->setAnchorPoint(ccp(1,0.5f));
 	straight_content->setPosition(ccp(straight_back->getContentSize().width-5,
 																		straight_back->getContentSize().height/2.f));
@@ -1416,7 +1417,7 @@ public:
 		//	contentStr = KS::replaceAll(contentStr, "%", "%");
 		StyledLabelTTF* reward2Lbl = StyledLabelTTF::create(
 																												ccsf("<font color=#FFAA14 size=11 newline=13>%s</font>"
-																														 "<font color=999 size=9>%s</font>",
+																														 "<font color=999 size=9 strokesize=0.5 strokeopacity=150>%s</font>",
 																														 titleStr.c_str(), contentStr.c_str()),
 																												mySGD->getFont().c_str(),
 																												15.f, 999, StyledAlignment::kLeftAlignment);
@@ -1676,7 +1677,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		else
 		{
 			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", my_rank)->getCString(), mySGD->getFont().c_str(), 12);
-			rank_label->disableOuterStroke();
+			rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			rank_label->setPosition(rank_position);
 			list_cell_case->addChild(rank_label);
 		}
@@ -1689,9 +1690,9 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(selectedFlagSpr);
 		
 		KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
+		nick_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		nick_label->setColor(ccc3(53, 41, 144));
 		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->disableOuterStroke();
 		nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(nick_label);
 		
@@ -1790,7 +1791,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	else
 	{
 		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
-		rank_label->disableOuterStroke();
+		rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		rank_label->setPosition(rank_position);
 		list_cell_case->addChild(rank_label);
 	}
@@ -1956,7 +1957,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	}
 	right_nick = KSLabelTTF::create(info.get("nick", "").asString().c_str(),
 																	mySGD->getFont().c_str(), 12.f);
-	right_nick->disableOuterStroke();
+	right_nick->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	right_nick->setAnchorPoint(ccp(0.5f, 0.5f));
 	right_nick->setPosition(ccp(right_flag->getContentSize().width/2.f+2, 0));
 	flagnick->addChild(right_nick);
