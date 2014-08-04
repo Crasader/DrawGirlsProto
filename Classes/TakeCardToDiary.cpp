@@ -248,7 +248,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	target->addChild(r_profile_label);
 	
 	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 7, CCSizeMake(175, 50), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(25,156));
+	r_stage_profile->setPosition(ccp(25,153));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
@@ -337,7 +337,7 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	//		}
 	
 	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
-	left_top_paper->setPosition(ccp(46,277));
+	left_top_paper->setPosition(ccp(46,278));
 	target->addChild(left_top_paper);
 	left_top_paper->setOpacity(0);
 	
