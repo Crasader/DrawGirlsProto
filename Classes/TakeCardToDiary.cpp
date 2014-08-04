@@ -8,6 +8,7 @@
 
 #include "TakeCardToDiary.h"
 #include "MyLocalization.h"
+#include "EffectSprite.h"
 TakeCardToDiary* TakeCardToDiary::create(int t_take_card_number, std::function<void()> t_end_func)
 {
 	TakeCardToDiary* t_tctd = new TakeCardToDiary();
@@ -321,6 +322,14 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	
 	smaller_img = r_card_img;
 	
+	if(mySGD->is_safety_mode)
+	{
+		EffectSprite* safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+		safety_img->setSilhouetteConvert(0);
+		safety_img->setPosition(ccpFromSize(r_card_img->getContentSize()/2.f));
+		r_card_img->addChild(safety_img);
+	}
+	
 	//		if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number))
 	//		{
 	//			CollectionAnimation* t_ca = CollectionAnimation::create(card_number);
@@ -345,6 +354,6 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	card_number_label->setColor(ccBLACK);
 	card_number_label->disableOuterStroke();
 	card_number_label->setAnchorPoint(ccp(0,0.5f));
-	card_number_label->setPosition(ccp(38,295));
+	card_number_label->setPosition(ccp(38,294));
 	target->addChild(card_number_label);
 }

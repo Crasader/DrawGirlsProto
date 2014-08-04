@@ -431,7 +431,7 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	card_number_label->setColor(ccBLACK);
 	card_number_label->disableOuterStroke();
 	card_number_label->setAnchorPoint(ccp(0,0.5f));
-	card_number_label->setPosition(ccp(38,295));
+	card_number_label->setPosition(ccp(38,294));
 	target->addChild(card_number_label);
 	
 	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");

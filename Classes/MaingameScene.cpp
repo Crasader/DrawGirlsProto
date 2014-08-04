@@ -3641,7 +3641,7 @@ void Maingame::startExchange()
 	AudioEngine::sharedInstance()->playSound("sound_back_maingame2.mp3", true);
 	AudioEngine::sharedInstance()->playEffect("ment_change_success.mp3", false, true);
 	
-	
+	mySGD->is_exchanged = true;
 	mySD->exchangeSilhouette();
 	myMS->exchangeMS();
 	

@@ -930,7 +930,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			graph_front->setPosition(graph_back->getPosition());
 			cell_back->addChild(graph_front);
 			
-			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
+			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code)/*myAchieve->getRecentValue(recent_code)*/)->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
 //			progress_label->disableOuterStroke();
 			progress_label->setAnchorPoint(ccp(0,0.5f));
 			progress_label->setPosition(ccp(5, graph_back->getContentSize().height/2.f));
