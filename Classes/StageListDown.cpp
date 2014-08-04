@@ -1279,7 +1279,8 @@ void StageListDown::successAction()
 		
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -1291,13 +1292,17 @@ void StageListDown::successAction()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
 			
 			if(i % 3 == 0)
 			{
@@ -1990,7 +1995,8 @@ void StageListDown::startDownloadSet()
 		// reduce
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -2002,13 +2008,17 @@ void StageListDown::startDownloadSet()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
 			
 			if(i % 3 == 0)
 			{
