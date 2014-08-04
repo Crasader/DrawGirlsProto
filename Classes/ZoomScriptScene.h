@@ -109,6 +109,8 @@ private:
 	CCPoint touchStart_p;
 	CCPoint moveSpeed_p;
 	float zoom_base_distance;
+	float zoom_base_radian;
+	CCSprite* card_back;
 	
 	map<int, CCPoint> multiTouchData;
 	

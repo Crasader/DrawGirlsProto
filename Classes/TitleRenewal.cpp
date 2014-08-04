@@ -306,27 +306,33 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		CCLOG("saved time zone : ",tz.c_str());
 	}
 		
-	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
-	{
-		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
-	}
-	else
-	{
-		if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
-		{
-			SaveData::sharedObject()->resetAllData();
-			myDSH->removeCache();
-			mySDS->removeCache();
-			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-			return;
-		}
-	}
+
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{
+		
+		if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
+		{
+			myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
+		}
+		else
+		{
+			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
+			{
+				SaveData::sharedObject()->resetAllData();
+				myDSH->removeCache();
+				mySDS->removeCache();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				return;
+			}
+		}
+		
+		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+	
+	
 	}
 	else
 	{
