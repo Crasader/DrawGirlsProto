@@ -3550,7 +3550,7 @@ void PlayUI::myInit ()
 	detail_counting_cnt = 0;
 	is_urgent = false;
 	use_time = 0;
-	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
+	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime")-1;
 	total_time = playtime_limit.getV();
 	
 	clr_cdt_type = mySD->getClearCondition();
@@ -3568,7 +3568,7 @@ void PlayUI::myInit ()
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
 //	addChild(time_back);
 	
-	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV())->getCString(), "timefont.fnt");
+	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV()+1)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,17-UI_OUT_DISTANCE));

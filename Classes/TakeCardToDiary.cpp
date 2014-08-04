@@ -246,8 +246,8 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	r_profile_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_profile_label);
 	
-	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 50), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(25,159));
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 7, CCSizeMake(175, 50), kCCTextAlignmentLeft);
+	r_stage_profile->setPosition(ccp(25,156));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
@@ -292,21 +292,14 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 	
 	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
-	r_stage_label->setAnchorPoint(ccp(0,0.5f));
-	r_stage_label->setPosition(ccp(136, 288));
+	r_stage_label->setAnchorPoint(ccp(1,0.5f));
+	r_stage_label->setPosition(ccp(167, 288));
 	r_stage_label->setColor(ccBLACK);
 	target->addChild(r_stage_label);
 }
 
 void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 {
-	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
-	card_number_label->setColor(ccBLACK);
-	card_number_label->disableOuterStroke();
-	card_number_label->setAnchorPoint(ccp(0,0.5f));
-	card_number_label->setPosition(ccp(38,295));
-	target->addChild(card_number_label);
-	
 	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
 	take_cnt_label->setColor(ccBLACK);
 	take_cnt_label->disableOuterStroke();
@@ -347,4 +340,11 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	target->addChild(right_bottom_paper);
 	bottom_cover = right_bottom_paper;
 	right_bottom_paper->setOpacity(0);
+	
+	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
+	card_number_label->setColor(ccBLACK);
+	card_number_label->disableOuterStroke();
+	card_number_label->setAnchorPoint(ccp(0,0.5f));
+	card_number_label->setPosition(ccp(38,295));
+	target->addChild(card_number_label);
 }

@@ -150,8 +150,8 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	profile_back->setPosition(ccp(25,157));
 //	target->addChild(profile_back);
 	
-	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 50), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(25,159));
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 7, CCSizeMake(175, 50), kCCTextAlignmentLeft);
+	r_stage_profile->setPosition(ccp(25,156));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
@@ -204,6 +204,8 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(close, 1, kCBP_MT_close);
 	
 	CommonButton* gift = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), 9, CCSizeMake(80,32), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), -191);
+	KSLabelTTF* gift_label = gift->getTitleLabel();
+	gift_label->disableOuterStroke();
 	gift->setFunction([=](CCObject* sender)
 					  {
 						  if(!is_menu_enable)
@@ -389,8 +391,8 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		
 		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
-		r_stage_label->setAnchorPoint(ccp(0,0.5f));
-		r_stage_label->setPosition(ccp(136, 288));
+		r_stage_label->setAnchorPoint(ccp(1,0.5f));
+		r_stage_label->setPosition(ccp(167, 288));
 		r_stage_label->setColor(ccBLACK);
 		target->addChild(r_stage_label);
 //	}
@@ -398,13 +400,6 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 {
-	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
-	card_number_label->setColor(ccBLACK);
-	card_number_label->disableOuterStroke();
-	card_number_label->setAnchorPoint(ccp(0,0.5f));
-	card_number_label->setPosition(ccp(38,295));
-	target->addChild(card_number_label);
-	
 	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
 	take_cnt_label->setColor(ccBLACK);
 	take_cnt_label->disableOuterStroke();
@@ -414,7 +409,7 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(0.57);
-	r_card_img->setPosition(ccp(129,161));
+	r_card_img->setPosition(ccp(129,159));
 	target->addChild(r_card_img);
 	
 	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number))
@@ -424,13 +419,20 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	}
 	
 	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
-	left_top_paper->setPosition(ccp(46,277));
+	left_top_paper->setPosition(ccp(44,275));
 	target->addChild(left_top_paper);
 	
 	CCSprite* right_bottom_paper = CCSprite::create("diary_paper.png");
 	right_bottom_paper->setRotation(180);
 	right_bottom_paper->setPosition(ccp(213,44));
 	target->addChild(right_bottom_paper);
+	
+	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
+	card_number_label->setColor(ccBLACK);
+	card_number_label->disableOuterStroke();
+	card_number_label->setAnchorPoint(ccp(0,0.5f));
+	card_number_label->setPosition(ccp(38,295));
+	target->addChild(card_number_label);
 	
 	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
