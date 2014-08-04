@@ -1340,6 +1340,14 @@ void Jack::endBackTracking()
 			}
 		}
 	}
+	
+	afterPoint = IntPoint::convertToIntPoint(getPosition());
+	
+	if(myGD->mapState[afterPoint.x][afterPoint.y] != mapOldline)
+	{
+		IntMoveState searchFirstMoveState = IntMoveState(afterPoint.x, afterPoint.y, directionStop);
+		searchAndMoveOldline(searchFirstMoveState);
+	}
 }
 
 void Jack::changeSpeed( float t_s )
