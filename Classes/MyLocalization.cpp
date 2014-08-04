@@ -643,7 +643,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("아이템 뽑기"), kMyLocalKey_itemGachaTitle);
 	ko->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	ko->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
-	ko->setObject(CCString::create("부활,무적아이템에 도전하세요!"), kMyLocalKey_itemGachaContent);
+	ko->setObject(CCString::create("부활 아이템에 도전하세요!"), kMyLocalKey_itemGachaContent);
 	ko->setObject(CCString::create("젬상점"), kMyLocalKey_rubyShop);
 	ko->setObject(CCString::create("골드상점"), kMyLocalKey_goldShop);
 	ko->setObject(CCString::create("하트상점"), kMyLocalKey_heartShop);
@@ -659,7 +659,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("효과음"), kMyLocalKey_effect);
 	ko->setObject(CCString::create("조이스틱\n위치"), kMyLocalKey_joystickPosition);
 	ko->setObject(CCString::create("조이스틱\n조작"), kMyLocalKey_joystickControl);
-	ko->setObject(CCString::create("안전모드"), kMyLocalKey_safetyMode);
+	ko->setObject(CCString::create("대중교통\n모드"), kMyLocalKey_safetyMode);
 	ko->setObject(CCString::create("알림"), kMyLocalKey_noti);
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
@@ -1414,7 +1414,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	ko->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
 	ko->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
-	ko->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
+	ko->setObject(CCString::create("다음"), kMyLocalKey_tutorialNextButton);
 	
 	ko->setObject(CCString::create("<font newline=16>선택된</font><font>스테이지</font>"), kMyLocalKey_puzzleDimmed1);
 	ko->setObject(CCString::create("<font>스테이지</font>"), kMyLocalKey_puzzleDimmed2);
@@ -1690,7 +1690,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
 	en->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	en->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
-	en->setObject(CCString::create("Resurrection, the invincible challenge your items!"), kMyLocalKey_itemGachaContent);
+	en->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	en->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	en->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
 	en->setObject(CCString::create("HEART SHOP"), kMyLocalKey_heartShop);
@@ -2447,7 +2447,12 @@ void MyLocal::en()
 	en->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	en->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
 	en->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
-	en->setObject(CCString::create("다음 ▶︎"), kMyLocalKey_tutorialNextButton);
+	en->setObject(CCString::create("다음"), kMyLocalKey_tutorialNextButton);
+	
+	en->setObject(CCString::create("<font newline=16>선택된</font><font>스테이지</font>"), kMyLocalKey_puzzleDimmed1);
+	en->setObject(CCString::create("<font>스테이지</font>"), kMyLocalKey_puzzleDimmed2);
+	en->setObject(CCString::create("<font newline=16>스테이지</font><font>클리어 정보</font>"), kMyLocalKey_puzzleDimmed3);
+	en->setObject(CCString::create("<font>게임준비</font>"), kMyLocalKey_puzzleDimmed4);
 	
 	en->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
@@ -2724,7 +2729,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
 	ja->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
 	ja->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
-	ja->setObject(CCString::create("Resurrection, the invincible challenge your items!"), kMyLocalKey_itemGachaContent);
+	ja->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	ja->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	ja->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
 	ja->setObject(CCString::create("HEART SHOP"), kMyLocalKey_heartShop);
@@ -3494,7 +3499,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\""), kMyLocalKey_nickBottomMent);
 	ja->setObject(CCString::create("아이디를 입력해주세요."), kMyLocalKey_pleaseInputID);
 	ja->setObject(CCString::create("유효하지 않은 아이디 입니다."), kMyLocalKey_invalidID);
-	ja->setObject(CCString::create("다음  ▶︎"), kMyLocalKey_tutorialNextButton);
+	ja->setObject(CCString::create("다음"), kMyLocalKey_tutorialNextButton);
+	
+	ja->setObject(CCString::create("<font newline=16>선택된</font><font>스테이지</font>"), kMyLocalKey_puzzleDimmed1);
+	ja->setObject(CCString::create("<font>스테이지</font>"), kMyLocalKey_puzzleDimmed2);
+	ja->setObject(CCString::create("<font newline=16>스테이지</font><font>클리어 정보</font>"), kMyLocalKey_puzzleDimmed3);
+	ja->setObject(CCString::create("<font>게임준비</font>"), kMyLocalKey_puzzleDimmed4);
 	
 	ja->setObject(CCString::create("다시보지않기"), kMyLocalKey_noReview);
 	ja->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);

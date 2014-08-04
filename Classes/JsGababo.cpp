@@ -26,7 +26,7 @@ JsGababo::JsGababo()
 	m_stepSprite = nullptr;
 	//	m_gameStep = 1;
 	m_winCount = 0;
-	cardNo=0;
+	cardNo=mySD->getSilType();
 	m_resultStamp = nullptr;
 	m_resultParticle = nullptr;
 	m_tutorialStep = 1;
@@ -403,7 +403,7 @@ void JsGababo::setupReward()
 void JsGababo::loadImage(int step)
 {
 	step+=1;
-	if(!cardNo)cardNo=rand()%5 + 1;
+	if(!cardNo)cardNo=mySD->getSilType();
 	if(m_stepSprite != nullptr)
 		m_stepSprite->removeFromParent();
 	m_stepSprite = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",

@@ -293,8 +293,8 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
 	regacha_label->addChild(price_back);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0)
-	{
+//	if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0)
+//	{
 		is_stamp = true;
 		
 		CCSize stamp_size = CCSizeMake(50,20);
@@ -319,32 +319,32 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 		CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(price_label);
-	}
-	else
-	{
-		is_stamp = false;
-		
-		CCSprite* price_type = CCSprite::create("pass_ticket4.png");
-		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_type);
-		
-		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
-		price_type->addChild(pass_count_case);
-		
-		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass4)), mySGD->getFont().c_str(), 8);
-		pass_count_label->setColor(ccc3(255, 255, 255));
-		float min_width = 10+pass_count_label->getContentSize().width;
-		if(min_width < 20)
-			min_width = 20;
-		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
-		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
-		pass_count_case->addChild(pass_count_label);
-		
-		CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
-		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-		price_back->addChild(price_label);
-	}
+//	}
+//	else
+//	{
+//		is_stamp = false;
+//		
+//		CCSprite* price_type = CCSprite::create("pass_ticket4.png");
+//		price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+//		price_back->addChild(price_type);
+//		
+//		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//		pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
+//		price_type->addChild(pass_count_case);
+//		
+//		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass4)), mySGD->getFont().c_str(), 8);
+//		pass_count_label->setColor(ccc3(255, 255, 255));
+//		float min_width = 10+pass_count_label->getContentSize().width;
+//		if(min_width < 20)
+//			min_width = 20;
+//		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
+//		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+//		pass_count_case->addChild(pass_count_label);
+//		
+//		CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+//		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+//		price_back->addChild(price_label);
+//	}
 	
 	
 	CCScale9Sprite* regacha_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
@@ -408,16 +408,16 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
-	{
-		loading_layer = LoadingLayer::create(touch_priority-100);
-		addChild(loading_layer);
-		
-		mySGD->addChangeGoods("g_i_p");
-		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
-	}
-	else
-	{
+//	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
+//	{
+//		loading_layer = LoadingLayer::create(touch_priority-100);
+//		addChild(loading_layer);
+//		
+//		mySGD->addChangeGoods("g_i_p");
+//		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
+//	}
+//	else
+//	{
 		if(mySGD->getGoodsValue(kGoodsType_gold) < mySGD->getItemGachaReplayGoldFee())
 		{
 			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
@@ -433,7 +433,7 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		
 		mySGD->addChangeGoods("g_i_gr");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
-	}
+//	}
 }
 
 void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
@@ -452,39 +452,70 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		regacha_button->setPosition(ccp(-65,-80-98));
 		regacha_button->setVisible(false);
 		
-		if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0 && !is_stamp)
-		{
-			is_stamp = true;
-			
-			regacha_label->removeAllChildren();
-			
-			CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
-			price_back->setContentSize(CCSizeMake(82, 20));
-			price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
-			regacha_label->addChild(price_back);
-			
-			CCSize stamp_size = CCSizeMake(50,20);
-			
-			CCScale9Sprite* stamp_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
-			stamp_back->setContentSize(stamp_size);
-			stamp_back->setPosition(ccp(0, regacha_label->getContentSize().height/2.f+15));
-			stamp_back->setRotation(-27);
-			regacha_label->addChild(stamp_back);
-			
-			float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
-			
-			KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
-			stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
-			stamp_label->setColor(ccc3(255,222,0));
-			stamp_back->addChild(stamp_label);
-			
-			CCSprite* price_type = CCSprite::create("price_gold_img.png");
-			price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
-			price_back->addChild(price_type);
-			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
-			price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
-			price_back->addChild(price_label);
-		}
+//		if(mySGD->getGoodsValue(kGoodsType_pass4) <= 0 && !is_stamp)
+//		{
+//			is_stamp = true;
+//			
+//			regacha_label->removeAllChildren();
+//			
+//			CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+//			price_back->setContentSize(CCSizeMake(82, 20));
+//			price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+//			regacha_label->addChild(price_back);
+//			
+//			CCSize stamp_size = CCSizeMake(50,20);
+//			
+//			CCScale9Sprite* stamp_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+//			stamp_back->setContentSize(stamp_size);
+//			stamp_back->setPosition(ccp(0, regacha_label->getContentSize().height/2.f+15));
+//			stamp_back->setRotation(-27);
+//			regacha_label->addChild(stamp_back);
+//			
+//			float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
+//			
+//			KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+//			stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
+//			stamp_label->setColor(ccc3(255,222,0));
+//			stamp_back->addChild(stamp_label);
+//			
+//			CCSprite* price_type = CCSprite::create("price_gold_img.png");
+//			price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+//			price_back->addChild(price_type);
+//			CCLabelTTF* price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getItemGachaReplayGoldFee())->getCString(), mySGD->getFont().c_str(), 12);
+//			price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+//			price_back->addChild(price_label);
+//		}
+//		else
+//		{
+//			regacha_label->removeAllChildren();
+//			
+//			CCScale9Sprite* price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0,0,20,20), CCRectMake(9,9,2,2));
+//			price_back->setContentSize(CCSizeMake(82, 20));
+//			price_back->setPosition(ccp(regacha_label->getContentSize().width/2.f, regacha_label->getContentSize().height/2.f-20));
+//			regacha_label->addChild(price_back);
+//			
+//			CCSprite* price_type = CCSprite::create("pass_ticket4.png");
+//			price_type->setPosition(ccp(price_back->getContentSize().width/2.f-25,price_back->getContentSize().height/2.f));
+//			price_back->addChild(price_type);
+//			
+//			CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//			pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
+//			price_type->addChild(pass_count_case);
+//			
+//			CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass4)), mySGD->getFont().c_str(), 8);
+//			pass_count_label->setColor(ccc3(255, 255, 255));
+//			float min_width = 10+pass_count_label->getContentSize().width;
+//			if(min_width < 20)
+//				min_width = 20;
+//			pass_count_case->setContentSize(CCSizeMake(min_width, 20));
+//			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+//			pass_count_case->addChild(pass_count_label);
+//			
+//			CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+//			price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
+//			price_back->addChild(price_label);
+//			
+//		}
 		
 		use_button->setPosition(ccp(65,-80-98));
 		use_button->setVisible(false);

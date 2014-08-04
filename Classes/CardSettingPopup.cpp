@@ -202,8 +202,8 @@ bool CardSettingPopup::init()
 	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	s_diary_img->addChild(s_diary_label);
 	
-	CCSprite* d_diary_img = CCSprite::create("subbutton_pink.png");
-	d_diary_img->setColor(ccGRAY);
+	CCSprite* d_diary_img = GraySprite::create("subbutton_pink.png");
+	((GraySprite*)d_diary_img)->setGray(true);
 	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
 	d_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));

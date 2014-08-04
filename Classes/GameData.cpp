@@ -270,10 +270,30 @@ void GameData::setInitRect( IntPoint initPoint, IntSize initSize )
 	{
 		for(int j=initPoint.y;j<initPoint.y+initSize.height;j++)
 		{
-			if(i == initPoint.x || j == initPoint.y || i == initPoint.x+initSize.width-1 || j == initPoint.y+initSize.height-1)
+			bool is_setted = false;
+			if(j < myGD->limited_step_bottom)
+				continue;
+			else if(j == myGD->limited_step_bottom)
+			{
 				mapState[i][j] = mapOldline;
-			else
-				mapState[i][j] = mapOldget;
+				is_setted = true;
+			}
+			
+			if(j > myGD->limited_step_top)
+				continue;
+			else if(j == myGD->limited_step_top)
+			{
+				mapState[i][j] = mapOldline;
+				is_setted = true;
+			}
+			
+			if(!is_setted)
+			{
+				if(i == initPoint.x || j == initPoint.y || i == initPoint.x+initSize.width-1 || j == initPoint.y+initSize.height-1)
+					mapState[i][j] = mapOldline;
+				else
+					mapState[i][j] = mapOldget;
+			}
 		}
 	}
 }
