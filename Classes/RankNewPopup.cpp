@@ -71,7 +71,7 @@ bool RankNewPopup::init()
 	main_case->addChild(title_back);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);
 	
@@ -429,7 +429,9 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		tipBack->setContentSize(CCSizeMake(278, 26));
 		KSLabelTTF* tipLbl = KSLabelTTF::create("TIP", mySGD->getFont().c_str(), 14.f);
-		tipLbl->disableOuterStroke();
+		tipLbl->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		
+		tipLbl->getTexture()->setAliasTexParameters();
 		//tipLbl->setColor(ccc3(255, 155, 0));
 		title_back->addChild(tipLbl, 4);
 		tipLbl->setPosition(ccpFromSize(title_back->getContentSize()) / 2.f + ccp(0,1));
@@ -824,7 +826,7 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 	//	contentStr = KS::replaceAll(contentStr, "%", "%");
 	StyledLabelTTF* reward2Lbl = StyledLabelTTF::create(
 																											ccsf("<font color=#FFAA14 size=11 newline=13>%s</font>"
-																													 "<font color=#FFFFFF size=9>%s</font>",
+																													 "<font color=#FFFFFF size=9 strokesize=0.5 strokeopacity=150 strokecolor=#000000>%s</font>",
 																													 titleStr.c_str(), contentStr.c_str()),
 																											mySGD->getFont().c_str(),
 																											15.f, 999, StyledAlignment::kLeftAlignment);

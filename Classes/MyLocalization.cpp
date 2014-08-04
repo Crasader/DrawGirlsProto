@@ -864,18 +864,18 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("첫구매 대폭할인!!"), kMyLocalKey_firstPurchaseSaleTitle);
 	ko->setObject(CCString::create("사랑합니다. 고객님!"), kMyLocalKey_mileageTitle);
 	ko->setObject(CCString::create("미사일 업그레이드"), kMyLocalKey_missileUpgrade);
-	ko->setObject(CCString::create("<font>누적영역</font><font color=961>%d%%</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalPercent1);
+	ko->setObject(CCString::create("<font>누적영역</font><font color=961>%d%%</font><font strokesize=0.5 strokeopacity=150>를 획득하라</font>"), kMyLocalKey_todaymissionTotalPercent1);
 	ko->setObject(CCString::create("%s%%"), kMyLocalKey_todaymissionTotalPercent2);
 	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalPercent3);
 	ko->setObject(CCString::create("현재 획득영역 "), kMyLocalKey_todaymissionTotalPercent4);
-	ko->setObject(CCString::create("<font>누적점수</font><font color=961>%s점</font><font>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
+	ko->setObject(CCString::create("<font>누적점수</font><font color=961>%s점</font><font strokesize=0.5 strokeopacity=150>을 획득하라</font>"), kMyLocalKey_todaymissionTotalScore1);
 	ko->setObject(CCString::create("%s점"), kMyLocalKey_todaymissionTotalScore2);
 	ko->setObject(CCString::create(" 획득하라!!"), kMyLocalKey_todaymissionTotalScore3);
 	ko->setObject(CCString::create("현재 획득점수 "), kMyLocalKey_todaymissionTotalScore4);
-	ko->setObject(CCString::create("<font color=961>%s골드</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
+	ko->setObject(CCString::create("<font color=961>%s골드</font><font strokesize=0.5 strokeopacity=150>를 획득하라</font>"), kMyLocalKey_todaymissionTotalTakeGold1);
 	ko->setObject(CCString::create("%s골드"), kMyLocalKey_todaymissionTotalTakeGold2);
 	ko->setObject(CCString::create("현재 획득골드 "), kMyLocalKey_todaymissionTotalTakeGold3);
-	ko->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
+	ko->setObject(CCString::create("<font>부하몹</font><font color=961>%d마리</font><font strokesize=0.5 strokeopacity=150>를 획득하라</font>"), kMyLocalKey_todaymissionTotalCatch1);
 	ko->setObject(CCString::create("%s마리"), kMyLocalKey_todaymissionTotalCatch2);
 	ko->setObject(CCString::create(" 사냥하라!!"), kMyLocalKey_todaymissionTotalCatch3);
 	ko->setObject(CCString::create("현재 잡은 부하몹 "), kMyLocalKey_todaymissionTotalCatch4);
@@ -950,8 +950,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 85% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent2);
 	ko->setObject(CCString::create("<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent3);
 	ko->setObject(CCString::create("<font color=961 size=12>체인지 알파벳 6개<font color=999 size=12 newline=18>를 모두 모은후<font color=961 size=12>영역을 100% 획득<font color=999 size=12>하면 됩니다."), kMyLocalKey_cardLockedMent4);
-	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTime);
-	ko->setObject(CCString::create("<font color=999 size=13>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
+	ko->setObject(CCString::create("<font color=999 size=13 strokesize=0.5 strokeopacity=150>남은시간"), kMyLocalKey_todaymissionRemainTime);
+	ko->setObject(CCString::create("<font color=999 size=13 strokesize=0.5 strokeopacity=150>남은시간"), kMyLocalKey_todaymissionRemainTimeMinute);
 	ko->setObject(CCString::create("<font color=961 size=15>%dHour"), kMyLocalKey_todaymissionRemainTime2);
 	ko->setObject(CCString::create("<font color=961 size=15>%dMinute"), kMyLocalKey_todaymissionRemainTimeMinute2);
 	ko->setObject(CCString::create("<font color=961 size=15>모든 피스 획득!"), kMyLocalKey_puzzleSuccessTitle);
@@ -1431,9 +1431,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	ko->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	ko->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ko->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ko->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
-	ko->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
+	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	ko->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	ko->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);
@@ -2456,9 +2456,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	en->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	en->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	en->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	en->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
-	en->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
+	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	en->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	en->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);
@@ -3503,9 +3503,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font size=12>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
 	ja->setObject(CCString::create("<font size=12>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
 	ja->setObject(CCString::create("<font size=12>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
-	ja->setObject(CCString::create("<font size=13 strokesize=0>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
-	ja->setObject(CCString::create("<font size=13 strokesize=0>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
-	ja->setObject(CCString::create("<font size=13 strokesize=0>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
+	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
+	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
+	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
 	
 	ja->setObject(CCString::create("드디어 오늘부터 닌자훈련을 시작하는구나!!\n할아버지의 명성에 걸 맞는\n훌륭한 닌자가 될꺼야!"), kMyLocalKey_scenarioMent1);
 	ja->setObject(CCString::create("여기가 훈련장인가?\n인기척도 없고 전력으로 훈련할 수 있겠는데?!"), kMyLocalKey_scenarioMent2);

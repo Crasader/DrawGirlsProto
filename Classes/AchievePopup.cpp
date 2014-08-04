@@ -104,7 +104,7 @@ bool AchievePopup::init()
 	
 	CCSprite* n_allReward_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), mySGD->getFont().c_str(), 12.5f);
-	n_allReward_label->disableOuterStroke();
+	n_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_allReward_label->setPosition(ccpFromSize(n_allReward_img->getContentSize()/2.f) + ccp(0,-1));
 	n_allReward_img->addChild(n_allReward_label);
 	
@@ -119,7 +119,7 @@ bool AchievePopup::init()
 	CCSprite* d_allReward_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)d_allReward_img)->setGray(true);
 	KSLabelTTF* d_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allRewardGet), mySGD->getFont().c_str(), 12.5f);
-	d_allReward_label->disableOuterStroke();
+	d_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	d_allReward_label->setPosition(ccpFromSize(d_allReward_img->getContentSize()/2.f) + ccp(0,-1));
 	d_allReward_img->addChild(d_allReward_label);
 	
@@ -865,17 +865,31 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		KSLabelTTF* cell_title = KSLabelTTF::create(CCString::createWithFormat("%s",
 																			   myAchieve->getTitle(recent_code).c_str())->getCString(),
 													mySGD->getFont().c_str(), 13);
-		cell_title->disableOuterStroke();
 		if(state_value == 1 || state_value == -1)
+		{
 			cell_title->setColor(ccc3(255, 170, 20));
+			cell_title->disableOuterStroke();
+		}
+		else
+		{
+			cell_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+			
+		}
 		cell_title->setAnchorPoint(ccp(0,0.5));
 		cell_title->setPosition(ccp(10,cell_back->getContentSize().height/2.f + 9));
 		cell_back->addChild(cell_title);
 		
 		KSLabelTTF* cell_content = KSLabelTTF::create(myAchieve->getContent(recent_code).c_str(), mySGD->getFont().c_str(), 9);
-		cell_content->disableOuterStroke();
 		if(state_value != 1 && state_value != -1)
+		{
+			cell_content->disableOuterStroke();
 			cell_content->setColor(ccc3(0, 80, 130));
+		}
+		else
+		{
+			cell_content->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+			
+		}
 		cell_content->setAnchorPoint(ccp(0,0.5));
 		cell_content->setPosition(ccp(10,cell_back->getContentSize().height/2.f - 10));
 		cell_back->addChild(cell_content);
@@ -900,7 +914,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			
 			CCSprite* n_success = CCSprite::create("achievement_button_success.png");
 			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess2), mySGD->getFont().c_str(), 12.5f);
-			n_label->disableOuterStroke();
+			n_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			n_label->setPosition(ccpFromSize(n_success->getContentSize()/2.f) + ccp(13,0));
 			n_success->addChild(n_label);
 			n_success->setPosition(ccp(360,cell_back->getContentSize().height/2.f));
@@ -925,7 +939,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			
 			CCSprite* n_get = CCSprite::create("achievement_button_reward.png");
 			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 12.5f);
-			n_label->disableOuterStroke();
+			n_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			n_label->setPosition(ccpFromSize(n_get->getContentSize()/2.f) + ccp(13,0));
 			n_get->addChild(n_label);
 			
@@ -988,7 +1002,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			
 			CCSprite* n_success = CCSprite::create("achievement_button_ing.png");
 			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont().c_str(), 12.5f);
-			n_label->disableOuterStroke();
+			n_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			n_label->setPosition(ccpFromSize(n_success->getContentSize()/2.f) + ccp(13,0));
 			n_success->addChild(n_label);
 			n_success->setPosition(ccp(360,cell_back->getContentSize().height/2.f));
@@ -1077,21 +1091,21 @@ void AchievePopup::setAllMenu()
 	{
 		CCSprite* n_all_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_all_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allView), mySGD->getFont().c_str(), 12.5f);
-		n_all_label->disableOuterStroke();
+		n_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		n_all_label->setPosition(ccpFromSize(n_all_img->getContentSize()/2.f) + ccp(0,2));
 		n_all_img->addChild(n_all_label);
 		
 		CCSprite* s_all_img = CCSprite::create("tabbutton_down.png");
 		s_all_img->setColor(ccGRAY);
 		KSLabelTTF* s_all_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allView), mySGD->getFont().c_str(), 12.5f);
+		s_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		s_all_label->setColor(ccGRAY);
-		s_all_label->disableOuterStroke();
 		s_all_label->setPosition(ccpFromSize(s_all_img->getContentSize()/2.f) + ccp(0,2));
 		s_all_img->addChild(s_all_label);
 		
 		CCSprite* d_all_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_all_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allView), mySGD->getFont().c_str(), 12.5f);
-		d_all_label->disableOuterStroke();
+		d_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		d_all_label->setPosition(ccpFromSize(d_all_img->getContentSize()/2.f) + ccp(0,2));
 		d_all_img->addChild(d_all_label);
 		
@@ -1110,7 +1124,7 @@ void AchievePopup::setSuccessMenu()
 	{
 		CCSprite* n_success_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_success_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess), mySGD->getFont().c_str(), 12.5f);
-		n_success_label->disableOuterStroke();
+		n_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		n_success_label->setPosition(ccpFromSize(n_success_img->getContentSize()/2.f) + ccp(0,2));
 		n_success_img->addChild(n_success_label);
 		
@@ -1124,7 +1138,7 @@ void AchievePopup::setSuccessMenu()
 		
 		CCSprite* d_success_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_success_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveSuccess), mySGD->getFont().c_str(), 12.5f);
-		d_success_label->disableOuterStroke();
+		d_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		d_success_label->setPosition(ccpFromSize(d_success_img->getContentSize()/2.f) + ccp(0,2));
 		d_success_img->addChild(d_success_label);
 		
@@ -1143,7 +1157,7 @@ void AchievePopup::setIngMenu()
 	{
 		CCSprite* n_ing_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveNotSuccess), mySGD->getFont().c_str(), 12.5f);
-		n_ing_label->disableOuterStroke();
+		n_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		n_ing_label->setPosition(ccpFromSize(n_ing_img->getContentSize()/2.f) + ccp(0,2));
 		n_ing_img->addChild(n_ing_label);
 		
@@ -1157,7 +1171,7 @@ void AchievePopup::setIngMenu()
 		
 		CCSprite* d_ing_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_ing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveNotSuccess), mySGD->getFont().c_str(), 12.5f);
-		d_ing_label->disableOuterStroke();
+		d_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
 		d_ing_img->addChild(d_ing_label);
 		
@@ -1190,7 +1204,7 @@ void AchievePopup::setRewardMenu()
 		
 		CCSprite* d_reward_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_achieveReward), mySGD->getFont().c_str(), 12.5f);
-		d_reward_label->disableOuterStroke();
+		d_reward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		d_reward_label->setPosition(ccpFromSize(d_reward_img->getContentSize()/2.f) + ccp(0,2));
 		d_reward_img->addChild(d_reward_label);
 		

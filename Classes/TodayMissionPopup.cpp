@@ -62,7 +62,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	m_container->addChild(back_case);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 12);
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
@@ -332,7 +332,8 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		else
 			ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute);
 		
-		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12 * 4.f, 999, StyledAlignment::kLeftAlignment);
+//		remain_label->setScale(1 / 4.f);
 		remain_label->setOldAnchorPoint();
 		remain_label->setPosition(ccp(-99, -47));
 		m_container->addChild(remain_label);

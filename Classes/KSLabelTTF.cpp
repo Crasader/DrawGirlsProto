@@ -231,7 +231,7 @@ bool KSLabelTTF::updateTexture()
 	
 	if (!tex)
 		return false;
-	
+//	m_fFontSize *= 4.f;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	
 	ccFontDefinition texDef = _prepareTextDefinition(true);
@@ -247,9 +247,10 @@ bool KSLabelTTF::updateTexture()
 											m_vAlignment);
 	
 #endif
-	
+//	m_fFontSize /= 4.f;
 	// set the texture
 	this->setTexture(tex);
+//	setScale(1 / 4.f);
 	// release it
 	tex->release();
 	
