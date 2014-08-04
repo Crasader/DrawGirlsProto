@@ -166,12 +166,12 @@ bool CardSettingPopup::init()
 	main_case->addChild(take_count_back, kCSS_Z_content);
 	
 	KSLabelTTF* mycard_count = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_myCardCount), mySGD->getFont().c_str(), 10);
-	mycard_count->disableOuterStroke();
+	mycard_count->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	mycard_count->setAnchorPoint(ccp(0.5f,0.5f));
 	take_count_back->addChild(mycard_count);
 	
 	KSLabelTTF* total_card_count = KSLabelTTF::create(ccsf("/%d", mySGD->total_card_cnt), mySGD->getFont().c_str(), 10);
-	total_card_count->disableOuterStroke();
+	total_card_count->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	total_card_count->setAnchorPoint(ccp(0.5f,0.5f));
 	take_count_back->addChild(total_card_count);
 	
@@ -190,7 +190,7 @@ bool CardSettingPopup::init()
 	
 	CCSprite* n_diary_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
-	n_diary_label->disableOuterStroke();
+	n_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	n_diary_img->addChild(n_diary_label);
 	
@@ -205,7 +205,7 @@ bool CardSettingPopup::init()
 	CCSprite* d_diary_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)d_diary_img)->setGray(true);
 	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
-	d_diary_label->disableOuterStroke();
+	d_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	d_diary_img->addChild(d_diary_label);
 	
@@ -401,14 +401,14 @@ void CardSettingPopup::defaultMenuSet()
 	
 	CCSprite* n_default_img = CCSprite::create(filename.c_str());
 	KSLabelTTF* n_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12.5f);
-	n_default_label->disableOuterStroke();
+	n_default_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_default_label->setPosition(ccpFromSize(n_default_img->getContentSize()/2.f) + ccp(0,2));
 	n_default_img->addChild(n_default_label);
 	
 	CCSprite* s_default_img = CCSprite::create(filename.c_str());
 	s_default_img->setColor(ccGRAY);
 	KSLabelTTF* s_default_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_defaultSort), mySGD->getFont().c_str(), 12.5f);
-	s_default_label->disableOuterStroke();
+	s_default_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_default_label->setPosition(ccpFromSize(s_default_img->getContentSize()/2.f) + ccp(0,2));
 	s_default_img->addChild(s_default_label);
 	
@@ -447,7 +447,7 @@ void CardSettingPopup::takeMenuSet()
 	
 	CCSprite* n_take_img = CCSprite::create(filename.c_str());
 	n_take_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_takeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
-	n_take_label->disableOuterStroke();
+	n_take_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_take_label->setPosition(ccpFromSize(n_take_img->getContentSize()/2.f) + ccp(0,2));
 	n_take_img->addChild(n_take_label);
 	
@@ -493,14 +493,14 @@ void CardSettingPopup::rankMenuSet()
 	
 	CCSprite* n_rank_img = CCSprite::create(filename.c_str());
 	n_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
-	n_rank_label->disableOuterStroke();
+	n_rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_rank_label->setPosition(ccpFromSize(n_rank_img->getContentSize()/2.f) + ccp(0,2));
 	n_rank_img->addChild(n_rank_label);
 	
 	CCSprite* s_rank_img = CCSprite::create(filename.c_str());
 	s_rank_img->setColor(ccGRAY);
 	s_rank_label = KSLabelTTF::create((myLoc->getLocalForKey(kMyLocalKey_gradeOrder) + sign_str).c_str(), mySGD->getFont().c_str(), 12.5f);
-	s_rank_label->disableOuterStroke();
+	s_rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_rank_label->setPosition(ccpFromSize(s_rank_img->getContentSize()/2.f) + ccp(0,2));
 	s_rank_img->addChild(s_rank_label);
 	
@@ -980,12 +980,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				else
 				{
 					KSLabelTTF* number_label = KSLabelTTF::create(ccsf("%d", NSDS_GI(kSDS_CI_int1_stage_i, card_number)), mySGD->getFont().c_str(), 17);
-					number_label->disableOuterStroke();
+					number_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 					number_label->setPosition(ccpFromSize(empty_back->getContentSize()/2.f) + ccp(0,10));
 					empty_back->addChild(number_label);
 					
 					KSLabelTTF* stage_label = KSLabelTTF::create("STAGE", mySGD->getFont().c_str(), 12);
-					stage_label->disableOuterStroke();
+					stage_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 					stage_label->setPosition(ccpFromSize(empty_back->getContentSize()/2.f) + ccp(0,-10));
 					empty_back->addChild(stage_label);
 				}

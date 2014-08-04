@@ -562,7 +562,7 @@ void StyledLabelTTF::setStringByTag(const char* text){
 			xg = std::strtoul(g.c_str(), nullptr, 16);
 			xb = std::strtoul(b.c_str(), nullptr, 16);
 		}else{
-			int rgb = sData[k].get("strokecolor", m_fontColor).asInt();
+			int rgb = sData[k].get("strokecolor", 0).asInt();
 			xr = (rgb/100)/9.f*255;
 			xg = (rgb/10%10)/9.f*255;
 			xb = (rgb%10)/9.f*255;

@@ -114,6 +114,7 @@ public:
 	void disableGradation();
 	void updateColor();
 protected:
+	CCSprite* m_textNode;
 	float m_outerStrokeSize;
 	ccColor3B m_outerStrokeColor;
 	bool m_outerIsStroke;

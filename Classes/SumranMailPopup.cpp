@@ -144,7 +144,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
 	allReceive->setTitleSize(12.f);
 	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
-	allReceive->getTitleLabel()->disableOuterStroke();
+	allReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 //	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 	allReceive->setTitleColor(ccc3(255, 255, 255));
 	allReceive->setTitleColorForDisable(ccc3(90, 60, 30));
@@ -191,7 +191,8 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	main_case->addChild(giftBoxAlertBox);
 
 	
-	CCLabelTTF* giftboxAlert = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* giftboxAlert = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
+	giftboxAlert->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	setFormSetter(giftboxAlert);
 	setFormSetter(giftBoxAlertBox);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
@@ -529,9 +530,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 
 		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 13); // "님의"
-		title->disableOuterStroke();
+		title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		title->setPosition(ccp(53.5, 19.5));
-		title->setColor(ccc3(255, 255, 255));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);
 		setFormSetter(title);
@@ -565,7 +565,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				btnReceive->setTitleSize(12.f);
 				btnReceive->setTouchPriority(-200);
 				btnReceive->setTitleColor(ccc3(255, 255, 255));
-				btnReceive->getTitleLabel()->disableOuterStroke();
+				btnReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 				btnReceive->setFunction([=](CCObject*)
 																{
 																	//						 CCMenuItemLambda* obj = dynamic_cast<CCMenuItemLambda*>(sender);
