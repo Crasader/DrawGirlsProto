@@ -1090,6 +1090,9 @@ void SumranMailPopup::successCardDownload()
 			   card_download_list[ing_card_download-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
@@ -1482,6 +1485,9 @@ void SumranMailPopup::successAction ()
 	{
 		for(int i=0;i<cf_list.size();i++)
 		{
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
