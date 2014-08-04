@@ -2352,6 +2352,9 @@ void TitleRenewalScene::startFileDownloadSet()
 		// reduce
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
@@ -3036,6 +3039,9 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));

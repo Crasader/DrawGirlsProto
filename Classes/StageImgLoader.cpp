@@ -48,6 +48,11 @@ CCSprite* StageImgLoader::getLoadedImg(string filename, CCRect t_rect)
 	return CCSprite::createWithTexture(texture, t_rect);
 }
 
+void StageImgLoader::removeTextureCache(string filename)
+{
+	CCTextureCache::sharedTextureCache()->removeTextureForKey((getDocumentPath() + filename).c_str());
+}
+
 CCTexture2D * StageImgLoader::addImage(const char * path)
 {
 	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath());

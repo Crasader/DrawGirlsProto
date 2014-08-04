@@ -75,6 +75,7 @@ public:
 	string writeable_path;
 	string down_filename;
 	
+	void removeTextureCache(string filename);
 	CCTexture2D* addImage(const char * path);
 	void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
 	
