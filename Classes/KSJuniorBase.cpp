@@ -80,9 +80,9 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
 	
 
-	if(((m_state & kCumberStateMoving) || m_state == kCumberStateDamaging) && stiffen)
+	if(((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateDamaging) && stiffen)
 	{
-		CCLOG("(m_state & kCumberStateMoving)");
+		CCLOG("(m_cumberState & kCumberStateMoving)");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
@@ -91,7 +91,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_state = kCumberStateDamaging;
+			m_cumberState = kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 		}
 	}
@@ -238,9 +238,9 @@ void KSJuniorBase::checkConfine(float dt)
 void KSJuniorBase::startAnimationNoDirection()
 {
 	CCLOG("Lets rotate");
-	if((m_state & kCumberStateNoDirection) == 0)
+	if((m_cumberState & kCumberStateNoDirection) == 0)
 	{
-		m_state |= kCumberStateNoDirection;
+		m_cumberState |= kCumberStateNoDirection;
 		m_noDirection.distance = 0;
 		m_noDirection.rotationDeg = 0;
 		m_noDirection.timer = 0;
@@ -261,7 +261,7 @@ void KSJuniorBase::damageReaction(float)
 	else
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 		unschedule(schedule_selector(KSJuniorBase::damageReaction));
 		m_furyMode.furyFrameCount = m_furyMode.totalFrame;
 		//		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
@@ -283,7 +283,7 @@ void KSJuniorBase::animationNoDirection(float dt)
 	}
 	else if(m_noDirection.state == 2)
 	{
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
 //		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
@@ -407,7 +407,7 @@ void KSJuniorBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
-	m_state = kCumberStateFury;
+	m_cumberState = kCumberStateFury;
 	
 	//	m_headImg->setColor(ccc3(0, 255, 0));
 	
@@ -423,7 +423,7 @@ void KSJuniorBase::furyModeScheduler(float dt)
 		// 시간이 다되서 끝나는 조건.
 		crashMapForPosition(getPosition());
 
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
@@ -468,7 +468,7 @@ void KSJuniorBase::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
-	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_state & kCumberStateNoDirection) == 0)
+	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_cumberState & kCumberStateNoDirection) == 0)
 	{
 		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
@@ -483,13 +483,13 @@ void KSJuniorBase::scaleAdjustment(float dt)
 
 void KSJuniorBase::onStartMoving()
 {
-	m_state = kCumberStateMoving;
+	m_cumberState = kCumberStateMoving;
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 }
 
 void KSJuniorBase::onStopMoving()
 {
-	m_state = 0;
+	m_cumberState = kCumberStateNothing;
 	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 }
 

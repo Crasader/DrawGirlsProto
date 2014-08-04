@@ -434,7 +434,7 @@ void FallingStoneWrapper::removeEffect()
 		unschedule(schedule_selector(FallingStoneWrapper::myAction));
 
 		m_cumber->setAttackPattern(nullptr);
-		myGD->communication("CP_onPatternEndOf", m_cumber);
+//		myGD->communication("CP_onPatternEndOf", m_cumber);
 
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FallingStoneWrapper::selfRemove));
