@@ -439,6 +439,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, "");
 		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee1));
 		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee2));
+		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee3));
 		tipMaquee->setPosition(mission_position);
 		tipMaquee->startMarquee();
 		tipMaquee->setFontSize(12.f);

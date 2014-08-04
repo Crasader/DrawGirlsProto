@@ -177,6 +177,12 @@ bool ZoomScript::init()
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
 	
+	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
+	showtime_morphing_label->setAnchorPoint(ccp(0,0));
+	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
+	showtime_morphing_label->setVisible(false);
+	script_case->addChild(showtime_morphing_label);
+	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
@@ -231,7 +237,7 @@ void ZoomScript::startScript()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 20));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 15));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -305,7 +311,6 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
-	script_case->setVisible(true);
 	script_case->setVisible(true);
 //	mode_button->setVisible(true);
 	
@@ -1035,6 +1040,9 @@ void ZoomScript::rankupAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
+	if(mySGD->getStageGrade() >= 3)
+		showtime_morphing_label->setVisible(true);
+	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
 	text_length = result.length();
@@ -1057,8 +1065,10 @@ void ZoomScript::showtimeThirdAction()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 20));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 15));
 	script_case->setVisible(true);
+	showtime_morphing_label->setVisible(true);
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1078,6 +1088,9 @@ void ZoomScript::showtimeSeventhAction()
 	script_case->setVisible(true);
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	if(mySGD->getStageGrade() >= 3)
+		showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

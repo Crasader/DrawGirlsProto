@@ -2146,7 +2146,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
-			showShopPopup(kSC_ruby);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
 		{

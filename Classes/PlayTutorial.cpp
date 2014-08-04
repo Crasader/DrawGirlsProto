@@ -1861,6 +1861,8 @@ bool PlayTutorial::init()
 	scenario_node->addChild(ikaruga, 1);
 	
 	TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+	typing_box->setScale(myDSH->screen_convert_rate);
+	typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
 	scenario_node->addChild(typing_box, 2);
 	
 	typing_box->setTouchOffScrollAndButton();
@@ -1868,6 +1870,8 @@ bool PlayTutorial::init()
 	typing_box->setTouchSuction(false);
 	
 	TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+	typing_box2->setScale(myDSH->screen_convert_rate);
+	typing_box2->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
 	scenario_node->addChild(typing_box2, 2);
 	typing_box2->setHide();
 	
@@ -2171,6 +2175,8 @@ void PlayTutorial::nextStep()
 											  scenario_node->addChild(ikaruga, 1);
 											  
 											  TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+											  typing_box->setScale(myDSH->screen_convert_rate);
+											  typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
 											  scenario_node->addChild(typing_box, 2);
 											  
 											  function<void()> end_func1 = [=]()

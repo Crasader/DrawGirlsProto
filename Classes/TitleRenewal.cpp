@@ -491,52 +491,51 @@ void TitleRenewalScene::successLogin()
 	
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
-//		AudioEngine::sharedInstance()->preloadEffectScene("Title");
-		nextPreloadStep();
-//		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
-//		
-//		addChild(KSTimer::create(1.f/60.f, [=]()
-//		{
-//			
-//			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
-//			
-//			addChild(KSTimer::create(20.f/60.f, [=]()
-//			{
-//				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
-//				
-//				addChild(KSTimer::create(1.f/60.f, [=]()
-//				{
-//					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
-//					
-//					addChild(KSTimer::create(1.f/60.f, [=]()
-//					{
-//						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
-//						
-//						addChild(KSTimer::create(1.f/60.f, [=]()
-//						{
-//							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
-//							
-//							addChild(KSTimer::create(1.f/60.f, [=]()
-//							{
-//								is_preloaded_effect = true;
-//								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//								
-//								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
-//								{
-//									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-//									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-//									
-//									CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-//									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-//									runAction(t_seq);
-//								}
-//							}));
-//						}));
-//					}));
-//				}));
-//			}));
-//		}));
+//		nextPreloadStep();
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
+		
+		addChild(KSTimer::create(1.f/60.f, [=]()
+		{
+			
+			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
+			
+			addChild(KSTimer::create(20.f/60.f, [=]()
+			{
+				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
+				
+				addChild(KSTimer::create(1.f/60.f, [=]()
+				{
+					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
+					
+					addChild(KSTimer::create(1.f/60.f, [=]()
+					{
+						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
+						
+						addChild(KSTimer::create(1.f/60.f, [=]()
+						{
+							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
+							
+							addChild(KSTimer::create(1.f/60.f, [=]()
+							{
+								is_preloaded_effect = true;
+								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+								
+								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+								{
+									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+									
+									CCDelayTime* t_delay = CCDelayTime::create(2.f);
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+									runAction(t_seq);
+								}
+							}));
+						}));
+					}));
+				}));
+			}));
+		}));
 	}));
 	
 //	if(myLog->getLogCount() > 0)
@@ -1625,6 +1624,30 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		
 		mySGD->initUserdata(result_data);
 		
+		int scenario_value = myDSH->getIntegerForKey(kDSH_Key_showedScenario);
+		if(scenario_value < 1000 && mySGD->getUserdataHighPiece() >= 1)
+		{
+			scenario_value = 1000;
+		}
+		int t_loop_cnt = mySGD->getPuzzleHistorySize();
+		for(int i=0;i<t_loop_cnt;i++)
+		{
+			PuzzleHistory t_history = mySGD->getPuzzleHistoryForIndex(i);
+			int t_puzzle_number = t_history.puzzle_number.getV();
+			if(t_puzzle_number > 1 && t_history.is_open.getV() && scenario_value < 1000*t_puzzle_number)
+			{
+				scenario_value = t_puzzle_number*1000;
+			}
+		}
+		
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, scenario_value);
+		
+		int pvp_tuto_number = myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial);
+		if(mySGD->getUserdataEndlessScore() > 0 && pvp_tuto_number != -1)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+		}
+		
 		mySGD->user_index = result_data["userIndex"].asInt64();
 	}
 	else
@@ -1825,6 +1848,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -2328,7 +2352,8 @@ void TitleRenewalScene::startFileDownloadSet()
 		// reduce
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(card_reduction_list[i].is_ani)
@@ -2341,13 +2366,22 @@ void TitleRenewalScene::startFileDownloadSet()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		// divide
@@ -3002,7 +3036,8 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(card_reduction_list[i].is_ani)
@@ -3015,13 +3050,22 @@ void TitleRenewalScene::successDownloadAction()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->begin();
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);

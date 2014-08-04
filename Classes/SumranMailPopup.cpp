@@ -810,19 +810,33 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 	//여기서 reward체크하고 다운받기~
 	
 	if(reward.isArray()){
+		Json::Value card_param;
+		int cnt = -1;
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
-				cardDown(reward[i]["count"].asInt(),func);
-				return;
+				cnt++;
+				card_param["noList"][cnt] =reward[i]["count"].asInt();
 			}
 		}
-	}
 	
+	
+		if(cnt>-1){
+			card_download_list.clear();
+			card_reduction_list.clear();
+			download_card_no = card_param["noList"][0].asInt();
+			end_func_download_card = func;
+			myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
+			return;
+		}
+	}
+	 
 	func(true);
 }
 
 void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> func){
 	if(reward.isArray()){
+		
+		
 		for(int i=0;i<reward.size();i++){
 			if(reward[i].get("type","box").asString()=="cd"){
 				takedCard(reward[i]["count"].asInt(),func);
@@ -834,18 +848,18 @@ void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> f
 	func();
 }
 
-void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
-	//카드정보 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
-	
-	// 카드 정보 받기
-	card_download_list.clear();
-	card_reduction_list.clear();
-	download_card_no = cardNo;
-	end_func_download_card = func;
-	Json::Value card_param;
-	card_param["noList"][0] = cardNo;
-	myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
-}
+//void SumranMailPopup::cardDown(int cardNo,std::function<void(bool)>func){
+//	//카드정보 다운로드하기, 다운성공시 func(true); , 실패시 func(false) 호출
+//	
+//	// 카드 정보 받기
+//	card_download_list.clear();
+//	card_reduction_list.clear();
+//	download_card_no = cardNo;
+//	end_func_download_card = func;
+//	Json::Value card_param;
+//	card_param["noList"][0] = cardNo;
+//	myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
+//}
 
 void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 {
@@ -857,6 +871,7 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -1075,7 +1090,8 @@ void SumranMailPopup::successCardDownload()
 			   card_download_list[ing_card_download-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(card_reduction_list[i].is_ani)
@@ -1088,13 +1104,22 @@ void SumranMailPopup::successCardDownload()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
@@ -1262,6 +1287,7 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -1456,7 +1482,8 @@ void SumranMailPopup::successAction ()
 	{
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -1468,13 +1495,22 @@ void SumranMailPopup::successAction ()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->begin();
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		df_list.clear();

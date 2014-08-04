@@ -2302,17 +2302,19 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 											  t_history.open_type = "";
 											  mySGD->setPuzzleHistoryForNotSave(t_history);
 											  
-											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
-											  {
-												  is_menu_enable = false;
-												  ShopPopup* t_shop = ShopPopup::create();
-												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-												  t_shop->targetHeartTime(heart_time);
-												  t_shop->setShopCode(kSC_ruby);
-												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-												  t_shop->addGray();
-												  addChild(t_shop, kMainFlowZorder_popup);
-											  }), 9999);
+											  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+											  
+//											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
+//											  {
+//												  is_menu_enable = false;
+//												  ShopPopup* t_shop = ShopPopup::create();
+//												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//												  t_shop->targetHeartTime(heart_time);
+//												  t_shop->setShopCode(kSC_ruby);
+//												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//												  t_shop->addGray();
+//												  addChild(t_shop, kMainFlowZorder_popup);
+//											  }), 9999);
 											  
 											  is_menu_enable = true;
 										  }
@@ -2416,13 +2418,14 @@ void MainFlowScene::menuAction(CCObject* sender)
 		
 		if(tag == kMainFlowMenuTag_rubyShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_ruby);
-			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-			t_shop->addGray();
-			addChild(t_shop, kMainFlowZorder_popup);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//			ShopPopup* t_shop = ShopPopup::create();
+//			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//			t_shop->targetHeartTime(heart_time);
+//			t_shop->setShopCode(kSC_ruby);
+//			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//			t_shop->addGray();
+//			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_goldShop)
 		{
@@ -2548,7 +2551,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			ShopPopup* t_shop = ShopPopup::create();
 			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_ruby);
+			t_shop->setShopCode(kSC_gold);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
 			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);

@@ -16,6 +16,8 @@ void StarGoldData::withdraw()
 {
 	total_card_cnt = 0;
 	
+	loading_tip_back_number = 1;
+	
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
@@ -3103,6 +3105,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "ing_win";
 	else if(t_type == kUserdataType_endlessData_ingWeek)
 		return_value = "ing_week";
+	else if(t_type == kUserdataType_endlessData_score)
+		return_value = "score";
 	
 	else if(t_type == kUserdataType_achieve_mapGacha)
 		return_value = "aMapGacha";
@@ -3191,7 +3195,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		{
 			userdata_storage[(UserdataType)i] = result_data["archiveData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
-		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
+		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 			if(i == kUserdataType_endlessData_ingWin)
@@ -3450,6 +3454,8 @@ void StarGoldData::myInit()
 	app_version = 2;
 	
 	total_card_cnt = 0;
+	
+	loading_tip_back_number = 1;
 	
 	max_network_check_cnt = 6; // 0.5초 단위로
 	network_check_cnt = 0;
@@ -3845,6 +3851,7 @@ void StarGoldData::setUserdataEndlessIngWeek(int t_i)
 //	}
 }
 int StarGoldData::getUserdataEndlessIngWeek(){	return userdata_storage[kUserdataType_endlessData_ingWeek].getV();	}
+int StarGoldData::getUserdataEndlessScore(){	return userdata_storage[kUserdataType_endlessData_score].getV();	}
 
 void StarGoldData::setUserdataAchieveMapGacha(int t_i)
 {

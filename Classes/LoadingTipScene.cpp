@@ -964,7 +964,11 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 	{
 		int selected_loading_tip = mySGD->before_curtain_tip_type;
 		
-		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", mySGD->loading_tip_back_number));
+		int back_number = mySGD->loading_tip_back_number;
+		if(back_number == 0)
+			back_number = 1;
+		
+		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", back_number));
 		loading_tip_back->setPosition(ccp(0,0));
 		loading_tip_node->addChild(loading_tip_back, 0, 1);
 		

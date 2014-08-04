@@ -164,6 +164,7 @@ enum SDS_KEY
 	kSDS_GI_shopItem_int1_sale_s,
 	kSDS_GI_shopItem_int1_exchangeID_s,
 	kSDS_GI_shop_isEvent_b,
+	kSDS_GI_serial_int1_cardNumber_i,
 	kSDS_GI_end = 1999,
 	kSDS_SI_base = 2000,
 	kSDS_SI_version_i,

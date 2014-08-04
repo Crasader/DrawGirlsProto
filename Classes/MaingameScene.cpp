@@ -312,6 +312,8 @@ void Maingame::onEnterTransitionDidFinish()
 void Maingame::startStory()
 {
 	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	t_tb->setScale(myDSH->screen_convert_rate);
+	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -1575,6 +1577,8 @@ void Maingame::removeConditionLabel()
 		scenario_node->addChild(asuka, 1);
 		
 		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		typing_box->setScale(myDSH->screen_convert_rate);
+		typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
 		typing_box->setHide();
 		scenario_node->addChild(typing_box, 2);
 		
@@ -1718,6 +1722,8 @@ void Maingame::removeConditionLabel()
 		exit_target->onExit();
 		
 		CCNode* scenario_node = CCNode::create();
+		scenario_node->setScale(myDSH->screen_convert_rate);
+		scenario_node->setPosition(ccpAdd(scenario_node->getPosition(), myDSH->ui_zero_point));
 		getParent()->addChild(scenario_node, 9999);
 		
 		float screen_scale_y = myDSH->ui_top/320.f;
@@ -1747,6 +1753,8 @@ void Maingame::removeConditionLabel()
 		scenario_node->addChild(asuka, 1);
 		
 		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		typing_box->setScale(myDSH->screen_convert_rate);
+		typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
 		typing_box->setHide();
 		scenario_node->addChild(typing_box, 2);
 		
@@ -2323,6 +2331,8 @@ void Maingame::clearScenario()
 void Maingame::clearScenario2()
 {
 	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	t_tb->setScale(myDSH->screen_convert_rate);
+	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -3069,6 +3079,8 @@ void Maingame::failScenario()
 void Maingame::failScenario2()
 {
 	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	t_tb->setScale(myDSH->screen_convert_rate);
+	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
