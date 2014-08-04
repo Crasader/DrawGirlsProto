@@ -1577,7 +1577,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	checkBeforeNewLine = t_checkBeforeNewLine;
 	
 	TUTO_TouchOutWidth = (1.94145*10.0)/myHSP->getScreenRealHeight();
-	TUTO_JOYSTICK_FOLLOW_DISTANCE = (1.94145*60.0)/myHSP->getScreenRealHeight();
+	TUTO_JOYSTICK_FOLLOW_DISTANCE = (1.94145*90.0)/myHSP->getScreenRealHeight();
 	
 	minimumDistanceJ = (1.94145*8.0)/myHSP->getScreenRealHeight();
 	JoystickCenterLimit = (1.94145*30.0)/myHSP->getScreenRealHeight();
