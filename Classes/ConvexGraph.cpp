@@ -57,7 +57,7 @@ void ConvexGraph::setPercentage(float t_percentage)
 	
 	if(m_type == ConvexGraphType::width)
 	{
-		float t_width = zero_size.width + (full_size.width - zero_size.width)*(t_percentage/100.f);
+		float t_width = zero_size.width + (full_size.width - zero_size.width)*(m_percentage/100.f);
 		
 		front_img->setContentSize(CCSizeMake(t_width, full_size.height));
 		front_img->setPosition(ccp(-full_size.width/2.f + front_img->getContentSize().width/2.f, 0));
