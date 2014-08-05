@@ -308,6 +308,13 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	take_cnt_label->setPosition(ccp(38,28));
 	target->addChild(take_cnt_label);
 	
+	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
+	card_number_label->setColor(ccBLACK);
+	card_number_label->disableOuterStroke();
+	card_number_label->setAnchorPoint(ccp(0,0.5f));
+	card_number_label->setPosition(ccp(38,294));
+	target->addChild(card_number_label);
+	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(1.5f/myDSH->screen_convert_rate);
 	
@@ -349,11 +356,4 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	target->addChild(right_bottom_paper);
 	bottom_cover = right_bottom_paper;
 	right_bottom_paper->setOpacity(0);
-	
-	KSLabelTTF* card_number_label = KSLabelTTF::create(ccsf("No.%d", card_number), mySGD->getFont().c_str(), 9);
-	card_number_label->setColor(ccBLACK);
-	card_number_label->disableOuterStroke();
-	card_number_label->setAnchorPoint(ccp(0,0.5f));
-	card_number_label->setPosition(ccp(38,294));
-	target->addChild(card_number_label);
 }
