@@ -38,6 +38,12 @@ bool AccountManagerPopup::init(int touchP)
 {
 	CCLayer::init();
 
+	std::map<HSPLoginTypeX, std::string> descMapper = {
+		{HSPLoginTypeGOOGLE, "Google ID"},
+		{HSPLoginTypeGUEST, "Guest ID"},
+		{HSPLoginTypeFACEBOOK, "Facebook ID"},
+	};
+	
 	startFormSetter(this);
 	ASPopupView* managerPopup = ASPopupView::createDimmed(touchP);
 	managerPopup->getDimmedSprite()->setVisible(false);
@@ -192,7 +198,12 @@ bool AccountManagerPopup::init(int touchP)
 	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo){
 		CCLog("another!!!");
 		Json::Value param;
+//#if __ANDROID__
 		param["memberID"] = prevMemberNo;
+//#else
+//		param["memberID"] = myHSP->getMemberID();
+//#endif		
+		
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
 		myHSP->command("getUserData", param, [=](Json::Value t){
@@ -230,6 +241,7 @@ bool AccountManagerPopup::init(int touchP)
 				titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
+																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
 																			 t["data"]["nick"].asString().c_str(), t["highPiece"].asInt(),
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
@@ -265,9 +277,16 @@ bool AccountManagerPopup::init(int touchP)
 						if(result_data["error"]["isSuccess"].asBool())
 						{
 							// 매핑 없이 로그인 시도. 이전기록 불러오기
+							
+							mySGD->resetLabels();
+							SaveData::sharedObject()->resetAllData();
+							myDSH->removeCache();
+							mySDS->removeCache();
+							
 							myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-							mySGD->resetLabels();
+							myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
+							myDSH->setIntegerForKey(kDSH_Key_clientVersion, 2);
 							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 						}
 						else
@@ -294,8 +313,9 @@ bool AccountManagerPopup::init(int touchP)
 						KS::KSLog("force %", t);
 						if(t["error"]["isSuccess"].asInt())
 						{
-							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+							
 							mySGD->resetLabels();
+							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 						}
 						else
@@ -328,8 +348,9 @@ bool AccountManagerPopup::init(int touchP)
 			if(t["error"]["isSuccess"].asBool()) {
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				mySGD->resetLabels();
-				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)willSaveLogin);
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				
 			}
 			else {
 				if(t["error"]["code"].asInt() == 0x0014006D) {
@@ -388,13 +409,9 @@ bool AccountManagerPopup::init(int touchP)
 		back->addChild(closeButton);
 		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
 		
-		std::map<HSPLoginTypeX, std::string> descMapper = {
-			{HSPLoginTypeGOOGLE, "Google ID"},
-			{HSPLoginTypeGUEST, "Guest ID"},
-			{HSPLoginTypeFACEBOOK, "Facebook ID"},
-		};
+		
 		std::string guidanceMsg = ccsf( getLocal(LK::kAccountDesc),
-																		descMapper[lt].c_str(), desc.c_str(),descMapper[lt].c_str() 
+																		descMapper.at(lt).c_str(), desc.c_str(),descMapper.at(lt).c_str()
 																	);
 		StyledLabelTTF* content = StyledLabelTTF::create(
 				guidanceMsg.c_str() ,

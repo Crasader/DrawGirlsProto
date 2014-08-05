@@ -2011,6 +2011,10 @@ void KSCumberBase::setGameover()
 	m_bossDie.m_bossDieBombFrameNumbers.push_back(m_well512.GetValue(60, 90));
 	m_bossDie.m_bossDieFrameCount = 0;
 	unschedule(schedule_selector(ThisClassType::cumberAttack));
+	unschedule(schedule_selector(KSCumberBase::movingAndCrash));
+	unschedule(schedule_selector(KSCumberBase::followProcess));
+	unschedule(schedule_selector(ThisClassType::update));
+
 	schedule(schedule_selector(ThisClassType::bossDieBomb));
 	//		int number = m_well512.GetValue(3, 4);
 	//		for(int i=0; i<number; i++)
