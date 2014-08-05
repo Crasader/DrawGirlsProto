@@ -25,6 +25,7 @@
 #include "FormSetter.h"
 #include "AchieveData.h"
 #include "Terms.h"
+#include "ConvexGraph.h"
 #include <algorithm>
 
 CCScene* TitleRenewalScene::scene()
@@ -800,21 +801,26 @@ void TitleRenewalScene::checkReceive()
 //					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
 //					addChild(logo_img, 1);
 					
-					CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
-					progress_back->setPosition(ccp(240,80));
-					addChild(progress_back, 1);
-					
-					progress_timer = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-					progress_timer->setType(kCCProgressTimerTypeBar);
-					progress_timer->setMidpoint(ccp(0,0));
-					progress_timer->setBarChangeRate(ccp(1,0));
-					progress_timer->setPercentage(0);
-					progress_timer->setPosition(ccp(240, 80));
+					progress_timer = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+					progress_timer->setPosition(ccp(240,80));
 					addChild(progress_timer, 1);
 					
-//					CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
-//					progress_top->setPosition(ccp(240,80));
-//					addChild(progress_top, 1);
+					progress_timer->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+					progress_timer->setBack("loading_progress_back.png");
+					
+					
+//					CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+//					progress_back->setPosition(ccp(240,80));
+//					addChild(progress_back, 1);
+//					
+//					progress_timer = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
+//					progress_timer->setType(kCCProgressTimerTypeBar);
+//					progress_timer->setMidpoint(ccp(0,0));
+//					progress_timer->setBarChangeRate(ccp(1,0));
+//					progress_timer->setPercentage(0);
+//					progress_timer->setPosition(ccp(240, 80));
+//					addChild(progress_timer, 1);
+					
 					
 					
 					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
@@ -3310,9 +3316,10 @@ void TitleRenewalScene::successDownloadAction()
 		rate = 100.f;
 	else if(rate < 0.f)
 		rate = 0.f;
-	
-	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, progress_timer->getPercentage(), rate);
-	progress_timer->runAction(t_to);
+
+	progress_timer->setPercentage(rate);
+//	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, progress_timer->getPercentage(), rate);
+//	progress_timer->runAction(t_to);
 }
 
 void TitleRenewalScene::endingCheck()

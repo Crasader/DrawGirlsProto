@@ -1039,6 +1039,12 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 		CCLOG("userdata was save to server");
 	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		CCLOG("fail!! not enought property");
+		fail_func();
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notEnoughRuby)), 9999);
+	}
 	else
 	{
 		CCLOG("fail!! save userdata to server");

@@ -17,6 +17,7 @@ USING_NS_CC_EXT;
 using namespace std;
 
 class TouchSuctionLayer;
+class ConvexGraph;
 class TodayMissionPopup : public CCLayer//, public CCBAnimationManagerDelegate
 {
 public:
@@ -37,7 +38,8 @@ private:
 	CCNode* m_container;
 	CCSprite* back_case;
 	CCControlButton* close_button;
-	CCProgressTimer* progress_bar;
+	ConvexGraph* progress_bar;
+//	CCProgressTimer* progress_bar;
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func);
 	void closeAction(CCObject* sender, CCControlEvent t_event);

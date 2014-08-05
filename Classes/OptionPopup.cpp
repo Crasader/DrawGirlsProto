@@ -533,8 +533,8 @@ bool OptionPopup::init()
 	
 	
 	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
-	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	safety_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	safety_label->setAnchorPoint(ccp(0,0.5f));
 	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-100,0)));
 	main_case->addChild(safety_label, kOP_Z_back);
