@@ -1098,8 +1098,6 @@ void TitleRenewalScene::resultGetTimeEvent(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->initTimeEventList(result_data["list"]);
-		
-		graphdog->setCommandFinishedFunc([](){ mySGD->refreshTimeEvent(); });
 	}
 	else
 	{

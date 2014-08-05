@@ -1221,7 +1221,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("아니오"), kMyLocalKey_no);
 	ko->setObject(CCString::create("네"), kMyLocalKey_yes);
-	ko->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	ko->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=17>%.0f%%를<font color=961>%.0f%%로 하향<font newline=17> 시켜드립니다.<font newline=17>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ko->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
 	
 	ko->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
@@ -1465,14 +1465,14 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("스테이지 랭킹"), kMyLocalKey_scenarioMent27);
 	ko->setObject(CCString::create("점수 정보"), kMyLocalKey_scenarioMent28);
 	ko->setObject(CCString::create("클리어 등급"), kMyLocalKey_scenarioMent29);
-	ko->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서 뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
+	ko->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서\n뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
 	ko->setObject(CCString::create("네! 그럼 최선을 다 해보겠습니다!"), kMyLocalKey_scenarioMent31);
 	ko->setObject(CCString::create("이런.. 다음엔 더 잘 할 수 있겠죠?\n여긴 게임이 끝나면 오게 됩니다."), kMyLocalKey_scenarioMent32);
 	ko->setObject(CCString::create("휴.. 이걸로 시험끝!!\n드디어 훈련시작이네~!"), kMyLocalKey_scenarioMent33);
 	ko->setObject(CCString::create("어랏. 아스카도 한조국립대에서 훈련하는거야?\n같이 최고의 닌자를 꿈꿀 수 있겠구나!!"), kMyLocalKey_scenarioMent34);
 	ko->setObject(CCString::create("쉿. 일반 학생들이 다니는 교정 안에서는\n닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는\n일반 학생들에겐 비밀이니까!"), kMyLocalKey_scenarioMent35);
 	ko->setObject(CCString::create("흐응... 비밀이라니...\n조금 긴장하게 되.."), kMyLocalKey_scenarioMent36);
-	ko->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기 때문에\n보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
+	ko->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
 	ko->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	ko->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	ko->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);
@@ -2262,7 +2262,7 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("아니오"), kMyLocalKey_no);
 	en->setObject(CCString::create("네"), kMyLocalKey_yes);
-	en->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	en->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=17>%.0f%%를<font color=961>%.0f%%로 하향<font newline=17> 시켜드립니다.<font newline=17>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	en->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
 	
 	en->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
@@ -2496,14 +2496,14 @@ void MyLocal::en()
 	en->setObject(CCString::create("스테이지 랭킹"), kMyLocalKey_scenarioMent27);
 	en->setObject(CCString::create("점수 정보"), kMyLocalKey_scenarioMent28);
 	en->setObject(CCString::create("클리어 등급"), kMyLocalKey_scenarioMent29);
-	en->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서 뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
+	en->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서\n뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
 	en->setObject(CCString::create("네! 그럼 최선을 다 해보겠습니다!"), kMyLocalKey_scenarioMent31);
 	en->setObject(CCString::create("이런.. 다음엔 더 잘 할 수 있겠죠?\n여긴 게임이 끝나면 오게 됩니다."), kMyLocalKey_scenarioMent32);
 	en->setObject(CCString::create("휴.. 이걸로 시험끝!!\n드디어 훈련시작이네~!"), kMyLocalKey_scenarioMent33);
 	en->setObject(CCString::create("어랏. 아스카도 한조국립대에서 훈련하는거야?\n같이 최고의 닌자를 꿈꿀 수 있겠구나!!"), kMyLocalKey_scenarioMent34);
 	en->setObject(CCString::create("쉿. 일반 학생들이 다니는 교정 안에서는\n닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는\n일반 학생들에겐 비밀이니까!"), kMyLocalKey_scenarioMent35);
 	en->setObject(CCString::create("흐응... 비밀이라니...\n조금 긴장하게 되.."), kMyLocalKey_scenarioMent36);
-	en->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기 때문에\n보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
+	en->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
 	en->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	en->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	en->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);
@@ -3315,7 +3315,7 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("아니오"), kMyLocalKey_no);
 	ja->setObject(CCString::create("네"), kMyLocalKey_yes);
-	ja->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=18>%.0f%%를<font color=961>%.0f%%로 하향<font newline=18> 시켜드립니다.<font newline=18>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
+	ja->setObject(CCString::create("<font>기본 클리어조건 <font color=961 newline=17>%.0f%%를<font color=961>%.0f%%로 하향<font newline=17> 시켜드립니다.<font newline=17>적용하시겠습니까?"), kMyLocalKey_clearTimeEventMent);
 	ja->setObject(CCString::create("이벤트"), kMyLocalKey_clearTimeEventTitle);
 	
 	ja->setObject(CCString::create("숨겨진 업적"), kMyLocalKey_achieveHiddenTitle);
@@ -3549,14 +3549,14 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("스테이지 랭킹"), kMyLocalKey_scenarioMent27);
 	ja->setObject(CCString::create("점수 정보"), kMyLocalKey_scenarioMent28);
 	ja->setObject(CCString::create("클리어 등급"), kMyLocalKey_scenarioMent29);
-	ja->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서 뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
+	ja->setObject(CCString::create("그럼 계속 해볼까요?\n5스테이지 클리어 후 메인화면에서\n뵙기로 하죠!"), kMyLocalKey_scenarioMent30);
 	ja->setObject(CCString::create("네! 그럼 최선을 다 해보겠습니다!"), kMyLocalKey_scenarioMent31);
 	ja->setObject(CCString::create("이런.. 다음엔 더 잘 할 수 있겠죠?\n여긴 게임이 끝나면 오게 됩니다."), kMyLocalKey_scenarioMent32);
 	ja->setObject(CCString::create("휴.. 이걸로 시험끝!!\n드디어 훈련시작이네~!"), kMyLocalKey_scenarioMent33);
 	ja->setObject(CCString::create("어랏. 아스카도 한조국립대에서 훈련하는거야?\n같이 최고의 닌자를 꿈꿀 수 있겠구나!!"), kMyLocalKey_scenarioMent34);
 	ja->setObject(CCString::create("쉿. 일반 학생들이 다니는 교정 안에서는\n닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는\n일반 학생들에겐 비밀이니까!"), kMyLocalKey_scenarioMent35);
 	ja->setObject(CCString::create("흐응... 비밀이라니...\n조금 긴장하게 되.."), kMyLocalKey_scenarioMent36);
-	ja->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기 때문에\n보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
+	ja->setObject(CCString::create("히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까."), kMyLocalKey_scenarioMent37);
 	ja->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	ja->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	ja->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);

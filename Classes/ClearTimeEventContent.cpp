@@ -118,7 +118,7 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	
 	StyledLabelTTF* ment_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventMent), 85.f, mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
-	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
+	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f) + ccp(0,21));
 	content_back->addChild(ment_label);
 	
 	CCLabelTTF* t1_label = CCLabelTTF::create();
@@ -133,7 +133,7 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	CCControlButton* no_button = CCControlButton::create(t1_label, no_back);
 	no_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearTimeEventContent::noAction), CCControlEventTouchUpInside);
 	no_button->setPreferredSize(CCSizeMake(101,44));
-	no_button->setPosition(ccp(-55,-50));
+	no_button->setPosition(ccp(-55,-45));
 	addChild(no_button);
 	setFormSetter(no_button);
 	
@@ -157,7 +157,7 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	CCControlButton* yes_button = CCControlButton::create(t2_label, yes_back);
 	yes_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearTimeEventContent::yesAction), CCControlEventTouchUpInside);
 	yes_button->setPreferredSize(CCSizeMake(101,44));
-	yes_button->setPosition(ccp(55,-50));
+	yes_button->setPosition(ccp(55,-45));
 	addChild(yes_button);
 	setFormSetter(yes_button);
 	

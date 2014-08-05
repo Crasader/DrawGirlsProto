@@ -420,14 +420,14 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	{
 		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		fail_rate_up_label->setAnchorPoint(ccp(0.5f,0.5f));
-		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,43));
+		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,41));
 		m_container->addChild(fail_rate_up_label);
 	}
 	else
 	{
 		StyledLabelTTF* rank_up_event_sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpEventSubMent), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		rank_up_event_sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-		rank_up_event_sub_label->setPosition(rankup_button->getPosition() + ccp(0,43));
+		rank_up_event_sub_label->setPosition(rankup_button->getPosition() + ccp(0,41));
 		m_container->addChild(rank_up_event_sub_label);
 	}
 	
