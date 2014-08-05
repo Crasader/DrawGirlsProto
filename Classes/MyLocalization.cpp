@@ -2154,7 +2154,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("보유갯수 :"), kMyLocalKey_buyMorphingTake);
 	en->setObject(CCString::create("개"), kMyLocalKey_buyMorphingTakeValue);
 	
-	en->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	en->setObject(CCString::create("사용하기"), kMyLocalKey_buyMorphingBuy);
 	
 	en->setObject(CCString::create("생명의 돌이 부족합니다."), kMyLocalKey_notEnoughtMorphingTitle);
 	en->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);
@@ -3207,7 +3207,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("보유갯수 :"), kMyLocalKey_buyMorphingTake);
 	ja->setObject(CCString::create("개"), kMyLocalKey_buyMorphingTakeValue);
 	
-	ja->setObject(CCString::create("카드 업그레이드"), kMyLocalKey_buyMorphingBuy);
+	ja->setObject(CCString::create("사용하기"), kMyLocalKey_buyMorphingBuy);
 	
 	ja->setObject(CCString::create("생명의 돌이 부족합니다."), kMyLocalKey_notEnoughtMorphingTitle);
 	ja->setObject(CCString::create("<font newline=18>생명의 돌은 PVP 및 각종 이벤트에서<font newline=18>보상으로 얻을 수 있습니다."), kMyLocalKey_notEnoughtMorphingContent);

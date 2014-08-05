@@ -2715,18 +2715,28 @@ void StartSettingPopup::popupCloseCardSetting()
 
 void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
+	bool is_it_possible_achieve = false;
+	
 	for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
 	{
+		if(!myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i))
+			is_it_possible_achieve = true;
+		
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
 		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(1)));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			myAchieve->updateAchieve(nullptr);
 		}
 	}
 	
-	mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
-	myAchieve->updateAchieve(nullptr);
+	if(is_it_possible_achieve)
+	{
+		mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
+		mySGD->changeUserdata(nullptr);
+	}
 	
 	
 	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));

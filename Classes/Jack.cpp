@@ -1913,9 +1913,9 @@ void Jack::takeSpeedUpItem()
 		
 		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 		{
-			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)))
+			if(!myAchieve->isNoti(AchievementCode(i)))
 			{
-				myAchieve->changeIngCount(AchievementCode(i), 1);
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
