@@ -675,6 +675,18 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	
 	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
 	{
+		int i = kAchievementCode_hidden_speedMania;
+		
+		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
+				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
 		speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
@@ -1353,7 +1365,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		{
 			if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 			{
-				if(!myAchieve->isNoti(AchievementCode(i)) && t_p == t_beforePercentage + myAchieve->getCondition(AchievementCode(i))/0.001f)
+				if(!myAchieve->isNoti(AchievementCode(i)) && t_p >= t_beforePercentage + myAchieve->getCondition(AchievementCode(i))*0.01f)
 				{
 					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 					AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));

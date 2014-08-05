@@ -21,7 +21,7 @@ void StoryManager::addMent(bool is_left, string t_name, string t_namefile, strin
 	
 	CCScale9Sprite* ment_box = CCScale9Sprite::create("talk_mentbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(12, 12, 23-12, 23-12));
 	ment_box->setContentSize(t_size);
-	ment_box->setPosition(t_point);
+	ment_box->setPosition(t_point + ccp(0, myDSH->ui_zero_point.y));
 	ment_box->setScale(myDSH->screen_convert_rate);
 	ment_node->addChild(ment_box);
 	

@@ -42,6 +42,7 @@
 #include "TypingBox.h"
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
+#include "LabelTTFMarquee.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -850,11 +851,25 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-			nick_label->disableOuterStroke();
-			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->setPosition(ccp(64,15.5f));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0,0.5f));
+				nick_marquee->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setAnchorPoint(ccp(0,0.5f));
+				nick_label->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
@@ -893,11 +908,25 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
-			nick_label->disableOuterStroke();
-			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->setPosition(ccp(64,15.5f));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0,0.5f));
+				nick_marquee->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setAnchorPoint(ccp(0,0.5f));
+				nick_label->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
