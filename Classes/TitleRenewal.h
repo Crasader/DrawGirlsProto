@@ -38,7 +38,7 @@ enum ReceiveState{
 };
 
 class KSLabelTTF;
-
+class ConvexGraph;
 class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public CCTextFieldDelegate
 {
 public:
@@ -66,7 +66,7 @@ private:
 	
 	bool is_loaded_cgp;
 	bool is_loaded_server;
-	
+	int loginCnt;
 	int ing_download_cnt;
 	float ing_download_per;
 	int success_download_cnt;
@@ -87,7 +87,8 @@ private:
 	
 	void changeTipMent();
 	
-	CCProgressTimer* progress_timer;
+//	CCProgressTimer* progress_timer;
+	ConvexGraph* progress_timer;
 	
 	void resultLogin(Json::Value result_data);
 	
