@@ -54,6 +54,7 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	TRACE();
 	is_preloaded_effect = false;
 	
 	is_downloading = false;
@@ -270,19 +271,21 @@ void TitleRenewalScene::endSplash()
 	}
 	else
 	{
-		myHSP->getIsUsimKorean([=](Json::Value result_data)
-							   {
-								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-								   if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
-								   {
-									   myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
-									   realInit();
-								   }
-								   else // 내국인이면서 동의안함. 꺼버리기
-								   {
-									   exit(1);
-								   }
-							   });
+		termsFunctor = [=](Json::Value result_data)
+		{
+			GraphDogLib::JsonToLog("isUsimKorean", result_data);
+			if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
+			{
+				myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
+				realInit();
+			}
+			else // 내국인이면서 동의안함. 꺼버리기
+			{
+				myHSP->getIsUsimKorean(termsFunctor);
+				//									   exit(1);
+			}
+		};
+		myHSP->getIsUsimKorean(termsFunctor);
 	}
 }
 
@@ -508,15 +511,15 @@ void TitleRenewalScene::successLogin()
 			addChild(KSTimer::create(20.f/60.f, [=]()
 			{
 				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
-				
+				TRACE();
 				addChild(KSTimer::create(1.f/60.f, [=]()
 				{
 					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
-					
+					TRACE();
 					addChild(KSTimer::create(1.f/60.f, [=]()
 					{
 						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
-						
+						TRACE();
 						addChild(KSTimer::create(1.f/60.f, [=]()
 						{
 							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
@@ -525,13 +528,15 @@ void TitleRenewalScene::successLogin()
 							{
 								is_preloaded_effect = true;
 								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-								
+								TRACE();
+								CCLog("%d %d %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
 								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 								{
 									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 									
 									CCDelayTime* t_delay = CCDelayTime::create(2.f);
+									TRACE();
 									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
 									runAction(t_seq);
@@ -2280,6 +2285,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());

@@ -115,6 +115,7 @@ private:
 	vector<DownloadImgInfo> download_set;
 	void startFileDownloadSet();
 	vector<int> is_enable_index;
+	std::function<void(Json::Value value)> termsFunctor;
 //	void successDownloadActionSet(string t_filename);
 //	void failDownloadActionSet(string t_filename);
 	
@@ -190,6 +191,7 @@ private:
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();
+	
 };
 
 #endif /* defined(__DGproto__TitleRenewal__) */
