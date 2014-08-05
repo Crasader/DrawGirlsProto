@@ -102,11 +102,11 @@ void KsLocal::ko()
 	obj[LK::kSaveDesc2] = "여러기기에서 게임을\n 즐기시려면 facebook ID를 \n 연결해 주세요.";
 	obj[LK::kFacebookButton] = "FACEBOOK\n ID 연결";
 	obj[LK::kWarningDesc] = "유의사항";
-	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
+	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
 																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
 																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
-																											 "<font color=#FFAA14 newline=24>이전 기록을 불러오시겠습니까?</font>"
-																											 "<font color=#FFFFFF newline=12>이전 게임 기록을 불러오면</font>"
+																											 "<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
+																											 "<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
 																											"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
@@ -162,12 +162,12 @@ void KsLocal::en()
 	obj[LK::kSaveDesc2] = "여러기기에서 게임을\n 즐기시려면 facebook ID를 \n 연결해 주세요.";
 	obj[LK::kFacebookButton] = "FACEBOOK\n ID 연결";
 	obj[LK::kWarningDesc] = "유의사항";
-	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
-																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
-																											 "<font color=#FFAA14 newline=24>이전 기록을 불러오시겠습니까?</font>"
-																											 "<font color=#FFFFFF newline=12>이전 게임 기록을 불러오면</font>"
-																											"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
+	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
+	"<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
+	"<font color=#FFFFFF newline=24>(%s, %d)</font>"
+	"<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
+	"<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
+	"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
@@ -221,12 +221,12 @@ void KsLocal::ja()
 	obj[LK::kSaveDesc2] = "여러기기에서 게임을\n 즐기시려면 facebook ID를 \n 연결해 주세요.";
 	obj[LK::kFacebookButton] = "FACEBOOK\n ID 연결";
 	obj[LK::kWarningDesc] = "유의사항";
-	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>이 ID에 연결된</font>"
-																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
-																											 "<font color=#FFAA14 newline=24>이전 기록을 불러오시겠습니까?</font>"
-																											 "<font color=#FFFFFF newline=12>이전 게임 기록을 불러오면</font>"
-																											"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
+	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
+	"<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
+	"<font color=#FFFFFF newline=24>(%s, %d)</font>"
+	"<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
+	"<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
+	"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
