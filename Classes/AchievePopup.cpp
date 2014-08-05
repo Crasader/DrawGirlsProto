@@ -20,6 +20,7 @@
 #include "TypingBox.h"
 #include "CCMenuLambda.h"
 #include "GraySprite.h"
+#include "ConvexGraph.h"
 
 enum AchievePopupMenuTag{
 	kAchievePopupMenuTag_close = 1,
@@ -801,8 +802,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	else
 	{
 		CCSprite* center_line = CCSprite::create("common_line.png");
-		center_line->setScaleX(208/center_line->getContentSize().width);
-		center_line->setPosition(ccpFromSize(cell_back->getContentSize()/2.f) - ccp(30,2));
+		center_line->setScaleX(178/center_line->getContentSize().width);
+		center_line->setPosition(ccpFromSize(cell_back->getContentSize()/2.f) - ccp(55,2));
 		cell_back->addChild(center_line);
 		
 		if(achieve_list[idx].achieve_list.size() == 3)
@@ -894,22 +895,25 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		cell_content->setPosition(ccp(10,cell_back->getContentSize().height/2.f - 10));
 		cell_back->addChild(cell_content);
 		
-		CCSprite* graph_back = CCSprite::create("achievement_graph_back.png");
-		graph_back->setPosition(ccp(cell_back->getContentSize().width-40, 10));
-		cell_back->addChild(graph_back);
-		
 		CCPoint img_position = ccp(170,24);
 		if(myAchieve->isCompleted(recent_code))
 		{
-			CCSprite* graph_front = CCSprite::create("achievement_graph_normal.png");
-			graph_front->setPosition(graph_back->getPosition());
-			cell_back->addChild(graph_front);
+			ConvexGraph* graph_img = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(126, 13), ConvexGraphType::width);
+			graph_img->setPosition(ccp(cell_back->getContentSize().width-60, 10));
+			cell_back->addChild(graph_img);
+			
+			graph_img->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+			graph_img->setBack("loading_progress_back.png");
+			
+			graph_img->setScale(0.846f);
+			graph_img->setPercentage(100.f);
+			
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
 //			progress_label->disableOuterStroke();
 			progress_label->setAnchorPoint(ccp(0,0.5f));
-			progress_label->setPosition(ccp(5, graph_back->getContentSize().height/2.f));
-			graph_front->addChild(progress_label);
+			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
+			cell_back->addChild(progress_label);
 			
 			
 			CCSprite* n_success = CCSprite::create("achievement_button_success.png");
@@ -926,15 +930,21 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		}
 		else if(myAchieve->isAchieve(recent_code))
 		{
-			CCSprite* graph_front = CCSprite::create("achievement_graph_normal.png");
-			graph_front->setPosition(graph_back->getPosition());
-			cell_back->addChild(graph_front);
+			ConvexGraph* graph_img = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(126, 13), ConvexGraphType::width);
+			graph_img->setPosition(ccp(cell_back->getContentSize().width-60, 10));
+			cell_back->addChild(graph_img);
+			
+			graph_img->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+			graph_img->setBack("loading_progress_back.png");
+			
+			graph_img->setScale(0.846f);
+			graph_img->setPercentage(100.f);
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code)/*myAchieve->getRecentValue(recent_code)*/)->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
 //			progress_label->disableOuterStroke();
 			progress_label->setAnchorPoint(ccp(0,0.5f));
-			progress_label->setPosition(ccp(5, graph_back->getContentSize().height/2.f));
-			graph_front->addChild(progress_label);
+			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
+			cell_back->addChild(progress_label);
 			
 			
 			CCSprite* n_get = CCSprite::create("achievement_button_reward.png");
@@ -985,19 +995,21 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		{
 			float rate = 1.f*myAchieve->getRecentValue(recent_code)/myAchieve->getCondition(recent_code);
 			
-			CCProgressTimer* graph_front = CCProgressTimer::create(CCSprite::create("achievement_graph_normal.png"));
-			graph_front->setType(kCCProgressTimerTypeBar);
-			graph_front->setMidpoint(ccp(0,0));
-			graph_front->setBarChangeRate(ccp(1,0));
-			graph_front->setPercentage(rate*100.f);
-			graph_front->setPosition(graph_back->getPosition());
-			cell_back->addChild(graph_front);
+			ConvexGraph* graph_img = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(126, 13), ConvexGraphType::width);
+			graph_img->setPosition(ccp(cell_back->getContentSize().width-60, 10));
+			cell_back->addChild(graph_img);
+			
+			graph_img->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+			graph_img->setBack("loading_progress_back.png");
+			
+			graph_img->setScale(0.846f);
+			graph_img->setPercentage(rate*100.f);
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
 //			progress_label->disableOuterStroke();
 			progress_label->setAnchorPoint(ccp(0,0.5f));
-			progress_label->setPosition(ccp(5, graph_back->getContentSize().height/2.f));
-			graph_front->addChild(progress_label);
+			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
+			cell_back->addChild(progress_label);
 			
 			
 			CCSprite* n_success = CCSprite::create("achievement_button_ing.png");
