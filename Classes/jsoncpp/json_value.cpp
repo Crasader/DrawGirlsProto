@@ -1020,8 +1020,14 @@ Value::size() const
    case uintValue:
    case realValue:
    case booleanValue:
-   case stringValue:
-      return 0;
+			 return 0;
+	 case stringValue:
+		 {
+				 Json::Reader r;
+				 Json::Value other;
+				 if(r.parse(value_.string_, other))return other.size();
+				 else return 0;
+		 }
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    case arrayValue:  // size of the array is highest index + 1
       if ( !value_.map_->empty() )
@@ -1121,8 +1127,7 @@ Value::operator[]( ArrayIndex index )
 	if(type_ == stringValue){
 		Json::Reader r;
 		Json::Value other;
-		r.parse(value_.string_, other);
-		swap( other );
+		if(r.parse(value_.string_, other))swap( other );
 	}
 	
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
@@ -1158,8 +1163,7 @@ Value::operator[]( ArrayIndex index ) const
 	if(type_ == stringValue){
 		Json::Reader r;
 		Json::Value other;
-		r.parse(value_.string_, other);
-		return other[index];
+		if(r.parse(value_.string_, other))return other[index];
 	}
 	
 	JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
@@ -1202,8 +1206,7 @@ Value::resolveReference( const char *key,
 	if(type_ == stringValue){
 		Json::Reader r;
 		Json::Value other;
-		r.parse(value_.string_, other);
-		swap( other );
+		if(r.parse(value_.string_, other))swap( other );
 	}
 	
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
@@ -1249,8 +1252,7 @@ Value::operator[]( const char *key ) const
 	if(type_ == stringValue){
 		Json::Reader r;
 		Json::Value other;
-		r.parse(value_.string_, other);
-		return other[key];
+		if(r.parse(value_.string_, other))return other[key];
 	}
 	 JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
 	
