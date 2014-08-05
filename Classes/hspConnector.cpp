@@ -104,7 +104,7 @@ extern "C"{
 		CCLOG("sendresultnative9");
 		return;
 	}
-	int Java_com_nhnent_SKDDMK_DGproto_getUserState(JNIEnv *env, jobject thiz)
+	int Java_com_nhnent_SKSUMRAN_DGproto_getUserState(JNIEnv *env, jobject thiz)
 	{
 		jboolean isCopy = JNI_FALSE;
 //		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
