@@ -262,7 +262,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	progress_bar = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
 	progress_bar->setPosition(ccp(0,3));
-	addChild(progress_bar);
+	m_container->addChild(progress_bar);
 	
 	progress_bar->setCover("loading_progress_front1.png", "loading_progress_mask.png");
 	progress_bar->setBack("loading_progress_back.png");
