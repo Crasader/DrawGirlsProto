@@ -52,6 +52,8 @@ void ConvexGraph::setCover(string t_cover_filename, string t_mask_filename)
 void ConvexGraph::setPercentage(float t_percentage)
 {
 	m_percentage = t_percentage;
+	if(m_percentage > 100.f)
+		m_percentage = 100.f;
 	
 	if(m_type == ConvexGraphType::width)
 	{
