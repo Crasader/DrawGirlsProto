@@ -238,6 +238,7 @@ void ZoomScript::startScript()
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
 	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 15));
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

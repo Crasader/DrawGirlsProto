@@ -396,7 +396,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 															 
 														 },
 														 [=](){ // end Functor
-															 progress_bar->setVisible(true);
+//															 progress_bar->setVisible(true);
 															 is_menu_enable = true;
 														 });
 }
@@ -410,7 +410,7 @@ void TodayMissionPopup::closeAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	progress_bar->setVisible(false);
+//	progress_bar->setVisible(false);
 	
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
