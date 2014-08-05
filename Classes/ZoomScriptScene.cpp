@@ -81,7 +81,7 @@ bool ZoomScript::init()
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kZS_Z_back);
 	
-	CCSprite* card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
 	card_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(card_back, kZS_Z_back);
 	
@@ -462,7 +462,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
 					
-					t_node->setPosition(ccp(160,215));
+					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
 					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
@@ -552,19 +552,19 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   game_node->addChild(target_node, kZS_Z_second_img);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
-																   game_node->setScale(1.5f);
-																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   game_node->setScale(0.5f);
+																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
-																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
-																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																	 CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																	 CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 																   
-																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
-																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
-																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																	 CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
+																	 CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 																   
 																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
-																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
 																   
 																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
@@ -1296,6 +1296,17 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			
+			
+			//회전관련하여 초기값 저장하기
+			zoom_base_radian = atanf((float)sub_point.y/(float)sub_point.x);
+			
+			if(sub_point.x<0) zoom_base_radian+=CC_DEGREES_TO_RADIANS(90);
+			else zoom_base_radian-=CC_DEGREES_TO_RADIANS(90);
+			
+			zoom_base_radian+=CC_DEGREES_TO_RADIANS(game_node->getRotation());
+
+			
 		}
 		else
 		{
@@ -1379,7 +1390,27 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					avg_point = ccpAdd(avg_point, it->second);
 				}
 				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
-
+				
+						
+				//회전~
+				float last_radian = atanf((float)sub_point.y/(float)sub_point.x);
+				
+				if(sub_point.x<0) last_radian+=CC_DEGREES_TO_RADIANS(90);
+				else last_radian-=CC_DEGREES_TO_RADIANS(90);
+				float degree =CC_RADIANS_TO_DEGREES(zoom_base_radian-last_radian)+720;
+				int degreeInt = abs((int)degree%360);
+				
+				//자석처럼 붙이자
+				if(degreeInt>355 || degreeInt<5)degree=0;
+				if(degreeInt<95 && degreeInt>85)degree=90;
+				if(degreeInt<185 && degreeInt>175)degree=180;
+				if(degreeInt<275 && degreeInt>265)degree=270;
+				
+				game_node->setRotation(degree);
+				card_back->setRotation(degree);
+				
+				
+				
 				script_label->setVisible(false);
 				script_case->setVisible(false);
 

@@ -79,7 +79,7 @@ bool CardViewScene::init()
 //	temp->setPosition(ccp(240,myDSH->ui_center_y));
 //	addChild(temp);
 	
-	CCSprite* card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
 	card_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(card_back, kCV_Z_back);
 	
@@ -509,6 +509,16 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 			
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			
+			//회전관련하여 초기값 저장하기
+			zoom_base_radian = atanf((float)sub_point.y/(float)sub_point.x);
+			
+			if(sub_point.x<0) zoom_base_radian+=CC_DEGREES_TO_RADIANS(90);
+			else zoom_base_radian-=CC_DEGREES_TO_RADIANS(90);
+			
+			zoom_base_radian+=CC_DEGREES_TO_RADIANS(game_node->getRotation());
+			
+		
 		}
 		else
 		{
@@ -599,7 +609,28 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				
 				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
 				
-			
+				
+				
+				
+				//회전~
+				float last_radian = atanf((float)sub_point.y/(float)sub_point.x);
+				
+				if(sub_point.x<0) last_radian+=CC_DEGREES_TO_RADIANS(90);
+				else last_radian-=CC_DEGREES_TO_RADIANS(90);
+				float degree =CC_RADIANS_TO_DEGREES(zoom_base_radian-last_radian)+720;
+				int degreeInt = abs((int)degree%360);
+				
+				//자석처럼 붙이자
+				if(degreeInt>355 || degreeInt<5)degree=0;
+				if(degreeInt<95 && degreeInt>85)degree=90;
+				if(degreeInt<185 && degreeInt>175)degree=180;
+				if(degreeInt<275 && degreeInt>265)degree=270;
+				
+				game_node->setRotation(degree);
+				card_back->setRotation(degree);
+				
+				
+				
 				
 				float before_scale = game_node->getScale();
 				

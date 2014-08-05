@@ -309,6 +309,9 @@ void StageInfoDown::successAction()
 		state_ment->setString("카드 섬네일 만드는 중...");
 		for(int i=0;i<cf_list.size();i++)
 		{
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
@@ -658,6 +661,9 @@ void StageInfoDown::successAction2()
 	{
 		for(int i=0;i<cf_list.size();i++)
 		{
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));

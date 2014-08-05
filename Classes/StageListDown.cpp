@@ -1279,6 +1279,9 @@ void StageListDown::successAction()
 		
 		for(int i=0;i<cf_list.size();i++)
 		{
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
@@ -1995,6 +1998,9 @@ void StageListDown::startDownloadSet()
 		// reduce
 		for(int i=0;i<cf_list.size();i++)
 		{
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));

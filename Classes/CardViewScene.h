@@ -87,13 +87,15 @@ private:
 	
 	bool isAnimated;
 	CCPoint touch_p;
-    unsigned long long touchStartTime;
+	unsigned long long touchStartTime;
 	unsigned long long first_touch_time;
 	int first_touch_p;
 	CCPoint first_touch_point;
 	CCPoint touchStart_p;
 	CCPoint moveSpeed_p;
+	CCSprite* card_back;
 	float zoom_base_distance;
+	float zoom_base_radian;
 	
 	map<int, CCPoint> multiTouchData;
 	

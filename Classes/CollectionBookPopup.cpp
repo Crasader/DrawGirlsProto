@@ -151,7 +151,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	target->addChild(profile_back);
 	
 	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 7, CCSizeMake(175, 50), kCCTextAlignmentLeft);
-	r_stage_profile->setPosition(ccp(25,156));
+	r_stage_profile->setPosition(ccp(25,153));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);
 	r_stage_profile->setAnchorPoint(ccp(0,1));
@@ -409,7 +409,7 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(0.57);
-	r_card_img->setPosition(ccp(129,159));
+	r_card_img->setPosition(ccp(129,161));
 	target->addChild(r_card_img);
 	
 	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, card_number))
@@ -419,7 +419,7 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	}
 	
 	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
-	left_top_paper->setPosition(ccp(44,275));
+	left_top_paper->setPosition(ccp(44,276));
 	target->addChild(left_top_paper);
 	
 	CCSprite* right_bottom_paper = CCSprite::create("diary_paper.png");

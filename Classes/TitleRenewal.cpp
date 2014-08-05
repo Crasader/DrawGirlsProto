@@ -306,27 +306,33 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		CCLOG("saved time zone : ",tz.c_str());
 	}
 		
-	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
-	{
-		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
-	}
-	else
-	{
-		if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
-		{
-			SaveData::sharedObject()->resetAllData();
-			myDSH->removeCache();
-			mySDS->removeCache();
-			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-			return;
-		}
-	}
+
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{
+		
+		if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
+		{
+			myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
+		}
+		else
+		{
+			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
+			{
+				SaveData::sharedObject()->resetAllData();
+				myDSH->removeCache();
+				mySDS->removeCache();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				return;
+			}
+		}
+		
+		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+	
+	
 	}
 	else
 	{
@@ -2352,6 +2358,9 @@ void TitleRenewalScene::startFileDownloadSet()
 		// reduce
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
@@ -3036,6 +3045,9 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
 			CCSprite* target_img = new CCSprite();
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));

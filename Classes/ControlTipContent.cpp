@@ -32,6 +32,11 @@ void ControlTipContent::completedAnimationSequenceNamed (char const * name)
 	
 	if(t_name == "Default Timeline")
 	{
+		addChild(KSTimer::create(0.5f, [=]()
+								 {
+									 ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
+								 }));
+		
 		if(is_first)
 		{
 			is_first = false;
@@ -43,11 +48,6 @@ void ControlTipContent::completedAnimationSequenceNamed (char const * name)
 			close_button->setVisible(true);
 			is_menu_enable = true;
 		}
-		
-		addChild(KSTimer::create(0.5f, [=]()
-						{
-							ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
-						}));
 	}
 }
 
