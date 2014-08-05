@@ -225,6 +225,7 @@ public:
 	
 	void login(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	void logout(jsonSelType func);
+	void withdrawAccount(jsonSelType func);
 	void mappingToAccount(jsonSelType func);
 	string getCountryCode();
 	string getTimeZone();

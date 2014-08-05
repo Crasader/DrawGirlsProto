@@ -1066,7 +1066,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 																													{
 																														if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																														{
-																															hspConnector::get()->logout([](Json::Value p){
+																															hspConnector::get()->withdrawAccount([](Json::Value p){
 																																myDSH->clear();
 																																myDSH->resetDSH();
 																																mySGD->withdraw();
