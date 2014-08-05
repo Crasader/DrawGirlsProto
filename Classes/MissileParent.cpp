@@ -629,7 +629,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			CCLOG("%x", t_ccn);
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 //			m_charges.push_back(t_ccn);
 //			cb->setChargeParent(t_ccn);
 		}
@@ -644,7 +644,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			t_ccn->startCharge();
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 //			cb->setChargeParent(t_ccn);
 		}
 		else // normal
@@ -658,7 +658,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			t_ccn->startCharge();
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 
 //			cb->setChargeParent(t_ccn);
 		}

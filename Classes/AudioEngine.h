@@ -87,7 +87,7 @@ public:
 		if(iter == preloaded_groan_list.end())
 		{
 			preloaded_groan_list.push_back(t_type);
-			mySAE->preloadEffect(string("groan" + t_type + ".wav").c_str());
+			mySAE->preloadEffect(t_type.c_str());
 		}
 	}
 	
@@ -708,7 +708,7 @@ public:
 	
 	void playGroanEffect(string filename)
 	{
-		playEffect(("groan" + filename + ".png").c_str(), false);
+		playEffect(filename.c_str(), false);
 	}
 	
 	void playEffect(const char* filename, bool loop = false, bool cancut = false)

@@ -47,8 +47,11 @@ import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
+
 import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
 import com.kamcord.android.Kamcord;
+import com.igaworks.IgawCommon;
+//import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
@@ -114,6 +117,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		        "UqS6SftTrZNWSuzP5WryaeFQK5gJ1oYFQTlMOHmctBK",
 //		        "175998");
 //		Kamcord.initActivity(this);
+		
+		IgawCommon.startApplication(DGproto.this);
+
 	}
 	  private void hideSystemUI()
 	    {
@@ -131,8 +137,8 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 			  if (Build.VERSION.SDK_INT >= 19){
 				  hideOption = hideOption | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 			    }
-			  
 			 
+			
 		        glSurfaceView.setSystemUiVisibility(hideOption);
 		  }
 //	                Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE 
@@ -189,7 +195,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     protected void onResume()
     {
          super.onResume();     
-         ADBrixManager.startSession(this);
+         
+         IgawCommon.startSession(DGproto.this);
+//         ADBrixManager.startSession(this);
          HSPCore core = HSPCore.getInstance();
          if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT
          		&& HSPCore.getInstance().getState() != HSPState.HSP_STATE_ONLINE) 
@@ -257,7 +265,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     protected void onPause()
     {
          super.onPause();
-         ADBrixManager.endSession();
+         IgawCommon.endSession();
          suspend();
     }
     @Override

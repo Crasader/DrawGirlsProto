@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.hangame.hsp">
 
  	<application>
-        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/google_app_id"/>
-        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
         
         <!-- [HSP SDK] google login activity start -->
         <activity android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection" android:name="com.toastgamenew.hsp.auth.login.GoogleLoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
@@ -21,6 +19,9 @@
                 <action android:name="com.android.vending.INSTALL_REFERRER"/>
             </intent-filter>
         </receiver>
+    
+	    <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/google_app_id"/>
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
     
         
     
@@ -89,10 +90,15 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+	<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+	<uses-permission android:name="android.permission.READ_SMS"/>
     <!-- [HSP SDK] permission end -->
 
     
 
+
+
+    
 
 
     
