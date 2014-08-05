@@ -1147,8 +1147,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 				
 			}, [=]()
 										{
-											endHidePopup();
 											open_message_popup_func();
+											endHidePopup();
 										});
 			
 		});
