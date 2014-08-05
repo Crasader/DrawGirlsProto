@@ -253,9 +253,9 @@ public class hspConnector {
 										+ result.getDomain() + ", detail = "
 										+ result.getDetail());
 
-								Toast.makeText(hspConnector.sContext,
-										" Remapping Failed: " + result,
-										Toast.LENGTH_LONG).show();
+//								Toast.makeText(hspConnector.sContext,
+//										" Remapping Failed: " + result,
+//										Toast.LENGTH_LONG).show();
 							}
 							Log.d("mapping",
 									"END - HSPRequestMappingToAccountCB ");
@@ -486,7 +486,7 @@ public class hspConnector {
 	
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
-
+		Log.d("", "login function");
 		hspConnector.handler.post(new Runnable() {
 			public void run() {
 
