@@ -388,7 +388,7 @@ public:
 		int sound_cnt = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
 		if(sound_cnt > 0)
 		{
-			AudioEngine::sharedInstance()->playGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, ks19937::getIntValue(1, sound_cnt)));
+			AudioEngine::sharedInstance()->playGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, card_number, ks19937::getIntValue(1, sound_cnt)));
 		}
 		
 		CCPoint touchLocation = pTouch->getLocation();

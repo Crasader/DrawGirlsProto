@@ -203,10 +203,13 @@ void ChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
-			cb->m_state = 0;
+//			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_state |= kCumberStateMoving; // Moving 정보
+				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+			else
+				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
 			
+			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -316,10 +319,13 @@ void SpecialChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
-			cb->m_state = 0;
+//			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_state |= kCumberStateMoving; // Moving 정보
+				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+			else
+				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
 
+			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -439,11 +445,14 @@ void CrashChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->resetCastingCancelCount();
-			cb->m_state = 0;
+//			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_state |= kCumberStateMoving; // Moving 정보
+				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+			else
+				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
 
 			
+			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;

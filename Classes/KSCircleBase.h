@@ -55,7 +55,7 @@ public:
 	virtual void completedAnimationSequenceNamed(const char *name_);
 	KSCircleBase() : RADIUS(15.f), m_lookToLeft(true)
 	{
-		m_state = 0;
+		m_cumberState = kCumberStateNothing;
 	}
 	void removeFromParent()
 	{

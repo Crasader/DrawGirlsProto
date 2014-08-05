@@ -199,6 +199,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_ui");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_bgm");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_effect");
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_girls");
 	CCFileUtils::sharedFileUtils()->addSearchPath("fonts");
 	
 	//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

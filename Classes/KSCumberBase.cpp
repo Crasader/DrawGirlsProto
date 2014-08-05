@@ -83,7 +83,7 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 void KSCumberBase::randomMoving(float dt)
 {
 	m_scale.timer += 1/60.f;
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -91,7 +91,7 @@ void KSCumberBase::randomMoving(float dt)
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
 		if(changeDirection == 0)
@@ -121,7 +121,7 @@ void KSCumberBase::randomMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -201,7 +201,7 @@ void KSCumberBase::randomMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -210,7 +210,7 @@ void KSCumberBase::randomMoving(float dt)
 	//        CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -238,7 +238,7 @@ void KSCumberBase::straightMoving(float dt)
 	m_scale.timer += 1/60.f;
 	
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -249,7 +249,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	int check_loop_cnt = 0;
 
 	// 낮은 확률로 방향 전환...	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
 		if(changeDirection == 0)
@@ -307,7 +307,7 @@ void KSCumberBase::straightMoving(float dt)
 		};
 		
 		
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -387,7 +387,7 @@ void KSCumberBase::straightMoving(float dt)
 		{
 			CCLOG("straightMoving cnt !! = %d", cnt);
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -398,7 +398,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -439,7 +439,7 @@ void KSCumberBase::followMoving(float dt)
 		unAggroExec();
 	}
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -449,7 +449,7 @@ void KSCumberBase::followMoving(float dt)
 	
 	float dx, dy;
 	dx = dy = 0;
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
@@ -502,7 +502,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			return m_directionAngleDegree;
 		};
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -576,7 +576,7 @@ void KSCumberBase::followMoving(float dt)
 				validPosition = true;
 			}
 		}
-		else // if(m_state == kCumberStateFury)
+		else // if(m_cumberState == kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_OUTLINE)
 			{
@@ -601,7 +601,7 @@ void KSCumberBase::followMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -611,7 +611,7 @@ void KSCumberBase::followMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -639,7 +639,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	m_scale.timer += 1/60.f;
 	
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -649,7 +649,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = m_well512.GetValue(3);
 		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
@@ -687,7 +687,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -790,7 +790,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -799,7 +799,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
- 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+ 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -831,7 +831,7 @@ void KSCumberBase::circleMoving(float dt)
 		m_circle.setRelocation(getPosition(), m_well512);
 	}
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -841,7 +841,7 @@ void KSCumberBase::circleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
 		{
@@ -874,7 +874,7 @@ void KSCumberBase::circleMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -948,7 +948,7 @@ void KSCumberBase::circleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -958,7 +958,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	
 	
- 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+ 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -998,7 +998,7 @@ void KSCumberBase::snakeMoving(float dt)
 		m_snake.setRelocation(getPosition(), m_well512);
 	}
 	
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -1008,7 +1008,7 @@ void KSCumberBase::snakeMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
 		{
@@ -1041,7 +1041,7 @@ void KSCumberBase::snakeMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_state != kCumberStateFury)
+		if(m_cumberState != kCumberStateFury)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -1115,7 +1115,7 @@ void KSCumberBase::snakeMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_state & kCumberStateMoving) == 0 && m_state != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
 			validPosition = true;
 		}
@@ -1125,7 +1125,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	
 	
- 	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+ 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -1165,7 +1165,7 @@ void KSCumberBase::rushMoving(float dt)
 	m_scale.timer += 1/60.f;
 
 
-	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_state & kCumberStateMoving) == 0)
+	if(m_scale.collisionStartTime + 1 < m_scale.timer || (m_cumberState & kCumberStateMoving) == 0)
 	{
 		m_scale.collisionCount = 0;
 		m_scale.collisionStartTime = m_scale.timer;
@@ -1175,7 +1175,7 @@ void KSCumberBase::rushMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 
-	if((m_state & kCumberStateMoving) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(m_furyMode.firstMoving == true)
 		{
@@ -1270,7 +1270,7 @@ void KSCumberBase::rushMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 
 
-	if(m_state == kCumberStateFury)
+	if(m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -1314,7 +1314,7 @@ n<m 인 부수기 공격은 m초 안에는 안함.
 void KSCumberBase::cumberAttack(float dt)
 {
 	bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
-	if(m_slience || !attackCondition || (m_state & kCumberStateAttack)) // 공격 못하는 조건이라면 패스.
+	if(m_slience || !attackCondition || (m_cumberState != kCumberStateMoving)) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
@@ -1324,6 +1324,7 @@ void KSCumberBase::cumberAttack(float dt)
 	//분노카운터,재공격카운터 계속 증가
 	m_reAttackCnt++;
 	m_furyCnt++;
+	m_reAttackCnt = 102;
 	if(m_reAttackCnt<100)return;
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
 	if(m_furyCnt > 0 && m_reAttackCnt > 0){
@@ -1411,7 +1412,7 @@ void KSCumberBase::cumberAttack(float dt)
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
 			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-				 currentSecond <= m_lastPattern.exeTime + 3)
+				 currentSecond <= m_lastPattern.exeTime + 3000)
 			{
 				
 			}
@@ -1500,8 +1501,9 @@ void KSCumberBase::cumberAttack(float dt)
 	// 확률로
 	
 	//재공격카운터 0이상일때.
-	bool attackable = (m_state & kCumberStateNoDirection) == 0 && (m_state & kCumberStateDirection) == 0 &&
-			(m_state & kCumberStateAttack) == 0; // 공격이 가능하다면...
+	bool attackable = m_cumberState == kCumberStateMoving;
+//(m_cumberState & kCumberStateNoDirection) == 0 && (m_cumberState & kCumberStateDirection) == 0 &&
+//			(m_cumberState & kCumberStateAttack) == 0; // 공격이 가능하다면...
 	if(exeProb == 0 && attackable && m_reAttackCnt>=0)
 	{
 		// 부수기 공격이 시행됐는데, 크래시 공격이 없다면포 텔포 해야됨
@@ -1667,7 +1669,7 @@ void KSCumberBase::cumberAttack(float dt)
 					
 					if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
 						searched = false;
-					if(attackCode["pattern"].asString() == "109" && m_state == kCumberStateFury)
+					if(attackCode["pattern"].asString() == "109" && m_cumberState == kCumberStateFury)
 						searched = false;
 					if(attackCode["pattern"].asString() == "1019" && m_swell.isStartSwell)
 					{
@@ -1966,7 +1968,7 @@ bool KSCumberBase::init()
 
 void KSCumberBase::startMoving()
 {
-	m_state = kCumberStateMoving;
+	m_cumberState = kCumberStateMoving;
 }
 
 void KSCumberBase::stopMoving()
@@ -1979,12 +1981,12 @@ void KSCumberBase::stopMoving()
 
 void KSCumberBase::setCumberState( int e )
 {
-	m_state = (CUMBER_STATE)e;
+	m_cumberState = (CUMBER_STATE)e;
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
 {
-	return m_state;
+	return m_cumberState;
 }
 
 void KSCumberBase::resetCastingCancelCount()
@@ -1999,7 +2001,7 @@ int KSCumberBase::getCastingCancelCount()
 
 void KSCumberBase::setGameover()
 {
-	m_state = kCumberStateGameover;
+	m_cumberState = kCumberStateGameover;
 	
 	//		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
 	//		runAction(CCScaleTo::create(2.f, 0.01f));
@@ -2031,7 +2033,7 @@ void KSCumberBase::movingAndCrash( float dt )
 	}
 	checkConfine(dt);
 	
-	if(m_state == kCumberStateFury)
+	if(m_cumberState == kCumberStateFury)
 	{
 		m_furyMode.furyFrameCount++;
 	}
@@ -2063,7 +2065,7 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 		}
 	};
-	if(m_state == kCumberStateFury)
+	if(m_cumberState == kCumberStateFury)
 	{
 		movingBranch(m_furyMovement);
 	}
@@ -2173,8 +2175,8 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 	if(m_swell.isStartSwell == false)
 	{
 		m_swell.totalFrame = totalFrame;
-//		auto backupState = m_state;
-		m_state = 0;
+//		auto backupState = m_cumberState;
+		m_cumberState = kCumberStateNothing;
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;
@@ -2186,7 +2188,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 																						 myGD->communication("MS_resetRects", false);
 																						 schedule(schedule_selector(KSCumberBase::swelling));
 
-																						 m_state = kCumberStateMoving;
+																						 m_cumberState = kCumberStateMoving;
 																					 }));
 		m_swell.isStartSwell = true;
 	}

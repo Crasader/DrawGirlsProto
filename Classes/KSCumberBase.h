@@ -66,23 +66,32 @@ enum COLLISION_CODE
 
 // Moving 상태는 Attack/NoDirection/Direction 과 조합이 가능함. 나머지는 ㄴㄴ
 typedef int CUMBER_STATE;
-// 일반적인 상태 돌아다닐 때,
+
+#define kCumberStateNothing (1)
+// 일반적인 상태 돌아다닐 때, 공격은 오직 이 상태에서만 가능.
+
 #define kCumberStateMoving (1 << 1)
+
+// 캐스팅
+#define kCumberStateCasting (1 << 2)
 // 공격중일 때, 러시어택과는 좀 다름.
-#define kCumberStateAttack (1 << 3)
+
+
+
+// 빙글 빙글...
+#define kCumberStateNoDirection (1 << 6)
+//   잭만 바라봐~
+#define kCumberStateDirection (1 << 7)
 
 // 맞고 있을 때...
-#define kCumberStateDamaging (1 << 6)
-// 빙글 빙글...
-#define kCumberStateNoDirection (1 << 7)
-//   잭만 바라봐~
-#define kCumberStateDirection (1 << 8)
+#define kCumberStateDamaging (1 << 8)
 // 분노모드.
 #define kCumberStateFury (1 << 9)
 // 게임오버.
 #define kCumberStateGameover (1 << 10)
 
-
+//#define BIT_CHECK(var, pos) (var &
+// NoDirection 과 Direction 은 Casting 이나 Attack 과 함께 비트플래그로 사용됨.
 enum MOVEMENT
 {
 	STRAIGHT_TYPE = 1,
@@ -326,7 +335,7 @@ public:
 	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
-	CUMBER_STATE m_state;
+	CUMBER_STATE m_cumberState;
 	vector<ChargeParent*> m_charges;
 	vector<ChargeParent*>& getCharges()
 	{

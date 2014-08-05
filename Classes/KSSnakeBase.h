@@ -15,9 +15,14 @@ using namespace cocos2d::extension;
 /// KSCumberBase 로 부터 derived 된 클래스가 몬스터의 이미지를 가져야 할 듯 싶다.
 
 
-class KSSnakeBase : public KSCumberBase
+class KSSnakeBase : public KSCumberBase, public CCBSelectorResolver
 {
 public:
+	virtual SEL_MenuHandler onResolveCCBCCMenuItemSelector(CCObject * pTarget, const char* pSelectorName);
+	virtual SEL_CallFuncN onResolveCCBCCCallFuncSelector(CCObject * pTarget, const char* pSelectorName);
+	virtual SEL_CCControlHandler onResolveCCBCCControlSelector(CCObject * pTarget, const char* pSelectorName);
+public:
+	virtual void completedAnimationSequenceNamed(const char *name_);
 	KSSnakeBase() :
 	RADIUS(110.f / 4.f), // 머리에 대한 충돌 반지름
 	BODY_RADIUS(70/4.f), // 몸통에 대한 충돌 반지름
@@ -30,7 +35,7 @@ public:
 	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
 	
 	{
-		m_state = 0;
+		m_cumberState = kCumberStateNothing;
 	}
 	
 	void removeFromParent()
@@ -53,6 +58,7 @@ public:
 	virtual void onPatternEnd();
 	virtual void onStartGame();
 	virtual void stopCasting();
+	void runTimeline( Json::Value patternInfo );
 	virtual void crashMapForPosition(CCPoint targetPt);
 	virtual bool init(const std::string& ccbiFile, bool isNotShowWindow);
 	static KSSnakeBase* create(const std::string& ccbiFile, bool isNotShowWindow = true) \
@@ -177,7 +183,13 @@ protected:
 	}m_direction;
 	
 	
-	
+protected:
+	std::string m_atype;
+	std::string currentTimeline;
+	std::string currentTimelineFooter; // _b _m _e 같은것들.
+	bool m_attackCanceled;
+	int m_repeatNumber;
+	CCBAnimationManager *mAnimationManager;
 	
 };
 
