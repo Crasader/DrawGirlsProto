@@ -1170,6 +1170,10 @@ Value::operator[]( ArrayIndex index ) const
 	
 	if ( type_ == nullValue )
 		return null;
+    
+    if(type_>objectValue){
+        return null;
+    }
 	
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    CZString key( index );
@@ -1208,6 +1212,10 @@ Value::resolveReference( const char *key,
 		Json::Value other;
 		if(r.parse(value_.string_, other))swap( other );
 	}
+    
+    if(type_>objectValue){
+        type_ = nullValue;
+    }
 	
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
    if ( type_ == nullValue )
@@ -1254,7 +1262,13 @@ Value::operator[]( const char *key ) const
 		Json::Value other;
 		if(r.parse(value_.string_, other))return other[key];
 	}
-	 JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
+    if(type_>objectValue){
+        return null;
+    }
+    if(!(type_ == nullValue  ||  type_ == objectValue)){
+        return null;
+    }
+    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
 	
 	if ( type_ == nullValue )
 		return null;
