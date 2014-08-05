@@ -21,7 +21,6 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 import com.hangame.hsp.payment.HSPPayment;
-import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
 //import com.litqoo.DGproto.R;
 
 
@@ -374,7 +373,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 	
 	public void addDoubleDialog(final String t_title, final String t_message, final String t_leftButtonText, final String t_rightButtonText, final int t_tag)
 	{
-		ADBrixManager.endSession();
+//		ADBrixManager.endSession();
 		handler.post(new Runnable() {
 			public void run() {
 				try {
@@ -394,6 +393,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 				            });
 						}
 					});
+					
 					myAlert.setNegativeButton(t_rightButtonText, new DialogInterface.OnClickListener() {
 						
 						public void onClick(DialogInterface dialog, int which) {
@@ -401,7 +401,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 							mGLView.queueEvent(new Runnable() {
 				                public void run() {
 				                	alertAction(dialogValue, 1);
-				                	ADBrixManager.startSession(KSActivityBase.this); // getApplicationContext()에서 activity를 넣어주는 것으로 변경 되었습니다. - 2013-11-13
+//				                	ADBrixManager.startSession(KSActivityBase.this); // getApplicationContext()에서 activity를 넣어주는 것으로 변경 되었습니다. - 2013-11-13
 //				                	DBrixManager.startSession(this);
 				                }
 				            });
