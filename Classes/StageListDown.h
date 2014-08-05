@@ -34,6 +34,7 @@ class IntPoint;
 class CumberShowWindow;
 class KSLabelTTF;
 class DownloadImgInfo;
+class ConvexGraph;
 class StageListDown : public CCLayer
 {
 public:
@@ -61,8 +62,9 @@ private:
 	
 	CumberShowWindow* loading_character;
 	CCScale9Sprite* talk_box;
-	CCSprite* progress_back;
-	CCProgressTimer* loading_progress;
+//	CCSprite* progress_back;
+//	CCProgressTimer* loading_progress;
+	ConvexGraph* loading_progress;
 	
 	void outOpenning();
 	

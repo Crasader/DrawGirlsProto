@@ -18,6 +18,7 @@
 #include "CommonButton.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "ConvexGraph.h"
 
 TodayMissionPopup* TodayMissionPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -259,18 +260,27 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		}
 	}
 	
-	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(0,3));
-	m_container->addChild(progress_back);
-	
-	progress_bar = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-	progress_bar->setType(kCCProgressTimerTypeBar);
-	progress_bar->setMidpoint(ccp(0,0));
-	progress_bar->setBarChangeRate(ccp(1,0));
-	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+	progress_bar = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
 	progress_bar->setPosition(ccp(0,3));
-	progress_bar->setVisible(false);
-	m_container->addChild(progress_bar);
+	addChild(progress_bar);
+	
+	progress_bar->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+	progress_bar->setBack("loading_progress_back.png");
+	
+	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+	
+//	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+//	progress_back->setPosition(ccp(0,3));
+//	m_container->addChild(progress_back);
+//	
+//	progress_bar = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
+//	progress_bar->setType(kCCProgressTimerTypeBar);
+//	progress_bar->setMidpoint(ccp(0,0));
+//	progress_bar->setBarChangeRate(ccp(1,0));
+//	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+//	progress_bar->setPosition(ccp(0,3));
+//	progress_bar->setVisible(false);
+//	m_container->addChild(progress_bar);
 	
 //	KSLabelTTF* progress_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 15.5f);
 //	progress_label->setAnchorPoint(ccp(0,0.5));
@@ -278,7 +288,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 //	m_container->addChild(progress_label);
 	
 	CCSprite* present_img = CCSprite::create("mission_present.png");
-	present_img->setPosition(ccp(progress_bar->getSprite()->getContentSize().width/2.f, 5));
+	present_img->setPosition(ccp(201/2.f, 5));
 	m_container->addChild(present_img);
 	
 	

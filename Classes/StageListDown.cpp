@@ -20,6 +20,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "ASPopupView.h"
+#include "ConvexGraph.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -848,17 +849,12 @@ void StageListDown::endOpenning()
 	
 	gray->removeFromParent();
 
-	progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(240,100));
-	addChild(progress_back);
-	
-	loading_progress = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-	loading_progress->setType(kCCProgressTimerTypeBar);
-	loading_progress->setMidpoint(ccp(0,0));
-	loading_progress->setBarChangeRate(ccp(1,0));
-	loading_progress->setPercentage(0);
-	loading_progress->setPosition(ccp(240, 100));
+	loading_progress = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+	loading_progress->setPosition(ccp(240,100));
 	addChild(loading_progress);
+	
+	loading_progress->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+	loading_progress->setBack("loading_progress_back.png");
 	
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 //	CCBReader* reader = new CCBReader(nodeLoader);
@@ -927,7 +923,6 @@ void StageListDown::outOpenning()
 										   {
 											   state_ment->setVisible(false);
 											   download_state->setPosition(ccp(240,80+20-300.f*t));
-											   progress_back->setPosition(ccp(240,100-300.f*t));
 											   loading_progress->setPosition(ccp(240,100-300.f*t));
 											   loading_character->setPosition(ccp(240,160-12+400.f*t));
 											   talk_box->setPosition(ccp(240,200+300.f*t));
@@ -935,7 +930,6 @@ void StageListDown::outOpenning()
 										   }, [=](float t)
 										   {
 											   download_state->setPosition(ccp(240,80+20-300.f));
-											   progress_back->setPosition(ccp(240,100-300.f));
 											   loading_progress->setPosition(ccp(240,100-300.f));
 											   loading_character->setPosition(ccp(240,160-12+400.f));
 											   talk_box->setPosition(ccp(240,200+300.f));
@@ -981,9 +975,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		startDownload();
@@ -1229,9 +1221,7 @@ void StageListDown::successAction()
 				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
-					loading_progress->stopAllActions();
-					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-					loading_progress->runAction(t_fromto);
+					loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 				}
 			}
 			if(success_func == nullptr)
@@ -1249,9 +1239,7 @@ void StageListDown::successAction()
 				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
-					loading_progress->stopAllActions();
-					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-					loading_progress->runAction(t_fromto);
+					loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 				}
 			}
 			startDownload();
@@ -1267,9 +1255,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		startDownload();
@@ -1330,9 +1316,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		
