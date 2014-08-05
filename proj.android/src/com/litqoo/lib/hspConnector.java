@@ -463,15 +463,25 @@ public class hspConnector {
 	public static double getScreenRealWidth() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		double x = dm.widthPixels/dm.xdpi;
-		return x;
+		
+		if(dm.xdpi>0){
+			double x = dm.widthPixels/dm.xdpi;
+			return x;
+		}else{
+			return 4.2f;
+		}
 	}
 	
 	public static double getScreenRealHeight() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		double y = dm.heightPixels/dm.ydpi;
-		return y;
+		
+		if(dm.ydpi>0){
+			double y = dm.heightPixels/dm.ydpi;
+			return y;
+		}else{
+			return 2.47f;
+		}
 	}
 	
 	public static void login(final int _key, final boolean manualLogin,
@@ -593,11 +603,13 @@ public class hspConnector {
 
 	public static String getCountryCode() {
 		String r = Locale.getDefault().getCountry();
+		if(r=="")r="kr";
 		return r;
 	}
 
 	public static String getTimeZone(){
 		TimeZone tz = TimeZone.getDefault();
+		if(tz.getID()=="")return"Asia/seoul";
 		return tz.getID();
 	}
 	
