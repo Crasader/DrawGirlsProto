@@ -664,6 +664,17 @@ void TitleRenewalScene::successLogin()
 	
 	is_loaded_cgp = false;
 	
+	addChild(KSTimer::create(5.f, [=]()
+							 {
+								 if(is_loaded_cgp)
+									 return;
+								 
+								 is_loaded_cgp = true;
+								 mySGD->cgp_data["promotionstate"] = "CGP_NONE";
+								 
+								 endingAction();
+							 }));
+	
 	std::function<void(Json::Value)> pf;
 	pf = [=](Json::Value v){
 		KS::KSLog("CGP : %", v);
@@ -675,6 +686,9 @@ void TitleRenewalScene::successLogin()
 		 
 		 }
 		 */
+		
+		if(is_loaded_cgp)
+			return;
 		
 		is_loaded_cgp = true;
 		mySGD->cgp_data = v;
