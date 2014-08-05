@@ -27,6 +27,7 @@
 #include "support/TransformUtils.h"
 #include "ks19937.h"
 #include "ServerDataSave.h"
+#include "AchieveNoti.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -256,6 +257,8 @@ public:
 	bool m_isWaving;
 	float m_lastTouchTime; // 마지막 터치 시점.
 	float m_touchTimer; // 증가하는 시간
+	
+	int m_touch_cnt;
 	///
 	
 	int colorRampUniformLocation;   // 1
@@ -271,6 +274,7 @@ public:
 		m_isLoadedRGB = false;
 		m_touchTimer = 0.f;
 		m_lastTouchTime = 0.f;
+		m_touch_cnt = 0;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -384,6 +388,15 @@ public:
 		if(m_isLoadedRGB == false)
 			return;
 		vector<int> tt;
+		
+		m_touch_cnt++;
+		if(!myAchieve->isNoti(AchievementCode::kAchievementCode_hidden_holder) && !myAchieve->isCompleted(AchievementCode::kAchievementCode_hidden_holder) &&
+		   m_touch_cnt >= myAchieve->getCondition(AchievementCode::kAchievementCode_hidden_holder))
+		{
+			myAchieve->changeIngCount(AchievementCode::kAchievementCode_hidden_holder, myAchieve->getCondition(AchievementCode::kAchievementCode_hidden_holder));
+			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode::kAchievementCode_hidden_holder);
+			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+		}
 		
 		int sound_cnt = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
 		if(sound_cnt > 0)

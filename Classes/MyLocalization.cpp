@@ -1376,6 +1376,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	ko->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	ko->setObject(CCString::create("<font color=999>이벤트를 놓치지 마세요!!"), kMyLocalKey_rankUpEventSubMent);
 	
 	ko->setObject(CCString::create("타임 오버"), kMyLocalKey_failTitleTimeover);
 	ko->setObject(CCString::create("미션 실패"), kMyLocalKey_failTitleMissionfail);
@@ -2411,6 +2412,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	en->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	en->setObject(CCString::create("<font color=999>이벤트를 놓치지 마세요!!"), kMyLocalKey_rankUpEventSubMent);
 	
 	en->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
 	en->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
@@ -3463,6 +3465,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("검색결과가 없습니다."), kMyLocalKey_cardGiftNotFound);
 	
 	ja->setObject(CCString::create("<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다."), kMyLocalKey_rankUpFailRateUp);
+	ja->setObject(CCString::create("<font color=999>이벤트를 놓치지 마세요!!"), kMyLocalKey_rankUpEventSubMent);
 	
 	ja->setObject(CCString::create("TIME OVER"), kMyLocalKey_failTitleTimeover);
 	ja->setObject(CCString::create("MISSION FAIL"), kMyLocalKey_failTitleMissionfail);
