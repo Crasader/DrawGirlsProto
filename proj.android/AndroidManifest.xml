@@ -16,6 +16,21 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
+
+
+		 <meta-data android:name="io.fiverocks.android.appstore" android:value="Google"/>
+		 <receiver
+        android:name="io.fiverocks.android.GCMReceiver"
+        android:permission="com.google.android.c2dm.permission.SEND">
+      <intent-filter>
+        <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+        <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+        <action android:name="com.google.android.gcm.intent.RETRY"/>
+        <category android:name="com.nhnent.SKSUMRAN"/>
+      </intent-filter>
+    </receiver>
+    <receiver android:name="io.fiverocks.android.FiveRocksReceiver"/>
+    
         <meta-data
             android:name="igaworks_app_key"
             android:value="58229468" />
@@ -23,6 +38,7 @@
             android:name="igaworks_hash_key"
             android:value="03c0b0579dd4470b" />
 		<meta-data android:name="igaworks_market_info" android:value="google"/>
+
         <meta-data
             android:name="adbrix_app_key"
             android:value="58229468" />
@@ -44,38 +60,40 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
         </activity>
         
                 <!-- kamcord -->
-         <activity
-            android:name="com.kamcord.android.KamcordActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:launchMode="singleTask"
-            android:windowSoftInputMode="stateHidden|adjustResize"
-            android:windowActionBar="false" >
-        </activity>
-        
-        <activity
-            android:name="com.kamcord.android.ReplayActivity"
-            android:label="Watch"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:launchMode="singleTask"
-            android:parentActivityName="com.kamcord.android.KamcordActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kamcord.android.KamcordActivity" />
-        </activity>
-        
-        <activity
-            android:name="com.kamcord.android.WebActivity"
-            android:label="Login"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen"
-            android:launchMode="singleTask"
-            android:parentActivityName="com.kamcord.android.KamcordActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.kamcord.android.KamcordActivity" />
-        </activity>
-        
+		<activity
+		    android:name="com.kamcord.android.KamcordActivity"
+		    android:launchMode="singleTask"
+		    android:configChanges="keyboardHidden|keyboard"
+		    android:windowSoftInputMode="stateHidden|adjustPan"
+		    android:windowActionBar="false"
+		    android:theme="@style/KamcordTheme"
+		    android:hardwareAccelerated="true" >
+		</activity>
+		
+		<activity
+		    android:name="com.kamcord.android.ReplayActivity"
+		    android:label="Watch"
+		    android:theme="@android:style/Theme.Translucent.NoTitleBar.Fullscreen"
+		    android:launchMode="singleTask"
+		    android:parentActivityName="com.kamcord.android.KamcordActivity"
+		    android:configChanges="orientation|screenSize|keyboardHidden"
+		    android:hardwareAccelerated="true" >
+		    <meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value="com.kamcord.android.KamcordActivity" />
+		</activity>
+		
+		<activity
+		    android:name="com.kamcord.android.WebActivity"
+		    android:label="Login"
+		    android:theme="@style/KamcordLoginTheme"
+		    android:launchMode="singleTask"
+		    android:parentActivityName="com.kamcord.android.KamcordActivity"
+		    android:configChanges="orientation|screenSize|keyboardHidden" >
+		    <meta-data
+		        android:name="android.support.PARENT_ACTIVITY"
+		        android:value="com.kamcord.android.KamcordActivity" />
+		</activity>
         
         <!-- HSP Activity Begin -->
         <activity
@@ -123,7 +141,7 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
                 <action android:name="com.nhn.nni.intent.EVENT" />
 
                 <!-- TODO: fill package name -->
-                <category android:name="com.nhnent.SKDDMK" />
+                <category android:name="com.nhnent.SKSUMRAN" />
 `
             </intent-filter>
             <intent-filter>
@@ -217,16 +235,24 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
                 
                    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
                 <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+                 <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+                 <permission
+    android:name="com.nhnent.SKSUMRAN.permission.C2D_MESSAGE"
+    android:protectionLevel="signature"/>
+  <uses-permission android:name="com.nhnent.SKSUMRAN.permission.C2D_MESSAGE"/>
+  
+  <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+                
     <!-- HSP permission end -->
 
 
     <!-- [HSP SDK] NPush Global permission begin -->
     <!-- TODO: fill package name -->
     <permission
-        android:name="com.nhnent.SKDDMK.permission.NNI_MESSAGE"
+        android:name="com.nhnent.SKSUMRAN.permission.NNI_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.nhnent.SKDDMK.permission.NNI_MESSAGE" />
+    <uses-permission android:name="com.nhnent.SKSUMRAN.permission.NNI_MESSAGE" />
     <!-- [HSP SDK] NPush Global permission end -->
 
 

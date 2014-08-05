@@ -341,6 +341,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card["no"].asInt(), sound_cnt, false);
 					for(int j=1;j<=sound_cnt;j++)
 					{
+						CCLOG("sound is %s",t_card["sound"][j-1].asString().c_str());
 						NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card["no"].asInt(), j, t_card["sound"][j-1].asString(), false);
 					}
 					
