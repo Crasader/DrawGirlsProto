@@ -66,7 +66,7 @@ private:
 	
 	bool is_loaded_cgp;
 	bool is_loaded_server;
-	
+	int loginCnt;
 	int ing_download_cnt;
 	float ing_download_per;
 	int success_download_cnt;

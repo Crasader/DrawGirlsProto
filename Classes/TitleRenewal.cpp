@@ -58,6 +58,7 @@ bool TitleRenewalScene::init()
 	
 	is_downloading = false;
 	
+	loginCnt=0;
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -337,17 +338,35 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	else
 	{
 		
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
-		
-			Json::Value param;
-			param["ManualLogin"] = true;
-			param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		//오류나도 3번은 자동 로그인 시도
+		if(loginCnt<3){
+			this->loginCnt++;
+			CCLOG("failed login , try login %d",loginCnt+1);
+			addChild(KSTimer::create(3, [=](){
+				//hspConnector::get()->logout([=](Json::Value v){
+					Json::Value param;
+					param["ManualLogin"] = true;
+					param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+					hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+				//});
+			}));
 			
-			hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-
-		
-		});
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}else{
+			loginCnt=0;
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
+			
+					//hspConnector::get()->logout([=](Json::Value v){
+						Json::Value param;
+						param["ManualLogin"] = true;
+						param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+						hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+					//});
+																										
+				
+			
+			});
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
 	}
 }
 
