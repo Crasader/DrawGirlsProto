@@ -508,7 +508,13 @@ protected:
 
 	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
-	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
+//	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
+    protected: AttackPattern* m_attackPattern;
+    public: virtual AttackPattern* getAttackPattern(void) const { return m_attackPattern; }
+    public: virtual void setAttackPattern(AttackPattern* var){ m_attackPattern = var;
+        CCLog("xxxxxxxxxxxxxxx %x", var);
+    }
+    
 
 	CC_SYNTHESIZE(CobWeb*, m_cobWebAttack, CobWebAttack);
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
