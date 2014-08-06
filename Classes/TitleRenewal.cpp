@@ -304,7 +304,10 @@ void TitleRenewalScene::realInit()
 void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
 	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
+	/*
+	 점검시 로그j
+	 {"error":{"isSuccess":false,"code":8197},"serviceprop":"08","playable":false}
+	 */
 	if(myDSH->getStringForKey(kDSH_Key_timeZone)==""){
 		string tz = myHSP->getTimeZone();
 		myDSH->setStringForKey(kDSH_Key_timeZone, tz);
@@ -324,6 +327,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		{
 			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 			{
+				CCLOG("resetalldata");
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
@@ -342,36 +346,49 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	}
 	else
 	{
+		CCLog("login error = %s", result_data["error"].get("localizedDescription", "NONE_LOCAL").asString().c_str());
+
+
+		auto tryLogin = [=](){
+			if(result_data["error"].get("localizedDescription", "").asString() == "")
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = (int)HSPLogin::GUEST;
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+			else
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+		};
 		
 		//오류나도 3번은 자동 로그인 시도
-		if(loginCnt<3){
-			this->loginCnt++;
-			CCLOG("failed login , try login %d",loginCnt+1);
-			addChild(KSTimer::create(3, [=](){
-				//hspConnector::get()->logout([=](Json::Value v){
-					Json::Value param;
-					param["ManualLogin"] = true;
-					param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-					hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-				//});
-			}));
-			
-		}else{
-			loginCnt=0;
-				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
-			
-					//hspConnector::get()->logout([=](Json::Value v){
-						Json::Value param;
-						param["ManualLogin"] = true;
-						param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-						hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-					//});
-																										
-				
-			
-			});
-			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		// 점검이면 그냥 재시도k
+		if(result_data["error"]["code"].asInt() == 8197)
+		{
+			addChild(KSTimer::create(3, tryLogin));
 		}
+		// 점검이 아니면 그냥 재시도 계속...
+		else
+		{
+			if(loginCnt<3){
+				this->loginCnt++;
+				CCLOG("failed login , try login %d",loginCnt+1);
+				addChild(KSTimer::create(3, tryLogin));
+			}
+			else{
+				
+				loginCnt=0;
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),
+																												tryLogin);
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+		}
+		
 	}
 }
 
