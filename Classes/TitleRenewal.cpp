@@ -1668,6 +1668,11 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		myDSH->resetDSH();
 		myDSH->loadAllUserData(result_data);
 		
+		if(myDSH->getStringForKey(kDSH_Key_nick) != result_data["nick"].asString())
+		{
+			myDSH->setStringForKey(kDSH_Key_nick, result_data["nick"].asString());
+		}
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		
