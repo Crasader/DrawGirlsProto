@@ -597,7 +597,7 @@ void MainFlowScene::tableOpenning()
 {
 	is_table_openning = true;
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i) + 1;
 	int action_cell_count = 0;
 	
 	for(int i=0;i<cell_cnt;i++)
@@ -747,7 +747,7 @@ void MainFlowScene::tableDownloading(function<void()> end_func)
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i)+1;
 	bool is_found = false;
 	
 	for(int i=0;i<cell_cnt;i++)
@@ -853,7 +853,7 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
 	title_name->runAction(t_fade);
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i)+1;
 	bool is_found = false;
 	
 	for(int i=0;i<cell_cnt;i++)
@@ -1298,7 +1298,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		cell_node->addChild(rate_timer, 0, 999);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
-		//title_label->enableOuterStroke(ccWHITE, 1.f);
+		title_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
 		title_label->setPosition(ccp(0,-56.f));
 		cell_node->addChild(title_label, 1);
 
