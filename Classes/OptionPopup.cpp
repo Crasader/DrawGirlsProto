@@ -1156,7 +1156,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_community)
 	{
-		myHSP->openHSPUrl("http://cafe.naver.com/ddmksk");
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
+//		myHSP->openHSPUrl("http://cafe.naver.com/ddmksk");
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tip)

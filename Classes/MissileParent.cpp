@@ -542,6 +542,13 @@ void MissileParent::subOneDie()
 		addChild(t_jm);
 		t_jm->startMoving();
 	}
+	else
+	{
+		
+		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)myGD->getMainCumberVector()[0], 80+kMyElementalLife, mySGD->getSelectedCharacterHistory().power.getV()*5.f);
+		addChild(t_jm);
+		t_jm->startMoving();
+	}
 }
 
 void MissileParent::endIngActionAP()
