@@ -979,6 +979,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardStrength,
 	kMyLocalKey_updateTitle,
 	kMyLocalKey_updateContent,
+	kMyLocalKey_communityNotOpenTitle,
+	kMyLocalKey_communityNotOpenContent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

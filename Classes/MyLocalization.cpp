@@ -1536,6 +1536,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	ko->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	ko->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	ko->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	ko->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -2571,6 +2573,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	en->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	en->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	en->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	en->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -3628,6 +3632,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	ja->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	ja->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	ja->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	ja->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
