@@ -44,6 +44,9 @@ bool CardSettingPopup::init()
         return false;
     }
 	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	table_update_cnt = 0;
+	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	
 	is_take_reverse = recent_sort_type == kCST_takeReverse;
@@ -1117,6 +1120,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			//			cell->addChild(select_img);
 			//		}
 		}
+	}
+	
+	table_update_cnt++;
+	if(table_update_cnt > 4)
+	{
+		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+		table_update_cnt = 0;
 	}
 	
 	return cell;
