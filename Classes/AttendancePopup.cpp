@@ -594,6 +594,11 @@ CCNode* AttendancePopup::getGoodsNode(string t_type, CCPoint base_position)
 		return_node = CCSprite::create("pass_ticket6.png");
 		return_node->setPosition(base_position);
 	}
+	else if(t_goods == kGoodsType_heart)
+	{
+		return_node = CCSprite::create("icon_h.png");
+		return_node->setPosition(base_position);
+	}
 	else
 	{
 		return_node = CCSprite::create("icon_box.png");

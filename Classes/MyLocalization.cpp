@@ -574,7 +574,7 @@ void MyLocal::ko()
 {
 	
 	CCDictionary* ko = CCDictionary::create();
-	ko->setObject(CCString::create("게임을 시작 중 입니다..."), kMyLocalKey_connectingServer);
+	ko->setObject(CCString::create("서버에 접속 중입니다..."), kMyLocalKey_connectingServer);
 	ko->setObject(CCString::create("닉네임 입력"), kMyLocalKey_inputNick);
 	ko->setObject(CCString::create(" 닉네임을 입력해주세요."), kMyLocalKey_inputPlease);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_ok);
