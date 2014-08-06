@@ -167,6 +167,8 @@ public:
 	}
 	
 	void setTextPosition(){
+		if(m_texts.empty())
+			return;
 		StyledLabelTTF* firstLabel = this->getFirstLabel();
 		StyledLabelTTF* lastLabel = this->getLastLabel();
 		
