@@ -166,7 +166,7 @@ bool ClearPopup::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), left_total_score.getV());
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -440,6 +440,7 @@ bool ClearPopup::init()
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 			   mySGD->getUserdataAchievePerfect() + 1 >= myAchieve->getCondition((AchievementCode)i))
 			{
+				myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -465,6 +466,7 @@ bool ClearPopup::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   nofail_value >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -474,7 +476,7 @@ bool ClearPopup::init()
 	{
 		if(!myAchieve->isNoti(kAchievementCode_hidden_noSound) && !myAchieve->isCompleted(kAchievementCode_hidden_noSound) && !myAchieve->isAchieve(kAchievementCode_hidden_noSound))
 		{
-			myAchieve->changeIngCount(kAchievementCode_hidden_noSound, 1);
+			myAchieve->changeIngCount(kAchievementCode_hidden_noSound, myAchieve->getCondition(kAchievementCode_hidden_noSound));
 			AchieveNoti* t_noti = AchieveNoti::create(kAchievementCode_hidden_noSound);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}

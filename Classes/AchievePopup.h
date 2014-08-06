@@ -94,6 +94,8 @@ private:
 	LoadingLayer* loading_layer;
 	void resultSaveUserData(Json::Value result_data);
 	
+	void checkLogRewardCount();
+	
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	
 	virtual void scrollViewDidScroll(CCScrollView* view);

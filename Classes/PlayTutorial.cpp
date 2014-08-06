@@ -2137,10 +2137,9 @@ void PlayTutorial::nextStep()
 											  
 											  if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
 											  {
-												  myAchieve->changeIngCount(AchievementCode(i), 1);
-												  
 												  if(!myAchieve->isNoti(AchievementCode(i)))
 												  {
+													  myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 													  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 												  }

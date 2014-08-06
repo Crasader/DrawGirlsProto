@@ -102,7 +102,7 @@ void CountingBMLabel::stopChanging()
 	unschedule(schedule_selector(CountingBMLabel::changing));
 	is_changing = false;
 	if(is_comma)
-		CCLabelBMFont::setString(KS::insert_separator(keep_value_string.c_str()).c_str());
+		CCLabelBMFont::setString(KS::insert_separator(base_value+keep_value, show_format).c_str());
 	else
 		CCLabelBMFont::setString(keep_value_string.c_str());
 }

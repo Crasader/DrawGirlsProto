@@ -2287,6 +2287,7 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2304,7 +2305,7 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2687,7 +2688,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2706,7 +2707,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2748,7 +2749,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2767,7 +2768,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2811,7 +2812,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
+						myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2830,7 +2831,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
+						myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2962,7 +2963,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2981,7 +2982,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -3024,7 +3025,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -3043,7 +3044,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}

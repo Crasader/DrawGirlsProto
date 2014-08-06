@@ -130,13 +130,12 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,0));
 //		list_number->addChild(list_number_d);
 		
-		
-		CCNode* t_goods_node = getGoodsNode(mySGD->attendance_data["rewardList"][i]["type"].asString(), ccp(t_back->getContentSize().width/2.f,28));
-		t_back->addChild(t_goods_node);
-
 		CCSprite* t_bottom_gray = CCSprite::create("attendance_gold_back.png");
 		t_bottom_gray->setPosition(ccp(t_back->getContentSize().width/2.f,10));
 		t_back->addChild(t_bottom_gray);
+		
+		CCNode* t_goods_node = getGoodsNode(mySGD->attendance_data["rewardList"][i]["type"].asString(), ccp(t_back->getContentSize().width/2.f,28));
+		t_back->addChild(t_goods_node);
 		
 		
 		string daystring = CCString::createWithFormat("%d%s", i+1,myLoc->getLocalForKey(kMyLocalKey_attendanceDay))->getCString();
@@ -147,12 +146,17 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		t_back->addChild(list_number);
 		
 
+//		CCSprite* icon_img = getGoodsType(mySGD->attendance_data["rewardList"][i]["type"].asString());
+//		t_bottom_gray->addChild(icon_img);
 		
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", mySGD->attendance_data["rewardList"][i]["count"].asInt())).c_str(), mySGD->getFont().c_str(), 10);
-		
 		t_bottom_gray->addChild(count_label);
 		
-		count_label->setPosition(ccpAdd(ccpFromSize(t_bottom_gray->getContentSize()/2.f),ccp(0,-1)));
+//		icon_img->setPosition(ccpFromSize(t_bottom_gray->getContentSize()/2.f) + ccp(-count_label->getContentSize().width/2.f, 0));
+		count_label->setPosition(ccpFromSize(t_bottom_gray->getContentSize()/2.f) + ccp(0, -1));
+
+		
+		
 		
 //		CCNode* bottom_node = getGoodsSmallNodeAndCount(mySGD->attendance_data["rewardList"][i]["type"].asString(), mySGD->attendance_data["rewardList"][i]["count"].asInt());
 //		bottom_node->setPosition(ccpFromSize(t_bottom_gray->getContentSize()/2.f));
@@ -537,62 +541,62 @@ CCNode* AttendancePopup::getGoodsNode(string t_type, CCPoint base_position)
 	if(t_goods == kGoodsType_gold)
 	{
 		return_node = CCSprite::create("shop_gold2.png");
-		return_node->setScale(0.7f);
+		return_node->setScale(0.6f);
 		return_node->setPosition(base_position + ccp(0,-10));
 	}
 	else if(t_goods == kGoodsType_ruby)
 	{
 		return_node = CCSprite::create("shop_ruby2.png");
-		return_node->setScale(0.7f);
+		return_node->setScale(0.6f);
 		return_node->setPosition(base_position + ccp(0,-10));
 	}
 	else if(t_goods == kGoodsType_item9)
 	{
-		return_node = CCSprite::create("item9.png");
-		return_node->setScale(0.55f);
+		return_node = CCSprite::create("icon_i9.png");
+//		return_node->setScale(0.55f);
 		return_node->setPosition(base_position);
 	}
 	else if(t_goods == kGoodsType_item6)
 	{
-		return_node = CCSprite::create("item6.png");
-		return_node->setScale(0.55f);
+		return_node = CCSprite::create("icon_i6.png");
+//		return_node->setScale(0.55f);
 		return_node->setPosition(base_position);
 	}
 	else if(t_goods == kGoodsType_item11)
 	{
-		return_node = CCSprite::create("item11.png");
-		return_node->setScale(0.55f);
+		return_node = CCSprite::create("icon_i11.png");
+//		return_node->setScale(0.55f);
 		return_node->setPosition(base_position);
 	}
 	else if(t_goods == kGoodsType_pass1)
 	{
 		return_node = CCSprite::create("pass_ticket1.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_pass2)
 	{
 		return_node = CCSprite::create("pass_ticket2.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_pass3)
 	{
 		return_node = CCSprite::create("pass_ticket3.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_pass4)
 	{
 		return_node = CCSprite::create("pass_ticket4.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_pass5)
 	{
 		return_node = CCSprite::create("pass_ticket5.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_pass6)
 	{
 		return_node = CCSprite::create("pass_ticket6.png");
-		return_node->setPosition(base_position);
+		return_node->setPosition(base_position + ccp(0,-2));
 	}
 	else if(t_goods == kGoodsType_heart)
 	{
@@ -603,6 +607,72 @@ CCNode* AttendancePopup::getGoodsNode(string t_type, CCPoint base_position)
 	{
 		return_node = CCSprite::create("icon_box.png");
 		return_node->setPosition(base_position);
+	}
+	
+	return return_node;
+}
+
+CCSprite* AttendancePopup::getGoodsType(string t_type)
+{
+	GoodsType t_goods = mySGD->getGoodsKeyToType(t_type);
+	
+	CCSprite* return_node = NULL;
+	if(t_goods == kGoodsType_gold)
+	{
+		return_node = CCSprite::create("icon_g.png");
+//		return_node->setScale(0.7f);
+	}
+	else if(t_goods == kGoodsType_ruby)
+	{
+		return_node = CCSprite::create("icon_r.png");
+//		return_node->setScale(0.7f);
+	}
+	else if(t_goods == kGoodsType_item9)
+	{
+		return_node = CCSprite::create("icon_i9.png");
+//		return_node->setScale(0.55f);
+	}
+	else if(t_goods == kGoodsType_item6)
+	{
+		return_node = CCSprite::create("icon_i6.png");
+//		return_node->setScale(0.55f);
+	}
+	else if(t_goods == kGoodsType_item11)
+	{
+		return_node = CCSprite::create("icon_i11.png");
+//		return_node->setScale(0.55f);
+	}
+	else if(t_goods == kGoodsType_pass1)
+	{
+		return_node = CCSprite::create("icon_p1.png");
+	}
+	else if(t_goods == kGoodsType_pass2)
+	{
+		return_node = CCSprite::create("icon_p2.png");
+	}
+	else if(t_goods == kGoodsType_pass3)
+	{
+		return_node = CCSprite::create("icon_p3.png");
+	}
+	else if(t_goods == kGoodsType_pass4)
+	{
+		return_node = CCSprite::create("icon_p4.png");
+	}
+	else if(t_goods == kGoodsType_pass5)
+	{
+		return_node = CCSprite::create("icon_p5.png");
+	}
+	else if(t_goods == kGoodsType_pass6)
+	{
+		return_node = CCSprite::create("icon_p6.png");
+	}
+	else if(t_goods == kGoodsType_heart)
+	{
+		return_node = CCSprite::create("icon_h.png");
+	}
+	else
+	{
+		return_node = CCSprite::create("icon_box.png");
 	}
 	
 	return return_node;
