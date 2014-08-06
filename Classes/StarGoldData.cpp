@@ -3202,6 +3202,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 			if(i == kUserdataType_endlessData_ingWin)
 			{
 				endless_my_victory = userdata_storage[(UserdataType)i].getV();
+				TRACE();
 			}
 		}
 		else

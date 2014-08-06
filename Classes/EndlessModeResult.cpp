@@ -144,6 +144,8 @@ bool EndlessModeResult::init()
 		if(left_total_score.getV() > right_total_score.getV())
 		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
+			CCLOG("change endless_my_victory : %d", mySGD->endless_my_victory.getV());
+			TRACE();
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
 			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
@@ -151,6 +153,8 @@ bool EndlessModeResult::init()
 		else
 		{
 			mySGD->endless_my_victory = 0;
+			CCLOG("change endless_my_victory : %d", mySGD->endless_my_victory.getV());
+			TRACE();
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;
 			mySGD->endless_my_ing_score = 0;
@@ -238,9 +242,6 @@ bool EndlessModeResult::init()
 		send_command_list.push_back(t_achieve[i]);
 	}
 	
-	if(mySGD->is_changed_userdata)
-		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
 	if(is_calc)
 	{
 		Json::Value param;
@@ -298,6 +299,9 @@ bool EndlessModeResult::init()
 		
 		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 	}
+	
+	if(mySGD->is_changed_userdata)
+		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	return true;
 }
@@ -708,6 +712,7 @@ void EndlessModeResult::setMain()
 																										t_star->setRotation(0);
 																										t_star->setOpacity(255);
 																										t_star2->setOpacity(255);
+																										addStarParticle(t_star);
 																										
 																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																					   {
@@ -722,6 +727,10 @@ void EndlessModeResult::setMain()
 			};
 			
 			left_star_animation_list.push_back(t_animation);
+		}
+		else
+		{
+			addStarParticle(t_star);
 		}
 	}
 	
@@ -852,6 +861,7 @@ void EndlessModeResult::setMain()
 																										t_star->setRotation(0);
 																										t_star->setOpacity(255);
 																										t_star2->setOpacity(255);
+																										addStarParticle(t_star);
 																										
 																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																					   {
@@ -866,6 +876,10 @@ void EndlessModeResult::setMain()
 			};
 			
 			right_star_animation_list.push_back(t_animation);
+		}
+		else
+		{
+			addStarParticle(t_star);
 		}
 	}
 	
@@ -984,6 +998,8 @@ void EndlessModeResult::setMain()
 	right_total_back->addChild(right_total_content);
 	
 	
+	CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
+	TRACE();
 	string next_button_str;
 	if(mySGD->endless_my_victory.getV() > 0)
 		next_button_str = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_victory.getV()+1)->getCString();
@@ -1028,6 +1044,8 @@ void EndlessModeResult::setMain()
 			result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 			main_case->addChild(result_stamp);
 			
+			CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
+			TRACE();
 			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 			win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 			result_stamp->addChild(win_label);
@@ -1218,6 +1236,8 @@ void EndlessModeResult::startCalcAnimation()
 																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 																				   main_case->addChild(result_stamp);
 																				   
+																				   CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
+																				   TRACE();
 																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 																				   win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 																				   result_stamp->addChild(win_label);
@@ -2811,4 +2831,51 @@ void EndlessModeResult::scrollViewDidScroll(CCScrollView* view)
 void EndlessModeResult::scrollViewDidZoom(CCScrollView* view)
 {
 	
+}
+
+CCParticleSystemQuad* EndlessModeResult::getStarParticle()
+{
+	CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+	particle->setPositionType(kCCPositionTypeRelative);
+	//particle->setAutoRemoveOnFinish(true);
+	particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+	particle->setEmissionRate(25);
+	particle->setAngle(90.0);
+	particle->setAngleVar(120.0);
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+	particle->setBlendFunc(blendFunc);
+	particle->setDuration(-1);
+	particle->setEmitterMode(kCCParticleModeGravity);
+	particle->setStartColor(ccc4f(1.f, 0.81f, 0.15f, 1.f));
+	particle->setStartColorVar(ccc4f(0,0,0,0.f));
+	particle->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+	particle->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+	particle->setStartSize(10.0);
+	particle->setStartSizeVar(5.0);
+	particle->setEndSize(0.0);
+	particle->setEndSizeVar(0.0);
+	particle->setGravity(ccp(0,0));
+	particle->setRadialAccel(0.0);
+	particle->setRadialAccelVar(0.0);
+	particle->setSpeed(0);
+	particle->setSpeedVar(0.0);
+	particle->setTangentialAccel(0);
+	particle->setTangentialAccelVar(0);
+	particle->setTotalParticles(50);
+	particle->setLife(1.0);
+	particle->setLifeVar(1.0);
+	particle->setStartSpin(0.0);
+	particle->setStartSpinVar(0.f);
+	particle->setEndSpin(0.0);
+	particle->setEndSpinVar(0.f);
+	particle->setPosVar(ccp(20,20));
+	particle->setPosition(ccp(0,0));
+	return particle;
+}
+
+void EndlessModeResult::addStarParticle(CCNode* t_node)
+{
+	CCParticleSystemQuad* t_particle = getStarParticle();
+	t_particle->setPosition(t_node->getContentSize().width/2.f, t_node->getContentSize().height/2.f);
+	t_node->addChild(t_particle);
 }
