@@ -286,7 +286,7 @@ bool AccountManagerPopup::init(int touchP)
 							myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 							myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
-							myDSH->setIntegerForKey(kDSH_Key_clientVersion, 2);
+							myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 						}
 						else

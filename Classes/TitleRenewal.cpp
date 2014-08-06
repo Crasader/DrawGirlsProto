@@ -304,7 +304,10 @@ void TitleRenewalScene::realInit()
 void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
 	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-	
+	/*
+	 점검시 로그j
+	 {"error":{"isSuccess":false,"code":8197},"serviceprop":"08","playable":false}
+	 */
 	if(myDSH->getStringForKey(kDSH_Key_timeZone)==""){
 		string tz = myHSP->getTimeZone();
 		myDSH->setStringForKey(kDSH_Key_timeZone, tz);
@@ -324,9 +327,11 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		{
 			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 			{
+				CCLOG("resetalldata");
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
+				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
 			}
@@ -341,36 +346,49 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 	}
 	else
 	{
+		CCLog("login error = %s", result_data["error"].get("localizedDescription", "NONE_LOCAL").asString().c_str());
+
+
+		auto tryLogin = [=](){
+			if(result_data["error"].get("localizedDescription", "").asString() == "")
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = (int)HSPLogin::GUEST;
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+			else
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+		};
 		
 		//오류나도 3번은 자동 로그인 시도
-		if(loginCnt<3){
-			this->loginCnt++;
-			CCLOG("failed login , try login %d",loginCnt+1);
-			addChild(KSTimer::create(3, [=](){
-				//hspConnector::get()->logout([=](Json::Value v){
-					Json::Value param;
-					param["ManualLogin"] = true;
-					param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-					hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-				//});
-			}));
-			
-		}else{
-			loginCnt=0;
-				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
-			
-					//hspConnector::get()->logout([=](Json::Value v){
-						Json::Value param;
-						param["ManualLogin"] = true;
-						param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-						hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
-					//});
-																										
-				
-			
-			});
-			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		// 점검이면 그냥 재시도k
+		if(result_data["error"]["code"].asInt() == 8197)
+		{
+			addChild(KSTimer::create(3, tryLogin));
 		}
+		// 점검이 아니면 그냥 재시도 계속...
+		else
+		{
+			if(loginCnt<3){
+				this->loginCnt++;
+				CCLOG("failed login , try login %d",loginCnt+1);
+				addChild(KSTimer::create(3, tryLogin));
+			}
+			else{
+				
+				loginCnt=0;
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),
+																												tryLogin);
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+		}
+		
 	}
 }
 
@@ -1667,6 +1685,11 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		myDSH->resetDSH();
 		myDSH->loadAllUserData(result_data);
 		
+		if(myDSH->getStringForKey(kDSH_Key_nick) != result_data["nick"].asString())
+		{
+			myDSH->setStringForKey(kDSH_Key_nick, result_data["nick"].asString());
+		}
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		
@@ -1897,6 +1920,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		{
 			Json::Value t_card = cards[i];
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);

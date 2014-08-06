@@ -26,6 +26,7 @@ public:
 	static GraySprite* createWithTexture(CCTexture2D* pTexture, const CCRect& tRect);
     bool initWithTexture(CCTexture2D* pTexture, const CCRect& tRect);
     void setGray (bool isGray);
+	void setDeepGray(bool isGray);
     virtual void draw();
 };
 

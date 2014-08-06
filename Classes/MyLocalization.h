@@ -975,6 +975,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_afterOpenCBT,
 	kMyLocalKey_cardChange,
 	kMyLocalKey_showtimeMorphingTouch,
+	kMyLocalKey_cardStrength,
+	kMyLocalKey_updateTitle,
+	kMyLocalKey_updateContent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;
