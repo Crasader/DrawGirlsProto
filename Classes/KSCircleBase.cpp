@@ -505,6 +505,7 @@ void KSCircleBase::stopCasting()
 	{
 		CCLOG("(m_cumberState & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+		m_cumberState = kCumberStateMoving;
 	}
 }
 

@@ -740,6 +740,7 @@ void KSSnakeBase::stopCasting()
 	{
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+		m_cumberState = kCumberStateMoving;
 	}
 //		m_cumberState = kCumberStateMoving; // 만약 멈춘 다면 여길 부활시킴.
 }
