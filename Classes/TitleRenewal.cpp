@@ -327,6 +327,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
+				myDSH->setIntegerForKey(kDSH_Key_clientVersion, 2);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
 			}
