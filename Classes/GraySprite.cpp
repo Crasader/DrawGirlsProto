@@ -122,6 +122,52 @@ void GraySprite::setGray (bool isGray) {
 
 }
 
+void GraySprite::setDeepGray (bool isGray) {
+    if(isGray) {
+        GLchar* pszFragSource =
+        "#ifdef GL_ES \n \
+        precision mediump float; \n \
+        #endif \n \
+        uniform sampler2D u_texture; \n \
+        varying vec2 v_texCoord; \n \
+        varying vec4 v_fragmentColor; \n \
+        void main(void) \n \
+        { \n \
+        // Convert to greyscale using NTSC weightings \n \
+        vec4 color = texture2D(u_texture, v_texCoord).rgba;\n \
+        float grey = dot(color.rgb, vec3(0.180, 0.350, 0.100)); \n \
+        gl_FragColor = vec4(grey, grey, grey, color.a); \n \
+        }";
+        
+        CCGLProgram* pProgram = new CCGLProgram();
+        pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, pszFragSource);
+        this->setShaderProgram(pProgram);
+        pProgram->release();
+        CHECK_GL_ERROR_DEBUG();
+		
+    } else {
+        CCGLProgram* pProgram = new CCGLProgram();
+        pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, ccPositionTextureColor_frag);
+        this->setShaderProgram(pProgram);
+        pProgram->release();
+        CHECK_GL_ERROR_DEBUG();
+    }
+    
+    this->getShaderProgram()->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
+    this->getShaderProgram()->addAttribute(kCCAttributeNameColor, kCCVertexAttrib_Color);
+    this->getShaderProgram()->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);
+    CHECK_GL_ERROR_DEBUG();
+    
+    
+    this->getShaderProgram()->link();
+    CHECK_GL_ERROR_DEBUG();
+    
+    
+    this->getShaderProgram()->updateUniforms();
+    CHECK_GL_ERROR_DEBUG();
+	
+}
+
 void GraySprite::draw(){
     ccGLEnableVertexAttribs(kCCVertexAttribFlag_PosColorTex );
     ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );

@@ -3454,6 +3454,8 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 2;
 	
+	client_version = 3;
+	
 	total_card_cnt = 0;
 	
 	loading_tip_back_number = 1;
