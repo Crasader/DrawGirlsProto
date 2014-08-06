@@ -597,7 +597,7 @@ void MainFlowScene::tableOpenning()
 {
 	is_table_openning = true;
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i) + 1;
 	int action_cell_count = 0;
 	
 	for(int i=0;i<cell_cnt;i++)
@@ -747,7 +747,7 @@ void MainFlowScene::tableDownloading(function<void()> end_func)
 {
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i)+1;
 	bool is_found = false;
 	
 	for(int i=0;i<cell_cnt;i++)
@@ -853,7 +853,7 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 	CCFadeTo* t_fade = CCFadeTo::create(0.5f, 255);
 	title_name->runAction(t_fade);
 	
-	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i);
+	int cell_cnt = NSDS_GI(kSDS_GI_puzzleListCount_i)+1;
 	bool is_found = false;
 	
 	for(int i=0;i<cell_cnt;i++)

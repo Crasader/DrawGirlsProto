@@ -126,6 +126,8 @@ void CountingBMLabel::myInit(string init_value, string font_filename, float t_du
 	is_changing = false;
 	duration = t_duration;
 	keep_value_string = init_value.c_str();
+	base_value = atof(keep_value_string.c_str());
+	keep_value = 0;
 	if(t_format == "%d")
 		show_format = "%.0f";
 	else

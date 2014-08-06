@@ -70,12 +70,17 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	back_case->addChild(back_in);
 	
 	
+	CCScale9Sprite* title_tag = CCScale9Sprite::create("title_tag.png", CCRectMake(0, 0, 135, 30), CCRectMake(45, 14, 45, 2));
+	title_tag->setContentSize(CCSizeMake(160, 31));
+	title_tag->setPosition(ccp(80, back_case->getContentSize().height-35));
+	back_case->addChild(title_tag);
+	
 	if(m_type == kPurchaseGuideType_emptyItem)
 	{
 		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleTitle), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
-		title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
 		m_container->addChild(title_label);
 	}
 	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
@@ -83,7 +88,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemPackageChance), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
-		title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
 		m_container->addChild(title_label);
 	}
 	
@@ -219,8 +224,8 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 //	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 15);
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-1,price_back->getContentSize().height/2.f));
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f+1,price_back->getContentSize().height/2.f));
+	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-6,price_back->getContentSize().height/2.f));
+	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f-5,price_back->getContentSize().height/2.f-1));
 	price_back->addChild(price_label);
 	
 	p_label->addChild(purchase_label);
