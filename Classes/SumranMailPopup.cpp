@@ -589,7 +589,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		
 																		if(isSuccess==false){
-																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,"실패", "카드정보 로드를 실패했습니다.",[=](){
+																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,myLoc->getLocalForKey(kMyLocalKey_fail), myLoc->getLocalForKey(kMyLocalKey_failedConnect),[=](){
 																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																			});
 																			this->addChild(alert, 2000);
@@ -616,7 +616,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 //																				setFormSetter(propName);
 //																				back->addChild(propName);
 																				
-																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("X%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
+																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
 																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
 																					spr->setScale(0.12);
@@ -628,7 +628,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
+																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
 																				
 																				setFormSetter(back);
 																				setFormSetter(spr);
@@ -688,16 +688,20 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		itemlist->setPosition(ccp(front->getContentSize().width/2.f,front->getContentSize().height/2.f+24));
 																		
 																		setFormSetter(itemlist);
-																		KSLabelTTF* titleLbl = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 12.f);
+																		KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_confirmGift), mySGD->getFont().c_str(), 12.f);
 																		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
 																		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 																		back->addChild(titleLbl);
 																		setFormSetter(titleLbl);
 																		
-																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),mail.get("sender","GM").asString().c_str())->getCString();
+																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																																						 mail.get("content","Gift").asString().c_str(),
+																																						 mail.get("sender","GM").asString().c_str(),
+																																						 GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																						 )->getCString();
 																		StyledLabelTTF* lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 																		
-																		lbl->setPosition(ccp(front->getContentSize().width/2.f,45));
+																		lbl->setPosition(ccp(front->getContentSize().width/2.f,52));
 																		front->addChild(lbl);
 																		setFormSetter(lbl);
 																		

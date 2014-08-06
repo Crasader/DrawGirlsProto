@@ -221,6 +221,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_dayAfterReset,
 	kMyLocalKey_hourAfterReset,
 	kMyLocalKey_secondAfterReset,
+	kMyLocalKey_confirmGift,
+	kMyLocalKey_failedConnect,
 	kMyLocalKey_giftbox,
 	kMyLocalKey_giftboxContent,
 	kMyLocalKey_allAccept,
