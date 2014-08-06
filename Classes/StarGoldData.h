@@ -368,6 +368,8 @@ public:
 	
 	static StarGoldData* sharedInstance();
 	
+	int client_version;
+	
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);

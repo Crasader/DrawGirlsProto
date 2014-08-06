@@ -327,7 +327,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
-				myDSH->setIntegerForKey(kDSH_Key_clientVersion, 2);
+				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
 			}
@@ -1903,6 +1903,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		{
 			Json::Value t_card = cards[i];
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
