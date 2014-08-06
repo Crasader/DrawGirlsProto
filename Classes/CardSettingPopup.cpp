@@ -44,6 +44,9 @@ bool CardSettingPopup::init()
         return false;
     }
 	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	table_update_cnt = 0;
+	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	
 	is_take_reverse = recent_sort_type == kCST_takeReverse;
@@ -178,7 +181,7 @@ bool CardSettingPopup::init()
 	
 	KSLabelTTF* take_card_count = KSLabelTTF::create(ccsf("%d", mySGD->getHasGottenCardsSize()), mySGD->getFont().c_str(), 10);
 	take_card_count->setColor(ccc3(255, 170, 20));
-	take_card_count->disableOuterStroke();
+	take_card_count->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	take_card_count->setAnchorPoint(ccp(0.5f,0.5f));
 	take_count_back->addChild(take_card_count);
 	
@@ -965,7 +968,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				n_frame->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 				n_node->addChild(n_frame);
 				
-				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 9);
 				n_label->setPosition(ccp(n_card->getContentSize().width-16, 12) + add_position);
 				n_frame->addChild(n_label);
 				
@@ -987,7 +990,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				s_frame->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 				s_node->addChild(s_frame);
 				
-				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 9);
 				s_label->setPosition(ccp(s_card->getContentSize().width-16, 12) + add_position);
 				s_frame->addChild(s_label);
 				
@@ -1068,7 +1071,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			n_frame->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
 			n_node->addChild(n_frame);
 			
-			KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 10);
+			KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
 			n_label->setPosition(ccp(n_card->getContentSize().width-16, 12) + add_position);
 			n_frame->addChild(n_label);
 			
@@ -1091,7 +1094,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			s_frame->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
 			s_node->addChild(s_frame);
 			
-			KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 10);
+			KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
 			s_label->setPosition(ccp(s_card->getContentSize().width-16, 12) + add_position);
 			s_frame->addChild(s_label);
 			
@@ -1117,6 +1120,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			//			cell->addChild(select_img);
 			//		}
 		}
+	}
+	
+	table_update_cnt++;
+	if(table_update_cnt > 4)
+	{
+		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+		table_update_cnt = 0;
 	}
 	
 	return cell;

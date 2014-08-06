@@ -445,6 +445,13 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	zoom_menu->setPosition(getContentPosition(kCBP_MT_zoom));
 	target->addChild(zoom_menu, 1, kCBP_MT_zoom);
 	zoom_menu->setTouchPriority(-191);
+	
+	page_cnt++;
+	if(page_cnt > 8)
+	{
+		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+		page_cnt = 0;
+	}
 }
 
 // on "init" you need to initialize your instance
@@ -457,6 +464,10 @@ bool CollectionBookPopup::init()
         return false;
     }
 	startFormSetter(this);
+	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	page_cnt = 0;
+	
 	is_menu_enable = false;
 	
 	mySGD->initCollectionBook();

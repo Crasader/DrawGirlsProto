@@ -221,7 +221,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_dayAfterReset,
 	kMyLocalKey_hourAfterReset,
 	kMyLocalKey_secondAfterReset,
+	kMyLocalKey_confirmGift,
+	kMyLocalKey_failedConnect,
 	kMyLocalKey_giftbox,
+	kMyLocalKey_giftboxContent,
 	kMyLocalKey_allAccept,
 	kMyLocalKey_puzzleOpenTitle,
 	kMyLocalKey_puzzleOpenContent,
@@ -978,6 +981,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardStrength,
 	kMyLocalKey_updateTitle,
 	kMyLocalKey_updateContent,
+	kMyLocalKey_communityNotOpenTitle,
+	kMyLocalKey_communityNotOpenContent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

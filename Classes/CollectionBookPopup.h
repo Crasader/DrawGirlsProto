@@ -74,6 +74,8 @@ private:
 	int recent_card_number;
 	bool is_enable_pageturn;
 	
+	int page_cnt;
+	
 	CCSprite* recent_left_img;
 	CCSprite* recent_right_img;
 	CCSprite* after_left_img;

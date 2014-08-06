@@ -89,6 +89,8 @@ private:
 	bool is_take_reverse;
 	bool is_rank_reverse;
 	
+	int table_update_cnt;
+	
 	void defaultMenuSet();
 	void takeMenuSet();
 	void rankMenuSet();

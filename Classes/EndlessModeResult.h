@@ -156,6 +156,9 @@ private:
 	
 	virtual void scrollViewDidScroll(CCScrollView* view);
 	virtual void scrollViewDidZoom(CCScrollView* view);
+	
+	CCParticleSystemQuad* getStarParticle();
+	void addStarParticle(CCNode* t_node);
 };
 
 #endif /* defined(__DGproto__EndlessModeResult__) */

@@ -140,7 +140,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void failAction();
 		void startDownloadCardImage ();
 		void startDownload ();
-	
+		
 
 	
 	bool isLoaded;

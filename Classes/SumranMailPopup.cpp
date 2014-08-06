@@ -589,7 +589,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		
 																		if(isSuccess==false){
-																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,"실패", "카드정보 로드를 실패했습니다.",[=](){
+																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,myLoc->getLocalForKey(kMyLocalKey_fail), myLoc->getLocalForKey(kMyLocalKey_failedConnect),[=](){
 																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																			});
 																			this->addChild(alert, 2000);
@@ -612,7 +612,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				
 																				CCSprite* spr;
-																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
+//																				KSLabelTTF* propName = KSLabelTTF::create("뽑기이용권", mySGD->getFont().c_str(), 13);
+//																				setFormSetter(propName);
+//																				back->addChild(propName);
+																				
+																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
 																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
 																					spr->setScale(0.12);
@@ -624,7 +628,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
+																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
 																				
 																				setFormSetter(back);
 																				setFormSetter(spr);
@@ -657,41 +661,155 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		
 																		
-																		ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
-																			
-																			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																			
-																			Json::Value p;
-																			int mailNo = mail["no"].asInt();
-																			
-																			p["giftBoxNo"] = mailNo;
-																			p["memberID"] = mail["memberID"].asInt64();
-																			
-																			t_suction->setTouchEnabled(true);
-																			t_suction->setVisible(true);
-																			//삭제요청
-																			this->removeMessage (mailNo, mail["memberID"].asInt64(),
-																													 [=](Json::Value r)
-																													 {
-																														 mySGD->saveChangeGoodsTransaction(r);
-																														 takedCheck(r["list"],[=](){
-																															 
-																															 t_suction->setTouchEnabled(false);
-																															 t_suction->setVisible(false);
-																															 
-																															 
-																														 });
-																													 });
-																			
-																		});
-																		
-																		this->addChild(alert, 2000);
 																		
 																		
-																	///////////////////////////////////////////////////////////////////
+																		ASPopupView* managerPopup = ASPopupView::createDimmed(-9999);
+																		managerPopup->getDimmedSprite()->setVisible(false);
+																		addChild(managerPopup);
+																		
+																		
+																		//	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+																		auto back = CCSprite::create("popup_large_back.png");
+																		
+																		auto front = CCScale9Sprite::create("common_grayblue.png",
+																																				CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+																		CommonAnimation::openPopup(managerPopup, back, managerPopup->getDimmedSprite(), nullptr, nullptr);
+												
+																		managerPopup->setContainerNode(back);
+																		front->setContentSize(CCSizeMake(251, 370 / 2.f-50));
+																		
+																		
+																		back->addChild(front);
+																		
+																		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,8));
+																		
+																		front->addChild(itemlist);
+																		setFormSetter(front);
+																		itemlist->setPosition(ccp(front->getContentSize().width/2.f,front->getContentSize().height/2.f+24));
+																		
+																		setFormSetter(itemlist);
+																		KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_confirmGift), mySGD->getFont().c_str(), 12.f);
+																		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+																		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+																		back->addChild(titleLbl);
+																		setFormSetter(titleLbl);
+																		
+																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																																						 mail.get("content","Gift").asString().c_str(),
+																																						 mail.get("sender","GM").asString().c_str(),
+																																						 GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																						 )->getCString();
+																		StyledLabelTTF* lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																		
+																		lbl->setPosition(ccp(front->getContentSize().width/2.f,52));
+																		front->addChild(lbl);
+																		setFormSetter(lbl);
+																		
+																		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
+																		setFormSetter(close_button);
+																		close_button->setPosition(ccp(150.0, 47.0));
+																		close_button->setFunction([=](CCObject* sender)
+																															{
+																																
+																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																CommonAnimation::closePopup(managerPopup, back,
+																																														managerPopup->getDimmedSprite(), nullptr,
+																																														[=](){
+																																															
+																																															///////////////////////////////
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																															
+																																															Json::Value p;
+																																															int mailNo = mail["no"].asInt();
+																																															
+																																															p["giftBoxNo"] = mailNo;
+																																															p["memberID"] = mail["memberID"].asInt64();
+																																															
+																																															t_suction->setTouchEnabled(true);
+																																															t_suction->setVisible(true);
+																																															//삭제요청
+																																															this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
+																																																									 {
+																																																										 mySGD->saveChangeGoodsTransaction(r);
+																																																										 takedCheck(r["list"],[=](){
+																																																											 
+																																																											 t_suction->setTouchEnabled(false);
+																																																											 t_suction->setVisible(false);
+																																																											 
+																																																											 
+																																																										 });
+																																																									 });
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															//////////////////////////////
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															
+																																															managerPopup->removeFromParent();
+																																														});
+																																
+																																	
+
+																																
+																																
+																															});
+																		back->addChild(close_button);
+																		
+																		
+																		//managerPopup->setContentSize(managerPopup->getContentSize() + CCSizeMake(0, -53));
+																		//managerPopup->setPositionY(managerPopup->getPositionY() + 22.5f);
+																		
+																		
+//																		
+//																		
+//																		ASPopupView *alert = ASPopupView::getCommonNoti(-9999,mail.get("content","Gfit").asString(), itemlist,[=](){
+//																			
+//																			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+//																			
+//																			Json::Value p;
+//																			int mailNo = mail["no"].asInt();
+//																			
+//																			p["giftBoxNo"] = mailNo;
+//																			p["memberID"] = mail["memberID"].asInt64();
+//																			
+//																			t_suction->setTouchEnabled(true);
+//																			t_suction->setVisible(true);
+//																			//삭제요청
+//																			this->removeMessage (mailNo, mail["memberID"].asInt64(),
+//																													 [=](Json::Value r)
+//																													 {
+//																														 mySGD->saveChangeGoodsTransaction(r);
+//																														 takedCheck(r["list"],[=](){
+//																															 
+//																															 t_suction->setTouchEnabled(false);
+//																															 t_suction->setVisible(false);
+//																															 
+//																															 
+//																														 });
+//																													 });
+//																			
+//																		});
+//																		
+//																		this->addChild(alert, 2000);
+//																		
+//																		
+//																	///////////////////////////////////////////////////////////////////
+//																	});
+																	
 																	});
-																	
-																	
 																	
 																	
 																	

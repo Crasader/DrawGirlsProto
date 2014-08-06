@@ -574,7 +574,7 @@ void MyLocal::ko()
 {
 	
 	CCDictionary* ko = CCDictionary::create();
-	ko->setObject(CCString::create("게임을 시작 중 입니다..."), kMyLocalKey_connectingServer);
+	ko->setObject(CCString::create("서버에 접속 중입니다..."), kMyLocalKey_connectingServer);
 	ko->setObject(CCString::create("닉네임 입력"), kMyLocalKey_inputNick);
 	ko->setObject(CCString::create(" 닉네임을 입력해주세요."), kMyLocalKey_inputPlease);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_ok);
@@ -663,6 +663,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("알림"), kMyLocalKey_noti);
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
+	ko->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	ko->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
@@ -695,6 +697,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d시간후 리셋"), kMyLocalKey_hourAfterReset);
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);
 	ko->setObject(CCString::create("선물함"), kMyLocalKey_giftbox);
+	ko->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	ko->setObject(CCString::create("모두수락"), kMyLocalKey_allAccept);
 	ko->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	ko->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
@@ -1062,7 +1065,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ko->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ko->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	ko->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ko->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
@@ -1535,6 +1538,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	ko->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	ko->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	ko->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	ko->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -1713,6 +1718,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Safe Mode"), kMyLocalKey_safetyMode);
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
+	en->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	en->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	en->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
@@ -1746,6 +1753,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("%dtimes after the reset"), kMyLocalKey_hourAfterReset);
 	en->setObject(CCString::create("%dMinutes after the reset"), kMyLocalKey_secondAfterReset);
 	en->setObject(CCString::create("Gift Box"), kMyLocalKey_giftbox);
+	en->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	en->setObject(CCString::create("Accept all"), kMyLocalKey_allAccept);
 	en->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	en->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
@@ -2102,7 +2110,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	en->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	en->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	en->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	en->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
@@ -2569,6 +2577,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	en->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	en->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	en->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	en->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -2757,9 +2767,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
+	ja->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	ja->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
+	ja->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	ja->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
 	ja->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ja->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
@@ -3159,7 +3172,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ja->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ja->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	ja->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ja->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
@@ -3625,6 +3638,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
 	ja->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
 	ja->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
+	ja->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
+	ja->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);

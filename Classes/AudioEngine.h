@@ -708,7 +708,7 @@ public:
 	
 	void playGroanEffect(string filename)
 	{
-		playEffect(filename.c_str(), false);
+		playEffect(filename.c_str(), false, true);
 	}
 	
 	void playEffect(const char* filename, bool loop = false, bool cancut = false)

@@ -195,6 +195,7 @@ void KSJuniorBase::checkConfine(float dt)
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 			   mySGD->getUserdataAchieveHunter() + mySGD->hunt_value.getV() >= myAchieve->getCondition((AchievementCode)i))
 			{
+				myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}

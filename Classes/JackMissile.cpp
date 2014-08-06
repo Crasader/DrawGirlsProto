@@ -663,14 +663,14 @@ void JM_BasicMissile::moving ()
 				myGD->communication("MP_explosion", particlePosition, ccc4f(0, 0, 0, 0), directionAngle);
 				myGD->communication("VS_setLight");
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
-				myGD->communication("CP_startDamageReaction", targetNode, 999999.f, directionAngle, true, true);
+				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle, true, true);
 				
-				myGD->communication("Main_showDamageMissile", particlePosition, int(999999));
+				myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
 				
 				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 				combo_cnt++;
 				
-				int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+				int addScore = (100.f+400.f)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
 				myGD->communication("UI_addScore", addScore);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 				myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
@@ -812,9 +812,9 @@ void JM_BasicMissile::myInit (CCNode * t_target, int jm_type, float missile_spee
 }
 void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_speed)
 {
-	is_one_die = false;
-	
-	if(missile_speed > 99999.f)
+//	is_one_die = false;
+//	
+//	if(missile_speed > 99999.f)
 		is_one_die = true;
 	
 	ing_miss_counting = -1;
@@ -840,37 +840,39 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	
 	particle_string = type_name + ".png";
 	
-	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	if(recent_card_number > 0)
-	{
-		float base_missile_damage;
-//		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
-		
-		damage = base_missile_damage; // * damage_per
-		
-		int base_missile_dex;
-//		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
-		
-		dex = base_missile_dex;
-		
-		damage = damage < 1 ? 1 : damage;
-		dex = dex < 1 ? 1 : dex;
-	}
-	else
-	{
-		damage = 1;
-		dex = 1;
-	}
-	
-	float damage_variation = damage*0.1f;
-	
-	random_device rd;
-	default_random_engine e1(rd());
-	uniform_real_distribution<float> uniform_dist(0, damage_variation);
-	
-	damage += uniform_dist(e1) - damage_variation/2.f;
-	if(damage < 1.f)
-		damage = 1.f;
+//	int recent_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
+//	if(recent_card_number > 0)
+//	{
+//		float base_missile_damage;
+////		base_missile_damage = NSDS_GI(kSDS_CI_int1_missile_power_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		
+//		damage = base_missile_damage; // * damage_per
+//		
+//		int base_missile_dex;
+////		base_missile_dex = NSDS_GI(kSDS_CI_int1_missile_dex_i, recent_card_number)*((myDSH->getIntegerForKey(kDSH_Key_cardLevel_int1, recent_card_number)-1)*0.1f+1.f);
+//		
+//		dex = base_missile_dex;
+//		
+//		damage = damage < 1 ? 1 : damage;
+//		dex = dex < 1 ? 1 : dex;
+//	}
+//	else
+//	{
+//		damage = 1;
+//		dex = 1;
+//	}
+//	
+//	float damage_variation = damage*0.1f;
+//	
+//	random_device rd;
+//	default_random_engine e1(rd());
+//	uniform_real_distribution<float> uniform_dist(0, damage_variation);
+//	
+//	damage += uniform_dist(e1) - damage_variation/2.f;
+//	if(damage < 1.f)
+//		damage = 1.f;
+	damage = missile_speed;
+	dex = 1;
 	
 	
 	if(missile_speed < 2.f)

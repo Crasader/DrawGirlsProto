@@ -2473,9 +2473,9 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	if(m_attackPercent<=0)vCount*=0.5f;
 	
 	if(vCount>0){
-		m_aiValue = m_aiValue+5.f*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
-		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.025;
+		m_aiValue = m_aiValue+10.f*vCount;
+		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
+		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.0125;
 	}
 	
 	

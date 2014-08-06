@@ -609,6 +609,7 @@ bool PuzzleScene::init()
 																if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 																   mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
 																{
+																	myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 																	AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 																	CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 																}
@@ -628,9 +629,9 @@ bool PuzzleScene::init()
 																
 																if(is_success)
 																{
-																	myAchieve->changeIngCount(i, 1);
 																	if(!myAchieve->isNoti(AchievementCode(i)))
 																	{
+																		myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 																		AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 																		CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 																	}
@@ -1166,6 +1167,7 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 											 if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 												mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
 											 {
+												 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 												 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 												 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 											 }
@@ -1185,9 +1187,9 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 											 
 											 if(is_success)
 											 {
-												 myAchieve->changeIngCount(i, 1);
 												 if(!myAchieve->isNoti(AchievementCode(i)))
 												 {
+													 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 													 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 												 }
@@ -2882,6 +2884,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
 				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
@@ -2938,6 +2941,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
 				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);

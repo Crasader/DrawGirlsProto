@@ -2725,7 +2725,7 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
 		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(1)));
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			myAchieve->updateAchieve(nullptr);

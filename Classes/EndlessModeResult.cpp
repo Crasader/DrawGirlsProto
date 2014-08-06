@@ -164,7 +164,7 @@ bool EndlessModeResult::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), left_total_score.getV());
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -182,6 +182,7 @@ bool EndlessModeResult::init()
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 			   mySGD->getUserdataAchievePerfect() + 1 >= myAchieve->getCondition((AchievementCode)i))
 			{
+				myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -236,9 +237,6 @@ bool EndlessModeResult::init()
 	{
 		send_command_list.push_back(t_achieve[i]);
 	}
-	
-	if(mySGD->is_changed_userdata)
-		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	if(is_calc)
 	{
@@ -297,6 +295,9 @@ bool EndlessModeResult::init()
 		
 		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 	}
+	
+	if(mySGD->is_changed_userdata)
+		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	return true;
 }
@@ -707,6 +708,7 @@ void EndlessModeResult::setMain()
 																										t_star->setRotation(0);
 																										t_star->setOpacity(255);
 																										t_star2->setOpacity(255);
+																										addStarParticle(t_star);
 																										
 																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																					   {
@@ -721,6 +723,10 @@ void EndlessModeResult::setMain()
 			};
 			
 			left_star_animation_list.push_back(t_animation);
+		}
+		else
+		{
+			addStarParticle(t_star);
 		}
 	}
 	
@@ -851,6 +857,7 @@ void EndlessModeResult::setMain()
 																										t_star->setRotation(0);
 																										t_star->setOpacity(255);
 																										t_star2->setOpacity(255);
+																										addStarParticle(t_star);
 																										
 																										t_star->addChild(KSGradualValue<float>::create(0.f, 1.f, 4.f/30.f, [=](float t)
 																																					   {
@@ -865,6 +872,10 @@ void EndlessModeResult::setMain()
 			};
 			
 			right_star_animation_list.push_back(t_animation);
+		}
+		else
+		{
+			addStarParticle(t_star);
 		}
 	}
 	
@@ -2810,4 +2821,51 @@ void EndlessModeResult::scrollViewDidScroll(CCScrollView* view)
 void EndlessModeResult::scrollViewDidZoom(CCScrollView* view)
 {
 	
+}
+
+CCParticleSystemQuad* EndlessModeResult::getStarParticle()
+{
+	CCParticleSystemQuad* particle = CCParticleSystemQuad::createWithTotalParticles(50);
+	particle->setPositionType(kCCPositionTypeRelative);
+	//particle->setAutoRemoveOnFinish(true);
+	particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+	particle->setEmissionRate(25);
+	particle->setAngle(90.0);
+	particle->setAngleVar(120.0);
+	ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+	particle->setBlendFunc(blendFunc);
+	particle->setDuration(-1);
+	particle->setEmitterMode(kCCParticleModeGravity);
+	particle->setStartColor(ccc4f(1.f, 0.81f, 0.15f, 1.f));
+	particle->setStartColorVar(ccc4f(0,0,0,0.f));
+	particle->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+	particle->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+	particle->setStartSize(10.0);
+	particle->setStartSizeVar(5.0);
+	particle->setEndSize(0.0);
+	particle->setEndSizeVar(0.0);
+	particle->setGravity(ccp(0,0));
+	particle->setRadialAccel(0.0);
+	particle->setRadialAccelVar(0.0);
+	particle->setSpeed(0);
+	particle->setSpeedVar(0.0);
+	particle->setTangentialAccel(0);
+	particle->setTangentialAccelVar(0);
+	particle->setTotalParticles(50);
+	particle->setLife(1.0);
+	particle->setLifeVar(1.0);
+	particle->setStartSpin(0.0);
+	particle->setStartSpinVar(0.f);
+	particle->setEndSpin(0.0);
+	particle->setEndSpinVar(0.f);
+	particle->setPosVar(ccp(20,20));
+	particle->setPosition(ccp(0,0));
+	return particle;
+}
+
+void EndlessModeResult::addStarParticle(CCNode* t_node)
+{
+	CCParticleSystemQuad* t_particle = getStarParticle();
+	t_particle->setPosition(t_node->getContentSize().width/2.f, t_node->getContentSize().height/2.f);
+	t_node->addChild(t_particle);
 }

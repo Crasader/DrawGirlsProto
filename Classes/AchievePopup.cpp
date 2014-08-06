@@ -306,6 +306,7 @@ void AchievePopup::hidePopup()
 
 void AchievePopup::endHidePopup()
 {
+	checkLogRewardCount();
 	if(target_final)
 		(target_final->*delegate_final)();
 	removeFromParent();
@@ -645,6 +646,33 @@ void AchievePopup::setAchieveTable()
 	
 	
 	all_reward_menu->setEnabled(is_reward);
+	
+	checkLogRewardCount();
+}
+
+void AchievePopup::checkLogRewardCount()
+{
+	int reward_count = 0;
+	
+	for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
+	{
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
+		{
+			reward_count++;
+		}
+	}
+	
+	for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
+	{
+		if(!myAchieve->isCompleted((AchievementCode)i) &&
+		   myAchieve->isAchieve((AchievementCode)i))
+		{
+			reward_count++;
+		}
+	}
+	
+	CCLOG("achieve reward count : %d", reward_count);
 }
 
 void AchievePopup::cellAction( CCObject* sender )
