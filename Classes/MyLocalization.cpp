@@ -1532,6 +1532,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
 	ko->setObject(CCString::create("카드 체인지!"), kMyLocalKey_cardChange);
 	ko->setObject(CCString::create("100% 쇼타임에서는 생명의 돌을 체험할 수 있어요."), kMyLocalKey_showtimeMorphingTouch);
+	ko->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
+	ko->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
+	ko->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
 	
 	
 //	ko->setObject(CCString::create("이번엔 획득한 영역 위를 이동하는\n방법을 알려드리겠습니다."), kMyLocalKey_tutorial8);
@@ -2563,6 +2566,9 @@ void MyLocal::en()
 	en->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
 	en->setObject(CCString::create("CARD CHANGE!"), kMyLocalKey_cardChange);
 	en->setObject(CCString::create("100% 쇼타임에서는 생명의 돌을 체험할 수 있어요."), kMyLocalKey_showtimeMorphingTouch);
+	en->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
+	en->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
+	en->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
 	
 	
 	//	en->setObject(CCString::create("Cannot connect to the server."), kMyLocalKey_canNotConnectedServer);
@@ -3616,6 +3622,9 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("정식오픈 후 사용할 수 있습니다."), kMyLocalKey_afterOpenCBT);
 	ja->setObject(CCString::create("CARD CHANGE!"), kMyLocalKey_cardChange);
 	ja->setObject(CCString::create("100% 쇼타임에서는 생명의 돌을 체험할 수 있어요."), kMyLocalKey_showtimeMorphingTouch);
+	ja->setObject(CCString::create("카드강화"), kMyLocalKey_cardStrength);
+	ja->setObject(CCString::create("업데이트 예정"), kMyLocalKey_updateTitle);
+	ja->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
 
 //	ja->setObject(CCString::create("サーバーに連結できません。"), kMyLocalKey_canNotConnectedServer);
 //	ja->setObject(CCString::create("画面をタッチしてください。"), kMyLocalKey_touchPlease);
