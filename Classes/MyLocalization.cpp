@@ -663,6 +663,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("알림"), kMyLocalKey_noti);
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
+	ko->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	ko->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
@@ -695,7 +697,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d시간후 리셋"), kMyLocalKey_hourAfterReset);
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);
 	ko->setObject(CCString::create("선물함"), kMyLocalKey_giftbox);
-	ko->setObject(CCString::create("<font color=#FFAA14>%s</font><font>로부터</font><br><font color=#FFFFFF>선물이 도착하였습니다.</font>"), kMyLocalKey_giftboxContent);
+	ko->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	ko->setObject(CCString::create("모두수락"), kMyLocalKey_allAccept);
 	ko->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	ko->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
@@ -1716,6 +1718,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Safe Mode"), kMyLocalKey_safetyMode);
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
+	en->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	en->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	en->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
@@ -1749,7 +1753,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("%dtimes after the reset"), kMyLocalKey_hourAfterReset);
 	en->setObject(CCString::create("%dMinutes after the reset"), kMyLocalKey_secondAfterReset);
 	en->setObject(CCString::create("Gift Box"), kMyLocalKey_giftbox);
-	en->setObject(CCString::create("<font color=#FFAA14>%s</font><font>로부터</font><br><font color=#FFFFFF>선물이 도착하였습니다.</font>"), kMyLocalKey_giftboxContent);
+	en->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	en->setObject(CCString::create("Accept all"), kMyLocalKey_allAccept);
 	en->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	en->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
@@ -2763,10 +2767,12 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
+	ja->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
+	ja->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
 	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
-	ja->setObject(CCString::create("<font color=#FFAA14>%s</font><font>로부터</font><br><font color=#FFFFFF>선물이 도착하였습니다.</font>"), kMyLocalKey_giftboxContent);
+	ja->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	ja->setObject(CCString::create("재접속"), kMyLocalKey_reConnect);
 	ja->setObject(CCString::create("다른 기기로 연결되었습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert1);
 	ja->setObject(CCString::create("서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다."), kMyLocalKey_reConnectAlert2);
