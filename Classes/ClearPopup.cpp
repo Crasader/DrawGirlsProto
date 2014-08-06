@@ -857,6 +857,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
 				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
@@ -914,6 +915,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
 				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);

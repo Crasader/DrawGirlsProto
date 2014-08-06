@@ -1698,6 +1698,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		if(t_nick_size->getContentSize().width > 85)
 		{
 			LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
+			nick_marquee->setSpace(30);
 			nick_marquee->addText(("<font color=#352990>"+myDSH->getStringForKey(kDSH_Key_nick)+"</font>").c_str());
 			nick_marquee->startMarquee();
 			nick_marquee->setFontSize(12.f);
@@ -1826,6 +1827,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	if(t_nick_size->getContentSize().width > 85)
 	{
 		LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
+		nick_marquee->setSpace(30);
 		nick_marquee->addText(("<font color=#352990>"+rank_list[idx].nick.getV()+"</font>").c_str());
 		nick_marquee->startMarquee();
 		nick_marquee->setFontSize(12.f);
