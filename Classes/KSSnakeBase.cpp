@@ -232,6 +232,7 @@ void KSSnakeBase::animationNoDirection(float dt)
 			m_noDirection.state = 0;
 			unschedule(schedule_selector(KSSnakeBase::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
+			m_snake.setRelocation(getPosition(), m_well512);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
@@ -405,6 +406,7 @@ void KSSnakeBase::damageReaction(float)
 		m_cumberState = kCumberStateMoving;
 		getEmotion()->releaseStun();
 		unschedule(schedule_selector(KSSnakeBase::damageReaction));
+		m_snake.setRelocation(getPosition(), m_well512);
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		m_furyMode.furyFrameCount = m_furyMode.totalFrame;
@@ -752,6 +754,10 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	{
 		CCLOG("hg!!!!");
 	}
+	if(m_cumberState & kCumberStateDamaging)
+	{
+		CCLOG("damaging!!");
+	}
 	SnakeTrace tr;
 	tr.position = t_sp;
 	tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
@@ -759,7 +765,7 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
 	m_cumberTrace.push_back(tr); //
-	if(m_cumberTrace.size() >= 350)
+	if(m_cumberTrace.size() >= 1000)
 	{
 		m_cumberTrace.pop_front();
 	}
