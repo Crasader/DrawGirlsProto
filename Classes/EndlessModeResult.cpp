@@ -144,8 +144,6 @@ bool EndlessModeResult::init()
 		if(left_total_score.getV() > right_total_score.getV())
 		{
 			mySGD->endless_my_victory = mySGD->endless_my_victory.getV() + 1;
-			CCLOG("change endless_my_victory : %d", mySGD->endless_my_victory.getV());
-			TRACE();
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
 			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
@@ -153,8 +151,6 @@ bool EndlessModeResult::init()
 		else
 		{
 			mySGD->endless_my_victory = 0;
-			CCLOG("change endless_my_victory : %d", mySGD->endless_my_victory.getV());
-			TRACE();
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;
 			mySGD->endless_my_ing_score = 0;
@@ -998,8 +994,6 @@ void EndlessModeResult::setMain()
 	right_total_back->addChild(right_total_content);
 	
 	
-	CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
-	TRACE();
 	string next_button_str;
 	if(mySGD->endless_my_victory.getV() > 0)
 		next_button_str = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_victory.getV()+1)->getCString();
@@ -1044,8 +1038,6 @@ void EndlessModeResult::setMain()
 			result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 			main_case->addChild(result_stamp);
 			
-			CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
-			TRACE();
 			CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 			win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 			result_stamp->addChild(win_label);
@@ -1236,8 +1228,6 @@ void EndlessModeResult::startCalcAnimation()
 																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
 																				   main_case->addChild(result_stamp);
 																				   
-																				   CCLOG("recent endless_my_victory : %d", mySGD->endless_my_victory.getV());
-																				   TRACE();
 																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
 																				   win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 																				   result_stamp->addChild(win_label);

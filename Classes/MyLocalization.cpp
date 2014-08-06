@@ -1063,7 +1063,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ko->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ko->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ko->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	ko->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ko->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ko->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
@@ -2106,7 +2106,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	en->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	en->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	en->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	en->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	en->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	en->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);
@@ -3166,7 +3166,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("캐릭터를 왼쪽으로 이동 후 오른쪽으로 조작하면 OK!"), kMyLocalKey_controlTip_slimLine_content);
 	
 	ja->setObject(CCString::create("미션"), kMyLocalKey_mission);
-	ja->setObject(CCString::create("PVP"), kMyLocalKey_endlessMode);
+	ja->setObject(CCString::create("PvP"), kMyLocalKey_endlessMode);
 	ja->setObject(CCString::create("주간연승랭킹"), kMyLocalKey_endlessWeeklyranking);
 	ja->setObject(CCString::create("정보"), kMyLocalKey_endlessMyInfo);
 	ja->setObject(CCString::create("전적"), kMyLocalKey_endlessInfoScore);

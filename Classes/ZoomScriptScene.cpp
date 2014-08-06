@@ -179,6 +179,7 @@ bool ZoomScript::init()
 	addChild(script_case, kZS_Z_script_case);
 	
 	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
+	showtime_morphing_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);
 	showtime_morphing_label->setAnchorPoint(ccp(0,0));
 	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
 	showtime_morphing_label->setVisible(false);

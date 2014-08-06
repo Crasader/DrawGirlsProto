@@ -1298,7 +1298,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		cell_node->addChild(rate_timer, 0, 999);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(puzzle_number, kSDS_PZ_title_s).c_str(), mySGD->getFont().c_str(), 11);
-		//title_label->enableOuterStroke(ccWHITE, 1.f);
+		title_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
 		title_label->setPosition(ccp(0,-56.f));
 		cell_node->addChild(title_label, 1);
 

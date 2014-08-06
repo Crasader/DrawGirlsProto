@@ -1698,7 +1698,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		if(t_nick_size->getContentSize().width > 85)
 		{
 			LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
-			nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+			nick_marquee->addText(("<font color=#352990>"+myDSH->getStringForKey(kDSH_Key_nick)+"</font>").c_str());
 			nick_marquee->startMarquee();
 			nick_marquee->setFontSize(12.f);
 			nick_marquee->setAnchorPoint(ccp(0,0.5f));
@@ -1708,7 +1708,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		else
 		{
 			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
-			nick_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//			nick_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			nick_label->setColor(ccc3(53, 41, 144));
 			nick_label->setAnchorPoint(ccp(0,0.5f));
 			nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
@@ -1826,7 +1826,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	if(t_nick_size->getContentSize().width > 85)
 	{
 		LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
-		nick_marquee->addText(rank_list[idx].nick.getV().c_str());
+		nick_marquee->addText(("<font color=#352990>"+rank_list[idx].nick.getV()+"</font>").c_str());
 		nick_marquee->startMarquee();
 		nick_marquee->setFontSize(12.f);
 		nick_marquee->setAnchorPoint(ccp(0,0.5f));
