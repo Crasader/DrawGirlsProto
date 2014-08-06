@@ -348,7 +348,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	FormSetter::get()->setEnabledRemocon(true);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	FormSetter::get()->setEnabledRemocon(true);
+	FormSetter::get()->setEnabledRemocon(false);
 #endif
 	//	CCScene* pScene = TitleScene::scene();
 //	CCScene* pScene = GaBaBo::scene();

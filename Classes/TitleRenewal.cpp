@@ -70,6 +70,7 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	white_back = NULL;
+	TRACE();
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
 	{
@@ -87,14 +88,18 @@ bool TitleRenewalScene::init()
 		CCSprite* splash = CCSprite::create("splash_nhn_litqoo.png");
 		splash->setPosition(ccp(240,160));
 		addChild(splash);
+		TRACE();
 		
 		addChild(KSTimer::create(1.f, [=]()
-		{
+														 {TRACE();
+															 
 			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-												   {
+																						 {TRACE();
+																							 
 													   splash->setOpacity(255-255*t);
 												   }, [=](float t)
-												   {
+																						 {TRACE();
+																							 
 													   splash->setOpacity(255-255*t);
 													   splash->removeFromParent();
 													   
@@ -103,12 +108,15 @@ bool TitleRenewalScene::init()
 													   addChild(marvelous_splash);
 													   
 													   addChild(KSTimer::create(1.f, [=]()
-																				{
+																											{TRACE();
+																												
 																					addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																														   {
+																																								 {TRACE();
+																																									 
 																															   marvelous_splash->setOpacity(255-255*t);
 																														   }, [=](float t)
-																														   {
+																																								 {TRACE();
+																																									 
 																															   marvelous_splash->setOpacity(255-255*t);
 																															   marvelous_splash->removeFromParent();
 																															   
@@ -204,7 +212,8 @@ void TitleRenewalScene::loadCounting(CCObject* sender)
 }
 
 void TitleRenewalScene::endSplash()
-{
+{TRACE();
+	
 //	CCSprite* ratings = CCSprite::create("game_ratings.png");
 //	ratings->setPosition(ccp(240,160));
 //	addChild(ratings);
