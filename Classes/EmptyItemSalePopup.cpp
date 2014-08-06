@@ -274,7 +274,10 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	
-	mySGD->addChangeGoods("pg_ei");
+	if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
+		mySGD->addChangeGoods("pg_snh");
+	else if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
+		mySGD->addChangeGoods("pg_ei");
 	
 	mySGD->changeGoods([=](Json::Value result_data){
 		inapp_loading->removeFromParent();

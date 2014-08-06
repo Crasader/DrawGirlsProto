@@ -3327,6 +3327,7 @@ void StarGoldData::resetRankReward()
 
 void StarGoldData::initTimeEventList(Json::Value t_list)
 {
+	time_event_list.clear();
 	int list_size = t_list.size();
 	
 	for(int i=0;i<list_size;i++)

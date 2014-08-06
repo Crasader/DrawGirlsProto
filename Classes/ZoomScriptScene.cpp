@@ -168,7 +168,8 @@ bool ZoomScript::init()
 //	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 //	addChild(zoom_img, kZS_Z_script_case);
 	
-	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16);
+	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16, CCSizeMake(330, 25), CCTextAlignment::kCCTextAlignmentCenter,
+									  CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
@@ -233,11 +234,12 @@ void ZoomScript::onEnterTransitionDidFinish()
 
 void ZoomScript::startScript()
 {
-	script_label->setString("");
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 15));
+	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setString("");
 	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
@@ -1061,13 +1063,14 @@ void ZoomScript::showtimeThirdAction()
 	{
 		startStageAnimation();
 	}
-	script_label->setVisible(true);
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
-	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 15));
+	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setString("");
 	script_case->setVisible(true);
+	script_label->setVisible(true);
 	showtime_morphing_label->setVisible(true);
 	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	

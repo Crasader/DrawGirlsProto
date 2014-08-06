@@ -329,7 +329,7 @@ enum AchievementCode
 	kAchievementCode_hidden_bigHand1,//	(히든) 욕심쟁이 : 한번에 먹은 영역이 50%이상일때 완
 	kAchievementCode_hidden_bigHand2,//	(히든) 욕심쟁이2 : 한번에 먹은 영역이 100%이상일때 완
 	
-	kAchievementCode_hidden_holder,//	(히든) 잉여킹 : 대기실에 켜놓고 100초 이상 경과
+	kAchievementCode_hidden_holder,//	(히든) 야메떼 : 카드 터치 100회
 	
 	kAchievementCode_hidden_noSound,//	(히든) 사운드따윈필요없어 : 설정에 사운드 끄고 플레이후 클리어 완
 	

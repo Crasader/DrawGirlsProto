@@ -818,6 +818,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardGiftNotFound,
 	
 	kMyLocalKey_rankUpFailRateUp,
+	kMyLocalKey_rankUpEventSubMent,
 	
 	kMyLocalKey_failTitleTimeover,
 	kMyLocalKey_failTitleMissionfail,

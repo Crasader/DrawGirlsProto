@@ -900,15 +900,13 @@ bool ShopPopup::init()
 	
 	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 	{
-		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-		   after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
+		myAchieve->changeIngCount(AchievementCode(i), after_value);
+		if(!myAchieve->isNoti(AchievementCode(i)) && after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), after_value);
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			
-			myAchieve->updateAchieve(nullptr);
 		}
+		myAchieve->updateAchieve(nullptr);
 	}
 	
     return true;
@@ -1043,7 +1041,7 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notEnoughRuby)), 9999);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
 	}
 	else
 	{
