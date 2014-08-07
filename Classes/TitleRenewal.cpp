@@ -847,8 +847,8 @@ void TitleRenewalScene::checkReceive()
 		{
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
 			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
-			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("최고진행스테이지%d", mySGD->getUserdataHighPiece()));
-			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("보유카드수%d", mySGD->getHasGottenCardsSize()));
+			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
+			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
 			
 			mySGD->network_check_cnt = 0;
 			

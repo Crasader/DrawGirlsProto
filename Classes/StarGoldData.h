@@ -961,6 +961,7 @@ public:
 	int loading_tip_back_number;
 	
 	int pvp_continue_cnt;
+	int ingame_continue_cnt;
 	int start_map_gacha_use_gold_cnt;
 	
 private:

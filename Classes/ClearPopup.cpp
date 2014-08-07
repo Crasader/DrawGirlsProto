@@ -239,6 +239,10 @@ bool ClearPopup::init()
 	else										take_level = 1;
 	
 	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %d", stage_number));
+	if(mySGD->ingame_continue_cnt > 0)
+	{
+		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %d", mySGD->ingame_continue_cnt), ccsf("Stage %d", stage_number));
+	}
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -541,7 +545,7 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  {
 										  TRACE();
 										  CCLOG("ClearPopup transaction success");
-										  fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("최고진행스테이지%d", mySGD->getUserdataHighPiece()));
+										  fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
 										  
 										  mySGD->network_check_cnt = 0;
 										  

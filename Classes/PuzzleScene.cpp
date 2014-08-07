@@ -640,7 +640,7 @@ bool PuzzleScene::init()
 																}
 															}
 															
-															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("보유카드수%d", mySGD->getHasGottenCardsSize()));
+															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
 														}
 												  }));
 		
