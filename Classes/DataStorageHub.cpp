@@ -776,5 +776,8 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_timeZone] = "tmzn";
 	
 	return_value[kDSH_Key_showedKindTutorial_int1] = "skt%d";
+	return_value[kDSH_Key_showedEmptyItemSale1] = "seis1";
+	return_value[kDSH_Key_showedEmptyItemSale2] = "seis2";
+	return_value[kDSH_Key_showedCardRankUp] = "scru";
 }
 #undef LZZ_INLINE

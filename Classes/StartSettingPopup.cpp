@@ -46,6 +46,7 @@
 #include "CommonAnimation.h"
 #include "AchieveNoti.h"
 #include "TypingBox.h"
+#include "FiveRocksCpp.h"
 
 bool StartSettingPopup::init()
 {
@@ -2685,6 +2686,9 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->is_endless_mode && mySGD->endless_my_victory.getV() == 0)
+			mySGD->pvp_continue_cnt = 0;
+		mySGD->ingame_continue_cnt = 0;
 		start_loading->removeFromParent();
 		
 		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
@@ -2738,6 +2742,15 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 		mySGD->changeUserdata(nullptr);
 	}
 	
+	string fiverocks_param1;
+	if(item_list[t_clicked_item_idx] == kIC_baseSpeedUp)
+		fiverocks_param1 = "Speed";
+	else if(item_list[t_clicked_item_idx] == kIC_doubleItem)
+		fiverocks_param1 = "Double";
+	else if(item_list[t_clicked_item_idx] == kIC_magnet)
+		fiverocks_param1 = "Magnet";
+	
+	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyItem", fiverocks_param1.c_str(), ccsf("Stage %d", mySD->getSilType()));
 	
 	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));
 	

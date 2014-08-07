@@ -11,6 +11,7 @@
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
 #include "HeartTime.h"
+#include "FiveRocksCpp.h"
 
 void StarGoldData::withdraw()
 {
@@ -426,6 +427,7 @@ void StarGoldData::setGameStart()
 	stage_grade = 0;
 	game_time = 0;
 	start_map_gacha_cnt = 0;
+	start_map_gacha_use_gold_cnt = 0;
 	clear_reward_gold = 0;
 	
 	damaged_score = 0;
@@ -2610,6 +2612,7 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 {
 	if(ingame_gold.getV() > 0)
 	{
+		is_ingame_gold = true;
 		int t_ingame_gold = ingame_gold.getV();
 		if(isTimeEvent(kTimeEventType_gold))
 			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
@@ -2663,6 +2666,30 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(is_ingame_gold)
+		{
+			int t_missile_level = getSelectedCharacterHistory().level.getV();
+			string fiverocks_param2;
+			if(t_missile_level <= 5)
+				fiverocks_param2 = "UserLv1~Lv5";
+			else if(t_missile_level <= 10)
+				fiverocks_param2 = "UserLv6~Lv10";
+			else if(t_missile_level <= 15)
+				fiverocks_param2 = "UserLv11~Lv15";
+			else if(t_missile_level <= 20)
+				fiverocks_param2 = "UserLv16~Lv20";
+			else if(t_missile_level <= 25)
+				fiverocks_param2 = "UserLv21~Lv25";
+			else if(t_missile_level <= 30)
+				fiverocks_param2 = "UserLv26~Lv30";
+			else
+				fiverocks_param2 = "UserLv31~";
+			
+			
+			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str());
+			is_ingame_gold = false;
+		}
+		
 		change_goods_list.clear();
 		
 		Json::Value result_list = result_data["list"];
@@ -3457,6 +3484,7 @@ void StarGoldData::myInit()
 	
 	client_version = 3;
 	
+	is_ingame_gold = false;
 	total_card_cnt = 0;
 	
 	loading_tip_back_number = 1;

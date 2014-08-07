@@ -96,6 +96,7 @@ private:
 	KSProtectVar<int> card_price_low; // friend point
 	
 	function<void()> fail_func;
+	function<void()> success_func;
 	
 	CCSprite* main_case;
 	int server_character_count;

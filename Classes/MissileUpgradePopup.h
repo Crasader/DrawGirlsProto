@@ -31,6 +31,7 @@ private:
 	function<void()> upgrade_func;
 	
 	bool is_menu_enable;
+	int use_gold_value;
 	
 	TouchSuctionLayer* suction;
 	

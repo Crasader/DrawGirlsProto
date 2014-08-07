@@ -21,6 +21,7 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "FiveRocksCpp.h"
 
 RankUpPopup* RankUpPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event)
 {
@@ -40,6 +41,17 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 			return;
 		
 		bool is_ok = rand()%1000 <= (mySGD->getRankUpBaseRate() + mySGD->getRankUpAddRate())*1000.f || is_time_event;
+		
+		if(!is_time_event)
+		{
+			string fiverocks_param2;
+			if(is_ok)
+				fiverocks_param2 = "success";
+			else
+				fiverocks_param2 = "fail";
+			fiverocks::FiveRocksBridge::trackEvent("UseGem", "StrengthenCard", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)), fiverocks_param2.c_str());
+			myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, 0);
+		}
 		
 		if(!is_ok)
 			mySGD->setRankUpAddRate(mySGD->getRankUpAddRate() + mySGD->getRankUpRateDistance());
@@ -230,7 +242,10 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	if(is_time_event)
 		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventTitle);
 	else
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)+1);
 		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpTitle);
+	}
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();

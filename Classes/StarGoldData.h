@@ -960,11 +960,17 @@ public:
 	
 	int loading_tip_back_number;
 	
+	int pvp_continue_cnt;
+	int ingame_continue_cnt;
+	int start_map_gacha_use_gold_cnt;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
 	vector<CollectionCardInfo> event_puzzle_cards;
 	vector<CollectionCardInfo> special_cards;
+	
+	bool is_ingame_gold;
 	
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

@@ -496,7 +496,7 @@ void AchievePopup::setAchieveTable()
 				}
 				else
 				{
-					if(!isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
+					if(myAchieve->getCondition(AchievementCode(i)) > 0 && !isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						another_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
 				}
 			}
@@ -516,7 +516,7 @@ void AchievePopup::setAchieveTable()
 				else// if(myAchieve->isCompleted((AchievementCode)i) ||
 //						myAchieve->isAchieve((AchievementCode)i))
 				{
-					if(!isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
+					if(myAchieve->getCondition(AchievementCode(i)) > 0 && !isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						another_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
 				}
 			}
@@ -554,7 +554,7 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   !myAchieve->isAchieve((AchievementCode)i))
@@ -565,7 +565,7 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   !myAchieve->isAchieve((AchievementCode)i))
@@ -580,7 +580,7 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   myAchieve->isAchieve((AchievementCode)i))
@@ -594,7 +594,7 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   myAchieve->isAchieve((AchievementCode)i))
@@ -875,6 +875,34 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 				cell_back->addChild(t_back);
 			}
 		}
+		else if(achieve_list[idx].achieve_list.size() == 2)
+		{
+			if(myAchieve->isCompleted(achieve_list[idx].achieve_list[1]))
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+				t_crown->setPosition(ccp(cell_back->getContentSize().width-18, cell_back->getContentSize().height-12));
+				cell_back->addChild(t_crown);
+			}
+			else
+			{
+				CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+				t_back->setPosition(ccp(cell_back->getContentSize().width-18, cell_back->getContentSize().height-12));
+				cell_back->addChild(t_back);
+			}
+			
+			if(myAchieve->isCompleted(achieve_list[idx].achieve_list[0]))
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
+				t_crown->setPosition(ccp(cell_back->getContentSize().width-18-21, cell_back->getContentSize().height-12));
+				cell_back->addChild(t_crown);
+			}
+			else
+			{
+				CCSprite* t_back = CCSprite::create("achievement_crown_down.png");
+				t_back->setPosition(ccp(cell_back->getContentSize().width-18-21, cell_back->getContentSize().height-12));
+				cell_back->addChild(t_back);
+			}
+		}
 		else if(achieve_list[idx].achieve_list.size() == 1)
 		{
 			if(myAchieve->isCompleted(achieve_list[idx].achieve_list[0]))
@@ -937,7 +965,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			graph_img->setPercentage(100.f);
 			
 			
-			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
+			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code)/*myAchieve->getRecentValue(recent_code)*/)->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
 //			progress_label->disableOuterStroke();
 			progress_label->setAnchorPoint(ccp(0,0.5f));
 			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));

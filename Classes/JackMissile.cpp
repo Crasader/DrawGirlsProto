@@ -875,10 +875,12 @@ void JM_BasicMissile::realInit (CCNode * t_target, int jm_type, float missile_sp
 	dex = 1;
 	
 	
-	if(missile_speed < 2.f)
-		missile_speed = 2.f;
-	else if(missile_speed > 9.f)
-		missile_speed = 9.f;
+//	if(missile_speed < 2.f)
+//		missile_speed = 2.f;
+//	else if(missile_speed > 9.f)
+//		missile_speed = 9.f;
+	
+	missile_speed = 7.f;
 	
 	myJM_SPEED = missile_speed * ((rand()%11 - 5)/10.f + 1.f);
 	myJM_CHANGE_DIRECTION_VAL = JM_CHANGE_DIRECTION_VAL;

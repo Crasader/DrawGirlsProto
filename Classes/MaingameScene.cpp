@@ -45,6 +45,7 @@
 #include "TouchSuctionLayer.h"
 #include "OnePercentTutorial.h"
 #include "TypingBox.h"
+#include "FiveRocksCpp.h"
 
 //#include "ScreenSide.h"
 
@@ -311,9 +312,9 @@ void Maingame::onEnterTransitionDidFinish()
 
 void Maingame::startStory()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
 	t_tb->setScale(myDSH->screen_convert_rate);
-//	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
+	t_tb->setPosition(t_tb->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -1226,9 +1227,12 @@ void Maingame::counting()
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
 //		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 //		{
+		
 			t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 		t_smg->remove_func = [=]()
 		{
+			if(mySGD->start_map_gacha_use_gold_cnt > 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "StartDraw", ccsf("gacha %02d", mySGD->start_map_gacha_use_gold_cnt), ccsf("Stage %d", mySD->getSilType()));
 			t_smg = NULL;
 		};
 			addChild(t_smg, startGachaZorder);
@@ -1256,10 +1260,15 @@ void Maingame::gachaOn()
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
+	bool is_use_gold = false;
+	
 	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
 		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	else if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+	{
+		is_use_gold = true;
 		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	}
 	else
 	{
 		showShop(kSC_gold);
@@ -1309,6 +1318,11 @@ void Maingame::gachaOn()
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
 //										  exit_target->onEnter();
+										  
+										  if(is_use_gold)
+											{
+												mySGD->start_map_gacha_use_gold_cnt++;
+											}
 										  
 										  myGD->resetGameData();
 										  mySGD->startMapGachaOn();
@@ -1577,9 +1591,9 @@ void Maingame::removeConditionLabel()
 		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
 		scenario_node->addChild(asuka, 1);
 		
-		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
 		typing_box->setScale(myDSH->screen_convert_rate);
-//		typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
+		typing_box->setPosition(typing_box->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 		typing_box->setHide();
 		scenario_node->addChild(typing_box, 2);
 		
@@ -1723,8 +1737,6 @@ void Maingame::removeConditionLabel()
 		exit_target->onExit();
 		
 		CCNode* scenario_node = CCNode::create();
-		scenario_node->setScale(myDSH->screen_convert_rate);
-		scenario_node->setPosition(ccpAdd(scenario_node->getPosition(), myDSH->ui_zero_point));
 		getParent()->addChild(scenario_node, 9999);
 		
 		float screen_scale_y = myDSH->ui_top/320.f;
@@ -1753,9 +1765,9 @@ void Maingame::removeConditionLabel()
 		asuka->setPosition(ccp(480+asuka->getContentSize().width*asuka->getScale(), 0));
 		scenario_node->addChild(asuka, 1);
 		
-		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
 		typing_box->setScale(myDSH->screen_convert_rate);
-//		typing_box->setPosition(ccpAdd(typing_box->getPosition(), myDSH->ui_zero_point));
+		typing_box->setPosition(typing_box->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 		typing_box->setHide();
 		scenario_node->addChild(typing_box, 2);
 		
@@ -2331,9 +2343,9 @@ void Maingame::clearScenario()
 
 void Maingame::clearScenario2()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
 	t_tb->setScale(myDSH->screen_convert_rate);
-//	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
+	t_tb->setPosition(t_tb->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()
@@ -3079,9 +3091,9 @@ void Maingame::failScenario()
 
 void Maingame::failScenario2()
 {
-	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65));
+	TypingBox* t_tb = TypingBox::create(-500, "boss_mentbox.png", CCRectMake(0, 0, 110, 75), CCRectMake(87, 37, 7, 15), CCRectMake(15, 30, 80, 31), CCSizeMake(180, 40), ccp(240,myDSH->ui_center_y-65), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
 	t_tb->setScale(myDSH->screen_convert_rate);
-//	t_tb->setPosition(ccpAdd(t_tb->getPosition(), myDSH->ui_zero_point));
+	t_tb->setPosition(t_tb->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 	addChild(t_tb, 100);
 	
 	function<void()> end_func1 = [=]()

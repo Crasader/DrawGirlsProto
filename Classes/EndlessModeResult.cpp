@@ -30,6 +30,7 @@
 #include "EndlessSeqWinRewardPopup.h"
 #include "StyledLabelTTF.h"
 #include "TypingBox.h"
+#include "FiveRocksCpp.h"
 
 enum EndlessModeResultZorder
 {
@@ -150,6 +151,37 @@ bool EndlessModeResult::init()
 		}
 		else
 		{
+			fiverocks::FiveRocksBridge::trackEvent("Game", "PvPResult", ccsf("win %d", mySGD->endless_my_victory.getV()), ccsf("Lv%d", mySGD->getSelectedCharacterHistory().level.getV()));
+			
+			if(mySGD->pvp_continue_cnt >= 1)
+			{
+				string fiverocks_param1, fiverocks_param2;
+				if(mySGD->pvp_continue_cnt == 1)
+					fiverocks_param1 = "continue 1";
+				else if(mySGD->pvp_continue_cnt <= 4)
+					fiverocks_param1 = "continue 02~04";
+				else if(mySGD->pvp_continue_cnt <= 8)
+					fiverocks_param1 = "continue 05~08";
+				else if(mySGD->pvp_continue_cnt <= 11)
+					fiverocks_param1 = "continue 09~11";
+				else
+					fiverocks_param1 = "continue 12~";
+				
+				if(mySGD->endless_my_victory.getV() == 0)
+					fiverocks_param2 = "win 0";
+				else if(mySGD->endless_my_victory.getV() == 1)
+					fiverocks_param2 = "win 1";
+				else if(mySGD->endless_my_victory.getV() <= 4)
+					fiverocks_param2 = "win 02~04";
+				else if(mySGD->endless_my_victory.getV() <= 8)
+					fiverocks_param2 = "win 05~08";
+				else if(mySGD->endless_my_victory.getV() <= 11)
+					fiverocks_param2 = "win 09~11";
+				else
+					fiverocks_param2 = "win 12~";
+				
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "PvPContinue", fiverocks_param1.c_str(), fiverocks_param2.c_str());
+			}
 			mySGD->endless_my_victory = 0;
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;

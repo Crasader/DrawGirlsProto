@@ -221,7 +221,8 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	setFormSetter(desc2);
 	
 	
-	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+	CCScale9Sprite* progress_back = CCScale9Sprite::create("loading_progress_back.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1));
+	progress_back->setContentSize(CCSizeMake(201, 13));
 	progress_back->setPosition(ccp(0,-67));
 	m_container->addChild(progress_back, kOnePercentGame_Z_content);
 	

@@ -342,7 +342,7 @@ void CardViewScene::menuAction(CCObject *sender)
 		unschedule(schedule_selector(CardViewScene::moveAnimation));
 		
 		temp_end_func();
-		
+		removeAllChildren();
 //		CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
 		CCDirector::sharedDirector()->popScene();
 	}
