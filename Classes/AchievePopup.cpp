@@ -496,7 +496,7 @@ void AchievePopup::setAchieveTable()
 				}
 				else
 				{
-					if(!isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
+					if(myAchieve->getCondition(AchievementCode(i)) > 0 && !isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						another_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
 				}
 			}
@@ -516,7 +516,7 @@ void AchievePopup::setAchieveTable()
 				else// if(myAchieve->isCompleted((AchievementCode)i) ||
 //						myAchieve->isAchieve((AchievementCode)i))
 				{
-					if(!isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
+					if(myAchieve->getCondition(AchievementCode(i)) > 0 && !isHaveAchieveGroup(another_list, myAchieve->getAchieveGroup((AchievementCode)i)))
 						another_list.push_back(myAchieve->getAchieveGroup((AchievementCode)i));
 				}
 			}
@@ -554,7 +554,7 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   !myAchieve->isAchieve((AchievementCode)i))
@@ -565,7 +565,7 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   !myAchieve->isAchieve((AchievementCode)i))
@@ -580,7 +580,7 @@ void AchievePopup::setAchieveTable()
 	{
 		for(int i=kAchievementCode_base+1;i<kAchievementCode_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   myAchieve->isAchieve((AchievementCode)i))
@@ -594,7 +594,7 @@ void AchievePopup::setAchieveTable()
 		
 		for(int i=kAchievementCode_hidden_base+1;i<kAchievementCode_hidden_end;i++)
 		{
-			if(myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
+			if(myAchieve->getCondition(AchievementCode(i)) > 0 && myAchieve->getRecentCodeFromGroup((AchievementCode)i) == (AchievementCode)i)
 			{
 				if(!myAchieve->isCompleted((AchievementCode)i) &&
 				   myAchieve->isAchieve((AchievementCode)i))
