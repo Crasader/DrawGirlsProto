@@ -287,7 +287,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 //	progress_label->setPosition(ccp(-progress_bar->getSprite()->getContentSize().width/2.f+10, -11));
 //	m_container->addChild(progress_label);
 	
-	CCSprite* present_img = CCSprite::create("mission_present.png");
+	CCSprite* present_img = CCSprite::create("today_mission_reward.png");
 	present_img->setPosition(ccp(201/2.f, 5));
 	m_container->addChild(present_img);
 	

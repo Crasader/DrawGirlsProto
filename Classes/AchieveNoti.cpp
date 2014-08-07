@@ -68,6 +68,30 @@ void AchieveNoti::myInit(AchievementCode t_code)
 				back_img->addChild(t_crown);
 			}
 		}
+		else if(t_group.achieve_list.size() == 2)
+		{
+			int t_index = 0;
+			for(int i=0;i<t_group.achieve_list.size();i++)
+			{
+				if(t_group.achieve_list[i] == t_code)
+				{
+					t_index = i;
+				}
+			}
+			
+			if(t_index == 0)
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_silver.png");
+				t_crown->setPosition(ccp(20 + 3, back_img->getContentSize().height/2.f+8 - 2));
+				back_img->addChild(t_crown);
+			}
+			else if(t_index == 1)
+			{
+				CCSprite* t_crown = CCSprite::create("achievement_crown_gold.png");
+				t_crown->setPosition(ccp(20 + 3, back_img->getContentSize().height/2.f+8 - 2));
+				back_img->addChild(t_crown);
+			}
+		}
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(myAchieve->getTitle(t_code).c_str(), mySGD->getFont().c_str(), 12);
 		title_label->setColor(ccc3(255, 170, 20));
