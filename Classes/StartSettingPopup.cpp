@@ -2688,7 +2688,7 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	{
 		if(mySGD->is_endless_mode && mySGD->endless_my_victory.getV() == 0)
 			mySGD->pvp_continue_cnt = 0;
-		ingame_continue_cnt = 0;
+		mySGD->ingame_continue_cnt = 0;
 		start_loading->removeFromParent();
 		
 		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
