@@ -576,13 +576,13 @@ private:
 			piece_img->addChild(mission_mark);
 		}
 		
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont2().c_str(), 13);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat("%d", stage_number)->getCString(), mySGD->getFont().c_str(), 13);
 		stage_number_label->setColor(ccc3(195, 255, 50));
 		stage_number_label->enableOuterStroke(ccBLACK, 1.f);
 		stage_number_label->setPosition(ccp(piece_img->getContentSize().width/2.f-17, piece_img->getContentSize().height/2.f-20));
 		piece_img->addChild(stage_number_label);
 		
-//		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont2().c_str(), 9);
+//		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 9);
 //		stage_label->setColor(ccWHITE);
 //		stage_label->enableOuterStroke(ccBLACK, 1.f);
 //		stage_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f - 7));

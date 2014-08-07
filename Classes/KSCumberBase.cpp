@@ -1010,7 +1010,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
-		if(ProbSelector::sel(0.005, 1.0 - 0.005, 0.0) == 0)
+		if(ProbSelector::sel(0.002, 1.0 - 0.002, 0.0) == 0)
 		{
 			// m_snake 변수를 재지정 ...
 			
@@ -1025,19 +1025,19 @@ void KSCumberBase::snakeMoving(float dt)
 	while(!validPosition)
 	{
 		cnt++;
+		assert(m_snake.longRadius >= m_snake.startXPosition);
+		float y = m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
+																					m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius;
+		y *= m_snake.sign;
 		
-		float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
-															pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+		float x = m_snake.startXPosition;
+		x = x + m_snake.longRadius;
+		x = x * cosf(m_snake.targetTheta) - y * sinf(m_snake.targetTheta);
+		y = x * sinf(m_snake.targetTheta) + y * cosf(m_snake.targetTheta);
 		
-		// 쿰버위치에서 센터 위치까지의 각도.
-		
-		float theta = atan2f(m_snake.relocationPosition.y - m_snake.centerPosition.y,
-												 m_snake.relocationPosition.x - m_snake.centerPosition.x);
-		
-		float a = circleRadius;
-		float b = a * m_snake.shortRadianRatio;
-		afterPosition = ccp(m_snake.centerPosition.x + a * cos(theta) * cos(m_snake.angleRad) - b * sin(theta) * sin(m_snake.angleRad),
-												m_snake.centerPosition.y + a * cos(m_snake.angleRad) * sin(theta) + b * sin(m_snake.angleRad) * cos(theta));
+		x = x + m_snake.startPosition.x;
+		y = y + m_snake.startPosition.y;
+		afterPosition = ccp(x, y);
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
@@ -1120,18 +1120,55 @@ void KSCumberBase::snakeMoving(float dt)
 			validPosition = true;
 		}
 	}
+	CCPoint oldPosition = ccp(m_snake.startXPosition,
+														m_snake.sign * m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
+																	m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius);
+	
+	int loopCnt = 0;
+	while(1)
+	{
+		loopCnt++;
+		m_snake.startXPosition += 0.05f;
+		if(m_snake.startXPosition >= m_snake.longRadius || loopCnt >= 300)
+		{
+			m_snake.setRelocation(getPosition(), m_well512);
+			break;
+		}
+		CCPoint newPosition = ccp(m_snake.startXPosition,
+															m_snake.sign * m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
+																																				 m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius);
+		if(ccpLength(newPosition - oldPosition) >= getSpeed() * 1.5f)
+		{
+			break;
+		}
+	}
+//	m_snake.startXPosition += getSpeed(); //  * cosf(m_snake.targetTheta);
+//	if(m_snake.startXPosition >= m_snake.longRadius)
+//	{
+//		m_snake.setRelocation(getPosition(), m_well512);
+//	}
 	
 	//	CCLOG("cnt outer !! = %d", cnt);
-	
-	
+	// 마지막 X 에 도착했으면 다시 리로케이션 해야됨.
+//	if(cosf(m_snake.targetTheta) >= 0)
+	{
+		
+	}
+//	else
+//	{
+//		if(m_snake.startXPosition <= m_snake.longRadius)
+//		{
+//			m_snake.setRelocation(getPosition(), m_well512);
+//		}
+//	}
 	
  	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 		{
-			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
-																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
-			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
+//			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
+//																pow((m_snake.centerPosition.y - m_snake.relocationPosition.y), 2));
+//			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 			
 			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
@@ -2890,4 +2927,22 @@ template <typename T>
 void FixedSizeDeque<T>::pop_front()
 {
 	m_deque.pop_front();
+}
+
+
+void KSCumberBase::SnakeMoving::setRelocation(const CCPoint& cumberP, Well512& m_well512)
+{
+	sign = m_well512.GetPlusMinus();
+	bool valid = false;
+	while(!valid)
+	{
+		startPosition = cumberP;
+		longRadius = ks19937::getDoubleValue(MIN_RADIUS, MAX_RADIUS);
+		shortRadius = ks19937::getDoubleValue(longRadius *  3.f / 4.f, longRadius);
+		targetTheta = ks19937::getDoubleValue(0, M_PI * 2);
+		targetPosition = ccp(cosf(targetTheta) * longRadius, sinf(targetTheta) * longRadius);
+		startXPosition = -longRadius;
+		
+		valid = true;
+	}
 }

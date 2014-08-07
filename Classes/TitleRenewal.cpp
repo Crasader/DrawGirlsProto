@@ -928,7 +928,7 @@ void TitleRenewalScene::checkReceive()
 						
 						if(!download_state)
 						{
-							download_state = CCLabelBMFont::create("", "allfont.fnt");
+							download_state = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 							download_state->setPosition(ccp(240,80));
 							addChild(download_state, 2);
 						}
