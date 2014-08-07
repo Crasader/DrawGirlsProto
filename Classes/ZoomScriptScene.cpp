@@ -719,7 +719,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
 					
-					t_node->setPosition(ccp(160,215));
+					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
 					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
@@ -760,23 +760,23 @@ void ZoomScript::menuAction(CCObject *sender)
 																   t_node->setVisible(true);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
-																   game_node->setScale(1.5f);
-																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   game_node->setScale(0.5f);
+																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
-																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
-																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																	 CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																	 CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 																   
-																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
-																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
-																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																	 CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
+																	 CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 																   
 																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
-																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
 																   
 																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
-																   
+																	 
 																   game_node->runAction(t_seq);
 															   }, [=](){
 																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
