@@ -23,11 +23,11 @@ void KSLabelTTF::enableOuterStroke(const ccColor3B &strokeColor, float strokeSiz
 void KSLabelTTF::setColor(ccColor3B t_color)
 {
 	m_gradationMode = false;
-	if(t_color.r + t_color.g + t_color.b < 100)
-	{
-		//		enableOuterStroke(ccWHITE, m_outerStrokeSize, m_outerStrokeOpacity);
-		disableOuterStroke();
-	}
+//	if(t_color.r + t_color.g + t_color.b < 100)
+//	{
+//		//		enableOuterStroke(ccWHITE, m_outerStrokeSize, m_outerStrokeOpacity);
+//		disableOuterStroke();
+//	}
 	CCLabelTTF::setColor(t_color);
 }
 
@@ -127,6 +127,16 @@ void KSLabelTTF::draw(void)
 }
 void KSLabelTTF::updateColor()
 {
+	
+	
+	if(m_outerSprite){
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255){
+				m_outerSprite->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
+		}else {
+			m_outerSprite->setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
+		}
+	}
+
 	if(m_gradationMode == false)
 	{
 		CCLabelTTF::updateColor();
@@ -224,7 +234,7 @@ bool KSLabelTTF::updateTexture()
 	
 	if (!tex)
 		return false;
-	
+//	m_fFontSize *= 4.f;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID) || (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	
 	ccFontDefinition texDef = _prepareTextDefinition(true);
@@ -240,9 +250,10 @@ bool KSLabelTTF::updateTexture()
 											m_vAlignment);
 	
 #endif
-	
+//	m_fFontSize /= 4.f;
 	// set the texture
 	this->setTexture(tex);
+//	setScale(1 / 4.f);
 	// release it
 	tex->release();
 	
@@ -285,24 +296,20 @@ bool KSLabelTTF::updateTexture()
 																									tex->getContentSize().height+m_outerStrokeSize*2 + padding);
 		
 		
+		
 		label->setFlipY(!oFlip);
 		label->setColor(m_outerStrokeColor);
 		
 		ccBlendFunc originalBlendFunc = label->getBlendFunc();
 		
-//		setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
-//		m_sBlendFunc.src = GL_SRC_ALPHA;
-//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-//		ccBlendFunc _t = {GL_ONE, GL_ONE_MINUS_SRC_ALPHA};
-		label->setBlendFunc(_t);
 		label->setOpacity(255);
 		CCPoint bottomLeft = ccp(label->getTexture()->getContentSize().width * label->getAnchorPoint().x + m_outerStrokeSize + padding / 2.f,
 														 label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize + padding / 2.f);
 //		CCPoint bottomLeft = CCPointZero;
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));
 		
-		rt->begin();
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255) rt->begin();
+			else rt->beginWithClear(1, 1, 1, 0);
 		
 		float devider = (m_fFontSize - 10)*9.f / 10.f + 8.f;
 		//float devider = 16;
@@ -318,14 +325,15 @@ bool KSLabelTTF::updateTexture()
 			{
 				
 			}
-			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
+			label->setPosition(ccp(bottomLeft.x + sin(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize
+														 ,bottomLeft.y + cos(CC_DEGREES_TO_RADIANS(i))*m_outerStrokeSize));
 			label->visit();
 		}
 	
 		// 테두리 빼고 뚫기. 투명 그라데이션 일 때만
 		if(m_gradationMode && (m_startColor.a != 255 || m_endColor.a != 255) )
 		{
-			label->setBlendFunc({GL_ZERO, GL_ONE_MINUS_SRC_ALPHA});
+			//label->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
 			label->setPosition(bottomLeft);
 			label->visit();
 			
@@ -334,11 +342,64 @@ bool KSLabelTTF::updateTexture()
 		rt->end();
 		label->setFlipY(oFlip);
 		label->setColor(oColor);
-		label->setBlendFunc(originalBlendFunc);
 		label->setOpacity(oOpacity);
-		
+		//rt->getSprite()->getTexture()->setAliasTexParameters();
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
 		m_outerSprite->setOpacity(m_outerStrokeOpacity);
+		
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255)m_outerSprite->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
+		else {
+			m_outerSprite->setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});
+			
+			
+//			GLchar* pszFragSource =
+//			"#ifdef GL_ES \n \
+//			precision mediump float; \n \
+//			#endif \n \
+//			uniform sampler2D u_texture; \n \
+//			varying vec2 v_texCoord; \n \
+//			varying vec4 v_fragmentColor; \n \
+//			void main(void) \n \
+//			{ \n \
+//			vec4 color = texture2D(u_texture, v_texCoord).rgba; \n \
+//			gl_FragColor = vec4(color.r*color.a,color.g*color.a,color.b*color.a,color.a); \n \
+//			}";
+////			
+////			"#ifdef GL_ES \n \
+////			precision mediump float; \n \
+////			#endif \n \
+////			uniform sampler2D u_texture; \n \
+////			varying vec2 v_texCoord; \n \
+////			varying vec4 v_fragmentColor; \n \
+////			void main(void) \n \
+////			{ \n \
+////			// Convert to greyscale using NTSC weightings \n \
+////			vec4 color = texture2D(u_texture, v_texCoord).rgba;\n \
+////			float grey = dot(color.rgb, vec3(0.299, 0.587, 0.114)); \n \
+////			gl_FragColor = vec4(grey, grey, grey, color.a); \n \
+////			}";
+//			
+//			CCGLProgram* pProgram = new CCGLProgram();
+//			pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, pszFragSource);
+//			m_outerSprite->setShaderProgram(pProgram);
+//			pProgram->release();
+//			
+//			m_outerSprite->getShaderProgram()->addAttribute(kCCAttributeNamePosition, kCCVertexAttrib_Position);
+//			m_outerSprite->getShaderProgram()->addAttribute(kCCAttributeNameColor, kCCVertexAttrib_Color);
+//			m_outerSprite->getShaderProgram()->addAttribute(kCCAttributeNameTexCoord, kCCVertexAttrib_TexCoords);
+//			CHECK_GL_ERROR_DEBUG();
+//			
+//			
+//			m_outerSprite->getShaderProgram()->link();
+//			CHECK_GL_ERROR_DEBUG();
+//			
+//			
+//			m_outerSprite->getShaderProgram()->updateUniforms();
+//			CHECK_GL_ERROR_DEBUG();
+
+		}
+		
+		
 		addChild(m_outerSprite, -1);
 		m_outerSprite->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 		label->setPosition(oPosition);
@@ -368,6 +429,8 @@ bool KSLabelTTF::updateTexture()
 //		cNode->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
 //		m_clippingNodeForGra = cNode;
 //	}
+	
+	
 	return true;
 }
 
@@ -388,7 +451,7 @@ void KSLabelTTF::setOpacity(GLubyte opacity)
 		m_outerSprite->setOpacity(opacity);
 	}
 	updateColor();
-	//	updateTexture();
+	//updateTexture();
 }
 void KSLabelTTF::setOpacityOuterStroke(GLubyte opa)
 {
@@ -415,11 +478,12 @@ bool KSLabelTTF::initWithString(const char *string, const char *fontName, float 
 		
 		this->setString(string);
 		
-		this->enableOuterStroke(ccBLACK, 0.5,(GLubyte)200);
+		//this->enableOuterStroke(ccBLACK, 1,(GLubyte)200);
+//		setOpacityModifyRGB(false);{CC_BLEND_SRC, CC_BLEND_DST}
+//		m_sBlendFunc.src = GL_ONE_MINUS_SRC_ALPHA;
+//		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
 //		setOpacityModifyRGB(false);
-		m_sBlendFunc.src = GL_SRC_ALPHA;
-		m_sBlendFunc.dst = GL_ONE_MINUS_SRC_ALPHA;
-//		setOpacityModifyRGB(false);
+		
 		
 		return true;
 	}

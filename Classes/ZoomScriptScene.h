@@ -52,6 +52,7 @@ private:
 	CommonButton* next_button;
 	KSLabelTTF* showtime_back;
 	MyNode* second_img;
+	KSLabelTTF* showtime_morphing_label;
 	
 	MyNode* third_img;
 	
@@ -108,6 +109,8 @@ private:
 	CCPoint touchStart_p;
 	CCPoint moveSpeed_p;
 	float zoom_base_distance;
+	float zoom_base_radian;
+	CCSprite* card_back;
 	
 	map<int, CCPoint> multiTouchData;
 	

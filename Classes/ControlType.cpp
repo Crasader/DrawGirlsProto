@@ -1438,7 +1438,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	is_show_draw_button_tutorial = false;
 	
 	TouchOutWidth = (1.94145*10.0)/myHSP->getScreenRealHeight();
-	JOYSTICK_FOLLOW_DISTANCE = (1.94145*60.0)/myHSP->getScreenRealHeight();
+	JOYSTICK_FOLLOW_DISTANCE = (1.94145*70.0)/myHSP->getScreenRealHeight();
 	
 	minimumDistanceJ = (1.94145*8.0)/myHSP->getScreenRealHeight();
 	JoystickCenterLimit = (1.94145*30.0)/myHSP->getScreenRealHeight();
@@ -1518,7 +1518,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		}
 		addChild(draw_button);
 		
-		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 18);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
 		click_label->enableOuterStroke(ccBLACK, 0.5f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);

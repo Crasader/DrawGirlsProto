@@ -45,6 +45,8 @@
 #include "AchieveNoti.h"
 #include "JsGababo.h"
 #include "TypingBox.h"
+#include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -489,6 +491,18 @@ bool PuzzleScene::init()
 		clear_star_take_level = take_level;
 		clear_is_empty_star = !is_not_empty_card[take_level-1];
 		
+		clear_is_empty_piece = true;
+		int played_stage_number = mySD->getSilType();
+		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
+		for(int i=1;i<=stage_card_count;i++)
+		{
+			if(mySGD->isHasGottenCards(played_stage_number, i) > 0)
+			{
+				clear_is_empty_piece = false;
+				is_not_empty_card[i-1] = true;
+			}
+		}
+		
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
 		{
 			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
@@ -503,15 +517,11 @@ bool PuzzleScene::init()
 		
 		keep_card_number = 0;
 		
-		clear_is_empty_piece = true;
-		int played_stage_number = mySD->getSilType();
-		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
 		for(int i=1;i<=stage_card_count;i++)
 		{
 			if(mySGD->isHasGottenCards(played_stage_number, i) > 0)
 			{
-				clear_is_empty_piece = false;
-				is_not_empty_card[i-1] = true;
+				
 			}
 			else
 			{
@@ -600,6 +610,7 @@ bool PuzzleScene::init()
 																if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 																   mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
 																{
+																	myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 																	AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 																	CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 																}
@@ -619,15 +630,17 @@ bool PuzzleScene::init()
 																
 																if(is_success)
 																{
-																	myAchieve->changeIngCount(i, 1);
 																	if(!myAchieve->isNoti(AchievementCode(i)))
 																	{
+																		myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 																		AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 																		CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 																	}
 																	myAchieve->updateAchieve(nullptr);
 																}
 															}
+															
+															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
 														}
 												  }));
 		
@@ -1157,6 +1170,7 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 											 if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 												mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
 											 {
+												 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 												 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 												 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 											 }
@@ -1176,9 +1190,9 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 											 
 											 if(is_success)
 											 {
-												 myAchieve->changeIngCount(i, 1);
 												 if(!myAchieve->isNoti(AchievementCode(i)))
 												 {
+													 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 													 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 												 }
@@ -1231,7 +1245,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
-	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect;
+	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect | clear_is_perfect_piece;
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -2146,7 +2160,8 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
-			showShopPopup(kSC_ruby);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
 		{
@@ -2868,10 +2883,25 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-			nick_label->disableOuterStroke();
-			nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
+				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
+				nick_marquee->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));
@@ -2910,10 +2940,25 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
-			nick_label->disableOuterStroke();
-			nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
+				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
+				nick_marquee->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",result_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));

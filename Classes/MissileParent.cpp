@@ -542,6 +542,13 @@ void MissileParent::subOneDie()
 		addChild(t_jm);
 		t_jm->startMoving();
 	}
+	else
+	{
+		
+		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)myGD->getMainCumberVector()[0], 80+kMyElementalLife, mySGD->getSelectedCharacterHistory().power.getV()*5.f);
+		addChild(t_jm);
+		t_jm->startMoving();
+	}
 }
 
 void MissileParent::endIngActionAP()
@@ -629,7 +636,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			CCLOG("%x", t_ccn);
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 //			m_charges.push_back(t_ccn);
 //			cb->setChargeParent(t_ccn);
 		}
@@ -644,7 +651,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			t_ccn->startCharge();
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 //			cb->setChargeParent(t_ccn);
 		}
 		else // normal
@@ -658,7 +665,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			t_ccn->startCharge();
 			
 			cb->getCharges().push_back(t_ccn);
-			cb->m_state |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
+//			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.
 
 //			cb->setChargeParent(t_ccn);
 		}

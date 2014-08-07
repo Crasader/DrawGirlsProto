@@ -30,6 +30,8 @@ private:
 	CCMenu* close_menu;
 	function<void(CCObject*)> end_selector;
 	
+	bool is_first;
+	
 	bool is_menu_enable;
 	CCSprite* close_button;
 	CCBAnimationManager* ccb_manager;

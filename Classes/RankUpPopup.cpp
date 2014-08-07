@@ -21,6 +21,7 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "FiveRocksCpp.h"
 
 RankUpPopup* RankUpPopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_rankup_func, function<void()> t_success_func, function<void()> t_fail_func, bool t_is_time_event)
 {
@@ -40,6 +41,17 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 			return;
 		
 		bool is_ok = rand()%1000 <= (mySGD->getRankUpBaseRate() + mySGD->getRankUpAddRate())*1000.f || is_time_event;
+		
+		if(!is_time_event)
+		{
+			string fiverocks_param2;
+			if(is_ok)
+				fiverocks_param2 = "success";
+			else
+				fiverocks_param2 = "fail";
+			fiverocks::FiveRocksBridge::trackEvent("UseGem", "StrengthenCard", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)), fiverocks_param2.c_str());
+			myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, 0);
+		}
 		
 		if(!is_ok)
 			mySGD->setRankUpAddRate(mySGD->getRankUpAddRate() + mySGD->getRankUpRateDistance());
@@ -230,7 +242,10 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	if(is_time_event)
 		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventTitle);
 	else
+	{
+		myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)+1);
 		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpTitle);
+	}
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
@@ -397,7 +412,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	{
 		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
 		CCSprite* event_img = CCSprite::create("puzzle_event.png");
-		event_img->setPosition(price_label->getPosition() + ccp(15,10));
+		event_img->setPosition(price_label->getPosition() + ccp(15,16));
 		price_back->addChild(event_img);
 	}
 	
@@ -420,8 +435,15 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	{
 		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		fail_rate_up_label->setAnchorPoint(ccp(0.5f,0.5f));
-		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,43));
+		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,41));
 		m_container->addChild(fail_rate_up_label);
+	}
+	else
+	{
+		StyledLabelTTF* rank_up_event_sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpEventSubMent), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
+		rank_up_event_sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+		rank_up_event_sub_label->setPosition(rankup_button->getPosition() + ccp(0,41));
+		m_container->addChild(rank_up_event_sub_label);
 	}
 	
 	

@@ -38,7 +38,7 @@ public:
 		m_strIndex = 0;
 		m_stopIndex= -1;
 		m_space = 100;
-		m_texts.push_back(text);
+		if(text!="")m_texts.push_back(text);
 		
 		this->setContentSize(CCSizeMake(width, height));
 //		m_back = CCLayerColor::create(color,width,height);
@@ -167,6 +167,8 @@ public:
 	}
 	
 	void setTextPosition(){
+		if(m_texts.empty())
+			return;
 		StyledLabelTTF* firstLabel = this->getFirstLabel();
 		StyledLabelTTF* lastLabel = this->getLastLabel();
 		

@@ -15,7 +15,7 @@ class KSJuniorBase : public KSCumberBase
 public:
 	KSJuniorBase() : RADIUS(15.f)
 	{
-		m_state = 0;
+		m_cumberState = kCumberStateNothing;
 		CCLOG("%s %d kCumberStateMoving", __FILE__, __LINE__);
 	}
 	virtual ~KSJuniorBase(){}

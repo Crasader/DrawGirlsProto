@@ -87,7 +87,7 @@ public:
 		if(iter == preloaded_groan_list.end())
 		{
 			preloaded_groan_list.push_back(t_type);
-			mySAE->preloadEffect(string("groan" + t_type + ".wav").c_str());
+			mySAE->preloadEffect(t_type.c_str());
 		}
 	}
 	
@@ -289,6 +289,11 @@ public:
 			mySAE->preloadEffect("sg_mg_fail.mp3");
 			mySAE->preloadEffect("sg_mg_light.mp3");
 			
+			mySAE->preloadEffect("se_typing_1.mp3");
+			mySAE->preloadEffect("se_typing_2.mp3");
+			mySAE->preloadEffect("se_typing_3.mp3");
+			mySAE->preloadEffect("se_typing_4.mp3");
+			
 			is_preloaded = true;
 		}
 	}
@@ -483,6 +488,11 @@ public:
 			mySAE->preloadEffect("groan7.mp3");
 			mySAE->preloadEffect("groan8.mp3");
 			mySAE->preloadEffect("groan9.mp3");
+			
+			mySAE->preloadEffect("se_typing_1.mp3");
+			mySAE->preloadEffect("se_typing_2.mp3");
+			mySAE->preloadEffect("se_typing_3.mp3");
+			mySAE->preloadEffect("se_typing_4.mp3");
 			
 //			mySAE->preloadEffect(".mp3");
 //			mySAE->preloadEffect(".mp3");
@@ -698,7 +708,7 @@ public:
 	
 	void playGroanEffect(string filename)
 	{
-		playEffect(("groan" + filename + ".png").c_str(), false);
+		playEffect(filename.c_str(), false, true);
 	}
 	
 	void playEffect(const char* filename, bool loop = false, bool cancut = false)

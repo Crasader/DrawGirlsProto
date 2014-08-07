@@ -113,12 +113,12 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	std::chrono::time_point<std::chrono::system_clock> start, end;
 //    start = std::chrono::system_clock::now();
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < 1)
+	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < mySGD->client_version)
 	{
 		SaveData::sharedObject()->resetAllData();
 		myDSH->removeCache();
 		mySDS->removeCache();
-		myDSH->setIntegerForKey(kDSH_Key_clientVersion, 1);
+		myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 	}
 	
 	
@@ -199,6 +199,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ingame/ingame_ui");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_bgm");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_effect");
+	CCFileUtils::sharedFileUtils()->addSearchPath("res_sound/sound_girls");
 	CCFileUtils::sharedFileUtils()->addSearchPath("fonts");
 	
 	//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
@@ -347,7 +348,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	FormSetter::get()->setEnabledRemocon(true);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	FormSetter::get()->setEnabledRemocon(true);
+	FormSetter::get()->setEnabledRemocon(false);
 #endif
 	//	CCScene* pScene = TitleScene::scene();
 //	CCScene* pScene = GaBaBo::scene();

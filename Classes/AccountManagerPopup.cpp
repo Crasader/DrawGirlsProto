@@ -7,7 +7,6 @@
 #include "KSLabelTTF.h"
 #include "StyledLabelTTF.h"
 #include "TitleRenewal.h"
-#include "HSPEnums.h"
 #include "LoadingLayer.h"
 #include <boost/lexical_cast.hpp>
 #include "KsLocal.h"
@@ -38,11 +37,17 @@ bool AccountManagerPopup::init(int touchP)
 {
 	CCLayer::init();
 
+	std::map<HSPLoginTypeX, std::string> descMapper = {
+		{HSPLoginTypeGOOGLE, "Google ID"},
+		{HSPLoginTypeGUEST, "Guest ID"},
+		{HSPLoginTypeFACEBOOK, "Facebook ID"},
+	};
+	m_touchP = touchP;
 	startFormSetter(this);
 	ASPopupView* managerPopup = ASPopupView::createDimmed(touchP);
 	managerPopup->getDimmedSprite()->setVisible(false);
 	addChild(managerPopup);
-	
+	m_managerPopup = managerPopup;
 	
 //	auto back = CCScale9Sprite::create("mainpopup_back.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
 	auto back = CCSprite::create("popup_large_back.png");
@@ -189,10 +194,16 @@ bool AccountManagerPopup::init(int touchP)
 	front->addChild(facebookLogin);
 	
 	
-	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo){
+	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo,
+																	 std::string tryName){
 		CCLog("another!!!");
 		Json::Value param;
+#if __ANDROID__
 		param["memberID"] = prevMemberNo;
+#else
+		param["memberID"] = myHSP->getMemberID();
+#endif		
+		
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
 		myHSP->command("getUserData", param, [=](Json::Value t){
@@ -230,6 +241,8 @@ bool AccountManagerPopup::init(int touchP)
 				titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
+																			 tryName.c_str(),
+//																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
 																			 t["data"]["nick"].asString().c_str(), t["highPiece"].asInt(),
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
@@ -257,52 +270,105 @@ bool AccountManagerPopup::init(int touchP)
 					
 				});
 				previousLoad->setFunction([=](CCObject*){
-					LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-					addChild(ll, INT_MAX);
-					hspConnector::get()->logout([=](Json::Value result_data){
-						ll->removeFromParent();
-						CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-						if(result_data["error"]["isSuccess"].asBool())
-						{
-							// 매핑 없이 로그인 시도. 이전기록 불러오기
-							myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
-							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-							mySGD->resetLabels();
-							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-						}
-						else
-						{
-							//					loading_progress_img->removeFromParent();
-							//					cancel_button->setEnabled(true);
-							//					ok_button->setEnabled(true);
-							//
-							//					cancel_button->setVisible(true);
-							//					ok_button->setVisible(true);
-							
-							CCLOG("fail logout");
-						}
-					});
 					
+					
+					if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+					{
+//						mentString = ccsf("<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>", descMapper.at(loginType).c_str());
+					}
+					auto loadFunction = [=]()
+					{
+						{
+							LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+							addChild(ll, INT_MAX);
+							hspConnector::get()->logout([=](Json::Value result_data){
+								ll->removeFromParent();
+								CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+								if(result_data["error"]["isSuccess"].asBool())
+								{
+									// 매핑 없이 로그인 시도. 이전기록 불러오기
+									
+									mySGD->resetLabels();
+									SaveData::sharedObject()->resetAllData();
+									myDSH->removeCache();
+									mySDS->removeCache();
+									
+									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
+									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
+									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+								}
+								else
+								{
+									//					loading_progress_img->removeFromParent();
+									//					cancel_button->setEnabled(true);
+									//					ok_button->setEnabled(true);
+									//
+									//					cancel_button->setVisible(true);
+									//					ok_button->setVisible(true);
+									
+									CCLOG("fail logout");
+								}
+							});
+							
+							
+						}
+					};
+					
+					if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
+					{
+						std::string mentString;
+						mentString += ccsf("<font color=#000000 newline=14>현재 기록은 영구히 삭제되며</font>"
+															 "<font color=#000000>%s 의 이전 기록을 로드합니다.</font>",
+															 tryName.c_str());
+						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
+																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+	
+					}
+					else
+					{
+						loadFunction();
+					}
 				});
 				
 				keepLoad->setFunction([=](CCObject*){
 					// 강제 매핑
-					LoadingLayer* ll = LoadingLayer::create(touchP - 100);
-					addChild(ll, INT_MAX);
-					hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
-						ll->removeFromParent();
-						KS::KSLog("force %", t);
-						if(t["error"]["isSuccess"].asInt())
-						{
-							myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-							mySGD->resetLabels();
-							CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-						}
-						else
-						{
-							
-						}
-					});
+					std::string mentString;
+					
+					if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+					{
+						mentString = ccsf("<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>",
+															descMapper.at(loginType).c_str());
+					}
+					mentString += ccsf("<font newline=14>%s 의 이전 기록은 영구히</font>"
+														 "<font >삭제되며 현재기록을 유지합니다.</font>",
+														 tryName.c_str());
+					StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
+																												mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+					
+					this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, [=]()
+														{
+															LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+															addChild(ll, INT_MAX);
+															hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
+																ll->removeFromParent();
+																KS::KSLog("force %", t);
+																if(t["error"]["isSuccess"].asInt())
+																{
+																	
+																	mySGD->resetLabels();
+																	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+																	CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																}
+																else
+																{
+																	
+																}
+															});
+														});
+					
 				});
 			}
 			else
@@ -317,7 +383,7 @@ bool AccountManagerPopup::init(int touchP)
 			}
 		});
 	};
-	auto doLogin = [=](HSPMapping hspmap, HSPLogin willSaveLogin){
+	auto doLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
 		
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
@@ -328,12 +394,35 @@ bool AccountManagerPopup::init(int touchP)
 			if(t["error"]["isSuccess"].asBool()) {
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				mySGD->resetLabels();
-				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)willSaveLogin);
+				std::string msg;
+				
+				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+				{
+					msg = ccsf("<font color=#FF0000 newline=14>%s 와의 연동을 해제합니다.</font>",
+										 descMapper.at(loginType).c_str());
+				}
+				msg += ccsf("<font>%s 와 연동합니다.</font>",
+															 tryName.c_str()
+															 );
+				auto content = StyledLabelTTF::create(msg.c_str(),
+																							mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				content->setAnchorPoint(ccp(0.5f, 0.5f));
+				
+				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																												 content,
+																												 [=]()
+																												 {
+																													 CCLOG("ttTT");
+																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																												 });
+				addChild(alert);
+				
+				
 			}
 			else {
 				if(t["error"]["code"].asInt() == 0x0014006D) {
-					anotherAccountFunctor(hspmap, willSaveLogin, t["prevMemberNo"].asUInt64());
+					anotherAccountFunctor(hspmap, willSaveLogin, t["prevMemberNo"].asUInt64(), tryName);
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 				else {
@@ -345,90 +434,16 @@ bool AccountManagerPopup::init(int touchP)
 			}
 		});
 	};
-	auto showWarning = [=](const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin){
-		HSPLoginTypeX lt = (HSPLoginTypeX)myHSP->getLoginType();
-		ASPopupView* warningPopup = ASPopupView::createDimmed(touchP - 2);
-		
-		warningPopup->getDimmedSprite()->setVisible(false);
-		managerPopup->addChild(warningPopup);
-
-		auto back = CCSprite::create("popup_large_back.png");
-
-		CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
-		auto front = CCScale9Sprite::create("common_grayblue.png",
-																				CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-
-		//	front->setVisible(false);
-		warningPopup->setContainerNode(back);
-		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
-		//	back->setContentSize(CCSizeMake(200, 200));
-		front->setContentSize(CCSizeMake(251, 141));
-
-
-		back->addChild(front);
-
-		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
-
-		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
-		//	titleLbl->setColor(ccc3(255, 170, 20));
-		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
-		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
-		back->addChild(titleLbl);
-
-
-		CommonButton* closeButton = CommonButton::createCloseButton(touchP - 2);
-		closeButton->setFunction([=](CCObject*)
-														 {
-															 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
-																													 [=]()
-																													 {
-																														 warningPopup->removeFromParent();
-																													 });
-														 });
-		back->addChild(closeButton);
-		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
-		
-		std::map<HSPLoginTypeX, std::string> descMapper = {
-			{HSPLoginTypeGOOGLE, "Google ID"},
-			{HSPLoginTypeGUEST, "Guest ID"},
-			{HSPLoginTypeFACEBOOK, "Facebook ID"},
-		};
-		std::string guidanceMsg = ccsf( getLocal(LK::kAccountDesc),
-																		descMapper[lt].c_str(), desc.c_str(),descMapper[lt].c_str() 
-																	);
-		StyledLabelTTF* content = StyledLabelTTF::create(
-				guidanceMsg.c_str() ,
-				mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);
-		front->addChild(content);
-		content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
-
-
-		CommonButton* connect = CommonButton::create(getLocal(LK::kLinkingCommand), 13.f, CCSizeMake(110, 50),
-																								 CommonButtonAchievement, touchP - 2);
-		connect->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -99.5f));
-		front->addChild(connect);
-		connect->setFunction([=](CCObject*){
-			doLogin(hspmap, willSaveLogin);
-		});
-		startFormSetter(this);
-		auto front2 = front;
-		auto content2 = content;
-		setFormSetter(front2);
-		setFormSetter(back);
-		setFormSetter(closeButton);
-		setFormSetter(content2);
-		setFormSetter(titleLbl);
-		setFormSetter(connect);
-
-	};
+	
 	auto tryLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
 		HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
-		if(loginType != HSPLoginTypeGUEST) { // 뭔가에 연결 되어 있다면...
-			showWarning(tryName, hspmap, willSaveLogin);
-		}
-		else {
-			doLogin(hspmap, willSaveLogin);
-		}
+		doLogin(hspmap, tryName, willSaveLogin);
+//		if(loginType == HSPLoginTypeGUEST) { // 뭔가에 연결 되어 있다면...
+//			showWarning(tryName, hspmap, willSaveLogin);
+//		}
+//		else {
+//			doLogin(hspmap, tryName, willSaveLogin);
+//		}
 	};
 	
 	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
@@ -462,5 +477,72 @@ bool AccountManagerPopup::init(int touchP)
 	setFormSetter(titleLbl);
 	return true;
 }
-
+void AccountManagerPopup::showWarning(const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin,
+											 StyledLabelTTF* announce,
+											 std::function<void(void)> loginProcess){
+	ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchP - 4);
+	
+	warningPopup->getDimmedSprite()->setVisible(false);
+	m_managerPopup->addChild(warningPopup);
+	
+	auto back = CCSprite::create("popup_large_back.png");
+	
+	CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
+	auto front = CCScale9Sprite::create("common_grayblue.png",
+																			CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	
+	//	front->setVisible(false);
+	warningPopup->setContainerNode(back);
+	//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
+	//	back->setContentSize(CCSizeMake(200, 200));
+	front->setContentSize(CCSizeMake(251, 141));
+	
+	
+	back->addChild(front);
+	
+	front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
+	
+	KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
+	//	titleLbl->setColor(ccc3(255, 170, 20));
+	titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+	titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+	back->addChild(titleLbl);
+	
+	
+	CommonButton* closeButton = CommonButton::createCloseButton(m_touchP - 4);
+	closeButton->setFunction([=](CCObject*)
+													 {
+														 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																												 [=]()
+																												 {
+																													 warningPopup->removeFromParent();
+																												 });
+													 });
+	back->addChild(closeButton);
+	closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
+	
+	
+	front->addChild(announce);
+	announce->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
+	
+	
+	CommonButton* connect = CommonButton::create(getLocal(LK::kLinkingCommand), 13.f, CCSizeMake(110, 50),
+																							 CommonButtonAchievement, m_touchP - 4);
+	connect->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, -99.5f));
+	front->addChild(connect);
+	connect->setFunction([=](CCObject*){
+		loginProcess();
+		//			doLogin(hspmap, desc, willSaveLogin);
+	});
+	startFormSetter(this);
+	auto front2 = front;
+	auto content2 = announce;
+	setFormSetter(front2);
+	setFormSetter(back);
+	setFormSetter(closeButton);
+	setFormSetter(content2);
+	setFormSetter(titleLbl);
+	setFormSetter(connect);
+	
+};
 

@@ -218,6 +218,7 @@ enum UserdataType
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
+	kUserdataType_endlessData_score,
 	
 	kUserdataType_achieve_mapGacha,
 	kUserdataType_achieve_noFail,
@@ -366,6 +367,8 @@ class StarGoldData : public CCObject
 public:
 	
 	static StarGoldData* sharedInstance();
+	
+	int client_version;
 	
 	void resetLabels();
 	
@@ -693,6 +696,7 @@ public:
 	int getUserdataEndlessIngWin();
 	void setUserdataEndlessIngWeek(int t_i);
 	int getUserdataEndlessIngWeek();
+	int getUserdataEndlessScore();
 	
 	void setUserdataAchieveMapGacha(int t_i);
 	int getUserdataAchieveMapGacha();
@@ -956,11 +960,17 @@ public:
 	
 	int loading_tip_back_number;
 	
+	int pvp_continue_cnt;
+	int ingame_continue_cnt;
+	int start_map_gacha_use_gold_cnt;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
 	vector<CollectionCardInfo> event_puzzle_cards;
 	vector<CollectionCardInfo> special_cards;
+	
+	bool is_ingame_gold;
 	
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;

@@ -25,7 +25,23 @@ KSSnakeBase::~KSSnakeBase()
 	CCLOG("~KSSnakeBase");
 }
 
+SEL_MenuHandler KSSnakeBase::onResolveCCBCCMenuItemSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLOG("%s", pSelectorName);
+	return NULL;
+}
 
+SEL_CallFuncN KSSnakeBase::onResolveCCBCCCallFuncSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLOG("%s", pSelectorName);
+	return NULL;
+}
+
+SEL_CCControlHandler KSSnakeBase::onResolveCCBCCControlSelector( CCObject * pTarget, const char* pSelectorName )
+{
+	CCLOG("%s", pSelectorName);
+	return NULL;
+}
 
 bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 {
@@ -159,9 +175,9 @@ void KSSnakeBase::startAnimationNoDirection()
 {
 	// 돌자...
 	CCLOG("Lets rotate");
-	if((m_state & kCumberStateNoDirection) == 0)
+	if((m_cumberState & kCumberStateNoDirection) == 0)
 	{
-		m_state |= kCumberStateNoDirection;
+		m_cumberState |= kCumberStateNoDirection;
 		m_noDirection.distance = 0;
 		m_noDirection.rotationDeg = 0;
 		m_noDirection.timer = 0;
@@ -212,10 +228,11 @@ void KSSnakeBase::animationNoDirection(float dt)
 		
 		if(ccpLength(m_noDirection.startingPoint - getPosition()) <= 0.5f)
 		{
-			m_state = kCumberStateMoving;
+			m_cumberState = kCumberStateMoving;
 			m_noDirection.state = 0;
 			unschedule(schedule_selector(KSSnakeBase::animationNoDirection));
 			setPosition(m_noDirection.startingPoint);
+			m_snake.setRelocation(getPosition(), m_well512);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 			m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		}
@@ -229,7 +246,7 @@ void KSSnakeBase::animationNoDirection(float dt)
 void KSSnakeBase::startAnimationDirection()
 {
 	// 잭을 바라보자.
-	m_state |= kCumberStateDirection;
+	m_cumberState |= kCumberStateDirection;
 	m_direction.initVars();
 	schedule(schedule_selector(KSSnakeBase::animationDirection));
 }
@@ -247,7 +264,7 @@ void KSSnakeBase::animationDirection(float dt)
 	}
 	else if(m_direction.state == 2)
 	{
-		//		m_state = kCumberStateMoving; //#!
+		//		m_cumberState = kCumberStateMoving; //#!
 		m_direction.state = 0;
 		unschedule(schedule_selector(KSSnakeBase::animationDirection));
 		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
@@ -266,25 +283,28 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	
 	
 	// 방사형으로 돌아가고 있는 중이라면
-	if((m_state & kCumberStateNoDirection) && castCancel)
+	if((m_cumberState & kCumberStateNoDirection) && castCancel)
 	{
-		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
-	if((m_state & kCumberStateMoving) == 0 && castCancel)
+	if((m_cumberState & kCumberStateDirection) && castCancel)
 	{
-		m_state = kCumberStateMoving;
+		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
-	if((m_state & kCumberStateDirection) && stiffen)
+//	if((m_cumberState & kCumberStateMoving) == 0 && castCancel)
+//	{
+//		m_cumberState = kCumberStateMoving;
+//	}
+//	if((m_cumberState & kCumberStateDirection) && stiffen)
+//	{
+//		CCLOG("(m_cumberState & kCumberStateDirection)");
+//		m_direction.state = 2; // 돌아가라고 상태 변경때림.
+//		m_cumberState = kCumberStateMoving; //#!
+//		
+//	}
+	if(((m_cumberState & kCumberStateMoving) || (m_cumberState & kCumberStateDamaging)) && stiffen)
 	{
-		CCLOG("(m_state & kCumberStateDirection)");
-		m_direction.state = 2; // 돌아가라고 상태 변경때림.
-		m_state = kCumberStateMoving; //#!
-		
-	}
-	if(((m_state & kCumberStateMoving) || m_state == kCumberStateDamaging) && stiffen)
-	{
-		CCLOG("(m_state & kCumberStateMoving)");
+		CCLOG("(m_cumberState & kCumberStateMoving)");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
@@ -293,13 +313,13 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_state = kCumberStateDamaging;
+			m_cumberState = kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 		}
 	}
-	if((m_state & kCumberStateMoving) == 0 && stiffen)
+	if((m_cumberState & kCumberStateMoving) == 0 && stiffen)
 	{
-		CCLOG("m_state == kCumberStateStop");
+		CCLOG("m_cumberState == kCumberStateStop");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
@@ -308,15 +328,38 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_state = kCumberStateDamaging;
+			m_cumberState = kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
+			if(damage / getTotalHp() * 4.f >= 3.f)
+			{
+				getEmotion()->goStun();
+			}
+			else
+			{
+				//				getEmotion()->goStun();
+				
+				ProbSelector ps = {1.0, 1.0, 7.0};
+				int r = ps.getResult();
+				//				if(r == 0)
+				//				{
+				//					getEmotion()->goStun();
+				//				}
+				if(r == 0)
+				{
+					getEmotion()->toAnger();
+				}
+				else if(r == 1)
+				{
+					getEmotion()->toCry();
+				}
+			}
 		}
 	}
-	if(m_state == kCumberStateFury && castCancel)
+	if(m_cumberState == kCumberStateFury && castCancel)
 	{
 		crashMapForPosition(getPosition());
-		
-		m_state = kCumberStateMoving;
+		m_castingCancelCount++;
+		m_cumberState = kCumberStateMoving;
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
@@ -352,7 +395,7 @@ void KSSnakeBase::damageReaction(float)
 			i->setColor(ccc3(255, 0, 0));
 		}
 	}
-	else
+	else // if(currentTimelineFooter == "")
 	{
 		m_headImg->setColor(ccc3(255, 255, 255));
 		m_tailImg->setColor(ccc3(255, 255, 255));
@@ -360,8 +403,10 @@ void KSSnakeBase::damageReaction(float)
 		{
 			i->setColor(ccc3(255, 255, 255));
 		}
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
+		getEmotion()->releaseStun();
 		unschedule(schedule_selector(KSSnakeBase::damageReaction));
+		m_snake.setRelocation(getPosition(), m_well512);
 		m_headAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		m_tailAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		m_furyMode.furyFrameCount = m_furyMode.totalFrame;
@@ -414,12 +459,100 @@ void KSSnakeBase::invisibling(float dt)
 	}
 	
 }
+void KSSnakeBase::runTimeline( Json::Value patternInfo )
+{
+	if(currentTimelineFooter == "") // 아무것도 공격중이 아니면 발싸 !!
+	{
+		std::string timeline = patternInfo["pattern"].asString();
+		m_atype = patternInfo.get("atype", "special").asString();
+		m_repeatNumber = patternInfo.get("repeat", 1).asInt();
+		m_attackCanceled = false;
+		currentTimeline = timeline;
+		currentTimelineFooter = "_b";
+		mAnimationManager->runAnimationsForSequenceNamed((currentTimeline + currentTimelineFooter).c_str());
+	}
+}
 
+void KSSnakeBase::completedAnimationSequenceNamed( const char *name_ )
+{
+	string name = name_;
+	if(name.size() < 2)
+		return;
+	char lastChar = name[name.size() - 1];
+	char lastPrevChar = name[name.size() - 2];
+	std::string tl(name.begin(), name.end() - 2);
+	if(lastPrevChar != '_')
+		return;
+	if(lastChar == 'b')
+	{
+		// 캔슬이 되었는지의 여부를 알아야 됨.
+		// middle 액션을 하기전에 속성을 설정함.
+		
+		if(m_atype == "crash")
+		{
+			AudioEngine::sharedInstance()->stopEffect("se_castmap.mp3");
+			//			AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+		}
+		else if(m_atype == "special")
+		{
+			AudioEngine::sharedInstance()->stopEffect("se_castspecial.mp3");
+			//			AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+		}
+		else // normal
+		{
+			AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
+			//			AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+		}
+		
+		if(m_attackCanceled) // 맞아서 캔슬이 되었다면
+		{
+			currentTimelineFooter = "_e";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+		else
+		{
+			currentTimelineFooter = "_m";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+	}
+	else if(lastChar == 'm')
+	{
+		
+		// 반복을 시킬 건지 검사하고 캔슬이 되었다면 캔슬 동작을 작동시킴.
+		// 캔슬이면 속성을 해제함.
+		if(m_attackCanceled) // 캔슬
+		{
+			currentTimelineFooter = "_e";
+			mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+		}
+		else
+		{
+			m_repeatNumber--;
+			if(m_repeatNumber > 0)
+			{
+				currentTimelineFooter = "_m";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+			else
+			{
+				currentTimelineFooter = "_e";
+				mAnimationManager->runAnimationsForSequenceNamed((tl + currentTimelineFooter).c_str());
+			}
+		}
+	}
+	else if(lastChar == 'e')
+	{
+		currentTimelineFooter = "";
+		m_cumberState = kCumberStateMoving;
+		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
+		myGD->communication("MS_resetRects", false);
+	}
+}
 void KSSnakeBase::scaleAdjustment(float dt)
 {
 	m_scale.autoIncreaseTimer += 1/60.f;
 	
-	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_state & kCumberStateNoDirection) == 0)
+	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && m_cumberState == kCumberStateMoving)
 	{
 		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
@@ -457,7 +590,7 @@ COLLISION_CODE KSSnakeBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 void KSSnakeBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
-	m_state = kCumberStateFury;
+	m_cumberState = kCumberStateFury;
 	
 	m_headImg->setColor(ccc3(0, 255, 0));
 	m_tailImg->setColor(ccc3(0, 255, 0));
@@ -506,7 +639,7 @@ void KSSnakeBase::furyModeScheduler(float dt)
 	//{
 		//crashMapForPosition(getPosition());
 		
-		//m_state = kCumberStateMoving;
+		//m_cumberState = kCumberStateMoving;
 		//m_headImg->setColor(ccc3(255, 255, 255));
 		//m_tailImg->setColor(ccc3(255, 255, 255));
 		//for(auto i : m_Bodies)
@@ -521,7 +654,7 @@ void KSSnakeBase::furyModeScheduler(float dt)
 		// 시간이 다되서 끝나는 조건.
 		crashMapForPosition(getPosition());
 
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
@@ -569,12 +702,12 @@ void KSSnakeBase::furyModeOff()
 
 void KSSnakeBase::onStartMoving()
 {
-	m_state = kCumberStateMoving;
+	m_cumberState = kCumberStateMoving;
 }
 
 void KSSnakeBase::onStopMoving()
 {
-	m_state = 0;
+	m_cumberState = 0;
 	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	CCLOG("stop!!");
 }
@@ -586,12 +719,13 @@ void KSSnakeBase::onPatternEnd()
 	if(m_direction.state == 1)
 	{
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 	}
-	else if(m_state & kCumberStateDirection)
+	else if(m_cumberState & kCumberStateDirection)
 	{
-		m_state = kCumberStateMoving;
+		m_cumberState = kCumberStateMoving;
 	}
+	// m_cumberState = kCumberStateMoving; 만약 멈추면 이거 라인 부활시킴.
 }
 
 void KSSnakeBase::onStartGame()
@@ -604,19 +738,13 @@ void KSSnakeBase::stopCasting()
 {
 	myGD->communication("MP_bombCumber", this);
 	// 방사형으로 돌아가고 있는 중이라면
-	if((m_state & kCumberStateNoDirection))
+	if((m_cumberState & kCumberStateCasting))
 	{
-		CCLOG("(m_state & kCumberStateNoDirection)");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-
-	}
-	else if((m_state & kCumberStateDirection))
-	{
-		CCLOG("(m_state & kCumberStateDirection)");
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
-		m_state = kCumberStateMoving; //#!
-
+		m_cumberState = kCumberStateMoving;
 	}
+//		m_cumberState = kCumberStateMoving; // 만약 멈춘 다면 여길 부활시킴.
 }
 
 void KSSnakeBase::setPosition( const CCPoint& t_sp )
@@ -626,6 +754,10 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	{
 		CCLOG("hg!!!!");
 	}
+	if(m_cumberState & kCumberStateDamaging)
+	{
+		CCLOG("damaging!!");
+	}
 	SnakeTrace tr;
 	tr.position = t_sp;
 	tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
@@ -633,13 +765,13 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
 	m_cumberTrace.push_back(tr); //
-	if(m_cumberTrace.size() >= 350)
+	if(m_cumberTrace.size() >= 1000)
 	{
 		m_cumberTrace.pop_front();
 	}
 	
 	// 돌때랑 분노 모드일 땐 메인포인트 지정하면 안됨.
-	if((m_state & kCumberStateNoDirection) || m_state == kCumberStateFury)
+	if((m_cumberState & kCumberStateNoDirection) || m_cumberState == kCumberStateFury)
 	{
 		// black hole!! 
 	}
@@ -682,23 +814,34 @@ float KSSnakeBase::getPositionY()
 	return m_headImg->getPositionY();
 }
 
-void KSSnakeBase::attackBehavior( Json::Value pattern )
+void KSSnakeBase::attackBehavior( Json::Value _pattern )
 {
-	if(pattern["pattern"].asString() == "109")
+	std::string pattern = _pattern["pattern"].asString();
+	bool moving = _pattern.get("movingcast", false).asInt();
+	if(moving)
 	{
-		m_state = 0;
+		m_cumberState = kCumberStateMoving | kCumberStateCasting;
+	}
+	else
+	{
+		m_cumberState = kCumberStateCasting;
+	}
+	
+	if(pattern == "109")
+	{
+		m_cumberState = 0;
 		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
-	else if( pattern["pattern"].asString() == "1007")
+	else if( pattern == "1007")
 	{
-		m_state = 0;
+		m_cumberState = 0;
 		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 	}
 	else
 	{
 		m_headAnimationManager->runAnimationsForSequenceNamed("cast101start");
 		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101start");
-		std::string target = pattern.get("target", "no").asString();
+		std::string target = _pattern.get("target", "no").asString();
 		if( target == "yes") // 타게팅이라면 조준하라
 			startAnimationDirection();
 		else if(target == "no") // 타게팅이 아니면 돌아라

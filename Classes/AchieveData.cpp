@@ -333,7 +333,7 @@ bool AchieveConditionReward::isAchieve(AchievementCode t_code)
 {
 	bool return_value;
 	
-	return_value = getRecentValue(t_code) >= getCondition(t_code);
+	return_value = getCondition(t_code) > 0 && getRecentValue(t_code) >= getCondition(t_code);
 	
 	return return_value;
 }
@@ -415,7 +415,7 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	else if(t_code == kAchievementCode_hidden_bigHand1 || t_code == kAchievementCode_hidden_bigHand2) // (히든)
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_holder) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_holder);	}
+	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_noSound) // (히든)
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_shopper1) // (히든)

@@ -104,7 +104,7 @@ extern "C"{
 		CCLOG("sendresultnative9");
 		return;
 	}
-	int Java_com_nhnent_SKDDMK_DGproto_getUserState(JNIEnv *env, jobject thiz)
+	int Java_com_nhnent_SKSUMRAN_DGproto_getUserState(JNIEnv *env, jobject thiz)
 	{
 		jboolean isCopy = JNI_FALSE;
 //		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
@@ -448,6 +448,26 @@ string hspConnector::getServerAddress(){
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
 	//return r;
+}
+void hspConnector::withdrawAccount(jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[[HSPCore sharedHSPCore] withdrawAccountWithCompletionHandler:
+	 ^(HSPError *error)
+	 {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(0,0,func,resultDict);
+	 }
+	 ];
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "withdrawAccount", "(I)V")) {
+		int _key =  jsonDelegator::get()->add(func,0,0);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#endif
 }
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS

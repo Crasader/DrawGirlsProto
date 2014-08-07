@@ -38,7 +38,7 @@ enum ReceiveState{
 };
 
 class KSLabelTTF;
-
+class ConvexGraph;
 class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public CCTextFieldDelegate
 {
 public:
@@ -59,14 +59,14 @@ private:
 	CCSprite* title_img;
 	CCBAnimationManager* title_manager;
 //	CCSprite* title_name;
-	CCLabelBMFont* download_state;
+	CCLabelTTF* download_state;
 	CCSprite* black_img;
 	vector<string> tip_list;
 	int recent_tip_index;
 	
 	bool is_loaded_cgp;
 	bool is_loaded_server;
-	
+	int loginCnt;
 	int ing_download_cnt;
 	float ing_download_per;
 	int success_download_cnt;
@@ -87,7 +87,8 @@ private:
 	
 	void changeTipMent();
 	
-	CCProgressTimer* progress_timer;
+//	CCProgressTimer* progress_timer;
+	ConvexGraph* progress_timer;
 	
 	void resultLogin(Json::Value result_data);
 	
@@ -115,6 +116,7 @@ private:
 	vector<DownloadImgInfo> download_set;
 	void startFileDownloadSet();
 	vector<int> is_enable_index;
+	std::function<void(Json::Value value)> termsFunctor;
 //	void successDownloadActionSet(string t_filename);
 //	void failDownloadActionSet(string t_filename);
 	
@@ -190,6 +192,7 @@ private:
 	
 	void alertAction(int t1, int t2);
 	virtual void keyBackClicked();
+	
 };
 
 #endif /* defined(__DGproto__TitleRenewal__) */

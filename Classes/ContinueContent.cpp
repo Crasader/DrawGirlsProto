@@ -76,48 +76,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
-	{
-		LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
-		t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
-		addChild(t_popup, 9999);
-		
-		mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
-		mySGD->changeGoods([=](Json::Value result_data)
-						   {
-							   t_popup->removeFromParent();
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							   {
-								   giveup_button->setEnabled(false);
-								   continue_button->setEnabled(false);
-								   
-								   is_continue = true;
-								   
-								   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-								   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-								   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-								   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-								   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-								   
-								   price_type->runAction(t_seq2);
-								   
-								   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-								   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-								   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-								   price_label->runAction(t_spawn2);
-							   }
-							   else
-							   {
-								   schedule(schedule_selector(ContinueContent::countingSchedule));
-								   
-								   mySGD->clearChangeGoods();
-								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-								   
-								   is_menu_enable = true;
-							   }
-						   });
-	}
-	else if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode)
 	{
 		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless())
 		{
@@ -131,6 +90,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								   t_popup->removeFromParent();
 								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								   {
+									   mySGD->pvp_continue_cnt++;
 									   giveup_button->setEnabled(false);
 									   continue_button->setEnabled(false);
 									   
@@ -172,6 +132,48 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 								  });
 			getParent()->addChild(t_popup);
 		}
+	}
+	else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+	{
+		LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+		t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+		addChild(t_popup, 9999);
+		
+		mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+		mySGD->changeGoods([=](Json::Value result_data)
+						   {
+							   t_popup->removeFromParent();
+							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							   {
+								   mySGD->ingame_continue_cnt++;
+								   giveup_button->setEnabled(false);
+								   continue_button->setEnabled(false);
+								   
+								   is_continue = true;
+								   
+								   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+								   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+								   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+								   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+								   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+								   
+								   price_type->runAction(t_seq2);
+								   
+								   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+								   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+								   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+								   price_label->runAction(t_spawn2);
+							   }
+							   else
+							   {
+								   schedule(schedule_selector(ContinueContent::countingSchedule));
+								   
+								   mySGD->clearChangeGoods();
+								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+								   
+								   is_menu_enable = true;
+							   }
+						   });
 	}
 	else
 	{
@@ -389,7 +391,17 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 //	price_back->setPosition(ccp(c_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, c_label->getContentSize().height/2.f));
 //	c_label->addChild(price_back);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+	if(mySGD->is_endless_mode)
+	{
+		price_type = CCSprite::create("price_gold_img.png");
+		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_type);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setAnchorPoint(ccp(0,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+		price_node->addChild(price_label);
+	}
+	else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
 	{
 		price_type = CCSprite::create("pass_ticket1.png");
 		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
@@ -409,16 +421,6 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		pass_count_case->addChild(pass_count_label);
 		
 		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
-		price_label->setAnchorPoint(ccp(0,0.5f));
-		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
-		price_node->addChild(price_label);
-	}
-	else if(mySGD->is_endless_mode)
-	{
-		price_type = CCSprite::create("price_gold_img.png");
-		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
-		price_node->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless())->getCString(), mySGD->getFont().c_str(), 15);
 		price_label->setAnchorPoint(ccp(0,0.5f));
 		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
 		price_node->addChild(price_label);

@@ -166,7 +166,8 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		m_gachaDesc->setPosition(t_position); 			// dt (0.0, 71.5)
 		m_tutorialStep++;
 		
-		CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+		CCScale9Sprite* progress_back = CCScale9Sprite::create("loading_progress_back.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1));
+		progress_back->setContentSize(CCSizeMake(201, 13));
 		
 		m_container->addChild(progress_back, kOnePercentTutorial_Z_content);
 		progress_back->setPosition(ccp(0, -67));

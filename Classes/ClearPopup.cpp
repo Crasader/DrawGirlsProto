@@ -42,6 +42,8 @@
 #include "TypingBox.h"
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
+#include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -165,7 +167,7 @@ bool ClearPopup::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   left_total_score.getV() >= myAchieve->getCondition((AchievementCode)i))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), left_total_score.getV());
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -235,6 +237,12 @@ bool ClearPopup::init()
 	else if(mySGD->is_showtime)					take_level = 3;
 	else if(mySGD->is_exchanged)				take_level = 2;
 	else										take_level = 1;
+	
+	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %d", stage_number));
+	if(mySGD->ingame_continue_cnt > 0)
+	{
+		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %d", mySGD->ingame_continue_cnt), ccsf("Stage %d", stage_number));
+	}
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -439,6 +447,7 @@ bool ClearPopup::init()
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 			   mySGD->getUserdataAchievePerfect() + 1 >= myAchieve->getCondition((AchievementCode)i))
 			{
+				myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -464,6 +473,7 @@ bool ClearPopup::init()
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 		   nofail_value >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -473,7 +483,7 @@ bool ClearPopup::init()
 	{
 		if(!myAchieve->isNoti(kAchievementCode_hidden_noSound) && !myAchieve->isCompleted(kAchievementCode_hidden_noSound) && !myAchieve->isAchieve(kAchievementCode_hidden_noSound))
 		{
-			myAchieve->changeIngCount(kAchievementCode_hidden_noSound, 1);
+			myAchieve->changeIngCount(kAchievementCode_hidden_noSound, myAchieve->getCondition(kAchievementCode_hidden_noSound));
 			AchieveNoti* t_noti = AchieveNoti::create(kAchievementCode_hidden_noSound);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 		}
@@ -535,6 +545,7 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  {
 										  TRACE();
 										  CCLOG("ClearPopup transaction success");
+										  fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
 										  
 										  mySGD->network_check_cnt = 0;
 										  
@@ -850,11 +861,26 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-			nick_label->disableOuterStroke();
-			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->setPosition(ccp(64,15.5f));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
+				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0,0.5f));
+				nick_marquee->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setAnchorPoint(ccp(0,0.5f));
+				nick_label->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
@@ -893,11 +919,26 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
-			nick_label->disableOuterStroke();
-			nick_label->setAnchorPoint(ccp(0,0.5));
-			nick_label->setPosition(ccp(64,15.5f));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
+			if(t_nick_size->getContentSize().width > 70)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
+				nick_marquee->setSpace(30);
+				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.5f);
+				nick_marquee->setAnchorPoint(ccp(0,0.5f));
+				nick_marquee->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				nick_label->disableOuterStroke();
+				nick_label->setAnchorPoint(ccp(0,0.5f));
+				nick_label->setPosition(ccp(64,15.5f));
+				list_cell_case->addChild(nick_label);
+			}
 			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();

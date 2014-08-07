@@ -1577,7 +1577,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	checkBeforeNewLine = t_checkBeforeNewLine;
 	
 	TUTO_TouchOutWidth = (1.94145*10.0)/myHSP->getScreenRealHeight();
-	TUTO_JOYSTICK_FOLLOW_DISTANCE = (1.94145*60.0)/myHSP->getScreenRealHeight();
+	TUTO_JOYSTICK_FOLLOW_DISTANCE = (1.94145*70.0)/myHSP->getScreenRealHeight();
 	
 	minimumDistanceJ = (1.94145*8.0)/myHSP->getScreenRealHeight();
 	JoystickCenterLimit = (1.94145*30.0)/myHSP->getScreenRealHeight();
@@ -1635,7 +1635,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		addChild(draw_button);
 		reader->release();
 		
-		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont2().c_str(), 18);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
 		click_label->enableOuterStroke(ccBLACK, 0.5f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);
@@ -1860,14 +1860,18 @@ bool PlayTutorial::init()
 	ikaruga->setVisible(false);
 	scenario_node->addChild(ikaruga, 1);
 	
-	TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+	TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
+	typing_box->setScale(myDSH->screen_convert_rate);
+	typing_box->setPosition(typing_box->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 	scenario_node->addChild(typing_box, 2);
 	
 	typing_box->setTouchOffScrollAndButton();
 	typing_box->setVisible(false);
 	typing_box->setTouchSuction(false);
 	
-	TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+	TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
+	typing_box2->setScale(myDSH->screen_convert_rate);
+	typing_box2->setPosition(typing_box2->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 	scenario_node->addChild(typing_box2, 2);
 	typing_box2->setHide();
 	
@@ -1973,7 +1977,7 @@ void PlayTutorial::nextStep()
 		
 		
 		StoryManager* t_sm = StoryManager::create(-500);
-		addChild(t_sm, 100);
+		addChild(t_sm, 101);
 		
 		CCSprite* gray = CCSprite::create("back_gray.png");
 		gray->setOpacity(0);
@@ -1987,7 +1991,7 @@ void PlayTutorial::nextStep()
 		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
 		area_take_sample->addChild(t_ccbi);
 		area_take_sample->setPosition(ccp(240,210));
-		addChild(area_take_sample, 101);
+		addChild(area_take_sample, 100);
 		
 //		AudioEngine::sharedInstance()->playEffect("ment_tutorial6.mp3", false, true);
 //		addChild(KSTimer::create(2.2f, [=](){AudioEngine::sharedInstance()->playEffect("ment_tutorial7.mp3", false, true);
@@ -2133,10 +2137,9 @@ void PlayTutorial::nextStep()
 											  
 											  if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
 											  {
-												  myAchieve->changeIngCount(AchievementCode(i), 1);
-												  
 												  if(!myAchieve->isNoti(AchievementCode(i)))
 												  {
+													  myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 													  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 												  }
@@ -2170,7 +2173,9 @@ void PlayTutorial::nextStep()
 											  ikaruga->setPosition(ccp(-ikaruga->getContentSize().width/3.f, 0));
 											  scenario_node->addChild(ikaruga, 1);
 											  
-											  TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+											  TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50), ccp(425,25)+ccp(myDSH->ui_zero_point.x, 0));
+											  typing_box->setScale(myDSH->screen_convert_rate);
+											  typing_box->setPosition(typing_box->getPosition() + ccp(myDSH->ui_zero_point.x, 0));
 											  scenario_node->addChild(typing_box, 2);
 											  
 											  function<void()> end_func1 = [=]()

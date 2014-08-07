@@ -32,16 +32,22 @@ void ControlTipContent::completedAnimationSequenceNamed (char const * name)
 	
 	if(t_name == "Default Timeline")
 	{
+		addChild(KSTimer::create(0.5f, [=]()
+								 {
+									 ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
+								 }));
+		
+		if(is_first)
+		{
+			is_first = false;
+			return;
+		}
+		
 		if(!close_button->isVisible())
 		{
 			close_button->setVisible(true);
 			is_menu_enable = true;
 		}
-		
-		addChild(KSTimer::create(0.5f, [=]()
-						{
-							ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
-						}));
 	}
 }
 
@@ -77,6 +83,11 @@ void ControlTipContent::myInit(int t_touch_priority, function<void(CCObject*)> t
 	area_take_sample->addChild(t_ccb.first);
 	area_take_sample->setPosition(ccp(0,0));
 	addChild(area_take_sample);
+	
+	if(t_code == kSpecialTutorialCode_lineTangle)
+		is_first = false;
+	else
+		is_first = true;
 	
 	t_ccb.second->setDelegate(this);
 	ccb_manager = t_ccb.second;

@@ -221,7 +221,8 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	setFormSetter(desc2);
 	
 	
-	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+	CCScale9Sprite* progress_back = CCScale9Sprite::create("loading_progress_back.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1));
+	progress_back->setContentSize(CCSizeMake(201, 13));
 	progress_back->setPosition(ccp(0,-67));
 	m_container->addChild(progress_back, kOnePercentGame_Z_content);
 	
@@ -581,17 +582,18 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					mySGD->clearChangeGoods();
-					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
-																		{
-																			ShopPopup* t_popup = ShopPopup::create();
-																			t_popup->setScale(myDSH->screen_convert_rate);
-																			t_popup->setShopCode(kSC_ruby);
-																			t_popup->setCloseFunc([=]()
-																								  {
-																									  //																is_menu_enable = true;
-																								  });
-																			addChild(t_popup, kOnePercentGame_Z_shop);
-																		}), 999);
+					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){}), 9999);
+//					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
+//																		{
+//																			ShopPopup* t_popup = ShopPopup::create();
+//																			t_popup->setScale(myDSH->screen_convert_rate);
+//																			t_popup->setShopCode(kSC_ruby);
+//																			t_popup->setCloseFunc([=]()
+//																								  {
+//																									  //																is_menu_enable = true;
+//																								  });
+//																			addChild(t_popup, kOnePercentGame_Z_shop);
+//																		}), 999);
 					//is_menu_enable = true;
 				}
 			});
@@ -623,17 +625,18 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					mySGD->clearChangeGoods();
-					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
-																		{
-																			ShopPopup* t_popup = ShopPopup::create();
-																			t_popup->setScale(myDSH->screen_convert_rate);
-																			t_popup->setShopCode(kSC_ruby);
-																			t_popup->setCloseFunc([=]()
-																								  {
-																									  //																is_menu_enable = true;
-																								  });
-																			addChild(t_popup, kOnePercentGame_Z_shop);
-																		}), 999);
+					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+//					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
+//																		{
+//																			ShopPopup* t_popup = ShopPopup::create();
+//																			t_popup->setScale(myDSH->screen_convert_rate);
+//																			t_popup->setShopCode(kSC_ruby);
+//																			t_popup->setCloseFunc([=]()
+//																								  {
+//																									  //																is_menu_enable = true;
+//																								  });
+//																			addChild(t_popup, kOnePercentGame_Z_shop);
+//																		}), 999);
 					//is_menu_enable = true;
 				}
 			});

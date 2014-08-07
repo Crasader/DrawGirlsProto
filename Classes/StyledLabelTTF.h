@@ -27,11 +27,11 @@ USING_NS_CC;
 	value3["linespacing"] = 30.f;
 	
 	value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
-	value4["font"] = mySGD->getFont2();
+	value4["font"] = mySGD->getFont();
 	value4["size"] = 20.f;
 	
 	value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
-	value5["font"] = mySGD->getFont2();
+	value5["font"] = mySGD->getFont();
 	value5["size"] = 25.f;
 	
 	
@@ -58,11 +58,11 @@ USING_NS_CC;
 		value3["linespacing"] = 30.f;
 		
 		value4["fillcolor"] = StyledLabelTTF::makeRGB(0, 0, 255);
-		value4["font"] = mySGD->getFont2();
+		value4["font"] = mySGD->getFont();
 		value4["size"] = 20.f;
 		
 		value5["fillcolor"] = StyledLabelTTF::makeRGB(255, 0, 255);
-		value5["font"] = mySGD->getFont2();
+		value5["font"] = mySGD->getFont();
 		value5["size"] = 25.f;
 		
 		

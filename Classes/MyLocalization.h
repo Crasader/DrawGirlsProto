@@ -221,7 +221,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_dayAfterReset,
 	kMyLocalKey_hourAfterReset,
 	kMyLocalKey_secondAfterReset,
+	kMyLocalKey_confirmGift,
+	kMyLocalKey_failedConnect,
 	kMyLocalKey_giftbox,
+	kMyLocalKey_giftboxContent,
 	kMyLocalKey_allAccept,
 	kMyLocalKey_puzzleOpenTitle,
 	kMyLocalKey_puzzleOpenContent,
@@ -818,6 +821,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_cardGiftNotFound,
 	
 	kMyLocalKey_rankUpFailRateUp,
+	kMyLocalKey_rankUpEventSubMent,
 	
 	kMyLocalKey_failTitleTimeover,
 	kMyLocalKey_failTitleMissionfail,
@@ -875,6 +879,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessOpeningMarquee4,
 	kMyLocalKey_rankNewMarquee1,
 	kMyLocalKey_rankNewMarquee2,
+	kMyLocalKey_rankNewMarquee3,
 	
 	kMyLocalKey_scenarioMent1,
 	kMyLocalKey_scenarioMent2,
@@ -972,6 +977,12 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_collectChange,
 	kMyLocalKey_afterOpenCBT,
 	kMyLocalKey_cardChange,
+	kMyLocalKey_showtimeMorphingTouch,
+	kMyLocalKey_cardStrength,
+	kMyLocalKey_updateTitle,
+	kMyLocalKey_updateContent,
+	kMyLocalKey_communityNotOpenTitle,
+	kMyLocalKey_communityNotOpenContent,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

@@ -20,6 +20,7 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "ASPopupView.h"
+#include "ConvexGraph.h"
 
 void StageListDown::addDownlist(string t_key, const Json::Value& result_data)
 {
@@ -208,6 +209,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				for(int i=0;i<cards.size();i++)
 				{
 					Json::Value t_card = cards[i];
+					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+					NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -215,7 +218,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					
 					NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 					NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt(), false);
+					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 					
 					Json::Value t_card_missile = t_card["missile"];
 					NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
@@ -340,6 +343,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card["no"].asInt(), sound_cnt, false);
 					for(int j=1;j<=sound_cnt;j++)
 					{
+						CCLOG("sound is %s",t_card["sound"][j-1].asString().c_str());
 						NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card["no"].asInt(), j, t_card["sound"][j-1].asString(), false);
 					}
 					
@@ -379,6 +383,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		NSDS_SI(puzzle_number, kSDS_PZ_clearCard_i, result_data["clearReward"]["normal"]["no"].asInt(), false);
 		{
 			Json::Value t_card = result_data["clearReward"]["normal"];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -386,7 +392,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt(), false);
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			Json::Value t_card_missile = t_card["missile"];
 			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
@@ -543,6 +549,8 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		NSDS_SI(puzzle_number, kSDS_PZ_perfectCard_i, result_data["clearReward"]["perfect"]["no"].asInt(), false);
 		{
 			Json::Value t_card = result_data["clearReward"]["perfect"];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -550,7 +558,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt(), false);
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			Json::Value t_card_missile = t_card["missile"];
 			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
@@ -844,17 +852,12 @@ void StageListDown::endOpenning()
 	
 	gray->removeFromParent();
 
-	progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(240,100));
-	addChild(progress_back);
-	
-	loading_progress = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-	loading_progress->setType(kCCProgressTimerTypeBar);
-	loading_progress->setMidpoint(ccp(0,0));
-	loading_progress->setBarChangeRate(ccp(1,0));
-	loading_progress->setPercentage(0);
-	loading_progress->setPosition(ccp(240, 100));
+	loading_progress = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+	loading_progress->setPosition(ccp(240,100));
 	addChild(loading_progress);
+	
+	loading_progress->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+	loading_progress->setBack("loading_progress_back.png");
 	
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 //	CCBReader* reader = new CCBReader(nodeLoader);
@@ -923,7 +926,6 @@ void StageListDown::outOpenning()
 										   {
 											   state_ment->setVisible(false);
 											   download_state->setPosition(ccp(240,80+20-300.f*t));
-											   progress_back->setPosition(ccp(240,100-300.f*t));
 											   loading_progress->setPosition(ccp(240,100-300.f*t));
 											   loading_character->setPosition(ccp(240,160-12+400.f*t));
 											   talk_box->setPosition(ccp(240,200+300.f*t));
@@ -931,7 +933,6 @@ void StageListDown::outOpenning()
 										   }, [=](float t)
 										   {
 											   download_state->setPosition(ccp(240,80+20-300.f));
-											   progress_back->setPosition(ccp(240,100-300.f));
 											   loading_progress->setPosition(ccp(240,100-300.f));
 											   loading_character->setPosition(ccp(240,160-12+400.f));
 											   talk_box->setPosition(ccp(240,200+300.f));
@@ -977,9 +978,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		startDownload();
@@ -1225,9 +1224,7 @@ void StageListDown::successAction()
 				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
-					loading_progress->stopAllActions();
-					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-					loading_progress->runAction(t_fromto);
+					loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 				}
 			}
 			if(success_func == nullptr)
@@ -1245,9 +1242,7 @@ void StageListDown::successAction()
 				download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 				if(loading_progress)
 				{
-					loading_progress->stopAllActions();
-					CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-					loading_progress->runAction(t_fromto);
+					loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 				}
 			}
 			startDownload();
@@ -1263,9 +1258,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		startDownload();
@@ -1276,7 +1269,11 @@ void StageListDown::successAction()
 		
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -1288,13 +1285,22 @@ void StageListDown::successAction()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		
@@ -1313,9 +1319,7 @@ void StageListDown::successAction()
 			download_state->setString(CCSTR_CWF("%.0f%%", clampf((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()), 0.f, 100.f))->getCString());
 			if(loading_progress)
 			{
-				loading_progress->stopAllActions();
-				CCProgressFromTo* t_fromto = CCProgressFromTo::create(0.3f, loading_progress->getPercentage(), (100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
-				loading_progress->runAction(t_fromto);
+				loading_progress->setPercentage((100.f*ing_download_cnt)/int(df_list.size()+sf_list.size()));
 			}
 		}
 		
@@ -1982,7 +1986,11 @@ void StageListDown::startDownloadSet()
 		// reduce
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -1994,13 +2002,22 @@ void StageListDown::startDownloadSet()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		

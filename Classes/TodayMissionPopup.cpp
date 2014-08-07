@@ -18,6 +18,7 @@
 #include "CommonButton.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "ConvexGraph.h"
 
 TodayMissionPopup* TodayMissionPopup::create(int t_touch_priority, function<void()> t_end_func)
 {
@@ -62,7 +63,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 	m_container->addChild(back_case);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 12);
-	title_label->disableOuterStroke();
+	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
@@ -259,26 +260,35 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		}
 	}
 	
-	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
-	progress_back->setPosition(ccp(0,3));
-	m_container->addChild(progress_back);
-	
-	progress_bar = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-	progress_bar->setType(kCCProgressTimerTypeBar);
-	progress_bar->setMidpoint(ccp(0,0));
-	progress_bar->setBarChangeRate(ccp(1,0));
-	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+	progress_bar = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
 	progress_bar->setPosition(ccp(0,3));
-	progress_bar->setVisible(false);
 	m_container->addChild(progress_bar);
+	
+	progress_bar->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+	progress_bar->setBack("loading_progress_back.png");
+	
+	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+	
+//	CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+//	progress_back->setPosition(ccp(0,3));
+//	m_container->addChild(progress_back);
+//	
+//	progress_bar = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
+//	progress_bar->setType(kCCProgressTimerTypeBar);
+//	progress_bar->setMidpoint(ccp(0,0));
+//	progress_bar->setBarChangeRate(ccp(1,0));
+//	progress_bar->setPercentage(100.f*mySGD->today_mission_info.ing_count.getV()/mySGD->today_mission_info.goal_count.getV());
+//	progress_bar->setPosition(ccp(0,3));
+//	progress_bar->setVisible(false);
+//	m_container->addChild(progress_bar);
 	
 //	KSLabelTTF* progress_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->today_mission_info.ing_count.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 15.5f);
 //	progress_label->setAnchorPoint(ccp(0,0.5));
 //	progress_label->setPosition(ccp(-progress_bar->getSprite()->getContentSize().width/2.f+10, -11));
 //	m_container->addChild(progress_label);
 	
-	CCSprite* present_img = CCSprite::create("mission_present.png");
-	present_img->setPosition(ccp(progress_bar->getSprite()->getContentSize().width/2.f, 5));
+	CCSprite* present_img = CCSprite::create("today_mission_reward.png");
+	present_img->setPosition(ccp(201/2.f, 5));
 	m_container->addChild(present_img);
 	
 	
@@ -332,7 +342,8 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 		else
 			ment_string = myLoc->getLocalForKey(kMyLocalKey_todaymissionRemainTimeMinute);
 		
-		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+		StyledLabelTTF* remain_label = StyledLabelTTF::create(ment_string.c_str(), mySGD->getFont().c_str(), 12 * 4.f, 999, StyledAlignment::kLeftAlignment);
+//		remain_label->setScale(1 / 4.f);
 		remain_label->setOldAnchorPoint();
 		remain_label->setPosition(ccp(-99, -47));
 		m_container->addChild(remain_label);
@@ -385,7 +396,7 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 															 
 														 },
 														 [=](){ // end Functor
-															 progress_bar->setVisible(true);
+//															 progress_bar->setVisible(true);
 															 is_menu_enable = true;
 														 });
 }
@@ -399,7 +410,7 @@ void TodayMissionPopup::closeAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	progress_bar->setVisible(false);
+//	progress_bar->setVisible(false);
 	
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		

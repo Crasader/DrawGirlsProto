@@ -81,7 +81,7 @@ bool ZoomScript::init()
 	back_img->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(back_img, kZS_Z_back);
 	
-	CCSprite* card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
+	card_back = KS::loadCCBI<CCSprite*>(this, "zoom_back.ccbi").first;
 	card_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(card_back, kZS_Z_back);
 	
@@ -140,7 +140,7 @@ bool ZoomScript::init()
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 240));
+		safety_img->setPosition(ccp(160, 230));
 		game_node->addChild(safety_img, kZS_Z_second_img);
 	}
 	
@@ -168,7 +168,8 @@ bool ZoomScript::init()
 //	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
 //	addChild(zoom_img, kZS_Z_script_case);
 	
-	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16);
+	script_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 16, CCSizeMake(330, 25), CCTextAlignment::kCCTextAlignmentCenter,
+									  CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 	script_label->setPosition(ccp(210,30));
 	addChild(script_label, kZS_Z_script_label);
 	
@@ -176,6 +177,13 @@ bool ZoomScript::init()
 	script_case->setVisible(false);
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
+	
+	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
+	showtime_morphing_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);
+	showtime_morphing_label->setAnchorPoint(ccp(0,0));
+	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
+	showtime_morphing_label->setVisible(false);
+	script_case->addChild(showtime_morphing_label);
 	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
@@ -227,11 +235,13 @@ void ZoomScript::onEnterTransitionDidFinish()
 
 void ZoomScript::startScript()
 {
-	script_label->setString("");
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 20));
+	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setString("");
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -246,26 +256,41 @@ void ZoomScript::typingAnimation()
 	typing_frame++;
 	if(typing_frame <= text_length)
 	{
+		CCLOG("typing animation : %d", typing_frame);
 		basic_string<wchar_t> result;
+		CCLOG("typing what? 1");
 		utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
+		CCLOG("typing what? 2");
 		
-		if(result[typing_frame]==' ' || result[typing_frame]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		if(result[typing_frame]==' ' || result[typing_frame]=='\n')
+		{
+			CCLOG("typing what? 2-1");
+			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		}
+		
+		CCLOG("typing what? 3");
 		
 		result = result.substr(0, typing_frame);
+		CCLOG("typing what? 4");
 		string conver;
+		CCLOG("typing what? 5");
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
+		CCLOG("typing what? 6");
 		script_label->setString(conver.c_str());
+		CCLOG("typing what? 7");
 		script_case->setVisible(true);
 		
+		CCLOG("typing what? 8");
 		if(typing_frame == text_length)
 		{
-						
+			CCLOG("typing what? 8-1");
 			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
-			
+			CCLOG("typing what? 8-2");
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
 			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
 			{
+				CCLOG("typing what? 8-2-1");
 				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 				zoom_img = tuto.first;
 				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
@@ -282,12 +307,16 @@ void ZoomScript::typingAnimation()
 			}
 			else
 			{
+				CCLOG("typing what? 8-2-2");
 				(this->*delegate_typing_after)();
 			}
+			CCLOG("typing what? 8-3");
 		}
+		CCLOG("typing what? 9");
 	}
 	else
 	{
+		CCLOG("typing length out");
 		CCTouch* t_touch = new CCTouch();
 		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 		t_touch->autorelease();
@@ -305,7 +334,6 @@ void ZoomScript::startTouchAction()
 	is_actioned = false;
 	setTouchEnabled(true);
 	next_button->setVisible(true);
-	script_case->setVisible(true);
 	script_case->setVisible(true);
 //	mode_button->setVisible(true);
 	
@@ -457,7 +485,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
 					
-					t_node->setPosition(ccp(160,215));
+					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
 					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
@@ -547,19 +575,19 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   game_node->addChild(target_node, kZS_Z_second_img);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
-																   game_node->setScale(1.5f);
-																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   game_node->setScale(0.5f);
+																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
-																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
-																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																	 CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																	 CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 																   
-																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
-																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
-																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																	 CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
+																	 CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 																   
 																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
-																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
 																   
 																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
@@ -710,7 +738,7 @@ void ZoomScript::menuAction(CCObject *sender)
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
 					
-					t_node->setPosition(ccp(160,215));
+					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
 					t_node->setVisible(false);
 					game_node->addChild(t_node, -1);
@@ -751,23 +779,23 @@ void ZoomScript::menuAction(CCObject *sender)
 																   t_node->setVisible(true);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
-																   game_node->setScale(1.5f);
-																   game_node->setPosition(ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+																   game_node->setScale(0.5f);
+																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
-																   CCDelayTime* delay1 = CCDelayTime::create(0.5f);
-																   CCMoveTo* move1 = CCMoveTo::create(1.f, ccp(0,0));
-																   CCDelayTime* delay2 = CCDelayTime::create(1.f);
+																	 CCDelayTime* delay1 = CCDelayTime::create(0.5f);
+																	 CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCDelayTime* delay2 = CCDelayTime::create(0.5f);
 																   
-																   CCMoveTo* move2 = CCMoveTo::create(0.7f, ccp((480.f-320.f*minimum_scale)/2.f, 0));
-																   CCScaleTo* t_scale = CCScaleTo::create(0.7f, minimum_scale);
-																   CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
+																	 CCMoveTo* move2 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
+																	 CCScaleTo* t_scale = CCScaleTo::create(0.5f, minimum_scale);
+																	 CCSpawn* t_spawn = CCSpawn::create(move2, t_scale, NULL);
 																   
 																   //	CCMoveTo* move2 = CCMoveTo::create(1.f, ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
-																   CCDelayTime* delay3 = CCDelayTime::create(1.f);
+																   CCDelayTime* delay3 = CCDelayTime::create(0.5f);
 																   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::rankupAction));
 																   
 																   CCAction* t_seq = CCSequence::create(delay1, move1, delay2, t_spawn, delay3, t_call, NULL);
-																   
+																	 
 																   game_node->runAction(t_seq);
 															   }, [=](){
 																   if(mySGD->isHasGottenCards(mySD->getSilType(), take_grade) > 0)
@@ -877,7 +905,7 @@ void ZoomScript::showtimeFirstAction()
 		
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 240));
+		safety_img->setPosition(ccp(160, 230));
 		game_node->addChild(safety_img, kZS_Z_second_img);
 	}
 	
@@ -1035,6 +1063,9 @@ void ZoomScript::rankupAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
+	if(mySGD->getStageGrade() >= 3)
+		showtime_morphing_label->setVisible(true);
+	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
 	text_length = result.length();
@@ -1052,13 +1083,16 @@ void ZoomScript::showtimeThirdAction()
 	{
 		startStageAnimation();
 	}
-	script_label->setVisible(true);
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
-	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height + 20));
+	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setString("");
 	script_case->setVisible(true);
+	script_label->setVisible(true);
+	showtime_morphing_label->setVisible(true);
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1078,6 +1112,9 @@ void ZoomScript::showtimeSeventhAction()
 	script_case->setVisible(true);
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	if(mySGD->getStageGrade() >= 3)
+		showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1283,6 +1320,17 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			}
 
 			zoom_base_distance = sqrtf(powf(sub_point.x, 2.f) + powf(sub_point.y, 2.f));
+			
+			
+			//회전관련하여 초기값 저장하기
+			zoom_base_radian = atanf((float)sub_point.y/(float)sub_point.x);
+			
+			if(sub_point.x<0) zoom_base_radian+=CC_DEGREES_TO_RADIANS(90);
+			else zoom_base_radian-=CC_DEGREES_TO_RADIANS(90);
+			
+			zoom_base_radian+=CC_DEGREES_TO_RADIANS(game_node->getRotation());
+
+			
 		}
 		else
 		{
@@ -1366,7 +1414,27 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 					avg_point = ccpAdd(avg_point, it->second);
 				}
 				avg_point = ccpMult(avg_point,1/(float)multiTouchData.size());
-
+				
+						
+				//회전~
+				float last_radian = atanf((float)sub_point.y/(float)sub_point.x);
+				
+				if(sub_point.x<0) last_radian+=CC_DEGREES_TO_RADIANS(90);
+				else last_radian-=CC_DEGREES_TO_RADIANS(90);
+				float degree =CC_RADIANS_TO_DEGREES(zoom_base_radian-last_radian)+720;
+				int degreeInt = abs((int)degree%360);
+				
+				//자석처럼 붙이자
+				if(degreeInt>355 || degreeInt<5)degree=0;
+				if(degreeInt<95 && degreeInt>85)degree=90;
+				if(degreeInt<185 && degreeInt>175)degree=180;
+				if(degreeInt<275 && degreeInt>265)degree=270;
+				
+				game_node->setRotation(degree);
+				card_back->setRotation(degree);
+				
+				
+				
 				script_label->setVisible(false);
 				script_case->setVisible(false);
 

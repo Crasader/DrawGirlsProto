@@ -21,6 +21,7 @@
 #include "MainFlowScene.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
+#include "FiveRocksCpp.h"
 
 MissileUpgradePopup* MissileUpgradePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func)
 {
@@ -33,6 +34,8 @@ MissileUpgradePopup* MissileUpgradePopup::create(int t_touch_priority, function<
 void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_upgrade_func)
 {
 	is_menu_enable = false;
+	
+	use_gold_value = 0;
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
@@ -277,6 +280,8 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 			return;
 		}
 		
+		use_gold_value = upgrade_price;
+		
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
@@ -329,6 +334,11 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLOG("missile upgrade success!!");
+		
+		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+		if(use_gold_value > 0)
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "lvUp", ccsf("lv%d", mySGD->getSelectedCharacterHistory().level.getV()), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
+		use_gold_value = 0;
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("se_upgrade.mp3", false);
@@ -415,6 +425,7 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	else
 	{
 		CCLOG("missile upgrade fail!!");
+		use_gold_value = 0;
 		
 		mySGD->clearChangeGoods();
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_gold, [=]()
@@ -527,7 +538,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 		upgrade_effect_2->setPosition(ccp(80,-14));
 		m_container->addChild(upgrade_effect_2);
 		
-		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 11);
+		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont().c_str(), 11);
 		effect_label->enableOuterStroke(ccBLACK, 1.f);
 		effect_label->setPosition(ccp(38,47));
 		upgrade_effect_2->addChild(effect_label);

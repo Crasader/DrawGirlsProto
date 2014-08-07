@@ -66,23 +66,32 @@ enum COLLISION_CODE
 
 // Moving 상태는 Attack/NoDirection/Direction 과 조합이 가능함. 나머지는 ㄴㄴ
 typedef int CUMBER_STATE;
-// 일반적인 상태 돌아다닐 때,
+
+#define kCumberStateNothing (1)
+// 일반적인 상태 돌아다닐 때, 공격은 오직 이 상태에서만 가능.
+
 #define kCumberStateMoving (1 << 1)
+
+// 캐스팅
+#define kCumberStateCasting (1 << 2)
 // 공격중일 때, 러시어택과는 좀 다름.
-#define kCumberStateAttack (1 << 3)
+
+
+
+// 빙글 빙글...
+#define kCumberStateNoDirection (1 << 6)
+//   잭만 바라봐~
+#define kCumberStateDirection (1 << 7)
 
 // 맞고 있을 때...
-#define kCumberStateDamaging (1 << 6)
-// 빙글 빙글...
-#define kCumberStateNoDirection (1 << 7)
-//   잭만 바라봐~
-#define kCumberStateDirection (1 << 8)
+#define kCumberStateDamaging (1 << 8)
 // 분노모드.
 #define kCumberStateFury (1 << 9)
 // 게임오버.
 #define kCumberStateGameover (1 << 10)
 
-
+//#define BIT_CHECK(var, pos) (var &
+// NoDirection 과 Direction 은 Casting 이나 Attack 과 함께 비트플래그로 사용됨.
 enum MOVEMENT
 {
 	STRAIGHT_TYPE = 1,
@@ -326,7 +335,7 @@ public:
 	MOVEMENT m_originalNormalMovement;  // 평사시 움직임의 백업본.
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
-	CUMBER_STATE m_state;
+	CUMBER_STATE m_cumberState;
 	vector<ChargeParent*> m_charges;
 	vector<ChargeParent*>& getCharges()
 	{
@@ -436,40 +445,33 @@ protected:
 	
 	struct SnakeMoving
 	{
-		SnakeMoving() : MIN_RADIUS(50.f), MAX_RADIUS(100.f), lastMovingTime(0){}
+		SnakeMoving() : MIN_RADIUS(80.f), MAX_RADIUS(150.f), lastMovingTime(0){}
 		
 		float lastMovingTime; // 마지막으로 움직인 시간을 기억함. 오랜만이라면 변수 재 설정.
-		CCPoint centerPosition;
-		CCPoint relocationPosition;
+//		CCPoint centerPosition;
+//		CCPoint relocationPosition;
 		int sign;
 		//		float goalAngleRad; // 돌아야 하는 총 각도.
-		float angleRad; // 현재 돈 각도
-		float shortRadianRatio; // 짧은 반지름 비율 : (0, 1]
+//		float angleRad; // 현재 돈 각도
+//		float shortRadianRatio; // 짧은 반지름 비율 : (0, 1]
 		const float MIN_RADIUS; // 최소 반지름
 		const float MAX_RADIUS; // 최대 반지름
-		void setRelocation(const CCPoint& cumberP, Well512& m_well512)
+		
+		float longRadius, shortRadius;
+		CCPoint startPosition;
+		CCPoint targetPosition;
+		float targetTheta;
+		float startXPosition;
+		void setRelocation(const CCPoint& cumberP, Well512& m_well512);
+		double smps(std::function<double(double)> f, double a, double b, int n)
 		{
-			sign = m_well512.GetPlusMinus();
-			bool valid = false;
-			while(!valid)
+			int i;
+			double h = (b - a ) / n, sum = 0;
+			for(int i=0; i<n; i++)
 			{
-				float r = m_well512.GetFloatValue(MIN_RADIUS, MAX_RADIUS);
-				float rad = m_well512.GetFloatValue(0, 2*M_PI);
-				shortRadianRatio = m_well512.GetFloatValue(0.0001f, 1.f);
-				relocationPosition = cumberP;
-				centerPosition = ccp(r * cos(rad) + relocationPosition.x, r * sin(rad) + relocationPosition.y);
-				angleRad = 0;//atan2(relocationPosition.y - centerPosition.y, relocationPosition.x - centerPosition.x);
-				
-				IntPoint centerPoint = ccp2ip(centerPosition);
-				if(mapLoopRange::mapWidthInnerBegin <= centerPoint.x &&
-				   centerPoint.x < mapLoopRange::mapWidthInnerEnd &&
-				   mapLoopRange::mapHeightOutlineBegin <= centerPoint.y &&
-				   centerPoint.y < mapLoopRange::mapHeightOutlineEnd)
-				{
-					valid = true;
-				}
-				
+				sum += (f(a+i*h) + 4*f(a+i*h + h/2) + f(a+(i+1)*h)) * h / 6;
 			}
+			return sum;
 		}
 	}m_snake;
 	struct EarthwarmMoving
@@ -508,7 +510,13 @@ protected:
 
 	
 	CC_SYNTHESIZE(LastPattern, m_lastPattern, LastPattern);
-	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
+//	CC_SYNTHESIZE(AttackPattern*, m_attackPattern, AttackPattern);
+    protected: AttackPattern* m_attackPattern;
+    public: virtual AttackPattern* getAttackPattern(void) const { return m_attackPattern; }
+    public: virtual void setAttackPattern(AttackPattern* var){ m_attackPattern = var;
+        CCLog("xxxxxxxxxxxxxxx %x", var);
+    }
+    
 
 	CC_SYNTHESIZE(CobWeb*, m_cobWebAttack, CobWebAttack);
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);

@@ -25,7 +25,9 @@
 #include "FormSetter.h"
 #include "AchieveData.h"
 #include "Terms.h"
+#include "ConvexGraph.h"
 #include <algorithm>
+#include "FiveRocksCpp.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -54,10 +56,12 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	TRACE();
 	is_preloaded_effect = false;
 	
 	is_downloading = false;
 	
+	loginCnt=0;
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -67,6 +71,7 @@ bool TitleRenewalScene::init()
 	
 	is_menu_enable = false;
 	white_back = NULL;
+	TRACE();
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
 	{
@@ -84,14 +89,18 @@ bool TitleRenewalScene::init()
 		CCSprite* splash = CCSprite::create("splash_nhn_litqoo.png");
 		splash->setPosition(ccp(240,160));
 		addChild(splash);
+		TRACE();
 		
 		addChild(KSTimer::create(1.f, [=]()
-		{
+														 {TRACE();
+															 
 			addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-												   {
+																						 {TRACE();
+																							 
 													   splash->setOpacity(255-255*t);
 												   }, [=](float t)
-												   {
+																						 {TRACE();
+																							 
 													   splash->setOpacity(255-255*t);
 													   splash->removeFromParent();
 													   
@@ -100,12 +109,15 @@ bool TitleRenewalScene::init()
 													   addChild(marvelous_splash);
 													   
 													   addChild(KSTimer::create(1.f, [=]()
-																				{
+																											{TRACE();
+																												
 																					addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																														   {
+																																								 {TRACE();
+																																									 
 																															   marvelous_splash->setOpacity(255-255*t);
 																														   }, [=](float t)
-																														   {
+																																								 {TRACE();
+																																									 
 																															   marvelous_splash->setOpacity(255-255*t);
 																															   marvelous_splash->removeFromParent();
 																															   
@@ -202,6 +214,8 @@ void TitleRenewalScene::loadCounting(CCObject* sender)
 
 void TitleRenewalScene::endSplash()
 {
+	TRACE();
+	
 //	CCSprite* ratings = CCSprite::create("game_ratings.png");
 //	ratings->setPosition(ccp(240,160));
 //	addChild(ratings);
@@ -252,6 +266,7 @@ void TitleRenewalScene::endSplash()
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 	if(screen_scale_x < 1.f)
 		screen_scale_x = 1.f;
+	TRACE();
 	
 	black_img = CCSprite::create("whitePaper.png");
 	black_img->setColor(ccBLACK);
@@ -266,28 +281,36 @@ void TitleRenewalScene::endSplash()
 	
 	if(myDSH->getBoolForKey(kDSH_Key_isCheckTerms))
 	{
+		TRACE();
+		
 		realInit();
 	}
 	else
 	{
-		myHSP->getIsUsimKorean([=](Json::Value result_data)
-							   {
-								   GraphDogLib::JsonToLog("isUsimKorean", result_data);
-								   if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
-								   {
-									   myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
-									   realInit();
-								   }
-								   else // 내국인이면서 동의안함. 꺼버리기
-								   {
-									   exit(1);
-								   }
-							   });
+		termsFunctor = [=](Json::Value result_data)
+		{
+			TRACE();
+			
+			GraphDogLib::JsonToLog("isUsimKorean", result_data);
+			if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
+			{
+				myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
+				realInit();
+			}
+			else // 내국인이면서 동의안함. 꺼버리기
+			{
+				myHSP->getIsUsimKorean(termsFunctor);
+				//									   exit(1);
+			}
+		};
+		myHSP->getIsUsimKorean(termsFunctor);
 	}
 }
 
 void TitleRenewalScene::realInit()
 {
+	TRACE();
+	
 	title_manager->runAnimationsForSequenceNamed("Default Timeline");
 	
 	Json::Value param;
@@ -298,56 +321,102 @@ void TitleRenewalScene::realInit()
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
 {
-	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	TRACE();
 	
+	CCLOG("resultLogin data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	/*
+	 점검시 로그j
+	 {"error":{"isSuccess":false,"code":8197},"serviceprop":"08","playable":false}
+	 */
 	if(myDSH->getStringForKey(kDSH_Key_timeZone)==""){
 		string tz = myHSP->getTimeZone();
 		myDSH->setStringForKey(kDSH_Key_timeZone, tz);
 		CCLOG("saved time zone : ",tz.c_str());
 	}
 		
-	if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
-	{
-		myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
-	}
-	else
-	{
-		if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
-		{
-			SaveData::sharedObject()->resetAllData();
-			myDSH->removeCache();
-			mySDS->removeCache();
-			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-			return;
-		}
-	}
+
 	
 	if(result_data["error"]["isSuccess"].asBool())
 	{
+		
+		if(myDSH->getStringForKey(kDSH_Key_savedMemberID) == "")
+		{
+			myDSH->setStringForKey(kDSH_Key_savedMemberID, myHSP->getSocialID());
+		}
+		else
+		{
+			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
+			{
+				CCLOG("resetalldata");
+				SaveData::sharedObject()->resetAllData();
+				myDSH->removeCache();
+				mySDS->removeCache();
+				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				return;
+			}
+		}
+		
+		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+	
+	
 	}
 	else
 	{
-		
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[=](){
-		
-			Json::Value param;
-			param["ManualLogin"] = true;
-			param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-			
-			hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+		CCLog("login error = %s", result_data["error"].get("localizedDescription", "NONE_LOCAL").asString().c_str());
 
+		TRACE();
 		
-		});
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		auto tryLogin = [=](){
+			if(result_data["error"].get("localizedDescription", "").asString() == "")
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = (int)HSPLogin::GUEST;
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+			else
+			{
+				Json::Value param;
+				param["ManualLogin"] = true;
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+			}
+		};
+		
+		//오류나도 3번은 자동 로그인 시도
+		// 점검이면 그냥 재시도k
+		if(result_data["error"]["code"].asInt() == 8197)
+		{
+			addChild(KSTimer::create(3, tryLogin));
+		}
+		// 점검이 아니면 그냥 재시도 계속...
+		else
+		{
+			if(loginCnt<3){
+				this->loginCnt++;
+				CCLOG("failed login , try login %d",loginCnt+1);
+				addChild(KSTimer::create(3, tryLogin));
+			}
+			else{
+				
+				loginCnt=0;
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),
+																												tryLogin);
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+		}
+		
 	}
 }
 
 void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 {
 	GraphDogLib::JsonToLog("resultHSLogin", result_data);
+	TRACE();
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
@@ -419,11 +488,15 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	bottom_label->setPosition(ccp(nick_back->getContentSize().width/2.f, 28));
 	nick_back->addChild(bottom_label);
 		
+		TRACE();
+
 		
 	}
 	else if(result_data["result"]["code"].asInt() == GDBLOCKEDUSER)
 	{
 		
+		TRACE();
+
 		CCLog("ffff %s",result_data["blockReason"].asString().c_str());
 		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
 		
@@ -435,6 +508,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else
 	{
+		TRACE();
+		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
@@ -443,6 +518,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 
 void TitleRenewalScene::nextPreloadStep()
 {
+	TRACE();
+
 	unschedule(schedule_selector(TitleRenewalScene::checkThreadPreload));
 	
 	audio_preload_step++;
@@ -466,6 +543,8 @@ void TitleRenewalScene::nextPreloadStep()
 	}
 	else
 	{
+		TRACE();
+
 		state_label->setString(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_titleTempScript1+audio_preload_step-1)));
 		AudioEngine::sharedInstance()->preloadThreadAction(audio_preload_step);
 		schedule(schedule_selector(TitleRenewalScene::checkThreadPreload));
@@ -476,12 +555,16 @@ void TitleRenewalScene::checkThreadPreload()
 {
 	if(AudioEngine::sharedInstance()->is_thread_preloaded)
 	{
+		TRACE();
+
 		nextPreloadStep();
 	}
 }
 
 void TitleRenewalScene::successLogin()
 {
+	TRACE();
+
 	state_label->setVisible(true);
 	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
@@ -491,52 +574,53 @@ void TitleRenewalScene::successLogin()
 	
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
-//		AudioEngine::sharedInstance()->preloadEffectScene("Title");
-		nextPreloadStep();
-//		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
-//		
-//		addChild(KSTimer::create(1.f/60.f, [=]()
-//		{
-//			
-//			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
-//			
-//			addChild(KSTimer::create(20.f/60.f, [=]()
-//			{
-//				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
-//				
-//				addChild(KSTimer::create(1.f/60.f, [=]()
-//				{
-//					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
-//					
-//					addChild(KSTimer::create(1.f/60.f, [=]()
-//					{
-//						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
-//						
-//						addChild(KSTimer::create(1.f/60.f, [=]()
-//						{
-//							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
-//							
-//							addChild(KSTimer::create(1.f/60.f, [=]()
-//							{
-//								is_preloaded_effect = true;
-//								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//								
-//								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
-//								{
-//									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-//									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-//									
-//									CCDelayTime* t_delay = CCDelayTime::create(2.f);
-//									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
-//									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
-//									runAction(t_seq);
-//								}
-//							}));
-//						}));
-//					}));
-//				}));
-//			}));
-//		}));
+//		nextPreloadStep();
+		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
+		
+		addChild(KSTimer::create(1.f/60.f, [=]()
+		{
+			
+			AudioEngine::sharedInstance()->preloadEffectTitleStep(1);
+			
+			addChild(KSTimer::create(20.f/60.f, [=]()
+			{
+				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
+				TRACE();
+				addChild(KSTimer::create(1.f/60.f, [=]()
+				{
+					AudioEngine::sharedInstance()->preloadEffectTitleStep(2);
+					TRACE();
+					addChild(KSTimer::create(1.f/60.f, [=]()
+					{
+						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
+						TRACE();
+						addChild(KSTimer::create(1.f/60.f, [=]()
+						{
+							AudioEngine::sharedInstance()->preloadEffectTitleStep(3);
+							
+							addChild(KSTimer::create(1.f/60.f, [=]()
+							{
+								is_preloaded_effect = true;
+								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+								TRACE();
+								CCLog("%d %d %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
+								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+								{
+									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+									
+									CCDelayTime* t_delay = CCDelayTime::create(2.f);
+									TRACE();
+									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
+									CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
+									runAction(t_seq);
+								}
+							}));
+						}));
+					}));
+				}));
+			}));
+		}));
 	}));
 	
 //	if(myLog->getLogCount() > 0)
@@ -634,6 +718,17 @@ void TitleRenewalScene::successLogin()
 	
 	is_loaded_cgp = false;
 	
+	addChild(KSTimer::create(5.f, [=]()
+							 {
+								 if(is_loaded_cgp)
+									 return;
+								 
+								 is_loaded_cgp = true;
+								 mySGD->cgp_data["promotionstate"] = "CGP_NONE";
+								 
+								 endingAction();
+							 }));
+	
 	std::function<void(Json::Value)> pf;
 	pf = [=](Json::Value v){
 		KS::KSLog("CGP : %", v);
@@ -645,6 +740,9 @@ void TitleRenewalScene::successLogin()
 		 
 		 }
 		 */
+		
+		if(is_loaded_cgp)
+			return;
 		
 		is_loaded_cgp = true;
 		mySGD->cgp_data = v;
@@ -747,6 +845,11 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
+			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
+			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
+			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
+			
 			mySGD->network_check_cnt = 0;
 			
 			if(0 >= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -776,21 +879,26 @@ void TitleRenewalScene::checkReceive()
 //					logo_img->setPosition(ccp(475-logo_img->getContentSize().width/2.f, 315-logo_img->getContentSize().height/2.f));
 //					addChild(logo_img, 1);
 					
-					CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
-					progress_back->setPosition(ccp(240,80));
-					addChild(progress_back, 1);
-					
-					progress_timer = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
-					progress_timer->setType(kCCProgressTimerTypeBar);
-					progress_timer->setMidpoint(ccp(0,0));
-					progress_timer->setBarChangeRate(ccp(1,0));
-					progress_timer->setPercentage(0);
-					progress_timer->setPosition(ccp(240, 80));
+					progress_timer = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+					progress_timer->setPosition(ccp(240,80));
 					addChild(progress_timer, 1);
 					
-//					CCSprite* progress_top = CCSprite::create("temp_title_loading_front.png");
-//					progress_top->setPosition(ccp(240,80));
-//					addChild(progress_top, 1);
+					progress_timer->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+					progress_timer->setBack("loading_progress_back.png");
+					
+					
+//					CCSprite* progress_back = CCSprite::create("loading_progress_back.png");
+//					progress_back->setPosition(ccp(240,80));
+//					addChild(progress_back, 1);
+//					
+//					progress_timer = CCProgressTimer::create(CCSprite::create("loading_progress_front.png"));
+//					progress_timer->setType(kCCProgressTimerTypeBar);
+//					progress_timer->setMidpoint(ccp(0,0));
+//					progress_timer->setBarChangeRate(ccp(1,0));
+//					progress_timer->setPercentage(0);
+//					progress_timer->setPosition(ccp(240, 80));
+//					addChild(progress_timer, 1);
+					
 					
 					
 					addChild(KSGradualValue<float>::create(1.f, 0.f, 0.8f, [=](float t){
@@ -820,7 +928,7 @@ void TitleRenewalScene::checkReceive()
 						
 						if(!download_state)
 						{
-							download_state = CCLabelBMFont::create("", "allfont.fnt");
+							download_state = CCLabelTTF::create("", mySGD->getFont().c_str(), 10);
 							download_state->setPosition(ccp(240,80));
 							addChild(download_state, 2);
 						}
@@ -1054,8 +1162,6 @@ void TitleRenewalScene::resultGetTimeEvent(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->initTimeEventList(result_data["list"]);
-		
-		graphdog->setCommandFinishedFunc([](){ mySGD->refreshTimeEvent(); });
 	}
 	else
 	{
@@ -1620,10 +1726,39 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		myDSH->resetDSH();
 		myDSH->loadAllUserData(result_data);
 		
+		if(myDSH->getStringForKey(kDSH_Key_nick) != result_data["nick"].asString())
+		{
+			myDSH->setStringForKey(kDSH_Key_nick, result_data["nick"].asString());
+		}
+		
 		if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) != kTutorialFlowStep_puzzleClick)
 			myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_end);
 		
 		mySGD->initUserdata(result_data);
+		
+		int scenario_value = myDSH->getIntegerForKey(kDSH_Key_showedScenario);
+		if(scenario_value < 1000 && mySGD->getUserdataHighPiece() >= 1)
+		{
+			scenario_value = 1000;
+		}
+		int t_loop_cnt = mySGD->getPuzzleHistorySize();
+		for(int i=0;i<t_loop_cnt;i++)
+		{
+			PuzzleHistory t_history = mySGD->getPuzzleHistoryForIndex(i);
+			int t_puzzle_number = t_history.puzzle_number.getV();
+			if(t_puzzle_number > 1 && t_history.is_open.getV() && scenario_value < 1000*t_puzzle_number)
+			{
+				scenario_value = t_puzzle_number*1000;
+			}
+		}
+		
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, scenario_value);
+		
+		int pvp_tuto_number = myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial);
+		if(mySGD->getUserdataEndlessScore() > 0 && pvp_tuto_number != -1)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
+		}
 		
 		mySGD->user_index = result_data["userIndex"].asInt64();
 	}
@@ -1825,6 +1960,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -2022,6 +2159,11 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 			for(int i=0;i<puzzle_cnt;i++)
 			{
 				int puzzle_number = puzzle_list[i]["order"].asInt();
+				
+				if(NSDS_GI(kSDS_GI_puzzleListVersion_i) == 0)
+				{
+					NSDS_SI(puzzle_number, kSDS_PZ_version_i, 0);
+				}
 				
 				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_number, false);
 				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str(), false);
@@ -2250,6 +2392,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
@@ -2328,7 +2471,11 @@ void TitleRenewalScene::startFileDownloadSet()
 		// reduce
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(card_reduction_list[i].is_ani)
@@ -2341,13 +2488,22 @@ void TitleRenewalScene::startFileDownloadSet()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
-			t_texture->begin();
+			t_texture->beginWithClear(0, 0, 0, 0);
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		// divide
@@ -3002,7 +3158,11 @@ void TitleRenewalScene::successDownloadAction()
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
 		for(int i=0;i<card_reduction_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(card_reduction_list[i].is_ani)
@@ -3015,13 +3175,22 @@ void TitleRenewalScene::successDownloadAction()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->begin();
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
@@ -3235,9 +3404,10 @@ void TitleRenewalScene::successDownloadAction()
 		rate = 100.f;
 	else if(rate < 0.f)
 		rate = 0.f;
-	
-	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, progress_timer->getPercentage(), rate);
-	progress_timer->runAction(t_to);
+
+	progress_timer->setPercentage(rate);
+//	CCProgressFromTo* t_to = CCProgressFromTo::create(0.5f, progress_timer->getPercentage(), rate);
+//	progress_timer->runAction(t_to);
 }
 
 void TitleRenewalScene::endingCheck()

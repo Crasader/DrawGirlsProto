@@ -673,8 +673,20 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	KSLabelTTF* speed_label;
 	KSLabelTTF* shadow;
 	
-	if(myGD->jack_base_speed + t_step*0.1f >= 2.f)
+	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterNo.getV()) + t_step*0.1f >= 2.f)
 	{
+		int i = kAchievementCode_hidden_speedMania;
+		
+		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
+				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
 		speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
@@ -1302,10 +1314,11 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		//			t_p = 0.99f;
 		myGD->communication("CP_changeMaxSize", t_p);
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
+		
+		bool is_five_percent = false;
+		
 		if(t_b)
 		{
-//			AudioEngine::sharedInstance()->playEffect("se_area.mp3", false, true);
-			
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 			myLog->addLog(kLOG_getPercent_f, myGD->getCommunication("UI_getUseTime"), t_p-t_beforePercentage);
 			
@@ -1327,8 +1340,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			if(t_p >= t_beforePercentage + 0.05f)
 			{
+				is_five_percent = true;
 				int random_value = rand()%9 + 1;
 				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("groan%d.mp3", random_value)->getCString(), false);
+			}
+			else
+			{
+				AudioEngine::sharedInstance()->playEffect("se_area.mp3", false, true);
 			}
 		}
 		
@@ -1337,7 +1355,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 			   t_p == t_beforePercentage + myAchieve->getCondition((AchievementCode)i)/0.001f)
 			{
-				myAchieve->changeIngCount(AchievementCode(i), 1);
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -1347,8 +1365,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		{
 			if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 			{
-				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-				   t_p == t_beforePercentage + myAchieve->getCondition(AchievementCode(i))/0.001f)
+				if(!myAchieve->isNoti(AchievementCode(i)) && t_p >= t_beforePercentage + myAchieve->getCondition(AchievementCode(i))*0.01f)
 				{
 					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 					AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
@@ -1371,7 +1388,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f)
 		{
-//			AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
+			if(!is_five_percent)
+				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f);
 			
@@ -1530,8 +1548,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									  {
 										  if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 										  {
-											  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-												 playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+											  if(!myAchieve->isNoti(AchievementCode(i)) && playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
 											  {
 												  myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 												  AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
@@ -1655,10 +1672,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			{
 				if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 				{
-					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-					   playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+					if(!myAchieve->isNoti(AchievementCode(i)) && playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
 					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
+						myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 						AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2069,6 +2085,7 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
 			   mySGD->getUserdataAchieveChangeMania() + 1 >= myAchieve->getCondition((AchievementCode)i))
 			{
+				myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -2691,7 +2708,7 @@ void PlayUI::setComboCnt (int t_combo)
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 			   combo_cnt == myAchieve->getCondition((AchievementCode)i))
 			{
-				myAchieve->changeIngCount(AchievementCode(i), combo_cnt);
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 			}
@@ -3543,7 +3560,7 @@ void PlayUI::myInit ()
 	detail_counting_cnt = 0;
 	is_urgent = false;
 	use_time = 0;
-	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime");
+	playtime_limit = mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime")-1;
 	total_time = playtime_limit.getV();
 	
 	clr_cdt_type = mySD->getClearCondition();
@@ -3561,7 +3578,7 @@ void PlayUI::myInit ()
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
 //	addChild(time_back);
 	
-	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV())->getCString(), "timefont.fnt");
+	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV()+1)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,17-UI_OUT_DISTANCE));

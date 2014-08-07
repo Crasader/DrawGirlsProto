@@ -29,6 +29,7 @@
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "FiveRocksCpp.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_gray = 0,
@@ -658,6 +659,8 @@ bool ShopPopup::init()
 	is_continue = false;
 	continue_end = nullptr;
 	
+	success_func = nullptr;
+	
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -900,15 +903,14 @@ bool ShopPopup::init()
 	
 	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
 	{
-		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-		   after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
+		myAchieve->changeIngCount(AchievementCode(i), after_value);
+		if(!myAchieve->isNoti(AchievementCode(i)) && after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
 		{
-			myAchieve->changeIngCount(AchievementCode(i), after_value);
+			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			
-			myAchieve->updateAchieve(nullptr);
 		}
+		myAchieve->updateAchieve(nullptr);
 	}
 	
     return true;
@@ -1035,9 +1037,21 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(success_func != nullptr)
+		{
+			success_func();
+			success_func = nullptr;
+		}
+		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 		CCLOG("userdata was save to server");
+	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		CCLOG("fail!! not enought property");
+		fail_func();
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
 	}
 	else
 	{
@@ -1066,8 +1080,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_ruby)
 	{
-		setShopCode(kSC_ruby);
-		is_menu_enable = true;
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+		
+//		setShopCode(kSC_ruby);
+//		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_gold)
 	{
@@ -1192,6 +1208,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 											mySGD->clearChangeGoods();
 										};
 										
+										success_func = [=]()
+										{
+											fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Purchase", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+										};
+										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
 									});
 //			}
@@ -1266,6 +1287,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 //												else if(before_code == kShopBeforeCode_startsetting)
 //													((StartSettingScene*)(target_parent->getParent()))->heart_time = target_heartTime;
 											}
+										};
+										
+										success_func = [=]()
+										{
+											fiverocks::FiveRocksBridge::trackEvent("UseGem", "Get_Heart", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 										};
 										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
@@ -2425,7 +2451,11 @@ void ShopPopup::successAction()
 	{
 		for(int i=0;i<cf_list.size();i++)
 		{
-			CCSprite* target_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+			mySIL->removeTextureCache(cf_list[i].from_filename);
+			mySIL->removeTextureCache(cf_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
 			if(cf_list[i].is_ani)
@@ -2437,13 +2467,22 @@ void ShopPopup::successAction()
 			
 			target_img->setScale(0.2f);
 			
-			CCRenderTexture* t_texture = CCRenderTexture::create(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY());
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
 			t_texture->setSprite(target_img);
 			t_texture->begin();
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
 			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		// 완료

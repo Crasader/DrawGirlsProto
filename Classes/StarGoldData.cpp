@@ -11,10 +11,13 @@
 #include "DataStorageHub.h"
 #include "AchieveNoti.h"
 #include "HeartTime.h"
+#include "FiveRocksCpp.h"
 
 void StarGoldData::withdraw()
 {
 	total_card_cnt = 0;
+	
+	loading_tip_back_number = 1;
 	
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
@@ -424,6 +427,7 @@ void StarGoldData::setGameStart()
 	stage_grade = 0;
 	game_time = 0;
 	start_map_gacha_cnt = 0;
+	start_map_gacha_use_gold_cnt = 0;
 	clear_reward_gold = 0;
 	
 	damaged_score = 0;
@@ -2285,6 +2289,7 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2302,7 +2307,7 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2607,6 +2612,7 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 {
 	if(ingame_gold.getV() > 0)
 	{
+		is_ingame_gold = true;
 		int t_ingame_gold = ingame_gold.getV();
 		if(isTimeEvent(kTimeEventType_gold))
 			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
@@ -2660,6 +2666,30 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(is_ingame_gold)
+		{
+			int t_missile_level = getSelectedCharacterHistory().level.getV();
+			string fiverocks_param2;
+			if(t_missile_level <= 5)
+				fiverocks_param2 = "UserLv1~Lv5";
+			else if(t_missile_level <= 10)
+				fiverocks_param2 = "UserLv6~Lv10";
+			else if(t_missile_level <= 15)
+				fiverocks_param2 = "UserLv11~Lv15";
+			else if(t_missile_level <= 20)
+				fiverocks_param2 = "UserLv16~Lv20";
+			else if(t_missile_level <= 25)
+				fiverocks_param2 = "UserLv21~Lv25";
+			else if(t_missile_level <= 30)
+				fiverocks_param2 = "UserLv26~Lv30";
+			else
+				fiverocks_param2 = "UserLv31~";
+			
+			
+			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str());
+			is_ingame_gold = false;
+		}
+		
 		change_goods_list.clear();
 		
 		Json::Value result_list = result_data["list"];
@@ -2685,7 +2715,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2704,7 +2734,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2746,7 +2776,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2765,7 +2795,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -2809,7 +2839,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
+						myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2828,7 +2858,7 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 					if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 					   t_count >= myAchieve->getCondition((AchievementCode)i))
 					{
-						myAchieve->changeIngCount(AchievementCode(i), 1);
+						myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 						AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 						CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 					}
@@ -2960,7 +2990,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -2979,7 +3009,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 							if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 							   t_count >= myAchieve->getCondition((AchievementCode)i))
 							{
-								myAchieve->changeIngCount(AchievementCode(i), 1);
+								myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 								AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 								CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 							}
@@ -3022,7 +3052,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -3041,7 +3071,7 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 						if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
 						   t_count >= myAchieve->getCondition((AchievementCode)i))
 						{
-							myAchieve->changeIngCount(AchievementCode(i), 1);
+							myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 							AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 							CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
 						}
@@ -3103,6 +3133,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "ing_win";
 	else if(t_type == kUserdataType_endlessData_ingWeek)
 		return_value = "ing_week";
+	else if(t_type == kUserdataType_endlessData_score)
+		return_value = "score";
 	
 	else if(t_type == kUserdataType_achieve_mapGacha)
 		return_value = "aMapGacha";
@@ -3191,7 +3223,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		{
 			userdata_storage[(UserdataType)i] = result_data["archiveData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
-		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek)
+		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 			if(i == kUserdataType_endlessData_ingWin)
@@ -3323,6 +3355,7 @@ void StarGoldData::resetRankReward()
 
 void StarGoldData::initTimeEventList(Json::Value t_list)
 {
+	time_event_list.clear();
 	int list_size = t_list.size();
 	
 	for(int i=0;i<list_size;i++)
@@ -3449,7 +3482,12 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 2;
 	
+	client_version = 3;
+	
+	is_ingame_gold = false;
 	total_card_cnt = 0;
+	
+	loading_tip_back_number = 1;
 	
 	max_network_check_cnt = 6; // 0.5초 단위로
 	network_check_cnt = 0;
@@ -3845,6 +3883,7 @@ void StarGoldData::setUserdataEndlessIngWeek(int t_i)
 //	}
 }
 int StarGoldData::getUserdataEndlessIngWeek(){	return userdata_storage[kUserdataType_endlessData_ingWeek].getV();	}
+int StarGoldData::getUserdataEndlessScore(){	return userdata_storage[kUserdataType_endlessData_score].getV();	}
 
 void StarGoldData::setUserdataAchieveMapGacha(int t_i)
 {

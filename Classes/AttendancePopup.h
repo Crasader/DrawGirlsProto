@@ -49,6 +49,7 @@ private:
 	
 	CCNode* getGoodsNode(string t_type, CCPoint base_position);
 	CCNode* getGoodsSmallNodeAndCount(string t_type, int t_count);
+	CCSprite* getGoodsType(string t_type);
 	
 	void myInit(int t_touch_priority, function<void()> t_end_func);
 	void closeAction(CCObject* sender, CCControlEvent t_event);

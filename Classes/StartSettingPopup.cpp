@@ -46,6 +46,7 @@
 #include "CommonAnimation.h"
 #include "AchieveNoti.h"
 #include "TypingBox.h"
+#include "FiveRocksCpp.h"
 
 bool StartSettingPopup::init()
 {
@@ -2092,18 +2093,19 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_ruby, [=]()
-																										{
-																											ShopPopup* t_shop = ShopPopup::create();
-																											t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																											if(mySGD->is_endless_mode)
-																												t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
-																											else
-																												t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
-																											t_shop->setShopCode(kSC_ruby);
-																											t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
-																											addChild(t_shop, kStartSettingPopupZorder_popup);
-																										}, [=](){is_menu_enable = true;}), 9999);
+													addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), 9999);
+//													addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_ruby, [=]()
+//																										{
+//																											ShopPopup* t_shop = ShopPopup::create();
+//																											t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
+//																											if(mySGD->is_endless_mode)
+//																												t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+//																											else
+//																												t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
+//																											t_shop->setShopCode(kSC_ruby);
+//																											t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+//																											addChild(t_shop, kStartSettingPopupZorder_popup);
+//																										}, [=](){is_menu_enable = true;}), 9999);
 												}
 												else
 												{
@@ -2483,6 +2485,14 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	cle_param["memberID"] = myHSP->getMemberID();
 	t_command_list.push_back(CommandParam("checkLoginEvent", cle_param, nullptr));
 	
+	t_command_list.push_back(CommandParam("gettimeevent", Json::Value(), [=](Json::Value result_data)
+										  {
+											  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											  {
+												  mySGD->initTimeEventList(result_data["list"]);
+											  }
+										  }));
+	
 	if(mySGD->is_endless_mode)
 	{
 		Json::Value endless_param;
@@ -2676,6 +2686,9 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(mySGD->is_endless_mode && mySGD->endless_my_victory.getV() == 0)
+			mySGD->pvp_continue_cnt = 0;
+		mySGD->ingame_continue_cnt = 0;
 		start_loading->removeFromParent();
 		
 		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
@@ -2706,19 +2719,38 @@ void StartSettingPopup::popupCloseCardSetting()
 
 void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
+	bool is_it_possible_achieve = false;
+	
 	for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
 	{
+		if(!myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i))
+			is_it_possible_achieve = true;
+		
 		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
 		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
 		{
+			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			myAchieve->updateAchieve(nullptr);
 		}
 	}
 	
-	mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
-	myAchieve->updateAchieve(nullptr);
+	if(is_it_possible_achieve)
+	{
+		mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
+		mySGD->changeUserdata(nullptr);
+	}
 	
+	string fiverocks_param1;
+	if(item_list[t_clicked_item_idx] == kIC_baseSpeedUp)
+		fiverocks_param1 = "Speed";
+	else if(item_list[t_clicked_item_idx] == kIC_doubleItem)
+		fiverocks_param1 = "Double";
+	else if(item_list[t_clicked_item_idx] == kIC_magnet)
+		fiverocks_param1 = "Magnet";
+	
+	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyItem", fiverocks_param1.c_str(), ccsf("Stage %d", mySD->getSilType()));
 	
 	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));
 	

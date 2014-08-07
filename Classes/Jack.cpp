@@ -1340,6 +1340,14 @@ void Jack::endBackTracking()
 			}
 		}
 	}
+	
+	afterPoint = IntPoint::convertToIntPoint(getPosition());
+	
+	if(myGD->mapState[afterPoint.x][afterPoint.y] != mapOldline)
+	{
+		IntMoveState searchFirstMoveState = IntMoveState(afterPoint.x, afterPoint.y, directionStop);
+		searchAndMoveOldline(searchFirstMoveState);
+	}
 }
 
 void Jack::changeSpeed( float t_s )
@@ -1901,19 +1909,7 @@ void Jack::takeSpeedUpItem()
 {
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
-		int i = kAchievementCode_hidden_speedMania;
-		
-		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
-		{
-			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)))
-			{
-				myAchieve->changeIngCount(AchievementCode(i), 1);
-				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
-				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			}
-		}
-		
-		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
+		myGD->communication("Main_takeSpeedUpEffect",  int(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f));
 
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 		
@@ -1939,7 +1935,7 @@ void Jack::takeSpeedUpItem()
 		speed_up_value += 0.1f;
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 		
-		myGD->communication("Main_takeSpeedUpEffect", int(speed_up_value/0.1f));
+		myGD->communication("Main_takeSpeedUpEffect", int(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f));
 	}
 }
 

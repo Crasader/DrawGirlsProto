@@ -33,7 +33,7 @@ public:
 	CCNode* front_node;
 	bool is_delaying;
 	
-	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 12, bool is_typing_sound = false);
+	void addMent(bool is_left, string t_name, string t_namefile, string t_ment, function<void(void)> t_end_func, CCSize t_size = CCSizeMake(350,100), CCPoint t_point = ccp(0,-110), int t_font_size = 10, bool is_typing_sound = false);
 	void cleanSM();
 	
 private:
@@ -48,6 +48,7 @@ private:
 	CCLabelTTF* next_label;
 	
 	bool is_click_effect;
+	int typing_sound_number;
 	
 	int m_touch_priority;
 	CCNode* ment_node;

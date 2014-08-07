@@ -19,6 +19,7 @@
 #include "PuzzleScene.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "FiveRocksCpp.h"
 
 EmptyItemSalePopup* EmptyItemSalePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type)
 {
@@ -70,20 +71,29 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	back_case->addChild(back_in);
 	
 	
+	CCScale9Sprite* title_tag = CCScale9Sprite::create("title_tag.png", CCRectMake(0, 0, 135, 30), CCRectMake(45, 14, 45, 2));
+	title_tag->setContentSize(CCSizeMake(160, 31));
+	title_tag->setPosition(ccp(80, back_case->getContentSize().height-35));
+	back_case->addChild(title_tag);
+	
 	if(m_type == kPurchaseGuideType_emptyItem)
 	{
+		myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale1, myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)+1);
+		
 		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleTitle), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
-		title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
 		m_container->addChild(title_label);
 	}
 	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
 	{
+		myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale2, myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)+1);
+		
 		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemPackageChance), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
-		title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
+		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
 		m_container->addChild(title_label);
 	}
 	
@@ -219,8 +229,8 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 //	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 15);
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-1,price_back->getContentSize().height/2.f));
-	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f+1,price_back->getContentSize().height/2.f));
+	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-6,price_back->getContentSize().height/2.f));
+	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f-5,price_back->getContentSize().height/2.f-1));
 	price_back->addChild(price_label);
 	
 	p_label->addChild(purchase_label);
@@ -274,12 +284,27 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	
-	mySGD->addChangeGoods("pg_ei");
+	if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
+		mySGD->addChangeGoods("pg_snh");
+	else if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
+		mySGD->addChangeGoods("pg_ei");
 	
 	mySGD->changeGoods([=](Json::Value result_data){
 		inapp_loading->removeFromParent();
 		if(result_data["result"]["code"].asInt() == GDSUCCESS)
 		{
+			if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
+			{
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack1", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale1, 0);
+			}
+			else if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
+			{
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack2", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale2, 0);
+			}
+			
+			
 			is_menu_enable = true;
 			giveupAction(sender, t_event);
 		}

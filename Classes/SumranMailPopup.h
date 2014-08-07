@@ -110,7 +110,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void filterWithMailFilter();
 		void rewardDown(Json::Value reward, std::function<void(bool)> func);
 		void takedCheck(Json::Value reward, std::function<void(void)> func);
-		void cardDown(int cardNo,std::function<void(bool)>finishFunc);
+	//	void cardDown(int cardNo,std::function<void(bool)>finishFunc);
 		void takedCard(int cardNo,std::function<void(void)>finishFunc);
 	protected:
 		std::function<void(void)> m_heartRefresh;
@@ -140,7 +140,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void failAction();
 		void startDownloadCardImage ();
 		void startDownload ();
-	
+		
 
 	
 	bool isLoaded;
