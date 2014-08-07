@@ -1737,8 +1737,6 @@ void Maingame::removeConditionLabel()
 		exit_target->onExit();
 		
 		CCNode* scenario_node = CCNode::create();
-		scenario_node->setScale(myDSH->screen_convert_rate);
-		scenario_node->setPosition(ccpAdd(scenario_node->getPosition(), myDSH->ui_zero_point));
 		getParent()->addChild(scenario_node, 9999);
 		
 		float screen_scale_y = myDSH->ui_top/320.f;
