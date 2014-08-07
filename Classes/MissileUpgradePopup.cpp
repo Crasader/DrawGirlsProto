@@ -538,7 +538,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 		upgrade_effect_2->setPosition(ccp(80,-14));
 		m_container->addChild(upgrade_effect_2);
 		
-		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont2().c_str(), 11);
+		KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_power), mySGD->getFont().c_str(), 11);
 		effect_label->enableOuterStroke(ccBLACK, 1.f);
 		effect_label->setPosition(ccp(38,47));
 		upgrade_effect_2->addChild(effect_label);

@@ -187,7 +187,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
         	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8); 
         }
     	com.litqoo.lib.hspConnector.kInit(this,glSurfaceView,getApplicationContext());
-    	
+    	hideSystemUI();
     	return glSurfaceView;
     }
     @Override
