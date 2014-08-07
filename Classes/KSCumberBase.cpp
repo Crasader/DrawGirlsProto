@@ -2447,7 +2447,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(m_aiValue<50)m_aiValue=50;
 		
 		m_attackPercent *=1.2f;
-		if(m_attackPercent<0.3)m_attackPercent=0.3;
+		if(m_attackPercent>0.3)m_attackPercent=0.3;
 		
 		int sumpercent = 0;
 		int crashCnt= 0;
