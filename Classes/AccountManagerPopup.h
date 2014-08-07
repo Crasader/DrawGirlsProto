@@ -2,9 +2,11 @@
 #define ACCOUNTMANAGERPOPUP_H
 
 #include "cocos2d.h"
+#include "HSPEnums.h"
 USING_NS_CC;
 
-
+class StyledLabelTTF;
+class ASPopupView;
 class AccountManagerPopup : public CCLayer
 {
 public:
@@ -19,7 +21,14 @@ public:
 		t->autorelease();
 		return t;
 	}
+	
+	void showWarning(const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin,
+																							StyledLabelTTF* announce,
+																							std::function<void(void)> loginProcess);
 	//virtual void registerWithTouchDispatcher();
+protected:
+	int m_touchP;
+	ASPopupView* m_managerPopup;
 };
 
 #endif
