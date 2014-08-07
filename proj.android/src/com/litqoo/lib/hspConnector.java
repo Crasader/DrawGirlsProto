@@ -23,18 +23,17 @@ import android.os.Handler;
 import android.telephony.TelephonyManager;
 import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPCore.HSPLoginType;
-import com.hangame.hsp.HSPCore.HSPWithdrawAccountCB;
 import com.hangame.hsp.HSPMappingType;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPResult.HSPResultCode;
 import com.hangame.hsp.HSPServiceProperties;
+import com.hangame.hsp.HSPServiceProperties.HSPLaunchingState;
 import com.hangame.hsp.HSPServiceProperties.HSPServerName;
 import com.hangame.hsp.HSPState;
 import com.hangame.hsp.HSPUtil;
@@ -48,6 +47,7 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
+import android.view.WindowManager;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -253,9 +253,9 @@ public class hspConnector {
 										+ result.getDomain() + ", detail = "
 										+ result.getDetail());
 
-//								Toast.makeText(hspConnector.sContext,
-//										" Remapping Failed: " + result,
-//										Toast.LENGTH_LONG).show();
+								Toast.makeText(hspConnector.sContext,
+										" Remapping Failed: " + result,
+										Toast.LENGTH_LONG).show();
 							}
 							Log.d("mapping",
 									"END - HSPRequestMappingToAccountCB ");
@@ -383,9 +383,9 @@ public class hspConnector {
 					// if (!kakaoLink.isAvailableIntent())
 					// return;
 					kakaoLink.openKakaoLink((Activity) hspConnector.sContext,
-							"http://hgurl.me/am7",
-							"돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브",
-							"com.nhnent.SKSUMRAN", "1.0", "땅따먹기 리턴즈 with 섬란카구라 뉴웨이브",
+							"http://naver.com",
+							"남자들을 흥분의 도가니로 몰아 넣은 그게임!!\n땅따먹기 섬란카구라 뉴웨이브",
+							"com.nhnent.SKDRAWGIRLSA", "1.0", "땅따먹기 섬란카구라",
 							"UTF-8");
 
 				}
@@ -463,30 +463,20 @@ public class hspConnector {
 	public static double getScreenRealWidth() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		
-		if(dm.xdpi>0){
-			double x = dm.widthPixels/dm.xdpi;
-			return x;
-		}else{
-			return 4.2f;
-		}
+		double x = dm.widthPixels/dm.xdpi;
+		return x;
 	}
 	
 	public static double getScreenRealHeight() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		
-		if(dm.ydpi>0){
-			double y = dm.heightPixels/dm.ydpi;
-			return y;
-		}else{
-			return 2.47f;
-		}
+		double y = dm.heightPixels/dm.ydpi;
+		return y;
 	}
 	
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
-		Log.d("", "login function");
+
 		hspConnector.handler.post(new Runnable() {
 			public void run() {
 
@@ -603,13 +593,11 @@ public class hspConnector {
 
 	public static String getCountryCode() {
 		String r = Locale.getDefault().getCountry();
-		if(r=="")r="kr";
 		return r;
 	}
 
 	public static String getTimeZone(){
 		TimeZone tz = TimeZone.getDefault();
-		if(tz.getID()=="")return"Asia/seoul";
 		return tz.getID();
 	}
 	
@@ -650,43 +638,7 @@ public class hspConnector {
 		HSPLoginType t = HSPCore.getInstance().loginType();
 		return t.ordinal();
 	}
-	public static void withdrawAccount(final int _key)
-	{
-		hspConnector.handler.post(new Runnable() {
-			public void run() { 
-				Activity activity = (Activity) hspConnector.sContext;
-				HSPCore core = HSPCore.getInstance();
 
-				if (core != null) {
-					// Log.i("com.litqoo.dgproto", "hspcore create ok2"); 
-					core.withdrawAccount(new HSPWithdrawAccountCB() { 
-						@Override
-						public void onAccountWithdraw(HSPResult result) {
-							// TODO Auto-generated method stub
-							JSONObject r = new JSONObject();
-							JSONObject error = new JSONObject();
-							try {
-								error.put("code", result.getCode());
-								error.put("isSuccess", result.isSuccess());
-								error.put("localizedDescription",
-										result.getDetail());
-								r.put("error", error);
-							} catch (JSONException e) {
-
-							}
-
-							mGLView.queueEvent(new KRunnable(_key, r.toString()) {
-								public void run() {
-									hspConnector.SendResult(this.delekey,
-											this.totalSource);
-								}
-							}); 
-						}
-					}); 
-				} 
-			}
-		});	
-	}
 	public static void logout(final int _key) {
 		hspConnector.handler.post(new Runnable() {
 			public void run() {
@@ -695,7 +647,8 @@ public class hspConnector {
 				HSPCore core = HSPCore.getInstance();
 
 				if (core != null) {
-					// Log.i("com.litqoo.dgproto", "hspcore create ok2"); 
+					// Log.i("com.litqoo.dgproto", "hspcore create ok2");
+
 					core.logout(new HSPCore.HSPLogoutCB() {
 						@Override
 						public void onLogout(HSPResult result) {
@@ -718,10 +671,14 @@ public class hspConnector {
 									hspConnector.SendResult(this.delekey,
 											this.totalSource);
 								}
-							}); 
-						} 
-					}); 
-				} 
+							});
+
+						}
+
+					});
+
+				}
+
 			}
 		});
 	}
