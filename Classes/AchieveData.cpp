@@ -333,7 +333,7 @@ bool AchieveConditionReward::isAchieve(AchievementCode t_code)
 {
 	bool return_value;
 	
-	return_value = getRecentValue(t_code) >= getCondition(t_code);
+	return_value = getCondition(t_code) > 0 && getRecentValue(t_code) >= getCondition(t_code);
 	
 	return return_value;
 }
