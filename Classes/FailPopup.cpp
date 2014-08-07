@@ -45,6 +45,7 @@
 #include "TypingBox.h"
 #include "StyledLabelTTF.h"
 #include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 #include "FormSetter.h"
 
@@ -238,6 +239,8 @@ bool FailPopup::init()
 		piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 		stage_tab->addChild(piece_number_label);
 	}
+	
+	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", "Fail", ccsf("Stage %d", mySD->getSilType()));
 	
 	for(int i=0;i<4;i++)
 	{

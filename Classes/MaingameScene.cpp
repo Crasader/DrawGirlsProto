@@ -45,6 +45,7 @@
 #include "TouchSuctionLayer.h"
 #include "OnePercentTutorial.h"
 #include "TypingBox.h"
+#include "FiveRocksCpp.h"
 
 //#include "ScreenSide.h"
 
@@ -1226,9 +1227,12 @@ void Maingame::counting()
 //		AudioEngine::sharedInstance()->playEffect("sound_go.mp3", false);
 //		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 //		{
+		
 			t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
 		t_smg->remove_func = [=]()
 		{
+			if(mySGD->start_map_gacha_use_gold_cnt > 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "StartDraw", ccsf("gacha %02d", mySGD->start_map_gacha_use_gold_cnt), ccsf("Stage %d", mySD->getSilType()));
 			t_smg = NULL;
 		};
 			addChild(t_smg, startGachaZorder);
@@ -1256,10 +1260,15 @@ void Maingame::gachaOn()
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
+	bool is_use_gold = false;
+	
 	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
 		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 	else if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
+	{
+		is_use_gold = true;
 		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+	}
 	else
 	{
 		showShop(kSC_gold);
@@ -1309,6 +1318,11 @@ void Maingame::gachaOn()
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
 //										  exit_target->onEnter();
+										  
+										  if(is_use_gold)
+											{
+												mySGD->start_map_gacha_use_gold_cnt++;
+											}
 										  
 										  myGD->resetGameData();
 										  mySGD->startMapGachaOn();

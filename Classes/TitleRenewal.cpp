@@ -27,6 +27,7 @@
 #include "Terms.h"
 #include "ConvexGraph.h"
 #include <algorithm>
+#include "FiveRocksCpp.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -844,6 +845,11 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
+			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
+			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("최고진행스테이지%d", mySGD->getUserdataHighPiece()));
+			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("보유카드수%d", mySGD->getHasGottenCardsSize()));
+			
 			mySGD->network_check_cnt = 0;
 			
 			if(0 >= character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size())
@@ -2153,6 +2159,11 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 			for(int i=0;i<puzzle_cnt;i++)
 			{
 				int puzzle_number = puzzle_list[i]["order"].asInt();
+				
+				if(NSDS_GI(kSDS_GI_puzzleListVersion_i) == 0)
+				{
+					NSDS_SI(puzzle_number, kSDS_PZ_version_i, 0);
+				}
 				
 				NSDS_SI(kSDS_GI_puzzleList_int1_no_i, i+1, puzzle_number, false);
 				NSDS_SS(kSDS_GI_puzzleList_int1_title_s, i+1, puzzle_list[i]["title"].asString().c_str(), false);

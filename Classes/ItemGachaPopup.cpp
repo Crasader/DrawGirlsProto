@@ -19,6 +19,7 @@
 #include "AudioEngine.h"
 #include "PuzzleScene.h"
 #include "CommonAnimation.h"
+#include "FiveRocksCpp.h"
 
 ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
 {
@@ -373,7 +374,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	use_button->setTouchPriority(touch_priority);
 	
-	
+	gacha_cnt = 1;
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 		
@@ -389,6 +390,20 @@ void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	
 	is_menu_enable = false;
+	
+	string fiverocks_param1;
+	if(item_type == kIC_fast)
+		fiverocks_param1 = "dash";
+	else if(item_type == kIC_subOneDie)
+		fiverocks_param1 = "onekill";
+	else if(item_type == kIC_silence)
+		fiverocks_param1 = "silence";
+	else if(item_type == kIC_longTime)
+		fiverocks_param1 = "time";
+	else if(item_type == kIC_heartUp)
+		fiverocks_param1 = "continue";
+	
+	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyRandomItem", fiverocks_param1.c_str(), ccsf("gacha %d", gacha_cnt));
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
@@ -442,7 +457,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		CCLOG("save userdata success!!");
-		
+		gacha_cnt++;
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
 		KS::setOpacity(question_img, 255);

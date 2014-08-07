@@ -29,6 +29,7 @@
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "FiveRocksCpp.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_gray = 0,
@@ -658,6 +659,8 @@ bool ShopPopup::init()
 	is_continue = false;
 	continue_end = nullptr;
 	
+	success_func = nullptr;
+	
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -1034,6 +1037,12 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(success_func != nullptr)
+		{
+			success_func();
+			success_func = nullptr;
+		}
+		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 		CCLOG("userdata was save to server");
@@ -1197,6 +1206,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 										fail_func = [=]()
 										{
 											mySGD->clearChangeGoods();
+										};
+										
+										success_func = [=]()
+										{
+											fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Purchase", ccsf("shopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 										};
 										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));

@@ -43,6 +43,7 @@
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
 #include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -236,6 +237,8 @@ bool ClearPopup::init()
 	else if(mySGD->is_showtime)					take_level = 3;
 	else if(mySGD->is_exchanged)				take_level = 2;
 	else										take_level = 1;
+	
+	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %d", stage_number));
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);
 	int stage_count = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_stageCount_i);
@@ -538,6 +541,7 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  {
 										  TRACE();
 										  CCLOG("ClearPopup transaction success");
+										  fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("최고진행스테이지%d", mySGD->getUserdataHighPiece()));
 										  
 										  mySGD->network_check_cnt = 0;
 										  

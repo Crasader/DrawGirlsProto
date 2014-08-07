@@ -46,6 +46,7 @@
 #include "JsGababo.h"
 #include "TypingBox.h"
 #include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -638,6 +639,8 @@ bool PuzzleScene::init()
 																	myAchieve->updateAchieve(nullptr);
 																}
 															}
+															
+															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("보유카드수%d", mySGD->getHasGottenCardsSize()));
 														}
 												  }));
 		

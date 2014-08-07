@@ -162,7 +162,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_savedMemberID,
 	kDSH_Key_timeZone,
 	
-	kDSH_Key_showedKindTutorial_int1
+	kDSH_Key_showedKindTutorial_int1,
+	kDSH_Key_showedEmptyItemSale1,
+	kDSH_Key_showedEmptyItemSale2
 	
 }DSH_Key;
 

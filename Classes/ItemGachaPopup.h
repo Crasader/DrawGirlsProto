@@ -33,6 +33,7 @@ private:
 	function<void(int)> gacha_on_func;
 	
 	bool is_menu_enable;
+	int gacha_cnt;
 	
 	TouchSuctionLayer* suction;
 	
