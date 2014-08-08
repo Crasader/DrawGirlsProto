@@ -240,22 +240,6 @@
 										<real>0.0</real>
 									</array>
 								</dict>
-								<dict>
-									<key>easing</key>
-									<dict>
-										<key>type</key>
-										<integer>1</integer>
-									</dict>
-									<key>time</key>
-									<real>2.4666666984558105</real>
-									<key>type</key>
-									<integer>3</integer>
-									<key>value</key>
-									<array>
-										<real>347</real>
-										<real>-86</real>
-									</array>
-								</dict>
 							</array>
 							<key>name</key>
 							<string>position</string>
@@ -376,8 +360,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>147.47502136230469</real>
-							<real>-36.550003051757812</real>
+							<real>0.0</real>
+							<real>0.0</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -565,9 +549,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.033333335071802139</real>
+			<real>0.0</real>
 			<key>position</key>
-			<real>1.7000000476837158</real>
+			<real>1.7333333492279053</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
