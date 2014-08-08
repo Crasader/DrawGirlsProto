@@ -969,7 +969,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				n_node->addChild(n_frame);
 				
 				KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 9);
-				n_label->setPosition(ccp(n_card->getContentSize().width-16, 12) + add_position);
+				n_label->setPosition(ccp(n_node->getContentSize().width-16, 12) + add_position);
 				n_frame->addChild(n_label);
 				
 				CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
@@ -991,7 +991,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				s_node->addChild(s_frame);
 				
 				KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", i+1), mySGD->getFont().c_str(), 9);
-				s_label->setPosition(ccp(s_card->getContentSize().width-16, 12) + add_position);
+				s_label->setPosition(ccp(s_node->getContentSize().width-16, 12) + add_position);
 				s_frame->addChild(s_label);
 				
 				CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
@@ -1073,7 +1073,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			n_node->addChild(n_frame);
 			
 			KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
-			n_label->setPosition(ccp(n_card->getContentSize().width-16, 12) + add_position);
+			n_label->setPosition(ccp(n_node->getContentSize().width-16, 12) + add_position);
 			n_frame->addChild(n_label);
 			
 			
@@ -1096,7 +1096,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			s_node->addChild(s_frame);
 			
 			KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
-			s_label->setPosition(ccp(s_card->getContentSize().width-16, 12) + add_position);
+			s_label->setPosition(ccp(s_node->getContentSize().width-16, 12) + add_position);
 			s_frame->addChild(s_label);
 			
 			CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
