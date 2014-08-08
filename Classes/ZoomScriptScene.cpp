@@ -292,6 +292,14 @@ void ZoomScript::typingAnimation()
 			}
 			else
 			{
+				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+				
+				zoom_img = tuto.first;
+				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+				
+				
+				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+				addChild(zoom_img, kZS_Z_script_case);
 				(this->*delegate_typing_after)();
 			}
 		}
