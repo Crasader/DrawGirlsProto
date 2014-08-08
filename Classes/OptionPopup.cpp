@@ -1168,9 +1168,11 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		int ret = hspConnector::get()->openKakaoMsg();
 		if(ret == 0) {
+			auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+			ment->setAnchorPoint(ccp(0.5f, 0.5f));
 			ASPopupView* as = ASPopupView::getCommonNoti2(-172, "에러",
-														  StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
-																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr, ccp(0, 0), true);
+																										ment, nullptr, ccp(0, 0), true);
 			addChild(as, kOP_Z_content);
 		}
 		
