@@ -76,7 +76,7 @@ void MileagePopup::myInit(int t_touch_priority, function<void()> t_end_func, int
 		empty_circle->setPosition(ccp(-90+i*45,-55));
 		m_container->addChild(empty_circle);
 		
-		KSLabelTTF* count_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont2().c_str(), 14);
+		KSLabelTTF* count_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 14);
 		count_label->setPosition(ccp(empty_circle->getContentSize().width/2.f, empty_circle->getContentSize().height/2.f));
 		empty_circle->addChild(count_label);
 		

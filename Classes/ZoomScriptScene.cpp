@@ -54,6 +54,8 @@ bool ZoomScript::init()
 	
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
+	typing_sound_number = 1;
+	
 	is_rankup = false;
 	is_time_event_card_on = false;
 	
@@ -238,8 +240,8 @@ void ZoomScript::startScript()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
-	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
 	script_label->setString("");
 	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
@@ -259,19 +261,23 @@ void ZoomScript::typingAnimation()
 		basic_string<wchar_t> result;
 		utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
 		
-		if(result[typing_frame]==' ' || result[typing_frame]=='\n')AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+		if(!(result[typing_frame]==' ' || result[typing_frame]=='\n'))
+		{
+			AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+			if(typing_sound_number > 4)
+				typing_sound_number = 1;
+		}
 		
 		result = result.substr(0, typing_frame);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
+		conver = conver + "_";
 		script_label->setString(conver.c_str());
 		script_case->setVisible(true);
 		
 		if(typing_frame == text_length)
 		{
-						
 			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
-			
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
 			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
@@ -306,6 +312,7 @@ void ZoomScript::typingAnimation()
 	}
 	else
 	{
+		CCLog("typing length out");
 		CCTouch* t_touch = new CCTouch();
 		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 		t_touch->autorelease();
@@ -1075,8 +1082,10 @@ void ZoomScript::showtimeThirdAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
-	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	
+	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
+	
 	script_label->setString("");
 	script_case->setVisible(true);
 	script_label->setVisible(true);

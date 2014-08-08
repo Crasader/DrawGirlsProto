@@ -383,9 +383,9 @@ public class hspConnector {
 					// if (!kakaoLink.isAvailableIntent())
 					// return;
 					kakaoLink.openKakaoLink((Activity) hspConnector.sContext,
-							"http://naver.com",
-							"남자들을 흥분의 도가니로 몰아 넣은 그게임!!\n땅따먹기 섬란카구라 뉴웨이브",
-							"com.nhnent.SKDRAWGIRLSA", "1.0", "땅따먹기 섬란카구라",
+							"http://hgurl.me/am7",
+							"돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브",
+							"com.nhnent.SKSUMRAN", "1.0", "땅따먹기 리턴즈 with 섬란카구라 뉴웨이브",
 							"UTF-8");
 
 				}

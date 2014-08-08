@@ -53,7 +53,7 @@ static AppDelegate s_sharedApplication;
 	
 	
 		[FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];
-
+		[FiveRocks setDebugEnabled:true];
 	
 	
     // Add the view controller's view to the window and display.

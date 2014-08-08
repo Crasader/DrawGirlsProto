@@ -231,6 +231,7 @@ void TypingBox::typing()
 			t_string = t_string.substr(0, typing_frame);
 			string conver;
 			utf8::utf16to8(t_string.begin(), t_string.end(), back_inserter(conver));
+			conver = conver + "_";
 			typing_label->setString(conver.c_str());
 			
 			if(typing_label->getContentSize().height <= box_in_size.height)

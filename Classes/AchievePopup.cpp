@@ -1354,7 +1354,7 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 	CCLOG("resultAllTakeSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLOG("reward get success!!");
+		CCLOG("resultAllTakeSaveUserData");
 		
 		mySGD->network_check_cnt = 0;
 		
@@ -1377,8 +1377,8 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 			mySGD->network_check_cnt = 0;
 			
 			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-				vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
-				mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+				vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+				mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
 			});
 			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		}
@@ -1386,8 +1386,8 @@ void AchievePopup::resultAllTakeSaveUserData(Json::Value result_data)
 		{
 			addChild(KSTimer::create(0.5f, [=]()
 									 {
-										 vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(nullptr);
-										 mySGD->changeGoodsTransaction(t_command_achieve, json_selector(this, AchievePopup::resultSaveUserData));
+										 vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultAllTakeSaveUserData));
+										 mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
 									 }));
 		}
 		
