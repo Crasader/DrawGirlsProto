@@ -698,7 +698,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);
 	ko->setObject(CCString::create("선물함"), kMyLocalKey_giftbox);
 	ko->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
-	ko->setObject(CCString::create("모두수락"), kMyLocalKey_allAccept);
+	ko->setObject(CCString::create("모든선물 받기"), kMyLocalKey_allAccept);
 	ko->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	ko->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
 	ko->setObject(CCString::create("도전함"), kMyLocalKey_challengeBox);
