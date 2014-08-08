@@ -40,7 +40,6 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	m_btnBack->setContentSize(CCSizeZero);
 	m_btn = CCControlButton::create(titleNode, m_btnBack);
 	m_btn->setPreferredSize(backSprite->getContentSize());
-	
 	this->setContentSize(m_btn->getContentSize());
 	m_btn->setAnchorPoint(ccp(0.5f,0.5f));
 	m_btn->addTargetWithActionForControlEvents(this, cccontrol_selector(ThisClassType::callFunc), CCControlEventTouchUpInside);
@@ -56,7 +55,6 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	//	lc->setTag(999);
 	return true;
 }
-
 
 
 bool CommonButton::init(string title, float fontSize, CCSize size,CommonButtonType btnType, int touchPriority){
