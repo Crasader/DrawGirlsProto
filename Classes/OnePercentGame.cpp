@@ -254,7 +254,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	t_label->addChild(gacha_label);
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("common_shadowgray2.png", CCRectMake(0, 0, 23, 23), CCRectMake(11, 11, 1, 1));
-	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setContentSize(CCSizeMake(77, 26));
 	setFormSetter(price_back);
 	price_back->setPosition(ccp(gacha_label->getContentSize().width/2.f + 5 + 8, 0));
 	t_label->addChild(price_back);
@@ -1053,7 +1053,7 @@ void OnePercentGame::showFail()
 	
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("common_shadowgray2.png", CCRectMake(0, 0, 23, 23), CCRectMake(11, 11, 1, 1));
-	price_back->setContentSize(CCSizeMake(82, 26));
+	price_back->setContentSize(CCSizeMake(77, 26));
 	setFormSetter(price_back);
 	price_back->setPosition(ccp(gacha_label->getContentSize().width/2.f + 5 + 8, 0));
 	t_label->addChild(price_back);
