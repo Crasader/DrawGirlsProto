@@ -2759,7 +2759,7 @@ void EndlessModeResult::successAction()
 				target_img->addChild(ani_img);
 			}
 			
-			target_img->setScale(0.2f);
+			target_img->setScale(0.4f);
 			
 			CCRenderTexture* t_texture = new CCRenderTexture();
 			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);

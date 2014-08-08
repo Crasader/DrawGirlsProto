@@ -98,7 +98,7 @@ void StoryManager::mentAction()
 		{
 			if(!(result[ment_recent_length]==' ' || result[ment_recent_length]=='\n'))
 			{
-				AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+				AudioEngine::sharedInstance()->playEffect("se_typing_5.mp3", false);//ccsf("se_typing_%d.mp3", typing_sound_number++), false);
 				if(typing_sound_number > 4)
 					typing_sound_number = 1;
 			}
@@ -107,6 +107,8 @@ void StoryManager::mentAction()
 		result = result.substr(0, ment_recent_length);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
+		if(ment_recent_length < ment_length)
+			conver = conver + "_";
 		ment_label->setString(conver.c_str());
 		
 		if(ment_recent_length >= ment_length)

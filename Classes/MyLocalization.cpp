@@ -698,7 +698,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);
 	ko->setObject(CCString::create("선물함"), kMyLocalKey_giftbox);
 	ko->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
-	ko->setObject(CCString::create("모두수락"), kMyLocalKey_allAccept);
+	ko->setObject(CCString::create("모든선물 받기"), kMyLocalKey_allAccept);
 	ko->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
 	ko->setObject(CCString::create("도움함"), kMyLocalKey_helpBox);
 	ko->setObject(CCString::create("도전함"), kMyLocalKey_challengeBox);
@@ -770,7 +770,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다."), kMyLocalKey_titleLoading10);
 	ko->setObject(CCString::create("change 글자를 모아서 특별한 이미지를 확인하세요."), kMyLocalKey_titleLoading11);
 	ko->setObject(CCString::create("미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다."), kMyLocalKey_titleLoading12);
-	ko->setObject(CCString::create("아이템뽑기에서는 '부활'/'무적' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
+	ko->setObject(CCString::create("아이템뽑기에서는 '부활' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
 	ko->setObject(CCString::create("스테이지마다 showtime 에 도전해 보세요."), kMyLocalKey_titleLoading14);
 	ko->setObject(CCString::create("매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요."), kMyLocalKey_titleLoading15);
 	ko->setObject(CCString::create("게임 내에서는 이름 대신 닉네임을 사용합니다."), kMyLocalKey_titleLoading16);
@@ -1826,7 +1826,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다."), kMyLocalKey_titleLoading10);
 	en->setObject(CCString::create("change 글자를 모아서 특별한 이미지를 확인하세요."), kMyLocalKey_titleLoading11);
 	en->setObject(CCString::create("미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다."), kMyLocalKey_titleLoading12);
-	en->setObject(CCString::create("아이템뽑기에서는 '부활'/'무적' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
+	en->setObject(CCString::create("아이템뽑기에서는 '부활' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
 	en->setObject(CCString::create("스테이지마다 showtime 에 도전해 보세요."), kMyLocalKey_titleLoading14);
 	en->setObject(CCString::create("매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요."), kMyLocalKey_titleLoading15);
 	en->setObject(CCString::create("게임 내에서는 이름 대신 닉네임을 사용합니다."), kMyLocalKey_titleLoading16);
@@ -2874,7 +2874,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다."), kMyLocalKey_titleLoading10);
 	ja->setObject(CCString::create("change 글자를 모아서 특별한 이미지를 확인하세요."), kMyLocalKey_titleLoading11);
 	ja->setObject(CCString::create("미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다."), kMyLocalKey_titleLoading12);
-	ja->setObject(CCString::create("아이템뽑기에서는 '부활'/'무적' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
+	ja->setObject(CCString::create("아이템뽑기에서는 '부활' 아이템을 뽑을 수 있어요."), kMyLocalKey_titleLoading13);
 	ja->setObject(CCString::create("스테이지마다 showtime 에 도전해 보세요."), kMyLocalKey_titleLoading14);
 	ja->setObject(CCString::create("매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요."), kMyLocalKey_titleLoading15);
 	ja->setObject(CCString::create("게임 내에서는 이름 대신 닉네임을 사용합니다."), kMyLocalKey_titleLoading16);

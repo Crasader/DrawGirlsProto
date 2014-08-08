@@ -54,6 +54,8 @@ private:
 	MyNode* second_img;
 	KSLabelTTF* showtime_morphing_label;
 	
+	int typing_sound_number;
+	
 	MyNode* third_img;
 	
 	EffectSprite* safety_img;

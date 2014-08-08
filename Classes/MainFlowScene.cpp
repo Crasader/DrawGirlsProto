@@ -3645,7 +3645,6 @@ void MainFlowScene::topOnLight()
 			kind_tutorial_pvp = [=]()
 			{
 				skip_menu->setEnabled(false);
-				scenario_node->removeFromParent();
 				kind_tutorial_pvp = nullptr;
 //				addChild(KSTimer::create(0.1f, [=]()
 //										 {
