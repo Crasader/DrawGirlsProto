@@ -65,6 +65,15 @@ void ContinueContent::requestItemDelivery()
 	hspConnector::get()->command(command_list);
 }
 
+void ContinueContent::endShow()
+{
+	counting_label->setOpacity(0);
+	counting_label->setVisible(true);
+	
+	is_menu_enable = true;
+	schedule(schedule_selector(ContinueContent::countingSchedule));
+}
+
 void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
@@ -302,17 +311,18 @@ void ContinueContent::countingSchedule()
 	{
 		float cvt_value = (53.f-ani_value)/9.f;
 		counting_label->setScale(5.f-4.f*cvt_value);
-		counting_label->setOpacity(200+55*cvt_value);
+		counting_label->setOpacity(200+54*cvt_value);
 	}
 	else if(ani_value >= 60-6-10-32)
 	{
-		
+		counting_label->setScale(1.f);
+		counting_label->setOpacity(254);
 	}
 	else // 11 ~ 0
 	{
 		float cvt_value = (11.f-ani_value)/11.f;
 		counting_label->setScaleX(1.f-cvt_value);
-		counting_label->setOpacity(255-255*cvt_value);
+		counting_label->setOpacity(254-254*cvt_value);
 	}
 	
 	
@@ -353,7 +363,9 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	
 	counting_value = 10*60;
 	
-	counting_label = CCLabelBMFont::create(CCString::createWithFormat("%d", counting_value/60)->getCString(), "continue.fnt");
+	counting_label = KSLabelTTF::create(CCString::createWithFormat("%d", counting_value/60)->getCString(), mySGD->getFont().c_str(), 100);
+	counting_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	counting_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	counting_label->setScale(5.f);
 	counting_label->setOpacity(0);
 	counting_label->setAnchorPoint(ccp(0.5f,0.5f));

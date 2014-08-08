@@ -23,6 +23,7 @@ enum ContinueContentMenuTag{
 	kContinueContentMenuTag_continue
 };
 class LoadingLayer;
+class KSLabelTTF;
 class ContinueContent : public CCNode
 {
 public:
@@ -64,7 +65,7 @@ private:
 	
 	int counting_value;
 	
-	CCLabelBMFont* counting_label;
+	KSLabelTTF* counting_label;
 	
 //	void menuAction(CCObject* sender);
 	void giveupAction(CCObject* sender, CCControlEvent t_event);
@@ -72,14 +73,7 @@ private:
 	
 	LoadingLayer* inapp_loading;
 	
-	void endShow()
-	{
-		counting_label->setOpacity(0);
-		counting_label->setVisible(true);
-		
-		is_menu_enable = true;
-		schedule(schedule_selector(ContinueContent::countingSchedule));
-	}
+	void endShow();
 	
 	void countingSchedule();
 	

@@ -1210,8 +1210,8 @@ void LoadingTipScene::readyLoading()
 		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_top.png", puzzle_number, "original")->getCString());
 		sil_load_list.push_back(CCString::createWithFormat("puzzle%d_%s_bottom.png", puzzle_number, "original")->getCString());
 		
-		default_load_list.push_back("mainflow_back_shadow_left.png");
-		default_load_list.push_back("mainflow_back_shadow_right.png");
+//		default_load_list.push_back("mainflow_back_shadow_left.png");
+//		default_load_list.push_back("mainflow_back_shadow_right.png");
 	}
 	else
 	{
