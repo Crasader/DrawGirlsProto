@@ -59,7 +59,7 @@ private:
 	CCSprite* title_img;
 	CCBAnimationManager* title_manager;
 //	CCSprite* title_name;
-	CCLabelTTF* download_state;
+	KSLabelTTF* download_state;
 	CCSprite* black_img;
 	vector<string> tip_list;
 	int recent_tip_index;

@@ -29,6 +29,7 @@ ComboView * ComboView::create (int combo)
 void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
+	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
 //	if(!mySGD->is_endless_mode)
 //		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
