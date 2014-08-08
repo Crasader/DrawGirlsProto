@@ -30,6 +30,10 @@ void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
 	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
+	if(shadow_label->getAnchorPoint().equals(ccp(1,0.5f)))
+	{
+		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
+	}
 //	if(!mySGD->is_endless_mode)
 //		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
@@ -72,6 +76,8 @@ void ComboView::myInit (int combo)
 		combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		shadow_label = CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
+		shadow_label->setAnchorPoint(ccp(1,0.5f));
+		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
 		combo_label->setAnchorPoint(ccp(1,0.5f));
 		combo_label->setPosition(ccp(0,0));
 		addChild(combo_label);
