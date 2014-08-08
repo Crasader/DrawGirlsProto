@@ -291,10 +291,9 @@ bool KSLabelTTF::updateTexture()
 		auto oColor = label->getColor();
 		auto oPosition = label->getPosition();
 		auto oOpacity = label->getOpacity();
-		//label->setOpacity(255);
 		float padding = 10;
 		CCRenderTexture* rt = CCRenderTexture::create(tex->getContentSize().width + m_outerStrokeSize*2 + padding ,
-																									tex->getContentSize().height+m_outerStrokeSize*2 + padding,kCCTexture2DPixelFormat_RGBA8888);
+																									tex->getContentSize().height+m_outerStrokeSize*2 + padding);
 		
 		
 		
@@ -308,16 +307,13 @@ bool KSLabelTTF::updateTexture()
 														 label->getTexture()->getContentSize().height * label->getAnchorPoint().y + m_outerStrokeSize + padding / 2.f);
 //		CCPoint bottomLeft = CCPointZero;
 		CCPoint position = ccpSub(label->getPosition(), ccp(-label->getContentSize().width / 2.0f,-label->getContentSize().height / 2.0f));
-//		
-		if(getOpacity()>=255 && m_outerStrokeOpacity>=255) rt->begin();
-		else rt->beginWithClear(1, 1, 1, 0);
-			
-			
-		float devider = (m_fFontSize - 10)*9.f / 10.f + 8.f;
 		
-		//label->getTexture()->setAliasTexParameters();
+		if(getOpacity()>=255 && m_outerStrokeOpacity>=255) rt->begin();
+			else rt->beginWithClear(1, 1, 1, 0);
+		
+		float devider = (m_fFontSize - 10)*9.f / 10.f + 8.f;
 		//float devider = 16;
-		for (int i=0; i<=360; i+=15) // you should optimize that for your needs
+		for (int i=0; i<360; i+=360 / devider) // you should optimize that for your needs
 		{
 			if(i == 0)
 			{
@@ -346,11 +342,11 @@ bool KSLabelTTF::updateTexture()
 		rt->end();
 		label->setFlipY(oFlip);
 		label->setColor(oColor);
-		//label->setOpacity(oOpacity);
-		rt->getSprite()->getTexture()->setAntiAliasTexParameters();
+		label->setOpacity(oOpacity);
+		//rt->getSprite()->getTexture()->setAliasTexParameters();
 		m_outerSprite = CCSprite::createWithTexture(rt->getSprite()->getTexture());
 		m_outerSprite->setOpacity(m_outerStrokeOpacity);
-		m_outerSprite->getTexture()->setAntiAliasTexParameters();
+		
 		if(getOpacity()>=255 && m_outerStrokeOpacity>=255)m_outerSprite->setBlendFunc({CC_BLEND_SRC, CC_BLEND_DST});
 		else {
 			m_outerSprite->setBlendFunc({GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA});

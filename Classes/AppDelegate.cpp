@@ -127,7 +127,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// initialize director
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
-	pDirector->setProjection(kCCDirectorProjection2D); // 바스트 모핑 측면을 보려면 주석 처리 필요함.
+//	pDirector->setProjection(kCCDirectorProjection2D); // 바스트 모핑 측면을 보려면 주석 처리 필요함.
 	
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 	//	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);

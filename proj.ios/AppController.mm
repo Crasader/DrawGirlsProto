@@ -30,11 +30,6 @@
 
 #import "RootViewController.h"
 #import "hspConnector.h"
-#import "FiveRocks.h"
-
-#define FIVEROCKS_APP_ID @"YOUR_APP_ID"
-#define FIVEROCKS_APP_KEY @"YOUR_APP_KEY"
-
 @implementation AppController
 
 //@synthesize window;
@@ -50,12 +45,6 @@ static AppDelegate s_sharedApplication;
 
     // Override point for customization after application launch.
     hspConnector::get()->setupHSPonIOS(10226, "SKDRAWGIRLS", "1.0.0", launchOptions);
-	
-	
-		[FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];
-		[FiveRocks setDebugEnabled:true];
-	
-	
     // Add the view controller's view to the window and display.
     window = [[UIWindow alloc] initWithFrame: [[UIScreen mainScreen] bounds]];
     EAGLView *__glView = [EAGLView viewWithFrame: [window bounds]
@@ -99,7 +88,6 @@ static AppDelegate s_sharedApplication;
      Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
      Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
      */
-	[FiveRocks endSession];
     cocos2d::CCDirector::sharedDirector()->pause();
 	cocos2d::CCDirector::sharedDirector()->stopAnimation();
 }
@@ -108,8 +96,6 @@ static AppDelegate s_sharedApplication;
     /*
      Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
      */
-	 [FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];
-	
 	cocos2d::CCDirector::sharedDirector()->startAnimation();
 //	if(!StarGoldData::sharedInstance()->is_paused)
 		cocos2d::CCDirector::sharedDirector()->resume();

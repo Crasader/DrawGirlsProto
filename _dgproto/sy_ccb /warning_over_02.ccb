@@ -669,8 +669,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1.3333332538604736</real>
-							<real>1.3333332538604736</real>
+							<real>1.5</real>
+							<real>1.5</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -712,7 +712,7 @@
 						<key>type</key>
 						<string>Byte</string>
 						<key>value</key>
-						<integer>255</integer>
+						<integer>0</integer>
 					</dict>
 					<dict>
 						<key>baseValue</key>
@@ -728,8 +728,8 @@
 						<key>value</key>
 						<array>
 							<integer>255</integer>
-							<integer>64</integer>
-							<integer>255</integer>
+							<integer>146</integer>
+							<integer>0</integer>
 						</array>
 					</dict>
 				</array>
@@ -830,9 +830,9 @@
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
-			<real>0.0</real>
+			<real>1.6532496213912964</real>
 			<key>position</key>
-			<real>0.69999998807907104</real>
+			<real>2.4666666984558105</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
