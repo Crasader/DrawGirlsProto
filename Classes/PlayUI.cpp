@@ -30,6 +30,10 @@ void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
 	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
+	if(shadow_label->getAnchorPoint().equals(ccp(1,0.5f)))
+	{
+		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
+	}
 //	if(!mySGD->is_endless_mode)
 //		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
