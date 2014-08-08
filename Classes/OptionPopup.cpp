@@ -862,11 +862,9 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_help)
 	{
-		myHSP->openCSCenter("supports.cscenter");
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
+//		myHSP->openCSCenter("supports.cscenter");
 		is_menu_enable = true;
-		//HelpPopup* t_hp = HelpPopup::create(this, callfunc_selector(OptionPopup::popupClose));
-		//addChild(t_hp, kOP_Z_popup);
-
 	}
 	else if(tag == kOP_MT_logout)
 	{
@@ -1156,8 +1154,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_community)
 	{
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
-//		myHSP->openHSPUrl("http://cafe.naver.com/ddmksk");
+		myHSP->openHSPUrl("http://cafe.naver.com/ddmksk");
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_tip)

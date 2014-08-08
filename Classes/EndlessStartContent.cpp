@@ -201,7 +201,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 		ikaruga->setPosition(ccp(-240-ikaruga->getContentSize().width*ikaruga->getScale(), -myDSH->ui_center_y));
 		scenario_node->addChild(ikaruga, 1);
 		
-		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50)-ccp(240,myDSH->ui_center_y), ccp(425,25)-ccp(240,myDSH->ui_center_y));
+		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50)-ccp(240,myDSH->ui_center_y), ccp(480.f-56.f,32.5f)-ccp(240,myDSH->ui_center_y));
 		typing_box->setHide();
 		scenario_node->addChild(typing_box, 2);
 		

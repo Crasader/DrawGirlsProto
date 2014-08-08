@@ -37,13 +37,14 @@ public:
 	
 	//"kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64)
 	//"kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64)
-	static TypingBox* create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position = ccp(425,25));
+	static TypingBox* create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position = ccp(0,0));
 	void setHide();
 	void showAnimation(float t_time);
 	void startTyping(string t_box_string, function<void()> t_end_func);
 	void stopTyping();
 	void setTouchOffScrollAndButton();
 	void setTouchSuction(bool t_b);
+	void setBoxScale(float t_s);
 	
 	static void changeTypingBox(TypingBox* from_tb, TypingBox* to_tb, CCSprite* from_cha, CCSprite* to_cha);
 	

@@ -14,6 +14,7 @@
 #include "MyLocalization.h"
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
+#include "DataStorageHub.h"
 
 TypingBox* TypingBox::create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position)
 {
@@ -32,7 +33,13 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	box_in_label = t_box_in_label;
 	box_in_size = t_box_in_size;
 	box_position = t_box_position;
-	button_position = t_button_position;
+	
+	if(t_button_position.equals(ccp(0,0)))
+	{
+		button_position = ccp(480,0) + ccp((480.f/myDSH->screen_convert_rate-480.f)/2.f,-myDSH->ui_zero_point.y) + ccp(-56,32.5f);
+	}
+	else
+		button_position = t_button_position;
 	
 	box_string = "";
 	
@@ -83,6 +90,11 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	next_button->setTouchPriority(touch_priority-2);
 	next_button->setVisible(false);
 	next_button->setTouchEnabled(false);
+}
+
+void TypingBox::setBoxScale(float t_s)
+{
+	box_img->setScale(t_s);
 }
 
 void TypingBox::changeTypingBox(TypingBox* from_tb, TypingBox* to_tb, CCSprite* from_cha, CCSprite* to_cha)
@@ -223,7 +235,7 @@ void TypingBox::typing()
 			//띄워쓰기나 줄바꿈 있을때 소리를 재생
 			if(!(t_string[typing_frame]==' ' || t_string[typing_frame]=='\n'))
 			{
-				AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+				AudioEngine::sharedInstance()->playEffect("se_typing_5.mp3", false);//ccsf("se_typing_%d.mp3", typing_sound_number++), false);
 				if(typing_sound_number > 4)
 					typing_sound_number = 1;
 			}
@@ -231,6 +243,8 @@ void TypingBox::typing()
 			t_string = t_string.substr(0, typing_frame);
 			string conver;
 			utf8::utf16to8(t_string.begin(), t_string.end(), back_inserter(conver));
+			if(typing_frame < text_length)
+				conver = conver + "_";
 			typing_label->setString(conver.c_str());
 			
 			if(typing_label->getContentSize().height <= box_in_size.height)
