@@ -240,7 +240,7 @@ void ZoomScript::startScript()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
 	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
 	script_label->setString("");
 	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
@@ -271,7 +271,8 @@ void ZoomScript::typingAnimation()
 		result = result.substr(0, typing_frame);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-		conver = conver + "_";
+		if(typing_frame < text_length)
+			conver = conver + "_";
 		script_label->setString(conver.c_str());
 		script_case->setVisible(true);
 		
@@ -1075,7 +1076,7 @@ void ZoomScript::showtimeThirdAction()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
 	
-	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
 	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
 	
 	script_label->setString("");

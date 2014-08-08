@@ -107,7 +107,8 @@ void StoryManager::mentAction()
 		result = result.substr(0, ment_recent_length);
 		string conver;
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-		conver = conver + "_";
+		if(ment_recent_length < ment_length)
+			conver = conver + "_";
 		ment_label->setString(conver.c_str());
 		
 		if(ment_recent_length >= ment_length)
