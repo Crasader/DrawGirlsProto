@@ -4931,8 +4931,8 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/XBase/iphonesimulator/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib",
 					"$(SDKROOT)/usr/lib/system",
-					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/5rocks-ios-sdk",
-					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/Classes",
+					"$(SRCROOT)/../5rocks-ios-sdk",
+					"$(SRCROOT)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -5009,8 +5009,8 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/XBase/iphonesimulator/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib",
 					"$(SDKROOT)/usr/lib/system",
-					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/5rocks-ios-sdk",
-					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/Classes",
+					"$(SRCROOT)/../5rocks-ios-sdk",
+					"$(SRCROOT)",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
