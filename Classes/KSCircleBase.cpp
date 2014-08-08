@@ -823,3 +823,9 @@ void CircleBossCCB::onNodeLoaded( CCNode * pNode, CCNodeLoader * pNodeLoader )
 {
 
 }
+
+void KSCircleBase::setGameover()
+{
+	KSCumberBase::setGameover();
+	unschedule(schedule_selector(ThisClassType::scaleAdjustment));
+}

@@ -13,6 +13,8 @@
 #include "MyLocalization.h"
 #include "CommonAnimation.h"
 #include "FlagSelector.h"
+#include "TouchSuctionLayer.h"
+
 static int 	kAttackGa = 1;
 static int	kAttackBa = 2;
 static int	kAttackBo = 3;
@@ -60,6 +62,11 @@ bool JsGababo::init()
 
 bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewards, std::function<void(int)> endFunction)
 {
+	auto suction = TouchSuctionLayer::create(touchPriority);
+	addChild(suction);
+	suction->setTouchEnabled(true);
+
+	
 	startFormSetter(this);
 	m_touchPriority = touchPriority;
 	m_endFunction = endFunction;
@@ -670,6 +677,8 @@ void JsGababo::setupCongMessage()
 	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 46), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), m_touchPriority - 1);
 	
 	m_confirmButton = button;
+	m_confirmButton->setEnabled(false);
+
 	button->setFunction(bind(&JsGababo::onPressConfirm, this, std::placeholders::_1));
 //	button->setTitleColor(ccc3(37, 15, 0));
 //	button->setTitleColorForDisable(ccc3(37, 15, 0));
@@ -695,7 +704,8 @@ void JsGababo::onPressConfirm(CCObject* t)
 	((CommonButton*)t)->setEnabled(false);
 	if(m_front3->getScaleY() <= 0.5f)
 		return;
-	
+	m_confirmButton->setEnabled(false);
+
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	meManager->runAnimationsForSequenceNamed("Default Timeline");
 	npcManager->runAnimationsForSequenceNamed("Default Timeline");
@@ -906,13 +916,21 @@ void JsGababo::showHandsMotionWrapper()
 				addChild(KSGradualValue<float>::create(0.f, 1.f, 0.26f, [=](float t){
 					float y0 = 255.f * t;
 					float y1 = -1*t + 2;
-					KS::setOpacity(result_stamp, y0);
-					result_stamp->setScale(y1);
+					if(m_resultStamp)
+					{
+						KS::setOpacity(result_stamp, y0);
+						result_stamp->setScale(y1);
+					}
+
 				}, [=](float t){
 					float y0 = 255.f * t;
 					float y1 = -1*t + 2;
-					KS::setOpacity(result_stamp, y0);
-					result_stamp->setScale(y1);
+					if(m_resultStamp)
+					{
+						KS::setOpacity(result_stamp, y0);
+						result_stamp->setScale(y1);
+					}
+
 					
 				}));
 			};
@@ -963,12 +981,20 @@ void JsGababo::showHandsMotionWrapper()
 					// YH 코드.
 					addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																								 {
-																									 KS::setOpacity(result_stamp, t*255);
-																									 result_stamp->setScale(2.5f-t*1.5f);
+																									 if(m_resultStamp)
+																									 {
+																										 KS::setOpacity(result_stamp, t*255);
+																										 result_stamp->setScale(2.5f-t*1.5f);
+																									 }
+
 																								 }, [=](float t)
 																								 {
-																									 KS::setOpacity(result_stamp, 255);
-																									 result_stamp->setScale(1.f);
+																									 if(m_resultStamp)
+																									 {
+																										 KS::setOpacity(result_stamp, 255);
+																										 result_stamp->setScale(1.f);
+																									 }
+
 																								 }));
 					m_resultStamp = result_stamp;
 					CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", m_winCount)->getCString(), "winfont.fnt");

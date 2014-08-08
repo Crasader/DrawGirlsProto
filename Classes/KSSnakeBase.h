@@ -133,6 +133,7 @@ public:
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition);
 	float getRadius();
 	void attachEmotion();
+	void setGameover();
 protected:
 	const float RADIUS;
 	const float BODY_RADIUS;
