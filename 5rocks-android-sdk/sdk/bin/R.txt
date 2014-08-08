@@ -1,0 +1,2 @@
+int string fiverocks_app_id 0x7f020000
+int string fiverocks_app_key 0x7f020001

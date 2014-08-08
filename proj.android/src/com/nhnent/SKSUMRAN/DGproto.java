@@ -47,7 +47,9 @@ import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
-import com.igaworks.adbrixtracersdk.interfaces.ADBrixManager;
+
+import com.kamcord.android.Kamcord;
+import com.igaworks.IgawCommon;
 //import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
@@ -64,12 +66,12 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		super.onCreate(savedInstanceState);
 		
 		Log.i("com.litqoo.dgproto", "init1 kamcord");
-		/*Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
+		Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
 		    "Ecl3mH6WxvG8T3lsrqbtAAOBrRq1AE664D7VYpMgZ7b",
 		    "drawgirls");
 		
 		Kamcord.initActivity(this);
-		*/
+		
 		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -77,7 +79,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 
 		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
-	
+		FiveRocks.setDebugEnabled(true);
 
 		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.0.KG")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
@@ -114,6 +116,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		        "UqS6SftTrZNWSuzP5WryaeFQK5gJ1oYFQTlMOHmctBK",
 //		        "175998");
 //		Kamcord.initActivity(this);
+		
+		IgawCommon.startApplication(DGproto.this);
+
 	}
 	  private void hideSystemUI()
 	    {
@@ -131,8 +136,8 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 			  if (Build.VERSION.SDK_INT >= 19){
 				  hideOption = hideOption | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
 			    }
-			  
 			 
+			
 		        glSurfaceView.setSystemUiVisibility(hideOption);
 		  }
 //	                Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE 
@@ -157,9 +162,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     }
 
     static { 
-    	FiveRocks.loadSharedLibrary();
-    	//System.loadLibrary("kamcord");
-        System.loadLibrary("cocos2dlua");
+    	//FiveRocks.loadSharedLibrary();
+    	System.loadLibrary("kamcord");
+    	System.loadLibrary("cocos2dlua");
     }
     
     public Cocos2dxGLSurfaceView onCreateView() {
@@ -182,14 +187,16 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
         	glSurfaceView.setEGLConfigChooser(5, 6, 5, 0, 16, 8); 
         }
     	com.litqoo.lib.hspConnector.kInit(this,glSurfaceView,getApplicationContext());
-    	
+    	hideSystemUI();
     	return glSurfaceView;
     }
     @Override
     protected void onResume()
     {
          super.onResume();     
-         ADBrixManager.startSession(this);
+         
+         IgawCommon.startSession(DGproto.this);
+//         ADBrixManager.startSession(this);
          HSPCore core = HSPCore.getInstance();
          if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT
          		&& HSPCore.getInstance().getState() != HSPState.HSP_STATE_ONLINE) 
@@ -257,7 +264,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     protected void onPause()
     {
          super.onPause();
-         ADBrixManager.endSession();
+         IgawCommon.endSession();
          suspend();
     }
     @Override

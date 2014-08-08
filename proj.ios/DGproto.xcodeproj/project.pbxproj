@@ -223,6 +223,12 @@
 		B2B6D8A5184CC0D000231A95 /* TicketRequestContent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B6D8A2184CC0D000231A95 /* TicketRequestContent.cpp */; };
 		B2B6D8B3184E0B9700231A95 /* CardStrengthPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B6D8AF184E0B9700231A95 /* CardStrengthPopup.cpp */; };
 		B2B6D8B4184E0B9700231A95 /* ControlTutorialContent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2B6D8B1184E0B9700231A95 /* ControlTutorialContent.cpp */; };
+		B2C5358B19949A8200516F99 /* libFiveRocks.a in Frameworks */ = {isa = PBXBuildFile; fileRef = B2C5358A19949A8200516F99 /* libFiveRocks.a */; };
+		B2C5369B19949A9300516F99 /* ConvexGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5358C19949A9200516F99 /* ConvexGraph.cpp */; };
+		B2C5369C19949A9300516F99 /* AccountManagerPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5358E19949A9200516F99 /* AccountManagerPopup.cpp */; };
+		B2C5369D19949A9300516F99 /* TypingBox.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5359019949A9200516F99 /* TypingBox.cpp */; };
+		B2C5369E19949A9300516F99 /* CardGiftPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5359219949A9200516F99 /* CardGiftPopup.cpp */; };
+		B2C536A019949A9300516F99 /* GoodsLight.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5359619949A9200516F99 /* GoodsLight.cpp */; };
 		B2CDB687185EDA8F0034A99C /* NoticeContent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CDB658185EDA8E0034A99C /* NoticeContent.cpp */; };
 		B2CDB688185EDA8F0034A99C /* SlotMachine.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CDB65A185EDA8E0034A99C /* SlotMachine.cpp */; };
 		B2CDB689185EDA8F0034A99C /* Dodge.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2CDB65C185EDA8E0034A99C /* Dodge.cpp */; };
@@ -1077,6 +1083,21 @@
 		B2B6D8B0184E0B9700231A95 /* CardStrengthPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardStrengthPopup.h; sourceTree = "<group>"; };
 		B2B6D8B1184E0B9700231A95 /* ControlTutorialContent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ControlTutorialContent.cpp; sourceTree = "<group>"; };
 		B2B6D8B2184E0B9700231A95 /* ControlTutorialContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ControlTutorialContent.h; sourceTree = "<group>"; };
+		B2C5358719949A8200516F99 /* FiveRocks.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiveRocks.h; sourceTree = "<group>"; };
+		B2C5358819949A8200516F99 /* FiveRocksC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiveRocksC.h; sourceTree = "<group>"; };
+		B2C5358919949A8200516F99 /* FiveRocksCpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FiveRocksCpp.h; sourceTree = "<group>"; };
+		B2C5358A19949A8200516F99 /* libFiveRocks.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFiveRocks.a; sourceTree = "<group>"; };
+		B2C5358C19949A9200516F99 /* ConvexGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvexGraph.cpp; sourceTree = "<group>"; };
+		B2C5358D19949A9200516F99 /* ConvexGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvexGraph.h; sourceTree = "<group>"; };
+		B2C5358E19949A9200516F99 /* AccountManagerPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccountManagerPopup.cpp; sourceTree = "<group>"; };
+		B2C5358F19949A9200516F99 /* AccountManagerPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountManagerPopup.h; sourceTree = "<group>"; };
+		B2C5359019949A9200516F99 /* TypingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypingBox.cpp; sourceTree = "<group>"; };
+		B2C5359119949A9200516F99 /* TypingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypingBox.h; sourceTree = "<group>"; };
+		B2C5359219949A9200516F99 /* CardGiftPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardGiftPopup.cpp; sourceTree = "<group>"; };
+		B2C5359319949A9200516F99 /* CardGiftPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardGiftPopup.h; sourceTree = "<group>"; };
+		B2C5359519949A9200516F99 /* HSPEnums.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSPEnums.h; sourceTree = "<group>"; };
+		B2C5359619949A9200516F99 /* GoodsLight.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = GoodsLight.cpp; sourceTree = "<group>"; };
+		B2C5359719949A9200516F99 /* GoodsLight.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GoodsLight.h; sourceTree = "<group>"; };
 		B2CDB658185EDA8E0034A99C /* NoticeContent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NoticeContent.cpp; sourceTree = "<group>"; };
 		B2CDB659185EDA8E0034A99C /* NoticeContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NoticeContent.h; sourceTree = "<group>"; };
 		B2CDB65A185EDA8E0034A99C /* SlotMachine.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlotMachine.cpp; sourceTree = "<group>"; };
@@ -2016,6 +2037,7 @@
 				D70B54D41814BC4F001FC90A /* libUnittWebSocketClient.a in Frameworks */,
 				D70B54D51814BC4F001FC90A /* libXInNetworkStatic.a in Frameworks */,
 				D70B54D61814BC4F001FC90A /* libXPlatformStatic.a in Frameworks */,
+				B2C5358B19949A8200516F99 /* libFiveRocks.a in Frameworks */,
 				D70B54D71814BC4F001FC90A /* libXStreamStatic.a in Frameworks */,
 				D70B54D81814BC4F001FC90A /* libXSystemStatic.a in Frameworks */,
 				D70B54D91814BC4F001FC90A /* libXInNetworkStatic_x86.a in Frameworks */,
@@ -2697,6 +2719,18 @@
 			path = script;
 			sourceTree = "<group>";
 		};
+		B2C5358619949A8200516F99 /* 5rocks-ios-sdk */ = {
+			isa = PBXGroup;
+			children = (
+				B2C5358719949A8200516F99 /* FiveRocks.h */,
+				B2C5358819949A8200516F99 /* FiveRocksC.h */,
+				B2C5358919949A8200516F99 /* FiveRocksCpp.h */,
+				B2C5358A19949A8200516F99 /* libFiveRocks.a */,
+			);
+			name = "5rocks-ios-sdk";
+			path = "../5rocks-ios-sdk";
+			sourceTree = "<group>";
+		};
 		D70B54391814BC4F001FC90A /* HSPSDKIOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -3073,115 +3107,10 @@
 		D70B551A1814BE8D001FC90A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				D7289AAE195A948B00200284 /* Terms.h */,
-				D7289AAF195A948B00200284 /* Terms.cpp */,
-				D7E8A135195A61CE000124A3 /* KsLocal_ios.mm */,
-				D7E8A132195A5F66000124A3 /* KsLocal.h */,
-				D7E8A133195A5F66000124A3 /* KsLocal.cpp */,
-				D7FD8DC1195804650090094C /* JsGababo.h */,
-				D7FD8DC2195804650090094C /* JsGababo.cpp */,
-				D778D7A519555F470056DC29 /* OnePercentTutorial.h */,
-				D778D7A619555F470056DC29 /* OnePercentTutorial.cpp */,
-				D7BE733A19515368009BFE67 /* TextureReloader.h */,
-				D7BE733B19515368009BFE67 /* TextureReloader.cpp */,
-				D7BE733C19515368009BFE67 /* TakePuzzleCardPopup.h */,
-				D7BE733D19515368009BFE67 /* TakePuzzleCardPopup.cpp */,
-				D7BE733E19515368009BFE67 /* RivalSelectPopup.h */,
-				D7BE733F19515368009BFE67 /* RivalSelectPopup.cpp */,
-				D7BE734019515368009BFE67 /* RankRewardPopup.h */,
-				D7BE734119515368009BFE67 /* RankRewardPopup.cpp */,
-				D7BE734219515368009BFE67 /* PuzzleSuccessAndPerfect.h */,
-				D7BE734319515368009BFE67 /* PuzzleSuccessAndPerfect.cpp */,
-				D7BE734419515368009BFE67 /* OnePercentGame.h */,
-				D7BE734519515368009BFE67 /* OnePercentGame.cpp */,
-				D7BE734619515368009BFE67 /* MissileUnitCCB.h */,
-				D7BE734719515368009BFE67 /* MissileUnitCCB.cpp */,
-				D7BE734819515368009BFE67 /* KudioEngine.h */,
-				D7BE734919515368009BFE67 /* FiveRocksCpp.h */,
-				D7BE734A19515368009BFE67 /* FiveRocksC.h */,
-				D7BE734B19515368009BFE67 /* FiveRocks.h */,
-				D7BE734C19515368009BFE67 /* EndlessStartContent.h */,
-				D7BE734D19515368009BFE67 /* EndlessStartContent.cpp */,
-				D7BE734E19515368009BFE67 /* EndlessSettingPopup.h */,
-				D7BE734F19515368009BFE67 /* EndlessSettingPopup.cpp */,
-				D7BE735019515368009BFE67 /* EndlessSeqWinRewardPopup.h */,
-				D7BE735119515368009BFE67 /* EndlessSeqWinRewardPopup.cpp */,
-				D7BE735219515368009BFE67 /* EndlessResultPopup.h */,
-				D7BE735319515368009BFE67 /* EndlessResultPopup.cpp */,
-				D7BE735419515368009BFE67 /* EndlessModeResult.h */,
-				D7BE735519515368009BFE67 /* EndlessModeResult.cpp */,
-				D7BE735619515368009BFE67 /* EndlessModeOpening.h */,
-				D7BE735719515368009BFE67 /* EndlessModeOpening.cpp */,
-				D7BE735819515368009BFE67 /* CurtainNodeForBonusGame.h */,
-				D7BE735919515368009BFE67 /* CurtainNodeForBonusGame.cpp */,
-				D7BE735A19515368009BFE67 /* CumberEmotion.h */,
-				D7BE735B19515368009BFE67 /* CumberEmotion.cpp */,
-				D7BE735C19515368009BFE67 /* CouponPopup.h */,
-				D7BE735D19515368009BFE67 /* CouponPopup.cpp */,
-				D7BE735E19515368009BFE67 /* ControlTipContent.h */,
-				D7BE735F19515368009BFE67 /* ControlTipContent.cpp */,
-				D7BE736019515368009BFE67 /* CommonAnimation.h */,
-				D7BE736119515368009BFE67 /* CommonAnimation.cpp */,
-				D7BE736219515368009BFE67 /* ColorSilhouette.h */,
-				D7BE736319515368009BFE67 /* ClearTimeEventContent.h */,
-				D7BE736419515368009BFE67 /* ClearTimeEventContent.cpp */,
-				D7BE736519515368009BFE67 /* CardViewScene.h */,
-				D7BE736619515368009BFE67 /* CardViewScene.cpp */,
-				D7BE736719515368009BFE67 /* CardLockedPopup.h */,
-				D7BE736819515368009BFE67 /* CardLockedPopup.cpp */,
-				D7BE736919515368009BFE67 /* BuyPiecePopup.h */,
-				D7BE736A19515368009BFE67 /* BuyPiecePopup.cpp */,
-				D7BE736B19515368009BFE67 /* BuyMorphingPopup.h */,
-				D7BE736C19515369009BFE67 /* BuyMorphingPopup.cpp */,
-				D7BE736D19515369009BFE67 /* BugTestScene2.h */,
-				D7BE736E19515369009BFE67 /* BugTestScene2.cpp */,
-				D7BE736F19515369009BFE67 /* BugTestScene1.h */,
-				D7BE737019515369009BFE67 /* BugTestScene1.cpp */,
-				D7BE737119515369009BFE67 /* AttendancePopup.h */,
-				D7BE737219515369009BFE67 /* AttendancePopup.cpp */,
-				D7BE737319515369009BFE67 /* AsyncSprite.h */,
-				D7BE737419515369009BFE67 /* AsyncSprite.cpp */,
-				D7BE737519515369009BFE67 /* AsyncCell.h */,
-				D7BE737619515369009BFE67 /* AsyncCell.cpp */,
-				D7B2BE8B1914F14E00010C7F /* TodayMissionPopup.h */,
-				D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */,
-				D7E0E73F19136625009E4B57 /* LevelupGuidePopup.h */,
-				D7E0E74019136625009E4B57 /* LevelupGuidePopup.cpp */,
-				D7E0E73C19120452009E4B57 /* EventShopPopup.h */,
-				D7E0E73D19120452009E4B57 /* EventShopPopup.cpp */,
-				D79953731910988F008489B1 /* FirstPurchasePopup.cpp */,
-				D79953741910988F008489B1 /* MileagePopup.h */,
-				D79953751910988F008489B1 /* MileagePopup.cpp */,
-				D79953761910988F008489B1 /* FirstPurchasePopup.h */,
-				D79953771910988F008489B1 /* EmptyItemSalePopup.h */,
-				D79953781910988F008489B1 /* EmptyItemSalePopup.cpp */,
-				D7995370190F9249008489B1 /* StyledLabelTTF.h */,
-				D7995371190F9249008489B1 /* StyledLabelTTF.cpp */,
-				D799536A190F7E56008489B1 /* RankUpPopup.h */,
-				D799536B190F7E56008489B1 /* RankUpPopup.cpp */,
-				D799536C190F7E56008489B1 /* FlagSelector.h */,
-				D799536D190F7E56008489B1 /* FlagSelector.cpp */,
-				D7995367190BCEAE008489B1 /* DetailConditionPopup.h */,
-				D7995368190BCEAE008489B1 /* DetailConditionPopup.cpp */,
-				D7995364190B74DD008489B1 /* GaBaBo.h */,
-				D7995365190B74DE008489B1 /* GaBaBo.cpp */,
-				D799535D190587C8008489B1 /* SilhouetteConvertFrag.h */,
-				D799535E190587C8008489B1 /* MissileUpgradePopup.h */,
-				D799535F190587C8008489B1 /* MissileUpgradePopup.cpp */,
-				D7995360190587C8008489B1 /* ItemGachaPopup.h */,
-				D7995361190587C8008489B1 /* ItemGachaPopup.cpp */,
-				D79953531905878F008489B1 /* TakeCardToDiary.h */,
-				D79953541905878F008489B1 /* TakeCardToDiary.cpp */,
-				D79953551905878F008489B1 /* GrayVert.h */,
-				D799535619058790008489B1 /* GrayPixelationVert.h */,
-				D799535719058790008489B1 /* GrayPixelationFrag.h */,
-				D799535819058790008489B1 /* GrayFrag.h */,
-				D799535919058790008489B1 /* ASMotionStreak.h */,
-				D799535A19058790008489B1 /* ASMotionStreak.cpp */,
-				D799534F18FF9D3F008489B1 /* StartSettingPopup.h */,
-				D799535018FF9D3F008489B1 /* StartSettingPopup.cpp */,
 				D7098602189F972800B6E838 /* AcceptChallengeAniContent.cpp */,
 				D7098603189F972800B6E838 /* AcceptChallengeAniContent.h */,
+				B2C5358E19949A9200516F99 /* AccountManagerPopup.cpp */,
+				B2C5358F19949A9200516F99 /* AccountManagerPopup.h */,
 				D7CC5276187A3410000EDDC7 /* AchieveData.cpp */,
 				D7CC5277187A3410000EDDC7 /* AchieveData.h */,
 				D7CC527A187A3410000EDDC7 /* AchieveNoti.cpp */,
@@ -3196,11 +3125,19 @@
 				D70B551E1814BE8D001FC90A /* AppDelegate.h */,
 				D70B55231814BE8D001FC90A /* AreaGage.cpp */,
 				D70B55241814BE8D001FC90A /* AreaGage.h */,
+				D799535A19058790008489B1 /* ASMotionStreak.cpp */,
+				D799535919058790008489B1 /* ASMotionStreak.h */,
 				B2B6D8941845069000231A95 /* ASPopupView.cpp */,
 				B2B6D8951845069000231A95 /* ASPopupView.h */,
+				D7BE737619515369009BFE67 /* AsyncCell.cpp */,
+				D7BE737519515369009BFE67 /* AsyncCell.h */,
+				D7BE737419515369009BFE67 /* AsyncSprite.cpp */,
+				D7BE737319515369009BFE67 /* AsyncSprite.h */,
 				D70B55261814BE8D001FC90A /* AttackItem.h */,
 				D70B55271814BE8D001FC90A /* AttackPattern.cpp */,
 				D70B55281814BE8D001FC90A /* AttackPattern.h */,
+				D7BE737219515369009BFE67 /* AttendancePopup.cpp */,
+				D7BE737119515369009BFE67 /* AttendancePopup.h */,
 				D70B55291814BE8D001FC90A /* AudioEngine.h */,
 				D70B552E1814BE8D001FC90A /* BaseXX.cpp */,
 				D70B552F1814BE8D001FC90A /* BaseXX.h */,
@@ -3216,22 +3153,36 @@
 				D70B55371814BE8D001FC90A /* BossLifeGage.h */,
 				D7DD85A318E02DA1008003D4 /* BrightenFrag.h */,
 				D70B55381814BE8D001FC90A /* BrushTime.h */,
+				D7BE737019515369009BFE67 /* BugTestScene1.cpp */,
+				D7BE736F19515369009BFE67 /* BugTestScene1.h */,
+				D7BE736E19515369009BFE67 /* BugTestScene2.cpp */,
+				D7BE736D19515369009BFE67 /* BugTestScene2.h */,
 				D7BB40A018D92110008E4699 /* bustMorphing.cpp */,
 				D7BB409F18D92110008E4699 /* bustMorphing.h */,
+				D7BE736C19515369009BFE67 /* BuyMorphingPopup.cpp */,
+				D7BE736B19515368009BFE67 /* BuyMorphingPopup.h */,
+				D7BE736A19515368009BFE67 /* BuyPiecePopup.cpp */,
+				D7BE736919515368009BFE67 /* BuyPiecePopup.h */,
 				D70985F6189F3A9B00B6E838 /* CardAnimations.cpp */,
 				D70985F3189F3A9B00B6E838 /* CardAnimations.h */,
 				D7EEDD931833B4740099C408 /* CardCase.cpp */,
 				D7EEDD941833B4740099C408 /* CardCase.h */,
 				B2CDB69C186315900034A99C /* CardChangePopup.cpp */,
 				B2CDB69D186315900034A99C /* CardChangePopup.h */,
+				B2C5359219949A9200516F99 /* CardGiftPopup.cpp */,
+				B2C5359319949A9200516F99 /* CardGiftPopup.h */,
 				D70B553B1814BE8D001FC90A /* CardListViewer.cpp */,
 				D70B553C1814BE8D001FC90A /* CardListViewer.h */,
+				D7BE736819515368009BFE67 /* CardLockedPopup.cpp */,
+				D7BE736719515368009BFE67 /* CardLockedPopup.h */,
 				D71DFB16186BB92F00BD3BCD /* CardMatching.cpp */,
 				D71DFB17186BB92F00BD3BCD /* CardMatching.h */,
 				B2ED103D183C82DC0030A857 /* CardSettingPopup.cpp */,
 				B2ED103E183C82DC0030A857 /* CardSettingPopup.h */,
 				B2B6D8AF184E0B9700231A95 /* CardStrengthPopup.cpp */,
 				B2B6D8B0184E0B9700231A95 /* CardStrengthPopup.h */,
+				D7BE736619515368009BFE67 /* CardViewScene.cpp */,
+				D7BE736519515368009BFE67 /* CardViewScene.h */,
 				D7EEDD8A183354530099C408 /* CCMenuItemLambda.cpp */,
 				D7EEDD8B183354530099C408 /* CCMenuItemLambda.h */,
 				D7EEDD871832FD7A0099C408 /* CCMenuLambda.cpp */,
@@ -3249,32 +3200,49 @@
 				B2ED1037183BC2660030A857 /* ClearPopup.h */,
 				D70B55481814BE8D001FC90A /* ClearShowTime.cpp */,
 				D70B55491814BE8D001FC90A /* ClearShowTime.h */,
+				D7BE736419515368009BFE67 /* ClearTimeEventContent.cpp */,
+				D7BE736319515368009BFE67 /* ClearTimeEventContent.h */,
 				B2ED103F183C82DC0030A857 /* CollectionBookPopup.cpp */,
 				B2ED1040183C82DC0030A857 /* CollectionBookPopup.h */,
+				D7BE736219515368009BFE67 /* ColorSilhouette.h */,
+				D7BE736119515368009BFE67 /* CommonAnimation.cpp */,
+				D7BE736019515368009BFE67 /* CommonAnimation.h */,
 				D7098604189F972800B6E838 /* CommonButton.cpp */,
 				D7098605189F972800B6E838 /* CommonButton.h */,
 				D70B55521814BE8D001FC90A /* ConditionPopup.cpp */,
 				D70B55531814BE8D001FC90A /* ConditionPopup.h */,
 				D70985F9189F5F8D00B6E838 /* ContinueContent.cpp */,
 				D70985FA189F5F8D00B6E838 /* ContinueContent.h */,
+				D7BE735F19515368009BFE67 /* ControlTipContent.cpp */,
+				D7BE735E19515368009BFE67 /* ControlTipContent.h */,
 				B2B6D8B1184E0B9700231A95 /* ControlTutorialContent.cpp */,
 				B2B6D8B2184E0B9700231A95 /* ControlTutorialContent.h */,
 				D70B55561814BE8D001FC90A /* ControlType.cpp */,
 				D70B55571814BE8D001FC90A /* ControlType.h */,
+				B2C5358C19949A9200516F99 /* ConvexGraph.cpp */,
+				B2C5358D19949A9200516F99 /* ConvexGraph.h */,
 				D70B55591814BE8D001FC90A /* core.h */,
 				D70B555C1814BE8D001FC90A /* CountingBMLabel.cpp */,
 				D70B555D1814BE8D001FC90A /* CountingBMLabel.h */,
 				B2CDB6A1186315900034A99C /* CountingGame.cpp */,
 				B2CDB6A2186315900034A99C /* CountingGame.h */,
+				D7BE735D19515368009BFE67 /* CouponPopup.cpp */,
+				D7BE735C19515368009BFE67 /* CouponPopup.h */,
 				D769726618EBFFB800E3FD55 /* cryptopp */,
 				D70B555E1814BE8D001FC90A /* Cumber.cpp */,
 				D70B555F1814BE8D001FC90A /* Cumber.h */,
 				D70B55601814BE8D001FC90A /* CumberBase.cpp */,
 				D70B55611814BE8D001FC90A /* CumberBase.h */,
+				D7BE735B19515368009BFE67 /* CumberEmotion.cpp */,
+				D7BE735A19515368009BFE67 /* CumberEmotion.h */,
 				B2ED105B183F2AC70030A857 /* CumberShowWindow.cpp */,
 				B2ED105C183F2AC70030A857 /* CumberShowWindow.h */,
+				D7BE735919515368009BFE67 /* CurtainNodeForBonusGame.cpp */,
+				D7BE735819515368009BFE67 /* CurtainNodeForBonusGame.h */,
 				B24861D21851CE1F004CF7D7 /* DataStorageHub.cpp */,
 				D70B55641814BE8D001FC90A /* DataStorageHub.h */,
+				D7995368190BCEAE008489B1 /* DetailConditionPopup.cpp */,
+				D7995367190BCEAE008489B1 /* DetailConditionPopup.h */,
 				B2ED1041183C82DC0030A857 /* DiaryZoomPopup.cpp */,
 				B2ED1042183C82DC0030A857 /* DiaryZoomPopup.h */,
 				D7B8D9B718A4691E0004D680 /* DimmedPopup.cpp */,
@@ -3287,17 +3255,40 @@
 				D74445A818DAC09000153EE6 /* EasingAction.h */,
 				D7DD859A18DFD029008003D4 /* EffectSprite.cpp */,
 				D7DD859B18DFD029008003D4 /* EffectSprite.h */,
+				D79953781910988F008489B1 /* EmptyItemSalePopup.cpp */,
+				D79953771910988F008489B1 /* EmptyItemSalePopup.h */,
 				D76973EB18F67DA000E3FD55 /* EncryptCharsA.cpp */,
 				D76973EA18F67DA000E3FD55 /* EncryptCharsA.h */,
+				D7BE735719515368009BFE67 /* EndlessModeOpening.cpp */,
+				D7BE735619515368009BFE67 /* EndlessModeOpening.h */,
+				D7BE735519515368009BFE67 /* EndlessModeResult.cpp */,
+				D7BE735419515368009BFE67 /* EndlessModeResult.h */,
+				D7BE735319515368009BFE67 /* EndlessResultPopup.cpp */,
+				D7BE735219515368009BFE67 /* EndlessResultPopup.h */,
+				D7BE735119515368009BFE67 /* EndlessSeqWinRewardPopup.cpp */,
+				D7BE735019515368009BFE67 /* EndlessSeqWinRewardPopup.h */,
+				D7BE734F19515368009BFE67 /* EndlessSettingPopup.cpp */,
+				D7BE734E19515368009BFE67 /* EndlessSettingPopup.h */,
+				D7BE734D19515368009BFE67 /* EndlessStartContent.cpp */,
+				D7BE734C19515368009BFE67 /* EndlessStartContent.h */,
 				D70B55691814BE8D001FC90A /* EnumDefine.h */,
 				D7B8D9BA18A7A2150004D680 /* EventListDown.cpp */,
 				D7B8D9BB18A7A2150004D680 /* EventListDown.h */,
 				D70B556B1814BE8D001FC90A /* EventPopup.cpp */,
 				D70B556C1814BE8D001FC90A /* EventPopup.h */,
+				D7E0E73D19120452009E4B57 /* EventShopPopup.cpp */,
+				D7E0E73C19120452009E4B57 /* EventShopPopup.h */,
 				D70B556D1814BE8D001FC90A /* FailHelpPopup.cpp */,
 				D70B556E1814BE8D001FC90A /* FailHelpPopup.h */,
 				B2ED1038183BC2660030A857 /* FailPopup.cpp */,
 				B2ED1039183BC2660030A857 /* FailPopup.h */,
+				D79953731910988F008489B1 /* FirstPurchasePopup.cpp */,
+				D79953761910988F008489B1 /* FirstPurchasePopup.h */,
+				D7BE734B19515368009BFE67 /* FiveRocks.h */,
+				D7BE734A19515368009BFE67 /* FiveRocksC.h */,
+				D7BE734919515368009BFE67 /* FiveRocksCpp.h */,
+				D799536D190F7E56008489B1 /* FlagSelector.cpp */,
+				D799536C190F7E56008489B1 /* FlagSelector.h */,
 				D7DD85A718E3CF21008003D4 /* FormSetter.cpp */,
 				D7DD85A618E3CF21008003D4 /* FormSetter.h */,
 				B24861C51850DA1F004CF7D7 /* FriendData.h */,
@@ -3305,6 +3296,8 @@
 				B24861BA184F73C2004CF7D7 /* FriendListPopup.h */,
 				D70B55731814BE8D001FC90A /* FromTo.cpp */,
 				D70B55741814BE8D001FC90A /* FromTo.h */,
+				D7995365190B74DE008489B1 /* GaBaBo.cpp */,
+				D7995364190B74DD008489B1 /* GaBaBo.h */,
 				B24861C61850DA1F004CF7D7 /* GachaBase.cpp */,
 				B24861C71850DA1F004CF7D7 /* GachaBase.h */,
 				D70B55751814BE8D001FC90A /* GachaPopup.cpp */,
@@ -3328,12 +3321,18 @@
 				D753BE8E18963DFD00B316B0 /* GivenFriendList.h */,
 				D753BE941898C01700B316B0 /* GoldClicker.cpp */,
 				D753BE951898C01700B316B0 /* GoldClicker.h */,
+				B2C5359619949A9200516F99 /* GoodsLight.cpp */,
+				B2C5359719949A9200516F99 /* GoodsLight.h */,
 				D70B557F1814BE8D001FC90A /* GradationBGI.cpp */,
 				D70B55801814BE8D001FC90A /* GradationBGI.h */,
 				D70B55831814BE8D001FC90A /* GraphDog.cpp */,
 				D70B55841814BE8D001FC90A /* GraphDog.h */,
+				D799535819058790008489B1 /* GrayFrag.h */,
+				D799535719058790008489B1 /* GrayPixelationFrag.h */,
+				D799535619058790008489B1 /* GrayPixelationVert.h */,
 				D70B55851814BE8D001FC90A /* GraySprite.cpp */,
 				D70B55861814BE8D001FC90A /* GraySprite.h */,
+				D79953551905878F008489B1 /* GrayVert.h */,
 				B2B6D8961845069000231A95 /* HatGacha.cpp */,
 				B2B6D8971845069000231A95 /* HatGacha.h */,
 				D7EEDD9E1833B4750099C408 /* HeartTime.cpp */,
@@ -3348,6 +3347,7 @@
 				D70B558A1814BE8D001FC90A /* hspConnector.h */,
 				D70B558B1814BE8D001FC90A /* hspDelegator.cpp */,
 				D70B558C1814BE8D001FC90A /* hspDelegator.h */,
+				B2C5359519949A9200516F99 /* HSPEnums.h */,
 				D70B558D1814BE8D001FC90A /* InApp.h */,
 				D70B558E1814BE8D001FC90A /* InApp.mm */,
 				D70B558F1814BE8D001FC90A /* InAppDelegator.cpp */,
@@ -3358,6 +3358,8 @@
 				B2ED104A183CFA880030A857 /* InviteEventPopup.h */,
 				D70B55931814BE8E001FC90A /* ItemBuyPopup.cpp */,
 				D70B55941814BE8E001FC90A /* ItemBuyPopup.h */,
+				D7995361190587C8008489B1 /* ItemGachaPopup.cpp */,
+				D7995360190587C8008489B1 /* ItemGachaPopup.h */,
 				D70B55951814BE8E001FC90A /* ItemListViewer.cpp */,
 				D70B55961814BE8E001FC90A /* ItemListViewer.h */,
 				D70B55971814BE8E001FC90A /* Jack.cpp */,
@@ -3370,6 +3372,8 @@
 				D70B559B1814BE8E001FC90A /* JNIKelper.h */,
 				B24861BB184F73C2004CF7D7 /* JoinGameFriendPopup.cpp */,
 				B24861BC184F73C2004CF7D7 /* JoinGameFriendPopup.h */,
+				D7FD8DC2195804650090094C /* JsGababo.cpp */,
+				D7FD8DC1195804650090094C /* JsGababo.h */,
 				D70B55A81814BE8E001FC90A /* jsoncpp */,
 				D70985FB189F5F8D00B6E838 /* KHAlertView.cpp */,
 				D70985FC189F5F8E00B6E838 /* KHAlertView.h */,
@@ -3391,14 +3395,20 @@
 				D7899CDE1822840D00852D30 /* KSJuniorBase.h */,
 				D78A8C6018B47AB0009080B3 /* KSLabelTTF.cpp */,
 				D78A8C6118B47AB0009080B3 /* KSLabelTTF.h */,
+				D7E8A133195A5F66000124A3 /* KsLocal.cpp */,
+				D7E8A132195A5F66000124A3 /* KsLocal.h */,
+				D7E8A135195A61CE000124A3 /* KsLocal_ios.mm */,
 				D71DFB13186BB28E00BD3BCD /* KSProtect.cpp */,
 				D71DFB14186BB28E00BD3BCD /* KSProtect.h */,
 				D7899D0B182CCF4C00852D30 /* KSSnakeBase.cpp */,
 				D7899D0C182CCF4C00852D30 /* KSSnakeBase.h */,
 				D70B55C11814BE8E001FC90A /* KSUtil.cpp */,
 				D70B55C21814BE8E001FC90A /* KSUtil.h */,
+				D7BE734819515368009BFE67 /* KudioEngine.h */,
 				D7E88D75188E5186004BDB01 /* LabelTTFMarquee.cpp */,
 				D7E88D76188E5186004BDB01 /* LabelTTFMarquee.h */,
+				D7E0E74019136625009E4B57 /* LevelupGuidePopup.cpp */,
+				D7E0E73F19136625009E4B57 /* LevelupGuidePopup.h */,
 				D70B55C51814BE8E001FC90A /* ListViewerScroll.cpp */,
 				D70B55C61814BE8E001FC90A /* ListViewerScroll.h */,
 				B2ED105D183F2AC70030A857 /* LoadingLayer.cpp */,
@@ -3421,6 +3431,8 @@
 				D70B55D01814BE8E001FC90A /* MapFragment.h */,
 				D70B55D11814BE8E001FC90A /* MapScanner.cpp */,
 				D70B55D21814BE8E001FC90A /* MapScanner.h */,
+				D79953751910988F008489B1 /* MileagePopup.cpp */,
+				D79953741910988F008489B1 /* MileagePopup.h */,
 				D73162CA1871A16F00890BE9 /* MiniGamePopup.cpp */,
 				D73162CB1871A16F00890BE9 /* MiniGamePopup.h */,
 				D7899D08182CCAF800852D30 /* MINSU.cpp */,
@@ -3434,6 +3446,10 @@
 				D70B55DA1814BE8E001FC90A /* MissileParent.h */,
 				D7899CE31822840D00852D30 /* MissileUnit.cpp */,
 				D70B55DB1814BE8E001FC90A /* MissileUnit.h */,
+				D7BE734719515368009BFE67 /* MissileUnitCCB.cpp */,
+				D7BE734619515368009BFE67 /* MissileUnitCCB.h */,
+				D799535F190587C8008489B1 /* MissileUpgradePopup.cpp */,
+				D799535E190587C8008489B1 /* MissileUpgradePopup.h */,
 				D7EEDD9C1833B4750099C408 /* MobHpGraph.cpp */,
 				D7EEDD9D1833B4750099C408 /* MobHpGraph.h */,
 				D70B55DC1814BE8E001FC90A /* MyLocalization.cpp */,
@@ -3452,6 +3468,10 @@
 				D70B55DF1814BE8E001FC90A /* NotiPopup.h */,
 				D7EEDD951833B4740099C408 /* OnePercentGacha.cpp */,
 				D7EEDD961833B4750099C408 /* OnePercentGacha.h */,
+				D7BE734519515368009BFE67 /* OnePercentGame.cpp */,
+				D7BE734419515368009BFE67 /* OnePercentGame.h */,
+				D778D7A619555F470056DC29 /* OnePercentTutorial.cpp */,
+				D778D7A519555F470056DC29 /* OnePercentTutorial.h */,
 				D70B55E11814BE8E001FC90A /* OpenUDID.h */,
 				D70B55E21814BE8E001FC90A /* OpenUDID.m */,
 				B2ED1043183C82DC0030A857 /* OptionPopup.cpp */,
@@ -3486,6 +3506,8 @@
 				B2CDB69F186315900034A99C /* PuzzlePiece.h */,
 				B2CDB695186194D00034A99C /* PuzzleScene.cpp */,
 				B2CDB696186194D00034A99C /* PuzzleScene.h */,
+				D7BE734319515368009BFE67 /* PuzzleSuccessAndPerfect.cpp */,
+				D7BE734219515368009BFE67 /* PuzzleSuccessAndPerfect.h */,
 				B2CDB697186194D00034A99C /* RandomDistribution.cpp */,
 				B2CDB698186194D00034A99C /* RandomDistribution.h */,
 				D70B55F61814BE8E001FC90A /* RandomSelector.h */,
@@ -3493,8 +3515,14 @@
 				D70B24CD18E51D7600D1CFC9 /* RankNewPopup.h */,
 				D70B55F71814BE8E001FC90A /* RankPopup.cpp */,
 				D70B55F81814BE8E001FC90A /* RankPopup.h */,
+				D7BE734119515368009BFE67 /* RankRewardPopup.cpp */,
+				D7BE734019515368009BFE67 /* RankRewardPopup.h */,
+				D799536B190F7E56008489B1 /* RankUpPopup.cpp */,
+				D799536A190F7E56008489B1 /* RankUpPopup.h */,
 				B24861CC1850DA1F004CF7D7 /* RentCardAniContent.cpp */,
 				B24861CD1850DA1F004CF7D7 /* RentCardAniContent.h */,
+				D7BE733F19515368009BFE67 /* RivalSelectPopup.cpp */,
+				D7BE733E19515368009BFE67 /* RivalSelectPopup.h */,
 				D7E88D79188E5186004BDB01 /* RollingButton.cpp */,
 				D7E88D7A188E5186004BDB01 /* RollingButton.h */,
 				B2CDB65F185EDA8E0034A99C /* Roulette.cpp */,
@@ -3528,6 +3556,7 @@
 				B2B6D8911842EA3000231A95 /* ShopPopup.h */,
 				B24861D7185706BE004CF7D7 /* ShowItemContent.cpp */,
 				B24861D8185706BE004CF7D7 /* ShowItemContent.h */,
+				D799535D190587C8008489B1 /* SilhouetteConvertFrag.h */,
 				D70B560A1814BE8E001FC90A /* SilhouetteData.cpp */,
 				D70B560B1814BE8E001FC90A /* SilhouetteData.h */,
 				B237D7FC1869115A009087E6 /* SlidingPuzzle.cpp */,
@@ -3558,6 +3587,8 @@
 				D70B561E1814BE8E001FC90A /* StartMapGacha.h */,
 				D7EEDD971833B4750099C408 /* StartMapLuckyItem.cpp */,
 				D7EEDD981833B4750099C408 /* StartMapLuckyItem.h */,
+				D799535018FF9D3F008489B1 /* StartSettingPopup.cpp */,
+				D799534F18FF9D3F008489B1 /* StartSettingPopup.h */,
 				B2CDB6A0186315900034A99C /* StartSettingScene.cpp */,
 				B2CDB6A3186315900034A99C /* StartSettingScene.h */,
 				D7899CEE1822840D00852D30 /* stlencoders */,
@@ -3571,14 +3602,26 @@
 				D70B56291814BE8E001FC90A /* Str2Token.h */,
 				D70B562A1814BE8E001FC90A /* StringCodec.cpp */,
 				D70B562B1814BE8E001FC90A /* StringCodec.h */,
+				D7995371190F9249008489B1 /* StyledLabelTTF.cpp */,
+				D7995370190F9249008489B1 /* StyledLabelTTF.h */,
 				D76973EE18F7E99C00E3FD55 /* SumranMailPopup.cpp */,
 				D76973ED18F7E99C00E3FD55 /* SumranMailPopup.h */,
+				D79953541905878F008489B1 /* TakeCardToDiary.cpp */,
+				D79953531905878F008489B1 /* TakeCardToDiary.h */,
+				D7BE733D19515368009BFE67 /* TakePuzzleCardPopup.cpp */,
+				D7BE733C19515368009BFE67 /* TakePuzzleCardPopup.h */,
+				D7289AAF195A948B00200284 /* Terms.cpp */,
+				D7289AAE195A948B00200284 /* Terms.h */,
+				D7BE733B19515368009BFE67 /* TextureReloader.cpp */,
+				D7BE733A19515368009BFE67 /* TextureReloader.h */,
 				D70B562E1814BE8E001FC90A /* TicketNeedPopup.cpp */,
 				D70B562F1814BE8E001FC90A /* TicketNeedPopup.h */,
 				B2B6D8A2184CC0D000231A95 /* TicketRequestContent.cpp */,
 				B2B6D89F184CC0D000231A95 /* TicketRequestContent.h */,
 				B24861D9185706BE004CF7D7 /* TitleRenewal.cpp */,
 				B24861DA185706BE004CF7D7 /* TitleRenewal.h */,
+				D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */,
+				D7B2BE8B1914F14E00010C7F /* TodayMissionPopup.h */,
 				D760C722187EA2B2005AC105 /* TouchSuctionLayer.cpp */,
 				D760C723187EA2B2005AC105 /* TouchSuctionLayer.h */,
 				D7733E2318B1B3000064BAA9 /* TouchSwallowManagement.cpp */,
@@ -3587,6 +3630,8 @@
 				D7CC5280187AB069000EDDC7 /* TutorialFlowStep.h */,
 				D7899CF91822840D00852D30 /* TutorialScene.cpp */,
 				D7899CFA1822840D00852D30 /* TutorialScene.h */,
+				B2C5359019949A9200516F99 /* TypingBox.cpp */,
+				B2C5359119949A9200516F99 /* TypingBox.h */,
 				D70B56301814BE8E001FC90A /* unchecked.h */,
 				B24861BF184F73C2004CF7D7 /* UnknownFriends.cpp */,
 				B24861C0184F73C2004CF7D7 /* UnknownFriends.h */,
@@ -3916,6 +3961,7 @@
 			children = (
 				D7DD859D18E003BE008003D4 /* pixelation.fsh */,
 				D70B54FB1814BC85001FC90A /* AddressBook.framework */,
+				B2C5358619949A8200516F99 /* 5rocks-ios-sdk */,
 				D70B54391814BC4F001FC90A /* HSPSDKIOS */,
 				D70B542D1814BC25001FC90A /* CFNetwork.framework */,
 				D70B542E1814BC25001FC90A /* CoreTelephony.framework */,
@@ -4150,6 +4196,7 @@
 				F293B6FC15EB823D00256477 /* AppController.mm in Sources */,
 				D76973AC18EBFFB900E3FD55 /* modes.cpp in Sources */,
 				F293B6FD15EB823D00256477 /* main.m in Sources */,
+				B2C5369E19949A9300516F99 /* CardGiftPopup.cpp in Sources */,
 				D769738218EBFFB900E3FD55 /* default.cpp in Sources */,
 				D71DFB15186BB28E00BD3BCD /* KSProtect.cpp in Sources */,
 				D76973B618EBFFB900E3FD55 /* polynomi.cpp in Sources */,
@@ -4256,12 +4303,14 @@
 				D7098607189F972800B6E838 /* CommonButton.cpp in Sources */,
 				15C1548C1683116B00D239F2 /* cpDampedRotarySpring.c in Sources */,
 				D7F4127C18C9B27E009372B2 /* BeautyStoneSynthesis.cpp in Sources */,
+				B2C5369D19949A9300516F99 /* TypingBox.cpp in Sources */,
 				D769737A18EBFFB900E3FD55 /* cbcmac.cpp in Sources */,
 				15C1548D1683116B00D239F2 /* cpDampedSpring.c in Sources */,
 				D76973B118EBFFB900E3FD55 /* oaep.cpp in Sources */,
 				D76973AA18EBFFB900E3FD55 /* md5.cpp in Sources */,
 				15C1548E1683116B00D239F2 /* cpGearJoint.c in Sources */,
 				D76973BA18EBFFB900E3FD55 /* rabin.cpp in Sources */,
+				B2C5369C19949A9300516F99 /* AccountManagerPopup.cpp in Sources */,
 				B24861C4184F73C2004CF7D7 /* UnknownFriends.cpp in Sources */,
 				D76973C218EBFFB900E3FD55 /* ripemd.cpp in Sources */,
 				D76973CD18EBFFB900E3FD55 /* shark.cpp in Sources */,
@@ -4499,6 +4548,7 @@
 				D769738D18EBFFB900E3FD55 /* elgamal.cpp in Sources */,
 				1A40E7F11727C47E006D4861 /* spine-cocos2dx.cpp in Sources */,
 				1AB87024175E0A2D005D39BF /* WebSocket.cpp in Sources */,
+				B2C5369B19949A9300516F99 /* ConvexGraph.cpp in Sources */,
 				D76973E618EBFFB900E3FD55 /* zlib.cpp in Sources */,
 				D76973A618EBFFB900E3FD55 /* mars.cpp in Sources */,
 				1AB87029175E0A40005D39BF /* CCSkeleton.cpp in Sources */,
@@ -4513,6 +4563,7 @@
 				1A9CE91F1765A2C2000E3062 /* Lua_web_socket.cpp in Sources */,
 				D70B563F1814BE8E001FC90A /* AlertEngine.cpp in Sources */,
 				D769739F18EBFFB900E3FD55 /* hrtimer.cpp in Sources */,
+				B2C536A019949A9300516F99 /* GoodsLight.cpp in Sources */,
 				D70B56401814BE8E001FC90A /* AppDelegate.cpp in Sources */,
 				B2ED103C183BC2660030A857 /* FailPopup.cpp in Sources */,
 				D7EEDDA91833B4750099C408 /* MissileDamageLabel.cpp in Sources */,
@@ -4825,8 +4876,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: hyoun-soo kim (AYMDF9CR39)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: hyoun-soo kim (AYMDF9CR39)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4880,6 +4931,8 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/XBase/iphonesimulator/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib",
 					"$(SDKROOT)/usr/lib/system",
+					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/5rocks-ios-sdk",
+					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/Classes",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -4889,7 +4942,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALID_ARCHS = "armv7 armv6";
 				WRAPPER_EXTENSION = app;
@@ -4903,8 +4956,8 @@
 				ARCHS = "$(ARCHS_STANDARD)";
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
-				CODE_SIGN_IDENTITY = "iPhone Developer: hyoun-soo kim (AYMDF9CR39)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: hyoun-soo kim (AYMDF9CR39)";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -4956,6 +5009,8 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/XBase/iphonesimulator/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib",
 					"$(SDKROOT)/usr/lib/system",
+					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/5rocks-ios-sdk",
+					"/Users/LitQoo/cocos2d-x-2.1.5/projects/dgproto/Classes",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -4965,7 +5020,7 @@
 					"-lstdc++",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VALID_ARCHS = "armv7 armv6";
