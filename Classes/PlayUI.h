@@ -41,6 +41,7 @@ public:
 private:
 	int hide_frame;
 	KSLabelTTF * combo_label;
+	KSLabelTTF* shadow_label;
 //	CCSprite* combo_str;
 //	CCSprite* combo_front;
 //	CCProgressTimer * combo_timer;
