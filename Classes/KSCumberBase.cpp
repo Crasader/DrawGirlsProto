@@ -1811,6 +1811,8 @@ void KSCumberBase::bossDieBomb(float dt)
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
 			this->setVisible(false);
+			
+			unschedule(schedule_selector(ThisClassType::bossDieBomb));
 		}
 	}
 }

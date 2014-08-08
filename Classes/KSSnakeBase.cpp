@@ -990,6 +990,8 @@ void KSSnakeBase::setGameover()
 {
 	KSCumberBase::setGameover();
 	unschedule(schedule_selector(ThisClassType::scaleAdjustment));
+	
+	unschedule(schedule_selector(ThisClassType::speedAdjustment));
 }
 
 
