@@ -145,6 +145,7 @@ public:
 	virtual COLLISION_CODE getCrashCode(IntPoint point, IntPoint* checkPosition);
 	float getRadius();
 	void attachEmotion();
+	void setGameover();
 protected:
 	bool m_lookToLeft;
 	std::string m_atype;

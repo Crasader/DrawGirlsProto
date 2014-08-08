@@ -987,6 +987,12 @@ IntPoint KSSnakeBase::getMapPoint( CCPoint c )
 
 
 
+void KSSnakeBase::setGameover()
+{
+	KSCumberBase::setGameover();
+	unschedule(schedule_selector(ThisClassType::scaleAdjustment));
+}
+
 
 
 
