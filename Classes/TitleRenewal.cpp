@@ -226,12 +226,13 @@ void TitleRenewalScene::endSplash()
 //	}));
 	
 	auto t_title = KS::loadCCBI<CCSprite*>(this, "title_01.ccbi");
+	
 	title_img = t_title.first;
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
 	
 	title_manager = t_title.second;
-	
+	title_manager->runAnimationsForSequenceNamed("Default Timeline");
 //	title_img = CCSprite::create("temp_title_back.png");
 //	title_img->setPosition(ccp(240,160));
 //	addChild(title_img);
@@ -311,7 +312,7 @@ void TitleRenewalScene::realInit()
 {
 	TRACE();
 	
-	title_manager->runAnimationsForSequenceNamed("Default Timeline");
+	
 	
 	Json::Value param;
 	param["ManualLogin"] = true;
