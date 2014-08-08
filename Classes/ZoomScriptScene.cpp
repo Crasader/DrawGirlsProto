@@ -263,7 +263,7 @@ void ZoomScript::typingAnimation()
 		
 		if(!(result[typing_frame]==' ' || result[typing_frame]=='\n'))
 		{
-			AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+			AudioEngine::sharedInstance()->playEffect("se_typing_5.mp3", false);//ccsf("se_typing_%d.mp3", typing_sound_number++), false);
 			if(typing_sound_number > 4)
 				typing_sound_number = 1;
 		}

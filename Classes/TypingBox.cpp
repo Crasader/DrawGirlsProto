@@ -223,7 +223,7 @@ void TypingBox::typing()
 			//띄워쓰기나 줄바꿈 있을때 소리를 재생
 			if(!(t_string[typing_frame]==' ' || t_string[typing_frame]=='\n'))
 			{
-				AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+				AudioEngine::sharedInstance()->playEffect("se_typing_5.mp3", false);//ccsf("se_typing_%d.mp3", typing_sound_number++), false);
 				if(typing_sound_number > 4)
 					typing_sound_number = 1;
 			}

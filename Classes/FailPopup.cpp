@@ -555,7 +555,7 @@ bool FailPopup::init()
 																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent32), end_func1);
 															  }));
 	}
-	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
+	else if(mySD->getSilType() >= 5 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
 		{
@@ -568,7 +568,7 @@ bool FailPopup::init()
 		}, [=](){}, kPurchaseGuideType_emptyItem);
 		addChild(t_popup, kZ_FP_popup+1);
 	}
-	else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0 &&
+	else if(mySD->getSilType() >= 5 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_stupidNpuHelp) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0 &&
 			mySGD->getUserdataTotalPlayCount() >= mySGD->getStupidNpuHelpPlayCount() && mySGD->getUserdataFailCount()+1 >= mySGD->getStupidNpuHelpFailCount())
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
