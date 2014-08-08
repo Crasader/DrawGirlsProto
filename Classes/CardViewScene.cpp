@@ -182,6 +182,16 @@ bool CardViewScene::init()
 	};
 	if(!is_morphing)
 	{
+		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+		
+		zoom_img = tuto.first;
+		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+		
+		
+		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+		addChild(zoom_img, kCV_Z_next_button);
+
+		
 		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CCScale9Sprite::create("whitepaper2.png", CCRectMake(0, 0, 63, 63), CCRectMake(31, 31, 1, 1)), -160);
 		buy_morphing->setPosition(morphing_position);
 		buy_morphing->setFunction([=](CCObject* sender)

@@ -603,6 +603,13 @@ float KSJuniorBase::getRadius()
 
 
 
+void KSJuniorBase::setGameover()
+{
+	KSCumberBase::setGameover();
+	unschedule(schedule_selector(ThisClassType::scaleAdjustment));
+}
+
+
 
 
 
