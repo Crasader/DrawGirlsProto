@@ -198,8 +198,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
          IgawCommon.startSession(DGproto.this);
 //         ADBrixManager.startSession(this);
          HSPCore core = HSPCore.getInstance();
-         if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT
-         		&& HSPCore.getInstance().getState() != HSPState.HSP_STATE_ONLINE) 
+//         if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT
+//         		&& HSPCore.getInstance().getState() != HSPState.HSP_STATE_ONLINE) 
+         if (HSPCore.getInstance().getState() != HSPState.HSP_STATE_INIT)
          { 
         	 hspConnector.handler.post(
         			 new Runnable(){
