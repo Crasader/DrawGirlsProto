@@ -138,9 +138,6 @@ public:
 		return btn;
 	}
 	
-	void CommonButton::setZoomOnTouchDown(bool var){
-		m_btn->setZoomOnTouchDown(var);
-	}
 	
 	bool init(CCSprite* backSprite, int touchPriority);
 
@@ -168,7 +165,6 @@ public:
 	void setBackgroundTypeForState(CommonButtonType type,CCControlState state);
 	void setTitleColor(ccColor3B color);
 	void setZoomOnTouchDown(bool var);
-	
 	KSLabelTTF* getTitleLabel();
 	KSLabelTTF* getPriceLabel();
 	CCSprite* getPriceSprite();

@@ -445,3 +445,8 @@ KSLabelTTF* CommonButton::getPriceLabel(){
 CCSprite* CommonButton::getPriceSprite(){
 	return m_priceTypeSprite;
 }
+
+
+void CommonButton::setZoomOnTouchDown(bool var){
+	m_btn->setZoomOnTouchDown(var);
+}
