@@ -33,7 +33,7 @@ public:
 		t->autorelease();
 		return t;
 	}
-	//virtual void registerWithTouchDispatcher();
+//	virtual void registerWithTouchDispatcher();
 	void setupReward();
 	void setupTutorial();
 	void setupCongMessage();
