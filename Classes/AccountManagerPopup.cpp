@@ -162,6 +162,7 @@ bool AccountManagerPopup::init(int touchP)
 	}
 	CommonButton* googleLogin = CommonButton::create(gButtonLbl.c_str(), 14.f, CCSizeMake(101, 60),
 																										 CommonButtonAchievement, touchP - 1);
+	googleLogin->setZoomOnTouchDown(false);
 	
 	googleLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -7.5f + 6 - 4.5f + 10.5f));
 	
@@ -190,7 +191,7 @@ bool AccountManagerPopup::init(int touchP)
 																										 CommonButtonAchievement, touchP - 1);
 	
 	facebookLogin->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(69, -79 + 4.5f + 14.5f));
-
+	facebookLogin->setZoomOnTouchDown(false);
 	front->addChild(facebookLogin);
 	
 	
@@ -426,9 +427,11 @@ bool AccountManagerPopup::init(int touchP)
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
 				else {
+					auto ment	= StyledLabelTTF::create(getLocal(LK::kCantLinking),
+																						 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+					ment->setAnchorPoint(ccp(0.5f, 0.5f));
 					ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
-																													 StyledLabelTTF::create(getLocal(LK::kCantLinking),
-																																									mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment), nullptr);
+																													 ment, nullptr);
 					addChild(alert);
 				}
 			}

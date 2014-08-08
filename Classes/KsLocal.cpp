@@ -113,7 +113,7 @@ void KsLocal::ko()
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
 																											 	obj[LK::kNetworkError] = "<font color=#FFFFFF newline=12>통신 에러</font>"
 																																								"<font color=#FFAA14>다시 시도해 주세요.</font>";
-	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=14>연결 할 수 없습니다.</font>"
 																																									"<font color=#FFAA14>다시 시도해 주세요.</font>";
 	obj[LK::kRetryLinking] = "";
 	obj[LK::kAccountDesc] = "<font color=#FFAA14 newline=12>%s 와 연결되어 있습니다.</font>"
@@ -173,7 +173,7 @@ void KsLocal::en()
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
 																											 	obj[LK::kNetworkError] = "<font color=#FFFFFF newline=12>통신 에러</font>"
 																																								"<font color=#FFAA14>다시 시도해 주세요.</font>";
-	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=14>연결 할 수 없습니다.</font>"
 																																									"<font color=#FFAA14>다시 시도해 주세요.</font>";
 	obj[LK::kRetryLinking] = "";
 	obj[LK::kAccountDesc] = "<font color=#FFAA14 newline=12>%s 와 연결되어 있습니다.</font>"
@@ -232,7 +232,7 @@ void KsLocal::ja()
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
 																											 	obj[LK::kNetworkError] = "<font color=#FFFFFF newline=12>통신 에러</font>"
 																																								"<font color=#FFAA14>다시 시도해 주세요.</font>";
-	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=12>연결 할 수 없습니다.</font>"
+	obj[LK::kCantLinking] = "<font color=#FFFFFF newline=14>연결 할 수 없습니다.</font>"
 																																									"<font color=#FFAA14>다시 시도해 주세요.</font>";
 	obj[LK::kRetryLinking] = "";
 	obj[LK::kAccountDesc] = "<font color=#FFAA14 newline=12>%s 와 연결되어 있습니다.</font>"
