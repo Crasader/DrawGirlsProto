@@ -54,6 +54,8 @@ bool ZoomScript::init()
 	
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
+	typing_sound_number = 1;
+	
 	is_rankup = false;
 	is_time_event_card_on = false;
 	
@@ -238,8 +240,8 @@ void ZoomScript::startScript()
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
-	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
 	script_label->setString("");
 	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
@@ -256,41 +258,30 @@ void ZoomScript::typingAnimation()
 	typing_frame++;
 	if(typing_frame <= text_length)
 	{
-		CCLOG("typing animation : %d", typing_frame);
 		basic_string<wchar_t> result;
-		CCLOG("typing what? 1");
 		utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
-		CCLOG("typing what? 2");
 		
-		if(result[typing_frame]==' ' || result[typing_frame]=='\n')
+		if(!(result[typing_frame]==' ' || result[typing_frame]=='\n'))
 		{
-			CCLOG("typing what? 2-1");
-			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
+			AudioEngine::sharedInstance()->playEffect(ccsf("se_typing_%d.mp3", typing_sound_number++), false);
+			if(typing_sound_number > 4)
+				typing_sound_number = 1;
 		}
 		
-		CCLOG("typing what? 3");
-		
 		result = result.substr(0, typing_frame);
-		CCLOG("typing what? 4");
 		string conver;
-		CCLOG("typing what? 5");
 		utf8::utf16to8(result.begin(), result.end(), back_inserter(conver));
-		CCLOG("typing what? 6");
+		conver = conver + "_";
 		script_label->setString(conver.c_str());
-		CCLOG("typing what? 7");
 		script_case->setVisible(true);
 		
-		CCLOG("typing what? 8");
 		if(typing_frame == text_length)
 		{
-			CCLOG("typing what? 8-1");
 			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
-			CCLOG("typing what? 8-2");
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
 			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
 			{
-				CCLOG("typing what? 8-2-1");
 				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 				zoom_img = tuto.first;
 				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
@@ -307,16 +298,13 @@ void ZoomScript::typingAnimation()
 			}
 			else
 			{
-				CCLOG("typing what? 8-2-2");
 				(this->*delegate_typing_after)();
 			}
-			CCLOG("typing what? 8-3");
 		}
-		CCLOG("typing what? 9");
 	}
 	else
 	{
-		CCLOG("typing length out");
+		CCLog("typing length out");
 		CCTouch* t_touch = new CCTouch();
 		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 		t_touch->autorelease();
@@ -1086,8 +1074,10 @@ void ZoomScript::showtimeThirdAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
-	script_label->setDimensions(CCSizeMake(script_label->getDimensions().width, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
-	script_case->setContentSize(CCSizeMake(353, script_label->getDimensions().height + 15));
+	
+	script_label->setContentSize(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
+	
 	script_label->setString("");
 	script_case->setVisible(true);
 	script_label->setVisible(true);
