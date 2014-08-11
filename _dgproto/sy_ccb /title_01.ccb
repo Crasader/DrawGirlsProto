@@ -1041,8 +1041,8 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>70</real>
-										<real>-120</real>
+										<real>80</real>
+										<real>-80</real>
 									</array>
 								</dict>
 								<dict>
@@ -1059,8 +1059,8 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>70</real>
-										<real>-80</real>
+										<real>80</real>
+										<real>-40</real>
 									</array>
 								</dict>
 								<dict>
@@ -1077,8 +1077,8 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>70</real>
-										<real>-120</real>
+										<real>80</real>
+										<real>-90</real>
 									</array>
 								</dict>
 							</array>
@@ -1115,8 +1115,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>70</real>
-							<real>-120</real>
+							<real>80</real>
+							<real>-90</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1174,6 +1174,8 @@
 						<integer>255</integer>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -1253,8 +1255,8 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>70</real>
-										<real>-120</real>
+										<real>80</real>
+										<real>-80</real>
 									</array>
 								</dict>
 								<dict>
@@ -1271,8 +1273,8 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>70</real>
-										<real>-80</real>
+										<real>80</real>
+										<real>-40</real>
 									</array>
 								</dict>
 							</array>
@@ -1355,8 +1357,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>70</real>
-							<real>-80</real>
+							<real>80</real>
+							<real>-40</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -1419,6 +1421,8 @@
 						<integer>0</integer>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
