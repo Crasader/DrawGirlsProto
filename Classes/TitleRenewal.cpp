@@ -1648,7 +1648,7 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					// check, after download ----------
 					DownloadFile t_df;
 					t_df.size = 100;
-					t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + ".ccbi";
+					t_df.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString();
 					t_df.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + ".ccbi";
 					t_df.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
 					
