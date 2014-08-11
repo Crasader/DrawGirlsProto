@@ -62,9 +62,29 @@ void CumberEmotion::releaseStun()
 		}
 	}
 }
+void CumberEmotion::goSlience()
+{
+	if(m_emotionState != EmotionState::kSlience)
+	{
+		presentationEmotion("emoticon_stun.ccbi");
+		m_emotionState = EmotionState::kSlience;
+	}
+}
+void CumberEmotion::releaseSlience()
+{
+	if(m_currentEmotion)
+	{
+		if(m_emotionState == EmotionState::kSlience)
+		{
+			m_currentEmotion->removeFromParent();
+			m_currentEmotion = nullptr;
+			m_emotionState = EmotionState::kNone;
+		}
+	}
+}
 void CumberEmotion::onKillingJack()
 {
-	if(m_emotionState != EmotionState::kRidicule)
+	if(m_emotionState != EmotionState::kRidicule && m_emotionState != EmotionState::kSlience)
 	{
 		presentationEmotion("emoticon_ridicule.ccbi");
 		m_emotionState = EmotionState::kRidicule;
@@ -73,7 +93,7 @@ void CumberEmotion::onKillingJack()
 
 void CumberEmotion::toBored()
 {
-	if(m_emotionState != EmotionState::kBored)
+	if(m_emotionState != EmotionState::kBored && m_emotionState != EmotionState::kSlience)
 	{
 		presentationEmotion("emoticon_yawn.ccbi");
 		m_emotionState = EmotionState::kBored;
@@ -81,7 +101,7 @@ void CumberEmotion::toBored()
 }
 void CumberEmotion::toCry()
 {
-	if(m_emotionState != EmotionState::kCry)
+	if(m_emotionState != EmotionState::kCry && m_emotionState != EmotionState::kSlience)
 	{
 		presentationEmotion("emoticon_cry.ccbi");
 		m_emotionState = EmotionState::kCry;
@@ -89,7 +109,7 @@ void CumberEmotion::toCry()
 }
 void CumberEmotion::toAnger()
 {
-	if(m_emotionState != EmotionState::kAnger)
+	if(m_emotionState != EmotionState::kAnger && m_emotionState != EmotionState::kSlience)
 	{
 		presentationEmotion("emoticon_anger.ccbi");
 		m_emotionState = EmotionState::kAnger;
@@ -115,7 +135,8 @@ void CumberEmotion::presentationEmotion(const std::string& emotion)
 	m_currentEmotion = t1.first;
 	
 	t1.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-		if(m_emotionState != EmotionState::kStun)
+		if(m_emotionState != EmotionState::kStun &&
+			 m_emotionState != EmotionState::kSlience)
 		{
 			m_currentEmotion->removeFromParent();
 			m_currentEmotion = nullptr;

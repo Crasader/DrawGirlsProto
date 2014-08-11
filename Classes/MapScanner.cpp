@@ -595,7 +595,11 @@ void MapScanner::exchangeMS()
 	addChild(invisibleImg, invisibleZorder);
 	
 	// ######################## hs code bbu woo~ ##############################
-	EffectSprite* t_spr = (EffectSprite*)invisibleImg->getChildByTag(8706);
+	
+	invisibleImg->getChildByTag(8707)->removeFromParent();
+	
+	CCClippingNode* t_sprc = (CCClippingNode*)invisibleImg->getChildByTag(8706);
+	CCSprite* t_spr = (CCSprite*)t_sprc->getChildByTag(8706);
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int orir =NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d);
 	int orig =NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d);
@@ -613,7 +617,7 @@ void MapScanner::exchangeMS()
 			r+=rm;
 			g+=gm;
 			b+=bm;
-			if(r>orir || b>orib || g>orig)mark=0;
+			if(r>=orir || b>=orib || g>=orig)mark=0;
 		}else{
 			r-=rm;
 			g-=gm;
@@ -621,7 +625,14 @@ void MapScanner::exchangeMS()
 			if(r<0 || g<0 || b<0)mark=1;
 		}
 		
-		t_spr->setColorSilhouette(r, g, b);
+		if(r<0)r=0;
+		if(g<0)g=0;
+		if(b<0)b=0;
+		if(r>255)r=255;
+		if(g>255)g=255;
+		if(b>255)b=255;
+		
+		t_spr->setColor(ccc3(r, g, b));
 		return true;
 	}));
 	// ######################## hs code bbu woo~ ##############################
@@ -1248,13 +1259,32 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 //	t_pattern->setPosition(ccp(6*pattern_size.width, 14*pattern_size.height));
 //	pattern_node->addChild(t_pattern);
 	
+	CCSprite *sten = CCSprite::createWithTexture(mySIL->addImage(filename));
+	CCSprite *sil = CCSprite::create("whitePaper.png");
+	sil->setScaleY(1.5);
+	sil->setScaleX(0.75);
+	
+	CCClippingNode *clip = CCClippingNode::create();
+	clip->setAlphaThreshold(0.1f);
+	sten->setOpacityModifyRGB(true);
+	clip->setPosition(ccp(160,215));
+	clip->setStencil(sten);
+	clip->setTag(8706);
+	this->addChild(clip);
+	clip->addChild(sil);
+	sil->setTag(8706);
+	sil->getTexture()->setAntiAliasTexParameters();
+	sten->getTexture()->setAntiAliasTexParameters();
+	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+	sil->setColor(ccc3(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)));
+	//clip->getTexture()->setAntiAliasTexParameters();
+	//
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
-	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 
 	// ######################## hs code bbu woo~ ##############################
-	t_spr->setTag(8706);
+	t_spr->setTag(8707);
 	// ######################## hs code bbu woo~ ##############################
 	
 	addChild(t_spr);

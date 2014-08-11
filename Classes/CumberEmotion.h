@@ -16,7 +16,8 @@ enum class EmotionState
 	kBored = 7,
 	kCry = 8,
 	kAnger = 9,
-	kScratch = 10
+	kScratch = 10,
+	kSlience,
 };
 class CumberEmotion : public CCNode
 {
@@ -34,6 +35,8 @@ public:
 	void onTouchingLine();
 	void goStun();
 	void releaseStun();
+	void goSlience();
+	void releaseSlience();
 	void onKillingJack();
 	void toBored();
 	void toCry();

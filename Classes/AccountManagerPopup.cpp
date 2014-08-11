@@ -252,7 +252,7 @@ bool AccountManagerPopup::init(int touchP)
 				front->addChild(content);
 				content->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
 				
-				CommonButton* previousLoad = CommonButton::create(getLocal(LK::kLoadPreviousData), 13.f, CCSizeMake(110, 50),
+				CommonButton* previousLoad = CommonButton::create(getLocal(LK::kLoadPreviousData), 13.f, CCSizeMake(130, 50),
 																													CommonButtonAchievement, touchP - 3);
 				previousLoad->setPosition(ccp(69.5, -32.f)); 			// dt (-1.0, 9.0)
 				front->addChild(previousLoad);
@@ -320,11 +320,12 @@ bool AccountManagerPopup::init(int touchP)
 					if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
 					{
 						std::string mentString;
-						mentString += ccsf("<font color=#000000 newline=14>현재 기록은 영구히 삭제되며</font>"
-															 "<font color=#000000>%s 의 이전 기록을 로드합니다.</font>",
+						mentString += ccsf("<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
+															 "<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>",
 															 tryName.c_str());
 						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
 						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
 	
 					}
@@ -526,7 +527,7 @@ void AccountManagerPopup::showWarning(const std::string& desc, HSPMapping hspmap
 	
 	
 	front->addChild(announce);
-	announce->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 72.5f - 20.f));
+	announce->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 0));
 	
 	
 	CommonButton* connect = CommonButton::create(getLocal(LK::kLinkingCommand), 13.f, CCSizeMake(110, 50),

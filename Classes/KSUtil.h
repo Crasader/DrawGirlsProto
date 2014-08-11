@@ -55,7 +55,12 @@ using namespace std;
 
 #include <zlib.h>
 
-#define TRACE() CCLog("%s %d", __FILE__, __LINE__);
+#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+#define TRACE()       do {} while (0)
+#elif COCOS2D_DEBUG == 1
+#define TRACE() CCLOG("%s %d", __FILE__, __LINE__);
+#endif
+
 namespace KS
 {
 	//	CCSprite* spriteWithSpriteFrameName(const char *pszSpriteFrameName);

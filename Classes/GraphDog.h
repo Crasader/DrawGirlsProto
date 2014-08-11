@@ -302,6 +302,8 @@ public:
 		longTimeErrorFunc = func;
 	}
 	
+	void log(string logtext);
+	
 		
 	static GraphDog* get()
 	{

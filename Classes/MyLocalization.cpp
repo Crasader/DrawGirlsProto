@@ -1193,7 +1193,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	ko->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	ko->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ko->setObject(CCString::create("PvP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ko->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
@@ -1432,9 +1432,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
 	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ko->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee5);
 	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
 	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
 	ko->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
@@ -2241,7 +2242,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	en->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	en->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	en->setObject(CCString::create("PvP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	en->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
@@ -2471,9 +2472,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
 	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	en->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee5);
 	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
 	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
 	en->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
@@ -3302,7 +3304,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
 	ja->setObject(CCString::create("지난주 플레이횟수"), kMyLocalKey_rankRewardStagePlayCount);
-	ja->setObject(CCString::create("PVP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
+	ja->setObject(CCString::create("PvP 랭킹"), kMyLocalKey_rankRewardEndlessTitle);
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ja->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
@@ -3532,9 +3534,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("젬 100개"), kMyLocalKey_gem100);
 	
 	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP랭킹은 연승이 중요합니다.</font>"), kMyLocalKey_endlessOpeningMarquee1);
-	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다. PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
-	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
-	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee2);
+	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>"), kMyLocalKey_endlessOpeningMarquee3);
+	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee4);
+	ja->setObject(CCString::create("<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_endlessOpeningMarquee5);
 	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>"), kMyLocalKey_rankNewMarquee1);
 	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>"), kMyLocalKey_rankNewMarquee2);
 	ja->setObject(CCString::create("<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>"), kMyLocalKey_rankNewMarquee3);
