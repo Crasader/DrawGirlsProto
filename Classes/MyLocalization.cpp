@@ -785,7 +785,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
 	ko->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
 	ko->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
-	ko->setObject(CCString::create("무적 아이템을 먹으면 몇 초간 무적상태가 되어 보스의 공격을 받지 않습니다."), kMyLocalKey_titleLoading27);
+	ko->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	ko->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);
 	ko->setObject(CCString::create("30%나 할인되는 종합 아이템 구매 찬스를 놓치지 마세요!"), kMyLocalKey_titleLoading29);
 	ko->setObject(CCString::create("미션스테이지에서는 미션을 먼저 완료한 후 클리어가 가능합니다."), kMyLocalKey_titleLoading30);
@@ -1842,7 +1842,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
 	en->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
 	en->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
-	en->setObject(CCString::create("무적 아이템을 먹으면 몇 초간 무적상태가 되어 보스의 공격을 받지 않습니다."), kMyLocalKey_titleLoading27);
+	en->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	en->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);
 	en->setObject(CCString::create("30%나 할인되는 종합 아이템 구매 찬스를 놓치지 마세요!"), kMyLocalKey_titleLoading29);
 	en->setObject(CCString::create("미션스테이지에서는 미션을 먼저 완료한 후 클리어가 가능합니다."), kMyLocalKey_titleLoading30);
@@ -2891,7 +2891,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
 	ja->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
 	ja->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
-	ja->setObject(CCString::create("무적 아이템을 먹으면 몇 초간 무적상태가 되어 보스의 공격을 받지 않습니다."), kMyLocalKey_titleLoading27);
+	ja->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	ja->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);
 	ja->setObject(CCString::create("30%나 할인되는 종합 아이템 구매 찬스를 놓치지 마세요!"), kMyLocalKey_titleLoading29);
 	ja->setObject(CCString::create("미션스테이지에서는 미션을 먼저 완료한 후 클리어가 가능합니다."), kMyLocalKey_titleLoading30);
