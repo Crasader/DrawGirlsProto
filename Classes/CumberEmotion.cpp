@@ -66,7 +66,7 @@ void CumberEmotion::goSlience()
 {
 	if(m_emotionState != EmotionState::kSlience)
 	{
-		presentationEmotion("emoticon_stun.ccbi");
+		presentationEmotion("emoticon_silence.ccbi");
 		m_emotionState = EmotionState::kSlience;
 	}
 }

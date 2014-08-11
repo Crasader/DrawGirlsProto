@@ -199,11 +199,11 @@ bool AccountManagerPopup::init(int touchP)
 																	 std::string tryName){
 		CCLog("another!!!");
 		Json::Value param;
-#if __ANDROID__
 		param["memberID"] = prevMemberNo;
-#else
-		param["memberID"] = myHSP->getMemberID();
-#endif		
+//#if __ANDROID__
+//#else
+////		param["memberID"] = myHSP->getMemberID();
+//#endif
 		
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
@@ -330,7 +330,20 @@ bool AccountManagerPopup::init(int touchP)
 					}
 					else
 					{
-						loadFunction();
+						std::string mentString;
+						if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+						{
+							mentString = ccsf(getLocal(LK::kUnlinkAccount1),
+																descMapper.at(loginType).c_str());
+						}
+
+//						mentString += ccsf(getLocal(LK::kForeverDeleteAccount1),
+//															 tryName.c_str());
+						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
+																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+//						loadFunction();
 					}
 				});
 				
@@ -347,7 +360,7 @@ bool AccountManagerPopup::init(int touchP)
 														 tryName.c_str());
 					StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																												mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-					
+					ment->setAnchorPoint(ccp(0.5f, 0.5f));
 					this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, [=]()
 														{
 															LoadingLayer* ll = LoadingLayer::create(touchP - 100);
@@ -373,13 +386,40 @@ bool AccountManagerPopup::init(int touchP)
 			}
 			else
 			{
-				auto st = StyledLabelTTF::create(getLocal(LK::kNetworkError),
-															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				// 원래는 에러가 떠야 하지만 원래 없었던 데이터 처럼 로그인 시킴.
+				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
+				mySGD->resetLabels();
+				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+				std::string msg;
 				
-				st->setAnchorPoint(ccp(0.5f, 0.5f));
-				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "LQError",
-																												 st, nullptr);
+				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+				{
+					msg = ccsf(getLocal(LK::kUnlinkAccount1),
+										 descMapper.at(loginType).c_str());
+				}
+				msg += ccsf(getLocal(LK::kLinkAccount1),
+										tryName.c_str()
+										);
+				auto content = StyledLabelTTF::create(msg.c_str(),
+																							mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				content->setAnchorPoint(ccp(0.5f, 0.5f));
+				
+				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																												 content,
+																												 [=]()
+																												 {
+																													 CCLOG("ttTT");
+																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																												 });
 				addChild(alert);
+
+//				auto st = StyledLabelTTF::create(getLocal(LK::kNetworkError),
+//															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//				
+//				st->setAnchorPoint(ccp(0.5f, 0.5f));
+//				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "LQError",
+//																												 st, nullptr);
+//				addChild(alert);
 			}
 		});
 	};

@@ -104,10 +104,10 @@ void KsLocal::ko()
 	obj[LK::kWarningDesc] = "유의사항";
 	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
 																											 "<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-																											 "<font color=#FFFFFF newline=24>(%s, %d)</font>"
+																											 "<font color=#FFFFFF newline=24>(%s, %d Stage)</font>"
 																											 "<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
 																											 "<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
-																											"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
+																											"<font color=#FFFFFF newline=12>현재 기록(%s, %dStage)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
@@ -123,7 +123,7 @@ void KsLocal::ko()
 																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
-	
+	obj[LK::kLinked] = "연결됨";
 	obj[LK::kForeverDeleteAccount1] = "<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
 	"<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>";
 	obj[LK::kForeverDeleteAccount2] = "<font newline=14>%s 의 이전 기록은 영구히</font>"
@@ -171,10 +171,10 @@ void KsLocal::en()
 	obj[LK::kWarningDesc] = "유의사항";
 	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
 	"<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-	"<font color=#FFFFFF newline=24>(%s, %d)</font>"
+	"<font color=#FFFFFF newline=24>(%s, %d Stage)</font>"
 	"<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
 	"<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
-	"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
+	"<font color=#FFFFFF newline=12>현재 기록(%s, %dStage)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
@@ -237,10 +237,10 @@ void KsLocal::ja()
 	obj[LK::kWarningDesc] = "유의사항";
 	obj[LK::kAnotherHistory] = "<font color=#FFFFFF newline=12>%s 에 연결된</font>"
 	"<font color=#FFFFFF newline=12>다른 게임 기록이 있습니다.</font>"
-	"<font color=#FFFFFF newline=24>(%s, %d)</font>"
+	"<font color=#FFFFFF newline=24>(%s, %d Stage)</font>"
 	"<font color=#FFAA14 newline=24>이 게임 기록을 불러오시겠습니까?</font>"
 	"<font color=#FFFFFF newline=12>게스트사용자인 경우 이전 게임 기록을 불러오면</font>"
-	"<font color=#FFFFFF newline=12>현재 게임 기록(%s, %d)은 삭제됩니다.</font>";
+	"<font color=#FFFFFF newline=12>현재 기록(%s, %dStage)은 삭제됩니다.</font>";
 
 	obj[LK::kLoadPreviousData] = "이전 기록 불러오기";
 	obj[LK::kSaveCurrentData] = "현재 기록을 저장";
