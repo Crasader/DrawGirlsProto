@@ -1617,7 +1617,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		rank_table->setDelegate(this);
 		
 		
-		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+		CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_purple.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 		list_cell_case->setContentSize(CCSizeMake(259, 31));
 		list_cell_case->setPosition(ccp(5+list_cell_case->getContentSize().width/2.f,167));//list_cell_case->getContentSize().height/2.f+5));
 		list_cell_case->setTag(kCellCase);
@@ -1772,14 +1772,14 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	int my_rank = myrank.getV();
 	
 	string case_name;
-//	if(my_rank == idx+1)
-//	{
-//		case_name = "mainpopup_pupple1.png";
-//	}
-//	else
-//	{
+	if(my_rank == idx+1)
+	{
 		case_name = "mainpopup_purple.png";
-//	}
+	}
+	else
+	{
+		case_name = "rank_normal2.png";
+	}
 	
 	CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 	list_cell_case->setContentSize(CCSizeMake(259, 31));
