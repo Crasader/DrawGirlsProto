@@ -234,6 +234,7 @@ void TitleRenewalScene::endSplash()
 	
 	title_manager = t_title.second;
 	
+	title_manager->runAnimationsForSequenceNamed("Default Timeline");
 //	title_img = CCSprite::create("temp_title_back.png");
 //	title_img->setPosition(ccp(240,160));
 //	addChild(title_img);
@@ -313,7 +314,6 @@ void TitleRenewalScene::realInit()
 {
 	TRACE();
 	
-	title_manager->runAnimationsForSequenceNamed("Default Timeline");
 	
 	TRACE();
 	Json::Value param;

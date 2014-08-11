@@ -157,6 +157,8 @@ enum StartSettingPopupItemZorder{
 
 void StartSettingPopup::setMain()
 {
+	bool is_tutorial = false;
+	
 	main_case = CCSprite::create("mainpopup2_back.png");
 	main_case->setPosition(ccp(240,160-22.f+8));
 	addChild(main_case, kStartSettingPopupZorder_main);
@@ -335,6 +337,7 @@ void StartSettingPopup::setMain()
 		
 		if(!show_item_popup.empty() && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
 		{
+			is_tutorial = true;
 			ASPopupView* t_popup = ASPopupView::create(touch_priority-100);
 			
 			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -378,6 +381,7 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
+		is_tutorial = true;
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 3);
 		
 		CCNode* scenario_node = CCNode::create();
@@ -762,6 +766,7 @@ void StartSettingPopup::setMain()
 	{
 		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha)) && !mySGD->is_endless_mode)
 		{
+			is_tutorial = true;
 			myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha), true);
 			
 			CCNode* scenario_node = CCNode::create();
@@ -1263,7 +1268,7 @@ void StartSettingPopup::setMain()
 													   
 												   }));
 		}
-		else if(mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() &&
+		else if(!is_tutorial && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() &&
 				mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
 		{
 			is_menu_enable = false;
