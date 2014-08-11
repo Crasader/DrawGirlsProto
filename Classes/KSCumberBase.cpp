@@ -2210,6 +2210,7 @@ void KSCumberBase::onStartGame()
 {
 	m_isStarted = true;
 	schedule(schedule_selector(ThisClassType::cumberAttack));
+	schedule(schedule_selector(ThisClassType::observeStopBoss));
 	schedule(schedule_selector(ThisClassType::timeMeasure));
 }
 
@@ -2918,6 +2919,26 @@ void KSCumberBase::setSpeedRatioForStone(CCNode* stonePointer, float speedRatio)
 CCNode* KSCumberBase::getSlowStonePointer()
 {
 	return m_slowStonePointer;
+}
+
+void KSCumberBase::observeStopBoss(float dt)
+{
+	if(m_cumberState == 0)
+	{
+		m_stopFrameCount++;
+	}
+	else
+	{
+		m_stopFrameCount = 0;
+	}
+	
+	if(m_stopFrameCount >= 60 * 4.f)
+	{
+		m_cumberState = kCumberStateMoving;
+		m_stopFrameCount = 0;
+		CCLOG("force moving");
+	}
+	
 }
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )
