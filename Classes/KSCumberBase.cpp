@@ -2465,6 +2465,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	CCLOG("#################### autobalance ############################");
 	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	
 	if(autobalanceTry==0 && !isExchange){
 		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
         settingFuryRule();
@@ -2486,7 +2487,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(m_aiValue<50)m_aiValue=50;
 		
 		m_attackPercent *=1.2f;
-		if(m_attackPercent>0.3)m_attackPercent=0.3;
+		if(m_attackPercent<0.25)m_attackPercent=0.25;
 		
 		int sumpercent = 0;
 		int crashCnt= 0;

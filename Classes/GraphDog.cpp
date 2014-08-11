@@ -353,6 +353,21 @@ bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDS
 }
 
 
+void GraphDog::log(string logtext){
+	
+	int b = 256;
+	int a = logtext.length()/b+1;
+	
+	for(int i=0;i<a;i++){
+		int endi = b;
+		
+		if(endi>logtext.length()-i*b)endi=logtext.length()-i*b;
+		string log = logtext.substr(i*b,endi+10);
+		CCLOG("%s",log.c_str());
+	}
+	
+}
+
 //쓰레드펑션
 void* GraphDog::t_function(void *_insertIndex)
 {
@@ -367,12 +382,20 @@ void* GraphDog::t_function(void *_insertIndex)
 	//string token="";
 	//CCLOG("t_function2");
 	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
-	
+	CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ command start, t_function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	CCLOG("request %s",command.commandStr.c_str());
-	string dataset = "&gid="+GraphDog::get()->aID+ "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
+	string dataset = "gid="+GraphDog::get()->aID+ "&command=" + paramStr + "&appver=" + GraphDog::get()->getAppVersionString() + "&version="+GRAPHDOG_VERSION;
 	CCLOG("t_function3");
 	//string commandurl = "http://litqoo.com/dgserver/data.php";
 	string commandurl = GraphDog::get()->getServerURL()+"/command.php"; //"http://182.162.201.147:10010/command.php"; //"http://182.162.201.147:10010/data.php"; //
+	
+	CCLOG("call graphdog : %s",commandurl.c_str());
+	CCLOG("-------------senddata-----------------");
+	GraphDog::get()->log(dataset+"\n ------- senddataend ---------");
+	CCLOG("-------------senddatareal1-----------------");
+	
+	CCLOG("call graphdog : %s",dataset.c_str());
+	CCLOG("-------------senddatareal2-----------------");
 	//commandurl=commandurl.append(GraphDog::get()->getGraphDogVersion());
 	//commandurl=commandurl.append("/");
 	//commandurl=commandurl.append(GraphDog::get()->aID);
@@ -624,7 +647,7 @@ void GraphDog::receivedCommand(float dt)
 		try {
 			if(commands.chunk.resultCode == CURLE_AGAIN)
 			{
-				CCLOG("commands.chunk.resultCode == CURLE_AGAIN");
+				//CCLOG("commands.chunk.resultCode == CURLE_AGAIN");
 				throw commands.chunk.resultCode;
 			}
 			else if(commands.chunk.resultCode != CURLE_OK)
@@ -690,22 +713,25 @@ void GraphDog::receivedCommand(float dt)
 			}
 			
 			//@ JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
-			CCLOG("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ command start, sendSize:%d, getSize:%d $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",commands.commandStr.length()*2,commands.chunk.size);
+			CCLOG("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ get data, sendSize:%d, getSize:%d $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",commands.commandStr.length()*2,commands.chunk.size);
 			Json::Value resultobj = commands.result;
 			
 			if(resultobj.get("checkDeviceError", false).asBool()){
 				CCLOG("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("resultobj : %s",resultobj.asString().c_str());
 				this->lastCmdNo=0;
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
 				
 			}else if(resultobj.get("cmdNoError", false).asBool()){
 				CCLOG("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("resultobj : %s",resultobj.asString().c_str());
 				this->lastCmdNo=0;
 				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
 				
 			}else if(resultobj.get("longTimeError", false).asBool()){
 				
 				CCLOG("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				CCLOG("resultobj : %s",resultobj.asString().c_str());
 				this->lastCmdNo=0;
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
 			

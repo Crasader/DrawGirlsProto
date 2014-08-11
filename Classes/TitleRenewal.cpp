@@ -139,10 +139,12 @@ bool TitleRenewalScene::init()
 //		//	addChild(KSTimer::create(3.f, [=]()
 //		//	{
 //		splash.second->runAnimationsForSequenceNamed("Default Timeline");
-//		//	}));
+		//		//	}));
+		TRACE();
 	}
 	else
 	{
+		TRACE();
 		endSplash();
 	}
 	
@@ -313,9 +315,11 @@ void TitleRenewalScene::realInit()
 	
 	title_manager->runAnimationsForSequenceNamed("Default Timeline");
 	
+	TRACE();
 	Json::Value param;
 	param["ManualLogin"] = true;
 	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+	TRACE();
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 }
 
