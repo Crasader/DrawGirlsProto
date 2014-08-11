@@ -1287,7 +1287,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	ko->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ko->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	ko->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ko->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	ko->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
@@ -2337,7 +2337,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	en->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	en->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	en->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	en->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	en->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
@@ -3399,7 +3399,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("<font>스크롤하면 점수 내역을 볼 수 있어요."), kMyLocalKey_endlessTutorialMent14);
 	ja->setObject(CCString::create("<font color=961>2연승에 도전할 수 있어요!"), kMyLocalKey_endlessTutorialMent15);
 	ja->setObject(CCString::create("잠깐!"), kMyLocalKey_endlessTutorialMent16);
-	ja->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다.(--)(__)"), kMyLocalKey_endlessTutorialMent17);
+	ja->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	ja->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
 	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
