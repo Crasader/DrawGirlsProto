@@ -216,6 +216,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	
 	
 	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	r_card_elemental_label->disableOuterStroke();
 	r_card_elemental_label->setPosition(ccp(32,111));
 	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_card_elemental_label);
@@ -288,14 +289,30 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 		}
 	}
 	
-	
-	int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-	
-	CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
-	r_stage_label->setAnchorPoint(ccp(1,0.5f));
-	r_stage_label->setPosition(ccp(167, 288));
-	r_stage_label->setColor(ccBLACK);
-	target->addChild(r_stage_label);
+	string card_category = NSDS_GS(kSDS_CI_int1_category_s, card_number);
+	if(card_category == "")
+		card_category = "normal";
+	if(card_category == "nPuzzle" || card_category == "ePuzzle")
+	{
+		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+		
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+		r_stage_label->setAnchorPoint(ccp(1,0.5f));
+		r_stage_label->setPosition(ccp(167, 288));
+		r_stage_label->setColor(ccBLACK);
+		target->addChild(r_stage_label);
+	}
+	else
+	{
+		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+		
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+		r_stage_label->setAnchorPoint(ccp(1,0.5f));
+		r_stage_label->setPosition(ccp(167, 288));
+		r_stage_label->setColor(ccBLACK);
+		target->addChild(r_stage_label);
+	}
 }
 
 void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)

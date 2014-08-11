@@ -966,7 +966,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code)/*myAchieve->getRecentValue(recent_code)*/)->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
-//			progress_label->disableOuterStroke();
+			progress_label->enableOuterStroke(ccBLACK, 0.5f, 255*0.6f, true);
 			progress_label->setAnchorPoint(ccp(0,0.5f));
 			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
 			cell_back->addChild(progress_label);
@@ -997,7 +997,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			graph_img->setPercentage(100.f);
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code)/*myAchieve->getRecentValue(recent_code)*/)->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
-//			progress_label->disableOuterStroke();
+			progress_label->enableOuterStroke(ccBLACK, 0.5f, 255*0.6f, true);
 			progress_label->setAnchorPoint(ccp(0,0.5f));
 			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
 			cell_back->addChild(progress_label);
@@ -1062,7 +1062,7 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			graph_img->setPercentage(rate*100.f);
 			
 			KSLabelTTF* progress_label = KSLabelTTF::create((KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getRecentValue(recent_code))->getCString()) + "/" + KS::insert_separator(CCString::createWithFormat("%d", myAchieve->getPresentationCondition(recent_code))->getCString())).c_str(), mySGD->getFont().c_str(), 8);
-//			progress_label->disableOuterStroke();
+			progress_label->enableOuterStroke(ccBLACK, 0.5f, 255*0.6f, true);
 			progress_label->setAnchorPoint(ccp(0,0.5f));
 			progress_label->setPosition(graph_img->getPosition() + ccp(5-53.5f, 0));
 			cell_back->addChild(progress_label);
