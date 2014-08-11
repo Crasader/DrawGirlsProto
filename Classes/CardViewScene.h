@@ -20,7 +20,7 @@ using namespace std;
 
 class CommonButton;
 class MyNode;
-class EffectSprite;
+//class EffectSprite;
 class GraySprite;
 class CCMenuLambda;
 class CardViewScene : public CCLayer
@@ -45,7 +45,7 @@ private:
 	MyNode* first_img;
 	
 	CommonButton* next_button;
-	EffectSprite* safety_img;
+//	EffectSprite* safety_img;
 	
 	bool is_scrolling;
 	bool is_before_scrolling;
