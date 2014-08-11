@@ -142,7 +142,8 @@ public:
 	m_cumberTimer(0), m_attackPattern(nullptr), m_cobWebAttack(nullptr), m_freezeAttack(nullptr),
 	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
-	m_flipProperty(false), m_emotion(nullptr)
+	m_flipProperty(false), m_emotion(nullptr),
+	m_stopFrameCount(0)
 	{
 		
 	}
@@ -285,7 +286,9 @@ public:
 	void setSpeedRatioForStone(CCNode* stonePointer, float speedRatio);
 	CCNode* getSlowStonePointer();
 	virtual void attachEmotion() = 0;
+	void observeStopBoss(float dt);
 public:
+	int m_stopFrameCount;
 	struct FollowMoving
 	{
 		FollowMoving() : timer(1.1f), lastMapCollisionTime(0), collisionCount(0){}
