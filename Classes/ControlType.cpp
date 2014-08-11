@@ -1437,8 +1437,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	
 	is_show_draw_button_tutorial = false;
 	
+	CCLog("device height : %.2lf", myHSP->getScreenRealHeight());
+	
 	TouchOutWidth = (1.94145*10.0)/myHSP->getScreenRealHeight();
 	JOYSTICK_FOLLOW_DISTANCE = (1.94145*70.0)/myHSP->getScreenRealHeight();
+	
+	CCLog("JOYSTICK_FOLLOW_DISTANCE : %.2lf", JOYSTICK_FOLLOW_DISTANCE);
 	
 	minimumDistanceJ = (1.94145*8.0)/myHSP->getScreenRealHeight();
 	JoystickCenterLimit = (1.94145*30.0)/myHSP->getScreenRealHeight();
