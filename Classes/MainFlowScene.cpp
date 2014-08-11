@@ -3593,7 +3593,7 @@ void MainFlowScene::topOnLight()
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																	 {
 																		 skip_menu->setEnabled(false);
-																		 
+																		 kind_tutorial_pvp = nullptr;
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
 //																									  is_menu_enable = true;
