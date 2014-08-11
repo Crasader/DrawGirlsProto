@@ -877,6 +877,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_endlessOpeningMarquee2,
 	kMyLocalKey_endlessOpeningMarquee3,
 	kMyLocalKey_endlessOpeningMarquee4,
+	kMyLocalKey_endlessOpeningMarquee5,
 	kMyLocalKey_rankNewMarquee1,
 	kMyLocalKey_rankNewMarquee2,
 	kMyLocalKey_rankNewMarquee3,

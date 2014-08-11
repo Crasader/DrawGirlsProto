@@ -388,20 +388,24 @@ void AppDelegate::applicationDidEnterBackground()
 // this function will be called when the app is active again
 void AppDelegate::applicationWillEnterForeground()
 {
-	long long int nowTime = GraphDog::get()->getTime();
-	int time = mySGD->getSessionTime();
-	if(!time)time=180;
-	
-	
-	if(nowTime-lastTime>time){
-		mySGD->resetLabels();
-		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-	}
-	
 	CCDirector::sharedDirector()->startAnimation();
 	
 	myTR->reloadTexture();
 	
 	SimpleAudioEngine::sharedEngine()->resumeBackgroundMusic();
 	SimpleAudioEngine::sharedEngine()->resumeAllEffects();
+	
+	long long int nowTime = GraphDog::get()->getTime();
+	int time = mySGD->getSessionTime();
+	if(!time)time=180;
+	
+	
+	if(nowTime-lastTime>time){
+		
+		CCDirector::sharedDirector()->getRunningScene()->addChild(KSTimer::create(0.1f, [=]()
+																				  {
+																					  mySGD->resetLabels();
+																					  CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																				  }));
+	}
 }
