@@ -1543,7 +1543,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									  for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
 									  {
 										  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
-											 countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
+											 use_time <= myAchieve->getCondition((AchievementCode)i))
 										  {
 											  myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 											  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
@@ -1667,7 +1667,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
 			{
 				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
-				   countingCnt.getV() <= myAchieve->getCondition((AchievementCode)i))
+				   use_time <= myAchieve->getCondition((AchievementCode)i))
 				{
 					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
 					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
