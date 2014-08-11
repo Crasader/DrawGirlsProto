@@ -599,6 +599,7 @@ void MapScanner::exchangeMS()
 	invisibleImg->getChildByTag(8707)->removeFromParent();
 	
 	CCClippingNode* t_sprc = (CCClippingNode*)invisibleImg->getChildByTag(8706);
+	t_sprc->setVisible(true);
 	CCSprite* t_spr = (CCSprite*)t_sprc->getChildByTag(8706);
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int orir =NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d);
@@ -1277,6 +1278,7 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	sten->getTexture()->setAntiAliasTexParameters();
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	sil->setColor(ccc3(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)));
+	clip->setVisible(false);
 	//clip->getTexture()->setAntiAliasTexParameters();
 	//
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
