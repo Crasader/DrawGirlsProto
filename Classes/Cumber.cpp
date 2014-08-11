@@ -425,10 +425,10 @@ void CumberParent::silenceItem(bool t_b)
 		mainCumber->setSlience(t_b);
 	}
 	
-	for(auto i : subCumberArray)
-	{
-		i->setSlience(t_b);
-	}	
+//	for(auto i : subCumberArray)
+//	{
+//		i->setSlience(t_b);
+//	}	
 }
 
 void CumberParent::setCasting(bool t_b)

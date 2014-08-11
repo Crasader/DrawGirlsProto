@@ -2770,6 +2770,15 @@ void KSCumberBase::setSpeedRatio( float sr )
 void KSCumberBase::setSlience( bool s )
 {
 	m_slience = s;
+	
+	if(s)
+	{
+		getEmotion()->goSlience();
+	}
+	else
+	{
+		getEmotion()->releaseSlience();
+	}
 }
 
 void KSCumberBase::caughtAnimation()
