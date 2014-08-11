@@ -169,6 +169,7 @@ void EndlessModeOpening::setMain()
 	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee2));
 	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee3));
 	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee4));
+	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee5));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));

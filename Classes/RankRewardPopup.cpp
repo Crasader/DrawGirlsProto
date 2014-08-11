@@ -67,11 +67,11 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	title_back->setPosition(ccp(80,back_case->getContentSize().height-10));
 	back_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardTitle), mySGD->getFont().c_str(), 14);
-	title_label->disableOuterStroke();
-	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,3.5f));
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardTitle), mySGD->getFont().c_str(), 15);
+	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
+	
+	CommonAnimation::applyShadow(title_label);
 	
 	
 	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
@@ -220,12 +220,15 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //		left_graph_case->addChild(count_label);
 //	}
 	
+	if(mySGD->rank_reward_data["stage"]["alluser"].asInt() == 0)
+		mySGD->rank_reward_data["stage"]["alluser"] = 1;
 	float stage_rank_percent = 1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt();
 	
 	CCSprite* stage_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	stage_percent_case->setAnchorPoint(ccp(0.5,1));
-	stage_percent_case->setPosition(ccp(left_graph_case->getContentSize().width, left_graph_case->getContentSize().height/2.f) + ccp(0,-1));
-	left_graph_case->addChild(stage_percent_case);
+	stage_percent_case->setPosition(left_back->getPosition() + ccpFromSize(left_back->getContentSize()/(-2.f)) + left_graph_back->getPosition() + ccpFromSize(left_graph_back->getContentSize()/(-2.f)) +
+									left_graph_case->getPosition() + ccpFromSize(left_graph_case->getContentSize()/(-2.f)) + ccp(left_graph_case->getContentSize().width, left_graph_case->getContentSize().height/2.f) + ccp(0,-1));
+	back_case->addChild(stage_percent_case, 1);
 	
 	KSLabelTTF* stage_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", stage_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
 	stage_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
@@ -394,16 +397,19 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //		right_graph_case->addChild(count_label);
 //	}
 	
+	if(mySGD->rank_reward_data["endless"]["alluser"].asInt() == 0)
+		mySGD->rank_reward_data["endless"]["alluser"] = 1;
 	float endless_rank_percent = 1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt();
 	
 	CCSprite* endless_percent_case = CCSprite::create("gameresult_rank_percent.png");
 	endless_percent_case->setAnchorPoint(ccp(0.5,1));
-	endless_percent_case->setPosition(ccp(right_graph_case->getContentSize().width, right_graph_case->getContentSize().height/2.f) + ccp(0,-1));
-	right_graph_case->addChild(endless_percent_case);
+	endless_percent_case->setPosition(right_back->getPosition() + ccpFromSize(right_back->getContentSize()/(-2.f)) + right_graph_back->getPosition() + ccpFromSize(right_graph_back->getContentSize()/(-2.f)) +
+									  right_graph_case->getPosition() + ccpFromSize(right_graph_case->getContentSize()/(-2.f)) + ccp(right_graph_case->getContentSize().width, right_graph_case->getContentSize().height/2.f) + ccp(0,-1));
+	back_case->addChild(endless_percent_case);
 	
 	KSLabelTTF* endless_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", endless_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
 	endless_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-	endless_percent_label->setPosition(ccpFromSize(endless_percent_case->getContentSize()/2.f) + ccp(0,-2));
+	endless_percent_label->setPosition(ccpFromSize(endless_percent_case->getContentSize()/2.f) + ccp(0,-3));
 	endless_percent_case->addChild(endless_percent_label);
 	
 	
@@ -494,18 +500,18 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		if(mySGD->rank_reward_data["stage"]["myrank"].asInt() <= 10)
 		{
 			if(mySGD->rank_reward_data["stage"]["alluser"].asInt() == 0)
-				stage_after_position = ccp(0, left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				stage_after_position = stage_percent_case->getPosition() + ccp(-left_graph_case->getContentSize().width,0);
 			else
-				stage_after_position = ccp(left_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				stage_after_position = stage_percent_case->getPosition() + ccp(-left_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), 0);
 			stage_percent_label->setFontSize(12);
 			stage_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["stage"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
 			if(mySGD->rank_reward_data["stage"]["alluser"].asInt() == 0)
-				stage_after_position = ccp(0, left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				stage_after_position = stage_percent_case->getPosition() + ccp(-left_graph_case->getContentSize().width,0);
 			else
-				stage_after_position = ccp(left_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), left_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				stage_after_position = stage_percent_case->getPosition() + ccp(-left_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), 0);
 		}
 		
 		CCMoveTo* stage_move = CCMoveTo::create(0.5f, stage_after_position);
@@ -516,18 +522,18 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		if(mySGD->rank_reward_data["endless"]["myrank"].asInt() <= 10)
 		{
 			if(mySGD->rank_reward_data["endless"]["alluser"].asInt() == 0)
-				endless_after_position = ccp(0, right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				endless_after_position = endless_percent_case->getPosition() + ccp(-right_graph_case->getContentSize().width,0);
 			else
-				endless_after_position = ccp(right_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				endless_after_position = endless_percent_case->getPosition() + ccp(-right_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), 0);
 			endless_percent_label->setFontSize(12);
 			endless_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["endless"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
 			if(mySGD->rank_reward_data["endless"]["alluser"].asInt() == 0)
-				endless_after_position = ccp(0, right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				endless_after_position = endless_percent_case->getPosition() + ccp(-right_graph_case->getContentSize().width,0);
 			else
-				endless_after_position = ccp(right_graph_case->getContentSize().width*(1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), right_graph_case->getContentSize().height/2.f) + ccp(0,-1);
+				endless_after_position = endless_percent_case->getPosition() + ccp(-right_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), 0);
 		}
 		
 		CCMoveTo* endless_move = CCMoveTo::create(0.5f, endless_after_position);
