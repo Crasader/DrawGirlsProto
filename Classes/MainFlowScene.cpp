@@ -3645,11 +3645,11 @@ void MainFlowScene::topOnLight()
 			kind_tutorial_pvp = [=]()
 			{
 				skip_menu->setEnabled(false);
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
 				kind_tutorial_pvp = nullptr;
-//				addChild(KSTimer::create(0.1f, [=]()
-//										 {
-//											 scenario_node->removeFromParent();
-//										 }));
 			};
 			
 			TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);
