@@ -138,52 +138,54 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	isLoaded = false;
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
+	_menu->setPosition(CCPointZero);
 	_menu->setTouchPriority(-200);
-
+	main_case->addChild(_menu, 4);
+	CCSprite* n_allReward_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	n_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_allReward_label->setPosition(ccpFromSize(n_allReward_img->getContentSize()/2.f) + ccp(0,-1));
+	n_allReward_img->addChild(n_allReward_label);
 	
-	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
-	allReceive->setTitleSize(12.f);
-	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
-	allReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
-//	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
-	allReceive->setTitleColor(ccc3(255, 255, 255));
-	allReceive->setTitleColorForDisable(ccc3(90, 60, 30));
-	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
-	allReceive->setFunction([=](CCObject*){
-		
-		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
-		
-		t_suction->setTouchEnabled(true);
-		t_suction->setVisible(true);
-		Json::Value p;
-		p["memberID"] = myHSP->getMemberID();
-		
-		
-		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value r){
-			if(r["result"]["code"].asInt()==GDSUCCESS){
-				
-				{
-					rewardDown(r["list"],[=](bool isSuccess){
-						//테이블 리로드
-						m_mailList.clear();
-						this->filterWithMailFilter();
-						this->mailTableView->reloadData();
-						mySGD->saveChangeGoodsTransaction(r);
-						takedCheck(r["list"],[=](){
-							t_suction->setTouchEnabled(false);
-							t_suction->setVisible(false);
-							
-						});
-					});
-				}
-			}
-		});
-	});
+	CCSprite* s_allReward_img = CCSprite::create("subbutton_pink.png");
+	s_allReward_img->setColor(ccGRAY);
+	KSLabelTTF* s_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	s_allReward_label->setColor(ccGRAY);
+	s_allReward_label->disableOuterStroke();
+	s_allReward_label->setPosition(ccpFromSize(s_allReward_img->getContentSize()/2.f) + ccp(0,-1));
+	s_allReward_img->addChild(s_allReward_label);
+	
+	CCSprite* d_allReward_img = GraySprite::create("subbutton_pink.png");
+	((GraySprite*)d_allReward_img)->setGray(true);
+	KSLabelTTF* d_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	d_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_allReward_label->setPosition(ccpFromSize(d_allReward_img->getContentSize()/2.f) + ccp(0,-1));
+	d_allReward_img->addChild(d_allReward_label);
+	
+	
+	allReceive = CCMenuItemSpriteLambda::create(n_allReward_img, s_allReward_img, d_allReward_img,
+																							std::bind(&ThisClassType::takeAllReward, this, std::placeholders::_1));
+//	allReceive->setTag(kAchievePopupMenuTag_allReward);
+	allReceive->setPosition(ccp(395,16));
+	_menu->addChild(allReceive);
+//	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
+//	
+//	allReceive->setTitleSize(12.f);
+//	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
+//	allReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+////	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
+//	allReceive->setTitleColor(ccc3(255, 255, 255));
+//	allReceive->setTitleColorForDisable(ccc3(90, 60, 30));
+//	//allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
+	
+	
+//	allReceive->setFunction([=](CCObject*));
 	//FormSetter::get()->addObject("testksoo2", allReceive);
-	allReceive->setPosition(ccp(395.0, 13.5));
+	
+//	allReceive->setPosition(ccp(395.0, 13.5));
 	allReceive->setEnabled(false);
 	setFormSetter(allReceive);
-	main_case->addChild(allReceive, 1);
+//	main_case->addChild(allReceive, 1);
 
 	auto giftBoxAlertBox = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
 	giftBoxAlertBox->setPosition(ccp(326.0, 246.5));
@@ -360,6 +362,39 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	t_suction->addChild(loading_circle);
 	
 	
+}
+void SumranMailPopup::takeAllReward(CCObject* sender)
+{
+	{
+		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+		
+		t_suction->setTouchEnabled(true);
+		t_suction->setVisible(true);
+		Json::Value p;
+		p["memberID"] = myHSP->getMemberID();
+		
+		
+		myHSP->command("confirmallgiftboxhistory",p,[=](Json::Value r){
+			if(r["result"]["code"].asInt()==GDSUCCESS){
+				
+				{
+					rewardDown(r["list"],[=](bool isSuccess){
+						//테이블 리로드
+						m_mailList.clear();
+						this->filterWithMailFilter();
+						this->mailTableView->reloadData();
+						mySGD->saveChangeGoodsTransaction(r);
+						takedCheck(r["list"],[=](){
+							t_suction->setTouchEnabled(false);
+							t_suction->setVisible(false);
+							
+						});
+					});
+				}
+			}
+		});
+	}
 }
 void SumranMailPopup::loadMail ()
 {

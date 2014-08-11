@@ -320,8 +320,7 @@ bool AccountManagerPopup::init(int touchP)
 					if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
 					{
 						std::string mentString;
-						mentString += ccsf("<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
-															 "<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>",
+						mentString += ccsf(getLocal(LK::kForeverDeleteAccount1),
 															 tryName.c_str());
 						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
@@ -341,11 +340,10 @@ bool AccountManagerPopup::init(int touchP)
 					
 					if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
 					{
-						mentString = ccsf("<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>",
+						mentString = ccsf(getLocal(LK::kUnlinkAccount1),
 															descMapper.at(loginType).c_str());
 					}
-					mentString += ccsf("<font newline=14>%s 의 이전 기록은 영구히</font>"
-														 "<font >삭제되며 현재기록을 유지합니다.</font>",
+					mentString += ccsf(getLocal(LK::kForeverDeleteAccount2),
 														 tryName.c_str());
 					StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																												mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
@@ -401,10 +399,10 @@ bool AccountManagerPopup::init(int touchP)
 				
 				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
 				{
-					msg = ccsf("<font color=#FF0000 newline=14>%s 와의 연동을 해제합니다.</font>",
+					msg = ccsf(getLocal(LK::kUnlinkAccount1),
 										 descMapper.at(loginType).c_str());
 				}
-				msg += ccsf("<font>%s 와 연동합니다.</font>",
+				msg += ccsf(getLocal(LK::kLinkAccount1),
 															 tryName.c_str()
 															 );
 				auto content = StyledLabelTTF::create(msg.c_str(),

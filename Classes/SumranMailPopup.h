@@ -112,6 +112,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void takedCheck(Json::Value reward, std::function<void(void)> func);
 	//	void cardDown(int cardNo,std::function<void(bool)>finishFunc);
 		void takedCard(int cardNo,std::function<void(void)>finishFunc);
+	void takeAllReward(CCObject* sender);
 	protected:
 		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
@@ -122,7 +123,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		SumranPostBoxState m_popupState;
 		CCSprite* main_case;
 		TouchSuctionLayer* t_suction;
-		CommonButton* allReceive;
+		CCMenuItemLambda* allReceive;
 	CCSprite* gray;
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
