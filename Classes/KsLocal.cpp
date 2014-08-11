@@ -123,7 +123,14 @@ void KsLocal::ko()
 																		"<font color=#FFFFFF newline=24>하실 수 없습니다.</font>"
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
-	obj[LK::kLinked] = "연결됨";
+	
+	obj[LK::kForeverDeleteAccount1] = "<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
+	"<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>";
+	obj[LK::kForeverDeleteAccount2] = "<font newline=14>%s 의 이전 기록은 영구히</font>"
+	"<font >삭제되며 현재기록을 유지합니다.</font>";
+	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
+	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
+
 	
 	m_mapper[__FUNCTION__] = obj;
 }
@@ -184,6 +191,13 @@ void KsLocal::en()
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
 	obj[LK::kLinked] = "연결됨";
+	obj[LK::kForeverDeleteAccount1] = "<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
+	"<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>";
+	obj[LK::kForeverDeleteAccount2] = "<font newline=14>%s 의 이전 기록은 영구히</font>"
+	"<font >삭제되며 현재기록을 유지합니다.</font>";
+	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
+	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
+
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
@@ -243,5 +257,12 @@ void KsLocal::ja()
 																		"<font color=#FFAA14 newline=12>연결 하시겠습니까?</font>";
 	obj[LK::kLinkingCommand] = "연결하기";
 	obj[LK::kLinked] = "연결됨";
+	obj[LK::kForeverDeleteAccount1] = "<font color=#FFFFFF newline=14>현재 기록은 영구히 삭제되며</font>"
+	"<font color=#FFFFFF>%s 의 이전 기록을 로드합니다.</font>";
+	obj[LK::kForeverDeleteAccount2] = "<font newline=14>%s 의 이전 기록은 영구히</font>"
+	"<font >삭제되며 현재기록을 유지합니다.</font>";
+	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
+	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
+
 	m_mapper[__FUNCTION__] = obj;
 }

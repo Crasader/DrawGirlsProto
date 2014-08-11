@@ -51,7 +51,11 @@ enum class LK
 	kRetryLinking,
 	kAccountDesc,
 	kLinkingCommand,
-	kLinked
+	kLinked,
+	kForeverDeleteAccount1,
+	kForeverDeleteAccount2,
+	kUnlinkAccount1,
+	kLinkAccount1
 };
 class KsLocal
 {
