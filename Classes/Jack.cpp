@@ -220,7 +220,22 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	else // escape point not found
 	{
 		CCLOG("escape point not found!");
-		endGame();
+		int i = kAchievementCode_hidden_dieEasy;
+		
+		if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+		{
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   myGD->getCommunication("UI_getUseTime") <= myAchieve->getCondition(AchievementCode(i)))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
+				AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		
+		mySGD->fail_code = kFC_gameover;
+		myGD->setIsGameover(true);
+		myGD->communication("Main_gameover");
 	}
 }
 
