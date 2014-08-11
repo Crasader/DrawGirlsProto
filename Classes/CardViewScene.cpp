@@ -118,13 +118,13 @@ bool CardViewScene::init()
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kCV_Z_first_img);
 	
-	if(mySGD->is_safety_mode)
-	{
-		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
-		safety_img->setSilhouetteConvert(0);
-		safety_img->setPosition(ccp(160, 230));
-		game_node->addChild(safety_img, kCV_Z_first_img);
-	}
+//	if(mySGD->is_safety_mode)
+//	{
+//		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
+//		safety_img->setSilhouetteConvert(0);
+//		safety_img->setPosition(ccp(160, 230));
+//		game_node->addChild(safety_img, kCV_Z_first_img);
+//	}
 	
 	CCPoint center_position = ccp(160,230);
 	
