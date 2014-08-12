@@ -266,6 +266,13 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	jsonTotalCmd["os"]="ios";
 	#endif
 	
+	
+	#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+	
+	#elif COCOS2D_DEBUG == 1
+		jsonTotalCmd["log"]="true";
+	#endif
+	
 	this->lastCmdNo += (int)(rand()%10)+1;
 	jsonTotalCmd["cmdNo"]=this->lastCmdNo;
 	

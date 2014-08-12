@@ -43,6 +43,17 @@ public:
 	int position_y;
 	
 	string ani_filename;
+	
+	CopyFile() :
+	is_ani(false),
+	cut_width(0),
+	cut_height(0),
+	position_x(0),
+	position_y(0),
+	ani_filename("")
+	{
+		
+	}
 };
 
 #endif /* defined(__DGproto__DownloadFile__) */

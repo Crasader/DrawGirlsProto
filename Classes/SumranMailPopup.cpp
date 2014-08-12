@@ -656,14 +656,16 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
 																					spr->setScale(0.12);
 																					count->setString("");
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}else{
 																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
+																					
 																				}
 																				
 																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
 																				
 																				setFormSetter(back);
 																				setFormSetter(spr);
@@ -1217,7 +1219,7 @@ void SumranMailPopup::startCardDownload()
 	mySGD->network_check_cnt = 0;
 	if(card_download_list.size() > 0 && ing_card_download <= card_download_list.size())
 	{
-		CCLOG("%d : %s", ing_download_cnt, card_download_list[ing_card_download-1].filename.c_str());
+		CCLOG("%d : %s", ing_card_download, card_download_list[ing_card_download-1].filename.c_str());
 		mySIL->downloadImg(card_download_list[ing_card_download-1].img,
 													  card_download_list[ing_card_download-1].size,
 													  card_download_list[ing_card_download-1].filename,
@@ -1231,14 +1233,14 @@ void SumranMailPopup::startCardDownload()
 
 void SumranMailPopup::successCardDownload()
 {
-	if(ing_download_cnt < card_download_list.size())
+	if(ing_card_download < card_download_list.size())
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_card_download-1].key,
 			   card_download_list[ing_card_download-1].img, false);
-		ing_download_cnt++;
+		ing_card_download++;
 		startCardDownload();
 	}
-	else if(ing_download_cnt == card_download_list.size())
+	else if(ing_card_download == card_download_list.size())
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_card_download-1].key,
 			   card_download_list[ing_card_download-1].img, false);
@@ -1281,7 +1283,7 @@ void SumranMailPopup::successCardDownload()
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		
-		ing_download_cnt++;
+		ing_card_download++;
 		end_func_download_card(true);
 	}
 	else
