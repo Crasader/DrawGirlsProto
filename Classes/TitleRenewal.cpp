@@ -1091,6 +1091,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setClearTakeCardCnt(result_data["clearTakeCardCnt"].asInt());
 		mySGD->setUnlockFrameCnt(result_data["unlockFrameCnt"].asInt());
 		mySGD->setSpecialEventPuzzleNumber(result_data["specialEventPuzzleNumber"].asInt());
+		mySGD->setSendPvpPlayDataRate(result_data["sendPvpPlayDataRate"].asInt());
 	}
 	else
 	{

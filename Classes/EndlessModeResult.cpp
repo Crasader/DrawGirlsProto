@@ -299,7 +299,14 @@ bool EndlessModeResult::init()
 												 }));
 	}
 	
-	if(left_total_score.getV() > right_total_score.getV() || mySGD->getIsAlwaysSavePlaydata() == 1)
+	bool is_send_pvp_play_data = false;
+	
+	if(mySGD->getIsAlwaysSavePlaydata() == 1)
+		is_send_pvp_play_data = true;
+	else if(left_total_score.getV() > right_total_score.getV() && rand()%100 > mySGD->getSendPvpPlayDataRate())
+		is_send_pvp_play_data = true;
+	
+	if(is_send_pvp_play_data)
 	{
 		Json::Value param2;
 		param2.clear();

@@ -3756,6 +3756,9 @@ string StarGoldData::getEventString(){	return event_string;	}
 void StarGoldData::setIsAlwaysSavePlaydata(int t_i){	is_always_save_playdata = t_i;	}
 int StarGoldData::getIsAlwaysSavePlaydata(){	return is_always_save_playdata;	}
 
+void StarGoldData::setSendPvpPlayDataRate(int t_i){	send_pvp_play_data_rate = t_i;	}
+int StarGoldData::getSendPvpPlayDataRate(){	return send_pvp_play_data_rate;	}
+
 string StarGoldData::getAllClearReward(){	return all_clear_reward.getV();	}
 void StarGoldData::setAllClearReward(string t_str){	all_clear_reward = t_str;	}
 
