@@ -385,12 +385,16 @@ void* GraphDog::t_function(void *_insertIndex)
 	Json::Value costr = command.commandStr;
 	
 	
-	int add = (int)(rand()%10)+1;
+	
+	pthread_mutex_lock(&command.caller->t_functionMutex);
+    
+    
+    int add = (int)(rand()%10)+1;
 	GraphDog::get()->lastCmdNo += add;
 	costr["cmdNo"]=GraphDog::get()->lastCmdNo;
 	command.commandStr = costr.asString();
 	CCLOG("cmdNo is %d",GraphDog::get()->lastCmdNo);
-	pthread_mutex_lock(&command.caller->t_functionMutex);
+    
 	//CCLOG("t_function2");
 	//string token="";
 	//CCLOG("t_function2");

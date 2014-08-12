@@ -417,6 +417,7 @@ private:
 		this->commandFinishedFunc=nullptr;
 		this->commandRetryFunc=nullptr;
 		this->deviceID=0;
+        AutoIncrease::cnt=0;
 		
 		
 	}
