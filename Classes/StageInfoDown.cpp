@@ -169,12 +169,12 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 				df_list.push_back(t_df);
 				// ================================
 				
-				CopyFile t_cf;
-				t_cf.from_filename = t_df.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-				cf_list.push_back(t_cf);
-				
-				is_add_cf = true;
+//				CopyFile t_cf;
+//				t_cf.from_filename = t_df.filename.c_str();
+//				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//				cf_list.push_back(t_cf);
+//				
+//				is_add_cf = true;
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
@@ -528,12 +528,12 @@ void StageInfoDown::resultLoadedCardData( Json::Value result_data )
 				df_list.push_back(t_df);
 				// ================================
 				
-				CopyFile t_cf;
-				t_cf.from_filename = t_df.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-				cf_list.push_back(t_cf);
-				
-				is_add_cf = true;
+//				CopyFile t_cf;
+//				t_cf.from_filename = t_df.filename.c_str();
+//				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//				cf_list.push_back(t_cf);
+//				
+//				is_add_cf = true;
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];

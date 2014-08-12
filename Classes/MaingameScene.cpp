@@ -290,7 +290,7 @@ void Maingame::onEnterTransitionDidFinish()
 			intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 			intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 			intro_boss->setScale(1.8f);
-			addChild(intro_boss, introZorder);
+			addChild(intro_boss, searchEyeZorder);
 			
 			CCDelayTime* t_delay = CCDelayTime::create(1.f);
 			CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
@@ -2328,7 +2328,7 @@ void Maingame::clearScenario()
 		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 		intro_boss->setScale(1.8f);
-		addChild(intro_boss, introZorder);
+		addChild(intro_boss, searchEyeZorder);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
 		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
@@ -3075,7 +3075,7 @@ void Maingame::failScenario()
 		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 		intro_boss->setScale(1.8f);
-		addChild(intro_boss, introZorder);
+		addChild(intro_boss, searchEyeZorder);
 		
 		CCDelayTime* t_delay = CCDelayTime::create(1.f);
 		CCMoveTo* t_move = CCMoveTo::create(0.7f, ccp(240,myDSH->ui_center_y+10));
@@ -3617,6 +3617,9 @@ void Maingame::showTextMessage(const std::string& text)
 }
 void Maingame::showTakeCoin()
 {
+	if(myGD->getIsGameover())
+		return;
+	
 	AudioEngine::sharedInstance()->playEffect("ment_spread_change.mp3", false, true);
 	
 	TakeCoin* t_w = TakeCoin::create();
@@ -3630,6 +3633,9 @@ CCNode* Maingame::gameNodePointer()
 
 void Maingame::showChangeCard()
 {
+	if(myGD->getIsGameover())
+		return;
+	
 	ChangeCard* t_w = ChangeCard::create();
 	addChild(t_w, goldZorder);
 }
@@ -3812,6 +3818,9 @@ void Maingame::gameNodeChangingGameStep( CCPoint t_p, int t_step )
 
 void Maingame::showAreaScroll()
 {
+	if(myGD->getIsGameover())
+		return;
+	
 	AreaScroll* t_w = AreaScroll::create();
 	addChild(t_w, goldZorder);
 	t_w->startAction();

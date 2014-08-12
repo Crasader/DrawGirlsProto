@@ -2036,12 +2036,12 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					card_download_list.push_back(t_df);
 					// ================================
 					
-					CopyFile t_cf;
-					t_cf.from_filename = t_df.filename.c_str();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					card_reduction_list.push_back(t_cf);
-					
-					is_add_cf = true;
+//					CopyFile t_cf;
+//					t_cf.from_filename = t_df.filename.c_str();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					card_reduction_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
 				}
 			}
 			
@@ -2473,44 +2473,6 @@ void TitleRenewalScene::startFileDownloadSet()
 		
 		// reduce and divide
 		
-		// reduce
-		for(int i=0;i<card_reduction_list.size();i++)
-		{
-			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
-			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-			if(card_reduction_list[i].is_ani)
-			{
-				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
-																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
-				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
-				target_img->addChild(ani_img);
-			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->beginWithClear(0, 0, 0, 0);
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
-		
 		// divide
 		for(int j=0;j<puzzle_download_list.size() && j < puzzle_download_list_puzzle_number.size();j++)
 		{
@@ -2673,6 +2635,44 @@ void TitleRenewalScene::startFileDownloadSet()
 			}
 			//메모리해제
 			img->release();
+		}
+		
+		// reduce
+		for(int i=0;i<card_reduction_list.size();i++)
+		{
+			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+			
+			CCSprite* target_img = new CCSprite();
+			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+			target_img->setAnchorPoint(ccp(0,0));
+			
+			if(card_reduction_list[i].is_ani)
+			{
+				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+				target_img->addChild(ani_img);
+			}
+			
+			target_img->setScale(0.4f);
+			
+			CCRenderTexture* t_texture = new CCRenderTexture();
+			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+			t_texture->setSprite(target_img);
+			t_texture->beginWithClear(0, 0, 0, 0);
+			t_texture->getSprite()->visit();
+			t_texture->end();
+			
+			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			
+			t_texture->release();
+			target_img->release();
+			
+			if(i % 3 == 0)
+			{
+				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+			}
 		}
 		
 		if(character_download_list.size() > 0)
