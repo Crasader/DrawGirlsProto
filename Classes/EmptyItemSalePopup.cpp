@@ -295,12 +295,12 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 		{
 			if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
 			{
-				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack1", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack1", ccsf("Display %02d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale1, 0);
 			}
 			else if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
 			{
-				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack2", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack2", ccsf("Display %02d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale2, 0);
 			}
 			

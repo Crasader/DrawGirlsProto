@@ -151,13 +151,13 @@ bool EndlessModeResult::init()
 		}
 		else
 		{
-			fiverocks::FiveRocksBridge::trackEvent("Game", "PvPResult", ccsf("win %d", mySGD->endless_my_victory.getV()), ccsf("Lv%d", mySGD->getSelectedCharacterHistory().level.getV()));
+			fiverocks::FiveRocksBridge::trackEvent("Game", "PvPResult", ccsf("win %03d", mySGD->endless_my_victory.getV()), ccsf("Lv%03d", mySGD->getSelectedCharacterHistory().level.getV()));
 			
 			if(mySGD->pvp_continue_cnt >= 1)
 			{
 				string fiverocks_param1, fiverocks_param2;
 				if(mySGD->pvp_continue_cnt == 1)
-					fiverocks_param1 = "continue 1";
+					fiverocks_param1 = "continue 01";
 				else if(mySGD->pvp_continue_cnt <= 4)
 					fiverocks_param1 = "continue 02~04";
 				else if(mySGD->pvp_continue_cnt <= 8)
@@ -168,9 +168,9 @@ bool EndlessModeResult::init()
 					fiverocks_param1 = "continue 12~";
 				
 				if(mySGD->endless_my_victory.getV() == 0)
-					fiverocks_param2 = "win 0";
+					fiverocks_param2 = "win 00";
 				else if(mySGD->endless_my_victory.getV() == 1)
-					fiverocks_param2 = "win 1";
+					fiverocks_param2 = "win 01";
 				else if(mySGD->endless_my_victory.getV() <= 4)
 					fiverocks_param2 = "win 02~04";
 				else if(mySGD->endless_my_victory.getV() <= 8)

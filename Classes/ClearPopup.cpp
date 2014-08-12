@@ -238,10 +238,10 @@ bool ClearPopup::init()
 	else if(mySGD->is_exchanged)				take_level = 2;
 	else										take_level = 1;
 	
-	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %d", stage_number));
+	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %03d", stage_number));
 	if(mySGD->ingame_continue_cnt > 0)
 	{
-		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %d", mySGD->ingame_continue_cnt), ccsf("Stage %d", stage_number));
+		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %02d", mySGD->ingame_continue_cnt), ccsf("Stage %03d", stage_number));
 	}
 	
 	int start_stage_number = NSDS_GI(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_startStage_i);

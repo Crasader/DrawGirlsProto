@@ -240,10 +240,10 @@ bool FailPopup::init()
 		stage_tab->addChild(piece_number_label);
 	}
 	
-	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", "Fail", ccsf("Stage %d", mySD->getSilType()));
+	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", "Fail", ccsf("Stage %03d", mySD->getSilType()));
 	if(mySGD->ingame_continue_cnt > 0)
 	{
-		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %d", mySGD->ingame_continue_cnt), ccsf("Stage %d", mySD->getSilType()));
+		fiverocks::FiveRocksBridge::trackEvent("UseGem", "IngameContinue1", ccsf("Continue %02d", mySGD->ingame_continue_cnt), ccsf("Stage %03d", mySD->getSilType()));
 	}
 	
 	for(int i=0;i<4;i++)

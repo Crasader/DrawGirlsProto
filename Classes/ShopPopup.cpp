@@ -1210,7 +1210,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										success_func = [=]()
 										{
-											fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Purchase", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+											fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Purchase", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 										};
 										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
@@ -1291,7 +1291,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										
 										success_func = [=]()
 										{
-											fiverocks::FiveRocksBridge::trackEvent("UseGem", "Get_Heart", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+											fiverocks::FiveRocksBridge::trackEvent("UseGem", "Get_Heart", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
 										};
 										
 										mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
