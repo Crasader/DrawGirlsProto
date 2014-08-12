@@ -72,7 +72,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 {
 
 	return;
-	CCLOG("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
+//	CCLOG("createJackMissile inner : %d, %d, %.2f", jm_type, cmCnt, missile_speed);
 	
 	int card_number;
 	card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
@@ -81,7 +81,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	{
 		if(jm_type%10 >= 0 && jm_type%10 <= 3)
 		{
-			CCLOG("base JackMissile");
+//			CCLOG("base JackMissile");
 			vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
 			int cumberCnt = subCumberArray.size();
 			int random_value;
@@ -139,7 +139,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 		}
 		else if(jm_type%10 >= 4 && jm_type%10 <= 6)
 		{
-			CCLOG("Upgrade JackMissile");
+//			CCLOG("Upgrade JackMissile");
 			UM_creator* t_c = UM_creator::create(cmCnt, jm_type, missile_speed, missile_position);
 			jack_missile_node->addChild(t_c);
 			t_c->startPetCreate();
@@ -566,7 +566,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
 	if(cb->getAttackQueue().empty() == false && cb->getAttackQueue().size()>0)
 	{
-        CCLOG("A");
+//        CCLOG("A");
 		patternData = cb->getAttackQueue().front();
 		cb->getAttackQueue().pop_front();
 	}  
@@ -575,7 +575,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		// 사냥꾼 미션이고 부하몹이 0 이하라면 부하몹 생성.
 		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
 		{
-			CCLOG("B");
+//			CCLOG("B");
 			Json::Reader reader;
 			Json::Value createCumberPattern;
 			reader.parse(R"({
@@ -594,11 +594,11 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	}
     
 	if(patternData.isNull() || patternData.asString()=="" || patternData.isBool()){
-		CCLOG("it's null in attackWithKSCode");
+//		CCLOG("it's null in attackWithKSCode");
 		patternData = patternDParam;
 	}
 	
-	KS::KSLog("%", patternData);
+//	KS::KSLog("%", patternData);
 	if(patternData["pattern"].asInt() == 1020)
 	{
 		Json::Reader reader;
@@ -614,8 +614,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	}
 	
 	std::string patternD = patternData.asString();
-	CCLOG(".. %s", patternDParam.c_str());
-	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
+//	CCLOG(".. %s", patternDParam.c_str());
+//	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
 	int castFrame = patternData.get("castframe", 120).asInt();
 	// 캐스팅 실패하면 캐스팅 시간 점점 줄음.
 	castFrame = MAX(30, castFrame - (castFrame * 0.1f)* cb->getCastingCancelCount());
@@ -633,7 +633,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			t_ccn->setChargeColor(ccc4f(0.00, 0.00, 0.00, 1.00));
 			cb->getParent()->addChild(t_ccn);
 			t_ccn->startCharge();
-			CCLOG("%x", t_ccn);
+//			CCLOG("%x", t_ccn);
 			
 			cb->getCharges().push_back(t_ccn);
 //			cb->m_cumberState |= kCumberStateAttack; // 지금 공격중이라는 정보 넣음.

@@ -420,8 +420,8 @@ void FallingStoneWrapper::stopMyAction()
 	AudioEngine::sharedInstance()->stopEffect("sound_rock_falling.mp3");
 	unschedule(schedule_selector(FallingStoneWrapper::myAction));
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+//	m_cumber->setAttackPattern(nullptr);
+//	myGD->communication("CP_onPatternEndOf", m_cumber);
 
 	startSelfRemoveSchedule();
 }
@@ -2716,7 +2716,7 @@ void CrashLazerWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::strin
 
 	startMyAction();
 
-	cb->stopAnimationDirection();
+//	cb->stopAnimationDirection();
 }
 
 void CrashLazerWrapper::selfRemove()

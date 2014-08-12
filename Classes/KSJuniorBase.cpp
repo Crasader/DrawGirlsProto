@@ -82,7 +82,6 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 
 	if(((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateDamaging) && stiffen)
 	{
-		CCLOG("(m_cumberState & kCumberStateMoving)");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
@@ -91,7 +90,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_cumberState = kCumberStateDamaging;
+			m_cumberState |= kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 		}
 	}
@@ -262,7 +261,9 @@ void KSJuniorBase::damageReaction(float)
 	else
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		m_cumberState = kCumberStateMoving;
+		m_cumberState &= kCumberStateMoving;
+//		m_cumberState &= ~kCumberStateDamaging;
+//		m_cumberState = kCumberStateMoving;
 		unschedule(schedule_selector(KSJuniorBase::damageReaction));
 		m_furyMode.furyFrameCount = m_furyMode.totalFrame;
 		//		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
@@ -285,7 +286,7 @@ void KSJuniorBase::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_cumberState = kCumberStateMoving;
-		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
+//		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
 //		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}
 }
@@ -471,7 +472,6 @@ void KSJuniorBase::scaleAdjustment(float dt)
 	
 	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && (m_cumberState & kCumberStateNoDirection) == 0)
 	{
-		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
 		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}

@@ -84,7 +84,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_cumberState = kCumberStateDamaging;
+			m_cumberState |= kCumberStateDamaging;
 			schedule(schedule_selector(ThisClassType::damageReaction));
 			if(damage / getTotalHp() * 4.f >= 3.f)
 			{
@@ -160,9 +160,10 @@ void KSCircleBase::damageReaction(float)
 	}
 	else if(currentTimelineFooter == "")
 	{
-		if((m_cumberState & kCumberStateMoving) == 0)
+//		if((m_cumberState & kCumberStateMoving) == 0)
 		{
-			m_cumberState = kCumberStateMoving;
+			m_cumberState &= kCumberStateMoving;
+//			m_cumberState &= ~kCumberStateDamaging;
 			getEmotion()->releaseStun();
 			unschedule(schedule_selector(KSCircleBase::damageReaction));
 			mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
@@ -187,7 +188,7 @@ void KSCircleBase::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_cumberState = kCumberStateMoving;
-		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
+//		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
 }
@@ -366,7 +367,6 @@ void KSCircleBase::scaleAdjustment(float dt)
 	
 	if(m_scale.increaseTime + 2.f < m_scale.autoIncreaseTimer && m_cumberState == kCumberStateMoving)
 	{
-		CCLOG("upSize!");
 		m_scale.increaseTime = m_scale.autoIncreaseTimer;
 		setCumberScale(MIN(m_maxScale, getCumberScale() + m_scale.SCALE_ADDER));
 	}
@@ -504,8 +504,8 @@ void KSCircleBase::stopCasting()
 	if((m_cumberState & kCumberStateCasting))
 	{
 		CCLOG("(m_cumberState & kCumberStateNoDirection)");
-		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-		m_cumberState = kCumberStateMoving;
+//		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+//		m_cumberState = kCumberStateMoving;
 	}
 }
 

@@ -287,6 +287,9 @@ public:
 	CCNode* getSlowStonePointer();
 	virtual void attachEmotion() = 0;
 	void observeStopBoss(float dt);
+	bool isMovable(){
+		return (m_cumberState & kCumberStateMoving) && ((m_cumberState & kCumberStateDamaging) == 0);
+	}
 public:
 	int m_stopFrameCount;
 	struct FollowMoving
@@ -517,7 +520,6 @@ protected:
     protected: AttackPattern* m_attackPattern;
     public: virtual AttackPattern* getAttackPattern(void) const { return m_attackPattern; }
     public: virtual void setAttackPattern(AttackPattern* var){ m_attackPattern = var;
-        CCLog("xxxxxxxxxxxxxxx %x", var);
     }
     
 
