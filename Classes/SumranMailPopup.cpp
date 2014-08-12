@@ -1087,12 +1087,12 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 				card_download_list.push_back(t_df);
 				// ================================
 				
-//				CopyFile t_cf;
-//				t_cf.from_filename = t_df.filename.c_str();
-//				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-//				card_reduction_list.push_back(t_cf);
-//				
-//				is_add_cf = true;
+				CopyFile t_cf;
+				t_cf.from_filename = t_df.filename.c_str();
+				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+				card_reduction_list.push_back(t_cf);
+				
+				is_add_cf = true;
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
@@ -1219,7 +1219,7 @@ void SumranMailPopup::startCardDownload()
 	mySGD->network_check_cnt = 0;
 	if(card_download_list.size() > 0 && ing_card_download <= card_download_list.size())
 	{
-		CCLOG("%d : %s", ing_download_cnt, card_download_list[ing_card_download-1].filename.c_str());
+		CCLOG("%d : %s", ing_card_download, card_download_list[ing_card_download-1].filename.c_str());
 		mySIL->downloadImg(card_download_list[ing_card_download-1].img,
 													  card_download_list[ing_card_download-1].size,
 													  card_download_list[ing_card_download-1].filename,
@@ -1233,14 +1233,14 @@ void SumranMailPopup::startCardDownload()
 
 void SumranMailPopup::successCardDownload()
 {
-	if(ing_download_cnt < card_download_list.size())
+	if(ing_card_download < card_download_list.size())
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_card_download-1].key,
 			   card_download_list[ing_card_download-1].img, false);
-		ing_download_cnt++;
+		ing_card_download++;
 		startCardDownload();
 	}
-	else if(ing_download_cnt == card_download_list.size())
+	else if(ing_card_download == card_download_list.size())
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_card_download-1].key,
 			   card_download_list[ing_card_download-1].img, false);
@@ -1283,7 +1283,7 @@ void SumranMailPopup::successCardDownload()
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		
-		ing_download_cnt++;
+		ing_card_download++;
 		end_func_download_card(true);
 	}
 	else
@@ -1507,12 +1507,12 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 				df_list.push_back(t_df);
 				// ================================
 				
-//				CopyFile t_cf;
-//				t_cf.from_filename = t_df.filename.c_str();
-//				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-//				cf_list.push_back(t_cf);
-//				
-//				is_add_cf = true;
+				CopyFile t_cf;
+				t_cf.from_filename = t_df.filename.c_str();
+				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+				cf_list.push_back(t_cf);
+				
+				is_add_cf = true;
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];

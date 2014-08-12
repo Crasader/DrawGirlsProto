@@ -954,13 +954,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				n_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",
-																											  card_number)->getCString()));//card%d_thumbnail.png
+				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											  card_number)->getCString()));
 				n_clipping->addChild(n_card);
-				n_card->setScale(0.2f);
+				n_card->setScale(0.5f);
 				
-				CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
-				n_node->setOpacity(0);
+				CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 				n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f) + add_position);
 				n_node->addChild(n_clipping);
 				
@@ -975,14 +974,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				s_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",
-																											  card_number)->getCString()));//card%d_thumbnail.png
-				s_card->setScale(0.2f);
+				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											  card_number)->getCString()));
+				s_card->setScale(0.5f);
 				s_card->setColor(ccGRAY);
 				s_clipping->addChild(s_card);
 				
-				CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
-				s_node->setOpacity(0);
+				CCSprite* s_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
 				s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f) + add_position);
 				s_node->addChild(s_clipping);
 				
@@ -1058,13 +1056,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			n_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",
-																										  card_number)->getCString()));//card%d_thumbnail.png
-			n_card->setScale(0.2f);
+			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																										  card_number)->getCString()));
+			n_card->setScale(0.5f);
 			n_clipping->addChild(n_card);
 			
-			CCSprite* n_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
-			n_node->setOpacity(0);
+			CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 			n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f) + add_position);
 			n_node->addChild(n_clipping);
 			
@@ -1082,12 +1079,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			
 			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",
 																										  card_number)->getCString()));//card%d_thumbnail.png
-			s_card->setScale(0.2f);
+			s_card->setScale(0.5f);
 			s_card->setColor(ccGRAY);
 			s_clipping->addChild(s_card);
 			
-			CCSprite* s_node = CCSprite::create("whitePaper.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
-			s_node->setOpacity(0);
+			CCSprite* s_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
 			s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f) + add_position);
 			s_node->addChild(s_clipping);
 			

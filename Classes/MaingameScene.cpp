@@ -1244,7 +1244,8 @@ void Maingame::counting()
 			myJack->isStun = false;
 			myCP->onStartGame();
 			myCP->startAutoAttacker();
-			myUI->startCounting();
+			if(!is_gohome)
+				myUI->startCounting();
 			myGD->setIsGameover(false);
 		}
 	}
@@ -2221,6 +2222,8 @@ void Maingame::gameover()
 
 	AudioEngine::sharedInstance()->stopSound();
 
+	myUI->stopCounting();
+	
 	if(mySGD->getIsCleared())
 	{
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
@@ -2236,8 +2239,6 @@ void Maingame::gameover()
 	}
 	else
 	{
-		myUI->stopCounting();
-		
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_gameover.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
