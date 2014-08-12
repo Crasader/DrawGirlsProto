@@ -58,6 +58,8 @@ bool ZoomScript::init()
 	
 	is_rankup = false;
 	is_time_event_card_on = false;
+	is_ccb_end = false;
+	is_next_on = false;
 	
 //	CCLayer* top_bottom_layer = CCLayer::create();
 //	top_bottom_layer->setPosition(ccp(0, 0));
@@ -191,7 +193,8 @@ bool ZoomScript::init()
 	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));
-	next_button->setVisible(false);
+	is_next_on = false;
+	next_button->setVisible(is_next_on && is_ccb_end);
 	addChild(next_button, kZS_Z_next_button);
 	
 	is_spin_mode = false;
@@ -295,6 +298,8 @@ void ZoomScript::typingAnimation()
 					t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 					t_touch->autorelease();
 					target_node->ccTouchEnded(t_touch, NULL);
+					is_ccb_end = true;
+					next_button->setVisible(is_next_on && is_ccb_end);
 				});
 			}
 			else
@@ -308,6 +313,11 @@ void ZoomScript::typingAnimation()
 				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 				addChild(zoom_img, kZS_Z_script_case);
 				(this->*delegate_typing_after)();
+				
+				tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
+					is_ccb_end = true;
+					next_button->setVisible(is_next_on && is_ccb_end);
+				});
 			}
 		}
 	}
@@ -330,7 +340,8 @@ void ZoomScript::startTouchAction()
 {
 	is_actioned = false;
 	setTouchEnabled(true);
-	next_button->setVisible(true);
+	is_next_on = true;
+	next_button->setVisible(is_next_on && is_ccb_end);
 	script_case->setVisible(true);
 //	mode_button->setVisible(true);
 	
@@ -372,7 +383,8 @@ void ZoomScript::menuAction(CCObject *sender)
 		//unschedule(schedule_selector(ZoomScript::moveChecking));
 		
 		is_actioned = true;
-		next_button->setVisible(false);
+		is_next_on = false;
+		next_button->setVisible(is_next_on && is_ccb_end);
 		script_case->setVisible(false);
 		script_label->setVisible(false);
 		mode_button->setVisible(false);
@@ -1128,7 +1140,8 @@ void ZoomScript::showtimeForthAction()
 	is_actioned = false;
 	is_showtime = false;
 //	is_touched_menu = false;
-	next_button->setVisible(true);
+	is_next_on = true;
+	next_button->setVisible(is_next_on && is_ccb_end);
 	script_case->setVisible(true);
 	script_label->setVisible(true);
 //	mode_button->setVisible(true);

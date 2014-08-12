@@ -36,6 +36,9 @@ private:
 	bool is_showtime;
 	bool is_exchanged;
 	
+	bool is_ccb_end;
+	bool is_next_on;
+	
 	int text_length;
 	string save_text;
 	int typing_frame;
