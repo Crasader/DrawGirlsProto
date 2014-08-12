@@ -536,9 +536,6 @@ void TitleRenewalScene::nextPreloadStep()
 		
 		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 		{
-			CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-			CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			
 			CCDelayTime* t_delay = CCDelayTime::create(2.f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
 			CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
@@ -610,9 +607,6 @@ void TitleRenewalScene::successLogin()
 								CCLog("%d %d %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
 								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 								{
-									CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-									CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-									
 									CCDelayTime* t_delay = CCDelayTime::create(2.f);
 									TRACE();
 									CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
@@ -2036,12 +2030,12 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					card_download_list.push_back(t_df);
 					// ================================
 					
-//					CopyFile t_cf;
-//					t_cf.from_filename = t_df.filename.c_str();
-//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-//					card_reduction_list.push_back(t_cf);
-//					
-//					is_add_cf = true;
+					CopyFile t_cf;
+					t_cf.from_filename = t_df.filename.c_str();
+					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+					card_reduction_list.push_back(t_cf);
+					
+					is_add_cf = true;
 				}
 			}
 			
@@ -2367,10 +2361,6 @@ void TitleRenewalScene::endingAction()
 	
 	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
 	{
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	
-	
 //	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
 //	{
 //		StoryView* t_sv = StoryView::create();
@@ -2397,6 +2387,9 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
