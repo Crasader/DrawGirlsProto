@@ -209,7 +209,7 @@
             <key>size</key>
             <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cf694a4c40553be836e8fc8c5f8cbc2b:479e02510c1a28defc288d0d6377475c:08ce8fdc69d1c89d209bdcb4dc318c00$</string>
+            <string>$TexturePacker:SmartUpdate:2cff5a0e1f49f02dd0e1d8c3907b951e:48cf41ca170823aad625fe215da1b92d:08ce8fdc69d1c89d209bdcb4dc318c00$</string>
             <key>textureFileName</key>
             <string>boss_snake.pvr.ccz</string>
         </dict>

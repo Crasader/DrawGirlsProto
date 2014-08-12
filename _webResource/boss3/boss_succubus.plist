@@ -20,11 +20,11 @@
             <key>boss_succubus_1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{73,29},{25,14}}</string>
+                <string>{{103,18},{25,14}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{25,14}}</string>
                 <key>sourceSize</key>
@@ -46,13 +46,13 @@
             <key>boss_succubus_3.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,2},{43,68}}</string>
+                <string>{{2,2},{44,68}}</string>
                 <key>offset</key>
-                <string>{0.5,0}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{1,0},{43,68}}</string>
+                <string>{{0,0},{44,68}}</string>
                 <key>sourceSize</key>
                 <string>{44,68}</string>
             </dict>
@@ -72,7 +72,7 @@
             <key>boss_succubus_5.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{103,18},{26,15}}</string>
+                <string>{{56,2},{26,15}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -124,11 +124,11 @@
             <key>boss_succubus_jr_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{47,2},{24,26}}</string>
+                <string>{{48,45},{24,26}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{24,26}}</string>
                 <key>sourceSize</key>
@@ -157,7 +157,7 @@
             <key>size</key>
             <string>{128,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:03b06e3758d729343835044fca6f0716:e5a447bb7ce42a4c29bce756c20c6e95:641d640808cb514b7652a7f567086894$</string>
+            <string>$TexturePacker:SmartUpdate:1373db6b5d8909fc728118333c6ff477:67b46d984d126efc529a553605624109:641d640808cb514b7652a7f567086894$</string>
             <key>textureFileName</key>
             <string>boss_succubus.pvr.ccz</string>
         </dict>
