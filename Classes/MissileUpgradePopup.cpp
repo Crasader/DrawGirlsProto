@@ -337,7 +337,7 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 		
 		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
 		if(use_gold_value > 0)
-			fiverocks::FiveRocksBridge::trackEvent("UseGold", "lvUp", ccsf("lv%d", mySGD->getSelectedCharacterHistory().level.getV()), ccsf("Puzzle %d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "LvUp", ccsf("Lv%02d", mySGD->getSelectedCharacterHistory().level.getV()), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
 		use_gold_value = 0;
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);

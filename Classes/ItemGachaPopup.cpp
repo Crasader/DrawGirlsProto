@@ -403,7 +403,7 @@ void ItemGachaPopup::useAction(CCObject* sender, CCControlEvent t_event)
 	else if(item_type == kIC_heartUp)
 		fiverocks_param1 = "continue";
 	
-	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyRandomItem", fiverocks_param1.c_str(), ccsf("gacha %d", gacha_cnt));
+	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyRandomItem", fiverocks_param1.c_str(), ccsf("gacha %03d", gacha_cnt));
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	

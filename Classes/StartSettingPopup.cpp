@@ -2755,7 +2755,7 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 	else if(item_list[t_clicked_item_idx] == kIC_magnet)
 		fiverocks_param1 = "Magnet";
 	
-	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyItem", fiverocks_param1.c_str(), ccsf("Stage %d", mySD->getSilType()));
+	fiverocks::FiveRocksBridge::trackEvent("UseGold", "BuyItem", fiverocks_param1.c_str(), ccsf("Stage %03d", mySD->getSilType()));
 	
 	int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[t_clicked_item_idx]));
 	

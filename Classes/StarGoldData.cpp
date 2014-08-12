@@ -2671,9 +2671,9 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			int t_missile_level = getSelectedCharacterHistory().level.getV();
 			string fiverocks_param2;
 			if(t_missile_level <= 5)
-				fiverocks_param2 = "UserLv1~Lv5";
+				fiverocks_param2 = "UserLv01~Lv05";
 			else if(t_missile_level <= 10)
-				fiverocks_param2 = "UserLv6~Lv10";
+				fiverocks_param2 = "UserLv06~Lv10";
 			else if(t_missile_level <= 15)
 				fiverocks_param2 = "UserLv11~Lv15";
 			else if(t_missile_level <= 20)

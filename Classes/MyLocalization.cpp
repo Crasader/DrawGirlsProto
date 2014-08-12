@@ -1290,7 +1290,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	ko->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
-	ko->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
+	ko->setObject(CCString::create("에피소드 %d"), kMyLocalKey_puzzleValue);
 	
 	ko->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
 	ko->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"
@@ -2340,7 +2340,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	en->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
-	en->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
+	en->setObject(CCString::create("에피소드 %d"), kMyLocalKey_puzzleValue);
 	
 	en->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
 	en->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"
@@ -3402,7 +3402,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("3연승을 할 때마다 생명의 돌을 1개\n받을 수 있습니다. 생명의 돌은 내가 가진\n카드에 생명을 불어넣을 수 있는\n특별한 아이템이니 소중히 사용해주세요.\n튜토리얼을 마치겠습니다. 그럼 전 이만!"), kMyLocalKey_endlessTutorialMent17);
 	ja->setObject(CCString::create("<font>대전 상대를 선택해주세요."), kMyLocalKey_endlessTutorialMent18);
 	
-	ja->setObject(CCString::create("%d 퍼즐"), kMyLocalKey_puzzleValue);
+	ja->setObject(CCString::create("에피소드 %d"), kMyLocalKey_puzzleValue);
 	
 	ja->setObject(CCString::create("보너스 영역 뽑기"), kMyLocalKey_onePercentTutorial1);
 	ja->setObject(CCString::create("<font color=#FFFFFF size=10 newline=12>안녕하세요!</font>"

@@ -49,7 +49,7 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 				fiverocks_param2 = "success";
 			else
 				fiverocks_param2 = "fail";
-			fiverocks::FiveRocksBridge::trackEvent("UseGem", "StrengthenCard", ccsf("Display %d", myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)), fiverocks_param2.c_str());
+			fiverocks::FiveRocksBridge::trackEvent("UseGem", "StrengthenCard", ccsf("Display %02d", myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)), fiverocks_param2.c_str());
 			myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, 0);
 		}
 		
