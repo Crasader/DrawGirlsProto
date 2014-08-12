@@ -273,8 +273,6 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		jsonTotalCmd["log"]="true";
 	#endif
 	
-	this->lastCmdNo += (int)(rand()%10)+1;
-	jsonTotalCmd["cmdNo"]=this->lastCmdNo;
 	
 	//ostringstream oss2;
 	//oss2 << jsonTotalCmd;
@@ -384,6 +382,14 @@ void* GraphDog::t_function(void *_insertIndex)
 	//	std::map<int, CommandType>& commands = graphdog->commands;
 	//	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
+	Json::Value costr = command.commandStr;
+	
+	
+	int add = (int)(rand()%10)+1;
+	GraphDog::get()->lastCmdNo += add;
+	costr["cmdNo"]=GraphDog::get()->lastCmdNo;
+	command.commandStr = costr.asString();
+	CCLOG("cmdNo is %d",GraphDog::get()->lastCmdNo);
 	pthread_mutex_lock(&command.caller->t_functionMutex);
 	//CCLOG("t_function2");
 	//string token="";
@@ -427,7 +433,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	{
 		//CCLOG("t_function OK1");
 		resultStr = command.chunk.memory;// gdchunk.memory;
-		CCLOG("get str %s",resultStr.c_str());
+		GraphDog::get()->log("------ get str --------\n"+resultStr+"\n ------- end get str ---------");
 		if(*resultStr.rbegin() == '#') // success
 		{
 			try
@@ -443,12 +449,17 @@ void* GraphDog::t_function(void *_insertIndex)
 				CCLOG("check3");
 				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 				
-				CCLOG("check4 %s",resultobj.asString().c_str());
+				GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
 				Json::Value commandParam = command.commandStr;
 				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
+					
 					resultCode = CURLE_CHUNK_FAILED;
 					CCLOG("cmd check error %s",resultobj.asString().c_str());
 					//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
+				}else{
+					
+					CCLOG("reset by server cmdNo is %d",GraphDog::get()->lastCmdNo);
+					GraphDog::get()->lastCmdNo=commandParam["cmdNo"].asInt();
 				}
 				//CCLOG("t_function OK2 %s",resultStr.c_str());
 			}
