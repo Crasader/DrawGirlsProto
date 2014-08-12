@@ -91,7 +91,7 @@ void KSCumberBase::randomMoving(float dt)
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
 		if(changeDirection == 0)
@@ -169,7 +169,6 @@ void KSCumberBase::randomMoving(float dt)
 			}
 			else
 			{
-				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -194,7 +193,6 @@ void KSCumberBase::randomMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLOG("random cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -210,7 +208,7 @@ void KSCumberBase::randomMoving(float dt)
 	//        CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -226,7 +224,6 @@ void KSCumberBase::randomMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -249,7 +246,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	int check_loop_cnt = 0;
 
 	// 낮은 확률로 방향 전환...	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
 		if(changeDirection == 0)
@@ -360,7 +357,6 @@ void KSCumberBase::straightMoving(float dt)
 			}
 			else
 			{
-				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -385,7 +381,6 @@ void KSCumberBase::straightMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLOG("straightMoving cnt !! = %d", cnt);
 		}
 		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
 		{
@@ -398,7 +393,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -413,7 +408,6 @@ void KSCumberBase::straightMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -449,7 +443,7 @@ void KSCumberBase::followMoving(float dt)
 	
 	float dx, dy;
 	dx = dy = 0;
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
@@ -572,7 +566,6 @@ void KSCumberBase::followMoving(float dt)
 			}
 			else
 			{
-				CCLOG("what!?");
 				validPosition = true;
 			}
 		}
@@ -594,7 +587,6 @@ void KSCumberBase::followMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLOG("followMoving cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -611,7 +603,7 @@ void KSCumberBase::followMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -627,7 +619,6 @@ void KSCumberBase::followMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -649,7 +640,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		int changeDirection = m_well512.GetValue(3);
 		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
@@ -783,7 +774,6 @@ void KSCumberBase::rightAngleMoving(float dt)
 		}
 		if(cnt >= 2)
 		{
-			CCLOG("rightAngleMoving cnt !! = %d", cnt);
 		}
 		if(cnt >= 30)
 		{
@@ -799,7 +789,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
- 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+ 	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -815,7 +805,6 @@ void KSCumberBase::rightAngleMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -841,7 +830,7 @@ void KSCumberBase::circleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
 		{
@@ -941,8 +930,7 @@ void KSCumberBase::circleMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt >= 3)
-			CCLOG("circleMoving cnt !! = %d", cnt);
+		
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -958,7 +946,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	
 	
- 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+ 	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -982,7 +970,6 @@ void KSCumberBase::circleMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -1008,7 +995,7 @@ void KSCumberBase::snakeMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(ProbSelector::sel(0.002, 1.0 - 0.002, 0.0) == 0)
 		{
@@ -1108,8 +1095,7 @@ void KSCumberBase::snakeMoving(float dt)
 				crashMapForPosition(afterPosition);
 			}
 		}
-		if(cnt >= 3)
-			CCLOG("snakeMoving cnt !! = %d", cnt);
+	
 		if(cnt >= 30)
 		{
 			pathFound = false;
@@ -1162,7 +1148,7 @@ void KSCumberBase::snakeMoving(float dt)
 //		}
 //	}
 	
- 	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+ 	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(pathFound)
 		{
@@ -1212,11 +1198,10 @@ void KSCumberBase::rushMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 
-	if((m_cumberState & kCumberStateMoving) || m_cumberState == kCumberStateFury)
+	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
 		if(m_furyMode.firstMoving == true)
 		{
-			CCLOG("firstRush");
 			CCPoint t = ip2ccp(myGD->getJackPoint()) - getPosition();
 			m_directionAngleDegree = rad2Deg(atan2(t.y, t.x)) + m_well512.GetValue(-10, +10);
 			m_furyMode.firstMoving = false;
@@ -1296,10 +1281,7 @@ void KSCumberBase::rushMoving(float dt)
 			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
 		}
 
-		if(cnt >= 2)
-		{
-			CCLOG("rushMoving cnt !! = %d", cnt);
-		}
+		
 	}
 
 	m_directionAngleDegree = degree;
@@ -1323,7 +1305,6 @@ void KSCumberBase::rushMoving(float dt)
 		m_scale.collisionCount++;
 		if(m_scale.collisionCount >= LIMIT_COLLISION_PER_SEC)
 		{
-			CCLOG("decrese Size !!");
 			setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER));
 		}
 	}
@@ -1636,7 +1617,6 @@ void KSCumberBase::cumberAttack(float dt)
 				float patternMax = 2 * notCrashSum / crashNumber;
 				for(auto& i : selectedAttacks)
 				{
-					KS::KSLog("% percent!!!", i["percent"].asDouble());
 					if(i["pattern"].asString() == "1017")
 					{
 						if(externalOutlineCount >= 150) // 가장자리 위주로 먹었다면...
@@ -1689,7 +1669,6 @@ void KSCumberBase::cumberAttack(float dt)
 						probSel.pushProb(i["percent"].asFloat());
 					}
 				}
-				CCLOG("externalCnt %d", externalOutlineCount);
 				while(!searched)
 				{
 					searchCount++;
@@ -1721,7 +1700,6 @@ void KSCumberBase::cumberAttack(float dt)
 				
 				if(searched)
 				{
-					KS::KSLog("%", attackCode);
 					//Json::FastWriter fw;
 					//std::string patternData = fw.write(attackCode);
                     std::string attackStr = attackCode.asString();
@@ -1731,7 +1709,6 @@ void KSCumberBase::cumberAttack(float dt)
 					{
 						int cframe =  attackCode.get("castframe", 0).asInt() + attackCode.get("totalframe", 0).asInt() + attackCode.get("crashframe",0).asInt();
 						attackBehavior(attackCode);
-						CCLog("cast frame si %d",cframe);
 						//한번 공격후 3초간 재공격 하지 않음.
 						m_reAttackCnt = -1 * (cframe + 60);
 					}
@@ -2132,7 +2109,6 @@ void KSCumberBase::followProcess(float dt)
 		ProbSelector ps = {this->getAiValue() / 25.f, 125.f};
 		if(ps.getResult() == 0)
 		{
-			CCLOG("follow!!!");
 			KSCumberBase* mainCumber = this;
 
 			int aggroCount = 0;
@@ -2690,7 +2666,7 @@ void KSCumberBase::settingPattern( Json::Value pattern )
 	
 	for(auto i : m_attacks)
 	{
-		KS::KSLog("%", i);
+//		KS::KSLog("%", i);
 	}
 }
 
@@ -2803,7 +2779,7 @@ void KSCumberBase::caughtAnimation()
 					attackIter != cumber->getAttacks().end();
 					++attackIter)
 			{
-				KS::KSLog("%", *attackIter);
+//				KS::KSLog("%", *attackIter);
 				if( (*attackIter).get("pattern", "").asString() == "1020" )
 				{
 					cumber->getAttackQueue().push_back(*attackIter);
