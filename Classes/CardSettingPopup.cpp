@@ -1077,8 +1077,8 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			s_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_visible.png",
-																										  card_number)->getCString()));//card%d_thumbnail.png
+			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+																										  card_number)->getCString()));
 			s_card->setScale(0.5f);
 			s_card->setColor(ccGRAY);
 			s_clipping->addChild(s_card);
