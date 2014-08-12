@@ -204,7 +204,6 @@
             <filename>boss_asuka/boss_asuka_jr_01.png</filename>
             <filename>boss_asuka/boss_asuka_jr_02.png</filename>
             <filename>boss_asuka/boss_asuka_jr_03.png</filename>
-            <filename>boss_asuka/boss_asuka_jr_04.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

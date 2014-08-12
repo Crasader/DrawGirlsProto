@@ -20,20 +20,20 @@
             <key>boss_octopus_01.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{91,33},{33,64}}</string>
+                <string>{{91,33},{33,65}}</string>
                 <key>offset</key>
-                <string>{0,0.5}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{33,64}}</string>
+                <string>{{0,0},{33,65}}</string>
                 <key>sourceSize</key>
                 <string>{33,65}</string>
             </dict>
             <key>boss_octopus_02.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{85,99},{21,10}}</string>
+                <string>{{85,100},{21,10}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -118,7 +118,7 @@
             <key>size</key>
             <string>{128,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:5a83be1842765120c8416eb6e5f90e1c:10a26c706e54ded4b97280ffd1f41ef2:57c89821cd46c93807e7559bf976487a$</string>
+            <string>$TexturePacker:SmartUpdate:2506bffd11f49644a0cb8805e983ba23:05433372bfafe8a15a9231726ffb8853:57c89821cd46c93807e7559bf976487a$</string>
             <key>textureFileName</key>
             <string>boss_octopus.pvr.ccz</string>
         </dict>

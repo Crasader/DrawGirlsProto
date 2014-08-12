@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>3</int>
         <key>texturePackerVersion</key>
-        <string>3.3.1</string>
+        <string>3.3.4</string>
         <key>fileName</key>
         <string>/Users/jinsilgim/cocos2d-x-2.1.5/projects/dgproto/_webResource/pvrcczResources/boss_bee.tps</string>
         <key>autoSDSettings</key>
@@ -184,6 +184,8 @@
             <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>heuristicMask</key>
             <false/>
+            <key>pivotPoint</key>
+            <enum type="SpriteSettings::PivotPoint">Center</enum>
         </struct>
         <key>fileList</key>
         <array>

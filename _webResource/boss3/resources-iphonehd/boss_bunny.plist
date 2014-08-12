@@ -118,7 +118,7 @@
             <key>size</key>
             <string>{256,256}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:a9977f036172c16d196b21388bb9bbe8:2f4d104c7e64d43a37c9c90a6d725e4f:adb3eefb28eee1646d5fd5f9707bdf22$</string>
+            <string>$TexturePacker:SmartUpdate:ff39ff4dda8725d57d61d92472cd2fa1:2f4d104c7e64d43a37c9c90a6d725e4f:adb3eefb28eee1646d5fd5f9707bdf22$</string>
             <key>textureFileName</key>
             <string>boss_bunny.pvr.ccz</string>
         </dict>
