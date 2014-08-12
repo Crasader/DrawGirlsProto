@@ -930,6 +930,8 @@ public:
 	
 	void setIsAlwaysSavePlaydata(int t_i);
 	int getIsAlwaysSavePlaydata();
+	void setSendPvpPlayDataRate(int t_i);
+	int getSendPvpPlayDataRate();
 	
 	
 	bool is_morphing_noti;
@@ -1148,6 +1150,7 @@ private:
 	
 	string event_string;
 	int is_always_save_playdata;
+	int send_pvp_play_data_rate;
 	
 	string app_type;
 	int app_version;
