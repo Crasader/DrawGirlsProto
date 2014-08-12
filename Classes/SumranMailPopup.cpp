@@ -656,14 +656,16 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
 																					spr->setScale(0.12);
 																					count->setString("");
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}else{
 																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
+																					
 																				}
 																				
 																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																				spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
 																				
 																				setFormSetter(back);
 																				setFormSetter(spr);
