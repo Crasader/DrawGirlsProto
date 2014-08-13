@@ -3437,7 +3437,7 @@ void CloudBomb::myInit (CCPoint cumberPosition, CCPoint jackPosition, Json::Valu
 	
 	scheduleUpdate();
 	
-	int m_color = 1;
+	int m_color = m_pattern.get("color", 1).asInt();;
 	std::string fileName = CCString::createWithFormat("cumber_missile%d.png", m_color)->getCString();
 	if(KS::isExistFile(fileName))
 		batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);

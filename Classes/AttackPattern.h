@@ -42,12 +42,42 @@ public:
 	
 	virtual void stopMyAction(){}
 	
+	void setStartingWithEarly()
+	{
+		// 캐스팅 끝나고 몬스터 상태가 릴리즈가 될것이냐... 안될것이냐
+		if(m_earlyRelease)
+		{
+			m_cumber->setAttackPattern(nullptr);
+			//cumber->setAttackPattern(t_m9);
+			
+			
+			myGD->communication("CP_onPatternEndOf", m_cumber);
+		}
+		else
+		{
+			m_cumber->setAttackPattern(this);
+		}
+	}
+	void setEndingWithEarly()
+	{
+		if(m_earlyRelease)
+		{
+			// 이미 릴리즈 되서 아무행동도 하지 않음.
+		}
+		else
+		{
+			m_cumber->setAttackPattern(nullptr);
+			myGD->communication("CP_onPatternEndOf", m_cumber);
+		}
+	}
 protected:
 	
 	virtual void selfRemoveSchedule();
 	
 	KSCumberBase* m_cumber;
 	int m_baseChildCount;
+	int m_earlyRelease;
+	
 };
 
 class SelfSpinMissile : public CCNode
@@ -130,7 +160,6 @@ public:
 //	void removeEffect()
 //	{
 //		unschedule(schedule_selector(ThunderBoltWrapper::myAction));
-//		myGD->communication("MP_endIngActionAP");
 //		myGD->communication("CP_onPatternEnd");
 //		
 //		if(targetingImg)
@@ -222,11 +251,11 @@ private:
 class MeteorWrapper : public AttackPattern
 {
 public:
-	static MeteorWrapper* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
+	static MeteorWrapper* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb);
 	
 	virtual void stopMyAction();
 	
-	void removeEffect();
+//	void removeEffect();
 	
 private:
 	int crashArea;
@@ -248,7 +277,7 @@ private:
 	
 	void myAction();
 	
-	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea);
+	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb);
 	
 	void accumCrashCount(int n);
 };
@@ -257,12 +286,12 @@ private:
 class TornadoWrapper : public AttackPattern // blind
 {
 public:
-	static TornadoWrapper* create(CCPoint t_sp, int tf, int sc);
+	static TornadoWrapper* create(CCPoint t_sp, int tf, int sc, KSCumberBase* cb);
 	
 private:
 	
 	
-	void myInit(CCPoint t_sp, int tf, int sc);
+	void myInit(CCPoint t_sp, int tf, int sc, KSCumberBase* cb);
 };
 
 
@@ -872,35 +901,8 @@ protected:
 
 
 
-class SightOutWrapper : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(SightOutWrapper);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
 
-class SlowZoneWrapper : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(SlowZoneWrapper);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
 
-class PrisonWrapper : public AttackPattern
-{
-public:
-	CREATE_FUNC_CCP(PrisonWrapper);
-	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
-	virtual void stopMyAction();
-	void update(float dt);
-protected:
-};
 
 class FreezingWrapper : public AttackPattern
 {
@@ -933,7 +935,6 @@ public:
 //	{
 //		unscheduleUpdate();
 //		
-//		myGD->communication("MP_endIngActionAP");
 //		myGD->communication("CP_onPatternEnd");
 //		
 //		startSelfRemoveSchedule();
@@ -1077,7 +1078,6 @@ protected:
  {
  unscheduleUpdate();
  
- myGD->communication("MP_endIngActionAP");
  myGD->communication("CP_onPatternEnd");
  
  startSelfRemoveSchedule();
@@ -1123,7 +1123,7 @@ private:
 class PrisonPattern : public AttackPattern // prison
 {
 public:
-	static PrisonPattern* create(CCPoint t_sp, float radius, int totalFrame);
+	static PrisonPattern* create(CCPoint t_sp, float radius, int totalFrame, KSCumberBase* cb);
 	
 	void startMyAction();
 	void hidingAnimation(float dt);
@@ -1132,7 +1132,7 @@ public:
 	
 	void stopMyAction();
 	
-	void myInit(CCPoint t_sp, float radius, int totalFrame); // create 0.5 second;
+	void myInit(CCPoint t_sp, float radius, int totalFrame, KSCumberBase* cb); // create 0.5 second;
 
 private:
 	CCSprite* m_prisonSprite;
