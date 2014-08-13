@@ -1331,121 +1331,157 @@ void VisibleSprite::setSceneNode( CCObject* t_scene_node )
 
 void VisibleSprite::visit()
 {
-	unsigned int loopCnt = drawRects->count();
-	float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//	start = std::chrono::system_clock::now();
+
+	light_img->draw();
 	
-	glEnable(GL_SCISSOR_TEST);
-
-	for(int i=0;i<loopCnt;i++)
-	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-		
-		float wScale = viewport[2] / design_resolution_size.width;
-		float hScale = viewport[3] / design_resolution_size.height;
-		
-		float x, y, w, h;
-		
-		if(is_set_scene_node)
-		{
-			x = (t_rect->origin.x*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1-1;
-			y = (t_rect->origin.y*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1-1;
-			w = (t_rect->size.width*game_node_scale)*wScale+2+2;
-			h = (t_rect->size.height*game_node_scale)*hScale+2+2;
-		}
-		else
-		{
-			x = (t_rect->origin.x*game_node_scale+jack_position.x)*wScale + viewport[0]-1-1;
-			y = (t_rect->origin.y*game_node_scale+jack_position.y)*hScale + viewport[1]-1-1;
-			w = (t_rect->size.width*game_node_scale)*wScale+2+2;
-			h = (t_rect->size.height*game_node_scale)*hScale+2+2;
-		}
-		
-		if(y > screen_size.height || y+h < 0.f)
-			continue;
-		else
-		{
-			glScissor(x,y,w,h);
-			light_img->draw();
-		}
-		
-	}
+	draw();
+	if(mySGD->is_safety_mode)
+		safety_img->draw();
 	
-	for(int i=0;i<loopCnt;i++)
-	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+//	end = std::chrono::system_clock::now();
+//	std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLOG("visit time : %f", elapsed_seconds.count());
+	
+//	unsigned int loopCnt = drawRects->count();
+//	float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
+//	
+//	glEnable(GL_SCISSOR_TEST);
+//
+//	for(int i=0;i<loopCnt;i++)
+//	{
+//		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+//		
+//		float wScale = viewport[2] / design_resolution_size.width;
+//		float hScale = viewport[3] / design_resolution_size.height;
+//		
+//		float x, y, w, h;
+//		
+//		if(is_set_scene_node)
+//		{
+//			x = (t_rect->origin.x*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1-1;
+//			y = (t_rect->origin.y*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1-1;
+//			w = (t_rect->size.width*game_node_scale)*wScale+2+2;
+//			h = (t_rect->size.height*game_node_scale)*hScale+2+2;
+//		}
+//		else
+//		{
+//			x = (t_rect->origin.x*game_node_scale+jack_position.x)*wScale + viewport[0]-1-1;
+//			y = (t_rect->origin.y*game_node_scale+jack_position.y)*hScale + viewport[1]-1-1;
+//			w = (t_rect->size.width*game_node_scale)*wScale+2+2;
+//			h = (t_rect->size.height*game_node_scale)*hScale+2+2;
+//		}
+//		
+//		if(y > screen_size.height || y+h < 0.f)
+//			continue;
+//		else
+//		{
+//			glScissor(x,y,w,h);
+//			light_img->draw();
+//		}
+//		
+//	}
+//	
+//	for(int i=0;i<loopCnt;i++)
+//	{
+//		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+//
+//		float wScale = viewport[2] / design_resolution_size.width;
+//		float hScale = viewport[3] / design_resolution_size.height;
+//
+//		float x, y, w, h;
+//
+//		if(is_set_scene_node)
+//		{
+//			x = (t_rect->origin.x*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
+//			y = (t_rect->origin.y*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
+//			w = (t_rect->size.width*game_node_scale)*wScale+2;
+//			h = (t_rect->size.height*game_node_scale)*hScale+2;
+//		}
+//		else
+//		{
+//			x = (t_rect->origin.x*game_node_scale+jack_position.x)*wScale + viewport[0]-1;
+//			y = (t_rect->origin.y*game_node_scale+jack_position.y)*hScale + viewport[1]-1;
+//			w = (t_rect->size.width*game_node_scale)*wScale+2;
+//			h = (t_rect->size.height*game_node_scale)*hScale+2;
+//		}
+//
+//		if(y > screen_size.height || y+h < 0.f)
+//			continue;
+//		else
+//		{
+//			glScissor(x,y,w,h);
+//			draw();
+//			if(mySGD->is_safety_mode)
+//				safety_img->draw();
+//		}
+//
+//	}
+//
+//	glDisable(GL_SCISSOR_TEST);
+}
 
-		float wScale = viewport[2] / design_resolution_size.width;
-		float hScale = viewport[3] / design_resolution_size.height;
+void VisibleSprite::draw()
+{
+	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-		float x, y, w, h;
-
-		if(is_set_scene_node)
-		{
-			x = (t_rect->origin.x*game_node_scale+jack_position.x+scene_node->getPositionX())*wScale + viewport[0]-1;
-			y = (t_rect->origin.y*game_node_scale+jack_position.y+scene_node->getPositionY())*hScale + viewport[1]-1;
-			w = (t_rect->size.width*game_node_scale)*wScale+2;
-			h = (t_rect->size.height*game_node_scale)*hScale+2;
-		}
-		else
-		{
-			x = (t_rect->origin.x*game_node_scale+jack_position.x)*wScale + viewport[0]-1;
-			y = (t_rect->origin.y*game_node_scale+jack_position.y)*hScale + viewport[1]-1;
-			w = (t_rect->size.width*game_node_scale)*wScale+2;
-			h = (t_rect->size.height*game_node_scale)*hScale+2;
-		}
-
-		if(y > screen_size.height || y+h < 0.f)
-			continue;
-		else
-		{
-			glScissor(x,y,w,h);
-			draw();
-			if(mySGD->is_safety_mode)
-				safety_img->draw();
-		}
-
-	}
-
-	glDisable(GL_SCISSOR_TEST);
+	//세팅
+	getTexture()->getShaderProgram()->use();
+	
+	getTexture()->getShaderProgram()->setUniformsForBuiltins();
+	
+	ccGLBindTexture2D(getTexture()->getName());
+//	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
+	
+	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+	
+	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
+	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, m_colors);
+	glDrawArrays(GL_TRIANGLES, 0, t_vertice_count);
+	
+	glDisable(GL_DEPTH_TEST);
 }
 
 void VisibleSprite::visitForThumb()
 {
-	unsigned int loopCnt = drawRects->count();
-	
-	glEnable(GL_SCISSOR_TEST);
-	
-	for(int i=0;i<loopCnt;i++)
-	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-		
-		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
-		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
-		
-		float x, y, w, h;
-		
-		if(is_set_scene_node)
-		{
-			x = t_rect->origin.x*wScale + viewport[0]-1;
-			y = t_rect->origin.y*hScale + viewport[1]-1;
-			w = t_rect->size.width*wScale + 2;
-			h = t_rect->size.height*hScale + 2;
-		}
-		else
-		{
-			x = t_rect->origin.x*wScale + viewport[0]-1;
-			y = t_rect->origin.y*hScale + viewport[1]-1;
-			w = t_rect->size.width*wScale + 2;
-			h = t_rect->size.height*hScale + 2;
-		}
-		
-		glScissor(x,y,w,h);
+//	unsigned int loopCnt = drawRects->count();
+//	
+//	glEnable(GL_SCISSOR_TEST);
+//	
+//	for(int i=0;i<loopCnt;i++)
+//	{
+//		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+//		
+//		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
+//		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
+//		
+//		float x, y, w, h;
+//		
+//		if(is_set_scene_node)
+//		{
+//			x = t_rect->origin.x*wScale + viewport[0]-1;
+//			y = t_rect->origin.y*hScale + viewport[1]-1;
+//			w = t_rect->size.width*wScale + 2;
+//			h = t_rect->size.height*hScale + 2;
+//		}
+//		else
+//		{
+//			x = t_rect->origin.x*wScale + viewport[0]-1;
+//			y = t_rect->origin.y*hScale + viewport[1]-1;
+//			w = t_rect->size.width*wScale + 2;
+//			h = t_rect->size.height*hScale + 2;
+//		}
+//		
+//		glScissor(x,y,w,h);
 		draw();
 		if(mySGD->is_safety_mode)
 			safety_img->draw();
-	}
-	
-	glDisable(GL_SCISSOR_TEST);
+//	}
+//	
+//	glDisable(GL_SCISSOR_TEST);
 }
 
 void VisibleSprite::replayVisitForThumb(int temp_time)
@@ -1587,41 +1623,48 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		}
 	}
 	
-	unsigned int loopCnt = rects->count();
-	
-	glEnable(GL_SCISSOR_TEST);
-	
-	for(int i=0;i<loopCnt;i++)
-	{
-		IntRect* t_rect = (IntRect*)rects->objectAtIndex(i);
-		
-		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
-		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
-		
-		float x, y, w, h;
-		
-		if(is_set_scene_node)
-		{
-			x = t_rect->origin.x*wScale + viewport[0]-1;
-			y = t_rect->origin.y*hScale + viewport[1]-1;
-			w = t_rect->size.width*wScale + 2;
-			h = t_rect->size.height*hScale + 2;
-		}
-		else
-		{
-			x = t_rect->origin.x*wScale + viewport[0]-1;
-			y = t_rect->origin.y*hScale + viewport[1]-1;
-			w = t_rect->size.width*wScale + 2;
-			h = t_rect->size.height*hScale + 2;
-		}
-		
-		glScissor(x,y,w,h);
+	CCArray* keep_array = drawRects;
+	drawRects = rects;
+	setRectToVertex();
+//	unsigned int loopCnt = rects->count();
+//	
+//	glEnable(GL_SCISSOR_TEST);
+//	
+//	for(int i=0;i<loopCnt;i++)
+//	{
+//		IntRect* t_rect = (IntRect*)rects->objectAtIndex(i);
+//		
+//		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
+//		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
+//		
+//		float x, y, w, h;
+//		
+//		if(is_set_scene_node)
+//		{
+//			x = t_rect->origin.x*wScale + viewport[0]-1;
+//			y = t_rect->origin.y*hScale + viewport[1]-1;
+//			w = t_rect->size.width*wScale + 2;
+//			h = t_rect->size.height*hScale + 2;
+//		}
+//		else
+//		{
+//			x = t_rect->origin.x*wScale + viewport[0]-1;
+//			y = t_rect->origin.y*hScale + viewport[1]-1;
+//			w = t_rect->size.width*wScale + 2;
+//			h = t_rect->size.height*hScale + 2;
+//		}
+//		
+//		glScissor(x,y,w,h);
 		draw();
 		if(mySGD->is_safety_mode)
 			safety_img->draw();
-	}
+//	}
+//	
+//	glDisable(GL_SCISSOR_TEST);
 	
-	glDisable(GL_SCISSOR_TEST);
+	drawRects = keep_array;
+	setRectToVertex();
+	visit();
 	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 }
@@ -1643,6 +1686,168 @@ void VisibleSprite::setDark()
 //	setColor(ccGRAY);
 }
 
+void VisibleSprite::setRectToVertex()
+{
+	if(m_vertices)
+		delete [] m_vertices;
+	if(m_textCoords)
+		delete [] m_textCoords;
+	if(light_vertices)
+		delete [] light_vertices;
+	if(safety_vertices)
+		delete [] safety_vertices;
+	if(m_colors)
+		delete [] m_colors;
+	
+	t_vertice_count = drawRects->count()*6;
+	
+	m_vertices = new Vertex3D[t_vertice_count];
+	m_textCoords = new Vertex3D[t_vertice_count];
+	
+	light_vertices = new Vertex3D[t_vertice_count];
+	safety_vertices = new Vertex3D[t_vertice_count];
+	
+	m_colors = new tColor4B[t_vertice_count];
+	
+	for(int i=0;i<drawRects->count();i++)
+	{
+		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
+		m_vertices[i*6+0].x = t_rect->origin.x;
+		m_vertices[i*6+0].y = t_rect->origin.y;
+		m_vertices[i*6+0].z = 0;
+		
+		m_vertices[i*6+1].x = t_rect->origin.x;
+		m_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+1].z = 0;
+		
+		m_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width;
+		m_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+2].z = 0;
+		
+		m_vertices[i*6+3].x = t_rect->origin.x;
+		m_vertices[i*6+3].y = t_rect->origin.y;
+		m_vertices[i*6+3].z = 0;
+		
+		m_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width;
+		m_vertices[i*6+4].y = t_rect->origin.y;
+		m_vertices[i*6+4].z = 0;
+		
+		m_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width;
+		m_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+5].z = 0;
+		
+		
+		m_textCoords[i*6+0].x = t_rect->origin.x/320.f;
+		m_textCoords[i*6+0].y = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+0].z = 0;
+		
+		m_textCoords[i*6+1].x = t_rect->origin.x/320.f;
+		m_textCoords[i*6+1].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+1].z = 0;
+		
+		m_textCoords[i*6+2].x = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+2].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+2].z = 0;
+		
+		m_textCoords[i*6+3].x = t_rect->origin.x/320.f;
+		m_textCoords[i*6+3].y = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+3].z = 0;
+		
+		m_textCoords[i*6+4].x = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+4].y = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+4].z = 0;
+		
+		m_textCoords[i*6+5].x = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+5].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+5].z = 0;
+		
+		
+		
+		light_vertices[i*6+0].x = t_rect->origin.x-0.5f;
+		light_vertices[i*6+0].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+0].z = -1;
+		
+		light_vertices[i*6+1].x = t_rect->origin.x-0.5f;
+		light_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+1].z = -1;
+		
+		light_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width+0.5f;
+		light_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+2].z = -1;
+		
+		light_vertices[i*6+3].x = t_rect->origin.x-0.5f;
+		light_vertices[i*6+3].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+3].z = -1;
+		
+		light_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width+0.5f;
+		light_vertices[i*6+4].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+4].z = -1;
+		
+		light_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width+0.5f;
+		light_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+5].z = -1;
+		
+		
+		safety_vertices[i*6+0].x = t_rect->origin.x;
+		safety_vertices[i*6+0].y = t_rect->origin.y;
+		safety_vertices[i*6+0].z = 1;
+		
+		safety_vertices[i*6+1].x = t_rect->origin.x;
+		safety_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height;
+		safety_vertices[i*6+1].z = 1;
+		
+		safety_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width;
+		safety_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height;
+		safety_vertices[i*6+2].z = 1;
+		
+		safety_vertices[i*6+3].x = t_rect->origin.x;
+		safety_vertices[i*6+3].y = t_rect->origin.y;
+		safety_vertices[i*6+3].z = 1;
+		
+		safety_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width;
+		safety_vertices[i*6+4].y = t_rect->origin.y;
+		safety_vertices[i*6+4].z = 1;
+		
+		safety_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width;
+		safety_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height;
+		safety_vertices[i*6+5].z = 1;
+		
+		
+		m_colors[i*6+0].r = 255;
+		m_colors[i*6+0].g = 255;
+		m_colors[i*6+0].b = 255;
+		m_colors[i*6+0].a = 255;
+		
+		m_colors[i*6+1].r = 255;
+		m_colors[i*6+1].g = 255;
+		m_colors[i*6+1].b = 255;
+		m_colors[i*6+1].a = 255;
+		
+		m_colors[i*6+2].r = 255;
+		m_colors[i*6+2].g = 255;
+		m_colors[i*6+2].b = 255;
+		m_colors[i*6+2].a = 255;
+		
+		m_colors[i*6+3].r = 255;
+		m_colors[i*6+3].g = 255;
+		m_colors[i*6+3].b = 255;
+		m_colors[i*6+3].a = 255;
+		
+		m_colors[i*6+4].r = 255;
+		m_colors[i*6+4].g = 255;
+		m_colors[i*6+4].b = 255;
+		m_colors[i*6+4].a = 255;
+		
+		m_colors[i*6+5].r = 255;
+		m_colors[i*6+5].g = 255;
+		m_colors[i*6+5].b = 255;
+		m_colors[i*6+5].a = 255;
+	}
+	
+	safety_img->setVertex(safety_vertices, m_textCoords, m_colors, t_vertice_count);
+	light_img->setVertex(light_vertices, m_textCoords, m_colors, t_vertice_count);
+}
+
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
 {
 	initWithTexture(mySIL->addImage(filename));
@@ -1657,30 +1862,90 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	design_resolution_size = CCEGLView::sharedOpenGLView()->getDesignResolutionSize();
 	glGetIntegerv(GL_VIEWPORT, viewport);
 
+	m_vertices = NULL;
+	m_textCoords = NULL;
+	light_vertices = NULL;
+	safety_vertices = NULL;
+	m_colors = NULL;
 	
 	drawRects = t_drawRects;
 	
-	safety_img = EffectSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
+	safety_img = RectsSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
 	safety_img->setSilhouetteConvert(0);
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(safety_img);
 	
 	
-	light_img = CCSprite::create("ingame_whiteback.png");
+	light_img = RectsSprite::create("ingame_whiteback.png");
 	light_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(light_img, -1);
 	
-
-	CCTintTo* t_tint1 = CCTintTo::create(1.f, 255, 100, 100);
-	CCTintTo* t_tint2 = CCTintTo::create(1.f, 100, 255, 100);
-	CCTintTo* t_tint3 = CCTintTo::create(1.f, 100, 100, 255);
-	CCTintTo* t_tint4 = CCTintTo::create(1.f, 255, 100, 255);
-	CCTintTo* t_tint5 = CCTintTo::create(1.f, 255, 255, 100);
-	CCTintTo* t_tint6 = CCTintTo::create(1.f, 100, 255, 255);
-	CCTintTo* t_tint7 = CCTintTo::create(1.f, 255, 255, 255);
-	CCSequence* t_seq = CCSequence::create(t_tint1, t_tint2, t_tint3, t_tint4, t_tint5, t_tint6, t_tint7, NULL);
-	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
-	light_img->runAction(t_repeat);
+	setRectToVertex();
+	
+	light_r = 255;
+	light_g = 100;
+	light_b = 100;
+	
+	light_step = 0;
+	light_frame = 0;
+	
+	addChild(KSSchedule::create([=](float dt){
+		
+		if(light_step == 0)
+		{
+			light_r = 255-light_frame/60.f*155;
+			light_g = 100+light_frame/60.f*155;
+			light_b = 100;
+		}
+		else if(light_step == 1)
+		{
+			light_r = 100;
+			light_g = 255-light_frame/60.f*155;
+			light_b = 100+light_frame/60.f*155;
+		}
+		else if(light_step == 2)
+		{
+			light_r = 100+light_frame/60.f*155;
+			light_g = 100;
+			light_b = 255;
+		}
+		else if(light_step == 3)
+		{
+			light_r = 255;
+			light_g = 100+light_frame/60.f*155;
+			light_b = 255-light_frame/60.f*155;
+		}
+		else if(light_step == 4)
+		{
+			light_r = 255-light_frame/60.f*155;
+			light_g = 255;
+			light_b = 100+light_frame/60.f*155;
+		}
+		else if(light_step == 5)
+		{
+			light_r = 100+light_frame/60.f*155;
+			light_g = 255;
+			light_b = 255;
+		}
+		else if(light_step == 6)
+		{
+			light_r = 255;
+			light_g = 255-light_frame/60.f*155;
+			light_b = 255-light_frame/60.f*155;
+		}
+		
+		light_img->setColorSilhouette(light_r, light_g, light_b);
+		
+		light_frame++;
+		if(light_frame >= 60)
+		{
+			light_step++;
+			if(light_step > 6)
+				light_step = 0;
+			light_frame = 0;
+		}
+		return true;
+	}));
 }
 
 CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
@@ -1758,6 +2023,7 @@ void VisibleParent::setDrawRects( CCArray* t_rects )
 {
 	drawRects->removeAllObjects();
 	drawRects->addObjectsFromArray(t_rects);
+	myVS->setRectToVertex();
 }
 
 CCArray* VisibleParent::getDrawRects()
@@ -1832,6 +2098,7 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 		removeArray.pop_back();
 		drawRects->removeObject(t_rect);
 	}
+	myVS->setRectToVertex();
 }
 
 void VisibleParent::divideRects(IntRect crashRect)
@@ -1953,6 +2220,7 @@ void VisibleParent::divideRects(IntRect crashRect)
 		removeArray.pop_back();
 		drawRects->removeObject(t_rect);
 	}
+	myVS->setRectToVertex();
 }
 
 void VisibleParent::setMoveGamePosition( CCPoint t_p )
@@ -2019,7 +2287,7 @@ void VisibleParent::changingGameStep( int t_step )
 
 void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename )
 {
-		drawRects = new CCArray(1);
+	drawRects = new CCArray(1);
 	setPosition(CCPointZero);
 
 	myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);

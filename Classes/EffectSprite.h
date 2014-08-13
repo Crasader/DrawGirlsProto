@@ -99,6 +99,7 @@ public:
 	{
 		EffectSprite* sp = new EffectSprite();
 		sp->initWithFile(str.c_str());
+		sp->autorelease();
 		
 		return sp;
 	}
@@ -225,7 +226,7 @@ public:
 	
 	void setColorSilhouette(int t_r, int t_g, int t_b)
 	{
-		if(m_currentMode != CurrentMode::kSilCvt)
+		if(m_currentMode != CurrentMode::kColorSil)
 		{
 			CCGLProgram* pProgram = new CCGLProgram();
 			pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, colorSilFrag);

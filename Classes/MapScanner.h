@@ -132,6 +132,81 @@ private:
 //	}
 //};
 
+typedef struct {
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
+} Vertex3D;
+
+typedef struct {
+	GLubyte r;
+	GLubyte g;
+	GLubyte b;
+	GLubyte a;
+}tColor4B;
+
+class RectsSprite : public EffectSprite
+{
+public:
+	static RectsSprite* create(const std::string& str)
+	{
+		RectsSprite* t_rs = new RectsSprite();
+		t_rs->initWithFile(str.c_str());
+		t_rs->autorelease();
+		return t_rs;
+	}
+	
+	static RectsSprite* createWithTexture(CCTexture2D *pTexture)
+	{
+		RectsSprite *pobSprite = new RectsSprite();
+		if (pobSprite && pobSprite->initWithTexture(pTexture))
+		{
+			pobSprite->autorelease();
+			return pobSprite;
+		}
+		CC_SAFE_DELETE(pobSprite);
+		return NULL;
+	}
+	
+	void setVertex(Vertex3D* t_vertices, Vertex3D* t_textCoords, tColor4B* t_colors, int t_vertice_count)
+	{
+		m_vertices = t_vertices;
+		m_textCoords = t_textCoords;
+		m_colors = t_colors;
+		vertice_count = t_vertice_count;
+	}
+	
+	virtual void draw()
+	{
+		glEnable(GL_DEPTH_TEST);
+		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+		
+		//세팅
+		getTexture()->getShaderProgram()->use();
+		
+		getTexture()->getShaderProgram()->setUniformsForBuiltins();
+		
+		ccGLBindTexture2D(getTexture()->getName());
+//		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
+		
+		ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+		
+		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, m_colors);
+		glDrawArrays(GL_TRIANGLES, 0, vertice_count);
+		
+		glDisable(GL_DEPTH_TEST);
+	}
+	
+private:
+	Vertex3D* m_vertices;
+	Vertex3D* m_textCoords;
+	tColor4B* m_colors;
+	
+	int vertice_count;
+};
+
 class VisibleSprite : public EffectSprite
 {
 public:
@@ -149,8 +224,19 @@ public:
 	void setLight();
 	void setDark();
 	
+	virtual void draw();
+	void setRectToVertex();
+	
 private:
 	CCArray* drawRects;
+	
+	Vertex3D* m_vertices;
+	Vertex3D* m_textCoords;
+	int t_vertice_count;
+	
+	Vertex3D* light_vertices;
+	Vertex3D* safety_vertices;
+	tColor4B* m_colors;
 	
 	CCPoint jack_position;
 	CCSize screen_size;
@@ -159,8 +245,14 @@ private:
 	CCNode* scene_node;
 	bool is_set_scene_node;
 	
-	EffectSprite* safety_img;
-	CCSprite* light_img;
+	RectsSprite* safety_img;
+	RectsSprite* light_img;
+	
+	int light_r;
+	int light_g;
+	int light_b;
+	int light_step;
+	int light_frame;
 	
 	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
 	
