@@ -501,8 +501,8 @@ CCString* MyLocal::getLocalCode()
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	tempCode = getCurrentLanguageJNI();
 #endif
-	
-	return CCString::create(tempCode);
+
+	return CCString::create("ko");
 }
 
 const char* MyLocal::getSupportLocalCode()
