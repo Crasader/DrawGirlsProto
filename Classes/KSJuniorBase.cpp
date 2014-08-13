@@ -286,6 +286,7 @@ void KSJuniorBase::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		m_cumberState = kCumberStateMoving;
+		m_noDirection.state = 0;
 //		unschedule(schedule_selector(KSJuniorBase::animationNoDirection));
 //		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString());
 	}

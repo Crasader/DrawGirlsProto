@@ -11,14 +11,15 @@
 void CommonBulletPattern::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
-			
+	
+	m_earlyRelease = false;
+	setStartingWithEarly();
 	//		m_position = t_sp;
 	//		firstJackPosition = ip2ccp(myGD->getJackPoint());
 	
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
-	
 	m_oneShotNumber = pattern["oneshot"].asInt();
 	m_oneShotTerm = pattern["oneshotterm"].asInt();
 	m_gunNumber = pattern["gunnumber"].asInt();
@@ -203,8 +204,7 @@ void CommonBulletPattern::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
@@ -261,6 +261,9 @@ void CommonBulletPattern::initGuns()
 void FireWorkWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 	
 	Json::Reader reader;
@@ -272,9 +275,7 @@ void FireWorkWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& 
 void FireWorkWrapper::stopMyAction()
 {
 	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -293,6 +294,9 @@ void FireWorkWrapper::update( float dt )
 void MovingSunflowerWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 	
 	Json::Reader reader;
@@ -304,9 +308,7 @@ void MovingSunflowerWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const std::s
 void MovingSunflowerWrapper::stopMyAction()
 {
 	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -420,6 +422,7 @@ void FallingStoneWrapper::stopMyAction()
 	AudioEngine::sharedInstance()->stopEffect("sound_rock_falling.mp3");
 	unschedule(schedule_selector(FallingStoneWrapper::myAction));
 
+	setEndingWithEarly();
 //	m_cumber->setAttackPattern(nullptr);
 //	myGD->communication("CP_onPatternEndOf", m_cumber);
 
@@ -476,6 +479,9 @@ void FallingStoneWrapper::myAction()
 void FallingStoneWrapper::myInit( int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type )
 {
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 	keepFrame = t_keepFrame;
 	shootFrame = t_shootFrame;
 	distance = t_distance;
@@ -495,7 +501,6 @@ Saw* Saw::create( CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize )
 
 void Saw::stopMyAction()
 {
-	myGD->communication("MP_endIngActionAP");
 
 	startSelfRemoveSchedule();
 }
@@ -545,9 +550,7 @@ void ThunderBoltWrapper::stopMyAction()
 	unschedule(schedule_selector(ThunderBoltWrapper::myAction));
 
 
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 	startSelfRemoveSchedule();
 	fadeFromToDuration.init(255, 0, 1.f);
 	schedule(schedule_selector(ThisClassType::hidingAnimation));
@@ -689,6 +692,9 @@ void ThunderBoltWrapper::myAction()
 void ThunderBoltWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame )
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	type = t_type;
 	targetingFrame = t_targetingFrame;
 	shootFrame = t_shootFrame;
@@ -742,7 +748,6 @@ BigSaw* BigSaw::create( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, In
 
 void BigSaw::stopMyAction()
 {
-	myGD->communication("MP_endIngActionAP");
 
 	startSelfRemoveSchedule();
 }
@@ -817,8 +822,7 @@ void FlameWrapper::stopMyAction()
 		unschedule(schedule_selector(FlameWrapper::myAction));
 		myParticle->setDuration(0);
 
-		m_cumber->setAttackPattern(nullptr);
-		myGD->communication("CP_onPatternEndOf", m_cumber);
+		setEndingWithEarly();
 
 		CCDelayTime* t_delay = CCDelayTime::create(1.2f);
 		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(FlameWrapper::particleRemove));
@@ -983,6 +987,9 @@ void FlameWrapper::initParticle()
 void FlameWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_burnFrame )
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	is_remove_called = false;
 
 	mType = 1;
@@ -1022,10 +1029,10 @@ void FlameWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_bu
 	startMyAction();
 }
 
-MeteorWrapper* MeteorWrapper::create( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea)
+MeteorWrapper* MeteorWrapper::create( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb)
 {
 	MeteorWrapper* t_m16 = new MeteorWrapper();
-	t_m16->myInit(t_type, t_tmCnt, t_totalFrame, t_crashArea);
+	t_m16->myInit(t_type, t_tmCnt, t_totalFrame, t_crashArea, cb);
 	t_m16->autorelease();
 	return t_m16;
 }
@@ -1036,25 +1043,23 @@ void MeteorWrapper::stopMyAction()
 	{
 		isRemoveEffect = true;
 		unschedule(schedule_selector(MeteorWrapper::myAction));
-
-		myGD->communication("MP_endIngActionAP");
-
-		startSelfRemoveSchedule();
-	}
-}
-
-void MeteorWrapper::removeEffect()
-{
-	if(!isRemoveEffect)
-	{
-		isRemoveEffect = true;
-		unschedule(schedule_selector(MeteorWrapper::myAction));
-
-		myGD->communication("MP_endIngActionAP");
+		setEndingWithEarly();
 
 		startSelfRemoveSchedule();
 	}
 }
+
+//void MeteorWrapper::removeEffect()
+//{
+//	if(!isRemoveEffect)
+//	{
+//		isRemoveEffect = true;
+//		unschedule(schedule_selector(MeteorWrapper::myAction));
+//
+//
+//		startSelfRemoveSchedule();
+//	}
+//}
 
 void MeteorWrapper::selfRemove()
 {
@@ -1121,7 +1126,7 @@ void MeteorWrapper::myAction()
 
 		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp,
 																					220, 20, IntSize(12, 12),
-																					this, callfunc_selector(MeteorWrapper::removeEffect),
+																					this, callfunc_selector(MeteorWrapper::stopMyAction),
 																					bind(&MeteorWrapper::accumCrashCount, this, std::placeholders::_1)); // imgSize, crashSize
 		addChild(t_fm);
 	}
@@ -1132,8 +1137,13 @@ void MeteorWrapper::myAction()
 	}
 }
 
-void MeteorWrapper::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea)
+void MeteorWrapper::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb)
 {
+	m_cumber = cb;
+	
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
 	isRemoveEffect = false;
 
 	//		myGD->communication("EP_startCrashAction");
@@ -1159,16 +1169,21 @@ void MeteorWrapper::accumCrashCount(int n)
 	crashCount += n;
 }
 
-TornadoWrapper* TornadoWrapper::create( CCPoint t_sp, int tf, int sc )
+TornadoWrapper* TornadoWrapper::create( CCPoint t_sp, int tf, int sc, KSCumberBase* cb )
 {
 	TornadoWrapper* t_m21 = new TornadoWrapper();
-	t_m21->myInit(t_sp, tf, sc);
+	t_m21->myInit(t_sp, tf, sc, cb);
 	t_m21->autorelease();
 	return t_m21;
 }
 
-void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc )
+void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc, KSCumberBase* cb )
 {
+	m_cumber = cb;
+	m_earlyRelease = true;
+	// BlindDrop 이 끝날 때 setEndingWithEarly(); 호출해야 하는데 일단 true 인 경우에 "반드시"
+	// 호출할 필요는 없음
+	setStartingWithEarly();
 	int totalFrame = tf;
 	float scale = sc;
 	IntPoint jackPoint = myGD->getJackPoint();
@@ -1181,84 +1196,6 @@ void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc )
 	startSelfRemoveSchedule();
 }
 
-//AP_Missile23* AP_Missile23::create( int t_frame )
-//{
-	//AP_Missile23* t_m23 = new AP_Missile23();
-	//t_m23->myInit(t_frame);
-	//t_m23->autorelease();
-	//return t_m23;
-//}
-
-//void AP_Missile23::updateCobweb()
-//{
-	//if(!is_stop)
-		//ingFrame = 0;
-//}
-
-//void AP_Missile23::removeCobweb()
-//{
-	//cobwebImg->removeFromParent();
-	//startSelfRemoveSchedule();
-//}
-
-//void AP_Missile23::stopFrame()
-//{
-	//is_stop = true;
-	//unschedule(schedule_selector(AP_Missile23::framing));
-
-	//cobwebImg->stopAllActions();
-
-	//CCScaleTo* t_scale = CCScaleTo::create(0.3, 0.f);
-	//CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(AP_Missile23::removeCobweb));
-	//CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
-	//cobwebImg->runAction(t_seq);
-
-	//myGD->setAlphaSpeed(myGD->getAlphaSpeed()+0.5f);
-	//myGD->communication("MP_deleteKeepAP23");
-//}
-
-//void AP_Missile23::myInit( int t_frame )
-//{
-	//is_stop = false;
-
-	//slowFrame = t_frame;
-
-
-	//CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	//CCBReader* reader = new CCBReader(nodeLoader);
-	//cobwebImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
-	//reader->release();
-
-	//cobwebImg->setPosition(ccp(160,215));
-	//cobwebImg->setScale(0.f);
-
-	//addChild(cobwebImg);
-	//m_scaleFromTo.init(0.0f, 1.0f, 0.3f);
-	////		CCScaleTo* t_scale = CCScaleTo::create(0.3, 1.f);
-	////		cobwebImg->runAction(t_scale); // 나중에 수동으로 구현해야함.
-
-	//myGD->setAlphaSpeed(myGD->getAlphaSpeed()-0.5f);
-
-	//startFrame();
-//}
-
-//void AP_Missile23::startFrame()
-//{
-	//ingFrame = 0;
-	//schedule(schedule_selector(AP_Missile23::framing));
-//}
-
-//void AP_Missile23::framing()
-//{
-	//ingFrame++;
-
-	//m_scaleFromTo.step(1/60.f);
-	//cobwebImg->setScale(m_scaleFromTo.getValue());
-	//if(ingFrame >= slowFrame)
-	//{
-		//stopFrame();
-	//}
-//}
 
 
 
@@ -1278,6 +1215,9 @@ void SightOutAttack::updateSightOut()
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
 	t_so->startAction();
+	
+	m_earlyRelease = true;
+	setStartingWithEarly();
 }
 
 void SightOutAttack::startFrame()
@@ -1309,6 +1249,10 @@ void SightOutAttack::myInit( int t_frame, KSCumberBase* cb )
 	sightOutFrame = t_frame;
 
 	m_cumber = cb;
+
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
 	SightOut* t_so = SightOut::create(sightOutFrame);
 	t_so->setPosition(ccp(160,215));
 	addChild(t_so);
@@ -1329,6 +1273,9 @@ void FreezeAttack::updateFreeze()
 {
 	myGD->communication("Jack_createFog");
 	ingFrame = 0;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	m_cumber->setFreezeAttack(this);
 }
 
 void FreezeAttack::stopFrame()
@@ -1361,6 +1308,8 @@ void FreezeAttack::myInit( int t_frame, KSCumberBase* cb )
 	freezingFrame = t_frame;
 
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
 	myGD->communication("Jack_createFog");
 	startFrame();
 }
@@ -1389,14 +1338,20 @@ ChaosAttack* ChaosAttack::create( int t_frame, KSCumberBase* cb )
 
 void ChaosAttack::updateChaos()
 {
+	myGD->communication("Jack_createChaos");
 	ingFrame = 0;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	m_cumber->setChaosAttack(this);
 }
 
 void ChaosAttack::stopFrame()
 {
 	unschedule(schedule_selector(ChaosAttack::framing));
 	m_cumber->setChaosAttack(nullptr);
-	startSelfRemoveSchedule();
+	removeFromParent();
+	myGD->communication("Jack_reverseOff");
+//	startSelfRemoveSchedule();
 }
 
 void ChaosAttack::startFrame()
@@ -1411,7 +1366,7 @@ void ChaosAttack::framing()
 
 	if(ingFrame >= chaosFrame)
 	{
-		myGD->communication("Jack_reverseOff");
+		
 		stopFrame();
 	}
 }
@@ -1423,6 +1378,8 @@ void ChaosAttack::myInit( int t_frame, KSCumberBase* cb )
 	m_cumber = cb;
 	myGD->communication("Jack_createChaos");
 	startFrame();
+	m_earlyRelease = true;
+	setStartingWithEarly();
 }
 
 void UnusedMissile5::selfRemoveSchedule()
@@ -2073,9 +2030,7 @@ void Mugunghwa::update( float dt )
 void CaromWrapper::stopMyAction()
 {
 	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -2106,6 +2061,9 @@ void CaromWrapper::selfRemoveSchedule()
 void CaromWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 	isRemoveEffect = false;
 	//		myGD->communication("EP_startCrashAction");
 
@@ -2545,6 +2503,9 @@ void SawWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patt
 	speed = pattern.get("speed", 150.f).asDouble() / 100.f;
 	crashsize = pattern.get("crashsize", 20.f).asDouble();
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 }
 
@@ -2564,8 +2525,7 @@ void SawWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -2579,6 +2539,9 @@ void SmallSawWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	speed = pattern.get("speed", 200.0).asDouble() / 100.f;
 	crashsize = pattern.get("crashsize", 10).asInt();
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 }
 
@@ -2586,8 +2549,7 @@ void SmallSawWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -2606,9 +2568,7 @@ void SmallSawWrapper::update( float dt )
 void CrashLazerWrapper::stopMyAction()
 {
 	unschedule(schedule_selector(ThisClassType::myAction));
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 	AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_1.mp3");
 	AudioEngine::sharedInstance()->stopEffect("se_destructionlaser_2.mp3");
 
@@ -2663,6 +2623,9 @@ void CrashLazerWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::strin
 	attacked = false;
 	lazer_main = t_bead = NULL;
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	crashCount = 0;
 	Json::Reader reader;
 	Json::Value pattern;
@@ -3138,6 +3101,9 @@ void CrashingRush::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& pa
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 }
 
@@ -3145,8 +3111,7 @@ void CrashingRush::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -3159,6 +3124,9 @@ void CrashingRush::update( float dt )
 void ThrowBombWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 	schedule(schedule_selector(ThisClassType::targetTraceUpdate));
 	Json::Reader reader;
@@ -3176,8 +3144,7 @@ void ThrowBombWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -3207,6 +3174,9 @@ void ThrowBombWrapper::targetTraceUpdate(float dt)
 void ScarabWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 
 	Json::Reader reader;
@@ -3222,8 +3192,7 @@ void ScarabWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	//		m_parentMissile->runAction(KSSequenceAndRemove::create(m_parentMissile, {CCFadeOut::create(0.5f)}));
 	//		m_parentMissile->removeFromParentAndCleanup(true);
@@ -3251,77 +3220,6 @@ void ScarabWrapper::update( float dt )
 }
 
 
-void SightOutWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
-{
-	Json::Reader reader;
-	Json::Value pattern;
-	reader.parse(patternData, pattern);
-	m_cumber = cb;
-	scheduleUpdate();
-}
-
-void SightOutWrapper::stopMyAction()
-{
-	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
-
-	startSelfRemoveSchedule();
-}
-
-void SightOutWrapper::update( float dt )
-{
-
-}
-
-void SlowZoneWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
-{
-	Json::Reader reader;
-	Json::Value pattern;
-	reader.parse(patternData, pattern);
-	m_cumber = cb;
-	scheduleUpdate();
-}
-
-void SlowZoneWrapper::stopMyAction()
-{
-	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
-
-	startSelfRemoveSchedule();
-}
-
-void SlowZoneWrapper::update( float dt )
-{
-
-}
-
-void PrisonWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
-{
-	Json::Reader reader;
-	Json::Value pattern;
-	reader.parse(patternData, pattern);
-	m_cumber = cb;
-	scheduleUpdate();
-}
-
-void PrisonWrapper::stopMyAction()
-{
-	unscheduleUpdate();
-
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
-
-	startSelfRemoveSchedule();
-}
-
-void PrisonWrapper::update( float dt )
-{
-
-}
 
 void FreezingWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
@@ -3382,8 +3280,7 @@ void LazerScanWrapper::stopMyAction()
 		beamImg = 0;
 	}
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -3458,6 +3355,9 @@ void LazerScanWrapper::startMyAction()
 void LazerScanWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	Json::Reader reader;
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
@@ -3505,6 +3405,9 @@ void RadioactivityWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::st
 	movingFrame = pattern.get("movingframe", 80).asInt();
 	m_position = t_sp;
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 }
 
@@ -3512,8 +3415,7 @@ void RadioactivityWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -3591,6 +3493,9 @@ void AlongOfTheLineWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::s
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
 	m_cumber = cb;
+	m_earlyRelease = false;
+	setStartingWithEarly();
+
 	m_totalFrame = pattern.get("totalframe", 180).asInt();
 	m_speed = pattern.get("linespeed", 100).asInt();
 	m_number = pattern.get("number", 4).asInt();
@@ -3601,8 +3506,7 @@ void AlongOfTheLineWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -3621,6 +3525,9 @@ void CloudWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& pa
 	reader.parse(patternData, pattern);
 	m_pattern = pattern;
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 	scheduleUpdate();
 }
 
@@ -3628,8 +3535,7 @@ void CloudWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }
@@ -3658,6 +3564,9 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	reader.parse(patternData, pattern);
 	m_pattern = pattern;
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 
 	IntPoint mapPoint;
 	bool finded;
@@ -3691,7 +3600,7 @@ void PutChildWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-
+	setEndingWithEarly();
 	startSelfRemoveSchedule();
 }
 
@@ -3782,6 +3691,8 @@ void CobWeb::updateCobWeb()
 {
 	if(!is_stop)
 		ingFrame = 0;
+	m_earlyRelease = true;
+	setStartingWithEarly();
 }
 
 void CobWeb::startFrame()
@@ -3876,6 +3787,8 @@ void CobWeb::stopFrame()
 void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
 {
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
 	state = kElse;
 	is_stop = false;
 	Json::Reader reader;
@@ -3903,10 +3816,10 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	startFrame();
 }
 
-PrisonPattern* PrisonPattern::create( CCPoint t_sp, float radius, int totalFrame )
+PrisonPattern* PrisonPattern::create( CCPoint t_sp, float radius, int totalFrame, KSCumberBase* cb )
 {
 	PrisonPattern* t_m28 = new PrisonPattern();
-	t_m28->myInit(t_sp, radius, totalFrame);
+	t_m28->myInit(t_sp, radius, totalFrame, cb);
 	t_m28->autorelease();
 	return t_m28;
 }
@@ -3960,10 +3873,14 @@ void PrisonPattern::stopMyAction()
 	schedule(schedule_selector(PrisonPattern::hidingAnimation));
 	unschedule(schedule_selector(PrisonPattern::myAction));
 	startSelfRemoveSchedule();
+	setEndingWithEarly();
 }
 
-void PrisonPattern::myInit( CCPoint t_sp, float radius, int totalFrame ) /* create 0.5 second */
+void PrisonPattern::myInit( CCPoint t_sp, float radius, int totalFrame, KSCumberBase* cb ) /* create 0.5 second */
 {
+	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
 	IntPoint jackPoint = myGD->getJackPoint();
 	m_initialJackPosition = ip2ccp(jackPoint);
 	m_radius = radius;
@@ -3979,6 +3896,9 @@ void PrisonPattern::myInit( CCPoint t_sp, float radius, int totalFrame ) /* crea
 void RunDownSawWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
 {
 	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+
 	Json::Reader reader;
 	reader.parse(patternData, m_pattern);
 	scheduleUpdate();
@@ -4022,8 +3942,7 @@ void RunDownSawWrapper::stopMyAction()
 {
 	unscheduleUpdate();
 
-	m_cumber->setAttackPattern(nullptr);
-	myGD->communication("CP_onPatternEndOf", m_cumber);
+	setEndingWithEarly();
 
 	startSelfRemoveSchedule();
 }

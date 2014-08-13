@@ -1450,8 +1450,11 @@ void Jack::reverseOn()
 void Jack::reverseOff()
 {
 	isReverse = false;
-	t_chaos->removeFromParentAndCleanup(true);
-	t_chaos = NULL;
+	if(t_chaos)
+	{
+		t_chaos->removeFromParentAndCleanup(true);
+		t_chaos = NULL;
+	}
 }
 
 void Jack::stunJack()
@@ -2344,7 +2347,7 @@ void Jack::startMove()
 void Jack::resetStopEffects()
 {
 	t_se = NULL;
-	t_chaos = NULL;
+//	t_chaos = NULL;
 }
 
 void Jack::positionRefresh()

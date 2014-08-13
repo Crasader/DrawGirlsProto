@@ -62,7 +62,7 @@ public:
 	void createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition, int missile_damage);
 	AttackOption getAttackOption(StoneType st, int grade);
 	void subOneDie();
-	void endIngActionAP();
+//	void endIngActionAP();
 	void explosion(CCPoint bombPosition, ccColor4F t_color, float t_angle);
 	void createTickingTimeBomb(IntPoint t_point, int t_bombFrameOneTime, int t_bombTimes, int t_rangeCode);
 	void resetTickingTimeBomb();
