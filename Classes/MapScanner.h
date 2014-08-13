@@ -168,7 +168,7 @@ public:
 		return NULL;
 	}
 	
-	void setVertex(Vertex3D* t_vertices, Vertex3D* t_textCoords, tColor4B* t_colors, int t_vertice_count)
+	void setVertex(Vertex3D* t_vertices, ccTex2F* t_textCoords, tColor4B* t_colors, int t_vertice_count)
 	{
 		m_vertices = t_vertices;
 		m_textCoords = t_textCoords;
@@ -178,30 +178,30 @@ public:
 	
 	virtual void draw()
 	{
-		glEnable(GL_DEPTH_TEST);
-		glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-		
+		CC_NODE_DRAW_SETUP();
+		ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 		//세팅
-		getTexture()->getShaderProgram()->use();
-		
-		getTexture()->getShaderProgram()->setUniformsForBuiltins();
+		//	getTexture()->getShaderProgram()->use();
+		//
+		//	getTexture()->getShaderProgram()->setUniformsForBuiltins();
 		
 		ccGLBindTexture2D(getTexture()->getName());
-//		ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
+		//	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
 		
+#define kQuadSize sizeof(m_sQuad.bl)
 		ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
 		
-		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
-		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
-		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, m_colors);
-		glDrawArrays(GL_TRIANGLES, 0, vertice_count);
-		
-		glDisable(GL_DEPTH_TEST);
+		{
+			glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+			glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_textCoords);
+			glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, m_colors);
+			glDrawArrays(GL_TRIANGLES, 0, vertice_count);
+		}
 	}
 	
 private:
 	Vertex3D* m_vertices;
-	Vertex3D* m_textCoords;
+	ccTex2F* m_textCoords;
 	tColor4B* m_colors;
 	
 	int vertice_count;
@@ -231,7 +231,8 @@ private:
 	CCArray* drawRects;
 	
 	Vertex3D* m_vertices;
-	Vertex3D* m_textCoords;
+//	Vertex3D* m_textCoords;
+	ccTex2F* m_textCoords;
 	int t_vertice_count;
 	
 	Vertex3D* light_vertices;

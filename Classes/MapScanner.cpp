@@ -1424,25 +1424,32 @@ void VisibleSprite::visit()
 
 void VisibleSprite::draw()
 {
-	glEnable(GL_DEPTH_TEST);
-	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-
-	//세팅
-	getTexture()->getShaderProgram()->use();
+//	CCSprite::draw();
+//	return;
+//	glEnable(GL_DEPTH_TEST);
+//	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 	
-	getTexture()->getShaderProgram()->setUniformsForBuiltins();
+	CC_NODE_DRAW_SETUP();
+	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
+	//세팅
+//	getTexture()->getShaderProgram()->use();
+//	
+//	getTexture()->getShaderProgram()->setUniformsForBuiltins();
 	
 	ccGLBindTexture2D(getTexture()->getName());
 //	ccGLEnableVertexAttribs( kCCVertexAttribFlag_Position | kCCVertexAttribFlag_TexCoords);
 	
+	#define kQuadSize sizeof(m_sQuad.bl)
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
+
+	{
+		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
+		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_textCoords);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, m_colors);
+		glDrawArrays(GL_TRIANGLES, 0, t_vertice_count);
+	}
 	
-	glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
-	glVertexAttribPointer(kCCVertexAttrib_TexCoords, 3, GL_FLOAT, GL_FALSE, 0, m_textCoords);
-	glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_FALSE, 0, m_colors);
-	glDrawArrays(GL_TRIANGLES, 0, t_vertice_count);
-	
-	glDisable(GL_DEPTH_TEST);
+//	glDisable(GL_DEPTH_TEST);
 }
 
 void VisibleSprite::visitForThumb()
@@ -1702,7 +1709,7 @@ void VisibleSprite::setRectToVertex()
 	t_vertice_count = drawRects->count()*6;
 	
 	m_vertices = new Vertex3D[t_vertice_count];
-	m_textCoords = new Vertex3D[t_vertice_count];
+	m_textCoords = new ccTex2F[t_vertice_count];
 	
 	light_vertices = new Vertex3D[t_vertice_count];
 	safety_vertices = new Vertex3D[t_vertice_count];
@@ -1737,29 +1744,29 @@ void VisibleSprite::setRectToVertex()
 		m_vertices[i*6+5].z = 0;
 		
 		
-		m_textCoords[i*6+0].x = t_rect->origin.x/320.f;
-		m_textCoords[i*6+0].y = (430.f - t_rect->origin.y) / 430.f;
-		m_textCoords[i*6+0].z = 0;
+		m_textCoords[i*6+0].u = t_rect->origin.x/320.f;
+		m_textCoords[i*6+0].v = (430.f - t_rect->origin.y) / 430.f;
+//		m_textCoords[i*6+0].z = 0;
 		
-		m_textCoords[i*6+1].x = t_rect->origin.x/320.f;
-		m_textCoords[i*6+1].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-		m_textCoords[i*6+1].z = 0;
+		m_textCoords[i*6+1].u = t_rect->origin.x/320.f;
+		m_textCoords[i*6+1].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+//		m_textCoords[i*6+1].z = 0;
 		
-		m_textCoords[i*6+2].x = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+2].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-		m_textCoords[i*6+2].z = 0;
+		m_textCoords[i*6+2].u = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+2].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+//		m_textCoords[i*6+2].z = 0;
 		
-		m_textCoords[i*6+3].x = t_rect->origin.x/320.f;
-		m_textCoords[i*6+3].y = (430.f - t_rect->origin.y) / 430.f;
-		m_textCoords[i*6+3].z = 0;
+		m_textCoords[i*6+3].u = t_rect->origin.x/320.f;
+		m_textCoords[i*6+3].v = (430.f - t_rect->origin.y) / 430.f;
+//		m_textCoords[i*6+3].z = 0;
 		
-		m_textCoords[i*6+4].x = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+4].y = (430.f - t_rect->origin.y) / 430.f;
-		m_textCoords[i*6+4].z = 0;
+		m_textCoords[i*6+4].u = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+4].v = (430.f - t_rect->origin.y) / 430.f;
+//		m_textCoords[i*6+4].z = 0;
 		
-		m_textCoords[i*6+5].x = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+5].y = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-		m_textCoords[i*6+5].z = 0;
+		m_textCoords[i*6+5].u = (t_rect->origin.x + t_rect->size.width)/320.f;
+		m_textCoords[i*6+5].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+//		m_textCoords[i*6+5].z = 0;
 		
 		
 		
