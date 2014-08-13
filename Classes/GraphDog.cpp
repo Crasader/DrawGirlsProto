@@ -739,21 +739,21 @@ void GraphDog::receivedCommand(float dt)
 			Json::Value resultobj = commands.result;
 			
 			if(resultobj.get("checkDeviceError", false).asBool()){
-				CCLOG("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
-				CCLOG("resultobj : %s",resultobj.asString().c_str());
+				CCLOG("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
 				
 			}else if(resultobj.get("cmdNoError", false).asBool()){
-				CCLOG("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
-				CCLOG("resultobj : %s",resultobj.asString().c_str());
+				CCLOG("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
 				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
 				
 			}else if(resultobj.get("longTimeError", false).asBool()){
 				
-				CCLOG("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
-				CCLOG("resultobj : %s",resultobj.asString().c_str());
+				CCLOG("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
+				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
 			
