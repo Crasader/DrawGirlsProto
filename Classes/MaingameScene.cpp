@@ -2312,6 +2312,7 @@ void Maingame::gameover()
 
 void Maingame::clearScenario()
 {
+	myMS->setVisible(false);
 	if(mySGD->is_endless_mode)
 	{
 		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
@@ -3840,8 +3841,8 @@ void Maingame::startShake( float t_direction_angle )
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_move);
 	runAction(t_seq);
 
-	//		shake_frame = 0;
-	//		schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
+//	shake_frame = 0;
+//	schedule(schedule_selector(Maingame::shaking), 1.f/20.f);
 }
 
 void Maingame::shaking()
@@ -3880,6 +3881,8 @@ void Maingame::shaking()
 void Maingame::stopShake()
 {
 	unschedule(schedule_selector(Maingame::shaking));
+	setRotation(0);
+	setPosition(CCPointZero);
 	shake_frame = 0;
 }
 
