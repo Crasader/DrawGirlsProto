@@ -34,6 +34,28 @@ public:
     {
         return (a.x == x && a.y == y);
     }
+	bool operator<( const BFS_Point& other) const
+	{
+		if ( x == other.x )
+		{
+			return y < other.y;
+		}
+		
+		return x < other.x;
+	}
+};
+template<>
+struct hash<BFS_Point>
+{
+	typedef std::size_t result_type;
+	
+	result_type operator()(BFS_Point const& s) const
+	{
+		return s.x * 10000 + s.y;
+//		result_type const h1 ( std::hash<std::string>()(s.first_name) );
+//		result_type const h2 ( std::hash<std::string>()(s.last_name) );
+//		return h1 ^ (h2 << 1);
+	}
 };
 
 //class BackObj : public CCSprite
