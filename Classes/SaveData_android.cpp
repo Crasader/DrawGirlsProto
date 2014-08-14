@@ -103,14 +103,20 @@
 
 void testF(string filePath, string tt)
 {
-	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
-	FILE* fp = fopen( path.c_str(), "w" );
-	if(!fp)
+	string t_path = CCFileUtils::sharedFileUtils()->getWritablePath() + "temp";
+	FILE* t_fp = fopen( t_path.c_str(), "w" );
+	if(!t_fp)
 	{
 		CCLOG("file failure");
 	}
-	fprintf(fp, "%s", tt.c_str());
-	fclose(fp);
+	fprintf(t_fp, "%s", tt.c_str());
+	fclose(t_fp);
+	
+	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
+	int rename_result;
+	rename_result = rename( t_path, path );
+	if(rename_result != 0)
+		CCLOG("file failure(rename)");
 }
 string readF(string filePath)
 {
