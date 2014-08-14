@@ -498,9 +498,9 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 	bfsArray.push(s_p);
 
 //	std::hash<BFS_Point> ttee;
-	vector<BFS_Point> check_new_line_list;
-	check_new_line_list.reserve(1000);
-//	hash_map<BFS_Point, int> check_new_line_list2;
+//	vector<BFS_Point> check_new_line_list;
+//	check_new_line_list.reserve(1000);
+	hash_map<BFS_Point, int> check_new_line_list2;
 	
 //	check_new_line_list.clear();
 	auto dgPointer = myGD;
@@ -522,13 +522,27 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 					dgPointer->mapState[a_p.x][a_p.y] = afterType;
 					bfsArray.push(a_p);
 				}
-				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
-//				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
 				{
-//					check_new_line_list2[a_p] = true;
-					check_new_line_list.push_back(a_p);
+					check_new_line_list2[a_p] = true;
+//					check_new_line_list.push_back(a_p);
 					bfsArray.push(a_p);
 				}
+			
+			
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.push(a_p);
+//				}
+//				//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
+//				{
+//					check_new_line_list2[a_p] = true;
+//					//					check_new_line_list.push_back(a_p);
+//					bfsArray.push(a_p);
+//				}
 			}
 		}
 	}
@@ -751,7 +765,7 @@ BFS_Point MapScanner::directionVector( IntDirection direction )
 	return r_v;
 }
 
-bool MapScanner::isInnerMap( BFS_Point t_p )
+bool MapScanner::isInnerMap(const BFS_Point& t_p )
 {
 	if(t_p.x >= mapWidthInnerBegin && t_p.x < mapWidthInnerEnd && t_p.y >= mapHeightInnerBegin && t_p.y < mapHeightInnerEnd)
 		return true;
