@@ -1146,7 +1146,7 @@ void ZoomScript::showtimeForthAction()
 	script_label->setVisible(true);
 //	mode_button->setVisible(true);
 	setTouchEnabled(true);
-	schedule(schedule_selector(ZoomScript::moveChecking));
+	//schedule(schedule_selector(ZoomScript::moveChecking));
 }
 
 void ZoomScript::registerWithTouchDispatcher()
