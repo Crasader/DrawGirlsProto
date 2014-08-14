@@ -602,9 +602,11 @@ void MapScanner::exchangeMS()
 	t_sprc->setVisible(true);
 	CCSprite* t_spr = (CCSprite*)t_sprc->getChildByTag(8706);
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	int orir =NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d);
-	int orig =NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d);
-	int orib =NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d);
+	int orir =254;
+	int orig = 1; //NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d);
+	int orib = 1; //NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d);
+	
+	t_spr->setColor(ccc3(254, 0, 0));
 	
 	float rm = orir/20.f;
 	float gm =  orig/20.f;
