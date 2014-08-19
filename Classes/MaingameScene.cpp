@@ -539,7 +539,9 @@ void Maingame::finalSetting()
 //	addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
 	
-	if(mySGD->isTimeEvent(kTimeEventType_clear))
+	if(mySD->getClearCondition() == kCLEAR_hellMode)
+		myUI->setClearPercentage(2.f);
+	else if(mySGD->isTimeEvent(kTimeEventType_clear))
 		myUI->setClearPercentage(mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f);
 	else
 		myUI->setClearPercentage(0.85f);
@@ -2210,7 +2212,10 @@ void Maingame::gameover()
 	int clear_info;
 	if(!mySGD->getIsCleared())
 	{
-		mySGD->gameOver(myUI->getScore(), myUI->getPercentage(), myUI->getUseTime());
+		if(mySD->getClearCondition() == kCLEAR_hellMode)
+			mySGD->gameOver(myUI->getUseTime()*500, myUI->getPercentage(), myUI->getUseTime());
+		else
+			mySGD->gameOver(myUI->getScore(), myUI->getPercentage(), myUI->getUseTime());
 		clear_info = -1;
 	}
 	else

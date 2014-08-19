@@ -199,13 +199,14 @@ enum MUI_PET_MenuTag{
 
 typedef enum t_CLEAR_CONDITION{
 	kCLEAR_default = 0,
-	kCLEAR_bossLifeZero,
-	kCLEAR_subCumberCatch,
-	kCLEAR_bigArea,
-	kCLEAR_itemCollect,
-	kCLEAR_perfect,
-	kCLEAR_sequenceChange,
-	kCLEAR_timeLimit
+	kCLEAR_bossLifeZero,	// 1
+	kCLEAR_subCumberCatch,	// 2
+	kCLEAR_bigArea,			// 3
+	kCLEAR_itemCollect,		// 4
+	kCLEAR_perfect,			// 5
+	kCLEAR_sequenceChange,	// 6
+	kCLEAR_timeLimit,		// 7
+	kCLEAR_hellMode
 }CLEAR_CONDITION;
 
 typedef enum t_ITEM_CODE{

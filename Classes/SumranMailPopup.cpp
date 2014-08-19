@@ -643,8 +643,9 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				CCScale9Sprite* back = CCScale9Sprite::create("mainpopup_pupple3.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 																				back->setContentSize(CCSizeMake(70, 70));
-																				back->setPosition(ccp(i*75-(mail["reward"].size()-1)/2.f*75,0));
+																				back->setPosition(ccp(i*75+75/2.f,0));
 																				
+																				CCLOG("position : %f",back->getPositionX());
 																				
 																				CCSprite* spr;
 //																				KSLabelTTF* propName = KSLabelTTF::create("뽑기이용권", mySGD->getFont().c_str(), 13);
@@ -653,8 +654,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
-																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png",rewardCount)->getCString());
-																					spr->setScale(0.12);
+																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",rewardCount)->getCString());
+																					spr->setScale(0.3f);
 																					count->setString("");
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}else{
@@ -691,11 +692,31 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		//																	lbl->setOldAnchorPoint();
 																		//																	lbl->setPosition(ccp(0,-55));
 																		//																	itemlist->addChild(lbl);
-																		itemlist->setContentSize(CCSizeMake(mail["reward"].size()*80, 100));
+																		itemlist->setContentSize(CCSizeMake((mail["reward"].size()*75)-2.5f/2.f, 100));
+																		CCLOG("contentsize is %f",itemlist->getContentSize().width);
+																		//itemlist->setPosition(ccp(0,40));
+																		//itemlist->setAnchorPoint(ccp(0,0));
 																		
+																		CCSize size = itemlist->getContentSize();
+																		CCScrollView* rewardScroll = CCScrollView::create();
+																		rewardScroll->setContentSize(size);
+																		rewardScroll->setViewSize(CCSizeMake(251, 90));
+																		rewardScroll->setContainer(itemlist);
+																		rewardScroll->setAnchorPoint(ccp(0,0));
+																		rewardScroll->setTouchPriority(-999999);
+																		rewardScroll->setPosition(ccp(0,53));
 																		
+																		CCLOG("contentoffset1 is %f,%f",rewardScroll->getContentOffset().x,rewardScroll->getContentOffset().y);
 																		
+																		rewardScroll->setContentOffset(ccp(251.f/2.f-itemlist->getContentSize().width/2.f-5.f/2.f,40));
+																		if(itemlist->getContentSize().width<251){
+																			rewardScroll->setTouchEnabled(false);
+																		}else{
+																			rewardScroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionHorizontal);
+																		}
+																		CCLOG("contentoffset2 is %f,%f",rewardScroll->getContentOffset().x,rewardScroll->getContentOffset().y);
 																		
+																		setFormSetter(rewardScroll);
 																		
 																		
 																		
@@ -720,9 +741,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,8));
 																		
-																		front->addChild(itemlist);
+																		front->addChild(rewardScroll);
 																		setFormSetter(front);
-																		itemlist->setPosition(ccp(front->getContentSize().width/2.f,front->getContentSize().height/2.f+24));
 																		
 																		setFormSetter(itemlist);
 																		KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_confirmGift), mySGD->getFont().c_str(), 12.f);
@@ -747,7 +767,9 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		close_button->setPosition(ccp(150.0, 47.0));
 																		close_button->setFunction([=](CCObject* sender)
 																															{
-																																
+																																managerPopup->removeFromParent();
+																																CCTextureCache::sharedTextureCache()->removeAllTextures();
+																																return;
 																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																																CommonAnimation::closePopup(managerPopup, back,
 																																														managerPopup->getDimmedSprite(), nullptr,
