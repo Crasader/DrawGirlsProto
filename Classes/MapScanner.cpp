@@ -87,9 +87,9 @@ void MapScanner::ingNewlineToRealNewline()
 
 void MapScanner::scanMap()
 {
-//	chrono::time_point<chrono::system_clock> start, end;
-//	chrono::duration<double> elapsed_seconds;
-//	start = chrono::system_clock::now();
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 
 	auto dgPointer = GameData::sharedGameData();
 	if(dgPointer->game_step == kGS_limited)
@@ -146,10 +146,10 @@ void MapScanner::scanMap()
 //		}
 //	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
-//	start = chrono::system_clock::now();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
@@ -660,15 +660,19 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 	while(!bfsArray.isEmpty())
 	{
 		BFS_Point t_p = bfsArray.dequeue();
-		for(int i=directionLeft;i<=directionUp;i+=2)
+		bool emptyLeft = false;
+		bool emptyRight = false;
+		bool emptyUp = false;
+		bool emptyDown = false;
 		{
-			BFS_Point t_v = directionVector((IntDirection)i);
+			BFS_Point t_v = BFS_Point(-1, 0);
 			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
 			
 			if(isInnerMap(a_p))
 			{
 				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
 				{
+					emptyLeft = true;
 					dgPointer->mapState[a_p.x][a_p.y] = afterType;
 					bfsArray.enqueue(a_p);
 				}
@@ -679,6 +683,163 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 				}
 			}
 		}
+		{
+			BFS_Point t_v = BFS_Point(1, 0);
+			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			
+			if(isInnerMap(a_p))
+			{
+				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+				{
+					emptyRight = true;
+					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+					bfsArray.enqueue(a_p);
+				}
+				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				{
+					check_new_line_list.push_back(a_p);
+					bfsArray.enqueue(a_p);
+				}
+			}
+		}
+		{
+			BFS_Point t_v = BFS_Point(0, 1);
+			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			
+			if(isInnerMap(a_p))
+			{
+				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+				{
+					emptyUp = true;
+					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+					bfsArray.enqueue(a_p);
+				}
+				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				{
+					check_new_line_list.push_back(a_p);
+					bfsArray.enqueue(a_p);
+				}
+			}
+
+			
+		}
+		{
+			BFS_Point t_v = BFS_Point(0, -1); 
+			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			
+			if(isInnerMap(a_p))
+			{
+				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+				{
+					emptyDown = true;
+					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+					bfsArray.enqueue(a_p);
+				}
+				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				{
+					check_new_line_list.push_back(a_p);
+					bfsArray.enqueue(a_p);
+				}
+			}
+
+		}
+		
+//		if(emptyLeft && emptyUp)
+//		{
+//			BFS_Point t_v = directionVector(directionLeftUp);
+//			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+//			
+//			if(isInnerMap(a_p))
+//			{
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.enqueue(a_p);
+//				}
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				{
+//					check_new_line_list.push_back(a_p);
+//					bfsArray.enqueue(a_p);
+//				}
+//			}
+//		}
+//		if(emptyRight && emptyUp)
+//		{
+//			BFS_Point t_v = directionVector(directionRightUp);
+//			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+//			
+//			if(isInnerMap(a_p))
+//			{
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.enqueue(a_p);
+//				}
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				{
+//					check_new_line_list.push_back(a_p);
+//					bfsArray.enqueue(a_p);
+//				}
+//			}
+//		}
+//		if(emptyRight && emptyDown)
+//		{
+//			BFS_Point t_v = directionVector(directionRightDown);
+//			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+//			
+//			if(isInnerMap(a_p))
+//			{
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.enqueue(a_p);
+//				}
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				{
+//					check_new_line_list.push_back(a_p);
+//					bfsArray.enqueue(a_p);
+//				}
+//			}
+//		}
+//		if(emptyLeft && emptyDown)
+//		{
+//			BFS_Point t_v = directionVector(directionLeftDown);
+//			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+//			
+//			if(isInnerMap(a_p))
+//			{
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.enqueue(a_p);
+//				}
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				{
+//					check_new_line_list.push_back(a_p);
+//					bfsArray.enqueue(a_p);
+//				}
+//			}
+//		}
+
+//		for(int i=directionLeft;i<=directionUp;i+=2)
+//		{
+//			BFS_Point t_v = directionVector((IntDirection)i);
+//			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+//			
+//			if(isInnerMap(a_p))
+//			{
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.enqueue(a_p);
+//				}
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				{
+//					check_new_line_list.push_back(a_p);
+//					bfsArray.enqueue(a_p);
+//				}
+//			}
+//		}
 	}
 }
 
