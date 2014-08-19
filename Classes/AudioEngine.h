@@ -79,6 +79,7 @@ public:
 		if(!t_b)
 			CCLOG("effect off!!");
 		effectOn = t_b;
+		mySAE->setEffectsVolume(1.f*(effectOn ? 1.f : 0)*(back_down ? 0 : 1.f));
 	}
 	
 	void preloadGroanEffect(string t_type)
