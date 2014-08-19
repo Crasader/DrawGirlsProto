@@ -87,9 +87,9 @@ void MapScanner::ingNewlineToRealNewline()
 
 void MapScanner::scanMap()
 {
-	chrono::time_point<chrono::system_clock> start, end;
-	chrono::duration<double> elapsed_seconds;
-	start = chrono::system_clock::now();
+//	chrono::time_point<chrono::system_clock> start, end;
+//	chrono::duration<double> elapsed_seconds;
+//	start = chrono::system_clock::now();
 
 	auto dgPointer = GameData::sharedGameData();
 	if(dgPointer->game_step == kGS_limited)
@@ -198,10 +198,10 @@ void MapScanner::scanMap()
 //		}
 //	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
@@ -211,10 +211,10 @@ void MapScanner::scanMap()
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	vector<CCNode*> main_cumber_vector = dgPointer->getMainCumberCCNodeVector();
 	int main_cumber_count = main_cumber_vector.size();
@@ -288,10 +288,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// new inside check
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -303,10 +303,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
@@ -356,10 +356,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
@@ -376,9 +376,9 @@ void MapScanner::scanMap()
 			dgPointer->mapState[mapWidthInnerEnd-1][j] = mapOldline;
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
 	
 	if(dgPointer->game_step == kGS_limited)
 	{
