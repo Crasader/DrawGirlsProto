@@ -2142,6 +2142,8 @@ void PlayUI::setClearPercentage (float t_p)
 	m_areaGage->setPosition(ccp(240,myDSH->ui_top-29));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
+	if(clr_cdt_type == kCLEAR_hellMode)
+		m_areaGage->setVisible(false);
 }
 void PlayUI::startCounting ()
 {
@@ -3064,7 +3066,11 @@ void PlayUI::counting ()
 		}
 	}
 	
-	int label_value = playtime_limit-countingCnt;
+	int label_value;
+	if(clr_cdt_type == kCLEAR_hellMode)
+		label_value = use_time;
+	else
+		label_value = playtime_limit.getV()-countingCnt.getV();
 	if(label_value < 0)
 		label_value = 0;
 	
@@ -3085,7 +3091,12 @@ void PlayUI::counting ()
 //		countingLabel->setScale(4.f);
 //		countingLabel->setPosition(ccp(240,myDSH->ui_center_y));
 		if(!t_is_die)
-			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
+		{
+			if(clr_cdt_type == kCLEAR_hellMode)
+				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
+			else
+				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
+		}
 		else
 		{
 			countingLabel->setString(CCString::createWithFormat("%d.%d", 0, 0)->getCString());
@@ -3103,7 +3114,10 @@ void PlayUI::counting ()
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,17));
-		countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
+		if(clr_cdt_type == kCLEAR_hellMode)
+			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
+		else
+			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
 	
 }
@@ -3528,7 +3542,6 @@ void PlayUI::myInit ()
 		addChild(score_label);
 	}
 	
-	
 	top_center_node = CCNode::create();
 	
 	addChild(KSGradualValue<float>::create(4+UI_OUT_DISTANCE, 4, UI_IN_TIME, [=](float t){top_center_node->setPositionY(t);}, [=](float t){top_center_node->setPositionY(4);}));
@@ -3547,6 +3560,9 @@ void PlayUI::myInit ()
 //	else if(myGD->gamescreen_type == kGT_rightUI)		percentageLabel->setPosition(ccp(480-50+36,myDSH->ui_center_y));
 //	else									percentageLabel->setPosition(ccp(470,myDSH->ui_top-60));
 	top_center_node->addChild(percentageLabel, 1);
+	
+	if(mySD->getClearCondition() == kCLEAR_hellMode)
+		percentageLabel->setVisible(false);
 	
 //	CCSprite* percentage_gain = CCSprite::create("ui_gain.png");
 //	percentage_gain->setAnchorPoint(ccp(0,0.5));
@@ -3578,6 +3594,12 @@ void PlayUI::myInit ()
 		total_time = total_time - mySD->getClearConditionTimeLimit();
 	}
 	
+	
+	if(clr_cdt_type == kCLEAR_hellMode)
+	{
+		score_label->setVisible(false);
+	}
+	
 //	CCSprite* time_back = CCSprite::create("ui_time_back.png");
 //	time_back->setPosition(ccp(240-25,myDSH->ui_top-25));
 //	if(myGD->gamescreen_type == kGT_leftUI)			time_back->setPosition(ccp((480-50-myGD->boarder_value*2)*3.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-25));
@@ -3585,7 +3607,13 @@ void PlayUI::myInit ()
 //	else											time_back->setPosition(ccp(480.f*3.1f/4.f,myDSH->ui_top-25));
 //	addChild(time_back);
 	
-	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", playtime_limit.getV()-countingCnt.getV()+1)->getCString(), "timefont.fnt");
+	int counting_label_init_value;
+	if(clr_cdt_type == kCLEAR_hellMode)
+		counting_label_init_value = 0;
+	else
+		playtime_limit.getV()-countingCnt.getV()+1;
+	
+	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", counting_label_init_value)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
 	countingLabel->setPosition(ccp(240,17-UI_OUT_DISTANCE));

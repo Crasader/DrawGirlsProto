@@ -155,7 +155,12 @@ bool FailPopup::init()
 	left_life_base_score = mySGD->area_score.getV() + mySGD->damage_score.getV() + mySGD->combo_score.getV();
 	left_life_decrease_score = (mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)].asInt()*30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
 	left_time_base_score = left_life_base_score.getV() + left_life_decrease_score.getV();
-	left_time_decrease_score = 0;//(play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+	
+	if(mySD->getClearCondition() != kCLEAR_hellMode)
+		left_time_decrease_score = 0;//(play_limit_time.getV()-mySGD->getGameTime())*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+	else
+		left_time_decrease_score = mySGD->getBaseScore();
+	
 	left_grade_base_score = left_time_base_score.getV() + left_time_decrease_score.getV();
 	left_grade_decrease_score = left_grade_base_score.getV()*0.f;
 	left_damaged_score = -mySGD->damaged_score.getV();

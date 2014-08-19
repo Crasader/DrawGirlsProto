@@ -530,7 +530,9 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 	
 	game_time = play_limit_time;
 	
-	base_score = base_score.getV()*0;
+	if(mySD->getClearCondition() != kCLEAR_hellMode)
+		base_score = base_score.getV()*0;
+	
 	score = score.getV()*0;
 	
 	area_score = area_score.getV()*0;
