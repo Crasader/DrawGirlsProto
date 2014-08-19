@@ -14,12 +14,7 @@
 #include "MyLocalization.h"
 #include "TextureReloader.h"
 
-#if defined __GNUC__ || defined __APPLE__
-#include <ext/hash_map>
-using namespace __gnu_cxx;
-#else
-#include <hash_map>
-#endif
+
 bool MapScanner::isCheckBossLocked()
 {
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -92,30 +87,69 @@ void MapScanner::ingNewlineToRealNewline()
 
 void MapScanner::scanMap()
 {
-	chrono::time_point<chrono::system_clock> start, end;
-	chrono::duration<double> elapsed_seconds;
-	start = chrono::system_clock::now();
+//	chrono::time_point<chrono::system_clock> start, end;
+//	chrono::duration<double> elapsed_seconds;
+//	start = chrono::system_clock::now();
 
 	auto dgPointer = GameData::sharedGameData();
-	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	if(dgPointer->game_step == kGS_limited)
 	{
-		if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
-			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
-		if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
-			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
-		if(dgPointer->game_step == kGS_limited)
+		int mid = (mapWidthInnerEnd - mapWidthInnerBegin) / 2;
+		
+		for(int i=mid;i>=mapWidthInnerBegin;i--)
 		{
 			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
 				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
 			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
 				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
+			
+		}
+		for(int i=mid + 1;i<mapWidthInnerEnd;i++)
+		{
+			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
+			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
+			
 		}
 	}
+	else
+	{
+		int mid = (mapWidthInnerEnd - mapWidthInnerBegin) / 2;
+		for(int i=mid + 1;i<mapWidthInnerEnd;i++)
+		{
+			if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+			if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+		}
+		for(int i=mid;i>=mapWidthInnerBegin;i--)
+		{
+			if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+			if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+		}
+	}
+//	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+//	{
+//		if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
+//			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+//		if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+//			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+//		if(dgPointer->game_step == kGS_limited)
+//		{
+//			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
+//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
+//			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
+//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
+//		}
+//	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 1 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
@@ -125,10 +159,10 @@ void MapScanner::scanMap()
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	vector<CCNode*> main_cumber_vector = dgPointer->getMainCumberCCNodeVector();
 	int main_cumber_count = main_cumber_vector.size();
@@ -202,10 +236,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// new inside check
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -217,15 +251,16 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
 	int sil_inside_cnt = 0;
 	int empty_inside_cnt = 0;
+	auto sd = mySD;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -236,14 +271,14 @@ void MapScanner::scanMap()
 			{
 				dgPointer->mapState[i][j] = mapOldline;
 				newInsideCnt++;
-				if(mySD->silData[i][j])		sil_inside_cnt++;
+				if(sd->silData[i][j])		sil_inside_cnt++;
 				else						empty_inside_cnt++;
 			}
 			else if(dgPointer->mapState[i][j] == mapNewget)
 			{
 				dgPointer->mapState[i][j] = mapOldget;
 				newInsideCnt++;
-				if(mySD->silData[i][j])		sil_inside_cnt++;
+				if(sd->silData[i][j])		sil_inside_cnt++;
 				else						empty_inside_cnt++;
 			}
 		}
@@ -269,10 +304,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
+//	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
@@ -289,9 +324,9 @@ void MapScanner::scanMap()
 			dgPointer->mapState[mapWidthInnerEnd-1][j] = mapOldline;
 	}
 	
-	end = chrono::system_clock::now();
-	elapsed_seconds = end-start;
-	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
+//	end = chrono::system_clock::now();
+//	elapsed_seconds = end-start;
+//	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
 	
 	if(dgPointer->game_step == kGS_limited)
 	{
@@ -488,6 +523,64 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 	return r_rect;
 }
 
+template <typename Node>
+class CircularQueue
+{
+private:
+	Node* node; // 노드 배열
+	int capacity; // 큐의 용량
+	int front; // 전단의 인덱스
+	int rear; // 후단의 인덱스
+public:
+	CircularQueue(int capacity)
+	{
+		this->capacity = capacity + 1; // 노드 배열의 크기는 실제 용량에서 1을 더한 크기 (더미 공간 때문)
+		node = new Node[this->capacity]; // Node 구조체 capacity + 1개를 메모리 공간에 할당한다
+		front = 0; rear = 0; // 전단과 후단의 초기화
+	}
+	~CircularQueue()
+	{
+		delete []node; // 노드 배열 소멸
+	}
+	void enqueue(const Node& data)
+	{
+		int pos; // 데이터가 들어갈 인덱스
+		pos = rear;
+		rear = (rear + 1) % (capacity);
+		node[pos] = data; // pos 번째의 노드의 데이터에 data를 대입한다
+	}
+	Node dequeue() {
+		int pos = front; // pos에 전단의 인덱스 대입
+		front = (front + 1) % capacity;
+		return node[pos]; // 제외되는 데이터를 반환한다
+	}
+	int getSize() {
+		if (front <= rear) // 전단의 인덱스가 후단의 인덱스와 같거나 그보다 작다면
+			return rear - front; // 후단의 인덱스에서 전단의 인덱스를 뺀값을 반환한다
+		else // 전단의 인덱스가 후단의 인덱스보다 크다면
+			return capacity - front + rear; // 용량에서 전단의 인덱스를 뺀 뒤에 후단의 인덱스를 더한 값을 반환한다
+	}
+	bool isEmpty() {
+		return front == rear; // 전단의 인덱스와 후단의 인덱스가 같을 경우 true, 아니면 false
+	}
+	bool isFull() {
+		return front == (rear + 1) % capacity;
+	}
+	int getRear() { return rear; }
+	int getFront() { return front; }
+	//	void show()
+	//	{
+	//		int tempFront = front;
+	//		while(tempFront != rear)
+	//		{
+	//			cout << node[tempFront].data << "/";
+	//
+	//			tempFront = (tempFront + 1) % capacity;
+	//		}
+	//		cout << endl;
+	//	}
+};
+
 template <typename T>
 class Code131_Queue
 {
@@ -510,21 +603,26 @@ public:
 	}
 	bool Enqueue(const T& ch)   // Enter an item in the queue
 	{
-		if(isFull()) return false;
+//		if(isFull()) return false;
 		
 		// Increment tail index
 		tail++;
 		// Add the item to the Queue
 		theQueue[tail % MAXSIZE] = ch;
-//		CCLOG("tail number = %d", tail);
+		CCLOG("queue = %d", tail % MAXSIZE);
 		return true;
 	}
 	T Dequeue()          // Remove an item from the queue
 	{
 		T ch;
 		
+		head++;
+		ch = theQueue[head % MAXSIZE];		// Get character to return
+		return ch;				// Return popped character
+		
+		
 		// Check for empty Queue
-		if(isEmpty())
+		if((head == tail))
 		{
 			assert("EMPTY");
 //			return '\0';  // Return null character if queue is empty
@@ -553,59 +651,32 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 	BFS_Point s_p;
 	s_p.x = startPoint.x;
 	s_p.y = startPoint.y;
-	Code131_Queue<BFS_Point> bfsArray;
-//	queue<BFS_Point> bfsArray;
+	CircularQueue<BFS_Point> bfsArray(300);
 	myGD->mapState[s_p.x][s_p.y] = afterType;
-	bfsArray.Enqueue(s_p);
-//	bfsArray.push(s_p);
+	bfsArray.enqueue(s_p);
 
-//	std::hash<BFS_Point> ttee;
-//	vector<BFS_Point> check_new_line_list;
-//	check_new_line_list.reserve(1000);
-	hash_map<BFS_Point, int> check_new_line_list2;
-	
-//	check_new_line_list.clear();
+	vector<BFS_Point> check_new_line_list;
 	auto dgPointer = myGD;
 	while(!bfsArray.isEmpty())
 	{
-		BFS_Point t_p = bfsArray.Dequeue();
-//		bfsArray.pop();
+		BFS_Point t_p = bfsArray.dequeue();
 		for(int i=directionLeft;i<=directionUp;i+=2)
 		{
 			BFS_Point t_v = directionVector((IntDirection)i);
-			BFS_Point a_p;
-			a_p.x = t_p.x+t_v.x;
-			a_p.y = t_p.y+t_v.y;
+			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
 			
 			if(isInnerMap(a_p))
 			{
 				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
 				{
 					dgPointer->mapState[a_p.x][a_p.y] = afterType;
-					bfsArray.Enqueue(a_p);
+					bfsArray.enqueue(a_p);
 				}
-//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
-				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
+				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
 				{
-					check_new_line_list2[a_p] = true;
-//					check_new_line_list.push_back(a_p);
-					bfsArray.Enqueue(a_p);
-//					bfsArray.push(a_p);
+					check_new_line_list.push_back(a_p);
+					bfsArray.enqueue(a_p);
 				}
-			
-			
-//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
-//				{
-//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
-//					bfsArray.push(a_p);
-//				}
-//				//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
-//				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
-//				{
-//					check_new_line_list2[a_p] = true;
-//					//					check_new_line_list.push_back(a_p);
-//					bfsArray.push(a_p);
-//				}
 			}
 		}
 	}
@@ -815,17 +886,36 @@ void MapScanner::startGame()
 
 BFS_Point MapScanner::directionVector( IntDirection direction )
 {
-	BFS_Point r_v;
-	if(direction == directionLeftUp)			{		r_v.x = -1;		r_v.y = 1;		}
-	else if(direction == directionLeft)			{		r_v.x = -1;		r_v.y = 0;		}
-	else if(direction == directionLeftDown)		{		r_v.x = -1;		r_v.y = -1;		}
-	else if(direction == directionDown)			{		r_v.x = 0;		r_v.y = -1;		}
-	else if(direction == directionRightDown)	{		r_v.x = 1;		r_v.y = -1;		}
-	else if(direction == directionRight)		{		r_v.x = 1;		r_v.y = 0;		}
-	else if(direction == directionRightUp)		{		r_v.x = 1;		r_v.y = 1;		}
-	else if(direction == directionUp)			{		r_v.x = 0;		r_v.y = 1;		}
-	else										{		r_v.x = 0;		r_v.y = 0;		}
-	return r_v;
+	switch(direction)
+	{
+		case(directionLeftUp):			{
+				return BFS_Point(-1, 1);
+			}
+		case(directionLeft)	:		{
+				return 		BFS_Point(-1, 0);
+			}
+		case (directionLeftDown):		{
+				return 		BFS_Point(-1, -1);
+			}
+		case (directionDown)	:		{
+				return 		BFS_Point(0, -1);
+			}
+		case (directionRightDown):	{
+				return 	BFS_Point(1, -1);
+			}
+		case (directionRight):		{
+				return BFS_Point(1, 0);;
+			}
+		case (directionRightUp):		{
+				return BFS_Point(1, 1);
+			}
+		case (directionUp):			{
+				return BFS_Point(0, 1);
+			}
+		default:
+			return BFS_Point(0, 0);
+
+	}
 }
 
 bool MapScanner::isInnerMap(const BFS_Point& t_p )
@@ -1303,6 +1393,7 @@ void MapScanner::myInit()
 
 	
 	setMapImg();
+	
 	
 }
 
@@ -1838,27 +1929,21 @@ void VisibleSprite::setRectToVertex()
 		
 		m_textCoords[i*6+0].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+0].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+0].z = 0;
 		
 		m_textCoords[i*6+1].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+1].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+1].z = 0;
 		
 		m_textCoords[i*6+2].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+2].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+2].z = 0;
 		
 		m_textCoords[i*6+3].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+3].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+3].z = 0;
 		
 		m_textCoords[i*6+4].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+4].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+4].z = 0;
 		
 		m_textCoords[i*6+5].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+5].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+5].z = 0;
 		
 		
 		
@@ -1886,61 +1971,17 @@ void VisibleSprite::setRectToVertex()
 		light_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height+0.5f;
 		light_vertices[i*6+5].z = -1;
 		
-		
-		safety_vertices[i*6+0].x = t_rect->origin.x;
-		safety_vertices[i*6+0].y = t_rect->origin.y;
-		safety_vertices[i*6+0].z = 1;
-		
-		safety_vertices[i*6+1].x = t_rect->origin.x;
-		safety_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+1].z = 1;
-		
-		safety_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+2].z = 1;
-		
-		safety_vertices[i*6+3].x = t_rect->origin.x;
-		safety_vertices[i*6+3].y = t_rect->origin.y;
-		safety_vertices[i*6+3].z = 1;
-		
-		safety_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+4].y = t_rect->origin.y;
-		safety_vertices[i*6+4].z = 1;
-		
-		safety_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+5].z = 1;
-		
-		
-		m_colors[i*6+0].r = 255;
-		m_colors[i*6+0].g = 255;
-		m_colors[i*6+0].b = 255;
-		m_colors[i*6+0].a = 255;
-		
-		m_colors[i*6+1].r = 255;
-		m_colors[i*6+1].g = 255;
-		m_colors[i*6+1].b = 255;
-		m_colors[i*6+1].a = 255;
-		
-		m_colors[i*6+2].r = 255;
-		m_colors[i*6+2].g = 255;
-		m_colors[i*6+2].b = 255;
-		m_colors[i*6+2].a = 255;
-		
-		m_colors[i*6+3].r = 255;
-		m_colors[i*6+3].g = 255;
-		m_colors[i*6+3].b = 255;
-		m_colors[i*6+3].a = 255;
-		
-		m_colors[i*6+4].r = 255;
-		m_colors[i*6+4].g = 255;
-		m_colors[i*6+4].b = 255;
-		m_colors[i*6+4].a = 255;
-		
-		m_colors[i*6+5].r = 255;
-		m_colors[i*6+5].g = 255;
-		m_colors[i*6+5].b = 255;
-		m_colors[i*6+5].a = 255;
+		for(int j=0;j<6;j++)
+		{
+			safety_vertices[i*6+j].x = m_vertices[i*6+j].x;
+			safety_vertices[i*6+j].y = m_vertices[i*6+j].y;
+			safety_vertices[i*6+j].z = 1;
+			
+			m_colors[i*6+j].r = 255;
+			m_colors[i*6+j].g = 255;
+			m_colors[i*6+j].b = 255;
+			m_colors[i*6+j].a = 255;
+		}
 	}
 	
 	safety_img->setVertex(safety_vertices, m_textCoords, m_colors, t_vertice_count);
