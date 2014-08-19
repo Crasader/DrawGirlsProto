@@ -800,7 +800,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("꾸욱 버튼을 누른채 한쪽 방향으로 그린 다음 되돌아 오면 한줄 그리기가 가능합니다."), kMyLocalKey_titleLoading39);
 	ko->setObject(CCString::create("그리는 도중 줄이 꼬여도 당황하지 마세요. 줄이 꼬인 상태에서도 영역을 획득할 수 있습니다."), kMyLocalKey_titleLoading40);
 	ko->setObject(CCString::create("작은 몬스터에는 HP가 존재하며, 공격이 성공할 때마다 HP가 줄어듭니다."), kMyLocalKey_titleLoading41);
-	ko->setObject(CCString::create("액자 하나를 완성할 때마다 골드선물을 드립니다."), kMyLocalKey_titleLoading42);
+	ko->setObject(CCString::create("액자 하나를 완성할 때마다 특별한 카드와 하트를 선물로 드립니다."), kMyLocalKey_titleLoading42);
 	ko->setObject(CCString::create("클리어 점수는 영역획득점수와 콤보점수, 남은 타임 보너스가 합산된 점수입니다."), kMyLocalKey_titleLoading43);
 	ko->setObject(CCString::create("고득점을 노린다면 연속 콤보를 성공시켜 보세요."), kMyLocalKey_titleLoading44);
 	ko->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
@@ -1857,7 +1857,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("꾸욱 버튼을 누른채 한쪽 방향으로 그린 다음 되돌아 오면 한줄 그리기가 가능합니다."), kMyLocalKey_titleLoading39);
 	en->setObject(CCString::create("그리는 도중 줄이 꼬여도 당황하지 마세요. 줄이 꼬인 상태에서도 영역을 획득할 수 있습니다."), kMyLocalKey_titleLoading40);
 	en->setObject(CCString::create("작은 몬스터에는 HP가 존재하며, 공격이 성공할 때마다 HP가 줄어듭니다."), kMyLocalKey_titleLoading41);
-	en->setObject(CCString::create("액자 하나를 완성할 때마다 골드선물을 드립니다."), kMyLocalKey_titleLoading42);
+	en->setObject(CCString::create("액자 하나를 완성할 때마다 특별한 카드와 하트를 선물로 드립니다."), kMyLocalKey_titleLoading42);
 	en->setObject(CCString::create("클리어 점수는 영역획득점수와 콤보점수, 남은 타임 보너스가 합산된 점수입니다."), kMyLocalKey_titleLoading43);
 	en->setObject(CCString::create("고득점을 노린다면 연속 콤보를 성공시켜 보세요."), kMyLocalKey_titleLoading44);
 	en->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
@@ -2906,7 +2906,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("꾸욱 버튼을 누른채 한쪽 방향으로 그린 다음 되돌아 오면 한줄 그리기가 가능합니다."), kMyLocalKey_titleLoading39);
 	ja->setObject(CCString::create("그리는 도중 줄이 꼬여도 당황하지 마세요. 줄이 꼬인 상태에서도 영역을 획득할 수 있습니다."), kMyLocalKey_titleLoading40);
 	ja->setObject(CCString::create("작은 몬스터에는 HP가 존재하며, 공격이 성공할 때마다 HP가 줄어듭니다."), kMyLocalKey_titleLoading41);
-	ja->setObject(CCString::create("액자 하나를 완성할 때마다 골드선물을 드립니다."), kMyLocalKey_titleLoading42);
+	ja->setObject(CCString::create("액자 하나를 완성할 때마다 특별한 카드와 하트를 선물로 드립니다."), kMyLocalKey_titleLoading42);
 	ja->setObject(CCString::create("클리어 점수는 영역획득점수와 콤보점수, 남은 타임 보너스가 합산된 점수입니다."), kMyLocalKey_titleLoading43);
 	ja->setObject(CCString::create("고득점을 노린다면 연속 콤보를 성공시켜 보세요."), kMyLocalKey_titleLoading44);
 	ja->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
