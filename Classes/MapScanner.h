@@ -24,34 +24,47 @@ using namespace cocos2d;
 using namespace std;
 #include <functional>
 using namespace placeholders;
+#if defined __GNUC__ || defined __APPLE__
+#include <ext/hash_map>
+using namespace __gnu_cxx;
+#else
+#include <hash_map>
+#endif
 class BFS_Point
 {
 public:
 	int x;
 	int y;
-	
+	BFS_Point(int _x, int _y)
+	{
+		x = _x;
+		y = _y;
+	}
+	BFS_Point(){}
 	bool operator== (const BFS_Point& a) const
     {
         return (a.x == x && a.y == y);
     }
 	bool operator<( const BFS_Point& other) const
 	{
+		return x < other.x;
 		if ( x == other.x )
 		{
 			return y < other.y;
 		}
 		
-		return x < other.x;
+		
 	}
 };
 template<>
-struct hash<BFS_Point>
+struct std::hash<BFS_Point>
 {
 	typedef std::size_t result_type;
 	
 	result_type operator()(BFS_Point const& s) const
 	{
-		return s.x * 10000 + s.y;
+		return s.x ^ (s.y << 1);
+//		return s.x + s.y;
 //		result_type const h1 ( std::hash<std::string>()(s.first_name) );
 //		result_type const h2 ( std::hash<std::string>()(s.last_name) );
 //		return h1 ^ (h2 << 1);
@@ -410,6 +423,7 @@ private:
 	void setTopBottomBlock();
 	StartMapLuckyItem* start_map_lucky_item;
 	
+	hash_map<int, BFS_Point> direction2BfsPoint;
 	bool is_removed_top_block, is_removed_bottom_block;
 	int remove_block_cnt;
 	void startRemoveBlock();
