@@ -1480,7 +1480,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	ko->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	ko->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);
-	ko->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에서 아직 있으니까 주변의 적을 정리 하자."), kMyLocalKey_scenarioMent41);
+	ko->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자."), kMyLocalKey_scenarioMent41);
 	ko->setObject(CCString::create("야규, 아까는 도와줘서 고마워.\n히바리가 거치적거리니까\n이대로면 모두한테 폐를 끼치게 돼."), kMyLocalKey_scenarioMent42);
 	ko->setObject(CCString::create("히바리는 거치적 거리는 존재 따위가 아니야.\n우리들은 모두 강하다고 인정받았으니까.\n히바리의 강한 점은 내가 제일 잘 알고있고,\n또 모두들 알고 있어.\n그러니까 더 자신에게 자신감을 가져."), kMyLocalKey_scenarioMent43);
 	ko->setObject(CCString::create("야규.."), kMyLocalKey_scenarioMent44);
@@ -2520,7 +2520,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	en->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	en->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);
-	en->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에서 아직 있으니까 주변의 적을 정리 하자."), kMyLocalKey_scenarioMent41);
+	en->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자."), kMyLocalKey_scenarioMent41);
 	en->setObject(CCString::create("야규, 아까는 도와줘서 고마워.\n히바리가 거치적거리니까\n이대로면 모두한테 폐를 끼치게 돼."), kMyLocalKey_scenarioMent42);
 	en->setObject(CCString::create("히바리는 거치적 거리는 존재 따위가 아니야.\n우리들은 모두 강하다고 인정받았으니까.\n히바리의 강한 점은 내가 제일 잘 알고있고,\n또 모두들 알고 있어.\n그러니까 더 자신에게 자신감을 가져."), kMyLocalKey_scenarioMent43);
 	en->setObject(CCString::create("야규.."), kMyLocalKey_scenarioMent44);
@@ -2529,7 +2529,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이카루가.. 그리고\n야규, 아스카, 히바리도 마침 딱 있었네!"), kMyLocalKey_scenarioMent47);
 	en->setObject(CCString::create("카츠라기님. 오늘 훈련은 끝났는데\n집에 안가세요?"), kMyLocalKey_scenarioMent48);
 	en->setObject(CCString::create("어, 응..음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨌든 좀 더 몸을 움직이려고... 응?"), kMyLocalKey_scenarioMent49);
-	en->setObject(CCString::create("아앗 저건뭐지?"), kMyLocalKey_scenarioMent50);
+	en->setObject(CCString::create("아앗! 저건 뭐지?"), kMyLocalKey_scenarioMent50);
 	en->setObject(CCString::create("소매치기예요!! 꼬마의 물건을 훔쳐가네요!!"), kMyLocalKey_scenarioMent51);
 	en->setObject(CCString::create("아이의 즐거움을 뺏는\n배짱 좋은 녀석이군.\n저런 썩은 자식은 우리들이 혼내줄테다!!"), kMyLocalKey_scenarioMent52);
 	en->setObject(CCString::create("우와! 실력이 일취월장인데요?\n벌써 실력이 많이 늘었네요.\n이젠 다른사람과 대전을 해볼까요?\n \n따라오세요."), kMyLocalKey_scenarioMent53);
@@ -3582,7 +3582,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!"), kMyLocalKey_scenarioMent38);
 	ja->setObject(CCString::create("히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!"), kMyLocalKey_scenarioMent39);
 	ja->setObject(CCString::create("야규! 히바리를 도와주었구나!"), kMyLocalKey_scenarioMent40);
-	ja->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에서 아직 있으니까 주변의 적을 정리 하자."), kMyLocalKey_scenarioMent41);
+	ja->setObject(CCString::create("어... 어떻게 라는 건 잘 모르겠고.\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자."), kMyLocalKey_scenarioMent41);
 	ja->setObject(CCString::create("야규, 아까는 도와줘서 고마워.\n히바리가 거치적거리니까\n이대로면 모두한테 폐를 끼치게 돼."), kMyLocalKey_scenarioMent42);
 	ja->setObject(CCString::create("히바리는 거치적 거리는 존재 따위가 아니야.\n우리들은 모두 강하다고 인정받았으니까.\n히바리의 강한 점은 내가 제일 잘 알고있고,\n또 모두들 알고 있어.\n그러니까 더 자신에게 자신감을 가져."), kMyLocalKey_scenarioMent43);
 	ja->setObject(CCString::create("야규.."), kMyLocalKey_scenarioMent44);
@@ -3591,7 +3591,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이카루가.. 그리고\n야규, 아스카, 히바리도 마침 딱 있었네!"), kMyLocalKey_scenarioMent47);
 	ja->setObject(CCString::create("카츠라기님. 오늘 훈련은 끝났는데\n집에 안가세요?"), kMyLocalKey_scenarioMent48);
 	ja->setObject(CCString::create("어, 응..음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨌든 좀 더 몸을 움직이려고... 응?"), kMyLocalKey_scenarioMent49);
-	ja->setObject(CCString::create("아앗 저건뭐지?"), kMyLocalKey_scenarioMent50);
+	ja->setObject(CCString::create("아앗! 저건 뭐지?"), kMyLocalKey_scenarioMent50);
 	ja->setObject(CCString::create("소매치기예요!! 꼬마의 물건을 훔쳐가네요!!"), kMyLocalKey_scenarioMent51);
 	ja->setObject(CCString::create("아이의 즐거움을 뺏는\n배짱 좋은 녀석이군.\n저런 썩은 자식은 우리들이 혼내줄테다!!"), kMyLocalKey_scenarioMent52);
 	ja->setObject(CCString::create("우와! 실력이 일취월장인데요?\n벌써 실력이 많이 늘었네요.\n이젠 다른사람과 대전을 해볼까요?\n \n따라오세요."), kMyLocalKey_scenarioMent53);
