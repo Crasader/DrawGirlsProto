@@ -1983,27 +1983,21 @@ void VisibleSprite::setRectToVertex()
 		
 		m_textCoords[i*6+0].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+0].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+0].z = 0;
 		
 		m_textCoords[i*6+1].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+1].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+1].z = 0;
 		
 		m_textCoords[i*6+2].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+2].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+2].z = 0;
 		
 		m_textCoords[i*6+3].u = t_rect->origin.x/320.f;
 		m_textCoords[i*6+3].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+3].z = 0;
 		
 		m_textCoords[i*6+4].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+4].v = (430.f - t_rect->origin.y) / 430.f;
-//		m_textCoords[i*6+4].z = 0;
 		
 		m_textCoords[i*6+5].u = (t_rect->origin.x + t_rect->size.width)/320.f;
 		m_textCoords[i*6+5].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
-//		m_textCoords[i*6+5].z = 0;
 		
 		
 		
@@ -2031,61 +2025,17 @@ void VisibleSprite::setRectToVertex()
 		light_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height+0.5f;
 		light_vertices[i*6+5].z = -1;
 		
-		
-		safety_vertices[i*6+0].x = t_rect->origin.x;
-		safety_vertices[i*6+0].y = t_rect->origin.y;
-		safety_vertices[i*6+0].z = 1;
-		
-		safety_vertices[i*6+1].x = t_rect->origin.x;
-		safety_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+1].z = 1;
-		
-		safety_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+2].z = 1;
-		
-		safety_vertices[i*6+3].x = t_rect->origin.x;
-		safety_vertices[i*6+3].y = t_rect->origin.y;
-		safety_vertices[i*6+3].z = 1;
-		
-		safety_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+4].y = t_rect->origin.y;
-		safety_vertices[i*6+4].z = 1;
-		
-		safety_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width;
-		safety_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height;
-		safety_vertices[i*6+5].z = 1;
-		
-		
-		m_colors[i*6+0].r = 255;
-		m_colors[i*6+0].g = 255;
-		m_colors[i*6+0].b = 255;
-		m_colors[i*6+0].a = 255;
-		
-		m_colors[i*6+1].r = 255;
-		m_colors[i*6+1].g = 255;
-		m_colors[i*6+1].b = 255;
-		m_colors[i*6+1].a = 255;
-		
-		m_colors[i*6+2].r = 255;
-		m_colors[i*6+2].g = 255;
-		m_colors[i*6+2].b = 255;
-		m_colors[i*6+2].a = 255;
-		
-		m_colors[i*6+3].r = 255;
-		m_colors[i*6+3].g = 255;
-		m_colors[i*6+3].b = 255;
-		m_colors[i*6+3].a = 255;
-		
-		m_colors[i*6+4].r = 255;
-		m_colors[i*6+4].g = 255;
-		m_colors[i*6+4].b = 255;
-		m_colors[i*6+4].a = 255;
-		
-		m_colors[i*6+5].r = 255;
-		m_colors[i*6+5].g = 255;
-		m_colors[i*6+5].b = 255;
-		m_colors[i*6+5].a = 255;
+		for(int j=0;j<6;j++)
+		{
+			safety_vertices[i*6+j].x = m_vertices[i*6+j].x;
+			safety_vertices[i*6+j].y = m_vertices[i*6+j].y;
+			safety_vertices[i*6+j].z = 1;
+			
+			m_colors[i*6+j].r = 255;
+			m_colors[i*6+j].g = 255;
+			m_colors[i*6+j].b = 255;
+			m_colors[i*6+j].a = 255;
+		}
 	}
 	
 	safety_img->setVertex(safety_vertices, m_textCoords, m_colors, t_vertice_count);
