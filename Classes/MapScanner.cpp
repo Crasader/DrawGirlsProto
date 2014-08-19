@@ -94,94 +94,42 @@ void MapScanner::scanMap()
 	auto dgPointer = GameData::sharedGameData();
 	if(dgPointer->game_step == kGS_limited)
 	{
-		int i = mapWidthInnerBegin;
-		int cnt = mapWidthInnerEnd - mapWidthInnerBegin;
-#define DUFF_STATEMENT do{ if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty) \
-		bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top)); \
-		if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty) \
-			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom)); } while(0);
-		register int n = (cnt + 7) / 8;
-		switch(cnt % 8) {
-			case 0:	do {
-				DUFF_STATEMENT;
-				i++;
-			case 7:
-				DUFF_STATEMENT;
-				i++;
-			case 6:
-				DUFF_STATEMENT;
-				i++;
-			case 5:
-				DUFF_STATEMENT;
-				i++;
-			case 4:
-				DUFF_STATEMENT;
-				i++;
-			case 3:
-				DUFF_STATEMENT;
-				i++;
-			case 2:
-				DUFF_STATEMENT;
-				i++;
-			case 1:
-				DUFF_STATEMENT;
-				i++;
-			} while(--n > 0);
-		}
+		int mid = (mapWidthInnerEnd - mapWidthInnerBegin) / 2;
 		
-//		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-//		{
-//			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
-//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
-//			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
-//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
-//			
-//		}
+		for(int i=mid;i>=mapWidthInnerBegin;i--)
+		{
+			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
+			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
+			
+		}
+		for(int i=mid + 1;i<mapWidthInnerEnd;i++)
+		{
+			if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_top));
+			if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, dgPointer->limited_step_bottom));
+			
+		}
 	}
 	else
 	{
-		int i = mapWidthInnerBegin;
-		int cnt = mapWidthInnerEnd - mapWidthInnerBegin;
-#define DUFF_STATEMENT do{ if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty) \
-		bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin)); \
-		if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty) \
-			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));} while(0);
-		register int n = (cnt + 7) / 8;
-		switch(cnt % 8) {
-			case 0:	do {
-				DUFF_STATEMENT;
-				i++;
-			case 7:
-				DUFF_STATEMENT;
-				i++;
-			case 6:
-				DUFF_STATEMENT;
-				i++;
-			case 5:
-				DUFF_STATEMENT;
-				i++;
-			case 4:
-				DUFF_STATEMENT;
-				i++;
-			case 3:
-				DUFF_STATEMENT;
-				i++;
-			case 2:
-				DUFF_STATEMENT;
-				i++;
-			case 1:
-				DUFF_STATEMENT;
-				i++;
-			} while(--n > 0);
+		int mid = (mapWidthInnerEnd - mapWidthInnerBegin) / 2;
+		for(int i=mid + 1;i<mapWidthInnerEnd;i++)
+		{
+			if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+			if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
 		}
-		
-//		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
-//		{
-//			if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
-//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
-//			if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
-//				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
-//		}
+		for(int i=mid;i>=mapWidthInnerBegin;i--)
+		{
+			if(dgPointer->mapState[i][mapHeightInnerBegin] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerBegin));
+			if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapEmpty)
+				bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(i, mapHeightInnerEnd-1));
+		}
 	}
 //	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 //	{
@@ -599,7 +547,6 @@ public:
 		int pos; // 데이터가 들어갈 인덱스
 		pos = rear;
 		rear = (rear + 1) % (capacity);
-		
 		node[pos] = data; // pos 번째의 노드의 데이터에 data를 대입한다
 	}
 	Node dequeue() {
@@ -733,7 +680,6 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 			}
 		}
 	}
-	CCLOG("vector size : %d", check_new_line_list.size());
 }
 
 MapScanner* MapScanner::create()
