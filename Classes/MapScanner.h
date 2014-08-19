@@ -384,7 +384,7 @@ private:
 	
 	BFS_Point directionVector(IntDirection direction);
 	
-	bool isInnerMap(BFS_Point t_p);
+	bool isInnerMap(const BFS_Point& t_p);
 	
 	BackFilename getBackVisibleFilename();
 	

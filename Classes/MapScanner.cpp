@@ -488,26 +488,88 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 	return r_rect;
 }
 
+template <typename T>
+class Code131_Queue
+{
+private:
+	int head, tail;           // Index to top of the queue
+	static const int MAXSIZE = 30000;
+	T theQueue[MAXSIZE];  // The queue
+public:
+	Code131_Queue()         // Class constructor
+	{
+		head = tail = -1;
+	}
+	~Code131_Queue()        // Class destuctor
+	{
+		
+	}
+	void ClearQueue()       // Remove all items from the queue
+	{
+		head = tail = -1; // Reset indices to start over
+	}
+	bool Enqueue(const T& ch)   // Enter an item in the queue
+	{
+		if(isFull()) return false;
+		
+		// Increment tail index
+		tail++;
+		// Add the item to the Queue
+		theQueue[tail % MAXSIZE] = ch;
+//		CCLOG("tail number = %d", tail);
+		return true;
+	}
+	T Dequeue()          // Remove an item from the queue
+	{
+		T ch;
+		
+		// Check for empty Queue
+		if(isEmpty())
+		{
+			assert("EMPTY");
+//			return '\0';  // Return null character if queue is empty
+		}
+		else
+		{
+			head++;
+			ch = theQueue[head % MAXSIZE];		// Get character to return
+			return ch;				// Return popped character
+		}
+	}
+	bool isEmpty()          // Return true if queue is empty
+	{
+		return (head == tail);
+	}
+	bool isFull()           // Return true if queue is full
+	{
+		return ((tail - MAXSIZE) == head);
+	}
+};
+
+
+
 void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint)
 {
 	BFS_Point s_p;
 	s_p.x = startPoint.x;
 	s_p.y = startPoint.y;
-	queue<BFS_Point> bfsArray;
+	Code131_Queue<BFS_Point> bfsArray;
+//	queue<BFS_Point> bfsArray;
 	myGD->mapState[s_p.x][s_p.y] = afterType;
-	bfsArray.push(s_p);
+	bfsArray.Enqueue(s_p);
+//	bfsArray.push(s_p);
 
 //	std::hash<BFS_Point> ttee;
-	vector<BFS_Point> check_new_line_list;
-	check_new_line_list.reserve(1000);
-//	hash_map<BFS_Point, int> check_new_line_list2;
+//	vector<BFS_Point> check_new_line_list;
+//	check_new_line_list.reserve(1000);
+	hash_map<BFS_Point, int> check_new_line_list2;
 	
 //	check_new_line_list.clear();
 	auto dgPointer = myGD;
-	while(!bfsArray.empty())
+	while(!bfsArray.isEmpty())
 	{
-		BFS_Point t_p = bfsArray.front();
-		bfsArray.pop();
+		BFS_Point t_p = bfsArray.Dequeue();
+//		bfsArray.pop();
 		for(int i=directionLeft;i<=directionUp;i+=2)
 		{
 			BFS_Point t_v = directionVector((IntDirection)i);
@@ -520,15 +582,30 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
 				{
 					dgPointer->mapState[a_p.x][a_p.y] = afterType;
-					bfsArray.push(a_p);
+					bfsArray.Enqueue(a_p);
 				}
-				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
-//				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
+//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
 				{
-//					check_new_line_list2[a_p] = true;
-					check_new_line_list.push_back(a_p);
-					bfsArray.push(a_p);
+					check_new_line_list2[a_p] = true;
+//					check_new_line_list.push_back(a_p);
+					bfsArray.Enqueue(a_p);
+//					bfsArray.push(a_p);
 				}
+			
+			
+//				if(dgPointer->mapState[a_p.x][a_p.y] == beforeType)
+//				{
+//					dgPointer->mapState[a_p.x][a_p.y] = afterType;
+//					bfsArray.push(a_p);
+//				}
+//				//				else if(dgPointer->mapState[a_p.x][a_p.y] == mapNewline && find(check_new_line_list.begin(), check_new_line_list.end(), a_p) == check_new_line_list.end())
+//				else if(myGD->mapState[a_p.x][a_p.y] == mapNewline && check_new_line_list2.find(a_p) == check_new_line_list2.end())
+//				{
+//					check_new_line_list2[a_p] = true;
+//					//					check_new_line_list.push_back(a_p);
+//					bfsArray.push(a_p);
+//				}
 			}
 		}
 	}
@@ -751,7 +828,7 @@ BFS_Point MapScanner::directionVector( IntDirection direction )
 	return r_v;
 }
 
-bool MapScanner::isInnerMap( BFS_Point t_p )
+bool MapScanner::isInnerMap(const BFS_Point& t_p )
 {
 	if(t_p.x >= mapWidthInnerBegin && t_p.x < mapWidthInnerEnd && t_p.y >= mapHeightInnerBegin && t_p.y < mapHeightInnerEnd)
 		return true;
