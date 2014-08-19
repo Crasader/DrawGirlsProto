@@ -767,9 +767,6 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		close_button->setPosition(ccp(150.0, 47.0));
 																		close_button->setFunction([=](CCObject* sender)
 																															{
-																																managerPopup->removeFromParent();
-																																CCTextureCache::sharedTextureCache()->removeAllTextures();
-																																return;
 																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																																CommonAnimation::closePopup(managerPopup, back,
 																																														managerPopup->getDimmedSprite(), nullptr,
