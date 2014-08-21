@@ -143,7 +143,7 @@ public:
 	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
-	m_stopFrameCount(0)
+	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f)
 	{
 		
 	}
@@ -292,6 +292,7 @@ public:
 	}
 public:
 	int m_stopFrameCount;
+	int m_castFrameCount;
 	struct FollowMoving
 	{
 		FollowMoving() : timer(1.1f), lastMapCollisionTime(0), collisionCount(0){}
@@ -347,8 +348,10 @@ public:
 	{
 		return m_charges;
 	}
-protected:
+	float m_lastCastTime;
 	float m_cumberTimer;
+protected:
+	
 	//선그을때 공격하는걸 제한하는 카운터
 	int m_adderCnt;
 	//재공격카운터
@@ -390,6 +393,7 @@ protected:
 	int m_healingFrameCount;
 //	enum MOVEMENT m_normalMode, m_drawMode;
 	int m_frameCount;
+	
 	
 	FixedSizeDeque<int> m_damagedFrames; // 맞았을 때의 프레임을 기록.
 	struct FuryMode

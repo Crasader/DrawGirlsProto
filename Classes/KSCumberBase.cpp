@@ -2899,6 +2899,14 @@ CCNode* KSCumberBase::getSlowStonePointer()
 
 void KSCumberBase::observeStopBoss(float dt)
 {
+	if((m_cumberState & kCumberStateMoving) == 0)
+	{
+		m_castFrameCount++;
+	}
+	else
+	{
+		m_castFrameCount = 0;
+	}
 	if(m_cumberState == 0)
 	{
 		m_stopFrameCount++;
@@ -2908,11 +2916,19 @@ void KSCumberBase::observeStopBoss(float dt)
 		m_stopFrameCount = 0;
 	}
 	
-	if(m_stopFrameCount >= 60 * 4.f)
+	if(m_stopFrameCount >= 60 * 2.f)
 	{
 		m_cumberState = kCumberStateMoving;
 		m_stopFrameCount = 0;
 		CCLOG("force moving");
+	}
+	if(m_castFrameCount >= 60 * 4.f)
+	{
+		
+		m_cumberState = kCumberStateMoving;
+		m_castFrameCount = 0;
+		CCLOG("force moving2");
+
 	}
 	
 }

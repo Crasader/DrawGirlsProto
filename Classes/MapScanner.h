@@ -426,6 +426,8 @@ private:
 	hash_map<int, BFS_Point> direction2BfsPoint;
 	bool is_removed_top_block, is_removed_bottom_block;
 	int remove_block_cnt;
+	
+	vector<pair<IntPoint, mapType>> checkingIndex;
 	void startRemoveBlock();
 	
 	void removingBlock();
