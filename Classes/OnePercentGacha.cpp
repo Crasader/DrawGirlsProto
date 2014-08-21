@@ -113,15 +113,15 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
 				
-				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
-				stop_label->setColor(ccBLACK);
-				stop_label->setPosition(ccp(0,15));
-				t_label->addChild(stop_label);
-				
-				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
-				stop_label2->setColor(ccBLACK);
-				stop_label2->setPosition(ccp(0,-12));
-				t_label->addChild(stop_label2);
+//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//				stop_label->setColor(ccBLACK);
+//				stop_label->setPosition(ccp(0,15));
+//				t_label->addChild(stop_label);
+//				
+//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//				stop_label2->setColor(ccBLACK);
+//				stop_label2->setPosition(ccp(0,-12));
+//				t_label->addChild(stop_label2);
 				
 				
 				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
@@ -164,15 +164,15 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
 				
-				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
-				stop_label->setColor(ccBLACK);
-				stop_label->setPosition(ccp(0,15));
-				t_label->addChild(stop_label);
-				
-				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
-				stop_label2->setColor(ccBLACK);
-				stop_label2->setPosition(ccp(0,-12));
-				t_label->addChild(stop_label2);
+//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//				stop_label->setColor(ccBLACK);
+//				stop_label->setPosition(ccp(0,15));
+//				t_label->addChild(stop_label);
+//				
+//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//				stop_label2->setColor(ccBLACK);
+//				stop_label2->setPosition(ccp(0,-12));
+//				t_label->addChild(stop_label2);
 				
 				
 				CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
@@ -231,15 +231,15 @@ void OnePercentGacha::requestItemDelivery()
 												
 												CCLabelTTF* t_label = CCLabelTTF::create();
 												
-												KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
-												stop_label->setColor(ccBLACK);
-												stop_label->setPosition(ccp(0,15));
-												t_label->addChild(stop_label);
-												
-												KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
-												stop_label2->setColor(ccBLACK);
-												stop_label2->setPosition(ccp(0,-12));
-												t_label->addChild(stop_label2);
+//												KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//												stop_label->setColor(ccBLACK);
+//												stop_label->setPosition(ccp(0,15));
+//												t_label->addChild(stop_label);
+//												
+//												KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//												stop_label2->setColor(ccBLACK);
+//												stop_label2->setPosition(ccp(0,-12));
+//												t_label->addChild(stop_label2);
 												
 												
 												CCScale9Sprite* stop_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
