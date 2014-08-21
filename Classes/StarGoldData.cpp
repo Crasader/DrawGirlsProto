@@ -109,76 +109,76 @@ CCSprite* StarGoldData::getLoadingImg()
 	
 	string filename;
 	string ments;
-	if(after_loading == kImgType_specialMap)
-	{
-		filename = "loadingimg_specialMap.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading1);
-	}
-	else if(after_loading == kImgType_control1)
-	{
-		filename = "loadingimg_control1.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading2);
-	}
-	else if(after_loading == kImgType_control2)
-	{
-		filename = "loadingimg_control2.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading3);
-	}
-	else if(after_loading == kImgType_facebook1)
-	{
-		filename = "loadingimg_facebook1.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading4);
-	}
-	else if(after_loading == kImgType_facebook2)
-	{
-		filename = "loadingimg_facebook2.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading5);
-	}
-	else if(after_loading == kImgType_facebook3)
-	{
-		filename = "loadingimg_facebook3.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading6);
-	}
-	else if(after_loading == kImgType_gallery)
-	{
-		filename = "loadingimg_gallery.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading21);
-	}
-	else if(after_loading == kImgType_gallery1)
-	{
-		filename = "loadingimg_gallery1.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading22);
-	}
-	else if(after_loading == kImgType_option)
-	{
-		filename = "loadingimg_option.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading23);
-	}
-	else if(after_loading == kImgType_pet)
-	{
-		filename = "loadingimg_pet.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading24);
-	}
-	else if(after_loading == kImgType_petbuff)
-	{
-		filename = "loadingimg_petbuff.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading25);
-	}
-	else if(after_loading == kImgType_elementalPresentation1)
-	{
-		filename = "loadingimg_elementalPresentation1.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading17);
-	}
-	else if(after_loading == kImgType_elemental)
-	{
-		filename = "loadingimg_elemental.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading19);
-	}
-	else if(after_loading == kImgType_facebookLoginReward)
-	{
-		filename = "loadingimg_facebookLoginReward.png";
-		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading20);
-	}
+//	if(after_loading == kImgType_specialMap)
+//	{
+//		filename = "loadingimg_specialMap.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading1);
+//	}
+//	else if(after_loading == kImgType_control1)
+//	{
+//		filename = "loadingimg_control1.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading2);
+//	}
+//	else if(after_loading == kImgType_control2)
+//	{
+//		filename = "loadingimg_control2.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading3);
+//	}
+//	else if(after_loading == kImgType_facebook1)
+//	{
+//		filename = "loadingimg_facebook1.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading4);
+//	}
+//	else if(after_loading == kImgType_facebook2)
+//	{
+//		filename = "loadingimg_facebook2.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading5);
+//	}
+//	else if(after_loading == kImgType_facebook3)
+//	{
+//		filename = "loadingimg_facebook3.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading6);
+//	}
+//	else if(after_loading == kImgType_gallery)
+//	{
+//		filename = "loadingimg_gallery.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading21);
+//	}
+//	else if(after_loading == kImgType_gallery1)
+//	{
+//		filename = "loadingimg_gallery1.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading22);
+//	}
+//	else if(after_loading == kImgType_option)
+//	{
+//		filename = "loadingimg_option.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading23);
+//	}
+//	else if(after_loading == kImgType_pet)
+//	{
+//		filename = "loadingimg_pet.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading24);
+//	}
+//	else if(after_loading == kImgType_petbuff)
+//	{
+//		filename = "loadingimg_petbuff.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading25);
+//	}
+//	else if(after_loading == kImgType_elementalPresentation1)
+//	{
+//		filename = "loadingimg_elementalPresentation1.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading17);
+//	}
+//	else if(after_loading == kImgType_elemental)
+//	{
+//		filename = "loadingimg_elemental.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading19);
+//	}
+//	else if(after_loading == kImgType_facebookLoginReward)
+//	{
+//		filename = "loadingimg_facebookLoginReward.png";
+//		ments = MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_loading20);
+//	}
 	
 	after_loading = kImgType_Empty;
 	

@@ -2458,7 +2458,7 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_noti), "뭔가 문제가 발생하였습니다.\n다시 시도해주세요."), 999);
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_endlessServerError)), 999);
 	}
 	TRACE();
 }
