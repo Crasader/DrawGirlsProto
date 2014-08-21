@@ -2726,6 +2726,7 @@ void MainFlowScene::showEndlessResult()
     EndlessModeResult* t_popup = EndlessModeResult::create();
 	TRACE();
     t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showEndlessOpening));
+	t_popup->refresh_achieve_func = bind(&MainFlowScene::countingAchievement, this);
 	TRACE();
     addChild(t_popup, kMainFlowZorder_popup);
 	TRACE();

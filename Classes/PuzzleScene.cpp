@@ -1246,6 +1246,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
 	t_popup->is_take_star_effect = true;
 	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect | clear_is_perfect_piece;
+	t_popup->refresh_achieve_func = bind(&PuzzleScene::countingAchievement, this);
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -1676,6 +1677,7 @@ void PuzzleScene::showFailPopup()
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideFailPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
+	t_popup->refresh_achieve_func = bind(&PuzzleScene::countingAchievement, this);
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 

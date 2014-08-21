@@ -51,6 +51,7 @@ public:
 	
 	std::function<void()> replay_func;
 	std::function<void()> goToMainFlow_func;
+	std::function<void()> refresh_achieve_func;
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
