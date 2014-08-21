@@ -13,7 +13,81 @@
 #include "KSLabelTTF.h"
 #include "MyLocalization.h"
 #include "TextureReloader.h"
+#include <memory>
+template <typename Node>
+class CircularQueue
+{
+private:
+	Node* node; // 노드 배열
+	int capacity; // 큐의 용량
+	int front; // 전단의 인덱스
+	int rear; // 후단의 인덱스
+public:
+	CircularQueue(int capacity)
+	{
+		this->capacity = capacity + 1; // 노드 배열의 크기는 실제 용량에서 1을 더한 크기 (더미 공간 때문)
+		node = new Node[this->capacity]; // Node 구조체 capacity + 1개를 메모리 공간에 할당한다
+		front = 0; rear = 0; // 전단과 후단의 초기화
+	}
+	
+	~CircularQueue()
+	{
+		delete []node; // 노드 배열 소멸
+	}
+	void clear()
+	{
+		front = rear = 0;
+	}
+	void enqueue(const Node& data)
+	{
+		int pos; // 데이터가 들어갈 인덱스
+		pos = rear;
+		rear = (rear + 1) % (capacity);
+		node[pos] = data; // pos 번째의 노드의 데이터에 data를 대입한다
+	}
+	Node dequeue() {
+		int pos = front; // pos에 전단의 인덱스 대입
+		front = (front + 1) % capacity;
+		return node[pos]; // 제외되는 데이터를 반환한다
+	}
+	int getSize() {
+		if (front <= rear) // 전단의 인덱스가 후단의 인덱스와 같거나 그보다 작다면
+			return rear - front; // 후단의 인덱스에서 전단의 인덱스를 뺀값을 반환한다
+		else // 전단의 인덱스가 후단의 인덱스보다 크다면
+			return capacity - front + rear; // 용량에서 전단의 인덱스를 뺀 뒤에 후단의 인덱스를 더한 값을 반환한다
+	}
+	bool isEmpty() {
+		return front == rear; // 전단의 인덱스와 후단의 인덱스가 같을 경우 true, 아니면 false
+	}
+	bool isFull() {
+		return front == (rear + 1) % capacity;
+	}
+	int getRear() { return rear; }
+	int getFront() { return front; }
+	vector<Node> getTotalData()
+	{
+		int tempFront = front;
+		vector<Node> T;
+		while(tempFront != rear)
+		{
+			T.push_back(node[tempFront]);
+			tempFront = (tempFront + 1) % capacity;
+		}
+		return T;
+	}
 
+	//	void show()
+	//	{
+	//		int tempFront = front;
+	//		while(tempFront != rear)
+	//		{
+	//			cout << node[tempFront].data << "/";
+	//
+	//			tempFront = (tempFront + 1) % capacity;
+	//		}
+	//		cout << endl;
+	//	}
+};
 
 bool MapScanner::isCheckBossLocked()
 {
@@ -159,10 +233,10 @@ void MapScanner::scanMap()
 			bfsCheck(mapEmpty, mapScaningEmptySide, IntPoint(mapWidthInnerEnd-1, j));
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
-//	start = chrono::system_clock::now();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 2 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	
 	vector<CCNode*> main_cumber_vector = dgPointer->getMainCumberCCNodeVector();
 	int main_cumber_count = main_cumber_vector.size();
@@ -236,10 +310,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
-//	start = chrono::system_clock::now();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 3 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	
 	// new inside check
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -251,10 +325,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
-//	start = chrono::system_clock::now();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
@@ -304,10 +378,10 @@ void MapScanner::scanMap()
 		}
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
-//	start = chrono::system_clock::now();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 5 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
@@ -324,9 +398,9 @@ void MapScanner::scanMap()
 			dgPointer->mapState[mapWidthInnerEnd-1][j] = mapOldline;
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 6 / time : %f", elapsed_seconds.count());
 	
 	if(dgPointer->game_step == kGS_limited)
 	{
@@ -367,6 +441,11 @@ void MapScanner::scanMap()
 	dgPointer->communication("UI_addScore", addScore);
 	
 	resetRects(true);
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("process step 7(resetRect!!!) / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
+
 }
 
 void MapScanner::resetRects(bool is_after_scanmap)
@@ -375,13 +454,15 @@ void MapScanner::resetRects(bool is_after_scanmap)
 //	chrono::duration<double> elapsed_seconds;
 //	start = chrono::system_clock::now();
 	
+	checkingIndex.clear();
+	auto gdPointer = myGD;
 	// view rects reset
 	CCArray* rects = CCArray::createWithCapacity(256);
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
-			if(myGD->mapState[i][j] == mapOldline || myGD->mapState[i][j] == mapOldget)
+			if(gdPointer->mapState[i][j] == mapOldget || gdPointer->mapState[i][j] == mapOldline)
 			{
 				IntRect* t_rect = newRectChecking(IntMoveState(i, j, directionRightUp));
 				rects->addObject(t_rect);
@@ -395,19 +476,58 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	
 	visibleImg->setDrawRects(rects);
 	
+	// newRectChecking 에서 mapScaningCheckLine mapScaningCheckGet 이 대입된 인덱스를 가져 오는게 속도 면에서 나을 듯??
 	float drawCellCnt = 0;
-	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	for(auto& check : checkingIndex)
 	{
-		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		auto checkValue = &gdPointer->mapState[check.first.x][check.first.y];
+		switch(check.second)
 		{
-			if(myGD->mapState[i][j] == mapScaningCheckLine)				myGD->mapState[i][j] = mapOldline;
-			else if(myGD->mapState[i][j] == mapScaningCheckGet)			myGD->mapState[i][j] = mapOldget;
-			
-			if((myGD->mapState[i][j] == mapOldget || myGD->mapState[i][j] == mapOldline) && mySD->silData[i][j])				drawCellCnt++;
+			case mapScaningCheckLine:
+				*checkValue = mapOldline;
+				if(mySD->silData[check.first.x][check.first.y])
+				{
+					drawCellCnt++;
+				}
+				
+				break;
+				
+			case mapScaningCheckGet:
+				*checkValue = mapOldget;
+				if(mySD->silData[check.first.x][check.first.y])
+				{
+					drawCellCnt++;
+				}
+				
+				break;
 		}
 	}
+//	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+//	{
+//		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+//		{
+//			auto checkValue = &gdPointer->mapState[i][j];
+//			switch(*checkValue)
+//			{
+//				case mapScaningCheckLine:
+//					*checkValue = mapOldline;
+//					if(mySD->silData[i][j])
+//					{
+//						drawCellCnt++;
+//					}
+//					break;
+//				case mapScaningCheckGet:
+//					*checkValue = mapOldget;
+//					if(mySD->silData[i][j])
+//					{
+//						drawCellCnt++;
+//					}
+//					break;
+//			}
+//		}
+//	}
 	
-	myGD->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
+	gdPointer->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 	
 	if(mySGD->is_write_replay)
 	{
@@ -420,19 +540,22 @@ void MapScanner::resetRects(bool is_after_scanmap)
 
 IntRect* MapScanner::newRectChecking(IntMoveState start)
 {
+	auto gdPointer = myGD;
 	IntPoint origin = IntPoint(start.origin.x, start.origin.y);
 	IntSize size = IntSize(0, 0);
 	
 	bool isUpper = true;
 	bool isRighter = true;
-	queue<IntMoveState> loopArray;
-	loopArray.push(start);
+	CircularQueue<IntMoveState> loopArray(350);
+	loopArray.enqueue(start);
+//	loopArray.push(start);
 	
-	queue<IntMoveState> nextLoopArray;
+	CircularQueue<IntMoveState> nextLoopArray(350);
 	
 //	int loopCnt;
 	
-	while(!loopArray.empty())
+//	while(!loopArray.empty())
+	while(!loopArray.isEmpty())
 	{
 		if(isUpper)				size.height++;
 		if(isRighter)			size.width++;
@@ -440,66 +563,104 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 		bool upable = isUpper;
 		bool rightable = isRighter;
 		
-		while(!loopArray.empty())
+		while(!loopArray.isEmpty())
 		{
 //			loopCnt++;
-			IntMoveState t_ms = loopArray.front();
-			loopArray.pop();
+			IntMoveState t_ms = loopArray.dequeue();
+//			loopArray.pop();
 			
 			
 			if(t_ms.direction == directionUp && !isUpper)
 				continue;
 			if(t_ms.direction == directionRight && !isRighter)
 				continue;
-			
-			if(myGD->mapState[t_ms.origin.x][t_ms.origin.y] == mapOldget)				myGD->mapState[t_ms.origin.x][t_ms.origin.y] = mapScaningCheckGet;
-			else if(myGD->mapState[t_ms.origin.x][t_ms.origin.y] == mapOldline)			myGD->mapState[t_ms.origin.x][t_ms.origin.y] = mapScaningCheckLine;
-			
-			if(t_ms.direction == directionUp)
+		
+			auto root = &gdPointer->mapState[t_ms.origin.x][t_ms.origin.y];
+			switch(*root)
 			{
-				if(isUpper)
-				{
-					IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-					if(n_msUp.origin.isInnerMap() && (myGD->mapState[n_msUp.origin.x][n_msUp.origin.y] == mapOldline || myGD->mapState[n_msUp.origin.x][n_msUp.origin.y] == mapOldget))
-						nextLoopArray.push(n_msUp);
-					else		upable = false;
-				}
+				case mapOldget:
+					*root = mapScaningCheckGet;
+//					checkingIndex.push_back(t_ms.origin);
+					checkingIndex.push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+					break;
+				case mapOldline:
+					*root = mapScaningCheckLine;
+//					make_pair<int, int>(3, 5);
+//					make_pair<IntPoint, int>(0, t_ms.origin);
+					
+					checkingIndex.push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+					break;
 			}
-			else if(t_ms.direction == directionRight)
+			
+			switch(t_ms.direction)
 			{
-				if(isRighter)
-				{
-					IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-					if(n_msRight.origin.isInnerMap() && (myGD->mapState[n_msRight.origin.x][n_msRight.origin.y] == mapOldline || myGD->mapState[n_msRight.origin.x][n_msRight.origin.y] == mapOldget))
-						nextLoopArray.push(n_msRight);
-					else		rightable = false;
-				}
-			}
-			else if(t_ms.direction == directionRightUp)
-			{
-				if(isUpper)
-				{
-					IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-					if(n_msUp.origin.isInnerMap() && (myGD->mapState[n_msUp.origin.x][n_msUp.origin.y] == mapOldline || myGD->mapState[n_msUp.origin.x][n_msUp.origin.y] == mapOldget))
-						nextLoopArray.push(n_msUp);
-					else		upable = false;
-				}
-				
-				if(isRighter)
-				{
-					IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-					if(n_msRight.origin.isInnerMap() && (myGD->mapState[n_msRight.origin.x][n_msRight.origin.y] == mapOldline || myGD->mapState[n_msRight.origin.x][n_msRight.origin.y] == mapOldget))
-						nextLoopArray.push(n_msRight);
-					else		rightable = false;
-				}
-				
-				if(upable && rightable)
-				{
-					IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
-					if(n_msRightUp.origin.isInnerMap() && (myGD->mapState[n_msRightUp.origin.x][n_msRightUp.origin.y] == mapOldline || myGD->mapState[n_msRightUp.origin.x][n_msRightUp.origin.y] == mapOldget))
-						nextLoopArray.push(n_msRightUp);
-					else		rightable = false;
-				}
+				case directionUp:
+					if(isUpper)
+					{
+						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						auto checkValue = gdPointer->mapState[n_msUp.origin.x][n_msUp.origin.y];
+						if((checkValue == mapOldline ||
+								checkValue == mapOldget) && n_msUp.origin.isInnerMap())
+						{
+							nextLoopArray.enqueue(n_msUp);
+						}
+						else
+						{
+							upable = false;
+						}
+					}
+					break;
+				case directionRight:
+					if(isRighter)
+					{
+						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+						auto checkValue = gdPointer->mapState[n_msRight.origin.x][n_msRight.origin.y];
+						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap())
+						{
+							nextLoopArray.enqueue(n_msRight);
+						}
+						else
+						{
+							rightable = false;
+						}
+					}
+					break;
+				case directionRightUp:
+					if(isUpper)
+					{
+						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						auto checkValue = gdPointer->mapState[n_msUp.origin.x][n_msUp.origin.y];
+						if((checkValue == mapOldline || checkValue == mapOldget) && n_msUp.origin.isInnerMap() )
+						{
+							nextLoopArray.enqueue(n_msUp);
+						}
+						else		upable = false;
+					}
+					
+					if(isRighter)
+					{
+						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+						auto checkValue = gdPointer->mapState[n_msRight.origin.x][n_msRight.origin.y];
+						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap() )
+						{
+							nextLoopArray.enqueue(n_msRight);
+						}
+						else		rightable = false;
+					}
+					
+					if(upable && rightable)
+					{
+						IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
+						auto checkValue = gdPointer->mapState[n_msRightUp.origin.x][n_msRightUp.origin.y];
+						if((checkValue == mapOldline ||
+								checkValue == mapOldget) && n_msRightUp.origin.isInnerMap() )
+						{
+							nextLoopArray.enqueue(n_msRightUp);
+						}
+						else		rightable = false;
+					}
+					break;
+					
 			}
 		}
 		
@@ -508,13 +669,15 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 		
 		if(isUpper || isRighter)
 		{
-			while(!nextLoopArray.empty())
+			for(auto& i : nextLoopArray.getTotalData())
 			{
-				loopArray.push(nextLoopArray.front());
-				nextLoopArray.pop();
+				loopArray.enqueue(i);
 			}
+			nextLoopArray.clear();
+				
 		}
 	}
+//	CCLOG("max1 %d max2 %d", loopArraySize, nextLoopArraySize);
 	
 //	CCLOG("loop count : %d", loopCnt);
 	
@@ -523,63 +686,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 	return r_rect;
 }
 
-template <typename Node>
-class CircularQueue
-{
-private:
-	Node* node; // 노드 배열
-	int capacity; // 큐의 용량
-	int front; // 전단의 인덱스
-	int rear; // 후단의 인덱스
-public:
-	CircularQueue(int capacity)
-	{
-		this->capacity = capacity + 1; // 노드 배열의 크기는 실제 용량에서 1을 더한 크기 (더미 공간 때문)
-		node = new Node[this->capacity]; // Node 구조체 capacity + 1개를 메모리 공간에 할당한다
-		front = 0; rear = 0; // 전단과 후단의 초기화
-	}
-	~CircularQueue()
-	{
-		delete []node; // 노드 배열 소멸
-	}
-	void enqueue(const Node& data)
-	{
-		int pos; // 데이터가 들어갈 인덱스
-		pos = rear;
-		rear = (rear + 1) % (capacity);
-		node[pos] = data; // pos 번째의 노드의 데이터에 data를 대입한다
-	}
-	Node dequeue() {
-		int pos = front; // pos에 전단의 인덱스 대입
-		front = (front + 1) % capacity;
-		return node[pos]; // 제외되는 데이터를 반환한다
-	}
-	int getSize() {
-		if (front <= rear) // 전단의 인덱스가 후단의 인덱스와 같거나 그보다 작다면
-			return rear - front; // 후단의 인덱스에서 전단의 인덱스를 뺀값을 반환한다
-		else // 전단의 인덱스가 후단의 인덱스보다 크다면
-			return capacity - front + rear; // 용량에서 전단의 인덱스를 뺀 뒤에 후단의 인덱스를 더한 값을 반환한다
-	}
-	bool isEmpty() {
-		return front == rear; // 전단의 인덱스와 후단의 인덱스가 같을 경우 true, 아니면 false
-	}
-	bool isFull() {
-		return front == (rear + 1) % capacity;
-	}
-	int getRear() { return rear; }
-	int getFront() { return front; }
-	//	void show()
-	//	{
-	//		int tempFront = front;
-	//		while(tempFront != rear)
-	//		{
-	//			cout << node[tempFront].data << "/";
-	//
-	//			tempFront = (tempFront + 1) % capacity;
-	//		}
-	//		cout << endl;
-	//	}
-};
+
 
 template <typename T>
 class Code131_Queue
@@ -665,8 +772,7 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 		bool emptyUp = false;
 		bool emptyDown = false;
 		{
-			BFS_Point t_v = BFS_Point(-1, 0);
-			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			BFS_Point a_p = BFS_Point(t_p.x - 1, t_p.y + 0);
 			
 			if(isInnerMap(a_p))
 			{
@@ -684,8 +790,7 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 			}
 		}
 		{
-			BFS_Point t_v = BFS_Point(1, 0);
-			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			BFS_Point a_p = BFS_Point(t_p.x + 1, t_p.y + 0);
 			
 			if(isInnerMap(a_p))
 			{
@@ -703,8 +808,7 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 			}
 		}
 		{
-			BFS_Point t_v = BFS_Point(0, 1);
-			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			BFS_Point a_p = BFS_Point(t_p.x + 0, t_p.y + 1);
 			
 			if(isInnerMap(a_p))
 			{
@@ -724,8 +828,7 @@ void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startP
 			
 		}
 		{
-			BFS_Point t_v = BFS_Point(0, -1); 
-			BFS_Point a_p = BFS_Point(t_p.x + t_v.x, t_p.y + t_v.y);
+			BFS_Point a_p = BFS_Point(t_p.x + 0, t_p.y - 1);
 			
 			if(isInnerMap(a_p))
 			{
@@ -2039,6 +2142,10 @@ void VisibleSprite::setDark()
 
 void VisibleSprite::setRectToVertex()
 {
+	
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 	if(m_vertices)
 		delete [] m_vertices;
 	if(m_textCoords)
@@ -2147,6 +2254,10 @@ void VisibleSprite::setRectToVertex()
 	
 	safety_img->setVertex(safety_vertices, m_textCoords, m_colors, t_vertice_count);
 	light_img->setVertex(light_vertices, m_textCoords, m_colors, t_vertice_count);
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("setRectToVertex step 1 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 }
 
 void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
@@ -2334,6 +2445,9 @@ CCArray* VisibleParent::getDrawRects()
 
 void VisibleParent::divideRect( IntPoint crashPoint )
 {
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 	if(mySD->silData[crashPoint.x][crashPoint.y] == true)
 		myGD->communication("UI_decreasePercentage");
 
@@ -2400,10 +2514,17 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 		drawRects->removeObject(t_rect);
 	}
 	myVS->setRectToVertex();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("devideRect step 1 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 }
 
 void VisibleParent::divideRects(IntRect crashRect)
 {
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 	int decrease_count = 0;
 	for(int i=crashRect.origin.x;i<crashRect.origin.x + crashRect.size.width;i++)
 	{
@@ -2522,6 +2643,10 @@ void VisibleParent::divideRects(IntRect crashRect)
 		drawRects->removeObject(t_rect);
 	}
 	myVS->setRectToVertex();
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("devide 렉츠. 1 / time : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 }
 
 void VisibleParent::setMoveGamePosition( CCPoint t_p )
