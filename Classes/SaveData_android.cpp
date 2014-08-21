@@ -114,7 +114,7 @@ void testF(string filePath, string tt)
 	
 	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
 	int rename_result;
-	rename_result = rename( t_path, path );
+	rename_result = rename( t_path.c_str(), path.c_str() );
 	if(rename_result != 0)
 		CCLOG("file failure(rename)");
 }
