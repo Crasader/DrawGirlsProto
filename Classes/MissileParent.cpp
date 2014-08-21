@@ -669,778 +669,788 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 
 //			cb->setChargeParent(t_ccn);
 		}
+		cb->m_lastCastTime = cb->m_cumberTimer;
 		cb->setDamageMeasure(0.f);
 		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
 		myGD->showDetailMessage(warningFileName, "w");
 		myGD->communication("Main_showThumbWarning", startPosition);
 	};
 	string warningFileName = "warning_" + pattern + ".ccbi";
-	if(pattern == "1")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			
-			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
 	
-	else if(pattern == "2")
+	if(cb->m_cumberTimer - 1.f >= cb->m_lastCastTime)
 	{
-		if(exe)
+		if(pattern == "1")
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				UnusedMissile6* t = UnusedMissile6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-								KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
+				startFirePosition = startPosition;
 				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "3")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile7* t = UnusedMissile7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "4")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile8* t = UnusedMissile8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "5")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile9* t = UnusedMissile9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "6")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile10* t = UnusedMissile10::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-			
-		}
-	}
-	else if(pattern == "7")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile11* t = UnusedMissile11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-			
-		}
-	}
-	else if(pattern == "8")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				Mugunghwa* t = Mugunghwa::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "9")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				CaromWrapper* t = CaromWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	
-	else if(pattern == "101")
-	{
-		if(exe)
-		{
-			
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-			
-		}
-	}
-	else if(pattern == "102")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile2* t = UnusedMissile2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "103")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile3* t = UnusedMissile3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "104")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				UnusedMissile4* t = UnusedMissile4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "105") // 나무 토막
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			
-			//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
-			auto func = [=](CCObject* cb)
-			{
-				SawWrapper* t = SawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-			
-		}
-	}
-	else if(pattern == "106") // 사과 던지기.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				SmallSawWrapper* t = SmallSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "107") // 태양광선.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				CrashLazerWrapper* t = CrashLazerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "108") // 다용도
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				CommonBulletPattern* t = CommonBulletPattern::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "109") // 개돌
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				KSCumberBase* t = dynamic_cast<KSCumberBase*>(cb);
-				
-				int totalFrame = patternData.get("totalframe", 300).asInt();
-				t->furyModeOn(totalFrame);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "110") // 폭죽
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				FireWorkWrapper* t = FireWorkWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "111") // 움직이는 해바라기
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				MovingSunflowerWrapper* t = MovingSunflowerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-			
-		}
-	}
-	else if(pattern == "112") // 폭탄 여러개 던지기
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				ThrowBombWrapper* t = ThrowBombWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "113") // 리버 스크럽
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				ScarabWrapper* t = ScarabWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "114") // 닳는 톱니.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "1001")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				int totalFrame = patternData.get("totalframe", 400).asInt();
-				TornadoWrapper* t_m21 = TornadoWrapper::create(startFirePosition, totalFrame, 1.5f,
-																											 dynamic_cast<KSCumberBase*>(cb));
-				pattern_container->addChild(t_m21);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	
-	else if(pattern == "1002")
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				if(cumber->getSightOutAttack())
+				//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+				auto func = [=](CCObject* cb)
 				{
-					cumber->getSightOutAttack()->updateSightOut();
-				}
-				else
-				{
-					int totalFrame = patternData.get("totalframe", 300).asInt();
-					SightOutAttack* t_m24 = SightOutAttack::create(totalFrame, cumber);
-					pattern_container->addChild(t_m24);
-					cumber->setSightOutAttack(t_m24);
-				}
-				//		SightOutWrapper* t = SightOutWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
-				//		pattern_container->addChild(t);
-				//		
-			};
-			castBranch(atype, func, warningFileName);
+					UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
 		}
-	}
-	else if(pattern == "1003")
-	{
-		if(exe)
+		
+		else if(pattern == "2")
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				if(cumber->getCobWebAttack())
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
 				{
-					cumber->getCobWebAttack()->updateCobWeb();
-				}
-				else
-				{
-					//					int totalFrame = patternData.get("totalframe", 60*4).asInt();
+					UnusedMissile6* t = UnusedMissile6::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
 					
-					//					Cobweb* t_m23 = Cobweb::create(totalFrame);
-					CobWeb* t_m23 = CobWeb::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-					pattern_container->addChild(t_m23);
-					cumber->setCobWebAttack(t_m23);
-				}
-				
-				
-			};
-			castBranch(atype, func, warningFileName);
+				};
+				castBranch(atype, func, warningFileName);
+			}
 		}
-	}
-	else if(pattern == "1004")
-	{
-		if(exe)
+		else if(pattern == "3")
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-//				int random_value = rand()%2 + 1;
-				int radius = 80;//pattern.get("radius", 100).asInt();
-				int objcnt = patternData.get("totalframe", 240).asInt();
-				PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt, dynamic_cast<KSCumberBase*>(cb));
-				pattern_container->addChild(t_m28);
-				t_m28->startMyAction();
-				KSCumberBase* cumber = (KSCumberBase*)cb;
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile7* t = UnusedMissile7::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
 				
-			};
-			castBranch(atype, func, warningFileName);
+			}
 		}
-	}
-	else if(pattern == "1005") // 빙결.
-	{
-		if(exe)
+		else if(pattern == "4")
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				if(cumber->getFreezeAttack())
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
 				{
-					cumber->getFreezeAttack()->updateFreeze();
-				}
-				else
-				{
-					int totalFrame = patternData.get("totalframe", 200).asInt();
-					FreezeAttack* t_m26 = FreezeAttack::create(totalFrame, cumber);
-					pattern_container->addChild(t_m26);
-					cumber->setFreezeAttack(t_m26);
-				}
+					UnusedMissile8* t = UnusedMissile8::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
 				
-			};
-			castBranch(atype, func, warningFileName);
-			
+			}
+		}
+		else if(pattern == "5")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile9* t = UnusedMissile9::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "6")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile10* t = UnusedMissile10::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+				
+			}
+		}
+		else if(pattern == "7")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile11* t = UnusedMissile11::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+				
+			}
+		}
+		else if(pattern == "8")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					Mugunghwa* t = Mugunghwa::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "9")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					CaromWrapper* t = CaromWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
 		}
 		
-	}
-	else if(pattern == "1006") // 혼란
-	{
-		if(exe)
+		else if(pattern == "101")
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				if(cumber->getChaosAttack())
+				
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
 				{
-					cumber->getChaosAttack()->updateChaos();
-				}
-				else
+					UnusedMissile1* t = UnusedMissile1::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+				
+			}
+		}
+		else if(pattern == "102")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile2* t = UnusedMissile2::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "103")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile3* t = UnusedMissile3::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "104")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					UnusedMissile4* t = UnusedMissile4::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "105") // 나무 토막
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				
+				//			myGD->communication("CP_setMainCumberState", CUMBER_STATE::CUMBERSTATEATTACKREADY); // cumberStateAttackReady
+				auto func = [=](CCObject* cb)
+				{
+					SawWrapper* t = SawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+				
+			}
+		}
+		else if(pattern == "106") // 사과 던지기.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					SmallSawWrapper* t = SmallSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "107") // 태양광선.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					CrashLazerWrapper* t = CrashLazerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "108") // 다용도
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					CommonBulletPattern* t = CommonBulletPattern::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "109") // 개돌
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* t = dynamic_cast<KSCumberBase*>(cb);
+					
+					int totalFrame = patternData.get("totalframe", 300).asInt();
+					t->furyModeOn(totalFrame);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "110") // 폭죽
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					FireWorkWrapper* t = FireWorkWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "111") // 움직이는 해바라기
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					MovingSunflowerWrapper* t = MovingSunflowerWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+				
+			}
+		}
+		else if(pattern == "112") // 폭탄 여러개 던지기
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					ThrowBombWrapper* t = ThrowBombWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "113") // 리버 스크럽
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					ScarabWrapper* t = ScarabWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "114") // 닳는 톱니.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1001")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					int totalFrame = patternData.get("totalframe", 400).asInt();
+					TornadoWrapper* t_m21 = TornadoWrapper::create(startFirePosition, totalFrame, 1.5f,
+																												 dynamic_cast<KSCumberBase*>(cb));
+					pattern_container->addChild(t_m21);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		
+		else if(pattern == "1002")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					if(cumber->getSightOutAttack())
+					{
+						cumber->getSightOutAttack()->updateSightOut();
+					}
+					else
+					{
+						int totalFrame = patternData.get("totalframe", 300).asInt();
+						SightOutAttack* t_m24 = SightOutAttack::create(totalFrame, cumber);
+						pattern_container->addChild(t_m24);
+						cumber->setSightOutAttack(t_m24);
+					}
+					//		SightOutWrapper* t = SightOutWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb));
+					//		pattern_container->addChild(t);
+					//
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1003")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					if(cumber->getCobWebAttack())
+					{
+						cumber->getCobWebAttack()->updateCobWeb();
+					}
+					else
+					{
+						//					int totalFrame = patternData.get("totalframe", 60*4).asInt();
+						
+						//					Cobweb* t_m23 = Cobweb::create(totalFrame);
+						CobWeb* t_m23 = CobWeb::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+						pattern_container->addChild(t_m23);
+						cumber->setCobWebAttack(t_m23);
+					}
+					
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1004")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					//				int random_value = rand()%2 + 1;
+					int radius = 80;//pattern.get("radius", 100).asInt();
+					int objcnt = patternData.get("totalframe", 240).asInt();
+					PrisonPattern* t_m28 = PrisonPattern::create(startFirePosition, radius, objcnt, dynamic_cast<KSCumberBase*>(cb));
+					pattern_container->addChild(t_m28);
+					t_m28->startMyAction();
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1005") // 빙결.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					if(cumber->getFreezeAttack())
+					{
+						cumber->getFreezeAttack()->updateFreeze();
+					}
+					else
+					{
+						int totalFrame = patternData.get("totalframe", 200).asInt();
+						FreezeAttack* t_m26 = FreezeAttack::create(totalFrame, cumber);
+						pattern_container->addChild(t_m26);
+						cumber->setFreezeAttack(t_m26);
+					}
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+			
+		}
+		else if(pattern == "1006") // 혼란
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					if(cumber->getChaosAttack())
+					{
+						cumber->getChaosAttack()->updateChaos();
+					}
+					else
+					{
+						int totalFrame = patternData.get("totalframe", 300).asInt();
+						ChaosAttack* t_m33 = ChaosAttack::create(totalFrame, cumber);
+						pattern_container->addChild(t_m33);
+						cumber->setChaosAttack(t_m33);
+					}
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1007") // 텔포.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					TeleportWrapper* t_m32 = TeleportWrapper::create();
+					pattern_container->addChild(t_m32);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(nullptr);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1008") // 인비지블
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
 				{
 					int totalFrame = patternData.get("totalframe", 300).asInt();
-					ChaosAttack* t_m33 = ChaosAttack::create(totalFrame, cumber);
-					pattern_container->addChild(t_m33);
-					cumber->setChaosAttack(t_m33);
-				}
+					((KSCumberBase*)cb)->startInvisible(totalFrame);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(nullptr);
+					myGD->communication("CP_onPatternEndOf", cb);
+				};
+				castBranch(atype, func, warningFileName);
 				
-			};
-			castBranch(atype, func, warningFileName);
+			}
 		}
-	}
-	else if(pattern == "1007") // 텔포.
-	{
-		if(exe)
+		else if(pattern == "1009") // 불지르기
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				TeleportWrapper* t_m32 = TeleportWrapper::create();
-				pattern_container->addChild(t_m32);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(nullptr);
-			};
-			castBranch(atype, func, warningFileName);
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					int totalFrame = patternData.get("totalframe", 60*3).asInt();
+					IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
+					CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+					FlameWrapper* t_m15 = FlameWrapper::create(mainCumberPosition, (KSCumberBase*)cb, 10, totalFrame);
+					pattern_container->addChild(t_m15);
+				};
+				castBranch(atype, func, warningFileName);
+			}
 		}
-	}
-	else if(pattern == "1008") // 인비지블
-	{
-		if(exe)
+		else if(pattern == "1010") // 위성빔.
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(exe)
 			{
-				int totalFrame = patternData.get("totalframe", 300).asInt();
-				((KSCumberBase*)cb)->startInvisible(totalFrame);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(nullptr);
-				myGD->communication("CP_onPatternEndOf", cb);
-			};
-			castBranch(atype, func, warningFileName);
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					// 2.f 하는 이유는 AP12 의 myAction 이 1/60 이 아니고 1/30.f 이라서.
+					int targetingFrame = patternData.get("targetingframe", 120).asInt() / 2.f;
+					int shootFrame = patternData.get("shootframe", 180).asInt() / 2.f;
+					int random_value = rand()%2 + 1;
+					
+					IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
+					CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
+					ThunderBoltWrapper* t_m12 = ThunderBoltWrapper::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
+					pattern_container->addChild(t_m12);
+					
+					//				myGD->communication("CP_onPatternEndOf", cb);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1011") // 레이저 스캔.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					LazerScanWrapper* t_m6 = LazerScanWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t_m6);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "1012") // 방사능 라인
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					RadioactivityWrapper* t = RadioactivityWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1013") // 메테오
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					int mType = 1;
+					int number = patternData.get("number", 3).asInt();
+					
+					MeteorWrapper* t_m16 = MeteorWrapper::create(mType, number, 60, patternData.get("area", 50).asInt(),
+																											 dynamic_cast<KSCumberBase*>(cb));
+					pattern_container->addChild(t_m16);
+					
+					//				cumber->setAttackPattern(t_m16);
+					
+					//				cumber->setAttackPattern(t_m16);
+					
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
+		else if(pattern == "1014") // 떨어지는 돌
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					int totalframe = patternData.get("totalframe", 300).asInt();
+					int shootframe = patternData.get("shootframe", 30).asInt();
+					float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
+					FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(25, 25), 1);
+					pattern_container->addChild(t_m9);
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "1015") // 풍차벽.
+		{
+			if(exe)
+			{
+				int totalframe = patternData.get("totalframe", 800).asInt();
+				
+				startFirePosition = startPosition;
+				WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
+				pattern_container->addChild(t_to);
+				
+				return invalid; // 노 캐스팅
+			}
+		}
+		else if(pattern == "1016") // 다이너마이트.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				int remainSecond = patternData.get("remainsecond", 9).asInt();
+				int crashArea = patternData.get("area", 50).asInt();
+				TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, crashArea, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
+				pattern_container->addChild(t_ttb);
+				return invalid; // 노 캐스팅
+			}
+		}
+		else if(pattern == "1017") // 선을 따라가는 공격
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					AlongOfTheLineWrapper* t = AlongOfTheLineWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					//cumber->setAttackPattern(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "1018") // 폭탄 구름.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					CloudWrapper* t = CloudWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+					//cumber->setAttackPattern(t);
+					
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "1019") // 복어 공격.
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					int totalFrame = patternData.get("totalframe", 300).asInt();
+					float scale = patternData.get("scale", 2.f).asFloat();
+					((KSCumberBase*)cb)->startSwell(scale, totalFrame);
+					
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					cumber->setAttackPattern(nullptr);
+					myGD->communication("CP_onPatternEndOf", cb);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern == "1020") // 자식들 낳기 공격
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					PutChildWrapper* t = PutChildWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
+		{
+			CircleCCBPieceBase* ccbPiece = dynamic_cast<CircleCCBPieceBase*>(cb);
+			if(!ccbPiece)
+				return invalid;
 			
-		}
-	}
-	else if(pattern == "1009") // 불지르기
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			if(atype == "crash")
 			{
-				int totalFrame = patternData.get("totalframe", 60*3).asInt();
-				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
-				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-				FlameWrapper* t_m15 = FlameWrapper::create(mainCumberPosition, (KSCumberBase*)cb, 10, totalFrame);
-				pattern_container->addChild(t_m15);
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "1010") // 위성빔.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				// 2.f 하는 이유는 AP12 의 myAction 이 1/60 이 아니고 1/30.f 이라서.
-				int targetingFrame = patternData.get("targetingframe", 120).asInt() / 2.f;
-				int shootFrame = patternData.get("shootframe", 180).asInt() / 2.f;
-				int random_value = rand()%2 + 1;
+				//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
+				AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3", false, true);
+				myGD->communication("Main_showWarning", 2);
 				
-				IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
-				CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-				ThunderBoltWrapper* t_m12 = ThunderBoltWrapper::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
-				pattern_container->addChild(t_m12);
+				AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
+				//			AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
 				
-				//				myGD->communication("CP_onPatternEndOf", cb);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "1011") // 레이저 스캔.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+			}
+			else if(atype == "special")
 			{
-				LazerScanWrapper* t_m6 = LazerScanWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t_m6);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "1012") // 방사능 라인
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
+				AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
+				AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3", false, true);
+				//			AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
+			}
+			else // normal
 			{
-				RadioactivityWrapper* t = RadioactivityWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
+				myGD->communication("Main_showWarning", 1);
+				AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
+				//			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
+				//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
+				AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3", false, true);
+			}
+			ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 		}
-	}
-	else if(pattern == "1013") // 메테오
-	{
-		if(exe)
+		else
 		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				int mType = 1;
-				int number = patternData.get("number", 3).asInt();
-				
-				MeteorWrapper* t_m16 = MeteorWrapper::create(mType, number, 60, patternData.get("area", 50).asInt(),
-																										 dynamic_cast<KSCumberBase*>(cb));
-				pattern_container->addChild(t_m16);
-				
-//				cumber->setAttackPattern(t_m16);
-				
-//				cumber->setAttackPattern(t_m16);
-				
-			};
-			castBranch(atype, func, warningFileName);
-		}
-	}
-	else if(pattern == "1014") // 떨어지는 돌
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				int totalframe = patternData.get("totalframe", 300).asInt();
-				int shootframe = patternData.get("shootframe", 30).asInt();
-				float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
-				FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(25, 25), 1);
-				pattern_container->addChild(t_m9);
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "1015") // 풍차벽.
-	{
-		if(exe)
-		{
-			int totalframe = patternData.get("totalframe", 800).asInt();
-			
-			startFirePosition = startPosition;
-			WindmillObject* t_to = WindmillObject::create(ccp2ip(startPosition), totalframe);
-			pattern_container->addChild(t_to);
-			
-			return invalid; // 노 캐스팅
-		}
-	}
-	else if(pattern == "1016") // 다이너마이트.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			int remainSecond = patternData.get("remainsecond", 9).asInt();
-			int crashArea = patternData.get("area", 50).asInt();
-			TickingTimeBomb* t_ttb = TickingTimeBomb::create(ccp2ip(startPosition), 120, remainSecond, crashArea, 1, tickingArray, this, callfunc_selector(MissileParent::resetTickingTimeBomb));
-			pattern_container->addChild(t_ttb);
-			return invalid; // 노 캐스팅
-		}
-	}
-	else if(pattern == "1017") // 선을 따라가는 공격
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				AlongOfTheLineWrapper* t = AlongOfTheLineWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				//cumber->setAttackPattern(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "1018") // 폭탄 구름.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				CloudWrapper* t = CloudWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-				//cumber->setAttackPattern(t);
-				
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "1019") // 복어 공격.
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				int totalFrame = patternData.get("totalframe", 300).asInt();
-				float scale = patternData.get("scale", 2.f).asFloat();
-				((KSCumberBase*)cb)->startSwell(scale, totalFrame);
-				
-				KSCumberBase* cumber = (KSCumberBase*)cb;
-				cumber->setAttackPattern(nullptr);
-				myGD->communication("CP_onPatternEndOf", cb);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern == "1020") // 자식들 낳기 공격
-	{
-		if(exe)
-		{
-			startFirePosition = startPosition;
-			auto func = [=](CCObject* cb)
-			{
-				PutChildWrapper* t = PutChildWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
-				pattern_container->addChild(t);
-			};
-			castBranch(atype, func, warningFileName);
-			
-		}
-	}
-	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
-	{
-		CircleCCBPieceBase* ccbPiece = dynamic_cast<CircleCCBPieceBase*>(cb);
-		if(!ccbPiece)
 			return invalid;
-		
-		if(atype == "crash")
-		{
-//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_crash.mp3", false);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_crash.mp3", false, true);
-			myGD->communication("Main_showWarning", 2);
-			
-			AudioEngine::sharedInstance()->playEffect("se_castmap.mp3", true);
-//			AudioEngine::sharedInstance()->playEffect("sound_casting_crash.mp3", true);
-			
 		}
-		else if(atype == "special")
-		{
-			AudioEngine::sharedInstance()->playEffect("se_castspecial.mp3", true);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_special.mp3", false, true);
-//			AudioEngine::sharedInstance()->playEffect("sound_casting_option.mp3", true);
-		}
-		else // normal
-		{
-			myGD->communication("Main_showWarning", 1);
-			AudioEngine::sharedInstance()->playEffect("se_castmissile.mp3", true);
-//			AudioEngine::sharedInstance()->playEffect("sound_casting_attack.mp3", true);
-//			AudioEngine::sharedInstance()->playEffect("sound_attackpattern_base.mp3", false);
-			AudioEngine::sharedInstance()->playEffect("ment_cast_missile.mp3", false, true);
-		}
-		ccbPiece->runTimeline(patternData); // "at" 같은게 넘어감.
 	}
-	else
-	{
-		return invalid;
-	}
+//	else
+//	{
+//		return invalid;
+//	}
+	
 	
 	
 	//	if(!invalid)
@@ -1617,7 +1627,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	
 	jack_missile_node = CCNode::create();
 	addChild(jack_missile_node, 10);
-	
+//	lastCastTime = 0;
 	myGD->I_CCPStrCumberBaseB["MP_attackWithKSCode"] = std::bind(&MissileParent::attackWithKSCode, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_removeChargeInArray"] = std::bind(&MissileParent::removeChargeInArray, this, _1);
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
