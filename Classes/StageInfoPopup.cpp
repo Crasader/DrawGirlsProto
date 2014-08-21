@@ -146,17 +146,17 @@ void StageInfoPopup::setBack()
 	back_img->addChild(step3_rank, kSIP_Z_content);
 	
 	
-	CCLabelTTF* step1_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step1_card))->getCString(), mySGD->getFont().c_str(), 17);
-	step1_reward->setPosition(getContentPosition(kSIP_MT_step1Reward));
-	back_img->addChild(step1_reward, kSIP_Z_content);
-	
-	CCLabelTTF* step2_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step2_card))->getCString(), mySGD->getFont().c_str(), 17);
-	step2_reward->setPosition(getContentPosition(kSIP_MT_step2Reward));
-	back_img->addChild(step2_reward, kSIP_Z_content);
-	
-	CCLabelTTF* step3_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step3_card))->getCString(), mySGD->getFont().c_str(), 17);
-	step3_reward->setPosition(getContentPosition(kSIP_MT_step3Reward));
-	back_img->addChild(step3_reward, kSIP_Z_content);
+//	CCLabelTTF* step1_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step1_card))->getCString(), mySGD->getFont().c_str(), 17);
+//	step1_reward->setPosition(getContentPosition(kSIP_MT_step1Reward));
+//	back_img->addChild(step1_reward, kSIP_Z_content);
+//	
+//	CCLabelTTF* step2_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step2_card))->getCString(), mySGD->getFont().c_str(), 17);
+//	step2_reward->setPosition(getContentPosition(kSIP_MT_step2Reward));
+//	back_img->addChild(step2_reward, kSIP_Z_content);
+//	
+//	CCLabelTTF* step3_reward = CCLabelTTF::create(CCString::createWithFormat("%d", NSDS_GI(kSDS_CI_int1_reward_i, step3_card))->getCString(), mySGD->getFont().c_str(), 17);
+//	step3_reward->setPosition(getContentPosition(kSIP_MT_step3Reward));
+//	back_img->addChild(step3_reward, kSIP_Z_content);
 	
 	
 	if(mySGD->isHasGottenCards(step1_card) > 0)

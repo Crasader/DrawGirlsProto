@@ -1965,9 +1965,9 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
-			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+//			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 			
 			if(t_card["piece"].asInt() == 0 || t_card["grade"].asInt() == 0 || t_card["no"].asInt() == 0)
@@ -2184,38 +2184,38 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 				
 				Json::Value path_info = puzzle_list[i]["pathInfo"];
 				Json::Value card_info = puzzle_list[i]["cardInfo"];
-				Json::Value reward_info = puzzle_list[i]["rewardInfo"];
-				Json::Value level_info = puzzle_list[i]["levelInfo"];
+//				Json::Value reward_info = puzzle_list[i]["rewardInfo"];
+//				Json::Value level_info = puzzle_list[i]["levelInfo"];
 				Json::Value condition_info = puzzle_list[i]["conditionInfo"];
 				int start_stage = puzzle_list[i]["startStage"].asInt();
 				for(int j=0;j<path_info.size();j++)
 				{
 					NSDS_SI(start_stage+j, kSDS_SI_puzzle_i, puzzle_number, false);
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, start_stage + j, path_info[j].asInt(), false);
-					NSDS_SI(start_stage+j, kSDS_SI_level_i, level_info[j].asInt(), false);
+//					NSDS_SI(start_stage+j, kSDS_SI_level_i, level_info[j].asInt(), false);
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, start_stage+j, condition_info[j]["gold"].asInt(), false);
 					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, start_stage+j, condition_info[j]["no"].asInt(), false);
 					Json::Value t_stage_cards = card_info[j];
 					for(int k=0;k<t_stage_cards.size();k++)
 					{
 						NSDS_SI(start_stage+j, kSDS_SI_level_int1_card_i, k+1, t_stage_cards[k].asInt(), false);
-						NSDS_SI(kSDS_CI_int1_reward_i, t_stage_cards[k].asInt(), reward_info[j][k].asInt(), false);
+//						NSDS_SI(kSDS_CI_int1_reward_i, t_stage_cards[k].asInt(), reward_info[j][k].asInt(), false);
 					}
 					mySDS->fFlush(start_stage+j, kSDS_SI_base);
 				}
 				mySDS->fFlush(kSDS_CI_base);
 
-				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_x_d, puzzle_list[i]["startPosition"]["x"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_y_d, puzzle_list[i]["startPosition"]["y"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_x_d, puzzle_list[i]["endPosition"]["x"].asInt(), false);
-				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_y_d, puzzle_list[i]["endPosition"]["y"].asInt(), false);
+//				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_x_d, puzzle_list[i]["startPosition"]["x"].asInt(), false);
+//				NSDS_SI(puzzle_number, kSDS_PZ_startWarp_y_d, puzzle_list[i]["startPosition"]["y"].asInt(), false);
+//				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_x_d, puzzle_list[i]["endPosition"]["x"].asInt(), false);
+//				NSDS_SI(puzzle_number, kSDS_PZ_lastWarp_y_d, puzzle_list[i]["endPosition"]["y"].asInt(), false);
 				
-				Json::Value coordinateInfo_list = puzzle_list[i]["coordinateInfo"];
-				for(int j=0;j<coordinateInfo_list.size();j++)
-				{
-					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_x_d, start_stage+j, coordinateInfo_list[j]["x"].asInt(), false);
-					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt(), false);
-				}
+//				Json::Value coordinateInfo_list = puzzle_list[i]["coordinateInfo"];
+//				for(int j=0;j<coordinateInfo_list.size();j++)
+//				{
+//					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_x_d, start_stage+j, coordinateInfo_list[j]["x"].asInt(), false);
+//					NSDS_SI(puzzle_number, kSDS_PZ_stage_int1_y_d, start_stage+j, coordinateInfo_list[j]["y"].asInt(), false);
+//				}
 				
 //				if(puzzle_number == 1 || myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1 >= puzzle_number)
 //				{

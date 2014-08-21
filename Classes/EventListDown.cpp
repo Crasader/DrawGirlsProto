@@ -38,8 +38,8 @@ void EventListDown::resultGetEventList(Json::Value result_data)
 				NSDS_SB(event_number, kSDS_PZ_isEvent_b, event_list[i]["isEvent"].asBool(), false);
 				NSDS_SI(event_number, kSDS_PZ_startStage_i, event_list[i]["startStage"].asInt(), false);
 				NSDS_SI(event_number, kSDS_PZ_stageCount_i, event_list[i]["stageCount"].asInt(), false);
-				NSDS_SI(event_number, kSDS_PZ_point_i, event_list[i]["point"].asInt(), false);
-				NSDS_SI(event_number, kSDS_PZ_ticket_i, event_list[i]["ticket"].asInt(), false);
+//				NSDS_SI(event_number, kSDS_PZ_point_i, event_list[i]["point"].asInt(), false);
+//				NSDS_SI(event_number, kSDS_PZ_ticket_i, event_list[i]["ticket"].asInt(), false);
 				
 				Json::Value thumbnail = event_list[i]["thumbnail"];
 				if(NSDS_GS(kSDS_GI_eventList_int1_thumbnail_s, i+1) != thumbnail["image"].asString())
