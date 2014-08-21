@@ -54,6 +54,8 @@ bool EndlessModeResult::init()
 	left_table = NULL;
 	right_table = NULL;
 	
+	refresh_achieve_func = nullptr;
+	
 	addChild(KSTimer::create(0.1f, [](){FormSetter::get()->start();}));
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -360,6 +362,11 @@ void EndlessModeResult::tryTransaction()
 										  
 										  ready_loading->removeFromParent();
 										  ready_loading = NULL;
+										  
+										  if(refresh_achieve_func != nullptr)
+										  {
+											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
+										  }
 									  }
 									  else
 									  {

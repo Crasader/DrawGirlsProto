@@ -81,6 +81,8 @@ bool ClearPopup::init()
 	is_not_replay = false;
 	is_take_star_effect = false;
 	
+	refresh_achieve_func = nullptr;
+	
 	if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 		myDSH->setIntegerForKey(kDSH_Key_tutorial_flowStep, kTutorialFlowStep_homeClick);
 	
@@ -550,6 +552,10 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 										  mySGD->network_check_cnt = 0;
 										  
 										  t_loading->removeFromParent();
+										  if(refresh_achieve_func != nullptr)
+										  {
+											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
+										  }
 									  }
 									  else
 									  {

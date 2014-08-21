@@ -86,6 +86,8 @@ bool FailPopup::init()
 	is_menu_enable = false;
 	is_end_popup_animation = false;
 	
+	refresh_achieve_func = nullptr;
+	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
 	
@@ -718,6 +720,11 @@ void FailPopup::tryTransaction(CCNode* t_loading)
 										  mySGD->network_check_cnt = 0;
 										  
 										  t_loading->removeFromParent();
+										  
+										  if(refresh_achieve_func != nullptr)
+										  {
+											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
+										  }
 									  }
 									  else
 									  {

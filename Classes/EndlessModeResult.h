@@ -35,6 +35,8 @@ public:
 	
 	virtual void onEnterTransitionDidFinish();
 	
+	std::function<void()> refresh_achieve_func;
+	
 private:
 	
 	int touch_priority;
