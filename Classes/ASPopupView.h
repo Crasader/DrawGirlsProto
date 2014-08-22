@@ -14,10 +14,33 @@
 #include "StarGoldData.h"
 #include "KSLabelTTF.h"
 #include "DataStorageHub.h"
+#include <map>
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
+
+class CommonNotiDuplicateManager
+{
+public:
+	static CommonNotiDuplicateManager* sharedInstance()
+	{
+		static CommonNotiDuplicateManager* t_cndm = NULL;
+		if(t_cndm == NULL)
+		{
+			t_cndm = new CommonNotiDuplicateManager();
+		}
+		return t_cndm;
+	}
+	
+	bool isOnTag(int t_tag);
+	void onTagAction(int t_tag);
+	void addTagFunction(int t_tag, function<void()> t_func);
+	
+private:
+	
+	map<int, vector<function<void()>>> on_tag_list;
+};
 
 class ASPopupView : public CCLayer
 {
@@ -106,6 +129,9 @@ public:
 	static ASPopupView* getCommonNoti(int t_touch_priority, string t_title, CCNode* ment_label,
 																		function<void()> close_func,
 																		float titleFontSize, CCPoint t_position, bool Xbutton, bool towButton,function<void()> close_func2);
+	
+	static ASPopupView* getCommonNotiTag(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, int t_tag); // 같은 태그 중복 제거
+	
 	bool is_menu_enable;
 	vector<function<void()>> button_func_list;
 	
@@ -117,8 +143,11 @@ protected:
 	CCNode* m_container;
 	int touch_priority;
 	
+	int duplicate_tag;
+	
 	void myInit(int t_touch_priority)
 	{
+		duplicate_tag = -1;
 		is_menu_enable = false;
 		touch_priority = t_touch_priority;
 		setTouchEnabled(true);

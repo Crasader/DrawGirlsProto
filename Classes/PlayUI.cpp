@@ -3611,7 +3611,7 @@ void PlayUI::myInit ()
 	if(clr_cdt_type == kCLEAR_hellMode)
 		counting_label_init_value = 0;
 	else
-		playtime_limit.getV()-countingCnt.getV()+1;
+		counting_label_init_value = playtime_limit.getV()-countingCnt.getV()+1;
 	
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", counting_label_init_value)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
