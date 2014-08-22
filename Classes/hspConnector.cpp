@@ -131,7 +131,7 @@ extern "C"{
 //				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
 			}
 		});
-	} 
+	}
 }
 #endif
 

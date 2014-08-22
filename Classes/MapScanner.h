@@ -338,6 +338,7 @@ enum MSzorder{
 	visibleZorder,
 	blockZorder,
 //	topBottomZorder,
+	gainEffectZorder,
 	boarderZorder
 };
 
@@ -390,8 +391,10 @@ private:
 	SEL_CallFunc start_delegate;
 	
 	void resetRects(bool is_after_scanmap);
+	CCArray* getGainRects(mapType (*gainMap)[217]);
+	mapType mapInitState[162][217];
 	
-	IntRect* newRectChecking(IntMoveState start);
+	IntRect* newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start);
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	
@@ -427,7 +430,7 @@ private:
 	bool is_removed_top_block, is_removed_bottom_block;
 	int remove_block_cnt;
 	
-	vector<pair<IntPoint, mapType>> checkingIndex;
+//	vector<pair<IntPoint, mapType>> checkingIndex;
 	void startRemoveBlock();
 	
 	void removingBlock();

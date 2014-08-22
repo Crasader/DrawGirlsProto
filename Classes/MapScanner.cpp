@@ -327,9 +327,14 @@ void MapScanner::scanMap()
 	
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
+	
+	/////////////////////////////////// by HS Start
+	// 새로 얻은 영역에 대한 정보 처리.
 	CCLOG("process step 4 / time : %f", elapsed_seconds.count());
 	start = chrono::system_clock::now();
 	
+	mapType mapGainState[162][217];
+	memcpy(mapGainState, mapInitState, sizeof(mapType) * 162 * 217);
 	// outside recovery and new inside add show
 	int newInsideCnt = 0;
 	int sil_inside_cnt = 0;
@@ -339,23 +344,54 @@ void MapScanner::scanMap()
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
-			if(dgPointer->mapState[i][j] == mapScaningEmptySide)
-				dgPointer->mapState[i][j] = mapEmpty;
-			else if(dgPointer->mapState[i][j] == mapRealNewline)
+			auto mapValue = &dgPointer->mapState[i][j];
+			switch(*mapValue)
 			{
-				dgPointer->mapState[i][j] = mapOldline;
-				newInsideCnt++;
-				if(sd->silData[i][j])		sil_inside_cnt++;
-				else						empty_inside_cnt++;
-			}
-			else if(dgPointer->mapState[i][j] == mapNewget)
-			{
-				dgPointer->mapState[i][j] = mapOldget;
-				newInsideCnt++;
-				if(sd->silData[i][j])		sil_inside_cnt++;
-				else						empty_inside_cnt++;
+				case mapScaningEmptySide:
+					*mapValue = mapEmpty;
+					mapGainState[i][j] = mapEmpty;
+					break;
+				case mapRealNewline:
+					*mapValue = mapOldline;
+					mapGainState[i][j] = mapOldline;
+					newInsideCnt++;
+					if(sd->silData[i][j])		sil_inside_cnt++;
+					else						empty_inside_cnt++;
+
+					break;
+				case mapNewget:
+					*mapValue = mapOldget;
+					mapGainState[i][j] = mapOldget;
+					newInsideCnt++;
+					if(sd->silData[i][j])		sil_inside_cnt++;
+					else						empty_inside_cnt++;
+
+					break;
 			}
 		}
+	}
+	
+	CCArray* intRects = getGainRects(mapGainState);
+	{
+		// 여기서 IntRects 를 돌면서 그리면 될 듯 함!
+		int rects = intRects->count();
+		for(int i=0; i<rects; i++)
+		{
+			IntRect* rect = (IntRect*)intRects->objectAtIndex(i);
+//			CCLOG("%d %d %d %d", rect->origin.x, rect->origin.y, rect->origin.x + rect->size.width, rect->origin.y + rect->size.height);
+			CCSprite* gainRectSprite = CCSprite::create();
+			gainRectSprite->setAnchorPoint(ccp(0, 0));
+			gainRectSprite->setTextureRect(CCRectMake(rect->origin.x, rect->origin.y, rect->size.width, rect->size.height));
+			gainRectSprite->setPosition(ccp(rect->origin.x, rect->origin.y));
+			addChild(gainRectSprite, gainEffectZorder);
+			addChild(KSGradualValue<float>::create(200, 0, 1.5f, [=](float t){
+				gainRectSprite->setOpacity(t);
+			}, [=](float t){
+				gainRectSprite->setOpacity(t);
+				gainRectSprite->removeFromParent();
+			}));
+		}
+//		CCLOG("NEW RECT END");
 	}
 	
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -374,9 +410,12 @@ void MapScanner::scanMap()
 			   dgPointer->mapState[i+1][j] != mapOutline && dgPointer->mapState[i+1][j-1] != mapOutline)
 			{
 				dgPointer->mapState[i][j] = mapOldget;
+//				mapGainState[i][j] = mapOldget;
 			}
 		}
 	}
+	
+	
 	
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
@@ -448,13 +487,46 @@ void MapScanner::scanMap()
 
 }
 
+CCArray* MapScanner::getGainRects(mapType (*gainMap)[217])
+{
+	vector<pair<IntPoint, mapType>> checkingIndex;
+	CCArray* rects = CCArray::createWithCapacity(30);
+	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+	{
+		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+		{
+			if(gainMap[i][j] == mapOldget || gainMap[i][j] == mapOldline)
+			{
+				IntRect* t_rect = newRectChecking(gainMap, &checkingIndex, IntMoveState(i, j, directionRightUp));
+				rects->addObject(t_rect);
+			}
+		}
+	}
+	
+	// newRectChecking 에서 mapScaningCheckLine mapScaningCheckGet 이 대입된 인덱스를 가져 오는게 속도 면에서 나을 듯??
+	for(auto& check : checkingIndex)
+	{
+		auto checkValue = &gainMap[check.first.x][check.first.y];
+		switch(check.second)
+		{
+			case mapScaningCheckLine:
+				*checkValue = mapOldline;
+				break;
+				
+			case mapScaningCheckGet:
+				*checkValue = mapOldget;
+				break;
+		}
+	}
+	return rects;
+}
 void MapScanner::resetRects(bool is_after_scanmap)
 {
 //	chrono::time_point<chrono::system_clock> start, end;
 //	chrono::duration<double> elapsed_seconds;
 //	start = chrono::system_clock::now();
 	
-	checkingIndex.clear();
+	vector<pair<IntPoint, mapType>> checkingIndex;
 	auto gdPointer = myGD;
 	// view rects reset
 	CCArray* rects = CCArray::createWithCapacity(256);
@@ -464,7 +536,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		{
 			if(gdPointer->mapState[i][j] == mapOldget || gdPointer->mapState[i][j] == mapOldline)
 			{
-				IntRect* t_rect = newRectChecking(IntMoveState(i, j, directionRightUp));
+				IntRect* t_rect = newRectChecking(gdPointer->mapState, &checkingIndex, IntMoveState(i, j, directionRightUp));
 				rects->addObject(t_rect);
 			}
 		}
@@ -485,19 +557,19 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		{
 			case mapScaningCheckLine:
 				*checkValue = mapOldline;
-				if(mySD->silData[check.first.x][check.first.y])
-				{
-					drawCellCnt++;
-				}
+//				if(mySD->silData[check.first.x][check.first.y])
+//				{
+//					drawCellCnt++;
+//				}
 				
 				break;
 				
 			case mapScaningCheckGet:
 				*checkValue = mapOldget;
-				if(mySD->silData[check.first.x][check.first.y])
-				{
-					drawCellCnt++;
-				}
+//				if(mySD->silData[check.first.x][check.first.y])
+//				{
+//					drawCellCnt++;
+//				}
 				
 				break;
 		}
@@ -538,9 +610,9 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	}
 }
 
-IntRect* MapScanner::newRectChecking(IntMoveState start)
+IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start)
 {
-	auto gdPointer = myGD;
+//	auto gdPointer = myGD;
 	IntPoint origin = IntPoint(start.origin.x, start.origin.y);
 	IntSize size = IntSize(0, 0);
 	
@@ -575,20 +647,18 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 			if(t_ms.direction == directionRight && !isRighter)
 				continue;
 		
-			auto root = &gdPointer->mapState[t_ms.origin.x][t_ms.origin.y];
+			auto root = &mapArray[t_ms.origin.x][t_ms.origin.y];
 			switch(*root)
 			{
 				case mapOldget:
 					*root = mapScaningCheckGet;
-//					checkingIndex.push_back(t_ms.origin);
-					checkingIndex.push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+					if(checkingIndex)
+						checkingIndex->push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
 					break;
 				case mapOldline:
 					*root = mapScaningCheckLine;
-//					make_pair<int, int>(3, 5);
-//					make_pair<IntPoint, int>(0, t_ms.origin);
-					
-					checkingIndex.push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+					if(checkingIndex)
+						checkingIndex->push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
 					break;
 			}
 			
@@ -598,7 +668,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 					if(isUpper)
 					{
 						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-						auto checkValue = gdPointer->mapState[n_msUp.origin.x][n_msUp.origin.y];
+						auto checkValue = mapArray[n_msUp.origin.x][n_msUp.origin.y];
 						if((checkValue == mapOldline ||
 								checkValue == mapOldget) && n_msUp.origin.isInnerMap())
 						{
@@ -614,7 +684,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 					if(isRighter)
 					{
 						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-						auto checkValue = gdPointer->mapState[n_msRight.origin.x][n_msRight.origin.y];
+						auto checkValue = mapArray[n_msRight.origin.x][n_msRight.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap())
 						{
 							nextLoopArray.enqueue(n_msRight);
@@ -629,7 +699,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 					if(isUpper)
 					{
 						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-						auto checkValue = gdPointer->mapState[n_msUp.origin.x][n_msUp.origin.y];
+						auto checkValue = mapArray[n_msUp.origin.x][n_msUp.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msUp.origin.isInnerMap() )
 						{
 							nextLoopArray.enqueue(n_msUp);
@@ -640,7 +710,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 					if(isRighter)
 					{
 						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-						auto checkValue = gdPointer->mapState[n_msRight.origin.x][n_msRight.origin.y];
+						auto checkValue = mapArray[n_msRight.origin.x][n_msRight.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap() )
 						{
 							nextLoopArray.enqueue(n_msRight);
@@ -651,7 +721,7 @@ IntRect* MapScanner::newRectChecking(IntMoveState start)
 					if(upable && rightable)
 					{
 						IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
-						auto checkValue = gdPointer->mapState[n_msRightUp.origin.x][n_msRightUp.origin.y];
+						auto checkValue = mapArray[n_msRightUp.origin.x][n_msRightUp.origin.y];
 						if((checkValue == mapOldline ||
 								checkValue == mapOldget) && n_msRightUp.origin.isInnerMap() )
 						{
@@ -1659,6 +1729,16 @@ void MapScanner::myInit()
 	setMapImg();
 	
 	
+	for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)
+	{
+		for(int j=mapHeightOutlineBegin;j<mapHeightOutlineEnd;j++)
+		{
+			if(i == mapWidthOutlineBegin || j == mapHeightOutlineBegin || i == mapWidthOutlineEnd-1 || j == mapHeightOutlineEnd-1)
+				mapInitState[i][j] = mapOutline;
+			else
+				mapInitState[i][j] = mapEmpty;
+		}
+	}
 }
 
 InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
