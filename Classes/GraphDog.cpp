@@ -677,49 +677,22 @@ void GraphDog::receivedCommand(float dt)
 				
 				CCLOG("commands.chunk.resultCode != CURLE_OK");
 				//다시시도하시겠습니까 팝업펑크가 있으면 띄운다.
-				if(commandRetryFunc!=nullptr){
+				if(commandRetryFunc!=nullptr && commands.errorCnt>=0){
 					CCLOG("commandRetryFunc!=nullptr");
 					std::vector<CommandParam> vcp;
 					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)
 					{
-						if(commands.errorCnt<0){
-							Json::Value resultobj;
-							CommandType command = iter->second;
-							resultobj["state"] = "error";
-							resultobj["errorMsg"] = "check your network state";
-							resultobj["errorCode"] = 1002;
-							resultobj["result"]["code"]=GDCHECKNETWORK;
-							
-							//callbackparam
-							if(command.paramStr!=""){
-								//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
-								Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
-								//@ resultobj["param"]=JsonBox::Value(param);
-								resultobj["param"]=param;
-							}
-							
-							CCLOG("graphdog:: error call func for %s",command.action.c_str());
-							if(command.func!=NULL){
-								command.func(resultobj);
-							}
-							
-						}else{
-							Json::Value param;
-							param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-							CommandParam cp;
-							cp.action = iter->second.action;
-							cp.param = param;
-							cp.func=iter->second.func;
-							vcp.push_back(cp);
-						
-						}
+						Json::Value param;
+						param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+						CommandParam cp;
+						cp.action = iter->second.action;
+						cp.param = param;
+						cp.func=iter->second.func;
+						vcp.push_back(cp);
 					}
 					
 					CCLOG("commands.errorCnt<=1");
-					if(commands.errorCnt<0){
-						
-						
-					}else if(commands.errorCnt<=1){
+					if(commands.errorCnt<=1){
 						CCLOG("commands.chunk.resultCode != CURLE_OK");
 						this->command(vcp,commands.errorCnt+1);
 					}else{
