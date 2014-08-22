@@ -4628,7 +4628,7 @@ void MainFlowScene::countingMessage()
 									 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
 									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
 									 TRACE();
-								 });
+								 }, -1);
 	TRACE();
 }
 
