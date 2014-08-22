@@ -137,13 +137,13 @@ public:
 	
 	void buttonAction(CCObject* sender, CCControlEvent t_event);
 	
+	int duplicate_tag;
+	
 protected:
 	CCSprite* dimmed_sprite;
 	CCPoint base_position;
 	CCNode* m_container;
 	int touch_priority;
-	
-	int duplicate_tag;
 	
 	void myInit(int t_touch_priority)
 	{

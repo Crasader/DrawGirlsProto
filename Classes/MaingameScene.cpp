@@ -61,7 +61,8 @@ CCScene* Maingame::scene()
 Maingame::~Maingame()
 {
 	mySGD->is_on_maingame = false;
-	sub_thumbs->release();
+	if(sub_thumbs)
+		sub_thumbs->release();
 }
 
 bool Maingame::init()
@@ -74,6 +75,8 @@ bool Maingame::init()
 	
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
+	
+	sub_thumbs = NULL;
 	
 	damaged_score = 0;
 	

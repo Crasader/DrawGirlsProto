@@ -324,7 +324,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 }
 //@ bool GraphDog::command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector){
 //@@bool GraphDog::command(string action, const Json::Value param,CCObject *target,GDSelType selector){
-bool GraphDog::command(string action, const Json::Value param,function<void(Json::Value)> func){
+bool GraphDog::command(string action, const Json::Value param,function<void(Json::Value)> func,int errorCnt){
 	CommandParam cp;
 	cp.action = action;
 	if(param != 0){
@@ -336,7 +336,7 @@ bool GraphDog::command(string action, const Json::Value param,function<void(Json
 	cp.func=func;
 	std::vector<CommandParam> p;
 	p.push_back(cp);
-	this->command(p);
+	this->command(p,errorCnt);
 	return true;
 }
 
@@ -677,7 +677,7 @@ void GraphDog::receivedCommand(float dt)
 				
 				CCLOG("commands.chunk.resultCode != CURLE_OK");
 				//다시시도하시겠습니까 팝업펑크가 있으면 띄운다.
-				if(commandRetryFunc!=nullptr){
+				if(commandRetryFunc!=nullptr && commands.errorCnt>=0){
 					CCLOG("commandRetryFunc!=nullptr");
 					std::vector<CommandParam> vcp;
 					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)

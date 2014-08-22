@@ -79,6 +79,8 @@ void NoticeContent::loadNotice(){
 		content_label->setVisible(true);
 		title_label->setVisible(true);
 		is_menu_enable=true;
+		
+		loadedAction();
 	}else if(show_content==NULL){
 		//그림모드
 		is_menu_enable=false;
