@@ -102,6 +102,7 @@ void NoticeContent::loadNotice(){
 		content_label->setVisible(false);
 		title_label->setVisible(false);
 		is_menu_enable = true;
+		loadedAction();
 	}
 }
 void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, Json::Value t_noti_list)

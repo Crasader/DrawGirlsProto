@@ -973,6 +973,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		//		WithdrawPopup* t_wp = WithdrawPopup::create(this, callfunc_selector(OptionPopup::popupClose));
 		//		addChild(t_wp, kOP_Z_popup);
 		
+		TRACE();
 		ASPopupView* t_popup = ASPopupView::create(-300);
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -1059,12 +1060,17 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 reader->release();
 														 
 														 Json::Value param;
+														 TRACE();
 														 param["memberID"] = hspConnector::get()->getSocialID();// hspConnector::get()->myKakaoInfo["user_id"].asString(); 기능 제거한다고 하면서 그래프도그가 수정됨
 														 hspConnector::get()->command("dropoutuser", param, [=](Json::Value result_data)
 																													{
+																														TRACE();
+
 																														if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																														{
+																															TRACE();
 																															hspConnector::get()->withdrawAccount([](Json::Value p){
+																																TRACE();
 																																myDSH->clear();
 																																myDSH->resetDSH();
 																																mySGD->withdraw();
@@ -1074,6 +1080,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 																														}
 																														else
 																														{
+																															KS::KSLog("%", result_data["result"]);
+																															TRACE();
 																															loading_progress_img->removeFromParent();
 																															close_button->setEnabled(true);
 																															ok_button->setEnabled(true);
