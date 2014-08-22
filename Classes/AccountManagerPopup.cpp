@@ -200,6 +200,8 @@ bool AccountManagerPopup::init(int touchP)
 		CCLog("another!!!");
 		Json::Value param;
 		param["memberID"] = prevMemberNo;
+		param["retry"] = true;
+		param["passCode"] = GDDONTFINDUSER;
 //#if __ANDROID__
 //#else
 ////		param["memberID"] = myHSP->getMemberID();
@@ -387,31 +389,70 @@ bool AccountManagerPopup::init(int touchP)
 			else
 			{
 				// 원래는 에러가 떠야 하지만 원래 없었던 데이터 처럼 로그인 시킴.
+				LoadingLayer* ll = LoadingLayer::create(touchP - 100);
+				addChild(ll, INT_MAX);
+				hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
+					ll->removeFromParent();
+					KS::KSLog("force %", t);
+					if(t["error"]["isSuccess"].asInt())
+					{
+						mySGD->resetLabels();
+						myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+						std::string msg;
+						
+						if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+						{
+							msg = ccsf(getLocal(LK::kUnlinkAccount1),
+												 descMapper.at(loginType).c_str());
+						}
+						msg += ccsf(getLocal(LK::kLinkAccount1),
+												tryName.c_str()
+												);
+						auto content = StyledLabelTTF::create(msg.c_str(),
+																									mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						content->setAnchorPoint(ccp(0.5f, 0.5f));
+						
+						ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																														 content,
+																														 [=]()
+																														 {
+																															 CCLOG("ttTT");
+																															 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																														 });
+						addChild(alert);
+
+					}
+					else
+					{
+						
+					}
+				});
+				
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-				mySGD->resetLabels();
-				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-				std::string msg;
-				
-				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
-				{
-					msg = ccsf(getLocal(LK::kUnlinkAccount1),
-										 descMapper.at(loginType).c_str());
-				}
-				msg += ccsf(getLocal(LK::kLinkAccount1),
-										tryName.c_str()
-										);
-				auto content = StyledLabelTTF::create(msg.c_str(),
-																							mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-				content->setAnchorPoint(ccp(0.5f, 0.5f));
-				
-				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
-																												 content,
-																												 [=]()
-																												 {
-																													 CCLOG("ttTT");
-																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-																												 });
-				addChild(alert);
+//				mySGD->resetLabels();
+//				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+//				std::string msg;
+//				
+//				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
+//				{
+//					msg = ccsf(getLocal(LK::kUnlinkAccount1),
+//										 descMapper.at(loginType).c_str());
+//				}
+//				msg += ccsf(getLocal(LK::kLinkAccount1),
+//										tryName.c_str()
+//										);
+//				auto content = StyledLabelTTF::create(msg.c_str(),
+//																							mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//				content->setAnchorPoint(ccp(0.5f, 0.5f));
+//				
+//				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+//																												 content,
+//																												 [=]()
+//																												 {
+//																													 CCLOG("ttTT");
+//																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+//																												 });
+//				addChild(alert);
 
 //				auto st = StyledLabelTTF::create(getLocal(LK::kNetworkError),
 //															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
