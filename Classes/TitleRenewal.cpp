@@ -636,6 +636,9 @@ void TitleRenewalScene::successLogin()
 	Json::Value commonsetting_param;
 	command_list.push_back(CommandParam("getcommonsetting", commonsetting_param, json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
+	Json::Value puzzleevent_param;
+	command_list.push_back(CommandParam("getpuzzleevent", puzzleevent_param, json_selector(this, TitleRenewalScene::resultGetPuzzleEvent)));
+	
 	Json::Value achievelist_param;
 	achievelist_param["version"] = NSDS_GI(kSDS_AI_version_i);
 	command_list.push_back(CommandParam("getarchivementlist", achievelist_param, json_selector(this, TitleRenewalScene::resultGetAchieveList)));
@@ -998,6 +1001,23 @@ void TitleRenewalScene::changeTipMent()
 	addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
 }
 
+void TitleRenewalScene::resultGetPuzzleEvent(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->setEventString(result_data["data"]["title"].asString());
+		mySGD->setSpecialEventPuzzleNumber(result_data["data"]["puzzleNo"].asInt());
+	}
+	else
+	{
+		is_receive_fail = true;
+		command_list.push_back(CommandParam("getpuzzleevent", Json::Value(), json_selector(this, TitleRenewalScene::resultGetPuzzleEvent)));
+	}
+	
+	receive_cnt--;
+	checkReceive();
+}
+
 void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -1083,14 +1103,12 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setPuzzlePerfectRewardRuby(result_data["puzzlePerfectRewardRuby"].asInt());
 		mySGD->setEndlessMinPiece(result_data["endlessMinPiece"].asInt());
 		
-		mySGD->setEventString(result_data["eventString"].asString());
 		mySGD->setIsAlwaysSavePlaydata(result_data["isAlwaysSavePlaydata"].asInt());
 		mySGD->setPlayContinueFeeEndless(result_data["playContinueFeeEndless"].asInt());
 		
 		mySGD->setAllClearReward(result_data["allClearReward"].asString());
 		mySGD->setClearTakeCardCnt(result_data["clearTakeCardCnt"].asInt());
 		mySGD->setUnlockFrameCnt(result_data["unlockFrameCnt"].asInt());
-		mySGD->setSpecialEventPuzzleNumber(result_data["specialEventPuzzleNumber"].asInt());
 		mySGD->setSendPvpPlayDataRate(result_data["sendPvpPlayDataRate"].asInt());
 	}
 	else

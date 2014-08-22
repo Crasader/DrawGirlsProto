@@ -3342,14 +3342,17 @@ void MainFlowScene::setBottom()
 
 	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
 	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
-	//	KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-	//	n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-5,18));
-	//	n_event_ment->setAnchorPoint(ccp(1,0.5));
-	//	n_etc_img->addChild(n_event_ment);
 	
 	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
 	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
 	n_etc_img->addChild(n_event_ment_case);
+	
+	if(puzzle_number)
+	{
+		KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+		n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f);
+		n_event_ment_case->addChild(n_event_ment);
+	}
 	
 	
 	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
@@ -3357,13 +3360,17 @@ void MainFlowScene::setBottom()
 		s_etc_img->setColor(ccGRAY);
 	else
 		s_etc_img->setColor(ccc3(50, 50, 50));
-	//	KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-	//	s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,25));
-	//	s_etc_img->addChild(s_event_ment);
 	
 	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
 	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
 	s_etc_img->addChild(s_event_ment_case);
+	
+	if(puzzle_number)
+	{
+		KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+		s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f);
+		s_event_ment_case->addChild(s_event_ment);
+	}
 	
 	
 	CCMenuLambda* etc_menu = CCMenuLambda::create();
