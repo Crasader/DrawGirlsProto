@@ -1982,7 +1982,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
 //			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
 //			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
@@ -1995,40 +1995,40 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			
 			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
-			Json::Value t_card_missile = t_card["missile"];
-			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
-			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
-			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
-			
-			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
-			
-			Json::Value t_ability = t_card["ability"];
-			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
-			for(int j=0;j<t_ability.size();j++)
-			{
-				Json::Value t_abil = t_ability[j];
-				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
-				
-				Json::Value t_option;
-				if(!t_abil["option"].isObject())                    t_option["key"]="value";
-				else												t_option =t_abil["option"];
-				
-				if(t_abil["type"].asInt() == kIC_attack)
-					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_addTime)
-					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_fast)
-					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_silence)
-					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_doubleItem)
-					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_longTime)
-					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
-				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
-					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
-			}
+//			Json::Value t_card_missile = t_card["missile"];
+//			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
+//			NSDS_SI(kSDS_CI_int1_missile_power_i, t_card["no"].asInt(), t_card_missile["power"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_missile_dex_i, t_card["no"].asInt(), t_card_missile["dex"].asInt(), false);
+//			NSDS_SD(kSDS_CI_int1_missile_speed_d, t_card["no"].asInt(), t_card_missile["speed"].asDouble(), false);
+//			
+//			NSDS_SS(kSDS_CI_int1_passive_s, t_card["no"].asInt(), t_card["passive"].asString().c_str(), false);
+//			
+//			Json::Value t_ability = t_card["ability"];
+//			NSDS_SI(kSDS_CI_int1_abilityCnt_i, t_card["no"].asInt(), int(t_ability.size()), false);
+//			for(int j=0;j<t_ability.size();j++)
+//			{
+//				Json::Value t_abil = t_ability[j];
+//				NSDS_SI(kSDS_CI_int1_ability_int2_type_i, t_card["no"].asInt(), t_abil["type"].asInt(), t_abil["type"].asInt(), false);
+//				
+//				Json::Value t_option;
+//				if(!t_abil["option"].isObject())                    t_option["key"]="value";
+//				else												t_option =t_abil["option"];
+//				
+//				if(t_abil["type"].asInt() == kIC_attack)
+//					NSDS_SI(kSDS_CI_int1_abilityAttackOptionPower_i, t_card["no"].asInt(), t_option["power"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_addTime)
+//					NSDS_SI(kSDS_CI_int1_abilityAddTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_fast)
+//					NSDS_SI(kSDS_CI_int1_abilityFastOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_silence)
+//					NSDS_SI(kSDS_CI_int1_abilitySilenceOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_doubleItem)
+//					NSDS_SI(kSDS_CI_int1_abilityDoubleItemOptionPercent_i, t_card["no"].asInt(), t_option["percent"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_longTime)
+//					NSDS_SI(kSDS_CI_int1_abilityLongTimeOptionSec_i, t_card["no"].asInt(), t_option["sec"].asInt(), false);
+//				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
+//					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
+//			}
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			

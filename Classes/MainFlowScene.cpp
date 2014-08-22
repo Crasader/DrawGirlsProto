@@ -3359,7 +3359,7 @@ void MainFlowScene::setBottom()
 	if(puzzle_number)
 		s_etc_img->setColor(ccGRAY);
 	else
-		s_etc_img->setColor(ccc3(50, 50, 50));
+		((GraySprite*)s_etc_img)->setDeepGray(!puzzle_number);
 	
 	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
 	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
