@@ -324,7 +324,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 }
 //@ bool GraphDog::command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector){
 //@@bool GraphDog::command(string action, const Json::Value param,CCObject *target,GDSelType selector){
-bool GraphDog::command(string action, const Json::Value param,function<void(Json::Value)> func){
+bool GraphDog::command(string action, const Json::Value param,function<void(Json::Value)> func,int errorCnt){
 	CommandParam cp;
 	cp.action = action;
 	if(param != 0){
@@ -336,7 +336,7 @@ bool GraphDog::command(string action, const Json::Value param,function<void(Json
 	cp.func=func;
 	std::vector<CommandParam> p;
 	p.push_back(cp);
-	this->command(p);
+	this->command(p,errorCnt);
 	return true;
 }
 
@@ -682,17 +682,44 @@ void GraphDog::receivedCommand(float dt)
 					std::vector<CommandParam> vcp;
 					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)
 					{
-						Json::Value param;
-						param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-						CommandParam cp;
-						cp.action = iter->second.action;
-						cp.param = param;
-						cp.func=iter->second.func;
-						vcp.push_back(cp);
+						if(commands.errorCnt<0){
+							Json::Value resultobj;
+							CommandType command = iter->second;
+							resultobj["state"] = "error";
+							resultobj["errorMsg"] = "check your network state";
+							resultobj["errorCode"] = 1002;
+							resultobj["result"]["code"]=GDCHECKNETWORK;
+							
+							//callbackparam
+							if(command.paramStr!=""){
+								//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
+								Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
+								//@ resultobj["param"]=JsonBox::Value(param);
+								resultobj["param"]=param;
+							}
+							
+							CCLOG("graphdog:: error call func for %s",command.action.c_str());
+							if(command.func!=NULL){
+								command.func(resultobj);
+							}
+							
+						}else{
+							Json::Value param;
+							param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+							CommandParam cp;
+							cp.action = iter->second.action;
+							cp.param = param;
+							cp.func=iter->second.func;
+							vcp.push_back(cp);
+						
+						}
 					}
 					
 					CCLOG("commands.errorCnt<=1");
-					if(commands.errorCnt<=1){
+					if(commands.errorCnt<0){
+						
+						
+					}else if(commands.errorCnt<=1){
 						CCLOG("commands.chunk.resultCode != CURLE_OK");
 						this->command(vcp,commands.errorCnt+1);
 					}else{

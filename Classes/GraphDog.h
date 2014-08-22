@@ -140,7 +140,7 @@ public:
 	
 	//@@    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
 	
-	bool command(string action, const Json::Value param,function<void(Json::Value)> func);
+	bool command(string action, const Json::Value param,function<void(Json::Value)> func,int errorCnt=0);
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
   
