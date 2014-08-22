@@ -395,6 +395,7 @@ ASPopupView* ASPopupView::getCommonNotiTag(int t_touch_priority, string t_title,
 	if(!is_on_tag)
 	{
 		t_popup = getCommonNoti(t_touch_priority, t_title, t_comment, close_func);
+		t_popup->duplicate_tag = t_tag;
 	}
 	
 	t_cndm->addTagFunction(t_tag, close_func);

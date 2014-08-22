@@ -575,7 +575,7 @@ bool PuzzleScene::init()
 															  mySGD->network_check_cnt = 0;
 															  
 															  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
-																  myHSP->command(this->clear_command_list);
+																  myHSP->command(this->clear_command_list, -1);
 															  }, 1);
 															  
 //															  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
@@ -588,7 +588,7 @@ bool PuzzleScene::init()
 														  {
 															  addChild(KSTimer::create(0.5f, [=]()
 																					   {
-																						   myHSP->command(this->clear_command_list);
+																						   myHSP->command(this->clear_command_list, -1);
 																					   }));
 														  }
 													  }
@@ -753,7 +753,7 @@ bool PuzzleScene::init()
 		}
 		
 		TRACE();
-		myHSP->command(clear_command_list);
+		myHSP->command(clear_command_list, -1);
 	}
 	
 	
@@ -3399,7 +3399,7 @@ void PuzzleScene::countingMessage()
 																 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
 																 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
 																 TRACE();
-															 });
+															 }, -1);
     TRACE();
 }
 

@@ -1060,7 +1060,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 	else
 	{
 		TRACE();
-		hspConnector::get()->command(send_command_list); // 987987987
+//		hspConnector::get()->command(send_command_list, -1); // 987987987
 		
 //		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 //		fail_label->setPosition(loading_img->getPosition());

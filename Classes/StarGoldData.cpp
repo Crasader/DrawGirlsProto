@@ -2642,7 +2642,7 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 		transaction_list.push_back(command_list[i]);
 	}
 	
-	hspConnector::get()->command(transaction_list);
+	hspConnector::get()->command(transaction_list, -1);
 }
 
 void StarGoldData::linkChangeHistory(Json::Value result_data)
