@@ -183,12 +183,12 @@ public:
 		GraphDog::get()->setup("drawgirls_tstore", "12345678","", pGraphdogVersion);
 	}
 	
-	bool command(const std::vector<CommandParam>& params){
-		return graphdog->command(params);
+	bool command(const std::vector<CommandParam>& params, int errorCnt=0){
+		return graphdog->command(params,errorCnt);
 	}
 	
-	bool command(const char* action, const Json::Value param,function<void(Json::Value)> func){
-		return graphdog->command(action,param,func);
+	bool command(const char* action, const Json::Value param,function<void(Json::Value)> func, int errorCnt=0){
+		return graphdog->command(action,param,func,errorCnt);
 	}
 	bool command(const char* action, const Json::Value param,CCObject* obj,function<void(Json::Value)> func){
 		return graphdog->command(action,param,obj,func);
