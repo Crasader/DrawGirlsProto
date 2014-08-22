@@ -37,7 +37,7 @@ public class PurchaseCBImpl implements PurchaseCB {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-//        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
+        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
         } else {
             // 결제 실패
 //        	Log.d("litqoo", "결제 실패" + Integer.toString(hspResult.getCode()));

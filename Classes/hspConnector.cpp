@@ -113,8 +113,25 @@ extern "C"{
 		//env->ReleaseStringUTFChars(revStr2, revStr);
 		
 	}
-
-	
+	void Java_com_litqoo_lib_hspConnector_requestItemDeliveryNative(JNIEnv *env, jobject thiz)
+	{
+		jboolean isCopy = JNI_FALSE;
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getMemberID();
+		GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+			if(t["result"]["code"].asInt() == GDSUCCESS)
+			{
+			}
+			else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
+			{
+//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+			}
+			else
+			{
+//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+			}
+		});
+	} 
 }
 #endif
 
@@ -442,10 +459,10 @@ string hspConnector::getServerAddress(){
 	}
 	
 	r = "http://"+r;
+	r = "http://182.162.201.147:10010";
 #endif
 	
 	
-	//r = "http://182.162.201.147:10010";
 	return r.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
