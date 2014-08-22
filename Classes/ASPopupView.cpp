@@ -16,6 +16,46 @@
 #include "CommonAnimation.h"
 
 
+bool CommonNotiDuplicateManager::isOnTag(int t_tag)
+{
+	auto iter = on_tag_list.find(t_tag);
+	if(iter == on_tag_list.end())
+		return false;
+	else
+		return true;
+}
+
+void CommonNotiDuplicateManager::onTagAction(int t_tag)
+{
+	auto iter = on_tag_list.find(t_tag);
+	if(iter != on_tag_list.end())
+	{
+		// vector<function<void()>> iter->second
+		int loop_cnt = iter->second.size();
+		for(int i=0;i<loop_cnt;i++)
+		{
+			iter->second[i]();
+		}
+		on_tag_list.erase(iter);
+	}
+}
+
+void CommonNotiDuplicateManager::addTagFunction(int t_tag, function<void()> t_func)
+{
+	auto iter = on_tag_list.find(t_tag);
+	if(iter != on_tag_list.end())
+	{
+		iter->second.push_back(t_func);
+	}
+	else
+	{
+		vector<function<void()>> func_list;
+		func_list.clear();
+		func_list.push_back(t_func);
+		on_tag_list[t_tag] = func_list;
+	}
+}
+
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment)
 {
 	return getCommonNoti(t_touch_priority, t_comment, [](){}, CCPointZero);
@@ -136,18 +176,30 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		close_button->setFunction([=](CCObject* sender)
 															{
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																CommonAnimation::closePopup(t_popup, t_container,
-																														t_popup->getDimmedSprite(), nullptr,
-																														[=](){
-																															if(close_func && !towButton)
-																																close_func();
-																															
-																															if(close_func && towButton)
-																																close_func2();
-																															
-																															t_popup->removeFromParent();
-																														});
 																
+																if(t_popup->duplicate_tag == -1)
+																{
+																	CommonAnimation::closePopup(t_popup, t_container,
+																								t_popup->getDimmedSprite(), nullptr,
+																								[=](){
+																									if(close_func && !towButton)
+																										close_func();
+																									
+																									if(close_func && towButton)
+																										close_func2();
+																									
+																									t_popup->removeFromParent();
+																								});
+																}
+																else
+																{
+																	CommonNotiDuplicateManager::sharedInstance()->onTagAction(t_popup->duplicate_tag);
+																	CommonAnimation::closePopup(t_popup, t_container,
+																								t_popup->getDimmedSprite(), nullptr,
+																								[=](){
+																									t_popup->removeFromParent();
+																								});
+																}
 															});
 		t_container->addChild(close_button);
 		
@@ -160,13 +212,26 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		close_button->setFunction([=](CCObject* sender)
 															{
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																CommonAnimation::closePopup(t_popup, t_container,
-																														t_popup->getDimmedSprite(), nullptr,
-																														[=](){
-																															if(close_func)
-																																close_func();
-																															t_popup->removeFromParent();
-																														});
+																
+																if(t_popup->duplicate_tag == -1)
+																{
+																	CommonAnimation::closePopup(t_popup, t_container,
+																								t_popup->getDimmedSprite(), nullptr,
+																								[=](){
+																									if(close_func)
+																										close_func();
+																									t_popup->removeFromParent();
+																								});
+																}
+																else
+																{
+																	CommonNotiDuplicateManager::sharedInstance()->onTagAction(t_popup->duplicate_tag);
+																	CommonAnimation::closePopup(t_popup, t_container,
+																								t_popup->getDimmedSprite(), nullptr,
+																								[=](){
+																									t_popup->removeFromParent();
+																								});
+																}
 															});
 		t_container->addChild(close_button);
 		
@@ -313,11 +378,28 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 
 ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, CCPoint t_position, bool XButton)
 {
-	
 	KSLabelTTF* ment_label = KSLabelTTF::create(t_comment.c_str(), mySGD->getFont().c_str(), 12);
 	ment_label->disableOuterStroke();
 	return ASPopupView::getCommonNoti(t_touch_priority, t_title,ment_label, close_func,
 																		12.f, t_position, XButton);
+}
+
+ASPopupView* ASPopupView::getCommonNotiTag(int t_touch_priority, string t_title, string t_comment, function<void()> close_func, int t_tag)
+{
+	CommonNotiDuplicateManager* t_cndm = CommonNotiDuplicateManager::sharedInstance();
+	
+	bool is_on_tag = t_cndm->isOnTag(t_tag);
+	
+	ASPopupView* t_popup = NULL;
+	
+	if(!is_on_tag)
+	{
+		t_popup = getCommonNoti(t_touch_priority, t_title, t_comment, close_func);
+	}
+	
+	t_cndm->addTagFunction(t_tag, close_func);
+	
+	return t_popup;
 }
 
 
