@@ -54,10 +54,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //		NSDS_SI(puzzle_number, kSDS_PZ_ticket_i, result_data["ticket"].asInt(), false);
 //		NSDS_SI(puzzle_number, kSDS_PZ_point_i, result_data["point"].asInt(), false);
 		
-		if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != result_data["map"]["image"].asString())
-		{
-			addDownlist("map", result_data);
-		}
+//		if(NSDS_GS(puzzle_number, kSDS_PZ_map_s) != result_data["map"]["image"].asString())
+//		{
+//			addDownlist("map", result_data);
+//		}
 		if(NSDS_GS(puzzle_number, kSDS_PZ_center_s) != result_data["center"]["image"].asString())
 		{
 			addDownlist("center", result_data);
@@ -120,7 +120,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				NSDS_SI(stage_number, kSDS_SI_playtime_i, stage_list[i]["playtime"].asInt(), false);
 				NSDS_SD(stage_number, kSDS_SI_scoreRate_d, stage_list[i]["scoreRate"].asDouble(), false);
 				NSDS_SD(stage_number, kSDS_SI_scale_d, stage_list[i]["scale"].asDouble(), false);
-				NSDS_SB(stage_number, kSDS_SI_minigame_b, stage_list[i]["minigame"].asBool(), false);
+//				NSDS_SB(stage_number, kSDS_SI_minigame_b, stage_list[i]["minigame"].asBool(), false);
 				NSDS_SS(stage_number, kSDS_SI_type_s, stage_list[i]["type"].asString(), false);
 				
 				Json::Value t_mission = stage_list[i]["mission"];
@@ -214,9 +214,9 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
-					NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+//					NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 					
-					NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+//					NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 					NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 					
@@ -370,7 +370,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					}
 				}
 				
-				NSDS_SI(stage_number, kSDS_SI_level_i, stage_list[i]["level"].asInt(), false);
+//				NSDS_SI(stage_number, kSDS_SI_level_i, stage_list[i]["level"].asInt(), false);
 				
 				NSDS_SS(stage_number, kSDS_SI_boss_s, stage_list[i]["boss"].asString(), false);
 				NSDS_SS(stage_number, kSDS_SI_junior_s, stage_list[i]["junior"].asString(), false);
@@ -388,9 +388,9 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
-			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+//			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
@@ -554,9 +554,9 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
-			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
+//			NSDS_SI(kSDS_CI_int1_reward_i, t_card["no"].asInt(), t_card["reward"].asInt(), false);
 			
-			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
+//			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
 			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
