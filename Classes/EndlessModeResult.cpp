@@ -94,6 +94,8 @@ bool EndlessModeResult::init()
 		mySGD->temp_endless_nick = mySGD->endless_nick.getV();
 		mySGD->temp_endless_flag = mySGD->endless_flag.getV();
 		mySGD->temp_endless_score = mySGD->endless_score.getV();
+		
+		is_calc = true;
 	}
 	else
 	{
@@ -308,7 +310,7 @@ bool EndlessModeResult::init()
 	else if(left_total_score.getV() > right_total_score.getV() && rand()%100 > mySGD->getSendPvpPlayDataRate())
 		is_send_pvp_play_data = true;
 	
-	if(is_send_pvp_play_data)
+	if(is_calc && is_send_pvp_play_data)
 	{
 		Json::Value param2;
 		param2.clear();
@@ -337,7 +339,7 @@ bool EndlessModeResult::init()
 		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
 	}
 	
-	if(mySGD->is_changed_userdata)
+	if(is_calc && mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	return true;
