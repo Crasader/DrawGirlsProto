@@ -213,6 +213,9 @@ public:
 	
 	virtual void draw()
 	{
+//		08-25 11:38:09.535: D/cocos2d-x debug info(17448): 0x583e3dc8 0x583ec880 0x581878c0 108
+
+		KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, vertice_count);
 		CC_NODE_DRAW_SETUP();
 		ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 		//세팅
@@ -229,7 +232,7 @@ public:
 		{
 			glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
 			glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_textCoords);
-			glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, m_colors);
+			glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, m_colors);
 			glDrawArrays(GL_TRIANGLES, 0, vertice_count);
 		}
 	}

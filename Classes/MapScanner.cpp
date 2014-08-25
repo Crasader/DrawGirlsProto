@@ -598,7 +598,6 @@ void MapScanner::resetRects(bool is_after_scanmap)
 //			}
 //		}
 //	}
-	
 	gdPointer->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 	
 	if(mySGD->is_write_replay)
@@ -1027,7 +1026,6 @@ MapScanner* MapScanner::create()
 void MapScanner::visit()
 {
 	glEnable(GL_SCISSOR_TEST);
-
 	int viewport [4];
 	glGetIntegerv (GL_VIEWPORT, viewport);
 	CCSize frame_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -1044,7 +1042,6 @@ void MapScanner::visit()
 	glScissor(x,y,w,h);
 
 	CCNode::visit();
-
 	glDisable(GL_SCISSOR_TEST);
 }
 
@@ -1955,7 +1952,7 @@ void VisibleSprite::draw()
 //	return;
 //	glEnable(GL_DEPTH_TEST);
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	
+	KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, t_vertice_count);
 	CC_NODE_DRAW_SETUP();
 	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 	//세팅
@@ -1968,14 +1965,12 @@ void VisibleSprite::draw()
 	
 	#define kQuadSize sizeof(m_sQuad.bl)
 	ccGLEnableVertexAttribs( kCCVertexAttribFlag_PosColorTex );
-
 	{
 		glVertexAttribPointer(kCCVertexAttrib_Position, 3, GL_FLOAT, GL_FALSE, 0, m_vertices);
 		glVertexAttribPointer(kCCVertexAttrib_TexCoords, 2, GL_FLOAT, GL_FALSE, 0, m_textCoords);
-		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, kQuadSize, m_colors);
+		glVertexAttribPointer(kCCVertexAttrib_Color, 4, GL_UNSIGNED_BYTE, GL_TRUE, 0, m_colors);
 		glDrawArrays(GL_TRIANGLES, 0, t_vertice_count);
 	}
-	
 //	glDisable(GL_DEPTH_TEST);
 }
 
@@ -2223,20 +2218,35 @@ void VisibleSprite::setDark()
 
 void VisibleSprite::setRectToVertex()
 {
-	
 	chrono::time_point<chrono::system_clock> start, end;
 	chrono::duration<double> elapsed_seconds;
 	start = chrono::system_clock::now();
 	if(m_vertices)
+	{
 		delete [] m_vertices;
+		m_vertices = nullptr;
+	}
 	if(m_textCoords)
+	{
 		delete [] m_textCoords;
+		m_textCoords = nullptr;
+	}
 	if(light_vertices)
+	{
 		delete [] light_vertices;
+		light_vertices = nullptr;
+	}
 	if(safety_vertices)
+	{
 		delete [] safety_vertices;
+		safety_vertices = nullptr;
+	}
 	if(m_colors)
+	{
 		delete [] m_colors;
+		m_colors = nullptr;
+		
+	}
 	
 	t_vertice_count = drawRects->count()*6;
 	
@@ -2247,7 +2257,6 @@ void VisibleSprite::setRectToVertex()
 	safety_vertices = new Vertex3D[t_vertice_count];
 	
 	m_colors = new tColor4B[t_vertice_count];
-	
 	for(int i=0;i<drawRects->count();i++)
 	{
 		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
@@ -2332,7 +2341,6 @@ void VisibleSprite::setRectToVertex()
 			m_colors[i*6+j].a = 255;
 		}
 	}
-	
 	safety_img->setVertex(safety_vertices, m_textCoords, m_colors, t_vertice_count);
 	light_img->setVertex(light_vertices, m_textCoords, m_colors, t_vertice_count);
 	end = chrono::system_clock::now();
@@ -2534,7 +2542,6 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 
 	crashPoint.x = (crashPoint.x-1)*pixelSize;
 	crashPoint.y = (crashPoint.y-1)*pixelSize;
-
 	vector<IntRect*> removeArray;
 	int loopCnt = drawRects->count();
 	for(int i=0;i<loopCnt;i++)
@@ -2587,7 +2594,6 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 			removeArray.push_back(t_rect);
 		}
 	}
-
 	while(!removeArray.empty())
 	{
 		IntRect* t_rect = removeArray.back();
