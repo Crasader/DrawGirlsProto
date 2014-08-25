@@ -2116,11 +2116,12 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 //	
 //	glDisable(GL_SCISSOR_TEST);
 	
-	drawRects = keep_array;
-	setRectToVertex();
 	visit();
 	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
+	
+	drawRects = keep_array;
+	setRectToVertex();
 }
 
 void VisibleSprite::setLight()

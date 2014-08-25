@@ -1215,10 +1215,11 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 										 {
 											 mySGD->network_check_cnt = 0;
 											 
-											 ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
 												 updateCardHistory(t_loading);
-											 });
-											 ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+											 }, 1);
+											 if(alert)
+												 ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 										 }
 										 else
 										 {
@@ -2312,10 +2313,15 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 								{
 									mySGD->network_check_cnt = 0;
 									
-									ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+									ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
 										tryGababoReward(t_loading, success_func);
-									});
-									((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+									}, 1);
+									
+//									ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//										tryGababoReward(t_loading, success_func);
+//									});
+									if(alert)
+										((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 								}
 								else
 								{

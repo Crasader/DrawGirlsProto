@@ -314,6 +314,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	GraphDog::get()->setDuplicateLoginFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert1),[](){
 			mySGD->resetLabels();
+			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -323,6 +324,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	GraphDog::get()->setCmdNoErrorFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[](){
 			mySGD->resetLabels();
+			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -331,6 +333,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	GraphDog::get()->setLongTimeErrorFunc([](){
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert3),[](){
 			mySGD->resetLabels();
+			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -350,15 +353,10 @@ bool AppDelegate::applicationDidFinishLaunching()
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	FormSetter::get()->setEnabledRemocon(false);
 #endif
-	//	CCScene* pScene = TitleScene::scene();
-//	CCScene* pScene = GaBaBo::scene();
-		CCScene* pScene = TitleRenewalScene::scene();
-	//	CCScene* pScene = Dodge::scene();
-	//	CCScene* pScene = CountingGame::scene();
-	//	CCScene* pScene = SlidingPuzzle::scene();
-//	CCScene* pScene = CardMatching::scene();
+	CCScene* pScene = TitleRenewalScene::scene();
+//	CCScene* pScene = TestScene::scene();
+
 	//	pEGLView->setDesignResolutionSize(480, 480, kResolutionFixedWidth);// kResolutionNoBorder);
-	//	CCScene* pScene = RandomDistribution::scene();
 	pDirector->runWithScene(pScene);
 	
 //	end = std::chrono::system_clock::now();
