@@ -14,6 +14,7 @@
 #include "MyLocalization.h"
 #include "TextureReloader.h"
 #include <memory>
+#include "KSGeometry.h"
 template <typename Node>
 class CircularQueue
 {
@@ -375,22 +376,55 @@ void MapScanner::scanMap()
 	{
 		// 여기서 IntRects 를 돌면서 그리면 될 듯 함!
 		int rects = intRects->count();
+		CCNode* effectSprites = CCNode::create();
+		addChild(effectSprites, gainEffectZorder);
+		float minx = numeric_limits<float>::max(), miny = numeric_limits<float>::max(),
+		maxx = numeric_limits<float>::min(), maxy = numeric_limits<float>::min();
 		for(int i=0; i<rects; i++)
 		{
 			IntRect* rect = (IntRect*)intRects->objectAtIndex(i);
 //			CCLOG("%d %d %d %d", rect->origin.x, rect->origin.y, rect->origin.x + rect->size.width, rect->origin.y + rect->size.height);
 			CCSprite* gainRectSprite = CCSprite::create();
-			gainRectSprite->setAnchorPoint(ccp(0, 0));
+			gainRectSprite->setAnchorPoint(ccp(0.5f, 0.5f));
+			
 			gainRectSprite->setTextureRect(CCRectMake(rect->origin.x, rect->origin.y, rect->size.width, rect->size.height));
-			gainRectSprite->setPosition(ccp(rect->origin.x, rect->origin.y));
-			addChild(gainRectSprite, gainEffectZorder);
-			addChild(KSGradualValue<float>::create(200, 0, 1.5f, [=](float t){
-				gainRectSprite->setOpacity(t);
-			}, [=](float t){
-				gainRectSprite->setOpacity(t);
-				gainRectSprite->removeFromParent();
-			}));
+			minx = MIN(minx, rect->origin.x);
+			miny = MIN(miny, rect->origin.y);
+			maxx = MAX(maxx, rect->origin.x + rect->size.width);
+			maxy = MAX(maxy, rect->origin.y + rect->size.height);
+//			auto transRect = rtSetScale(CCRectMake(rect->origin.x, rect->origin.y, rect->size.width, rect->size.height), 1.f, ccp(0.5f, 0.5f));
+			gainRectSprite->setPosition(ccp(rect->origin.x + rect->size.width / 2.f, rect->origin.y + rect->size.height / 2.f));
+//			gainRectSprite->setPosition(transRect.origin);
+			effectSprites->addChild(gainRectSprite);
 		}
+		float centerX  = (maxx + minx) / 2.f;
+		float centerY = (maxy +	miny) / 2.f;
+		for(int i=0; i<effectSprites->getChildrenCount(); i++)
+		{
+			CCSprite* tt = (CCSprite*)effectSprites->getChildren()->objectAtIndex(i);
+			tt->setPosition(tt->getPosition() - ccp(centerX, centerY));
+			
+		}
+		effectSprites->setPosition(ccp(centerX, centerY));
+		addChild(KSGradualValue<float>::create(0.f, 1.f , 0.4f, [=](float t){
+			float a = 1 + (10.f / (maxx - minx)) * t;
+			float b = 1 + (10.f / (maxy - miny)) * t;
+			float c = 200 + (0 - 200.f) * t;
+			
+			effectSprites->setScaleX(a);
+			effectSprites->setScaleY(b);
+			KS::setOpacity(effectSprites, c);
+		}, [=](float t){
+			
+			float a = 1 + (10.f / (maxx - minx)) * t;
+			float b = 1 + (10.f / (maxy - miny)) * t;
+			float c = 200 + (0 - 200.f) * t;
+			
+//			effectSprites->setScaleX(a);
+//			effectSprites->setScaleY(b);
+			KS::setOpacity(effectSprites, c);
+			effectSprites->removeFromParent();
+		}));
 //		CCLOG("NEW RECT END");
 	}
 	
@@ -1956,7 +1990,7 @@ void VisibleSprite::draw()
 //	return;
 //	glEnable(GL_DEPTH_TEST);
 //	glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-	KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, t_vertice_count);
+//	KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, t_vertice_count);
 	CC_NODE_DRAW_SETUP();
 	ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 	//세팅

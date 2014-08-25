@@ -198,10 +198,14 @@ void ChargeNodeLambda::charging()
 		//AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		actionFunction(real_target);
+		
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+		
 		if(cb)
 		{
+			cb->m_castFrameCount = 0;
+			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
@@ -316,8 +320,11 @@ void SpecialChargeNodeLambda::charging()
 		actionFunction(real_target);
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+		
 		if(cb)
 		{
+			cb->m_castFrameCount = 0;
+			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
@@ -442,8 +449,11 @@ void CrashChargeNodeLambda::charging()
 		CCLOG("removeSelf call");
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
+		
 		if(cb)
 		{
+			cb->m_castFrameCount = 0;
+			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
