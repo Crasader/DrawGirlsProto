@@ -379,7 +379,7 @@ void EndlessModeResult::tryTransaction()
 											  
 											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 												  tryTransaction();
-											  }, -1);
+											  }, 1);
 											  
 //											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 //												  tryTransaction();

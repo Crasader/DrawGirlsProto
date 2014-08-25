@@ -547,7 +547,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 //	CCLOG("reset rects : %f", elapsed_seconds.count());
 	
 	visibleImg->setDrawRects(rects);
-	TRACE();
+	
 	// newRectChecking 에서 mapScaningCheckLine mapScaningCheckGet 이 대입된 인덱스를 가져 오는게 속도 면에서 나을 듯??
 	float drawCellCnt = 0;
 	for(auto& check : checkingIndex)
@@ -557,24 +557,23 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		{
 			case mapScaningCheckLine:
 				*checkValue = mapOldline;
-				if(mySD->silData[check.first.x][check.first.y])
-				{
-					drawCellCnt++;
-				}
+//				if(mySD->silData[check.first.x][check.first.y])
+//				{
+//					drawCellCnt++;
+//				}
 				
 				break;
 				
 			case mapScaningCheckGet:
 				*checkValue = mapOldget;
-				if(mySD->silData[check.first.x][check.first.y])
-				{
-					drawCellCnt++;
-				}
+//				if(mySD->silData[check.first.x][check.first.y])
+//				{
+//					drawCellCnt++;
+//				}
 				
 				break;
 		}
 	}
-	TRACE();
 //	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 //	{
 //		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -599,7 +598,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 //			}
 //		}
 //	}
-	TRACE();
+	
 	gdPointer->communication("UI_setPercentage", float(drawCellCnt/mySD->must_cnt), is_after_scanmap);
 	
 	if(mySGD->is_write_replay)
@@ -609,7 +608,6 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		else
 			myGD->communication("UI_writeMap");
 	}
-	TRACE();
 }
 
 IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start)
@@ -1152,12 +1150,10 @@ void MapScanner::exchangeMS()
 	addChild(visibleImg, visibleZorder);
 
 	visibleImg->setDrawRects(t_rect_array);
-	TRACE();
+
 	t_rect_array->autorelease();
 
-	TRACE();
 	scanMap();
-	TRACE();
 }
 
 void MapScanner::randomingRectView( CCPoint t_p )
@@ -2164,7 +2160,6 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 	CCArray* keep_array = drawRects;
 	drawRects = rects;
 	setRectToVertex();
-	TRACE();
 //	unsigned int loopCnt = rects->count();
 //	
 //	glEnable(GL_SCISSOR_TEST);
@@ -2194,22 +2189,19 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 //		}
 //		
 //		glScissor(x,y,w,h);
-	TRACE();
 		draw();
-	TRACE();
 		if(mySGD->is_safety_mode)
 			safety_img->draw();
 //	}
 //	
 //	glDisable(GL_SCISSOR_TEST);
-	TRACE();
-	drawRects = keep_array;
-	TRACE();
-	setRectToVertex();
+	
 	visit();
-	TRACE();
+	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
-	TRACE();
+	
+	drawRects = keep_array;
+	setRectToVertex();
 }
 
 void VisibleSprite::setLight()
@@ -2380,9 +2372,9 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_dra
 	light_img = RectsSprite::create("ingame_whiteback.png");
 	light_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(light_img, -1);
-	TRACE();
+	
 	setRectToVertex();
-	TRACE();
+	
 	light_r = 255;
 	light_g = 100;
 	light_b = 100;

@@ -710,6 +710,11 @@ void FailPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)
 void FailPopup::tryTransaction(CCNode* t_loading)
 {
 	TRACE();
+	if(loading_img)
+	{
+		loading_img->setVisible(true);
+	}
+	
 	mySGD->changeGoodsTransaction(send_command_list, [=](Json::Value result_data)
 								  {
 									  TRACE();
@@ -1088,16 +1093,20 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 			list_cell_case->runAction(t_seq);
 		}
+		loading_img->removeFromParent();
+		loading_img = NULL;
 	}
 	else
 	{
 		TRACE();
 		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
-		fail_label->setPosition(loading_img->getPosition());
+		if(loading_img)
+			fail_label->setPosition(loading_img->getPosition());
+		else
+			fail_label->setPosition(ccp(-500,-500));
 		main_case->addChild(fail_label, kZ_FP_img);
+		loading_img->setVisible(false);
 	}
-	
-	loading_img->removeFromParent();
 	TRACE();
 }
 

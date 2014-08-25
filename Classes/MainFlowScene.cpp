@@ -577,10 +577,11 @@ void MainFlowScene::updateCardHistory(CCNode *t_loading)
 											 TRACE();
 											 mySGD->network_check_cnt = 0;
 											 
-											 ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 												 updateCardHistory(t_loading);
-											 });
-											 ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+											 }, 1);
+											 if(alert)
+												 ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 										 }
 										 else
 										 {
@@ -4739,7 +4740,7 @@ void MainFlowScene::callTimeInfo()
 										TRACE();
 										addChild(KSTimer::create(1.f, [=](){callTimeInfo();}));
 									}
-								 });
+								 }, -1);
 }
 
 void MainFlowScene::tableRefresh()
