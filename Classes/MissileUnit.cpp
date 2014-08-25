@@ -1045,14 +1045,16 @@ void SatelliteBeam::beamSetPosition (CCPoint t_p)
 	
 	IntPoint beamPoint = IntPoint((t_p.x-1)/pixelSize+1, (t_p.y-1)/pixelSize+1); // center
 	
-	int crashSize = 3;
-	for(int x=beamPoint.x-crashSize; x<=beamPoint.x+crashSize; x++)
-	{
-		for(int y=beamPoint.y-crashSize; y<=beamPoint.y+crashSize; y++)
-		{
-			crashMapForIntPoint(IntPoint(x, y));
-		}
-	}
+	int crashSize = 1;
+	crashMapForIntRect(IntRect(beamPoint.x - crashSize, beamPoint.y - crashSize, crashSize * 2.f, crashSize * 2.f));
+//	for(int x=beamPoint.x-crashSize; x<=beamPoint.x+crashSize; x++)
+//	{
+//		for(int y=beamPoint.y-crashSize; y<=beamPoint.y+crashSize; y++)
+//		{
+//			crashMapForIntPoint(IntPoint(x, y));
+//
+//		}
+//	}
 	
 	//		for(int i=beamPoint.y-10;i<=beamPoint.y+10;i++)
 	//		{
