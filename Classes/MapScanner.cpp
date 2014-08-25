@@ -1081,7 +1081,7 @@ void MapScanner::exchangeMS()
 	invisibleImg->setPosition(CCPointZero);
 //	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 //	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
-	invisibleImg->runAction(CCRepeatForever::create(CCSequence::create(CCFadeOut::create(0.5f),CCFadeIn::create(0.5f),nullptr)));
+//	invisibleImg->runAction(CCRepeatForever::create(CCSequence::create(CCFadeOut::create(0.5f),CCFadeIn::create(0.5f),nullptr)));
 	
 
 	addChild(invisibleImg, invisibleZorder);
