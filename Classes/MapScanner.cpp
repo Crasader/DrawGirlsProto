@@ -557,19 +557,19 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		{
 			case mapScaningCheckLine:
 				*checkValue = mapOldline;
-//				if(mySD->silData[check.first.x][check.first.y])
-//				{
-//					drawCellCnt++;
-//				}
+				if(mySD->silData[check.first.x][check.first.y])
+				{
+					drawCellCnt++;
+				}
 				
 				break;
 				
 			case mapScaningCheckGet:
 				*checkValue = mapOldget;
-//				if(mySD->silData[check.first.x][check.first.y])
-//				{
-//					drawCellCnt++;
-//				}
+				if(mySD->silData[check.first.x][check.first.y])
+				{
+					drawCellCnt++;
+				}
 				
 				break;
 		}
