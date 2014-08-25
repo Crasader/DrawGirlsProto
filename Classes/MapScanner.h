@@ -215,7 +215,7 @@ public:
 	{
 //		08-25 11:38:09.535: D/cocos2d-x debug info(17448): 0x583e3dc8 0x583ec880 0x581878c0 108
 
-		KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, vertice_count);
+//		KS::KSLog("% % % %", m_vertices, m_textCoords, m_colors, vertice_count);
 		CC_NODE_DRAW_SETUP();
 		ccGLBlendFunc( m_sBlendFunc.src, m_sBlendFunc.dst );
 		//세팅
