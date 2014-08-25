@@ -263,6 +263,12 @@ bool MainFlowScene::init()
 	
     TRACE();
 	bool is_openning = false;
+	
+	if(mySGD->is_endless_mode && myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
+	{
+		mySGD->is_endless_mode = false;
+	}
+	
 	if(mySGD->is_endless_mode)
 	{
         TRACE();
