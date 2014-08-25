@@ -277,7 +277,7 @@ bool EndlessModeResult::init()
 		Json::Value param;
 		param.clear();
 		param["memberID"] = myHSP->getMemberID();
-		param["score"] = int(mySGD->getScore());
+		param["score"] = left_total_score.getV();// int(mySGD->getScore());
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 		param["victory"] = left_total_score.getV() > right_total_score.getV();
@@ -313,7 +313,7 @@ bool EndlessModeResult::init()
 		Json::Value param2;
 		param2.clear();
 		param2["memberID"] = myHSP->getMemberID();
-		param2["score"] = mySGD->getScore();
+		param2["score"] = left_total_score.getV();//mySGD->getScore();
 		param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 		param2["level"] = mySGD->endless_my_level.getV();
 		param2["autoLevel"] = 1;

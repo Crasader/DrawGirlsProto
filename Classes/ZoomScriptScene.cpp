@@ -920,6 +920,9 @@ void ZoomScript::showtimeFirstAction()
 	
 	target_node = second_img;
 	
+	game_node->setRotation(0);
+	card_back->setRotation(0);
+	
 	game_node->setScale(1.f);
 	game_node->setAnchorPoint(ccp(0.5,0.5));
 	game_node->setContentSize(CCSizeMake(320,460));
@@ -944,11 +947,13 @@ void ZoomScript::showtimeFirstAction()
 		second_img->addChild(eye, 1, 1);
 	}
 	
-	CCFadeTo* t_fade = CCFadeTo::create(1.f/6.f, 0);
-	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeSecondAction));
-	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+//	CCFadeTo* t_fade = CCFadeTo::create(1.f/6.f, 0);
+//	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::showtimeSecondAction));
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_fade, t_call);
+//	
+//	white_paper->runAction(t_seq);
 	
-	white_paper->runAction(t_seq);
+	showtimeSecondAction();
 }
 
 void ZoomScript::showtimeFifthAction()
@@ -994,6 +999,10 @@ void ZoomScript::showtimeFifthAction()
 	
 	game_node->setScale(1.5f);
 	game_node->setPosition(ccp(240,myDSH->ui_center_y));//ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
+	
+	game_node->setRotation(0);
+	card_back->setRotation(0);
+	
 	if(second_img)
 		second_img->removeFromParent();
 	else

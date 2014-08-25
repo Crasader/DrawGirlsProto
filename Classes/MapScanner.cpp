@@ -1115,24 +1115,27 @@ void MapScanner::exchangeMS()
 	invisibleImg->setPosition(CCPointZero);
 //	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 //	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
-	invisibleImg->runAction(CCRepeatForever::create(CCSequence::create(CCFadeOut::create(0.5f),CCFadeIn::create(0.5f),nullptr)));
+//	invisibleImg->runAction(CCRepeatForever::create(CCSequence::create(CCFadeOut::create(0.5f),CCFadeIn::create(0.5f),nullptr)));
 	
 
 	addChild(invisibleImg, invisibleZorder);
 	
 	// ######################## hs code bbu woo~ ##############################
 	
-	invisibleImg->getChildByTag(8707)->removeFromParent();
+	EffectSprite* t_img = (EffectSprite*)invisibleImg->getChildByTag(8707);
 	
-	CCClippingNode* t_sprc = (CCClippingNode*)invisibleImg->getChildByTag(8706);
-	t_sprc->setVisible(true);
-	CCSprite* t_spr = (CCSprite*)t_sprc->getChildByTag(8706);
-	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
+//	invisibleImg->getChildByTag(8707)->removeFromParent();
+//	
+//	CCClippingNode* t_sprc = (CCClippingNode*)invisibleImg->getChildByTag(8706);
+//	t_sprc->setVisible(true);
+//	CCSprite* t_spr = (CCSprite*)t_sprc->getChildByTag(8706);
+//	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int orir =254;
 	int orig = 1; //NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d);
 	int orib = 1; //NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d);
 	
-	t_spr->setColor(ccc3(254, 0, 0));
+	t_img->setColorSilhouette(orir, orig, orib);
+//	t_spr->setColor(ccc3(254, 0, 0));
 	
 	float rm = orir/20.f;
 	float gm =  orig/20.f;
@@ -1161,7 +1164,8 @@ void MapScanner::exchangeMS()
 		if(g>255)g=255;
 		if(b>255)b=255;
 		
-		t_spr->setColor(ccc3(r, g, b));
+//		t_spr->setColor(ccc3(r, g, b));
+		t_img->setColorSilhouette(r, g, b);
 		return true;
 	}));
 	// ######################## hs code bbu woo~ ##############################
