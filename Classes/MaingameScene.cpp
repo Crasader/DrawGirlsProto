@@ -63,6 +63,7 @@ Maingame::~Maingame()
 	mySGD->is_on_maingame = false;
 	if(sub_thumbs)
 		sub_thumbs->release();
+	AudioEngine::sharedInstance()->stopAllEffects();
 }
 
 bool Maingame::init()
