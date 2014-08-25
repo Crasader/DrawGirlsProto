@@ -920,6 +920,9 @@ void ZoomScript::showtimeFirstAction()
 	
 	target_node = second_img;
 	
+	game_node->setRotation(0);
+	card_back->setRotation(0);
+	
 	game_node->setScale(1.f);
 	game_node->setAnchorPoint(ccp(0.5,0.5));
 	game_node->setContentSize(CCSizeMake(320,460));
