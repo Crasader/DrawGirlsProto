@@ -48,6 +48,7 @@ bool CumberShowWindow::init()
 		
 		m_circleSprite = dynamic_cast<CircleBossCCB*>(p);//ret.first;
 		m_circleAnimation = reader->getAnimationManager();// ret.second;
+		m_circleAnimation->runAnimationsForSequenceNamed("Default Timeline");
 		m_circleAnimation->setDelegate(this);
 		reader->release();
 		
