@@ -318,11 +318,11 @@ private:
 		{
 			if(piece_mode == kPieceMode_default)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 //				if(!is_simple)
 //					setStar(n_piece);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 //				if(!is_simple)
 //					setStar(s_piece);
@@ -340,14 +340,14 @@ private:
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				setStar(n_piece);
 				setStageLevel(n_piece, false);
 //				CCSprite* n_embo = CCSprite::create(CCString::createWithFormat("piece_embo_%s.png", WorH.c_str())->getCString());
 //				n_embo->setPosition(ccp(n_piece->getContentSize().width/2.f, n_piece->getContentSize().height/2.f));
 //				n_piece->addChild(n_embo);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccGRAY);
 				setStar(s_piece);
@@ -371,10 +371,10 @@ private:
 		{
 			if(piece_mode == kPieceMode_default)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 //				setStageLevel(n_piece, false);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_center_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 //				setStageLevel(s_piece, true);
 				
@@ -390,12 +390,12 @@ private:
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
 				setStar(n_piece);
 				setStageLevel(n_piece, false);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
 				setStar(s_piece);
@@ -451,12 +451,12 @@ private:
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
 				setStar(n_piece);
 				setStageLevel(n_piece, false);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
 				setStar(s_piece);
@@ -493,12 +493,12 @@ private:
 			}
 			else if(piece_mode == kPieceMode_thumb)
 			{
-				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* n_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				n_piece->setGray(true);
 				setStar(n_piece);
 				setStageLevel(n_piece, false);
-				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
+				GraySprite* s_piece = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("puzzle%d_face_piece%d.png", puzzle_number,
 																											   NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_pieceNo_i, stage_number)-1)->getCString()));
 				s_piece->setColor(ccc3(80, 80, 80));
 				setStar(s_piece);

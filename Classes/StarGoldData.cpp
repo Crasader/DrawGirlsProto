@@ -3484,7 +3484,7 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 2;
 	
-	client_version = 4;
+	client_version = 5;
 	
 	is_ingame_gold = false;
 	total_card_cnt = 0;

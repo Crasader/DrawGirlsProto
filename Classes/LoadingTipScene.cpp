@@ -1297,9 +1297,15 @@ void LoadingTipScene::startLoading()
 	for(int i=0;i<total_load_img;i++)
 	{
 		if(i < sil_load_list.size())
+		{
+			CCLOG("try %s", sil_load_list[ing_load_img].c_str());
 			mySIL->addImageAsync(sil_load_list[ing_load_img].c_str(), this, callfuncO_selector(LoadingTipScene::countingFunc));
+		}
 		else
+		{
 			CCTextureCache::sharedTextureCache()->addImageAsync(default_load_list[i-sil_load_list.size()].c_str(), this, callfuncO_selector(LoadingTipScene::countingFunc));
+			CCLOG("try %s", default_load_list[i-sil_load_list.size()].c_str());
+		}
 	}
 }
 

@@ -60,6 +60,7 @@ class StageImgLoader : public CCNode
 public:
 	static StageImgLoader* sharedInstance();
 	
+	CCSprite* getUnsafeLoadedImg(string filename);
 	CCSprite* getLoadedImg(string filename);
 	CCSprite* getLoadedImg(string filename, CCRect t_rect);
 	
@@ -76,6 +77,7 @@ public:
 	string down_filename;
 	
 	void removeTextureCache(string filename);
+	CCTexture2D * addNakedImage(const char * path);
 	CCTexture2D* addImage(const char * path);
 	void addImageAsync(const char *path, CCObject *target, SEL_CallFuncO selector);
 	

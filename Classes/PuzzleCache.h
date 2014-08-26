@@ -71,7 +71,7 @@ public:
 	
 	static PuzzleImage* createWithImageFileThreadSafe(string fullpath){
 		PuzzleImage* image = new PuzzleImage();
-		image->initWithImageFileThreadSafe(fullpath.c_str());
+		image->initWithEncryptedImageFileFullPath(fullpath.c_str());
 		image->autorelease();
 		return image;
 	}
@@ -425,7 +425,7 @@ public:
 		
 		
 		PuzzleImage* puzzleImg = new PuzzleImage();
-		puzzleImg->initWithImageFileThreadSafe(pFilename->getCString());
+		puzzleImg->initWithEncryptedImageFileFullPath(pFilename->getCString());
 		
 		
 		pFilename->release();
@@ -434,7 +434,7 @@ public:
 		PuzzleImage* thumbImg = new PuzzleImage();
 		CCString *tFilename = new CCString();
 		tFilename->initWithFormat((m_documentPath+"puzzle%d_face.png").c_str(), puzzleNo);
-		thumbImg->initWithImageFileThreadSafe(tFilename->getCString());
+		thumbImg->initWithEncryptedImageFileFullPath(tFilename->getCString());
 		tFilename->release();
 		//CCString::createWithFormat((mySIL->getDocumentPath()+"puzzle%d_face.png").c_str(), puzzleNo)->getCString()
 		
