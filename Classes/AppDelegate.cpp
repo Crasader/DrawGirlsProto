@@ -403,6 +403,7 @@ void AppDelegate::applicationWillEnterForeground()
 		CCDirector::sharedDirector()->getRunningScene()->addChild(KSTimer::create(0.1f, [=]()
 																				  {
 																					  mySGD->resetLabels();
+																					  AudioEngine::sharedInstance()->stopAllEffects();
 																					  CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 																				  }));
 	}
