@@ -8,7 +8,7 @@ import threading
 import random
 import json
 import datetime
-
+import time
 #obj = DES.new("12345678", DES.MODE_ECB)
 
 #encrypted = obj.encrypt("Please  ")
@@ -97,8 +97,9 @@ def stress1(thNo,cycle):
 		#login
 		senddata1 = {"0":{"a":"login","p":{"memberID":memNo}},"memberID": memNo,"dontcheck":True}
 		jsonString = json.dumps(senddata1)
-		urlreq(serverUrl,jsonString)
-		#mm = mm.replace("\\","")
+		t = urlreq(serverUrl,jsonString)
+        #print t
+        #mm = mm.replace("\\","")
 		#mm = mm.replace("'","")
 		#print mm
 		#jsonResult = json.loads(mm);
@@ -137,8 +138,11 @@ def stress1(thNo,cycle):
 
 		millisec = int(deltaDatetime.total_seconds() * 1000)
 		
-		print "%d msec cycle : %d / memberNo : %d  ...  %d / %d  ...  failCount : %d" % (millisec, count, memNo ,exeCount, allexec*7 ,failCount) #jsonResult["result"]["code"]
+		#print t
+		print "%d msec / cycle : %d / memberNo : %d  ...  %d / %d  ...  failCount : %d" % (millisec, count, memNo ,exeCount, allexec*7 ,failCount) #jsonResult["result"]["code"]
 		count = count + 1
+
+	print "stop thread %d"%(thNo)
 #result = urlreq(random.choice(jsonString))
 
 def main():
@@ -183,6 +187,8 @@ def main():
 		
 		print "connect to "+serverUrl
 		for temp in range(1,  threads+1):
+			time.sleep(.200)
+			print "create thread %d"%(temp)
 			th = threading.Thread(target = stress1, args=(temp,cycle,))
 			th.start()
 		pass
