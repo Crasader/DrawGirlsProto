@@ -343,7 +343,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		
 		
 	}
-	if((m_cumberState & kCumberStateMoving) == 0 && stiffen && false)
+	if((m_cumberState & kCumberStateMoving) == 0 && stiffen)
 	{
 		CCLOG("안움직일때의경직");
 		float rad = deg2Rad(angle);

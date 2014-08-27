@@ -16,7 +16,7 @@ void SilhouetteData::startSetting()
 {
 	must_cnt = 0;
 	CCImage *tx = new CCImage;
-	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 1))->getCString());
+	tx->initWithEncryptedImageFileFullPath(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 1))->getCString());
 	
 	unsigned char* pData = (unsigned char*)tx->getData();    //원본 이미지 데이터
 	int imgByte = 3;
@@ -125,7 +125,7 @@ void SilhouetteData::exchangeSilhouette()
 {
 	must_cnt = 0;
 	CCImage *tx = new CCImage;
-	tx->initWithImageFileThreadSafe(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 2))->getCString());
+	tx->initWithEncryptedImageFileFullPath(CCString::createWithFormat((mySIL->getDocumentPath()+"card%d_invisible.png").c_str(), NSDS_GI(myType, kSDS_SI_level_int1_card_i, 2))->getCString());
 	
 	unsigned char* pData = (unsigned char*)tx->getData();    //원본 이미지 데이터
 	int imgByte = 3;

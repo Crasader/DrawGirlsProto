@@ -2492,7 +2492,7 @@ void TitleRenewalScene::startFileDownloadSet()
 				continue;
 			
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w, *st_h;
 			
@@ -3254,7 +3254,7 @@ void TitleRenewalScene::successDownloadAction()
 				continue;
 			
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + puzzle_download_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w, *st_h;
 			

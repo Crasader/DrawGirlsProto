@@ -73,7 +73,7 @@ namespace KS
 	std::string decompress_string(const std::string& str);
 	
 	string getLocalCode();
-	
+	string getFileExtenstion (const char * file_name);
 	string insert_separator(const string& s, char separator = ',', int width = 3);
 	string insert_separator(const int& s, const string& format = "%d", char separator = ',', int width = 3);
 	string insert_separator(const float& s, const string& format = "%f",  char separator = ',', int width = 3);

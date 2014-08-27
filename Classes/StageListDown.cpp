@@ -990,7 +990,7 @@ void StageListDown::successAction()
 		for(int j=0;j<cut_list.size();j++)
 		{
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w = new CCImage;
 			CCImage *st_h = new CCImage;
@@ -1765,7 +1765,7 @@ void StageListDown::startDownloadSet()
 		for(int j=0;j<cut_list.size();j++)
 		{
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w = new CCImage;
 			CCImage *st_h = new CCImage;
