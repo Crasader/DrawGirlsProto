@@ -1984,7 +1984,7 @@ bool KSCumberBase::init()
 
 void KSCumberBase::startMoving()
 {
-	m_cumberState = kCumberStateMoving;
+	setCumberState(kCumberStateMoving);
 }
 
 void KSCumberBase::stopMoving()
@@ -1997,7 +1997,28 @@ void KSCumberBase::stopMoving()
 
 void KSCumberBase::setCumberState( int e )
 {
+#define TEMP(_S, _e, _E) if( _e & _E ) _S += (#_E) + std::string("|")
+	std::string state = "CUMBER STATE = ";
+	TEMP(state, m_cumberState, kCumberStateNothing);
+	TEMP(state, m_cumberState, kCumberStateMoving);
+	TEMP(state, m_cumberState, kCumberStateCasting);
+	TEMP(state, m_cumberState, kCumberStateNoDirection);
+	TEMP(state, m_cumberState, kCumberStateDirection);
+	TEMP(state, m_cumberState, kCumberStateDamaging);
+	TEMP(state, m_cumberState, kCumberStateFury);
+	TEMP(state, m_cumberState, kCumberStateGameover);
+	state += "-->";
+	TEMP(state, e, kCumberStateNothing);
+	TEMP(state, e, kCumberStateMoving);
+	TEMP(state, e, kCumberStateCasting);
+	TEMP(state, e, kCumberStateNoDirection);
+	TEMP(state, e, kCumberStateDirection);
+	TEMP(state, e, kCumberStateDamaging);
+	TEMP(state, e, kCumberStateFury);
+	TEMP(state, e, kCumberStateGameover);
+	CCLOG(state.c_str());
 	m_cumberState = (CUMBER_STATE)e;
+#undef TEMP
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2017,7 +2038,7 @@ int KSCumberBase::getCastingCancelCount()
 
 void KSCumberBase::setGameover()
 {
-	m_cumberState = kCumberStateGameover;
+	setCumberState(kCumberStateGameover);
 	
 	//		m_scale.scale.init(m_scale.scale.getValue(), 0.f, 0.03f);
 	//		runAction(CCScaleTo::create(2.f, 0.01f));
@@ -2196,7 +2217,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 	{
 		m_swell.totalFrame = totalFrame;
 //		auto backupState = m_cumberState;
-		m_cumberState = kCumberStateNothing;
+		setCumberState(kCumberStateNothing);
 		addChild(KSGradualValue<float>::create(m_swell.scale, scale, 1.3f, 
 																					 [=](float t){
 																						 m_swell.scale = t;
@@ -2208,7 +2229,7 @@ void KSCumberBase::startSwell(float scale, int totalFrame)
 																						 myGD->communication("MS_resetRects", false);
 																						 schedule(schedule_selector(KSCumberBase::swelling));
 
-																						 m_cumberState = kCumberStateMoving;
+																						 setCumberState(kCumberStateMoving);
 																					 }));
 		m_swell.isStartSwell = true;
 	}
@@ -2916,16 +2937,16 @@ void KSCumberBase::observeStopBoss(float dt)
 		m_stopFrameCount = 0;
 	}
 	
-	if(m_stopFrameCount >= 60 * 2.f)
+	if(m_stopFrameCount >= 60 * 6.f)
 	{
-		m_cumberState = kCumberStateMoving;
+//		setCumberState(kCumberStateMoving);
 		m_stopFrameCount = 0;
 		CCLOG("force moving");
 	}
-	if(m_castFrameCount >= 60 * 4.f)
+	if(m_castFrameCount >= 60 * 6.f)
 	{
 		
-		m_cumberState = kCumberStateMoving;
+//		setCumberState(kCumberStateMoving);
 		m_castFrameCount = 0;
 		CCLOG("force moving2");
 

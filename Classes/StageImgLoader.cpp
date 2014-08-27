@@ -100,10 +100,10 @@ size_t StageImgLoader::WriteMemoryCallback(void *contents, size_t size, size_t n
 	}
 	out->size += realsize;
 	
-	if(out->filename.find("thumbnail.png") != string::npos)
-	{
-		CCLOG("TEST");
-	}
+//	if(out->filename.find("thumbnail.png") != string::npos)
+//	{
+//		CCLOG("TEST");
+//	}
 	if(KS::getFileExtenstion(out->filename.c_str()) == "png")
 	{
 		char* charContents = (char*)contents;

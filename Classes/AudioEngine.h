@@ -750,7 +750,7 @@ public:
 			if(!is_ing)
 			{
 				string real_filename = filename;
-				CCLOG("PlayEffect loop : %s", filename);
+//				CCLOG("PlayEffect loop : %s", filename);
 
 				SoundEffect* t_effect = new SoundEffect();
 				t_effect->autorelease();
@@ -800,7 +800,7 @@ public:
 	}
 	void stopEffect(const char* filename)
 	{
-		CCLOG("StopEffect loop check start : %s", filename);
+//		CCLOG("StopEffect loop check start : %s", filename);
 		bool is_found;
 		do
 		{
@@ -810,7 +810,7 @@ public:
 				SoundEffect* target = (SoundEffect*)soundEffects->objectAtIndex(i);
 				if(target->filename == filename)
 				{
-					CCLOG("StopEffect loop find : %s", filename);
+//					CCLOG("StopEffect loop find : %s", filename);
 					is_found = true;
 					mySAE->stopEffect(target->effectCode);
 					soundEffects->removeObject(target);

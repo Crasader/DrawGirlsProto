@@ -61,7 +61,7 @@ bool KSCircleBase::init(const string& ccbiName)
 bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCancel, bool stiffen)
 {
 	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
-	CCLOG("damaga!!!");
+//	CCLOG("damaga!!!");
 	m_remainHp -= damage;
 	myGD->communication("UI_subBossLife", damage); //## 보스쪽에서 이걸 호출
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
@@ -84,7 +84,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_cumberState |= kCumberStateDamaging;
+			setCumberState( m_cumberState | kCumberStateDamaging);
 			schedule(schedule_selector(ThisClassType::damageReaction));
 			if(damage / getTotalHp() * 4.f >= 3.f)
 			{
@@ -116,7 +116,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 	{
 		crashMapForPosition(getPosition());
 		m_castingCancelCount++;
-		m_cumberState = kCumberStateMoving;
+		setCumberState(kCumberStateMoving);
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
@@ -140,7 +140,7 @@ void KSCircleBase::startAnimationNoDirection()
 	CCLOG("Lets rotate");
 	if((m_cumberState & kCumberStateNoDirection) == 0)
 	{
-		m_cumberState |= kCumberStateNoDirection;
+		setCumberState( m_cumberState | kCumberStateNoDirection);
 		m_noDirection.distance = 0;
 		m_noDirection.rotationDeg = 0;
 		m_noDirection.timer = 0;
@@ -162,7 +162,7 @@ void KSCircleBase::damageReaction(float)
 	{
 //		if((m_cumberState & kCumberStateMoving) == 0)
 		{
-			m_cumberState &= kCumberStateMoving;
+			setCumberState( m_cumberState & ~kCumberStateDamaging);
 //			m_cumberState &= ~kCumberStateDamaging;
 			getEmotion()->releaseStun();
 			unschedule(schedule_selector(KSCircleBase::damageReaction));
@@ -187,7 +187,7 @@ void KSCircleBase::animationNoDirection(float dt)
 	}
 	else if(m_noDirection.state == 2)
 	{
-		m_cumberState = kCumberStateMoving;
+		setCumberState(kCumberStateMoving);
 		m_noDirection.state = 0;
 //		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
@@ -198,7 +198,7 @@ void KSCircleBase::onPatternEnd()
 {
 	CCLOG("onPatternEnd!!");
 	m_noDirection.state = 2;
-	m_cumberState = kCumberStateMoving;
+	setCumberState(kCumberStateMoving);
 }
 
 void KSCircleBase::onStartGame()
@@ -306,7 +306,7 @@ void KSCircleBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
-	m_cumberState = kCumberStateFury;
+	setCumberState(kCumberStateFury);
 	
 	//	m_headImg->setColor(ccc3(0, 255, 0));
 	
@@ -320,7 +320,7 @@ void KSCircleBase::furyModeScheduler(float dt)
 		// 시간이 다되서 끝나는 조건.
 		crashMapForPosition(getPosition());
 		
-		m_cumberState = kCumberStateMoving;
+		setCumberState(kCumberStateMoving);
 		//		m_headImg->setColor(ccc3(255, 255, 255));
 		myGD->communication("MS_resetRects", false);
 		unschedule(schedule_selector(ThisClassType::furyModeScheduler));
@@ -480,7 +480,7 @@ void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
 	else if(lastChar == 'e')
 	{
 		currentTimelineFooter = "";
-		m_cumberState = kCumberStateMoving;
+		setCumberState(kCumberStateMoving);
 		mAnimationManager->runAnimationsForSequenceNamed("Default Timeline");
 		myGD->communication("MS_resetRects", false);
 	}
@@ -488,13 +488,13 @@ void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
 
 void KSCircleBase::onStartMoving()
 {
-	m_cumberState = kCumberStateMoving;
+	setCumberState(kCumberStateMoving);
 	schedule(schedule_selector(KSCumberBase::movingAndCrash));
 }
 
 void KSCircleBase::onStopMoving()
 {
-	m_cumberState = kCumberStateNothing;
+	setCumberState(kCumberStateNothing);
 	CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
 }
 
@@ -505,8 +505,8 @@ void KSCircleBase::stopCasting()
 	if((m_cumberState & kCumberStateCasting))
 	{
 		CCLOG("(m_cumberState & kCumberStateNoDirection)");
-//		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
-//		m_cumberState = kCumberStateMoving;
+		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
+//		setCumberState(kCumberStateMoving;
 	}
 }
 
@@ -566,11 +566,11 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 	bool moving = _pattern.get("movingcast", false).asInt();
 	if(moving)
 	{
-		m_cumberState = kCumberStateMoving | kCumberStateCasting;
+		setCumberState(kCumberStateMoving | kCumberStateCasting);
 	}
 	else
 	{
-		m_cumberState = kCumberStateCasting;
+		setCumberState(kCumberStateCasting);
 	}
 	if(pattern == "109")
 	{

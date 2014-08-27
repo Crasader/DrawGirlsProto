@@ -238,7 +238,7 @@ public:
 //					}
 //#endif
 					
-					CCLOG("PlayEffect loop : %s", filename);
+//					CCLOG("PlayEffect loop : %s", filename);
 					
 					LoopEffect* t_effect = new LoopEffect();
 					t_effect->autorelease();
