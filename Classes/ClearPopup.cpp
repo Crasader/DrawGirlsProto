@@ -350,7 +350,7 @@ bool ClearPopup::init()
 		
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
+	ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
 	ok_label->disableOuterStroke();
 	t_ok_node->addChild(ok_label);
 	
@@ -522,6 +522,11 @@ bool ClearPopup::init()
 																  }));
 	
     return true;
+}
+
+void ClearPopup::onMainButton()
+{
+	ok_label->setString(myLoc->getLocalForKey(kMyLocalKey_toMain));
 }
 
 void ClearPopup::onEnterTransitionDidFinish()

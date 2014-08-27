@@ -383,7 +383,6 @@ void EndlessModeOpening::setMain()
 								  if(kind_tutorial_pvp != nullptr)
 									{
 										kind_tutorial_pvp();
-										kind_tutorial_pvp = nullptr;
 									}
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
@@ -589,10 +588,8 @@ void EndlessModeOpening::setMain()
 				kind_tutorial_pvp = [=]()
 				{
 					skip_menu->setEnabled(false);
-					addChild(KSTimer::create(0.1f, [=]()
-											 {
-												 scenario_node->removeFromParent();
-											 }));
+					scenario_node->removeFromParent();
+					kind_tutorial_pvp = nullptr;
 				};
 				
 				TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-9999);

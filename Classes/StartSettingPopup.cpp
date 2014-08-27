@@ -1155,10 +1155,11 @@ void StartSettingPopup::setMain()
 	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		
 	}, [=](){
-		is_menu_enable = true;
 		
 		if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 		{
+			is_menu_enable = false;
+			
 			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 			if(screen_scale_x < 1.f)
@@ -1278,6 +1279,10 @@ void StartSettingPopup::setMain()
 																															 upgradeAction(NULL);
 																														 });
 			addChild(t_popup, kStartSettingPopupZorder_popup);
+		}
+		else
+		{
+			is_menu_enable = true;
 		}
 	});
 }

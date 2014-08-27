@@ -74,6 +74,8 @@ bool Maingame::init()
         return false;
     }
 	
+	mySGD->is_on_maingame = false;
+	mySGD->is_paused = false;
 	setTag(0);
 	AudioEngine::sharedInstance()->startGame();
 	
@@ -952,6 +954,7 @@ void Maingame::checkTutorial()
 																																					for(int i=0;i<pattern_code.size();i++)
 																																						myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
 																																					exit_target->onEnter();
+																																					mySGD->is_on_maingame = true;
 																																				}, pattern_code);
 																		   t_popup->setContainerNode(t_container);
 																		   exit_target->getParent()->addChild(t_popup);
@@ -959,6 +962,7 @@ void Maingame::checkTutorial()
 																	   else
 																	   {
 																		   exit_target->onEnter();
+																		   mySGD->is_on_maingame = true;
 																	   }
 																	   
 																   }, kSpecialTutorialCode_lineTangle);
@@ -1022,6 +1026,7 @@ void Maingame::checkTutorial()
 																																					for(int i=0;i<pattern_code.size();i++)
 																																						myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
 																																					exit_target->onEnter();
+																																					mySGD->is_on_maingame = true;
 																																				}, pattern_code);
 																		   t_popup->setContainerNode(t_container);
 																		   exit_target->getParent()->addChild(t_popup);
@@ -1029,6 +1034,7 @@ void Maingame::checkTutorial()
 																	   else
 																	   {
 																		   exit_target->onEnter();
+																		   mySGD->is_on_maingame = true;
 																	   }
 																	   
 																   }, kSpecialTutorialCode_slimLine);
@@ -1077,14 +1083,17 @@ void Maingame::checkTutorial()
 																					 for(int i=0;i<pattern_code.size();i++)
 																						 myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
 																					 exit_target->onEnter();
+																					 mySGD->is_on_maingame = true;
 																				 }, pattern_code);
 			t_popup->setContainerNode(t_container);
 			exit_target->getParent()->addChild(t_popup);
 		}
+		else
+		{
+			mySGD->is_on_maingame = true;
+		}
 	}
 	//	}
-	
-	mySGD->is_on_maingame = true;
 }
 
 void Maingame::initJackPosition(CCPoint jack_position)
@@ -1283,6 +1292,8 @@ void Maingame::gachaOn()
 	
 	bool t_jack_stun = myJack->isStun;
 	
+	mySGD->is_on_maingame = false;
+	
 	CCNode* exit_target = this;
 	mControl->setTouchEnabled(false);
 	exit_target->onExit();
@@ -1342,6 +1353,7 @@ void Maingame::gachaOn()
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();
+											  mySGD->is_on_maingame = true;
 										  }), 9999);
 									  }
 									  
@@ -1558,6 +1570,8 @@ void Maingame::removeConditionLabel()
 		
 		bool t_jack_stun = myJack->isStun;
 		
+		mySGD->is_on_maingame = false;
+		
 		CCNode* exit_target = this;
 		mControl->setTouchEnabled(false);
 		exit_target->onExit();
@@ -1620,6 +1634,7 @@ void Maingame::removeConditionLabel()
 																		 myJack->isStun = t_jack_stun;
 																		 
 																		 exit_target->onEnter();
+																		 mySGD->is_on_maingame = true;
 																		 startControl();
 																		 ((ControlJoystickButton*)mControl)->resetTouch();
 																		 
@@ -1642,6 +1657,7 @@ void Maingame::removeConditionLabel()
 			myJack->isStun = t_jack_stun;
 			
 			exit_target->onEnter();
+			mySGD->is_on_maingame = true;
 			startControl();
 			((ControlJoystickButton*)mControl)->resetTouch();
 			
@@ -1737,6 +1753,8 @@ void Maingame::removeConditionLabel()
 	{
 		bool t_jack_stun = myJack->isStun;
 		
+		mySGD->is_on_maingame = false;
+		
 		CCNode* exit_target = this;
 		mControl->setTouchEnabled(false);
 		exit_target->onExit();
@@ -1783,6 +1801,7 @@ void Maingame::removeConditionLabel()
 			myJack->isStun = t_jack_stun;
 			
 			exit_target->onEnter();
+			mySGD->is_on_maingame = true;
 			startControl();
 			((ControlJoystickButton*)mControl)->resetTouch();
 			
@@ -2132,6 +2151,8 @@ void Maingame::stunBacking()
 
 	if(afterJackPoint.isNull())
 	{
+		myGD->communication("SW_stopAllSW");
+		
 		unschedule(schedule_selector(Maingame::stunBacking));
 		myJack->endBackTracking();
 		myJack->willBackTracking = false;
@@ -2147,6 +2168,8 @@ void Maingame::stunBacking()
 
 	if(afterJackPoint.isNull())
 	{
+		myGD->communication("SW_stopAllSW");
+		
 		unschedule(schedule_selector(Maingame::stunBacking));
 		myJack->endBackTracking();
 		myJack->willBackTracking = false;
@@ -2177,6 +2200,8 @@ void Maingame::startBackTracking()
 
 void Maingame::stopBackTracking()
 {
+	myGD->communication("SW_stopAllSW");
+	
 	unschedule(schedule_selector(Maingame::backTracking));
 	((ControlJoystickButton*)mControl)->isBacking = false;
 	myJack->endBackTracking();
@@ -4694,6 +4719,8 @@ void Maingame::showShop(int t_shopcode)
 	
 	bool t_jack_stun = myJack->isStun;
 	
+	mySGD->is_on_maingame = false;
+	
 	CCNode* exit_target = this;
 	mControl->setTouchEnabled(false);
 	exit_target->onExit();
@@ -4707,6 +4734,7 @@ void Maingame::showShop(int t_shopcode)
 							  startControl();
 							  myJack->isStun = t_jack_stun;
 							  exit_target->onEnter();
+							  mySGD->is_on_maingame = true;
 							  is_pause = false;
 						  });
 	exit_target->getParent()->addChild(t_popup);
@@ -4775,6 +4803,8 @@ void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes
 	
 	bool t_jack_stun = myJack->isStun;
 	
+	mySGD->is_on_maingame = false;
+	
 	CCNode* exit_target = this;
 	mControl->setTouchEnabled(false);
 	exit_target->onExit();
@@ -4796,6 +4826,7 @@ void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes
 																		   mControl->isStun = false;
 																		   myJack->isStun = t_jack_stun;
 																		   exit_target->onEnter();
+																		   mySGD->is_on_maingame = true;
 																		   is_pause = false;
 																		   no_func();
 																		   startControl();
@@ -4806,6 +4837,7 @@ void Maingame::showClearTimeEvent(function<void()> no_func, function<void()> yes
 																		   mControl->isStun = false;
 																		   myJack->isStun = t_jack_stun;
 																		   exit_target->onEnter();
+																		   mySGD->is_on_maingame = true;
 																		   is_pause = false;
 																		   yes_func();
 																		   startControl();
@@ -4830,6 +4862,8 @@ void Maingame::showPause()
 	
 	bool t_jack_stun = myJack->isStun;
 	
+	mySGD->is_on_maingame = false;
+	
 	CCNode* exit_target = this;
 	if(mControl)
 		mControl->setTouchEnabled(false);
@@ -4853,6 +4887,7 @@ void Maingame::showPause()
 			mControl->isStun = false;
 		myJack->isStun = t_jack_stun;
 		exit_target->onEnter();
+		mySGD->is_on_maingame = true;
 		cancelHome();
 		is_pause = false;
 		t_popup->removeFromParent();
@@ -4946,6 +4981,8 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 {
 	bool t_jack_stun = myJack->isStun;
 	
+	mySGD->is_on_maingame = false;
+	
 	CCNode* exit_target = this;
 	mControl->setTouchEnabled(false);
 	exit_target->onExit();
@@ -4966,6 +5003,8 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   mControl->isStun = false;
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
+															   is_gohome = true;
+															   mySGD->is_on_maingame = true;
 															   mySGD->is_paused = false;
 															   myUI->stopCounting();
 															   AudioEngine::sharedInstance()->setAppFore();
@@ -4976,6 +5015,7 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   mControl->isStun = false;
 															   myJack->isStun = t_jack_stun;
 															   exit_target->onEnter();
+															   mySGD->is_on_maingame = true;
 															   (t_continue->*d_continue)();
 															   continueAction();
 																 t_popup->removeFromParent();
