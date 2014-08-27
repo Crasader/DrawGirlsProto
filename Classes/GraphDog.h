@@ -131,7 +131,7 @@ public:
 	void setup(string appID,string secretKey,string _packageName,string _appVersion);
 	//명령날리기 - 이 함수로 모든 통신을 할수있다. 쓰레드생성 실패시 false 그외 true
 	
-	bool command(const std::vector<CommandParam>& params,int errorCnt=0);
+	bool command(const std::vector<CommandParam>& params,int errorCnt=-1);
 	
 	//@    bool command(string action, const JsonBox::Object* const param,CCObject *target,GDSelType selector);
 	
@@ -140,7 +140,7 @@ public:
 	
 	//@@    bool command(string action, const Json::Value param,CCObject *target,GDSelType selector);
 	
-	bool command(string action, const Json::Value param,function<void(Json::Value)> func,int errorCnt=0);
+	bool command(string action, const Json::Value param,function<void(Json::Value)> func,int errorCnt=-1);
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
   

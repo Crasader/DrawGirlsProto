@@ -791,12 +791,13 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	}
 	else
 	{
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 			CCNode* t_node = CCNode::create();
 			t_node->setTag(kSLD_MT_receive);
 			menuAction(t_node);
-		});
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}, 1);
+		if(alert)
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
 //		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
 //		replay_menu->setPosition(ccp(300,100));
