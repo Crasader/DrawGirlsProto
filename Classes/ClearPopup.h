@@ -55,6 +55,7 @@ public:
 	std::function<void()> goToMainFlow_func;
 	std::function<void()> refresh_achieve_func;
 	
+	void onMainButton();
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 	virtual void onEnterTransitionDidFinish();
@@ -72,6 +73,9 @@ private:
 	CCSprite* main_case;
 	
 	KSLabelTTF* title;
+	
+	KSLabelTTF* ok_label;
+	
 //	KSLabelTTF* n_ok_label2;
 //	KSLabelTTF* s_ok_label2;
 //	KSLabelTTF* n_replay_label2;

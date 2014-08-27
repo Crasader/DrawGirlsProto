@@ -1253,6 +1253,8 @@ void PuzzleScene::showClearPopup()
 	t_popup->is_take_star_effect = true;
 	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect | clear_is_perfect_piece;
 	t_popup->refresh_achieve_func = bind(&PuzzleScene::countingAchievement, this);
+	if(clear_is_stage_unlock)
+		t_popup->onMainButton();
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
