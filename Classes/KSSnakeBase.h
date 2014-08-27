@@ -35,7 +35,7 @@ public:
 	TAIL_MARGIN(40)      // 몸통과 꼬리사이의 거리.
 	
 	{
-		m_cumberState = kCumberStateNothing;
+		setCumberState(kCumberStateNothing);
 	}
 	
 	void removeFromParent()

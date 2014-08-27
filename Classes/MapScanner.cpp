@@ -2769,7 +2769,7 @@ void VisibleParent::divideRects(IntRect crashRect)
 	myVS->setRectToVertex();
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
-	CCLOG("devide 렉츠. 1 / time : %f", elapsed_seconds.count());
+//	CCLOG("devide 렉츠. 1 / time : %f", elapsed_seconds.count());
 	start = chrono::system_clock::now();
 }
 

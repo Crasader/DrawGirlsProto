@@ -1254,7 +1254,7 @@ PlayUI::~ PlayUI ()
 void PlayUI::addScore (int t_score)
 {
 	score_value = score_value.getV() + t_score;
-	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+//	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	
 	if(mySGD->is_write_replay)
@@ -2540,7 +2540,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 																			
 																			float before_score = score_value.getV();
 																			damaged_score = damaged_score.getV() - t_damage;
-																			CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
+//																			CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 																			score_label->setString(CCString::createWithFormat("%.0f", damaged_score.getV() + before_score)->getCString());
 																			
 																		}));
