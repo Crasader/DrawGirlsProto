@@ -137,6 +137,89 @@ public:
 
 static const int IntPointValueIsNULL	=	-1;
 
+class IntPointSTL
+{
+public:
+	int x;
+	int y;
+	
+	IntPointSTL()
+	{
+		x = y = IntPointValueIsNULL;
+	}
+	IntPointSTL(const IntPointSTL& ip)
+	{
+		x = ip.x;
+		y = ip.y;
+	}
+	IntPointSTL(int t_x, int t_y)
+	{
+		x = t_x;
+		y = t_y;
+	}
+	float length() const
+	{
+		return sqrt(x*x + y*y);
+	}
+	IntPointSTL operator+(const IntPointSTL& right) const
+	{
+		return IntPointSTL(x + right.x, y + right.y);
+	}
+	IntPointSTL operator-(const IntPointSTL& right) const
+	{
+		return IntPointSTL(x - right.x, y - right.y);
+	}
+	IntPointSTL operator*(float a) const
+	{
+		return IntPointSTL(x * a, y * a);
+	}
+	IntPointSTL operator/(float a) const
+	{
+		return IntPointSTL(x / a, y / a);
+	}
+	IntPointSTL rotation(float rad) const
+	{
+		return IntPointSTL(round(cos(rad) * x - sin(rad) * y), round(cos(rad) * y + sin(rad) * x));
+	}
+	bool operator==(const IntPointSTL& right) const
+	{
+		return x == right.x && y == right.y;
+	}
+	bool operator<(const IntPointSTL& ip) const
+	{
+		if(x == ip.x)
+			return y < ip.y;
+		else
+			return x < ip.x;
+	}
+	static IntPointSTL convertToIntPoint(CCPoint t_p)
+	{
+		return IntPointSTL(roundf((t_p.x-1)/pixelSize+1), roundf((t_p.y-1)/pixelSize+1));
+	}
+	
+	CCPoint convertToCCP()
+	{
+		return ccp((x-1.f)*pixelSize+1.f, (y-1.f)*pixelSize+1.f);
+	}
+	
+	bool isInnerMap()
+	{
+		if(x >= mapWidthInnerBegin && x < mapWidthInnerEnd && y >= mapHeightInnerBegin && y < mapHeightInnerEnd)
+			return true;
+		else
+			return false;
+	}
+	
+	bool isNull()
+	{
+		if(x == IntPointValueIsNULL && y == IntPointValueIsNULL)
+			return true;
+		else
+			return false;
+	}
+};
+
+
 class IntPoint : public CCObject
 {
 public:
@@ -240,6 +323,25 @@ public:
 		distance = IntVector(t_dx, t_dy);
 	}
 };
+class IntMoveStateSTL
+{
+public:
+	IntPointSTL origin;
+	IntDirection direction;
+	
+	IntMoveStateSTL()
+	{
+		origin = IntPointSTL();
+		direction = directionStop;
+	}
+	
+	IntMoveStateSTL(int t_x, int t_y, IntDirection t_d)
+	{
+		origin = IntPointSTL(t_x, t_y);
+		direction = t_d;
+	}
+};
+
 
 class IntMoveState : public CCObject
 {
@@ -297,4 +399,26 @@ public:
 	}
 };
 
+class IntRectSTL
+{
+public:
+	int x;
+	int y;
+	int width;
+	int height;
+	
+	IntRectSTL()
+	{
+		x = y = IntPointValueIsNULL;
+		width = height = 0;
+	}
+	
+	IntRectSTL(int t_x, int t_y, int t_w, int t_h)
+	{
+		x = t_x;
+		y = t_y;
+		width = t_w;
+		height = t_h;
+	}
+};
 #endif /* defined(__DGproto__IntSeries__) */
