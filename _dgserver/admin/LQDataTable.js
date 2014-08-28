@@ -202,12 +202,13 @@ var getFieldInfo = function(obj){
 	if(result["table"]){
 		result["dbSource"]=result["table"].attr("dbSource");
 		result["dbTable"] = result["table"].attr("dbTable");
+		result["tableName"] = result["table"].attr("name");
 		result["dbSort"] = result["table"].attr("dbSort");
 		result["dbWhere"] = result["table"].attr("dbWhere");
 		result["defaultData"]=s2j(result["table"].attr("defaultData"));
 		if(!result["dbWhere"])result["dbWhere"]={};
 		result["dbLimit"] = result["table"].attr("dbLimit");
-		result["dbLoadParam"] =j2s({"where":s2j(result["dbWhere"]),"limit":s2j(result["dbLimit"]),"sort":s2j(result["dbSort"])});
+		result["dbLoadParam"] =j2s({"name":result["tableName"],"where":s2j(result["dbWhere"]),"limit":s2j(result["dbLimit"]),"sort":s2j(result["dbSort"])});
 		dbFunc = s2j(result["table"].attr("dbFunc"));
 
 		if(dbFunc){
@@ -275,7 +276,7 @@ var getFieldInfo = function(obj){
 		result["editor"]=result["fieldHeader"].attr("editor");
 		if(typeof(result["editor"])=="undefined")result["editor"]=result["cell"].attr("editor");
 		result["viewer"]=result["fieldHeader"].attr("viewer");
-		
+		if(typeof(result["viewer"])=="undefined")result["viewer"]=result["cell"].attr("viewer");
 		// log("getFieldInfo, editorValue "+result["editorObj"].attr("editor"));
 		// log("getFieldInfo, viewer "+result["viewer"]);
 		// log("getFieldInfo, editor "+result["editor"]);
@@ -298,6 +299,8 @@ var getFieldInfo = function(obj){
 }
 
 var gf = getFieldInfo;
+
+var contextSelectedCell=null;
 
 var nl2br = function(str, is_xhtml) {
 		var breakTag = (is_xhtml || typeof is_xhtml === 'undefined') ? '<br ' + '/>' : '<br>'; // Adjust comment to avoid issue on phpjs.org display
@@ -526,24 +529,28 @@ var editorFunc_dataSelector = function(value,option){
 
 
 var editorFunc_text = function(value,option){
-	var _option = option; 
+	var _option = s2j(option); 
 	
 	var datatype = "";
-	
+	var placeholder="String";
 
 	if(typeof(_option)=="object"){
 		if("datatype" in _option)datatype=_option["datatype"];
 	}
 
-	if(typeof(value)=="number")
+	if(typeof(value)=="number"){
 		datatype="int";
-	
+		placeholder="Number";
+	}
 	if(typeof(value)=="object"){
 		value = j2s(value);
 	}
+	if(datatype=="number" || datatype=="int"){
+		placeholder="Number";
+	}
+	if(!option["placeholder"])option["placeholder"]=placeholder;
 	var neditor = $("<input>").attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline").attr("editor",j2s(option)).attr("placeholder",option["placeholder"]);
 	return neditor;
-	//return "<input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
 }
 
 
@@ -562,7 +569,7 @@ var editorFunc_date = function(value,option){
 }
 
 var editorFunc_time = function(value,option){
-	var neditor = $("<input>").attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline LQDateEditor").attr("editor",j2s(option));
+	var neditor = $("<input>").attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline LQDateEditor").attr("editor",j2s(option)).css("width",100);
 	neditor.timepicker({controlType: 'select',separator:'',timeFormat: 'HHmmss',stepHour: 1,
 			stepMinute: 1,
 			stepSecond: 1});
@@ -571,7 +578,7 @@ var editorFunc_time = function(value,option){
 
 var editorFunc_datetime = function(value,option){
 	var neditor = $("<input>");
-	neditor.attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline").attr("editor",j2s(option));
+	neditor.attr("type","text").attr("value",value).addClass("LQEditor form-control form-control-inline").attr("editor",j2s(option)).css("width",180);
 	neditor.datetimepicker({
 			controlType: 'select',
 			dateFormat: 'yymmdd',
@@ -657,8 +664,6 @@ var editorFunc_array = function(value,option){
 	
 	var eTable = $("<table>").attr("value",j2s(_value)).attr("editor",j2s(_option)).addClass("LQEditor table table-bordered");
 	var eTbody = $("<tbody>").appendTo(eTable);
-	var eTR = $("<tr>").appendTo(eTbody);
-	eTR.append("<td colspan=2><input type='button' value='add' class='LQJSONArrayEditorAdd btn btn-primary'></td></tr>");
 
 
 	//  var _result = "<table border=1 value='"+j2s(_value)+"' editor='"+j2s(_option)+"' class='LQEditor table table-bordered' editor='array'><tbody>";
@@ -672,10 +677,11 @@ var editorFunc_array = function(value,option){
 	//log("-----------start-------------");
 	for(var j in _value){
 		var nTR = $("<tr>").attr("datarow","").appendTo(eTbody);
+		var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(nTR);
 		var nTD = $("<td>").attr("datafield","").appendTo(nTR);
 		nTD.append(editorSelector(_option["element"],_value[j]));
 		var nTD2 = $("<td>").appendTo(nTR);
-		nTD2.append("<input type='button' value='delete' class='LQJSONArrayEditorDelete  btn btn-danger'>");
+		nTD2.append("<input type='button' value='-' class='LQJSONArrayEditorDelete  btn btn-danger'>");
 		// _result+="<tr datarow>";
 		// _result+="<td datafield>";	
 		// log("editroFunc_array in for "+j2s(_value[j])+" in "+j+" element "+j2s(_option["element"])+" fullsource "+j2s(_value));
@@ -684,6 +690,10 @@ var editorFunc_array = function(value,option){
 		// _result+="<td><input type='button' value='delete' class='LQJSONArrayEditorDelete  btn btn-danger'></td>";
 		// _result+="</tr>";
 	}
+
+	var eTR = $("<tr>").addClass("addrow").appendTo(eTbody);
+	eTR.append("<td bgcolor=cccccc></td><td colspan=2 align=center><input type='button' value='Add to Array' class='LQJSONArrayEditorAdd btn btn-primary'></td></tr>");
+
 	//log("-----------end-------------");
 	//_result+="</tbody></table>";
 	
@@ -754,7 +764,7 @@ var editorFunc_table = function(value,option){
 			// _result+="</td>";
 		}
 		 var nTD = $("<td>").appendTo(nTR);
-		 $("<input>").attr("btn","button").attr("value","delete").addClass("LQJSONTableEditorDelete  btn btn-danger").appendTo(nTD);
+		 $("<input>").attr("btn","button").attr("value","-").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(nTD);
 
 		//  _result+="<td><input type='button' value='delete' class='LQJSONTableEditorDelete  btn btn-danger'></td>";
 		// _result+="</tr>";
@@ -844,14 +854,15 @@ var editorFunc_dictionary = function(value,option){
 
 	var neditor = $("<table>").attr("value",j2s(_value)).attr("editor",j2s(option)).addClass('LQEditor table table-bordered').attr("keyEditor",j2s(keyEditor)).attr("keyEditorOption",j2s(keyEditorOption));
 	var eTbody = $('<tbody>').appendTo(neditor);
-	var eTR = $('<tr>').appendTo(eTbody);
-	var eTD = $('<td>').appendTo(eTR).attr("colspan",3);
-	$('<input>').attr("type","text").addClass("LQDictFieldName form-control form-control-inline'").appendTo(eTD);
-	var eSelect = $('<select>').addClass("LQDictEditorSelect form-control form-control-inline").appendTo(eTD);
-	if(isInVKey) eSelect.append("<option value='VARIABLEKEY'>VARIABLE FIELD</option>");
-	eSelect.append("<option value='text(string)'>text(string)</option><option value='text(number)'>text(number)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option><option value='array(dict)'>array(dict)</option></select>");
-	$("<input>").attr("type","button").attr("value","add").addClass("LQJSONDictionaryEditorAdd btn btn-primary").appendTo(eTD);
-	$("<tr>").append("<td>key</td><td>value</td><td></td>").appendTo(eTbody);
+	// var eTR = $('<tr>').appendTo(eTbody);
+	// var eTD = $('<td>').appendTo(eTR).attr("colspan",3);
+	// //$('<input>').attr("type","text").addClass("LQDictFieldName form-control form-control-inline'").appendTo(eTD);
+	// var eSelect = $('<select>').addClass("LQDictEditorSelect form-control form-control-inline").appendTo(eTD);
+	// if(isInVKey) eSelect.append("<option value='VARIABLEKEY'>VARIABLE FIELD</option>");
+	// eSelect.append("<option value='text(string)'>text(string)</option><option value='text(number)'>text(number)</option><option value='textarea'>textarea</option><option value='dictionary'>dictionary</option><option value='array(number)'>array(number)</option><option value='array(string)'>array(string)</option><option value='array(dict)'>array(dict)</option></select>");
+	
+	
+	//$("<tr>").append("<td>key</td><td>value</td><td></td>").appendTo(eTbody);
 
 	// _result+="<tr><td colspan=3><input type='text' class='LQDictFieldNameText form-control form-control-inline'>"
 	
@@ -869,6 +880,7 @@ var editorFunc_dictionary = function(value,option){
 	
 	for(var j in _value){
 		var nTR = $("<tr>").attr("datarow","").appendTo(eTbody);
+		var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(nTR);
 		var nTD = $("<td>").appendTo(nTR);
 		$("<input>").attr("type","text").attr("value",j).addClass("LQDictFieldName form-control form-control-inline").appendTo(nTD);
 
@@ -913,12 +925,17 @@ var editorFunc_dictionary = function(value,option){
 //		_result+= editorSelector(_op1,_value[j]);
 		
 		var nTD3 = $("<td>").appendTo(nTR);
-		$("<input>").attr("type","button").attr("value","delete").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(nTD3);
+		$("<input>").attr("type","button").attr("value","-").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(nTD3);
 		
 		// _result+="</td><td><input type='button' value='delete' class='LQJSONTableEditorDelete btn btn-danger'></td>";
 		//_result+="</tr>";
 	}
 	//_result+="</tbody></table>";
+
+	var nTR = $("<tr>").addClass("addrow").appendTo(eTbody);
+	var nTD0 = $("<td>").appendTo(nTR).attr("bgcolor","cccccc").css("min-width",1);
+	var nTD = $("<td>").appendTo(nTR).attr("colspan",3).attr("align","center");
+	var addBtn = $("<input>").attr("type","button").attr("value","Add to Dict").addClass("LQJSONDictionaryEditorAdd btn btn-primary").appendTo(nTD);
 	
 	return neditor;
 //	return $(_result);
@@ -982,14 +999,14 @@ var editorSelector = function(editor,value){
 	}
 	editor = s2j(editor);
 	//log("editor is "+j2s(editor));
-	if(!editor || typeof(editor)=="undefined"){
+	if(!editor || typeof(editor)=="undefined" || editor==""){
 		editor = {};
-
-		if(typeof(value)=="number"){ editor["type"]="text"; editor["datatype"]="int";}
-		if(typeof(value)=="string" && value.length<100) editor["type"]="text";
-		if(typeof(value)=="string" && value.length>100) editor["type"]="textarea";
-		if(typeof(value)=="object" && value[0]!=undefined) editor["type"]="array";
-		else if(typeof(value)=="object") editor["type"]="dictionary";
+		editor["type"]="autoEditor";
+		// if(typeof(value)=="number"){ editor["type"]="text"; editor["datatype"]="int";}
+		// if(typeof(value)=="string" && value.length<100) editor["type"]="text";
+		// if(typeof(value)=="string" && value.length>100) editor["type"]="textarea";
+		// if(typeof(value)=="object" && value[0]!=undefined) editor["type"]="array";
+		// else if(typeof(value)=="object") editor["type"]="dictionary";
 		
 		
 		//log("editorSelector, valuse is "+typeof(value)+" editor is "+editor);
@@ -1032,8 +1049,8 @@ var makeManageButton = function(manage,isEditorMode){
 		pushData = "<input type=button value='Apply' class='LQModifyApply btn btn-primary'><input type=button value='Cancel' class='LQModifyCancel btn btn-danger'>";
 	}else{
 		if(typeof(manage)=="string"){
-			if(manage.indexOf("update")!=-1)pushData+="<input type=button value='Modify' class='LQModify btn btn-primary'>";
-			if(manage.indexOf("delete")!=-1)pushData+="<input type=button value='Delete' class='LQDelete btn btn-danger'>";
+			if(manage.indexOf("update")!=-1)pushData+="<button  class='LQModify btn btn-primary glyphicon glyphicon-edit'></button>";
+			if(manage.indexOf("delete")!=-1)pushData+="<button  class='LQDelete btn btn-danger glyphicon glyphicon-trash'></button>";
 		}
 	}
 	return pushData;
@@ -1052,7 +1069,7 @@ var startUpdateMode = function(obj){
 		var attrs = tInfo["table"][0].attributes;
 		for(var i=0;i<attrs.length;i++) {
 			if(attrs[i].nodeName!="class"){
-				newTable.attr(attrs[i].nodeName,attrs[i].nodeValue);
+				newTable.attr(attrs[i].nodeName,attrs[i].value);
 				//log(attrs[i].nodeName + " => " + attrs[i].nodeValue);
 			}
 		}
@@ -1066,7 +1083,7 @@ var startUpdateMode = function(obj){
 				var nTD2 = $("<td>").appendTo(nTR).addClass("LQDataCell").attr("field",fInfo["field"]);
 				var attrs = $(this)[0].attributes;
 				for(var i=0;i<attrs.length;i++) {
-					nTD2.attr(attrs[i].nodeName,attrs[i].nodeValue);
+					nTD2.attr(attrs[i].nodeName,attrs[i].value);
 				}
 				var v="";
 				if(tInfo["rowData"]){
@@ -1205,11 +1222,12 @@ var loadDataForm = function(obj){
 
 
 }
-var alert = function(title,msg,closeFunc,btns){
-	log("ALERT:"+title+"-"+msg);
-	$("#LQDialog").attr("title",title);
+var alert = function(mtitle,msg,closeFunc,btns){
+	log("ALERT:"+mtitle+"-"+msg);
+	if(typeof(msg)=="undefined" || !msg)msg=mtitle;
 	$("#LQDialog").html(msg);
 	$("#LQDialog").dialog({
+	  title:mtitle,
 	  beforeClose: closeFunc,
       modal: true,
       buttons: btns
@@ -1230,33 +1248,48 @@ var loadDataTableInfo = function(obj,callFunc){
 	    type : "post",
 	    success : function(data){
 	    	var headTR = $('<tr>');
-
 	    	printLog(data);
+	    	
+	    	if(typeof(data["head"]) == "string") data["head"] = s2j(data["head"]);
 
 	    	if(!data["head"]){
 	    		callFunc(obj);
 	    		return;
 	    	}
+
+	    	var headString = "<tr>\n";
+
 	 		for(var i in data["head"]){
 	 			var headData=data["head"][i];
 	 			var headTitle = "";
 	 			var headTH = $("<th>");
+	 			headString+="<th ";	
+	 			if(typeof(headData)=="string")headData=s2j(headData);
 
 	 			for(var j in headData){
-
 	 				if(!isNaN(parseInt(j))){
 		 				headTH.attr(headData[j],"");
+	 					headString+=j2s(headData[j])+" ";
 	 				}else{
 		 				headTH.attr(j,j2s(headData[j]));
+	 					headString+=j2s(j)+"='"+j2s(headData[j])+"' ";
 	 				}
 	 			}
+	 			
 	 			if(headData["field"])headTitle=headData["field"];
 	 			if(headData["title"])headTitle=headData["title"];
+
+	 			headString+=">"+headTitle+"</th>\n";
+
 	 			headTH.html(headTitle);
+
 	 			headTH.appendTo(headTR);
 	 		}
+	 		headString+="</tr>";
+	 		log(headString);
 	 		
 	 		headTR.appendTo(obj.find("thead"));
+	 		log(headTR.html());
 	    	if(tInfo["dbLimit"]>0){
 	    		var foot = $('<tfoot>').appendTo(tInfo["table"]);
 	    		var footTR = $("<tr>").appendTo(foot);
@@ -1296,10 +1329,10 @@ var loadDataTable = function(obj,addMode){
 		}
 
 		if(typeof(tInfo["dbClass"])!="undefined"){
-			var param = s2j(tInfo["dbWhere"]);
-			param["limit"]=tInfo["dbLimit"];
-			param["sort"]=tInfo["dbSort"];
-			tInfo["dbWhere"] = j2s(param);
+			// var param = s2j(tInfo["dbWhere"]);
+			// param["limit"]=tInfo["dbLimit"];
+			// param["sort"]=tInfo["dbSort"];
+			// tInfo["dbWhere"] = j2s(param);
 			dbParam = {"gid":gid,"dbFunc":tInfo["selectFunc"],"dbClass":tInfo["dbClass"],"param":tInfo["dbLoadParam"],"dbMode":"select"};
 		}else{
 			dbParam = {"gid":gid,"table":tInfo["dbTable"],"sort":tInfo["dbSort"],"limit":tInfo["dbLimit"],"where":tInfo["dbWhere"],"dbMode":"select"};
@@ -1439,6 +1472,17 @@ $(document).ready(function(){
 			});
 		}else{
 			if(autoLoadSetting!="false")loadDataTable($(this),"reload");
+
+			var tInfo = gf($(this));
+			var titleLength = tInfo["table"].find("th").length;
+    		var foot = $('<tfoot>').appendTo(tInfo["table"]);
+    		var footTR = $("<tr>").appendTo(foot);
+    		var footTD = $("<td>").attr("align","center")
+						    	  .addClass("LQLoadNext")
+						    	  .attr("colspan",titleLength)
+						    	  .html("Next")
+						    	  .appendTo(footTR);
+    	
 		}
 	});
 	
@@ -1459,6 +1503,7 @@ $(document).ready(function(){
 		var result="<tr datarow>";
 
 		var eTR = $("<tr>").attr("datarow","");
+		var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(eTR);
 /*
 	option = dataTable.attr("option");
 	if(typeof(option)=="string")
@@ -1470,7 +1515,7 @@ $(document).ready(function(){
 	//	log(option[i]);
 	
 		var fieldname = $(this).parent().children(".LQDictFieldName").val();
-		var fieldeditor = $(this).parent().children(".LQDictEditorSelect").val();
+		//var fieldeditor = $(this).parent().children(".LQDictEditorSelect").val();
 		
 		var option = dataTable.attr("editor");
 		log("editor option is"+option);
@@ -1503,35 +1548,38 @@ $(document).ready(function(){
 		
 		
 		var addEditor;
-		if(fieldeditor=="array(number)"){
-			addEditor= editorSelector({"type":"array","element":{"type":"text","datatype":"int"}},"");	
-		}else if(fieldeditor=="array(string)"){
-			addEditor= editorSelector({"type":"array"},"");	
-		}else if(fieldeditor=="array(dict)"){
-			addEditor= editorSelector({"type":"array","element":{"type":"dictionary"}},"");	
+		// if(fieldeditor=="array(number)"){
+		// 	addEditor= editorSelector({"type":"array","element":{"type":"text","datatype":"int"}},"");	
+		// }else if(fieldeditor=="array(string)"){
+		// 	addEditor= editorSelector({"type":"array"},"");	
+		// }else if(fieldeditor=="array(dict)"){
+		// 	addEditor= editorSelector({"type":"array","element":{"type":"dictionary"}},"");	
 
-		}else if(fieldeditor=="text(number)"){
-			addEditor= editorSelector({"type":"text","datatype":"int"},"");	
-		}else if(fieldeditor=="text(string)"){
-			addEditor= editorSelector({"type":"text"},"");
-		}else if(fieldeditor=="VARIABLEKEY"){
-			var vk;
-			for(k in option){
-				if(option[k]["field"]=="VARIABLEKEY")vk=k;
-			}
-			addEditor= editorSelector(option[vk]["editor"],"");
-		}else{
-			addEditor= editorSelector({"type":fieldeditor},"");	
-		}
+		// }else if(fieldeditor=="text(number)"){
+		// 	addEditor= editorSelector({"type":"text","datatype":"int"},"");	
+		// }else if(fieldeditor=="text(string)"){
+		// 	addEditor= editorSelector({"type":"text"},"");
+		// }else if(fieldeditor=="VARIABLEKEY"){
+		// 	var vk;
+		// 	for(k in option){
+		// 		if(option[k]["field"]=="VARIABLEKEY")vk=k;
+		// 	}
+		// 	addEditor= editorSelector(option[vk]["editor"],"");
+		// }else{
+		// 	addEditor= editorSelector({"type":"autoViewer"},"");	
+		// }
+
+
+		addEditor= editorSelector({"type":"autoEditor"},"");	
 		eTD2.append(addEditor);
 
 		var eTD3 = $("<td>").appendTo(eTR);
-		$("<input>").attr("type","button").attr("value","delete").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(eTD3);
+		$("<input>").attr("type","button").attr("value","-").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(eTD3);
 		//result+="</td><td><input type='button' value='delete' class='LQJSONTableEditorDelete btn btn-danger'></td>";
 //	}
 	//result+="</tr>";
 	
-	dataTable.children('tbody').append(eTR);
+	dataTable.children('tbody').children('.addrow').before(eTR);
 });
 
 
@@ -1573,7 +1621,7 @@ $('body').on('click','.LQJSONTableEditorAdd',function(){
 		}
 	
 	var nTD = $("<td>").appendTo(eTR);
-	$("<input>").attr("type","button").attr("value","delete").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(nTD);
+	$("<input>").attr("type","button").attr("value","-").addClass("LQJSONTableEditorDelete btn btn-danger").appendTo(nTD);
 	//result+="<td><input type='button' value='delete' class='LQJSONTableEditorDelete btn btn-danger'></td></tr>";
 	
 	dataTable.children('tbody').append(eTR);
@@ -1586,10 +1634,11 @@ $('body').on('click','.LQJSONArrayEditorAdd',function(){
 	//var result="<tr datarow>";
 	var option = dataTable.attr("editor");
 	var eTR = $("<tr>").attr("datarow","");
+	var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(eTR);
 	if(option)
 		if(typeof(option)=="string")
 			option = s2j(option);
-			
+	
 	$("<td>").attr("datafield","").append(editorSelector(option["element"],"")).appendTo(eTR);
  	// result+="<td datafield>";	
  	
@@ -1600,10 +1649,10 @@ $('body').on('click','.LQJSONArrayEditorAdd',function(){
 
 	
 	var nTD = $("<td>").appendTo(eTR);
-	$("<input>").attr("type","button").attr("value","delete").addClass("LQJSONArrayEditorDelete btn btn-danger").appendTo(nTD);
+	$("<input>").attr("type","button").attr("value","-").addClass("LQJSONArrayEditorDelete btn btn-danger").appendTo(nTD);
 //	result+="<td><input type='button' value='delete' class='LQJSONArrayEditorDelete btn btn-danger'></td></tr>";
 	
-	dataTable.children('tbody').append(eTR);
+	dataTable.children("tbody").children(".addrow").before(eTR);
 });
 
 /*
@@ -1640,7 +1689,6 @@ $('body').append('<div id="LQDataToolTip" style="position:relative;display:none"
 $('body').append('<div id="LQDialog" style="position:relative;display:none"></div>');
 $('body').append('<div id="LQEditForm" style="position:relative;display:none"></div>');
 
-var contextSelectedCell=null;
 $('body').on('contextmenu','.LQDataCell',function(event){
 
 	contextSelectedCell=$(this);
@@ -1772,7 +1820,9 @@ $('body').on('click','.LQDelete',function(){
 
 	if(typeof(tInfo["dbClass"]) != "undefined")
 	{	
-		var lastData = {"shardIndex":tInfo["shardIndex"],"data":tInfo["rowData"]};
+		var lastData = s2j(tInfo["dbLoadParam"]);
+		lastData["shardIndex"]=tInfo["shardIndex"];
+		lastData["data"]=tInfo["rowData"];
 		param={"dbClass":tInfo["dbClass"],"dbFunc":tInfo["deleteFunc"],"param":j2s(lastData),"dbMode":"delete"};
 	}
 
@@ -1785,7 +1835,8 @@ $('body').on('click','.LQDelete',function(){
 		} ,{"Delete":function(){
 			var cmt = getObjValue($(this).find(".LQEditor:first"));
 			var nP = s2j(param["param"]);
-			nP["comment"]=j2s(cmt);
+			nP["reason"]=j2s(cmt);
+			nP["enableComment"]=true;
 			param["param"]=j2s(nP);
 			deleteApplyAjax(param,tInfo);
 
@@ -1865,73 +1916,31 @@ var requestInsert = function(obj,modal){
 			dbFunc=obj.attr("func");
 			dbMode = "custom";
 		}
-		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["writeFunc"],"param":j2s({"data":rowDatas}),"dbMode":"insert"};
+
+
+		var loadparam = s2j(tInfo["dbLoadParam"]);
+		loadparam["data"]=rowDatas;		
+		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["writeFunc"],"param":j2s(loadparam),"dbMode":"insert"};
 		param["shardIndex"]=tInfo["shardIndex"];
 	}
 
-	log(j2s(param));
-	$.ajax({
-	    url : tInfo["dbSource"], 
-	    data : param,
-	    dataType : "json", 
-	    type : "post",
-	    success :function(resultData){ 
-	    	
-	    	printLog(resultData);
-	    	if(tInfo["table"].hasClass("LQEditForm")){
-				tInfo = gf(contextSelectedCell);
-			}
+	
+	if(tInfo["commenter"]){
+		var pushData = editorSelector(tInfo["commenter"],"");
+		alert("Comment", pushData,function(){
 
-	    	log("add result data :"+j2s(resultData));
-
-	   		 var data = resultData["data"];
-
-			if(resultData['result']['code']==1){
-
-				if(modal)modal.dialog( "close" );
-	   			//값재설정
-				log("add success");
-
-				//if(resultData["no"] && tInfo["primaryKey"])rowData[tInfo["primaryKey"]]=resultData["no"];
-
-				var pushData="";
-
-				if(typeof(data[0])=="undefined"){
-					tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(data,tInfo["table"],"yellow"));
-				}else{					
-					for(var i in data){
-						var rowData = data[i];
-						tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(rowData,tInfo["table"],"yellow"));
-					}
-				}
-
-				
-				
-				//데이터 테이블에 집어넣기
-				//tInfo["table"].find('tbody[datazone]:last > tr:first').after(pushData);
-				
-
-				if(tInfo["table"].attr("editType")!="form"){
-					tInfo["row"].remove();
-				}
-				// rowData[tInfo["primaryKey"]] = data["data"]
-
-
-				// mydata = s2j(tInfo["table"].find('tbody[datazone]:last > tr:first').after().attr("data"));
-				// tInfo["rowData"] = data["data"];
-				// tInfo["row"].attr("data",j2s(tInfo["rowData"]));
-
-			}else{
-   			alert("error",resultData['result']['message']);
-   			//tInfo["table"].find('tr:last').remove();
-			}
-			return true;
-			},
-		error: function(e) {
-			log(e);
-	    	alert("network error",j2s(e));
+		} ,{"Modify":function(){
+			var cmt = getObjValue($(this).find(".LQEditor:first"));
+			var nP = s2j(param["param"]);
+			nP["enableComment"]=true;
+			nP["reason"]=j2s(cmt);
+			param["param"]=j2s(nP);
+			insertApplyAjax(param,tInfo,modal);
+			$(this).dialog( "close" );		
+		}});
+	}else{
+		insertApplyAjax(param,tInfo,modal);	
 	}
-		});
 }
 
 $('body').on('click','.LQAddStart',function(){
@@ -1988,8 +1997,8 @@ $('body').on('click','.LQAddStart',function(){
 		var attrs = tInfo["table"][0].attributes;
 		for(var i=0;i<attrs.length;i++) {
 			if(attrs[i].nodeName!="class"){
-				newTable.attr(attrs[i].nodeName,attrs[i].nodeValue);
-				log(attrs[i].nodeName + " => " + attrs[i].nodeValue);
+				newTable.attr(attrs[i].nodeName,attrs[i].value);
+				log(attrs[i].nodeName + " => " + attrs[i].value);
 			}
 		}
 
@@ -2002,7 +2011,7 @@ $('body').on('click','.LQAddStart',function(){
 				var nTD2 = $("<td>").appendTo(nTR).addClass("LQDataAddCell").attr("field",fInfo["field"]);
 				var attrs = $(this)[0].attributes;
 				for(var i=0;i<attrs.length;i++) {
-					nTD2.attr(attrs[i].nodeName,attrs[i].nodeValue);
+					nTD2.attr(attrs[i].nodeName,attrs[i].value);
 				}
 				
 				if(fInfo["editor"]!=undefined)viewValue = editorSelector(fInfo["editor"],"");
@@ -2027,6 +2036,9 @@ $('body').on('click','.LQAddStart',function(){
 });
 
 $('body').on('click','.LQAdd',function(){
+
+
+
 	requestInsert($(this));
 });
 
@@ -2083,61 +2095,6 @@ $(".LQAdd .LQDelete .LQModify .LQModifyApply .LQModifyCancel").blur();
 
 	
 });
-		
-var commenter = function(value,option){
-	return "변경이유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
-}
-var commenter_value = function(obj){
-	return obj.val();
-} 
-
-var propChange = function(value){
-	switch(value){
-		case "m":return "결제";
-		case "r":return "젬";
-		case "pr":return "유료젬";
-		case "fr":return "무료젬";
-		case "g":return "골드";
-		case "h":return "하트";
-		case "i6":return "아이템두배아이템";
-		case "i8":return "시간추가아이템";
-		case "i9":return "신발아이템";
-		case "i11":return "자석아이템";
-		case "p1":return "이어하기권";
-		case "p2":return "맵가챠권";
-		case "p3":return "캐릭업글권";
-		case "p4":return "아이템뽑기권";
-		case "p5":return "99프로뽑기권";
-		case "p6":return "생명의 돌";
-		case "cd":return "카드";
-		case "pc":return "피스";
-		case "pz":return "퍼즐";
-	}
-}
-
-var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
-}
-
-var rewardViewer = function(value,option){
-	value=s2j(value);
-	var pushData = '<table class="table table-boarded">';
-	for(var i in value){
-		pushData+='<tr><td>'+propChange(value[i]["type"])+'</td><td>'+value[i]["count"]+'개</td></tr>';
-	}
-	pushData+="</table>";
-	return pushData;
-}
-
-var languageViewer = function(value,option){
-	value = s2j(value);
-	var pushData = '<table class="table table-boarded">';
-	for(var lang in value){
-		pushData+='<tr><td>'+lang+'</td><td>'+value[lang]+'</td></tr>';
-	}
-	pushData+="</table>";
-	return pushData;
-}
 
 var requestUpdate = function(obj,modal){
 	var tInfo = gf(obj);
@@ -2193,9 +2150,19 @@ var requestUpdate = function(obj,modal){
 	{
 		param={"mode":"update","table":tInfo["dbTable"],"primaryValue":tInfo["primaryValue"],"data":j2s(changeData),"oldData":j2s(oldData),"dbMode":"update"};
 	}else{
-		var lastData = {"data":changeData,"shardIndex":tInfo["shardIndex"],"oldData":oldData};
+
+		// var lastData = {"data":changeData,"shardIndex":tInfo["shardIndex"],"oldData":oldData};
+		// lastData["primaryKey"]=tInfo["primaryKey"];
+		// lastData["primaryValue"]=tInfo["primaryValue"];
+
+
+		var lastData = s2j(tInfo["dbLoadParam"]); 
+		lastData["data"]=changeData;
+		lastData["shardIndex"]=tInfo["shardIndex"];
+		lastData["oldData"]=oldData;
 		lastData["primaryKey"]=tInfo["primaryKey"];
 		lastData["primaryValue"]=tInfo["primaryValue"];
+
 		var dbMode = "update";
 		var dbFunc = tInfo["updateFunc"];
 		if(tInfo["table"].attr("startMode")=="update"){
@@ -2218,7 +2185,8 @@ var requestUpdate = function(obj,modal){
 		} ,{"Modify":function(){
 			var cmt = getObjValue($(this).find(".LQEditor:first"));
 			var nP = s2j(param["param"]);
-			nP["comment"]=j2s(cmt);
+			nP["enableComment"]=true;
+			nP["reason"]=j2s(cmt);
 			param["param"]=j2s(nP);
 			modfiyApplyAjax(param,tInfo,modal);
 
@@ -2287,7 +2255,7 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 						}
 					});
 				}else{
-					if(openSuccessAlert)alert("ok","success"); // ############## 모두 초기화해야하나?
+					if(openSuccessAlert)alert("success",j2s(data["result"]["message"])); // ############## 모두 초기화해야하나?
 				}	
 		
 
@@ -2296,7 +2264,7 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 				tInfo["row"].attr("bgcolor","cccccc"); 
 
 			}else{
-   				alert("error",j2s(data));
+   				alert("error",j2s(data["result"]["message"]));
 			}
 		}
 		,error: function(e) {
@@ -2307,5 +2275,80 @@ var modfiyApplyAjax = function(param,tInfo,modal){
 
 
 
+var insertApplyAjax = function(param,tInfo,modal){
+	if(tInfo["table"].hasClass("LQEditForm")){
+		tInfo = gf(contextSelectedCell);
+	}
+	log("param is "+j2s(param));
+
+	$.ajax({
+	    url : tInfo["dbSource"], 
+	    data : param,
+	    dataType : "json", 
+	    type : "post",
+	    success :function(resultData){ 
+	    	
+	    	printLog(resultData);
+	    	if(tInfo["table"].hasClass("LQEditForm")){
+				tInfo = gf(contextSelectedCell);
+			}
+
+	    	log("add result data :"+j2s(resultData));
+
+	   		 var data = resultData["data"];
+
+			if(resultData['result']['code']==1){
+
+				if(modal)modal.dialog( "close" );
+	   			//값재설정
+				log("add success");
+
+				//if(resultData["no"] && tInfo["primaryKey"])rowData[tInfo["primaryKey"]]=resultData["no"];
+
+				var pushData="";
+
+				if(typeof(data[0])=="undefined"){
+					if(tInfo["table"].find('tbody[datazone]:last > tr:first').length > 0)
+						tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(data,tInfo["table"],"yellow"));
+					else
+						tInfo["table"].find('tbody[datazone]').append(makeDataRow(data,tInfo["table"],"yellow"));
+				}else{					
+					for(var i in data){
+						var rowData = data[i];
+						if(tInfo["table"].find('tbody[datazone]:last > tr:first').length > 0)
+							tInfo["table"].find('tbody[datazone]:last > tr:first').before(makeDataRow(rowData,tInfo["table"],"yellow"));
+						else
+							tInfo["table"].find('tbody[datazone]').append(makeDataRow(data,tInfo["table"],"yellow"));
+					}
+				}
+
+				
+				
+				//데이터 테이블에 집어넣기
+				//tInfo["table"].find('tbody[datazone]:last > tr:first').after(pushData);
+				
+
+				if(tInfo["table"].attr("editType")!="form"){
+					tInfo["row"].remove();
+				}
+				// rowData[tInfo["primaryKey"]] = data["data"]
+
+
+				// mydata = s2j(tInfo["table"].find('tbody[datazone]:last > tr:first').after().attr("data"));
+				// tInfo["rowData"] = data["data"];
+				// tInfo["row"].attr("data",j2s(tInfo["rowData"]));
+
+			}else{
+   			alert("error",resultData['result']['message']);
+   			//tInfo["table"].find('tr:last').remove();
+			}
+			return true;
+			},
+		error: function(e) {
+			log(e);
+	    	alert("network error",j2s(e));
+		}
+	});
+}
 
 

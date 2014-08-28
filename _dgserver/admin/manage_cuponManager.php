@@ -45,8 +45,8 @@ function CuponManager(value,option){
 		});
 
 		var editTableTR2 = $("<tr>").appendTo(editTable);
-		$("<td>").appendTo(editTableTR2).append("번호");
-		$("<td>").appendTo(editTableTR2).append("쿠폰ID");
+		$("<td>").appendTo(editTableTR2).append("코드번호");
+		$("<td>").appendTo(editTableTR2).append("쿠폰번호");
 		$("<td>").appendTo(editTableTR2).append("쿠폰코드");
 
 
@@ -82,7 +82,7 @@ function CuponManager(value,option){
 	}
 }
 
-var cuponCode = function(value,option){
+var cuponCount = function(value,option){
 	if(!value) return "";
 
 	var newobj = new CuponManager(value,option);
@@ -99,8 +99,22 @@ var cuponCode = function(value,option){
 
 <br><br>
 <h2 id="tables-contextual-classes">|쿠폰관리</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CuponManager" dbWhere='' autoSetting="true" name="datatable" editRowOnly="true" editType="form" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CuponManager" dbLimit="30" dbWhere='{}' name="datatable" editRowOnly="true" editType="form" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+		<th virtual title='진행상태' field='state' viewer='{"type":"text"}' >진행상태</th>
+		<th title='쿠폰명' field='title' viewer='{"type":"text"}' editor='{"type":"text"}' >쿠폰명</th>
+		<th virtual title='갯수' field='cuponCount' viewer='{"type":"cuponCount"}' >갯수</th>
+		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
+		<th title='국가' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelector"}' >국가</th>
+		<th title='시작일시' field='startDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >시작일시</th>
+		<th title='종료일시' field='endDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >종료일시</th>
+		<th title='중복사용' field='isCommon' viewer='{"type":"bool"}' editor='{"type":"bool"}' >중복사용</th>
+		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"쿠폰","statsID":"cupon","statsValueField":"no"}' >교환ID</th>
+		<th title='생성일' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >생성일</th>
+		<th manage='update delete insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

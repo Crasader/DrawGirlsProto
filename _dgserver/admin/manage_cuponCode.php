@@ -3,6 +3,12 @@ include "manage_header.php";
 
 if(!$_GET["cuponNo"])$_GET["cuponNo"]=0;
 
+$listViewer=array("type"=>"select");
+while($pData = CuponManager::getRowByQuery("",null,"title,no")){
+	$listViewer["element"][] = $pData["no"]."-".$pData["title"];
+	$listViewer["value"][]=$pData["no"];
+}
+
 ?>
 <script>
 $(document).ready(function(){
@@ -122,8 +128,19 @@ var cuponMaker_value = function(obj){
 </div>
 <br><br>
 <h2 id="tables-contextual-classes">|쿠폰코드</h2>
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="cuponCode" autoSetting="true" dbWhere='{"type":"cuponNo","id":<?=$_GET["cuponNo"]?>}' dbLimit="10" dbSort='{"no":"desc"}' editRowOnly="ture" editType="form" name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="cuponCode" dbWhere='{"type":"cuponNo","id":<?=$_GET["cuponNo"]?>}' dbLimit="10" dbSort='{"no":"desc"}' editRowOnly="ture" editType="form" name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+		<th title='쿠폰번호' field='cuponNo' viewer='<?=json_encode($listViewer)?>' editor='<?=json_encode($listViewer)?>' >쿠폰번호</th>
+		<th title='쿠폰코드' field='cuponCode' viewer='{"type":"cuponCodeViewer"}' editor='{"type":"cuponMaker"}' >쿠폰코드</th>
+		<th title='관리서버' field='serverNo' viewer='{"type":"text"}' >관리서버</th>
+		<th virtual title='사용여부' field='isUsed' viewer='{"type":"text"}' >사용여부</th>
+		<th virtual title='사용일시' field='usedDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >사용일시</th>
+		<th virtual title='사용유저' field='memberID' viewer='{"type":"text"}' >사용유저</th>
+		<th manage='delete insert' ></th>
+		</tr> 
+
 	</thead>
 	<tbody datazone>
 

@@ -51,7 +51,7 @@ include "command/cmd2.php";
 
 
 if(!$stopCommand){
-	$command = new commandClass();
+	//$command = new commandClass();
 	
 	for($c=0;$c<count($param);$c++){
 		$cmd = (string)$c;
@@ -60,9 +60,9 @@ if(!$stopCommand){
 		$a = strtolower($param[$cmd]["a"]);
 		
 		
-		if(method_exists($command,$a)){
+		if(method_exists("commandClass",$a)){
 			$startTime = TimeManager::getMicroTime();
-			$r = $command->$a($p);
+			$r = commandClass::$a($p);
 			$endTime = TimeManager::getMicroTime();
 
 			$r[log] = LogManager::getLogAndClear();
@@ -77,7 +77,7 @@ if(!$stopCommand){
 			$p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$p2["output"]=$allResult[$cmd];
 			$p2["execTime"]=$endTime-$startTime;
-			if($a!="writelog")$command->writelog($p2);
+			if($a!="writelog")commandClass::writelog($p2);
 			
 		}else if($a=="help"){
 			$class_methods = get_class_methods('commandClass');
@@ -88,7 +88,7 @@ if(!$stopCommand){
 			exit;
 		}else{
 			$p["api"]=$param[$cmd]["a"];
-			$allResult[$cmd]= $command->httpgateway($p);
+			$allResult[$cmd]= commandClass::httpgateway($p);
 			
 			
 			$p2=array();
@@ -99,7 +99,7 @@ if(!$stopCommand){
 			$p2["category"]=$p["api"];
 			$p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$p2["output"]=$allResult[$cmd];
-			$command->writelog($p2);
+			commandClass::writelog($p2);
 			//$allResult[$cmd]=array("state"=>"error","msg"=>"don't find command");
 		}
 		

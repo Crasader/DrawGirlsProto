@@ -1,8 +1,8 @@
 <?php
 include "header.php";
-
 $stopCommand = true;
 
+include "../command/cmd2_help.php";
 include "../command/cmd2.php";
 
 
@@ -237,11 +237,10 @@ $(document).ready(function(){
  		<td colspan=2>
  			<?php
 
-$command = new commandClass();
 
 
 
-$class_methods = get_class_methods($command);
+$class_methods = get_class_methods("commandHelpClass");
 $apiList=array();
 
 $apiList[]="-----select api-------";
@@ -249,7 +248,7 @@ $optionList="<option value=''></option>";
 foreach ($class_methods as $method_name) {
     if(strpos($method_name,"help_")  !== false){
 	    $realName = str_replace("help_","",$method_name);
-	    $mInfo = $command->$method_name();
+	    $mInfo = commandHelpClass::$method_name();
 	    $apiList[]=$realName;
 	    $optionList.="<option value='$realName'>$realName</option>";
 	    echo "<div name='".$realName."'' style='display:none' value='ok'>";

@@ -2,7 +2,7 @@
 include "manage_header.php";
 
 
-$result = mysql_query("select * from ".DBManager::getMT("piece")." where no<=100 order by no asc",DBManager::getMainConnection());
+$result = Piece::getQueryResultWithShardKey("select * from ".Piece::getDBTable()." where no<=100 order by no asc",1);
 ?>
 <center>
 <table border=1>

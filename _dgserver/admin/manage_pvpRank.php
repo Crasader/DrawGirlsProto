@@ -31,12 +31,6 @@ $(document).ready(function(){
 	});
 });
 
-var commenter = function(value,option){
-	return "변경이유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
-}
-var commenter_value = function(obj){
-	return obj.val();
-} 
 
 var clearList = function(value,option){
 	value = s2j(value);
@@ -81,8 +75,18 @@ var clearList = function(value,option){
 <br><br>
 
 <h2 id="tables-contextual-classes">|PVP랭킹</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="EndlessRank" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"victory":"desc","score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="EndlessRank" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"victory":"desc","score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary field='no' viewer='{"type":"text"}' >no</th>
+		<th field='regWeek' viewer='{"type":"text"}' editor='{"type":"text"}' >regWeek</th>
+		<th field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >memberID</th>
+		<th field='nick' viewer='{"type":"text"}' editor='{"type":"text"}' >nick</th>
+		<th field='victory' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >victory</th>
+		<th field='score' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >score</th>
+		<th field='regDate' viewer='{"type":"text"}' editor='{"type":"datetime"}' >regDate</th>
+		<th manage='delete update insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

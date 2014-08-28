@@ -24,8 +24,9 @@ $(document).ready(function(){
 <input name="gid" value="<?=$gid?>" type="hidden">
 <br><br>
 <div class="table-responsive">
-	<table align=center><tr><td>
-<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
+	<table align=center>
+		<tr><td>
+			<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
 			  <button id="findType" type="button" value="nick" class="btn btn-default" data-toggle="button">닉네임</button>
 			  <button id="findType" type="button" value="fb" class="btn btn-default" data-toggle="button">페이스북</button>
 			  <button id="findType" type="button" value="pc" class="btn btn-default" data-toggle="button">Payco</button>
@@ -38,7 +39,8 @@ $(document).ready(function(){
 	        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
 	      		</span>
       		</div>
-		</td></tr></table>
+		</td></tr>
+	</table>
 </div>
 <br><br>
 <div class="table-responsive">
@@ -67,13 +69,13 @@ $(document).ready(function(){
 			<td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 		</tr>
 	</table>
-<br><br>
+	<br>
 	<h2 id="tables-contextual-classes">|게임 기록 정보</h2>
 	<table class="table table-bordered">	  
 		<tr>
-			<td>닉네임</td><td field="nick" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
-			<td>이용국가</td><td field="country" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
-			<td></td><td></td>
+			<td>닉네임</td><td field="nick" viewer='{"type":"text"}'></td>
+			<td>이용국가</td><td field="country" viewer='{"type":"text"}'></td>
+			<td>결제</td><td field="m" viewer='{"type":"text"}'></td>
 		</tr>
 		<tr>
 			<td>케릭터레벨</td><td field="characterLevel" viewer='{"type":"text"}'></td>
@@ -91,23 +93,35 @@ $(document).ready(function(){
 			<td>보유하트</td><td field="h" viewer='{"type":"text"}'></td>
 		</tr>
 		<tr>
-			<td>최고스테이지</td><td field="highPiece" viewer='{"type":"text"}'></td>
-			<td>최고기록</td><td field="highScore" viewer='{"type":"text"}'></td>
+			<td>최고스테이지</td><td field="highPiece" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>최고기록</td><td field="highScore" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>마지막접속<br>주간번호</td><td field="eventCheckWeek" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 		<tr>
 			<td>연속출석일수</td><td field="eventAtdCount" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>출석일자</td><td field="eventCheckDate" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-			<td>오늘의미션 일자</td><td field="tm_date" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-		</tr>
-		<tr>
-			<td>오늘의미션 타입</td><td field="tm_type" viewer='{"type":"text"}'></td>
-			<td>목표</td><td field="tm_goal" viewer='{"type":"text"}'></td>
-			<td>달성</td><td field="tm_count" viewer='{"type":"text"}'></td>
+			<td></td><td></td>
 		</tr>
 	</table>
-
-	<br><br>
+	<br>
+	<h2 id="tables-contextual-classes">|오늘의 미션</h2>
+	<table class="table table-bordered">	 
+		<tr>
+			<td>날짜</td><td field="tm_date" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>타입</td><td field="tm_type" viewer='{"type":"select","element":["영역획득","점수합산","골드모으기","부하몹사냥"],"value":[1,2,3,4]}' editor='{"type":"select","element":["영역획득","점수합산","골드모으기","부하몹사냥"],"value":[1,2,3,4]}' ></td>
+			<td>보상</td><td field="tm_reward" viewer='{"type":"propertyViewer"}'></td>
+			
+		</tr>
+		<tr>
+			<td>목표</td><td field="tm_goal" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>달성</td><td field="tm_count" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>완료여부</td><td field="tm_success" viewer='{"type":"text"}'></td>
+		</tr>
+		<tr>
+			<td>오토레벨</td><td field="TMLevel" viewer='{"type":"titleArrayViewer","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' editor='{"type":"keyArrayEditor","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' colspan=5></td>
+		</tr>
+	</table>
+	<br>
 	<h2 id="tables-contextual-classes">|보유 아이템</h2>
 	<table class="table table-bordered">
 		<tr>

@@ -37,8 +37,18 @@ $(document).ready(function(){
 </div>
 <br><br>
 <h2 id="tables-contextual-classes">|변경내역조회</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ModifyHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ModifyHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1>
 	<thead>
+		<tr>
+			<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+			<th title='회원번호' field='memberID' viewer='{"type":"text"}' >회원번호</th>
+			<th title='카테고리' field='category' viewer='{"type":"text"}' >카테고리</th>
+			<th title='수정전데이터' field='oldData' viewer='{"type":"autoViewer"}' >수정전데이터</th>
+			<th title='수정후데이터' field='newData' viewer='{"type":"autoViewer"}' >수정후데이터</th>
+			<th title='수정사유' field='reason' viewer='{"type":"text"}' >수정사유</th>
+			<th title='작성자' field='writer' viewer='{"type":"text"}' >작성자</th>
+			<th title='수정일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >수정일시</th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

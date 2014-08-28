@@ -31,7 +31,7 @@ var editor_sendType = function(value,option){
 	var select = $("<div>").addClass("btn-group radio-btn LQEditor").appendTo(neditor);
 	$("<button>").attr("id","sendType").attr("value","direct").append("직접지급").appendTo(select).addClass("btn btn-default");
 	$("<button>").attr("id","sendType").attr("value","giftbox").append("선물함지급").appendTo(select).addClass("btn btn-default active");;
-	$("<input>").attr("id","message").appendTo(select).addClass("form-control").attr("placeholder","변경사유 입력");
+	$("<input>").attr("id","message").appendTo(select).addClass("form-control").attr("placeholder","선물메세지");
 
 	return neditor;
 }
@@ -62,10 +62,31 @@ var editor_propData_value = function(obj){
 
 var viewer_memberList = function(value,option){
 	value = s2j(value);
-	var neditor = $("<textarea>").addClass("LQEditor form-control").attr("editor",j2s(option));
+
+	var removetr = function(event){
+		var obj = event.data.obj; 
+		var neditor = event.data.obj.parent().parent().parent();
+		var v = s2j(neditor.attr("v")); 
+		delete v[obj.attr("memberID")]; 
+		neditor.attr("v",j2s(v));
+		obj.remove();
+	}
+
+	var neditor = $("<div>").addClass("LQEditor").attr("editor",j2s(option));
+	var table = $("<table>").addClass("table table-bordered").appendTo(neditor);
+	var tr1 = $("<tr>").appendTo(table);
+	$("<td>").appendTo(tr1).html("회원번호");
+	$("<td>").appendTo(tr1).html("닉네임");
+	$("<td>").appendTo(tr1).html("삭제");
+
 	neditor.attr("v",j2s(value));
-	for(k in value){
-		neditor.append(value[k]+"("+k+")\n");
+	for(k in value){	
+		var tr2 = $("<tr>").appendTo(table).addClass("member").attr("memberID",k);
+		$("<td>").appendTo(tr2).html(k);
+		$("<td>").appendTo(tr2).html(value[k]);
+		var btn = $("<button>").addClass("btn btn-danger").html("-").on("click",{"obj":tr2},removetr);
+		$("<td>").appendTo(tr2).append(btn);
+
 	}
 
 	return neditor;
@@ -78,18 +99,57 @@ var viewer_memberList_value = function(obj){
 
 
 
+var getNickNameAjaxFunc = function(data){
+	printLog(data);
+	log(data);
+	if(data["result"]["code"]==1){
+		var v = s2j($("[field=memberList]").find(".LQEditor").attr("v"));
+		var op = $("[field=memberList]").find(".LQEditor").attr("editor");
+		if(!v)v={};
+		
+		for(var i=0;i<data["list"].length;i++){
+			v[data["list"][i]["memberID"]]=data["list"][i]["nick"];	
+		}
+		
+		$("[field=memberList]").html("").append(viewer_memberList(v,op));
+    	$('#findNo').val("");
+    	$('#findNo').focus();
+	}else{
+		alert("error",data["result"]["message"]);
+	}
+}
+		    
+
 var excelMemberList = function(value,option){
 	var newobj = new FileUploader(value,option);
 	newobj.callbackFunc = function(resultTxt){
 		log(resultTxt);
 		var result = s2j(resultTxt);	
 		result = result["excelData"][0];
-		var memberlist={};
+		var memberlist=[];
 		for(var i=0;i<result.length;i++){
-			memberlist[""+result[i]]="nick";
+			var m = {"type":"sno","find":result[i]};
+			memberlist.push(m);
 		}
-		var op = $("[field=memberList]").find(".LQEditor").attr("editor");
-		$("[field=memberList]").html("").append(viewer_memberList(memberlist,op));
+		//[{"type":$('.active[id=findType]').val(),"find":$("#findNo").val()}]
+		var dbparam = {"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s(memberlist)};
+		log(dbparam);
+			$.ajax({
+			    url : "dataManager2.php", 
+			    data : dbparam,
+			    dataType : "json", 
+			    type : "post",
+			    success : getNickNameAjaxFunc,
+			    error : function(e){
+			    	alert("error","아이디를 로드할수 없습니다.");
+			    }
+			});
+
+		//});
+
+
+		// var op = $("[field=memberList]").find(".LQEditor").attr("editor");
+		// $("[field=memberList]").html("").append(viewer_memberList(memberlist,op));
 
 		this.editor.attr("v",j2s(resultTxt));
 	}
@@ -102,17 +162,77 @@ var excelMemberList_value = function(obj){
 	return s2j(obj.attr("v"));
 }
 
+
 var addByID = function(obj){
 	var neditor = $("<div>").addClass("Editor");
-	var input = $("<input>").addClass("form-control form-control-inline").attr("id","addID").appendTo(neditor);
-	var btn = $("<button>").addClass("btn btn-primary").append("Add").attr("id","addIDBtn").on("click",function(){
-		
-			var v = s2j($("[field=memberList]").find(".LQEditor").attr("v"));
-			var op = $("[field=memberList]").find(".LQEditor").attr("editor");
-			if(!v)v={};
-			v[""+$("#addID").val()]="nick";
-			$("[field=memberList]").html("").append(viewer_memberList(v,op));
-	}).appendTo(neditor);;
+	// var input = $("<input>").addClass("form-control form-control-inline").attr("id","addID").appendTo(neditor);
+	// var btn = $("<button>").addClass("btn btn-primary").append("Add").attr("id","addIDBtn").on("click",function(){		
+
+
+	// $("<button>").addClass("btn").addClass("btn-default").attr("id","findUserInfo").html("조회").appendTo(i_span);
+
+	// 	//ajax로 생성
+	// 	$.ajax({
+	//     url : "dataManager2.php", 
+	//     data : {"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s({"memberID":$("#addID").val()})},
+	//     dataType : "json", 
+	//     type : "post",
+	//     success : function(data){
+	//     	printLog(data);
+	//     	log(data);
+	//     	if(data["result"]["code"]==1){
+	//     		var v = s2j($("[field=memberList]").find(".LQEditor").attr("v"));
+	// 			var op = $("[field=memberList]").find(".LQEditor").attr("editor");
+	// 			if(!v)v={};
+	// 			v[data["memberID"]]=data["nick"];
+	// 			$("[field=memberList]").html("").append(viewer_memberList(v,op));
+
+	//     	}else{
+	//     		alert("error","아이디를 로드할수 없습니다."+j2s(data));
+	//     	}
+	//     },
+	//     error : function(e){
+	//     	alert("error","아이디를 로드할수 없습니다."+j2s(e));
+	//     }
+	// 	});
+	// }).appendTo(neditor);;
+
+	var i_table = $("<table>").appendTo(neditor);
+	var i_tr1 = $("<tr>").appendTo(i_table);
+	var i_td1 = $("<td>").appendTo(i_tr1);
+	var i_div1 = $("<div>").attr("data-toggle-name","radius_options").attr("data-toggle","buttons-radio").addClass("btn-group").addClass("radio-btn").appendTo(i_td1);
+	$("<button>").attr("id","findType").addClass("btn").addClass("btn-default").attr("data-toggle","button").appendTo(i_div1).attr("value","nick").html("닉네임");
+	$("<button>").attr("id","findType").addClass("btn").addClass("btn-default").attr("data-toggle","button").appendTo(i_div1).attr("value","fb").html("페북아이디");
+	$("<button>").attr("id","findType").addClass("btn").addClass("btn-default").attr("data-toggle","button").appendTo(i_div1).attr("value","pc").html("Payco");
+	$("<button>").attr("id","findType").addClass("btn").addClass("btn-default").addClass("active").attr("data-toggle","button").appendTo(i_div1).attr("value","sno").html("회원번호");
+	var i_td2 = $("<td>").appendTo(i_tr1);
+	var i_div2 = $("<div>").addClass("input-group").appendTo(i_td2);
+	var i_input = $("<input>").attr("type","text").addClass("form-control").attr("id","findNo").appendTo(i_div2);
+	var i_span = $("<span>").addClass("input-group-btn").appendTo(i_div2);
+	var findbtn = $("<button>").attr("id","findBtn").addClass("btn").addClass("btn-default").appendTo(i_span).html("추가").on("click",function(){	
+
+	var dbparam = {"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s([{"type":$('.active[id=findType]').val(),"find":$("#findNo").val()}])};
+	log(dbparam);
+		$.ajax({
+		    url : "dataManager2.php", 
+		    data : dbparam,
+		    dataType : "json", 
+		    type : "post",
+		    success : getNickNameAjaxFunc,
+		    error : function(e){
+		    	alert("error","아이디를 로드할수 없습니다.");
+		    }
+		});
+
+	});
+	
+	i_input.keyup(function(event){
+	    if(event.keyCode == 13){
+	       $("#findBtn").trigger("click");
+	       $("#findNo").blur();
+	    }
+	});
+
 	return neditor;
 }
 </script>
@@ -149,10 +269,11 @@ var addByID = function(obj){
 <div class="table-responsive">
 <table class="LQDataForm" autoLoad="false" startMode="update" dbSource="dataManager2.php" dbClass="SendItem" dbWhere='' name="userinfo" width="1000" align=center commenter='{"type":"custom","func":"commenter"}'>
 	<tr><td manage="update insert delete">
-	<h2 id="tables-contextual-classes">|재화/아이템 변경</h2>
+	
+	<table width=100%><tr><td><h2 id="tables-contextual-classes">|특정회원 재화/아이템 변경</h2></td><td align=right valign=bottom>[<a href=manage_sendItemAlluser.php?gid=<?=$gid?>>전체회원에게 보내기</a>]</td></tr></table>
 	<table class="table table-bordered">
 		<tr>
-			<td>엑셀파일로로드</td>
+			<td>아이디추가<br><font color=cccccc>xls파일의 A열에<br> 회원번호 입력</font></td>
 			<td field="excelMemberList" editor='{"type":"excelMemberList","uploadFile":"./processupload/processupload.php","uploadDir":"../images/","excelReturn":true, "removeFile":true}'></td>
 		</tr>
 		<tr>

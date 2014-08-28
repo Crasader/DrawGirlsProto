@@ -23,8 +23,7 @@
 <table border=0 width=100%>
 <?php
 
-	$nowDate = TimeManager::
-	getCurrentDateTime();
+	$nowDate = TimeManager::getCurrentDateTime();
 
 	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isList=1 order by `no` desc")){
 

@@ -3,6 +3,7 @@
 include "../lib.php";
 
 
+
 $admin = new AdminUser($_SESSION["admin_no"]);
 if($admin->isLogined() && !$_GET["mode"]){
 	?>
@@ -1036,7 +1037,7 @@ function getCircleBoss($stageNo,$stageLevel){
 	// 	$boss["shape"]="snake";
 	// }
 	
-	$boss["scale"]=array("min"=>0.5,"start"=>0.5,"max"=>0.5); //
+	$boss["scale"]=array("min"=>0.4,"start"=>0.4,"max"=>0.4); //
 
 	$movement = rand(1,3);
 	$boss["movement"]=array("normal"=>$movement,"draw"=>$movement); // 1~4
@@ -1099,7 +1100,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 		$junior=array();
 		$junior["type"] = $jrName;
 		$junior["speed"] = array("min"=>$jrSpeed*0.5,"start"=>$jrSpeed,"max"=>$jrSpeed);
-		$junior["scale"] = array("min"=>0.5,"start"=>0.5,"max"=>0.5);
+		$junior["scale"] = array("min"=>0.4,"start"=>0.4,"max"=>0.4);
 		$junior["movement"] = array("normal"=>$movement,"draw"=>$movement);
 		$junior["hp"] = (int)($boss["hp"]*0.2);
 		if($jCnt>=5)$junior["hp"]=(int)($boss["hp"]/$jCnt);
@@ -1117,7 +1118,7 @@ function getJuniors($stageNo,$stageLevel,$boss){
 $bossData = array();
 
 
-$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 and autoLevel=1 order by no asc",DBManager::getMainConnection());
+$result = mysql_query("select * from aPieceTable where level>=1 and no<1000 and autoLevel=1 order by no asc",DBGroup::create("main")->getConnectionForRead(1));
 while($data = mysql_fetch_array($result)){
 	//$data[level] = ceil($data[no]/5);
 	$data[level] = $data[no];
@@ -1142,7 +1143,7 @@ while($data = mysql_fetch_array($result)){
 			$reward = $stageReward[$ci];
 			$sString = json_encode($cardStat[$ci],JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			$qs1 = "update aCardTable set missile='".$sString."',piece=".$data[no]." where no=".$cards[$ci];
-			mysql_query($qs1,DBManager::getMainConnection());
+			mysql_query($qs1,DBGroup::create("main")->getConnectionForRead(1));
 			echo "<br><font color=blue>$qs1</font>";
 			echo json_encode($cardStat,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
 			echo "<br><br>";

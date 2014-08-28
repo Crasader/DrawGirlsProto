@@ -42,11 +42,11 @@ function ExchangeEditor(value,option){
 	    		obj.editor.attr("value",obj.exchangeID);
 	    		obj.createRewardEditor(data["list"]);
 	    	}else{
-	    		alert("error","교환정보가 제대로 저장되지 않았습니다. 다시 시도해주세요"+j2s(data));
+	    		alert("error","교환정보가 제대로 저장되지 않았습니다. 다시 시도해주세요");
 	    	}
 	    },
 	    error : function(e){
-	    	alert("error","교환정보가 제대로 저장되지 않았습니다. 다시 시도해주세요"+j2s(e));
+	    	alert("error","교환정보가 제대로 저장되지 않았습니다. 다시 시도해주세요");
 	    }
 		});
 
@@ -157,8 +157,23 @@ var exchangemaker_value = function(obj){
 	return obj.attr("value");
 }
 
+var propertyViewer = function(value,option){
+	return propChange(value);
+}
 
+var arrayViewer = function(value,option){
 
+	value = s2j(value);
+	var table = $("<table>").addClass("table").addClass("table-bordered");	
+
+		
+	for(var i in value){
+		var tr1 = $("<tr>").appendTo(table);
+		$("<td>").html(value[i]).appendTo(tr1);
+	}
+
+	return table;
+}
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -186,7 +201,7 @@ function ExchangeViewer(value,option){
 		var editTableTD = $("<td>").attr("colspan",2).appendTo(editTableTR);
 		$("<label>").append("교환ID : "+this.exchangeID).appendTo(editTableTD);
 		var editTableTR2 = $("<tr>").appendTo(editTable);
-		var editTableTD3 = $("<td>").attr("colspan",2).appendTo(editTableTR2).attr("align","center");
+		//var editTableTD3 = $("<td>").attr("colspan",2).appendTo(editTableTR2).attr("align","center");
 		
 		if(list){
 			for(var i =0 ; i<list.length; i++){
@@ -323,17 +338,8 @@ var languageEditor_value = function(obj){
 }
 
 
-var languageViewer = function(value,option){
-	value = s2j(value);
-	var pushData = '<table class="table table-boarded">';
-	for(i in value){
-			pushData+='<tr><td>'+i+'</td>';
-			pushData+='<td>'+value[i]+'</td></tr>';
-	}
-	pushData+="</table>";
 
-	return pushData;
-}
+
 
 var cuponCodeViewer = function(value,option){
 	return value.substr(0,4)+"-"+value.substr(4,4)+"-"+value.substr(8,4);
@@ -352,9 +358,9 @@ var imageInfoViewer = function(value,option){
 
 var adminPermissionView = function(value,opotion){
 	value = s2j(value);
-	var perList = ["readAdmin","editAdmin","readUser","editUser","readEvent","editEvent","readGame","editGame"];
-	var nameList = ["관리자보기","관리자수정","유저보기","유저수정","이벤트보기","이벤트수정","게임설정보기","게임설정수정"];
-
+	var perList = ["readAdmin","readUser","readEvent","readGame"];
+	var nameList = ["운영자관리","유저관리","이벤트관리","게임설정"];
+	
 	var table = $("<table>").addClass("table").addClass("table-bordered");
 	var titleRow = $("<tr>");
 	var valueRow = $("<tr>");
@@ -378,8 +384,8 @@ var adminPermissionView = function(value,opotion){
 
 var adminPermissionEditor = function(value,option){
 	value = s2j(value);
-	var perList = ["readAdmin","editAdmin","readUser","editUser","readEvent","editEvent","readGame","editGame"];
-	var nameList = ["관리자보기","관리자수정","유저보기","유저수정","이벤트보기","이벤트수정","게임설정보기","게임설정수정"];
+	var perList = ["readAdmin","readUser","readEvent","readGame"];
+	var nameList = ["접속자관리","유저관리","이벤트관리","게임설정"];
 
 	var table = $("<table>").addClass("table").addClass("table-bordered").addClass("LQEditor").attr("editor",j2s(option));
 	var titleRow = $("<tr>");
@@ -404,6 +410,373 @@ var adminPermissionEditor_value = function(obj){
 		else r[n]="false";
 	});
 	return r;
+}
+
+var showPuzzleImg = function(value,option){
+	data = s2j(value);
+	if(!data)return "";
+	if(!data["image"]) return "";
+	return '<img src='+data["image"]+' height=100>';
+}
+
+var puzzleOpenConditionViewer = function(value,option){
+	value = s2j(value);
+	
+	var table = $("<table>").addClass("table").addClass("table-bordered");	
+
+	if(typeof(value)!="object" || value.length==0) table.html("<tr><td>없음</td></tr>");
+	for(var i in value){
+		var row = $("<tr>").appendTo(table);
+		var cell = $("<td>").appendTo(row);
+		var conStr = "";
+		for(var j in value[i]){
+			if(value[i][j]["type"]=="s")conStr+="별 "+value[i][j]["value"]+"개 이상 보유";
+			if(value[i][j]["type"]=="p")conStr+=value[i][j]["value"]+"번 퍼즐 클리어";
+			if(value[i][j]["type"]=="r")conStr+=value[i][j]["value"]+"젬 으로 구매";
+			if(value[i][j]["type"]=="w")conStr+=value[i][j]["weekday"]+"번째 요일 "+value[i][j]["s"]+"~"+value[i][j]["e"];
+			if(value[i][j]["type"]=="d")conStr+=value[i][j]["s"]+"~"+value[i][j]["e"];
+			if(j<value[i].length-1)conStr+=" & ";
+		}
+		cell.html(conStr);
+	}
+
+	return table;
+
+
+}
+
+var puzzleCardRewradViewer = function(value,option){
+	value = s2j(value);
+	
+	var table = $("<table>").addClass("table").addClass("table-bordered");	
+	var nRow = $("<tr>").html("<td>최초완성</td><td>"+value["normal"]+"</td>").appendTo(table);
+	var pRow = $("<tr>").html("<td>퍼펙트완성</td><td>"+value["perfect"]+"</td>").appendTo(table);
+
+	return table;
+}
+
+var titleArrayViewer = function(value,option){
+
+	value = s2j(value);
+	option = s2j(option);
+	var table = $("<table>").addClass("table").addClass("table-bordered");	
+
+	var tr1 = $("<tr>").appendTo(table);
+	var tr2 = $("<tr>").appendTo(table);
+		
+	for(var i in option["title"]){
+		$("<td>").html(option["title"][i]).appendTo(tr1);
+		$("<td>").html(value[i]).appendTo(tr2);
+	}
+
+	return table;
+}
+
+
+var keyArrayViewer = function(value,option){
+
+	value = s2j(value);
+	option = s2j(option);
+	var table = $("<table>").addClass("table").addClass("table-bordered");	
+
+		
+	for(var i in value){
+		var tr1 = $("<tr>").appendTo(table);
+		$("<td>").html(i).appendTo(tr1);
+		$("<td>").html(j2s(value[i])).appendTo(tr1);
+	}
+
+	return table;
+}
+
+var keyArrayEditor = function(value,option){
+
+	value = s2j(value);
+	option = s2j(option);
+	var table = $("<table>").addClass("table").addClass("table-bordered").addClass("LQEditor").attr("editor",j2s(option));	
+
+	var tr1 = $("<tr>").appendTo(table);
+	var tr2 = $("<tr>").appendTo(table);
+		
+	for(var i in option["title"]){
+		
+		var editor = editorSelector('{"type":"text"}', value[i]);
+		$("<td>").html(option["title"][i]).appendTo(tr1);
+		$("<td>").append(editor).appendTo(tr2);
+
+	}
+
+	return table;
+}
+
+var keyArrayEditor_value = function(obj){
+	var dataRow = {};
+	var value=[];
+	var i=0;
+	obj.find(".LQEditor").each(function(){
+		var veditor = $(this);
+		var vv = getObjValue(veditor);
+		value[i]=vv;
+		i++;
+	});
+
+	return value;
+}
+
+var setTypeEditor = function(value,option){
+	var vList = value.split(",");
+	option = s2j(option);
+
+	var table =$("<table>").addClass("table").addClass("table-bordered").addClass("LQEditor").attr("editor",j2s(option));
+	var tr1 = $("<tr>").appendTo(table);
+	var tr2 = $("<tr>").appendTo(table);
+	var eList = option["element"];
+	var pList = option["element"];
+	if(option["value"])eList=option["value"];
+
+	for(var i in eList){
+		var td1 = $("<td>").appendTo(tr1).html(pList[i]);
+		var td2 = $("<td>").appendTo(tr2);
+		var checkbox = $("<input>").attr("type","checkbox").attr("value",eList[i]).appendTo(td2);
+		if($.inArray(eList[i],vList) > -1)checkbox.attr("checked",true);
+	}
+
+	var allSelect = $("<td>").appendTo(tr1);
+
+	var all = option["all"];
+	if(!all)all="모두선택";
+	$("<button>").html(all).addClass("btn").appendTo(allSelect).on("click",function(){
+		$(this).parent().parent().parent().find("input:checkbox").each(function(){
+			$(this).prop("checked","checked");
+		});
+	});
+
+	var alldeSelect = $("<td>").appendTo(tr2);
+	$("<button>").html("모두해제").addClass("btn").appendTo(alldeSelect).on("click",function(){
+		$(this).parent().parent().parent().find("input:checkbox").each(function(){
+			$(this).prop("checked",false);
+		});
+	});
+
+	return table;
+}
+
+var setTypeEditor_value = function(obj){
+	var value = [];
+	obj.find("input:checkbox").each(function(){
+		if($(this).is(":checked"))
+			value.push($(this).attr("value"));
+	});
+	return value.join(","); 
+}
+
+var setTypeViewer = function(value,option){
+	var vList = value.split(",");
+	option = s2j(option);
+	var eList = option["element"];
+	var pList = option["element"];
+	if(option["value"])eList=option["value"];
+
+	if(option["all"] && vList.length == eList.length)return option["all"];
+
+	var result = [];
+	for(var i in vList){
+		var idx = $.inArray(vList[i],eList);
+		result.push(pList[idx]);
+	}
+
+	return result.join(",");
+}
+
+var countrySelector = function(value,option){
+	option = s2j(option);
+	option["element"]=["한국","태국","대만","홍콩","베트남","필리핀","싱가폴","마카오","말레이시아","인도네시아","일본","중국","미국"];
+	option["value"]=["kr","th","tw","hk","vn","ph","sg","mo","my","id","jp","cn","us"];
+	option["all"]="전체국가";
+	return setTypeEditor(value,option);
+}
+
+var countrySelector_value = function(obj){
+	return setTypeEditor_value(obj);
+}
+
+var countrySelectorOnce = function(value,option){
+	option = s2j(option);
+	option["element"]=["한국","태국","대만","홍콩","베트남","필리핀","싱가폴","마카오","말레이시아","인도네시아","일본","중국","미국","전체"];
+	option["value"]=["kr","th","tw","hk","vn","ph","sg","mo","my","id","jp","cn","us","all"];
+	return editorFunc_select(value,option);
+}
+
+var countryViewer = function(value,option){
+	option = s2j(option);
+	option["element"]=["한국","태국","대만","홍콩","베트남","필리핀","싱가폴","마카오","말레이시아","인도네시아","일본","중국","미국"];
+	option["value"]=["kr","th","tw","hk","vn","ph","sg","mo","my","id","jp","cn","us"];
+	option["all"]="전체국가";
+	return setTypeViewer(value,option);
+}
+
+
+var osSelector = function(value,option){
+	option = s2j(option);
+	option["element"]=["ios","android"];
+	option["all"]="전체OS";
+	return setTypeEditor(value,option);
+}
+
+var osSelector_value = function(obj){
+	return setTypeEditor_value(obj);
+}
+
+var osViewer = function(value,option){
+	option = s2j(option);
+	option["element"]=["ios","android"];
+	option["all"]="전체OS";
+	return setTypeViewer(value,option);
+}
+
+
+var weekDaySelector = function(value,option){
+	option = s2j(option);
+	option["element"]=["일","월","화","수","목","금","토"];
+	option["value"]=["sun","mon","tue","wed","thu","fri","sat"];
+	option["all"]="매일";
+	return setTypeEditor(value,option);
+}
+
+var weekDaySelector_value = function(obj){
+	return setTypeEditor_value(obj);
+}
+
+var weekDayViewer = function(value,option){
+	option = s2j(option);
+	option["element"]=["일","월","화","수","목","금","토"];
+	option["value"]=["sun","mon","tue","wed","thu","fri","sat"];
+	option["all"]="매일";
+	return setTypeViewer(value,option);
+}
+
+var autoViewer = function(value,option){
+	var nValue = s2j(value);
+	if(typeof(nValue)!="object"){
+		return viewerSelector('{"type":"text"}',value);
+	}else{
+		return viewerSelector('{"type":"keyArrayViewer"}',value);	
+		// var sValue = j2s(value);
+		// if(sValue[0]=="["){
+		// 	return editorSelector('{"type":"arrayViewer"}',value);	
+		// }else{
+		// 	return editorSelector('{"type":"dictionaryViewer"}',value); 
+		// }
+	}
+}
+
+
+var autoEditor = function(value,option){
+	var nValue = s2j(value);
+	var vType = typeof(nValue);
+	if((typeof(nValue)=="undefined" || nValue=="") && value!==0){
+		var select = $("<select>").addClass("form-control form-control-inline").attr("editor",j2s(option));
+		$("<option>").append("추가할 타입 선택").appendTo(select);
+		$("<option>").append("Text").appendTo(select);
+		$("<option>").append("Number").appendTo(select);
+		$("<option>").append("Array").appendTo(select);
+		$("<option>").append("Dictionary").appendTo(select);
+		select.on("change",function(){
+			switch($(this).val()){
+				case "Text": $(this).parent().html("").append(editorSelector('{"type":"text"}'));break;
+				case "Number": $(this).parent().html("").append(editorSelector('{"type":"text","datatype":"int"}'));break;
+				case "Array":$(this).parent().html("").append(editorSelector('{"type":"array","element":{"type":"autoEditor"}}'));break;
+				case "Dictionary":$(this).parent().html("").append(editorSelector('{"type":"dictionary"}'));break;
+			}
+		});
+		return select;
+	}else if(typeof(nValue)!="object"){
+		if(typeof(nValue)=="number"){
+			return editorSelector('{"type":"text","datetype":"int"}',value);
+		}
+		return editorSelector('{"type":"text"}',value);
+	}else{
+		var sValue = j2s(value);
+		if(sValue[0]=="["){
+			return editorSelector('{"type":"array"}',value);	
+		}else{
+			return editorSelector('{"type":"dictionary"}',value); 
+		}
+	}
+}
+
+var autoEditor_value = function(obj){
+	return "";
+}
+
+
+		
+var commenter = function(value,option){
+	return "사유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
+}
+var commenter_value = function(obj){
+	return obj.val();
+} 
+
+var propChange = function(value){
+	switch(value){
+		case "m":return "결제";
+		case "r":return "젬";
+		case "pr":return "유료젬";
+		case "fr":return "무료젬";
+		case "g":return "골드";
+		case "h":return "하트";
+		case "i6":return "아이템두배아이템";
+		case "i8":return "시간추가아이템";
+		case "i9":return "신발아이템";
+		case "i11":return "자석아이템";
+		case "p1":return "이어하기권";
+		case "p2":return "맵가챠권";
+		case "p3":return "캐릭업글권";
+		case "p4":return "아이템뽑기권";
+		case "p5":return "99프로뽑기권";
+		case "p6":return "생명의 돌";
+		case "cd":return "카드";
+		case "pc":return "피스";
+		case "pz":return "퍼즐";
+	}
+}
+
+var propSelect = function(value,option){
+ return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
+}
+
+var rewardViewer = function(value,option){
+	value=s2j(value);
+	var pushData = '<table class="table table-boarded">';
+	for(var i in value){
+		pushData+='<tr><td>'+propChange(value[i]["type"])+'</td><td>'+value[i]["count"]+'개</td></tr>';
+	}
+	pushData+="</table>";
+	return pushData;
+}
+
+var languageViewer = function(value,option){
+	value = s2j(value);
+	var pushData = '<table class="table table-boarded">';
+	for(var lang in value){
+		pushData+='<tr><td>'+lang+'</td><td>'+nl2br(value[lang])+'</td></tr>';
+	}
+	pushData+="</table>";
+	return pushData;
+}
+
+
+var koreanViewer = function(value,option){
+	value = s2j(value);
+	// var pushData = '<table class="table table-boarded">';
+	// for(i in value){
+	// 		pushData+='<tr><td>'+i+'</td>';
+	// 		pushData+='<td>'+nl2br(value[i])+'</td></tr>';
+	// }
+	// pushData+="</table>";
+
+	return nl2br(value["ko"]);
 }
 
 ///////////////////////
@@ -565,7 +938,7 @@ function FileUploader(value,option){
 	// 	return obj.find(".imageSelector").val();
 	// }
 	var imageSelector_value = function(obj){
-		return obj.attr("value");
+		return obj.find(".imageSelector").val();
 	}	
 	var resourceSelector = function(value,option){	
 
@@ -585,7 +958,7 @@ function FileUploader(value,option){
 	}
 	
 	var resourceSelector_value = function(obj){
-		return obj.attr("value");
+		return obj.find(".resourceSelector").val();
 	}
 
 	var imageViewer = function(value,option){
@@ -597,6 +970,8 @@ function FileUploader(value,option){
 		return img;
 	}
 	
+
+
 	window.changeJsonFormInput = function(input,value,size) {
 		log("changeJsonFormInput:"+input+",value:"+value+",size:"+size);
 		var obj = delegator2[input];
