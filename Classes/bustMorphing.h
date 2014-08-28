@@ -662,8 +662,9 @@ public:
 
 #if 1
 		CCImage* img = new CCImage();
-		img->initWithImageFileThreadSafe(fullPath.c_str());
-		unsigned char* oData = img->getData();	
+		img->initWithEncryptedImageFileFullPath(fullPath.c_str());
+		unsigned char* oData = img->getData();
+
 		int height = img->getHeight();
 		int width = img->getWidth();
 		m_silColors = vector<vector<ccColor4B> >(height, vector<ccColor4B>(width));	

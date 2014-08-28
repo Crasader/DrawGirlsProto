@@ -954,7 +954,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				n_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
 																											  card_number)->getCString()));
 				n_clipping->addChild(n_card);
 				n_card->setScale(0.5f);
@@ -974,7 +974,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				s_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
 																											  card_number)->getCString()));
 				s_card->setScale(0.5f);
 				s_card->setColor(ccGRAY);
@@ -1056,7 +1056,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			n_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
 			n_card->setScale(0.5f);
 			n_clipping->addChild(n_card);
@@ -1077,7 +1077,7 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			s_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png",
+			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
 																										  card_number)->getCString()));
 			s_card->setScale(0.5f);
 			s_card->setColor(ccGRAY);

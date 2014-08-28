@@ -654,7 +654,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
-																					spr = mySIL->getLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",rewardCount)->getCString());
+																					spr = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",rewardCount)->getCString());
 																					spr->setScale(0.3f);
 																					count->setString("");
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
@@ -1214,12 +1214,13 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 				Json::Value card_param;
 				card_param["noList"][0] = download_card_no.getV();
 				myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
-			});
-			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}, 1);
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		}
 		else
 		{
@@ -1319,10 +1320,11 @@ void SumranMailPopup::failCardDownload()
 	{
 		mySGD->network_check_cnt = 0;
 		
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 			startCardDownload();
-		});
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}, 1);
+		if(alert)
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	}
 	else
 	{
@@ -1372,10 +1374,11 @@ void SumranMailPopup::takedCard(int cardNo, function<void()> t_end_func){
 			{
 				mySGD->network_check_cnt = 0;
 				
-				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 					takedCard(cardNo, t_end_func);
-				});
-				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+				}, 1);
+				if(alert)
+					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 			}
 			else
 			{

@@ -406,10 +406,10 @@ void MapScanner::scanMap()
 			
 		}
 		effectSprites->setPosition(ccp(centerX, centerY));
-		addChild(KSGradualValue<float>::create(0.f, 1.f , 0.4f, [=](float t){
+		addChild(KSGradualValue<float>::create(0.f, 1.f , 0.1f, [=](float t){
 			float a = 1 + (10.f / (maxx - minx)) * t;
 			float b = 1 + (10.f / (maxy - miny)) * t;
-			float c = 200 + (0 - 200.f) * t;
+			float c = 255 + (0 - 255.f) * t;
 			
 			effectSprites->setScaleX(a);
 			effectSprites->setScaleY(b);
@@ -418,7 +418,7 @@ void MapScanner::scanMap()
 			
 			float a = 1 + (10.f / (maxx - minx)) * t;
 			float b = 1 + (10.f / (maxy - miny)) * t;
-			float c = 200 + (0 - 200.f) * t;
+			float c = 255 + (0 - 255.f) * t;
 			
 //			effectSprites->setScaleX(a);
 //			effectSprites->setScaleY(b);
@@ -517,8 +517,7 @@ void MapScanner::scanMap()
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
 	CCLOG("process step 7(resetRect!!!) / time : %f", elapsed_seconds.count());
-	start = chrono::system_clock::now();
-
+	start = chrono::system_clock::now(); 
 }
 
 CCArray* MapScanner::getGainRects(mapType (*gainMap)[217])
@@ -643,7 +642,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	}
 }
 
-IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start)
+IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, const IntMoveState& start)
 {
 //	auto gdPointer = myGD;
 	IntPoint origin = IntPoint(start.origin.x, start.origin.y);
@@ -653,13 +652,9 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 	bool isRighter = true;
 	CircularQueue<IntMoveState> loopArray(350);
 	loopArray.enqueue(start);
-//	loopArray.push(start);
 	
 	CircularQueue<IntMoveState> nextLoopArray(350);
 	
-//	int loopCnt;
-	
-//	while(!loopArray.empty())
 	while(!loopArray.isEmpty())
 	{
 		if(isUpper)				size.height++;
@@ -2491,7 +2486,7 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	
 	
 	CCImage* img = new CCImage();
-	img->initWithImageFileThreadSafe(fullpath.c_str());
+	img->initWithEncryptedImageFileFullPath(fullpath.c_str());
 	
 //	CCLOG("fuckfuckfuck android %d,%d,%d,%d",newImg->getDataLen(), newImg->getWidth(), newImg->getHeight(), newImg->getBitsPerComponent());
 	
@@ -2770,7 +2765,7 @@ void VisibleParent::divideRects(IntRect crashRect)
 	myVS->setRectToVertex();
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
-	CCLOG("devide 렉츠. 1 / time : %f", elapsed_seconds.count());
+//	CCLOG("devide 렉츠. 1 / time : %f", elapsed_seconds.count());
 	start = chrono::system_clock::now();
 }
 

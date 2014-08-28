@@ -1253,6 +1253,8 @@ void PuzzleScene::showClearPopup()
 	t_popup->is_take_star_effect = true;
 	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect | clear_is_perfect_piece;
 	t_popup->refresh_achieve_func = bind(&PuzzleScene::countingAchievement, this);
+	if(clear_is_stage_unlock)
+		t_popup->onMainButton();
 	addChild(t_popup, kPuzzleZorder_popup);
 }
 
@@ -1759,22 +1761,22 @@ void PuzzleScene::setPuzzle()
 	
 	int puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	CCSprite* top = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
+	CCSprite* top = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("puzzle%d_original_top.png", puzzle_number)->getCString());
 	top->setAnchorPoint(ccp(0.5, 1));
 	top->setPosition(ccp(0, puzzle_size.height/2.f));
 	puzzle_node->addChild(top, kPuzzleNodeZorder_puzzle);
 	
-	CCSprite* bottom = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_bottom.png", puzzle_number)->getCString());
+	CCSprite* bottom = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("puzzle%d_original_bottom.png", puzzle_number)->getCString());
 	bottom->setAnchorPoint(ccp(0.5, 0));
 	bottom->setPosition(ccp(0, -puzzle_size.height/2.f));
 	puzzle_node->addChild(bottom, kPuzzleNodeZorder_puzzle);
 	
-	CCSprite* left = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString());
+	CCSprite* left = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("puzzle%d_original_left.png", puzzle_number)->getCString());
 	left->setAnchorPoint(ccp(0, 0.5));
 	left->setPosition(ccp(-puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(left, kPuzzleNodeZorder_puzzle);
 	
-	CCSprite* right = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString());
+	CCSprite* right = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("puzzle%d_original_right.png", puzzle_number)->getCString());
 	right->setAnchorPoint(ccp(1, 0.5));
 	right->setPosition(ccp(puzzle_size.width/2.f, 0));
 	puzzle_node->addChild(right, kPuzzleNodeZorder_puzzle);
@@ -1872,7 +1874,7 @@ void PuzzleScene::setPuzzle()
 		}
 		else
 		{
-			CCSprite* piece = mySIL->getLoadedImg(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, i)->getCString());
+			CCSprite* piece = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("puzzle%d_original_piece%d.png", puzzle_number, i)->getCString());
 			piece->setAnchorPoint(ccp(0.5,0.5));
 			piece->setPosition(piece_position);
 			puzzle_node->addChild(piece, kPuzzleNodeZorder_puzzle);

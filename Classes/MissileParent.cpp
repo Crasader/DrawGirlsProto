@@ -115,7 +115,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 				}
 			}
 			
-			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
 			card_img->setScale(0.f);
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);
@@ -155,7 +155,7 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 			int shoot_frame = t_missile_speed*3;
 			shoot_frame *= cmCnt;
 			
-			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
+			CCSprite* card_img = CCSprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png", card_number)->getCString()));
 			card_img->setScale(0.f);
 			card_img->setPosition(missile_position);
 			jack_missile_node->addChild(card_img);

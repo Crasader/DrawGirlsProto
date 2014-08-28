@@ -397,7 +397,7 @@ private:
 	CCArray* getGainRects(mapType (*gainMap)[217]);
 	mapType mapInitState[162][217];
 	
-	IntRect* newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start);
+	IntRect* newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, const IntMoveState& start);
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	

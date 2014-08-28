@@ -791,12 +791,13 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	}
 	else
 	{
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
 			CCNode* t_node = CCNode::create();
 			t_node->setTag(kSLD_MT_receive);
 			menuAction(t_node);
-		});
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}, 1);
+		if(alert)
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
 //		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
 //		replay_menu->setPosition(ccp(300,100));
@@ -990,7 +991,7 @@ void StageListDown::successAction()
 		for(int j=0;j<cut_list.size();j++)
 		{
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w = new CCImage;
 			CCImage *st_h = new CCImage;
@@ -1765,7 +1766,7 @@ void StageListDown::startDownloadSet()
 		for(int j=0;j<cut_list.size();j++)
 		{
 			CCImage *img = new CCImage;
-			img->initWithImageFileThreadSafe((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
+			img->initWithEncryptedImageFileFullPath((mySIL->getDocumentPath() + cut_list[j].filename).c_str()); //퍼즐이미지를 불러옵니다.
 			
 			CCImage *st_w = new CCImage;
 			CCImage *st_h = new CCImage;

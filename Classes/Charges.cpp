@@ -209,11 +209,12 @@ void ChargeNodeLambda::charging()
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+				cb->setCumberState(cb->m_cumberState | kCumberStateMoving);
 			else
-				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
+				cb->setCumberState(cb->m_cumberState & ~kCumberStateMoving); // 움직이고 있었다면 무효로.
+
 			
-			CCLog("cb == %d", cb->m_cumberState);
+//			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -328,11 +329,11 @@ void SpecialChargeNodeLambda::charging()
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+				cb->setCumberState(cb->m_cumberState | kCumberStateMoving); // Moving 정보
 			else
-				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
+				cb->setCumberState(cb->m_cumberState & ~kCumberStateMoving); // 움직이고 있었다면 무효로.
 
-			CCLog("cb == %d", cb->m_cumberState);
+//			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;
@@ -457,12 +458,12 @@ void CrashChargeNodeLambda::charging()
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
-				cb->m_cumberState |= kCumberStateMoving; // Moving 정보
+				cb->setCumberState(cb->m_cumberState | kCumberStateMoving); // Moving 정보
 			else
-				cb->m_cumberState &= ~kCumberStateMoving; // 움직이고 있었다면 무효로.
+				cb->setCumberState(cb->m_cumberState & ~kCumberStateMoving); // 움직이고 있었다면 무효로.
 
 			
-			CCLog("cb == %d", cb->m_cumberState);
+//			CCLog("cb == %d", cb->m_cumberState);
 			auto end = chrono::system_clock::now();
 			auto currentSecond = chrono::system_clock::to_time_t(end);
 			LastPattern lp;

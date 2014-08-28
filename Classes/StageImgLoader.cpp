@@ -11,6 +11,29 @@
 #import <Foundation/Foundation.h>
 #endif
 
+#include "KSUtil.h"
+CCSprite* StageImgLoader::getUnsafeLoadedImg(string filename)
+{
+	CCTexture2D* texture = addNakedImage(filename.c_str());
+	if(texture)
+	{
+		CCSprite *pobSprite = new CCSprite();
+		if (pobSprite && pobSprite->initWithTexture(texture))
+		{
+			pobSprite->autorelease();
+			return pobSprite;
+		}
+		CC_SAFE_DELETE(pobSprite);
+		
+		return pobSprite;
+	}
+	else
+	{
+		return nullptr;
+	}
+
+//	return CCSprite::createWithTexture(texture);
+}
 CCSprite* StageImgLoader::getLoadedImg(string filename)
 {
 	CCTexture2D* texture = addImage(filename.c_str());
@@ -55,25 +78,44 @@ void StageImgLoader::removeTextureCache(string filename)
 
 CCTexture2D * StageImgLoader::addImage(const char * path)
 {
-	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath());
+	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), true);
 }
-
+CCTexture2D * StageImgLoader::addNakedImage(const char * path)
+{
+	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), false);
+}
 void StageImgLoader::addImageAsync(const char *path, cocos2d::CCObject *target, SEL_CallFuncO selector)
 {
-	CCTextureCache::sharedTextureCache()->addImageAsync(path, target, selector, true, getDocumentPath());
+	CCTextureCache::sharedTextureCache()->addImageAsync(path, target, selector, true, getDocumentPath(), true);
 }
 
 size_t StageImgLoader::WriteMemoryCallback(void *contents, size_t size, size_t nmemb, void *userp) {
 	size_t realsize = size*nmemb;
 	LMemoryStruct *out=(LMemoryStruct *)userp;
-    if(out && !out->stream) {
-        /* open file for writing */
-        out->stream = fopen(out->filename.c_str(), "wb");
-        if(!out->stream)
-            return -1; /* failure, can't open file to write */
-    }
+	if(out && !out->stream) {
+		/* open file for writing */
+		out->stream = fopen(out->filename.c_str(), "wb");
+		if(!out->stream)
+			return -1; /* failure, can't open file to write */
+	}
 	out->size += realsize;
-    return fwrite(contents, size, nmemb, out->stream);
+	
+//	if(out->filename.find("thumbnail.png") != string::npos)
+//	{
+//		CCLOG("TEST");
+//	}
+	if(KS::getFileExtenstion(out->filename.c_str()) == "png")
+	{
+		char* charContents = (char*)contents;
+		char* buffer = (char*)contents;
+		while(buffer != &charContents[size * nmemb])
+		{
+			*buffer ^= 0x34;
+			buffer++;
+		}
+	}
+	
+	return fwrite(contents, size, nmemb, out->stream);
 }
 
 string StageImgLoader::getDocumentPath()

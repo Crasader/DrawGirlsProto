@@ -73,8 +73,8 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 {
 	KSCumberBase::startDamageReaction(damage, angle, castCancel, stiffen);
 	m_remainHp -= damage;
-	CCLOG("KSJuniorBase Hp %f", m_remainHp);
-	CCLOG("damaga!!!");
+//	CCLOG("KSJuniorBase Hp %f", m_remainHp);
+//	CCLOG("damaga!!!");
 	// 방사형으로 돌아가고 있는 중이라면
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
@@ -128,7 +128,7 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 						attackIter != cumber->getAttacks().end();
 						++attackIter)
 				{
-					KS::KSLog("%", *attackIter);
+//					KS::KSLog("%", *attackIter);
 					if( (*attackIter).get("pattern", "").asString() == "1020" )
 					{
 						cumber->getAttackQueue().push_back(*attackIter);
@@ -261,7 +261,8 @@ void KSJuniorBase::damageReaction(float)
 	else
 	{
 		//		m_headImg->setColor(ccc3(255, 255, 255));
-		m_cumberState &= kCumberStateMoving;
+//		setCumberState( m_cumberState | kCumberStateMoving);
+		setCumberState( m_cumberState & ~kCumberStateDamaging);
 //		m_cumberState &= ~kCumberStateDamaging;
 //		m_cumberState = kCumberStateMoving;
 		unschedule(schedule_selector(KSJuniorBase::damageReaction));

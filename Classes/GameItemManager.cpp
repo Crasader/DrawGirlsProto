@@ -79,7 +79,7 @@ void GameItemBase::traceCharacter()
 	{
 		stopTraceCharacter();
 		
-		CCLOG("take it item!!!");
+//		CCLOG("take it item!!!");
 		
 		if(mySD->getClearCondition() == kCLEAR_itemCollect)
 			myGD->communication("UI_takeItemCollect");
@@ -102,7 +102,7 @@ void GameItemBase::traceCharacter()
 		{
 			stopTraceCharacter();
 			
-			CCLOG("take it item!!!");
+//			CCLOG("take it item!!!");
 			
 			if(mySD->getClearCondition() == kCLEAR_itemCollect)
 				myGD->communication("UI_takeItemCollect");

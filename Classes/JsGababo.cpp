@@ -303,7 +303,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	loadImage(0);
 	
 	// 튜토 보여줬다면
-	if(myDSH->getIntegerForKey(kDSH_Key_isShowGababoTutorial) && false)
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowGababoTutorial))
 	{
 		m_front1->setScaleY(1.f);
 
