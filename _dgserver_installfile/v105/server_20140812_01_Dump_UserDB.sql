@@ -1,0 +1,1 @@
+DROP TABLE  `UserLogTable`,`EndlessPlayList`, `EndlessRank`, `MessageTable`, `UserProperty`, `UserPropertyHistory`, `WeeklyScoreTable`

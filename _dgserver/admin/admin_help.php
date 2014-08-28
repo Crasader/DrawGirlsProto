@@ -4,7 +4,7 @@ include "header.php";
 $stopCommand = true;
 
 include "../command/cmd2.php";
-
+include "../command/cmd2_help.php";
 //echo time()."<br>";
 //echo (microtime(true)*100)."<br>";
 ?>
@@ -12,8 +12,6 @@ include "../command/cmd2.php";
 <table width=80% align=center><tr><td>
 <?php
 
-
-$command = new commandClass();
 
 
 echo "<hr border=2>";
@@ -34,12 +32,12 @@ foreach(ResultState::$m_resutlCodeList as $key=>$value){
 echo "};";
 echo"</pre><br><br>";
 
-$class_methods = get_class_methods($command);
+$class_methods = get_class_methods("commandHelpClass");
 
 foreach ($class_methods as $method_name) {
     if(strpos($method_name,"help_")  !== false){
 	    $realName = str_replace("help_","",$method_name);
-	    $mInfo = $command->$method_name();
+	    $mInfo = commandHelpClass::$method_name();
 	    echo "<hr border=2>";
 	    echo "<font size=6 color=blue>".$realName."</font><br>";
 	    echo "<b>".$mInfo["description"]."</b><br><br>";

@@ -29,18 +29,18 @@ class DBServer{
 	public $m_connection=null;
 	public $m_selectedDBName=null;
 	public function __construct($host,$id,$pw){
-		//LogManager::addLog("__construct server".$host.$id.$pw);
+		////LogManager::addLog("__construct server".$host.$id.$pw);
 		$this->m_host=$host;
 		$this->m_id=$id;
 		$this->m_pw=$pw;
 	}
 
 	static public function create($host,$id,$pw){
-		//LogManager::addLog("create server".$host.$id.$pw);
+		////LogManager::addLog("create server".$host.$id.$pw);
 		// for($i=1;$i<count(self::$m_serverList);$i++){
 		// 	$server = $m_serverList[$i];
 		// 	if($host==$server->m_host && $id == $server->m_id){
-		// 		LogManager::addLog("selected server");
+		// 		//LogManager::addLog("selected server");
 		// 		return $server;}
 		// }
 
@@ -60,7 +60,7 @@ class DBServer{
 		if(!$this->m_connection){
 			$this->m_connection = mysql_connect($this->m_host,$this->m_id,$this->m_pw);
 			if($this->m_connection){
-				LogManager::addLog("success mysql_connect");
+				////LogManager::addLog("success mysql_connect");
 			}
 		}
 		return $this->m_connection;
@@ -75,13 +75,11 @@ class DBServer{
 
 	public function selectDB($dbName){
 
-		LogManager::addLog("select DB ".$dbName);
-		//if($this->m_selectedDBName==$dbName)return;
-		if(mysql_select_db($dbName, $this->m_connection)){
-			LogManager::addLog("select ok ".$dbName);
+		if(mysql_select_db($dbName, $this->getConnection())){
 			$this->m_selectedDBName=$dbName;
+			return true;
 		}else{
-			LogManager::addLog("select fail ".$dbName);
+			return false;
 		}
 	}
 
@@ -113,7 +111,7 @@ class DBGroup{
 	public function addMaster($db){
 		$this->m_masterList[]=$db;
 
-		//LogManager::addLog("masterSize is ".count($this->m_masterList));
+		////LogManager::addLog("masterSize is ".count($this->m_masterList));
 	}
 
 	public function getMaster($order){
@@ -138,7 +136,6 @@ class DBGroup{
 
 
 	public function setNewShardKeyFunc($func,$cls="default"){
-		LogManager::addLog("setNewShardKeyFunc for ".$cls);
 		$this->m_newShardKeyFunc[$cls] = $func;
 	}
 
@@ -150,7 +147,6 @@ class DBGroup{
 	}
 
 	public function setGetShardKeyFunc($func,$cls="default"){
-		LogManager::addLog("setGetShardKeyFunc for ".$cls);
 		$this->m_getShardKeyFunc[$cls] = $func;
 	}
 
@@ -160,11 +156,9 @@ class DBGroup{
 		return $func($skey);
 	}
 
-	public function newShardKeyFunc($cls="default",$cls="default"){
-		LogManager::addLog("called newShardKeyFunc ok!!");
+	public function newShardKeyFunc($skey,$cls="default"){
 		if(!$this->m_newShardKeyFunc[$cls])$cls="default";
 		$func = $this->m_newShardKeyFunc[$cls];
-		LogManager::addLog("called newShardKeyFuc with ".$cls);
 		return $func($skey);
 	}
 
@@ -180,15 +174,11 @@ class DBGroup{
 		
 
 		if(!$shardOrder){
-			LogManager::addLog("getConnectionforwrite1 for ".$cls);
 			if(!$this->m_getShardKeyFunc[$cls])$cls="default";
-			LogManager::addLog("getConnectionforwrite2 for ".$cls);
 			$func = $this->m_getShardKeyFunc[$cls];
 			$shardOrder = $func($shardKeyValue);
 		}
-		LogManager::addLog("w getShardkeyValue ".$shardKeyValue);
-		LogManager::addLog("w getConnection ".$shardOrder);
-
+		
 		$server = $this->getMaster($shardOrder);
 		if(!$server)return null;
 		return $server->getConnection();
@@ -200,14 +190,10 @@ class DBGroup{
 			$func = $this->m_getShardKeyFunc[$cls];
 			$shardOrder = $func($shardKeyValue);
 		}
-		LogManager::addLog("r getShardkey ".$shardKeyValue);
-		LogManager::addLog("r getConnection ".$shardOrder);
-
-		//LogManager::addLog("this masterSize is ".count($this->m_masterList));
+		
 		$master = $this->getMaster($shardOrder);
 		if(!$master)return null;
 		$slave = $master->getSlaveByRand();
-		//LogManager::addLog("get slave is ".var_export($slave,true));
 		if(!$slave)return null;
 		return $slave->getConnection();
 	}
@@ -269,10 +255,9 @@ class DBMaster{
 	public function getSlaveByRand(){
 		srand((double)microtime()*1000000);
 		$r  =rand(1,$this->getSlaveCount());
-		LogManager::addLog("getSlaveByRand number->".$r."(1~".(count($this->m_slaveList)-1));
-		//LogManager::addLog("slaveList is".var_export($this->m_slaveList,true));
+		////LogManager::addLog("slaveList is".var_export($this->m_slaveList,true));
 		$slave = $this->m_slaveList[$r];
-		//LogManager::addLog("slave is ".var_export($slave,true));
+		////LogManager::addLog("slave is ".var_export($slave,true));
 		return $slave;
 	}
 
@@ -328,7 +313,6 @@ class DBTable2{
 	
 	static public function newShardKeyFunc($shardkey){
 		self::initial();
-		LogManager::addLog("start newShardKeyFunc!! for ".self::getDBTable()." with ".$shardkey);
 		return self::getDBGroup()->newShardKeyFunc($shardkey,self::getDBTable());
 	}
 
@@ -339,7 +323,6 @@ class DBTable2{
 
 	static public function setNewShardKeyFunc($func){
 		self::initial();
-		LogManager::addLog("set newShardKeyFunc!! for ".self::getDBTable()." with ".var_export($func,true));
 		self::getDBGroup()->setNewShardKeyFunc($func,self::getDBTable());
 	}
 	
@@ -364,7 +347,6 @@ class DBTable2{
 			
 
 			static::construct();
-			LogManager::addLog("db table auto select by ".get_called_class()." ==>".static::$m__DBTable);
 		}
 	}
 
@@ -467,9 +449,7 @@ class DBTable2{
 	}
 	
 	public function save($isIncludePrimaryKey=false){
-		LogManager::addLog("DBRow save function");
 		if(!static::$m__DBGroup){
-			LogManager::addLog("dont save. dbgroup is null");
 			return false;
 		}
 
@@ -489,28 +469,24 @@ class DBTable2{
 			if($this->isLoaded()){
 				//update
 				$query = $this->updateQuery(false,$isIncludePrimaryKey);
-				LogManager::addLog("make update query ".$query);
+				//LogManager::addLog("make update query ".$query);
 		}else{
 				//insert
 				$query = $this->insertQuery($isIncludePrimaryKey);
-				LogManager::addLog("make insert query ".$query);
+				//LogManager::addLog("make insert query ".$query);
 				$isInsert=true;
 			}
 			
 			if(mysql_query($query,$writeConn)){
-				LogManager::addLog("what?->".mysql_error());
-				LogManager::addLog("query ok ");
 				if($isInsert && static::$m__autoIncreaseKey){
 					$this->{static::$m__autoIncreaseKey}=mysql_insert_id($writeConn);
-					LogManager::addLog("find autoIncreaseKey ".static::$m__autoIncreaseKey." value is ".$this->m__data[static::$m__autoIncreaseKey]);
 				}
 				return true;
 			}else{
-				LogManager::addLog("query fail ".mysql_error());
+				//LogManager::addLog("query fail ".mysql_error());
 				return false;
 			}
 		}
-		LogManager::addLog("dginfo fail");
 		return false;
 	}
 	
@@ -520,17 +496,17 @@ class DBTable2{
 
 	public function load($where){
 		self::initial();
-		LogManager::addLog("start load1 $where and ".$this->m__shardKeyValue);
+		//LogManager::addLog("start load1 $where and ".$this->m__shardKeyValue);
 		if(!static::$m__DBTable){
-			LogManager::addLog("need check m__DBTable");
+			//LogManager::addLog("need check m__DBTable");
 			return false;
 		}
 		if(!static::$m__DBGroup){
-			LogManager::addLog("need check m__DBGroup");
+			//LogManager::addLog("need check m__DBGroup");
 			return false;
 		}
 		if(!$where && !$this->getPrimaryValue()){
-			LogManager::addLog("need check where or this->getPrimaryValue");
+			//LogManager::addLog("need check where or this->getPrimaryValue");
 			return false;
 		}
 
@@ -542,7 +518,7 @@ class DBTable2{
 
 		$readConn = static::$m__DBGroup->getConnectionForRead($this->m__shardKeyValue,$this->m__shardOrder,self::getDBTable());
 		if(!$readConn){
-			LogManager::addLog("need connection ",$this->m__shardKeyValue,$this->m__shardOrder);
+			//LogManager::addLog("need connection ",$this->m__shardKeyValue,$this->m__shardOrder);
 			return false;
 		}
 		
@@ -554,7 +530,7 @@ class DBTable2{
 			$query = "select * from ".static::$m__DBTable." where ".$where;
 		}
 		
-		LogManager::addLog("load query ".$query);
+		//LogManager::addLog("load query ".$query);
 
 		$this->m__isLoaded=false;
 
@@ -564,12 +540,12 @@ class DBTable2{
 		
 		if($tempdata && $tempdata[static::$m__primaryKey]){
 			$this->m__data = $tempdata;
-			LogManager::addLog("load ok, primarykey is".$tempdata[static::$m__primaryKey]);
+			//LogManager::addLog("load ok, primarykey is".$tempdata[static::$m__primaryKey]);
 			$this->m__isLoaded=true;
 			return true;
 		}
 		
-		LogManager::addLog("load fail".mysql_error());
+		//LogManager::addLog("load fail".mysql_error());
 		return false;
 	}
 	
@@ -586,12 +562,10 @@ class DBTable2{
 
 	public function setDBShardKeyValue($shardkeyValue){
 		$this->m__shardKeyValue = $shardkeyValue;
-		LogManager::addLog(get_called_class()." set m__shardKeyValue = ".$this->m__shardKeyValue);
 	}
 
 	public function setDBShardOrder($shardOrder){
 		$this->m__shardOrder = $shardOrder;
-		LogManager::addLog(get_called_class()." set m__shardOrder = ".$this->m__shardOrder);
 	}
 
 	// public function getDBConnection(){
@@ -599,10 +573,13 @@ class DBTable2{
 	// }
 	
 
-	public function &getRef($key){
+	public function &getRef($key,$isRead=false){
+		if(is_string($this->m__data[$key]))$this->jsonToObj($key);
+		if($isRead==false)$this->m__modifyData[$key]=true;
 		return $this->m__data[$key];
 	}
 	public function setRef($field,$key,$value){
+		$this->m__modifyData[$field]=true;
 		return $this->m__data[$field][$key]=$value;	
 	}
 	public function getField($key){
@@ -676,7 +653,7 @@ class DBTable2{
 		self::initial();
 		static::$m__shardKey =& $newvalue;
 		static::$m__shardKey = $shardkey;
-		LogManager::addLog(get_called_class()."set m__shardKey = ".static::$m__shardKey);
+		//LogManager::addLog(get_called_class()."set m__shardKey = ".static::$m__shardKey);
 	}
 
 	public static function getShardKey(){
@@ -736,7 +713,7 @@ class DBTable2{
 		static::$m__LQTableSelectQueryCustomFunction=$func;
 	}
 	static public function setLQTableSelectCustomFunction($func){
-		LogManager::addLog("set select custom func for ".self::getDBTable());
+		//LogManager::addLog("set select custom func for ".self::getDBTable());
 		$newValue="";
 		static::$m__LQTableSelectCustomFunction=&$newValue;
 		static::$m__LQTableSelectCustomFunction = $func;
@@ -760,10 +737,13 @@ class DBTable2{
 	public static function loadWithLQTable($p){
 		self::initial();
 		$admin = new AdminUser($_SESSION["admin_no"]);
-		if(!$admin->isLogined()){
-			return ResultState::makeReturn(ResultState::GDSECURITY);
-		}
 
+		if(!$admin->isLogined()){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");
+		}
+		if(!$admin->checkPermissionGroup(get_called_class(),"read")){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");	
+		}
 
 		$klass = get_called_class();
 		$obj = new $klass();
@@ -789,8 +769,12 @@ class DBTable2{
 	public static function selectWithLQTable($param){
 		self::initial();
 		$admin = new AdminUser($_SESSION["admin_no"]);
+
 		if(!$admin->isLogined()){
-			return ResultState::makeReturn(ResultState::GDSECURITY);
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");
+		}
+		if(!$admin->checkPermissionGroup(get_called_class(),"read")){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");	
 		}
 
 		$klass = get_called_class();
@@ -802,10 +786,10 @@ class DBTable2{
 		//쿼리 만들기
 		$query = "";
 		if(static::$m__LQTableSelectQueryCustomFunction){
-			LogManager::addLog("start custom select query param is".json_encode($param));
+			//LogManager::addLog("start custom select query param is".json_encode($param));
 			$func = static::$m__LQTableSelectQueryCustomFunction;
 			$query = $func($param);
-			LogManager::addLog("custom select query : ".$query);
+			//LogManager::addLog("custom select query : ".$query);
 		}
 
 
@@ -814,7 +798,7 @@ class DBTable2{
 		$orders = array();
 		if($param["sort"]){
 			$orderInfo = $param["sort"];
-			LogManager::addLog("sort info".$param["sort"]);
+			//LogManager::addLog("sort info".$param["sort"]);
 			if($orderInfo){
 				$orderStr=" order by";
 				$cc=1;
@@ -842,17 +826,14 @@ class DBTable2{
 		if($param["limit"]){
 			if(!$param["where"] || !$param["where"]["start"]){
 				$param["where"]["start"]=1;
-				LogManager::addLog("reset where start".$param["where"]["start"]);
 			}
 			$result["nextInfo"]=array("start"=>$param["where"]["start"]+$param["limit"]);
 
 			$limitOfServer = $param["where"]["startList"];
 			if(count($limitOfServer)>0){
-				LogManager::addLog("limit mode is startList ->".$limitOfServer[1]);
 				$limitQuery =" limit ".($limitOfServer[1]).",".$param["limit"];
 			}else{
 				$limitOfServer = array(0,0);
-				LogManager::addLog("limit mode is limit ->".$param["where"]["start"]);
 				$limitQuery = " limit 0,".$param["limit"];	
 			}
 		}else{
@@ -888,18 +869,26 @@ class DBTable2{
 		$count = $param["limit"];
 
 
-	    LogManager::addLog("1 server start query 1: ".$query.$limitQuery);
 	    $serveri=0;
 	    $oShard=-1;
 	    while($data = self::getRowByQuery($query.$limitQuery)){
+
+
 	    	$serveri++;
 	    	$nShard = self::getShardIndexNow();
+			
+			$data["shardIndex"]=$nShard;
+			
+	    	
 	    	if($oShard!=$nShard)$serveri=1;
 	    	if($param["limit"]>0 && $serveri==$param["limit"] && $oShard==$nShard){
+	    		static::$m__qResult=null;
+				static::$m__qCnt++;
 	    		$serveri=0;
+	    		$nShard = self::getShardIndexNow();
 				if(!$limitOfServer[$nShard+1])$limitOfServer[$nShard+1]=0;
 				$limitQuery =" limit ".($limitOfServer[$nShard+1]).",".$param["limit"];
-				LogManager::addLog($nShard." server start query 2: ".$query.$limitQuery);
+				
 	    	}
 	    	$oShard = $nShard;
 
@@ -910,8 +899,7 @@ class DBTable2{
 			if($func){
 				$data=$func($data);
 			}
-			$data["shardIndex"]=self::getShardIndexNow();
-			
+
 			
 
 			if(!$orderField1){
@@ -933,9 +921,7 @@ class DBTable2{
 				$nShard = self::getShardIndexNow();
 				if(!$limitOfServer[$nShard])$limitOfServer[$nShard]=0;
 				$limitQuery =" limit ".($limitOfServer[$nShard]).",".$param["limit"];
-				LogManager::addLog($nShard." server start query 3: ".$query.$limitQuery);
-				LogManager::addLog("fuck bug ".json_encode($rdata[$count-1])."======".json_encode($data));
-				//}
+			//}
 			}
 
 
@@ -953,19 +939,27 @@ class DBTable2{
 			$cnt++;
 	    }
 
+	    //LogManager::addLog("test startlimit");
+	    $limitOfServer2 = array(0,0,0,0,0,0,0,0,0,0,0,0,0);
 
-		
+
 		for($i=0;$i<count($rdata);$i++){
 			$si = $rdata[$i]["shardIndex"];
 			$limitOfServer[$si] +=1;
 		}
 
-		$result["nextInfo"]["startList"]=$limitOfServer;
+
+		for($i=0;$i<count($limitOfServer2);$i++){
+	    	//LogManager::addLog("test startlimit->".$i.",".$limitOfServer[$i]);
+			if($limitOfServer[$i])$limitOfServer2[$i]=$limitOfServer[$i];
+		}
+
+		$result["nextInfo"]["startList"]=$limitOfServer2;
 
 
 	    $result["param"]=$param;
 	    $result["data"]=$rdata;
-	    if(count($rdata)<=0){
+	    if(count($rdata)<=0 && $param["where"]["start"]>1){
 	    	$result["result"]=ResultState::toArray(ResultState::GDDONTFIND,"데이터를 찾을 수 없습니다.");
 	    	return $result;
 	    }
@@ -976,8 +970,22 @@ class DBTable2{
 	public static function insertWithLQTable($param){
 		self::initial();
 		$admin = new AdminUser($_SESSION["admin_no"]);
+
 		if(!$admin->isLogined()){
-			return ResultState::makeReturn(ResultState::GDSECURITY);
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");
+		}
+		if(!$admin->checkPermissionGroup(get_called_class(),"write")){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");	
+		}
+
+		if($param["enableComment"]==true){
+			$mh = new ModifyHistory($param["data"]["memberID"]);
+			$mh->writer = $admin->id;
+			$mh->oldData="insert";
+			$mh->newData=$param["data"];
+			$mh->reason=$param["reason"];
+			$mh->category=get_called_class();
+			$mh->save();
 		}
 
 		$klass = get_called_class();
@@ -1010,8 +1018,8 @@ class DBTable2{
 			}
 		}
 
-		LogManager::addLog("loadQuery:".$loadQuery);
-		LogManager::addLog("param check ".json_encode($param["data"],true));
+		//LogManager::addLog("loadQuery:".$loadQuery);
+		//LogManager::addLog("param check ".json_encode($param["data"],true));
 		
 		if($loadQuery!=-1){
 			$obj->load($loadQuery);
@@ -1024,11 +1032,11 @@ class DBTable2{
 
 		foreach ($param["data"] as $key => $value) {
 			$obj->$key = $value;
-			LogManager::addLog("foreach $key -".json_encode($value,true));
+			//LogManager::addLog("foreach $key -".json_encode($value,true));
 		}
 
 		$pkeyInclude = $autokey?false:true;
-		LogManager::addLog("check pkey include pk:".$pkey." and ak:".$autokey." result:".$pkeyInclude);
+		//LogManager::addLog("check pkey include pk:".$pkey." and ak:".$autokey." result:".$pkeyInclude);
 		if($obj->save($pkeyInclude)){
 			$r["data"] = $obj->getArrayData(true);
 			$r["shardIndex"]=$shardIndex;
@@ -1044,10 +1052,24 @@ class DBTable2{
 	public static function updateWithLQTable($param){
 		self::initial();
 		$admin = new AdminUser($_SESSION["admin_no"]);
-		if(!$admin->isLogined()){
-			return ResultState::makeReturn(ResultState::GDSECURITY);
-		}
 
+		if(!$admin->isLogined()){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");
+		}
+		if(!$admin->checkPermissionGroup(get_called_class(),"write")){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");	
+		}
+		
+		if($param["enableComment"]==true){
+			$mh = new ModifyHistory($param["data"]["memberID"]);
+			$mh->writer = $admin->id;
+			$mh->oldData=$param["oldData"];
+			$mh->newData=$param["data"];
+			$mh->reason=$param["reason"];
+			$mh->category=get_called_class();
+			$mh->save();
+		}
+		
 		$klass = get_called_class();
 		$shardIndex=$param["shardIndex"];
 
@@ -1080,7 +1102,12 @@ class DBTable2{
 
 		}
 
-		LogManager::addLog("updatewithinsert loadquery is ".$loadQuery);
+		foreach ($param["data"] as $key => $value) {
+			$obj->$key = $value;
+			//LogManager::addLog("foreach $key -".json_encode($value,true));
+		}
+		
+		//LogManager::addLog("updatewithinsert loadquery is ".$loadQuery);
 		$obj->load($loadQuery);
 
 
@@ -1093,22 +1120,23 @@ class DBTable2{
 
 		foreach ($param["data"] as $key => $value) {
 			$obj->$key = $value;
-			LogManager::addLog("foreach $key -".json_encode($value,true));
+			//LogManager::addLog("foreach $key -".json_encode($value,true));
 		}
 		
 		$pkeyInclude = $autokey?false:true;
-		LogManager::addLog("check pkey include pk:".$pkey." and ak:".$autokey." result:".$pkeyInclude);
+		//LogManager::addLog("check pkey include pk:".$pkey." and ak:".$autokey." result:".$pkeyInclude);
 		
 		if($obj->save($pkeyInclude)){
 			$r["data"] = $obj->getArrayData(true);
 			$func = static::$m__LQTableSelectCustomFunction;
 			if($func)$r["data"]=$func($r["data"]);
 			$r["shardIndex"]=$param["shardIndex"];
+			
 			$r["result"]=ResultState::successToArray();
 			return $r;
 		}
 
-		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
+		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"저장오류");
 		return $r;
 	}
 
@@ -1116,9 +1144,22 @@ class DBTable2{
 		self::initial();
 		$admin = new AdminUser($_SESSION["admin_no"]);
 		if(!$admin->isLogined()){
-			return ResultState::makeReturn(ResultState::GDSECURITY);
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");
+		}
+		if(!$admin->checkPermissionGroup(get_called_class(),"write")){
+			return ResultState::makeReturn(ResultState::GDSECURITY,"권한이 없습니다.");	
 		}
 
+		if($param["enableComment"]==true){
+			$mh = new ModifyHistory($param["data"]["memberID"]);
+			$mh->writer = $admin->id;
+			$mh->oldData=$param["data"];
+			$mh->newData="delete";
+			$mh->reason=$param["reason"];
+			$mh->category=get_called_class();
+			$mh->save();
+		}
+		
 		$klass = get_called_class();
 		$shardIndex=$param["shardIndex"];
 
@@ -1180,16 +1221,14 @@ class DBTable2{
 		self::initial();
 
 		$con = static::$m__DBGroup->getConnectionForRead($shardKey,null,self::getDBTable()); 
-		LogManager::addLog("getQueryResult query0->".$query);
+		//LogManager::addLog("getQueryResult query0->".$query);
 		return self::getQueryResult($query,$con,$isForRead);
 	}
 
 	static public function getQueryResult($query,$dbcon=NULL,$isForRead=true){
 		self::initial();
 
-		LogManager::addLog("getQueryResult query1->".$query);
 		if(static::$m__qCnt==-1){
-		LogManager::addLog("query2");
 			$newvalue1=1;
 			static::$m__qCnt =& $newvalue1;
 			$newvalue2=array();
@@ -1201,14 +1240,14 @@ class DBTable2{
 			}
 		}
 
-		LogManager::addLog("query3 -> ".static::$m__qCnt);
 		if(static::$m__qResult==-1){
 			$newvalue2="";
 			static::$m__qResult =& $newvalue2;
+		}else if(!static::$m__qResult){
+			static::$m__qCnt=1;
 		}
-
+		
 		if(static::$m__qCnt>=count(static::$m__dbList)){
-			LogManager::addLog("end quertResult qCnt = ".static::$m__qCnt."-".static::$m__dbList);
 			static::$m__qCnt=1;
 			return false;
 		}
@@ -1218,16 +1257,16 @@ class DBTable2{
 		else $dbconn = $dbcon;
 		if(!$dbconn)return null;
 		static::$m__qResult = mysql_query($query,$dbconn);
-		LogManager::addLog("getqueryresult error ? ->".mysql_error());
-		LogManager::addLog("ok go ".$query." from ".static::$m__DBTable." ".$where.get_called_class());
 		//}
 		
-		if(!static::$m__qResult)return NULL;
+		if(!static::$m__qResult){
+			return NULL;
+		}
 
 		//$result = mysql_fetch_array(static::$m__qResult,MYSQL_ASSOC);
 
 		static::$m__qCnt++;
-
+		//LogManager::addLog("pp m__qCnt to".static::$m__qCnt);
 		if(static::$m__qResult || $dbcon!=NULL)return static::$m__qResult;
 		
 		//static::$m__qResult="";
@@ -1247,17 +1286,15 @@ class DBTable2{
 
 	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
 		self::initial();
-		LogManager::addLog("query1 : ".$where);
 		if(static::$m__qCnt==-1){
-		LogManager::addLog("query2");
 			$newvalue1=1;
 			static::$m__qCnt =& $newvalue1;
+			static::$m__qCnt=1;
 			$newvalue2=array();
 			static::$m__dbList =& $newValue2;
 			static::$m__dbList = static::$m__DBGroup->getMasterList();
 		}
 
-		LogManager::addLog("query3 -> ".static::$m__qCnt);
 		if(static::$m__qResult==-1){
 			$newvalue2="";
 			static::$m__qResult =& $newvalue2;
@@ -1267,7 +1304,7 @@ class DBTable2{
 		// 	if(!static::$m__qResult){
 		// 		static::$m__qResult = mysql_query("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where,DBManager::getMainConnection());
 		// 	}
-		// 	LogManager::addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
+		// 	//LogManager::addLog("select ".$fields." from ".DBManager::getMT(get_called_class())." ".$where);
 		// 	if(static::$m__qResult)$result = mysql_fetch_array(static::$m__qResult,MYSQL_ASSOC);
 		// 	if(!$result)static::$m__qResult=null;
 		// 	return $result;
@@ -1285,7 +1322,6 @@ class DBTable2{
 			else $dbconn = $dbcon;
 			static::$m__qResult =& $newvalue4;
 			static::$m__qResult = mysql_query("select ".$fields." from ".static::$m__DBTable." ".$where,$dbconn);
-			LogManager::addLog("ok go select ".$fields." from ".static::$m__DBTable." ".$where.get_called_class()." at server : ".static::$m__qCnt);
 		}
 		
 		if(!static::$m__qResult)return NULL;
@@ -1297,7 +1333,6 @@ class DBTable2{
 		static::$m__qResult="";
 		static::$m__qCnt++;
 
-		LogManager::addLog("next server ...".static::$m__qCnt);
 		return self::getRowByQuery($where);
 	}
 
@@ -1339,7 +1374,7 @@ class DBTable2{
 
 		if($dbcon){
 			$result=mysql_query("delete from ".static::$m__DBTable." ".$where,$dbcon);
-			LogManager::addLog("delete gogo is ".$result);
+			//LogManager::addLog("delete gogo is ".$result);
 			return $result;
 		}
 

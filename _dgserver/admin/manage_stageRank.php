@@ -31,12 +31,6 @@ $(document).ready(function(){
 	});
 });
 
-var commenter = function(value,option){
-	return "변경이유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
-}
-var commenter_value = function(obj){
-	return obj.val();
-} 
 
 var clearList = function(value,option){
 	value = s2j(value);
@@ -56,33 +50,43 @@ var clearList = function(value,option){
 <input name="gid" value="<?=$gid?>" type="hidden">
 <br><br>
 <div class="table-responsive">
-	<table align=center><tr><td>
-<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
-			  <button id="findType" type="button" value="nick" class="btn btn-default" data-toggle="button">닉네임</button>
-			  <button id="findType" type="button" value="fb" class="btn btn-default" data-toggle="button">페이스북</button>
-			  <button id="findType" type="button" value="pc" class="btn btn-default" data-toggle="button">Payco</button>
-			  <button id="findType" type="button" value="sno" class="btn btn-default active" data-toggle="button">회원번호</button>
-			</div>
-		</td>
-		<td>
-			<input type="text" class="form-control" id="findNo" value="*">
-		</td>
-		<td>&nbsp;&nbsp;스테이지번호&nbsp;&nbsp;</td>
-		<td>
-			<div class="input-group">
-	      		
-	      		<input type="text" class="form-control" id="findStage" value="1">
-	      		<span class="input-group-btn">
-	        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
-	      		</span>
-      		</div>
+		<table align=center><tr><td>
+				<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">
+				  <button id="findType" type="button" value="nick" class="btn btn-default" data-toggle="button">닉네임</button>
+				  <button id="findType" type="button" value="fb" class="btn btn-default" data-toggle="button">페이스북</button>
+				  <button id="findType" type="button" value="pc" class="btn btn-default" data-toggle="button">Payco</button>
+				  <button id="findType" type="button" value="sno" class="btn btn-default active" data-toggle="button">회원번호</button>
+				</div>
+			</td>
+			<td>
+				<input type="text" class="form-control" id="findNo" value="*">
+			</td>
+			<td>&nbsp;&nbsp;스테이지번호&nbsp;&nbsp;</td>
+			<td>
+				<div class="input-group">
+		      		
+		      		<input type="text" class="form-control" id="findStage" value="1">
+		      		<span class="input-group-btn">
+		        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
+		      		</span>
+	      		</div>
 		</td></tr></table>
 </div>
 <br><br>
 
 <h2 id="tables-contextual-classes">|스테이지랭킹</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="StageScore" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="StageScore" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary field='no' viewer='{"type":"text"}' >no</th>
+		<th field='stageNo' viewer='{"type":"text"}' editor='{"type":"text"}' >stageNo</th>
+		<th field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >memberID</th>
+		<th field='score' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >score</th>
+		<th field='regDate' viewer='{"type":"text"}' editor='{"type":"datetime"}' >regDate</th>
+		<th field='data' viewer='{"type":"text"}' editor='{"type":"textarea"}' >data</th>
+		<th field='regTime' viewer='{"type":"text"}' editor='{"type":"text"}' >regTime</th>
+		<th manage='delete update insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

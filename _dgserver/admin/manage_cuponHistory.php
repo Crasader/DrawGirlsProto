@@ -37,8 +37,16 @@ $(document).ready(function(){
 </div>
 <br><br>
 <h2 id="tables-contextual-classes">|쿠폰사용내역</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CuponHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CuponHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+		<th title='회원번호' field='memberID' viewer='{"type":"text"}' >회원번호</th>
+		<th title='쿠폰명' field='cuponTitle' viewer='{"type":"text"}' >쿠폰명</th>
+		<th title='쿠폰번호' field='cuponNo' viewer='{"type":"text"}' >쿠폰번호</th>
+		<th title='코드코드' field='cuponCode' viewer='{"type":"cuponCodeViewer"}' >코드코드</th>
+		<th title='사용일시' field='useDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >사용일시</th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

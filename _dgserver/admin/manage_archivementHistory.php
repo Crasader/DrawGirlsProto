@@ -1,5 +1,13 @@
 <?php
 include "manage_header.php";
+
+	$listViewer=array("type"=>"select");
+	while($pData = Archivement::getRowByQuery("",null,"title,id")){
+		$lang = json_decode($pData["title"],true);
+		$listViewer["element"][] = $pData["id"]."-".$lang["ko"];
+		$listViewer["value"][]=$pData["id"];
+	}
+
 ?>
 <script>
 
@@ -39,8 +47,19 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|업적정보</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+		<th title='회원번호' field='memberID' viewer='{"type":"text"}' >회원번호</th>
+		<th title='업적' field='archiveID' viewer='<?=json_encode($listViewer)?>' >업적</th>
+		<th title='값' field='count' viewer='{"type":"text"}' editor='{"type":"text"}' >값</th>
+		<th title='목표' field='goal' viewer='{"type":"text"}' >목표</th>
+		<th title='완료일시' field='clearDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >완료일시</th>
+		<th title='보상일시' field='rewardDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >보상일시</th>
+		<th virtual title='보상' field='reward' viewer='{"type":"rewardViewer"}' >보상</th>
+		<th manage='update delete' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

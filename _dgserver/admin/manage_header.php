@@ -65,6 +65,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 			echo "게임아이디를 찾을수없습니다. <a href=index.php>select gid</a>";
 			exit;
 		}
+
 	?>
 
 	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -86,9 +87,11 @@ $left_menu[]=array("title"=>"","url"=>"");
 			<div class="col-lg-2"> <!--navbar-fixed-left-->
 				<div class="bs-sidebar hidden-print" role="complementary">
 					<center>
+							
+		        	<br>
+						Hello <?=$admin->id?>
 		            	<!--[<a href=manage_userInfo.php?gid=<?=$gid?>>운영툴</a>] [<a href=admin_help.php?gid=<?=$gid?>>관리툴</a>]-->
 		        	</center>
-		        	<br>
 		            <ul class="nav bs-sidenav">
 		            	<!-- li><a href="#glyphicons">Glyphicons</a>
 							<ul class="nav">
@@ -98,66 +101,82 @@ $left_menu[]=array("title"=>"","url"=>"");
 							</ul>
 		            	</li -->
 						<?php
-							if($admin->checkPermission("readUser")){
+							if($admin->checkPermission("user","read")){
 						?>
 		            	<li>유저관리
 							<ul class="nav">
-								<li><a href=manage_userInfo.php?gid=<?=$gid?>>userInfo<br>기본정보조회</a></li>
-								<li><a href=manage_modifyHistory.php?gid=<?=$gid?>>modifyHistory<br>변경내역조회</a></li>
-								<li><a href=manage_puzzleHistory.php?gid=<?=$gid?>>puzzleHistory<br>퍼즐정보</a></li>
-								<li><a href=manage_pieceHistory.php?gid=<?=$gid?>>pieceHistory<br>보유피스</a></li>
-								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>characterHistory<br>보유캐릭터</a></li>
-								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>cardHistory<br>보유카드</a></li>
-								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>archivementHistory<br>업적진행상황</a></li>
-								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>giftBoxHistory<br>선물함</a></li>
-								<li><a href=manage_userStorage.php?gid=<?=$gid?>>userStorage<br>재화보관함</a></li>
-								<li><a href=manage_cuponHistory.php?gid=<?=$gid?>>cuponHistory<br>쿠폰사용내역</a></li>
-								<li><a href=manage_userLog.php?gid=<?=$gid?>>userLog<br>유저로그</a></li>
-								<li><a href=manage_userData.php?gid=<?=$gid?>>userdata<br>유저목록</a></li>
-							</ul>
-		            	</li>
-		            	<li>랭킹
-							<ul class="nav">
-								<li><a href=manage_stageRank.php?gid=<?=$gid?>>stageRank<br>스테이지</a></li>
-								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>pvpRank<br>PVP</a></li>
-								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>weeklyRank<br>주간누적랭킹</a></li>
+								<li><a href=manage_userInfo.php?gid=<?=$gid?>>기본정보조회</a></li>
+								<li><a href=manage_modifyHistory.php?gid=<?=$gid?>>변경내역조회</a></li>
+								<li><a href=manage_puzzleHistory.php?gid=<?=$gid?>>퍼즐정보</a></li>
+								<li><a href=manage_pieceHistory.php?gid=<?=$gid?>>보유피스</a></li>
+								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>보유캐릭터</a></li>
+								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>보유카드</a></li>
+								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>업적진행상황</a></li>
+								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>선물함</a></li>
+								<li><a href=manage_userStorage.php?gid=<?=$gid?>>재화보관함</a></li>
+								<li><a href=manage_cuponHistory.php?gid=<?=$gid?>>쿠폰사용내역</a></li>
+								<li><a href=manage_userLog.php?gid=<?=$gid?>>유저로그</a></li>
+								<li><a href=manage_userData.php?gid=<?=$gid?>>유저목록</a></li>
 							</ul>
 		            	</li>
 						<?php
 							}
 
-							if($admin->checkPermission("readEvent")){
+							if($admin->checkPermission("rank","read")){
+						?>
+		            	<li>랭킹
+							<ul class="nav">
+								<li><a href=manage_stageRank.php?gid=<?=$gid?>>스테이지</a></li>
+								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>PVP</a></li>
+								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>주간누적랭킹</a></li>
+							</ul>
+		            	</li>
+						<?php
+							}
+
+							if($admin->checkPermission("event","read")){
 						?>
 		            	<li>이벤트
 							<ul class="nav">
-								<li><a href=manage_sendItem.php?gid=<?=$gid?>>sendItem<br>재화/아이템 정보변경</a></li>
-								<li><a href=manage_notice.php?gid=<?=$gid?>>notice<br>공지</a></li>
-								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>loginEvent<br>로그인이벤트</a></li>
-								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>shopEvent<br>할인이벤트</a></li>
-								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>timeEvent<br>타임이벤트</a></li>
-								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>attendenceEvent<br>출석이벤트</a></li>
-								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>attendenceEventDay<br>출석이벤트보상</a></li>
-								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>cuponManager<br>쿠폰관리</a></li>
-								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>cuponCode<br>쿠폰코드</a></li>
+								<li><a href=manage_sendItem.php?gid=<?=$gid?>>재화/아이템 선물하기</a></li>
+								<li><a href=manage_notice.php?gid=<?=$gid?>>공지사항</a></li>
+								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>로그인이벤트</a></li>
+								<li><a href=manage_puzzleEvent.php?gid=<?=$gid?>>퍼즐이벤트</a></li>
+								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>할인이벤트</a></li>
+								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>타임이벤트</a></li>
+								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>출석이벤트</a></li>
+								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>출석이벤트보상</a></li>
+								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>쿠폰관리</a></li>
+								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>쿠폰코드</a></li>
 							</ul>
 						</li>
 						<?php
 							}
 
-							if($admin->checkPermission("readAdmin")){
+							if($admin->checkPermission("game","read")){
 						?>
-		            	<li>관리
+		            	<li>게임관리
 							<ul class="nav">
-								<li><a href=manage_commonSetting.php?gid=<?=$gid?>>CommonSetting<br>기본설정</a></li>
-								<li><a href=manage_archivement.php?gid=<?=$gid?>>archivement<br>업적</a></li>
-								<li><a href=manage_cardText.php?gid=<?=$gid?>>cardText<br>카드스크립트</a></li>
-								<li><a href=manage_shop.php?gid=<?=$gid?>>shop<br>상점</a></li>
-								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVPPlayData<br>PVP플레이데이터</a></li>
-								<li><a href=manage_adminUser.php?gid=<?=$gid?>>adminUser<br>관리자목록</a></li>
-								<li><a href=admin_help.php?gid=<?=$gid?>>EditGame<br>관리툴</a></li>
-								<li><a href=manage_balance.php?gid=<?=$gid?>>balance<br>벨런스</a></li>
+								<li><a href=manage_commonSetting.php?gid=<?=$gid?>>기본설정</a></li>
+								<li><a href=manage_exchange.php?gid=<?=$gid?>>교환ID</a></li>
+								<li><a href=manage_archivement.php?gid=<?=$gid?>>업적</a></li>
+								<li><a href=manage_cardText.php?gid=<?=$gid?>>카드 스크립트/프로필</a></li>
+								<li><a href=manage_shop.php?gid=<?=$gid?>>상점</a></li>
+								<li><a href=manage_puzzleOpen.php?gid=<?=$gid?>>퍼즐오픈조건</a></li>
+								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVP플레이데이터</a></li>
+								<li><a href=manage_balance.php?gid=<?=$gid?>>벨런스</a></li>
+								<li><a href=manage_dbcheck.php?gid=<?=$gid?>>DB구조</a></li>
 							</ul>
 						</li>
+						<li><a href=admin_help.php?gid=<?=$gid?>>관리툴</a></li>
+						<?php
+							}
+						?>
+
+						<?php
+							if($admin->checkPermission("admin","read")){
+						?>
+						<li><a href=manage_adminUser.php?gid=<?=$gid?>>운영자관리</a></li>
 						<?php
 							}
 						?>

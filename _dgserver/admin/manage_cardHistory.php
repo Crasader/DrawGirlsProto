@@ -1,5 +1,19 @@
 <?php
 include "manage_header.php";
+
+	$listViewer=array("type"=>"select");
+	while($pData = Card::getRowByQuery("",null,"name,no")){
+		$lang = json_decode($pData["name"],true);
+		$listViewer["element"][] = $pData["no"]."-".$lang["ko"];
+		$listViewer["value"][]=$pData["no"];
+	}
+
+	$listViewer2=array("type"=>"select");
+	while($pData = Puzzle::getRowByQuery("",null,"title,no")){
+		$lang=json_decode($pData["title"],true);
+		$listViewer2["element"][] = $pData["no"]."-".$lang["ko"];
+		$listViewer2["value"][]=$pData["no"];
+	}
 ?>
 <script>
 
@@ -52,8 +66,19 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|카드정보</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CardHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CardHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+			<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+			<th title='회원번호' field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >회원번호</th>
+			<th title='카드' field='cardNo' viewer='<?=json_encode($listViewer)?>' editor='{"type":"text","datatype":"int"}' >카드</th>
+			<th title='갯수' field='count' viewer='{"type":"text"}' editor='{"type":"text"}' >갯수</th>
+			<th title='퍼즐' field='puzzleNo' viewer='<?=json_encode($listViewer2)?>' >퍼즐</th>
+			<th title='코멘트' field='comment' viewer='{"type":"text"}' editor='{"type":"text"}' >코멘트</th>
+			<th title='획득일시' field='takeDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >획득일시</th>
+			<th title='모핑여부' field='isMorphing' viewer='{"type":"bool"}' editor='{"type":"bool"}' >모핑여부</th>
+			<th manage='update delete insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

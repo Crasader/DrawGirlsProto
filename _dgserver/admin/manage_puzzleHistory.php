@@ -1,5 +1,12 @@
 <?php
-include "manage_header.php";
+	include "manage_header.php";
+
+	$puzzleViewer=array("type"=>"select");
+	while($pData = Puzzle::getRowByQuery("",null,"title,no")){
+		$lang = json_decode($pData["title"],true);
+		$puzzleViewer["element"][] = $pData["no"]."-".$lang["ko"];
+		$puzzleViewer["value"][]=$pData["no"];
+	}
 ?>
 <script>
 	var loadFunc = function(table,data){
@@ -50,11 +57,21 @@ $(document).ready(function(){
 </div>
 <br><br>
 <h2 id="tables-contextual-classes">|퍼즐내역조회</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PuzzleHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PuzzleHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+			<th primary title='고유번호' field='no' viewer='{"type":"text"}'>고유번호</th>
+			<th title='회원번호' field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >회원번호</th>
+			<th title='퍼즐정보' field='puzzleNo' viewer='<?=json_encode($puzzleViewer)?>' editor='<?=json_encode($puzzleViewer)?>' >퍼즐정보</th>
+			<th title='오픈유형' field='openType' viewer='{"type":"text"}' editor='{"type":"text"}' >오픈유형</th>
+			<th title='최초오픈일시' field='openDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >최초오픈일시</th>
+			<th title='최초완성일시' field='clearDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >최초완성일시</th>
+			<th title='퍼펙트완성일시' field='perfectDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >퍼펙트완성일시</th>
+			<th title='보상' field='reward' viewer='{"type":"text"}' >보상</th>
+			<th manage='update delete insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
-
 	</tbody>
 </table>
 

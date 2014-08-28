@@ -81,10 +81,9 @@ if(!$gid){
 <td><a href=admin_help.php?gid=<?=$gid?>>API<br><font color=red>에이피아이</font></a></td>
 <td><a href=admin_apiTest.php?gid=<?=$gid?>>APITest<br><font color=red>에이피아이테스트</font></a></td>
 <td><a href=admin_util.php?gid=<?=$gid?>>util<br><font color=red>유틸</font></a></td>
-<td><a href=admin_formSetter.php?gid=<?=$gid?>>formSetter<br><font color=red>위치잡기</font></a></td>
-<td><a href=admin_statsClear.php?gid=<?=$gid?>>stats-clear<br><font color=red>통계</font></a></td>
-<td><a href=admin_worklist.php?gid=<?=$gid?>>worklist<br><font color=red>작업목록</font></a></td>
+<td><a href=admin_convertor.php?gid=<?=$gid?>>convertor<br><font color=red>convertor</font></a></td>
 <td><a href=admin_pushMessage.php?gid=<?=$gid?>>pushMessage<br><font color=red>푸쉬메세지</font></a></td>
+<td><a href=admin_usingfilelist.php?gid=<?=$gid?>>usingfilelist<br><font color=red>사용파일목록</font></a></td>
 </tr>
 </table>
 
@@ -96,14 +95,11 @@ if(!$gid){
 <td><a href=admin_notice.php?gid=<?=$gid?>>notice<br><font color=red>공지</font></a></td>
 <td><a href=admin_puzzle.php?gid=<?=$gid?>>puzzle<br><font color=red>퍼즐</font></a></td>
 <td><a href=admin_piece.php?gid=<?=$gid?>>piece<br><font color=red>피스</font></a></td>
-<td><a href=admin_book.php?gid=<?=$gid?>>book<br><font color=red>책</font></a></td>
-<td><a href=admin_stage.php?gid=<?=$gid?>>stage<br><font color=red>스테이지</font></a></td>
 <td><a href=admin_card.php?gid=<?=$gid?>>card<br><font color=red>카드</font></a></td>
 <td><a href=admin_character.php?gid=<?=$gid?>>character<br><font color=red>캐릭터</font></a></td>
 <td><a href=admin_item.php?gid=<?=$gid?>>item<br><font color=red>아이템</font></a></td>
 <td><a href=admin_shop.php?gid=<?=$gid?>>shop<br><font color=red>상점</font></a></td>
 <td><a href=admin_exchange.php?gid=<?=$gid?>>exchange<br><font color=red>교환매니저</font></a></td>
-<td><a href=admin_language.php?gid=<?=$gid?>>language<br><font color=red>언어</font></a></td>
 <td><a href=admin_mission.php?gid=<?=$gid?>>mission<br><font color=red>미션</font></a></td>
 <td><a href=admin_archivement.php?gid=<?=$gid?>>archivement<br><font color=red>업적</font></a></td>
 <td><a href=admin_monster.php?gid=<?=$gid?>>monster<br><font color=red>몬스터</font></a></td>
@@ -118,8 +114,6 @@ if(!$gid){
 <tr>
 <td bgcolor=cccccc><b>ShardServer</b></td>
 <td><a href=admin_user.php?gid=<?=$gid?>>user<br><font color=red>유저</font></a></td>
-<td><a href=admin_log.php?gid=<?=$gid?>>log<br><font color=red>로그</font></a></td>
-<td><a href=admin_message.php?gid=<?=$gid?>>message<br><font color=red>메세지</font></a></td>
 <td><a href=admin_weeklyScore.php?gid=<?=$gid?>>weeklyscore<br><font color=red>주간점수</font></a></td>
 <td><a href=admin_stageScore.php?gid=<?=$gid?>>stagescore<br><font color=red>스테이지점수</font></a></td>
 </tr>

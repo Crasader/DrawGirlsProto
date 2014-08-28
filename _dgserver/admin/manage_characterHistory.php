@@ -1,5 +1,12 @@
 <?php
-include "manage_header.php";
+	include "manage_header.php";
+
+	$listViewer=array("type"=>"select");
+	while($pData = Character::getRowByQuery("",null,"name,no")){
+		$lang = json_decode($pData["name"],true);
+		$listViewer["element"][] = $pData["no"]."-".$lang["ko"];
+		$listViewer["value"][]=$pData["no"];
+	}
 ?>
 <script>
 
@@ -38,8 +45,16 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|캐릭터정보</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CharacterHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CharacterHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+			<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+			<th title='회원번호' field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >회원번호</th>
+			<th title='캐릭터' field='characterNo' viewer='<?=json_encode($listViewer)?>' editor='<?=json_encode($listViewer)?>' >캐릭터</th>
+			<th title='레벨' field='level' viewer='{"type":"text"}' editor='{"type":"text"}' >레벨</th>
+			<th title='구입일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >구입일시</th>
+			<th manage='delete update insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

@@ -24,6 +24,12 @@ void AreaGage::setPercentage( float t_p )
 		gage_bar1->stopAllActions();
 		CCProgressTo* t_to1 = CCProgressTo::create(0.3f, t_p/clear_percent*100.f);
 		gage_bar1->runAction(t_to1);
+		
+		gage_bar2->stopAllActions();
+		gage_bar2->runAction(CCProgressTo::create(0.1f, 0.f));
+		
+		gage_bar3->stopAllActions();
+		gage_bar3->runAction(CCProgressTo::create(0.1f, 0.f));
 	}
 	else if(t_p < 1.f)
 	{
@@ -39,6 +45,9 @@ void AreaGage::setPercentage( float t_p )
 		CCProgressTo* t_to2 = CCProgressTo::create(0.1f, (t_p-clear_percent)/(1.f-clear_percent)*100.f);
 		CCSequence* t_seq2 = CCSequence::createWithTwoActions(t_delay2, t_to2);
 		gage_bar2->runAction(t_seq2);
+		
+		gage_bar3->stopAllActions();
+		gage_bar3->runAction(CCProgressTo::create(0.1f, 0.f));
 	}
 	else
 	{

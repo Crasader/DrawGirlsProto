@@ -1,11 +1,12 @@
 <?php
+ob_start();
+
 
 include "lib.php";
-iconv_set_encoding("internal_encoding", "UTF-8");
-iconv_set_encoding("output_encoding", "UTF-8");
+#iconv_set_encoding("internal_encoding", "UTF-8");
+#iconv_set_encoding("output_encoding", "UTF-8");
 
-
-
+//echo "2dhqLCia6H379CQaBAPFAFU7YhDpsAay7JQM6jiDSY0=#";
 
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
 $_dirs = explode("/",$_SERVER["REQUEST_URI"]);
@@ -39,7 +40,7 @@ if($mode){
    // $param = base64_decode(str_replace(" ","+",$_POST["command"]));
     
     $paramoriginal = decryptByAESWithBase64($_POST["command"]); //@mcrypt_decrypt(MCRYPT_DES, "12345678", $param, MCRYPT_MODE_ECB);
-    
+    //LogManager::addLog("original:".$_POST["command"]);
     $param = json_decode(trim($paramoriginal),true);
     CurrentUserInfo::$os = $param["os"];
     CurrentUserInfo::$language = $param["lang"];
@@ -47,14 +48,11 @@ if($mode){
     CurrentUserInfo::$socialID = $param["socialID"];
     CurrentUserInfo::$country = $param["country"];
     if($param["timezone"])CurrentUserInfo::$timezone = $param["timezone"];
-
-
-    if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["hspMemberNo"];
-    if(!CurrentUserInfo::$memberID)CurrentUserInfo::$memberID= $param["memberNo"];
+    if($param["log"])LogManager::$m_isLocked=false;
     // if(!is_array($param)){
     //     $param = json_decode(trim(preg_replace("/'/","\"", $paramoriginal)),true);
-    //     LogManager::addLog("ok --> ".$paramoriginal);
-    //     LogManager::addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
+    //     //LogManager::addLog("ok --> ".$paramoriginal);
+    //     //LogManager::addLog("ok --> ".preg_replace("/'/","\"", $paramoriginal));
     // }
     $version = $_POST["version"];
     
@@ -64,9 +62,71 @@ if($mode){
 if($version)include "command/cmd".$version.".php";
 else include "command/cmd2.php";
 
+$checklorj=false;
+$error="";
+//보안체크용
+if(CurrentUserInfo::$memberID){
+    //LogManager::addLog("start checking user");
+    $userData = UserData::create(CurrentUserInfo::$memberID);
 
-if(!$stopCommand){
-    $command = new commandClass();
+    if($userData->isLoaded()){
+        //ERROR
+        $error = false;
+        if($userData->deviceID!=$param["deviceID"]){
+            $error = "checkDeviceError";
+        }else if($userData->lastCmdNo>=$param["cmdNo"]){
+            $error = "cmdNoError";
+        }else if((TimeManager::getTime()-$userData->lastTime)>60*30){
+            $error = "longTimeError";
+        }else{
+            //save deviceID, save checkDeviceError, save longtimeerror
+            $userData->lastCmdNo=$param["cmdNo"];
+            $cnt=0;
+            while(!$userData->save()){
+                $cnt++; 
+                if($cnt>5){
+                    $error = "longTimeError";
+                    break;
+                }
+            }
+        }
+
+
+    }else{
+        //LogManager::addLog("userLogFailed : dont find.uu ".CurrentUserInfo::$memberID);
+        $error="cmdNoError";
+    }
+}else{
+    //LogManager::addLog("userLogFailed : id is none uu");
+    $error="cmdNoError";
+}
+
+if($param["dontcheck"]){
+    $error="";
+    //LogManager::addLog("dontcheck!!");
+}
+
+if($error){
+   $checklorj = false;
+   for($c=0;$c<count($param);$c++){
+        $cmd = (string)$c;
+        if(!$param[$cmd])continue;
+        $p = $param[$cmd]["p"];
+        $a = strtolower($param[$cmd]["a"]);
+        if($a=="login" || $a=="join"){
+            $error = "";
+            break;
+        }
+    }
+}
+
+if($error!=""){
+    $allResult[$error]=true;
+    $allResult["log"]=LogManager::getLogAndClear();
+
+}else{
+//if(!$stopCommand){
+    //$command = new commandClass();
     $istransaction = false;    
     $commitMemberID=0;
     $commitCmdName="";
@@ -81,67 +141,23 @@ if(!$stopCommand){
             $commitMemberID=$p["memberID"];
             CommitManager::begin($commitMemberID);
             $commitCmdName = $cmd;
-        }else if(method_exists($command,$a)){
+        }else if(method_exists("commandClass",$a)){
             if(!CurrentUserInfo::$memberID && $p["memberID"]){
                 CurrentUserInfo::$memberID = $p["memberID"];
             }
 
-            if(!($a=="login" || $a=="join") && CurrentUserInfo::$memberID && $checkUserdata==false){
-                $userdata = UserData::create(CurrentUserInfo::$memberID);
-                LogManager::addLog("action is ".$a." deviceID ".$userdata->deviceID." and cmdNo".$userdata->lastCmdNo." userdata is".json_encode($userdata->getArrayData(true)));
-                LogManager::addLog("param deviceID is ".$param["deviceID"]." and cmdNo is ".$param["cmdNo"]);
-
-                if($userdata->isLoaded()){
-                    if($userdata->deviceID!=$param["deviceID"]){
-                            $checkUserdata=true;
-                            $allResult["checkDeviceError"]=true;
-                            $r["result"]=ResultState::toArray(4002);
-                            $allResult[$cmd]= $r;
-                            //continue;
-                    
-                    }else if($userdata->lastCmdNo>=$param["cmdNo"]){
-                                            $allResult["cmdNoError"]=true;
-                                            $checkUserdata=true;
-                                            $r["result"]=ResultState::toArray(4001);
-                                            $allResult[$cmd]= $r;
-                                            //continue;
-
-                                       // }
-                    
-
-
-                    }else if((TimeManager::getTime()-$userdata->lastTime)>60*30){
-                        $checkUserdata=true;
-                        $allResult["longTimeError"]=true;
-                        $r["result"]=ResultState::toArray(4003);
-                        $allResult[$cmd]= $r;
-                        //continue;
-                    }else{
-                        $userdata->lastCmdNo=$param["cmdNo"];
-                        if($userdata->save()){
-                            $checkUserdata=true;
-                        }else{
-                            $userdata->save();
-                            $checkUserdata=true;
-                        }
-                    }
-                }
-
-
-
-            }
 
             $startTime = TimeManager::getMicroTime();
-            $r = $command->$a($p);
+            $r = CommandClass::$a($p);
             $endTime = TimeManager::getMicroTime();
             
             if($a=="login" || $a=="join"){
-                LogManager::addLog("ok out deviceID ".$r["result"]["code"]);
+                //LogManager::addLog("ok out deviceID ".$r["result"]["code"]);
                 if(ResultState::successCheck($r["result"])){
                     $checkUserdata=true;
                     $allResult["lastCmdNo"]=0;
                     $allResult["deviceID"]=$r["data"]["deviceID"];
-                    LogManager::addLog("out deviceID".$r["data"]["deviceID"]);
+                    //LogManager::addLog("out deviceID".$r["data"]["deviceID"]);
                 }else{
                     $allResult["deviceID"]=0;
                 }
@@ -163,8 +179,11 @@ if(!$stopCommand){
             $p2["output"]=$r;
             $p2["output"]["log"]=$logs;
             $p2["execTime"]=$endTime-$startTime;
-            if($a!="writelog")$command->writelog($p2);
+            if($a!="writelog")CommandClass::writelog($p2);
+            
+            
             $r["log"]=LogManager::getLogAndClear();
+            
             $allResult[$cmd]= $r;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');
@@ -175,7 +194,7 @@ if(!$stopCommand){
             exit;
         }else{
             $p["api"]=$param[$cmd]["a"];
-            $allResult[$cmd]= $command->httpgateway($p);
+            $allResult[$cmd]= CommandClass::httpgateway($p);
             
             
             $p2=array();
@@ -184,7 +203,7 @@ if(!$stopCommand){
             $p2["category"]=$p["api"];
             $p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
             $p2["output"]=$allResult[$cmd];
-            $command->writelog($p2);
+            CommandClass::writelog($p2);
             //$allResult[$cmd]=array("state"=>"error","msg"=>"don't find command");
         }
         
@@ -210,29 +229,34 @@ if(!$stopCommand){
         $p2["category"]="starttransaction";
         $p2["content"]='{"memberID":"'.CurrentUserInfo::$memberID.'"}';
         $p2["output"]=$allResult[$commitCmdName];
-        $command->writelog($p2);
+        CommandClass::writelog($p2);
     }
-
-    $allResult["state"]="ok";
-    $allResult["timestamp"]=TimeManager::getTime();
-    $allResult["date"]=TimeManager::getCurrentDateTime();
-    $allResult["weekNo"]=TimeManager::getCurrentWeekNo();
-    $allResult["cmdNo"]=$param["cmdNo"];
-    $allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
-    
-    if($mode=="nodes"){
-        echo $allResult;
-    }else{
-        //echo $allResult;
-         echo encryptByAESWithBase64($allResult)."#";
-       // echo base64_encode(@mcrypt_encrypt(MCRYPT_DES, $SECRETKEY,$allResult, MCRYPT_MODE_ECB))."#";        
-    }
-    
-    
-    //DBServer::closeAllConnection();
-    DBServer::closeAllConnection();
-    @mysql_close();
 
 }
+
+
+
+
+$allResult["state"]="ok";
+$allResult["timestamp"]=TimeManager::getTime();
+$allResult["date"]=TimeManager::getCurrentDateTime();
+$allResult["weekNo"]=TimeManager::getCurrentWeekNo();
+$allResult["cmdNo"]=$param["cmdNo"];
+$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+
+if($mode=="nodes"){
+    echo $allResult;
+}else{
+    //echo $allResult;
+     echo encryptByAESWithBase64($allResult)."#";
+   // echo base64_encode(@mcrypt_encrypt(MCRYPT_DES, $SECRETKEY,$allResult, MCRYPT_MODE_ECB))."#";        
+}
+
+
+//DBServer::closeAllConnection();
+DBServer::closeAllConnection();
+@mysql_close();
+
+ob_end_flush();
 
 ?>

@@ -29,12 +29,6 @@ $(document).ready(function(){
 	});
 });
 
-var commenter = function(value,option){
-	return "변경이유 : <input type='text' value='"+value+"' class='LQEditor form-control form-control-inline' editor='"+j2s(option)+"'>";
-}
-var commenter_value = function(obj){
-	return obj.val();
-} 
 
 var clearList = function(value,option){
 	value = s2j(value);
@@ -73,8 +67,18 @@ var clearList = function(value,option){
 <br><br>
 
 <h2 id="tables-contextual-classes">|피스정보조회</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PieceHistory" autoLoad="false" autoSetting="true" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PieceHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
+		<tr>
+			<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
+			<th title='회원번호' field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >회원번호</th>
+			<th title='스테이지번호' field='pieceNo' viewer='{"type":"text"}' editor='{"type":"text"}' >스테이지번호</th>
+			<th title='최초진입일시' field='openDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >최초진입일시</th>
+			<th title='최초클리어일시' field='firstClearDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >최초클리어일시</th>
+			<th title='플레이횟수' field='tryCount' viewer='{"type":"text"}' editor='{"type":"text"}' >플레이횟수</th>
+			<th title='진행상태' field='clearDateList' viewer='{"type":"clearList"}' editor='{"type":"array","element":{"type":"datetime"}}' >진행상태</th>
+			<th manage='update delete insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 
