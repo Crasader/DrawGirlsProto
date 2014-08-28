@@ -194,7 +194,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     protected void onResume()
     {
          super.onResume();     
-         
+         hideSystemUI();
          IgawCommon.startSession(DGproto.this);
 //         ADBrixManager.startSession(this);
          HSPCore core = HSPCore.getInstance();
