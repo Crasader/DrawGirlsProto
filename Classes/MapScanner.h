@@ -248,7 +248,7 @@ private:
 class VisibleSprite : public EffectSprite
 {
 public:
-	static VisibleSprite* create(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
+	static VisibleSprite* create(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename);
 	
 	void setMoveGamePosition(CCPoint t_p);
 	
@@ -266,7 +266,7 @@ public:
 	void setRectToVertex();
 	
 private:
-	CCArray* drawRects;
+	std::vector<IntRectSTL>* drawRects;
 	
 	Vertex3D* m_vertices;
 //	Vertex3D* m_textCoords;
@@ -293,7 +293,7 @@ private:
 	int light_step;
 	int light_frame;
 	
-	void myInit(const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename);
+	void myInit(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename);
 	
 	CCTexture2D* createSafetyImage(string fullpath);
 };
@@ -303,14 +303,13 @@ class VisibleParent : public CCNode
 public:
 	static VisibleParent* create(const char* filename, bool isPattern, string sil_filename);
 	
-	void setDrawRects(CCArray* t_rects);
+	void setDrawRects(const std::vector<IntRectSTL>& t_rects);
 	
 	virtual ~VisibleParent()
 	{
-		drawRects->release();
 	}
 	
-	CCArray* getDrawRects();
+	const std::vector<IntRectSTL>& getDrawRects();
 	
 	CCSprite* getVisibleSprite()
 	{
@@ -319,8 +318,8 @@ public:
 	
 private:
 	VisibleSprite* myVS;
-	
-	CCArray* drawRects;
+	std::vector<IntRectSTL> drawRects;
+//	CCArray* drawRects;
 	
 	void divideRect(IntPoint crashPoint);
 	void divideRects(IntRect crashRect);
@@ -394,10 +393,10 @@ private:
 	SEL_CallFunc start_delegate;
 	
 	void resetRects(bool is_after_scanmap);
-	CCArray* getGainRects(mapType (*gainMap)[217]);
+	std::vector<IntRectSTL> getGainRects(mapType (*gainMap)[217]);
 	mapType mapInitState[162][217];
 	
-	IntRect* newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, const IntMoveState& start);
+	IntRectSTL newRectChecking(mapType (*mapArray)[217], vector<pair<IntPointSTL, mapType>>* checkingIndex, const IntMoveStateSTL& start);
 	
 	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
 	

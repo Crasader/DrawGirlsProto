@@ -4295,6 +4295,8 @@ void Maingame::scoreAttackMissile(int t_damage)
 
 void Maingame::refreshThumb()
 {
+	if(!myMS->isVisible())
+		return;
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
 	thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
 	t_vs->visitForThumb();
@@ -4356,6 +4358,9 @@ void Maingame::refreshThumb()
 
 void Maingame::refreshReplayThumb(int temp_time)
 {
+	if(!myMS->isVisible())
+		return;
+	
 	int play_index = mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)].asInt();
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() <= play_index || mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)][play_index].asInt() > temp_time)
 		return;

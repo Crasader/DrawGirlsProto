@@ -372,28 +372,28 @@ void MapScanner::scanMap()
 		}
 	}
 	
-	CCArray* intRects = getGainRects(mapGainState);
+	std::vector<IntRectSTL> intRects = getGainRects(mapGainState);
 	{
 		// 여기서 IntRects 를 돌면서 그리면 될 듯 함!
-		int rects = intRects->count();
+		int rects = intRects.size();
 		CCNode* effectSprites = CCNode::create();
 		addChild(effectSprites, gainEffectZorder);
 		float minx = numeric_limits<float>::max(), miny = numeric_limits<float>::max(),
 		maxx = numeric_limits<float>::min(), maxy = numeric_limits<float>::min();
 		for(int i=0; i<rects; i++)
 		{
-			IntRect* rect = (IntRect*)intRects->objectAtIndex(i);
-//			CCLOG("%d %d %d %d", rect->origin.x, rect->origin.y, rect->origin.x + rect->size.width, rect->origin.y + rect->size.height);
+			IntRectSTL rect = intRects[i];
+//			CCLOG("%d %d %d %d", rect.x, rect.y, rect.x + rect->size.width, rect.y + rect->size.height);
 			CCSprite* gainRectSprite = CCSprite::create();
 			gainRectSprite->setAnchorPoint(ccp(0.5f, 0.5f));
 			
-			gainRectSprite->setTextureRect(CCRectMake(rect->origin.x, rect->origin.y, rect->size.width, rect->size.height));
-			minx = MIN(minx, rect->origin.x);
-			miny = MIN(miny, rect->origin.y);
-			maxx = MAX(maxx, rect->origin.x + rect->size.width);
-			maxy = MAX(maxy, rect->origin.y + rect->size.height);
-//			auto transRect = rtSetScale(CCRectMake(rect->origin.x, rect->origin.y, rect->size.width, rect->size.height), 1.f, ccp(0.5f, 0.5f));
-			gainRectSprite->setPosition(ccp(rect->origin.x + rect->size.width / 2.f, rect->origin.y + rect->size.height / 2.f));
+			gainRectSprite->setTextureRect(CCRectMake(rect.x, rect.y, rect.width, rect.height));
+			minx = MIN(minx, rect.x);
+			miny = MIN(miny, rect.y);
+			maxx = MAX(maxx, rect.x + rect.width);
+			maxy = MAX(maxy, rect.y + rect.height);
+//			auto transRect = rtSetScale(CCRectMake(rect.x, rect.y, rect.width, rect.height), 1.f, ccp(0.5f, 0.5f));
+			gainRectSprite->setPosition(ccp(rect.x + rect.width / 2.f, rect.y + rect.height / 2.f));
 //			gainRectSprite->setPosition(transRect.origin);
 			effectSprites->addChild(gainRectSprite);
 		}
@@ -520,18 +520,19 @@ void MapScanner::scanMap()
 	start = chrono::system_clock::now(); 
 }
 
-CCArray* MapScanner::getGainRects(mapType (*gainMap)[217])
+std::vector<IntRectSTL> MapScanner::getGainRects(mapType (*gainMap)[217])
 {
-	vector<pair<IntPoint, mapType>> checkingIndex;
-	CCArray* rects = CCArray::createWithCapacity(30);
+	vector<pair<IntPointSTL, mapType>> checkingIndex;
+	std::vector<IntRectSTL> rects;
+	rects.reserve(10);
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
 			if(gainMap[i][j] == mapOldget || gainMap[i][j] == mapOldline)
 			{
-				IntRect* t_rect = newRectChecking(gainMap, &checkingIndex, IntMoveState(i, j, directionRightUp));
-				rects->addObject(t_rect);
+				IntRectSTL t_rect = newRectChecking(gainMap, &checkingIndex, IntMoveStateSTL(i, j, directionRightUp));
+				rects.push_back(t_rect);
 			}
 		}
 	}
@@ -555,30 +556,32 @@ CCArray* MapScanner::getGainRects(mapType (*gainMap)[217])
 }
 void MapScanner::resetRects(bool is_after_scanmap)
 {
-//	chrono::time_point<chrono::system_clock> start, end;
-//	chrono::duration<double> elapsed_seconds;
-//	start = chrono::system_clock::now();
+	chrono::time_point<chrono::system_clock> start, end;
+	chrono::duration<double> elapsed_seconds;
+	start = chrono::system_clock::now();
 	
-	vector<pair<IntPoint, mapType>> checkingIndex;
+	vector<pair<IntPointSTL, mapType>> checkingIndex;
 	auto gdPointer = myGD;
 	// view rects reset
-	CCArray* rects = CCArray::createWithCapacity(256);
+//	CCArray* rects = CCArray::createWithCapacity(256);
+	std::vector<IntRectSTL> rects;
+	rects.reserve(256);
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
 			if(gdPointer->mapState[i][j] == mapOldget || gdPointer->mapState[i][j] == mapOldline)
 			{
-				IntRect* t_rect = newRectChecking(gdPointer->mapState, &checkingIndex, IntMoveState(i, j, directionRightUp));
-				rects->addObject(t_rect);
+				rects.push_back( newRectChecking(gdPointer->mapState, &checkingIndex, IntMoveStateSTL(i, j, directionRightUp)) );
+//				rects->addObject(t_rect);
 			}
 		}
 	}
 	
-//	end = chrono::system_clock::now();
-//	elapsed_seconds = end-start;
-//	CCLOG("reset rects : %f", elapsed_seconds.count());
-	
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("reset rects : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 	visibleImg->setDrawRects(rects);
 	
 	// newRectChecking 에서 mapScaningCheckLine mapScaningCheckGet 이 대입된 인덱스를 가져 오는게 속도 면에서 나을 듯??
@@ -607,6 +610,10 @@ void MapScanner::resetRects(bool is_after_scanmap)
 				break;
 		}
 	}
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("reset rects 2 : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 //	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 //	{
 //		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -640,9 +647,13 @@ void MapScanner::resetRects(bool is_after_scanmap)
 		else
 			myGD->communication("UI_writeMap");
 	}
+	end = chrono::system_clock::now();
+	elapsed_seconds = end-start;
+	CCLOG("reset rects3 : %f", elapsed_seconds.count());
+	start = chrono::system_clock::now();
 }
 
-IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, const IntMoveState& start)
+IntRectSTL MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPointSTL, mapType>>* checkingIndex, const IntMoveStateSTL& start)
 {
 //	auto gdPointer = myGD;
 	IntPoint origin = IntPoint(start.origin.x, start.origin.y);
@@ -650,10 +661,10 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 	
 	bool isUpper = true;
 	bool isRighter = true;
-	CircularQueue<IntMoveState> loopArray(350);
+	CircularQueue<IntMoveStateSTL> loopArray(350);
 	loopArray.enqueue(start);
 	
-	CircularQueue<IntMoveState> nextLoopArray(350);
+	CircularQueue<IntMoveStateSTL> nextLoopArray(350);
 	
 	while(!loopArray.isEmpty())
 	{
@@ -666,7 +677,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 		while(!loopArray.isEmpty())
 		{
 //			loopCnt++;
-			IntMoveState t_ms = loopArray.dequeue();
+			IntMoveStateSTL t_ms = loopArray.dequeue();
 //			loopArray.pop();
 			
 			
@@ -681,12 +692,12 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 				case mapOldget:
 					*root = mapScaningCheckGet;
 					if(checkingIndex)
-						checkingIndex->push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+						checkingIndex->push_back(pair<IntPointSTL, mapType>(t_ms.origin, *root));
 					break;
 				case mapOldline:
 					*root = mapScaningCheckLine;
 					if(checkingIndex)
-						checkingIndex->push_back(pair<IntPoint, mapType>(t_ms.origin, *root));
+						checkingIndex->push_back(pair<IntPointSTL, mapType>(t_ms.origin, *root));
 					break;
 			}
 			
@@ -695,7 +706,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 				case directionUp:
 					if(isUpper)
 					{
-						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						IntMoveStateSTL n_msUp = IntMoveStateSTL(t_ms.origin.x, t_ms.origin.y+1, directionUp);
 						auto checkValue = mapArray[n_msUp.origin.x][n_msUp.origin.y];
 						if((checkValue == mapOldline ||
 								checkValue == mapOldget) && n_msUp.origin.isInnerMap())
@@ -711,7 +722,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 				case directionRight:
 					if(isRighter)
 					{
-						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+						IntMoveStateSTL n_msRight = IntMoveStateSTL(t_ms.origin.x+1, t_ms.origin.y, directionRight);
 						auto checkValue = mapArray[n_msRight.origin.x][n_msRight.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap())
 						{
@@ -726,7 +737,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 				case directionRightUp:
 					if(isUpper)
 					{
-						IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
+						IntMoveStateSTL n_msUp = IntMoveStateSTL(t_ms.origin.x, t_ms.origin.y+1, directionUp);
 						auto checkValue = mapArray[n_msUp.origin.x][n_msUp.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msUp.origin.isInnerMap() )
 						{
@@ -737,7 +748,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 					
 					if(isRighter)
 					{
-						IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
+						IntMoveStateSTL n_msRight = IntMoveStateSTL(t_ms.origin.x+1, t_ms.origin.y, directionRight);
 						auto checkValue = mapArray[n_msRight.origin.x][n_msRight.origin.y];
 						if((checkValue == mapOldline || checkValue == mapOldget) && n_msRight.origin.isInnerMap() )
 						{
@@ -748,7 +759,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 					
 					if(upable && rightable)
 					{
-						IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
+						IntMoveStateSTL n_msRightUp = IntMoveStateSTL(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
 						auto checkValue = mapArray[n_msRightUp.origin.x][n_msRightUp.origin.y];
 						if((checkValue == mapOldline ||
 								checkValue == mapOldget) && n_msRightUp.origin.isInnerMap() )
@@ -779,8 +790,7 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 	
 //	CCLOG("loop count : %d", loopCnt);
 	
-	IntRect* r_rect = new IntRect((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
-	r_rect->autorelease();
+	IntRectSTL r_rect = IntRectSTL((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
 	return r_rect;
 }
 
@@ -1166,11 +1176,11 @@ void MapScanner::exchangeMS()
 	// ######################## hs code bbu woo~ ##############################
 	
 	
-	CCArray* t_rect_array = new CCArray();
 
+	std::vector<IntRectSTL> t_rect_array;
 	if(visibleImg)
 	{
-		t_rect_array->initWithArray(visibleImg->getDrawRects());
+		t_rect_array = visibleImg->getDrawRects();
 		visibleImg->removeFromParentAndCleanup(true);
 		visibleImg = NULL;
 	}
@@ -1180,9 +1190,6 @@ void MapScanner::exchangeMS()
 	addChild(visibleImg, visibleZorder);
 
 	visibleImg->setDrawRects(t_rect_array);
-
-	t_rect_array->autorelease();
-
 	scanMap();
 }
 
@@ -1862,7 +1869,7 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 //	addChild(t_render);
 }
 
-VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
+VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename )
 {
 	VisibleSprite* t_v = new VisibleSprite();
 	t_v->myInit(filename, isPattern, t_drawRects, sil_filename);
@@ -2075,7 +2082,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 	}
 	
 	
-	CCArray* rects = CCArray::createWithCapacity(256);
+	std::vector<IntRectSTL> rects;
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
@@ -2177,52 +2184,19 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 					}
 				}
 				
-				IntRect* r_rect = new IntRect((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
-				r_rect->autorelease();
-				
-				rects->addObject(r_rect);
+				rects.push_back(IntRectSTL((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize));
 			}
 		}
 	}
 	
-	CCArray* keep_array = drawRects;
-	drawRects = rects;
+	auto keep_array = drawRects;
+	*drawRects = rects;
 	setRectToVertex();
-//	unsigned int loopCnt = rects->count();
-//	
-//	glEnable(GL_SCISSOR_TEST);
-//	
-//	for(int i=0;i<loopCnt;i++)
-//	{
-//		IntRect* t_rect = (IntRect*)rects->objectAtIndex(i);
-//		
-//		float wScale = viewport[2] / (design_resolution_size.width + (viewport[2]-960.f)/2.f); // 1024, 768 / 480, 360 -> + 32, 24
-//		float hScale = viewport[3] / (design_resolution_size.height + (viewport[2]-960.f)/2.f*design_resolution_size.height/design_resolution_size.width); // 1136, 641 / 480, 271 -> + 89, 50
-//		
-//		float x, y, w, h;
-//		
-//		if(is_set_scene_node)
-//		{
-//			x = t_rect->origin.x*wScale + viewport[0]-1;
-//			y = t_rect->origin.y*hScale + viewport[1]-1;
-//			w = t_rect->size.width*wScale + 2;
-//			h = t_rect->size.height*hScale + 2;
-//		}
-//		else
-//		{
-//			x = t_rect->origin.x*wScale + viewport[0]-1;
-//			y = t_rect->origin.y*hScale + viewport[1]-1;
-//			w = t_rect->size.width*wScale + 2;
-//			h = t_rect->size.height*hScale + 2;
-//		}
-//		
-//		glScissor(x,y,w,h);
+
 		draw();
 		if(mySGD->is_safety_mode)
 			safety_img->draw();
-//	}
-//	
-//	glDisable(GL_SCISSOR_TEST);
+
 	
 	visit();
 	
@@ -2281,7 +2255,7 @@ void VisibleSprite::setRectToVertex()
 		
 	}
 	
-	t_vertice_count = drawRects->count()*6;
+	t_vertice_count = drawRects->size() * 6;
 	
 	m_vertices = new Vertex3D[t_vertice_count];
 	m_textCoords = new ccTex2F[t_vertice_count];
@@ -2290,76 +2264,76 @@ void VisibleSprite::setRectToVertex()
 	safety_vertices = new Vertex3D[t_vertice_count];
 	
 	m_colors = new tColor4B[t_vertice_count];
-	for(int i=0;i<drawRects->count();i++)
+	for(int i=0;i<drawRects->size() ;i++)
 	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-		m_vertices[i*6+0].x = t_rect->origin.x;
-		m_vertices[i*6+0].y = t_rect->origin.y;
+		IntRectSTL t_rect = (*drawRects)[i];
+		m_vertices[i*6+0].x = t_rect.x;
+		m_vertices[i*6+0].y = t_rect.y;
 		m_vertices[i*6+0].z = 0;
 		
-		m_vertices[i*6+1].x = t_rect->origin.x;
-		m_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+1].x = t_rect.x;
+		m_vertices[i*6+1].y = t_rect.y + t_rect.height;
 		m_vertices[i*6+1].z = 0;
 		
-		m_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width;
-		m_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+2].x = t_rect.x + t_rect.width;
+		m_vertices[i*6+2].y = t_rect.y + t_rect.height;
 		m_vertices[i*6+2].z = 0;
 		
-		m_vertices[i*6+3].x = t_rect->origin.x;
-		m_vertices[i*6+3].y = t_rect->origin.y;
+		m_vertices[i*6+3].x = t_rect.x;
+		m_vertices[i*6+3].y = t_rect.y;
 		m_vertices[i*6+3].z = 0;
 		
-		m_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width;
-		m_vertices[i*6+4].y = t_rect->origin.y;
+		m_vertices[i*6+4].x = t_rect.x + t_rect.width;
+		m_vertices[i*6+4].y = t_rect.y;
 		m_vertices[i*6+4].z = 0;
 		
-		m_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width;
-		m_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height;
+		m_vertices[i*6+5].x = t_rect.x + t_rect.width;
+		m_vertices[i*6+5].y = t_rect.y + t_rect.height;
 		m_vertices[i*6+5].z = 0;
 		
 		
-		m_textCoords[i*6+0].u = t_rect->origin.x/320.f;
-		m_textCoords[i*6+0].v = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+0].u = t_rect.x/320.f;
+		m_textCoords[i*6+0].v = (430.f - t_rect.y) / 430.f;
 		
-		m_textCoords[i*6+1].u = t_rect->origin.x/320.f;
-		m_textCoords[i*6+1].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+1].u = t_rect.x/320.f;
+		m_textCoords[i*6+1].v = (430.f - (t_rect.y + t_rect.height)) / 430.f;
 		
-		m_textCoords[i*6+2].u = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+2].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+2].u = (t_rect.x + t_rect.width)/320.f;
+		m_textCoords[i*6+2].v = (430.f - (t_rect.y + t_rect.height)) / 430.f;
 		
-		m_textCoords[i*6+3].u = t_rect->origin.x/320.f;
-		m_textCoords[i*6+3].v = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+3].u = t_rect.x/320.f;
+		m_textCoords[i*6+3].v = (430.f - t_rect.y) / 430.f;
 		
-		m_textCoords[i*6+4].u = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+4].v = (430.f - t_rect->origin.y) / 430.f;
+		m_textCoords[i*6+4].u = (t_rect.x + t_rect.width)/320.f;
+		m_textCoords[i*6+4].v = (430.f - t_rect.y) / 430.f;
 		
-		m_textCoords[i*6+5].u = (t_rect->origin.x + t_rect->size.width)/320.f;
-		m_textCoords[i*6+5].v = (430.f - (t_rect->origin.y + t_rect->size.height)) / 430.f;
+		m_textCoords[i*6+5].u = (t_rect.x + t_rect.width)/320.f;
+		m_textCoords[i*6+5].v = (430.f - (t_rect.y + t_rect.height)) / 430.f;
 		
 		
 		
-		light_vertices[i*6+0].x = t_rect->origin.x-0.5f;
-		light_vertices[i*6+0].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+0].x = t_rect.x-0.5f;
+		light_vertices[i*6+0].y = t_rect.y-0.5f;
 		light_vertices[i*6+0].z = -1;
 		
-		light_vertices[i*6+1].x = t_rect->origin.x-0.5f;
-		light_vertices[i*6+1].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+1].x = t_rect.x-0.5f;
+		light_vertices[i*6+1].y = t_rect.y + t_rect.height+0.5f;
 		light_vertices[i*6+1].z = -1;
 		
-		light_vertices[i*6+2].x = t_rect->origin.x + t_rect->size.width+0.5f;
-		light_vertices[i*6+2].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+2].x = t_rect.x + t_rect.width+0.5f;
+		light_vertices[i*6+2].y = t_rect.y + t_rect.height+0.5f;
 		light_vertices[i*6+2].z = -1;
 		
-		light_vertices[i*6+3].x = t_rect->origin.x-0.5f;
-		light_vertices[i*6+3].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+3].x = t_rect.x-0.5f;
+		light_vertices[i*6+3].y = t_rect.y-0.5f;
 		light_vertices[i*6+3].z = -1;
 		
-		light_vertices[i*6+4].x = t_rect->origin.x + t_rect->size.width+0.5f;
-		light_vertices[i*6+4].y = t_rect->origin.y-0.5f;
+		light_vertices[i*6+4].x = t_rect.x + t_rect.width+0.5f;
+		light_vertices[i*6+4].y = t_rect.y-0.5f;
 		light_vertices[i*6+4].z = -1;
 		
-		light_vertices[i*6+5].x = t_rect->origin.x + t_rect->size.width+0.5f;
-		light_vertices[i*6+5].y = t_rect->origin.y + t_rect->size.height+0.5f;
+		light_vertices[i*6+5].x = t_rect.x + t_rect.width+0.5f;
+		light_vertices[i*6+5].y = t_rect.y + t_rect.height+0.5f;
 		light_vertices[i*6+5].z = -1;
 		
 		for(int j=0;j<6;j++)
@@ -2382,7 +2356,7 @@ void VisibleSprite::setRectToVertex()
 	start = chrono::system_clock::now();
 }
 
-void VisibleSprite::myInit( const char* filename, bool isPattern, CCArray* t_drawRects, string sil_filename )
+void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename )
 {
 	initWithTexture(mySIL->addImage(filename));
 	setBrighten(1.f);
@@ -2553,14 +2527,13 @@ VisibleParent* VisibleParent::create( const char* filename, bool isPattern, stri
 	return t_vp;
 }
 
-void VisibleParent::setDrawRects( CCArray* t_rects )
+void VisibleParent::setDrawRects( const std::vector<IntRectSTL>& t_rects )
 {
-	drawRects->removeAllObjects();
-	drawRects->addObjectsFromArray(t_rects);
+	drawRects = t_rects;
 	myVS->setRectToVertex();
 }
 
-CCArray* VisibleParent::getDrawRects()
+const std::vector<IntRectSTL>& VisibleParent::getDrawRects()
 {
 	return drawRects;
 }
@@ -2575,64 +2548,60 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 
 	crashPoint.x = (crashPoint.x-1)*pixelSize;
 	crashPoint.y = (crashPoint.y-1)*pixelSize;
-	vector<IntRect*> removeArray;
-	int loopCnt = drawRects->count();
+	auto drawRectsCopy = drawRects;
+	drawRects.clear();
+	int loopCnt = drawRectsCopy.size();
 	for(int i=0;i<loopCnt;i++)
 	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-		if(crashPoint.x >= t_rect->origin.x && crashPoint.x < t_rect->origin.x + t_rect->size.width && crashPoint.y >= t_rect->origin.y && crashPoint.y < t_rect->origin.y + t_rect->size.height)
+		IntRectSTL t_rect = drawRectsCopy[i];
+		if(crashPoint.x >= t_rect.x && crashPoint.x < t_rect.x + t_rect.width && crashPoint.y >= t_rect.y && crashPoint.y < t_rect.y + t_rect.height)
 		{
 			// divide rect
 			IntSize t_size;
 
 			// left down
-			t_size.width = crashPoint.x - t_rect->origin.x;
-			t_size.height = crashPoint.y - t_rect->origin.y + pixelSize;
+			t_size.width = crashPoint.x - t_rect.x;
+			t_size.height = crashPoint.y - t_rect.y + pixelSize;
 			if(t_size.width >= pixelSize) // left down create
 			{
-				IntRect* n_rect = new IntRect(t_rect->origin.x, t_rect->origin.y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				drawRects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(t_rect.x, t_rect.y, t_size.width, t_size.height));
 			}
 
 			// down right
-			t_size.width = t_rect->origin.x + t_rect->size.width - crashPoint.x;
-			t_size.height = crashPoint.y - t_rect->origin.y;
+			t_size.width = t_rect.x + t_rect.width - crashPoint.x;
+			t_size.height = crashPoint.y - t_rect.y;
 			if(t_size.height >= pixelSize) // down right create
 			{
-				IntRect* n_rect = new IntRect(crashPoint.x, t_rect->origin.y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				drawRects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(crashPoint.x, t_rect.y, t_size.width, t_size.height));
+//				IntRect* n_rect = new IntRect(crashPoint.x, t_rect.y, t_size.width, t_size.height);
+//				n_rect->autorelease();
+//				drawRects->addObject(n_rect);
 			}
 
 			// right up
-			t_size.width = t_rect->origin.x + t_rect->size.width - crashPoint.x - pixelSize;
-			t_size.height = t_rect->origin.y + t_rect->size.height - crashPoint.y;
+			t_size.width = t_rect.x + t_rect.width - crashPoint.x - pixelSize;
+			t_size.height = t_rect.y + t_rect.height - crashPoint.y;
 			if(t_size.width >= pixelSize)
 			{
-				IntRect* n_rect = new IntRect(crashPoint.x+pixelSize, crashPoint.y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				drawRects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(crashPoint.x+pixelSize, crashPoint.y, t_size.width, t_size.height));
+//				IntRect* n_rect = new IntRect(crashPoint.x+pixelSize, crashPoint.y, t_size.width, t_size.height);
+//				n_rect->autorelease();
+//				drawRects->addObject(n_rect);
 			}
 
 			// up left
-			t_size.width = crashPoint.x - t_rect->origin.x + pixelSize;
-			t_size.height = t_rect->origin.y + t_rect->size.height - crashPoint.y - pixelSize;
+			t_size.width = crashPoint.x - t_rect.x + pixelSize;
+			t_size.height = t_rect.y + t_rect.height - crashPoint.y - pixelSize;
 			if(t_size.height >= pixelSize)
 			{
-				IntRect* n_rect = new IntRect(t_rect->origin.x, crashPoint.y + pixelSize, t_size.width, t_size.height);
-				n_rect->autorelease();
-				drawRects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(t_rect.x, crashPoint.y + pixelSize, t_size.width, t_size.height));
+//				IntRect* n_rect = new IntRect(t_rect.x, crashPoint.y + pixelSize, t_size.width, t_size.height);
+//				n_rect->autorelease();
+//				drawRects->addObject(n_rect);
 			}
-			removeArray.push_back(t_rect);
 		}
 	}
-	while(!removeArray.empty())
-	{
-		IntRect* t_rect = removeArray.back();
-		removeArray.pop_back();
-		drawRects->removeObject(t_rect);
-	}
+	
 	myVS->setRectToVertex();
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
@@ -2664,104 +2633,87 @@ void VisibleParent::divideRects(IntRect crashRect)
 	
 	CCRect crash_rect = CCRectMake(crashRect.origin.x, crashRect.origin.y, crashRect.size.width, crashRect.size.height);
 	
-	vector<IntRect*> removeArray;
-	int loopCnt = drawRects->count();
+	auto drawRectsCopy = drawRects;
+	drawRects.clear();
+	int loopCnt = drawRectsCopy.size();
 	
-	CCArray* add_rects = CCArray::create();
 	
 	for(int i=0;i<loopCnt;i++)
 	{
-		IntRect* t_rect = (IntRect*)drawRects->objectAtIndex(i);
-		CCRect f_rect = CCRectMake(t_rect->origin.x, t_rect->origin.y, t_rect->size.width, t_rect->size.height);
+		IntRectSTL t_rect = drawRectsCopy[i];
+		CCRect f_rect = CCRectMake(t_rect.x, t_rect.y, t_rect.width, t_rect.height);
 		if(crash_rect.intersectsRect(f_rect))
 		{
 			// divide rect
 			IntSize t_size;
 			
 			// left down
-			t_size.width = crashRect.origin.x - t_rect->origin.x;
-			t_size.height = (crashRect.origin.y + crashRect.size.height) - t_rect->origin.y;
+			t_size.width = crashRect.origin.x - t_rect.x;
+			t_size.height = (crashRect.origin.y + crashRect.size.height) - t_rect.y;
 			if(t_size.width >= pixelSize && t_size.height >= pixelSize) // left down create
 			{
-				if(t_size.width > t_rect->size.width)
-					t_size.width = t_rect->size.width;
-				if(t_size.height > t_rect->size.height)
-					t_size.height = t_rect->size.height;
+				if(t_size.width > t_rect.width)
+					t_size.width = t_rect.width;
+				if(t_size.height > t_rect.height)
+					t_size.height = t_rect.height;
 				
-				IntRect* n_rect = new IntRect(t_rect->origin.x, t_rect->origin.y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				add_rects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(t_rect.x, t_rect.y, t_size.width, t_size.height));
 			}
 			
 			// down right
-			t_size.width = (t_rect->origin.x + t_rect->size.width) - crashRect.origin.x;
-			t_size.height = crashRect.origin.y - t_rect->origin.y;
+			t_size.width = (t_rect.x + t_rect.width) - crashRect.origin.x;
+			t_size.height = crashRect.origin.y - t_rect.y;
 			if(t_size.height >= pixelSize && t_size.width >= pixelSize) // down right create
 			{
-				if(t_size.width > t_rect->size.width)
-					t_size.width = t_rect->size.width;
-				if(t_size.height > t_rect->size.height)
-					t_size.height = t_rect->size.height;
+				if(t_size.width > t_rect.width)
+					t_size.width = t_rect.width;
+				if(t_size.height > t_rect.height)
+					t_size.height = t_rect.height;
 				
 				int after_x;
-				if(crashRect.origin.x < t_rect->origin.x)
-					after_x = t_rect->origin.x;
+				if(crashRect.origin.x < t_rect.x)
+					after_x = t_rect.x;
 				else
 					after_x = crashRect.origin.x;
 				
-				IntRect* n_rect = new IntRect(after_x, t_rect->origin.y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				add_rects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(after_x, t_rect.y, t_size.width, t_size.height));
 			}
 			
 			// right up
-			t_size.width = (t_rect->origin.x + t_rect->size.width) - (crashRect.origin.x + crashRect.size.width);
-			t_size.height = (t_rect->origin.y + t_rect->size.height) - crashRect.origin.y;
+			t_size.width = (t_rect.x + t_rect.width) - (crashRect.origin.x + crashRect.size.width);
+			t_size.height = (t_rect.y + t_rect.height) - crashRect.origin.y;
 			if(t_size.width >= pixelSize && t_size.height >= pixelSize)
 			{
-				if(t_size.width > t_rect->size.width)
-					t_size.width = t_rect->size.width;
-				if(t_size.height > t_rect->size.height)
-					t_size.height = t_rect->size.height;
+				if(t_size.width > t_rect.width)
+					t_size.width = t_rect.width;
+				if(t_size.height > t_rect.height)
+					t_size.height = t_rect.height;
 				
 				int after_y;
-				if(crashRect.origin.y < t_rect->origin.y)
-					after_y = t_rect->origin.y;
+				if(crashRect.origin.y < t_rect.y)
+					after_y = t_rect.y;
 				else
 					after_y = crashRect.origin.y;
 				
-				IntRect* n_rect = new IntRect(crashRect.origin.x + crashRect.size.width, after_y, t_size.width, t_size.height);
-				n_rect->autorelease();
-				add_rects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(crashRect.origin.x + crashRect.size.width, after_y, t_size.width, t_size.height));
 			}
 			
 			// up left
-			t_size.width = (crashRect.origin.x + crashRect.size.width) - t_rect->origin.x;
-			t_size.height = (t_rect->origin.y + t_rect->size.height) - (crashRect.origin.y + crashRect.size.height);
+			t_size.width = (crashRect.origin.x + crashRect.size.width) - t_rect.x;
+			t_size.height = (t_rect.y + t_rect.height) - (crashRect.origin.y + crashRect.size.height);
 			if(t_size.height >= pixelSize && t_size.width >= pixelSize)
 			{
-				if(t_size.width > t_rect->size.width)
-					t_size.width = t_rect->size.width;
-				if(t_size.height > t_rect->size.height)
-					t_size.height = t_rect->size.height;
+				if(t_size.width > t_rect.width)
+					t_size.width = t_rect.width;
+				if(t_size.height > t_rect.height)
+					t_size.height = t_rect.height;
 				
-				IntRect* n_rect = new IntRect(t_rect->origin.x, crashRect.origin.y + crashRect.size.height, t_size.width, t_size.height);
-				n_rect->autorelease();
-				add_rects->addObject(n_rect);
+				drawRects.push_back(IntRectSTL(t_rect.x, crashRect.origin.y + crashRect.size.height, t_size.width, t_size.height));
 			}
 			
-			removeArray.push_back(t_rect);
 		}
 	}
 	
-	drawRects->addObjectsFromArray(add_rects);
-	
-	while(!removeArray.empty())
-	{
-		IntRect* t_rect = removeArray.back();
-		removeArray.pop_back();
-		drawRects->removeObject(t_rect);
-	}
 	myVS->setRectToVertex();
 	end = chrono::system_clock::now();
 	elapsed_seconds = end-start;
@@ -2833,7 +2785,8 @@ void VisibleParent::changingGameStep( int t_step )
 
 void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename )
 {
-	drawRects = new CCArray(1);
+//	drawRects = new CCArray(1);
+	drawRects.clear();
 	setPosition(CCPointZero);
 
 	myGD->V_Ip["VS_divideRect"] = std::bind(&VisibleParent::divideRect, this, _1);
@@ -2842,7 +2795,7 @@ void VisibleParent::myInit( const char* filename, bool isPattern, string sil_fil
 	myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
 	myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);
 
-	myVS = VisibleSprite::create(filename, isPattern, drawRects, sil_filename);
+	myVS = VisibleSprite::create(filename, isPattern, &drawRects, sil_filename);
 	myVS->setPosition(CCPointZero);
 	addChild(myVS);
 

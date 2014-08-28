@@ -1773,13 +1773,17 @@ void KSCumberBase::bossDieBomb(float dt)
 		 != m_bossDie.m_bossDieBombFrameNumbers.end())
 	{
 		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");
+
 		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		CCPoint t = getPosition();
 		t.x += ks19937::getFloatValue(-100.f, 100.f); // m_well512.GetFloatValue(-100.f, 100.f);
 		t.y += ks19937::getFloatValue(-100.f, 100.f); 
 		ret.first->setPosition(t);
 		getParent()->addChild(ret.first, 11);
-		
+		ret.second->setAnimationCompletedCallbackLambda(this, [=](const char* timeline){
+			if(timeline == std::string("Default Timeline"))
+				ret.first->removeFromParent();
+		});
 		if(maxValue == m_bossDie.m_bossDieFrameCount)
 		{
 			auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
@@ -1789,6 +1793,10 @@ void KSCumberBase::bossDieBomb(float dt)
 			getParent()->addChild(ret.first, 11);
 			this->setVisible(false);
 			
+			ret.second->setAnimationCompletedCallbackLambda(this, [=](const char* timeline){
+				if(timeline == std::string("Default Timeline"))
+					ret.first->removeFromParent();
+			});
 			unschedule(schedule_selector(ThisClassType::bossDieBomb));
 		}
 	}
