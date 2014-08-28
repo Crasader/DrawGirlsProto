@@ -642,7 +642,7 @@ void MapScanner::resetRects(bool is_after_scanmap)
 	}
 }
 
-IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, IntMoveState start)
+IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPoint, mapType>>* checkingIndex, const IntMoveState& start)
 {
 //	auto gdPointer = myGD;
 	IntPoint origin = IntPoint(start.origin.x, start.origin.y);
@@ -652,13 +652,9 @@ IntRect* MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<IntPo
 	bool isRighter = true;
 	CircularQueue<IntMoveState> loopArray(350);
 	loopArray.enqueue(start);
-//	loopArray.push(start);
 	
 	CircularQueue<IntMoveState> nextLoopArray(350);
 	
-//	int loopCnt;
-	
-//	while(!loopArray.empty())
 	while(!loopArray.isEmpty())
 	{
 		if(isUpper)				size.height++;

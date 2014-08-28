@@ -115,22 +115,26 @@ extern "C"{
 	}
 	void Java_com_litqoo_lib_hspConnector_requestItemDeliveryNative(JNIEnv *env, jobject thiz)
 	{
-		jboolean isCopy = JNI_FALSE;
-		Json::Value param;
-		param["memberID"] = hspConnector::get()->getMemberID();
-		GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
-			if(t["result"]["code"].asInt() == GDSUCCESS)
-			{
-			}
-			else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-			{
-//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-			}
-			else
-			{
-//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-			}
-		});
+		if(GraphDog::get()->getMemberID())
+		{
+			jboolean isCopy = JNI_FALSE;
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getMemberID();
+			GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
+				if(t["result"]["code"].asInt() == GDSUCCESS)
+				{
+				}
+				else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
+				{
+					//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+				}
+				else
+				{
+					//				addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+				}
+			});
+			
+		}
 	}
 }
 #endif
