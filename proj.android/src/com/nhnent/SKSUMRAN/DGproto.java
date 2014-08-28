@@ -81,7 +81,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.0.KG")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.1")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
