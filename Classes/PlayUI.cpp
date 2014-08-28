@@ -34,6 +34,10 @@ void ComboView::changeCombo (int combo)
 	{
 		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
 	}
+	else
+	{
+		shadow_label->setPosition(ccpFromSize(combo_label->getContentSize()) + ccp(0,-4));
+	}
 //	if(!mySGD->is_endless_mode)
 //		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
 }
