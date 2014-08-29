@@ -2189,7 +2189,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		}
 	}
 	
-	auto keep_array = drawRects;
+	auto keep_array = *drawRects;
 	*drawRects = rects;
 	setRectToVertex();
 
@@ -2202,7 +2202,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 	
-	drawRects = keep_array;
+	*drawRects = keep_array;
 	setRectToVertex();
 }
 
@@ -2548,12 +2548,13 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 
 	crashPoint.x = (crashPoint.x-1)*pixelSize;
 	crashPoint.y = (crashPoint.y-1)*pixelSize;
+	int loopCnt = drawRects.size();
 	auto drawRectsCopy = drawRects;
 	drawRects.clear();
-	int loopCnt = drawRectsCopy.size();
-	for(int i=0;i<loopCnt;i++)
+//	for(int i=0;i<loopCnt;i++)
+	for(auto iter = drawRectsCopy.begin(); iter != drawRectsCopy.end(); ++iter)
 	{
-		IntRectSTL t_rect = drawRectsCopy[i];
+		IntRectSTL t_rect = *iter;
 		if(crashPoint.x >= t_rect.x && crashPoint.x < t_rect.x + t_rect.width && crashPoint.y >= t_rect.y && crashPoint.y < t_rect.y + t_rect.height)
 		{
 			// divide rect
@@ -2600,7 +2601,12 @@ void VisibleParent::divideRect( IntPoint crashPoint )
 //				drawRects->addObject(n_rect);
 			}
 		}
+		else
+		{
+			drawRects.push_back(*iter);
+		}
 	}
+	
 	
 	myVS->setRectToVertex();
 	end = chrono::system_clock::now();
@@ -2633,14 +2639,13 @@ void VisibleParent::divideRects(IntRect crashRect)
 	
 	CCRect crash_rect = CCRectMake(crashRect.origin.x, crashRect.origin.y, crashRect.size.width, crashRect.size.height);
 	
+	int loopCnt = drawRects.size();
 	auto drawRectsCopy = drawRects;
 	drawRects.clear();
-	int loopCnt = drawRectsCopy.size();
 	
-	
-	for(int i=0;i<loopCnt;i++)
+	for(auto iter = drawRectsCopy.begin(); iter != drawRectsCopy.end(); ++iter)
 	{
-		IntRectSTL t_rect = drawRectsCopy[i];
+		IntRectSTL t_rect = *iter;
 		CCRect f_rect = CCRectMake(t_rect.x, t_rect.y, t_rect.width, t_rect.height);
 		if(crash_rect.intersectsRect(f_rect))
 		{
@@ -2710,7 +2715,11 @@ void VisibleParent::divideRects(IntRect crashRect)
 				
 				drawRects.push_back(IntRectSTL(t_rect.x, crashRect.origin.y + crashRect.size.height, t_size.width, t_size.height));
 			}
-			
+		
+		}
+		else
+		{
+			drawRects.push_back(*iter);
 		}
 	}
 	
