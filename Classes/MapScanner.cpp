@@ -2189,7 +2189,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		}
 	}
 	
-	auto keep_array = drawRects;
+	auto keep_array = *drawRects;
 	*drawRects = rects;
 	setRectToVertex();
 
@@ -2202,7 +2202,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 	
-	drawRects = keep_array;
+	*drawRects = keep_array;
 	setRectToVertex();
 }
 
