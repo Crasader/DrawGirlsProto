@@ -1587,7 +1587,7 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 					// check, after download ----------
 					DownloadFile t_df1;
 					t_df1.size = 100;
-					t_df1.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_head.ccbi";
+					t_df1.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString();
 					t_df1.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_head.ccbi";
 					t_df1.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
 					
@@ -1596,10 +1596,13 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 						monster_download_list.push_back(t_df1);
 					// ================================
 					
+					string body_img = monster_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
+					GraphDogLib::replaceString(body_img, "_head.ccbi", "_body.ccbi");
+					
 					// check, after download ----------
 					DownloadFile t_df2;
 					t_df2.size = 100;
-					t_df2.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_body.ccbi";
+					t_df2.img = body_img.c_str();
 					t_df2.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_body.ccbi";
 					t_df2.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
 					
@@ -1608,10 +1611,13 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 						monster_download_list.push_back(t_df2);
 					// ================================
 					
+					string tail_img = monster_list[i-1]["resourceInfo"]["ccbi"].asString().c_str();
+					GraphDogLib::replaceString(tail_img, "_head.ccbi", "_tail.ccbi");
+					
 					// check, after download ----------
 					DownloadFile t_df3;
 					t_df3.size = 100;
-					t_df3.img = monster_list[i-1]["resourceInfo"]["ccbi"].asString() + "_tail.ccbi";
+					t_df3.img = tail_img.c_str();
 					t_df3.filename = monster_list[i-1]["resourceInfo"]["ccbiID"].asString() + "_tail.ccbi";
 					t_df3.key = CCSTR_CWF("mi%d_ri_ccbi", i)->getCString();
 					

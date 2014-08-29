@@ -2098,6 +2098,9 @@ void PuzzleScene::buyPieceAction(int t_stage_number)
 
 void PuzzleScene::lockPieceAction(int t_stage_number)
 {
+	if(!is_menu_enable)
+		return;
+	
 	CCLOG("lockPieceAction : %d", t_stage_number);
 	
 	AudioEngine::sharedInstance()->playEffect("se_lock.mp3", false);
