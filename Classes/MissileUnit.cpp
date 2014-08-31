@@ -1113,7 +1113,7 @@ void SatelliteBeam::myInit (CCPoint t_sp, int t_type, CCObject * t_removeEffect,
 	addChild(beam_main);
 	{
 		auto ret2 = KS::loadCCBI<CCSprite*>(this, "pattern_lightning_targeting.ccbi");
-		KS::setBlendFunc(ret2.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//		KS::setBlendFunc(ret2.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		beam_main->addChild(ret2.first, -1);
 	}
 	//		beam_main->setVisible(false);
