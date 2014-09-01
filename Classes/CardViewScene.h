@@ -44,6 +44,8 @@ private:
 	
 	MyNode* first_img;
 	
+	CCSprite* sound_img;
+	
 	CommonButton* next_button;
 //	EffectSprite* safety_img;
 	

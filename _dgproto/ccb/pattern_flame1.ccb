@@ -32,7 +32,7 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>displayFrame</key>
+								<key>rotation</key>
 								<dict>
 									<key>keyframes</key>
 									<array>
@@ -43,16 +43,13 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.0</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_flame1_1.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>0.0</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -61,16 +58,13 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.066666670143604279</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_flame1_2.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>-120</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -79,58 +73,98 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.13333334028720856</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_flame1_3.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>200</real>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.20000000298023224</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
+											<key>value</key>
+											<real>200</real>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>rotation</string>
+									<key>type</key>
+									<integer>2</integer>
+								</dict>
+								<key>scale</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>pattern_flame1_4.png</string>
-												<string>Use regular file</string>
+												<real>1</real>
+												<real>1</real>
 											</array>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>scale</string>
 											<key>time</key>
-											<real>0.26666668057441711</real>
+											<real>0.13333334028720856</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<string>pattern_flame1_5.png</string>
-												<string>Use regular file</string>
+												<real>0.94999998807907104</real>
+												<real>0.94999998807907104</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.23333333432674408</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>1</real>
+												<real>1</real>
 											</array>
 										</dict>
 									</array>
 									<key>name</key>
-									<string>displayFrame</string>
+									<string>scale</string>
 									<key>type</key>
-									<integer>7</integer>
+									<integer>4</integer>
 								</dict>
 							</dict>
 						</dict>
@@ -141,7 +175,7 @@
 						<key>customClass</key>
 						<string></string>
 						<key>displayName</key>
-						<string>pattern_flame1_1</string>
+						<string>pattern_flame1_3</string>
 						<key>memberVarAssignmentName</key>
 						<string></string>
 						<key>memberVarAssignmentType</key>
@@ -160,6 +194,11 @@
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>1</real>
+									<real>1</real>
+								</array>
 								<key>name</key>
 								<string>scale</string>
 								<key>type</key>
@@ -168,9 +207,19 @@
 								<array>
 									<real>1</real>
 									<real>1</real>
-									<false/>
+									<true/>
 									<integer>0</integer>
 								</array>
+							</dict>
+							<dict>
+								<key>baseValue</key>
+								<real>0.0</real>
+								<key>name</key>
+								<string>rotation</string>
+								<key>type</key>
+								<string>Degrees</string>
+								<key>value</key>
+								<real>200</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -181,11 +230,6 @@
 								<false/>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<array>
-									<string>pattern_flame1_1.png</string>
-									<string>Use regular file</string>
-								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -193,7 +237,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>pattern_flame1_5.png</string>
+									<string>pattern_flame1_3.png</string>
 								</array>
 							</dict>
 						</array>

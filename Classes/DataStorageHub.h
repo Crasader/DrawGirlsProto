@@ -165,7 +165,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_showedKindTutorial_int1,
 	kDSH_Key_showedEmptyItemSale1,
 	kDSH_Key_showedEmptyItemSale2,
-	kDSH_Key_showedCardRankUp
+	kDSH_Key_showedCardRankUp,
+	
+	kDSH_Key_isOffCardMorphingSound
 	
 }DSH_Key;
 

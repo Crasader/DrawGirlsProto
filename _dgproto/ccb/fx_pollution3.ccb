@@ -32,7 +32,7 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>displayFrame</key>
+								<key>rotation</key>
 								<dict>
 									<key>keyframes</key>
 									<array>
@@ -43,16 +43,13 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.0</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>fx_pollution3_1.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>0.0</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -61,16 +58,13 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.066666670143604279</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>fx_pollution3_2.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>-120</real>
 										</dict>
 										<dict>
 											<key>easing</key>
@@ -79,58 +73,34 @@
 												<integer>0</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.13333334028720856</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>fx_pollution3_3.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>60</real>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>rotation</string>
 											<key>time</key>
 											<real>0.20000000298023224</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>2</integer>
 											<key>value</key>
-											<array>
-												<string>fx_pollution3_4.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.26666668057441711</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>fx_pollution3_5.png</string>
-												<string>Use regular file</string>
-											</array>
+											<real>200</real>
 										</dict>
 									</array>
 									<key>name</key>
-									<string>displayFrame</string>
+									<string>rotation</string>
 									<key>type</key>
-									<integer>7</integer>
+									<integer>2</integer>
 								</dict>
 							</dict>
 						</dict>
@@ -173,6 +143,16 @@
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<real>0.0</real>
+								<key>name</key>
+								<string>rotation</string>
+								<key>type</key>
+								<string>Degrees</string>
+								<key>value</key>
+								<real>200</real>
+							</dict>
+							<dict>
 								<key>name</key>
 								<string>ignoreAnchorPointForPosition</string>
 								<key>type</key>
@@ -181,11 +161,6 @@
 								<false/>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<array>
-									<string>fx_pollution3_1.png</string>
-									<string>Use regular file</string>
-								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -193,7 +168,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>fx_pollution3_5.png</string>
+									<string>fx_pollution3_1.png</string>
 								</array>
 							</dict>
 						</array>
@@ -630,7 +605,7 @@
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>205.82723999023438</real>
+			<real>512</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>

@@ -104,124 +104,6 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>displayFrame</key>
-								<dict>
-									<key>keyframes</key>
-									<array>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.0</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_1.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.066666670143604279</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_2.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.13333334028720856</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_3.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.20000000298023224</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_4.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.26666668057441711</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_5.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.3333333432674408</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_laserpuple_6.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-									</array>
-									<key>name</key>
-									<string>displayFrame</string>
-									<key>type</key>
-									<integer>7</integer>
-								</dict>
 								<key>opacity</key>
 								<dict>
 									<key>keyframes</key>
@@ -306,6 +188,106 @@
 									<string>opacity</string>
 									<key>type</key>
 									<integer>5</integer>
+								</dict>
+								<key>rotation</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>0.0</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.066666670143604279</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-60</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.13333334028720856</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>100</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.20000000298023224</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>30</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.26666668057441711</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-90</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.3333333432674408</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>0.0</real>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>rotation</string>
+									<key>type</key>
+									<integer>2</integer>
 								</dict>
 								<key>scale</key>
 								<dict>
@@ -435,6 +417,16 @@
 								</array>
 							</dict>
 							<dict>
+								<key>baseValue</key>
+								<real>0.0</real>
+								<key>name</key>
+								<string>rotation</string>
+								<key>type</key>
+								<string>Degrees</string>
+								<key>value</key>
+								<real>0.0</real>
+							</dict>
+							<dict>
 								<key>name</key>
 								<string>ignoreAnchorPointForPosition</string>
 								<key>type</key>
@@ -443,11 +435,6 @@
 								<false/>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<array>
-									<string>pattern_laserpuple_1.png</string>
-									<string>Use regular file</string>
-								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -455,7 +442,7 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>pattern_laserpuple_6.png</string>
+									<string>pattern_laserpuple_1.png</string>
 								</array>
 							</dict>
 							<dict>
@@ -707,7 +694,7 @@
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
-			<real>336.27667236328125</real>
+			<real>512</real>
 			<key>sequenceId</key>
 			<integer>0</integer>
 			<key>soundChannel</key>

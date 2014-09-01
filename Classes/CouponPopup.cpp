@@ -361,7 +361,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 											CommonAnimation::closePopup(this, m_container, this->gray, [=](){
 												
 											}, [=](){
-												end_func();
+//												end_func();
 												success_func();
 												removeFromParent();
 											});
