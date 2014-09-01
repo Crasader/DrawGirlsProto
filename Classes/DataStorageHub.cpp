@@ -779,5 +779,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_showedEmptyItemSale1] = "seis1";
 	return_value[kDSH_Key_showedEmptyItemSale2] = "seis2";
 	return_value[kDSH_Key_showedCardRankUp] = "scru";
+	
+	return_value[kDSH_Key_isOffCardMorphingSound] = "iocms";
 }
 #undef LZZ_INLINE

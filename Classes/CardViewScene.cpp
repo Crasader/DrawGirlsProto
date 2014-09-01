@@ -95,6 +95,8 @@ bool CardViewScene::init()
 	setFormSetter(game_node);
 	addChild(game_node, kCV_Z_first_img);
 	
+	sound_img = NULL;
+	
 	int card_number = mySGD->selected_collectionbook;
 	
 	int sound_count = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
@@ -147,13 +149,55 @@ bool CardViewScene::init()
 	
 //	zoom_img = CCSprite::create("ending_expand.png");
 	
-	
 	CCPoint morphing_position = ccp(447,45);
+	
+	function<void()> refresh_morphing_sound = [=]()
+	{
+		if(sound_img)
+		{
+			sound_img->removeFromParent();
+			sound_img = NULL;
+		}
+		
+		if(sound_count > 0)
+		{
+			if(myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound))
+			{
+				sound_img = CCSprite::create("diary_voice_on.png");
+				sound_img->setPosition(morphing_position + ccp(0,50));
+				addChild(sound_img, kCV_Z_next_button);
+			}
+			else
+			{
+				sound_img = CCSprite::create("diary_voice_off.png");
+				sound_img->setPosition(morphing_position + ccp(0,50));
+				addChild(sound_img, kCV_Z_next_button);
+			}
+		}
+	};
 	
 	string morphing_filename = "";
 	auto liveGirl = [=](){
 		is_actioned = false;
 		is_morphing = true;
+		
+		refresh_morphing_sound();
+		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
+		CCSprite* s_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
+		CCMenuItemLambda* sound_item = CCMenuItemSpriteLambda::create(n_sound, s_sound, [=](CCObject* sender)
+																	  {
+																		  if(!is_actioned)
+																			{
+																				is_actioned = true;
+																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																				myDSH->setBoolForKey(kDSH_Key_isOffCardMorphingSound, !myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound));
+																				refresh_morphing_sound();
+																				is_actioned = false;
+																			}
+																	  });
+		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
+		sound_menu->setPosition(morphing_position + ccp(0,50));
+		addChild(sound_menu, kCV_Z_next_button);
 		
 		if(buy_morphing)
 			buy_morphing->removeFromParent();
@@ -216,6 +260,24 @@ bool CardViewScene::init()
 	else
 	{
 //		morphing_filename = "morphing_heart_on.ccbi";
+		
+		refresh_morphing_sound();
+		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
+		CCSprite* s_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
+		CCMenuItemLambda* sound_item = CCMenuItemSpriteLambda::create(n_sound, s_sound, [=](CCObject* sender)
+																	  {
+																		  if(!is_actioned)
+																		  {
+																			  is_actioned = true;
+																			  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																			  myDSH->setBoolForKey(kDSH_Key_isOffCardMorphingSound, !myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound));
+																			  refresh_morphing_sound();
+																			  is_actioned = false;
+																		  }
+																	  });
+		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
+		sound_menu->setPosition(morphing_position + ccp(0,50));
+		addChild(sound_menu, kCV_Z_next_button);
 		
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 		

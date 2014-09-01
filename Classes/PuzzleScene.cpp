@@ -2196,6 +2196,15 @@ void PuzzleScene::menuAction(CCObject* sender)
 			OptionPopup* t_popup = OptionPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
 			addChild(t_popup, kPuzzleZorder_popup);
+			
+			t_popup->open_message_popup_func = [=]()
+			{
+				is_menu_enable = false;
+				SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(PuzzleScene::mailPopupClose), bind(&PuzzleScene::heartRefresh, this));
+				addChild(t_pp, kPuzzleZorder_popup);
+				
+				postbox_count_case->setVisible(false);
+			};
 		}
 		else if(tag == kPuzzleMenuTag_event)
 		{
