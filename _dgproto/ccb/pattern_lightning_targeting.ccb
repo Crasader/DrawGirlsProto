@@ -23,6 +23,40 @@
 		<key>children</key>
 		<array>
 			<dict>
+				<key>animatedProperties</key>
+				<dict>
+					<key>0</key>
+					<dict>
+						<key>scale</key>
+						<dict>
+							<key>keyframes</key>
+							<array>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>scale</string>
+									<key>time</key>
+									<real>0.0</real>
+									<key>type</key>
+									<integer>4</integer>
+									<key>value</key>
+									<array>
+										<real>1</real>
+										<real>0.60000002384185791</real>
+									</array>
+								</dict>
+							</array>
+							<key>name</key>
+							<string>scale</string>
+							<key>type</key>
+							<integer>4</integer>
+						</dict>
+					</dict>
+				</dict>
 				<key>baseClass</key>
 				<string>CCLayer</string>
 				<key>children</key>
@@ -32,7 +66,7 @@
 						<dict>
 							<key>0</key>
 							<dict>
-								<key>displayFrame</key>
+								<key>opacity</key>
 								<dict>
 									<key>keyframes</key>
 									<array>
@@ -40,151 +74,92 @@
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.0</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting1.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.066666670143604279</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting2.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.13333334028720856</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting3.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
+											<string>opacity</string>
 											<key>time</key>
 											<real>0.20000000298023224</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>5</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting4.png</string>
-												<string>Use regular file</string>
-											</array>
+											<integer>0</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>opacity</string>
 											<key>time</key>
 											<real>0.26666668057441711</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>5</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting1.png</string>
-												<string>Use regular file</string>
-											</array>
+											<integer>200</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
+											<string>opacity</string>
 											<key>time</key>
-											<real>0.3333333432674408</real>
+											<real>0.36666667461395264</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>5</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting2.png</string>
-												<string>Use regular file</string>
-											</array>
+											<integer>200</integer>
 										</dict>
 										<dict>
 											<key>easing</key>
 											<dict>
 												<key>type</key>
-												<integer>0</integer>
+												<integer>1</integer>
 											</dict>
 											<key>name</key>
-											<string>displayFrame</string>
-											<key>time</key>
-											<real>0.40000000596046448</real>
-											<key>type</key>
-											<integer>7</integer>
-											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting3.png</string>
-												<string>Use regular file</string>
-											</array>
-										</dict>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>displayFrame</string>
+											<string>opacity</string>
 											<key>time</key>
 											<real>0.46666666865348816</real>
 											<key>type</key>
-											<integer>7</integer>
+											<integer>5</integer>
 											<key>value</key>
-											<array>
-												<string>pattern_lightning_targeting4.png</string>
-												<string>Use regular file</string>
-											</array>
+											<integer>0</integer>
 										</dict>
 									</array>
 									<key>name</key>
-									<string>displayFrame</string>
+									<string>opacity</string>
 									<key>type</key>
-									<integer>7</integer>
+									<integer>5</integer>
+								</dict>
+								<key>rotation</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-15</real>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>rotation</string>
+									<key>type</key>
+									<integer>2</integer>
 								</dict>
 								<key>scale</key>
 								<dict>
@@ -199,13 +174,13 @@
 											<key>name</key>
 											<string>scale</string>
 											<key>time</key>
-											<real>0.0</real>
+											<real>0.1666666716337204</real>
 											<key>type</key>
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1</real>
-												<real>1</real>
+												<real>0.0</real>
+												<real>0.0</real>
 											</array>
 										</dict>
 										<dict>
@@ -217,13 +192,13 @@
 											<key>name</key>
 											<string>scale</string>
 											<key>time</key>
-											<real>0.13333334028720856</real>
+											<real>0.20000000298023224</real>
 											<key>type</key>
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1.1000000238418579</real>
-												<real>1.1000000238418579</real>
+												<real>0.30000001192092896</real>
+												<real>0.30000001192092896</real>
 											</array>
 										</dict>
 										<dict>
@@ -235,13 +210,13 @@
 											<key>name</key>
 											<string>scale</string>
 											<key>time</key>
-											<real>0.3333333432674408</real>
+											<real>0.26666668057441711</real>
 											<key>type</key>
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>0.89999997615814209</real>
-												<real>0.89999997615814209</real>
+												<real>0.69999998807907104</real>
+												<real>0.69999998807907104</real>
 											</array>
 										</dict>
 										<dict>
@@ -258,8 +233,8 @@
 											<integer>4</integer>
 											<key>value</key>
 											<array>
-												<real>1</real>
-												<real>1</real>
+												<real>1.3999999761581421</real>
+												<real>1.3999999761581421</real>
 											</array>
 										</dict>
 									</array>
@@ -307,11 +282,21 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
-									<real>1</real>
+									<real>1.3999999761581421</real>
+									<real>1.3999999761581421</real>
 									<true/>
 									<integer>0</integer>
 								</array>
+							</dict>
+							<dict>
+								<key>baseValue</key>
+								<real>0.0</real>
+								<key>name</key>
+								<string>rotation</string>
+								<key>type</key>
+								<string>Degrees</string>
+								<key>value</key>
+								<real>-15</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -322,11 +307,6 @@
 								<false/>
 							</dict>
 							<dict>
-								<key>baseValue</key>
-								<array>
-									<string>pattern_lightning_targeting1.png</string>
-									<string>Use regular file</string>
-								</array>
 								<key>name</key>
 								<string>displayFrame</string>
 								<key>type</key>
@@ -334,7 +314,308 @@
 								<key>value</key>
 								<array>
 									<string></string>
-									<string>pattern_lightning_targeting5.png</string>
+									<string>pattern_lightning_targeting1.png</string>
+								</array>
+							</dict>
+							<dict>
+								<key>baseValue</key>
+								<integer>255</integer>
+								<key>name</key>
+								<string>opacity</string>
+								<key>type</key>
+								<string>Byte</string>
+								<key>value</key>
+								<integer>0</integer>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>blendFunc</string>
+								<key>type</key>
+								<string>Blendmode</string>
+								<key>value</key>
+								<array>
+									<integer>1</integer>
+									<integer>1</integer>
+								</array>
+							</dict>
+						</array>
+						<key>seqExpanded</key>
+						<true/>
+					</dict>
+					<dict>
+						<key>animatedProperties</key>
+						<dict>
+							<key>0</key>
+							<dict>
+								<key>rotation</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>0.0</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.066666670143604279</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-60</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.13333334028720856</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>120</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.20000000298023224</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-40</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.26666668057441711</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-60</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>0</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.3333333432674408</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>120</real>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>rotation</string>
+											<key>time</key>
+											<real>0.40000000596046448</real>
+											<key>type</key>
+											<integer>2</integer>
+											<key>value</key>
+											<real>-40</real>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>rotation</string>
+									<key>type</key>
+									<integer>2</integer>
+								</dict>
+								<key>scale</key>
+								<dict>
+									<key>keyframes</key>
+									<array>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.0</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.13333334028720856</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.75</real>
+												<real>0.75</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.3333333432674408</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.75</real>
+												<real>0.75</real>
+											</array>
+										</dict>
+										<dict>
+											<key>easing</key>
+											<dict>
+												<key>type</key>
+												<integer>1</integer>
+											</dict>
+											<key>name</key>
+											<string>scale</string>
+											<key>time</key>
+											<real>0.46666666865348816</real>
+											<key>type</key>
+											<integer>4</integer>
+											<key>value</key>
+											<array>
+												<real>0.89999997615814209</real>
+												<real>0.89999997615814209</real>
+											</array>
+										</dict>
+									</array>
+									<key>name</key>
+									<string>scale</string>
+									<key>type</key>
+									<integer>4</integer>
+								</dict>
+							</dict>
+						</dict>
+						<key>baseClass</key>
+						<string>CCSprite</string>
+						<key>children</key>
+						<array/>
+						<key>customClass</key>
+						<string></string>
+						<key>displayName</key>
+						<string>pattern_lightning_targeting1</string>
+						<key>memberVarAssignmentName</key>
+						<string></string>
+						<key>memberVarAssignmentType</key>
+						<integer>0</integer>
+						<key>properties</key>
+						<array>
+							<dict>
+								<key>name</key>
+								<string>anchorPoint</string>
+								<key>type</key>
+								<string>Point</string>
+								<key>value</key>
+								<array>
+									<real>0.5</real>
+									<real>0.5</real>
+								</array>
+							</dict>
+							<dict>
+								<key>baseValue</key>
+								<array>
+									<real>1</real>
+									<real>1</real>
+								</array>
+								<key>name</key>
+								<string>scale</string>
+								<key>type</key>
+								<string>ScaleLock</string>
+								<key>value</key>
+								<array>
+									<real>0.89999997615814209</real>
+									<real>0.89999997615814209</real>
+									<false/>
+									<integer>0</integer>
+								</array>
+							</dict>
+							<dict>
+								<key>baseValue</key>
+								<real>0.0</real>
+								<key>name</key>
+								<string>rotation</string>
+								<key>type</key>
+								<string>Degrees</string>
+								<key>value</key>
+								<real>-40</real>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>ignoreAnchorPointForPosition</string>
+								<key>type</key>
+								<string>Check</string>
+								<key>value</key>
+								<false/>
+							</dict>
+							<dict>
+								<key>name</key>
+								<string>displayFrame</string>
+								<key>type</key>
+								<string>SpriteFrame</string>
+								<key>value</key>
+								<array>
+									<string></string>
+									<string>pattern_lightning_targeting1.png</string>
 								</array>
 							</dict>
 						</array>
@@ -364,6 +645,11 @@
 						</array>
 					</dict>
 					<dict>
+						<key>baseValue</key>
+						<array>
+							<real>1</real>
+							<real>1</real>
+						</array>
 						<key>name</key>
 						<string>scale</string>
 						<key>type</key>
@@ -371,7 +657,7 @@
 						<key>value</key>
 						<array>
 							<real>1</real>
-							<real>1</real>
+							<real>0.60000002384185791</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -405,6 +691,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
