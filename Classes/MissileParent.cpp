@@ -50,7 +50,14 @@ void MissileParent::bombCumber( CCObject* target )
 	if(cumber->getAttackPattern())
 	{
 		auto temp = cumber->getAttackPattern();
-		temp->stopMyAction();
+		if(temp)
+		{
+			temp->stopMyAction();
+		}
+		else
+		{ 
+			CCLOG("hue~~");
+		}
 		cumber->setAttackPattern(nullptr);
 		cancelSound = true;
 	}
@@ -229,10 +236,13 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 				for(int i = 0; i<myGD->getSubCumberCount();i++){
 					KSCumberBase* cumber = myGD->getSubCumberVector()[i];
 					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
-					if(ccpLength(nowDis)<ccpLength(minDis))
+					if(cumber->getDeadState() == false)
 					{
-						nearCumber=cumber;
-						minDis = nowDis;
+						if(ccpLength(nowDis)<ccpLength(minDis))
+						{
+							nearCumber=cumber;
+							minDis = nowDis;
+						}
 					}
 				}
 				
@@ -529,6 +539,9 @@ int MissileParent::getJackMissileCnt()
 
 void MissileParent::removeAllPattern()
 {
+	
+
+	
 	pattern_container->removeAllChildren();
 }
 void MissileParent::subOneDie()
@@ -606,7 +619,33 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
 		
 		// 기본값으로 서버에서 설정된 부하몹 개수로 함.
-		int n = MIN(patternData.get("maxchilds", root.size()).asInt() - myGD->getSubCumberCount(), patternData.get("childs", 1).asInt());
+		
+		// 여기서 계산함
+		
+		float totalMapSize = (mapWidthInnerEnd - mapWidthInnerBegin) * (mapHeightInnerEnd - mapHeightInnerBegin);
+		float obtainSize = 0;
+		
+		
+		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+		{
+			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			{
+				if(myGD->mapState[i][j] == mapType::mapOldget ||
+					 myGD->mapState[i][j] == mapType::mapOldline)
+				{
+					obtainSize++;
+				}
+			}
+		}
+		
+		int remainPercent = (totalMapSize - obtainSize) / totalMapSize * 100.f;
+//		CCLOG("___ 남은 영역 : %d", remainPercent);
+		
+		int adjustmentMax = (patternData.get("maxchilds", root.size()).asInt() - 1) / (100.f - 5.f) * (remainPercent - 5.f);
+//		CCLOG("___ 계산된 맥스 : %d", adjustmentMax);
+		int n = MIN(adjustmentMax - myGD->getSubCumberCount(), patternData.get("childs", 1).asInt());
+		
+		// 부하몹 테스트가 우선.
 		if(n <= 0) // 부하몹 생성할것이 없다면 false 리턴함.
 		{
 			return invalid;
