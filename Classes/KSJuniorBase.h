@@ -140,7 +140,7 @@ protected:
 	}m_noDirection;
 	
 	
-	
+
 	
 };
 

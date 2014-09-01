@@ -110,61 +110,61 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	CCScale9Sprite* nick_case1 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	nick_case1->setAnchorPoint(ccp(0.5f, 0.5f));
-	nick_case1->setContentSize(CCSizeMake(70,35));
-	nick_case1->setPosition(ccp(-87.f, 0)); 			// dt (-128.0,2.5)
+	nick_case1->setContentSize(CCSizeMake(212,35));
+	nick_case1->setPosition(ccpFromSize(m_container->getContentSize() / 2.f).x, 0);
 	m_container->addChild(nick_case1);
 	
-	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	nick_case2->setAnchorPoint(ccp(0.5f, 0.5f));
-	nick_case2->setContentSize(CCSizeMake(70,35));
-	nick_case2->setPosition(ccp(0.f, 0)); 			// dt (-60.5,3.0)
-	m_container->addChild(nick_case2);
-	
-	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	nick_case3->setAnchorPoint(ccp(0.5f, 0.5f));
-	nick_case3->setContentSize(CCSizeMake(70,35));
-	nick_case3->setPosition(ccp(87.f,0)); 			// dt (7.5,3.5)
-	m_container->addChild(nick_case3);
+//	CCScale9Sprite* nick_case2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	nick_case2->setAnchorPoint(ccp(0.5f, 0.5f));
+//	nick_case2->setContentSize(CCSizeMake(70,35));
+//	nick_case2->setPosition(ccp(0.f, 0)); 			// dt (-60.5,3.0)
+//	m_container->addChild(nick_case2);
+//	
+//	CCScale9Sprite* nick_case3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	nick_case3->setAnchorPoint(ccp(0.5f, 0.5f));
+//	nick_case3->setContentSize(CCSizeMake(70,35));
+//	nick_case3->setPosition(ccp(87.f,0)); 			// dt (7.5,3.5)
+//	m_container->addChild(nick_case3);
 
-	CCSprite* seperateBar1 = CCSprite::create("coupon_bar.png");
-	seperateBar1->setPosition(ccp(-43, 0.f));
-	m_container->addChild(seperateBar1);
-	
-	
-	CCSprite* seperateBar2 = CCSprite::create("coupon_bar.png");
-	seperateBar2->setPosition(ccp(43, 0.f));
-	m_container->addChild(seperateBar2);
+//	CCSprite* seperateBar1 = CCSprite::create("coupon_bar.png");
+//	seperateBar1->setPosition(ccp(-43, 0.f));
+//	m_container->addChild(seperateBar1);
+//	
+//	
+//	CCSprite* seperateBar2 = CCSprite::create("coupon_bar.png");
+//	seperateBar2->setPosition(ccp(43, 0.f));
+//	m_container->addChild(seperateBar2);
 	
 	CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	t_back1->setOpacity(0);
-	input_text1 = CCEditBox::create(CCSizeMake(55, 35), t_back1);
-	input_text1->setPosition(ccp(130.0 + 23.f,219.f));
+	input_text1 = CCEditBox::create(CCSizeMake(190.f, 35), t_back1);
+	input_text1->setPosition(ccp(234.5f,219.f));
 	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 	
-	CCScale9Sprite* t_back2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	t_back2->setOpacity(0);
-	input_text2 = CCEditBox::create(CCSizeMake(55, 35), t_back2);
-	input_text2->setPosition(ccp(209.5 + 30.f,219.f)); 			// dt (22.5,0.0)
-	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
-	
-	CCScale9Sprite* t_back3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	t_back3->setOpacity(0);
-	input_text3 = CCEditBox::create(CCSizeMake(55, 35), t_back3);
-	input_text3->setPosition(ccp(289.5 + 37.f,219.f)); 			// dt (34.5,-3.0)
-	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
+//	CCScale9Sprite* t_back2 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	t_back2->setOpacity(0);
+//	input_text2 = CCEditBox::create(CCSizeMake(55, 35), t_back2);
+//	input_text2->setPosition(ccp(209.5 + 30.f,219.f)); 			// dt (22.5,0.0)
+//	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text2, 99999);
+//	
+//	CCScale9Sprite* t_back3 = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	t_back3->setOpacity(0);
+//	input_text3 = CCEditBox::create(CCSizeMake(55, 35), t_back3);
+//	input_text3->setPosition(ccp(289.5 + 37.f,219.f)); 			// dt (34.5,-3.0)
+//	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text3, 99999);
 	
 	
 	initiateEditBox(input_text1);
-	initiateEditBox(input_text2);
-	initiateEditBox(input_text3);
+//	initiateEditBox(input_text2);
+//	initiateEditBox(input_text3);
 
 	setFormSetter(input_text1);
-	setFormSetter(input_text2);
-	setFormSetter(input_text3);
+//	setFormSetter(input_text2);
+//	setFormSetter(input_text3);
 	
 	setFormSetter(nick_case1);
-	setFormSetter(nick_case2);
-	setFormSetter(nick_case3);
+//	setFormSetter(nick_case2);
+//	setFormSetter(nick_case3);
 		
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
@@ -190,10 +190,10 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 		input_text1->setEnabled(true);
 		input_text1->setVisible(true);
 		
-		input_text2->setEnabled(true);
-		input_text2->setVisible(true);
-		input_text3->setEnabled(true);
-		input_text3->setVisible(true);
+//		input_text2->setEnabled(true);
+//		input_text2->setVisible(true);
+//		input_text3->setEnabled(true);
+//		input_text3->setVisible(true);
 		
 	});
 }
@@ -211,7 +211,8 @@ void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	addChild(loading_layer, 999);
 	
 	Json::Value param;
-	std::string couponText = std::string(input_text1->getText()) + input_text2->getText() + input_text3->getText();
+//	std::string couponText = std::string(input_text1->getText()) + input_text2->getText() + input_text3->getText();
+	std::string couponText = std::string(input_text1->getText());
 	param["memberID"] = myHSP->getMemberID();
 	param["cuponCode"] = couponText;
 
@@ -473,17 +474,17 @@ void CouponPopup::editBoxEditingDidEnd(CCEditBox* editBox)
 void CouponPopup::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
 {
 	CCLOG("edit changed : %s", text.c_str());
-	if(text.size() == 4)
-	{
-		if(editBox == input_text1)
-		{
-			input_text2->touchDownAction(nullptr, CCControlEvent());
-		}
-		else if(editBox == input_text2)
-		{
-			input_text3->touchDownAction(nullptr, CCControlEvent());
-		}
-	}
+//	if(text.size() >= )
+//	{
+//		if(editBox == input_text1)
+//		{
+//			input_text2->touchDownAction(nullptr, CCControlEvent());
+//		}
+//		else if(editBox == input_text2)
+//		{
+//			input_text3->touchDownAction(nullptr, CCControlEvent());
+//		}
+//	}
 }
 void CouponPopup::editBoxReturn(CCEditBox* editBox)
 {
@@ -500,7 +501,7 @@ void CouponPopup::initiateEditBox(CCEditBox* editbox)
 	editbox->setDelegate(this);
 //	m_container->addChild(input_text);
 	editbox->setTouchPriority(touch_priority);
-	editbox->setMaxLength(4);
+	editbox->setMaxLength(12);
 	editbox->setEnabled(false);
 	editbox->setVisible(false);
 }
