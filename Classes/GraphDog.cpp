@@ -359,7 +359,9 @@ bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDS
 
 
 void GraphDog::log(string logtext){
-	
+#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+	return;
+#endif
 	int b = 256;
 	int a = logtext.length()/b+1;
 	

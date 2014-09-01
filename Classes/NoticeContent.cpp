@@ -29,7 +29,7 @@ void NoticeContent::menuAction(CCObject* sender)
 	
 	if(is_not_show_three_day)
 	{
-		myDSH->setStringForKey(kDSH_Key_noticeViewDate_int1, notice_list[ing_close_cnt]["no"].asInt(), CCString::createWithFormat("%lld",GraphDog::get()->getTime()+24*60*60*3)->getCString());
+		myDSH->setStringForKey(kDSH_Key_noticeViewDate_int1, notice_list[ing_close_cnt]["no"].asInt(), CCString::createWithFormat("%lld",GraphDog::get()->getTime()+18*60*60)->getCString());
 	}
 	
 	ing_close_cnt++;
@@ -103,8 +103,6 @@ void NoticeContent::loadNotice(){
 		
 		content_label->setVisible(false);
 		title_label->setVisible(false);
-		is_menu_enable = true;
-		loadedAction();
 	}
 }
 void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector, Json::Value t_noti_list)
@@ -140,7 +138,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	
 	
-	day3Btn = CommonButton::create("3일동안 열지 않음", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
+	day3Btn = CommonButton::create("오늘 하루 그만 보기", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
 	addChild(day3Btn,100);
 	day3Btn->setTag(kNoticeContentMenuTag_check);
 	day3Btn->setAnchorPoint(ccp(0,0.5));
