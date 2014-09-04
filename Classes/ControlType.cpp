@@ -330,6 +330,7 @@ const float CONTROL_IN_TIME = 0.5f;
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
 	
+	//조이스틱이 십자가 형태로 움직이도록 함.
 	if(beforeDirection == directionDown || beforeDirection == directionUp){
 		control_ball->setPosition(ccp(control_circle->getPositionX(),control_ball->getPositionY()));
 	}else if(beforeDirection == directionRight || beforeDirection == directionLeft){
@@ -341,9 +342,24 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	float distanceValue = sqrtf(powf(distancePoint.x, 2.f) + powf(distancePoint.y, 2.f));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
-	
+	//조이스틱 보정하기
 	if(distanceValue<20){
-
+		if(beforeDirection == directionLeft || beforeDirection == directionRight){
+			if(distancePoint.x<0){
+				beforeDirection=directionLeft;
+			}else if(distancePoint.x>0){
+				beforeDirection=directionRight;
+			}
+		}
+		
+		if(beforeDirection == directionUp || beforeDirection == directionDown){
+			if(distancePoint.y<0){
+				beforeDirection=directionDown;
+			}else if(distancePoint.y>0){
+				beforeDirection=directionUp;
+			}
+		}
+		
 		myJack->changeDirection(beforeDirection, beforeDirection);
 		return;
 	}
