@@ -232,7 +232,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		//		ostringstream oss;
 		//		oss << (iter->param);
 		char buf[20];
-		sprintf(buf, "%d", i);
+		sprintf(buf, "%03d", i);
 		//@ JsonBox::Object param;
 		Json::Value param;
 		param["p"] = iter->param;
