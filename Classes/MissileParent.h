@@ -89,7 +89,8 @@ private:
 	void removeChargeInArray(CCObject* remove_charge);
 	void movingMainCumber();
 	void myInit(CCNode* boss_eye);
-	CCNode* pattern_container;
+//	CCNode* pattern_container;
+	CC_SYNTHESIZE(CCClippingNode*, pattern_container, PatternContainer);
 };
 
 #endif
