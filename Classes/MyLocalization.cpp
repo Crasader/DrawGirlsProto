@@ -1070,6 +1070,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
 	ko->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
+	ko->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
+	ko->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

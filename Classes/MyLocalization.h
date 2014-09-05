@@ -985,6 +985,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_communityNotOpenTitle,
 	kMyLocalKey_communityNotOpenContent,
 	
+	kMyLocalKey_joystickSize,
+	kMyLocalKey_useSideDirection,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

@@ -18,6 +18,7 @@ USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
+class KSLabelTTF;
 class OptionPopup : public CCLayer
 {
 public:
@@ -51,9 +52,13 @@ private:
 	
 	CCSprite* joystick_positioning_img;
 	CCSprite* joystick_moving_img;
+	CCSprite* use_side_direction_img;
 	
 	CCMenu* joystick_positioning_menu;
 	CCMenu* joystick_moving_menu;
+	CCMenu* use_side_direction_menu;
+	
+	KSLabelTTF* joystick_size_value;
 	
 	CCSprite* safety_img;
 	CCMenu* safety_menu;
@@ -76,6 +81,8 @@ private:
 	
 	void resetJoystickPositioningMenu();
 	void resetJoystickMovingMenu();
+	
+	void resetUseSideDirectionMenu();
 	
 	void resetSafetyMenu();
 	

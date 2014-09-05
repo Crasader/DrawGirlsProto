@@ -781,5 +781,6 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_showedCardRankUp] = "scru";
 	
 	return_value[kDSH_Key_isOffCardMorphingSound] = "iocms";
+	return_value[kDSH_Key_joystickSize] = "jss";
 }
 #undef LZZ_INLINE
