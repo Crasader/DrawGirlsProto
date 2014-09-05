@@ -331,10 +331,13 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
 	
 	//조이스틱이 십자가 형태로 움직이도록 함.
-	if(beforeDirection == directionDown || beforeDirection == directionUp){
-		control_ball->setPosition(ccp(control_circle->getPositionX(),control_ball->getPositionY()));
-	}else if(beforeDirection == directionRight || beforeDirection == directionLeft){
-		control_ball->setPosition(ccp(control_ball->getPositionX(),control_circle->getPositionY()));
+	if(!isEnableIrregularDirection)
+	{
+		if(beforeDirection == directionDown || beforeDirection == directionUp){
+			control_ball->setPosition(ccp(control_circle->getPositionX(),control_ball->getPositionY()));
+		}else if(beforeDirection == directionRight || beforeDirection == directionLeft){
+			control_ball->setPosition(ccp(control_ball->getPositionX(),control_circle->getPositionY()));
+		}
 	}
 	
 	
@@ -556,7 +559,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			}
 			
 			
-			if(myJack->isDrawingOn){
+			if(myJack->isDrawingOn && !isEnableIrregularDirection){
 					secondDirection = angleDirection;
 			}
 			
@@ -767,7 +770,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			else												secondDirection = directionUp;
 		}
 		
-		if(myJack->isDrawingOn){
+		if(myJack->isDrawingOn && !isEnableIrregularDirection){
 			secondDirection = angleDirection;
 		}
 		
