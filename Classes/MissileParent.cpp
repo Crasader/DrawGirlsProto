@@ -539,9 +539,24 @@ int MissileParent::getJackMissileCnt()
 
 void MissileParent::removeAllPattern()
 {
-	
-
-	
+	vector<CCNode*> remover;
+	for(int i=0; i<pattern_container->getChildrenCount(); i++)
+	{
+		CCNode* tt = (CCNode*)pattern_container->getChildren()->objectAtIndex(i);
+		if(dynamic_cast<CobWeb*>(tt) || dynamic_cast<ChaosAttack*>(tt) ||
+			 dynamic_cast<FreezeAttack*>(tt))
+		{
+			remover.push_back(tt);
+		}
+		else
+		{
+			remover.push_back(tt);
+		}
+	}
+	for(auto i : remover)
+	{
+//		pattern_container->getChildren()->removeObject(i);
+	}
 	pattern_container->removeAllChildren();
 }
 void MissileParent::subOneDie()
@@ -644,7 +659,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		int adjustmentMax = (patternData.get("maxchilds", root.size()).asInt() - 1) / (100.f - 5.f) * (remainPercent - 5.f);
 //		CCLOG("___ 계산된 맥스 : %d", adjustmentMax);
 		int n = MIN(adjustmentMax - myGD->getSubCumberCount(), patternData.get("childs", 1).asInt());
-		
 		// 부하몹 테스트가 우선.
 		if(n <= 0) // 부하몹 생성할것이 없다면 false 리턴함.
 		{
@@ -869,7 +883,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				
 			}
 		}
-		
 		else if(pattern == "101")
 		{
 			if(exe)
@@ -1654,7 +1667,46 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, floa
 void MissileParent::myInit( CCNode* boss_eye )
 {
 	//chargeArray = new CCArray(1);
-	pattern_container = CCNode::create();
+	myGD->getMissileParent = [=]()->MissileParent*{
+		return this;
+	};
+	pattern_container = CCClippingNode::create();
+	CCSprite* clearMask = CCSprite::create("clear_mask.png");
+	pattern_container->setStencil(clearMask);
+	pattern_container->getStencil()->setScale(0.0001f);
+	pattern_container->setAlphaThreshold(0.1f);
+	pattern_container->setInverted(true);
+	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+	if(screen_scale_x < 1.f)
+		screen_scale_x = 1.f;
+	
+	float screen_scale_y = myDSH->ui_top/320.f;
+	
+	
+	CCPoint change_origin = ccp(0,0);
+	pattern_container->setRectYH(CCRectMake(change_origin.x - 200, change_origin.y - 200, 480, 320*screen_scale_y * 3.f));
+	
+//	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//	if(screen_scale_x < 1.f)
+//		screen_scale_x = 1.f;
+//	
+//	float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//	float change_scale = 1.f;
+//	CCPoint change_origin = ccp(0,0);
+//	if(screen_scale_x > 1.f)
+//	{
+//		change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//		change_scale = screen_scale_x;
+//	}
+//	if(screen_scale_y > 1.f)
+//		change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//	CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//	pattern_container->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+	
+	
+	
 	addChild(pattern_container);
 	tickingArray = new CCArray(1);
 	

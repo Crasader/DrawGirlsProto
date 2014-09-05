@@ -2097,6 +2097,78 @@ IntDirection Jack::reverseDirection( IntDirection t_d )
 	return returnDirection;
 }
 
+void Jack::patternRemover()
+{
+	
+	bool canceled = false;
+	for(auto cumber : myGD->getMainCumberVector())
+	{
+		for(auto i : cumber->getCharges())
+		{
+			i->cancelCharge();
+			canceled = true;
+		}
+		cumber->setCumberState(kCumberStateMoving);
+	}
+	if(canceled)
+	{
+		myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
+	}
+	for(int i=0; i<myGD->getMissileParent()->getPatternContainer()->getChildrenCount(); ++i)
+	{
+		AttackPattern* temp = (AttackPattern*)myGD->getMissileParent()->getPatternContainer()->getChildren()->objectAtIndex(i);
+		if(temp)
+		{
+			if(dynamic_cast<CobWeb*>(temp) || dynamic_cast<ChaosAttack*>(temp) ||
+				 dynamic_cast<FreezeAttack*>(temp))
+			{
+			}
+			else
+			{
+				temp->onExit();
+			}
+		}
+		else
+		{
+			CCLOG("hue~");
+		}
+
+	}
+	
+	MissileParent* pattern = myGD->getMissileParent();
+	CCNode* patternStencil = pattern->getPatternContainer()->getStencil();
+	//				patternStencil->setPosition(getPosition());
+	patternStencil->setPosition(ip2ccp(myGD->getJackPoint()));
+	addChild(KSGradualValue<float>::create(0.1f, 2.5f, 0.8f, [=](float t){
+		patternStencil->setScale(t);
+	}, [=](float t){
+		patternStencil->setScale(t);
+		for(int i=0; i<myGD->getMissileParent()->getPatternContainer()->getChildrenCount(); ++i)
+		{
+			AttackPattern* temp = (AttackPattern*)myGD->getMissileParent()->getPatternContainer()->getChildren()->objectAtIndex(i);
+			if(temp)
+			{
+				temp->stopMyAction();
+			}
+			else
+			{
+				CCLOG("hue~");
+			}
+
+		}
+		for(auto cumber : myGD->getMainCumberVector())
+		{
+			cumber->setAttackPattern(nullptr);
+			cumber->setCumberState(kCumberStateMoving);
+		}
+		
+//		addChild(KSTimer::create(0.3f, [=](){
+			myGD->removeAllPattern();
+//		}));
+		
+		patternStencil->setScale(0.0001f);
+	}));
+}
 void Jack::dieEffect()
 {
 	dieEffectCnt++;
@@ -2118,40 +2190,6 @@ void Jack::dieEffect()
 		}
 		else
 		{
-			auto patternRemover = [=](){
-				bool canceled = false;
-				for(auto cumber : myGD->getMainCumberVector())
-				{
-					for(auto i : cumber->getCharges())
-					{
-						i->cancelCharge();
-						canceled = true;
-					}
-					
-					if(cumber->getAttackPattern())
-					{
-						auto temp = cumber->getAttackPattern();
-						if(temp)
-						{
-							temp->stopMyAction();
-						}
-						else
-						{
-							CCLOG("hue~~");
-						}
-						cumber->setAttackPattern(nullptr);
-						//						cancelSound = true;
-					}
-					
-					cumber->setCumberState(kCumberStateMoving);
-				}
-				if(canceled)
-				{
-					myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
-				}
-				
-				myGD->removeAllPattern();
-			};
 			if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 			{
 				myGD->communication("UI_addGameTime30Sec");
@@ -2300,6 +2338,7 @@ void Jack::continueGame()
 //	jackImg->setScale(0.8f);
 //	addChild(jackImg, kJackZ_main);
 
+	patternRemover();
 	startReviveAnimation(jackImg);
 }
 

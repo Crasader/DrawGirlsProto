@@ -346,6 +346,7 @@ private:
 	void startInnerParticle(CCNode* target_node);
 	void startLightSprite(CCNode* target_node);
 	void startOutterParticle(CCNode* target_node);
+	void patternRemover();
 };
 
 #endif

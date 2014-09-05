@@ -78,7 +78,8 @@ enum JackBaseSpeedTag{
 #include <string>
 
 class KSCumberBase;
-
+class MissileParent;
+class CumberParent;
 class GameData : public CCObject
 {
 public:
@@ -130,6 +131,8 @@ public:
 	std::function<void(void)> toFun;
 	std::function<void(void)> toScratch;
 	std::function<void(void)> removeAllPattern;
+	std::function<CumberParent*(void)> getCumberParent;
+	std::function<MissileParent*(void)> getMissileParent;
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();

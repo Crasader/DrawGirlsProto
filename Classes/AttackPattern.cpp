@@ -1269,6 +1269,10 @@ FreezeAttack* FreezeAttack::create( int t_frame, KSCumberBase* cb )
 	return t_m26;
 }
 
+FreezeAttack::~FreezeAttack()
+{
+	myGD->communication("Main_touchOn");
+}
 void FreezeAttack::updateFreeze()
 {
 	myGD->communication("Jack_createFog");
@@ -1335,7 +1339,11 @@ ChaosAttack* ChaosAttack::create( int t_frame, KSCumberBase* cb )
 	t_m33->autorelease();
 	return t_m33;
 }
-
+ChaosAttack::~ChaosAttack()
+{
+	m_cumber->setChaosAttack(nullptr);
+	myGD->communication("Jack_reverseOff");
+}
 void ChaosAttack::updateChaos()
 {
 	myGD->communication("Jack_createChaos");
@@ -3686,7 +3694,14 @@ CobWeb* CobWeb::create( CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 	t_m23->autorelease();
 	return t_m23;
 }
-
+CobWeb::~CobWeb()
+{
+	if(state == kInner)
+	{
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+decreaseSpeed);
+	}
+	m_cumber->setCobWebAttack(nullptr);
+}
 void CobWeb::updateCobWeb()
 {
 	if(!is_stop)
@@ -3718,7 +3733,7 @@ void CobWeb::framing()
 				cobwebPosition.y - 100 <= jackPosition.y && jackPosition.y <= cobwebPosition.y + 100)
 			{
 				//					CCLOG("-0.5");
-				myGD->setAlphaSpeed(myGD->getAlphaSpeed() - 0.5f);
+				myGD->setAlphaSpeed(myGD->getAlphaSpeed() - decreaseSpeed);
 				state = kInner;
 			}
 			else
@@ -3776,12 +3791,12 @@ void CobWeb::stopFrame()
 	CCSequence* t_seq = CCSequence::createWithTwoActions(t_scale, t_call);
 	cobwebImg->runAction(t_seq);
 
-	if(state == kInner)
-	{
-		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+decreaseSpeed);
-	}
-	m_cumber->setCobWebAttack(nullptr);
-	state = kFrameTerminated;
+//	if(state == kInner)
+//	{
+//		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+decreaseSpeed);
+//	}
+//	m_cumber->setCobWebAttack(nullptr);
+//	state = kFrameTerminated;
 }
 
 void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternData )
@@ -3795,7 +3810,8 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	reader.parse(patternData, pattern);
 	KS::KSLog("%", pattern);
 	slowFrame = pattern.get("totalframe", 60*4).asInt();
-	decreaseSpeed = pattern.get("decrease", 0.5f).asFloat();	
+	decreaseSpeed = pattern.get("decrease", 0.5f).asFloat();
+	decreaseSpeed = 1.f;
 
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	CCBReader* reader1 = new CCBReader(nodeLoader);

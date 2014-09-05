@@ -2824,7 +2824,7 @@ void AlongOfTheLine::myInit (CCPoint cumberPosition, CCPoint jackPosition, int t
 		pollution.alongPath.point = point;
 		pollution.alongPath.direction = direction;
 		pollution.spr = KS::loadCCBI<CCSprite*>(this, "fx_pollution5.ccbi").first;
-		KS::setBlendFunc(pollution.spr, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//		KS::setBlendFunc(pollution.spr, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		pollution.goal = goal;
 		
 		m_pollutions.push_back(pollution);
