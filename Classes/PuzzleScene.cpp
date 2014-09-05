@@ -474,10 +474,11 @@ bool PuzzleScene::init()
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
 		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
-		else if(mySGD->is_showtime)							take_level = 3;
-		else if(mySGD->is_exchanged)						take_level = 2;
-		else												take_level = 1;
+		take_level = mySGD->getStageGrade();
+//		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
+//		else if(mySGD->is_showtime)							take_level = 3;
+//		else if(mySGD->is_exchanged)						take_level = 2;
+//		else												take_level = 1;
 		
 //		if(mySGD->isTimeEvent(kTimeEventType_card))
 //		{

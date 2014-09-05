@@ -258,6 +258,8 @@ private:
 	double minimumDistanceJ;
 	double JoystickCenterLimit;
 	
+	float joystick_size_value;
+	
 	
 	void myInit(CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack);
 	

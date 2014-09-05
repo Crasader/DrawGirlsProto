@@ -80,9 +80,9 @@ void AreaGage::onChange()
 	star1->removeAllChildren();
 	star2->removeAllChildren();
 	
-	CCPoint base_position = ccp(-4.5f,0);
+	CCPoint base_position = ccp(-9,0);
 	CCPoint d_position = ccp(9,0);
-	for(int i=0;i<2;i++)
+	for(int i=0;i<3;i++)
 	{
 		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(base_position + d_position*i);
@@ -233,9 +233,9 @@ void AreaGage::myInit(float t_clear_percent)
 	star2->setPosition(ccp(gage_bar3->getPositionX(), 11));
 	addChild(star2, 3);
 	
-	CCPoint base_position = ccp(-9,0);
+	CCPoint base_position = ccp(-4.5f,0);
 	CCPoint d_position = ccp(9,0);
-	for(int i=0;i<3;i++)
+	for(int i=0;i<2;i++)
 	{
 		CCSprite* star_img = CCSprite::create("star_on.png");
 		star_img->setPosition(base_position + d_position*i);

@@ -198,6 +198,39 @@ void GraphDog::setLanguage(string lang){
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
+bool GraphDog::isExistApp()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jint ret = -1;
+	JniMethodInfo t;
+	CCLog("isExistApp");
+	
+	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
+	{
+		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+		JniMethodInfo __minfo;
+		__minfo.classID = 0;
+		__minfo.env = 0;
+		__minfo.methodID = 0;
+		
+		jstring param1 = t.env->NewStringUTF("com.litqoo.DgDiary");
+		
+		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "isExistApp", "(Ljava/lang/String;)Z"))
+		{
+			ret = __minfo.env->CallObjectMethod(jobj, __minfo.methodID, param1);
+			CCLog("ret = %d ", ret);
+			__minfo.env->DeleteLocalRef(__minfo.classID);
+		}
+		minfo.env->DeleteGlobalRef(jobj);
+		minfo.env->DeleteLocalRef(minfo.classID);
+	}
+	
+	return (bool)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return false;
+#endif
+}
+
 string GraphDog::getLanguage(){
 	
 	string lang = CCUserDefault::sharedUserDefault()->getStringForKey("GRAPHDOG_LANG");

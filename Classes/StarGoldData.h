@@ -404,6 +404,9 @@ public:
 	void setStageGrade(int t_i);
 	int getStageGrade();
 	
+	void setBeforeRankUpStageGrade(int t_i);
+	int getBeforeRankUpStageGrade();
+	
 	int getStageGold();
 	
 	bool getIsAfterSceneChapter();
@@ -1001,6 +1004,7 @@ private:
 	KSProtectVar<float> score;
 	KSProtectVar<float> percentage;
 	KSProtectVar<int> stage_grade;
+	KSProtectVar<int> before_rankup_stage_grade;
 	KSProtectVar<int> keep_gold;
 	KSProtectVar<int> game_time;
 	KSProtectVar<int> ingame_gold;

@@ -42,6 +42,7 @@
 #include "AccountManagerPopup.h"
 #include "StyledLabelTTF.h"
 #include "OnePercentTutorial.h"
+#include "Diary19Popup.h"
 
 USING_NS_CC_EXT;
 
@@ -60,6 +61,7 @@ enum OptionPopupMenuTag{
 	kOP_MT_gameui_full,
 	kOP_MT_gameui_right,
 	kOP_MT_help,
+	kOP_MT_toDiary19,
 	kOP_MT_logout,
 	kOP_MT_noti,
 	kOP_MT_withdraw,
@@ -67,6 +69,10 @@ enum OptionPopupMenuTag{
 	kOP_MT_joystickMoving,
 	kOP_MT_tutorial,
 	kOP_MT_safety,
+	kOP_MT_joystickSize,
+	kOP_MT_joystickBig,
+	kOP_MT_joystickSmall,
+	kOP_MT_useSideDirection,
 	kOP_MT_push,
 	kOP_MT_message,
 	kOP_MT_coupon,
@@ -532,6 +538,96 @@ bool OptionPopup::init()
 	resetJoystickMovingMenu();
 	
 	
+	KSLabelTTF* joystick_size_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickSize), mySGD->getFont().c_str(), 11.5f);
+	joystick_size_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+	joystick_size_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	joystick_size_label->setAnchorPoint(ccp(0,0.5f));
+	joystick_size_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickSize), ccp(-100,0)));
+	main_case->addChild(joystick_size_label, kOP_Z_back);
+	
+	CCSprite* joystick_size_scroll = CCSprite::create("option_scroll.png");
+	joystick_size_scroll->setPosition(getContentPosition(kOP_MT_joystickSize) + ccp(1,0));
+	joystick_size_scroll->setScaleX(0.7f);
+	joystick_size_scroll->setScaleY(1.5f);
+	main_case->addChild(joystick_size_scroll, kOP_Z_back);
+	
+	CCSprite* n_joystick_big = CCSprite::create("option_plus.png");
+	KSLabelTTF* n_big_label = KSLabelTTF::create("+", mySGD->getFont().c_str(), 12);
+	n_big_label->setPosition(ccpFromSize(n_joystick_big->getContentSize()/2.f));
+	n_joystick_big->addChild(n_big_label);
+	CCSprite* s_joystick_big = CCSprite::create("option_plus.png");
+	s_joystick_big->setColor(ccGRAY);
+	KSLabelTTF* s_big_label = KSLabelTTF::create("+", mySGD->getFont().c_str(), 12);
+	s_big_label->setPosition(ccpFromSize(s_joystick_big->getContentSize()/2.f));
+	s_joystick_big->addChild(s_big_label);
+	
+	CCMenuItem* joystick_size_big_item = CCMenuItemSprite::create(n_joystick_big, s_joystick_big, this, menu_selector(OptionPopup::menuAction));
+	joystick_size_big_item->setTag(kOP_MT_joystickBig);
+	joystick_size_big_item->setPosition(ccp(-40,0));
+	
+	
+	CCSprite* n_joystick_small = CCSprite::create("option_plus.png");
+	KSLabelTTF* n_small_label = KSLabelTTF::create("-", mySGD->getFont().c_str(), 12);
+	n_small_label->setPosition(ccpFromSize(n_joystick_small->getContentSize()/2.f));
+	n_joystick_small->addChild(n_small_label);
+	CCSprite* s_joystick_small = CCSprite::create("option_plus.png");
+	s_joystick_small->setColor(ccGRAY);
+	KSLabelTTF* s_small_label = KSLabelTTF::create("-", mySGD->getFont().c_str(), 12);
+	s_small_label->setPosition(ccpFromSize(s_joystick_small->getContentSize()/2.f));
+	s_joystick_small->addChild(s_small_label);
+	
+	CCMenuItem* joystick_size_small_item = CCMenuItemSprite::create(n_joystick_small, s_joystick_small, this, menu_selector(OptionPopup::menuAction));
+	joystick_size_small_item->setTag(kOP_MT_joystickSmall);
+	joystick_size_small_item->setPosition(ccp(40,0));
+	
+	
+	CCMenu* joystick_size_menu = CCMenu::create();
+	joystick_size_menu->setPosition(getContentPosition(kOP_MT_joystickSize)+ccp(1,0));
+	main_case->addChild(joystick_size_menu, kOP_Z_content);
+	joystick_size_menu->setTouchPriority(-171);
+	
+	joystick_size_menu->addChild(joystick_size_big_item);
+	joystick_size_menu->addChild(joystick_size_small_item);
+	
+	joystick_size_value = KSLabelTTF::create(ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5), mySGD->getFont().c_str(), 17);
+	joystick_size_value->setScaleX(1.f/joystick_size_scroll->getScaleX());
+	joystick_size_value->setScaleY(1.f/joystick_size_scroll->getScaleY());
+	joystick_size_value->enableOuterStroke(ccBLACK, 1.5f, 255*0.6f, true);
+	joystick_size_value->setPosition(ccp(joystick_size_scroll->getContentSize().width/2.f, joystick_size_scroll->getContentSize().height/2.f-1));
+	joystick_size_scroll->addChild(joystick_size_value);
+	
+	
+//	myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection)
+	KSLabelTTF* use_side_direction_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_useSideDirection), mySGD->getFont().c_str(), 11.5f);
+	use_side_direction_label->disableOuterStroke();
+	use_side_direction_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+	use_side_direction_label->setAnchorPoint(ccp(0,0.5f));
+	use_side_direction_label->setPosition(ccpAdd(getContentPosition(kOP_MT_useSideDirection), ccp(-100,0)));
+	main_case->addChild(use_side_direction_label, kOP_Z_back);
+	
+	CCSprite* use_side_direction_scroll = CCSprite::create("option_scroll.png");
+	use_side_direction_scroll->setPosition(getContentPosition(kOP_MT_useSideDirection));
+	main_case->addChild(use_side_direction_scroll, kOP_Z_back);
+	
+	CCSprite* n_use_side_direction_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+	n_use_side_direction_moving->setOpacity(0);
+	CCSprite* s_use_side_direction_moving = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+	s_use_side_direction_moving->setOpacity(0);
+	
+	CCMenuItem* use_side_direction_item = CCMenuItemSprite::create(n_use_side_direction_moving, s_use_side_direction_moving, this, menu_selector(OptionPopup::menuAction));
+	use_side_direction_item->setTag(kOP_MT_useSideDirection);
+	
+	use_side_direction_menu = CCMenu::createWithItem(use_side_direction_item);
+	use_side_direction_menu->setPosition(getContentPosition(kOP_MT_useSideDirection));
+	main_case->addChild(use_side_direction_menu, kOP_Z_content);
+	use_side_direction_menu->setTouchPriority(-171);
+	
+	use_side_direction_img = NULL;
+	resetUseSideDirectionMenu();
+	
+	
+	
+	
 	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
 	safety_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
@@ -561,7 +657,7 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* alert_tab = CCSprite::create("option_tab.png");
-	alert_tab->setPosition(ccp(50, 100));
+	alert_tab->setPosition(ccp(50, 88));
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
 	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 12);
@@ -628,7 +724,7 @@ bool OptionPopup::init()
 	
 	CCScale9Sprite* info_back = CCScale9Sprite::create("option_info_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
 	info_back->setContentSize(CCSizeMake(350, 35));
-	info_back->setPosition(ccp(272, 60));
+	info_back->setPosition(ccp(272, 54));
 	main_case->addChild(info_back, kOP_Z_content);
 	
 	CCSprite* info_line = CCSprite::create("common_line.png");
@@ -741,6 +837,34 @@ bool OptionPopup::init()
 	help_item->setPosition(ccp(395,16));
 	tab_menu->addChild(help_item);
 	
+	
+	
+	CCSprite* n_diary_img = CCSprite::create("option_19.png");
+	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	n_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	n_diary_img->addChild(n_diary_label);
+	
+	CCSprite* s_diary_img = CCSprite::create("option_19.png");
+	s_diary_img->setColor(ccGRAY);
+	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	s_diary_label->setColor(ccGRAY);
+	s_diary_label->disableOuterStroke();
+	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	s_diary_img->addChild(s_diary_label);
+	
+	CCSprite* d_diary_img = CCSprite::create("option_19.png");
+	d_diary_img->setColor(ccGRAY);
+	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	d_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	d_diary_img->addChild(d_diary_label);
+	
+	
+	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(OptionPopup::menuAction));
+	diary_item->setTag(kOP_MT_toDiary19);
+	diary_item->setPosition(ccp(293,16));
+	tab_menu->addChild(diary_item);
 	
 	
 	
@@ -865,6 +989,25 @@ void OptionPopup::menuAction(CCObject* pSender)
 		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
 //		myHSP->openCSCenter("supports.cscenter");
 		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_toDiary19)
+	{
+		if(0)
+		{
+			// 다이어리 앱 설치되어 있음
+			
+			// 다이어리 앱 실행
+			
+			is_menu_enable = true;
+		}
+		else
+		{
+			Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
+														 {
+															 is_menu_enable = true;
+														 });
+			addChild(t_popup, 999);
+		}
 	}
 	else if(tag == kOP_MT_logout)
 	{
@@ -1115,6 +1258,32 @@ void OptionPopup::menuAction(CCObject* pSender)
 		//		resetJoystickMovingMenu();
 		//		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_joystickBig)
+	{
+		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5;
+		if(recent_size < 9)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size+1-5);
+			joystick_size_value->setString(ccsf("%d", recent_size+1));
+		}
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_joystickSmall)
+	{
+		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5;
+		if(recent_size > 1)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size-1-5);
+			joystick_size_value->setString(ccsf("%d", recent_size-1));
+		}
+		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_useSideDirection)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection));
+		resetUseSideDirectionMenu();
+		is_menu_enable = true;
+	}
 	else if(tag == kOP_MT_tutorial)
 	{
 		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
@@ -1322,6 +1491,38 @@ void OptionPopup::resetJoystickMovingMenu()
 	joystick_moving_img->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), img_position));
 }
 
+void OptionPopup::resetUseSideDirectionMenu()
+{
+	if(use_side_direction_img)
+	{
+		use_side_direction_img->removeFromParent();
+		use_side_direction_img = NULL;
+	}
+	
+	use_side_direction_img = CCSprite::create("subbutton_purple2.png");
+	main_case->addChild(use_side_direction_img, kOP_Z_content);
+	
+	string inner_text;
+	CCPoint img_position;
+	if(myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection))//ControlJoystickNotFixed))
+	{
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		img_position = ccp(-28,0);
+	}
+	else
+	{
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		img_position = ccp(28,0);
+	}
+	
+	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
+	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	inner_label->setPosition(ccp(use_side_direction_img->getContentSize().width/2.f, use_side_direction_img->getContentSize().height/2.f));
+	use_side_direction_img->addChild(inner_label);
+	
+	use_side_direction_img->setPosition(ccpAdd(getContentPosition(kOP_MT_useSideDirection), img_position));
+}
+
 void OptionPopup::resetSafetyMenu()
 {
 	if(safety_img)
@@ -1430,13 +1631,15 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	
 	else if(t_tag == kOP_MT_bgm)					return_value = ccp(200, 210);
 	else if(t_tag == kOP_MT_effect)					return_value = ccp(380, 210);
-	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(200, 175);
-	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(380, 175);
-	else if(t_tag == kOP_MT_safety)					return_value = ccp(200, 140);
-	else if(t_tag == kOP_MT_push)					return_value = ccp(200, 100);
-	else if(t_tag == kOP_MT_message)				return_value = ccp(380, 100);
+	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(200, 180);
+	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(380, 180);
+	else if(t_tag == kOP_MT_joystickSize)			return_value = ccp(200, 150);
+	else if(t_tag == kOP_MT_useSideDirection)		return_value = ccp(380, 150);
+	else if(t_tag == kOP_MT_safety)					return_value = ccp(200, 120);
+	else if(t_tag == kOP_MT_push)					return_value = ccp(200, 88);
+	else if(t_tag == kOP_MT_message)				return_value = ccp(380, 88);
 	
-	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(65, 60);
+	else if(t_tag == kOP_MT_withdraw)		return_value = ccp(65, 54);
 	else if(t_tag == kOP_MT_logout)			return_value = ccp(273, 43);
 	
 	else if(t_tag == kOP_MT_coupon)			return_value = ccp(390, 256);

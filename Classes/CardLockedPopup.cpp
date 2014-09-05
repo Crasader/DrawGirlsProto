@@ -69,7 +69,7 @@ void CardLockedPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	slttf->setPosition(ccp(0,5));
 	m_container->addChild(slttf);
 	
-	if(t_step == 1 || t_step == 3)
+	if(t_step == 1 || t_step == 2)
 	{
 		slttf->setPosition(ccp(0,-14));
 	}

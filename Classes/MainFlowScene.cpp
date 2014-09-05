@@ -369,10 +369,11 @@ bool MainFlowScene::init()
 //		myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt)+1);
 		
 		int take_level;
-		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
-		else if(mySGD->is_showtime)							take_level = 3;
-		else if(mySGD->is_exchanged)						take_level = 2;
-		else												take_level = 1;
+		take_level = mySGD->getStageGrade();
+//		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
+//		else if(mySGD->is_showtime)							take_level = 3;
+//		else if(mySGD->is_exchanged)						take_level = 2;
+//		else												take_level = 1;
 		
         TRACE();
 		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)

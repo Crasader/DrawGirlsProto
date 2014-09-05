@@ -3186,8 +3186,8 @@ void PlayUI::lifeBonus ()
 		CCLOG("keep percentage2 : %.4f", keep_percentage.getV());
 		int grade_value = 1;
 		if(is_exchanged && keep_percentage.getV() >= 1.f)	grade_value = 4;
-		else if(keep_percentage.getV() >= 1.f)				grade_value = 3;
-		else if(is_exchanged)								grade_value = 2;
+		else if(is_exchanged)								grade_value = 3;
+		else if(keep_percentage.getV() >= 1.f)				grade_value = 2;
 		
 		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt.getV(), use_time, total_time);
 		CCDelayTime* n_d = CCDelayTime::create(2.5f);
@@ -3250,8 +3250,8 @@ void PlayUI::endGame (bool is_show_reason)
 				int grade_value = 1;
 				
 				if(is_exchanged && (beforePercentage^t_tta)/1000.f >= 1.f)		grade_value = 4;
-				else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 3;
-				else if(is_exchanged)											grade_value = 2;
+				else if(is_exchanged)											grade_value = 3;
+				else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 2;
 				
 				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt.getV(), use_time, total_time);
 				CCDelayTime* n_d = CCDelayTime::create(4.5f);
@@ -3335,8 +3335,8 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 		int grade_value = 1;
 		
 		if(is_exchanged && t_percent >= 1.f)		grade_value = 4;
-		else if(t_percent >= 1.f)					grade_value = 3;
-		else if(is_exchanged)						grade_value = 2;
+		else if(is_exchanged)						grade_value = 3;
+		else if(t_percent >= 1.f)					grade_value = 2;
 		
 		mySGD->gameClear(grade_value, int(getScore()), t_percent, countingCnt.getV(), use_time, total_time);
 		nextScene();
@@ -3376,8 +3376,8 @@ void PlayUI::cancelOnePercentGacha ()
 		int grade_value = 1;
 		
 		if(is_exchanged && keep_percentage.getV() >= 1.f)		grade_value = 4;
-		else if(keep_percentage.getV() >= 1.f)					grade_value = 3;
-		else if(is_exchanged)									grade_value = 2;
+		else if(is_exchanged)									grade_value = 3;
+		else if(keep_percentage.getV() >= 1.f)					grade_value = 2;
 		
 		mySGD->gameClear(grade_value, int(getScore()), keep_percentage.getV(), countingCnt.getV(), use_time, total_time);
 		nextScene();

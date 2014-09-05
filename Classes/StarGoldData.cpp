@@ -425,6 +425,7 @@ void StarGoldData::setGameStart()
 	percentage = 0.f;
 	keep_gold = myDSH->getIntegerForKey(kDSH_Key_savedGold);
 	stage_grade = 0;
+	before_rankup_stage_grade = 0;
 	game_time = 0;
 	start_map_gacha_cnt = 0;
 	start_map_gacha_use_gold_cnt = 0;
@@ -467,6 +468,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 
 	is_cleared = true;
 	stage_grade = t_grade;
+	before_rankup_stage_grade = t_grade;
 	percentage = t_percentage;
 
 	base_score = t_score;
@@ -515,6 +517,7 @@ void StarGoldData::gameOver( float t_score, float t_percentage, int t_game_time 
 
 	is_cleared = false;
 	stage_grade = 0;
+	before_rankup_stage_grade = 0;
 	
 	base_score = t_score;
 	score = t_score;
@@ -585,6 +588,15 @@ void StarGoldData::setStageGrade(int t_i)
 int StarGoldData::getStageGrade()
 {
 	return stage_grade.getV();
+}
+
+void StarGoldData::setBeforeRankUpStageGrade(int t_i)
+{
+	before_rankup_stage_grade = t_i;
+}
+int StarGoldData::getBeforeRankUpStageGrade()
+{
+	return before_rankup_stage_grade.getV();
 }
 
 int StarGoldData::getStageGold()

@@ -487,6 +487,9 @@ void CumberParent::removeSubCumber(CCObject* r_sc)
 
 void CumberParent::myInit()
 {
+	myGD->getCumberParent = [=]()->CumberParent*{
+		this;
+	};
 	is_die_animationing = false;
 	isGameover = false;
 	

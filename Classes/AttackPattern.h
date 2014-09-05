@@ -334,7 +334,7 @@ private:
 	void startFrame();
 	
 	void framing();
-	
+	void stopMyAction(){stopFrame(); }
 	void stopFrame();
 	
 	void myInit(int t_frame, KSCumberBase* cb);
@@ -344,9 +344,10 @@ class FreezeAttack : public AttackPattern // freeze
 {
 public:
 	static FreezeAttack* create(int t_frame, KSCumberBase* cb);
+	virtual ~FreezeAttack();
 	
 	void updateFreeze();
-	
+	void stopMyAction(){stopFrame(); }
 	void stopFrame();
 	
 private:
@@ -378,8 +379,9 @@ class ChaosAttack : public AttackPattern // chaos
 public:
 	static ChaosAttack* create(int t_frame, KSCumberBase* cb);
 	
+	virtual ~ChaosAttack();
 	void updateChaos();
-	
+	void stopMyAction(){stopFrame(); }
 	void stopFrame();
 	
 private:
@@ -1097,7 +1099,7 @@ public:
 	static CobWeb* create(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
 	
 	void updateCobWeb();
-	
+	virtual ~CobWeb();
 private:
 
 	Json::Value pattern;
@@ -1113,7 +1115,7 @@ private:
 	void framing();
 	
 	void removeCobWeb();
-	
+	void stopMyAction(){stopFrame(); }
 	void stopFrame();
 	
 	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);

@@ -985,6 +985,13 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_communityNotOpenTitle,
 	kMyLocalKey_communityNotOpenContent,
 	
+	kMyLocalKey_joystickSize,
+	kMyLocalKey_useSideDirection,
+	kMyLocalKey_toDiary19,
+	kMyLocalKey_toDiary19Title,
+	kMyLocalKey_toDiary19Content,
+	kMyLocalKey_toDiary19Button,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 
