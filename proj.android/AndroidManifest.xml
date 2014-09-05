@@ -5,7 +5,7 @@
     android:versionName="1.0.1" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="8"
         android:targetSdkVersion="19" />
 
     <uses-feature android:glEsVersion="0x00020000" />
@@ -211,10 +211,7 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="com.android.vending.BILLING" />
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="com.tmoney.vending.INBILLING" />
     <uses-permission android:name="android.permission.GET_ACCOUNTS" /> <!-- GCM requires a Google account. -->
-    <permission android:name="com.tmoney.vending.INBILLING" />
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" /> <!-- 부팅 완료 후에 바로 NNI 서비스 시작 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 알림에서 사용. 앱이 절전모드에서 빠져나올수 있도록함 -->
@@ -256,10 +253,5 @@ android:theme="@android:style/Theme.Translucent.NoTitleBar" >
     <!-- [HSP SDK] NPush Global permission end -->
 
 
-    <!-- ﻿[HSP SDK] Payment TStore SMS Permission Begin -->
-    <!-- T Store 빌드시에만 사용해주세요. -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="com.tmoney.vending.INBILLING" />
-    <!-- ﻿[HSP SDK] Payment TStore SMS Permission End -->
 
 </manifest>

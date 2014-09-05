@@ -101,67 +101,90 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 	{
 		AudioEngine::sharedInstance()->playEffect("se_subdie.mp3", false);
 		
-		mySGD->increaseCatchCumber();
-		myGD->communication("CP_removeSubCumber", this);
-		auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
-		KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
-		CCPoint t = getPosition();
-		ret.first->setPosition(t);
-		addChild(ret.first, 11);
 		
-		scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
 		//		removeFromParentAndCleanup(true);
 
-		/////////////////////////////// 다음 패턴 부하생성.
 		if(mySD->getClearCondition() == kCLEAR_subCumberCatch)
 		{
 			// 보스에서 부하 생성패턴이 있는지 살펴보고 없으면 강제로 넣어줌.
-			bool found2 = false;
-			for(auto iter = myGD->getMainCumberVector().begin();
-					iter != myGD->getMainCumberVector().end();
-					++iter)
+			/////////////////////////////// 다음 패턴 부하생성.
+			if(0)
 			{
-				KSCumberBase* cumber = *iter;
-				bool found = false;
-				for(auto attackIter = cumber->getAttacks().begin();
-						attackIter != cumber->getAttacks().end();
-						++attackIter)
+				bool found2 = false;
+				for(auto iter = myGD->getMainCumberVector().begin();
+						iter != myGD->getMainCumberVector().end();
+						++iter)
 				{
-//					KS::KSLog("%", *attackIter);
-					if( (*attackIter).get("pattern", "").asString() == "1020" )
+					KSCumberBase* cumber = *iter;
+					bool found = false;
+					for(auto attackIter = cumber->getAttacks().begin();
+							attackIter != cumber->getAttacks().end();
+							++attackIter)
 					{
-						cumber->getAttackQueue().push_back(*attackIter);
-						found = true;
+						//					KS::KSLog("%", *attackIter);
+						if( (*attackIter).get("pattern", "").asString() == "1020" )
+						{
+							cumber->getAttackQueue().push_back(*attackIter);
+							found = true;
+							break;
+						}
+					}
+					if(found)
+					{
+						found2 = true;
 						break;
 					}
+					//						attackIter = cumber->getAttackPattern().en
 				}
-				if(found)
+				if(found2 == false)
 				{
-					found2 = true;
-					break;
+					if(myGD->getMainCumberVector().empty() == false)
+					{
+						Json::Reader reader;
+						Json::Value createCumberPattern;
+						reader.parse(R"({
+												 "atype" : "special",
+												 "childs" : 1,
+												 "name" : "부하몹리젠",
+												 "pattern" : 1020,
+												 "percent" : 1,
+												 "target" : "no"
+												 } )", createCumberPattern);
+						
+						auto cumber = myGD->getMainCumberVector()[0];
+						cumber->getAttackQueue().push_back(createCumberPattern);
+					}
 				}
-//						attackIter = cumber->getAttackPattern().en
+			
 			}
-			if(found2 == false)
-			{
-				if(myGD->getMainCumberVector().empty() == false)
-				{
-					Json::Reader reader;
-					Json::Value createCumberPattern;
-					reader.parse(R"({
-											 "atype" : "special",
-											 "childs" : 1,
-											 "name" : "부하몹리젠",
-											 "pattern" : 1020,
-											 "percent" : 1,
-											 "target" : "no"
-											 } )", createCumberPattern);
-					
-					auto cumber = myGD->getMainCumberVector()[0];
-					cumber->getAttackQueue().push_back(createCumberPattern);
-				}
-			}
+			setCumberState(m_cumberState & ~kCumberStateMoving);
+			
+			auto emotion = KS::loadCCBI<CCSprite*>(this, "emoticon_stun.ccbi");
+			m_deadState = true;
+			m_headImg->addChild(emotion.first, 10);
+			emotion.first->setPositionY(emotion.first->getPositionY() + 50);
+			emotion.first->setPositionX(30);
+			emotion.first->setScale(1.5f);
+			addChild(KSTimer::create(3.f, [=](){
+				setCumberState(m_cumberState | kCumberStateMoving);
+				m_remainHp = m_totalHp;
+				m_deadState = false;
+				emotion.first->removeFromParent();
+			}));
+		}
+		else
+		{
+			mySGD->increaseCatchCumber();
+			myGD->communication("CP_removeSubCumber", this);
+			auto ret = KS::loadCCBI<CCSprite*>(this, "bossbomb1.ccbi");
+			KS::setBlendFunc(ret.first, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			
+			CCPoint t = getPosition();
+			ret.first->setPosition(t);
+			addChild(ret.first, 11);
+			
+			scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 1.f);
 		}
 
 		return true;

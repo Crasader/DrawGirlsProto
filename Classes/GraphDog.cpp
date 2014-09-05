@@ -232,7 +232,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		//		ostringstream oss;
 		//		oss << (iter->param);
 		char buf[20];
-		sprintf(buf, "%d", i);
+		sprintf(buf, "%03d", i);
 		//@ JsonBox::Object param;
 		Json::Value param;
 		param["p"] = iter->param;
@@ -359,7 +359,9 @@ bool GraphDog::test(string action, const Json::Value param,CCObject *target, GDS
 
 
 void GraphDog::log(string logtext){
-	
+#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+	return;
+#endif
 	int b = 256;
 	int a = logtext.length()/b+1;
 	

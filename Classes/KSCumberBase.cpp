@@ -2484,7 +2484,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	if(vCount>0){
 		m_aiValue = m_aiValue+10.f*vCount;
 		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
-		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.0125;
+		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
 	}
 	
 	
@@ -2530,73 +2530,73 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	return;
 	
 	
-	
-	autobalanceTry = playCount;
-	
-	//int balPt = clearCount-2;
-	
-	if(autobalanceTry==0){
-		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
-		return;
-	}
-	
-	
-	CCLOG("#################### autobalance ############################");
-	CCLOG("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
-	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	
-	//오토벨런싱트라이 값까지는 어렵게
-	if(playCount<=autobalanceTry){
-		float per = 1.f-(float)playCount/(float)autobalanceTry;
-		//ai조절
-		if(m_aiValue>0){
-			int aiMax = m_aiValue*2;
-			if(aiMax>90)aiMax=90;
-			if(m_aiValue>aiMax)aiMax=m_aiValue;
-			if(aiMax<=50)aiMax=50;
-			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
-		}
-		//attackterm조절
-		if(m_attackPercent>0){
-			float aiMax = m_attackPercent*2;
-			if(aiMax>0.4)aiMax=0.4;
-			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
-			if(aiMax<=0.3)aiMax=0.3;
-			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
-			
-			if(m_attackPercent>0.4)m_attackPercent=0.4;
-		}
-	
-		CCLOG("#################### Change Balnace1 ############################");
-		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
-	}else if(playCount>autobalanceTry && playCount<=autobalanceTry*2){
-		
-	//그다음부턴 50%까지 까임
-	}else{
-		
-		float per = 1.5f; //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
-		if(autobalanceTry>0)per-=playCount/(float)(4*autobalanceTry);
-		if(per>1)per=1;
-		if(per<0.5)per=0.5;
-		
-		//ai조절
-		if(m_aiValue>0){
-					m_aiValue = m_aiValue*per;
-		}
-		
-		//attackterm조절
-		if(m_attackPercent>0){
-			m_attackPercent = m_attackPercent*per;
-		}
-		
-		CCLOG("#################### Change Balnace2 ############################");
-		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
-	}
-					 
-	
-	CCLOG("#################### autobalance ############################");
-					 
+//	
+//	autobalanceTry = playCount;
+//	
+//	//int balPt = clearCount-2;
+//	
+//	if(autobalanceTry==0){
+//		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
+//		return;
+//	}
+//	
+//	
+//	CCLOG("#################### autobalance ############################");
+//	CCLOG("vicetory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+//	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+//	
+//	//오토벨런싱트라이 값까지는 어렵게
+//	if(playCount<=autobalanceTry){
+//		float per = 1.f-(float)playCount/(float)autobalanceTry;
+//		//ai조절
+//		if(m_aiValue>0){
+//			int aiMax = m_aiValue*2;
+//			if(aiMax>90)aiMax=90;
+//			if(m_aiValue>aiMax)aiMax=m_aiValue;
+//			if(aiMax<=50)aiMax=50;
+//			m_aiValue = m_aiValue + (aiMax-m_aiValue)*per;
+//		}
+//		//attackterm조절
+//		if(m_attackPercent>0){
+//			float aiMax = m_attackPercent*2;
+//			if(aiMax>0.4)aiMax=0.4;
+//			if(m_attackPercent>aiMax)aiMax=m_attackPercent;
+//			if(aiMax<=0.3)aiMax=0.3;
+//			m_attackPercent = m_attackPercent + (aiMax-m_attackPercent)*per;
+//			
+//			if(m_attackPercent>0.4)m_attackPercent=0.4;
+//		}
+//	
+//		CCLOG("#################### Change Balnace1 ############################");
+//		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+//	//오토벨런싱+2 판까지는 원래 벨런스로 플레이
+//	}else if(playCount>autobalanceTry && playCount<=autobalanceTry*2){
+//		
+//	//그다음부턴 50%까지 까임
+//	}else{
+//		
+//		float per = 1.5f; //1-(float)(playCount-autobalanceTry*4)/(float)autobalanceTry;
+//		if(autobalanceTry>0)per-=playCount/(float)(4*autobalanceTry);
+//		if(per>1)per=1;
+//		if(per<0.5)per=0.5;
+//		
+//		//ai조절
+//		if(m_aiValue>0){
+//					m_aiValue = m_aiValue*per;
+//		}
+//		
+//		//attackterm조절
+//		if(m_attackPercent>0){
+//			m_attackPercent = m_attackPercent*per;
+//		}
+//		
+//		CCLOG("#################### Change Balnace2 ############################");
+//		CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+//	}
+//					 
+//	
+//	CCLOG("#################### autobalance ############################");
+//					 
 	
 //	if(clearCount>1 && puzzleNo!=1){
 //		

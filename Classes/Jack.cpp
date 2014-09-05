@@ -2118,11 +2118,47 @@ void Jack::dieEffect()
 		}
 		else
 		{
+			auto patternRemover = [=](){
+				bool canceled = false;
+				for(auto cumber : myGD->getMainCumberVector())
+				{
+					for(auto i : cumber->getCharges())
+					{
+						i->cancelCharge();
+						canceled = true;
+					}
+					
+					if(cumber->getAttackPattern())
+					{
+						auto temp = cumber->getAttackPattern();
+						if(temp)
+						{
+							temp->stopMyAction();
+						}
+						else
+						{
+							CCLOG("hue~~");
+						}
+						cumber->setAttackPattern(nullptr);
+						//						cancelSound = true;
+					}
+					
+					cumber->setCumberState(kCumberStateMoving);
+				}
+				if(canceled)
+				{
+					myGD->communication("Main_hideScreenSideWarning"); // 화면에 빨간 테두리 지우는 함수
+				}
+				
+				myGD->removeAllPattern();
+			};
 			if(myDSH->getIntegerForKey(kDSH_Key_tutorial_flowStep) == kTutorialFlowStep_ingame)
 			{
 				myGD->communication("UI_addGameTime30Sec");
 				speed_up_value = 0.f;
 				changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
+				
+				patternRemover();
 				
 				startReviveAnimation(jackImg);
 			}
@@ -2139,6 +2175,8 @@ void Jack::dieEffect()
 //				jackImg->setScale(0.8f);
 //				addChild(jackImg, kJackZ_main);
 				
+				
+				patternRemover();
 				startReviveAnimation(jackImg);
 			}
 			else

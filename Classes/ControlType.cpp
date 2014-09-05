@@ -329,9 +329,41 @@ const float CONTROL_IN_TIME = 0.5f;
 
 void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 {
+	
+	//조이스틱이 십자가 형태로 움직이도록 함.
+	if(beforeDirection == directionDown || beforeDirection == directionUp){
+		control_ball->setPosition(ccp(control_circle->getPositionX(),control_ball->getPositionY()));
+	}else if(beforeDirection == directionRight || beforeDirection == directionLeft){
+		control_ball->setPosition(ccp(control_ball->getPositionX(),control_circle->getPositionY()));
+	}
+	
+	
 	CCPoint distancePoint = ccp(t_p.x - control_circle->getPositionX(), t_p.y - control_circle->getPositionY());
 	float distanceValue = sqrtf(powf(distancePoint.x, 2.f) + powf(distancePoint.y, 2.f));
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
+	
+	//조이스틱 보정하기
+	if(distanceValue<20){
+		if(beforeDirection == directionLeft || beforeDirection == directionRight){
+			if(distancePoint.x<0){
+				beforeDirection=directionLeft;
+			}else if(distancePoint.x>0){
+				beforeDirection=directionRight;
+			}
+		}
+		
+		if(beforeDirection == directionUp || beforeDirection == directionDown){
+			if(distancePoint.y<0){
+				beforeDirection=directionDown;
+			}else if(distancePoint.y>0){
+				beforeDirection=directionUp;
+			}
+		}
+		
+		myJack->changeDirection(beforeDirection, beforeDirection);
+		return;
+	}
+	
 	
 	if(myJack->isStun)// || myJack->willBackTracking || myJack->getJackState() == jackStateBackTracking)
 	{
@@ -521,6 +553,11 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 				angleDirection = directionLeft;
 				if(jackPoint.y == mapHeightInnerEnd-1)				secondDirection = directionDown;
 				else												secondDirection = directionUp;
+			}
+			
+			
+			if(myJack->isDrawingOn){
+					secondDirection = angleDirection;
 			}
 			
 			if(angleDirection != beforeDirection || isButtonAction)
@@ -730,6 +767,10 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			else												secondDirection = directionUp;
 		}
 		
+		if(myJack->isDrawingOn){
+			secondDirection = angleDirection;
+		}
+		
 		if(angleDirection != beforeDirection || isButtonAction)
 		{
 			isButtonAction = false;
@@ -808,8 +849,8 @@ void ControlJoystickButton::resetTouch()
 	}
 }
 
-#define JOYSTICK_SCREEN_IN_DISTANCE	50
-#define BUTTON_SCREEN_IN_DISTANCE	50
+#define JOYSTICK_SCREEN_IN_DISTANCE	60
+#define BUTTON_SCREEN_IN_DISTANCE	60
 
 void ControlJoystickButton::invisibleControl()
 {
@@ -946,7 +987,11 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(isControlJoystickNotFixed)
+					if(isJoystickCenterNotFixed)
+					{
+						
+					}
+					else if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -967,7 +1012,11 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(isControlJoystickNotFixed)
+					if(isJoystickCenterNotFixed)
+					{
+						
+					}
+					else if(isControlJoystickNotFixed && !isJoystickCenterNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -1016,7 +1065,11 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(isControlJoystickNotFixed)
+					if(isJoystickCenterNotFixed)
+					{
+						
+					}
+					else if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -1037,7 +1090,11 @@ void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
 					else if(after_circle_position.y > myDSH->ui_top-JoystickCenterLimit)
 						after_circle_position.y = myDSH->ui_top-JoystickCenterLimit;
 					
-					if(isControlJoystickNotFixed)
+					if(isJoystickCenterNotFixed)
+					{
+						
+					}
+					else if(isControlJoystickNotFixed)
 						control_circle->setPosition(after_circle_position);
 					else
 					{
@@ -1133,8 +1190,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 20)
-								t_distance = 20;
+							if(distanceValue > 25)
+								t_distance = 25;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -1143,14 +1200,21 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						else
 						{
 							control_circle->setPosition(after_circle_position);
-							control_ball->setPosition(location);
+							
+							
+							float t_distance = distanceValue;
+							if(distanceValue > 25)
+								t_distance = 25;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							control_ball->setPosition(inner_position);
 						}
 					}
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25)
+							t_distance = 25;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1181,8 +1245,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 20)
-								t_distance = 20;
+							if(distanceValue > 25)
+								t_distance = 25;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -1197,8 +1261,8 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25)
+							t_distance = 25;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1284,8 +1348,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25)
+							t_distance = 25;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1300,8 +1364,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 20)
-						t_distance = 20;
+					if(distanceValue > 25)
+						t_distance = 25;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					
@@ -1332,8 +1396,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25)
+							t_distance = 25;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1348,8 +1412,8 @@ void ControlJoystickButton::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 20)
-						t_distance = 20;
+					if(distanceValue > 25)
+						t_distance = 25;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					
@@ -1440,7 +1504,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	CCLog("device width : %.2lf", myHSP->getScreenRealWidth());
 	
 	TouchOutWidth = (2.912176*10.0)/myHSP->getScreenRealWidth();
-	JOYSTICK_FOLLOW_DISTANCE = (2.912176*70.0)/myHSP->getScreenRealWidth();
+	JOYSTICK_FOLLOW_DISTANCE = (2.912176*65.0)/myHSP->getScreenRealWidth();
 	
 	CCLog("JOYSTICK_FOLLOW_DISTANCE : %.2lf", JOYSTICK_FOLLOW_DISTANCE);
 	

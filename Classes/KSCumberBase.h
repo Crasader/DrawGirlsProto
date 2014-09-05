@@ -143,7 +143,7 @@ public:
 	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
-	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f)
+	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false)
 	{
 		
 	}
@@ -535,6 +535,9 @@ protected:
 	CC_SYNTHESIZE(float, m_remainHp, RemainHp);
 	CC_SYNTHESIZE(float, m_totalHp, TotalHp);
 	CC_SYNTHESIZE(CumberEmotion*, m_emotion, Emotion);
+	CC_SYNTHESIZE(bool, m_deadState, DeadState);
+	CC_SYNTHESIZE(bool, m_deadTime, DeadTime);
+
 	// 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	CC_SYNTHESIZE_PASS_BY_REF(vector<Json::Value>, m_attacks, Attacks);
 
