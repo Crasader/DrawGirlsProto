@@ -1211,21 +1211,21 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_joystickBig)
 	{
-		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize);
+		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5;
 		if(recent_size < 9)
 		{
-			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size+1);
-			joystick_size_value->setString(ccsf("%d", recent_size+1+5));
+			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size+1-5);
+			joystick_size_value->setString(ccsf("%d", recent_size+1));
 		}
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_joystickSmall)
 	{
-		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize);
-		if(recent_size > 0)
+		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5;
+		if(recent_size > 1)
 		{
-			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size-1);
-			joystick_size_value->setString(ccsf("%d", recent_size-1+5));
+			myDSH->setIntegerForKey(kDSH_Key_joystickSize, recent_size-1-5);
+			joystick_size_value->setString(ccsf("%d", recent_size-1));
 		}
 		is_menu_enable = true;
 	}

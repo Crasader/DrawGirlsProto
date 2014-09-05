@@ -1576,11 +1576,11 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	setMapData = t_setMapData;
 	checkBeforeNewLine = t_checkBeforeNewLine;
 	
-	TUTO_TouchOutWidth = (2.912176*10.0)/myHSP->getScreenRealWidth();
-	TUTO_JOYSTICK_FOLLOW_DISTANCE = (2.912176*70.0)/myHSP->getScreenRealWidth();
+	TUTO_TouchOutWidth = 10.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
 	
-	minimumDistanceJ = (2.912176*8.0)/myHSP->getScreenRealWidth();
-	JoystickCenterLimit = (2.912176*30.0)/myHSP->getScreenRealWidth();
+	minimumDistanceJ = 8.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	JoystickCenterLimit = 30.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
 	
 	regular_spectrum = 70.f;
 	irregular_spectrum = 20.f;
