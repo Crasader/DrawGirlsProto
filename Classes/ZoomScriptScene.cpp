@@ -103,14 +103,14 @@ bool ZoomScript::init()
 	silType = mySD->getSilType();
 	
 	is_showtime = mySGD->is_showtime;
-	is_exchanged = mySGD->is_exchanged;
+//	is_exchanged = mySGD->is_exchanged;
 	
 	second_img = NULL;
 	
 	int card_number;
 	
-	if(is_exchanged)	card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
-	else				card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1);
+	if(mySGD->getStageGrade() >= 3)	card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	else							card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1);
 	
 	int sound_count = NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number);
 	for(int i=1;i<=sound_count;i++)
@@ -119,8 +119,8 @@ bool ZoomScript::init()
 	}
 	
 	int t_t_card;
-	if(is_exchanged)	t_t_card = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
-	else				t_t_card = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	if(mySGD->getStageGrade() >= 3)	t_t_card = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
+	else							t_t_card = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
 	
 	sound_count = NSDS_GI(kSDS_CI_int1_soundCnt_i, t_t_card);
 	for(int i=1;i<=sound_count;i++)
@@ -240,7 +240,7 @@ void ZoomScript::onEnterTransitionDidFinish()
 
 void ZoomScript::startScript()
 {
-	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (is_exchanged ? 2 : 1)));
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, (mySGD->getStageGrade() >= 3 ? 3 : 1)));
 	
 	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
 	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
@@ -452,17 +452,17 @@ void ZoomScript::menuAction(CCObject *sender)
 			int take_grade = 1;
 			if(target_node == first_img)
 			{
-				if(is_exchanged)
-					take_grade = 2;
+				if(mySGD->getStageGrade() >= 3)
+					take_grade = 3;
 				else
 					take_grade = 1;
 			}
 			else if(target_node == second_img)
 			{
-				if(is_exchanged)
+				if(mySGD->getStageGrade() >= 3)
 					take_grade = 4;
 				else
-					take_grade = 3;
+					take_grade = 2;
 			}
 			else
 			{
@@ -520,50 +520,50 @@ void ZoomScript::menuAction(CCObject *sender)
 																   }
 															   }, [=](){
 																   
-																   if(up_value == 1)
-																   {
-																	   if(take_grade == 1)
-																	   {
-																		   is_exchanged = true;
-																		   mySGD->is_exchanged = true;
-																		   mySGD->is_showtime = false;
-																	   }
-																	   else if(take_grade == 2)
-																	   {
-																		   is_exchanged = false;
-																		   mySGD->is_exchanged = false;
-																		   mySGD->setPercentage(1.f);
-																		   mySGD->is_showtime = true;
-																	   }
-																	   else if(take_grade == 3)
-																	   {
-																		   is_exchanged = true;
-																		   mySGD->is_exchanged = true;
-																		   mySGD->is_showtime = false;
-																	   }
-																   }
-																   else if(up_value == 2)
-																   {
-																	   if(take_grade == 1)
-																	   {
-																		   mySGD->setPercentage(1.f);
-																		   mySGD->is_showtime = true;
-																	   }
-																	   else if(take_grade >= 2)
-																	   {
-																		   is_exchanged = true;
-																		   mySGD->is_exchanged = true;
-																		   mySGD->setPercentage(1.f);
-																		   mySGD->is_showtime = true;
-																	   }
-																   }
-																   else if(up_value >= 3)
-																   {
-																	   is_exchanged = true;
-																	   mySGD->is_exchanged = true;
-																	   mySGD->setPercentage(1.f);
-																	   mySGD->is_showtime = true;
-																   }
+//																   if(up_value == 1)
+//																   {
+//																	   if(take_grade == 1)
+//																	   {
+//																		   is_exchanged = true;
+//																		   mySGD->is_exchanged = true;
+//																		   mySGD->is_showtime = false;
+//																	   }
+//																	   else if(take_grade == 2)
+//																	   {
+//																		   is_exchanged = false;
+//																		   mySGD->is_exchanged = false;
+//																		   mySGD->setPercentage(1.f);
+//																		   mySGD->is_showtime = true;
+//																	   }
+//																	   else if(take_grade == 3)
+//																	   {
+//																		   is_exchanged = true;
+//																		   mySGD->is_exchanged = true;
+//																		   mySGD->is_showtime = false;
+//																	   }
+//																   }
+//																   else if(up_value == 2)
+//																   {
+//																	   if(take_grade == 1)
+//																	   {
+//																		   mySGD->setPercentage(1.f);
+//																		   mySGD->is_showtime = true;
+//																	   }
+//																	   else if(take_grade >= 2)
+//																	   {
+//																		   is_exchanged = true;
+//																		   mySGD->is_exchanged = true;
+//																		   mySGD->setPercentage(1.f);
+//																		   mySGD->is_showtime = true;
+//																	   }
+//																   }
+//																   else if(up_value >= 3)
+//																   {
+//																	   is_exchanged = true;
+//																	   mySGD->is_exchanged = true;
+//																	   mySGD->setPercentage(1.f);
+//																	   mySGD->is_showtime = true;
+//																   }
 																   
 																   mySGD->setStageGrade(after_value);
 
@@ -895,8 +895,8 @@ void ZoomScript::showtimeFirstAction()
 	
 	int card_number;
 	
-	if(is_exchanged)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
-	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	if(mySGD->getStageGrade() >= 3)		card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
+	else								card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
 	
 	second_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 
@@ -930,9 +930,9 @@ void ZoomScript::showtimeFirstAction()
 	first_img->removeFromParentAndCleanup(true);
 	first_img = NULL;
 	
-	int third_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
+	int third_card_number = card_number;
 	
-	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, third_card_number))
+	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, third_card_number))
 	{
 		eye_ani_size = CCSizeMake(NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, third_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, third_card_number));
 		loop_length = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, third_card_number);
@@ -966,14 +966,7 @@ void ZoomScript::showtimeFifthAction()
 	
 	int card_number;
 	
-	if(is_exchanged)
-	{
-		if(mySGD->getPercentage() >= 1.f)
-			card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 4);
-		else
-			card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2);
-	}
-	else					card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3);
+	card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
 	
 	third_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
 	
@@ -1081,7 +1074,7 @@ void ZoomScript::rankupAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
-	if(mySGD->getStageGrade() >= 3)
+	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)
 		showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
@@ -1097,7 +1090,7 @@ void ZoomScript::showtimeThirdAction()
 	white_paper->removeFromParent();
 
 	
-	if(is_exchanged && NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3)))
+	if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 4)))
 	{
 		startStageAnimation();
 	}
@@ -1133,7 +1126,7 @@ void ZoomScript::showtimeSeventhAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
-	if(mySGD->getStageGrade() >= 3)
+	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)
 		showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;

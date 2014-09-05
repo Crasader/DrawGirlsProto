@@ -61,28 +61,29 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 			
 			if(!is_time_event)
 			{
-				int take_grade = 1;
-				if(mySGD->is_showtime && mySGD->is_exchanged)
-					take_grade = 4;
-				else if(mySGD->is_showtime)
-					take_grade = 3;
-				else if(mySGD->is_exchanged)
-					take_grade = 2;
-				else
-					take_grade = 1;
+				int take_grade;
+				take_grade = mySGD->getStageGrade();
+//				if(mySGD->is_showtime && mySGD->is_exchanged)
+//					take_grade = 4;
+//				else if(mySGD->is_showtime)
+//					take_grade = 3;
+//				else if(mySGD->is_exchanged)
+//					take_grade = 2;
+//				else
+//					take_grade = 1;
 				
 				if(take_grade == 2)
 				{
-					mySGD->is_showtime = true;
-					mySGD->is_exchanged = false;
-					mySGD->setPercentage(1.f);
+//					mySGD->is_showtime = true;
+//					mySGD->is_exchanged = false;
+//					mySGD->setPercentage(1.f);
 					mySGD->setStageGrade(3);
 				}
 				else if(take_grade == 3)
 				{
-					mySGD->is_showtime = true;
-					mySGD->is_exchanged = true;
-					mySGD->setPercentage(1.f);
+//					mySGD->is_showtime = true;
+//					mySGD->is_exchanged = true;
+//					mySGD->setPercentage(1.f);
 					mySGD->setStageGrade(4);
 				}
 			}
@@ -272,15 +273,16 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	sub_title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-60));
 	back_case->addChild(sub_title_label);
 	
-	int take_grade = 1;
-	if(mySGD->is_showtime && mySGD->is_exchanged)
-		take_grade = 4-1;
-	else if(mySGD->is_showtime)
-		take_grade = 3;
-	else if(mySGD->is_exchanged)
-		take_grade = 2;
-	else
-		take_grade = 1;
+	int take_grade;
+	take_grade = mySGD->getStageGrade();
+//	if(mySGD->is_showtime && mySGD->is_exchanged)
+//		take_grade = 4-1;
+//	else if(mySGD->is_showtime)
+//		take_grade = 3;
+//	else if(mySGD->is_exchanged)
+//		take_grade = 2;
+//	else
+//		take_grade = 1;
 	
 	int t_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_grade);
 	string t_card_type = NSDS_GS(kSDS_CI_int1_category_s, t_card_number);

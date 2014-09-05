@@ -34,7 +34,7 @@ private:
 	CCNode* game_node;
 	int silType;
 	bool is_showtime;
-	bool is_exchanged;
+//	bool is_exchanged;
 	
 	bool is_ccb_end;
 	bool is_next_on;
