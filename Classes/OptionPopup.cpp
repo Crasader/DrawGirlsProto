@@ -42,6 +42,7 @@
 #include "AccountManagerPopup.h"
 #include "StyledLabelTTF.h"
 #include "OnePercentTutorial.h"
+#include "Diary19Popup.h"
 
 USING_NS_CC_EXT;
 
@@ -60,6 +61,7 @@ enum OptionPopupMenuTag{
 	kOP_MT_gameui_full,
 	kOP_MT_gameui_right,
 	kOP_MT_help,
+	kOP_MT_toDiary19,
 	kOP_MT_logout,
 	kOP_MT_noti,
 	kOP_MT_withdraw,
@@ -837,6 +839,34 @@ bool OptionPopup::init()
 	
 	
 	
+	CCSprite* n_diary_img = CCSprite::create("option_19.png");
+	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	n_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	n_diary_img->addChild(n_diary_label);
+	
+	CCSprite* s_diary_img = CCSprite::create("option_19.png");
+	s_diary_img->setColor(ccGRAY);
+	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	s_diary_label->setColor(ccGRAY);
+	s_diary_label->disableOuterStroke();
+	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	s_diary_img->addChild(s_diary_label);
+	
+	CCSprite* d_diary_img = CCSprite::create("option_19.png");
+	d_diary_img->setColor(ccGRAY);
+	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	d_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	d_diary_img->addChild(d_diary_label);
+	
+	
+	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(OptionPopup::menuAction));
+	diary_item->setTag(kOP_MT_toDiary19);
+	diary_item->setPosition(ccp(293,16));
+	tab_menu->addChild(diary_item);
+	
+	
 	
 	//	CCSprite* n_noti = CCSprite::create("option_noti.png");
 	//	CCSprite* s_noti = CCSprite::create("option_noti.png");
@@ -959,6 +989,25 @@ void OptionPopup::menuAction(CCObject* pSender)
 		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
 //		myHSP->openCSCenter("supports.cscenter");
 		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_toDiary19)
+	{
+		if(0)
+		{
+			// 다이어리 앱 설치되어 있음
+			
+			// 다이어리 앱 실행
+			
+			is_menu_enable = true;
+		}
+		else
+		{
+			Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
+														 {
+															 is_menu_enable = true;
+														 });
+			addChild(t_popup, 999);
+		}
 	}
 	else if(tag == kOP_MT_logout)
 	{

@@ -144,7 +144,7 @@ public:
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, Json::Value result);
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
   
-	
+	bool isExistApp();
 	
 	template<typename... Args>
 	void command(string action,function<void(Json::Value)> func,const char* jsonString, Args... args){

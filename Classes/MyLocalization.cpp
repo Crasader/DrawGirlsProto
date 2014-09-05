@@ -1072,6 +1072,11 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	ko->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
+	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	
+	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
+	ko->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ko->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	
 	setObject(ko, "ko");
 }
