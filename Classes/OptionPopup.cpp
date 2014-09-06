@@ -43,6 +43,7 @@
 #include "StyledLabelTTF.h"
 #include "OnePercentTutorial.h"
 #include "Diary19Popup.h"
+#include "LoadingLayer.h"
 
 USING_NS_CC_EXT;
 
@@ -992,13 +993,31 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_toDiary19)
 	{
-		if(0)
+		if(graphdog->isExistApp())
 		{
 			// 다이어리 앱 설치되어 있음
 			
-			// 다이어리 앱 실행
+			LoadingLayer* t_loading = LoadingLayer::create(-9999);
+			addChild(t_loading, 9999);
+			t_loading->startLoading();
 			
-			is_menu_enable = true;
+			Json::Value t_param;
+			t_param["memberID"] = myHSP->getMemberID();
+			
+			myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
+						   {
+							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+								{
+									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString()); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+								}
+							   else
+								{
+									CCLOG("failed makediarycode");
+								}
+							   
+							   t_loading->removeFromParent();
+							   is_menu_enable = true;
+						   });
 		}
 		else
 		{
