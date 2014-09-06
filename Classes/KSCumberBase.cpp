@@ -452,7 +452,7 @@ void KSCumberBase::followMoving(float dt)
 			float goalDegree = rad2Deg(atan2(t.y, t.x));
 			float deltaDegree = (goalDegree - m_follow.followDegree)/1.f;
 			m_follow.followDegree += clampf(deltaDegree, -5, 5);
-			float speed = getSpeed()*2;
+			float speed = getSpeed()*1.1;
 			if(speed>1.5)speed=1.5;
 			dx = speed * cos(deg2Rad(m_follow.followDegree));
 			dy = speed * sin(deg2Rad(m_follow.followDegree));
