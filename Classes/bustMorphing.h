@@ -28,6 +28,7 @@
 #include "ks19937.h"
 #include "ServerDataSave.h"
 #include "AchieveNoti.h"
+#include "GraphDog.h"
 
 using namespace cocos2d;
 using namespace cocos2d::extension;
@@ -266,6 +267,7 @@ public:
 	vector<vector<ccColor4B>> m_silColors; // y, x 의 컬러값. loadRGB 할 때 로드 함.
 	CCPoint m_greenCenter;
 	CCPoint m_redCenter;
+	CCPoint m_startPos;
 //	FromToWithDuration2
 	MyNode()
 	{
@@ -275,6 +277,7 @@ public:
 		m_touchTimer = 0.f;
 		m_lastTouchTime = 0.f;
 		m_touch_cnt = 0;
+		
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -295,6 +298,47 @@ public:
 	}
 	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
+		CCPoint touchLocation = pTouch->getLocation();
+		m_startPos = convertToNodeSpace(touchLocation);
+		m_stopTouch = false;
+		
+		CCPoint local = convertToNodeSpace(touchLocation);
+		CCPoint t = ccpMult(ccpSub(local,m_startPos),0.1f);
+		
+		m_validTouch = false;
+		//			local = m_validTouchPosition;
+		m_waveRange = 1000;
+		//vector<Vertex3D*> movingVertices;
+		//map<Vertex3D*, ccColor4B> movingVertexColors; // 움직일 좌표의 rgb 임.
+		//map<Vertex3D*, float> distance; // 클릭한 곳으로부터로의 위치
+		
+		m_movingVertices.clear();
+		m_movingVertexColors.clear();
+		m_distance.clear();
+		
+		
+		GraphDog::get()->timeLog("ccTouchBegan test start");
+		
+		for(int i=0; i<m_triCount*3; i++)
+		{
+			CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+			if(ccpLength(t - local) <= m_waveRange)
+			{
+				Vertex3D original = m_2xVertices[i];
+				ccColor4B color = m_silColors[original.y][original.x];
+				if(color.r<=0 && color.g<=0)continue;
+					
+				
+				m_distance[&m_vertices[i]] = ccpLength(t-local);
+				m_movingVertexColors[&m_vertices[i]] = color;
+				
+				m_movingVertices.push_back(&m_vertices[i]); // 움직일 대상이 되는 점을 모집함.
+				
+			}
+		}
+		GraphDog::get()->timeLog("ccTouchBegan check over");
+		
+
 		return true;
 	}
 	virtual void registerWithTouchDispatcher ()
@@ -302,60 +346,247 @@ public:
 		CCTouchDispatcher* pDispatcher = CCDirector::sharedDirector()->getTouchDispatcher();
 		pDispatcher->addTargetedDelegate(this, 0, false);
 	}
+	
+	
+	vector<Vertex3D*> m_movingVertices;
+	map<Vertex3D*, ccColor4B> m_movingVertexColors; // 움직일 좌표의 rgb 임.
+	map<Vertex3D*, float> m_distance; // 클릭한 곳으로부터로의 위치
+	
+	bool m_stopTouch;
 	virtual void ccTouchMoved(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
+		
+		////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		
+		if(m_stopTouch==true) return;
+		
+
+		
+		
+		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
+		CCPoint t = ccpMult(ccpSub(local,m_startPos),0.2f);
+		float d = ccpLength(t);
+		if(d>15){
+			morphing(pTouch, pEvent);
+			m_stopTouch=true;
+			return;
+		}
+		
+		m_validTouch = false;
+		//			local = m_validTouchPosition;
+		m_waveRange = 1000;
+		//vector<Vertex3D*> movingVertices;
+		//map<Vertex3D*, ccColor4B> movingVertexColors; // 움직일 좌표의 rgb 임.
+		//map<Vertex3D*, float> distance; // 클릭한 곳으로부터로의 위치
+
+		
+		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
+		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
+		int cnt=0;
+		for(auto i : m_movingVertices){ // 움직여야 되는 점의 집합에 대해
+			Vertex3D backup = m_backupVertices[i];
+			float r = m_distance[i];
+			ccColor4B rgb = m_movingVertexColors[i];
+			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
+			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+			float waveValue = rgb.g + rgb.r + 40;
+			float devider = -15.f;
+			float time1 = 0.15f;
+			float time2 = 0.5f;
+			if(waveValue > 5)
+			{
+				float diffRad = diffRad1;
+				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
+				
+				
+				*i = Vertex3DMake(backup.x + t.x * waveValue/255.f, backup.y + t.y* waveValue/255.f, backup.z);
+			}
+			cnt++;
+		}
+		//
+//				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+//				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
+//																								 [=](CCPoint t){
+//																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																									 //																								 i->y = backup.y + t;
+//																								 },
+//																								 [=](CCPoint t){
+//																									 //for(auto i : movingVertices){
+//																									 
+//																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), time2,
+//																																														[=](CCPoint t){
+//																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																																														},
+//																																														[=](CCPoint t){
+//																																															*i = backup;
+//																																														},
+//																																														elasticOut));
+//																									 //}
+//																								 },
+//																								 nullptr));
+//				//																							 expoIn));
+//			}
+//			if(waveValue2 > 5)
+//			{
+//				float diffRad = diffRad2;
+//				CCPoint goalPosition = ccp(cosf(diffRad2), sinf(diffRad2)) * waveValue2  / devider;
+//				//goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+//				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, time1,
+//																								 [=](CCPoint t){
+//																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																									 //																								 i->y = backup.y + t;
+//																								 },
+//																								 [=](CCPoint t){
+//																									 //for(auto i : movingVertices){
+//																									 
+//																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), time2,
+//																																														[=](CCPoint t){
+//																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																																														},
+//																																														[=](CCPoint t){
+//																																															*i = backup;
+//																																														},
+//																																														elasticOut));
+//																									 //}
+//																								 },
+//																								 nullptr));
+//				//																							 expoIn));
+//			}
+
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
 		return; // disable
+//		CCPoint touchLocation = pTouch->getLocation();
+//		CCPoint local = convertToNodeSpace(touchLocation);
+//		
+//		CCPoint diff = -(local - m_beganTouchPoint);
+//		
+//		if(m_validTouch && ccpLength(diff) > 30)
+//		{
+//			m_validTouch = false;
+//			local = m_validTouchPosition;
+//			CCLOG("%f %f", local.x, local.y);
+//			
+//			vector<Vertex3D*> movingVertices;
+//			map<Vertex3D*, float> distance;
+//			for(int i=0; i<m_triCount*3; i++)
+//			{
+//				CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
+//				if(ccpLength(t - local) <= m_waveRange)
+//				{
+//					movingVertices.push_back(&m_vertices[i]);
+//					distance[&m_vertices[i]] = ccpLength(t-local);
+//				}
+//			}
+//			
+//			for(auto i : movingVertices){
+//				Vertex3D backup = m_backupVertices[i];
+//				float r = distance[i];
+//				float diffRad = atan2f(diff.y, diff.x);
+////				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+//				CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
+//				goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
+//				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
+//																							 [=](CCPoint t){
+//																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+////																								 i->y = backup.y + t;
+//																							 },
+//																							 [=](CCPoint t){
+//																								 //for(auto i : movingVertices){
+//																								 
+//																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
+//																																												[=](CCPoint t){
+//																																													*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+//																																												},
+//																																												[=](CCPoint t){
+//																																													*i = backup;
+//																																												},
+//																																												elasticOut));
+//																								 //}
+//																							 }));
+//			}
+//		}
+	}
+	
+	void morphing(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent){
+		///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+		
+		if(m_stopTouch){m_stopTouch=false; return;}
+		
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		
-		CCPoint diff = -(local - m_beganTouchPoint);
 		
-		if(m_validTouch && ccpLength(diff) > 30)
-		{
-			m_validTouch = false;
-			local = m_validTouchPosition;
-			CCLOG("%f %f", local.x, local.y);
-			
-			vector<Vertex3D*> movingVertices;
-			map<Vertex3D*, float> distance;
-			for(int i=0; i<m_triCount*3; i++)
+		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
+		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
+		int cnt=0;
+		for(auto i : m_movingVertices){ // 움직여야 되는 점의 집합에 대해
+			Vertex3D backup = m_backupVertices[i];
+			float r = m_distance[i];
+			ccColor4B rgb = m_movingVertexColors[i];
+			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
+			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
+			float waveValue = rgb.g + rgb.r + 40;
+			float devider = -15.f;
+			float time1 = 0.15f;
+			float time2 = 0.5f;
+			if(waveValue > 5)
 			{
-				CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
-				if(ccpLength(t - local) <= m_waveRange)
-				{
-					movingVertices.push_back(&m_vertices[i]);
-					distance[&m_vertices[i]] = ccpLength(t-local);
-				}
+				float diffRad = diffRad1;
+				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
+				
+				
+				addChild(KSGradualValue<CCPoint>::create(ccp(0,0), goalPosition, time1,
+																								 [=](CCPoint t){
+																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																									 //																								 i->y = backup.y + t;
+																								 },
+																								 [=](CCPoint t){
+																									 //for(auto i : movingVertices){
+																									 
+																									 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), time2,
+																																														[=](CCPoint t){
+																																															*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
+																																														},
+																																														[=](CCPoint t){
+																																															*i = backup;
+																																														},
+																																														elasticOut));
+																									 //}
+																								 },
+																								 nullptr));
 			}
-			
-			for(auto i : movingVertices){
-				Vertex3D backup = m_backupVertices[i];
-				float r = distance[i];
-				float diffRad = atan2f(diff.y, diff.x);
-//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-				CCPoint goalPosition = ccp(cosf(diffRad) * -200 / powf(r, 0.9f), sinf(diffRad) * -200 / powf(r, 0.9f));
-				goalPosition = ccp(clampf(goalPosition.x, -20, 20), clampf(goalPosition.y, -20, 20));
-				addChild(KSGradualValue<CCPoint>::create(ccp(0, 0), goalPosition, 0.3f,
-																							 [=](CCPoint t){
-																								 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-//																								 i->y = backup.y + t;
-																							 },
-																							 [=](CCPoint t){
-																								 //for(auto i : movingVertices){
-																								 
-																								 addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(0, 0), 1.f,
-																																												[=](CCPoint t){
-																																													*i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
-																																												},
-																																												[=](CCPoint t){
-																																													*i = backup;
-																																												},
-																																												elasticOut));
-																								 //}
-																							 }));
-			}
+			cnt++;
 		}
+		
+		
+		//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	}
+	
 	virtual void ccTouchEnded(cocos2d::CCTouch *pTouch, cocos2d::CCEvent *pEvent)
 	{
 #if 0

@@ -564,6 +564,7 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_touch_p = (int)touch;
 			first_touch_point = location;
 			is_scrolling = true;
+			first_img->ccTouchBegan(touch,pEvent);
 			//			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 			//			{
 			//				is_touched_menu = true;
@@ -630,41 +631,46 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			
 			if(multiTouchData.size() == 1)
 			{
+				
+				
+				//ccTouchMoved(touch,pEvent);
+				
+				
 				//				if(is_touched_menu)
 				//				{
 				//					next_button->ccTouchMoved(touch, pEvent);
 				//				}
-				
-
-				
-				if(is_spin_mode)
-				{
-					this->unschedule(schedule_selector(CardViewScene::moveAnimation));
-					moveSpeed_p = CCPointZero;
-					isAnimated = false;
-					
-					CCPoint rotate_sub = ccpSub(location, touch_p);
-					
-					float rotation_degree = first_img->getImageRotationDegree() + rotate_sub.x/5.f;
-					if(rotation_degree > 60.f)
-						rotation_degree = 60.f;
-					else if(rotation_degree < -60.f)
-						rotation_degree = -60.f;
-					first_img->setImageRotationDegree(rotation_degree);
-					
-					float rotation_degreeX = first_img->getImageRotationDegreeX() - rotate_sub.y/5.f;
-					if(rotation_degreeX > 60.f)
-						rotation_degreeX = 60.f;
-					else if(rotation_degreeX < -60.f)
-						rotation_degreeX = -60.f;
-					first_img->setImageRotationDegreeX(rotation_degreeX);
-				}
-				else
-					this->moveListXY(ccpSub(touch_p, location));
-//				CCPoint after_position = ccpMult(location,-1);
-//				first_img->movingDistance(ccpSub(after_position, save_position));
-//				save_position = after_position;
+//
+//				
+//				if(is_spin_mode)
+//				{
+//					this->unschedule(schedule_selector(CardViewScene::moveAnimation));
+//					moveSpeed_p = CCPointZero;
+//					isAnimated = false;
+//					
+//					CCPoint rotate_sub = ccpSub(location, touch_p);
+//					
+//					float rotation_degree = first_img->getImageRotationDegree() + rotate_sub.x/5.f;
+//					if(rotation_degree > 60.f)
+//						rotation_degree = 60.f;
+//					else if(rotation_degree < -60.f)
+//						rotation_degree = -60.f;
+//					first_img->setImageRotationDegree(rotation_degree);
+//					
+//					float rotation_degreeX = first_img->getImageRotationDegreeX() - rotate_sub.y/5.f;
+//					if(rotation_degreeX > 60.f)
+//						rotation_degreeX = 60.f;
+//					else if(rotation_degreeX < -60.f)
+//						rotation_degreeX = -60.f;
+//					first_img->setImageRotationDegreeX(rotation_degreeX);
+//				}
+//				else
+//					this->moveListXY(ccpSub(touch_p, location));
+////				CCPoint after_position = ccpMult(location,-1);
+////				first_img->movingDistance(ccpSub(after_position, save_position));
+////				save_position = after_position;
 				touch_p = location;
+				first_img->ccTouchMoved(touch,pEvent);
 			}
 			else if(multiTouchData.size() == 2)
 			{
@@ -806,6 +812,10 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				}
 				else
 				{
+					
+					if(is_morphing)
+						first_img->morphing(touch, pEvent);
+					return;
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 					

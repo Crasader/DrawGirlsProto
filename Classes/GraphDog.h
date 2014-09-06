@@ -303,6 +303,16 @@ public:
 		longTimeErrorFunc = func;
 	}
 	
+	std::chrono::time_point<std::chrono::system_clock> timecheck;
+	void timeLog(string log){
+		std::chrono::time_point<std::chrono::system_clock> lastTime=timecheck;
+		timecheck=std::chrono::system_clock::now();
+		 std::chrono::duration<double> elapsed_seconds = timecheck-lastTime;
+		
+		CCLOG("%s(%f)",log.c_str(), elapsed_seconds.count());
+		
+	}
+	
 	void log(string logtext);
 	
 		
