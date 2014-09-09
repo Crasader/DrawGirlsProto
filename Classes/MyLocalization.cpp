@@ -382,10 +382,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
 	ko->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
 	ko->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
-	ko->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
-	ko->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
-	ko->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
-	ko->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	ko->setObject(CCString::create("<font>미사일 레벨을 올리면 </font><font color=961>부하몬스터를 쉽게 죽이고,</font>"), kMyLocalKey_levelupGuideMent1);
+	ko->setObject(CCString::create("<font color=961>패턴공격을 빨리 저지시킬 수 있으며,</font>"), kMyLocalKey_levelupGuideMent2);
+	ko->setObject(CCString::create("<font color=961>고득점 기록에 도움이 됩니다.</font>"), kMyLocalKey_levelupGuideMent3);
+	ko->setObject(CCString::create("<font>미사일 업그레이드를 하러 갈까요?</font>"), kMyLocalKey_levelupGuideMent4);
 //	ko->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	ko->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
 	ko->setObject(CCString::create("업적"), kMyLocalKey_achievement);
@@ -1077,6 +1077,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
 	ko->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
 	ko->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ko->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
+	
+	ko->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
+	ko->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
 	
 	setObject(ko, "ko");
 }
@@ -1365,10 +1369,10 @@ void MyLocal::en()
 	en->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
 	en->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
 	en->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
-	en->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
-	en->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
-	en->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
-	en->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	en->setObject(CCString::create("<font>미사일 레벨을 올리면 </font><font color=961>부하몬스터를 쉽게 죽이고,</font>"), kMyLocalKey_levelupGuideMent1);
+	en->setObject(CCString::create("<font color=961>패턴공격을 빨리 저지시킬 수 있으며,</font>"), kMyLocalKey_levelupGuideMent2);
+	en->setObject(CCString::create("<font color=961>고득점 기록에 도움이 됩니다.</font>"), kMyLocalKey_levelupGuideMent3);
+	en->setObject(CCString::create("<font>미사일 업그레이드를 하러 갈까요?</font>"), kMyLocalKey_levelupGuideMent4);
 //	en->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	en->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
 	en->setObject(CCString::create("업적"), kMyLocalKey_achievement);
@@ -2036,6 +2040,18 @@ void MyLocal::en()
 	en->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
 	en->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
 	
+	en->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
+	en->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
+	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	
+	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
+	en->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	en->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	en->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
+	
+	en->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
+	en->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
+	
 	setObject(en, "en");
 }
 void MyLocal::ja()
@@ -2323,10 +2339,10 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("당신만을 위한 특별한 기회!"), kMyLocalKey_eventShopMent1);
 	ja->setObject(CCString::create("%s 보너스 혜택을 드려요."), kMyLocalKey_eventShopMent2);
 	ja->setObject(CCString::create("이 창을 닫으면 %s 보너스 기회는 사라집니다."), kMyLocalKey_eventShopMent3);
-	ja->setObject(CCString::create("공격레벨을 올리면"), kMyLocalKey_levelupGuideMent1);
-	ja->setObject(CCString::create("보스를 좀 더 쉽게 물리칠 수 있습니다."), kMyLocalKey_levelupGuideMent2);
-	ja->setObject(CCString::create("업그레이드 버튼을 눌러"), kMyLocalKey_levelupGuideMent3);
-	ja->setObject(CCString::create("공격레벨을 올려보세요!"), kMyLocalKey_levelupGuideMent4);
+	ja->setObject(CCString::create("<font>미사일 레벨을 올리면 </font><font color=961>부하몬스터를 쉽게 죽이고,</font>"), kMyLocalKey_levelupGuideMent1);
+	ja->setObject(CCString::create("<font color=961>패턴공격을 빨리 저지시킬 수 있으며,</font>"), kMyLocalKey_levelupGuideMent2);
+	ja->setObject(CCString::create("<font color=961>고득점 기록에 도움이 됩니다.</font>"), kMyLocalKey_levelupGuideMent3);
+	ja->setObject(CCString::create("<font>미사일 업그레이드를 하러 갈까요?</font>"), kMyLocalKey_levelupGuideMent4);
 //	ja->setObject(CCString::create("다음에"), kMyLocalKey_next);
 	ja->setObject(CCString::create("업그레이드"), kMyLocalKey_levelupGo);
 	ja->setObject(CCString::create("업적"), kMyLocalKey_achievement);
@@ -2997,6 +3013,18 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("추후 업데이트 됩니다."), kMyLocalKey_updateContent);
 	ja->setObject(CCString::create("준비중"), kMyLocalKey_communityNotOpenTitle);
 	ja->setObject(CCString::create("준비입니다. 공식카페를 이용해 주세요."), kMyLocalKey_communityNotOpenContent);
+	
+	ja->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
+	ja->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
+	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	
+	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
+	ja->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ja->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ja->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
+	
+	ja->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
+	ja->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
 
 	setObject(ja, "ja");
 }

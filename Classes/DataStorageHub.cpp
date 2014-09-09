@@ -782,5 +782,6 @@ void DataStorageHub::initReturnPair()
 	
 	return_value[kDSH_Key_isOffCardMorphingSound] = "iocms";
 	return_value[kDSH_Key_joystickSize] = "jss";
+	return_value[kDSH_Key_isOffJoystickVib] = "iojv";
 }
 #undef LZZ_INLINE

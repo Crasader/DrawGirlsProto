@@ -169,7 +169,8 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_isOffCardMorphingSound,
 	
-	kDSH_Key_joystickSize
+	kDSH_Key_joystickSize,
+	kDSH_Key_isOffJoystickVib
 	
 }DSH_Key;
 

@@ -147,6 +147,8 @@ public:
 	bool isExistApp();
 	void openDiaryApp(string t_memberID, string t_diaryCode);
 	
+	void vibAction();
+	
 	template<typename... Args>
 	void command(string action,function<void(Json::Value)> func,const char* jsonString, Args... args){
 		ostringstream oss;

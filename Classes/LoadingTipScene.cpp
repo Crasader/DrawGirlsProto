@@ -968,7 +968,16 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		if(back_number == 0)
 			back_number = 1;
 		
-		CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", back_number));
+		string back_img_filename;
+		if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+		{
+			back_img_filename = "main_back.png";
+		}
+		else
+		{
+			back_img_filename = ccsf("loading_%d.png", back_number);
+		}
+		CCSprite* loading_tip_back = CCSprite::create(back_img_filename.c_str());
 		loading_tip_back->setPosition(ccp(0,0));
 		loading_tip_node->addChild(loading_tip_back, 0, 1);
 		
@@ -1049,10 +1058,19 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	CCNode* loading_tip_node = CCNode::create();
 	
-	int rand_value = rand()%5+1;
-	mySGD->loading_tip_back_number = rand_value;
-	
-	CCSprite* loading_tip_back = CCSprite::create(ccsf("loading_%d.png", rand_value));
+	string back_img_filename;
+	if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
+	{
+		back_img_filename = "main_back.png";
+	}
+	else
+	{
+		int rand_value = rand()%5+1;
+		mySGD->loading_tip_back_number = rand_value;
+		
+		back_img_filename = ccsf("loading_%d.png", rand_value);
+	}
+	CCSprite* loading_tip_back = CCSprite::create(back_img_filename.c_str());
 	loading_tip_back->setPosition(ccp(0,0));
 	loading_tip_back->setVisible(false);
 	loading_tip_node->addChild(loading_tip_back, 0, 1);

@@ -992,6 +992,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_toDiary19Content,
 	kMyLocalKey_toDiary19Button,
 	
+	kMyLocalKey_joystickVib,
+	kMyLocalKey_joystickSizeQuestionTitle,
+	kMyLocalKey_joystickSizeQuestionContent,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

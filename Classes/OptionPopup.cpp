@@ -44,6 +44,7 @@
 #include "OnePercentTutorial.h"
 #include "Diary19Popup.h"
 #include "LoadingLayer.h"
+#include "JoystickSizeQuestionPopup.h"
 
 USING_NS_CC_EXT;
 
@@ -68,12 +69,14 @@ enum OptionPopupMenuTag{
 	kOP_MT_withdraw,
 	kOP_MT_joystickPositioning,
 	kOP_MT_joystickMoving,
+	kOP_MT_joystickVib,
 	kOP_MT_tutorial,
 	kOP_MT_safety,
 	kOP_MT_joystickSize,
 	kOP_MT_joystickBig,
 	kOP_MT_joystickSmall,
 	kOP_MT_useSideDirection,
+	kOP_MT_joystickSizeQuestion,
 	kOP_MT_push,
 	kOP_MT_message,
 	kOP_MT_coupon,
@@ -546,10 +549,8 @@ bool OptionPopup::init()
 	joystick_size_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickSize), ccp(-100,0)));
 	main_case->addChild(joystick_size_label, kOP_Z_back);
 	
-	CCSprite* joystick_size_scroll = CCSprite::create("option_scroll.png");
-	joystick_size_scroll->setPosition(getContentPosition(kOP_MT_joystickSize) + ccp(1,0));
-	joystick_size_scroll->setScaleX(0.7f);
-	joystick_size_scroll->setScaleY(1.5f);
+	CCSprite* joystick_size_scroll = CCSprite::create("option_scroll2.png");
+	joystick_size_scroll->setPosition(getContentPosition(kOP_MT_joystickSize) + ccp(-13,0));
 	main_case->addChild(joystick_size_scroll, kOP_Z_back);
 	
 	CCSprite* n_joystick_big = CCSprite::create("option_plus.png");
@@ -564,7 +565,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_big_item = CCMenuItemSprite::create(n_joystick_big, s_joystick_big, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_big_item->setTag(kOP_MT_joystickBig);
-	joystick_size_big_item->setPosition(ccp(-40,0));
+	joystick_size_big_item->setPosition(ccp(-45,0));
 	
 	
 	CCSprite* n_joystick_small = CCSprite::create("option_plus.png");
@@ -579,7 +580,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_small_item = CCMenuItemSprite::create(n_joystick_small, s_joystick_small, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_small_item->setTag(kOP_MT_joystickSmall);
-	joystick_size_small_item->setPosition(ccp(40,0));
+	joystick_size_small_item->setPosition(ccp(18,0));
 	
 	
 	CCMenu* joystick_size_menu = CCMenu::create();
@@ -591,11 +592,50 @@ bool OptionPopup::init()
 	joystick_size_menu->addChild(joystick_size_small_item);
 	
 	joystick_size_value = KSLabelTTF::create(ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5), mySGD->getFont().c_str(), 17);
-	joystick_size_value->setScaleX(1.f/joystick_size_scroll->getScaleX());
-	joystick_size_value->setScaleY(1.f/joystick_size_scroll->getScaleY());
 	joystick_size_value->enableOuterStroke(ccBLACK, 1.5f, 255*0.6f, true);
-	joystick_size_value->setPosition(ccp(joystick_size_scroll->getContentSize().width/2.f, joystick_size_scroll->getContentSize().height/2.f-1));
+	joystick_size_value->setPosition(ccp(joystick_size_scroll->getContentSize().width/2.f, joystick_size_scroll->getContentSize().height/2.f-1.5f));
 	joystick_size_scroll->addChild(joystick_size_value);
+	
+	
+	CCSprite* n_question = CCSprite::create("option_question.png");
+	CCSprite* s_question = CCSprite::create("option_question.png");
+	s_question->setColor(ccGRAY);
+	
+	CCMenuItem* question_item = CCMenuItemSprite::create(n_question, s_question, this, menu_selector(OptionPopup::menuAction));
+	question_item->setTag(kOP_MT_joystickSizeQuestion);
+	
+	CCMenu* question_menu = CCMenu::createWithItem(question_item);
+	question_menu->setPosition(getContentPosition(kOP_MT_joystickSize) + ccp(47, 0));
+	main_case->addChild(question_menu, kOP_Z_content);
+	question_menu->setTouchPriority(-171);
+	
+	
+	KSLabelTTF* joystick_vib_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickVib), mySGD->getFont().c_str(), 11.5f);
+	joystick_vib_label->disableOuterStroke();
+	joystick_vib_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+	joystick_vib_label->setAnchorPoint(ccp(0,0.5f));
+	joystick_vib_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickVib), ccp(-100,0)));
+	main_case->addChild(joystick_vib_label, kOP_Z_back);
+	
+	CCSprite* joystick_vib_scroll = CCSprite::create("option_scroll.png");
+	joystick_vib_scroll->setPosition(getContentPosition(kOP_MT_joystickVib));
+	main_case->addChild(joystick_vib_scroll, kOP_Z_back);
+	
+	CCSprite* n_joystick_vib = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+	n_joystick_vib->setOpacity(0);
+	CCSprite* s_joystick_vib = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+	s_joystick_vib->setOpacity(0);
+	
+	CCMenuItem* joystick_vib_item = CCMenuItemSprite::create(n_joystick_vib, s_joystick_vib, this, menu_selector(OptionPopup::menuAction));
+	joystick_vib_item->setTag(kOP_MT_joystickVib);
+	
+	joystick_vib_menu = CCMenu::createWithItem(joystick_vib_item);
+	joystick_vib_menu->setPosition(getContentPosition(kOP_MT_joystickVib));
+	main_case->addChild(joystick_vib_menu, kOP_Z_content);
+	joystick_vib_menu->setTouchPriority(-171);
+	
+	joystick_vib_img = NULL;
+	resetJoystickVibMenu();
 	
 	
 //	myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection)
@@ -1277,6 +1317,12 @@ void OptionPopup::menuAction(CCObject* pSender)
 		//		resetJoystickMovingMenu();
 		//		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_joystickVib)
+	{
+		myDSH->setBoolForKey(kDSH_Key_isOffJoystickVib, !myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib));
+		resetJoystickVibMenu();
+		is_menu_enable = true;
+	}
 	else if(tag == kOP_MT_joystickBig)
 	{
 		int recent_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5;
@@ -1302,6 +1348,11 @@ void OptionPopup::menuAction(CCObject* pSender)
 		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, !myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection));
 		resetUseSideDirectionMenu();
 		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_joystickSizeQuestion)
+	{
+		JoystickSizeQuestionPopup* t_popup = JoystickSizeQuestionPopup::create(-300, [=](){is_menu_enable = true;});
+		addChild(t_popup, kOP_Z_popup);
 	}
 	else if(tag == kOP_MT_tutorial)
 	{
@@ -1510,6 +1561,38 @@ void OptionPopup::resetJoystickMovingMenu()
 	joystick_moving_img->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickMoving), img_position));
 }
 
+void OptionPopup::resetJoystickVibMenu()
+{
+	if(joystick_vib_img)
+	{
+		joystick_vib_img->removeFromParent();
+		joystick_vib_img = NULL;
+	}
+	
+	joystick_vib_img = CCSprite::create("subbutton_purple2.png");
+	main_case->addChild(joystick_vib_img, kOP_Z_content);
+	
+	string inner_text;
+	CCPoint img_position;
+	if(myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib))//ControlJoystickNotFixed))
+	{
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		img_position = ccp(28,0);
+	}
+	else
+	{
+		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		img_position = ccp(-28,0);
+	}
+	
+	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
+	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	inner_label->setPosition(ccp(joystick_vib_img->getContentSize().width/2.f, joystick_vib_img->getContentSize().height/2.f));
+	joystick_vib_img->addChild(inner_label);
+	
+	joystick_vib_img->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickVib), img_position));
+}
+
 void OptionPopup::resetUseSideDirectionMenu()
 {
 	if(use_side_direction_img)
@@ -1653,8 +1736,9 @@ CCPoint OptionPopup::getContentPosition(int t_tag)
 	else if(t_tag == kOP_MT_joystickPositioning)	return_value = ccp(200, 180);
 	else if(t_tag == kOP_MT_joystickMoving)			return_value = ccp(380, 180);
 	else if(t_tag == kOP_MT_joystickSize)			return_value = ccp(200, 150);
-	else if(t_tag == kOP_MT_useSideDirection)		return_value = ccp(380, 150);
-	else if(t_tag == kOP_MT_safety)					return_value = ccp(200, 120);
+	else if(t_tag == kOP_MT_joystickVib)			return_value = ccp(380, 150);
+	else if(t_tag == kOP_MT_useSideDirection)		return_value = ccp(200, 120);
+	else if(t_tag == kOP_MT_safety)					return_value = ccp(380, 120);
 	else if(t_tag == kOP_MT_push)					return_value = ccp(200, 88);
 	else if(t_tag == kOP_MT_message)				return_value = ccp(380, 88);
 	

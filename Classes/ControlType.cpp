@@ -387,6 +387,10 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		if(distanceValue > minimumDistanceJ && (t_p.x > 480.f-TouchOutWidth || t_p.x < TouchOutWidth || t_p.y > myDSH->ui_top-TouchOutWidth || t_p.y < TouchOutWidth))
 		{
 			CCLOG("Touch Out Action!!!");
+			
+			if(!myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib))
+				GraphDog::get()->vibAction();
+			
 			IntPoint jackPoint = myGD->getJackPoint();
 			
 			if(angle < -180.f+regular_spectrum/2.f)

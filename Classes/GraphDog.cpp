@@ -25,6 +25,7 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#import "AudioToolbox/AudioToolbox.h"
 //#include "OpenUDID.h"
 #endif
 #include "BaseXX.h"
@@ -276,6 +277,15 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 	
 	
 	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"DgDiary://"]];
+#endif
+}
+
+void GraphDog::vibAction()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JNIKelper::getInstance()->callJava_simple("vib");
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 #endif
 }
 
