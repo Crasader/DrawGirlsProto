@@ -228,7 +228,7 @@ bool GraphDog::isExistApp()
 	
 	return (bool)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return false;
+	return (bool)[[UIApplication sharedApplication]canOpenURL:[NSURL URLWithString:@"DgDiary://"]];
 #endif
 }
 
@@ -241,7 +241,7 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 //	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()V"))
 //	{
 //		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
-		JniMethodInfo __minfo;
+		JniMethodInfo __mino;
 //		__minfo.classID = 0;
 //		__minfo.env = 0;
 //		__minfo.methodID = 0;
@@ -262,7 +262,20 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 //	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	UIPasteboard* pasteborad1 = [UIPasteboard pasteboardWithName:@"memberID" create:YES];
+	if(pasteborad1 != nil)
+		pasteborad1.string = [NSString stringWithUTF8String:t_memberID.c_str()];
+	else
+		NSLog(@"Can't create pasteboard1");
 	
+	UIPasteboard* pasteborad2 = [UIPasteboard pasteboardWithName:@"diaryCode" create:YES];
+	if(pasteborad2 != nil)
+		pasteborad2.string = [NSString stringWithUTF8String:t_diaryCode.c_str()];
+	else
+		NSLog(@"Can't create pasteboard2");
+	
+	
+	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"DgDiary://"]];
 #endif
 }
 
