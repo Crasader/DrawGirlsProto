@@ -192,7 +192,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
 	ko->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	ko->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	ko->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 //	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
@@ -1204,7 +1204,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	en->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	en->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	en->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 	en->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 //	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
@@ -2175,7 +2175,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	ja->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	ja->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	ja->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 //	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
