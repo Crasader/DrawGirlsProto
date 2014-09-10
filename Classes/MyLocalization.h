@@ -1001,12 +1001,26 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_missionTitle10,
 	kMyLocalKey_missionTitle11,
 	kMyLocalKey_missionTitle12,
+	kMyLocalKey_missionTitle13,
 	
 	kMyLocalKey_missionDiscription8,
 	kMyLocalKey_missionDiscription9,
 	kMyLocalKey_missionDiscription10,
 	kMyLocalKey_missionDiscription11,
 	kMyLocalKey_missionDiscription12,
+	kMyLocalKey_missionDiscription13,
+	
+	kMyLocalKey_missionCondition8,
+	kMyLocalKey_missionCondition9,
+	kMyLocalKey_missionCondition10,
+	kMyLocalKey_missionCondition11,
+	kMyLocalKey_missionCondition12,
+	kMyLocalKey_missionCondition13,
+	
+	kMyLocalKey_mission10Label,
+	kMyLocalKey_mission11Label,
+	kMyLocalKey_mission12Label,
+	kMyLocalKey_mission13Label,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

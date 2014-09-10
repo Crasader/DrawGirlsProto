@@ -1262,7 +1262,13 @@ void PlayUI::addScore (int t_score)
 //	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	
-//	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_score && !is_cleared_cdt)
+	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_score && !is_cleared_cdt)
+	{
+		if(getScore() >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+		{
+			conditionClear();
+		}
+	}
 //		checkScoreMission();
 	
 	if(mySGD->is_write_replay)
@@ -2702,15 +2708,15 @@ void PlayUI::scoreAttackMissile(int t_damage)
 
 int PlayUI::getComboCnt ()
 {
-	return combo_cnt;
+	return combo_cnt.getV();
 }
 void PlayUI::setComboCnt (int t_combo)
 {
-	int before_combo = combo_cnt;
+	int before_combo = combo_cnt.getV();
 	combo_cnt = t_combo;
-	if(high_combo_cnt < combo_cnt)
+	if(high_combo_cnt < combo_cnt.getV())
 	{
-		high_combo_cnt = combo_cnt;
+		high_combo_cnt = combo_cnt.getV();
 		
 		if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_combo && high_combo_cnt >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
 		{
@@ -2718,18 +2724,18 @@ void PlayUI::setComboCnt (int t_combo)
 		}
 	}
 	
-	if(before_combo < combo_cnt)
+	if(before_combo < combo_cnt.getV())
 	{
 		if(mySGD->is_endless_mode)
 		{
-			if(combo_cnt%5 == 0)
+			if(combo_cnt.getV()%5 == 0)
 			{
 				ing_bomb_value = 5;
 				addScoreAttack(3000);
 			}
-			else if(ing_bomb_value < combo_cnt%5)
+			else if(ing_bomb_value < combo_cnt.getV()%5)
 			{
-				ing_bomb_value = combo_cnt%5;
+				ing_bomb_value = combo_cnt.getV()%5;
 			}
 			
 			CCPoint recent_position = bomb_img->getPosition();
@@ -2750,7 +2756,7 @@ void PlayUI::setComboCnt (int t_combo)
 		for(int i=kAchievementCode_comboMania1;i<=kAchievementCode_comboMania3;i++)
 		{
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-			   combo_cnt == myAchieve->getCondition((AchievementCode)i))
+			   combo_cnt.getV() == myAchieve->getCondition((AchievementCode)i))
 			{
 				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
@@ -2762,7 +2768,7 @@ void PlayUI::setComboCnt (int t_combo)
 	{
 		if(mySGD->is_endless_mode)
 		{
-			ing_bomb_value = combo_cnt;
+			ing_bomb_value = combo_cnt.getV();
 			if(ing_bomb_value > 5)
 				ing_bomb_value = 5;
 			
@@ -4053,25 +4059,119 @@ void PlayUI::myInit ()
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 	}
+	else if(clr_cdt_type == kCLEAR_hellMode)
+	{
+		is_cleared_cdt = true;
+	}
 	else if(clr_cdt_type == kCLEAR_percentage)
 	{
 		is_cleared_cdt = false;
 	}
 	else if(clr_cdt_type == kCLEAR_score)
 	{
+		mission_button->doOpen();
+		
 		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission10Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+//		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+//		clr_cdt_label->setColor(ccc3(255, 170, 20));
+//		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+//		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+//		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+//		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+//		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_combo)
 	{
+		mission_button->doOpen();
+		
 		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission11Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+//		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+//		clr_cdt_label->setColor(ccc3(255, 170, 20));
+//		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+//		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+//		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+//		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+//		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_gold)
 	{
+		mission_button->doOpen();
+		
 		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission12Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
+		addChild(t_condition_label, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+//		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+//		clr_cdt_label->setColor(ccc3(255, 170, 20));
+//		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+//		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
+//		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+//		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+//		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_turns)
 	{
+		mission_button->doOpen();
+		
 		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission13Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.f,0.5f));
+		addChild(t_condition_label, 2);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", turn_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(clr_cdt_label->getContentSize().width/2.f - t_condition_label->getContentSize().width/2.f, -1));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_default)
 	{
@@ -4358,8 +4458,20 @@ void PlayUI::checkStageGoldMission(int t_gold)
 
 void PlayUI::addTurnCnt()
 {
-	turn_cnt++;
-	if(!is_cleared_cdt && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_turns && turn_cnt >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+	turn_cnt = turn_cnt.getV() + 1;
+	
+	if(clr_cdt_type == kCLEAR_turns)
+	{
+		CCLabelTTF* t_condition_label = (CCLabelTTF*)mission_clear_remove_nodes[0];
+		
+		CCLabelTTF* clr_cdt_label = (CCLabelTTF*)mission_clear_remove_nodes[1];
+		clr_cdt_label->setString(ccsf("%d", turn_cnt.getV()));
+		
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(clr_cdt_label->getContentSize().width/2.f - t_condition_label->getContentSize().width/2.f, -1));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
+	}
+	
+	if(!is_cleared_cdt && clr_cdt_type == kCLEAR_turns && turn_cnt.getV() >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
 	{
 		conditionFail();
 		

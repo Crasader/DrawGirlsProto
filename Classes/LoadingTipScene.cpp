@@ -731,6 +731,60 @@ CCNode* LoadingTipScene::getMissionTipImage()
 //								   onMinimumTime();
 //							   });
 	}
+	else if(mission_type == kCLEAR_hellMode)
+	{
+//		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+//		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
+	else if(mission_type == kCLEAR_percentage)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
+	else if(mission_type == kCLEAR_score)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition10), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
+	else if(mission_type == kCLEAR_combo)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
+	else if(mission_type == kCLEAR_gold)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition12), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
+	else if(mission_type == kCLEAR_turns)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+	}
 	
 //	mission_back->setScale(1.5f);
 //	KS::setOpacity(mission_back, 0);
@@ -948,6 +1002,60 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,0));
 			mission_back->addChild(main_ment);
+		}
+		else if(mission_type == kCLEAR_hellMode)
+		{
+			//		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			//
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_percentage)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_score)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition10), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_combo)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_gold)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition12), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_turns)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
 		}
 		
 //		loading_tip_node->addChild(KSGradualValue<int>::create(255, 0, 0.2f, [=](int t)
