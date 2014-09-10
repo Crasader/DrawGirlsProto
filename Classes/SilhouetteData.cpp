@@ -319,7 +319,12 @@ std::string SilhouetteData::getConditionTitle()
 	else if(my_clear_condition == kCLEAR_perfect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle5);
 	else if(my_clear_condition == kCLEAR_sequenceChange)	return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle6);
 	else if(my_clear_condition == kCLEAR_timeLimit)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle7);
-	else													return_value =myLoc->getLocalForKey(kMyLocalKey_missionTitle0);
+	else if(my_clear_condition == kCLEAR_percentage)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle8);
+	else if(my_clear_condition == kCLEAR_score)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle9);
+	else if(my_clear_condition == kCLEAR_combo)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle10);
+	else if(my_clear_condition == kCLEAR_gold)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle11);
+	else if(my_clear_condition == kCLEAR_turns)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle12);
+	else													return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle0);
 
 	return return_value;
 }
@@ -342,6 +347,11 @@ std::string SilhouetteData::getConditionContent( int t_type )
 	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription5);
 	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription6);
 	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription7);
+	else if(t_type == kCLEAR_percentage)			return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_missionDiscription8), NSDS_GI(getSilType(), kSDS_SI_missionOptionPercent_i));
+	else if(t_type == kCLEAR_score)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription9);
+	else if(t_type == kCLEAR_combo)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription10);
+	else if(t_type == kCLEAR_gold)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription11);
+	else if(t_type == kCLEAR_turns)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription12);
 	else
 	{
 		if(mySGD->isTimeEvent(kTimeEventType_clear))

@@ -85,6 +85,8 @@ void PatternTutorialContent::myInit(int t_touch_priority, function<void(CCObject
 	
 	for(int i=0;i<t_pattern_list.size();i++)
 	{
+		if(t_pattern_list[i] == 0)
+			continue;
 		pattern_list.push_back(t_pattern_list[i]);
 	}
 	CCSprite* case_back = CCSprite::create("ingame_back.png");

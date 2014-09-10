@@ -1082,6 +1082,18 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
 	ko->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
 	
+	ko->setObject(CCString::create("목표 달성률"), kMyLocalKey_missionTitle8);
+	ko->setObject(CCString::create("목표 점수"), kMyLocalKey_missionTitle9);
+	ko->setObject(CCString::create("목표 콤보"), kMyLocalKey_missionTitle10);
+	ko->setObject(CCString::create("목표 골드"), kMyLocalKey_missionTitle11);
+	ko->setObject(CCString::create("목표 턴수"), kMyLocalKey_missionTitle12);
+	
+	ko->setObject(CCString::create("<font color=961 size=13>%.0f%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionDiscription8);
+	ko->setObject(CCString::create("<font>높은 점수를 달성하세요!"), kMyLocalKey_missionDiscription9);
+	ko->setObject(CCString::create("<font>높은 콤보를 달성하세요!"), kMyLocalKey_missionDiscription10);
+	ko->setObject(CCString::create("<font>많은 골드를 획득하세요!"), kMyLocalKey_missionDiscription11);
+	ko->setObject(CCString::create("<font>작은 턴으로 게임을 클리어 하세요!"), kMyLocalKey_missionDiscription12);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

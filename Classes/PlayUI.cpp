@@ -390,6 +390,7 @@ void GoldLabel::startIncreasing ()
 //	runAction(t_seq);
 	
 	int stageGold = mySGD->getStageGold();
+	myGD->communication("UI_checkStageGoldMission", stageGold);
 	
 	keep_gold_string = CCString::createWithFormat("%d", stageGold)->getCString();
 	base_gold = atof(getString()); // 원래 가지고 있던 골드
@@ -1261,6 +1262,9 @@ void PlayUI::addScore (int t_score)
 //	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	
+//	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_score && !is_cleared_cdt)
+//		checkScoreMission();
+	
 	if(mySGD->is_write_replay)
 	{
 		if(mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_scoreTime)].size() > 0)
@@ -1454,12 +1458,14 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	if(clr_cdt_type == kCLEAR_perfect && !isGameover && !is_cleared_cdt && floorf(t_p*10000.f)/10000.f*100.f >= clr_cdt_per*100.f &&
 	   floorf(t_p*10000.f)/10000.f*100.f <= (clr_cdt_per+clr_cdt_range)*100.f)
 		conditionClear();
+	if(clr_cdt_type == kCLEAR_percentage && !isGameover && !is_cleared_cdt && t_p >= clearPercentage.getV())
+		conditionClear();
 	
 	if(m_areaGage)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
+	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) != kCLEAR_percentage && mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
 	{
 		is_on_clear_time_event = true;
 		clear_time_event_func([=]()
@@ -1515,8 +1521,14 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									  //			else
 									  //				conditionFail();
 								  }
+								  else if(clr_cdt_type == kCLEAR_default)
+									  conditionClear();
 								  
-								  if(clr_cdt_type == kCLEAR_default)
+								  else if(clr_cdt_type == kCLEAR_score)
+									{
+										checkScoreMission();
+									}
+								  else if(clr_cdt_type == kCLEAR_turns)
 									  conditionClear();
 								  
 								  if(is_cleared_cdt)
@@ -1639,8 +1651,13 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 //			else
 //				conditionFail();
 		}
-		
-		if(clr_cdt_type == kCLEAR_default)
+		else if(clr_cdt_type == kCLEAR_default)
+			conditionClear();
+		else if(clr_cdt_type == kCLEAR_score)
+		{
+			checkScoreMission();
+		}
+		else if(clr_cdt_type == kCLEAR_turns)
 			conditionClear();
 		
 		if(is_cleared_cdt)
@@ -1872,6 +1889,8 @@ void PlayUI::addResultCCB(string ccb_filename)
 
 void PlayUI::conditionClear ()
 {
+	if(is_cleared_cdt)
+		return;
 //	removeChildByTag(kCT_UI_clrCdtLabel);
 	is_cleared_cdt = true;
 	mission_button->doClose();
@@ -2107,6 +2126,9 @@ void PlayUI::takeExchangeCoin (CCPoint t_start_position, int t_coin_number)
 		myGD->communication("Jack_positionRefresh");
 		
 		m_areaGage->onChange();
+		
+//		if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_score && !is_cleared_cdt)
+//			checkScoreMission();
 	}
 }
 void PlayUI::subBossLife (float t_life)
@@ -2142,7 +2164,7 @@ void PlayUI::setMaxBossLife (float t_life)
 void PlayUI::setClearPercentage (float t_p)
 {
 	clearPercentage = t_p;
-	m_areaGage = AreaGage::create(0.85f);//clearPercentage.getV());
+	m_areaGage = AreaGage::create(clearPercentage.getV());//0.85f);//clearPercentage.getV());
 	m_areaGage->setPosition(ccp(240,myDSH->ui_top-29));
 	top_center_node->addChild(m_areaGage);
 	m_areaGage->setPercentage(getPercentage());
@@ -2686,6 +2708,15 @@ void PlayUI::setComboCnt (int t_combo)
 {
 	int before_combo = combo_cnt;
 	combo_cnt = t_combo;
+	if(high_combo_cnt < combo_cnt)
+	{
+		high_combo_cnt = combo_cnt;
+		
+		if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_combo && high_combo_cnt >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+		{
+			conditionClear();
+		}
+	}
 	
 	if(before_combo < combo_cnt)
 	{
@@ -3446,6 +3477,9 @@ void PlayUI::myInit ()
 	
 	percentage_decrease_cnt = 0;
 	combo_cnt = 0;
+	high_combo_cnt = 0;
+	
+	turn_cnt = 0;
 	
 	score_attack_damage = 0;
 	
@@ -3465,6 +3499,9 @@ void PlayUI::myInit ()
 	
 	gold_label = GoldLabel::create();
 	addChild(gold_label);
+	
+	myGD->V_I["UI_checkStageGoldMission"] = std::bind(&PlayUI::checkStageGoldMission, this, _1);
+	
 	gold_label->setString("0");
 	
 	CCPoint gold_origin_position = gold_label->getPosition();
@@ -4016,6 +4053,26 @@ void PlayUI::myInit ()
 //		clr_cdt_label->setPosition(ccpAdd(icon_menu->getPosition(), ccp(0,-5)));
 //		addChild(clr_cdt_label, 0, kCT_UI_clrCdtLabel);
 	}
+	else if(clr_cdt_type == kCLEAR_percentage)
+	{
+		is_cleared_cdt = false;
+	}
+	else if(clr_cdt_type == kCLEAR_score)
+	{
+		is_cleared_cdt = false;
+	}
+	else if(clr_cdt_type == kCLEAR_combo)
+	{
+		is_cleared_cdt = false;
+	}
+	else if(clr_cdt_type == kCLEAR_gold)
+	{
+		is_cleared_cdt = false;
+	}
+	else if(clr_cdt_type == kCLEAR_turns)
+	{
+		is_cleared_cdt = false;
+	}
 	else if(clr_cdt_type == kCLEAR_default)
 	{
 		if(mySD->getSilType() != 1)
@@ -4142,6 +4199,8 @@ void PlayUI::myInit ()
 	myGD->V_I["UI_writeGameOver"] = std::bind(&PlayUI::writeGameOver, this, _1);
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
+	myGD->V_V["UI_addTurnCnt"] = std::bind(&PlayUI::addTurnCnt, this);
+	myGD->V_V["checkScoreMission"] = std::bind(&PlayUI::checkScoreMission, this);
 }
 
 void PlayUI::hideThumb()
@@ -4288,6 +4347,69 @@ void PlayUI::endCloseShutter ()
 //	AudioEngine::sharedInstance()->setAppFore();
 //	CCDirector::sharedDirector()->resume();
 //}
+
+void PlayUI::checkStageGoldMission(int t_gold)
+{
+	if(NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_gold && t_gold >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+	{
+		conditionClear();
+	}
+}
+
+void PlayUI::addTurnCnt()
+{
+	turn_cnt++;
+	if(!is_cleared_cdt && NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i) == kCLEAR_turns && turn_cnt >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+	{
+		conditionFail();
+		
+		mySGD->fail_code = kFC_missionfail;
+		
+		stopCounting();
+		// timeover
+		isGameover = true;
+		myGD->communication("CP_setGameover");
+		myGD->removeAllPattern();
+		myGD->communication("Main_allStopSchedule");
+		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+		
+		addResultCCB("ui_missonfail.ccbi");
+		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+		
+		endGame(false);
+	}
+}
+
+void PlayUI::checkScoreMission()
+{
+	int total_score;
+	
+	int grade_value = 1;
+	
+	if(is_exchanged && (beforePercentage^t_tta)/1000.f >= 1.f)		grade_value = 4;
+	else if(is_exchanged)											grade_value = 3;
+	else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 2;
+	
+	int recent_score = getScore();
+	
+	float t_game_time = countingCnt.getV();
+	float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+	if(mySD->getClearCondition() == kCLEAR_timeLimit)
+	{
+		play_limit_time -= mySD->getClearConditionTimeLimit();
+	}
+	
+	int time_score = ((play_limit_time-t_game_time)*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
+	
+	total_score = recent_score + time_score;
+	total_score = total_score*grade_value;
+	
+	if(total_score >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
+	{
+		conditionClear();
+	}
+}
+
 void PlayUI::alertAction (int t1, int t2)
 {
 	

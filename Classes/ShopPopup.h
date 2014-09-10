@@ -26,7 +26,8 @@ enum ShopCode{
 	kSC_gold,
 	kSC_heart,
 	kSC_character,
-	kSC_card
+	kSC_card,
+	kSC_startPack
 };
 
 enum ShopBeforeCode{
@@ -110,6 +111,7 @@ private:
 	CCMenuItem* ruby_menu;
 	CCMenuItem* gold_menu;
 	CCMenuItem* heart_menu;
+	CCMenuItem* startPack_menu;
 	
 //	CCMenu* tab_menu;
 	

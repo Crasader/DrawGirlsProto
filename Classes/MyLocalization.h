@@ -996,6 +996,18 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_joystickSizeQuestionTitle,
 	kMyLocalKey_joystickSizeQuestionContent,
 	
+	kMyLocalKey_missionTitle8,
+	kMyLocalKey_missionTitle9,
+	kMyLocalKey_missionTitle10,
+	kMyLocalKey_missionTitle11,
+	kMyLocalKey_missionTitle12,
+	
+	kMyLocalKey_missionDiscription8,
+	kMyLocalKey_missionDiscription9,
+	kMyLocalKey_missionDiscription10,
+	kMyLocalKey_missionDiscription11,
+	kMyLocalKey_missionDiscription12,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

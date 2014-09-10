@@ -256,6 +256,9 @@ public:
 	void takeSilenceItem();
 	void hideThumb();
 	void addScoreAttack(int t_damage);
+	void checkStageGoldMission(int t_gold);
+	void addTurnCnt();
+	void checkScoreMission();
 	
 	function<void(function<void()>, function<void()>)> clear_time_event_func;
 	
@@ -282,6 +285,8 @@ private:
 	FeverParent * my_fp;
 	ComboParent * my_combo;
 	int combo_cnt;
+	int high_combo_cnt;
+	int turn_cnt;
 	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;

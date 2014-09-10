@@ -901,6 +901,9 @@ void Jack::moveTest()
 				
 				myGD->communication("MS_scanMap");
 				myGD->communication("PM_cleanPath");
+				
+				myGD->communication("UI_addTurnCnt");
+				
 				escapeJack();
 			}
 		}

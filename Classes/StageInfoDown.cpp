@@ -44,6 +44,16 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 		else if(t_mission["type"].asInt() == kCLEAR_timeLimit)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionSec_i, t_option["sec"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_percentage)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_score)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionCount_i, t_option["score"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_combo)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionCount_i, t_option["combo"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_gold)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_turns)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
 		
 		
 		Json::Value shopItems = result_data["shopItems"];
