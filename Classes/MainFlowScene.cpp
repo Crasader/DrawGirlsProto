@@ -77,6 +77,8 @@ bool MainFlowScene::init()
 	kind_tutorial_pvp = nullptr;
 	refresh_ing_win_func = nullptr;
 	
+	is_not_first = false;
+	
 	is_table_openning = false;
     TRACE();
 	callTimeInfo();
@@ -4609,41 +4611,95 @@ void MainFlowScene::countingMessage()
 {
 	TRACE();
 	postbox_count_case->setVisible(false);
+	
+	vector<CommandParam> command_list;
+	command_list.clear();
+	
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	//USE GETMESSAGELIST
-	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
-								 {
-									 TRACE();
-									 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
-									 
-									 if(r["result"]["code"].asInt() != GDSUCCESS)
+	command_list.push_back(CommandParam("checkgiftboxhistory",p,[=](Json::Value r)
 										{
 											TRACE();
-											return;
-										}
-									 
-									 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
-									 
-									 if(message_cnt > 0)
-									 {
-										 int t_count = message_cnt;
-										 int base_width = 20;
-										 while (t_count/10 > 0)
-										 {
-											 base_width+=5;
-											 t_count /= 10;
-										 }
-										 
-										 postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
-									 }
-									 
-									 postbox_count_case->setVisible(message_cnt > 0);
-									 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
-									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
-									 TRACE();
-								 }, -1);
+											GraphDogLib::JsonToLog("checkgiftboxhistory", r);
+											
+											if(r["result"]["code"].asInt() != GDSUCCESS)
+											{
+												TRACE();
+												return;
+											}
+											
+											int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
+											
+											if(message_cnt > 0)
+											{
+												int t_count = message_cnt;
+												int base_width = 20;
+												while (t_count/10 > 0)
+												{
+													base_width+=5;
+													t_count /= 10;
+												}
+												
+												postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
+											}
+											
+											postbox_count_case->setVisible(message_cnt > 0);
+											postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
+											postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
+											TRACE();
+										}));
+	if(!is_not_first)
+	{
+		Json::Value todaymission_param;
+		todaymission_param["memberID"] = hspConnector::get()->getSocialID();
+		command_list.push_back(CommandParam("gettodaymission", todaymission_param, [=](Json::Value result_data)
+											{
+												KS::KSLog("%", result_data);
+												
+												if(result_data["result"]["code"].asInt() == GDSUCCESS)
+												{
+													is_not_first = true;
+													mySGD->initTodayMission(result_data);
+												}
+											}));
+	}
+	
+	myHSP->command(command_list, -1);
+	
+//	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
+//								 {
+//									 TRACE();
+//									 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
+//									 
+//									 if(r["result"]["code"].asInt() != GDSUCCESS)
+//										{
+//											TRACE();
+//											return;
+//										}
+//									 
+//									 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
+//									 
+//									 if(message_cnt > 0)
+//									 {
+//										 int t_count = message_cnt;
+//										 int base_width = 20;
+//										 while (t_count/10 > 0)
+//										 {
+//											 base_width+=5;
+//											 t_count /= 10;
+//										 }
+//										 
+//										 postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
+//									 }
+//									 
+//									 postbox_count_case->setVisible(message_cnt > 0);
+//									 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
+//									 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
+//									 TRACE();
+//								 }, -1);
+		
 	TRACE();
 }
 
