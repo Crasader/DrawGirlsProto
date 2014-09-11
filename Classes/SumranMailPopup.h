@@ -112,7 +112,10 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		void takedCheck(Json::Value reward, std::function<void(void)> func);
 	//	void cardDown(int cardNo,std::function<void(bool)>finishFunc);
 		void takedCard(int cardNo,std::function<void(void)>finishFunc);
-	void confirmMessage(Json::Value mail);
+	
+	void confirmMessage(int type,Json::Value mail);
+	Json::Value getButton(Json::Value mail);
+	
 	void takeAllReward(CCObject* sender);
 	protected:
 		std::function<void(void)> m_heartRefresh;
