@@ -691,7 +691,7 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 ////				first_img->movingDistance(ccpSub(after_position, save_position));
 ////				save_position = after_position;
 				touch_p = location;
-				first_img->ccTouchMoved(touch,pEvent);
+				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
 			}
 			else if(multiTouchData.size() == 2)
 			{

@@ -192,7 +192,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("푸쉬알림"), kMyLocalKey_pushNoti);
 	ko->setObject(CCString::create("메세지\n알림"), kMyLocalKey_messageNoti);
 	ko->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	ko->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	ko->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 //	ko->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ko->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ko->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
@@ -288,7 +288,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create(""), kMyLocalKey_titleLoadingBegin);
 	ko->setObject(CCString::create("각 스테이지 별로 각기 다른 4장의 이미지를 획득해 보세요."), kMyLocalKey_titleLoading1);
-	ko->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내 컬렉션에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
+	ko->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내카드에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
 	ko->setObject(CCString::create("파란색 실루엣 영역을 획득해야 % 가 증가해요."), kMyLocalKey_titleLoading3);
 	ko->setObject(CCString::create("'영역 다시 뽑기' 를 해서 넓은 영역으로 play 를 시작하면 좀 더 쉽게 높은 등급의 카드를 획득하기가 쉬워져요"), kMyLocalKey_titleLoading4);
 	ko->setObject(CCString::create("'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다."), kMyLocalKey_titleLoading5);
@@ -1204,7 +1204,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Notify"), kMyLocalKey_noti);
 	en->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	en->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	en->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	en->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 	en->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 //	en->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	en->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
@@ -1301,7 +1301,7 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create(""), kMyLocalKey_titleLoadingBegin);
 	en->setObject(CCString::create("각 스테이지 별로 각기 다른 4장의 이미지를 획득해 보세요."), kMyLocalKey_titleLoading1);
-	en->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내 컬렉션에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
+	en->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내카드에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
 	en->setObject(CCString::create("파란색 실루엣 영역을 획득해야 % 가 증가해요."), kMyLocalKey_titleLoading3);
 	en->setObject(CCString::create("'영역 다시 뽑기' 를 해서 넓은 영역으로 play 를 시작하면 좀 더 쉽게 높은 등급의 카드를 획득하기가 쉬워져요"), kMyLocalKey_titleLoading4);
 	en->setObject(CCString::create("'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다."), kMyLocalKey_titleLoading5);
@@ -2175,7 +2175,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Push"), kMyLocalKey_pushNoti);
 	ja->setObject(CCString::create("Message\nAlarm"), kMyLocalKey_messageNoti);
 	ja->setObject(CCString::create("서버연결에 실패하였습니다."), kMyLocalKey_failedConnect);
-	ja->setObject(CCString::create("선물확인"), kMyLocalKey_confirmGift);
+	ja->setObject(CCString::create("메세지확인"), kMyLocalKey_confirmGift);
 //	ja->setObject(CCString::create("선물을 받았습니다."), kMyLocalKey_getgift);
 	ja->setObject(CCString::create("받은 메세지가 없습니다."), kMyLocalKey_nogift);
 	ja->setObject(CCString::create("*받은 메세지는 30일 이후에 삭제됩니다."), kMyLocalKey_giftboxAlert);
@@ -2271,7 +2271,7 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create(""), kMyLocalKey_titleLoadingBegin);
 	ja->setObject(CCString::create("각 스테이지 별로 각기 다른 4장의 이미지를 획득해 보세요."), kMyLocalKey_titleLoading1);
-	ja->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내 컬렉션에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
+	ja->setObject(CCString::create("공공장소나 대중교통 이용시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내카드에서 확인 할 수 있습니다."), kMyLocalKey_titleLoading2);
 	ja->setObject(CCString::create("파란색 실루엣 영역을 획득해야 % 가 증가해요."), kMyLocalKey_titleLoading3);
 	ja->setObject(CCString::create("'영역 다시 뽑기' 를 해서 넓은 영역으로 play 를 시작하면 좀 더 쉽게 높은 등급의 카드를 획득하기가 쉬워져요"), kMyLocalKey_titleLoading4);
 	ja->setObject(CCString::create("'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다."), kMyLocalKey_titleLoading5);

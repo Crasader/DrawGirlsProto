@@ -563,8 +563,10 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		cell->addChild(_menu, kMP_MT_getheart);
 
 
-
-		title = KSLabelTTF::create(mail.get("content","Gift").asString().c_str(), mySGD->getFont().c_str(), 13); // "님의"
+		
+		string titlestr = mail.get("content","Gift").asString();
+		ReplaceString(titlestr,"\n"," ");
+		title = KSLabelTTF::create(titlestr.c_str(), mySGD->getFont().c_str(), 13); // "님의"
 		title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		title->setPosition(ccp(53.5, 19.5));
 		title->setAnchorPoint(CCPointZero);
@@ -574,7 +576,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		if(title->getContentSize().width>100){
 			title->removeFromParent();
 			LabelTTFMarquee *title2 = LabelTTFMarquee::create(ccc4(255, 255, 255, 255), 100, 13, "");
-			title2->addText("<font size=13 color=#ffffff>"+mail.get("content","Gift").asString()+"</font>");
+			title2->addText("<font size=13 color=#ffffff strokecolor=#000000 strokesize=0.5 strokeopacity=200>"+titlestr+"</font>");
 			title2->setAnchorPoint(CCPointZero);
 			title2->setTag(kMP_MT_title);
 			title2->setSpace(50);
@@ -634,7 +636,16 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		
 																		CCNode* itemlist = CCNode::create();
+																		CCScrollView* rewardScroll = CCScrollView::create();
 																		setFormSetter(itemlist);
+																		
+																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																																						 mail.get("content","Gift").asString().c_str(),
+																																						 mail.get("sender","GM").asString().c_str(),
+																																						 GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																						 )->getCString();
+																		StyledLabelTTF* lbl;
+																		
 																		if(mail["reward"].isArray()){
 																			for(int i=0;i<mail["reward"].size();i++){
 																				string rewardType = mail["reward"][i].get("type","box").asString();
@@ -676,31 +687,47 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				itemlist->addChild(back);
 																				
 																			}
-																		}else if(mail["reward"].isObject()){
 																			
+																			itemlist->setContentSize(CCSizeMake((mail["reward"].size()*75)-2.5f/2.f, 50));
+																			lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																			
+																			if(itemlist->getContentSize().width<251){
+																				rewardScroll->setTouchEnabled(false);
+																			}else{
+																				rewardScroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionHorizontal);
+																			}
+																			
+																		}else{ //if(mail["reward"].isObject())
+																			//일반텍스트일때
+																			KSLabelTTF* label = KSLabelTTF::create(mail["content"].asString().c_str(), mySGD->getFont().c_str(), 13);
+																			
+																			itemlist->addChild(label);
+																			
+																			from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																																				".",
+																																				mail.get("sender","GM").asString().c_str(),
+																																				GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																				)->getCString();
+																			
+																			lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																			
+																			itemlist->setContentSize(CCSizeMake((mail["reward"].size()*75)-2.5f/2.f, label->getContentSize().height));
+																			
+																			
+																			if(itemlist->getContentSize().height>60){
+																				rewardScroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
+																			}else{
+																				rewardScroll->setTouchEnabled(false);
+																			}
 																		}
 																		
-																		
-																		//KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getgift), mySGD->getFont().c_str(), 13);
-																		//	ment->setPosition(ccp(itemlist->getContentSize().width/2.f,-83));
-																		//itemlist->addChild(ment);
-																		//setFormSetter(ment);
-																		
-																		
-																		//																	StyledLabelTTF* lbl = StyledLabelTTF::create(rewardList.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
-																		//																	setFormSetter(lbl);
-																		//																	lbl->setOldAnchorPoint();
-																		//																	lbl->setPosition(ccp(0,-55));
-																		//																	itemlist->addChild(lbl);
-																		itemlist->setContentSize(CCSizeMake((mail["reward"].size()*75)-2.5f/2.f, 100));
 																		CCLOG("contentsize is %f",itemlist->getContentSize().width);
 																		//itemlist->setPosition(ccp(0,40));
 																		//itemlist->setAnchorPoint(ccp(0,0));
 																		
 																		CCSize size = itemlist->getContentSize();
-																		CCScrollView* rewardScroll = CCScrollView::create();
 																		rewardScroll->setContentSize(size);
-																		rewardScroll->setViewSize(CCSizeMake(251, 90));
+																		rewardScroll->setViewSize(CCSizeMake(251, 80));
 																		rewardScroll->setContainer(itemlist);
 																		rewardScroll->setAnchorPoint(ccp(0,0));
 																		rewardScroll->setTouchPriority(-999999);
@@ -709,11 +736,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		CCLOG("contentoffset1 is %f,%f",rewardScroll->getContentOffset().x,rewardScroll->getContentOffset().y);
 																		
 																		rewardScroll->setContentOffset(ccp(251.f/2.f-itemlist->getContentSize().width/2.f-5.f/2.f,40));
-																		if(itemlist->getContentSize().width<251){
-																			rewardScroll->setTouchEnabled(false);
-																		}else{
-																			rewardScroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionHorizontal);
-																		}
+																		
+																		
 																		CCLOG("contentoffset2 is %f,%f",rewardScroll->getContentOffset().x,rewardScroll->getContentOffset().y);
 																		
 																		setFormSetter(rewardScroll);
@@ -751,12 +775,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		back->addChild(titleLbl);
 																		setFormSetter(titleLbl);
 																		
-																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
-																																						 mail.get("content","Gift").asString().c_str(),
-																																						 mail.get("sender","GM").asString().c_str(),
-																																						 GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
-																																						 )->getCString();
-																		StyledLabelTTF* lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+																		
+																		
 																		
 																		lbl->setPosition(ccp(front->getContentSize().width/2.f,52));
 																		front->addChild(lbl);
@@ -1883,6 +1903,8 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 			 for(int i=0;i<m_mailList.size();i++){
 				 if(m_mailList[i]["no"].asInt() != mailNo){
 					 newMailList.append(m_mailList[i]);
+				 }else{
+					 this->confirmMessage(m_mailList[i]);
 				 }
 			 }
 			 //테이블 리로드
@@ -1897,6 +1919,10 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 	 );
 }
 
+
+void SumranMailPopup::confirmMessage(Json::Value mail){
+	CCLOG("test->> %s",mail.asString().c_str());
+}
 void SumranMailPopup::removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> userFunction)
 {
 	Json::Value p;
