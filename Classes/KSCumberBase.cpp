@@ -2481,19 +2481,24 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	
 	if(m_attackPercent<=0)vCount*=0.5f;
 	
-	if(vCount>0){
-		m_aiValue = m_aiValue+10.f*vCount;
-		m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
-		m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
-	}
+
 	
 	
+	//체인지시 오토벨런싱 다시
 	if(isExchange){
+		
+		if(vCount>0){
+			m_aiValue = m_aiValue+10.f*vCount;
+			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
+			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
+		}
+		
 		m_aiValue *=2;
 		if(m_aiValue<50)m_aiValue=50;
 		
 		m_attackPercent *=1.2f;
 		if(m_attackPercent<0.25)m_attackPercent=0.25;
+		if(m_attackPercent>0.4)m_attackPercent=0.4;
 		
 		int sumpercent = 0;
 		int crashCnt= 0;
@@ -2517,7 +2522,23 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		}
 		}
 		
+	//체인지 아닐때 벨런싱
+	}else{
+		vCount*=0.8f;
 		
+		if(vCount>0){
+			m_aiValue = m_aiValue+10.f*vCount;
+			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
+			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
+		}
+		
+		//부수기 공격 확률 낮추기
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if( (*iter)["atype"].asString() == "crash" ){
+				(*iter)["percent"]=1;
+			}
+		}
 	}
 	
 	if(m_attackPercent<=0 && m_maxSpeed>0.8f)m_maxSpeed=0.8f;
