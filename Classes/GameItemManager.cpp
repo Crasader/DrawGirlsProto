@@ -944,8 +944,8 @@ void ExchangeCoin::moving()
 			move_speed += 0.2f;
 		}
 		
-		int changeAngleValue = rand()%5 - 2;
-		changeAngleValue *= rand()%5+1;
+		float changeAngleValue = (rand()%31 - 15)/10.f; // -1.5 ~ 1.5 // 원래는 -2 ~ 2
+		changeAngleValue *= (rand()%11)/10.f+1; // 1 ~ 2 원래는 1 ~ 5
 		
 		directionAngle += changeAngleValue;
 		if(directionAngle < 0)			directionAngle += 360;

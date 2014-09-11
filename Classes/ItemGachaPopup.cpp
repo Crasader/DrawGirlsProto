@@ -95,7 +95,16 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						}));
 						
 						string title_str, ment_str;
-						int random_value = rand()%1000;
+						int random_value;
+						if(!myDSH->getBoolForKey(kDSH_Key_isNotFirstItemGacha))
+						{
+							myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, true);
+							random_value = 900;
+						}
+						else
+						{
+							random_value = rand()%1000;
+						}
 						if(random_value < 200) // 200
 						{
 							item_type = kIC_fast; // 4

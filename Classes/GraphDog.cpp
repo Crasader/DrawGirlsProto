@@ -242,7 +242,7 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 //	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()V"))
 //	{
 //		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
-		JniMethodInfo __mino;
+		JniMethodInfo __minfo;
 //		__minfo.classID = 0;
 //		__minfo.env = 0;
 //		__minfo.methodID = 0;
