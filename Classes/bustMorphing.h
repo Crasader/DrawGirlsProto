@@ -391,8 +391,7 @@ public:
 			ccColor4B rgb = m_movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g? rgb.g + 40 : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
-			float waveValue2 = rgb.r? rgb.r + 40 : 0; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
+			float waveValue = rgb.g + rgb.r + 40;
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
@@ -540,7 +539,7 @@ public:
 		
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
-		
+		CCPoint subP = ccpMult(ccpSub(local,m_startPos),0.2f);
 		
 		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
 		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
@@ -551,8 +550,7 @@ public:
 			ccColor4B rgb = m_movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g? rgb.g + 40 : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
-			float waveValue2 = rgb.r? rgb.r + 40 : 0; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
+			float waveValue = rgb.g + rgb.r + 40;
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
@@ -562,7 +560,7 @@ public:
 				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
 				
 				
-				addChild(KSGradualValue<CCPoint>::create(ccp(0,0), goalPosition, time1,
+				addChild(KSGradualValue<CCPoint>::create(ccp(subP.x,subP.y), goalPosition, time1,
 																								 [=](CCPoint t){
 																									 *i = Vertex3DMake(backup.x + t.x, backup.y + t.y, backup.z);
 																									 //																								 i->y = backup.y + t;

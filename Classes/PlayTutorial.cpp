@@ -553,6 +553,10 @@ void TutoControler::touchAction(CCPoint t_p, bool t_b)
 		if(distanceValue > minimumDistanceJ && (t_p.x > 480.f-TUTO_TouchOutWidth || t_p.x < TUTO_TouchOutWidth || t_p.y > myDSH->ui_top-TUTO_TouchOutWidth || t_p.y < TUTO_TouchOutWidth))
 		{
 			CCLOG("Touch Out Action!!!");
+			
+			if(!myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib))
+				GraphDog::get()->vibAction();
+			
 			IntPoint jackPoint = my_char->my_point;
 			
 			if(angle < -180.f+regular_spectrum/2.f)

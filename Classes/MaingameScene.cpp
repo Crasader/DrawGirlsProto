@@ -545,7 +545,9 @@ void Maingame::finalSetting()
 //	addChild(opg, 9999);
 	myUI->setMaxBossLife(mySD->getBossMaxLife());
 	
-	if(mySD->getClearCondition() == kCLEAR_hellMode)
+	if(mySD->getClearCondition() == kCLEAR_percentage)
+		myUI->setClearPercentage(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i)/100.f);
+	else if(mySD->getClearCondition() == kCLEAR_hellMode)
 		myUI->setClearPercentage(2.f);
 	else if(mySGD->isTimeEvent(kTimeEventType_clear))
 		myUI->setClearPercentage(mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f);

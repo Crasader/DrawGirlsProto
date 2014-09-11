@@ -10,7 +10,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <unistd.h>
-//#include "JNIKelper.h"
+#include "JNIKelper.h"
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 #include "jni.h"
@@ -25,6 +25,7 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #include <sys/types.h>
 #include <sys/sysctl.h>
+#import "AudioToolbox/AudioToolbox.h"
 //#include "OpenUDID.h"
 #endif
 #include "BaseXX.h"
@@ -201,33 +202,90 @@ void GraphDog::setLanguage(string lang){
 bool GraphDog::isExistApp()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	jint ret = -1;
-	JniMethodInfo t;
-	CCLog("isExistApp");
+	jboolean ret = false;
+//	JniMethodInfo minfo;
+//	jobject jobj;
 	
-	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
-	{
-		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()Ljava/lang/Object;"))
+//	{
+//		CCLog("found getActivity");
+//		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
 		JniMethodInfo __minfo;
-		__minfo.classID = 0;
-		__minfo.env = 0;
-		__minfo.methodID = 0;
-		
-		jstring param1 = t.env->NewStringUTF("com.litqoo.DgDiary");
-		
-		if(JniHelper::getMethodInfo(__minfo, packageName.c_str(), "isExistApp", "(Ljava/lang/String;)Z"))
+//		__minfo.classID = 0;
+//		__minfo.env = 0;
+//		__minfo.methodID = 0;
+
+		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "isExistApp", "(Ljava/lang/String;)Z"))
 		{
-			ret = __minfo.env->CallObjectMethod(jobj, __minfo.methodID, param1);
-			CCLog("ret = %d ", ret);
+			jstring param1 = __minfo.env->NewStringUTF("com.litqoo.DgDiary");
+			
+			ret = __minfo.env->CallBooleanMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1);
 			__minfo.env->DeleteLocalRef(__minfo.classID);
+			__minfo.env->DeleteLocalRef(param1);
 		}
-		minfo.env->DeleteGlobalRef(jobj);
-		minfo.env->DeleteLocalRef(minfo.classID);
-	}
+//		minfo.env->DeleteGlobalRef(jobj);
+//		minfo.env->DeleteLocalRef(minfo.classID);
+//	}
 	
 	return (bool)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return false;
+	return (bool)[[UIApplication sharedApplication]canOpenURL:[NSURL URLWithString:@"DgDiary://"]];
+#endif
+}
+
+void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	JniMethodInfo minfo;
+//	jobject jobj;
+	
+//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()V"))
+//	{
+//		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+		JniMethodInfo __mino;
+//		__minfo.classID = 0;
+//		__minfo.env = 0;
+//		__minfo.methodID = 0;
+		
+		
+		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "diaryAppExe", "(Ljava/lang/String;Ljava/lang/String;)V"))
+		{
+			jstring param1 = __minfo.env->NewStringUTF(t_memberID.c_str());
+			jstring param2 = __minfo.env->NewStringUTF(t_diaryCode.c_str());
+			
+			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2);
+			__minfo.env->DeleteLocalRef(__minfo.classID);
+			__minfo.env->DeleteLocalRef(param1);
+			__minfo.env->DeleteLocalRef(param2);
+		}
+//		minfo.env->DeleteGlobalRef(jobj);
+//		minfo.env->DeleteLocalRef(minfo.classID);
+//	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	UIPasteboard* pasteborad1 = [UIPasteboard pasteboardWithName:@"memberID" create:YES];
+	if(pasteborad1 != nil)
+		pasteborad1.string = [NSString stringWithUTF8String:t_memberID.c_str()];
+	else
+		NSLog(@"Can't create pasteboard1");
+	
+	UIPasteboard* pasteborad2 = [UIPasteboard pasteboardWithName:@"diaryCode" create:YES];
+	if(pasteborad2 != nil)
+		pasteborad2.string = [NSString stringWithUTF8String:t_diaryCode.c_str()];
+	else
+		NSLog(@"Can't create pasteboard2");
+	
+	
+	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"DgDiary://"]];
+#endif
+}
+
+void GraphDog::vibAction()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JNIKelper::getInstance()->callJava_simple("vib");
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	AudioServicesPlaySystemSound(kSystemSoundID_Vibrate);
 #endif
 }
 

@@ -287,7 +287,7 @@ bool PuzzleScene::init()
 	else if(before_scene_name == "fail")
 	{
 		int selected_stage_number = myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, puzzle_number);
-		if(selected_stage_number <= 0 || selected_stage_number <= start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
+		if(selected_stage_number <= 0 || selected_stage_number < start_stage || selected_stage_number >= start_stage + stage_count) // 마지막 플레이 스테이지 기록이 없거나, 범위 밖에 있다
 		{
 			bool have_not_cleared_stage = false;
 			vector<int> not_cleared_stage_list;

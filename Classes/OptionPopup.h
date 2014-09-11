@@ -53,10 +53,12 @@ private:
 	CCSprite* joystick_positioning_img;
 	CCSprite* joystick_moving_img;
 	CCSprite* use_side_direction_img;
+	CCSprite* joystick_vib_img;
 	
 	CCMenu* joystick_positioning_menu;
 	CCMenu* joystick_moving_menu;
 	CCMenu* use_side_direction_menu;
+	CCMenu* joystick_vib_menu;
 	
 	KSLabelTTF* joystick_size_value;
 	
@@ -83,6 +85,8 @@ private:
 	void resetJoystickMovingMenu();
 	
 	void resetUseSideDirectionMenu();
+	
+	void resetJoystickVibMenu();
 	
 	void resetSafetyMenu();
 	

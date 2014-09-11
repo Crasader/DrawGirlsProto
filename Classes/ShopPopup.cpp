@@ -222,6 +222,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	else if(recent_shop_code == kSC_heart)
 		heart_menu->setEnabled(true);
 	//		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(true);
+	else if(recent_shop_code == kSC_startPack)
+	{
+		if(startPack_menu)
+			startPack_menu->setEnabled(true);
+	}
 	
 	if(t_code == kSC_character)
 		character_menu->setEnabled(false);
@@ -238,6 +243,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	else if(t_code == kSC_heart)
 		heart_menu->setEnabled(false);
 //		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(false);
+	else if(t_code == kSC_startPack)
+	{
+		if(startPack_menu)
+			startPack_menu->setEnabled(false);
+	}
 	
 	
 	if(recent_shop_code == kSC_character)
@@ -292,6 +302,10 @@ void ShopPopup::setShopCode(ShopCode t_code)
 		suction->setNotSwallowRect(CCRectMake(table_position.x, table_position.y, table_size.width, table_size.height));
 		suction->setTouchEnabled(true);
 		addChild(suction);
+	}
+	else if(recent_shop_code == kSC_startPack)
+	{
+		
 	}
 	else if(recent_shop_code != kSC_card)
 	{
@@ -663,6 +677,8 @@ bool ShopPopup::init()
 	
 	is_set_close_func = false;
 	target_heartTime = NULL;
+	
+	startPack_menu = NULL;
 	
 	touch_priority = -400;
 	

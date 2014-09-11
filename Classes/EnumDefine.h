@@ -206,7 +206,12 @@ typedef enum t_CLEAR_CONDITION{
 	kCLEAR_perfect,			// 5
 	kCLEAR_sequenceChange,	// 6
 	kCLEAR_timeLimit,		// 7
-	kCLEAR_hellMode
+	kCLEAR_hellMode,		// 8
+	kCLEAR_percentage,		// 9
+	kCLEAR_score,			// 10
+	kCLEAR_combo,			// 11
+	kCLEAR_gold,			// 12
+	kCLEAR_turns			// 13
 }CLEAR_CONDITION;
 
 typedef enum t_ITEM_CODE{

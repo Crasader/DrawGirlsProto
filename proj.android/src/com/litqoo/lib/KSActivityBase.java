@@ -6,9 +6,11 @@ import org.cocos2dx.lib.Cocos2dxActivity;
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
@@ -58,7 +60,34 @@ public class KSActivityBase extends Cocos2dxActivity{
 		public int width;
 		public int height;
 	}
-
+	
+	public boolean isExistApp(final String packageName)
+	{
+		Log.i("cocos", "isExistApp In");
+		PackageManager pm = getPackageManager();
+		try{
+			pm.getApplicationInfo(packageName, PackageManager.GET_META_DATA);
+		}
+		catch(Exception e){
+			return false;
+		}
+		return true;
+	}
+	
+	public void diaryAppExe(final String memberID, final String diaryCode)
+	{
+		ComponentName compName = new ComponentName("com.litqoo.DgDiary","com.litqoo.DgDiary.DgDiary"); 
+	    Intent intent = new Intent(Intent.ACTION_MAIN);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+	    intent.setComponent(compName);
+	    
+	    intent.putExtra("memberID", memberID);
+	    intent.putExtra("diaryCode", diaryCode);
+	    
+	    startActivity(intent);
+	}
+	
 	private int getLeftMargin() {
 		Size b = getFitScreen();
 		DisplayMetrics displayMetrics = new DisplayMetrics();
