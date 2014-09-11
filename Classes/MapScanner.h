@@ -248,7 +248,7 @@ private:
 class VisibleSprite : public EffectSprite
 {
 public:
-	static VisibleSprite* create(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename);
+	static VisibleSprite* create(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number);
 	
 	void setMoveGamePosition(CCPoint t_p);
 	
@@ -293,7 +293,7 @@ private:
 	int light_step;
 	int light_frame;
 	
-	void myInit(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename);
+	void myInit(const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number);
 	
 	CCTexture2D* createSafetyImage(string fullpath);
 };
@@ -301,7 +301,7 @@ private:
 class VisibleParent : public CCNode
 {
 public:
-	static VisibleParent* create(const char* filename, bool isPattern, string sil_filename);
+	static VisibleParent* create(const char* filename, bool isPattern, string sil_filename, int t_card_number);
 	
 	void setDrawRects(const std::vector<IntRectSTL>& t_rects);
 	
@@ -332,7 +332,7 @@ private:
 	
 	void changingGameStep(int t_step);
 	
-	void myInit(const char* filename, bool isPattern, string sil_filename);
+	void myInit(const char* filename, bool isPattern, string sil_filename, int t_card_number);
 };
 
 enum MSzorder{

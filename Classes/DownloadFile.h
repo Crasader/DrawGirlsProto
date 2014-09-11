@@ -43,6 +43,8 @@ public:
 	int position_y;
 	
 	string ani_filename;
+	bool is_ccb;
+	string ccb_filename;
 	
 	CopyFile() :
 	is_ani(false),
@@ -50,7 +52,9 @@ public:
 	cut_height(0),
 	position_x(0),
 	position_y(0),
-	ani_filename("")
+	ani_filename(""),
+	is_ccb(false),
+	ccb_filename("")
 	{
 		
 	}

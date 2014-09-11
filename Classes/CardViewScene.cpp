@@ -120,6 +120,23 @@ bool CardViewScene::init()
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kCV_Z_first_img);
 	
+	ccb_manager = NULL;
+	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	{
+		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
+		CCSprite* t_ccb_img = t_ccb.first;
+		t_ccb_img->setPosition(ccp(160, 215));
+		first_img->addChild(t_ccb_img);
+		
+		ccb_manager = t_ccb.second;
+		
+		first_img->touch_ccb_func = [=]()
+		{
+			ccb_manager->runAnimationsForSequenceNamed("touch1");
+		};
+	}
+	
 //	if(mySGD->is_safety_mode)
 //	{
 //		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
@@ -180,6 +197,8 @@ bool CardViewScene::init()
 	auto liveGirl = [=](){
 		is_actioned = false;
 		is_morphing = true;
+		
+		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
@@ -260,6 +279,8 @@ bool CardViewScene::init()
 	else
 	{
 //		morphing_filename = "morphing_heart_on.ccbi";
+		
+		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));

@@ -103,20 +103,39 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 
 	string ttt, ttt2;
 
+	CCSprite* ccb_img = NULL;
+	
 	if(t_exchanged)
 	{
-		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
-		ttt2 = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString();
+		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString();
+		ttt2 = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString();
+		
+		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3)))
+		{
+			ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))).first;
+			ccb_img->setPosition(ccp(160,215));
+		}
 	}
 	else
 	{
 		ttt = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
 		ttt2 = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+		
+		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1)))
+		{
+			ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))).first;
+			ccb_img->setPosition(ccp(160,215));
+		}
 	}
 
 	clear_img = mySIL->getLoadedImg(ttt.c_str());
 	clear_img->setPosition(ccp(160,215));
 	addChild(clear_img, kCST_Z_clear);
+	
+	if(ccb_img)
+	{
+		clear_img->addChild(ccb_img);
+	}
 	
 	if(mySGD->is_safety_mode)
 	{

@@ -43,6 +43,7 @@ private:
 	bool is_actioned;
 	
 	MyNode* first_img;
+	CCBAnimationManager* ccb_manager;
 	
 	CCSprite* sound_img;
 	
