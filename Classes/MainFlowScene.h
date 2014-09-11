@@ -179,6 +179,7 @@ private:
 	void popupClose();
 	void mailPopupClose();
 	void achievePopupClose();
+	void friendPopupClose();
 	void tutorialCardSettingClose();
 	
 	void endUnlockAnimation();

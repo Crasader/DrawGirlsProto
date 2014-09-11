@@ -51,6 +51,8 @@
 #include "RankRewardPopup.h"
 #include "TakePuzzleCardPopup.h"
 #include "TypingBox.h"
+#include "KsLocal.h"
+#include "FriendPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -2375,7 +2377,7 @@ enum MainFlowMenuTag{
 	kMainFlowMenuTag_gacha,
 	kMainFlowMenuTag_achievement,
 	kMainFlowMenuTag_event,
-	kMainFlowMenuTag_endlessMode
+	kMainFlowMenuTag_endlessMode,
 };
 
 void MainFlowScene::showShopPopup(int t_code)
@@ -2577,15 +2579,6 @@ void MainFlowScene::menuAction(CCObject* sender)
 			TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
-		else if(tag == kMainFlowMenuTag_friendManagement)
-		{
-			is_menu_enable = true;
-
-			InviteEventPopup* t_rp = InviteEventPopup::create(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
-
-			addChild(t_rp, kMainFlowZorder_popup);
-
-		}
 		else if(tag == kMainFlowMenuTag_gacha)
 		{
 			GachaPurchase* t_gp = GachaPurchase::create();
@@ -2601,6 +2594,12 @@ void MainFlowScene::menuAction(CCObject* sender)
 			addChild(t_ap, kMainFlowZorder_popup);
 			
 			t_ap->setHideFinalAction(this, callfunc_selector(MainFlowScene::achievePopupClose));
+		}
+		else if(tag == kMainFlowMenuTag_friendManagement)
+		{
+			FriendPopup* tPopup = FriendPopup::create();
+			addChild(tPopup, kMainFlowZorder_popup);
+			tPopup->setHideFinalAction(this, callfunc_selector(MainFlowScene::friendPopupClose));
 		}
 		else if(tag == kMainFlowMenuTag_event)
 		{
@@ -2932,7 +2931,29 @@ void MainFlowScene::setBottom()
 	
 	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 
+	CCSprite* n_friend = CCSprite::create("mainflow_mission.png");
+	KSLabelTTF* n_friend_label = KSLabelTTF::create(getLocal(LK::kFriendList), mySGD->getFont().c_str(), 10);
+	n_friend_label->enableOuterStroke(ccBLACK, 1.f);
+	n_friend_label->setPosition(ccp(n_friend->getContentSize().width/2.f, 7));
+	n_friend->addChild(n_friend_label);
+	CCSprite* s_friend = CCSprite::create("mainflow_mission.png");
+	s_friend->setColor(ccGRAY);
+	KSLabelTTF* s_friend_label = KSLabelTTF::create(getLocal(LK::kFriendList), mySGD->getFont().c_str(), 10);
+	s_friend_label->enableOuterStroke(ccBLACK, 1.f);
+	s_friend_label->setPosition(ccp(s_friend->getContentSize().width/2.f, 7));
+	s_friend->addChild(s_friend_label);
 	
+	CCMenuItem* friend_item = CCMenuItemSprite::create(n_friend, s_friend, this, menu_selector(MainFlowScene::menuAction));
+	friend_item->setTag(kMainFlowMenuTag_friendManagement);
+	
+	CCMenu* friend_menu = CCMenu::createWithItem(friend_item);
+	friend_menu->setPosition(ccp(240 + 40,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*3.f, n_friend->getContentSize().height/2.f+6));
+	//	bottom_case->addChild(mission_menu);
+	addChild(friend_menu, kMainFlowZorder_uiButton);
+	bottom_list.push_back(friend_menu);
+	
+	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+
 	
 	Json::Value v = mySGD->cgp_data;
 //	Json::Reader r;
@@ -4701,6 +4722,10 @@ void MainFlowScene::achievePopupClose()
 	is_menu_enable = true;
 }
 
+void MainFlowScene::friendPopupClose()
+{
+	is_menu_enable = true;
+}
 void MainFlowScene::mailPopupClose()
 {
     TRACE();
