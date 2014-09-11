@@ -782,67 +782,82 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		front->addChild(lbl);
 																		setFormSetter(lbl);
 																		
-																		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
-																		setFormSetter(close_button);
-																		close_button->setPosition(ccp(150.0, 47.0));
-																		close_button->setFunction([=](CCObject* sender)
-																															{
-																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																																CommonAnimation::closePopup(managerPopup, back,
-																																														managerPopup->getDimmedSprite(), nullptr,
-																																														[=](){
-																																															
-																																															///////////////////////////////
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																																															
-																																															Json::Value p;
-																																															int mailNo = mail["no"].asInt();
-																																															
-																																															p["giftBoxNo"] = mailNo;
-																																															p["memberID"] = mail["memberID"].asInt64();
-																																															
-																																															t_suction->setTouchEnabled(true);
-																																															t_suction->setVisible(true);
-																																															//삭제요청
-																																															this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
-																																																									 {
-																																																										 mySGD->saveChangeGoodsTransaction(r);
-																																																										 takedCheck(r["list"],[=](){
+																		
+																		Json::Value btnInfo = this->getButton(mail);
+																		
+																		
+																		float width = (btnInfo.size()+1)*110-10;
+																		float x = -width/2.f;
+																		for (int i=0; i<btnInfo.size(); i++) {
+																			
+																			x += 110;
+																			
+																			CommonButton* close_button = CommonButton::create(btnInfo[i].asString().c_str(), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
+																			close_button->setPosition(ccp(x+150, 47.0));
+																			back->addChild(close_button);
+																			
+																			
+																			close_button->setFunction([=](CCObject* sender)
+																																{
+																																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																	CommonAnimation::closePopup(managerPopup, back,
+																																															managerPopup->getDimmedSprite(), nullptr,
+																																															[=](){
+																																																
+																																																///////////////////////////////
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																																
+																																																Json::Value p;
+																																																int mailNo = mail["no"].asInt();
+																																																
+																																																p["giftBoxNo"] = mailNo;
+																																																p["memberID"] = mail["memberID"].asInt64();
+																																																
+																																																t_suction->setTouchEnabled(true);
+																																																t_suction->setVisible(true);
+																																																//삭제요청
+																																																this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
+																																																										 {
+																																																											 this->confirmMessage(i,m_mailList[i]);
 																																																											 
-																																																											 t_suction->setTouchEnabled(false);
-																																																											 t_suction->setVisible(false);
-																																																											 
-																																																											 
+																																																											 mySGD->saveChangeGoodsTransaction(r);
+																																																											 takedCheck(r["list"],[=](){
+																																																												 
+																																																												 t_suction->setTouchEnabled(false);
+																																																												 t_suction->setVisible(false);
+																																																												 
+																																																												 
+																																																											 });
 																																																										 });
-																																																									 });
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															//////////////////////////////
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															managerPopup->removeFromParent();
-																																														});
-																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																//////////////////////////////
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																managerPopup->removeFromParent();
+																																															});
 																																	
-
-																																
-																																
-																															});
-																		back->addChild(close_button);
+																																	
+																																	
+																																	
+																																	
+																																});
+																		}
+																		
 																		
 																		
 																		//managerPopup->setContentSize(managerPopup->getContentSize() + CCSizeMake(0, -53));
@@ -1212,6 +1227,51 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 					// ================================
 				}
 			}
+			
+			Json::Value t_faceInfo = t_card["faceInfo"];
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
+				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+				
+				DownloadFile t_df1;
+				t_df1.size = t_faceInfo["size"].asInt();
+				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
+				card_download_list.push_back(t_df1);
+				
+				DownloadFile t_df2;
+				t_df2.size = t_faceInfo["size"].asInt();
+				t_df2.img = t_faceInfo["plist"].asString().c_str();
+				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
+				card_download_list.push_back(t_df2);
+				
+				DownloadFile t_df3;
+				t_df3.size = t_faceInfo["size"].asInt();
+				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
+				card_download_list.push_back(t_df3);
+				
+				if(!is_add_cf)
+				{
+					CopyFile t_cf;
+					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+					card_reduction_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
+				
+				CopyFile t_cf = card_reduction_list.back();
+				card_reduction_list.pop_back();
+				t_cf.is_ccb = true;
+				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				
+				card_reduction_list.push_back(t_cf);
+			}
 		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
@@ -1299,6 +1359,13 @@ void SumranMailPopup::successCardDownload()
 																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
 				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
 				target_img->addChild(ani_img);
+			}
+			
+			if(card_reduction_list[i].is_ccb)
+			{
+				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
+				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+				target_img->addChild(face_img);
 			}
 			
 			target_img->setScale(0.4f);
@@ -1464,6 +1531,13 @@ CCNode* SumranMailPopup::addCardImg (int t_card_number, int t_card_level, string
 											  CCRectMake(0, 0, ani_size.width, ani_size.height));
 		t_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number)));
 		card_img->addChild(t_ani);
+	}
+	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+	{
+		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
+		ccb_img->setPosition(ccp(160,215));
+		card_img->addChild(ccb_img);
 	}
 	
 	CardCase* t_case = CardCase::create(t_card_number, t_card_level, t_passive);
@@ -1637,6 +1711,51 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 					// ================================
 				}
 			}
+			
+			Json::Value t_faceInfo = t_card["faceInfo"];
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
+				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+				
+				DownloadFile t_df1;
+				t_df1.size = t_faceInfo["size"].asInt();
+				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
+				df_list.push_back(t_df1);
+				
+				DownloadFile t_df2;
+				t_df2.size = t_faceInfo["size"].asInt();
+				t_df2.img = t_faceInfo["plist"].asString().c_str();
+				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
+				df_list.push_back(t_df2);
+				
+				DownloadFile t_df3;
+				t_df3.size = t_faceInfo["size"].asInt();
+				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
+				df_list.push_back(t_df3);
+				
+				if(!is_add_cf)
+				{
+					CopyFile t_cf;
+					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
+				
+				CopyFile t_cf = cf_list.back();
+				cf_list.pop_back();
+				t_cf.is_ccb = true;
+				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				
+				cf_list.push_back(t_cf);
+			}
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		}
 		
@@ -1696,6 +1815,13 @@ void SumranMailPopup::successAction ()
 				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
 				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
 				target_img->addChild(ani_img);
+			}
+			
+			if(cf_list[i].is_ccb)
+			{
+				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
+				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+				target_img->addChild(face_img);
 			}
 			
 			target_img->setScale(0.4f);
@@ -1792,8 +1918,6 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 			 for(int i=0;i<m_mailList.size();i++){
 				 if(m_mailList[i]["no"].asInt() != mailNo){
 					 newMailList.append(m_mailList[i]);
-				 }else{
-					 this->confirmMessage(m_mailList[i]);
 				 }
 			 }
 			 //테이블 리로드
@@ -1808,10 +1932,20 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 	 );
 }
 
-
-void SumranMailPopup::confirmMessage(Json::Value mail){
-	CCLOG("test->> %s",mail.asString().c_str());
+Json::Value SumranMailPopup::getButton(Json::Value mail){
+	Json::Value btn;
+	
+	btn[0]=myLoc->getLocalForKey(kMyLocalKey_ok);
+	
+	return btn;
 }
+
+void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
+	CCLOG("test->> %s",mail.asString().c_str());
+	
+}
+
+
 void SumranMailPopup::removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> userFunction)
 {
 	Json::Value p;

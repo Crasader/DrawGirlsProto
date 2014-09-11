@@ -800,6 +800,11 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_soundType_int1_s)				rv = "%d_soundType_%d";
 	else if(t_key == kSDS_CI_int1_characterNo_i)				rv = "%d_characterNo";
 	else if(t_key == kSDS_CI_int1_serial_i)						rv = "%d_serial";
+	else if(t_key == kSDS_CI_int1_haveFaceInfo_b)				rv = "%d_haveFaceInfo";
+	else if(t_key == kSDS_CI_int1_faceInfo_s)					rv = "%d_faceInfo";
+	else if(t_key == kSDS_CI_int1_faceInfoCcbi_s)				rv = "%d_faceInfoCcbi";
+	else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
+	else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	

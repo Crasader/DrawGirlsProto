@@ -95,6 +95,8 @@ private:
 	int keep_card_number;
 	int locked_puzzle_count;
 	
+	bool is_not_first;
+	
 	function<void(function<void()>)> start_unlock_animation;
 	
 	void updateCardHistory(CCNode* t_loading);

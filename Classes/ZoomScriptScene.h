@@ -48,6 +48,8 @@ private:
 //	bool is_touched_menu;
 	bool is_actioned;
 	
+	CCBAnimationManager* ccb_manager;
+	
 	MyNode* first_img;
 	CCLabelTTF* script_label;
 	CCScale9Sprite* script_case;

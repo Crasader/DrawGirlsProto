@@ -1185,7 +1185,7 @@ void MapScanner::exchangeMS()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString());
+	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2));
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
@@ -1344,7 +1344,7 @@ void MapScanner::setMapImg()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(visible_filename.filename.c_str(), visible_filename.isPattern, invisible_filename.filename);
+	visibleImg = VisibleParent::create(visible_filename.filename.c_str(), visible_filename.isPattern, invisible_filename.filename, NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1));
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 
@@ -1869,10 +1869,10 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 //	addChild(t_render);
 }
 
-VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename )
+VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number )
 {
 	VisibleSprite* t_v = new VisibleSprite();
-	t_v->myInit(filename, isPattern, t_drawRects, sil_filename);
+	t_v->myInit(filename, isPattern, t_drawRects, sil_filename, t_card_number);
 	t_v->autorelease();
 	return t_v;
 }
@@ -2356,13 +2356,20 @@ void VisibleSprite::setRectToVertex()
 	start = chrono::system_clock::now();
 }
 
-void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename )
+void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number )
 {
 	initWithTexture(mySIL->addImage(filename));
 	setBrighten(1.f);
 //	setColor(ccGRAY);
 	setPosition(ccp(160,215));
 
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+	{
+		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
+		ccb_img->setPosition(ccp(160,215));
+		addChild(ccb_img);
+	}
+	
 	
 	is_set_scene_node = false;
 
@@ -2519,10 +2526,10 @@ CCTexture2D* VisibleSprite::createSafetyImage(string fullpath){
 	
 }
 
-VisibleParent* VisibleParent::create( const char* filename, bool isPattern, string sil_filename )
+VisibleParent* VisibleParent::create( const char* filename, bool isPattern, string sil_filename, int t_card_number )
 {
 	VisibleParent* t_vp = new VisibleParent();
-	t_vp->myInit(filename, isPattern, sil_filename);
+	t_vp->myInit(filename, isPattern, sil_filename, t_card_number);
 	t_vp->autorelease();
 	return t_vp;
 }
@@ -2792,7 +2799,7 @@ void VisibleParent::changingGameStep( int t_step )
 	myVS->setMoveGamePosition(after_position);
 }
 
-void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename )
+void VisibleParent::myInit( const char* filename, bool isPattern, string sil_filename, int t_card_number )
 {
 //	drawRects = new CCArray(1);
 	drawRects.clear();
@@ -2804,7 +2811,7 @@ void VisibleParent::myInit( const char* filename, bool isPattern, string sil_fil
 	myGD->V_V["VS_setLimittedMapPosition"] = std::bind(&VisibleParent::setLimittedMapPosition, this);
 	myGD->V_I["VS_changingGameStep"] = std::bind(&VisibleParent::changingGameStep, this, _1);
 
-	myVS = VisibleSprite::create(filename, isPattern, &drawRects, sil_filename);
+	myVS = VisibleSprite::create(filename, isPattern, &drawRects, sil_filename, t_card_number);
 	myVS->setPosition(CCPointZero);
 	addChild(myVS);
 

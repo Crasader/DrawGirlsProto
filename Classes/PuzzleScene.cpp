@@ -2611,6 +2611,13 @@ void PuzzleScene::setRight()
 				
 				t_inner->setPositionY(rand()%120-60);
 				
+				if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, step_card_number))
+				{
+					CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, step_card_number)).first;
+					ccb_img->setPosition(ccp(160,215));
+					t_inner->addChild(ccb_img);
+				}
+				
 				t_clipping->addChild(t_inner);
 				
 				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
