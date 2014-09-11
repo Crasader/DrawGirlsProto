@@ -1106,50 +1106,45 @@ void KSCumberBase::snakeMoving(float dt)
 			validPosition = true;
 		}
 	}
-	CCPoint oldPosition = ccp(m_snake.startXPosition,
-														m_snake.sign * m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
-																	m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius);
 	
-	int loopCnt = 0;
-	while(1)
-	{
-		loopCnt++;
-		m_snake.startXPosition += 0.05f;
-		if(m_snake.startXPosition >= m_snake.longRadius || loopCnt >= 300)
-		{
-			m_snake.setRelocation(getPosition(), m_well512);
-			break;
-		}
-		CCPoint newPosition = ccp(m_snake.startXPosition,
-															m_snake.sign * m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
-																																				 m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius);
-		if(ccpLength(newPosition - oldPosition) >= getSpeed() * 1.5f)
-		{
-			break;
-		}
-	}
-//	m_snake.startXPosition += getSpeed(); //  * cosf(m_snake.targetTheta);
-//	if(m_snake.startXPosition >= m_snake.longRadius)
-//	{
-//		m_snake.setRelocation(getPosition(), m_well512);
-//	}
+	CCPoint oldPosition = afterPosition;
 	
-	//	CCLOG("cnt outer !! = %d", cnt);
-	// 마지막 X 에 도착했으면 다시 리로케이션 해야됨.
-//	if(cosf(m_snake.targetTheta) >= 0)
-	{
-		
-	}
-//	else
-//	{
-//		if(m_snake.startXPosition <= m_snake.longRadius)
-//		{
-//			m_snake.setRelocation(getPosition(), m_well512);
-//		}
-//	}
+	
 	
  	if(isMovable() || m_cumberState == kCumberStateFury)
 	{
+		int loopCnt = 0;
+		while(1)
+		{
+			loopCnt++;
+			m_snake.startXPosition += 0.05f;
+			if(m_snake.startXPosition >= m_snake.longRadius || loopCnt >= 300)
+			{
+				m_snake.setRelocation(getPosition(), m_well512);
+				break;
+			}
+			
+			// 새 좌표 구함.
+			float y = m_snake.shortRadius * sqrtf(m_snake.longRadius * m_snake.longRadius -
+																						m_snake.startXPosition * m_snake.startXPosition) / m_snake.longRadius;
+			y *= m_snake.sign;
+			
+			float x = m_snake.startXPosition;
+			x = x + m_snake.longRadius;
+			x = x * cosf(m_snake.targetTheta) - y * sinf(m_snake.targetTheta);
+			y = x * sinf(m_snake.targetTheta) + y * cosf(m_snake.targetTheta);
+			
+			x = x + m_snake.startPosition.x;
+			y = y + m_snake.startPosition.y;
+			
+			
+			CCPoint newPosition = ccp(x, y);
+			if(ccpLength(newPosition - oldPosition) >= getSpeed())
+			{
+				break;
+			}
+		}
+		
 		if(pathFound)
 		{
 //			float circleRadius = sqrt(pow((m_snake.centerPosition.x - m_snake.relocationPosition.x), 2) +
@@ -1157,6 +1152,7 @@ void KSCumberBase::snakeMoving(float dt)
 //			m_snake.angleRad += getSpeed() * m_snake.sign / circleRadius;
 			
 			//		CCLOG("%f %f", afterPosition.x, afterPosition.y);
+			CCLOG("setPosition %f %f", afterPosition.x, afterPosition.y);
 			setPosition(afterPosition);
 		}
 		
@@ -2027,6 +2023,7 @@ void KSCumberBase::setCumberState( int e )
 	CCLOG(state.c_str());
 	m_cumberState = (CUMBER_STATE)e;
 #undef TEMP
+	
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2986,6 +2983,7 @@ void FixedSizeDeque<T>::pop_front()
 
 void KSCumberBase::SnakeMoving::setRelocation(const CCPoint& cumberP, Well512& m_well512)
 {
+	CCLOG("snake 재지정.");
 	sign = m_well512.GetPlusMinus();
 	bool valid = false;
 	while(!valid)
