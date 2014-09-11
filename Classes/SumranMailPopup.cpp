@@ -782,67 +782,82 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		front->addChild(lbl);
 																		setFormSetter(lbl);
 																		
-																		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
-																		setFormSetter(close_button);
-																		close_button->setPosition(ccp(150.0, 47.0));
-																		close_button->setFunction([=](CCObject* sender)
-																															{
-																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																																CommonAnimation::closePopup(managerPopup, back,
-																																														managerPopup->getDimmedSprite(), nullptr,
-																																														[=](){
-																																															
-																																															///////////////////////////////
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																																															
-																																															Json::Value p;
-																																															int mailNo = mail["no"].asInt();
-																																															
-																																															p["giftBoxNo"] = mailNo;
-																																															p["memberID"] = mail["memberID"].asInt64();
-																																															
-																																															t_suction->setTouchEnabled(true);
-																																															t_suction->setVisible(true);
-																																															//삭제요청
-																																															this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
-																																																									 {
-																																																										 mySGD->saveChangeGoodsTransaction(r);
-																																																										 takedCheck(r["list"],[=](){
+																		
+																		Json::Value btnInfo = this->getButton(mail);
+																		
+																		
+																		float width = (btnInfo.size()+1)*110-10;
+																		float x = -width/2.f;
+																		for (int i=0; i<btnInfo.size(); i++) {
+																			
+																			x += 110;
+																			
+																			CommonButton* close_button = CommonButton::create(btnInfo[i].asString().c_str(), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
+																			close_button->setPosition(ccp(x+150, 47.0));
+																			back->addChild(close_button);
+																			
+																			
+																			close_button->setFunction([=](CCObject* sender)
+																																{
+																																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																	CommonAnimation::closePopup(managerPopup, back,
+																																															managerPopup->getDimmedSprite(), nullptr,
+																																															[=](){
+																																																
+																																																///////////////////////////////
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																																																
+																																																Json::Value p;
+																																																int mailNo = mail["no"].asInt();
+																																																
+																																																p["giftBoxNo"] = mailNo;
+																																																p["memberID"] = mail["memberID"].asInt64();
+																																																
+																																																t_suction->setTouchEnabled(true);
+																																																t_suction->setVisible(true);
+																																																//삭제요청
+																																																this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
+																																																										 {
+																																																											 this->confirmMessage(i,m_mailList[i]);
 																																																											 
-																																																											 t_suction->setTouchEnabled(false);
-																																																											 t_suction->setVisible(false);
-																																																											 
-																																																											 
+																																																											 mySGD->saveChangeGoodsTransaction(r);
+																																																											 takedCheck(r["list"],[=](){
+																																																												 
+																																																												 t_suction->setTouchEnabled(false);
+																																																												 t_suction->setVisible(false);
+																																																												 
+																																																												 
+																																																											 });
 																																																										 });
-																																																									 });
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															//////////////////////////////
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															
-																																															managerPopup->removeFromParent();
-																																														});
-																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																//////////////////////////////
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																
+																																																managerPopup->removeFromParent();
+																																															});
 																																	
-
-																																
-																																
-																															});
-																		back->addChild(close_button);
+																																	
+																																	
+																																	
+																																	
+																																});
+																		}
+																		
 																		
 																		
 																		//managerPopup->setContentSize(managerPopup->getContentSize() + CCSizeMake(0, -53));
@@ -1903,8 +1918,6 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 			 for(int i=0;i<m_mailList.size();i++){
 				 if(m_mailList[i]["no"].asInt() != mailNo){
 					 newMailList.append(m_mailList[i]);
-				 }else{
-					 this->confirmMessage(m_mailList[i]);
 				 }
 			 }
 			 //테이블 리로드
@@ -1919,10 +1932,20 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 	 );
 }
 
-
-void SumranMailPopup::confirmMessage(Json::Value mail){
-	CCLOG("test->> %s",mail.asString().c_str());
+Json::Value SumranMailPopup::getButton(Json::Value mail){
+	Json::Value btn;
+	
+	btn[0]=myLoc->getLocalForKey(kMyLocalKey_ok);
+	
+	return btn;
 }
+
+void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
+	CCLOG("test->> %s",mail.asString().c_str());
+	
+}
+
+
 void SumranMailPopup::removeMessageByList(vector<int> mailNo, long long memberID, std::function<void(Json::Value)> userFunction)
 {
 	Json::Value p;
