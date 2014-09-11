@@ -140,6 +140,24 @@ bool ZoomScript::init()
 	first_img->setTouchEnabled(false);
 	game_node->addChild(first_img, kZS_Z_first_img);
 	
+	ccb_manager = NULL;
+	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	{
+		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
+		CCSprite* ccb_img = t_ccb.first;
+		ccb_img->setPosition(ccp(160,215));
+		first_img->addChild(ccb_img);
+		
+		ccb_manager = t_ccb.second;
+		
+		first_img->touch_ccb_func = [=]()
+		{
+			ccb_manager->runAnimationsForSequenceNamed("touch1");
+		};
+	}
+	
+	
 	if(mySGD->is_safety_mode)
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
@@ -493,6 +511,20 @@ void ZoomScript::menuAction(CCObject *sender)
 					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
+					if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+					{
+						auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number));
+						CCSprite* ccb_img = t_ccb.first;
+						ccb_img->setPosition(ccp(160,215));
+						t_node->addChild(ccb_img);
+						
+						ccb_manager = t_ccb.second;
+						
+						t_node->touch_ccb_func = [=]()
+						{
+							ccb_manager->runAnimationsForSequenceNamed("touch1");
+						};
+					}
 					
 					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
@@ -746,6 +778,20 @@ void ZoomScript::menuAction(CCObject *sender)
 					if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()))
 						t_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 					
+					if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+					{
+						auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number));
+						CCSprite* ccb_img = t_ccb.first;
+						ccb_img->setPosition(ccp(160,215));
+						t_node->addChild(ccb_img);
+						
+						ccb_manager = t_ccb.second;
+						
+						t_node->touch_ccb_func = [=]()
+						{
+							ccb_manager->runAnimationsForSequenceNamed("touch1");
+						};
+					}
 					
 					t_node->setPosition(ccp(160,230));
 					t_node->setTouchEnabled(false);
@@ -903,6 +949,19 @@ void ZoomScript::showtimeFirstAction()
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		second_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	{
+		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
+		CCSprite* ccb_img = t_ccb.first;
+		ccb_img->setPosition(ccp(160,215));
+		second_img->addChild(ccb_img);
+		
+		ccb_manager = t_ccb.second;
+		second_img->touch_ccb_func = [=]()
+		{
+			ccb_manager->runAnimationsForSequenceNamed("touch1");
+		};
+	}
 	
 	second_img->setPosition(ccp(160,230));
 	second_img->setTouchEnabled(false);
@@ -973,6 +1032,19 @@ void ZoomScript::showtimeFifthAction()
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		third_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	{
+		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
+		CCSprite* ccb_img = t_ccb.first;
+		ccb_img->setPosition(ccp(160,215));
+		third_img->addChild(ccb_img);
+		
+		ccb_manager = t_ccb.second;
+		third_img->touch_ccb_func = [=]()
+		{
+			ccb_manager->runAnimationsForSequenceNamed("touch1");
+		};
+	}
 	
 	third_img->setPosition(ccp(160,215));
 	third_img->setTouchEnabled(false);

@@ -245,6 +245,11 @@ enum SDS_KEY
 	kSDS_CI_int1_soundType_int1_s,
 	kSDS_CI_int1_characterNo_i,
 	kSDS_CI_int1_serial_i,
+	kSDS_CI_int1_haveFaceInfo_b,
+	kSDS_CI_int1_faceInfo_s,
+	kSDS_CI_int1_faceInfoCcbi_s,
+	kSDS_CI_int1_faceInfoPvrccz_s,
+	kSDS_CI_int1_faceInfoPlist_s,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,
 	kSDS_AI_version_i,
@@ -356,6 +361,9 @@ public:
 	void fFlush(int i1, SDS_KEY fr_key);
 	
 	void removeCache();
+	
+	string getRKey (SDS_KEY t_key);
+	
 private:
 	map<string, KSProtectVar<bool>> sds_cache_bool;
 	map<string, KSProtectVar<bool>>::iterator iter_bool;
@@ -381,7 +389,6 @@ private:
 	
 	SaveData * myDefault;
 	SDS_SET getKeySet (SDS_KEY t_key);
-	string getRKey (SDS_KEY t_key);
 	SaveDataFile getSDF (SDS_KEY t_key);
 	void myInit ();
 };

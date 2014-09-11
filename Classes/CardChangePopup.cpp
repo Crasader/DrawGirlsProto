@@ -220,6 +220,13 @@ void CardChangePopup::setSelectedCard(int t_card_number)
 		selected_card->addChild(t_ani);
 	}
 	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+	{
+		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
+		ccb_img->setPosition(ccpFromSize(selected_card->getContentSize()/2.f));
+		selected_card->addChild(ccb_img);
+	}
+	
 	CardCase* t_case = CardCase::create(t_card_number);
 	t_case->setPosition(CCPointZero);
 	selected_card->addChild(t_case);

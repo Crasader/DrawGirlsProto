@@ -258,6 +258,7 @@ public:
 	bool m_isWaving;
 	float m_lastTouchTime; // 마지막 터치 시점.
 	float m_touchTimer; // 증가하는 시간
+	function<void()> touch_ccb_func;
 	
 	int m_touch_cnt;
 	///
@@ -277,7 +278,7 @@ public:
 		m_touchTimer = 0.f;
 		m_lastTouchTime = 0.f;
 		m_touch_cnt = 0;
-		
+		touch_ccb_func = nullptr;
 	}
 	///////////////////
 	virtual ~MyNode()
@@ -633,6 +634,11 @@ public:
 		if(sound_cnt > 0 && !myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound))
 		{
 			AudioEngine::sharedInstance()->playGroanEffect(NSDS_GS(kSDS_CI_int1_soundType_int1_s, card_number, ks19937::getIntValue(1, sound_cnt)));
+		}
+		
+		if(touch_ccb_func != nullptr)
+		{
+			touch_ccb_func();
 		}
 		
 		CCPoint touchLocation = pTouch->getLocation();

@@ -1093,6 +1093,51 @@ void RankPopup::resultLoadedCardInfo (Json::Value result_data)
 					// ================================
 				}
 			}
+			
+			Json::Value t_faceInfo = t_card["faceInfo"];
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
+				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+				
+				DownloadFile t_df1;
+				t_df1.size = t_faceInfo["size"].asInt();
+				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
+				df_list.push_back(t_df1);
+				
+				DownloadFile t_df2;
+				t_df2.size = t_faceInfo["size"].asInt();
+				t_df2.img = t_faceInfo["plist"].asString().c_str();
+				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
+				df_list.push_back(t_df2);
+				
+				DownloadFile t_df3;
+				t_df3.size = t_faceInfo["size"].asInt();
+				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
+				df_list.push_back(t_df3);
+				
+				if(!is_add_cf)
+				{
+					CopyFile t_cf;
+					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+					cf_list.push_back(t_cf);
+					
+					is_add_cf = true;
+				}
+				
+				CopyFile t_cf = cf_list.back();
+				cf_list.pop_back();
+				t_cf.is_ccb = true;
+				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+				
+				cf_list.push_back(t_cf);
+			}
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		}
 		
@@ -1174,6 +1219,13 @@ void RankPopup::successAction ()
 				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
 				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
 				target_img->addChild(ani_img);
+			}
+			
+			if(cf_list[i].is_ccb)
+			{
+				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
+				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+				target_img->addChild(face_img);
 			}
 			
 			target_img->setScale(0.4f);
@@ -1288,6 +1340,13 @@ void RankPopup::addCardImg (int t_card_number, int t_card_level, string t_passiv
 											  CCRectMake(0, 0, ani_size.width, ani_size.height));
 		t_ani->setPosition(ccp(NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number)));
 		used_card_img->addChild(t_ani);
+	}
+	
+	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+	{
+		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
+		ccb_img->setPosition(ccp(160,215));
+		used_card_img->addChild(ccb_img);
 	}
 	
 	CardCase* t_case = CardCase::create(t_card_number, t_card_level, t_passive);
