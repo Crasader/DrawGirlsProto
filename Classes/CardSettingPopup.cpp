@@ -221,7 +221,7 @@ bool CardSettingPopup::init()
 	
 	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
 	
-	
+	/*
 	CCSprite* n_strength_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)n_strength_img)->setGray(true);
 	KSLabelTTF* n_strength_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardStrength), mySGD->getFont().c_str(), 12.5f);
@@ -251,7 +251,7 @@ bool CardSettingPopup::init()
 	strength_menu->setTag(kCSS_MT_strength);
 	strength_menu->setPosition(ccp(290,16));
 	tab_menu->addChild(strength_menu);
-	
+	*/
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_card))
 	{

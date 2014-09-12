@@ -1520,7 +1520,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	
 //	CCLog("device width : %.2lf", myHSP->getScreenRealWidth());
 	
-	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f;
+	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f;
 	
 	TouchOutWidth = 10.0*joystick_size_value;
 	JOYSTICK_FOLLOW_DISTANCE = 65.0*joystick_size_value;

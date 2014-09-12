@@ -1022,6 +1022,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_mission12Label,
 	kMyLocalKey_mission13Label,
 	
+	kMyLocalKey_recommenderReg,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

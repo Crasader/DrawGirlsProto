@@ -230,10 +230,10 @@ void EventShopPopup::menuAction(CCObject* sender)
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	
-	addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
-	
-	
-	return;
+//	addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
+//	
+//	
+//	return;
 	
 	int tag = ((CCNode*)sender)->getTag();
 	int t_index = tag - kEventShopProductCode_1;

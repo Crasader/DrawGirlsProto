@@ -1096,10 +1096,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_ruby)
 	{
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 		
-//		setShopCode(kSC_ruby);
-//		is_menu_enable = true;
+		setShopCode(kSC_ruby);
+		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_gold)
 	{
@@ -1125,9 +1125,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 	{
 		if(recent_shop_code == kSC_ruby)
 		{
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
 			
-			/* close cbt
+			
 			createCheckBuyPopup([=]()
 								{
 									loading_layer = LoadingLayer::create();
@@ -1204,7 +1204,6 @@ void ShopPopup::menuAction(CCObject* pSender)
 									});
 #endif
 								});
-			 */
 		}
 		else if(recent_shop_code == kSC_gold)
 		{

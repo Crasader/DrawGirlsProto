@@ -2428,14 +2428,14 @@ void MainFlowScene::menuAction(CCObject* sender)
 		
 		if(tag == kMainFlowMenuTag_rubyShop)
 		{
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
-//			ShopPopup* t_shop = ShopPopup::create();
-//			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-//			t_shop->targetHeartTime(heart_time);
-//			t_shop->setShopCode(kSC_ruby);
-//			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-//			t_shop->addGray();
-//			addChild(t_shop, kMainFlowZorder_popup);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+			ShopPopup* t_shop = ShopPopup::create();
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->targetHeartTime(heart_time);
+			t_shop->setShopCode(kSC_ruby);
+			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+			t_shop->addGray();
+			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_goldShop)
 		{
@@ -3397,19 +3397,19 @@ void MainFlowScene::setBottom()
 		
 		is_menu_enable = false;
 		
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 		
 		
-//			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-//
-//			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-//														 {
-//															 mySGD->is_before_stage_img_download = true;
-//															 topOuting();
-//															 bottomPuzzleMode();
-//															 tableDownloading(t_func);
-//														 }, [=](){puzzleLoadSuccess();});
-//			addChild(t_sld, kMainFlowZorder_popup);
+			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+
+			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+														 {
+															 mySGD->is_before_stage_img_download = true;
+															 topOuting();
+															 bottomPuzzleMode();
+															 tableDownloading(t_func);
+														 }, [=](){puzzleLoadSuccess();});
+			addChild(t_sld, kMainFlowZorder_popup);
 	});
 	
 	etc_menu->addChild(etc_item);

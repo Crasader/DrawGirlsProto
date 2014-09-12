@@ -182,8 +182,8 @@ enum SpecialTutorialCode{
 };
 
 enum ControlJoystickDirection{
-	kControlJoystickDirection_right = 0,
-	kControlJoystickDirection_left
+	kControlJoystickDirection_left = 0,
+	kControlJoystickDirection_right
 };
 
 enum SaveUserData_Key{
