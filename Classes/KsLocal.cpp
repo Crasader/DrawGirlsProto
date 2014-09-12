@@ -130,8 +130,28 @@ void KsLocal::ko()
 	"<font >삭제되며 현재기록을 유지합니다.</font>";
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
-
 	
+	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendListTitle] = "친구목록";
+	obj[LK::kFriendListMenu] = "친구목록";
+	obj[LK::kFriendAddMenu] = "친구추가";
+	obj[LK::kFriendManageMenu] = "친구관리";
+	obj[LK::kFriendLimitDesc] = "친구는 50명 까지 등록 가능합니다.";
+	obj[LK::kFriendMyCount] = "내 친구수 %d명";
+	obj[LK::kFriendLastConnection] = "최종접속시간 %s";
+	obj[LK::kFriendCurrentStage] = "%d스테이지 진행중";
+	obj[LK::kFriendHeartSend] = "   보내기";
+	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
+	
+	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
+	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendSearch] = "검색";
+	obj[LK::kFriendMailAccept] = "수락";
+	obj[LK::kFriendMailReject] = "거절";
+	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
+	obj[LK::kFriendConfirm] = "확인";
+	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
+		// add friend !
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::en()
@@ -198,6 +218,26 @@ void KsLocal::en()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
+	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendListTitle] = "친구목록";
+	obj[LK::kFriendListMenu] = "친구목록";
+	obj[LK::kFriendAddMenu] = "친구추가";
+	obj[LK::kFriendManageMenu] = "친구관리";
+	obj[LK::kFriendLimitDesc] = "친구는 50명 까지 등록 가능합니다.";
+	obj[LK::kFriendMyCount] = "내 친구수 %d명";
+	obj[LK::kFriendLastConnection] = "최종접속시간 %s";
+	obj[LK::kFriendCurrentStage] = "%d스테이지 진행중";
+
+	obj[LK::kFriendHeartSend] = "보내기";
+	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
+	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
+	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendSearch] = "검색";
+	obj[LK::kFriendMailAccept] = "수락";
+	obj[LK::kFriendMailReject] = "거절";
+	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
+	obj[LK::kFriendConfirm] = "확인";
+	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
@@ -264,5 +304,24 @@ void KsLocal::ja()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
+	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendListTitle] = "친구목록";
+	obj[LK::kFriendListMenu] = "친구목록";
+	obj[LK::kFriendAddMenu] = "친구추가";
+	obj[LK::kFriendManageMenu] = "친구관리";
+	obj[LK::kFriendLimitDesc] = "친구는 50명 까지 등록 가능합니다.";
+	obj[LK::kFriendMyCount] = "내 친구수 %d명";
+	obj[LK::kFriendLastConnection] = "최종접속시간 %s";
+	obj[LK::kFriendCurrentStage] = "%d스테이지 진행중";
+	obj[LK::kFriendHeartSend] = "보내기";
+	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
+	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
+	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendSearch] = "검색";
+	obj[LK::kFriendMailAccept] = "수락";
+	obj[LK::kFriendMailReject] = "거절";
+	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
+	obj[LK::kFriendConfirm] = "확인";
+	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
 	m_mapper[__FUNCTION__] = obj;
 }

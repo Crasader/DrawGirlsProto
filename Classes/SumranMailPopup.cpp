@@ -36,6 +36,7 @@
 #include "CommonAnimation.h"
 #include "KSProtect.h"
 #include "LabelTTFMarquee.h"
+#include "KSLocal.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -788,11 +789,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		float width = (btnInfo.size()+1)*110-10;
 																		float x = -width/2.f;
-																		for (int i=0; i<btnInfo.size(); i++) {
+																		for (int buttonIndex=0; buttonIndex<btnInfo.size(); buttonIndex++) {
 																			
 																			x += 110;
 																			
-																			CommonButton* close_button = CommonButton::create(btnInfo[i].asString().c_str(), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
+																			CommonButton* close_button = CommonButton::create(btnInfo[buttonIndex].asString().c_str(), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), managerPopup->getTouchPriority()-5);
 																			close_button->setPosition(ccp(x+150, 47.0));
 																			back->addChild(close_button);
 																			
@@ -823,7 +824,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																																																//삭제요청
 																																																this->removeMessage (mailNo, mail["memberID"].asInt64(),[=](Json::Value r)
 																																																										 {
-																																																											 this->confirmMessage(i,m_mailList[i]);
+																																																											 this->confirmMessage(buttonIndex, mail);
 																																																											 
 																																																											 mySGD->saveChangeGoodsTransaction(r);
 																																																											 takedCheck(r["list"],[=](){
@@ -1935,13 +1936,46 @@ void SumranMailPopup::removeMessage(int mailNo, long long memberID, std::functio
 Json::Value SumranMailPopup::getButton(Json::Value mail){
 	Json::Value btn;
 	
-	btn[0]=myLoc->getLocalForKey(kMyLocalKey_ok);
+	if(mail["data"].get("friendreq", 0).asInt())
+	{
+		
+		btn[0] = getLocal(LK::kFriendMailReject);
+		btn[1] = getLocal(LK::kFriendMailAccept);
+	}
+	else
+	{
+		btn[0] = myLoc->getLocalForKey(kMyLocalKey_ok);
+	}
 	
 	return btn;
 }
 
 void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
 	CCLOG("test->> %s",mail.asString().c_str());
+	if(mail["data"].get("friendreq", 0).asInt())
+	{
+		if(btnIndex == 1)
+		{
+			// add friend !
+			Json::Value param;
+			param["memberID"] = myHSP->getMemberID();
+			param["friendID"] = mail["data"].get("from", "0").asString();
+			myHSP->command("addfriend", param, [=](Json::Value v){
+				if(v["result"]["code"] != GDSUCCESS)
+					return;
+				
+				
+				
+				
+				
+			});
+			
+		}
+	}
+	else
+	{
+		
+	}
 	
 }
 

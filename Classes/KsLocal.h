@@ -55,7 +55,26 @@ enum class LK
 	kForeverDeleteAccount1,
 	kForeverDeleteAccount2,
 	kUnlinkAccount1,
-	kLinkAccount1
+	kLinkAccount1,
+	kFriendList,
+	kFriendListTitle,
+	kFriendListMenu,
+	kFriendAddMenu,
+	kFriendManageMenu,
+	kFriendLimitDesc,
+	kFriendMyCount,
+	kFriendLastConnection,
+	kFriendCurrentStage,
+	kFriendHeartSend,
+	kFriendHeartReSend,
+	kFriendInputNickName,
+	kFriendAddFriend,
+	kFriendSearch,
+	kFriendMailAccept,
+	kFriendMailReject,
+	kFriendRemoveFriend,
+	kFriendConfirm,
+	kFriendRemoveFriendQ
 };
 class KsLocal
 {
