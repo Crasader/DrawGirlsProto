@@ -1025,6 +1025,10 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_recommenderReg,
 	kMyLocalKey_realContinue,
 	
+	kMyLocalKey_accountLinkLeadTitle,
+	kMyLocalKey_accountLinkLeadContent,
+	kMyLocalKey_accountLinkLeadButton,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

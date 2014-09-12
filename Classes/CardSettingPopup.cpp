@@ -57,7 +57,7 @@ bool CardSettingPopup::init()
 		card_list.push_back(mySGD->getHasGottenCardData(i));
 	}
 	
-	changeSortType(CardSortType(recent_sort_type));
+	changeSortType(CardSortType(recent_sort_type), true);
 	
 	recent_selected_card_number = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
 	
@@ -570,8 +570,32 @@ void CardSettingPopup::beforeMenuReset(int keep_type)
 	}
 }
 
-void CardSettingPopup::changeSortType( CardSortType t_type )
+void CardSettingPopup::changeSortType( CardSortType t_type, bool is_init )
 {
+	if(!is_init)
+	{
+		if(recent_sort_type == kCST_default)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault, card_table->getContentOffset().y);
+		}
+		else if(recent_sort_type == kCST_take)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTake, card_table->getContentOffset().y);
+		}
+		else if(recent_sort_type == kCST_takeReverse)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse, card_table->getContentOffset().y);
+		}
+		else if(recent_sort_type == kCST_gradeUp)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade, card_table->getContentOffset().y);
+		}
+		else if(recent_sort_type == kCST_gradeDown)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+		}
+	}
+	
 	recent_sort_type = t_type;
 	myDSH->setIntegerForKey(kDSH_Key_cardSortType, t_type);
 	mySGD->changeSortType(t_type);
