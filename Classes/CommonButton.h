@@ -165,7 +165,7 @@ public:
 	void setBackgroundTypeForState(CommonButtonType type,CCControlState state);
 	void setTitleColor(ccColor3B color);
 	void setZoomOnTouchDown(bool var);
-	
+	CCScale9Sprite* getBackgroundSprite(){return m_btnBack;}
 	KSLabelTTF* getTitleLabel();
 	KSLabelTTF* getPriceLabel();
 	CCSprite* getPriceSprite();
