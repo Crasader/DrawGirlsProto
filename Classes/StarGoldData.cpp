@@ -19,6 +19,8 @@ void StarGoldData::withdraw()
 	
 	loading_tip_back_number = 1;
 	
+	is_on_accountLinkLead = false;
+	
 	is_unlock_puzzle = 0;
 	is_perfect_puzzle = 0;
 	
@@ -3515,6 +3517,7 @@ void StarGoldData::myInit()
 	is_on_attendance = false;
 	is_on_rank_reward = false;
 	is_endless_mode = false;
+	is_on_accountLinkLead = false;
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
 	

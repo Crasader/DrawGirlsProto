@@ -1111,6 +1111,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("추천인등록"), kMyLocalKey_recommenderReg);
 	ko->setObject(CCString::create("정말 이어하시겠습니까?"), kMyLocalKey_realContinue);
 	
+	ko->setObject(CCString::create("계정연결하세요!"), kMyLocalKey_accountLinkLeadTitle);
+	ko->setObject(CCString::create("<font newline=15>아직 계정연결 안하셨어요?!</font><font newline=15>열심히 쌓은 데이터 잃어버리지 않게</font><font>서둘러 연결하세요!</font>"), kMyLocalKey_accountLinkLeadContent);
+	ko->setObject(CCString::create("설정창 바로가기"), kMyLocalKey_accountLinkLeadButton);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

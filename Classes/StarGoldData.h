@@ -969,6 +969,8 @@ public:
 	int ingame_continue_cnt;
 	int start_map_gacha_use_gold_cnt;
 	
+	bool is_on_accountLinkLead;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

@@ -51,6 +51,7 @@
 #include "RankRewardPopup.h"
 #include "TakePuzzleCardPopup.h"
 #include "TypingBox.h"
+#include "AccountLinkLeadPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -4132,12 +4133,59 @@ void MainFlowScene::topOnLight()
 																														   {
 																															   mySGD->is_today_mission_first = false;
 																															   
-																															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																															   {
+																																   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																	{
+																																		mySGD->is_on_accountLinkLead = true;
+																																		AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																																	 {
+																																																		 is_menu_enable = false;
+																																																		 OptionPopup* t_popup = OptionPopup::create();
+																																																		 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																																		 addChild(t_popup, kMainFlowZorder_popup);
+																																																		 
+																																																		 t_popup->open_message_popup_func = [=]()
+																																																		 {
+																																																			 is_menu_enable = false;
+																																																			 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																																			 addChild(t_pp, kMainFlowZorder_popup);
+																																																			 
+																																																			 postbox_count_case->setVisible(false);
+																																																		 };
+																																																	 });
+																																		addChild(t_popup, kMainFlowZorder_popup);
+																																	}
+																																   else
+																																	   is_menu_enable = true;
+																															   });
 																															   addChild(t_popup, kMainFlowZorder_popup);
 																														   }
 																														   else
 																														   {
-																															   is_menu_enable = true;
+																															   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																															   {
+																																   mySGD->is_on_accountLinkLead = true;
+																																   AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																																{
+																																																	is_menu_enable = false;
+																																																	OptionPopup* t_popup = OptionPopup::create();
+																																																	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																																	addChild(t_popup, kMainFlowZorder_popup);
+																																																	
+																																																	t_popup->open_message_popup_func = [=]()
+																																																	{
+																																																		is_menu_enable = false;
+																																																		SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																																		addChild(t_pp, kMainFlowZorder_popup);
+																																																		
+																																																		postbox_count_case->setVisible(false);
+																																																	};
+																																																});
+																																   addChild(t_popup, kMainFlowZorder_popup);
+																															   }
+																															   else
+																																   is_menu_enable = true;
 																														   }
 																													   });
 																	addChild(t_popup, kMainFlowZorder_popup);
@@ -4148,12 +4196,59 @@ void MainFlowScene::topOnLight()
 																	{
 																		mySGD->is_today_mission_first = false;
 																		
-																		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=](){is_menu_enable = true;});
+																		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																		{
+																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																			{
+																				mySGD->is_on_accountLinkLead = true;
+																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																			 {
+																																				 is_menu_enable = false;
+																																				 OptionPopup* t_popup = OptionPopup::create();
+																																				 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																				 addChild(t_popup, kMainFlowZorder_popup);
+																																				 
+																																				 t_popup->open_message_popup_func = [=]()
+																																				 {
+																																					 is_menu_enable = false;
+																																					 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																					 addChild(t_pp, kMainFlowZorder_popup);
+																																					 
+																																					 postbox_count_case->setVisible(false);
+																																				 };
+																																			 });
+																				addChild(t_popup, kMainFlowZorder_popup);
+																			}
+																			else
+																				is_menu_enable = true;
+																		});
 																		addChild(t_popup, kMainFlowZorder_popup);
 																	}
 																	else
 																	{
-																		is_menu_enable = true;
+																		if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																		{
+																			mySGD->is_on_accountLinkLead = true;
+																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																		 {
+																																			 is_menu_enable = false;
+																																			 OptionPopup* t_popup = OptionPopup::create();
+																																			 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																			 addChild(t_popup, kMainFlowZorder_popup);
+																																			 
+																																			 t_popup->open_message_popup_func = [=]()
+																																			 {
+																																				 is_menu_enable = false;
+																																				 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																				 addChild(t_pp, kMainFlowZorder_popup);
+																																				 
+																																				 postbox_count_case->setVisible(false);
+																																			 };
+																																		 });
+																			addChild(t_popup, kMainFlowZorder_popup);
+																		}
+																		else
+																			is_menu_enable = true;
 																	}
 																}
 														   });
@@ -4182,7 +4277,31 @@ void MainFlowScene::topOnLight()
 																																																		 pvp_tutorial();
 																																																	 }
 																																																	 else
-																																																		 is_menu_enable = true;
+																																																		{
+																																																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																																			{
+																																																				mySGD->is_on_accountLinkLead = true;
+																																																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																																																			 {
+																																																																				 is_menu_enable = false;
+																																																																				 OptionPopup* t_popup = OptionPopup::create();
+																																																																				 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																																																				 addChild(t_popup, kMainFlowZorder_popup);
+																																																																				 
+																																																																				 t_popup->open_message_popup_func = [=]()
+																																																																				 {
+																																																																					 is_menu_enable = false;
+																																																																					 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																																																					 addChild(t_pp, kMainFlowZorder_popup);
+																																																																					 
+																																																																					 postbox_count_case->setVisible(false);
+																																																																				 };
+																																																																			 });
+																																																				addChild(t_popup, kMainFlowZorder_popup);
+																																																			}
+																																																			else
+																																																				is_menu_enable = true;
+																																																		}
 																																																 });
 																																		  addChild(t_popup, kMainFlowZorder_popup);
 																																	  }
@@ -4195,7 +4314,31 @@ void MainFlowScene::topOnLight()
 																																			  pvp_tutorial();
 																																		  }
 																																		  else
-																																			  is_menu_enable = true;
+																																			{
+																																				if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																				{
+																																					mySGD->is_on_accountLinkLead = true;
+																																					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																																				 {
+																																																					 is_menu_enable = false;
+																																																					 OptionPopup* t_popup = OptionPopup::create();
+																																																					 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																																					 addChild(t_popup, kMainFlowZorder_popup);
+																																																					 
+																																																					 t_popup->open_message_popup_func = [=]()
+																																																					 {
+																																																						 is_menu_enable = false;
+																																																						 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																																						 addChild(t_pp, kMainFlowZorder_popup);
+																																																						 
+																																																						 postbox_count_case->setVisible(false);
+																																																					 };
+																																																				 });
+																																					addChild(t_popup, kMainFlowZorder_popup);
+																																				}
+																																				else
+																																					is_menu_enable = true;
+																																			}
 																																	  }
 																																  });
 																			   addChild(t_popup, kMainFlowZorder_popup);
@@ -4230,7 +4373,31 @@ void MainFlowScene::topOnLight()
 																		   pvp_tutorial();
 																	   }
 																	   else
-																		   is_menu_enable = true;
+																		{
+																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																			{
+																				mySGD->is_on_accountLinkLead = true;
+																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																			 {
+																																				 is_menu_enable = false;
+																																				 OptionPopup* t_popup = OptionPopup::create();
+																																				 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																				 addChild(t_popup, kMainFlowZorder_popup);
+																																				 
+																																				 t_popup->open_message_popup_func = [=]()
+																																				 {
+																																					 is_menu_enable = false;
+																																					 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																					 addChild(t_pp, kMainFlowZorder_popup);
+																																					 
+																																					 postbox_count_case->setVisible(false);
+																																				 };
+																																			 });
+																				addChild(t_popup, kMainFlowZorder_popup);
+																			}
+																			else
+																				is_menu_enable = true;
+																		}
 																   });
 																   addChild(t_popup, kMainFlowZorder_popup);
 															   }
@@ -4243,7 +4410,31 @@ void MainFlowScene::topOnLight()
 																	   pvp_tutorial();
 																   }
 																   else
-																	   is_menu_enable = true;
+																	{
+																		if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																		{
+																			mySGD->is_on_accountLinkLead = true;
+																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																		 {
+																																			 is_menu_enable = false;
+																																			 OptionPopup* t_popup = OptionPopup::create();
+																																			 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																			 addChild(t_popup, kMainFlowZorder_popup);
+																																			 
+																																			 t_popup->open_message_popup_func = [=]()
+																																			 {
+																																				 is_menu_enable = false;
+																																				 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																				 addChild(t_pp, kMainFlowZorder_popup);
+																																				 
+																																				 postbox_count_case->setVisible(false);
+																																			 };
+																																		 });
+																			addChild(t_popup, kMainFlowZorder_popup);
+																		}
+																		else
+																			is_menu_enable = true;
+																	}
 															   }
 														   });
 		addChild(t_popup, kMainFlowZorder_popup);
@@ -4263,7 +4454,31 @@ void MainFlowScene::topOnLight()
 				pvp_tutorial();
 			}
 			else
-				is_menu_enable = true;
+			{
+				if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+				{
+					mySGD->is_on_accountLinkLead = true;
+					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																				 {
+																					 is_menu_enable = false;
+																					 OptionPopup* t_popup = OptionPopup::create();
+																					 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																					 addChild(t_popup, kMainFlowZorder_popup);
+																					 
+																					 t_popup->open_message_popup_func = [=]()
+																					 {
+																						 is_menu_enable = false;
+																						 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																						 addChild(t_pp, kMainFlowZorder_popup);
+																						 
+																						 postbox_count_case->setVisible(false);
+																					 };
+																				 });
+					addChild(t_popup, kMainFlowZorder_popup);
+				}
+				else
+					is_menu_enable = true;
+			}
 		});
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
@@ -4273,6 +4488,29 @@ void MainFlowScene::topOnLight()
 		
 		pvp_tutorial();
 	}
+	else if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+	{
+		mySGD->is_on_accountLinkLead = true;
+		AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																	 {
+																		 is_menu_enable = false;
+																		 OptionPopup* t_popup = OptionPopup::create();
+																		 t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																		 addChild(t_popup, kMainFlowZorder_popup);
+																		 
+																		 t_popup->open_message_popup_func = [=]()
+																		 {
+																			 is_menu_enable = false;
+																			 SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																			 addChild(t_pp, kMainFlowZorder_popup);
+																			 
+																			 postbox_count_case->setVisible(false);
+																		 };
+																	 });
+		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else
+		is_menu_enable = true;
 }
 
 void MainFlowScene::topOuting()

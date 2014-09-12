@@ -126,7 +126,7 @@ private:
 	
 	void alignChange();
 	
-	void changeSortType( CardSortType t_type );
+	void changeSortType( CardSortType t_type, bool is_init = false );
 	
 	bool is_menu_enable;
 	
