@@ -369,7 +369,7 @@ public:
 		CCPoint local = convertToNodeSpace(touchLocation);
 		CCPoint t = ccpMult(ccpSub(local,m_startPos),0.2f);
 		float d = ccpLength(t);
-		if(d>15){
+		if(d>13){
 			morphing(pTouch, pEvent);
 			m_stopTouch=true;
 			return;
@@ -392,11 +392,11 @@ public:
 			ccColor4B rgb = m_movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g + rgb.r + 40;
+			float waveValue = rgb.g + rgb.r;
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
-			if(waveValue > 5)
+			if(waveValue > 0)
 			{
 				float diffRad = diffRad1;
 				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
@@ -551,11 +551,11 @@ public:
 			ccColor4B rgb = m_movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g + rgb.r + 40;
+			float waveValue = rgb.g + rgb.r;
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
-			if(waveValue > 5)
+			if(waveValue > 1)
 			{
 				float diffRad = diffRad1;
 				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
@@ -662,11 +662,14 @@ public:
 			CCPoint t = ccp(m_vertices[i].x, m_vertices[i].y);
 			if(ccpLength(t - local) <= m_waveRange)
 			{
-				movingVertices.push_back(&m_vertices[i]); // 움직일 대상이 되는 점을 모집함.
-				distance[&m_vertices[i]] = ccpLength(t-local);
+			distance[&m_vertices[i]] = ccpLength(t-local);
 				Vertex3D original = m_2xVertices[i];
 				ccColor4B color = m_silColors[original.y][original.x];
-				movingVertexColors[&m_vertices[i]] = color;
+				
+				if(color.r+color.g>0){
+					movingVertices.push_back(&m_vertices[i]); // 움직일 대상이 되는 점을 모집함.
+					movingVertexColors[&m_vertices[i]] = color;
+				}
 			}
 		}
 
@@ -678,12 +681,12 @@ public:
 			ccColor4B rgb = movingVertexColors[i];
 			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
 			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
-			float waveValue = rgb.g? rgb.g + 40 : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
-			float waveValue2 = rgb.r? rgb.r + 40 : 0; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
+			float waveValue = rgb.g; // (rgb.b >= 10 ? 40 : 0);
+			float waveValue2 = rgb.r; // : (rgb.b >= 10 ? 40 : 0); // (rgb.b >= 10 ? 40 : 0);
 			float devider = -15.f;
 			float time1 = 0.15f;
 			float time2 = 0.5f;
-			if(waveValue > 5)
+			if(waveValue > 0)
 			{
 				float diffRad = diffRad1;
 				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
@@ -708,8 +711,7 @@ public:
 																								 },
 																								 nullptr));
 				//																							 expoIn));
-			}
-			if(waveValue2 > 5)
+			}else if(waveValue2 > 0)
 			{
 				float diffRad = diffRad2;
 				CCPoint goalPosition = ccp(cosf(diffRad2), sinf(diffRad2)) * waveValue2  / devider;
@@ -884,9 +886,9 @@ public:
 
 		int hm = 30;
 		int wm = 30;
-		for(int y=0 + hm; y<texture->getPixelsHigh() - 20; y+=hm)
+		for(int y=hm; y<texture->getPixelsHigh()-hm; y+=hm)
 		{
-			for(int x=0 + wm; x<texture->getPixelsWide() - 20; x+=wm)
+			for(int x=hm; x<texture->getPixelsWide()-hm; x+=wm)
 			{
 				m_points.push_back(Vertex3DMake(x, y, 0));
 			}

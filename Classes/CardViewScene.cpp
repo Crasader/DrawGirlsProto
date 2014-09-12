@@ -47,6 +47,7 @@ bool CardViewScene::init()
     }
 	
 	buy_morphing = nullptr;
+	t_ccb_img = nullptr;
 	startFormSetter(this);
 	
 	
@@ -125,7 +126,7 @@ bool CardViewScene::init()
 	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
 	{
 		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
-		CCSprite* t_ccb_img = t_ccb.first;
+		t_ccb_img = t_ccb.first;
 		t_ccb_img->setPosition(ccp(160, 215));
 		first_img->addChild(t_ccb_img);
 		
@@ -557,7 +558,7 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 {
 	CCSetIterator iter;
 	CCTouch *touch;
-	
+	touch_mode=1;
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
@@ -697,6 +698,7 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			}
 			else if(multiTouchData.size() == 2)
 			{
+				touch_mode=2;
 				CCPoint sub_point = CCPointZero;
 				CCPoint avg_point = CCPointZero;
 				map<int, CCPoint>::iterator it;
@@ -830,13 +832,13 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
-					if(is_morphing)
+					if(is_morphing && touch_mode!=2)
 						first_img->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
 					
-					if(is_morphing)
+					if(is_morphing && touch_mode!=2)
 						first_img->morphing(touch, pEvent);
 					return;
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
