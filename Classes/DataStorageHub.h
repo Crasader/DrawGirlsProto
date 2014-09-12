@@ -171,7 +171,13 @@ typedef enum t_DSH_Key{
 	
 	kDSH_Key_joystickSize,
 	kDSH_Key_isOffJoystickVib,
-	kDSH_Key_isNotFirstItemGacha
+	kDSH_Key_isNotFirstItemGacha,
+	
+	kDSH_Key_cardSettingTableOffsetDefault,
+	kDSH_Key_cardSettingTableOffsetTake,
+	kDSH_Key_cardSettingTableOffsetTakeReverse,
+	kDSH_Key_cardSettingTableOffsetGrade,
+	kDSH_Key_cardSettingTableOffsetGradeReverse
 	
 }DSH_Key;
 

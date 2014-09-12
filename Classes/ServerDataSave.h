@@ -250,6 +250,7 @@ enum SDS_KEY
 	kSDS_CI_int1_faceInfoCcbi_s,
 	kSDS_CI_int1_faceInfoPvrccz_s,
 	kSDS_CI_int1_faceInfoPlist_s,
+	kSDS_CI_int1_haveAdult_b,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,
 	kSDS_AI_version_i,

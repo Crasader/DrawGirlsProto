@@ -566,7 +566,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_big_item = CCMenuItemSprite::create(n_joystick_big, s_joystick_big, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_big_item->setTag(kOP_MT_joystickBig);
-	joystick_size_big_item->setPosition(ccp(-45,0));
+	joystick_size_big_item->setPosition(ccp(18,0));
 	
 	
 	CCSprite* n_joystick_small = CCSprite::create("option_plus.png");
@@ -581,7 +581,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_small_item = CCMenuItemSprite::create(n_joystick_small, s_joystick_small, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_small_item->setTag(kOP_MT_joystickSmall);
-	joystick_size_small_item->setPosition(ccp(18,0));
+	joystick_size_small_item->setPosition(ccp(-45,0));
 	
 	
 	CCMenu* joystick_size_menu = CCMenu::create();
@@ -1081,7 +1081,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								{
-									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString()); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), -1); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
 								}
 							   else
 								{

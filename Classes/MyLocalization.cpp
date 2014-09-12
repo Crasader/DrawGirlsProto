@@ -1109,6 +1109,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("/%d턴"), kMyLocalKey_mission13Label);
 	
 	ko->setObject(CCString::create("추천인등록"), kMyLocalKey_recommenderReg);
+	ko->setObject(CCString::create("정말 이어하시겠습니까?"), kMyLocalKey_realContinue);
 	
 	setObject(ko, "ko");
 }

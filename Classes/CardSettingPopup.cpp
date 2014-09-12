@@ -637,6 +637,27 @@ void CardSettingPopup::onEnter()
 {
 	CCLayer::onEnter();
 	
+	if(recent_sort_type == kCST_default && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault)));
+	}
+	else if(recent_sort_type == kCST_take && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTake) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTake)));
+	}
+	else if(recent_sort_type == kCST_takeReverse && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse)));
+	}
+	else if(recent_sort_type == kCST_gradeUp && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade)));
+	}
+	else if(recent_sort_type == kCST_gradeDown && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse)));
+	}
+	
 	showPopup();
 }
 
@@ -692,7 +713,27 @@ void CardSettingPopup::endShowPopup()
 void CardSettingPopup::hidePopup()
 {
 	is_menu_enable = false;
-		
+	
+	if(recent_sort_type == kCST_default)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault, card_table->getContentOffset().y);
+	}
+	else if(recent_sort_type == kCST_take)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTake, card_table->getContentOffset().y);
+	}
+	else if(recent_sort_type == kCST_takeReverse)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse, card_table->getContentOffset().y);
+	}
+	else if(recent_sort_type == kCST_gradeUp)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade, card_table->getContentOffset().y);
+	}
+	else if(recent_sort_type == kCST_gradeDown)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+	}
 	
 	CommonAnimation::closePopup(this, main_case, gray, [=](){
 		
@@ -839,6 +880,27 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		}
 		else if(tag == kCSS_MT_diary)
 		{
+			if(recent_sort_type == kCST_default)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault, card_table->getContentOffset().y);
+			}
+			else if(recent_sort_type == kCST_take)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTake, card_table->getContentOffset().y);
+			}
+			else if(recent_sort_type == kCST_takeReverse)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse, card_table->getContentOffset().y);
+			}
+			else if(recent_sort_type == kCST_gradeUp)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade, card_table->getContentOffset().y);
+			}
+			else if(recent_sort_type == kCST_gradeDown)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+			}
+			
 			mySGD->selected_collectionbook = mySGD->getHasGottenCardsDataCardNumber(mySGD->getHasGottenCardsSize()-1);
 			
 			CollectionBookPopup* t_popup = CollectionBookPopup::create();
@@ -915,6 +977,27 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 void CardSettingPopup::alignChange()
 {
 	card_table->reloadData();
+	
+	if(recent_sort_type == kCST_default && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault)));
+	}
+	else if(recent_sort_type == kCST_take && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTake) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTake)));
+	}
+	else if(recent_sort_type == kCST_takeReverse && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse)));
+	}
+	else if(recent_sort_type == kCST_gradeUp && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade)));
+	}
+	else if(recent_sort_type == kCST_gradeDown && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse)));
+	}
 }
 
 void CardSettingPopup::cellAction( CCObject* sender )

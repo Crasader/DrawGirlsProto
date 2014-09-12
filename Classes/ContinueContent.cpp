@@ -85,21 +85,78 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	
-	if(mySGD->is_endless_mode)
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realContinue),[=]()
 	{
-		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless())
+		if(mySGD->is_endless_mode)
+		{
+			if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless())
+			{
+				LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+				addChild(t_popup, 9999);
+				
+				mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+				mySGD->changeGoods([=](Json::Value result_data)
+								   {
+									   t_popup->removeFromParent();
+									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									   {
+										   mySGD->pvp_continue_cnt++;
+										   giveup_button->setEnabled(false);
+										   continue_button->setEnabled(false);
+										   
+										   is_continue = true;
+										   
+										   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+										   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+										   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+										   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+										   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+										   
+										   price_type->runAction(t_seq2);
+										   
+										   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+										   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+										   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+										   price_label->runAction(t_spawn2);
+									   }
+									   else
+									   {
+										   schedule(schedule_selector(ContinueContent::countingSchedule));
+										   
+										   mySGD->clearChangeGoods();
+										   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										   
+										   is_menu_enable = true;
+									   }
+								   });
+			}
+			else
+			{
+				ShopPopup* t_popup = ShopPopup::create();
+				t_popup->setScale(myDSH->screen_convert_rate);
+				t_popup->setShopCode(kSC_gold);
+				t_popup->setCloseFunc([=]()
+									  {
+										  is_menu_enable = true;
+										  schedule(schedule_selector(ContinueContent::countingSchedule));
+									  });
+				getParent()->addChild(t_popup);
+			}
+		}
+		else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
 		{
 			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
 			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 			addChild(t_popup, 9999);
 			
-			mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+			mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
 			mySGD->changeGoods([=](Json::Value result_data)
 							   {
 								   t_popup->removeFromParent();
 								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								   {
-									   mySGD->pvp_continue_cnt++;
+									   mySGD->ingame_continue_cnt++;
 									   giveup_button->setEnabled(false);
 									   continue_button->setEnabled(false);
 									   
@@ -131,137 +188,89 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 		}
 		else
 		{
-			ShopPopup* t_popup = ShopPopup::create();
-			t_popup->setScale(myDSH->screen_convert_rate);
-			t_popup->setShopCode(kSC_gold);
-			t_popup->setCloseFunc([=]()
-								  {
-									  is_menu_enable = true;
-									  schedule(schedule_selector(ContinueContent::countingSchedule));
-								  });
-			getParent()->addChild(t_popup);
+			if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
+			{
+				LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+				addChild(t_popup, 9999);
+				
+				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+				mySGD->changeGoods([=](Json::Value result_data)
+								   {
+									   t_popup->removeFromParent();
+									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+									   {
+										   giveup_button->setEnabled(false);
+										   continue_button->setEnabled(false);
+										   
+										   is_continue = true;
+										   
+										   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+										   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+										   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+										   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+										   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+										   
+										   price_type->runAction(t_seq2);
+										   
+										   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+										   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+										   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+										   price_label->runAction(t_spawn2);
+									   }
+									   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+									   {
+										   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+																							{
+																								schedule(schedule_selector(ContinueContent::countingSchedule));
+																								mySGD->clearChangeGoods();
+																								is_menu_enable = true;
+																							}), 9999);
+									   }
+									   else
+									   {
+										   schedule(schedule_selector(ContinueContent::countingSchedule));
+										   
+										   mySGD->clearChangeGoods();
+										   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
+																							myLoc->getLocalForKey(kMyLocalKey_noti),
+																							myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										   
+										   is_menu_enable = true;
+									   }
+								   });
+			}
+			else
+			{
+				getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+																 {
+																	 schedule(schedule_selector(ContinueContent::countingSchedule));
+																	 is_menu_enable = true;
+																 }), 9999);
+				
+				//			ShopPopup* t_popup = ShopPopup::create();
+				//			t_popup->setScale(myDSH->screen_convert_rate);
+				//			t_popup->setShopCode(kSC_ruby);
+				//			t_popup->setCloseFunc([=]()
+				//								  {
+				//									  is_menu_enable = true;
+				//									  schedule(schedule_selector(ContinueContent::countingSchedule));
+				//								  });
+				//			t_popup->is_continue = true;
+				//			t_popup->continue_end = [=]()
+				//			{
+				//				continueAction(NULL, CCControlEventTouchUpInside);
+				//			};
+				//			getParent()->addChild(t_popup);
+			}
 		}
-	}
-	else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
-	{
-		LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
-		t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
-		addChild(t_popup, 9999);
 		
-		mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
-		mySGD->changeGoods([=](Json::Value result_data)
-						   {
-							   t_popup->removeFromParent();
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							   {
-								   mySGD->ingame_continue_cnt++;
-								   giveup_button->setEnabled(false);
-								   continue_button->setEnabled(false);
-								   
-								   is_continue = true;
-								   
-								   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-								   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-								   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-								   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-								   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-								   
-								   price_type->runAction(t_seq2);
-								   
-								   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-								   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-								   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-								   price_label->runAction(t_spawn2);
-							   }
-							   else
-							   {
-								   schedule(schedule_selector(ContinueContent::countingSchedule));
-								   
-								   mySGD->clearChangeGoods();
-								   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-								   
-								   is_menu_enable = true;
-							   }
-						   });
-	}
-	else
-	{
-		if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
-		{
-			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
-			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
-			addChild(t_popup, 9999);
-			
-			mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
-			mySGD->changeGoods([=](Json::Value result_data)
-							   {
-								   t_popup->removeFromParent();
-								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								   {
-									   giveup_button->setEnabled(false);
-									   continue_button->setEnabled(false);
-									   
-									   is_continue = true;
-									   
-									   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-									   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-									   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-									   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-									   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-									   
-									   price_type->runAction(t_seq2);
-									   
-									   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-									   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-									   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-									   price_label->runAction(t_spawn2);
-								   }
-								   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
-								   {
-									   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
-																		   {
-																			   schedule(schedule_selector(ContinueContent::countingSchedule));
-																			   mySGD->clearChangeGoods();
-																			   is_menu_enable = true;
-																		   }), 9999);
-								   }
-								   else
-								   {
-									   schedule(schedule_selector(ContinueContent::countingSchedule));
-									   
-									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
-																																			myLoc->getLocalForKey(kMyLocalKey_noti),
-																																			myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-									   
-									   is_menu_enable = true;
-								   }
-							   });
-		}
-		else
-		{
-			getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
-															 {
-																 schedule(schedule_selector(ContinueContent::countingSchedule));
-																 is_menu_enable = true;
-															 }), 9999);
-			
-//			ShopPopup* t_popup = ShopPopup::create();
-//			t_popup->setScale(myDSH->screen_convert_rate);
-//			t_popup->setShopCode(kSC_ruby);
-//			t_popup->setCloseFunc([=]()
-//								  {
-//									  is_menu_enable = true;
-//									  schedule(schedule_selector(ContinueContent::countingSchedule));
-//								  });
-//			t_popup->is_continue = true;
-//			t_popup->continue_end = [=]()
-//			{
-//				continueAction(NULL, CCControlEventTouchUpInside);
-//			};
-//			getParent()->addChild(t_popup);
-		}
-	}
+	},12.f,ccp(0.01f,0.01f),true,true,[=](){
+		
+		schedule(schedule_selector(ContinueContent::countingSchedule));
+		
+		is_menu_enable = true;
+	}), 9999);
 }
 
 void ContinueContent::giveupAction(CCObject* sender, CCControlEvent t_event)

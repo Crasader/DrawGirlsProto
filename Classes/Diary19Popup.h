@@ -20,13 +20,15 @@ class TouchSuctionLayer;
 class Diary19Popup : public CCLayer
 {
 public:
-	static Diary19Popup* create(int t_touch_priority, function<void()> t_end_func);
+	static Diary19Popup* create(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame = false);
 	
 private:
 	int touch_priority;
 	function<void()> end_func;
 	
 	bool is_menu_enable;
+	bool is_ingame;
+	CCPoint center_position;
 	
 	TouchSuctionLayer* suction;
 	
@@ -36,7 +38,7 @@ private:
 	
 	void buttonAction(CCObject* sender, CCControlEvent t_event);
 	
-	void myInit(int t_touch_priority, function<void()> t_end_func);
+	void myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame);
 };
 
 #endif /* defined(__DGproto__Diary19Popup__) */

@@ -233,7 +233,7 @@ bool GraphDog::isExistApp()
 #endif
 }
 
-void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
+void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode, int t_card_number)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 //	JniMethodInfo minfo;
@@ -248,12 +248,12 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 //		__minfo.methodID = 0;
 		
 		
-		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "diaryAppExe", "(Ljava/lang/String;Ljava/lang/String;)V"))
+		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "diaryAppExe", "(Ljava/lang/String;Ljava/lang/String;I)V"))
 		{
 			jstring param1 = __minfo.env->NewStringUTF(t_memberID.c_str());
 			jstring param2 = __minfo.env->NewStringUTF(t_diaryCode.c_str());
 			
-			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2);
+			__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2, t_card_number);
 			__minfo.env->DeleteLocalRef(__minfo.classID);
 			__minfo.env->DeleteLocalRef(param1);
 			__minfo.env->DeleteLocalRef(param2);
@@ -274,6 +274,15 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode)
 		pasteborad2.string = [NSString stringWithUTF8String:t_diaryCode.c_str()];
 	else
 		NSLog(@"Can't create pasteboard2");
+	
+	UIPasteboard* pasteborad3 = [UIPasteboard pasteboardWithName:@"cardNumber" create:YES];
+	if(pasteborad3 != nil)
+	{
+		string t_card_string = ccsf("%d", t_card_number);
+		pasteborad3.string = [NSString stringWithUTF8String:t_card_string.c_str()];
+	}
+	else
+		NSLog(@"Can't create pasteboard3");
 	
 	
 	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"DgDiary://"]];
