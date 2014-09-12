@@ -198,7 +198,8 @@ bool CardViewScene::init()
 		is_actioned = false;
 		is_morphing = true;
 		
-		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
+		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
@@ -280,7 +281,8 @@ bool CardViewScene::init()
 	{
 //		morphing_filename = "morphing_heart_on.ccbi";
 		
-		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
+		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
