@@ -783,5 +783,12 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_isOffCardMorphingSound] = "iocms";
 	return_value[kDSH_Key_joystickSize] = "jss";
 	return_value[kDSH_Key_isOffJoystickVib] = "iojv";
+	return_value[kDSH_Key_isNotFirstItemGacha] = "infig";
+	
+	return_value[kDSH_Key_cardSettingTableOffsetDefault] = "cstod";
+	return_value[kDSH_Key_cardSettingTableOffsetTake] = "cstot";
+	return_value[kDSH_Key_cardSettingTableOffsetTakeReverse] = "cstotr";
+	return_value[kDSH_Key_cardSettingTableOffsetGrade] = "cstog";
+	return_value[kDSH_Key_cardSettingTableOffsetGradeReverse] = "cstogr";
 }
 #undef LZZ_INLINE

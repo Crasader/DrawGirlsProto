@@ -1580,11 +1580,11 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	setMapData = t_setMapData;
 	checkBeforeNewLine = t_checkBeforeNewLine;
 	
-	TUTO_TouchOutWidth = 10.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
-	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	TUTO_TouchOutWidth = 10.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
 	
-	minimumDistanceJ = 8.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
-	JoystickCenterLimit = 30.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	minimumDistanceJ = 8.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	JoystickCenterLimit = 30.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
 	
 	regular_spectrum = 70.f;
 	irregular_spectrum = 20.f;

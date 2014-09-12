@@ -1185,7 +1185,7 @@ void MapScanner::exchangeMS()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2));
+	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3));
 	visibleImg->setPosition(CCPointZero);
 	addChild(visibleImg, visibleZorder);
 

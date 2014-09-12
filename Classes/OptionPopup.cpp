@@ -81,6 +81,7 @@ enum OptionPopupMenuTag{
 	kOP_MT_message,
 	kOP_MT_coupon,
 	kOP_MT_community,
+	kOP_MT_recommender,
 	kOP_MT_tip,
 	kOP_MT_kakao
 };
@@ -354,14 +355,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_tip_img = CCSprite::create("tabbutton_up.png");
-	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	n_tip_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_tip_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
 	n_tip_img->addChild(n_tip_label);
 	
 	CCSprite* s_tip_img = CCSprite::create("tabbutton_up.png");
 	s_tip_img->setColor(ccGRAY);
-	KSLabelTTF* s_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	s_tip_label->disableOuterStroke();
 	s_tip_label->setColor(ccGRAY);
 	s_tip_label->setPosition(ccpFromSize(s_tip_img->getContentSize()/2.f) + ccp(0,2));
@@ -369,14 +370,14 @@ bool OptionPopup::init()
 	
 	CCSprite* d_tip_img = CCSprite::create("tabbutton_down.png");
 	d_tip_img->setColor(ccGRAY);
-	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	d_tip_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	d_tip_label->setPosition(ccpFromSize(d_tip_img->getContentSize()/2.f) + ccp(0,2));
 	d_tip_img->addChild(d_tip_label);
 	
 	
 	CCMenuItem* tip_item = CCMenuItemSprite::create(n_tip_img, s_tip_img, d_tip_img, this, menu_selector(OptionPopup::menuAction));
-	tip_item->setTag(kOP_MT_tip);
+	tip_item->setTag(kOP_MT_recommender);
 	tip_item->setPosition(ccp(244,256.5f));
 	tab_menu->addChild(tip_item);
 	
@@ -565,7 +566,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_big_item = CCMenuItemSprite::create(n_joystick_big, s_joystick_big, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_big_item->setTag(kOP_MT_joystickBig);
-	joystick_size_big_item->setPosition(ccp(-45,0));
+	joystick_size_big_item->setPosition(ccp(18,0));
 	
 	
 	CCSprite* n_joystick_small = CCSprite::create("option_plus.png");
@@ -580,7 +581,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* joystick_size_small_item = CCMenuItemSprite::create(n_joystick_small, s_joystick_small, this, menu_selector(OptionPopup::menuAction));
 	joystick_size_small_item->setTag(kOP_MT_joystickSmall);
-	joystick_size_small_item->setPosition(ccp(18,0));
+	joystick_size_small_item->setPosition(ccp(-45,0));
 	
 	
 	CCMenu* joystick_size_menu = CCMenu::create();
@@ -851,6 +852,34 @@ bool OptionPopup::init()
 	//	logout_menu->setTouchPriority(-171);
 	
 	
+	CCSprite* n_accountLink_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	n_accountLink_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_accountLink_label->setPosition(ccpFromSize(n_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
+	n_accountLink_img->addChild(n_accountLink_label);
+	
+	CCSprite* s_accountLink_img = CCSprite::create("subbutton_pink.png");
+	s_accountLink_img->setColor(ccGRAY);
+	KSLabelTTF* s_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	s_accountLink_label->setColor(ccGRAY);
+	s_accountLink_label->disableOuterStroke();
+	s_accountLink_label->setPosition(ccpFromSize(s_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
+	s_accountLink_img->addChild(s_accountLink_label);
+	
+	CCSprite* d_accountLink_img = CCSprite::create("subbutton_pink.png");
+	d_accountLink_img->setColor(ccGRAY);
+	KSLabelTTF* d_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	d_accountLink_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_accountLink_label->setPosition(ccpFromSize(d_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
+	d_accountLink_img->addChild(d_accountLink_label);
+	
+	
+	CCMenuItem* accountLink_item = CCMenuItemSprite::create(n_accountLink_img, s_accountLink_img, d_accountLink_img, this, menu_selector(OptionPopup::menuAction));
+	accountLink_item->setTag(kOP_MT_tip);
+	accountLink_item->setPosition(ccp(395,16));
+	tab_menu->addChild(accountLink_item);
+	
+	
 	CCSprite* n_help_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
 	n_help_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
@@ -875,7 +904,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* help_item = CCMenuItemSprite::create(n_help_img, s_help_img, d_help_img, this, menu_selector(OptionPopup::menuAction));
 	help_item->setTag(kOP_MT_help);
-	help_item->setPosition(ccp(395,16));
+	help_item->setPosition(ccp(293,16));//395
 	tab_menu->addChild(help_item);
 	
 	
@@ -904,7 +933,7 @@ bool OptionPopup::init()
 	
 	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(OptionPopup::menuAction));
 	diary_item->setTag(kOP_MT_toDiary19);
-	diary_item->setPosition(ccp(293,16));
+	diary_item->setPosition(ccp(191,16));//293
 	tab_menu->addChild(diary_item);
 	
 	
@@ -1031,6 +1060,10 @@ void OptionPopup::menuAction(CCObject* pSender)
 //		myHSP->openCSCenter("supports.cscenter");
 		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_recommender)
+	{
+		is_menu_enable = true;
+	}
 	else if(tag == kOP_MT_toDiary19)
 	{
 		if(graphdog->isExistApp())
@@ -1048,7 +1081,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 								{
-									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString()); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), -1); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
 								}
 							   else
 								{

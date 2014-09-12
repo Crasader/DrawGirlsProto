@@ -170,7 +170,14 @@ typedef enum t_DSH_Key{
 	kDSH_Key_isOffCardMorphingSound,
 	
 	kDSH_Key_joystickSize,
-	kDSH_Key_isOffJoystickVib
+	kDSH_Key_isOffJoystickVib,
+	kDSH_Key_isNotFirstItemGacha,
+	
+	kDSH_Key_cardSettingTableOffsetDefault,
+	kDSH_Key_cardSettingTableOffsetTake,
+	kDSH_Key_cardSettingTableOffsetTakeReverse,
+	kDSH_Key_cardSettingTableOffsetGrade,
+	kDSH_Key_cardSettingTableOffsetGradeReverse
 	
 }DSH_Key;
 
@@ -181,8 +188,8 @@ enum SpecialTutorialCode{
 };
 
 enum ControlJoystickDirection{
-	kControlJoystickDirection_right = 0,
-	kControlJoystickDirection_left
+	kControlJoystickDirection_left = 0,
+	kControlJoystickDirection_right
 };
 
 enum SaveUserData_Key{

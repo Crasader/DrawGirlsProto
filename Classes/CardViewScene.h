@@ -44,7 +44,7 @@ private:
 	
 	MyNode* first_img;
 	CCBAnimationManager* ccb_manager;
-	
+	CCSprite* t_ccb_img;
 	CCSprite* sound_img;
 	
 	CommonButton* next_button;
@@ -62,7 +62,7 @@ private:
 	void nextScene();
 	
 	bool is_morphing;
-	
+	int touch_mode;
 	CCSprite* zoom_img;
 	
 	CCSprite* morphing_img;

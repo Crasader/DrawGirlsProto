@@ -145,7 +145,7 @@ public:
 	bool test(string action, const Json::Value param,CCObject *target, GDSelType selector, string result);
   
 	bool isExistApp();
-	void openDiaryApp(string t_memberID, string t_diaryCode);
+	void openDiaryApp(string t_memberID, string t_diaryCode, int t_card_number);
 	
 	void vibAction();
 	

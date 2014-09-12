@@ -16,17 +16,23 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 
-Diary19Popup* Diary19Popup::create(int t_touch_priority, function<void()> t_end_func)
+Diary19Popup* Diary19Popup::create(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame)
 {
 	Diary19Popup* t_mup = new Diary19Popup();
-	t_mup->myInit(t_touch_priority, t_end_func);
+	t_mup->myInit(t_touch_priority, t_end_func, t_is_ingame);
 	t_mup->autorelease();
 	return t_mup;
 }
 
-void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func)
+void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame)
 {
 	is_menu_enable = false;
+	is_ingame = t_is_ingame;
+	
+	if(is_ingame)
+		center_position = ccp(240, myDSH->ui_center_y);
+	else
+		center_position = ccp(240,160);
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
@@ -38,7 +44,7 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	gray = CCSprite::create("back_gray.png");
 	gray->setOpacity(0);
-	gray->setPosition(ccp(240,160));
+	gray->setPosition(center_position);
 	gray->setScaleX(screen_scale_x);
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
@@ -49,7 +55,7 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func)
 	suction->setTouchEnabled(true);
 	
 	m_container = CCNode::create();
-	m_container->setPosition(ccp(240,160));
+	m_container->setPosition(center_position);
 	addChild(m_container);
 	
 	back_case = CCSprite::create("popup_small_back.png");

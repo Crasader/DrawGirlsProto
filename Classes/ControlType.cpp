@@ -1520,7 +1520,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	
 //	CCLog("device width : %.2lf", myHSP->getScreenRealWidth());
 	
-	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f;
+	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f;
 	
 	TouchOutWidth = 10.0*joystick_size_value;
 	JOYSTICK_FOLLOW_DISTANCE = 65.0*joystick_size_value;
@@ -1591,7 +1591,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		{
 			draw_button->setPosition(ccp(480-BUTTON_SCREEN_IN_DISTANCE+CONTROL_OUT_DISTANCE,BUTTON_SCREEN_IN_DISTANCE));
 			
-			addChild(KSGradualValue<float>::create(480-BUTTON_SCREEN_IN_DISTANCE - CONTROL_OUT_DISTANCE, 480-BUTTON_SCREEN_IN_DISTANCE, CONTROL_IN_TIME,
+			addChild(KSGradualValue<float>::create(480-BUTTON_SCREEN_IN_DISTANCE + CONTROL_OUT_DISTANCE, 480-BUTTON_SCREEN_IN_DISTANCE, CONTROL_IN_TIME,
 												   [=](float t){draw_button->setPositionX(t);},
 												   [=](float t){draw_button->setPositionX(480-BUTTON_SCREEN_IN_DISTANCE);}));
 		}

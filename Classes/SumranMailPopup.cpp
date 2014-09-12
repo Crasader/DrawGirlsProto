@@ -1127,6 +1127,8 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 //					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 //			}
 			
+			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
 			bool is_add_cf = false;
@@ -1608,6 +1610,8 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 //				else if(t_abil["type"].asInt() == kIC_baseSpeedUp)
 //					NSDS_SI(kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i, t_card["no"].asInt(), t_option["unit"].asInt(), false);
 //			}
+			
+			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
