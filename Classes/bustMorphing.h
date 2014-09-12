@@ -369,8 +369,33 @@ public:
 		CCPoint local = convertToNodeSpace(touchLocation);
 		CCPoint t = ccpMult(ccpSub(local,m_startPos),0.2f);
 		float d = ccpLength(t);
-		if(d>13){
-			morphing(pTouch, pEvent);
+		if(d>18){
+			
+			float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
+			float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
+			int cnt=0;
+			for(auto i : m_movingVertices){ // 움직여야 되는 점의 집합에 대해
+				Vertex3D backup = m_backupVertices[i];
+				float r = m_distance[i];
+				ccColor4B rgb = m_movingVertexColors[i];
+				float waveValue = rgb.g + rgb.r;
+				float time1 = 0.15f;
+				float time2 = 0.5f;
+				if(waveValue > 0)
+				{
+					CCPoint goalPosition = CCPointMake(backup.x + t.x * waveValue/255.f, backup.y + t.y* waveValue/255.f);
+					addChild(KSGradualValue<CCPoint>::create(goalPosition, ccp(backup.x, backup.y), time2,
+																									 [=](CCPoint k){
+																										 *i = Vertex3DMake(k.x,k.y, backup.z);
+																									 },
+																									 [=](CCPoint t){
+																										 *i = backup;
+																									 },
+																									 elasticOut));
+				}
+				cnt++;
+			}
+			
 			m_stopTouch=true;
 			return;
 		}
@@ -390,19 +415,13 @@ public:
 			Vertex3D backup = m_backupVertices[i];
 			float r = m_distance[i];
 			ccColor4B rgb = m_movingVertexColors[i];
-			float diffRad = atan2f(1.f, 0.f); // 위쪽으로.
-			//				CCPoint goalPosition = ccp(cosf(diffRad) * -800 / r, sinf(diffRad) * -800 / r);
 			float waveValue = rgb.g + rgb.r;
-			float devider = -15.f;
-			float time1 = 0.15f;
-			float time2 = 0.5f;
 			if(waveValue > 0)
 			{
-				float diffRad = diffRad1;
-				CCPoint goalPosition = ccp(cosf(diffRad1), sinf(diffRad1)) * waveValue  / devider;
-				
 				
 				*i = Vertex3DMake(backup.x + t.x * waveValue/255.f, backup.y + t.y* waveValue/255.f, backup.z);
+				
+
 			}
 			cnt++;
 		}
