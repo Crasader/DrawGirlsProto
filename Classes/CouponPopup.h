@@ -39,8 +39,8 @@ private:
 	CCNode* m_container;
 	
 	CCEditBox* input_text1;
-	CCEditBox* input_text2;
-	CCEditBox* input_text3;
+//	CCEditBox* input_text2;
+//	CCEditBox* input_text3;
 	
 	CCSprite* back_case;
 	LoadingLayer* loading_layer;

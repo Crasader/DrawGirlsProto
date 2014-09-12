@@ -76,11 +76,6 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 								   input_text1->setEnabled(false);
 								   input_text1->removeFromParent();
 								   
-								   input_text2->setEnabled(false);
-								   input_text2->removeFromParent();
-									 
-								   input_text3->setEnabled(false);
-								   input_text3->removeFromParent();
 								   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 								   
 									 CommonAnimation::closePopup(this, m_container, gray, [=](){
@@ -254,11 +249,6 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 	input_text1->setVisible(false);
 	input_text1->setEnabled(false);
 	
-	input_text2->setVisible(false);
-	input_text2->setEnabled(false);
-	
-	input_text3->setVisible(false);
-	input_text3->setEnabled(false);
 	ASPopupView* t_popup = ASPopupView::create(touch_priority-5);
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -352,11 +342,6 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 											input_text1->setEnabled(false);
 											input_text1->removeFromParent();
 											
-											input_text2->setEnabled(false);
-											input_text2->removeFromParent();
-											
-											input_text3->setEnabled(false);
-											input_text3->removeFromParent();
 											
 											CommonAnimation::closePopup(this, m_container, this->gray, [=](){
 												
@@ -370,12 +355,6 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 										{
 											input_text1->setVisible(true);
 											input_text1->setEnabled(true);
-											
-											input_text2->setVisible(true);
-											input_text2->setEnabled(true);
-											
-											input_text3->setVisible(true);
-											input_text3->setEnabled(true);
 											
 											this->is_menu_enable = true;
                                             t_popup->removeFromParent();
