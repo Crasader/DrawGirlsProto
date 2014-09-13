@@ -244,7 +244,7 @@ void EventShopPopup::menuAction(CCObject* sender)
 							addChild(loading_layer, 999);
 							
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopEventRuby_int1_exchangeID_s, t_index));
+							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopEventRuby_int1_exchangeID_s, t_index), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 							
 							mySGD->changeGoods([=](Json::Value result_data){
 								loading_layer->removeFromParent();

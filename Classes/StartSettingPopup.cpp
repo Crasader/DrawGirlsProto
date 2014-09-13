@@ -63,6 +63,8 @@ bool StartSettingPopup::init()
 	buy_button = NULL;
 	selected_gacha_item = (ITEM_CODE)mySGD->gacha_item.getV();
 	
+	is_first_gacha = false;
+	
 	touch_priority = -210;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -1569,12 +1571,37 @@ void StartSettingPopup::startItemGacha()
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
+	int random_value;
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_isNotFirstItemGacha))
+	{
+		is_first_gacha = true;
+		myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, true);
+	}
+	else
+	{
+		random_value = rand()%1000;
+	}
+	
+	if(random_value < 200) // 200
+		gacha_item_type = kIC_fast; // 4
+	else if(random_value < 400) // 200
+		gacha_item_type = kIC_subOneDie; // 5
+	else if(random_value < 650) // 250
+		gacha_item_type = kIC_silence; // 7
+	else if(random_value < 900) // 250
+		gacha_item_type = kIC_longTime; // 8
+	else // 100
+		gacha_item_type = kIC_heartUp; // 10
+	
 	if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 	{
 		CCLOG("start item gacha");
 		
-		
-		mySGD->addChangeGoods("g_i_p");
+		if(is_first_gacha)
+			mySGD->addChangeGoods("g_i_p", kGoodsType_begin, 0, "", ccsf("%d", -1), "아이템가챠(패스권)");
+		else
+			mySGD->addChangeGoods("g_i_p", kGoodsType_begin, 0, "", ccsf("%d", gacha_item_type), "아이템가챠(패스권)");
 		
 		mySGD->changeGoods(json_selector(this, StartSettingPopup::goItemGacha));
 	}
@@ -1599,7 +1626,10 @@ void StartSettingPopup::startItemGacha()
 				return;
 			}
 			
-			mySGD->addChangeGoods("g_i_gr");
+			if(is_first_gacha)
+				mySGD->addChangeGoods("g_i_gr", kGoodsType_begin, 0, "", ccsf("%d", -1), "아이템가챠(다시뽑기)");
+			else
+				mySGD->addChangeGoods("g_i_gr", kGoodsType_begin, 0, "", ccsf("%d", gacha_item_type), "아이템가챠(다시뽑기)");
 		}
 		else
 		{
@@ -1620,7 +1650,10 @@ void StartSettingPopup::startItemGacha()
 				return;
 			}
 			
-			mySGD->addChangeGoods("g_i_g");
+			if(is_first_gacha)
+				mySGD->addChangeGoods("g_i_g", kGoodsType_begin, 0, "", ccsf("%d", -1), "아이템가챠");
+			else
+				mySGD->addChangeGoods("g_i_g", kGoodsType_begin, 0, "", ccsf("%d", gacha_item_type), "아이템가챠");
 		}
 		CCLOG("start item gacha");
 		
@@ -1682,11 +1715,16 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			else
 				buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
 //			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
-		});
+		}, gacha_item_type);
 		addChild(t_popup, kStartSettingPopupZorder_popup);
 	}
 	else
 	{
+		if(is_first_gacha)
+		{
+			myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, false);
+		}
+		
 		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
@@ -1694,6 +1732,8 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		
 		is_menu_enable = true;
 	}
+	
+	is_first_gacha = false;
 }
 
 void StartSettingPopup::itemGachaAction()
@@ -2033,7 +2073,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
 											
-											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]));
+											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]), kGoodsType_begin, 0, "", ccsf("%d", mySD->getSilType()), "아이템구입");
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -2092,7 +2132,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 											LoadingLayer* t_loading = LoadingLayer::create(-9999);
 											addChild(t_loading, 9999);
 											
-											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]));
+											mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopItem_int1_exchangeID_s, item_list[clicked_item_idx]), kGoodsType_begin, 0, "", ccsf("%d", mySD->getSilType()), "아이템구입");
 											
 											mySGD->changeGoods([=](Json::Value result_data){
 												t_loading->removeFromParent();
@@ -2568,7 +2608,7 @@ void StartSettingPopup::finalSetting()
 		{
 			if(mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(item_list[i])) > 0)
 			{
-				mySGD->addChangeGoods(CCString::createWithFormat("u_i_%d", item_list[i])->getCString());
+				mySGD->addChangeGoods(CCString::createWithFormat("u_i_%d", item_list[i])->getCString(), kGoodsType_begin, 0, "", ccsf("%d", mySD->getSilType()), "아이템사용");
 				is_have_item[i] = true;
 			}
 			myLog->addLog(kLOG_useItem_s, -1, convertToItemCodeToItemName(item_list[i]).c_str());

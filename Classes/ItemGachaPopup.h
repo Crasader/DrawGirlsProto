@@ -23,7 +23,7 @@ class KSLabelTTF;
 class ItemGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
-	static ItemGachaPopup* create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func);
+	static ItemGachaPopup* create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func, int t_item_type);
 	
 	virtual void completedAnimationSequenceNamed (char const * name);
 	
@@ -56,7 +56,7 @@ private:
 	
 	LoadingLayer* loading_layer;
 	
-	void myInit(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func);
+	void myInit(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func, int t_item_type);
 	void useAction(CCObject* sender, CCControlEvent t_event);
 	void regachaAction(CCObject* sender, CCControlEvent t_event);
 	

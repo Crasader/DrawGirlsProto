@@ -1134,7 +1134,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									addChild(loading_layer, kSP_Z_popup);
 									
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1));
+									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 									
 									mySGD->changeGoods([=](Json::Value result_data){
 										loading_layer->removeFromParent();
@@ -1216,7 +1216,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopGold_int1_exchangeID_s, tag-kSP_MT_content1));
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopGold_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 										
 										fail_func = [=]()
 										{
@@ -1252,7 +1252,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										loading_layer = LoadingLayer::create();
 										addChild(loading_layer, kSP_Z_popup);
 										
-										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopCoin_int1_exchangeID_s, tag-kSP_MT_content1));
+										mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopCoin_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 										
 //										myDSH->setIntegerForKey(kDSH_Key_heartCnt, myDSH->getIntegerForKey(kDSH_Key_heartCnt) + ruby_to_heart[index_to_heart[tag-kSP_MT_content1].getV()].getV());
 										

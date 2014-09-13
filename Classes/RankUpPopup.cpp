@@ -499,7 +499,12 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
-		mySGD->addChangeGoods("c_up");
+		int take_grade;
+		take_grade = mySGD->getStageGrade();
+		
+		int t_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_grade);
+		
+		mySGD->addChangeGoods("c_up", kGoodsType_begin, 0, "", ccsf("%d", t_card_number), "카드승급");
 		
 		mySGD->changeGoods([=](Json::Value result_data){
 			t_loading->removeFromParent();

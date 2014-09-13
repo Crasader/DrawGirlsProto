@@ -95,7 +95,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-				mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+				mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "이어하기(PvP)");
 				mySGD->changeGoods([=](Json::Value result_data)
 								   {
 									   t_popup->removeFromParent();
@@ -150,7 +150,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 			addChild(t_popup, 9999);
 			
-			mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+			mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
 			mySGD->changeGoods([=](Json::Value result_data)
 							   {
 								   t_popup->removeFromParent();
@@ -194,7 +194,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(루비)");
 				mySGD->changeGoods([=](Json::Value result_data)
 								   {
 									   t_popup->removeFromParent();

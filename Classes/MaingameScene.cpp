@@ -1287,11 +1287,11 @@ void Maingame::gachaOn()
 	bool is_use_gold = false;
 	
 	if(mySGD->getGoodsValue(kGoodsType_pass2) > 0)
-		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+		mySGD->addChangeGoods("g_m_p", kGoodsType_pass2, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "맵가챠(패스권)");
 	else if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 	{
 		is_use_gold = true;
-		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+		mySGD->addChangeGoods("g_m_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "맵가챠(골드)");
 	}
 	else
 	{

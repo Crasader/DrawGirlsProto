@@ -432,6 +432,7 @@ public:
 	void setTargetDelegate(CCObject* t_t, SEL_CallFuncB t_d);
 	
 	int getGameTime();
+	int getGameUseTime();
 	
 	void setStartRequestsData(Json::Value result_data);
 	
@@ -1009,6 +1010,7 @@ private:
 	KSProtectVar<int> before_rankup_stage_grade;
 	KSProtectVar<int> keep_gold;
 	KSProtectVar<int> game_time;
+	KSProtectVar<int> game_use_time;
 	KSProtectVar<int> ingame_gold;
 	
 	int start_map_gacha_cnt;

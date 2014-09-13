@@ -103,7 +103,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
-		mySGD->addChangeGoods("g_99_p");
+		mySGD->addChangeGoods("g_99_p", kGoodsType_begin, 0, "", ccsf("%d", mySD->getSilType()), "99프로가챠(패스권)");
 		
 		mySGD->changeGoods([=](Json::Value result_data){
 			t_loading->removeFromParent();
@@ -154,7 +154,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 		LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
 		addChild(t_loading, 9999);
 		
-		mySGD->addChangeGoods("g_99_r");
+		mySGD->addChangeGoods("g_99_r", kGoodsType_begin, 0, "", ccsf("%d", mySD->getSilType()), "99프로가챠(루비)");
 		
 		mySGD->changeGoods([=](Json::Value result_data){
 			t_loading->removeFromParent();
