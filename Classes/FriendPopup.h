@@ -65,6 +65,8 @@ private:
 	
 	//	ScrollBar* m_scrollBar;
 	std::vector<std::string> m_sendList; // 친구요청 보낸 리스트. 버튼 감추기 위해 필요함.
+	std::function<void(CCObject*)> m_manageButtonCallback;
+	std::function<void(CCObject*)> m_listButtonCallback;
 	bool is_menu_enable;
 	int m_touchPriority;
 	CCMenuLambda* tab_menu;
