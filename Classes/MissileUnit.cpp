@@ -3855,7 +3855,7 @@ void PoisonDrop::initParticle ()
 	auto ret = KS::loadCCBI<CCSprite*>(this, "bomb_8_9.ccbi");
 	CCSprite* particle = ret.first;
 	
-	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	//		particle->setPosVar(CCPointZero);
 	dropImg->addChild(particle);
 }
