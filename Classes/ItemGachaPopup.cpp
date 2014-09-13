@@ -21,10 +21,10 @@
 #include "CommonAnimation.h"
 #include "FiveRocksCpp.h"
 
-ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
+ItemGachaPopup* ItemGachaPopup::create(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func, int t_item_type)
 {
 	ItemGachaPopup* t_mup = new ItemGachaPopup();
-	t_mup->myInit(t_touch_priority, t_end_func, t_gacha_on_func);
+	t_mup->myInit(t_touch_priority, t_end_func, t_gacha_on_func, t_item_type);
 	t_mup->autorelease();
 	return t_mup;
 }
@@ -95,43 +95,28 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						}));
 						
 						string title_str, ment_str;
-						int random_value;
-						if(!myDSH->getBoolForKey(kDSH_Key_isNotFirstItemGacha))
+						if(item_type == kIC_fast) // 200
 						{
-							myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, true);
-							random_value = 900;
-						}
-						else
-						{
-							random_value = rand()%1000;
-						}
-						if(random_value < 200) // 200
-						{
-							item_type = kIC_fast; // 4
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item4title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item4ment);
 						}
-						else if(random_value < 400) // 200
+						else if(item_type == kIC_subOneDie) // 200
 						{
-							item_type = kIC_subOneDie; // 5
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
 						}
-						else if(random_value < 650) // 250
+						else if(item_type = kIC_silence) // 250
 						{
-							item_type = kIC_silence; // 7
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
 						}
-						else if(random_value < 900) // 250
+						else if(item_type = kIC_longTime) // 250
 						{
-							item_type = kIC_longTime; // 8
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item8title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item8ment);
 						}
-						else // 100
+						else // 100 item_type == kIC_heartUp
 						{
-							item_type = kIC_heartUp; // 10
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item10title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item10ment);
 						}
@@ -218,13 +203,15 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 	}
 }
 
-void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func)
+void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, function<void(int)> t_gacha_on_func, int t_item_type)
 {
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
 	gacha_on_func = t_gacha_on_func;
+	
+	item_type = t_item_type;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -455,7 +442,20 @@ void ItemGachaPopup::regachaAction(CCObject* sender, CCControlEvent t_event)
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		mySGD->addChangeGoods("g_i_gr");
+	int random_value = rand()%1000;
+	
+	if(random_value < 200) // 200
+		item_type = kIC_fast; // 4
+	else if(random_value < 400) // 200
+		item_type = kIC_subOneDie; // 5
+	else if(random_value < 650) // 250
+		item_type = kIC_silence; // 7
+	else if(random_value < 900) // 250
+		item_type = kIC_longTime; // 8
+	else // 100
+		item_type = kIC_heartUp; // 10
+	
+		mySGD->addChangeGoods("g_i_gr", kGoodsType_begin, 0, "", ccsf("%d", item_type), "아이템가챠(다시뽑기)");
 		mySGD->changeGoods(json_selector(this, ItemGachaPopup::resultSaveUserData));
 //	}
 }

@@ -249,7 +249,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		before_level = missile_level;
 		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
 		
-		mySGD->addChangeGoods("cu_p", kGoodsType_cu, mySGD->getSelectedCharacterHistory().characterNo.getV());
+		mySGD->addChangeGoods("cu_p", kGoodsType_cu, mySGD->getSelectedCharacterHistory().characterNo.getV(), "", ccsf("%d", mySGD->getUserdataHighPiece()), "캐릭터업그레이드(패스권)");
 		
 		mySGD->changeGoods(json_selector(this, MissileUpgradePopup::resultSaveUserData));
 		
@@ -296,8 +296,8 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		t_detail.m_type = kGoodsType_gold;
 		t_detail.m_value = -upgrade_price;
 		t_detail.m_statsID = "";
-		t_detail.m_statsValue = "";
-		t_detail.m_content = "";
+		t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+		t_detail.m_content = "캐릭터업그레이드(골드)";
 		t_detail.m_isPurchase = false;
 		
 		t_list.push_back(t_detail);
@@ -306,8 +306,8 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		t_detail2.m_type = kGoodsType_cu;
 		t_detail2.m_value = mySGD->getSelectedCharacterHistory().characterNo.getV();
 		t_detail2.m_statsID = "";
-		t_detail2.m_statsValue = "";
-		t_detail2.m_content = "";
+		t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+		t_detail2.m_content = "캐릭터업그레이드(골드)";
 		t_detail2.m_isPurchase = false;
 		
 		t_list.push_back(t_detail2);

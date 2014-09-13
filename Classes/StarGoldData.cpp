@@ -429,6 +429,7 @@ void StarGoldData::setGameStart()
 	stage_grade = 0;
 	before_rankup_stage_grade = 0;
 	game_time = 0;
+	game_use_time = 0;
 	start_map_gacha_cnt = 0;
 	start_map_gacha_use_gold_cnt = 0;
 	clear_reward_gold = 0;
@@ -486,6 +487,7 @@ void StarGoldData::gameClear( int t_grade, float t_score, float t_percentage, in
 	score = score.getV()*stage_grade.getV();
 
 	game_time = t_game_time;
+	game_use_time = t_use_time;
 	
 	if(is_write_replay)
 	{
@@ -669,6 +671,11 @@ void StarGoldData::setTargetDelegate( CCObject* t_t, SEL_CallFuncB t_d )
 int StarGoldData::getGameTime()
 {
 	return game_time.getV();
+}
+
+int StarGoldData::getGameUseTime()
+{
+	return game_use_time.getV();
 }
 
 void StarGoldData::setStartRequestsData( Json::Value result_data )
@@ -2633,7 +2640,7 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 		if(isTimeEvent(kTimeEventType_gold))
 			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
 		
-		addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString());
+		addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
 	}
 	
 	vector<CommandParam> transaction_list;

@@ -695,7 +695,7 @@ void AchievePopup::cellAction( CCObject* sender )
 	
 	if(myAchieve->isChangedAchieve())
 	{
-		mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", keep_tag)->getCString());
+		mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", keep_tag)->getCString(), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "업적완료");
 		
 		vector<CommandParam> t_command_achieve = myAchieve->updateAchieveHistoryVectorParam(json_selector(this, AchievePopup::resultSaveUserData));
 		mySGD->changeGoodsTransaction(t_command_achieve, nullptr);
@@ -1304,7 +1304,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		if(!myAchieve->isCompleted((AchievementCode)i) &&
 		   myAchieve->isAchieve((AchievementCode)i))
 		{
-			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString());
+			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString(), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "업적완료");
 			myAchieve->changeComplete((AchievementCode)i);
 			
 			one_list.push_back((AchievementCode)i);
@@ -1317,7 +1317,7 @@ void AchievePopup::takeAllReward(CCObject* sender)
 		if(!myAchieve->isCompleted((AchievementCode)i) &&
 		   myAchieve->isAchieve((AchievementCode)i))
 		{
-			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString());
+			mySGD->addChangeGoods(CCString::createWithFormat("ac_%d", i)->getCString(), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "업적완료");
 			myAchieve->changeComplete((AchievementCode)i);
 			
 			one_list.push_back((AchievementCode)i);

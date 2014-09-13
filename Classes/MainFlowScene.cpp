@@ -1577,7 +1577,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					heart_refresh_loading = t_loading;
 					
-					mySGD->addChangeGoods("getHeart", kGoodsType_heart, refresh_cnt, "puzzleHeart", ccsf("%d", puzzle_number), "퍼즐클리어하트");
+					mySGD->addChangeGoods("fullHeart", kGoodsType_heart, refresh_cnt, "", ccsf("%d", mySGD->getUserdataHighPiece()), "하트충전");
 					mySGD->changeGoods(json_selector(this, MainFlowScene::puzzleHeartRefresh));
 				}
 				
@@ -2100,7 +2100,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					heart_refresh_loading = t_loading;
 					
-					mySGD->addChangeGoods("getHeart", kGoodsType_heart, refresh_cnt, "puzzleHeart", ccsf("%d", puzzle_number), "퍼즐클리어하트");
+					mySGD->addChangeGoods("fullHeart", kGoodsType_heart, refresh_cnt, "", ccsf("%d", mySGD->getUserdataHighPiece()), "하트충전");
 					mySGD->changeGoods(json_selector(this, MainFlowScene::puzzleHeartRefresh));
 				}
 				
@@ -2237,7 +2237,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 		LoadingLayer* loading_layer = LoadingLayer::create(-9999);
 		addChild(loading_layer, 9999);
 		
-		mySGD->addChangeGoods("b_pft", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", puzzle_number)->getCString());
+		mySGD->addChangeGoods("b_pft", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", puzzle_number)->getCString(), "퍼즐퍼펙트");
 		mySGD->changeGoods([=](Json::Value result_data)
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)

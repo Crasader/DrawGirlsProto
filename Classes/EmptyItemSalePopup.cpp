@@ -285,9 +285,10 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 //#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	
 	if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
-		mySGD->addChangeGoods("pg_snh");
+		mySGD->addChangeGoods("pg_snh", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 	else if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
-		mySGD->addChangeGoods("pg_ei");
+		mySGD->addChangeGoods("pg_ei", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+	
 	
 	mySGD->changeGoods([=](Json::Value result_data){
 		inapp_loading->removeFromParent();

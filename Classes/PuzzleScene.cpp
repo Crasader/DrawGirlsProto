@@ -597,7 +597,7 @@ bool PuzzleScene::init()
 		
 		if(!mySGD->isTimeEvent(kTimeEventType_heart))
 		{
-			mySGD->addChangeGoods("clearHeartUp");
+			mySGD->addChangeGoods("clearHeartUp", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getGameUseTime()), "클리어하트충전");
 		}
 		
 		Json::Value card_param;
