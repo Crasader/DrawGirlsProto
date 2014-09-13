@@ -1037,6 +1037,7 @@ void FriendPopup::setAddMenu()
 					
 					Json::Value param;
 					param["nick"] = editbox->getText();
+					param["isPublic"] = true;
 					myHSP->command("getuserdata", param, [=](Json::Value v){
 						KS::KSLog("%", v);
 						if(v["result"]["code"] != GDSUCCESS)
