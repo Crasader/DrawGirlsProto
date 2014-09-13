@@ -2469,7 +2469,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		return;
 	}
 	
-	if(!isExchange && !isClear){
+	if(!isExchange){
 		//시도횟수에 따라 몬스터  hp 떨구기.
 		float hpBalance = MIN(playCount,10)*5;
 		m_remainHp -= m_remainHp*hpBalance/100.f;
