@@ -70,8 +70,12 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 	
 	m_attackCanceled = true;
 	
-
-	if((m_cumberState & kCumberStateNoDirection) && castCancel)
+	if(castCancel)
+	{
+		CCLOG("캔슬 상황");
+	}
+	if(((m_cumberState & kCumberStateNoDirection) || (m_cumberState & kCumberStateCasting))
+		 && castCancel)
 	{
 		CCLOG("(m_cumberState & kCumberStateNoDirection)");
 		CCLOG("돌아가라고 상태 변경때림!!");

@@ -13,7 +13,7 @@ USING_NS_CC;
 class SearchEye : public CCNode
 {
 public:
-	static SearchEye * create (CCNode* t_boss);
+	static SearchEye * create (CCNode* t_boss, vector<SearchEye*>* sv);
 	virtual ~SearchEye()
 	{
 		CCLOG("~SEARCH EYE");
@@ -26,7 +26,8 @@ private:
 	CCSize frame_size;
 	int ing_frame;
 	void mainCumberSearching ();
-	void myInit (CCNode* t_boss);
+	vector<SearchEye*>* search_eye_vector;
+	void myInit (CCNode* t_boss, vector<SearchEye*>* sv);
 };
 #undef LZZ_INLINE
 #endif

@@ -539,7 +539,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
-				param["content"] = myHSP->getSocialID() + "님이 하트를 보냈습니다.";
+				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
 				//			param["data"] = param2;
 				myHSP->command("sendmessage", param, [=](Json::Value v){
 					if(v["result"]["code"] != GDSUCCESS)

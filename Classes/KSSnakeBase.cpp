@@ -294,11 +294,11 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	
 	
 	// 방사형으로 돌아가고 있는 중이라면
-	if((m_cumberState & kCumberStateNoDirection) && castCancel)
+	if(((m_cumberState & kCumberStateNoDirection) || (m_cumberState & kCumberStateCasting)) && castCancel)
 	{
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
-	if((m_cumberState & kCumberStateDirection) && castCancel)
+	if(((m_cumberState & kCumberStateDirection) || (m_cumberState & kCumberStateCasting)) && castCancel)
 	{
 		m_direction.state = 2; // 돌아가라고 상태 변경때림.
 	}

@@ -587,7 +587,7 @@ void Maingame::finalSetting()
 	{
 		CCNode* t_boss = main_cumber_vector[i];
 		
-		SearchEye* t_search_eye = SearchEye::create(t_boss);
+		SearchEye* t_search_eye = SearchEye::create(t_boss, &search_eye_vector);
 		t_search_eye->setPosition(CCPointZero);
 		addChild(t_search_eye, searchEyeZorder);
 		
@@ -4703,11 +4703,12 @@ void Maingame::hideThumb()
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];
 //		t_search_eye->setVisible(false);
-//		t_search_eye->removeFromParent();
+		t_search_eye->removeFromParent();
 	}
 	search_eye_vector.clear();
 	
 	mControl->setVisible(false);
+	
 	
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);
