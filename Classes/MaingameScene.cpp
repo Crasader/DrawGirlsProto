@@ -3573,6 +3573,7 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_1016.ccbi"] = kMyLocalKey_warning1016;
 	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
 	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
+	fileName2Language["warning_1019.ccbi"] = kMyLocalKey_warning1019;
 	fileName2Language["warning_1020.ccbi"] = kMyLocalKey_warning1020;
 	fileName2Language["warning_boss_success.ccbi"] = kMyLocalKey_warningBossSuccess;
 	fileName2Language["warning_over_02.ccbi"] = kMyLocalKey_warningLastLife;
