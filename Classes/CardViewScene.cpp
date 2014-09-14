@@ -169,7 +169,7 @@ bool CardViewScene::init()
 	
 //	zoom_img = CCSprite::create("ending_expand.png");
 	
-	CCPoint morphing_position = ccp(447,45);
+	CCPoint morphing_position = ccp(447,36.5f);
 	
 	function<void()> refresh_morphing_sound = [=]()
 	{
@@ -185,7 +185,7 @@ bool CardViewScene::init()
 			if(is_morphing)
 				sound_position = morphing_position;
 			else
-				sound_position = morphing_position + ccp(0,50);
+				sound_position = morphing_position + ccp(0,49.5f);
 				
 			if(myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound))
 			{
