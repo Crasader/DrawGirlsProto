@@ -4,10 +4,10 @@
 #include "SearchEye.h"
 #include "SilhouetteData.h"
 #define LZZ_INLINE inline
-SearchEye * SearchEye::create (CCNode* t_boss)
+SearchEye * SearchEye::create (CCNode* t_boss, vector<SearchEye*>* sv)
 {
 	SearchEye* t_se = new SearchEye();
-	t_se->myInit(t_boss);
+	t_se->myInit(t_boss, sv);
 	t_se->autorelease();
 	return t_se;
 }
@@ -25,7 +25,13 @@ void SearchEye::mainCumberSearching ()
 		if(!myGD->isValidMainCumber(target_boss))
 		{
 			unschedule(schedule_selector(SearchEye::mainCumberSearching));
+			myGD->communication("Main_removeSearchEye", this);
 			removeFromParent();
+			auto iter = std::find(search_eye_vector->begin(), search_eye_vector->end(), this);
+			if(iter != search_eye_vector->end())
+			{
+				search_eye_vector->erase(iter);
+			}
 			return;
 		}
 		
@@ -71,10 +77,10 @@ void SearchEye::mainCumberSearching ()
 		runAction(t_move);
 	}
 }
-void SearchEye::myInit (CCNode* t_boss)
+void SearchEye::myInit (CCNode* t_boss, vector<SearchEye*>* sv)
 {
 	target_boss = t_boss;
-	
+	search_eye_vector = sv;
 	search_eye_arrow = CCSprite::create("search_eye_arrow.png");
 	search_eye_arrow->setAnchorPoint(ccp(0.5,1));
 	search_eye_arrow->setPosition(CCPointZero);

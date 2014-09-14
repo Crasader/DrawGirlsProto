@@ -74,7 +74,10 @@ enum class LK
 	kFriendMailReject,
 	kFriendRemoveFriend,
 	kFriendConfirm,
-	kFriendRemoveFriendQ
+	kFriendRemoveFriendQ,
+	kFriendAddLimitMe,
+	kFriendAddLimitYou,
+	kFriendNotFountFriend
 };
 class KsLocal
 {

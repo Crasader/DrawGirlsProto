@@ -466,7 +466,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
-				param["content"] = myHSP->getSocialID() + "님이 친구 요청 보냈습니다.";
+				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
 				param["data"] = param2;
 				myHSP->command("sendmessage", param, [=](Json::Value v){
 					if(v["result"]["code"] != GDSUCCESS)
@@ -539,7 +539,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
-				param["content"] = myHSP->getSocialID() + "님이 하트를 보냈습니다.";
+				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
 				//			param["data"] = param2;
 				myHSP->command("sendmessage", param, [=](Json::Value v){
 					if(v["result"]["code"] != GDSUCCESS)
@@ -1038,7 +1038,22 @@ void FriendPopup::setAddMenu()
 					myHSP->command("getuserdata", param, [=](Json::Value v){
 						KS::KSLog("%", v);
 						if(v["result"]["code"] != GDSUCCESS)
+						{
+							if(input_text1)
+							{
+								input_text1->setVisible(false);
+							}
+							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNotFountFriend), [=](){
+								if(input_text1)
+								{
+									input_text1->setVisible(true);
+								}
+	
+							});
+							popup->getDimmedSprite()->setVisible(false);
+							addChild(popup);
 							return;
+						}
 						m_votedFriendList = Json::Value(Json::arrayValue);
 						Json::Value temp;
 						temp = v;

@@ -45,6 +45,8 @@
 #include "Diary19Popup.h"
 #include "LoadingLayer.h"
 #include "JoystickSizeQuestionPopup.h"
+#include "IntroducerPopup.h"
+
 
 USING_NS_CC_EXT;
 
@@ -1062,7 +1064,25 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_recommender)
 	{
-		is_menu_enable = true;
+		if(atoi(mySGD->getIntroducerID().c_str()) == 0)
+		{
+			IntroducerPopup* t_popup = IntroducerPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
+			{
+				is_menu_enable = false;
+				CommonAnimation::closePopup(this, main_case, gray, [=](){
+					
+				}, [=]()
+											{
+												open_message_popup_func();
+												endHidePopup();
+											});
+			});
+			addChild(t_popup, 999);
+		}
+		else
+		{
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_introducerAfter), [=](){is_menu_enable = true;}), 999);
+		}
 	}
 	else if(tag == kOP_MT_toDiary19)
 	{

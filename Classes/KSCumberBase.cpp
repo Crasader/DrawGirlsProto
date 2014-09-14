@@ -1327,8 +1327,8 @@ n<m 인 부수기 공격은 m초 안에는 안함.
  * */
 void KSCumberBase::cumberAttack(float dt)
 {
-	bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
-	if(m_slience || !attackCondition || (m_cumberState != kCumberStateMoving)) // 공격 못하는 조건이라면 패스.
+	
+	if(m_slience || (m_cumberState != kCumberStateMoving)) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
@@ -1403,6 +1403,9 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
+		bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
+		if(attackCondition == false)
+			return; // 부수기는 특정 조건하에서는 공격 하지 않음.
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
 			if( (*iter)["atype"].asString() == "crash" )

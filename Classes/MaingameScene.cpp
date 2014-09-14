@@ -587,7 +587,7 @@ void Maingame::finalSetting()
 	{
 		CCNode* t_boss = main_cumber_vector[i];
 		
-		SearchEye* t_search_eye = SearchEye::create(t_boss);
+		SearchEye* t_search_eye = SearchEye::create(t_boss, &search_eye_vector);
 		t_search_eye->setPosition(CCPointZero);
 		addChild(t_search_eye, searchEyeZorder);
 		
@@ -595,6 +595,8 @@ void Maingame::finalSetting()
 		
 		search_eye_vector.push_back(t_search_eye);
 	}
+	
+	myGD->V_CCO["Main_removeSearchEye"] = bind(&Maingame::removeSearchEye, this, std::placeholders::_1);
 	
 	mySGD->resetIngameDetailScore();
 	
@@ -3571,6 +3573,7 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_1016.ccbi"] = kMyLocalKey_warning1016;
 	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
 	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
+	fileName2Language["warning_1019.ccbi"] = kMyLocalKey_warning1019;
 	fileName2Language["warning_1020.ccbi"] = kMyLocalKey_warning1020;
 	fileName2Language["warning_boss_success.ccbi"] = kMyLocalKey_warningBossSuccess;
 	fileName2Language["warning_over_02.ccbi"] = kMyLocalKey_warningLastLife;
@@ -4675,6 +4678,19 @@ void Maingame::refreshReplayPosition(int temp_time)
 	}
 }
 
+void Maingame::removeSearchEye(CCObject* t_node)
+{
+	for(auto iter=search_eye_vector.begin();iter!=search_eye_vector.end();iter++)
+	{
+		SearchEye* t_search_eye = *iter;
+		if(t_search_eye == t_node)
+		{
+			search_eye_vector.erase(iter);
+			return;
+		}
+	}
+}
+
 void Maingame::hideThumb()
 {
 	if(mySGD->is_endless_mode)
@@ -4688,11 +4704,12 @@ void Maingame::hideThumb()
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];
 //		t_search_eye->setVisible(false);
-//		t_search_eye->removeFromParent();
+		t_search_eye->removeFromParent();
 	}
 	search_eye_vector.clear();
 	
 	mControl->setVisible(false);
+	
 	
 	thumb_texture->setVisible(false);
 	character_thumb->setVisible(false);

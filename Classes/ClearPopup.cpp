@@ -406,6 +406,13 @@ bool ClearPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
+	if(stage_number == mySGD->getIntroduceStage() && mySGD->getIntroducerID() != "0" && mySGD->getIntroducerID() != "-1")
+	{
+		Json::Value t_param;
+		t_param["memberID"] = myHSP->getSocialID();
+		send_command_list.push_back(CommandParam("completeIntroducer", t_param, json_selector(this, ClearPopup::resultCompleteIntroducer)));
+	}
+	
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	int open_stage = -1;
 	if(mySGD->getIsNotClearedStage())
@@ -523,6 +530,14 @@ bool ClearPopup::init()
 																  }));
 	
     return true;
+}
+									
+void ClearPopup::resultCompleteIntroducer(Json::Value result_data)
+{
+	if(result_data["result"]["code"] == GDSUCCESS)
+	{
+		mySGD->setIntroducerID("-1");
+	}
 }
 
 void ClearPopup::onMainButton()

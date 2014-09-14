@@ -972,6 +972,12 @@ public:
 	
 	bool is_on_accountLinkLead;
 	
+	string getIntroducerID();
+	void setIntroducerID(string t_id);
+	
+	void setIntroduceStage(int t_i);
+	int getIntroduceStage();
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1154,11 +1160,15 @@ private:
 	jsonSelType update_today_mission_callback;
 	void resultUpdateTodayMission(Json::Value result_data);
 	
+	KSProtectStr introducerID;
+	
 	vector<TimeEventInfo> time_event_list;
 	
 	string event_string;
 	int is_always_save_playdata;
 	int send_pvp_play_data_rate;
+	
+	KSProtectVar<int> introduce_stage;
 	
 	string app_type;
 	int app_version;

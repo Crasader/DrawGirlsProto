@@ -539,6 +539,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다이너마이트 지뢰"), kMyLocalKey_warning1016);
 	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
 	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
+	ko->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	ko->setObject(CCString::create("부하몬스터 소환"), kMyLocalKey_warning1020);
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
 	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
@@ -988,7 +989,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ko->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ko->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ko->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ko->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ko->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ko->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ko->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -1114,6 +1115,17 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("계정연결하세요!"), kMyLocalKey_accountLinkLeadTitle);
 	ko->setObject(CCString::create("<font newline=15>아직 계정연결 안하셨어요?!</font><font newline=15>열심히 쌓은 데이터 잃어버리지 않게</font><font>서둘러 연결하세요!</font>"), kMyLocalKey_accountLinkLeadContent);
 	ko->setObject(CCString::create("설정창 바로가기"), kMyLocalKey_accountLinkLeadButton);
+	
+	ko->setObject(CCString::create("추천합니다!"), kMyLocalKey_introducerTitle);
+	ko->setObject(CCString::create("<font newline=15>추천인을 등록해주세요!</font><font newline=15>%d스테이지 클리어 후 젬 %d개를 드립니다!"), kMyLocalKey_introducerContent);
+	ko->setObject(CCString::create("추천할 대상"), kMyLocalKey_introducerPlaceHolder);
+	ko->setObject(CCString::create("확인"), kMyLocalKey_introducerOk);
+	
+	ko->setObject(CCString::create("이미 추천인 등록을 하셨습니다."), kMyLocalKey_introducerAfter);
+	ko->setObject(CCString::create("닉네임을 입력해주세요."), kMyLocalKey_introducerPleaseInputNick);
+	ko->setObject(CCString::create("해당 닉네임을 찾을 수 없습니다."), kMyLocalKey_introducerDonFindNick);
+	ko->setObject(CCString::create("%s 님을 추천인으로 등록하셨습니다."), kMyLocalKey_introducerSuccess);
+	ko->setObject(CCString::create("자신을 추천인으로 등록할 수 없습니다."), kMyLocalKey_introducerSelfNotIntroduce);
 	
 	setObject(ko, "ko");
 }
@@ -1553,6 +1565,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
 	en->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	en->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	en->setObject(CCString::create("Last Life"), kMyLocalKey_warningLastLife);
 	
@@ -1991,7 +2004,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	en->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	en->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	en->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	en->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	en->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	en->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	en->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -2527,6 +2540,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
 	ja->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	ja->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	ja->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	ja->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
 	ja->setObject(CCString::create("새로운 보스 공격!"), kMyLocalKey_newBossPattern);
@@ -2965,7 +2979,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ja->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ja->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ja->setObject(CCString::create("제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ja->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ja->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ja->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ja->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);

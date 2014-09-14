@@ -65,7 +65,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 {
 	
 	CCLayer::init();
-	
+	m_touchPriority = -200;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -140,7 +140,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	CCMenuLambda* _menu = CCMenuLambda::create();
 	_menu->setPosition(CCPointZero);
-	_menu->setTouchPriority(-200);
+	_menu->setTouchPriority(m_touchPriority);
 	main_case->addChild(_menu, 4);
 	CCSprite* n_allReward_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
@@ -169,7 +169,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 //	allReceive->setTag(kAchievePopupMenuTag_allReward);
 	allReceive->setPosition(ccp(395,16));
 	_menu->addChild(allReceive);
-//	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), -200);
+//	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), m_touchPriority);
 //	
 //	allReceive->setTitleSize(12.f);
 //	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
@@ -203,12 +203,12 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	giftBoxAlertBox->addChild(giftboxAlert, 1);
 	
 	
-	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200); // ? 티켓함?이 맞음? From YH To KS
-	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* ticketFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* challengeFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_challengeBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* coinFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartBox), 12, CCSizeMake(65,38), CommonButtonGray, -200);
-	CommonButton* totalFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 12, CCSizeMake(65,38), CommonButtonGray, -200);
+	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority); // ? 티켓함?이 맞음? From YH To KS
+	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* ticketFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* challengeFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_challengeBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* coinFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* totalFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
 	
 	// 모든 필터를 감춤. 섬란 버전에서는.
 	giftFilter->setVisible(false);
@@ -334,7 +334,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	giftFilter->setPosition(ccp(377, 255));
 	this->addChild(giftFilter, 1);
 	
-	CommonButton* closeBtn = CommonButton::createCloseButton(-200);
+	CommonButton* closeBtn = CommonButton::createCloseButton(m_touchPriority);
 	closeBtn->setFunction([=](CCObject*){
 		hspConnector::get()->removeTarget(this);
 		
@@ -476,7 +476,7 @@ void SumranMailPopup::drawMail (Json::Value obj)
 	mailTableView->setDelegate(this);
 //	this->addChild(mailTableView, kMP_Z_mailTable);
 	main_case->addChild(mailTableView, kMP_Z_mailTable);
-	mailTableView->setTouchPriority(-200);
+	mailTableView->setTouchPriority(m_touchPriority);
 
 	isLoaded=true;
 	
@@ -559,7 +559,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 
 		CCMenuLambda* _menu = CCMenuLambda::create();
 		_menu->setPosition(ccp(0, 0));
-		_menu->setTouchPriority(-200);
+		_menu->setTouchPriority(m_touchPriority);
 		_menu->setTag(kMP_MT_send);
 		cell->addChild(_menu, kMP_MT_getheart);
 
@@ -597,11 +597,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				comment = GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Event").asString().c_str());
 				
 				
-				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), -200);
+				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), m_touchPriority);
 				setFormSetter(btnReceive);
 				btnReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_take));
 				btnReceive->setTitleSize(12.f);
-				btnReceive->setTouchPriority(-200);
+				btnReceive->setTouchPriority(m_touchPriority);
 				btnReceive->setTitleColor(ccc3(255, 255, 255));
 				btnReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 				btnReceive->setFunction([=](CCObject*)
@@ -1967,7 +1967,24 @@ void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
 			myHSP->command("addfriend", param, [=](Json::Value v){
 				if(v["result"]["code"] != GDSUCCESS)
 					return;
-				
+				if(v["result"]["code"] == GDFRIENDMAX)
+				{
+					std::string resultMessage = v["result"]["message"].asString();
+					// 내가 50명 넘음
+					if(resultMessage == "me")
+					{
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendAddLimitMe), nullptr);
+						popup->getDimmedSprite()->setVisible(false);
+						addChild(popup); 
+					}
+					// 상대방이 50명 넘음
+					else if (resultMessage == "you")
+					{
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendAddLimitYou), nullptr);
+						popup->getDimmedSprite()->setVisible(false);
+						addChild(popup);
+					}
+				}
 				
 				
 				

@@ -118,6 +118,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 	
 	void takeAllReward(CCObject* sender);
 	protected:
+		int m_touchPriority;
 		std::function<void(void)> m_heartRefresh;
 		Json::Value m_mailList; // 이 정보를 기반으로 뿌려줌. 
 		Json::Value m_filteredMailList; // 걸러진 데이터들
