@@ -115,7 +115,7 @@ bool FriendPopup::init()
 	list_menu->setEnabled(false);
 	recent_code = FriendTabCode::kList;
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-200);
+	CommonButton* close_menu = CommonButton::createCloseButton(m_touchPriority);
 	close_menu->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 													{
@@ -483,14 +483,11 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 						
 						
 					});
+					successPopup->getDimmedSprite()->setVisible(false);
 					addChild(successPopup);
 					
 					addFriend->setVisible(false);
 				});
-				
-				
-				
-				
 				CCLOG("add friend");
 			});
 		}

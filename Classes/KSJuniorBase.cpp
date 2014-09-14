@@ -204,9 +204,11 @@ void KSJuniorBase::checkConfine(float dt)
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty &&
+		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty
 		 
-		 dynamic_cast<KSJuniorBase*>(this))
+		 /* &&
+		 
+		 dynamic_cast<KSJuniorBase*>(this)*/)
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 		

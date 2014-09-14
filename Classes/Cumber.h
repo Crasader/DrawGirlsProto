@@ -58,7 +58,7 @@ public:
 
 	void subCumberReplication();
 	void setGameover();
-	void startTeleport();
+	void startTeleport(CCObject* cumber);
 	int getMainCumberSheild();
 
 
@@ -112,6 +112,7 @@ private:
 	void silenceItem(bool t_b);
 	void setCasting(bool t_b);
 	void removeSubCumber(CCObject* r_sc);
+	void removeMainCumber(CCObject* r_sc);
 	void myInit();
 	void mappingFunctor();
 	void toFun();

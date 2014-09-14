@@ -1973,6 +1973,7 @@ void KSCumberBase::onJackDrawLine()
 {
 }
 
+
 bool KSCumberBase::init()
 {
 	CCNode::init();

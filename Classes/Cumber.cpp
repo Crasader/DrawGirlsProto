@@ -213,12 +213,13 @@ void CumberParent::setGameover()
 	}
 }
 
-void CumberParent::startTeleport()
+void CumberParent::startTeleport(CCObject* cumber)
 {
 	//##
 	//### : !@#!@#!@#!@#!#!@#!@#!@#!@#!@#!@#!@#!#@#!#@ 논란
-	for(auto mainCumber : mainCumbers)
-		mainCumber->startTeleport();
+	((KSCumberBase*)cumber)->startTeleport();
+//	for(auto mainCumber : mainCumbers)
+//		mainCumber->startTeleport();
 }
 
 int CumberParent::getMainCumberSheild()
@@ -483,6 +484,24 @@ void CumberParent::removeSubCumber(CCObject* r_sc)
 //		}
 //	}
 }
+void CumberParent::removeMainCumber(CCObject* r_sc)
+{
+	auto iter = std::find(mainCumbers.begin(), mainCumbers.end(), r_sc);
+	if(iter != mainCumbers.end())
+	{
+		mainCumbers.erase(iter);
+	}
+	
+	for(auto iter = hp_graphs.begin();iter!=hp_graphs.end();++iter)
+	{
+		if((*iter)->getTargetNode() == r_sc)
+		{
+			removeChild(*iter);
+			hp_graphs.erase(iter);
+			break;
+		}
+	}
+}
 
 
 void CumberParent::myInit()
@@ -550,6 +569,8 @@ void CumberParent::myInit()
 		mainCumber->getRandomPosition(&mapPoint, &finded);
 		myGD->setMainCumberPoint(mainCumber, mapPoint);
 		mainCumber->setPosition(ip2ccp(mapPoint));
+		mainCumber->m_circle.setRelocation(getPosition(), m_well512);
+		mainCumber->m_snake.setRelocation(getPosition(), m_well512);
 		mainCumber->startAnimationNoDirection();
 		mainCumbers.push_back(mainCumber);
 		addChild(mainCumber);
@@ -617,6 +638,7 @@ void CumberParent::mappingFunctor()
 	myGD->V_V["CP_movingMainCumber"] = std::bind(&CumberParent::movingMainCumber, this);
 	myGD->V_V["CP_onJackDrawLine"] = std::bind(&CumberParent::onJackDrawLine, this);
 	myGD->V_CCO["CP_removeSubCumber"] = std::bind(&CumberParent::removeSubCumber, this, _1);
+	myGD->V_CCO["CP_removeMainCumber"] = std::bind(&CumberParent::removeMainCumber, this, _1);
 	myGD->I_V["CP_getSubCumberCount"] = std::bind(&CumberParent::getSubCumberCount, this);
 	myGD->V_Ip["CP_createSubCumber"] = std::bind(&CumberParent::createSubCumber, this, _1);
 	myGD->V_I["CP_setMainCumberState"] = std::bind(&CumberParent::setMainCumberState, this, _1);
@@ -628,7 +650,7 @@ void CumberParent::mappingFunctor()
 	
 	myGD->V_V["CP_setGameover"] = std::bind(&CumberParent::setGameover, this);
 	myGD->V_V["CP_tickingOn"] = std::bind(&CumberParent::tickingOn, this);
-	myGD->V_V["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this);
+	myGD->V_CCO["CP_startTeleport"] = std::bind(&CumberParent::startTeleport, this, _1);
 	myGD->V_V["CP_subCumberReplication"] = std::bind(&CumberParent::subCumberReplication, this);
 	myGD->B_CCOFFBB["CP_startDamageReaction"] =
 		std::bind(&CumberParent::startDamageReaction, this, _1, _2, _3, _4, _5);

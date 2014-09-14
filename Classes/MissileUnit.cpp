@@ -3784,7 +3784,7 @@ void PoisonLine::myInit (IntPoint t_sp, int frame)
 	//		initWithFile("poison_line.png");
 	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution7.ccbi");
 	line = ret.first;
-	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	line->setPositionType(kCCPositionTypeGrouped);
 	addChild(line);
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
@@ -3857,7 +3857,8 @@ void PoisonDrop::initParticle ()
 	
 //	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 	//		particle->setPosVar(CCPointZero);
-	dropImg->addChild(particle);
+	addChild(particle);
+	particle->setPosition(dropImg->getPosition());
 }
 void PoisonDrop::stopAction ()
 {

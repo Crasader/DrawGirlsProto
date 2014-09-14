@@ -266,7 +266,17 @@ void KSSnakeBase::animationDirection(float dt)
 	else if(m_direction.state == 2)
 	{
 		CCLOG("조준하는것을 멈추고 움직이기 시작함");
-		setCumberState(kCumberStateMoving); //#!
+		if(getCumberState() != kCumberStateFury)
+		{
+			CCLOG("분노 아님!!");
+			setCumberState(kCumberStateMoving); //#!
+		}
+		else
+		{
+			CCLOG("분노임~");
+		}
+
+		
 		m_direction.state = 0;
 //		unschedule(schedule_selector(KSSnakeBase::animationDirection));
 		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
@@ -617,7 +627,7 @@ void KSSnakeBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	setCumberState(kCumberStateFury);
-	
+	m_noDirection.state = 2;	
 	m_headImg->setColor(ccc3(0, 255, 0));
 	m_tailImg->setColor(ccc3(0, 255, 0));
 	for(auto i : m_Bodies)
@@ -726,6 +736,52 @@ void KSSnakeBase::furyModeOff()
 	//	}
 }
 
+void KSSnakeBase::checkConfine(float dt)
+{
+	IntPoint mapPoint = m_mapPoint;
+	// 갇혀있는지 검사함. 갇혀있으면 없앰.
+	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
+		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty
+		 
+		 /* &&
+			
+			dynamic_cast<KSJuniorBase*>(this)*/)
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+		
+		
+		int rmCnt = 5;
+		
+		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
+		
+		int weapon_rank = (weapon_level-1)/5 + 1;
+		weapon_level = (weapon_level-1)%5 + 1;
+		
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rmCnt, getPosition(), mySGD->getSelectedCharacterHistory().power.getV());
+		
+		//		string missile_code;
+		//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		//
+		//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+		//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		//
+		//		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
+		
+//		mySGD->increaseCatchCumber();
+		myGD->communication("CP_removeMainCumber", this);
+		
+		removeFromParentAndCleanup(true);
+		
+		return;
+	}
+}
+
+
 void KSSnakeBase::onStartMoving()
 {
 	setCumberState(kCumberStateMoving);
@@ -773,6 +829,7 @@ void KSSnakeBase::stopCasting()
 
 void KSSnakeBase::setPosition( const CCPoint& t_sp )
 {
+	
 	CCPoint prevPosition = getPosition();
 	if(isnan(prevPosition.x))
 	{
@@ -851,11 +908,12 @@ void KSSnakeBase::attackBehavior( Json::Value _pattern )
 	
 	if(pattern == "109")
 	{
-		setCumberState(0);
+		startAnimationDirection();
+//		setCumberState(0);
 	}
 	else if( pattern == "1007")
 	{
-		setCumberState(0);
+//		setCumberState(0);
 	}
 	else
 	{
