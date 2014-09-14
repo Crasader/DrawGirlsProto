@@ -203,24 +203,24 @@ std::string getPastTimeMsg(long long currentTimeStamp, long long pastTimeStamp)
 void timeSpliter(long long time, int* year, int* month, int* day, int* hour, int* minute, int* second)
 {
 	if(year != nullptr)
-		*year = time / 10000000000;
-	time %= 10000000000;
+		*year = time / 31536000;
+	time %= 31536000;
 	
 	if(month != nullptr)
-		*month = time / 100000000;
-	time %=100000000;
+		*month = time / 2592000;
+	time %=2592000;
 	
 	if(day != nullptr)
-		*day = time / 1000000;
-	time %= 1000000;
+		*day = time / 86400;
+	time %= 86400;
 	
 	if(hour != nullptr)
-		*hour = time / 10000;
-	time %= 10000;
+		*hour = time / 3600;
+	time %= 3600;
 	
 	if(minute != nullptr)
-		*minute = time / 100;
-	time %= 100;
+		*minute = time / 60;
+	time %= 60;
 	
 	if(second != nullptr)
 		*second = time / 1;

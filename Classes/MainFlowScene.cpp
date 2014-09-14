@@ -2950,7 +2950,7 @@ void MainFlowScene::setBottom()
 	friend_item->setTag(kMainFlowMenuTag_friendManagement);
 	
 	CCMenu* friend_menu = CCMenu::createWithItem(friend_item);
-	friend_menu->setPosition(ccp(240 + 40,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*3.f, n_friend->getContentSize().height/2.f+6));
+	friend_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*4.f, n_friend->getContentSize().height/2.f+6));
 	//	bottom_case->addChild(mission_menu);
 	addChild(friend_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(friend_menu);

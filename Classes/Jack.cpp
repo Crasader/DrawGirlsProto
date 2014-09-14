@@ -2142,10 +2142,19 @@ void Jack::patternRemover()
 	CCNode* patternStencil = pattern->getPatternContainer()->getStencil();
 	//				patternStencil->setPosition(getPosition());
 	patternStencil->setPosition(ip2ccp(myGD->getJackPoint()));
+	
+	CCSprite* removerSprite = CCSprite::create("clear_wave.png");
+	pattern->addChild(removerSprite, 9999);
+	removerSprite->setPosition(ip2ccp(myGD->getJackPoint()));
+	
+	
 	addChild(KSGradualValue<float>::create(0.1f, 2.5f, 0.8f, [=](float t){
 		patternStencil->setScale(t);
+		removerSprite->setScale(t);
 	}, [=](float t){
 		patternStencil->setScale(t);
+		removerSprite->setScale(t);
+		removerSprite->removeFromParent();
 		for(int i=0; i<myGD->getMissileParent()->getPatternContainer()->getChildrenCount(); ++i)
 		{
 			AttackPattern* temp = (AttackPattern*)myGD->getMissileParent()->getPatternContainer()->getChildren()->objectAtIndex(i);
