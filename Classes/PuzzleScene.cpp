@@ -790,6 +790,7 @@ bool PuzzleScene::init()
 	{
 		if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stageSetting)
 		{
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 			openBeforeSettingPopup();
 		}
 		else
