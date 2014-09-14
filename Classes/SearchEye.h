@@ -14,6 +14,10 @@ class SearchEye : public CCNode
 {
 public:
 	static SearchEye * create (CCNode* t_boss);
+	virtual ~SearchEye()
+	{
+		CCLOG("~SEARCH EYE");
+	}
 	void startSearch ();
 private:
 	CCNode* target_boss;

@@ -52,7 +52,7 @@ public:
 	
 	virtual ~KSSnakeBase();
 	
-	virtual void checkConfine(float dt){}
+	virtual void checkConfine(float dt);
 	virtual void onStartMoving();
 	virtual void onStopMoving();
 	virtual void onPatternEnd();

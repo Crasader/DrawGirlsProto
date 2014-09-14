@@ -1241,9 +1241,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				startFirePosition = startPosition;
 				auto func = [=](CCObject* cb)
 				{
-					TeleportWrapper* t_m32 = TeleportWrapper::create();
-					pattern_container->addChild(t_m32);
 					KSCumberBase* cumber = (KSCumberBase*)cb;
+					TeleportWrapper* t_m32 = TeleportWrapper::create(cumber);
+					pattern_container->addChild(t_m32);
 					cumber->setAttackPattern(nullptr);
 				};
 				castBranch(atype, func, warningFileName);

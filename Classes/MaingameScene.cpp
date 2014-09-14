@@ -4686,7 +4686,7 @@ void Maingame::hideThumb()
 	{
 		SearchEye* t_search_eye = search_eye_vector[i];
 //		t_search_eye->setVisible(false);
-		t_search_eye->removeFromParent();
+//		t_search_eye->removeFromParent();
 	}
 	search_eye_vector.clear();
 	

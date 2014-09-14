@@ -11,6 +11,7 @@
 #include "StageImgLoader.h"
 #include "KSUtil.h"
 #include "CumberEmotion.h"
+#include "StarGoldData.h"
 
 bool KSCircleBase::init(const string& ccbiName)
 {
@@ -73,6 +74,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 	if((m_cumberState & kCumberStateNoDirection) && castCancel)
 	{
 		CCLOG("(m_cumberState & kCumberStateNoDirection)");
+		CCLOG("돌아가라고 상태 변경때림!!");
 		m_noDirection.state = 2; // 돌아가라고 상태 변경때림.
 	}
 	if( ((m_cumberState & kCumberStateMoving) || (m_cumberState & kCumberStateDamaging)) && stiffen )
@@ -187,7 +189,16 @@ void KSCircleBase::animationNoDirection(float dt)
 	}
 	else if(m_noDirection.state == 2)
 	{
-		setCumberState(kCumberStateMoving);
+		CCLOG("m_noDirection.state 끝나는 것");
+		if(getCumberState() != kCumberStateFury)
+		{
+			CCLOG("분노 아님!!");
+			setCumberState(kCumberStateMoving);
+		}
+		else
+		{
+			CCLOG("분노임~");
+		}
 		m_noDirection.state = 0;
 //		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
@@ -304,6 +315,7 @@ void KSCircleBase::crashMapForPosition(CCPoint targetPt)
 
 void KSCircleBase::furyModeOn(int tf)
 {
+	CCLOG("furyModeOn");
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
 	setCumberState(kCumberStateFury);
@@ -486,6 +498,51 @@ void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
 	}
 }
 
+void KSCircleBase::checkConfine(float dt)
+{
+	IntPoint mapPoint = m_mapPoint;
+	// 갇혀있는지 검사함. 갇혀있으면 없앰.
+	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
+		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
+		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty
+		 
+		 /* &&
+			
+			dynamic_cast<KSJuniorBase*>(this)*/)
+	{
+		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+		
+		
+		int rmCnt = 5;
+		
+		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
+		
+		int weapon_rank = (weapon_level-1)/5 + 1;
+		weapon_level = (weapon_level-1)%5 + 1;
+		
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rmCnt, getPosition(), mySGD->getSelectedCharacterHistory().power.getV());
+		
+		//		string missile_code;
+		//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+		//
+		//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+		//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+		//
+		//		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
+		
+//		mySGD->increaseCatchCumber();
+		myGD->communication("CP_removeMainCumber", this);
+		
+		
+		removeFromParentAndCleanup(true);
+		return;
+	}
+}
+
 void KSCircleBase::onStartMoving()
 {
 	setCumberState(kCumberStateMoving);
@@ -575,6 +632,7 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 	if(pattern == "109")
 	{
 		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
+		startAnimationDirection();
 	}
 	else if( pattern == "1007")
 	{
