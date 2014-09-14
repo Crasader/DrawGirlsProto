@@ -181,16 +181,22 @@ bool CardViewScene::init()
 		
 		if(sound_count > 0)
 		{
+			CCPoint sound_position;
+			if(is_morphing)
+				sound_position = morphing_position;
+			else
+				sound_position = morphing_position + ccp(0,50);
+				
 			if(myDSH->getBoolForKey(kDSH_Key_isOffCardMorphingSound))
 			{
 				sound_img = CCSprite::create("diary_voice_on.png");
-				sound_img->setPosition(morphing_position + ccp(0,50));
+				sound_img->setPosition(sound_position);
 				addChild(sound_img, kCV_Z_next_button);
 			}
 			else
 			{
 				sound_img = CCSprite::create("diary_voice_off.png");
-				sound_img->setPosition(morphing_position + ccp(0,50));
+				sound_img->setPosition(sound_position);
 				addChild(sound_img, kCV_Z_next_button);
 			}
 		}
