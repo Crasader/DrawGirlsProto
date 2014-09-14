@@ -479,6 +479,11 @@ void Maingame::finalSetting()
 	
 //	myGD->initStartRect();
 	
+	
+	myJack = Jack::create();
+	game_node->addChild(myJack, myJackZorder);
+	myJack->initStartPosition(game_node->getPosition());
+	
 	myPM = PathManager::create();
 	game_node->addChild(myPM, myPMZorder);
 	
@@ -532,9 +537,6 @@ void Maingame::finalSetting()
 	game_node->addChild(line_particle, myJackZorder);
 	
 	
-	myJack = Jack::create();
-	game_node->addChild(myJack, myJackZorder);
-	myJack->initStartPosition(game_node->getPosition());
 	
 	line_particle->setPosition(myJack->getPosition());
 	

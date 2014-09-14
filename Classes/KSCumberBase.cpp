@@ -2439,13 +2439,6 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	
 
 	bool isClear = mySGD->isClearPiece(mySD->getSilType());
-	if(isClear && !isExchange){
-		
-		CCLOG("############ clear stage, dont autobalance ################");
-		//return;
-	}
-	
-	
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
 	int vCount = mySGD->getUserdataAutoLevel();
@@ -2462,13 +2455,14 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		CCLOG("it's PVP mode!! now victory is %d",vCount);
 	}
 	
-
 	
+
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 
 	CCLOG("#################### autobalance ############################");
-	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d",vCount,playCount,autobalanceTry,puzzleNo);
+	CCLOG("victory : %d / try : %d / autobalanceTry : %d / puzzleNo : %d / hp : %f",vCount,playCount,autobalanceTry,puzzleNo,m_remainHp);
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	
 	
 	if(autobalanceTry==0 && !isExchange){
 		CCLOG("############ autobalanceTry : 0, dont autobalance ################");
@@ -2476,12 +2470,18 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		return;
 	}
 	
+	if(!isExchange){
+		//시도횟수에 따라 몬스터  hp 떨구기.
+		float hpBalance = MIN(playCount,10)*5;
+		m_remainHp -= m_remainHp*hpBalance/100.f;
+		
+		float speedBalance = MIN(0.2,playCount*0.02);
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+speedBalance);
+	}
+	
 	
 	if(m_attackPercent<=0)vCount*=0.5f;
-	
 
-	
-	
 	//체인지시 오토벨런싱 다시
 	if(isExchange){
 		
@@ -2490,6 +2490,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
 			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
 		}
+		
 		
 		m_aiValue *=2;
 		if(m_aiValue<50)m_aiValue=50;
@@ -2544,7 +2545,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	settingFuryRule();
 	
 	CCLOG("#################### Change Balnace1 ############################");
-	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed);
+	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f, hp : %f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed,m_remainHp);
 
 	return;
 	
