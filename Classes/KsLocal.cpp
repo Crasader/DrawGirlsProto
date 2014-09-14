@@ -144,13 +144,16 @@ void KsLocal::ko()
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
-	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendAddFriend] = " + 친구요청";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
 	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
 	obj[LK::kFriendConfirm] = "확인";
 	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
+	obj[LK::kFriendAddLimitMe] = "더 이상 추가를 할 수 없습니다.";
+	obj[LK::kFriendAddLimitYou] = "상대방의 친구가 너무 많습니다.";
+	obj[LK::kFriendNotFountFriend] = "찾을 수 없습니다.";
 		// add friend !
 	m_mapper[__FUNCTION__] = obj;
 }
@@ -231,13 +234,16 @@ void KsLocal::en()
 	obj[LK::kFriendHeartSend] = "보내기";
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
-	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendAddFriend] = " + 친구요청";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
 	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
 	obj[LK::kFriendConfirm] = "확인";
 	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
+	obj[LK::kFriendAddLimitMe] = "더 이상 추가를 할 수 없습니다.";
+	obj[LK::kFriendAddLimitYou] = "상대방의 친구가 너무 많습니다.";
+	obj[LK::kFriendNotFountFriend] = "찾을 수 없습니다.";
 	m_mapper[__FUNCTION__] = obj;
 }
 void KsLocal::ja()
@@ -316,12 +322,15 @@ void KsLocal::ja()
 	obj[LK::kFriendHeartSend] = "보내기";
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
-	obj[LK::kFriendAddFriend] = " + 친구추가";
+	obj[LK::kFriendAddFriend] = " + 친구요청";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
 	obj[LK::kFriendRemoveFriend] = "- 친구삭제";
 	obj[LK::kFriendConfirm] = "확인";
 	obj[LK::kFriendRemoveFriendQ] = "<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>";
+	obj[LK::kFriendAddLimitMe] = "더 이상 추가를 할 수 없습니다.";
+	obj[LK::kFriendAddLimitYou] = "상대방의 친구가 너무 많습니다.";
+	obj[LK::kFriendNotFountFriend] = "찾을 수 없습니다.";
 	m_mapper[__FUNCTION__] = obj;
 }
