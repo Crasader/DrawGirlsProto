@@ -1318,17 +1318,17 @@ void FreezeAttack::myInit( int t_frame, KSCumberBase* cb )
 	startFrame();
 }
 
-TeleportWrapper* TeleportWrapper::create()
+TeleportWrapper* TeleportWrapper::create(KSCumberBase* cumber)
 {
 	TeleportWrapper* t_m32 = new TeleportWrapper();
-	t_m32->myInit();
+	t_m32->myInit(cumber);
 	t_m32->autorelease();
 	return t_m32;
 }
 
-void TeleportWrapper::myInit()
+void TeleportWrapper::myInit(KSCumberBase* cumber)
 {
-	myGD->communication("CP_startTeleport");
+	myGD->communication("CP_startTeleport", cumber);
 	startSelfRemoveSchedule();
 }
 

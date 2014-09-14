@@ -366,12 +366,13 @@ private:
 class TeleportWrapper : public AttackPattern // teleport
 {
 public:
-	static TeleportWrapper* create();
+	static TeleportWrapper* create(KSCumberBase* cumber);
 	
 private:
+	KSCumberBase* m_cumber;
 	
 	
-	void myInit();
+	void myInit(KSCumberBase* cumber);
 };
 
 class ChaosAttack : public AttackPattern // chaos
