@@ -29,6 +29,8 @@
 #include "TouchSuctionLayer.h"
 #include "CardGiftPopup.h"
 #include "ASPopupView.h"
+#include "LoadingLayer.h"
+#include "Diary19Popup.h"
 
 enum CBP_Zorder{
 	kCBP_Z_gray = 1,
@@ -43,6 +45,7 @@ enum CBP_MenuTag{
 	kCBP_MT_pre,
 	kCBP_MT_next,
 	kCBP_MT_gift,
+	kCBP_MT_diary19,
 //	kCBP_MT_inputText,
 	kCBP_MT_strength,
 //	kCBP_MT_second,
@@ -191,6 +194,20 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		}
 	}
 	
+	if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+	{
+		CCSprite* n_diary_19 = CCSprite::create("diary_19.png");
+		CCSprite* s_diary_19 = CCSprite::create("diary_19.png");
+		s_diary_19->setColor(ccGRAY);
+		
+		CCMenuItem* diary_19_item = CCMenuItemSprite::create(n_diary_19, s_diary_19, this, menu_selector(CollectionBookPopup::menuAction));
+		diary_19_item->setTag(kCBP_MT_diary19);
+		
+		CCMenu* diary_19_menu = CCMenu::createWithItem(diary_19_item);
+		diary_19_menu->setPosition(ccp(180,74));
+		target->addChild(diary_19_menu, 1, kCBP_MT_diary19);
+		diary_19_menu->setTouchPriority(-191);
+	}
 	
 	CommonButton* close = CommonButton::createCloseButton(-191);
 	close->setFunction([=](CCObject* sender)
@@ -621,6 +638,8 @@ bool CollectionBookPopup::init()
 		
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 		((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+		if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+			((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 		
 //		int sub_count = after_right_img->getTag();
@@ -890,6 +909,8 @@ void CollectionBookPopup::startNextPage()
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
+	if((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -974,6 +995,8 @@ void CollectionBookPopup::startNextFullSelectedPage()
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	int sub_count = after_right_img->getTag();
@@ -1096,6 +1119,8 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	int sub_count = covered_right_img->getTag();
@@ -1154,6 +1179,8 @@ void CollectionBookPopup::startNextSelectedPage()
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
+	if((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1282,6 +1309,8 @@ void CollectionBookPopup::endNextPage()
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	int sub_count = after_right_img->getTag();
@@ -1364,6 +1393,8 @@ void CollectionBookPopup::endNextSelectedPage()
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	int sub_count = after_right_img->getTag();
@@ -1440,6 +1471,8 @@ void CollectionBookPopup::startPrePage()
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)covered_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	int sub_count = covered_right_img->getTag();
@@ -1499,6 +1532,8 @@ void CollectionBookPopup::endPrePage()
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
+	if((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1547,6 +1582,8 @@ void CollectionBookPopup::endPrePage()
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	sub_count = after_right_img->getTag();
@@ -1595,6 +1632,8 @@ void CollectionBookPopup::endPreSelectedPage()
 	reorderChild(recent_right_img, kCBP_Z_recent);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_close))->setEnabled(true);
 	((CommonButton*)recent_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(true);
+	if((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(true);
 //	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_pre))->setEnabled(true);
 	((CCMenu*)recent_right_img->getChildByTag(kCBP_MT_next))->setEnabled(true);
@@ -1643,6 +1682,8 @@ void CollectionBookPopup::endPreSelectedPage()
 	
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
 	((CommonButton*)after_right_img->getChildByTag(kCBP_MT_gift))->setEnabled(false);
+	if((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))
+		((CCMenu*)after_right_img->getChildByTag(kCBP_MT_diary19))->setTouchEnabled(false);
 //	((CCMenu*)after_right_img->getChildByTag(kCBP_MT_zoom))->setEnabled(false);
 	
 //	sub_count = after_right_img->getTag();
@@ -1771,6 +1812,43 @@ void CollectionBookPopup::menuAction(CCObject* pSender)
 //		
 //		target_final = NULL;
 //		hidePopup();
+	}
+	else if(tag == kCBP_MT_diary19)
+	{
+		if(graphdog->isExistApp())
+		{
+			// 다이어리 앱 설치되어 있음
+			
+			LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+			addChild(t_loading, 9999);
+			t_loading->startLoading();
+			
+			Json::Value t_param;
+			t_param["memberID"] = myHSP->getMemberID();
+			
+			myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
+						   {
+							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+							   {
+								   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), recent_card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+							   }
+							   else
+							   {
+								   CCLOG("failed makediarycode");
+							   }
+							   
+							   t_loading->removeFromParent();
+							   is_menu_enable = true;
+						   });
+		}
+		else
+		{
+			Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
+														 {
+															 is_menu_enable = true;
+														 });
+			addChild(t_popup, 999);
+		}
 	}
 	else if(tag == kCBP_MT_pre)
 	{
