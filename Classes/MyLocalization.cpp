@@ -1115,6 +1115,17 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=15>아직 계정연결 안하셨어요?!</font><font newline=15>열심히 쌓은 데이터 잃어버리지 않게</font><font>서둘러 연결하세요!</font>"), kMyLocalKey_accountLinkLeadContent);
 	ko->setObject(CCString::create("설정창 바로가기"), kMyLocalKey_accountLinkLeadButton);
 	
+	ko->setObject(CCString::create("추천합니다!"), kMyLocalKey_introducerTitle);
+	ko->setObject(CCString::create("<font newline=15>추천인을 등록해주세요!</font><font newline=15>%d스테이지 클리어 후 젬 %d개를 드립니다!"), kMyLocalKey_introducerContent);
+	ko->setObject(CCString::create("추천할 대상"), kMyLocalKey_introducerPlaceHolder);
+	ko->setObject(CCString::create("확인"), kMyLocalKey_introducerOk);
+	
+	ko->setObject(CCString::create("이미 추천인 등록을 하셨습니다."), kMyLocalKey_introducerAfter);
+	ko->setObject(CCString::create("닉네임을 입력해주세요."), kMyLocalKey_introducerPleaseInputNick);
+	ko->setObject(CCString::create("해당 닉네임을 찾을 수 없습니다."), kMyLocalKey_introducerDonFindNick);
+	ko->setObject(CCString::create("%s 님을 추천인으로 등록하셨습니다."), kMyLocalKey_introducerSuccess);
+	ko->setObject(CCString::create("자신을 추천인으로 등록할 수 없습니다."), kMyLocalKey_introducerSelfNotIntroduce);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

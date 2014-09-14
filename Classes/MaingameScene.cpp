@@ -596,6 +596,8 @@ void Maingame::finalSetting()
 		search_eye_vector.push_back(t_search_eye);
 	}
 	
+	myGD->V_CCO["Main_removeSearchEye"] = bind(&Maingame::removeSearchEye, this, std::placeholders::_1);
+	
 	mySGD->resetIngameDetailScore();
 	
 	startScene();
@@ -4672,6 +4674,19 @@ void Maingame::refreshReplayPosition(int temp_time)
 //		CCCallFunc* t_call = CCCallFunc::create(continue_label, callfunc_selector(CCLabelTTF::removeFromParent));
 //		CCSequence* t_seq = CCSequence::createWithTwoActions(t_spawn, t_call);
 //		continue_label->runAction(t_seq);
+	}
+}
+
+void Maingame::removeSearchEye(CCObject* t_node)
+{
+	for(auto iter=search_eye_vector.begin();iter!=search_eye_vector.end();iter++)
+	{
+		SearchEye* t_search_eye = *iter;
+		if(t_search_eye == t_node)
+		{
+			search_eye_vector.erase(iter);
+			return;
+		}
 	}
 }
 

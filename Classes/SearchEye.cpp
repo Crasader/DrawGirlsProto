@@ -25,6 +25,7 @@ void SearchEye::mainCumberSearching ()
 		if(!myGD->isValidMainCumber(target_boss))
 		{
 			unschedule(schedule_selector(SearchEye::mainCumberSearching));
+			myGD->communication("Main_removeSearchEye", this);
 			removeFromParent();
 			search_eye_vector->erase(std::find(search_eye_vector->begin(), search_eye_vector->end(), this));
 			return;
