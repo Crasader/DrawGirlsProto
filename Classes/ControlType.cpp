@@ -346,7 +346,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
 	//조이스틱 보정하기
-	if(distanceValue<20){
+	if(distanceValue<20*joystick_size_value){
 		if(beforeDirection == directionLeft || beforeDirection == directionRight){
 			if(distancePoint.x<0){
 				beforeDirection=directionLeft;
