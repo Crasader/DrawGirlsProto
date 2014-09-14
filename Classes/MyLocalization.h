@@ -1029,6 +1029,17 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_accountLinkLeadContent,
 	kMyLocalKey_accountLinkLeadButton,
 	
+	kMyLocalKey_introducerTitle,
+	kMyLocalKey_introducerContent,
+	kMyLocalKey_introducerPlaceHolder,
+	kMyLocalKey_introducerOk,
+	
+	kMyLocalKey_introducerAfter,
+	kMyLocalKey_introducerPleaseInputNick,
+	kMyLocalKey_introducerDonFindNick,
+	kMyLocalKey_introducerSuccess,
+	kMyLocalKey_introducerSelfNotIntroduce,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

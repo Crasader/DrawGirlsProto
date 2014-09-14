@@ -315,6 +315,8 @@ private:
 	void goReplay ();
 	void cancelHome ();
 	
+	void removeSearchEye(CCObject* t_node);
+	
 	void showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_continue, SEL_CallFunc d_continue);
 	void continueAction();
 	

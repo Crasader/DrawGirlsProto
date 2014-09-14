@@ -26,6 +26,8 @@ void StarGoldData::withdraw()
 	
 	time_event_list.clear();
 	
+	setIntroducerID("");
+	
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
 	is_new_puzzle_card = false;
@@ -3262,6 +3264,8 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		if(i == kUserdataType_selectedCharNO)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
 	}
+	
+	setIntroducerID(result_data.get("introducerID", Json::Value()).asString());
 }
 
 bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
@@ -3519,6 +3523,8 @@ void StarGoldData::myInit()
 	
 	heart_time = NULL;
 	
+	setIntroducerID("");
+	
 	is_new_puzzle_card = false;
 	
 	is_on_attendance = false;
@@ -3618,6 +3624,15 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 	}
+}
+
+string StarGoldData::getIntroducerID()
+{
+	return introducerID.getV();
+}
+void StarGoldData::setIntroducerID(string t_id)
+{
+	introducerID = t_id;
 }
 
 bool StarGoldData::getIsNotClearedStage(){	return is_not_cleared_stage;}
@@ -3782,6 +3797,9 @@ int StarGoldData::getIsAlwaysSavePlaydata(){	return is_always_save_playdata;	}
 
 void StarGoldData::setSendPvpPlayDataRate(int t_i){	send_pvp_play_data_rate = t_i;	}
 int StarGoldData::getSendPvpPlayDataRate(){	return send_pvp_play_data_rate;	}
+
+void StarGoldData::setIntroduceStage(int t_i){	introduce_stage = t_i;	}
+int StarGoldData::getIntroduceStage(){	return introduce_stage.getV();	}
 
 string StarGoldData::getAllClearReward(){	return all_clear_reward.getV();	}
 void StarGoldData::setAllClearReward(string t_str){	all_clear_reward = t_str;	}
