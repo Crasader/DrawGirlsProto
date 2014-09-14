@@ -1549,12 +1549,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	ControlCommon::myInit(t_main, d_readyBack, t_jack);
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
-	control_circle->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	control_circle->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
 	control_circle->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
-	control_ball->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+5)/5.f);
+	control_ball->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
 	control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_ball);
 	
