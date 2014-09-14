@@ -513,6 +513,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_warning1016,
 	kMyLocalKey_warning1017,
 	kMyLocalKey_warning1018,
+	kMyLocalKey_warning1019,
 	kMyLocalKey_warning1020,
 	kMyLocalKey_warningBossSuccess,
 	kMyLocalKey_warningLastLife,

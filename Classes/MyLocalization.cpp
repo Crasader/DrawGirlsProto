@@ -539,6 +539,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("다이너마이트 지뢰"), kMyLocalKey_warning1016);
 	ko->setObject(CCString::create("불꽃스토커"), kMyLocalKey_warning1017);
 	ko->setObject(CCString::create("문득구름"), kMyLocalKey_warning1018);
+	ko->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	ko->setObject(CCString::create("부하몬스터 소환"), kMyLocalKey_warning1020);
 	ko->setObject(CCString::create("보스공격저지"), kMyLocalKey_warningBossSuccess);
 	ko->setObject(CCString::create("마지막 목숨"), kMyLocalKey_warningLastLife);
@@ -1564,6 +1565,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
 	en->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	en->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	en->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	en->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	en->setObject(CCString::create("Last Life"), kMyLocalKey_warningLastLife);
 	
@@ -2538,6 +2540,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Dynamite Mine"), kMyLocalKey_warning1016);
 	ja->setObject(CCString::create("Flame Stoker"), kMyLocalKey_warning1017);
 	ja->setObject(CCString::create("Sudden Cloude"), kMyLocalKey_warning1018);
+	ja->setObject(CCString::create("거대화"), kMyLocalKey_warning1019);
 	ja->setObject(CCString::create("Boss Attacks Blocked"), kMyLocalKey_warningBossSuccess);
 	
 	ja->setObject(CCString::create("새로운 보스 공격!"), kMyLocalKey_newBossPattern);
