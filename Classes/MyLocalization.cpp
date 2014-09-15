@@ -1117,8 +1117,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("설정창 바로가기"), kMyLocalKey_accountLinkLeadButton);
 	
 	ko->setObject(CCString::create("추천합니다!"), kMyLocalKey_introducerTitle);
-	ko->setObject(CCString::create("<font newline=15>추천인을 등록해주세요!</font><font newline=15>%d스테이지 클리어 후 젬 %d개를 드립니다!"), kMyLocalKey_introducerContent);
-	ko->setObject(CCString::create("추천할 대상"), kMyLocalKey_introducerPlaceHolder);
+	ko->setObject(CCString::create("<font newline=15>추천인을 등록해주세요.</font><font newline=15>등록 즉시 보상을 드립니다."), kMyLocalKey_introducerContent);
+	ko->setObject(CCString::create("추천인 닉네임"), kMyLocalKey_introducerPlaceHolder);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_introducerOk);
 	
 	ko->setObject(CCString::create("이미 추천인 등록을 하셨습니다."), kMyLocalKey_introducerAfter);
