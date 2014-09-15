@@ -506,9 +506,6 @@ public class hspConnector {
 							// Log.d("litqoo", "BEGIN - HSPLoginCB");
 
 							HSPCore core = HSPCore.getInstance();
-							if (core.getState() == HSPState.HSP_STATE_ONLINE) {
-								Log.d("hsp", "dfsgfsdg");
-							}
 							JSONObject r = new JSONObject();
 							JSONObject error = new JSONObject();
 
@@ -766,7 +763,8 @@ public class hspConnector {
 			@Override
 			public void onAfterLogin() {
 				
-				requestItemDeliveryNative();
+//				requestItemDeliveryNative();
+				
 				//RequestItemDelivery(); 호출하여 미 배송 아이템 존재 유무 체크
                 //아이템 존재 한다면 지급 프로세스 및  FinishItemDelivery();
 				// TODO Auto-generated method stub

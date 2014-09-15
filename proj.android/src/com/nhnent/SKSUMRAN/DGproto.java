@@ -63,11 +63,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		super.onCreate(savedInstanceState);
 		
 		Log.i("com.litqoo.dgproto", "init1 kamcord");
-		/*Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
+		Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
 		    "Ecl3mH6WxvG8T3lsrqbtAAOBrRq1AE664D7VYpMgZ7b",
-		    "drawgirls");*/
+		    "drawgirls");
 		
-		//Kamcord.initActivity(this);
+		Kamcord.initActivity(this);
 		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
