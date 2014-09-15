@@ -417,7 +417,22 @@ public:
 	}
 	float m_lastCastTime;
 	float m_cumberTimer;
-	
+	struct FuryMode
+	{
+		int furyFrameCount;
+		int totalFrame;
+		int colorRef;
+		int colorDir;
+		void startFury(int tf)
+		{
+			totalFrame = tf;
+			furyFrameCount = 0;
+			firstMoving = true;
+			colorRef = 255;
+			colorDir = -1; // 처음에 레드를 제외한 다른 컬러는 감소시킴.
+		}
+		bool firstMoving; // 처음 분노를 시작했다면 true
+	}m_furyMode;
 protected:
 	
 	//선그을때 공격하는걸 제한하는 카운터
@@ -464,22 +479,7 @@ protected:
 	
 	
 	FixedSizeDeque<int> m_damagedFrames; // 맞았을 때의 프레임을 기록.
-	struct FuryMode
-	{
-		int furyFrameCount;
-		int totalFrame;
-		int colorRef;
-		int colorDir;
-		void startFury(int tf)
-		{
-			totalFrame = tf;
-			furyFrameCount = 0;
-			firstMoving = true;
-			colorRef = 255;
-			colorDir = -1; // 처음에 레드를 제외한 다른 컬러는 감소시킴.
-		}
-		bool firstMoving; // 처음 분노를 시작했다면 true
-	}m_furyMode;
+	
 
 	
 	

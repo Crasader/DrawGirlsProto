@@ -2112,6 +2112,7 @@ void Jack::patternRemover()
 			canceled = true;
 		}
 		cumber->setCumberState(kCumberStateMoving);
+		cumber->m_furyMode.furyFrameCount = cumber->m_furyMode.totalFrame;
 	}
 	if(canceled)
 	{
@@ -2172,6 +2173,7 @@ void Jack::patternRemover()
 		{
 			cumber->setAttackPattern(nullptr);
 			cumber->setCumberState(kCumberStateMoving);
+			cumber->m_furyMode.furyFrameCount = cumber->m_furyMode.totalFrame;
 		}
 		
 //		addChild(KSTimer::create(0.3f, [=](){
