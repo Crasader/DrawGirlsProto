@@ -1271,13 +1271,11 @@ void KSCumberBase::rushMoving(float dt)
 		{
 			validPosition = true;
 		}
-		if(m_furyMode.furyFrameCount % 8 == 0) // n 프레임당 한번 깎음.
+		if(m_furyMode.furyFrameCount % 4 == 0) // n 프레임당 한번 깎음.
 		{
 			crashMapForPosition(afterPosition);
-			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
+//			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
 		}
-
-		
 	}
 
 	m_directionAngleDegree = degree;

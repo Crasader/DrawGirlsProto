@@ -23,13 +23,11 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.nhnent.SKSUMRAN;
 import io.fiverocks.android.FiveRocks;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -43,7 +41,6 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
-
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
@@ -55,6 +52,7 @@ import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
 
+@SuppressLint("NewApi")
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final String FiveRocks_AppId = "53c4918600821d86a400000e";
 	public static final String FiveRocks_AppKey = "bSYyKMPM-oSSEMEvOPMW";
@@ -66,12 +64,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		super.onCreate(savedInstanceState);
 		
 		Log.i("com.litqoo.dgproto", "init1 kamcord");
-		Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
+		/*Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
 		    "Ecl3mH6WxvG8T3lsrqbtAAOBrRq1AE664D7VYpMgZ7b",
-		    "drawgirls");
+		    "drawgirls");*/
 		
-		Kamcord.initActivity(this);
-		
+		//Kamcord.initActivity(this);
 		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
@@ -81,7 +78,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.1")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.3")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
