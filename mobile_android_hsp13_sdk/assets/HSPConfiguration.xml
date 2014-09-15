@@ -16,6 +16,7 @@
 	<configuration key="HSP_ENFORCED_DEVICE_LOGIN" value="false"/>
 	<configuration key="HSP_USE_WEBVIEW_HARDWARE_ACCELERATE" value="false"/>
 	<configuration key="HSP_USE_JOGA" value="true"/>
+	<configuration key="HSP_TOPBAR_COLOR" value="#ff1414"/>
 
 	<configuration key="HSP_USE_PUSH" value="true"/>
 

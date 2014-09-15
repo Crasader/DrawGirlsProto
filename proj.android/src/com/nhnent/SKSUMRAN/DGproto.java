@@ -23,15 +23,14 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.nhnent.SKSUMRAN;
 import io.fiverocks.android.FiveRocks;
-
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONObject;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -42,12 +41,10 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.WindowManager;
-
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
-
 import com.kamcord.android.Kamcord;
 import com.igaworks.IgawCommon;
 //import com.kamcord.android.Kamcord;
@@ -55,6 +52,7 @@ import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 //import com.litqoo.lib.KRunnable;
 
+@SuppressLint("NewApi")
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final String FiveRocks_AppId = "53c4918600821d86a400000e";
 	public static final String FiveRocks_AppKey = "bSYyKMPM-oSSEMEvOPMW";
@@ -72,7 +70,6 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		
 		Kamcord.initActivity(this);
 		
-		
 		if (Build.VERSION.SDK_INT >= ANDROID_BUILD_GINGERBREAD){
 	    	setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 	    }
@@ -81,7 +78,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.1")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.3")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
@@ -129,9 +126,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		  if (Build.VERSION.SDK_INT >= 11){
 			  int hideOption = Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE
 	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
+	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION; // hide nav bar
+	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
 			  
 			  if (Build.VERSION.SDK_INT >= 19){
 				  hideOption = hideOption | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -273,9 +270,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
         super.onDestroy();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-    //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-//    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
-//    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    	super.onActivityResult(requestCode, resultCode, data);
+    	hideSystemUI();
+    	//com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
+    }
     @Override
     protected void onStart() {
       super.onStart();

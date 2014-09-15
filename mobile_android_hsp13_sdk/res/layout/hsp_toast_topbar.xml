@@ -35,12 +35,6 @@
 	            android:layout_centerInParent="true"
 	            android:layout_alignParentRight="true"
 	            android:tag="hsp.toast.topbar.button" />
-		    <TextView
-		        android:layout_width="fill_parent"
-		        android:layout_height="0.67dp"
-		        android:background="@color/hsp.toast.topbar.bottomline.hangame"
-		        android:layout_alignParentBottom="true"
-		        android:tag="hsp.topbar.bottomline" />
     </RelativeLayout>
 
 

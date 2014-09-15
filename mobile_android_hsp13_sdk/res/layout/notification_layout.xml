@@ -11,6 +11,7 @@
 	    android:scaleType="centerInside"
         />
     <LinearLayout
+        android:id="@+id/notification.background"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="fill_vertical"

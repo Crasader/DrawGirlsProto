@@ -504,6 +504,8 @@ void KSCircleBase::completedAnimationSequenceNamed( const char *name_ )
 
 void KSCircleBase::checkConfine(float dt)
 {
+//	if(m_cumberState == kCumberStateFury) // 분노 모드면
+//		return;
 	IntPoint mapPoint = m_mapPoint;
 	// 갇혀있는지 검사함. 갇혀있으면 없앰.
 	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
