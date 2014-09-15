@@ -30,6 +30,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -125,9 +126,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		  if (Build.VERSION.SDK_INT >= 11){
 			  int hideOption = Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE
 	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION // hide nav bar
-	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
+	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION; // hide nav bar
+	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
 			  
 			  if (Build.VERSION.SDK_INT >= 19){
 				  hideOption = hideOption | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
@@ -269,9 +270,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
         super.onDestroy();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-    //    protected void onActivityResult(int requestCode, int resultCode, Intent data){
-//    	com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
-//    }
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
+    	super.onActivityResult(requestCode, resultCode, data);
+    	hideSystemUI();
+    	//com.litqoo.lib.hspConnector.onActivityResult(requestCode, resultCode, data, this);
+    }
     @Override
     protected void onStart() {
       super.onStart();
