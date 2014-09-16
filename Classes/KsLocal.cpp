@@ -145,6 +145,7 @@ void KsLocal::ko()
 	
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
@@ -235,6 +236,7 @@ void KsLocal::en()
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
@@ -323,6 +325,7 @@ void KsLocal::ja()
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";

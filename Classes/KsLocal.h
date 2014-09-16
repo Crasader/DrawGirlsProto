@@ -69,6 +69,7 @@ enum class LK
 	kFriendHeartReSend,
 	kFriendInputNickName,
 	kFriendAddFriend,
+	kFriendAddingFriend,
 	kFriendSearch,
 	kFriendMailAccept,
 	kFriendMailReject,
