@@ -13,6 +13,7 @@
 #include "DataStorageHub.h"
 #include "SilhouetteData.h"
 #include <map>
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 using namespace std;
@@ -21,7 +22,7 @@ class CommonButton;
 class MyNode;
 class EffectSprite;
 class KSLabelTTF;
-class ZoomScript : public CCLayer
+class ZoomScript : public CCLayer, public BackKeyBase
 {
 public:
 	virtual bool init();
@@ -129,6 +130,7 @@ private:
 	
 	void frameAnimation();
 	
+	virtual void keyBackClicked(void);
 	
 	void moveListXY(CCPoint t_p);
 	void moveAnimation();

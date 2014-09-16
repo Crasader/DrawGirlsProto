@@ -45,6 +45,7 @@ enum ShopPopup_MenuTag{
 	kSP_MT_heart,
 	kSP_MT_character,
 	kSP_MT_card,
+	kSP_MT_p1,
 	kSP_MT_content1,
 	kSP_MT_content2,
 	kSP_MT_content3,
@@ -58,93 +59,93 @@ enum ShopPopup_MenuTag{
 	kSP_MT_characterUnlockBase = 20000
 };
 
-string ShopPopup::getPriceData(string t_code)
-{
-	string return_value;
-	
-	if(t_code == "wonToRuby1")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 0);
-	else if(t_code == "wonToRuby2")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 1);
-	else if(t_code == "wonToRuby3")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 2);
-	else if(t_code == "wonToRuby4")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 3);
-	else if(t_code == "wonToRuby5")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 4);
-	else if(t_code == "wonToRuby6")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 5);
-	else if(t_code == "rubyFromWon1")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 0);
-	else if(t_code == "rubyFromWon2")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 1);
-	else if(t_code == "rubyFromWon3")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 2);
-	else if(t_code == "rubyFromWon4")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 3);
-	else if(t_code == "rubyFromWon5")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 4);
-	else if(t_code == "rubyFromWon6")
-		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 5);
-	else if(t_code == "rubyToGold1")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 0);
-	else if(t_code == "rubyToGold2")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 1);
-	else if(t_code == "rubyToGold3")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 2);
-	else if(t_code == "rubyToGold4")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 3);
-	else if(t_code == "rubyToGold5")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 4);
-	else if(t_code == "rubyToGold6")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 5);
-	else if(t_code == "goldFromRuby1")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 0);
-	else if(t_code == "goldFromRuby2")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 1);
-	else if(t_code == "goldFromRuby3")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 2);
-	else if(t_code == "goldFromRuby4")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 3);
-	else if(t_code == "goldFromRuby5")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 4);
-	else if(t_code == "goldFromRuby6")
-		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 5);
-	else if(t_code == "rubyToHeart1")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 0);
-	else if(t_code == "rubyToHeart2")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 1);
-	else if(t_code == "rubyToHeart3")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 2);
-	else if(t_code == "rubyToHeart4")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 3);
-	else if(t_code == "rubyToHeart5")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 4);
-	else if(t_code == "rubyToHeart6")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 5);
-	else if(t_code == "heartFromRuby1")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 0);
-	else if(t_code == "heartFromRuby2")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 1);
-	else if(t_code == "heartFromRuby3")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 2);
-	else if(t_code == "heartFromRuby4")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 3);
-	else if(t_code == "heartFromRuby5")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 4);
-	else if(t_code == "heartFromRuby6")
-		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 5);
-	
-	CCLOG("%s : %s", t_code.c_str(), return_value.c_str());
-	
-	return return_value;
-}
+//string ShopPopup::getPriceData(string t_code)
+//{
+//	string return_value;
+//	
+//	if(t_code == "wonToRuby1")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 0);
+//	else if(t_code == "wonToRuby2")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 1);
+//	else if(t_code == "wonToRuby3")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 2);
+//	else if(t_code == "wonToRuby4")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 3);
+//	else if(t_code == "wonToRuby5")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 4);
+//	else if(t_code == "wonToRuby6")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_priceName_s, 5);
+//	else if(t_code == "rubyFromWon1")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 0);
+//	else if(t_code == "rubyFromWon2")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 1);
+//	else if(t_code == "rubyFromWon3")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 2);
+//	else if(t_code == "rubyFromWon4")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 3);
+//	else if(t_code == "rubyFromWon5")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 4);
+//	else if(t_code == "rubyFromWon6")
+//		return_value = NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, 5);
+//	else if(t_code == "rubyToGold1")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 0);
+//	else if(t_code == "rubyToGold2")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 1);
+//	else if(t_code == "rubyToGold3")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 2);
+//	else if(t_code == "rubyToGold4")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 3);
+//	else if(t_code == "rubyToGold5")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 4);
+//	else if(t_code == "rubyToGold6")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_priceName_s, 5);
+//	else if(t_code == "goldFromRuby1")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 0);
+//	else if(t_code == "goldFromRuby2")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 1);
+//	else if(t_code == "goldFromRuby3")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 2);
+//	else if(t_code == "goldFromRuby4")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 3);
+//	else if(t_code == "goldFromRuby5")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 4);
+//	else if(t_code == "goldFromRuby6")
+//		return_value = NSDS_GS(kSDS_GI_shopGold_int1_countName_s, 5);
+//	else if(t_code == "rubyToHeart1")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 0);
+//	else if(t_code == "rubyToHeart2")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 1);
+//	else if(t_code == "rubyToHeart3")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 2);
+//	else if(t_code == "rubyToHeart4")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 3);
+//	else if(t_code == "rubyToHeart5")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 4);
+//	else if(t_code == "rubyToHeart6")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_priceName_s, 5);
+//	else if(t_code == "heartFromRuby1")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 0);
+//	else if(t_code == "heartFromRuby2")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 1);
+//	else if(t_code == "heartFromRuby3")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 2);
+//	else if(t_code == "heartFromRuby4")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 3);
+//	else if(t_code == "heartFromRuby5")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 4);
+//	else if(t_code == "heartFromRuby6")
+//		return_value = NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, 5);
+//	
+//	CCLOG("%s : %s", t_code.c_str(), return_value.c_str());
+//	
+//	return return_value;
+//}
 
 void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 {
 	if(recent_shop_code == kSC_ruby)
 	{
-		StyledLabelTTF* ruby_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("rubyFromWon%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopRuby_int1_countName_s, t_number-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
 		ruby_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(ruby_label);
@@ -158,7 +159,7 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 	}
 	else if(recent_shop_code == kSC_gold)
 	{
-		StyledLabelTTF* gold_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("goldFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* gold_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopGold_int1_countName_s, t_number-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		gold_label->setAnchorPoint(ccp(0.5f,0.5f));
 		gold_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(gold_label);
@@ -172,7 +173,7 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 	}
 	else if(recent_shop_code == kSC_heart)
 	{
-		StyledLabelTTF* heart_label = StyledLabelTTF::create(getPriceData(CCString::createWithFormat("heartFromRuby%d", t_number)->getCString()).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* heart_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopCoin_int1_countName_s, t_number-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		heart_label->setAnchorPoint(ccp(0.5f,0.5f));
 		heart_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
 		t_target->addChild(heart_label);
@@ -183,6 +184,13 @@ void ShopPopup::addPriceReward(CCNode *t_target, int t_number)
 //		heart_label->setAnchorPoint(ccp(1.f,0.5f));
 //		heart_label->setPosition(ccpFromSize(t_target->getContentSize()) + ccp(-12,-18));
 //		t_target->addChild(heart_label);
+	}
+	else if(recent_shop_code == kSC_p1)
+	{
+		StyledLabelTTF* p1_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopP1_int1_countName_s, t_number-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		p1_label->setAnchorPoint(ccp(0.5f,0.5f));
+		p1_label->setPosition(ccpFromSize(t_target->getContentSize()/2.f) + ccp(0,-4));
+		t_target->addChild(p1_label);
 	}
 }
 
@@ -222,6 +230,8 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	else if(recent_shop_code == kSC_heart)
 		heart_menu->setEnabled(true);
 	//		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(true);
+	else if(recent_shop_code == kSC_p1)
+		p1_menu->setEnabled(true);
 	else if(recent_shop_code == kSC_startPack)
 	{
 		if(startPack_menu)
@@ -243,6 +253,8 @@ void ShopPopup::setShopCode(ShopCode t_code)
 	else if(t_code == kSC_heart)
 		heart_menu->setEnabled(false);
 //		tab_menu->getChildByTag(kSP_MT_heart)->setVisible(false);
+	else if(t_code == kSC_p1)
+		p1_menu->setEnabled(false);
 	else if(t_code == kSC_startPack)
 	{
 		if(startPack_menu)
@@ -316,6 +328,8 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			filename = "shop_gold%d.png";
 		else if(recent_shop_code == kSC_heart)
 			filename = "shop_coin%d.png";
+		else if(recent_shop_code == kSC_p1)
+			filename = "shop_p1_%d.png";
 		
 		for(int i=1;i<=6;i++)
 		{
@@ -333,24 +347,30 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			
 			string sale_str;
 			string price_type;
-			string price_key;
+			SDS_KEY price_key;
 			if(recent_shop_code == kSC_ruby)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopRuby_int1_sale_s, i-1);
 				price_type = mySGD->getGoodsTypeToKey(kGoodsType_money);//NSDS_GS(kSDS_GI_shopRuby_int1_priceType_s, i-1);
-				price_key = "wonToRuby%d";
+				price_key = kSDS_GI_shopRuby_int1_priceName_s;
 			}
 			else if(recent_shop_code == kSC_gold)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopGold_int1_sale_s, i-1);
 				price_type = mySGD->getGoodsTypeToKey(kGoodsType_ruby);//NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, i-1);
-				price_key = "rubyToGold%d";
+				price_key = kSDS_GI_shopGold_int1_priceName_s;
 			}
 			else if(recent_shop_code == kSC_heart)
 			{
 				sale_str = NSDS_GS(kSDS_GI_shopCoin_int1_sale_s, i-1);
 				price_type = mySGD->getGoodsTypeToKey(kGoodsType_ruby); //NSDS_GS(kSDS_GI_shopCoin_int1_priceType_s, i-1);
-				price_key = "rubyToHeart%d";
+				price_key = kSDS_GI_shopCoin_int1_priceName_s;
+			}
+			else if(recent_shop_code == kSC_p1)
+			{
+				sale_str = NSDS_GS(kSDS_GI_shopP1_int1_sale_s, i-1);
+				price_type = mySGD->getGoodsTypeToKey(kGoodsType_gold); //NSDS_GS(kSDS_GI_shopCoin_int1_priceType_s, i-1);
+				price_key = kSDS_GI_shopP1_int1_priceName_s;
 			}
 			
 			if(!sale_str.empty())
@@ -366,29 +386,33 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			
 			if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 			{
-				CCLabelTTF* won_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
 				won_label->setPosition(ccp(0, -27));
 				content_node->addChild(won_label, 3);
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			{
-				CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
-				ruby_img->setPosition(ccp(-30, -27));
-				content_node->addChild(ruby_img, 3);
-				
-				CCLabelTTF* ruby_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				CCLabelTTF* ruby_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
 				ruby_label->setPosition(ccp(10, -27));
 				content_node->addChild(ruby_label, 3);
+				
+				CCSprite* ruby_img = CCSprite::create("price_ruby_img.png");
+				ruby_img->setPosition(ccp(-ruby_label->getContentSize().width/2.f-4, -27));
+				content_node->addChild(ruby_img, 3);
+				
+				ruby_label->setPositionX(ruby_img->getContentSize().width/2.f-4);
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			{
-				CCSprite* gold_img = CCSprite::create("price_gold_img.png");
-				gold_img->setPosition(ccp(-30, -27));
-				content_node->addChild(gold_img, 3);
-				
-				CCLabelTTF* gold_label = CCLabelTTF::create(getPriceData(CCString::createWithFormat(price_key.c_str(), i)->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+				CCLabelTTF* gold_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
 				gold_label->setPosition(ccp(10, -27));
 				content_node->addChild(gold_label, 3);
+				
+				CCSprite* gold_img = CCSprite::create("price_gold_img.png");
+				gold_img->setPosition(ccp(-gold_label->getContentSize().width/2.f-2, -27));
+				content_node->addChild(gold_img, 3);
+				
+				gold_label->setPositionX(gold_img->getContentSize().width/2.f-7);
 			}
 			
 			CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(ShopPopup::menuAction));
@@ -752,13 +776,13 @@ bool ShopPopup::init()
 	
 	tab_menu->setTouchPriority(touch_priority-4);
 	
-	CCSprite* n_ruby_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* n_ruby_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	n_ruby_label->disableOuterStroke();
 	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	n_ruby_img->addChild(n_ruby_label);
 	
-	CCSprite* s_ruby_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* s_ruby_img = CCSprite::create("shoptap_down.png");
 	s_ruby_img->setColor(ccGRAY);
 	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	s_ruby_label->setColor(ccGRAY);
@@ -766,7 +790,7 @@ bool ShopPopup::init()
 	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	s_ruby_img->addChild(s_ruby_label);
 	
-	CCSprite* d_ruby_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* d_ruby_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	d_ruby_label->disableOuterStroke();
 	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
@@ -779,13 +803,13 @@ bool ShopPopup::init()
 	tab_menu->addChild(ruby_menu, kSP_Z_content);
 	
 	
-	CCSprite* n_gold_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* n_gold_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	n_gold_label->disableOuterStroke();
 	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
 	n_gold_img->addChild(n_gold_label);
 	
-	CCSprite* s_gold_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* s_gold_img = CCSprite::create("shoptap_down.png");
 	s_gold_img->setColor(ccGRAY);
 	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	s_gold_label->setColor(ccGRAY);
@@ -793,7 +817,7 @@ bool ShopPopup::init()
 	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
 	s_gold_img->addChild(s_gold_label);
 	
-	CCSprite* d_gold_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* d_gold_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	d_gold_label->disableOuterStroke();
 	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
@@ -806,13 +830,13 @@ bool ShopPopup::init()
 	tab_menu->addChild(gold_menu, kSP_Z_content);
 	
 	
-	CCSprite* n_heart_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* n_heart_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	n_heart_label->disableOuterStroke();
 	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
 	n_heart_img->addChild(n_heart_label);
 	
-	CCSprite* s_heart_img = CCSprite::create("tabbutton_down.png");
+	CCSprite* s_heart_img = CCSprite::create("shoptap_down.png");
 	s_heart_img->setColor(ccGRAY);
 	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	s_heart_label->disableOuterStroke();
@@ -820,7 +844,7 @@ bool ShopPopup::init()
 	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
 	s_heart_img->addChild(s_heart_label);
 	
-	CCSprite* d_heart_img = CCSprite::create("tabbutton_up.png");
+	CCSprite* d_heart_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	d_heart_label->disableOuterStroke();
 	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
@@ -831,6 +855,33 @@ bool ShopPopup::init()
 	heart_menu->setTag(kSP_MT_heart);
 	heart_menu->setPosition(getContentPosition(kSP_MT_heart));
 	tab_menu->addChild(heart_menu, kSP_Z_content);
+	
+	
+	CCSprite* n_p1_img = CCSprite::create("shoptap_down.png");
+	KSLabelTTF* n_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	n_p1_label->disableOuterStroke();
+	n_p1_label->setPosition(ccpFromSize(n_p1_img->getContentSize()/2.f) + ccp(0,2));
+	n_p1_img->addChild(n_p1_label);
+	
+	CCSprite* s_p1_img = CCSprite::create("shoptap_down.png");
+	s_p1_img->setColor(ccGRAY);
+	KSLabelTTF* s_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	s_p1_label->disableOuterStroke();
+	s_p1_label->setColor(ccGRAY);
+	s_p1_label->setPosition(ccpFromSize(s_p1_img->getContentSize()/2.f) + ccp(0,2));
+	s_p1_img->addChild(s_p1_label);
+	
+	CCSprite* d_p1_img = CCSprite::create("shoptap_up.png");
+	KSLabelTTF* d_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	d_p1_label->disableOuterStroke();
+	d_p1_label->setPosition(ccpFromSize(d_p1_img->getContentSize()/2.f) + ccp(0,2));
+	d_p1_img->addChild(d_p1_label);
+	
+	
+	p1_menu = CCMenuItemSprite::create(n_p1_img, s_p1_img, d_p1_img, this, menu_selector(ShopPopup::menuAction));
+	p1_menu->setTag(kSP_MT_p1);
+	p1_menu->setPosition(getContentPosition(kSP_MT_p1));
+	tab_menu->addChild(p1_menu, kSP_Z_content);
 	
 	
 	
@@ -1020,11 +1071,13 @@ CCPoint ShopPopup::getContentPosition(int t_tag)
 	else if(t_tag == kSP_MT_card)
 		return_value = ccp(141.5f,256.5f);
 	else if(t_tag == kSP_MT_ruby)
-		return_value = ccp(244,256.5f);//ccp(59,256);//ccp(224,256);
+		return_value = ccp(268,256.5f);//ccp(59,256);//ccp(224,256);
 	else if(t_tag == kSP_MT_gold)
-		return_value = ccp(319,256.5f);//ccp(141.5f,256);//ccp(306,256);
+		return_value = ccp(333,256.5f);//ccp(141.5f,256);//ccp(306,256);
 	else if(t_tag == kSP_MT_heart)
-		return_value = ccp(394,256.5f);//ccp(224,256);//ccp(388.5f,256);
+		return_value = ccp(398,256.5f);//ccp(224,256);//ccp(388.5f,256);
+	else if(t_tag == kSP_MT_p1)
+		return_value = ccp(203,256.5f);
 	else if(t_tag == kSP_MT_content1)
 		return_value = ccp(100,177);
 	else if(t_tag == kSP_MT_content2)
@@ -1109,6 +1162,11 @@ void ShopPopup::menuAction(CCObject* pSender)
 	else if(tag == kSP_MT_heart)
 	{
 		setShopCode(kSC_heart);
+		is_menu_enable = true;
+	}
+	else if(tag == kSP_MT_p1)
+	{
+		setShopCode(kSC_p1);
 		is_menu_enable = true;
 	}
 	else if(tag == kSP_MT_character)
@@ -1321,6 +1379,42 @@ void ShopPopup::menuAction(CCObject* pSender)
 //				is_menu_enable = true;
 //				CCLOG("not enough ruby!!!");
 //			}
+		}
+		else if(recent_shop_code == kSC_p1)
+		{
+			//			string price_type = NSDS_GS(kSDS_GI_shopGold_int1_priceType_s, tag-kSP_MT_content1);
+			
+			//			if(mySGD->getGoodsValue(kGoodsType_ruby) >= index_to_gold[tag-kSP_MT_content1].getV())
+			//			{
+			createCheckBuyPopup([=]()
+								{
+									loading_layer = LoadingLayer::create();
+									addChild(loading_layer, kSP_Z_popup);
+									
+									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopP1_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+									
+									fail_func = [=]()
+									{
+										mySGD->clearChangeGoods();
+									};
+									
+									success_func = [=]()
+									{
+										fiverocks::FiveRocksBridge::trackEvent("GetP1", "Get_Purchase", ccsf("ShopPurchase%d", tag-kSP_MT_content1+1), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+									};
+									
+									mySGD->changeGoods(json_selector(this, ShopPopup::resultSetUserData));
+								});
+			//			}
+			//			else
+			//			{
+			//				addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-10, kGoodsType_ruby, [=]()
+			//																	{
+			//																		setShopCode(kSC_ruby);
+			//																	}), kSP_Z_popup);
+			//				is_menu_enable = true;
+			//				CCLOG("not enough ruby!!!");
+			//			}
 		}
 	}
 //	else if(tag == kSP_MT_content2)

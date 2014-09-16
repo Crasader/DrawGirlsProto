@@ -186,6 +186,7 @@ bool TitleRenewalScene::init()
 void TitleRenewalScene::onEnterTransitionDidFinish()
 {
     CCLayer::onEnterTransitionDidFinish();
+	
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -217,6 +218,14 @@ void TitleRenewalScene::loadCounting(CCObject* sender)
 void TitleRenewalScene::endSplash()
 {
 	TRACE();
+	
+	setBackKeyFunc([=](){
+		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+	});
+	
+	setBackKeyEnabled(true);
+	
+	setKeypadEnabled(true);
 	
 //	CCSprite* ratings = CCSprite::create("game_ratings.png");
 //	ratings->setPosition(ccp(240,160));
@@ -352,6 +361,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 			{
 				CCLOG("resetalldata");
+				setBackKeyEnabled(false);
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
@@ -1424,6 +1434,17 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			t_index++;
 		}
 		
+		for(int i=1;i<=6;i++)
+		{
+			string t_key = CCString::createWithFormat("s_p1_%d", i)->getCString();
+			Json::Value t_data = result_data[t_key.c_str()];
+			
+			NSDS_SS(kSDS_GI_shopP1_int1_countName_s, i-1, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopP1_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopP1_int1_sale_s, i-1, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopP1_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
+		}
+		
 		NSDS_SB(kSDS_GI_shop_isEvent_b, result_data["event"].asBool(), false);
 		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
 	}
@@ -2462,6 +2483,8 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
+	setBackKeyEnabled(false);
+	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
@@ -3599,6 +3622,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	}
 	else if(tag >= kTitleRenewal_MT_puzzleBase)
 	{
+		setBackKeyEnabled(false);
 		tag -= kTitleRenewal_MT_puzzleBase;
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
@@ -3688,5 +3712,5 @@ void TitleRenewalScene::alertAction(int t1, int t2)
 
 void TitleRenewalScene::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+	onBackKeyAction();
 }

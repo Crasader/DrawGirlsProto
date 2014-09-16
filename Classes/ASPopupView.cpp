@@ -175,6 +175,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 		close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 25, case_back->getContentSize().height/2.f - 22));
 		close_button->setFunction([=](CCObject* sender)
 															{
+																t_popup->setBackKeyEnabled(false);
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																
 																if(t_popup->duplicate_tag == -1)
@@ -245,7 +246,42 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 	
 	t_popup->getDimmedSprite()->setOpacity(0);
-	CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
+	CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite(), nullptr, [=]()
+							   {
+								   if(Xbutton)
+									{
+										t_popup->setBackKeyFunc([=]()
+																{
+																	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																	
+																	if(t_popup->duplicate_tag == -1)
+																	{
+																		CommonAnimation::closePopup(t_popup, t_container,
+																									t_popup->getDimmedSprite(), nullptr,
+																									[=](){
+																										if(close_func && !towButton)
+																											close_func();
+																										
+																										if(close_func && towButton)
+																											close_func2();
+																										
+																										t_popup->removeFromParent();
+																									});
+																	}
+																	else
+																	{
+																		CommonNotiDuplicateManager::sharedInstance()->onTagAction(t_popup->duplicate_tag);
+																		CommonAnimation::closePopup(t_popup, t_container,
+																									t_popup->getDimmedSprite(), nullptr,
+																									[=](){
+																										t_popup->removeFromParent();
+																									});
+																	}
+																});
+										t_popup->setBackKeyEnabled(true);
+										t_popup->setKeypadEnabled(true);
+									}
+							   });
 	return t_popup;
 }
 
@@ -331,6 +367,7 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 		close_button->setPosition(ccp(case_back->getContentSize().width/2.f - 25, case_back->getContentSize().height/2.f - 22));
 		close_button->setFunction([=](CCObject* sender)
 															{
+																t_popup->setBackKeyEnabled(false);
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																CommonAnimation::closePopup(t_popup, t_container,
 																														t_popup->getDimmedSprite(), nullptr,
@@ -372,7 +409,25 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f));
 	
 	t_popup->getDimmedSprite()->setOpacity(0);
-	CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite());
+	CommonAnimation::openPopup(t_popup, t_container, t_popup->getDimmedSprite(), nullptr, [=]()
+							   {
+								   if(Xbutton)
+								   {
+									   t_popup->setBackKeyFunc([=]()
+															   {
+																   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																   CommonAnimation::closePopup(t_popup, t_container,
+																							   t_popup->getDimmedSprite(), nullptr,
+																							   [=](){
+																								   if(close_func)
+																									   close_func();
+																								   t_popup->removeFromParent();
+																							   });
+															   });
+									   t_popup->setBackKeyEnabled(true);
+									   t_popup->setKeypadEnabled(true);
+								   }
+							   });
 	return t_popup;
 }
 
@@ -469,11 +524,21 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-25));
 		close_button->setFunction([=](CCObject* sender)
 															{
+																t_popup->setBackKeyEnabled(false);
 																AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																close_func();
 																t_popup->removeFromParent();
 															});
 		t_container->addChild(close_button);
+		
+		t_popup->setBackKeyFunc([=]()
+								{
+									AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+									close_func();
+									t_popup->removeFromParent();
+								});
+		t_popup->setBackKeyEnabled(true);
+		t_popup->setKeypadEnabled(true);
 	}
 	else
 	{
@@ -558,6 +623,8 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 								  if(!t_popup->is_menu_enable)
 									  return;
 								  
+								  t_popup->setBackKeyEnabled(false);
+								  
 								  t_popup->is_menu_enable = false;
 									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
 										
@@ -608,6 +675,22 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 		
 	}, [=](){
 		t_popup->is_menu_enable = true;
+		t_popup->setBackKeyFunc([=]()
+								{
+									if(!t_popup->is_menu_enable)
+										return;
+									
+									t_popup->is_menu_enable = false;
+									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
+										
+									}, [=](){
+										if(cancel_func != nullptr)
+											cancel_func();
+										t_popup->removeFromParent();
+									});
+								});
+		t_popup->setBackKeyEnabled(true);
+		t_popup->setKeypadEnabled(true);
 	});
 	
 	
@@ -619,4 +702,9 @@ void ASPopupView::buttonAction(CCObject* sender, CCControlEvent t_event)
 	int tag = ((CCNode*)sender)->getTag();
 	
 	button_func_list[tag]();
+}
+
+void ASPopupView::keyBackClicked(void)
+{
+	onBackKeyAction();
 }

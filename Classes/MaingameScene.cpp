@@ -86,7 +86,6 @@ bool Maingame::init()
 	is_pause = false;
 	is_gohome = false;
 	t_smg = NULL;
-	setKeypadEnabled(true);
 	
 	warning_count = 0;
 	
@@ -1140,6 +1139,13 @@ void Maingame::initJackPosition(CCPoint jack_position)
 
 void Maingame::startScene()
 {
+	setBackKeyFunc([=](){
+			myUI->showPause();
+	});
+	setBackKeyEnabled(true);
+	
+	setKeypadEnabled(true);
+	
 	AudioEngine::sharedInstance()->playSound("sound_back_maingame.mp3", true);
 	AudioEngine::sharedInstance()->preloadEffectScene("Maingame");
 	
@@ -1345,6 +1351,8 @@ void Maingame::gachaOn()
 									  t_loading->removeFromParent();
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
+										  setBackKeyEnabled(false);
+										  
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
 //										  exit_target->onEnter();
@@ -1486,7 +1494,15 @@ void Maingame::alertAction(int t1, int t2)
 
 void Maingame::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(Maingame::alertAction));
+	if(!myUI->isGameover)
+	{
+		onBackKeyAction();
+		
+		setBackKeyFunc([=](){
+			myUI->showPause();
+		});
+		setBackKeyEnabled(true);
+	}
 }
 
 void Maingame::touchEnd()
@@ -3186,6 +3202,8 @@ void Maingame::closeShutter()
 
 void Maingame::endCloseShutter()
 {
+	setBackKeyEnabled(false);
+	
 	if(mySGD->is_endless_mode)
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
@@ -4970,6 +4988,8 @@ void Maingame::goHome ()
 }
 void Maingame::goReplay ()
 {
+	setBackKeyEnabled(false);
+	
 	mySGD->setUserdataAchieveNoFail(0);
 	for(int i=kAchievementCode_fail1;i<=kAchievementCode_fail3;i++)
 	{

@@ -15,6 +15,7 @@
 #include "KSLabelTTF.h"
 #include "DataStorageHub.h"
 #include <map>
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -42,7 +43,7 @@ private:
 	map<int, vector<function<void()>>> on_tag_list;
 };
 
-class ASPopupView : public CCLayer
+class ASPopupView : public CCLayer, public BackKeyBase
 {
 public:
 	static ASPopupView* create(int t_touch_priority)
@@ -138,6 +139,8 @@ public:
 	void buttonAction(CCObject* sender, CCControlEvent t_event);
 	
 	int duplicate_tag;
+	
+	virtual void keyBackClicked(void);
 	
 protected:
 	CCSprite* dimmed_sprite;

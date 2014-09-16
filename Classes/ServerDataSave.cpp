@@ -721,6 +721,10 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopItem_int1_priceName_s)			rv = "si%dprcName";
 	else if(t_key == kSDS_GI_shopItem_int1_sale_s)				rv = "si%dsale";
 	else if(t_key == kSDS_GI_shopItem_int1_exchangeID_s)		rv = "si%dxcID";
+	else if(t_key == kSDS_GI_shopP1_int1_countName_s)			rv = "sp1%dcntName";
+	else if(t_key == kSDS_GI_shopP1_int1_priceName_s)			rv = "sp1%dprcName";
+	else if(t_key == kSDS_GI_shopP1_int1_sale_s)				rv = "sp1%dsale";
+	else if(t_key == kSDS_GI_shopP1_int1_exchangeID_s)			rv = "sp1%dxcID";
 	else if(t_key == kSDS_GI_shop_isEvent_b)					rv = "sIsEv";
 	else if(t_key == kSDS_GI_serial_int1_cardNumber_i)			rv = "srl%dcd";
 	

@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -20,10 +21,12 @@ using namespace std;
 class LoadingLayer;
 class TouchSuctionLayer;
 class KSLabelTTF;
-class IntroducerPopup : public CCLayer, public CCEditBoxDelegate
+class IntroducerPopup : public CCLayer, public CCEditBoxDelegate, public BackKeyBase
 {
 public:
 	static IntroducerPopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func);
+	
+	virtual void keyBackClicked(void);
 	
 private:
 	int touch_priority;
