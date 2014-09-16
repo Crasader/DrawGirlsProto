@@ -258,6 +258,7 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		Json::Value param;
 		param["memberID"] = myHSP->getSocialID();
 		param["nick"] = input_text1->getText();
+		param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 		myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
@@ -338,6 +339,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["nick"] = input_text1->getText();
+				param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 				myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 			}, 1);
 			if(alert)
@@ -350,6 +352,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["nick"] = input_text1->getText();
+										 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 										 myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 									 }));
 		}

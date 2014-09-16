@@ -23,6 +23,7 @@
 #include "ZoomScriptScene.h"
 #include "MissileDamageLabel.h"
 #include "KSProtect.h"
+#include "BackKeyBase.h"
 
 using namespace cocos2d;
 
@@ -65,7 +66,7 @@ class CumberShowWindow;
 class EffectSprite;
 class FloatingCoinParent;
 class StartMapGacha;
-class Maingame : public CCLayer
+class Maingame : public CCLayer, public BackKeyBase
 {
 public:
     virtual bool init();

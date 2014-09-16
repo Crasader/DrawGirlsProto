@@ -52,6 +52,14 @@ bool ZoomScript::init()
         return false;
     }
 	
+	setBackKeyFunc([=](){
+		CCNode* t_node = CCNode::create();
+		menuAction(t_node);
+	});
+	setBackKeyEnabled(true);
+	
+	setKeypadEnabled(true);
+	
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
 	typing_sound_number = 1;
@@ -920,6 +928,8 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::nextScene()
 {
+	setBackKeyEnabled(false);
+	
 	if(mySGD->is_endless_mode)
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
@@ -1663,4 +1673,18 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 void ZoomScript::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
 {
 	ccTouchesEnded(pTouches, pEvent);
+}
+
+void ZoomScript::keyBackClicked()
+{
+	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
+	{
+		onBackKeyAction();
+		
+		setBackKeyFunc([=](){
+			CCNode* t_node = CCNode::create();
+			menuAction(t_node);
+		});
+		setBackKeyEnabled(true);
+	}
 }

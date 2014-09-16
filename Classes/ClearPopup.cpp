@@ -410,6 +410,7 @@ bool ClearPopup::init()
 	{
 		Json::Value t_param;
 		t_param["memberID"] = myHSP->getSocialID();
+		t_param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerCompleteReward);
 		send_command_list.push_back(CommandParam("completeIntroducer", t_param, json_selector(this, ClearPopup::resultCompleteIntroducer)));
 	}
 	

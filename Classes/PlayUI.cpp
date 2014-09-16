@@ -4462,13 +4462,16 @@ void PlayUI::addTurnCnt()
 	
 	if(clr_cdt_type == kCLEAR_turns)
 	{
-		CCLabelTTF* t_condition_label = (CCLabelTTF*)mission_clear_remove_nodes[0];
+		if(mission_clear_remove_nodes.size() >= 2)
+		{
+			CCLabelTTF* t_condition_label = (CCLabelTTF*)mission_clear_remove_nodes[0];
 		
-		CCLabelTTF* clr_cdt_label = (CCLabelTTF*)mission_clear_remove_nodes[1];
-		clr_cdt_label->setString(ccsf("%d", turn_cnt.getV()));
-		
-		t_condition_label->setPosition(mission_back->getPosition() + ccp(clr_cdt_label->getContentSize().width/2.f - t_condition_label->getContentSize().width/2.f, -1));
-		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
+			CCLabelTTF* clr_cdt_label = (CCLabelTTF*)mission_clear_remove_nodes[1];
+			clr_cdt_label->setString(ccsf("%d", turn_cnt.getV()));
+			
+			t_condition_label->setPosition(mission_back->getPosition() + ccp(clr_cdt_label->getContentSize().width/2.f - t_condition_label->getContentSize().width/2.f, -1));
+			clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
+		}
 	}
 	
 	if(!is_cleared_cdt && clr_cdt_type == kCLEAR_turns && turn_cnt.getV() >= NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))
