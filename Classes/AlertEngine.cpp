@@ -11,6 +11,12 @@
 #include "JNIKelper.h"
 #endif
 
+void AlertEngine::addDoubleAlert(const char *t_title, const char *t_message, const char *t_leftButtonText, const char *t_rightButtonText, int t_tag, std::function<void(int,int)> fc)
+{
+	func = fc;
+	addDoubleAlert(t_title, t_message, t_leftButtonText, t_rightButtonText, t_tag, nullptr, nullptr);
+	
+}
 void AlertEngine::addDoubleAlert(const char *t_title, const char *t_message, const char *t_leftButtonText, const char *t_rightButtonText, int t_tag, CCObject* t_target, SEL_AlertFuncII t_selector)
 {
 //	if(addable)
@@ -88,7 +94,8 @@ void AlertEngine::doAction(int t_alertNumber, int t_buttonNumber)
 {
 //	addable = true;
 	CCLOG("seo reaction");
-	(target->*selector)(t_alertNumber, t_buttonNumber);
+	if(target && selector)(target->*selector)(t_alertNumber, t_buttonNumber);
+	if(func)func(t_alertNumber,t_buttonNumber);
 	CCLOG("seo reaction end");
 }
 

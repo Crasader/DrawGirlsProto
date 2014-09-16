@@ -9,7 +9,7 @@
 #include "CommonButton.h"
 
 #include "MyLocalization.h"
-
+#include "AlertEngine.h"
 #include "KSLabelTTF.h"
 bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	if(CCNode::init()==false){
@@ -240,6 +240,12 @@ void CommonButton::callFunc(CCObject* obj, CCControlEvent event){
 void CommonButton::setTouchPriority(int touchPriority){
 	m_btn->setTouchPriority(touchPriority);
 }
+
+
+int CommonButton::getTouchPriority(){
+	return m_btn->getTouchPriority();
+}
+
 void CommonButton::setTitle(string title){
 	m_btnTitle->setString(title.c_str());
 }
@@ -449,4 +455,95 @@ CCSprite* CommonButton::getPriceSprite(){
 
 void CommonButton::setZoomOnTouchDown(bool var){
 	m_btn->setZoomOnTouchDown(var);
+}
+
+void CommonButton::findBackBtn(cocos2d::CCNode* obj,vector<BackKeyData> &m_backkeyList,CCPoint pos){
+	if(!obj)return;
+	if(obj->getStringData()=="backkey"){
+		m_backkeyList.push_back({obj,pos});
+	}
+	
+	CCArray* children = obj->getChildren();
+	if(children==nullptr)return;
+	if(CCLayer* checkobj = dynamic_cast<CCLayer*>(children)){
+		if(!checkobj->isTouchEnabled())return;
+	}
+	
+	for(int i=0;i<children->count();i++){
+		CCNode* child = (CCNode*)children->objectAtIndex(i);
+		CCPoint addPos = obj->convertToWorldSpace(child->getPosition());
+		CommonButton::findBackBtn(child,m_backkeyList,ccpAdd(pos,addPos));
+		//if(childchild!=nullptr){m_objList->addObject(childchild);}
+	}
+	
+	//	return nullptr;
+}
+
+void CommonButton::callBackKey(){
+	vector<BackKeyData> m_backkeyList;
+	
+	CommonButton::findBackBtn(CCDirector::sharedDirector()->getRunningScene(),m_backkeyList,ccp(0,0));
+	int selectIndex=-1;
+	int maxPri=INT_MAX;
+	for(int i=0;i<m_backkeyList.size();i++){
+		CCNode* selectedObj = m_backkeyList[i].obj;
+		
+		if(CCControlButton* checkobj2 = dynamic_cast<CCControlButton*>(selectedObj)){
+			//checkobj2->sendActionsForControlEvents(CCControlEventTouchUpInside);
+			if(maxPri>checkobj2->getTouchPriority()){
+				maxPri =checkobj2->getTouchPriority();
+				selectIndex=i;
+			}
+		}else if(CommonButton* checkobj3 = dynamic_cast<CommonButton*>(selectedObj)){
+			//checkobj3->callFunc(checkobj3,CCControlEventTouchUpInside);
+			if(maxPri>checkobj3->getTouchPriority()){
+				maxPri =checkobj3->getTouchPriority();
+				selectIndex=i;
+			}
+		}else if(CCMenu* checkobj1 = dynamic_cast<CCMenu*>(selectedObj->getParent())){
+			//checkobj1->activate();
+			if(maxPri>checkobj1->getTouchPriority()){
+				maxPri =checkobj1->getTouchPriority();
+				selectIndex=i;
+			}
+		}
+	}
+	
+	if(selectIndex==-1){
+		
+
+		
+		
+		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, [](int t1,int t2){	if(t1 == 1 && t2 == 0)
+		{
+			CCDirector::sharedDirector()->end();
+		}});
+		return;
+	}
+	
+	CCNode* selectedObj = m_backkeyList[selectIndex].obj;
+	
+	
+	
+	CCSet set;
+	
+	CCTouch* t = new CCTouch();
+	float scaleFactor = CCDirector::sharedDirector()->getContentScaleFactor();
+	CCPoint worldPosition = CCDirector::sharedDirector()->convertToUI(selectedObj->getParent()->convertToWorldSpace(selectedObj->getPosition()));
+	t->setTouchInfo(99,worldPosition.x,worldPosition.y);
+	set.addObject(t);
+	CCDirector::sharedDirector()->getTouchDispatcher()->touchesBegan(&set,NULL);
+	CCDirector::sharedDirector()->getTouchDispatcher()->touchesEnded(&set,NULL);
+	
+	//		if(CCControlButton* checkobj2 = dynamic_cast<CCControlButton*>(selectedObj)){
+	//			checkobj2->sendActionsForControlEvents(CCControlEventTouchUpInside);
+	//		}else if(CommonButton* checkobj3 = dynamic_cast<CommonButton*>(selectedObj)){
+	//			checkobj3->callFunc(checkobj3,CCControlEventTouchUpInside);
+	//		}else if(CCMenuItem* checkobj1 = dynamic_cast<CCMenuItem*>(selectedObj)){
+	//			checkobj1->activate();
+	//		}
+	
+	
+	
+	
 }
