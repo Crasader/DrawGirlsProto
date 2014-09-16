@@ -178,6 +178,7 @@ bool FriendPopup::init()
 		
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																																 {
+																																	 typing_box->setBackKeyEnabled(false);
 																																	 skip_menu->setEnabled(false);
 																																	 
 																																	 addChild(KSTimer::create(0.1f, [=]()
@@ -191,6 +192,7 @@ bool FriendPopup::init()
 		
 		function<void()> end_func2 = [=]()
 		{
+			typing_box->setBackKeyEnabled(false);
 			skip_menu->setEnabled(false);
 			
 			addChild(KSTimer::create(0.1f, [=]()
@@ -215,6 +217,17 @@ bool FriendPopup::init()
 																														skip_menu->setEnabled(true);
 																														
 																														typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial1), end_func1);
+																														
+																														typing_box->setBackKeyFunc([=](){
+																															skip_menu->setEnabled(false);
+																															
+																															addChild(KSTimer::create(0.1f, [=]()
+																																					 {
+																																						 scenario_node->removeFromParent();
+																																					 }));
+																														});
+																														typing_box->setBackKeyEnabled(true);
+																														typing_box->setKeypadEnabled(true);
 																													}));
 	}
 	
@@ -246,10 +259,19 @@ void FriendPopup::endShowPopup()
 	//	}
 	
 	is_menu_enable = true;
+	
+	setBackKeyFunc([=]()
+				   {
+					   hidePopup();
+				   });
+	setBackKeyEnabled(true);
+	setKeypadEnabled(true);
 }
 
 void FriendPopup::hidePopup()
 {
+	setBackKeyEnabled(false);
+	
 	is_menu_enable = false;
 	friend_table->setTouchEnabled(false);
 	

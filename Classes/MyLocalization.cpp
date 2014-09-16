@@ -1127,6 +1127,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%s 님을 추천인으로 등록하셨습니다."), kMyLocalKey_introducerSuccess);
 	ko->setObject(CCString::create("자신을 추천인으로 등록할 수 없습니다."), kMyLocalKey_introducerSelfNotIntroduce);
 	
+	ko->setObject(CCString::create("부활석"), kMyLocalKey_p1Shop);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

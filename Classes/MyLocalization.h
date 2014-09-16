@@ -1041,6 +1041,8 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_introducerSuccess,
 	kMyLocalKey_introducerSelfNotIntroduce,
 	
+	kMyLocalKey_p1Shop,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 
