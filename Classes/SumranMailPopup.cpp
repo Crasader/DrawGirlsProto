@@ -195,7 +195,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 
 	
 	KSLabelTTF* giftboxAlert = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
-	giftboxAlert->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	giftboxAlert->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	setFormSetter(giftboxAlert);
 	setFormSetter(giftBoxAlertBox);
 	giftboxAlert->setAnchorPoint(ccp(0,0.5));
@@ -568,7 +568,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		string titlestr = mail.get("content","Gift").asString();
 		ReplaceString(titlestr,"\n"," ");
 		title = KSLabelTTF::create(titlestr.c_str(), mySGD->getFont().c_str(), 13); // "님의"
-		title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		title->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		title->setPosition(ccp(53.5, 19.5));
 		title->setAnchorPoint(CCPointZero);
 		title->setTag(kMP_MT_title);

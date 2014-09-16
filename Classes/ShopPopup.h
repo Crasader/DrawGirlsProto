@@ -27,6 +27,7 @@ enum ShopCode{
 	kSC_heart,
 	kSC_character,
 	kSC_card,
+	kSC_p1,
 	kSC_startPack
 };
 
@@ -111,6 +112,7 @@ private:
 	CCMenuItem* ruby_menu;
 	CCMenuItem* gold_menu;
 	CCMenuItem* heart_menu;
+	CCMenuItem* p1_menu;
 	CCMenuItem* startPack_menu;
 	
 //	CCMenu* tab_menu;
@@ -139,7 +141,7 @@ private:
 	
 	CCPoint getContentPosition(int t_tag);
 	
-	string getPriceData(string t_code);
+//	string getPriceData(string t_code);
 	void addPriceReward(CCNode* t_target, int t_number);
 	
 	int gacha_card_number;

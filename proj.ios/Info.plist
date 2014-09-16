@@ -35,6 +35,7 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>kakao89958125601566961</string>
+				<string>DGproto</string>
 			</array>
 		</dict>
 	</array>

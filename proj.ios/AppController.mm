@@ -138,6 +138,23 @@ static AppDelegate s_sharedApplication;
 }
 
 
+- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url sourceApplication:(NSString *)sourceApplication annotation:(id)annotation{
+	
+	NSLog(@"url %@ sourceApplication %@",url, sourceApplication);
+	
+	NSString *str = [NSString stringWithFormat:@"url:%@\n source:%@",[url absoluteString],sourceApplication];
+	
+//	UIAlertView *alert =
+//
+//	[[[UIAlertView alloc]initWithTitle:@"call From A" message:str delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil, nil]autorelease];
+//
+//	[alert show];
+	
+	return YES;
+	
+}
+
+
 #pragma mark -
 #pragma mark Memory management
 

@@ -27,6 +27,7 @@ struct SnakeTrace
 {
 	CCPoint position; // 자취의 위치와
 	float directionRad; // 자취의 방향.
+	bool targeting; // 당시 타겟팅 되고 있었는지.
 };
 enum CumberZorder
 {

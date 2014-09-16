@@ -72,6 +72,8 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 								   if(!is_menu_enable)
 									   return;
 								   
+								   setBackKeyEnabled(false);
+								   
 								   is_menu_enable = false;
 								   input_text1->setEnabled(false);
 								   input_text1->removeFromParent();
@@ -98,6 +100,7 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	StyledLabelTTF* ment_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_introducerContent), mySGD->getIntroduceStage(), 5), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
+//	ment_label->enableOuterStroke(ccBLACK, 0.3f, (GLubyte)50, true);
 	ment_label->setPosition(ccp(0,30));
 	m_container->addChild(ment_label);
 	
@@ -174,6 +177,27 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 		input_text1->setEnabled(true);
 		input_text1->setVisible(true);
 		
+		setBackKeyFunc([=](){
+			if(!is_menu_enable)
+				return;
+			
+			is_menu_enable = false;
+			input_text1->setEnabled(false);
+			input_text1->removeFromParent();
+			
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+			
+			CommonAnimation::closePopup(this, m_container, gray, [=](){
+				
+			}, [=](){
+				end_func(); removeFromParent();
+			});
+		});
+		
+		setBackKeyEnabled(true);
+		
+		setKeypadEnabled(true);
+		
 		//		input_text2->setEnabled(true);
 		//		input_text2->setVisible(true);
 		//		input_text3->setEnabled(true);
@@ -187,6 +211,8 @@ void IntroducerPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	if(!is_menu_enable)
 		return;
 	
+	setBackKeyEnabled(false);
+	
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
@@ -198,6 +224,7 @@ void IntroducerPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
+			setBackKeyEnabled(true);
 		}), 999);
 		return;
 	}
@@ -208,6 +235,7 @@ void IntroducerPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
+			setBackKeyEnabled(true);
 		}), 999);
 		return;
 	}
@@ -230,6 +258,7 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		Json::Value param;
 		param["memberID"] = myHSP->getSocialID();
 		param["nick"] = input_text1->getText();
+		param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 		myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
@@ -240,6 +269,7 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
+			setBackKeyEnabled(true);
 		}), 9999);
 		
 		loading_layer->removeFromParent();
@@ -309,6 +339,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["nick"] = input_text1->getText();
+				param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 				myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 			}, 1);
 			if(alert)
@@ -321,6 +352,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["nick"] = input_text1->getText();
+										 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
 										 myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 									 }));
 		}
@@ -596,4 +628,9 @@ void IntroducerPopup::initiateEditBox(CCEditBox* editbox)
 	editbox->setMaxLength(12);
 	editbox->setEnabled(false);
 	editbox->setVisible(false);
+}
+
+void IntroducerPopup::keyBackClicked(void)
+{
+	onBackKeyAction();
 }

@@ -19,6 +19,7 @@
 TypingBox* TypingBox::create(int t_touch_priority, string t_box_filename, CCRect t_box_9_out, CCRect t_box_9_in, CCRect t_box_in_label, CCSize t_box_in_size, CCPoint t_box_position, CCPoint t_button_position)
 {
 	TypingBox* t_tb = new TypingBox();
+	t_tb->ignoreAnchorPointForPosition(false);
 	t_tb->myInit(t_touch_priority, t_box_filename, t_box_9_out, t_box_9_in, t_box_in_label, t_box_in_size, t_box_position, t_button_position);
 	t_tb->autorelease();
 	return t_tb;
@@ -276,4 +277,9 @@ void TypingBox::scrollViewDidScroll(CCScrollView* view)
 void TypingBox::scrollViewDidZoom(CCScrollView* view)
 {
 	
+}
+
+void TypingBox::keyBackClicked(void)
+{
+	onBackKeyAction();
 }

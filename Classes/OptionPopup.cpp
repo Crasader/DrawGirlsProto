@@ -302,7 +302,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_coupon_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* n_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
-	n_coupon_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_coupon_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_coupon_label->setPosition(ccpFromSize(n_coupon_img->getContentSize()/2.f) + ccp(0,2));
 	n_coupon_img->addChild(n_coupon_label);
 	
@@ -317,7 +317,7 @@ bool OptionPopup::init()
 	CCSprite* d_coupon_img = CCSprite::create("tabbutton_down.png");
 	d_coupon_img->setColor(ccGRAY);
 	KSLabelTTF* d_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
-	d_coupon_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_coupon_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_coupon_label->setPosition(ccpFromSize(d_coupon_img->getContentSize()/2.f) + ccp(0,2));
 	d_coupon_img->addChild(d_coupon_label);
 	
@@ -330,7 +330,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_community_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* n_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
-	n_community_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_community_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_community_label->setPosition(ccpFromSize(n_community_img->getContentSize()/2.f) + ccp(0,2));
 	n_community_img->addChild(n_community_label);
 	
@@ -345,7 +345,7 @@ bool OptionPopup::init()
 	CCSprite* d_community_img = CCSprite::create("tabbutton_down.png");
 	d_community_img->setColor(ccGRAY);
 	KSLabelTTF* d_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
-	d_community_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_community_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_community_label->setPosition(ccpFromSize(d_community_img->getContentSize()/2.f) + ccp(0,2));
 	d_community_img->addChild(d_community_label);
 	
@@ -358,7 +358,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_tip_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
-	n_tip_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_tip_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_tip_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
 	n_tip_img->addChild(n_tip_label);
 	
@@ -373,7 +373,7 @@ bool OptionPopup::init()
 	CCSprite* d_tip_img = CCSprite::create("tabbutton_down.png");
 	d_tip_img->setColor(ccGRAY);
 	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
-	d_tip_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_tip_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_tip_label->setPosition(ccpFromSize(d_tip_img->getContentSize()/2.f) + ccp(0,2));
 	d_tip_img->addChild(d_tip_label);
 	
@@ -856,7 +856,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_accountLink_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
-	n_accountLink_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_accountLink_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_accountLink_label->setPosition(ccpFromSize(n_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
 	n_accountLink_img->addChild(n_accountLink_label);
 	
@@ -871,7 +871,7 @@ bool OptionPopup::init()
 	CCSprite* d_accountLink_img = CCSprite::create("subbutton_pink.png");
 	d_accountLink_img->setColor(ccGRAY);
 	KSLabelTTF* d_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
-	d_accountLink_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_accountLink_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_accountLink_label->setPosition(ccpFromSize(d_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
 	d_accountLink_img->addChild(d_accountLink_label);
 	
@@ -884,7 +884,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_help_img = CCSprite::create("subbutton_pink.png");
 	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
-	n_help_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_help_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_help_label->setPosition(ccpFromSize(n_help_img->getContentSize()/2.f) + ccp(0,-1));
 	n_help_img->addChild(n_help_label);
 	
@@ -899,7 +899,7 @@ bool OptionPopup::init()
 	CCSprite* d_help_img = CCSprite::create("subbutton_pink.png");
 	d_help_img->setColor(ccGRAY);
 	KSLabelTTF* d_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
-	d_help_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_help_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_help_label->setPosition(ccpFromSize(d_help_img->getContentSize()/2.f) + ccp(0,-1));
 	d_help_img->addChild(d_help_label);
 	
@@ -913,7 +913,7 @@ bool OptionPopup::init()
 	
 	CCSprite* n_diary_img = CCSprite::create("option_19.png");
 	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
-	n_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	n_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	n_diary_img->addChild(n_diary_label);
 	
@@ -928,7 +928,7 @@ bool OptionPopup::init()
 	CCSprite* d_diary_img = CCSprite::create("option_19.png");
 	d_diary_img->setColor(ccGRAY);
 	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
-	d_diary_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+	d_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	d_diary_img->addChild(d_diary_label);
 	

@@ -110,66 +110,6 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 	return true;
 }
 
-void KSSnakeBase::setHeadAndBodies()
-{
-	SnakeTrace lastTrace = m_cumberTrace.back();
-//	float tt = rad2Deg( lastTrace.directionRad );
-	//	CCLOG("deg %f", tt);
-	//	m_headImg->setVisible(false);
-	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));
-	
-	int lastTraceIndex = m_cumberTrace.size() - 1; // to 0
-	//	int bodyIndex = 0;
-	//	for(auto i : m_cumberTrace)
-	for(int bodyIndex = 0; bodyIndex < m_Bodies.size(); ++bodyIndex)
-	{
-		// 순서대로 머리에 가까운 몸통처리.
-		float distance = 0;
-		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
-		{
-			SnakeTrace t = m_cumberTrace[traceIndex];
-			// t 와 tr 의 거리차이.
-			//			float distance = ccpLength(lastTrace.position - t.position);
-			//			int distance = lastTraceIndex - traceIndex;
-			
-			// traceIndex + 1 위치와 traceIndex 위치의 누적
-			distance += ccpLength(m_cumberTrace[traceIndex + 1].position - t.position);
-			if(distance >= BODY_MARGIN * getCumberScale())
-			{
-				lastTraceIndex = traceIndex;
-				lastTrace = t;
-				break;
-			}
-		}
-		m_Bodies[bodyIndex]->setRotation(-rad2Deg(lastTrace.directionRad));
-		m_Bodies[bodyIndex]->setPosition(lastTrace.position);
-	}
-	{
-		float distance = 0;
-		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
-		{
-			SnakeTrace t = m_cumberTrace[traceIndex];
-			// t 와 tr 의 거리차이.
-			//			float distance = ccpLength(lastTrace.position - t.position);
-			//			int distance = lastTraceIndex - traceIndex;
-			
-			// traceIndex + 1 위치와 traceIndex 위치의 누적
-			distance += ccpLength(m_cumberTrace[traceIndex + 1].position - t.position);
-			if(distance >= TAIL_MARGIN * getCumberScale())
-			{
-				lastTraceIndex = traceIndex;
-				lastTrace = t;
-				break;
-			}
-		}
-		m_tailImg->setRotation(-rad2Deg(lastTrace.directionRad));
-		m_tailImg->setPosition(lastTrace.position);
-		//		m_tailImg->setScale(3.f);
-	}
-	
-	//	m_headImg->setScale(tt / 360);
-	
-}
 
 void KSSnakeBase::startAnimationNoDirection()
 {
@@ -230,7 +170,9 @@ void KSSnakeBase::animationNoDirection(float dt)
 			CCLOG("도는것을 멈추고 움직이기 시작함");
 			setCumberState(kCumberStateMoving);
 			m_noDirection.state = 0;
-//			unschedule(schedule_selector(KSSnakeBase::animationNoDirection));
+			
+			unschedule(schedule_selector(KSSnakeBase::animationNoDirection));
+			
 			setPosition(m_noDirection.startingPoint);
 			m_snake.setRelocation(getPosition(), m_well512);
 			m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
@@ -247,7 +189,7 @@ void KSSnakeBase::startAnimationDirection()
 {
 	// 잭을 바라보자.
 	CCLOG("조준하기");
-	m_cumberState |= kCumberStateDirection;
+	setCumberState(getCumberState() | kCumberStateDirection);
 	m_direction.initVars();
 	schedule(schedule_selector(KSSnakeBase::animationDirection));
 }
@@ -261,12 +203,12 @@ void KSSnakeBase::animationDirection(float dt)
 		IntPoint headPoint = ccp2ip(getPosition());
 		float rot = rad2Deg(atan2(jackPoint.x - headPoint.x, jackPoint.y - headPoint.y));
 		rot -= 90;
-		m_headImg->setRotation(rot);
+		m_headImg->setRotation(rot); // 머리 따라감.
 	}
 	else if(m_direction.state == 2)
 	{
 		CCLOG("조준하는것을 멈추고 움직이기 시작함");
-		if(getCumberState() != kCumberStateFury)
+		if((getCumberState() & kCumberStateFury) == 0)
 		{
 			CCLOG("분노 아님!!");
 			setCumberState(kCumberStateMoving); //#!
@@ -291,7 +233,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 	m_invisible.invisibleFrame = m_invisible.VISIBLE_FRAME; // 인비지블 풀어주는 쪽으로 유도.
 	
 	setCumberScale(MAX(m_minScale, getCumberScale() - m_scale.SCALE_SUBER)); // 맞으면 작게 함.
-	
+	m_attackCanceled = true;
 	
 	// 방사형으로 돌아가고 있는 중이라면
 	if(((m_cumberState & kCumberStateNoDirection) || (m_cumberState & kCumberStateCasting)) && castCancel)
@@ -313,9 +255,8 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 //		setCumberState(kCumberStateMoving; //#!
 //		
 //	}
-	if( (m_cumberState & kCumberStateMoving) && stiffen)
+	if( ((m_cumberState & kCumberStateMoving) || (m_cumberState & kCumberStateDamaging)) && stiffen )
 	{
-		CCLOG("움직일때의경직");
 		float rad = deg2Rad(angle);
 		m_damageData.m_damageX = cos(rad);
 		m_damageData.m_damageY = sin(rad);
@@ -324,7 +265,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 		
 		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
 		{
-			m_cumberState |= kCumberStateDamaging;
+			setCumberState( m_cumberState | kCumberStateDamaging);
 			schedule(schedule_selector(ThisClassType::damageReaction));
 			if(damage / getTotalHp() * 4.f >= 3.f)
 			{
@@ -332,14 +273,8 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 			}
 			else
 			{
-				//				getEmotion()->goStun();
-				
 				ProbSelector ps = {1.0, 1.0, 7.0};
 				int r = ps.getResult();
-				//				if(r == 0)
-				//				{
-				//					getEmotion()->goStun();
-				//				}
 				if(r == 0)
 				{
 					getEmotion()->toAnger();
@@ -351,45 +286,7 @@ bool KSSnakeBase::startDamageReaction(float damage, float angle, bool castCancel
 			}
 		} 
 	}
-	if((m_cumberState & kCumberStateMoving) == 0 && stiffen)
-	{
-		CCLOG("안움직일때의경직");
-		float rad = deg2Rad(angle);
-		m_damageData.m_damageX = cos(rad);
-		m_damageData.m_damageY = sin(rad);
-		//	CCLOG("%f %f", dx, dy);
-		
-		
-		if(m_damageData.setStiffen(damage / getTotalHp() * 4.f))
-		{
-			setCumberState(kCumberStateDamaging);
-			schedule(schedule_selector(ThisClassType::damageReaction));
-			if(damage / getTotalHp() * 4.f >= 3.f)
-			{
-				getEmotion()->goStun();
-			}
-			else
-			{
-				//				getEmotion()->goStun();
-				
-				ProbSelector ps = {1.0, 1.0, 7.0};
-				int r = ps.getResult();
-				//				if(r == 0)
-				//				{
-				//					getEmotion()->goStun();
-				//				}
-				if(r == 0)
-				{
-					getEmotion()->toAnger();
-				}
-				else if(r == 1)
-				{
-					getEmotion()->toCry();
-				}
-			}
-		}
-	}
-	if(m_cumberState == kCumberStateFury && castCancel)
+	if((m_cumberState & kCumberStateFury) && castCancel)
 	{
 		crashMapForPosition(getPosition());
 		m_castingCancelCount++;
@@ -626,7 +523,7 @@ COLLISION_CODE KSSnakeBase::crashLooper(const set<IntPoint>& v, IntPoint* cp)
 void KSSnakeBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
-	setCumberState(kCumberStateFury);
+	setCumberState(kCumberStateFury | kCumberStateMoving);
 	m_noDirection.state = 2;	
 	m_headImg->setColor(ccc3(0, 255, 0));
 	m_tailImg->setColor(ccc3(0, 255, 0));
@@ -740,7 +637,9 @@ void KSSnakeBase::checkConfine(float dt)
 {
 	IntPoint mapPoint = m_mapPoint;
 	// 갇혀있는지 검사함. 갇혀있으면 없앰.
-	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+	if(mapPoint.x - 1 >= 0 && mapPoint.y - 1 >= 0 &&
+		 mapPoint.x + 1 < mapLoopRange::mapWidthOutlineEnd && mapPoint.y + 1 < mapLoopRange::mapHeightOutlineEnd &&
+		 myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
@@ -789,7 +688,7 @@ void KSSnakeBase::onStartMoving()
 
 void KSSnakeBase::onStopMoving()
 {
-	setCumberState(0);
+	setCumberState(kCumberStateNothing);
 }
 
 void KSSnakeBase::onPatternEnd()
@@ -840,7 +739,7 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	SnakeTrace tr;
 	tr.position = t_sp;
 	tr.directionRad = atan2f(t_sp.y - prevPosition.y, t_sp.x - prevPosition.x);
-
+	tr.targeting = m_direction.state != 0;
 	//		KSCumberBase::setPosition(t_sp);
 	m_headImg->setPosition(t_sp);
 	m_cumberTrace.push_back(tr); //
@@ -850,7 +749,7 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 	}
 	
 	// 돌때랑 분노 모드일 땐 메인포인트 지정하면 안됨.
-	if((m_cumberState & kCumberStateNoDirection) || m_cumberState == kCumberStateFury)
+	if((m_cumberState & kCumberStateNoDirection) || (m_cumberState & kCumberStateFury))
 	{
 		// black hole!! 
 	}
@@ -859,11 +758,73 @@ void KSSnakeBase::setPosition( const CCPoint& t_sp )
 		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
 		m_mapPoint = ccp2ip(t_sp);
 	}
+//	myGD->setMainCumberPoint(this, ccp2ip(t_sp));
+//	m_mapPoint = ccp2ip(t_sp);
 	setHeadAndBodies();
 	//		myGD->communication("Main_moveGamePosition", t_sp);
 	//		myGD->communication("VS_setMoveGamePosition", t_sp);
 	//		myGD->communication("Main_moveGamePosition", t_sp);
 	//		myGD->communication("Main_moveGamePosition", t_sp);
+}
+void KSSnakeBase::setHeadAndBodies()
+{
+	SnakeTrace lastTrace = m_cumberTrace.back();
+	//	float tt = rad2Deg( lastTrace.directionRad );
+	//	CCLOG("deg %f", tt);
+	//	m_headImg->setVisible(false);
+	m_headImg->setRotation(-rad2Deg( lastTrace.directionRad ));
+	
+	int lastTraceIndex = m_cumberTrace.size() - 1; // to 0
+	//	int bodyIndex = 0;
+	//	for(auto i : m_cumberTrace)
+	for(int bodyIndex = 0; bodyIndex < m_Bodies.size(); ++bodyIndex)
+	{
+		// 순서대로 머리에 가까운 몸통처리.
+		float distance = 0;
+		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
+		{
+			SnakeTrace t = m_cumberTrace[traceIndex];
+			// t 와 tr 의 거리차이.
+			//			float distance = ccpLength(lastTrace.position - t.position);
+			//			int distance = lastTraceIndex - traceIndex;
+			
+			// traceIndex + 1 위치와 traceIndex 위치의 누적
+			distance += ccpLength(m_cumberTrace[traceIndex + 1].position - t.position);
+			if(distance >= BODY_MARGIN * getCumberScale())
+			{
+				lastTraceIndex = traceIndex;
+				lastTrace = t;
+				break;
+			}
+		}
+		m_Bodies[bodyIndex]->setRotation(-rad2Deg(lastTrace.directionRad));
+		m_Bodies[bodyIndex]->setPosition(lastTrace.position);
+	}
+	{
+		float distance = 0;
+		for(int traceIndex = lastTraceIndex - 1; traceIndex >= 0; traceIndex--)
+		{
+			SnakeTrace t = m_cumberTrace[traceIndex];
+			// t 와 tr 의 거리차이.
+			//			float distance = ccpLength(lastTrace.position - t.position);
+			//			int distance = lastTraceIndex - traceIndex;
+			
+			// traceIndex + 1 위치와 traceIndex 위치의 누적
+			distance += ccpLength(m_cumberTrace[traceIndex + 1].position - t.position);
+			if(distance >= TAIL_MARGIN * getCumberScale())
+			{
+				lastTraceIndex = traceIndex;
+				lastTrace = t;
+				break;
+			}
+		}
+		m_tailImg->setRotation(-rad2Deg(lastTrace.directionRad));
+		m_tailImg->setPosition(lastTrace.position);
+		//		m_tailImg->setScale(3.f);
+	}
+	
+	//	m_headImg->setScale(tt / 360);
+	
 }
 
 void KSSnakeBase::setPositionX( float t_x )

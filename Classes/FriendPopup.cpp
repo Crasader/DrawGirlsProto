@@ -178,6 +178,7 @@ bool FriendPopup::init()
 		
 		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
 																																 {
+																																	 typing_box->setBackKeyEnabled(false);
 																																	 skip_menu->setEnabled(false);
 																																	 
 																																	 addChild(KSTimer::create(0.1f, [=]()
@@ -191,6 +192,7 @@ bool FriendPopup::init()
 		
 		function<void()> end_func2 = [=]()
 		{
+			typing_box->setBackKeyEnabled(false);
 			skip_menu->setEnabled(false);
 			
 			addChild(KSTimer::create(0.1f, [=]()
@@ -215,6 +217,17 @@ bool FriendPopup::init()
 																														skip_menu->setEnabled(true);
 																														
 																														typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial1), end_func1);
+																														
+																														typing_box->setBackKeyFunc([=](){
+																															skip_menu->setEnabled(false);
+																															
+																															addChild(KSTimer::create(0.1f, [=]()
+																																					 {
+																																						 scenario_node->removeFromParent();
+																																					 }));
+																														});
+																														typing_box->setBackKeyEnabled(true);
+																														typing_box->setKeypadEnabled(true);
 																													}));
 	}
 	
@@ -246,10 +259,19 @@ void FriendPopup::endShowPopup()
 	//	}
 	
 	is_menu_enable = true;
+	
+	setBackKeyFunc([=]()
+				   {
+					   hidePopup();
+				   });
+	setBackKeyEnabled(true);
+	setKeypadEnabled(true);
 }
 
 void FriendPopup::hidePopup()
 {
+	setBackKeyEnabled(false);
+	
 	is_menu_enable = false;
 	friend_table->setTouchEnabled(false);
 	
@@ -355,7 +377,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		nick->enableOuterStroke(ccc3(0, 0, 0), 1.f, 200, true);
 		setFormSetter(nick);
 		
-		KSLabelTTF* lastConnection = KSLabelTTF::create(ccsf(getLocal(LK::kFriendLastConnection), GraphDogLib::dateFormat("m/d h:i", memberInfo["lastDate"].asLargestInt()).c_str()),
+		KSLabelTTF* lastConnection = KSLabelTTF::create(ccsf(getLocal(LK::kFriendLastConnection), GraphDogLib::dateFormat("m/d H:i", memberInfo["lastDate"].asLargestInt()).c_str()),
 																										mySGD->getFont().c_str(), 10.f);
 		lastConnection->setColor(ccc3(50, 40, 150));
 		lastConnection->setPosition(ccp(105.5, 8.0));
@@ -365,11 +387,12 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		KSLabelTTF* currentStage = KSLabelTTF::create(ccsf(getLocal(LK::kFriendCurrentStage), memberInfo["highPiece"].asInt()),
 																									mySGD->getFont().c_str(), 15.f);
 		currentStage->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-		currentStage->enableOuterStroke(ccc3(0, 0, 0), 1.f, 255, true);
+		currentStage->setAnchorPoint(ccp(1.f, 0.5f));
+		currentStage->enableOuterStroke(ccc3(0, 0, 0), 0.3f, 50, true);
 		cell_back->addChild(currentStage, 1);
 		
 		setFormSetter(currentStage);
-		currentStage->setPosition(ccp(238.0, 17.5));
+		currentStage->setPosition(ccp(292.f, 17.5));
 
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(memberInfo["flag"].asString()).c_str());
@@ -442,12 +465,12 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		userAttacher(cell_back, memberInfo);
 		
 		
-		if(std::find(m_sendList.begin(), m_sendList.end(), memberInfo["memberID"].asString()) == m_sendList.end() ||
+		if(std::find(m_sendList.begin(), m_sendList.end(), memberInfo["memberID"].asString()) == m_sendList.end() &&
 			 std::find(m_sendList.begin(), m_sendList.end(), boost::lexical_cast<std::string>(myHSP->getMemberID())) == m_sendList.end() )
 			 
 		{
 			CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddFriend), 13.f, CCSizeMake(100, 30),
-																										 CCScale9Sprite::create("subbutton_purple3.png" , CCRectMake(0,0, 100, 39), CCRectMake(57, 22, 2, 2)),
+																										 CCScale9Sprite::create("friend_bt.png"),
 																										 m_touchPriority);
 			cell_back->addChild(addFriend, 1);
 			addFriend->setPosition(ccp(349.0, 17.0));
@@ -478,6 +501,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					}
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
+//					m_votedFriendList[idx]["reqexist"] = true;
 					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 요청했습니다.", [=](){
 						input_text1->setVisible(true);
 						
@@ -486,10 +510,20 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					successPopup->getDimmedSprite()->setVisible(false);
 					addChild(successPopup);
 					
-					addFriend->setVisible(false);
+					addFriend->setTitle(getLocal(LK::kFriendAddingFriend));
+					addFriend->setEnabled(false);
 				});
 				CCLOG("add friend");
 			});
+		}
+		else
+		{
+			CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddingFriend), 13.f, CCSizeMake(100, 30),
+																										 CCScale9Sprite::create("friend_bt.png"),
+																										 m_touchPriority);
+			cell_back->addChild(addFriend, 1);
+			addFriend->setPosition(ccp(349.0, 17.0));
+			addFriend->setEnabled(false);
 		}
 		
 	}
@@ -510,7 +544,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		
 		userAttacher(cell_back, memberInfo);
 		
-		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString());
+		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString(), mySGD->getHeartSendCoolTime());
 		if(remainTime == 0 && memberInfo["memberID"].asInt64() != myHSP->getMemberID())
 		{
 			CommonButton* sendHeart = CommonButton::create(getLocal(LK::kFriendHeartSend), 13.f, CCSizeMake(100, 30),
@@ -803,21 +837,21 @@ void FriendPopup::setListMenu()
 	{
 		CCSprite* n_all_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		n_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_all_label->setPosition(ccpFromSize(n_all_img->getContentSize()/2.f) + ccp(0,2));
 		n_all_img->addChild(n_all_label);
 		
 		CCSprite* s_all_img = CCSprite::create("tabbutton_down.png");
 		s_all_img->setColor(ccGRAY);
 		KSLabelTTF* s_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		s_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		s_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		s_all_label->setColor(ccGRAY);
 		s_all_label->setPosition(ccpFromSize(s_all_img->getContentSize()/2.f) + ccp(0,2));
 		s_all_img->addChild(s_all_label);
 		
 		CCSprite* d_all_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		d_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_all_label->setPosition(ccpFromSize(d_all_img->getContentSize()/2.f) + ccp(0,2));
 		d_all_img->addChild(d_all_label);
 		
@@ -904,7 +938,7 @@ void FriendPopup::setAddMenu()
 	{
 		CCSprite* n_success_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_success_label = KSLabelTTF::create(getLocal(LK::kFriendAddMenu), mySGD->getFont().c_str(), 12.5f);
-		n_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_success_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_success_label->setPosition(ccpFromSize(n_success_img->getContentSize()/2.f) + ccp(0,2));
 		n_success_img->addChild(n_success_label);
 		
@@ -918,7 +952,7 @@ void FriendPopup::setAddMenu()
 		
 		CCSprite* d_success_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_success_label = KSLabelTTF::create(getLocal(LK::kFriendAddMenu), mySGD->getFont().c_str(), 12.5f);
-		d_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_success_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_success_label->setPosition(ccpFromSize(d_success_img->getContentSize()/2.f) + ccp(0,2));
 		d_success_img->addChild(d_success_label);
 		
@@ -1003,7 +1037,7 @@ void FriendPopup::setAddMenu()
 				
 				CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_gray.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 //				t_back1->setOpacity(0);
-				input_text1 = CCEditBox::create(CCSizeMake(315.f, 34), t_back1);
+				input_text1 = CCEditBox::create(CCSizeMake(305.f, 34), t_back1);
 				input_text1->setPosition(ccp(36.0, 209.5));
 				CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 				CCEditBox* editbox = input_text1;
@@ -1098,7 +1132,7 @@ void FriendPopup::setManageMenu()
 	{
 		CCSprite* n_ing_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_ing_label = KSLabelTTF::create(getLocal(LK::kFriendManageMenu), mySGD->getFont().c_str(), 12.5f);
-		n_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_ing_label->setPosition(ccpFromSize(n_ing_img->getContentSize()/2.f) + ccp(0,2));
 		n_ing_img->addChild(n_ing_label);
 		
@@ -1112,7 +1146,7 @@ void FriendPopup::setManageMenu()
 		
 		CCSprite* d_ing_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_ing_label = KSLabelTTF::create(getLocal(LK::kFriendManageMenu), mySGD->getFont().c_str(), 12.5f);
-		d_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
 		d_ing_img->addChild(d_ing_label);
 		

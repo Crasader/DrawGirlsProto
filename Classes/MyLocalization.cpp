@@ -1117,7 +1117,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("설정창 바로가기"), kMyLocalKey_accountLinkLeadButton);
 	
 	ko->setObject(CCString::create("추천합니다!"), kMyLocalKey_introducerTitle);
-	ko->setObject(CCString::create("<font newline=15>추천인을 등록해주세요.</font><font newline=15>등록 즉시 보상을 드립니다."), kMyLocalKey_introducerContent);
+	ko->setObject(CCString::create("<font newline=15 strokesize=0.3 strokeopacity=50>추천인을 등록해주세요.</font><font newline=15 strokesize=0.3 strokeopacity=50>등록 즉시 보상을 드립니다."), kMyLocalKey_introducerContent);
 	ko->setObject(CCString::create("추천인 닉네임"), kMyLocalKey_introducerPlaceHolder);
 	ko->setObject(CCString::create("확인"), kMyLocalKey_introducerOk);
 	
@@ -1126,6 +1126,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("해당 닉네임을 찾을 수 없습니다."), kMyLocalKey_introducerDonFindNick);
 	ko->setObject(CCString::create("%s 님을 추천인으로 등록하셨습니다."), kMyLocalKey_introducerSuccess);
 	ko->setObject(CCString::create("자신을 추천인으로 등록할 수 없습니다."), kMyLocalKey_introducerSelfNotIntroduce);
+	
+	ko->setObject(CCString::create("부활석"), kMyLocalKey_p1Shop);
+	
+	ko->setObject(CCString::create("추천인 입력 보상"), kMyLocalKey_introducerInputReward);
+	ko->setObject(CCString::create("추천인 일정 스테이지 달성 보상"), kMyLocalKey_introducerCompleteReward);
 	
 	setObject(ko, "ko");
 }

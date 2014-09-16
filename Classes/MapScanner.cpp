@@ -1116,7 +1116,7 @@ void MapScanner::exchangeMS()
 		invisibleImg = NULL;
 	}
 
-	invisibleImg = InvisibleSprite::create(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 2))->getCString(), false);
+	invisibleImg = InvisibleSprite::create(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), false);
 	invisibleImg->setPosition(CCPointZero);
 //	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 //	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
