@@ -14,6 +14,7 @@
 #include "jsoncpp/json.h"
 
 #include "CCMenuLambda.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -29,7 +30,7 @@ class LoadingLayer;
 class ScrollBar;
 class KSLabelTTF;
 
-class FriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate
+class FriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate, public BackKeyBase
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

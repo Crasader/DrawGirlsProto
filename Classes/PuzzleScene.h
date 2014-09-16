@@ -15,6 +15,7 @@
 #include "KnownFriend.h"
 #include "PuzzlePiece.h"
 #include "ShopPopup.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -40,7 +41,7 @@ class RankFriendInfo;
 class CommonButton;
 class CCMenuItemLambda;
 class CCMenuLambda;
-class PuzzleScene : public CCLayer
+class PuzzleScene : public CCLayer, public BackKeyBase
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

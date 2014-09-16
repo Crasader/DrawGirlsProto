@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -31,7 +32,7 @@ enum KindTutorialType
 class TouchSuctionLayer;
 class KSLabelTTF;
 
-class TypingBox : public CCNode, public CCScrollViewDelegate
+class TypingBox : public CCLayer, public CCScrollViewDelegate, public BackKeyBase
 {
 public:
 	
@@ -47,6 +48,8 @@ public:
 	void setBoxScale(float t_s);
 	
 	static void changeTypingBox(TypingBox* from_tb, TypingBox* to_tb, CCSprite* from_cha, CCSprite* to_cha);
+	
+	virtual void keyBackClicked(void);
 	
 private:
 	

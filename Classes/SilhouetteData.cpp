@@ -135,9 +135,16 @@ void SilhouetteData::exchangeSilhouette()
 	
 	if(tx->hasAlpha())imgByte=4;
 	
+//	for(int i=mapWidthOutlineBegin;i<mapWidthOutlineEnd;i++)
+//	{
+//		for(int j=mapHeightOutlineBegin;j<mapHeightOutlineEnd;j++)
+//		{
+//			silData[i][j] = false;
+//		}
+//	}
 	
 	for(int y=0;y<dataHeight;y++){
-		//string xprint = "";
+//		string xprint = "";
 		for(int x=0;x<dataWidth;x++){
 			int x_offset=2;
 			int y_offset=2;
@@ -146,20 +153,22 @@ void SilhouetteData::exchangeSilhouette()
 			int i = ((y*dataRate+y_offset)*tx->getWidth()+(x*dataRate+x_offset))*imgByte;
 			
 			//순서대로 r,g,b 값을 더하여 10 이상일때 실루엣으로 인식
-			if(pData[i]+pData[i+1]+pData[i+2]>=10)
+			if(pData[i+2] > 200)//pData[i]+pData[i+1]+pData[i+2]>=10)
 			{
 				must_cnt++;
 				silData[x+1][215-y]=true;
-				//xprint+="1";
+//				xprint+="1";
 			}else{
 				silData[x+1][215-y]=false;
-				//xprint+="0";
+//				xprint+="0";
 			}
 		}
-		//CCLOG("%d : %s",y,xprint.c_str());
+//		CCLOG("%d : %s",y,xprint.c_str());
 	}
 	
 	tx->release();
+	
+	
 	
 //	string t_sil = NSDS_GS(kSDS_CI_int1_silImgInfoSilData_s, NSDS_GI(myType, kSDS_SI_level_int1_card_i, 2));
 //	

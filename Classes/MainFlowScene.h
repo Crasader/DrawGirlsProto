@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include <deque>
 #include "jsoncpp/json.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -64,7 +65,7 @@ public:
 class CountingBMLabel;
 class HeartTime;
 class KSLabelTTF;
-class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
+class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource, public BackKeyBase
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

@@ -225,7 +225,7 @@ bool CardViewScene::init()
 																			}
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
-		sound_menu->setPosition(morphing_position + ccp(0,50));
+		sound_menu->setPosition(sound_img->getPosition());
 		addChild(sound_menu, kCV_Z_next_button);
 		
 		if(buy_morphing)
@@ -308,7 +308,7 @@ bool CardViewScene::init()
 																		  }
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
-		sound_menu->setPosition(morphing_position + ccp(0,50));
+		sound_menu->setPosition(sound_img->getPosition());
 		addChild(sound_menu, kCV_Z_next_button);
 		
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");

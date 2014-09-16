@@ -19,6 +19,7 @@
 #include "StageImgLoader.h"
 #include "cocos-ext.h"
 #include "FlagSelector.h"
+#include "BackKeyBase.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -39,7 +40,7 @@ enum ReceiveState{
 
 class KSLabelTTF;
 class ConvexGraph;
-class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public CCTextFieldDelegate
+class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate, public BackKeyBase//, public CCTextFieldDelegate
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

@@ -74,7 +74,12 @@ bool MainFlowScene::init()
     {
         return false;
     }
-	CCLog("%s %d", __FILE__, __LINE__);
+	
+	setBackKeyFunc([=](){
+		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+	});
+	setBackKeyEnabled(true);
+	
 	setKeypadEnabled(true);
 	
 	kind_tutorial_pvp = nullptr;
@@ -944,6 +949,8 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 
 void MainFlowScene::puzzleLoadSuccess()
 {
+	setBackKeyEnabled(false);
+	
 	mySGD->resetLabels();
 	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 }
@@ -2829,11 +2836,11 @@ void MainFlowScene::setBottom()
 	if(NSDS_GB(kSDS_GI_shop_isEvent_b))
 	{
 		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
-		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+8));
+		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
 		n_shop->addChild(n_shop_event);
 		
 		CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
-		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+8));
+		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+2));
 		s_shop->addChild(s_shop_event);
 		s_shop_event->setColor(ccGRAY);
 	}
@@ -2904,7 +2911,7 @@ void MainFlowScene::setBottom()
 		if(t_percent < 100.f)
 		{
 			CCScale9Sprite* n_percent_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height));
+			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height+2));
 			n_mission->addChild(n_percent_back);
 			
 			CCLabelTTF* n_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
@@ -2913,7 +2920,7 @@ void MainFlowScene::setBottom()
 			n_percent_back->addChild(n_percent_label);
 			
 			CCScale9Sprite* s_percent_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height));
+			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height+2));
 			s_mission->addChild(s_percent_back);
 			
 			CCLabelTTF* s_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
@@ -2934,12 +2941,12 @@ void MainFlowScene::setBottom()
 	
 	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
 
-	CCSprite* n_friend = CCSprite::create("mainflow_mission.png");
+	CCSprite* n_friend = CCSprite::create("mainflow_friend.png");
 	KSLabelTTF* n_friend_label = KSLabelTTF::create(getLocal(LK::kFriendList), mySGD->getFont().c_str(), 10);
 	n_friend_label->enableOuterStroke(ccBLACK, 1.f);
 	n_friend_label->setPosition(ccp(n_friend->getContentSize().width/2.f, 7));
 	n_friend->addChild(n_friend_label);
-	CCSprite* s_friend = CCSprite::create("mainflow_mission.png");
+	CCSprite* s_friend = CCSprite::create("mainflow_friend.png");
 	s_friend->setColor(ccGRAY);
 	KSLabelTTF* s_friend_label = KSLabelTTF::create(getLocal(LK::kFriendList), mySGD->getFont().c_str(), 10);
 	s_friend_label->enableOuterStroke(ccBLACK, 1.f);
@@ -5097,5 +5104,5 @@ void MainFlowScene::alertAction(int t1, int t2)
 
 void MainFlowScene::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+	onBackKeyAction();
 }

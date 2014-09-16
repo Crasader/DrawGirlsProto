@@ -262,6 +262,8 @@ public:
 	
 	function<void(function<void()>, function<void()>)> clear_time_event_func;
 	
+	bool isGameover;
+	
 private:
 	bool is_on_clear_time_event;
 	KSProtectVar<int> score_attack_damage;
@@ -298,7 +300,6 @@ private:
 	bool is_show_exchange_coin;
 	int taked_coin_cnt;
 	bool isFirst;
-	bool isGameover;
 	bool is_hard;
 	int beforePercentage;
 	KSProtectVar<int> playtime_limit;
