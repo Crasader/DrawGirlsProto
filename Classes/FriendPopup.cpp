@@ -510,7 +510,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		
 		userAttacher(cell_back, memberInfo);
 		
-		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString());
+		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString(), mySGD->getHeartSendCoolTime());
 		if(remainTime == 0 && memberInfo["memberID"].asInt64() != myHSP->getMemberID())
 		{
 			CommonButton* sendHeart = CommonButton::create(getLocal(LK::kFriendHeartSend), 13.f, CCSizeMake(100, 30),
