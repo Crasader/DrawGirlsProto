@@ -178,7 +178,7 @@ public:
 		return false;
 	}
 	
-	mapType mapState[162][217];
+	mapType mapState[mapWidthOutlineEnd][mapHeightOutlineEnd];
 	
 	static GameData* sharedGameData();
 	

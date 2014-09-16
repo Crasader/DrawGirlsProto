@@ -200,7 +200,9 @@ void KSJuniorBase::checkConfine(float dt)
 	
 	IntPoint mapPoint = m_mapPoint;
 	// 갇혀있는지 검사함. 갇혀있으면 없앰.
-	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+	if(mapPoint.x - 1 >= 0 && mapPoint.y - 1 >= 0 &&
+		 mapPoint.x + 1 < mapLoopRange::mapWidthOutlineEnd && mapPoint.y + 1 < mapLoopRange::mapHeightOutlineEnd &&
+		 myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
@@ -436,7 +438,7 @@ void KSJuniorBase::furyModeOn(int tf)
 {
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
-	m_cumberState = kCumberStateFury;
+	m_cumberState = kCumberStateFury | kCumberStateMoving;
 	
 	//	m_headImg->setColor(ccc3(0, 255, 0));
 	
