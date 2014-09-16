@@ -100,6 +100,7 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	StyledLabelTTF* ment_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_introducerContent), mySGD->getIntroduceStage(), 5), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
+//	ment_label->enableOuterStroke(ccBLACK, 0.3f, (GLubyte)50, true);
 	ment_label->setPosition(ccp(0,30));
 	m_container->addChild(ment_label);
 	

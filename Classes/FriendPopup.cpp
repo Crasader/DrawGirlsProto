@@ -825,21 +825,21 @@ void FriendPopup::setListMenu()
 	{
 		CCSprite* n_all_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		n_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_all_label->setPosition(ccpFromSize(n_all_img->getContentSize()/2.f) + ccp(0,2));
 		n_all_img->addChild(n_all_label);
 		
 		CCSprite* s_all_img = CCSprite::create("tabbutton_down.png");
 		s_all_img->setColor(ccGRAY);
 		KSLabelTTF* s_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		s_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		s_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		s_all_label->setColor(ccGRAY);
 		s_all_label->setPosition(ccpFromSize(s_all_img->getContentSize()/2.f) + ccp(0,2));
 		s_all_img->addChild(s_all_label);
 		
 		CCSprite* d_all_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_all_label = KSLabelTTF::create(getLocal(LK::kFriendListMenu), mySGD->getFont().c_str(), 12.5f);
-		d_all_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_all_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_all_label->setPosition(ccpFromSize(d_all_img->getContentSize()/2.f) + ccp(0,2));
 		d_all_img->addChild(d_all_label);
 		
@@ -926,7 +926,7 @@ void FriendPopup::setAddMenu()
 	{
 		CCSprite* n_success_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_success_label = KSLabelTTF::create(getLocal(LK::kFriendAddMenu), mySGD->getFont().c_str(), 12.5f);
-		n_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_success_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_success_label->setPosition(ccpFromSize(n_success_img->getContentSize()/2.f) + ccp(0,2));
 		n_success_img->addChild(n_success_label);
 		
@@ -940,7 +940,7 @@ void FriendPopup::setAddMenu()
 		
 		CCSprite* d_success_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_success_label = KSLabelTTF::create(getLocal(LK::kFriendAddMenu), mySGD->getFont().c_str(), 12.5f);
-		d_success_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_success_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_success_label->setPosition(ccpFromSize(d_success_img->getContentSize()/2.f) + ccp(0,2));
 		d_success_img->addChild(d_success_label);
 		
@@ -1120,7 +1120,7 @@ void FriendPopup::setManageMenu()
 	{
 		CCSprite* n_ing_img = CCSprite::create("tabbutton_down.png");
 		KSLabelTTF* n_ing_label = KSLabelTTF::create(getLocal(LK::kFriendManageMenu), mySGD->getFont().c_str(), 12.5f);
-		n_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		n_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		n_ing_label->setPosition(ccpFromSize(n_ing_img->getContentSize()/2.f) + ccp(0,2));
 		n_ing_img->addChild(n_ing_label);
 		
@@ -1134,7 +1134,7 @@ void FriendPopup::setManageMenu()
 		
 		CCSprite* d_ing_img = CCSprite::create("tabbutton_up.png");
 		KSLabelTTF* d_ing_label = KSLabelTTF::create(getLocal(LK::kFriendManageMenu), mySGD->getFont().c_str(), 12.5f);
-		d_ing_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+		d_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
 		d_ing_img->addChild(d_ing_label);
 		
