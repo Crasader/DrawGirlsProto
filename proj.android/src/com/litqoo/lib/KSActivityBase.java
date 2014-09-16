@@ -74,7 +74,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 		return true;
 	}
 	
-	public void diaryAppExe(final String memberID, final String diaryCode)
+	public void diaryAppExe(final String memberID, final String diaryCode, final int cardNumber)
 	{
 		ComponentName compName = new ComponentName("com.litqoo.DgDiary","com.litqoo.DgDiary.DgDiary"); 
 	    Intent intent = new Intent(Intent.ACTION_MAIN);
@@ -84,6 +84,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 	    
 	    intent.putExtra("memberID", memberID);
 	    intent.putExtra("diaryCode", diaryCode);
+	    intent.putExtra("cardNumber", cardNumber);
 	    
 	    startActivity(intent);
 	}
@@ -329,7 +330,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 		});
 	}
 
-	private void vib() {
+	public void vib() {
 		getHandler().post(new Runnable() {
 
 			public void run() {
