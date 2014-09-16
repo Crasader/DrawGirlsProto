@@ -118,7 +118,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 		}
 	}
 
-	if(m_cumberState == kCumberStateFury && castCancel)
+	if((m_cumberState & kCumberStateFury) && castCancel)
 	{
 		crashMapForPosition(getPosition());
 		m_castingCancelCount++;
@@ -194,7 +194,7 @@ void KSCircleBase::animationNoDirection(float dt)
 	else if(m_noDirection.state == 2)
 	{
 		CCLOG("m_noDirection.state 끝나는 것");
-		if(getCumberState() != kCumberStateFury)
+		if((getCumberState() & kCumberStateFury) == 0)
 		{
 			CCLOG("분노 아님!!");
 			setCumberState(kCumberStateMoving);
@@ -322,7 +322,7 @@ void KSCircleBase::furyModeOn(int tf)
 	CCLOG("furyModeOn");
 	m_furyMode.startFury(tf);
 	m_noDirection.state = 2;
-	setCumberState(kCumberStateFury);
+	setCumberState(kCumberStateFury | kCumberStateMoving);
 	
 	//	m_headImg->setColor(ccc3(0, 255, 0));
 	
@@ -508,7 +508,9 @@ void KSCircleBase::checkConfine(float dt)
 //		return;
 	IntPoint mapPoint = m_mapPoint;
 	// 갇혀있는지 검사함. 갇혀있으면 없앰.
-	if(myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
+	if(mapPoint.x - 1 >= 0 && mapPoint.y - 1 >= 0 &&
+		 mapPoint.x + 1 < mapLoopRange::mapWidthOutlineEnd && mapPoint.y + 1 < mapLoopRange::mapHeightOutlineEnd &&
+		 myGD->mapState[mapPoint.x][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
@@ -604,8 +606,15 @@ void KSCircleBase::setPosition( const CCPoint& t_sp )
 	
 		
 	m_headImg->setPosition(t_sp);
-	myGD->setMainCumberPoint(this, ccp2ip(t_sp));
-	m_mapPoint = ccp2ip(t_sp);
+	if((m_cumberState & kCumberStateNoDirection) || (m_cumberState & kCumberStateFury))
+	{
+		// black hole!!
+	}
+	else
+	{
+		myGD->setMainCumberPoint(this, ccp2ip(t_sp));
+		m_mapPoint = ccp2ip(t_sp);
+	}
 }
 
 void KSCircleBase::setPositionX( float t_x )

@@ -91,7 +91,7 @@ void KSCumberBase::randomMoving(float dt)
 	CCPoint afterPosition;
 	IntPoint afterPoint;
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
 		if(changeDirection == 0)
@@ -121,7 +121,7 @@ void KSCumberBase::randomMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -199,7 +199,7 @@ void KSCumberBase::randomMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -208,7 +208,7 @@ void KSCumberBase::randomMoving(float dt)
 	//        CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -246,7 +246,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	int check_loop_cnt = 0;
 
 	// 낮은 확률로 방향 전환...	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
 		if(changeDirection == 0)
@@ -304,7 +304,7 @@ void KSCumberBase::straightMoving(float dt)
 		};
 		
 		
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -382,7 +382,7 @@ void KSCumberBase::straightMoving(float dt)
 		if(cnt >= 2)
 		{
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -393,7 +393,7 @@ void KSCumberBase::straightMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -443,7 +443,7 @@ void KSCumberBase::followMoving(float dt)
 	
 	float dx, dy;
 	dx = dy = 0;
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(m_follow.timer - m_follow.lastMapCollisionTime > 1.f)
 		{
@@ -496,7 +496,7 @@ void KSCumberBase::followMoving(float dt)
 			}
 			return m_directionAngleDegree;
 		};
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -593,7 +593,7 @@ void KSCumberBase::followMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -603,7 +603,7 @@ void KSCumberBase::followMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -640,7 +640,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		int changeDirection = m_well512.GetValue(3);
 		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
@@ -678,7 +678,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 		
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -780,7 +780,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -789,7 +789,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 	
 	
- 	if(isMovable() || m_cumberState == kCumberStateFury)
+ 	if(isMovable())
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -830,7 +830,7 @@ void KSCumberBase::circleMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
 		{
@@ -863,7 +863,7 @@ void KSCumberBase::circleMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -936,7 +936,7 @@ void KSCumberBase::circleMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -946,7 +946,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	
 	
- 	if(isMovable() || m_cumberState == kCumberStateFury)
+ 	if(isMovable())
 	{
 		if(pathFound)
 		{
@@ -995,7 +995,7 @@ void KSCumberBase::snakeMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 	
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(ProbSelector::sel(0.002, 1.0 - 0.002, 0.0) == 0)
 		{
@@ -1028,7 +1028,7 @@ void KSCumberBase::snakeMoving(float dt)
 		afterPoint = ccp2ip(afterPosition);
 		IntPoint checkPosition;
 		COLLISION_CODE collisionCode = getCrashCode(afterPoint, &checkPosition);
-		if(m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateFury) == 0)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
@@ -1101,7 +1101,7 @@ void KSCumberBase::snakeMoving(float dt)
 			pathFound = false;
 			validPosition = true;
 		}
-		if((m_cumberState & kCumberStateMoving) == 0 && m_cumberState != kCumberStateFury)
+		if((m_cumberState & kCumberStateMoving) == 0 && (m_cumberState & kCumberStateFury) == 0)
 		{
 			validPosition = true;
 		}
@@ -1111,7 +1111,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	
 	
- 	if(isMovable() || m_cumberState == kCumberStateFury)
+ 	if(isMovable())
 	{
 		int loopCnt = 0;
 		while(1)
@@ -1194,7 +1194,7 @@ void KSCumberBase::rushMoving(float dt)
 	IntPoint afterPoint;
 	//	int check_loop_cnt = 0;
 
-	if(isMovable() || m_cumberState == kCumberStateFury)
+	if(isMovable())
 	{
 		if(m_furyMode.firstMoving == true)
 		{
@@ -1274,7 +1274,8 @@ void KSCumberBase::rushMoving(float dt)
 		if(m_furyMode.furyFrameCount % 4 == 0) // n 프레임당 한번 깎음.
 		{
 			crashMapForPosition(afterPosition);
-//			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
+			myGD->setMainCumberPoint(this, ccp2ip(afterPosition)); // 에라 모르겠다. 깎을 때만 포지션 바꿈. ㄷ ㄷ ;
+			m_mapPoint = ccp2ip(afterPosition);
 		}
 	}
 
@@ -1283,7 +1284,7 @@ void KSCumberBase::rushMoving(float dt)
 	//	CCLOG("cnt outer !! = %d", cnt);
 
 
-	if(m_cumberState == kCumberStateFury)
+	if((m_cumberState & kCumberStateFury))
 	{
 		if(pathFound)
 			setPosition(afterPosition);
@@ -1682,7 +1683,7 @@ void KSCumberBase::cumberAttack(float dt)
 					
 					if(attackCode["pattern"].asString() == "1008" && m_invisible.startInvisibleScheduler)
 						searched = false;
-					if(attackCode["pattern"].asString() == "109" && m_cumberState == kCumberStateFury)
+					if(attackCode["pattern"].asString() == "109" && (m_cumberState & kCumberStateFury))
 						searched = false;
 					if(attackCode["pattern"].asString() == "1019" && m_swell.isStartSwell)
 					{
@@ -2026,6 +2027,10 @@ void KSCumberBase::setCumberState( int e )
 	m_cumberState = (CUMBER_STATE)e;
 #undef TEMP
 	
+	if(e == 0)
+	{
+		CCLOG("TTT");
+	}
 }
 
 CUMBER_STATE KSCumberBase::getCumberState()
@@ -2081,7 +2086,7 @@ void KSCumberBase::movingAndCrash( float dt )
 	}
 	checkConfine(dt);
 	
-	if(m_cumberState == kCumberStateFury)
+	if(m_cumberState & kCumberStateFury)
 	{
 		m_furyMode.furyFrameCount++;
 	}
@@ -2113,7 +2118,7 @@ void KSCumberBase::movingAndCrash( float dt )
 				break;
 		}
 	};
-	if(m_cumberState == kCumberStateFury)
+	if(m_cumberState & kCumberStateFury)
 	{
 		movingBranch(m_furyMovement);
 	}
