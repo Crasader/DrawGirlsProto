@@ -728,7 +728,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	setFormSetter(selectedFlagSpr);
 	KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5); // user_list[i]["nick"].asString().c_str()
 	nick_label->setAnchorPoint(ccp(0,0.5f));
-	nick_label->enableOuterStroke(ccc3(50, 25, 0), 0.3f, (GLubyte)50, true);
+	nick_label->enableOuterStroke(ccc3(50, 25, 0), 0.3f, 50, true);
 	nick_label->setPosition(ccp(79 + 2,19 - 2.f));
 	list_cell_case->addChild(nick_label);
 	setFormSetter(nick_label);
