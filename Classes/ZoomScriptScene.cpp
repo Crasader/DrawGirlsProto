@@ -143,7 +143,7 @@ bool ZoomScript::init()
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
 	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)is_morphing = true;
-	else is_morphing = true;
+	else is_morphing = false;
 	
 	first_img->setPosition(ccp(160,230));
 	first_img->setAnchorPoint(ccp(0.5,0.5));
