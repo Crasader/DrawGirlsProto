@@ -7,7 +7,7 @@
 //
 
 #include "BackKeyBase.h"
-#include "BackKeyManager.h"
+/*#include "BackKeyManager.h"
 
 BackKeyBase::BackKeyBase() :
 over_popup_count(0),
@@ -42,4 +42,4 @@ void BackKeyBase::onBackKeyAction()
 		is_action_enabled = false;
 		back_action = nullptr;
 	}
-}
+}*/

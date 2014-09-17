@@ -8,7 +8,7 @@
 
 #ifndef __DGproto__BackKeyManager__
 #define __DGproto__BackKeyManager__
-
+/*
 #include "cocos2d.h"
 #include "cocos-ext.h"
 
@@ -44,5 +44,5 @@ private:
 	
 	void myInit();
 };
-
+*/
 #endif /* defined(__DGproto__BackKeyManager__) */

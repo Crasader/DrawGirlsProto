@@ -22,7 +22,7 @@ class CommonButton;
 class MyNode;
 class EffectSprite;
 class KSLabelTTF;
-class ZoomScript : public CCLayer, public BackKeyBase
+class ZoomScript : public CCLayer//, public BackKeyBase
 {
 public:
 	virtual bool init();
@@ -144,6 +144,8 @@ private:
 	virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent);
 	
 	virtual void registerWithTouchDispatcher(void);
+	
+	void alertAction(int t1, int t2);
 	
 };
 

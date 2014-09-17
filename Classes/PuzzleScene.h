@@ -41,7 +41,7 @@ class RankFriendInfo;
 class CommonButton;
 class CCMenuItemLambda;
 class CCMenuLambda;
-class PuzzleScene : public CCLayer, public BackKeyBase
+class PuzzleScene : public CCLayer//, public BackKeyBase
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

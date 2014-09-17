@@ -81,10 +81,10 @@ bool PuzzleScene::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		startBacking();
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		startBacking();
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -1735,7 +1735,7 @@ void PuzzleScene::puzzleOpenning()
 
 void PuzzleScene::puzzleBacking()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	CCSprite* title_name = CCSprite::create("temp_title_name.png");
 	title_name->setPosition(ccp(240,160));
@@ -3507,5 +3507,6 @@ void PuzzleScene::alertAction(int t1, int t2)
 
 void PuzzleScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(PuzzleScene::alertAction));
+//	onBackKeyAction();
 }

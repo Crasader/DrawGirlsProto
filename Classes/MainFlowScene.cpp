@@ -75,10 +75,10 @@ bool MainFlowScene::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -949,7 +949,7 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 
 void MainFlowScene::puzzleLoadSuccess()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	mySGD->resetLabels();
 	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
@@ -5104,5 +5104,6 @@ void MainFlowScene::alertAction(int t1, int t2)
 
 void MainFlowScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+//	onBackKeyAction();
 }

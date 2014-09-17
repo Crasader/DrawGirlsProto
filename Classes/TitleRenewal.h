@@ -40,7 +40,7 @@ enum ReceiveState{
 
 class KSLabelTTF;
 class ConvexGraph;
-class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate, public BackKeyBase//, public CCTextFieldDelegate
+class TitleRenewalScene : public cocos2d::CCLayer, public CCEditBoxDelegate//, public BackKeyBase//, public CCTextFieldDelegate
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

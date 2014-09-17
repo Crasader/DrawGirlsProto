@@ -7,7 +7,7 @@
 //
 
 #include "BackKeyManager.h"
-#include "BackKeyBase.h"
+/*#include "BackKeyBase.h"
 
 void BackKeyManager::addBase(BackKeyBase* t_base)
 {
@@ -38,4 +38,4 @@ void BackKeyManager::removeBase(BackKeyBase* t_base)
 void BackKeyManager::myInit()
 {
 	base_list.clear();
-}
+}*/

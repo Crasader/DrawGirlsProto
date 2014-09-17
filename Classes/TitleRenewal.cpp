@@ -219,11 +219,11 @@ void TitleRenewalScene::endSplash()
 {
 	TRACE();
 	
-	setBackKeyFunc([=](){
-		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
-	});
-	
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+//	});
+//	
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -361,7 +361,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 			{
 				CCLOG("resetalldata");
-				setBackKeyEnabled(false);
+//				setBackKeyEnabled(false);
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
@@ -2555,7 +2555,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
@@ -3694,7 +3694,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	}
 	else if(tag >= kTitleRenewal_MT_puzzleBase)
 	{
-		setBackKeyEnabled(false);
+//		setBackKeyEnabled(false);
 		tag -= kTitleRenewal_MT_puzzleBase;
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
@@ -3784,5 +3784,6 @@ void TitleRenewalScene::alertAction(int t1, int t2)
 
 void TitleRenewalScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+//	onBackKeyAction();
 }
