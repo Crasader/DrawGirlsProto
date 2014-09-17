@@ -92,7 +92,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	script_back->setPosition(ccp(25,261));
 //	target->addChild(script_back);
 	
-	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 9, CCSizeMake(175, 35), kCCTextAlignmentLeft);
+	CCLabelTTF* r_stage_script = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_script_s, card_number).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(175, 35), kCCTextAlignmentLeft);
 	r_stage_script->setPosition(ccp(25,253));
 	r_stage_script->setColor(ccBLACK);
 	r_stage_script->setVerticalAlignment(kCCVerticalTextAlignmentTop);
@@ -113,7 +113,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //	profile_back->setPosition(ccp(25,157));
 //	target->addChild(profile_back);
 	
-	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 8, CCSizeMake(175, 50), kCCTextAlignmentLeft);
+	CCLabelTTF* r_stage_profile = CCLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, card_number).c_str(), mySGD->getFont().c_str(), 10, CCSizeMake(175, 50), kCCTextAlignmentLeft);
 	r_stage_profile->setPosition(ccp(25,189));
 	r_stage_profile->setColor(ccBLACK);
 	r_stage_profile->setVerticalAlignment(kCCVerticalTextAlignmentTop);

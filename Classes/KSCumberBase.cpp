@@ -2494,7 +2494,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(vCount>0){
 			m_aiValue = m_aiValue+10.f*vCount;
 			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
-			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
+			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
 		
@@ -2534,7 +2534,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(vCount>0){
 			m_aiValue = m_aiValue+10.f*vCount;
 			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
-			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.00125;
+			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
 		//부수기 공격 확률 낮추기
@@ -2546,8 +2546,8 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		}
 	}
 	
-	if(m_attackPercent<=0 && m_maxSpeed>0.8f)m_maxSpeed=0.8f;
-	if(m_maxSpeed>1.2f)m_maxSpeed=1.2f;
+	if(m_attackPercent<=0 && m_maxSpeed>0.7f)m_maxSpeed=0.7f;
+	if(m_maxSpeed>1.f)m_maxSpeed=1.f;
 	settingFuryRule();
 	
 	CCLOG("#################### Change Balnace1 ############################");

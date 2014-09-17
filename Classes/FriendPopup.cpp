@@ -377,7 +377,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		nick->enableOuterStroke(ccc3(0, 0, 0), 1.f, 200, true);
 		setFormSetter(nick);
 		
-		KSLabelTTF* lastConnection = KSLabelTTF::create(ccsf(getLocal(LK::kFriendLastConnection), GraphDogLib::dateFormat("m/d h:i", memberInfo["lastDate"].asLargestInt()).c_str()),
+		KSLabelTTF* lastConnection = KSLabelTTF::create(ccsf(getLocal(LK::kFriendLastConnection), GraphDogLib::dateFormat("m/d H:i", memberInfo["lastDate"].asLargestInt()).c_str()),
 																										mySGD->getFont().c_str(), 10.f);
 		lastConnection->setColor(ccc3(50, 40, 150));
 		lastConnection->setPosition(ccp(105.5, 8.0));
@@ -387,11 +387,12 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		KSLabelTTF* currentStage = KSLabelTTF::create(ccsf(getLocal(LK::kFriendCurrentStage), memberInfo["highPiece"].asInt()),
 																									mySGD->getFont().c_str(), 15.f);
 		currentStage->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-		currentStage->enableOuterStroke(ccc3(0, 0, 0), 1.f, 255, true);
+		currentStage->setAnchorPoint(ccp(1.f, 0.5f));
+		currentStage->enableOuterStroke(ccc3(0, 0, 0), 0.3f, 50, true);
 		cell_back->addChild(currentStage, 1);
 		
 		setFormSetter(currentStage);
-		currentStage->setPosition(ccp(238.0, 17.5));
+		currentStage->setPosition(ccp(292.f, 17.5));
 
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(memberInfo["flag"].asString()).c_str());
@@ -464,12 +465,12 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		userAttacher(cell_back, memberInfo);
 		
 		
-		if(std::find(m_sendList.begin(), m_sendList.end(), memberInfo["memberID"].asString()) == m_sendList.end() ||
+		if(std::find(m_sendList.begin(), m_sendList.end(), memberInfo["memberID"].asString()) == m_sendList.end() &&
 			 std::find(m_sendList.begin(), m_sendList.end(), boost::lexical_cast<std::string>(myHSP->getMemberID())) == m_sendList.end() )
 			 
 		{
 			CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddFriend), 13.f, CCSizeMake(100, 30),
-																										 CCScale9Sprite::create("subbutton_purple3.png" , CCRectMake(0,0, 100, 39), CCRectMake(57, 22, 2, 2)),
+																										 CCScale9Sprite::create("friend_bt.png"),
 																										 m_touchPriority);
 			cell_back->addChild(addFriend, 1);
 			addFriend->setPosition(ccp(349.0, 17.0));
@@ -500,6 +501,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					}
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
+//					m_votedFriendList[idx]["reqexist"] = true;
 					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 요청했습니다.", [=](){
 						input_text1->setVisible(true);
 						
@@ -508,10 +510,20 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					successPopup->getDimmedSprite()->setVisible(false);
 					addChild(successPopup);
 					
-					addFriend->setVisible(false);
+					addFriend->setTitle(getLocal(LK::kFriendAddingFriend));
+					addFriend->setEnabled(false);
 				});
 				CCLOG("add friend");
 			});
+		}
+		else
+		{
+			CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddingFriend), 13.f, CCSizeMake(100, 30),
+																										 CCScale9Sprite::create("friend_bt.png"),
+																										 m_touchPriority);
+			cell_back->addChild(addFriend, 1);
+			addFriend->setPosition(ccp(349.0, 17.0));
+			addFriend->setEnabled(false);
 		}
 		
 	}
@@ -532,7 +544,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		
 		userAttacher(cell_back, memberInfo);
 		
-		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString());
+		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString(), mySGD->getHeartSendCoolTime());
 		if(remainTime == 0 && memberInfo["memberID"].asInt64() != myHSP->getMemberID())
 		{
 			CommonButton* sendHeart = CommonButton::create(getLocal(LK::kFriendHeartSend), 13.f, CCSizeMake(100, 30),
@@ -1025,7 +1037,7 @@ void FriendPopup::setAddMenu()
 				
 				CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_gray.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 //				t_back1->setOpacity(0);
-				input_text1 = CCEditBox::create(CCSizeMake(315.f, 34), t_back1);
+				input_text1 = CCEditBox::create(CCSizeMake(305.f, 34), t_back1);
 				input_text1->setPosition(ccp(36.0, 209.5));
 				CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 				CCEditBox* editbox = input_text1;

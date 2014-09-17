@@ -512,13 +512,15 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			
 			if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 			{
-				CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* won_label = KSLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				won_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				won_label->setPosition(ccp(0, -27));
 				content_node->addChild(won_label, 3);
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 			{
-				CCLabelTTF* ruby_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* ruby_label = KSLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				ruby_label->setPosition(ccp(10, -27));
 				content_node->addChild(ruby_label, 3);
 				
@@ -530,7 +532,8 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			}
 			else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
 			{
-				CCLabelTTF* gold_label = CCLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* gold_label = KSLabelTTF::create(NSDS_GS(price_key, i-1).c_str(), mySGD->getFont().c_str(), 14);
+				gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				gold_label->setPosition(ccp(10, -27));
 				content_node->addChild(gold_label, 3);
 				
@@ -1165,6 +1168,7 @@ bool ShopPopup::init()
 	
 	CCSprite* n_ruby_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	n_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_ruby_label->disableOuterStroke();
 	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	n_ruby_img->addChild(n_ruby_label);
@@ -1173,13 +1177,13 @@ bool ShopPopup::init()
 	s_ruby_img->setColor(ccGRAY);
 	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	s_ruby_label->setColor(ccGRAY);
-	s_ruby_label->disableOuterStroke();
+	s_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	s_ruby_img->addChild(s_ruby_label);
 	
 	CCSprite* d_ruby_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
-	d_ruby_label->disableOuterStroke();
+	d_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	d_ruby_img->addChild(d_ruby_label);
 	
@@ -1192,7 +1196,7 @@ bool ShopPopup::init()
 	
 	CCSprite* n_gold_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
-	n_gold_label->disableOuterStroke();
+	n_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
 	n_gold_img->addChild(n_gold_label);
 	
@@ -1200,13 +1204,13 @@ bool ShopPopup::init()
 	s_gold_img->setColor(ccGRAY);
 	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	s_gold_label->setColor(ccGRAY);
-	s_gold_label->disableOuterStroke();
+	s_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
 	s_gold_img->addChild(s_gold_label);
 	
 	CCSprite* d_gold_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
-	d_gold_label->disableOuterStroke();
+	d_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
 	d_gold_img->addChild(d_gold_label);
 	
@@ -1219,21 +1223,21 @@ bool ShopPopup::init()
 	
 	CCSprite* n_heart_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
-	n_heart_label->disableOuterStroke();
+	n_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
 	n_heart_img->addChild(n_heart_label);
 	
 	CCSprite* s_heart_img = CCSprite::create("shoptap_down.png");
 	s_heart_img->setColor(ccGRAY);
 	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
-	s_heart_label->disableOuterStroke();
+	s_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_heart_label->setColor(ccGRAY);
 	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
 	s_heart_img->addChild(s_heart_label);
 	
 	CCSprite* d_heart_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
-	d_heart_label->disableOuterStroke();
+	d_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
 	d_heart_img->addChild(d_heart_label);
 	
@@ -1246,21 +1250,21 @@ bool ShopPopup::init()
 	
 	CCSprite* n_p1_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
-	n_p1_label->disableOuterStroke();
+	n_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_p1_label->setPosition(ccpFromSize(n_p1_img->getContentSize()/2.f) + ccp(0,2));
 	n_p1_img->addChild(n_p1_label);
 	
 	CCSprite* s_p1_img = CCSprite::create("shoptap_down.png");
 	s_p1_img->setColor(ccGRAY);
 	KSLabelTTF* s_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
-	s_p1_label->disableOuterStroke();
+	s_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_p1_label->setColor(ccGRAY);
 	s_p1_label->setPosition(ccpFromSize(s_p1_img->getContentSize()/2.f) + ccp(0,2));
 	s_p1_img->addChild(s_p1_label);
 	
 	CCSprite* d_p1_img = CCSprite::create("shoptap_up.png");
 	KSLabelTTF* d_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
-	d_p1_label->disableOuterStroke();
+	d_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_p1_label->setPosition(ccpFromSize(d_p1_img->getContentSize()/2.f) + ccp(0,2));
 	d_p1_img->addChild(d_p1_label);
 	

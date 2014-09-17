@@ -220,7 +220,7 @@ void KSSnakeBase::animationDirection(float dt)
 
 		
 		m_direction.state = 0;
-//		unschedule(schedule_selector(KSSnakeBase::animationDirection));
+		unschedule(schedule_selector(KSSnakeBase::animationDirection));
 		m_headAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 		m_tailAnimationManager->runAnimationsForSequenceNamed("cast101stop");
 	}
@@ -533,6 +533,7 @@ void KSSnakeBase::furyModeOn(int tf)
 	}
 	
 	schedule(schedule_selector(ThisClassType::furyModeScheduler));
+	stopAnimationDirection();
 }
 
 
@@ -1013,8 +1014,16 @@ void KSSnakeBase::attachEmotion()
 {
 	CumberEmotion* ce = CumberEmotion::create();
 	
-	m_headImg->addChild(ce, CumberZorder::kEmotion);
+	m_headImg->getParent()->addChild(ce, m_headImg->getZOrder() + 1);
+//	m_headImg->addChild(ce, CumberZorder::kEmotion);
 	m_emotion = ce;
+	
+	addChild(KSSchedule::create([=](float b)->bool
+															{
+																m_emotion->setPosition(m_headImg->getPosition());
+																m_emotion->setScale(m_headImg->getScale());
+																return true;
+															}));
 }
 IntPoint KSSnakeBase::getMapPoint( CCPoint c )
 {

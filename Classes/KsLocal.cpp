@@ -131,7 +131,7 @@ void KsLocal::ko()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 	
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
@@ -145,6 +145,7 @@ void KsLocal::ko()
 	
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
@@ -221,7 +222,7 @@ void KsLocal::en()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
@@ -235,6 +236,7 @@ void KsLocal::en()
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";
@@ -310,7 +312,7 @@ void KsLocal::ja()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
@@ -323,6 +325,7 @@ void KsLocal::ja()
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
+	obj[LK::kFriendAddingFriend] = "친구요청중";
 	obj[LK::kFriendSearch] = "검색";
 	obj[LK::kFriendMailAccept] = "수락";
 	obj[LK::kFriendMailReject] = "거절";

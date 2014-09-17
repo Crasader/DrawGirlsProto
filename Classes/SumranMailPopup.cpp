@@ -594,7 +594,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		{
 			case kGift:
 				
-				comment = GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Event").asString().c_str());
+				comment = GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Event").asString().c_str());
 				
 				
 				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), m_touchPriority);
@@ -643,7 +643,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
 																																						 mail.get("content","Gift").asString().c_str(),
 																																						 mail.get("sender","GM").asString().c_str(),
-																																						 GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																						 GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																						 )->getCString();
 																		StyledLabelTTF* lbl;
 																		
@@ -707,7 +707,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
 																																				".",
 																																				mail.get("sender","GM").asString().c_str(),
-																																				GraphDogLib::dateFormat("m/d h:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
+																																				GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																				)->getCString();
 																			
 																			lbl  = StyledLabelTTF::create(from.c_str(), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);

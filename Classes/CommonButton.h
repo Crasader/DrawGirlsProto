@@ -88,6 +88,7 @@ public:
 			return NULL;
 		}
 		btn->autorelease();
+		btn->setStringData("backkey");
 		return btn;
 	}
 	
@@ -98,6 +99,7 @@ public:
 			return NULL;
 		}
 		btn->autorelease();
+		btn->setStringData("backkey");
 		return btn;
 	}
 	
@@ -138,7 +140,14 @@ public:
 		return btn;
 	}
 	
-
+	struct BackKeyData{
+		CCNode* obj;
+		CCPoint pos;
+	};
+	
+	static void findBackBtn(cocos2d::CCNode* obj,vector<BackKeyData> &m_backkeyList,CCPoint pos);
+	static void callBackKey();
+	
 	bool init(CCSprite* backSprite, int touchPriority);
 
 	bool init(string title, float fontSize, CCSize size,CommonButtonType btnType, int touchPriority);
@@ -150,6 +159,7 @@ public:
 	void callFunc(CCObject* obj, CCControlEvent event);
 	
 	void setTouchPriority(int touchPriority);
+	int getTouchPriority();
 	void setTitle(string title);
 	void setTitleSize(float size);
 	void setSize(CCSize size);
