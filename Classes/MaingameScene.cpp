@@ -5071,6 +5071,11 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   mySGD->is_on_maingame = true;
 															   (t_continue->*d_continue)();
 															   continueAction();
+																 
+																 
+																 // ///////////////////////////////////////////////////// hs code bbu woo code for balance
+																 
+																 
 																 t_popup->removeFromParent();
 														   });
 	
