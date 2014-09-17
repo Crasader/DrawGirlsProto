@@ -2102,7 +2102,8 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 	reader = new CCBReader(nodeLoader);
 	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
-	KS::setBlendFunc(oilImg, ccBlendFunc{GL_ONE_MINUS_DST_COLOR, GL_ONE});
+	reader->getAnimationManager()->setDelegate(this);
+//	KS::setBlendFunc(oilImg, ccBlendFunc{GL_ONE_MINUS_DST_COLOR, GL_ONE});
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
 	setPosition(t_fp); // t_sp
