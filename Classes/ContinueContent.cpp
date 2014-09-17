@@ -556,8 +556,8 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(235,85));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+20.f));
+	back_in->setContentSize(CCSizeMake(235,75));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+25.f));
 	back_case->addChild(back_in,2);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
@@ -616,7 +616,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueGem), mySGD->getFont().c_str(), 13);
 	c_label->disableOuterStroke();
 	c_label->setAnchorPoint(ccp(0.5f,0.5f));
-	c_label->setPosition(ccp(0,10));
+	c_label->setPosition(ccp(0,15));
 	
 	CCNode* price_node = CCNode::create();
 	price_node->setPosition(ccp(0, -10));
@@ -636,6 +636,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		counting_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0,-6));
 		
+		c_label->setString(myLoc->getLocalForKey(kMyLocalKey_onContinue));
 		c_label->setAnchorPoint(ccp(0,0.5f));
 		c_label->setPosition(ccp(0,0));
 		
@@ -656,7 +657,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		continue_button = CCControlButton::create(r_label, c_back);
 		continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
 		continue_button->setPreferredSize(CCSizeMake(150,44));
-		continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-58));
+		continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-62));
 		back_case->addChild(continue_button);
 		
 		continue_button->setTouchPriority(touch_priority-1);
@@ -671,7 +672,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		// 버튼 두개(부활석, 젬 소모)
 		
 		CCScale9Sprite* price_back1 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		price_back1->setContentSize(CCSizeMake(60, 25));
+		price_back1->setContentSize(CCSizeMake(80, 28));
 		price_back1->setPosition(ccp(0,0));
 		price_node->addChild(price_back1);
 		
@@ -680,7 +681,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		KSLabelTTF* c_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueP1), mySGD->getFont().c_str(), 13);
 		c_label2->disableOuterStroke();
 		c_label2->setAnchorPoint(ccp(0.5f,0.5f));
-		c_label2->setPosition(ccp(0,10));
+		c_label2->setPosition(ccp(0,15));
 		r_label2->addChild(c_label2);
 		
 		CCNode* price_node2 = CCNode::create();
@@ -688,7 +689,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		r_label2->addChild(price_node2);
 		
 		CCScale9Sprite* price_back2 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		price_back2->setContentSize(CCSizeMake(60, 25));
+		price_back2->setContentSize(CCSizeMake(80, 28));
 		price_back2->setPosition(ccp(0,0));
 		price_node2->addChild(price_back2);
 		
@@ -721,8 +722,8 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		continue_button2 = CCControlButton::create(r_label2, c_back2);
 		continue_button2->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction2), CCControlEventTouchUpInside);
-		continue_button2->setPreferredSize(CCSizeMake(120,60));
-		continue_button2->setPosition(ccp(back_case->getContentSize().width/2.f-61,back_case->getContentSize().height/2.f-58));
+		continue_button2->setPreferredSize(CCSizeMake(120,70));
+		continue_button2->setPosition(ccp(back_case->getContentSize().width/2.f-61,back_case->getContentSize().height/2.f-53));
 		back_case->addChild(continue_button2);
 		
 		continue_button2->setTouchPriority(touch_priority-1);
@@ -768,7 +769,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	else
 	{
 		CCScale9Sprite* price_back1 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		price_back1->setContentSize(CCSizeMake(60, 25));
+		price_back1->setContentSize(CCSizeMake(80, 28));
 		price_back1->setPosition(ccp(0,0));
 		price_node->addChild(price_back1);
 		
@@ -790,8 +791,8 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	
 	continue_button = CCControlButton::create(r_label, c_back);
 	continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
-	continue_button->setPreferredSize(CCSizeMake(120,60));
-	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-58));
+	continue_button->setPreferredSize(CCSizeMake(120,70));
+	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-53));
 	back_case->addChild(continue_button);
 	
 	continue_button->setTouchPriority(touch_priority-1);

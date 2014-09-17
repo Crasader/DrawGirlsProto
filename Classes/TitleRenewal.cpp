@@ -1445,6 +1445,78 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopP1_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
+		Json::Value startPack = result_data["startPack"];
+		NSDS_SI(kSDS_GI_shopStartPack_no_i, startPack["no"].asInt(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_pID_s, startPack["pID"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_exchangeID_s, startPack["exchangeID"].asString(), false);
+		
+		Json::Value sp_data = startPack["data"];
+		NSDS_SS(kSDS_GI_shopStartPack_title_s, sp_data["title"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_content_s, sp_data["content"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_salePercent_s, sp_data["percent"].asString(), false);
+		NSDS_SI(kSDS_GI_shopStartPack_expireSec_i, sp_data["expireSec"].asInt(), false);
+		
+		Json::Value sp_price = sp_data["price"];
+		NSDS_SS(kSDS_GI_shopStartPack_PriceOriginal_s, sp_price["original"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_PriceSale_s, sp_price["sale"].asString(), false);
+		
+		Json::Value sp_list = sp_data["list"];
+		int sp_list_cnt = sp_list.size();
+		NSDS_SI(kSDS_GI_shopStartPack_listCnt_i, sp_list_cnt, false);
+		for(int i=0;i<sp_list_cnt;i++)
+		{
+			Json::Value t_data = sp_list[i];
+			string t_type = t_data["type"].asString();
+			NSDS_SS(kSDS_GI_shopStartPack_int1_type_s, i+1, t_type, false);
+			NSDS_SS(kSDS_GI_shopStartPack_int1_title_s, i+1, t_data["title"].asString(), false);
+			GoodsType key_type = mySGD->getGoodsKeyToType(t_type);
+			if(key_type == kGoodsType_ruby || key_type == kGoodsType_gold || key_type == kGoodsType_heart)
+			{
+				NSDS_SI(kSDS_GI_shopStartPack_int1_viewNumber_i, i+1, t_data["viewNumber"].asInt(), false);
+			}
+		}
+		
+		Json::Value eventPack = result_data["eventPack"];
+		bool is_have_eventPack = eventPack["data"]["isHave"].asBool();
+		NSDS_SB(kSDS_GI_shopEventPack_isHave_b, is_have_eventPack, false);
+		if(is_have_eventPack)
+		{
+			NSDS_SI(kSDS_GI_shopEventPack_no_i, eventPack["no"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_pID_s, eventPack["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_exchangeID_s, eventPack["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_startDate_s, eventPack["startDate"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_endDate_s, eventPack["endDate"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventPack_startTime_i, eventPack["startTime"].asInt(), false);
+			NSDS_SI(kSDS_GI_shopEventPack_endTime_i, eventPack["endTime"].asInt(), false);
+			
+			Json::Value ep_data = eventPack["data"];
+			NSDS_SS(kSDS_GI_shopEventPack_title_s, ep_data["title"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_content_s, ep_data["content"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_salePercent_s, ep_data["percent"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventPack_isJustOne_b, ep_data["isJustOne"].asBool(), false);
+			
+			Json::Value ep_price = ep_data["price"];
+			NSDS_SS(kSDS_GI_shopEventPack_PriceOriginal_s, ep_price["original"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_PriceSale_s, ep_price["sale"].asString(), false);
+			
+			Json::Value ep_list = ep_data["list"];
+			int ep_list_cnt = ep_list.size();
+			NSDS_SI(kSDS_GI_shopEventPack_listCnt_i, ep_list_cnt, false);
+			for(int i=0;i<ep_list_cnt;i++)
+			{
+				Json::Value t_data = ep_list[i];
+				string t_type = t_data["type"].asString();
+				NSDS_SS(kSDS_GI_shopEventPack_int1_type_s, i+1, t_type, false);
+				NSDS_SS(kSDS_GI_shopEventPack_int1_title_s, i+1, t_data["title"].asString(), false);
+				GoodsType key_type = mySGD->getGoodsKeyToType(t_type);
+				if(key_type == kGoodsType_ruby || key_type == kGoodsType_gold || key_type == kGoodsType_heart)
+				{
+					NSDS_SI(kSDS_GI_shopEventPack_int1_viewNumber_i, i+1, t_data["viewNumber"].asInt(), false);
+				}
+			}
+		}
+		
+		
 		NSDS_SB(kSDS_GI_shop_isEvent_b, result_data["event"].asBool(), false);
 		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
 	}
@@ -1772,7 +1844,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		reader1.parse(result_data["data"].asString(), data1);
 		
 		myDSH->resetDSH();
-		myDSH->loadAllUserData(result_data);
+//		myDSH->loadAllUserData(result_data);
 		
 		if(myDSH->getStringForKey(kDSH_Key_nick) != result_data["nick"].asString())
 		{
@@ -3647,7 +3719,7 @@ void TitleRenewalScene::joinAction()
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
-										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+//										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										
 										 
@@ -3677,7 +3749,7 @@ void TitleRenewalScene::joinAction()
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
 										 
-										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+//										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
 									 }
