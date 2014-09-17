@@ -644,6 +644,14 @@ bool FailPopup::init()
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
+	if(mySD->getSilType() == mySGD->getIntroduceStage() && mySGD->getIntroducerID() != "0" && mySGD->getIntroducerID() != "-1")
+	{
+		Json::Value t_param;
+		t_param["memberID"] = myHSP->getSocialID();
+		t_param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerCompleteReward);
+		send_command_list.push_back(CommandParam("completeIntroducer", t_param, json_selector(this, FailPopup::resultCompleteIntroducer)));
+	}
+	
 	mySGD->setUserdataAchieveNoFail(0);
 	
 	for(int i=kAchievementCode_fail1;i<=kAchievementCode_fail3;i++)
@@ -705,6 +713,14 @@ bool FailPopup::init()
 	addChild(curtain_node, kZ_FP_popup+5);
 	
 	return true;
+}
+
+void FailPopup::resultCompleteIntroducer(Json::Value result_data)
+{
+	if(result_data["result"]["code"] == GDSUCCESS)
+	{
+		mySGD->setIntroducerID("-1");
+	}
 }
 
 void FailPopup::onEnterTransitionDidFinish()

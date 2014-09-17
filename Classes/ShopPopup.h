@@ -140,7 +140,8 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
-	void buyStartPack(CCObject* sender, CCControlEvent t_event);
+	void buyStartPack(CCObject* sender);
+	void buyEventPack(CCObject* sender);
 	
 	void resultSetUserData(Json::Value result_data);
 	
@@ -180,6 +181,7 @@ private:
 	
 	void requestItemDelivery();
 	void requestItemDeliveryStartPack();
+	void requestItemDeliveryEventPack();
 };
 
 #endif /* defined(__DGproto__ShopPopup__) */
