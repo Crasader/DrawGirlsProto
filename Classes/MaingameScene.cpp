@@ -5082,7 +5082,7 @@ void Maingame::continueAction()
 {
 	myLog->addLog(kLOG_action_continue, -1);
 	
-	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+//	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 	
 	startControl();
 	mySGD->is_paused = false;

@@ -331,7 +331,7 @@ void StartSettingPopup::setMain()
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 							   {
-								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
 							   }
 						   });
 		
@@ -2460,7 +2460,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	
 	vector<CommandParam> t_command_list;
 	t_command_list.clear();
-	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
+//	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
 	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
 	{
@@ -2564,22 +2564,22 @@ void StartSettingPopup::acceptStartAction()
 	
 	if(mySGD->getRemoveMessageMailNo() != 0 && mySGD->getRemoveMessageMemberId() != 0)
 	{
-		vector<CommandParam> command_list;
-		
-		////////////////////////////// ksks
-		Json::Value p;
-		p["no"] = mySGD->getRemoveMessageMailNo();
-		p["memberID"] = mySGD->getRemoveMessageMemberId();
-		CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
-		command_list.push_back(ksooParam);
-		// create message remove command
-		// command_list.push_back(message remove command);
-		
-		//////////////////////////////
-		
-		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalAcceptStartAction)));
-		
-		hspConnector::get()->command(command_list);
+//		vector<CommandParam> command_list;
+//		
+//		////////////////////////////// ksks
+//		Json::Value p;
+//		p["no"] = mySGD->getRemoveMessageMailNo();
+//		p["memberID"] = mySGD->getRemoveMessageMemberId();
+//		CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+//		command_list.push_back(ksooParam);
+//		// create message remove command
+//		// command_list.push_back(message remove command);
+//		
+//		//////////////////////////////
+//		
+//		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalAcceptStartAction)));
+//		
+//		hspConnector::get()->command(command_list);
 	}
 	else
 	{

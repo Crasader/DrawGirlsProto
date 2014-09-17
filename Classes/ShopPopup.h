@@ -28,7 +28,7 @@ enum ShopCode{
 	kSC_character,
 	kSC_card,
 	kSC_p1,
-	kSC_startPack
+	kSC_eventPack
 };
 
 enum ShopBeforeCode{
@@ -42,6 +42,7 @@ class HeartTime;
 class LoadingLayer;
 class TouchSuctionLayer;
 class CommonButton;
+class KSLabelTTF;
 class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -113,7 +114,9 @@ private:
 	CCMenuItem* gold_menu;
 	CCMenuItem* heart_menu;
 	CCMenuItem* p1_menu;
-	CCMenuItem* startPack_menu;
+	CCMenuItem* eventPack_menu;
+	CCNode* eventPack_node;
+	KSLabelTTF* time_label;
 	
 //	CCMenu* tab_menu;
 	
@@ -136,6 +139,8 @@ private:
 	
 	void hidePopup();
 	void endHidePopup();
+	
+	void buyStartPack(CCObject* sender, CCControlEvent t_event);
 	
 	void resultSetUserData(Json::Value result_data);
 	
@@ -174,6 +179,7 @@ private:
 	virtual void registerWithTouchDispatcher();
 	
 	void requestItemDelivery();
+	void requestItemDeliveryStartPack();
 };
 
 #endif /* defined(__DGproto__ShopPopup__) */

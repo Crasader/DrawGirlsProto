@@ -423,6 +423,14 @@ bool FailPopup::init()
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
+																									  if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+																									  {
+																										  chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+																										  std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+																										  myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+																										  CCLOG("saved StartPack time : %ld", now_time_t);
+																									  }
+																									  
 																									  if(is_today_mission_success)
 																									  {
 																										  mySGD->is_today_mission_first = false;
@@ -443,6 +451,14 @@ bool FailPopup::init()
 			
 			addChild(KSTimer::create(0.1f, [=]()
 									 {
+										 if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+										 {
+											 chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+											 std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+											 myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+											 CCLOG("saved StartPack time : %ld", now_time_t);
+										 }
+										 
 										 if(is_today_mission_success)
 										 {
 											 mySGD->is_today_mission_first = false;
@@ -699,7 +715,8 @@ void FailPopup::onEnterTransitionDidFinish()
 	
 	tryTransaction(t_loading);
 	
-	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
+	is_saved_user_data = true;
+//	myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 }
 
 void FailPopup::controlButtonAction(CCObject* sender, CCControlEvent t_event)
@@ -1470,7 +1487,7 @@ void FailPopup::resultSavedUserData(Json::Value result_data)
 	}
 	else
 	{
-		myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
+//		myDSH->saveAllUserData(json_selector(this, FailPopup::resultSavedUserData));
 	}
 }
 

@@ -2233,16 +2233,16 @@ void Jack::dieEffect()
 			}
 			else
 			{
-				if(mySGD->is_endless_mode || continue_on_count < 2)
-				{
-					continue_on_count++;
+//				if(mySGD->is_endless_mode || continue_on_count < 2)
+//				{
+					continue_on_count = continue_on_count.getV() + 1;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
-				}
-				else
-				{
-					jackImg->setVisible(false);
-					endGame();
-				}
+//				}
+//				else
+//				{
+//					jackImg->setVisible(false);
+//					endGame();
+//				}
 			}
 		}
 	}
@@ -2456,6 +2456,11 @@ CCNode* Jack::getJack()
 	return this;
 }
 
+int Jack::getContinueOnCount()
+{
+	return continue_on_count.getV();
+}
+
 void Jack::myInit()
 {
 	continue_on_count = 0;
@@ -2487,6 +2492,7 @@ void Jack::myInit()
 	myGD->V_V["Jack_positionRefresh"] = std::bind(&Jack::positionRefresh, this);
 	myGD->B_V["Jack_isDie"] = std::bind(&Jack::isDieJack, this);
 	myGD->CCN_V["Jack_getJack"] = std::bind(&Jack::getJack, this);
+	myGD->I_V["Jack_getContinueOnCount"] = std::bind(&Jack::getContinueOnCount, this);
 
 
 	isMoving = false;

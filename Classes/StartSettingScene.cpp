@@ -275,7 +275,7 @@ void StartSettingScene::setMain()
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 		}
 	}
-	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
 	
 	if(!show_item_popup.empty())
 	{
@@ -718,8 +718,8 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 //							   mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold)-missile_level*1000);
 							   myDSH->setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter), missile_level);
 							   
-							   myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
-							   
+//							   myDSH->saveUserData({kSaveUserData_Key_gold, kSaveUserData_Key_character}, nullptr);
+				
 							   missile_level++;
 							   missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
 							   missile_data_power->setString(CCString::createWithFormat("파워 %d", mySGD->getSelectedCharacterHistory().power.getV())->getCString());
@@ -813,7 +813,7 @@ void StartSettingScene::startItemGacha()
 	CCLOG("start item gacha");
 	
 //	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) - 1000);
-	myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
+//	myDSH->saveUserData({kSaveUserData_Key_gold}, nullptr);
 	
 	if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 		selected_gacha_item = kIC_emptyBegin;
@@ -2078,7 +2078,7 @@ void StartSettingScene::realStartAction()
 {
 	finalSetting();
 	
-	myDSH->saveAllUserData(json_selector(this, StartSettingScene::finalStartAction));
+//	myDSH->saveAllUserData(json_selector(this, StartSettingScene::finalStartAction));
 }
 
 void StartSettingScene::acceptStartAction()
@@ -2104,7 +2104,7 @@ void StartSettingScene::acceptStartAction()
 		
 		//////////////////////////////
 		
-		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingScene::finalAcceptStartAction)));
+//		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingScene::finalAcceptStartAction)));
 		
 		hspConnector::get()->command(command_list);
 	}
@@ -2328,13 +2328,13 @@ void StartSettingScene::buySuccessItem(int t_clicked_item_idx, int cnt)
 		is_selected_item[t_clicked_item_idx] = true;
 	}
 	
-	vector<SaveUserData_Key> save_userdata_list;
-	
-	save_userdata_list.push_back(kSaveUserData_Key_gold);
-	save_userdata_list.push_back(kSaveUserData_Key_star);
-	save_userdata_list.push_back(kSaveUserData_Key_item);
-	
-	myDSH->saveUserData(save_userdata_list, nullptr);
+//	vector<SaveUserData_Key> save_userdata_list;
+//	
+//	save_userdata_list.push_back(kSaveUserData_Key_gold);
+//	save_userdata_list.push_back(kSaveUserData_Key_star);
+//	save_userdata_list.push_back(kSaveUserData_Key_item);
+//	
+//	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	is_menu_enable = true;
 }

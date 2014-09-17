@@ -3356,7 +3356,7 @@ void PlayUI::gachaOnOnePercent (float t_percent)
 	
 	save_userdata_list.push_back(kSaveUserData_Key_star);
 	
-	myDSH->saveUserData(save_userdata_list, nullptr);
+//	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	beforePercentage = (int(t_percent*1000))^t_tta;
 	m_areaGage->setPercentage(t_percent);
@@ -4323,7 +4323,7 @@ void PlayUI::continueAction ()
 	
 	save_userdata_list.push_back(kSaveUserData_Key_gold);
 	
-	myDSH->saveUserData(save_userdata_list, nullptr);
+//	myDSH->saveUserData(save_userdata_list, nullptr);
 	
 	AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_time_noti.mp3");
