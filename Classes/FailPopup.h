@@ -190,6 +190,8 @@ private:
 	void resultGetRank(Json::Value result_data);
 	bool is_go_to_mainflow;
 	void resultGetTime(Json::Value result_data);
+	
+	void resultCompleteIntroducer(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__FailPopup__) */

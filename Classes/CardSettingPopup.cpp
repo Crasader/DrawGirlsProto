@@ -820,7 +820,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			save_userdata_list.push_back(kSaveUserData_Key_cardsInfo);
 			save_userdata_list.push_back(kSaveUserData_Key_selectedCard);
 			
-			myDSH->saveUserData(save_userdata_list, nullptr);
+//			myDSH->saveUserData(save_userdata_list, nullptr);
 			
 			
 			if(mySGD->before_cardsetting == kSceneCode_PuzzleMapScene)

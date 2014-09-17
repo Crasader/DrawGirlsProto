@@ -2799,7 +2799,7 @@ void CrashLazerWrapper::myAction()
 			
 			float t_scale = m_crashSize/30.f;
 
-			crashRect = CCRectMake(-30, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale)); //x좌표에 -30추가, 무조건 1자로 깍도록
+			crashRect = CCRectMake(0, (-m_crashSize + 10*t_scale), 460, (m_crashSize + 10*t_scale)); //x좌표에 -30추가, 무조건 1자로 깍도록
 			//				crashRect = CCRectMake(0, -60/2 + 10, 460, +60/2 + 10);
 			lineCrashMap(c_sp, angle, 460, 60);
 			

@@ -44,6 +44,7 @@
 #include "TouchSuctionLayer.h"
 #include "LabelTTFMarquee.h"
 #include "FiveRocksCpp.h"
+#include <chrono>
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -1489,6 +1490,14 @@ void ClearPopup::endTakeCard()
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
+																									  if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+																										{
+																											chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+																											std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+																											myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+																											CCLOG("saved StartPack time : %ld", now_time_t);
+																										}
+																									  
 																									  if(is_today_mission_success)
 																									  {
 																										  mySGD->is_today_mission_first = false;
@@ -1510,6 +1519,14 @@ void ClearPopup::endTakeCard()
 			
 			addChild(KSTimer::create(0.1f, [=]()
 									 {
+										 if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+										 {
+											 chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+											 std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+											 myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+											 CCLOG("saved StartPack time : %ld", now_time_t);
+										 }
+										 
 										 if(is_today_mission_success)
 										 {
 											 mySGD->is_today_mission_first = false;
@@ -1998,7 +2015,7 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 	}
 	else
 	{
-		myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+//		myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
 	}
 }
 

@@ -32,7 +32,7 @@ enum KindTutorialType
 class TouchSuctionLayer;
 class KSLabelTTF;
 
-class TypingBox : public CCLayer, public CCScrollViewDelegate, public BackKeyBase
+class TypingBox : public CCLayer, public CCScrollViewDelegate//, public BackKeyBase
 {
 public:
 	

@@ -3153,6 +3153,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "highScore";
 	else if(t_type == kUserdataType_highPiece)
 		return_value = "highPiece";
+	else if(t_type == kUserdataType_onlyOneBuyPack)
+		return_value = "onlyOneBuyPack";
 	
 	else if(t_type == kUserdataType_endlessData_ingWin)
 		return_value = "ing_win";
@@ -3900,6 +3902,19 @@ void StarGoldData::setUserdataHighPiece(int t_i)
 	}
 }
 int StarGoldData::getUserdataHighPiece(){	return userdata_storage[kUserdataType_highPiece].getV();	}
+
+void StarGoldData::setUserdataOnlyOneBuyPack(int t_i)
+{
+	if(userdata_storage[kUserdataType_onlyOneBuyPack].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_onlyOneBuyPack;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataOnlyOneBuyPack(){	return userdata_storage[kUserdataType_onlyOneBuyPack].getV();	}
 
 void StarGoldData::setUserdataEndlessIngWin(int t_i)
 {

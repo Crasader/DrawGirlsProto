@@ -238,9 +238,11 @@ public:
 	
 	CCNode* getJack();
 	
+	int getContinueOnCount();
+	
 private:
 	
-	int continue_on_count;
+	KSProtectVar<int> continue_on_count;
 	
 	CCSprite* touchPointSpr_byJoystick;
 	CCSprite* directionSpr_byJoystick;

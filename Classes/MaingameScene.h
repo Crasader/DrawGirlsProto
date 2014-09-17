@@ -66,7 +66,7 @@ class CumberShowWindow;
 class EffectSprite;
 class FloatingCoinParent;
 class StartMapGacha;
-class Maingame : public CCLayer, public BackKeyBase
+class Maingame : public CCLayer//, public BackKeyBase
 {
 public:
     virtual bool init();

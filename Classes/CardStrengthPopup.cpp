@@ -1160,7 +1160,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			addChild(loading_label, kCardStrengthPopupZorder_popup);
 			
 			
-			myDSH->saveUserData({kSaveUserData_Key_cardsInfo, kSaveUserData_Key_star}, json_selector(this, CardStrengthPopup::resultStrength));
+//			myDSH->saveUserData({kSaveUserData_Key_cardsInfo, kSaveUserData_Key_star}, json_selector(this, CardStrengthPopup::resultStrength));
 			
 			setOfferingNode(0);
 		}
@@ -1234,7 +1234,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 			addChild(loading_label, kCardStrengthPopupZorder_popup);
 			
 			
-			myDSH->saveUserData({kSaveUserData_Key_cardsInfo, kSaveUserData_Key_gold}, json_selector(this, CardStrengthPopup::resultStrength));
+//			myDSH->saveUserData({kSaveUserData_Key_cardsInfo, kSaveUserData_Key_gold}, json_selector(this, CardStrengthPopup::resultStrength));
 			
 			setOfferingNode(0);
 		}
@@ -1267,7 +1267,7 @@ void CardStrengthPopup::menuAction(CCObject* pSender)
 void CardStrengthPopup::replayAction(CCObject* sender)
 {
 	replay_menu->removeFromParent();
-	myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
+//	myDSH->saveUserData({kSaveUserData_Key_cardsInfo}, json_selector(this, CardStrengthPopup::resultStrength));
 }
 
 void CardStrengthPopup::resultStrength(Json::Value result_data)

@@ -726,6 +726,21 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopP1_int1_sale_s)				rv = "sp1%dsale";
 	else if(t_key == kSDS_GI_shopP1_int1_exchangeID_s)			rv = "sp1%dxcID";
 	else if(t_key == kSDS_GI_shop_isEvent_b)					rv = "sIsEv";
+	else if(t_key == kSDS_GI_shopStartPack_no_i)				rv = "sspNo";
+	else if(t_key == kSDS_GI_shopStartPack_pID_s)				rv = "sspPID";
+	else if(t_key == kSDS_GI_shopStartPack_exchangeID_s)		rv = "sspXcID";
+	else if(t_key == kSDS_GI_shopStartPack_expireSec_i)			rv = "sspExpireSec";
+	else if(t_key == kSDS_GI_shopStartPack_img_s)				rv = "sspImg";
+	else if(t_key == kSDS_GI_shopEventPack_isHave_b)			rv = "sepIsHave";
+	else if(t_key == kSDS_GI_shopEventPack_no_i)				rv = "sepNo";
+	else if(t_key == kSDS_GI_shopEventPack_pID_s)				rv = "sepPID";
+	else if(t_key == kSDS_GI_shopEventPack_exchangeID_s)		rv = "sepXcID";
+	else if(t_key == kSDS_GI_shopEventPack_startDate_s)			rv = "sepStartDate";
+	else if(t_key == kSDS_GI_shopEventPack_endDate_s)			rv = "sepEndDate";
+	else if(t_key == kSDS_GI_shopEventPack_startTime_i)			rv = "sepStartTime";
+	else if(t_key == kSDS_GI_shopEventPack_endTime_i)			rv = "sepEndTime";
+	else if(t_key == kSDS_GI_shopEventPack_isJustOne_b)			rv = "sepIsJustOne";
+	else if(t_key == kSDS_GI_shopEventPack_img_s)				rv = "sepImg";
 	else if(t_key == kSDS_GI_serial_int1_cardNumber_i)			rv = "srl%dcd";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";

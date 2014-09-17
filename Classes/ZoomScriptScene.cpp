@@ -21,6 +21,7 @@
 #include "RankUpPopup.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "AlertEngine.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -52,11 +53,11 @@ bool ZoomScript::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		CCNode* t_node = CCNode::create();
-		menuAction(t_node);
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		CCNode* t_node = CCNode::create();
+//		menuAction(t_node);
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -929,7 +930,7 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::nextScene()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	if(mySGD->is_endless_mode)
 	{
@@ -1621,16 +1622,25 @@ void ZoomScript::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
 	ccTouchesEnded(pTouches, pEvent);
 }
 
+void ZoomScript::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
 void ZoomScript::keyBackClicked()
 {
-	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
-	{
-		onBackKeyAction();
-		
-		setBackKeyFunc([=](){
-			CCNode* t_node = CCNode::create();
-			menuAction(t_node);
-		});
-		setBackKeyEnabled(true);
-	}
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
+//	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
+//	{
+//		onBackKeyAction();
+//		
+//		setBackKeyFunc([=](){
+//			CCNode* t_node = CCNode::create();
+//			menuAction(t_node);
+//		});
+//		setBackKeyEnabled(true);
+//	}
 }

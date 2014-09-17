@@ -215,6 +215,7 @@ enum UserdataType
 	kUserdataType_selectedCharNO,
 	kUserdataType_highScore,
 	kUserdataType_highPiece,
+	kUserdataType_onlyOneBuyPack,
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
@@ -695,6 +696,8 @@ public:
 	int getUserdataHighScore();
 	void setUserdataHighPiece(int t_i);
 	int getUserdataHighPiece();
+	void setUserdataOnlyOneBuyPack(int t_i);
+	int getUserdataOnlyOneBuyPack();
 	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();

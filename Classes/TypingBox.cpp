@@ -281,5 +281,5 @@ void TypingBox::scrollViewDidZoom(CCScrollView* view)
 
 void TypingBox::keyBackClicked(void)
 {
-	onBackKeyAction();
+//	onBackKeyAction();
 }

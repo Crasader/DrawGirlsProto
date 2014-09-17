@@ -746,26 +746,26 @@ void BeautyStoneSynthesisPopup::menuAction(CCObject* pSender)
 									 t_suction->addChild(loading_label);
 									 
 									 
-									 myDSH->saveAllUserData([=](Json::Value result_data)
-															{
-																if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																{
-																	
-																}
-																else
-																{
-																	
-																}
-																
-																t_suction->removeFromParent();
-																setStrengthNode(-1);
-																offering_table->reloadData();
-																setOfferingNode(-1);
-																
-																addChild(ASPopupView::getCommonNoti(-250, "합성 성공!!"), kBeautyStoneSynthesisPopupZorder_popup);
-																
-																is_menu_enable = true;
-															});
+//									 myDSH->saveAllUserData([=](Json::Value result_data)
+//															{
+//																if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//																{
+//																	
+//																}
+//																else
+//																{
+//																	
+//																}
+//																
+//																t_suction->removeFromParent();
+//																setStrengthNode(-1);
+//																offering_table->reloadData();
+//																setOfferingNode(-1);
+//																
+//																addChild(ASPopupView::getCommonNoti(-250, "합성 성공!!"), kBeautyStoneSynthesisPopupZorder_popup);
+//																
+//																is_menu_enable = true;
+//															});
 									 t_popup->removeFromParent();
 								 });
 			

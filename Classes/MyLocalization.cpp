@@ -1132,6 +1132,9 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("추천인 입력 보상"), kMyLocalKey_introducerInputReward);
 	ko->setObject(CCString::create("추천인 일정 스테이지 달성 보상"), kMyLocalKey_introducerCompleteReward);
 	
+	ko->setObject(CCString::create("젬 이어하기"), kMyLocalKey_onContinueGem);
+	ko->setObject(CCString::create("부활석 이어하기"), kMyLocalKey_onContinueP1);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

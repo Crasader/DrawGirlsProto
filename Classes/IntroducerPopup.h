@@ -21,7 +21,7 @@ using namespace std;
 class LoadingLayer;
 class TouchSuctionLayer;
 class KSLabelTTF;
-class IntroducerPopup : public CCLayer, public CCEditBoxDelegate, public BackKeyBase
+class IntroducerPopup : public CCLayer, public CCEditBoxDelegate//, public BackKeyBase
 {
 public:
 	static IntroducerPopup* create(int t_touch_priority, function<void()> t_end_func, function<void()> t_success_func);
