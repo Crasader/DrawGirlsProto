@@ -56,6 +56,8 @@ private:
 	CCScale9Sprite* script_case;
 	
 	CommonButton* next_button;
+	
+	int touch_mode;
 	KSLabelTTF* showtime_back;
 	MyNode* second_img;
 	KSLabelTTF* showtime_morphing_label;
@@ -79,6 +81,7 @@ private:
 	
 	void nextScene();
 	
+	bool is_morphing;
 	CCSprite* zoom_img;
 	
 	
