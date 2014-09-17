@@ -131,7 +131,7 @@ void KsLocal::ko()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 	
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
@@ -222,7 +222,7 @@ void KsLocal::en()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
@@ -312,7 +312,7 @@ void KsLocal::ja()
 	obj[LK::kUnlinkAccount1] = "<font color=#FF00000 newline=14>%s 와의 연동을 해제합니다.</font>";
 	obj[LK::kLinkAccount1] = "<font>%s 와 연동합니다.</font>";
 
-	obj[LK::kFriendList] = "친구목록";
+	obj[LK::kFriendList] = "친구";
 	obj[LK::kFriendListTitle] = "친구목록";
 	obj[LK::kFriendListMenu] = "친구목록";
 	obj[LK::kFriendAddMenu] = "친구추가";
