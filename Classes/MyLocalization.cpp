@@ -169,8 +169,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("자석"), kMyLocalKey_magnetTitle);
 	ko->setObject(CCString::create("골드와 아이템을 빨아들입니다."), kMyLocalKey_magnetContent);
 	ko->setObject(CCString::create("아이템 뽑기"), kMyLocalKey_itemGachaTitle);
-	ko->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	ko->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	ko->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	ko->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	ko->setObject(CCString::create("부활 아이템에 도전하세요!"), kMyLocalKey_itemGachaContent);
 	ko->setObject(CCString::create("젬상점"), kMyLocalKey_rubyShop);
 	ko->setObject(CCString::create("골드상점"), kMyLocalKey_goldShop);
@@ -1209,8 +1209,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	en->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	en->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
-	en->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	en->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	en->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	en->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	en->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	en->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	en->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
@@ -2180,8 +2180,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	ja->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	ja->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
-	ja->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	ja->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	ja->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	ja->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	ja->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	ja->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	ja->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);

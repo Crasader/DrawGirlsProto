@@ -1522,193 +1522,193 @@ bool ShopPopup::init()
 	time_label = NULL;
 	
 	
-//	chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-//	std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
-//	///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
-//	time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
-//	
-//	int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
-//	
-//	bool is_on_time_startPack = sub_time <= expireSec;
-//	bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-//	///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
-//	bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
-//	bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
-//	bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-//	bool is_on_time_eventPack = false;
-//	
-//	tm* now_tm = localtime(&now_time_t);
-//	string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
-//	string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
-//	
-//	int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
-//	int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
-//	
-//	if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
-//	   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
-//	   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
-//	   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
-//	{
-//		is_on_time_eventPack = true;
-//	}
-//	
-//	bool is_useable_eventPack = true;
-//	if(is_have_eventPack && is_on_time_eventPack)
-//	{
-//		if(is_just_one)
-//		{
-//			if(!is_buyed_eventPack)
-//				is_useable_eventPack = true;
-//			else
-//				is_useable_eventPack = false;
-//		}
-//		else
-//			is_useable_eventPack = true;
-//	}
-//	else
-//	{
-//		is_useable_eventPack = false;
-//	}
-//	
-//	if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) // 스타트팩을 구입한적 없고 스타트팩 시간이 맞는 경우 || 이벤트팩이 존재하고 해당 이벤트팩의 시간이 맞는 경우
-//	{
-//		CCSprite* n_eventPack_img = CCSprite::create("shoptap_down.png");
-//		KSLabelTTF* n_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
-//		n_eventPack_label->disableOuterStroke();
-//		n_eventPack_label->setPosition(ccpFromSize(n_eventPack_img->getContentSize()/2.f) + ccp(0,2));
-//		n_eventPack_img->addChild(n_eventPack_label);
-//		
-//		CCSprite* s_eventPack_img = CCSprite::create("shoptap_down.png");
-//		s_eventPack_img->setColor(ccGRAY);
-//		KSLabelTTF* s_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
-//		s_eventPack_label->disableOuterStroke();
-//		s_eventPack_label->setColor(ccGRAY);
-//		s_eventPack_label->setPosition(ccpFromSize(s_eventPack_img->getContentSize()/2.f) + ccp(0,2));
-//		s_eventPack_img->addChild(s_eventPack_label);
-//		
-//		CCSprite* d_eventPack_img = CCSprite::create("shoptap_up.png");
-//		KSLabelTTF* d_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
-//		d_eventPack_label->disableOuterStroke();
-//		d_eventPack_label->setPosition(ccpFromSize(d_eventPack_img->getContentSize()/2.f) + ccp(0,2));
-//		d_eventPack_img->addChild(d_eventPack_label);
-//		
-//		
-//		eventPack_menu = CCMenuItemSprite::create(n_eventPack_img, s_eventPack_img, d_eventPack_img, this, menu_selector(ShopPopup::menuAction));
-//		eventPack_menu->setTag(kSP_MT_eventPack);
-//		eventPack_menu->setPosition(getContentPosition(kSP_MT_eventPack));
-//		tab_menu->addChild(eventPack_menu, kSP_Z_content);
-//		
-//		
-//		
-//		if(!is_buyed_startPack && is_on_time_startPack)// 스타트팩을 구입한적 없고 스타트팩 시간이 맞는경우
-//		{
-//			time_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
-//			time_label->setPosition(getContentPosition(kSP_MT_eventPack) + ccp(0,20));
-//			main_case->addChild(time_label);
-//
-//			CCSprite* time_back = CCSprite::create("mainflow_new3.png");
-//			time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
-//			time_label->addChild(time_back, -1);
-//	
-//			time_label->addChild(KSSchedule::create([=](float dt)
-//							   {
-//								   chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-//								   std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+	chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+	std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+	///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+	time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+	
+	int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+	
+	bool is_on_time_startPack = sub_time <= expireSec;
+	bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+	bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+	bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+	bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	bool is_on_time_eventPack = false;
+	
+	tm* now_tm = localtime(&now_time_t);
+	string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+	string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+	
+	int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+	int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+	
+	if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+	   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+	   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+	   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+	{
+		is_on_time_eventPack = true;
+	}
+	
+	bool is_useable_eventPack = true;
+	if(is_have_eventPack && is_on_time_eventPack)
+	{
+		if(is_just_one)
+		{
+			if(!is_buyed_eventPack)
+				is_useable_eventPack = true;
+			else
+				is_useable_eventPack = false;
+		}
+		else
+			is_useable_eventPack = true;
+	}
+	else
+	{
+		is_useable_eventPack = false;
+	}
+	
+	if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) // 스타트팩을 구입한적 없고 스타트팩 시간이 맞는 경우 || 이벤트팩이 존재하고 해당 이벤트팩의 시간이 맞는 경우
+	{
+		CCSprite* n_eventPack_img = CCSprite::create("shoptap_down.png");
+		KSLabelTTF* n_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		n_eventPack_label->disableOuterStroke();
+		n_eventPack_label->setPosition(ccpFromSize(n_eventPack_img->getContentSize()/2.f) + ccp(0,2));
+		n_eventPack_img->addChild(n_eventPack_label);
+		
+		CCSprite* s_eventPack_img = CCSprite::create("shoptap_down.png");
+		s_eventPack_img->setColor(ccGRAY);
+		KSLabelTTF* s_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		s_eventPack_label->disableOuterStroke();
+		s_eventPack_label->setColor(ccGRAY);
+		s_eventPack_label->setPosition(ccpFromSize(s_eventPack_img->getContentSize()/2.f) + ccp(0,2));
+		s_eventPack_img->addChild(s_eventPack_label);
+		
+		CCSprite* d_eventPack_img = CCSprite::create("shoptap_up.png");
+		KSLabelTTF* d_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		d_eventPack_label->disableOuterStroke();
+		d_eventPack_label->setPosition(ccpFromSize(d_eventPack_img->getContentSize()/2.f) + ccp(0,2));
+		d_eventPack_img->addChild(d_eventPack_label);
+		
+		
+		eventPack_menu = CCMenuItemSprite::create(n_eventPack_img, s_eventPack_img, d_eventPack_img, this, menu_selector(ShopPopup::menuAction));
+		eventPack_menu->setTag(kSP_MT_eventPack);
+		eventPack_menu->setPosition(getContentPosition(kSP_MT_eventPack));
+		tab_menu->addChild(eventPack_menu, kSP_Z_content);
+		
+		
+		
+		if(!is_buyed_startPack && is_on_time_startPack)// 스타트팩을 구입한적 없고 스타트팩 시간이 맞는경우
+		{
+			time_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
+			time_label->setPosition(getContentPosition(kSP_MT_eventPack) + ccp(0,20));
+			main_case->addChild(time_label);
+
+			CCSprite* time_back = CCSprite::create("mainflow_new3.png");
+			time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
+			time_label->addChild(time_back, -1);
+	
+			time_label->addChild(KSSchedule::create([=](float dt)
+							   {
+								   chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+								   std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+								   
+								   time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+								   
+								   int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+								   
+								   if(sub_time <= expireSec)
+									{
+										string show_time = "";
+										int e_s_sub_time = expireSec - sub_time;
+										show_time += ccsf("%02d:", e_s_sub_time/(60*60));
+										e_s_sub_time = e_s_sub_time%(60*60);
+										show_time += ccsf("%02d:", e_s_sub_time/60);
+										e_s_sub_time = e_s_sub_time%60;
+										show_time += ccsf("%02d", e_s_sub_time);
+										
+										time_label->setString(show_time.c_str());
+										time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
+										return true;
+									}
+								   else
+									{
+										time_label->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
+										eventPack_menu->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
+										return false;
+									}
+								   
+//								   tm* sub_time_tm = gmtime(&sub_time);
 //								   
-//								   time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
-//								   
-//								   int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
-//								   
-//								   if(sub_time <= expireSec)
-//									{
-//										string show_time = "";
-//										int e_s_sub_time = expireSec - sub_time;
-//										show_time += ccsf("%02d:", e_s_sub_time/(60*60));
-//										e_s_sub_time = e_s_sub_time%(60*60);
-//										show_time += ccsf("%02d:", e_s_sub_time/60);
-//										e_s_sub_time = e_s_sub_time%60;
-//										show_time += ccsf("%02d", e_s_sub_time);
-//										
-//										time_label->setString(show_time.c_str());
-//										time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
-//										return true;
-//									}
-//								   else
-//									{
-//										time_label->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
-//										eventPack_menu->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
-//										return false;
-//									}
-//								   
-////								   tm* sub_time_tm = gmtime(&sub_time);
-////								   
-////								   int	tm_sec;		/* seconds after the minute [0-60] */
-////								   int	tm_min;		/* minutes after the hour [0-59] */
-////								   int	tm_hour;	/* hours since midnight [0-23] */
-////								   int	tm_mday;	/* day of the month [1-31] */
-////								   int	tm_mon;		/* months since January [0-11] */
-////								   int	tm_year;	/* years since 1900 */
-////								   int	tm_wday;	/* days since Sunday [0-6] */
-////								   int	tm_yday;	/* days since January 1 [0-365] */
-////								   int	tm_isdst;	/* Daylight Savings Time flag */
-////								   long	tm_gmtoff;	/* offset from CUT in seconds */
-////								   char	*tm_zone;	/* timezone abbreviation */
-//							   }));
-//		}
-//		else if(is_useable_eventPack)
-//		{
-//			addChild(KSSchedule::create([=](float dt)
-//										{
-//											bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
-//											bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
-//											bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-//											bool is_on_time_eventPack = false;
-//											
-//											chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-//											std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
-//											
-//											tm* now_tm = localtime(&now_time_t);
-//											string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
-//											string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
-//											
-//											int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
-//											int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
-//											
-//											if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
-//											   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
-//											   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
-//											   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
-//											{
-//												is_on_time_eventPack = true;
-//											}
-//											
-//											bool is_useable_eventPack = true;
-//											if(is_have_eventPack && is_on_time_eventPack)
-//											{
-//												if(is_just_one)
-//												{
-//													if(!is_buyed_eventPack)
-//														is_useable_eventPack = true;
-//													else
-//														is_useable_eventPack = false;
-//												}
-//												else
-//													is_useable_eventPack = true;
-//											}
-//											else
-//											{
-//												is_useable_eventPack = false;
-//											}
-//											
-//											if(!is_useable_eventPack)
-//											{
-//												eventPack_menu->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
-//											}
-//											
-//											return is_useable_eventPack;
-//										}));
-//		}
-//	}
+//								   int	tm_sec;		/* seconds after the minute [0-60] */
+//								   int	tm_min;		/* minutes after the hour [0-59] */
+//								   int	tm_hour;	/* hours since midnight [0-23] */
+//								   int	tm_mday;	/* day of the month [1-31] */
+//								   int	tm_mon;		/* months since January [0-11] */
+//								   int	tm_year;	/* years since 1900 */
+//								   int	tm_wday;	/* days since Sunday [0-6] */
+//								   int	tm_yday;	/* days since January 1 [0-365] */
+//								   int	tm_isdst;	/* Daylight Savings Time flag */
+//								   long	tm_gmtoff;	/* offset from CUT in seconds */
+//								   char	*tm_zone;	/* timezone abbreviation */
+							   }));
+		}
+		else if(is_useable_eventPack)
+		{
+			addChild(KSSchedule::create([=](float dt)
+										{
+											bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+											bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+											bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+											bool is_on_time_eventPack = false;
+											
+											chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+											std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+											
+											tm* now_tm = localtime(&now_time_t);
+											string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+											string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+											
+											int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+											int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+											
+											if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+											   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+											   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+											   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+											{
+												is_on_time_eventPack = true;
+											}
+											
+											bool is_useable_eventPack = true;
+											if(is_have_eventPack && is_on_time_eventPack)
+											{
+												if(is_just_one)
+												{
+													if(!is_buyed_eventPack)
+														is_useable_eventPack = true;
+													else
+														is_useable_eventPack = false;
+												}
+												else
+													is_useable_eventPack = true;
+											}
+											else
+											{
+												is_useable_eventPack = false;
+											}
+											
+											if(!is_useable_eventPack)
+											{
+												eventPack_menu->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
+											}
+											
+											return is_useable_eventPack;
+										}));
+		}
+	}
 	
 	
 	
