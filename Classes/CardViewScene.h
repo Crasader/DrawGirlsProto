@@ -49,7 +49,7 @@ private:
 	
 	CommonButton* next_button;
 //	EffectSprite* safety_img;
-	
+	int touch_mode;
 	bool is_scrolling;
 	bool is_before_scrolling;
 	
@@ -62,7 +62,6 @@ private:
 	void nextScene();
 	
 	bool is_morphing;
-	int touch_mode;
 	CCSprite* zoom_img;
 	
 	CCSprite* morphing_img;

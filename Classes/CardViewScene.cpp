@@ -235,6 +235,21 @@ bool CardViewScene::init()
 		sound_menu->setPosition(sound_position);
 		addChild(sound_menu, kCV_Z_next_button);
 		
+		
+		
+		
+		
+		
+		
+		// 퍼즐씬 -> 카드자세히보기 에서 자동으로 생명의돌팝업뜨길래 쓴다고 눌렀는데 팝업창 닫히면서 죽음
+		
+		
+		
+		
+		
+		
+		
+		
 		if(buy_morphing)
 			buy_morphing->removeFromParent();
 		
@@ -635,7 +650,8 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 {
 	CCSetIterator iter;
 	CCTouch *touch;
-	touch_mode=1;
+	
+	touch_mode=0;
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
@@ -733,43 +749,6 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			if(multiTouchData.size() == 1)
 			{
 				
-				
-				//ccTouchMoved(touch,pEvent);
-				
-				
-				//				if(is_touched_menu)
-				//				{
-				//					next_button->ccTouchMoved(touch, pEvent);
-				//				}
-//
-//				
-//				if(is_spin_mode)
-//				{
-//					this->unschedule(schedule_selector(CardViewScene::moveAnimation));
-//					moveSpeed_p = CCPointZero;
-//					isAnimated = false;
-//					
-//					CCPoint rotate_sub = ccpSub(location, touch_p);
-//					
-//					float rotation_degree = first_img->getImageRotationDegree() + rotate_sub.x/5.f;
-//					if(rotation_degree > 60.f)
-//						rotation_degree = 60.f;
-//					else if(rotation_degree < -60.f)
-//						rotation_degree = -60.f;
-//					first_img->setImageRotationDegree(rotation_degree);
-//					
-//					float rotation_degreeX = first_img->getImageRotationDegreeX() - rotate_sub.y/5.f;
-//					if(rotation_degreeX > 60.f)
-//						rotation_degreeX = 60.f;
-//					else if(rotation_degreeX < -60.f)
-//						rotation_degreeX = -60.f;
-//					first_img->setImageRotationDegreeX(rotation_degreeX);
-//				}
-//				else
-//					this->moveListXY(ccpSub(touch_p, location));
-////				CCPoint after_position = ccpMult(location,-1);
-////				first_img->movingDistance(ccpSub(after_position, save_position));
-////				save_position = after_position;
 				touch_p = location;
 				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
 			}
@@ -826,43 +805,6 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				old_center_pos = avg_point;
 				
 				
-				
-				
-				//game_node->setPosition(avg_point);
-//				CCPoint a_p;
-//				{
-//					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
-//					comp_scale = game_node->getScale() - comp_scale;
-//					
-//					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
-//				}
-//				
-//				if(game_node->getScale() <= 1.5f)
-//				{
-//					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
-//					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
-//				}
-//				else
-//				{
-//					game_node->setPositionX(a_p.x);
-//					
-//					if(game_node->getPositionX() > 40.f)
-//						game_node->setPositionX(40.f);
-//					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
-//						game_node->setPositionX(480-320*game_node->getScale()-40.f);
-//				}
-//				
-//				float comp_scale = before_scale;
-//				comp_scale = game_node->getScale() - comp_scale;
-//				
-//				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
-//				
-//				if(game_node->getPositionY() > 0+40.f)
-//					game_node->setPositionY(0+40.f);
-//				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-//					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
 			}
 		}
 	}

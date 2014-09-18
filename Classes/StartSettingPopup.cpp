@@ -629,26 +629,30 @@ void StartSettingPopup::setMain()
 			{
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-				n_item_case->addChild(n_mount);
 				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_img->setScale(0.7f);
 				n_item_case->addChild(n_img);
 				
+				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+				n_mount->setScale(1.f/n_img->getScale());
+				n_img->addChild(n_mount);
+				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
-				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-				s_item_case->addChild(s_mount);
 				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setColor(ccGRAY);
 				s_img->setScale(0.7f);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
+				
+				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+				s_mount->setScale(1.f/s_img->getScale());
+				s_img->addChild(s_mount);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 				item_item->setTag(i+1);
@@ -739,9 +743,9 @@ void StartSettingPopup::setMain()
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-		mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+		mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 		mount_img->setScale(1.f/gacha_item->getScale());
-		gacha_item->addChild(mount_img);
+		gacha_item->addChild(mount_img, 1);
 	}
 	else
 	{
@@ -1328,8 +1332,6 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
 																		   CCPoint title_position = ccp(188, 130);
 																		   
-																		   //123123123
-																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
 																		   item_title_label->setColor(ccc3(255, 170, 20));
@@ -1349,7 +1351,7 @@ void StartSettingPopup::gachaMenuCreate()
 																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
 																			{
 																				item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
-																				option_label->setString(mySD->getItemScript(kIC_itemGacha).c_str());
+																				option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
 																			}
 																		   
 																		   if(!buy_button)
@@ -1707,6 +1709,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			selected_gacha_item = (ITEM_CODE)item_type;
 			mySGD->gacha_item = selected_gacha_item;
 			
+			item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
+			option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
+			
 			CCPoint gacha_item_position = gacha_item->getPosition();
 			gacha_item->removeFromParent();
 			
@@ -1716,9 +1721,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 			
 			CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-			mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+			mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 			mount_img->setScale(1.f/gacha_item->getScale());
-			gacha_item->addChild(mount_img);
+			gacha_item->addChild(mount_img, 1);
 			
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 				buy_button->setPrice(PriceTypePass4, 0);
@@ -1809,9 +1814,9 @@ void StartSettingPopup::stopItemGacha()
 	main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 	
 	CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-	mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+	mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 	mount_img->setScale(1.f/gacha_item->getScale());
-	gacha_item->addChild(mount_img);
+	gacha_item->addChild(mount_img, 1);
 	
 	unschedule(schedule_selector(StartSettingPopup::itemGachaAction));
 }
@@ -1930,26 +1935,30 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-				n_item_case->addChild(n_mount);
 				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setScale(0.7f);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
+				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+				n_mount->setScale(1.f/n_img->getScale());
+				n_img->addChild(n_mount, 1);
+				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
-				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-				s_item_case->addChild(s_mount);
 				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setColor(ccGRAY);
 				s_img->setScale(0.7f);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
+				
+				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+				s_mount->setScale(1.f/s_img->getScale());
+				s_img->addChild(s_mount, 1);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 				item_item->setTag(tag);
@@ -2835,26 +2844,30 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 		ITEM_CODE t_ic = item_list[t_clicked_item_idx];
 		
 		CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-		CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-		n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-		n_item_case->addChild(n_mount);
 		
 		CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 		n_img->setScale(0.7f);
 		n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 		n_item_case->addChild(n_img);
 		
+		CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+		n_mount->setScale(1.f/n_img->getScale());
+		n_img->addChild(n_mount, 1);
+		
 		CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 		s_item_case->setColor(ccGRAY);
-		CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-		s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-		s_item_case->addChild(s_mount);
 		
 		CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 		s_img->setColor(ccGRAY);
 		s_img->setScale(0.7f);
 		s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 		s_item_case->addChild(s_img);
+		
+		CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+		s_mount->setScale(1.f/s_img->getScale());
+		s_img->addChild(s_mount, 1);
 		
 		CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 		item_item->setTag(t_clicked_item_idx+1);
