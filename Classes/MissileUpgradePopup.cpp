@@ -144,14 +144,14 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_level->setColor(ccc3(255, 222, 0));
-	missile_data_level->disableOuterStroke();
+	missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_level->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
 	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 11);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
-	missile_data_power->disableOuterStroke();
+	missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
 	missile_data_power->setPosition(ccp(level_case->getContentSize().width/2.f+28.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_power);

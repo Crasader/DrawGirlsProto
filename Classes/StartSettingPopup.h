@@ -101,8 +101,8 @@ private:
 	void closeAction();
 	
 	CCMenu* upgrade_menu;
-	CCLabelTTF* missile_data_level;
-	CCLabelTTF* missile_data_power;
+	KSLabelTTF* missile_data_level;
+	KSLabelTTF* missile_data_power;
 	void upgradeAction(CCObject* sender);
 	
 	CCMenuLambda* item_gacha_menu;

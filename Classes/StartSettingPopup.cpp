@@ -195,7 +195,7 @@ void StartSettingPopup::setMain()
 	{
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
-		stage_number_label->disableOuterStroke();
+		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		stage_number_label->setPosition(ccp(65, 250));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
@@ -209,7 +209,7 @@ void StartSettingPopup::setMain()
 		{
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			stage_number_label->setColor(ccc3(255, 255, 255));
-			stage_number_label->disableOuterStroke();
+			stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			stage_number_label->setPosition(ccp(65, 250));
 			setFormSetter(stage_number_label);
 			main_case->addChild(stage_number_label);
@@ -222,7 +222,7 @@ void StartSettingPopup::setMain()
 			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 255, 255));
-			piece_number_label->disableOuterStroke();
+			piece_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			piece_number_label->setPosition(ccp(65, 250));
 			main_case->addChild(piece_number_label);
 			
@@ -269,7 +269,7 @@ void StartSettingPopup::setMain()
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12.5f);
-		mission_title_label->disableOuterStroke();
+		mission_title_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f) + ccp(0,1));
 		mission_title_back->addChild(mission_title_label);
 		
@@ -978,13 +978,15 @@ void StartSettingPopup::setMain()
 		missile_img = t_gm;
 	}
 	
-	missile_data_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_level);
+	missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_level->setPosition(ccp(left_back->getPositionX()-29,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_power);
+	missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_power->setPosition(ccp(left_back->getPositionX()+29,95));
 	main_case->addChild(missile_data_power);
 	
