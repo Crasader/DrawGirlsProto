@@ -211,6 +211,13 @@ bool CardViewScene::init()
 			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
+		
+		CCPoint sound_position;
+		if(is_morphing)
+			sound_position = morphing_position;
+		else
+			sound_position = morphing_position + ccp(0,49.5f);
+		
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
 		CCSprite* s_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
 		CCMenuItemLambda* sound_item = CCMenuItemSpriteLambda::create(n_sound, s_sound, [=](CCObject* sender)
@@ -225,7 +232,7 @@ bool CardViewScene::init()
 																			}
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
-		sound_menu->setPosition(sound_img->getPosition());
+		sound_menu->setPosition(sound_position);
 		addChild(sound_menu, kCV_Z_next_button);
 		
 		
@@ -309,6 +316,13 @@ bool CardViewScene::init()
 			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
+		
+		CCPoint sound_position;
+		if(is_morphing)
+			sound_position = morphing_position;
+		else
+			sound_position = morphing_position + ccp(0,49.5f);
+		
 		CCSprite* n_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
 		CCSprite* s_sound = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 50, 50));
 		CCMenuItemLambda* sound_item = CCMenuItemSpriteLambda::create(n_sound, s_sound, [=](CCObject* sender)
@@ -323,7 +337,7 @@ bool CardViewScene::init()
 																		  }
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
-		sound_menu->setPosition(sound_img->getPosition());
+		sound_menu->setPosition(sound_position);
 		addChild(sound_menu, kCV_Z_next_button);
 		
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");

@@ -1650,6 +1650,59 @@ bool ShopPopup::init()
 ////								   char	*tm_zone;	/* timezone abbreviation */
 //							   }));
 //		}
+//		else if(is_useable_eventPack)
+//		{
+//			addChild(KSSchedule::create([=](float dt)
+//										{
+//											bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+//											bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+//											bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+//											bool is_on_time_eventPack = false;
+//											
+//											chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+//											std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+//											
+//											tm* now_tm = localtime(&now_time_t);
+//											string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+//											string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+//											
+//											int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+//											int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+//											
+//											if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+//											   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+//											   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+//											   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+//											{
+//												is_on_time_eventPack = true;
+//											}
+//											
+//											bool is_useable_eventPack = true;
+//											if(is_have_eventPack && is_on_time_eventPack)
+//											{
+//												if(is_just_one)
+//												{
+//													if(!is_buyed_eventPack)
+//														is_useable_eventPack = true;
+//													else
+//														is_useable_eventPack = false;
+//												}
+//												else
+//													is_useable_eventPack = true;
+//											}
+//											else
+//											{
+//												is_useable_eventPack = false;
+//											}
+//											
+//											if(!is_useable_eventPack)
+//											{
+//												eventPack_menu->runAction(CCSequence::createWithTwoActions(CCDelayTime::create(0.1f), CCHide::create()));
+//											}
+//											
+//											return is_useable_eventPack;
+//										}));
+//		}
 //	}
 	
 	
