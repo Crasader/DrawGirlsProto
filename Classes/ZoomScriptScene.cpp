@@ -1400,7 +1400,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_touch_p = int(touch);
 			first_touch_point = location;
 			is_scrolling = true;
-			first_img->ccTouchBegan(touch,pEvent);
+			target_node->ccTouchBegan(touch,pEvent);
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 //			{
 //				is_touched_menu = true;
@@ -1470,7 +1470,7 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			{
 				
 				touch_p = location;
-				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
+				if(is_morphing)target_node->ccTouchMoved(touch,pEvent);
 			}
 			else if(multiTouchData.size() == 2)
 			{
@@ -1594,12 +1594,12 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 //					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
 //						target_node->ccTouchEnded(touch, pEvent);
 					if(is_morphing && touch_mode!=2)
-						first_img->ccTouchEnded(touch, pEvent);
+						target_node->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
 					if(is_morphing && touch_mode!=2)
-						first_img->morphing(touch, pEvent);
+						target_node->morphing(touch, pEvent);
 					return;
 
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
