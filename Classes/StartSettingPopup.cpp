@@ -749,13 +749,13 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
-		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
+		gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
 		gacha_item->setPosition(ccp(410,185));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
-		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, 15.f));
+		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
 		gacha_item->addChild(gacha_label);
 	}
 	
@@ -1353,6 +1353,20 @@ void StartSettingPopup::gachaMenuCreate()
 																				item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
 																				option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
 																			}
+																		   else
+																			{
+																				CCPoint keep_position = gacha_item->getPosition();
+																				gacha_item->removeFromParent();
+																				
+																				gacha_item = KS::loadCCBI<CCSprite*>(this, "randomitem.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+																				gacha_item->setPosition(keep_position);
+																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+																				
+																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+																				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+																				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+																				gacha_item->addChild(gacha_label);
+																			}
 																		   
 																		   if(!buy_button)
 																			{
@@ -1866,6 +1880,25 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		{
 			is_clicked_gacha_menu = false;
 			gacha_clicked_img->setVisible(false);
+			
+			if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+			{
+				
+			}
+			else
+			{
+				CCPoint keep_position = gacha_item->getPosition();
+				gacha_item->removeFromParent();
+				
+				gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+				gacha_item->setPosition(keep_position);
+				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+				
+				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+				gacha_item->addChild(gacha_label);
+			}
 		}
 		
 		clicked_item_idx = tag-1;
