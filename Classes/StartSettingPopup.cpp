@@ -308,32 +308,32 @@ void StartSettingPopup::setMain()
 			if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 		}
-		mySGD->changeGoods([=](Json::Value result_data)
-						   {
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							   {
-//								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
-							   }
-						   });
+//		mySGD->changeGoods([=](Json::Value result_data)
+//						   {
+//							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//							   {
+////								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//							   }
+//						   });
 		
 		
 		
