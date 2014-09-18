@@ -3444,6 +3444,8 @@ void MainFlowScene::setBottom()
 	});
 	
 	etc_menu->addChild(etc_item);
+	
+	etc_item->setEnabled(puzzle_number);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
