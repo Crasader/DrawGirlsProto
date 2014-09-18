@@ -5,7 +5,7 @@
 #include "curl/curl.h"
 #include <pthread.h>
 #include <queue>
-
+#include "Json.h"
 using namespace cocos2d;
 using namespace std;
 
@@ -51,6 +51,7 @@ public:
 struct GDWebSpriteMemoryStruct {
     char *memory;
     size_t size;
+		string url;
 };
 
 class GDWebSpriteManager {
@@ -71,6 +72,7 @@ public:
         webImages->init();
         isDownloding=false;
         downloadIndex=0;
+			
         
     }
     
