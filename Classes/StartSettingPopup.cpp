@@ -1328,6 +1328,8 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
 																		   CCPoint title_position = ccp(188, 130);
 																		   
+																		   //123123123
+																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
 																		   item_title_label->setColor(ccc3(255, 170, 20));
@@ -1338,11 +1340,17 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCRect option_size = CCRectMake(0, 0, 200, 25);
 																		   CCPoint option_position = ccp(188, 117);
 																		   
-																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 11.5f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
+																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 10.f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 																			 setFormSetter(option_label);
 																		   option_label->setAnchorPoint(ccp(0,1));
 																		   option_label->setPosition(option_position);
 																		   main_case->addChild(option_label);
+																		   
+																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+																			{
+																				item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
+																				option_label->setString(mySD->getItemScript(kIC_itemGacha).c_str());
+																			}
 																		   
 																		   if(!buy_button)
 																			{
@@ -2884,14 +2892,15 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	if(t_code == kIC_attack)				return_value = "Attack";
 	else if(t_code == kIC_speedUp)			return_value = "SpeedUp";
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
-	else if(t_code == kIC_fast)				return_value = "Fast";
-	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
+	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(kMyLocalKey_item4title);
+	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(kMyLocalKey_item5title);
 	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
-	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
+	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(kMyLocalKey_item7title);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_item8title);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
 	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
+	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(kMyLocalKey_item10title);
 	
 	return return_value.c_str();
 }
