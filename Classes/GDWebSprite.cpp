@@ -246,7 +246,7 @@ void GDWebSprite::finishDownload(){
 							
 							CCLOG("GDWebSprite : save ok %s, %s",newfile["url"].asString().c_str(),(mySIL->getDocumentPath().c_str()+filename).c_str());
 
-							if(list.size()>3){
+							if(list.size()>30){
 								//CCLOG("removed1 -> %s",list.toStyledString().c_str());
 								Json::Value rFileInfo =list[0];
 								string rFilename =rFileInfo.get("filename", "fn").asString();
