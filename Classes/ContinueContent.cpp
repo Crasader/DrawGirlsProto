@@ -573,7 +573,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	counting_label->setScale(5.f);
 	counting_label->setOpacity(0);
 	counting_label->setAnchorPoint(ccp(0.5f,0.5f));
-	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f-6));
+	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f-8));
 	back_in->addChild(counting_label);
 	counting_label->setVisible(false);
 	
