@@ -308,32 +308,32 @@ void StartSettingPopup::setMain()
 			if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 		}
-		mySGD->changeGoods([=](Json::Value result_data)
-						   {
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							   {
-//								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
-							   }
-						   });
+//		mySGD->changeGoods([=](Json::Value result_data)
+//						   {
+//							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//							   {
+////								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//							   }
+//						   });
 		
 		
 		
@@ -749,13 +749,13 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
-		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
+		gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
 		gacha_item->setPosition(ccp(410,185));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
-		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, 15.f));
+		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
 		gacha_item->addChild(gacha_label);
 	}
 	
@@ -1353,6 +1353,20 @@ void StartSettingPopup::gachaMenuCreate()
 																				item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
 																				option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
 																			}
+																		   else
+																			{
+																				CCPoint keep_position = gacha_item->getPosition();
+																				gacha_item->removeFromParent();
+																				
+																				gacha_item = KS::loadCCBI<CCSprite*>(this, "randomitem.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+																				gacha_item->setPosition(keep_position);
+																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+																				
+																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+																				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+																				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+																				gacha_item->addChild(gacha_label);
+																			}
 																		   
 																		   if(!buy_button)
 																			{
@@ -1866,6 +1880,25 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		{
 			is_clicked_gacha_menu = false;
 			gacha_clicked_img->setVisible(false);
+			
+			if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+			{
+				
+			}
+			else
+			{
+				CCPoint keep_position = gacha_item->getPosition();
+				gacha_item->removeFromParent();
+				
+				gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+				gacha_item->setPosition(keep_position);
+				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+				
+				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+				gacha_item->addChild(gacha_label);
+			}
 		}
 		
 		clicked_item_idx = tag-1;

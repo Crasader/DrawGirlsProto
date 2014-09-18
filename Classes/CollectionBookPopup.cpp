@@ -243,6 +243,9 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	gift->setPosition(ccp(115,37));
 	target->addChild(gift, 1, kCBP_MT_gift);
 	
+	CardSortInfo t_card_info = mySGD->getHasGottenCardDataForCardNumber(card_number);
+	gift->setVisible(t_card_info.count.getV() >= 2);
+	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 //	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
 //	s_zoom->setColor(ccGRAY);

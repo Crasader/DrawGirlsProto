@@ -2045,9 +2045,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
 																																											  }));
 																													}
-																													else if(is_unlock_puzzle == 4)
+																													else if(is_unlock_puzzle >= 4)
 																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4000);
+																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
 																														
 																														skip_menu->setEnabled(false);
 																														
@@ -2063,24 +2063,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																					 scenario_node->removeFromParent();
 																																				 }));
 																													}
-																													else if(is_unlock_puzzle == 5)
-																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5000);
-																														
-																														skip_menu->setEnabled(false);
-																														
-																														mySGD->setIsUnlockPuzzle(0);
-																														is_unlock_puzzle = 0;
-																														
-																														endUnlockAnimation();
-																														
-																														t_end_func();
-																														
-																														addChild(KSTimer::create(0.1f, [=]()
-																																				 {
-																																					 scenario_node->removeFromParent();
-																																				 }));
-																													}
+																													
 																												}
 																											  else
 																												{
@@ -3444,6 +3427,8 @@ void MainFlowScene::setBottom()
 	});
 	
 	etc_menu->addChild(etc_item);
+	
+	etc_item->setEnabled(puzzle_number);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)

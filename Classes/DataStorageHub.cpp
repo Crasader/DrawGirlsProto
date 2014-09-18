@@ -518,75 +518,75 @@ void DataStorageHub::clear()
 
 void DataStorageHub::resetDSH ()
 {
-	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
-	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
+//	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
+//	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
 	
 	setIntegerForKey(kDSH_Key_heartCnt, 0, false);
 	setIntegerForKey(kDSH_Key_heartTime, 0, false);
 	
-	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
-	{
-		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
-		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
-	
-	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
-	for(int i=1;i<=have_ticket_cnt;i++)
-		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
-	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
-	
-	setStringForKey(kDSH_Key_nick, "", false);
-	
-	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
-		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, 0, false);
-	}
-	
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
-		for(int j=1;j<=slot_count;j++)
-			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, 0, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_selfBeautyStoneID, 0, false);
-	int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
-	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, 0, false);
-	for(int i=1;i<=have_beauty_stone_cnt;i++)
-	{
-		int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
-		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, 0, false);
-	}
-	
-	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
-	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);
-	for(int i=1;i<=achieve_data_cnt;i++)
-	{
-		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
-		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0, false);
-		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0, false);
-	}
-	
-	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
-		setIntegerForKey((DSH_Key)i, 0, false);
-	
-	int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
-	setIntegerForKey(kDSH_Key_minigame_playedCnt, 0);
-	for(int i=1;i<=minigame_played_cnt;i++)
-	{
-		int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
-		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, 0, false);
-		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
+//	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
+//	{
+//		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
+//		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
+//	
+//	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
+//	for(int i=1;i<=have_ticket_cnt;i++)
+//		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
+//	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
+//	
+//	setStringForKey(kDSH_Key_nick, "", false);
+//	
+//	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+//		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, 0, false);
+//	}
+//	
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+//		for(int j=1;j<=slot_count;j++)
+//			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, 0, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_selfBeautyStoneID, 0, false);
+//	int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+//	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, 0, false);
+//	for(int i=1;i<=have_beauty_stone_cnt;i++)
+//	{
+//		int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+//		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, 0, false);
+//	}
+//	
+//	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
+//	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);
+//	for(int i=1;i<=achieve_data_cnt;i++)
+//	{
+//		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
+//		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0, false);
+//		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0, false);
+//	}
+//	
+//	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+//		setIntegerForKey((DSH_Key)i, 0, false);
+//	
+//	int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
+//	setIntegerForKey(kDSH_Key_minigame_playedCnt, 0);
+//	for(int i=1;i<=minigame_played_cnt;i++)
+//	{
+//		int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
+//		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, 0, false);
+//		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	
 	fFlush();
 }
