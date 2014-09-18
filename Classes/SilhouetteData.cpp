@@ -474,14 +474,15 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	if(t_code == kIC_attack)				return_value = "획득시 보스에게 미사일 공격을 가한다.";
 	else if(t_code == kIC_speedUp)			return_value = "획득시 유저의 속도가 올라간다.";
 	else if(t_code == kIC_addTime)			return_value = "획득시 남은 시간이 일정량 증가한다.";
-	else if(t_code == kIC_fast)				return_value = "획득시 일시적으로 빠르게 움직인다.";
-	else if(t_code == kIC_subOneDie)		return_value = "획득시 부하 몬스터 1마리를 제거한다.";
+	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(kMyLocalKey_item4ment);
+	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(kMyLocalKey_item5ment);
 	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemContent);
-	else if(t_code == kIC_silence)			return_value = "획득시 보스 몬스터가 일정시간동안 공격하지 않는다.";
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeContent);
+	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(kMyLocalKey_item7ment);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_item8ment);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpContent);
 	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetContent);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaContent);
+	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(kMyLocalKey_item10ment);
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;

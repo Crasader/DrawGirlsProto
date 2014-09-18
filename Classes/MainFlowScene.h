@@ -160,9 +160,9 @@ private:
 	void countingAchievement();
 	
 	CCScale9Sprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+	KSLabelTTF* postbox_count_label;
 	CCScale9Sprite* achievement_count_case;
-	CCLabelTTF* achievement_count_label;
+	KSLabelTTF* achievement_count_label;
 	
 	function<void()> refresh_ing_win_func;
 	

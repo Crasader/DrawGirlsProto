@@ -989,7 +989,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ko->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ko->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ko->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ko->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ko->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ko->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ko->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -2012,7 +2012,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	en->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	en->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	en->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	en->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	en->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	en->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	en->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -2987,7 +2987,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ja->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ja->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ja->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ja->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ja->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ja->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ja->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);

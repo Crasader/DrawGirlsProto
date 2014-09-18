@@ -2914,8 +2914,9 @@ void MainFlowScene::setBottom()
 			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height+2));
 			n_mission->addChild(n_percent_back);
 			
-			CCLabelTTF* n_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			n_percent_back->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			n_percent_label->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			n_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
 			n_percent_back->addChild(n_percent_label);
 			
@@ -2923,8 +2924,9 @@ void MainFlowScene::setBottom()
 			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height+2));
 			s_mission->addChild(s_percent_back);
 			
-			CCLabelTTF* s_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			s_percent_back->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			s_percent_label->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			s_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
 			s_percent_back->addChild(s_percent_label);
 		}
@@ -4802,8 +4804,9 @@ void MainFlowScene::setTop()
 //														return true;
 //													}));
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 8);
+	postbox_count_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 8);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
+	postbox_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
@@ -4817,7 +4820,8 @@ void MainFlowScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(6, 6));
 	achieve_node->addChild(achievement_count_case);
 	
-	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	

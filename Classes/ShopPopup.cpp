@@ -1605,7 +1605,11 @@ bool ShopPopup::init()
 //			time_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
 //			time_label->setPosition(getContentPosition(kSP_MT_eventPack) + ccp(0,20));
 //			main_case->addChild(time_label);
-//			
+//
+//			CCSprite* time_back = CCSprite::create("mainflow_new3.png");
+//			time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
+//			time_label->addChild(time_back, -1);
+//	
 //			time_label->addChild(KSSchedule::create([=](float dt)
 //							   {
 //								   chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
@@ -1626,6 +1630,7 @@ bool ShopPopup::init()
 //										show_time += ccsf("%02d", e_s_sub_time);
 //										
 //										time_label->setString(show_time.c_str());
+//										time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
 //										return true;
 //									}
 //								   else

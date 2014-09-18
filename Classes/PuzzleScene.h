@@ -41,6 +41,7 @@ class RankFriendInfo;
 class CommonButton;
 class CCMenuItemLambda;
 class CCMenuLambda;
+class KSLabelTTF;
 class PuzzleScene : public CCLayer//, public BackKeyBase
 {
 public:
@@ -94,9 +95,9 @@ private:
 	CountingBMLabel* friend_point_label;
 	
 	CCScale9Sprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+	KSLabelTTF* postbox_count_label;
 	CCScale9Sprite* achievement_count_case;
-	CCLabelTTF* achievement_count_label;
+	KSLabelTTF* achievement_count_label;
 	
 	function<void(void)> close_friend_point_action;
 	void closeFriendPoint();
