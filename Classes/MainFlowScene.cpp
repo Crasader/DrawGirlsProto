@@ -54,6 +54,8 @@
 #include "KsLocal.h"
 #include "FriendPopup.h"
 #include "AccountLinkLeadPopup.h"
+#include "PuzzleOpenPopup.h"
+
 
 CCScene* MainFlowScene::scene()
 {
@@ -180,7 +182,7 @@ bool MainFlowScene::init()
 						t_info.is_base_condition_success = false;
 					}
 				}
-				else if(t_type == "r")
+				else if(t_type == "g")
 				{
 					t_info.need_ruby_value = t_condition["value"].asInt();
 					and_open = false;
@@ -1406,9 +1408,11 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				}
 				else
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), mySGD->getFont().c_str(), 10);
+					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
+					
+					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 102.5f));
+					condition_content->setPosition(ccp(67.5f, 100.f));
 					not_clear_img->addChild(condition_content);
 				}
 				
@@ -1416,25 +1420,26 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					
-					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
-					price_type->setScale(0.7f);
-					c_label->addChild(price_type);
-					
-					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", t_info.need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
-					price_value_label->disableOuterStroke();
-					c_label->addChild(price_value_label);
+//					CCSprite* price_type = CCSprite::create("price_ruby_img.png");
+//					price_type->setScale(0.7f);
+//					c_label->addChild(price_type);
+//					
+//					KSLabelTTF* price_value_label = KSLabelTTF::create(CCString::createWithFormat("%d  ", t_info.need_ruby_value)->getCString(), mySGD->getFont().c_str(), 10);
+//					price_value_label->disableOuterStroke();
+//					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
 					detail_label->disableOuterStroke();
+					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
 					
-					float t_width = price_type->getContentSize().width*price_type->getScale();
-					float v_width = price_value_label->getContentSize().width;
-					float d_width = detail_label->getContentSize().width;
-					
-					price_type->setPositionX(-(v_width+d_width - (t_width+v_width+d_width)/2.f + t_width/2.f));
-					price_value_label->setPositionX(-(d_width-(t_width+v_width+d_width)/2.f + v_width/2.f));
-					detail_label->setPositionX(price_value_label->getPositionX() + v_width/2.f + d_width/2.f);
+//					float t_width = price_type->getContentSize().width*price_type->getScale();
+//					float v_width = price_value_label->getContentSize().width;
+//					float d_width = detail_label->getContentSize().width;
+//					
+//					price_type->setPositionX(-(v_width+d_width - (t_width+v_width+d_width)/2.f + t_width/2.f));
+//					price_value_label->setPositionX(-(d_width-(t_width+v_width+d_width)/2.f + v_width/2.f));
+//					detail_label->setPositionX(price_value_label->getPositionX() + v_width/2.f + d_width/2.f);
 					
 					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
 
@@ -1490,25 +1495,52 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				condition_title->setPosition(ccp(67.5f, 121));
 				not_clear_img->addChild(condition_title);
 				
-				KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
-				condition_content->disableOuterStroke();
-				condition_content->setPosition(ccp(67.5f, 102.5f));
-				not_clear_img->addChild(condition_content);
-				
-				CCLabelTTF* c_label = CCLabelTTF::create();
-				KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
-				detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-				detail_label->setPosition(ccp(0,0));
-				c_label->addChild(detail_label);
-				
-				CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
-				
-				CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
-				detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-				detail_button->setTag(0);
-				detail_button->setPreferredSize(CCSizeMake(90, 43));
-				detail_button->setPosition(ccp(67.5f,65.5f));
-				not_clear_img->addChild(detail_button);
+				if(t_info.is_have_ruby_condition)
+				{
+					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
+					
+					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+					condition_content->disableOuterStroke();
+					condition_content->setPosition(ccp(67.5f, 100.f));
+					not_clear_img->addChild(condition_content);
+					
+					CCLabelTTF* c_label = CCLabelTTF::create();
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+					detail_label->setPosition(ccp(0,0));
+					c_label->addChild(detail_label);
+					
+					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
+					
+					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
+					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
+					detail_button->setTag(0);
+					detail_button->setPreferredSize(CCSizeMake(90, 43));
+					detail_button->setPosition(ccp(67.5f,65.5f));
+					not_clear_img->addChild(detail_button);
+				}
+				else
+				{
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
+					condition_content->disableOuterStroke();
+					condition_content->setPosition(ccp(67.5f, 102.5f));
+					not_clear_img->addChild(condition_content);
+					
+					CCLabelTTF* c_label = CCLabelTTF::create();
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+					detail_label->setPosition(ccp(0,0));
+					c_label->addChild(detail_label);
+					
+					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
+					
+					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
+					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
+					detail_button->setTag(0);
+					detail_button->setPreferredSize(CCSizeMake(90, 43));
+					detail_button->setPosition(ccp(67.5f,65.5f));
+					not_clear_img->addChild(detail_button);
+				}
 			}
 			else
 			{
@@ -2275,53 +2307,88 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int t_index = (tag-10000000)/10000;
 		int t_need_ruby = tag%10000;
 		
-		LoadingLayer* t_loading = LoadingLayer::create(-9999);
-		addChild(t_loading, 9999);
+		PuzzleOpenPopup* t_popup = PuzzleOpenPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
+														   {
+															   LoadingLayer* t_loading = LoadingLayer::create(-9999);
+															   addChild(t_loading, 9999);
+															   
+															   int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
+															   PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+															   t_history.is_open = true;
+															   t_history.open_type = "골드결제";
+															   
+//															   string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list
+															   
+															   vector<ChangeGoodsDataDetail> t_list;
+															   
+															   ChangeGoodsDataDetail t_detail;
+															   t_detail.m_type = kGoodsType_gold;
+															   t_detail.m_value = -t_need_ruby;
+															   t_detail.m_statsID = "";
+															   t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+															   t_detail.m_content = "퍼즐오픈(골드)";
+															   t_detail.m_isPurchase = false;
+															   
+															   t_list.push_back(t_detail);
+															   
+															   ChangeGoodsDataDetail t_detail2;
+															   t_detail2.m_type = kGoodsType_pz;
+															   t_detail2.m_value = puzzle_number;
+															   t_detail2.m_statsID = "";
+															   t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+															   t_detail2.m_content = "퍼즐오픈(골드)";
+															   t_detail2.m_isPurchase = false;
+															   
+															   t_list.push_back(t_detail2);
+															   
+															   mySGD->addChangeGoods("p_p_p", t_list);
+															   
+//															   mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
+															   
+															   vector<CommandParam> command_list;
+															   
+															   command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
+															   
+															   mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
+																							 {
+																								 t_loading->removeFromParent();
+																								 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																								 {
+																									 is_menu_enable = true;
+																									 
+																									 CCPoint t_offset = puzzle_table->getContentOffset();
+																									 puzzle_table->reloadData();
+																									 puzzle_table->setContentOffset(t_offset);
+																									 //											  puzzle_table->updateCellAtIndex(t_index);
+																								 }
+																								 else
+																								 {
+																									 mySGD->clearChangeGoods();
+																									 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+																									 t_history.is_open = false;
+																									 t_history.open_type = "";
+																									 mySGD->setPuzzleHistoryForNotSave(t_history);
+																									 
+																									 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+																									 
+																									 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
+																									 //											  {
+																									 //												  is_menu_enable = false;
+																									 //												  ShopPopup* t_shop = ShopPopup::create();
+																									 //												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																									 //												  t_shop->targetHeartTime(heart_time);
+																									 //												  t_shop->setShopCode(kSC_ruby);
+																									 //												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+																									 //												  t_shop->addGray();
+																									 //												  addChild(t_shop, kMainFlowZorder_popup);
+																									 //											  }), 9999);
+																									 
+																									 is_menu_enable = true;
+																								 }
+																							 });
+														   }, t_need_ruby);
 		
-		int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
-		PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-		t_history.is_open = true;
-		t_history.open_type = "젬결제";
-		
-		mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
-		
-		vector<CommandParam> command_list;
-		
-		command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
-		
-		mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
-									  {
-										  t_loading->removeFromParent();
-										  if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										  {
-											  is_menu_enable = true;
-											  puzzle_table->updateCellAtIndex(t_index);
-										  }
-										  else
-										  {
-											  mySGD->clearChangeGoods();
-											  PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-											  t_history.is_open = false;
-											  t_history.open_type = "";
-											  mySGD->setPuzzleHistoryForNotSave(t_history);
-											  
-											  addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
-											  
-//											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
-//											  {
-//												  is_menu_enable = false;
-//												  ShopPopup* t_shop = ShopPopup::create();
-//												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-//												  t_shop->targetHeartTime(heart_time);
-//												  t_shop->setShopCode(kSC_ruby);
-//												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-//												  t_shop->addGray();
-//												  addChild(t_shop, kMainFlowZorder_popup);
-//											  }), 9999);
-											  
-											  is_menu_enable = true;
-										  }
-									  });
+		addChild(t_popup, kMainFlowZorder_popup);
 	}
 }
 
