@@ -148,7 +148,7 @@ bool StageSettingPopup::init()
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
 		}
 	}
-	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//	myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
 	
 	if(!show_item_popup.empty())
 	{
@@ -713,7 +713,7 @@ void StageSettingPopup::realStartAction()
 {
 	finalSetting();
 	
-	myDSH->saveAllUserData(json_selector(this, StageSettingPopup::finalStartAction));
+//	myDSH->saveAllUserData(json_selector(this, StageSettingPopup::finalStartAction));
 }
 
 void StageSettingPopup::acceptStartAction()
@@ -723,22 +723,22 @@ void StageSettingPopup::acceptStartAction()
 	was_end_startAction = false;
 	was_end_removeMessage = false;
 	
-	vector<CommandParam> command_list;
-	
-	////////////////////////////// ksks
-	Json::Value p;
-	p["no"] = mySGD->getRemoveMessageMailNo();
-	p["memberID"] = mySGD->getRemoveMessageMemberId();
-	CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
-	command_list.push_back(ksooParam);
-	// create message remove command
-	// command_list.push_back(message remove command);
-	
-	//////////////////////////////
-	
-	command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StageSettingPopup::finalAcceptStartAction)));
-	
-	hspConnector::get()->command(command_list);
+//	vector<CommandParam> command_list;
+//	
+//	////////////////////////////// ksks
+//	Json::Value p;
+//	p["no"] = mySGD->getRemoveMessageMailNo();
+//	p["memberID"] = mySGD->getRemoveMessageMemberId();
+//	CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+//	command_list.push_back(ksooParam);
+//	// create message remove command
+//	// command_list.push_back(message remove command);
+//	
+//	//////////////////////////////
+//	
+//	command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StageSettingPopup::finalAcceptStartAction)));
+//	
+//	hspConnector::get()->command(command_list);
 }
 void StageSettingPopup::finalSetting()
 {
@@ -880,12 +880,12 @@ void StageSettingPopup::buySuccessItem(int t_clicked_item_number, int cnt)
 	
 	((CCSprite*)item_parent->getChildByTag(kSSP_MT_selectedBase+t_clicked_item_number))->setVisible(true);
 	
-	vector<SaveUserData_Key> save_userdata_list;
-	
-	save_userdata_list.push_back(kSaveUserData_Key_gold);
-	save_userdata_list.push_back(kSaveUserData_Key_item);
-	
-	myDSH->saveUserData(save_userdata_list, nullptr);
+//	vector<SaveUserData_Key> save_userdata_list;
+//	
+//	save_userdata_list.push_back(kSaveUserData_Key_gold);
+//	save_userdata_list.push_back(kSaveUserData_Key_item);
+//	
+//	myDSH->saveUserData(save_userdata_list, nullptr);
 }
 
 string StageSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)

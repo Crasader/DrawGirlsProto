@@ -32,6 +32,7 @@ enum CSS_MenuTag{
 	kCSS_MT_alignDefault,
 	kCSS_MT_alignTake,
 	kCSS_MT_alignRank,
+	kCSS_MT_eventCard,
 	kCSS_MT_diary,
 	kCSS_MT_event,
 	kCSS_MT_strength,

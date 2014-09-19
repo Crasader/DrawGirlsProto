@@ -237,133 +237,133 @@ string DataStorageHub::getKey (DSH_Key t_name)
 {
 	return return_value[t_name];
 }
-Json::Value DataStorageHub::getSaveAllUserDataParam ()
-{
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getSocialID();
-	
-	Json::Value data;
-	
-	for(int i = kSaveUserData_Key_base+1;i<kSaveUserData_Key_end;i++)
-	{
-		writeParamForKey(data, SaveUserData_Key(i));
-	}
-	
-	Json::FastWriter writer;
-	param["data"] = writer.write(data);
-	param["nick"] = getStringForKey(kDSH_Key_nick);
-	return param;
-}
-void DataStorageHub::loadAllUserData (Json::Value result_data)
-{
-	Json::Value data;
-	Json::Reader reader;
-	reader.parse(result_data["data"].asString(), data);
-	
-	CCLOG("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
-	
-	setIntegerForKey(kDSH_Key_savedStar, data.get(getKey(kDSH_Key_savedStar), default_ruby).asInt(), false);
-	setIntegerForKey(kDSH_Key_savedGold, data.get(getKey(kDSH_Key_savedGold), default_gold).asInt(), false);
-	
-	setIntegerForKey(kDSH_Key_heartCnt, data[getKey(kDSH_Key_heartCnt)].asInt(), false);
-	setIntegerForKey(kDSH_Key_heartTime, data[getKey(kDSH_Key_heartTime)].asInt(), false);
-	
-	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
-	{
-		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
-		setBoolForKey(kDSH_Key_isShowItem_int1, i, data[getKey(kDSH_Key_isShowItem_int1)][i].asBool(), false);
-	}
-	
-	setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
-	setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt(), false);
-	
-	int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
-	setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
-	for(int i=1;i<=have_ticket_cnt;i++)
-		setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString(), false);
-	
-//	int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
-//	setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt, false);
-//	for(int i=1;i<=open_stage_cnt;i++)
+//Json::Value DataStorageHub::getSaveAllUserDataParam ()
+//{
+//	Json::Value param;
+//	param["memberID"] = hspConnector::get()->getSocialID();
+//	
+//	Json::Value data;
+//	
+//	for(int i = kSaveUserData_Key_base+1;i<kSaveUserData_Key_end;i++)
 //	{
-//		int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
-//		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number, false);
-//		setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool(), false);
+//		writeParamForKey(data, SaveUserData_Key(i));
 //	}
 //	
-//	int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
-//	setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt, false);
-//	for(int i=1;i<=clear_stage_cnt;i++)
+//	Json::FastWriter writer;
+//	param["data"] = writer.write(data);
+//	param["nick"] = getStringForKey(kDSH_Key_nick);
+//	return param;
+//}
+//void DataStorageHub::loadAllUserData (Json::Value result_data)
+//{
+//	Json::Value data;
+//	Json::Reader reader;
+//	reader.parse(result_data["data"].asString(), data);
+//	
+//	CCLOG("parse data : %s", GraphDogLib::JsonObjectToString(data).c_str());
+//	
+//	setIntegerForKey(kDSH_Key_savedStar, data.get(getKey(kDSH_Key_savedStar), default_ruby).asInt(), false);
+//	setIntegerForKey(kDSH_Key_savedGold, data.get(getKey(kDSH_Key_savedGold), default_gold).asInt(), false);
+//	
+//	setIntegerForKey(kDSH_Key_heartCnt, data[getKey(kDSH_Key_heartCnt)].asInt(), false);
+//	setIntegerForKey(kDSH_Key_heartTime, data[getKey(kDSH_Key_heartTime)].asInt(), false);
+//	
+//	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
 //	{
-//		int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
-//		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number, false);
-//		setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool(), false);
+//		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, data[getKey(kDSH_Key_haveItemCnt_int1)][i].asInt(), false);
+//		setBoolForKey(kDSH_Key_isShowItem_int1, i, data[getKey(kDSH_Key_isShowItem_int1)][i].asBool(), false);
 //	}
-	
-	setStringForKey(kDSH_Key_nick, result_data["nick"].asString(), false);
-	setStringForKey(kDSH_Key_flag, result_data["flag"].asString(), false);
-	
-	setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt(), false);
-	for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
-		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
-	}
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, data[getKey(kDSH_Key_weaponLevelForCharacter_int1)][i-1].asInt(), false);
-	
-	
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
-		for(int j=1;j<=slot_count;j++)
-			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, data[getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j].asInt(), false);
-	}
-	
-	setIntegerForKey(kDSH_Key_selfBeautyStoneID, data[getKey(kDSH_Key_selfBeautyStoneID)].asInt(), false);
-	int have_beauty_stone_cnt = data[getKey(kDSH_Key_haveBeautyStoneCnt)].asInt();
-	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_beauty_stone_cnt, false);
-	for(int i=1;i<=have_beauty_stone_cnt;i++)
-	{
-		int beauty_stone_id = data[getKey(kDSH_Key_haveBeautyStoneID_int1)][i].asInt();
-		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, beauty_stone_id, false);
-		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneType_int1)][i].asInt(), false);
-		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneRank_int1)][i].asInt(), false);
-		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneLevel_int1)][i].asInt(), false);
-	}
-	
-	
-	int achieve_data_cnt = data[getKey(kDSH_Key_achieveDataCnt)].asInt();
-	setIntegerForKey(kDSH_Key_achieveDataCnt, achieve_data_cnt);
-	for(int i=1;i<=achieve_data_cnt;i++)
-	{
-		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), false);
-		setIntegerForKey(kDSH_Key_achieveData_int1_value, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), data[getKey(kDSH_Key_achieveData_int1_value)][i].asInt(), false);
-	}
-	
-	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
-		setIntegerForKey((DSH_Key)i, data[getKey((DSH_Key)i)].asInt(), false);
-	
-	int minigame_played_cnt = data[getKey(kDSH_Key_minigame_playedCnt)].asInt();
-	setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
-	for(int i=1;i<=minigame_played_cnt;i++)
-	{
-		int stage_number = data[getKey(kDSH_Key_minigame_int1_stageNumber)][i].asInt();
-		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, stage_number, false);
-		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, data[getKey(kDSH_Key_minigame_int1_isPlayed)][i].asBool(), false);
-	}
-	
-	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17, false);//data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
-	
-//	int end_played_stage = data[getKey(kDSH_Key_endPlayedStage)].asInt();
-//	setIntegerForKey(kDSH_Key_endPlayedStage, end_played_stage, false);
-//	for(int i=1;i<=end_played_stage;i++)
-//		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
-	
-	setIntegerForKey(kDSH_Key_storyReadPoint, data[getKey(kDSH_Key_storyReadPoint)].asInt(), false);
-	
-	fFlush();
-}
+//	
+//	setIntegerForKey(kDSH_Key_allHighScore, data[getKey(kDSH_Key_allHighScore)].asInt(), false);
+//	setIntegerForKey(kDSH_Key_selectedCard, data[getKey(kDSH_Key_selectedCard)].asInt(), false);
+//	
+//	int have_ticket_cnt = data[getKey(kDSH_Key_haveTicketCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_haveTicketCnt, have_ticket_cnt, false);
+//	for(int i=1;i<=have_ticket_cnt;i++)
+//		setStringForKey(kDSH_Key_ticketUserId_int1, i, data[getKey(kDSH_Key_ticketUserId_int1)][i].asString(), false);
+//	
+////	int open_stage_cnt = data[getKey(kDSH_Key_openStageCnt)].asInt();
+////	setIntegerForKey(kDSH_Key_openStageCnt, open_stage_cnt, false);
+////	for(int i=1;i<=open_stage_cnt;i++)
+////	{
+////		int t_stage_number = data[getKey(kDSH_Key_openStageNumber_int1)][i].asInt();
+////		setIntegerForKey(kDSH_Key_openStageNumber_int1, i, t_stage_number, false);
+////		setBoolForKey(kDSH_Key_isOpenStage_int1, t_stage_number, data[getKey(kDSH_Key_isOpenStage_int1)][i].asBool(), false);
+////	}
+////	
+////	int clear_stage_cnt = data[getKey(kDSH_Key_clearStageCnt)].asInt();
+////	setIntegerForKey(kDSH_Key_clearStageCnt, clear_stage_cnt, false);
+////	for(int i=1;i<=clear_stage_cnt;i++)
+////	{
+////		int t_stage_number = data[getKey(kDSH_Key_clearStageNumber_int1)][i].asInt();
+////		setIntegerForKey(kDSH_Key_clearStageNumber_int1, i, t_stage_number, false);
+////		setBoolForKey(kDSH_Key_isClearStage_int1, t_stage_number, data[getKey(kDSH_Key_isClearStage_int1)][i].asBool(), false);
+////	}
+//	
+//	setStringForKey(kDSH_Key_nick, result_data["nick"].asString(), false);
+//	setStringForKey(kDSH_Key_flag, result_data["flag"].asString(), false);
+//	
+//	setIntegerForKey(kDSH_Key_selectedCharacter, data[getKey(kDSH_Key_selectedCharacter)].asInt(), false);
+//	for(int i=1;i<NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		bool t_unlocked = data[getKey(kDSH_Key_isCharacterUnlocked_int1)][i].asBool();
+//		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, t_unlocked, false);
+//	}
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, data[getKey(kDSH_Key_weaponLevelForCharacter_int1)][i-1].asInt(), false);
+//	
+//	
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+//		for(int j=1;j<=slot_count;j++)
+//			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, data[getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j].asInt(), false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_selfBeautyStoneID, data[getKey(kDSH_Key_selfBeautyStoneID)].asInt(), false);
+//	int have_beauty_stone_cnt = data[getKey(kDSH_Key_haveBeautyStoneCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, have_beauty_stone_cnt, false);
+//	for(int i=1;i<=have_beauty_stone_cnt;i++)
+//	{
+//		int beauty_stone_id = data[getKey(kDSH_Key_haveBeautyStoneID_int1)][i].asInt();
+//		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, beauty_stone_id, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneType_int1)][i].asInt(), false);
+//		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneRank_int1)][i].asInt(), false);
+//		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, data[getKey(kDSH_Key_beautyStoneLevel_int1)][i].asInt(), false);
+//	}
+//	
+//	
+//	int achieve_data_cnt = data[getKey(kDSH_Key_achieveDataCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_achieveDataCnt, achieve_data_cnt);
+//	for(int i=1;i<=achieve_data_cnt;i++)
+//	{
+//		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), false);
+//		setIntegerForKey(kDSH_Key_achieveData_int1_value, data[getKey(kDSH_Key_achieveData_int1_code)][i].asInt(), data[getKey(kDSH_Key_achieveData_int1_value)][i].asInt(), false);
+//	}
+//	
+//	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+//		setIntegerForKey((DSH_Key)i, data[getKey((DSH_Key)i)].asInt(), false);
+//	
+//	int minigame_played_cnt = data[getKey(kDSH_Key_minigame_playedCnt)].asInt();
+//	setIntegerForKey(kDSH_Key_minigame_playedCnt, minigame_played_cnt, false);
+//	for(int i=1;i<=minigame_played_cnt;i++)
+//	{
+//		int stage_number = data[getKey(kDSH_Key_minigame_int1_stageNumber)][i].asInt();
+//		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, stage_number, false);
+//		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, data[getKey(kDSH_Key_minigame_int1_isPlayed)][i].asBool(), false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17, false);//data[getKey(kDSH_Key_tutorial_flowStep)].asInt(), false);
+//	
+////	int end_played_stage = data[getKey(kDSH_Key_endPlayedStage)].asInt();
+////	setIntegerForKey(kDSH_Key_endPlayedStage, end_played_stage, false);
+////	for(int i=1;i<=end_played_stage;i++)
+////		setIntegerForKey(kDSH_Key_stageClearRank_int1, i, data[getKey(kDSH_Key_stageClearRank_int1)][i].asInt(), false);
+//	
+//	setIntegerForKey(kDSH_Key_storyReadPoint, data[getKey(kDSH_Key_storyReadPoint)].asInt(), false);
+//	
+//	fFlush();
+//}
 void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_key)
 {
 	if(t_key == kSaveUserData_Key_star)
@@ -487,28 +487,28 @@ void DataStorageHub::writeParamForKey (Json::Value & data, SaveUserData_Key t_ke
 //			data[getKey(kDSH_Key_stageClearRank_int1)][i] = getIntegerForKey(kDSH_Key_stageClearRank_int1, i);
 //	}
 }
-void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
-{
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getSocialID();
-	
-	Json::Value data;
-	
-	for(int i=0;i<key_list.size();i++)
-	{
-		writeParamForKey(data, key_list[i]);
-	}
-	
-	Json::FastWriter writer;
-	param["data"] = writer.write(data);
-	param["nick"] = getStringForKey(kDSH_Key_nick);
-	
-	hspConnector::get()->command("updateUserData", param, t_selector);
-}
-void DataStorageHub::saveAllUserData (jsonSelType t_saved)
-{
-	hspConnector::get()->command("updateUserData", getSaveAllUserDataParam(), t_saved);
-}
+//void DataStorageHub::saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector)
+//{
+//	Json::Value param;
+//	param["memberID"] = hspConnector::get()->getSocialID();
+//	
+//	Json::Value data;
+//	
+//	for(int i=0;i<key_list.size();i++)
+//	{
+//		writeParamForKey(data, key_list[i]);
+//	}
+//	
+//	Json::FastWriter writer;
+//	param["data"] = writer.write(data);
+//	param["nick"] = getStringForKey(kDSH_Key_nick);
+//	
+//	hspConnector::get()->command("updateUserData", param, t_selector);
+//}
+//void DataStorageHub::saveAllUserData (jsonSelType t_saved)
+//{
+//	hspConnector::get()->command("updateUserData", getSaveAllUserDataParam(), t_saved);
+//}
 
 void DataStorageHub::clear()
 {
@@ -518,75 +518,75 @@ void DataStorageHub::clear()
 
 void DataStorageHub::resetDSH ()
 {
-	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
-	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
+//	setIntegerForKey(kDSH_Key_savedStar, default_ruby, false);
+//	setIntegerForKey(kDSH_Key_savedGold, default_gold, false);
 	
 	setIntegerForKey(kDSH_Key_heartCnt, 0, false);
 	setIntegerForKey(kDSH_Key_heartTime, 0, false);
 	
-	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
-	{
-		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
-		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
-	
-	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
-	for(int i=1;i<=have_ticket_cnt;i++)
-		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
-	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
-	
-	setStringForKey(kDSH_Key_nick, "", false);
-	
-	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
-		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, 0, false);
-	}
-	
-	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
-	{
-		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
-		for(int j=1;j<=slot_count;j++)
-			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, 0, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_selfBeautyStoneID, 0, false);
-	int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
-	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, 0, false);
-	for(int i=1;i<=have_beauty_stone_cnt;i++)
-	{
-		int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
-		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, 0, false);
-		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, 0, false);
-	}
-	
-	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
-	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);
-	for(int i=1;i<=achieve_data_cnt;i++)
-	{
-		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
-		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0, false);
-		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0, false);
-	}
-	
-	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
-		setIntegerForKey((DSH_Key)i, 0, false);
-	
-	int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
-	setIntegerForKey(kDSH_Key_minigame_playedCnt, 0);
-	for(int i=1;i<=minigame_played_cnt;i++)
-	{
-		int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
-		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, 0, false);
-		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
-	}
-	
-	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
+//	for(int i=kIC_emptyBegin+1;i<kIC_emptyEnd;i++)
+//	{
+//		setIntegerForKey(kDSH_Key_haveItemCnt_int1, i, 0, false);
+//		setBoolForKey(kDSH_Key_isShowItem_int1, i, false, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_allHighScore, 0, false);
+//	
+//	int have_ticket_cnt = getIntegerForKey(kDSH_Key_haveTicketCnt);
+//	for(int i=1;i<=have_ticket_cnt;i++)
+//		setStringForKey(kDSH_Key_ticketUserId_int1, i, "", false);
+//	setIntegerForKey(kDSH_Key_haveTicketCnt, 0, false);
+//	
+//	setStringForKey(kDSH_Key_nick, "", false);
+//	
+//	setIntegerForKey(kDSH_Key_selectedCharacter, 0, false);
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		setBoolForKey(kDSH_Key_isCharacterUnlocked_int1, i, false, false);
+//		setIntegerForKey(kDSH_Key_weaponLevelForCharacter_int1, i-1, 0, false);
+//	}
+//	
+//	for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
+//	{
+//		int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+//		for(int j=1;j<=slot_count;j++)
+//			setIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j, 0, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_selfBeautyStoneID, 0, false);
+//	int have_beauty_stone_cnt = getIntegerForKey(kDSH_Key_haveBeautyStoneCnt);
+//	setIntegerForKey(kDSH_Key_haveBeautyStoneCnt, 0, false);
+//	for(int i=1;i<=have_beauty_stone_cnt;i++)
+//	{
+//		int beauty_stone_id = getIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i);
+//		setIntegerForKey(kDSH_Key_haveBeautyStoneID_int1, i, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneType_int1, beauty_stone_id, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneRank_int1, beauty_stone_id, 0, false);
+//		setIntegerForKey(kDSH_Key_beautyStoneLevel_int1, beauty_stone_id, 0, false);
+//	}
+//	
+//	int achieve_data_cnt = getIntegerForKey(kDSH_Key_achieveDataCnt);
+//	setIntegerForKey(kDSH_Key_achieveDataCnt, 0, false);
+//	for(int i=1;i<=achieve_data_cnt;i++)
+//	{
+//		int code = getIntegerForKey(kDSH_Key_achieveData_int1_code, i);
+//		setIntegerForKey(kDSH_Key_achieveData_int1_code, i, 0, false);
+//		setIntegerForKey(kDSH_Key_achieveData_int1_value, code, 0, false);
+//	}
+//	
+//	for(int i=kDSH_Key_achieve_base+1;i<kDSH_Key_achieve_end;i++)
+//		setIntegerForKey((DSH_Key)i, 0, false);
+//	
+//	int minigame_played_cnt = getIntegerForKey(kDSH_Key_minigame_playedCnt);
+//	setIntegerForKey(kDSH_Key_minigame_playedCnt, 0);
+//	for(int i=1;i<=minigame_played_cnt;i++)
+//	{
+//		int stage_number = getIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i);
+//		setIntegerForKey(kDSH_Key_minigame_int1_stageNumber, i, 0, false);
+//		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
+//	}
+//	
+//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	
 	fFlush();
 }
@@ -790,5 +790,8 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_cardSettingTableOffsetTakeReverse] = "cstotr";
 	return_value[kDSH_Key_cardSettingTableOffsetGrade] = "cstog";
 	return_value[kDSH_Key_cardSettingTableOffsetGradeReverse] = "cstogr";
+	return_value[kDSH_Key_cardSettingTableOffsetEvent] = "cstoe";
+	
+	return_value[kDSH_Key_savedStartPackFirstTime] = "sspft";
 }
 #undef LZZ_INLINE

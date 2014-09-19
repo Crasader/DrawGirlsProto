@@ -30,7 +30,7 @@ class LoadingLayer;
 class ScrollBar;
 class KSLabelTTF;
 
-class FriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate, public BackKeyBase
+class FriendPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate, public CCEditBoxDelegate//, public BackKeyBase
 {
 public:
 	// Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)

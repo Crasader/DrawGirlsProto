@@ -1139,10 +1139,10 @@ void Maingame::initJackPosition(CCPoint jack_position)
 
 void Maingame::startScene()
 {
-	setBackKeyFunc([=](){
-			myUI->showPause();
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//			myUI->showPause();
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -1351,7 +1351,7 @@ void Maingame::gachaOn()
 									  t_loading->removeFromParent();
 									  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									  {
-										  setBackKeyEnabled(false);
+//										  setBackKeyEnabled(false);
 										  
 										  mControl->isStun = false;
 										  myJack->isStun = t_jack_stun;
@@ -1494,15 +1494,16 @@ void Maingame::alertAction(int t1, int t2)
 
 void Maingame::keyBackClicked()
 {
-	if(!myUI->isGameover)
-	{
-		onBackKeyAction();
-		
-		setBackKeyFunc([=](){
-			myUI->showPause();
-		});
-		setBackKeyEnabled(true);
-	}
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(Maingame::alertAction));
+//	if(!myUI->isGameover)
+//	{
+//		onBackKeyAction();
+//		
+//		setBackKeyFunc([=](){
+//			myUI->showPause();
+//		});
+//		setBackKeyEnabled(true);
+//	}
 }
 
 void Maingame::touchEnd()
@@ -3202,7 +3203,7 @@ void Maingame::closeShutter()
 
 void Maingame::endCloseShutter()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	if(mySGD->is_endless_mode)
 	{
@@ -3746,7 +3747,7 @@ void Maingame::startExchange()
 	
 	sil_thumb->removeFromParent();
 	
-	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
+	sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3))->getCString()));
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 	sil_thumb->setScale(t_scale);
@@ -3764,7 +3765,7 @@ void Maingame::startExchange()
 		CCPoint t_position = replay_sil_thumb->getPosition();
 		replay_sil_thumb->removeFromParent();
 		
-		replay_sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2))->getCString()));
+		replay_sil_thumb = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3))->getCString()));
 		int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 		replay_sil_thumb->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
 		replay_sil_thumb->setScale(t_scale);
@@ -4988,7 +4989,7 @@ void Maingame::goHome ()
 }
 void Maingame::goReplay ()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	mySGD->setUserdataAchieveNoFail(0);
 	for(int i=kAchievementCode_fail1;i<=kAchievementCode_fail3;i++)
@@ -5071,6 +5072,11 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   mySGD->is_on_maingame = true;
 															   (t_continue->*d_continue)();
 															   continueAction();
+																 
+																 
+																 // ///////////////////////////////////////////////////// hs code bbu woo code for balance
+																 
+																 
 																 t_popup->removeFromParent();
 														   });
 	
@@ -5082,7 +5088,7 @@ void Maingame::continueAction()
 {
 	myLog->addLog(kLOG_action_continue, -1);
 	
-	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
+//	myDSH->saveUserData({kSaveUserData_Key_star}, nullptr);
 	
 	startControl();
 	mySGD->is_paused = false;

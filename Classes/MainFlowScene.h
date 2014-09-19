@@ -65,7 +65,7 @@ public:
 class CountingBMLabel;
 class HeartTime;
 class KSLabelTTF;
-class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource, public BackKeyBase
+class MainFlowScene : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource//, public BackKeyBase
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -160,9 +160,9 @@ private:
 	void countingAchievement();
 	
 	CCScale9Sprite* postbox_count_case;
-	CCLabelTTF* postbox_count_label;
+	KSLabelTTF* postbox_count_label;
 	CCScale9Sprite* achievement_count_case;
-	CCLabelTTF* achievement_count_label;
+	KSLabelTTF* achievement_count_label;
 	
 	function<void()> refresh_ing_win_func;
 	

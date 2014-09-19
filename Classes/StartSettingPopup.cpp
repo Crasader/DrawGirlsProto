@@ -195,7 +195,7 @@ void StartSettingPopup::setMain()
 	{
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
-		stage_number_label->disableOuterStroke();
+		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		stage_number_label->setPosition(ccp(65, 250));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
@@ -209,7 +209,7 @@ void StartSettingPopup::setMain()
 		{
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			stage_number_label->setColor(ccc3(255, 255, 255));
-			stage_number_label->disableOuterStroke();
+			stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			stage_number_label->setPosition(ccp(65, 250));
 			setFormSetter(stage_number_label);
 			main_case->addChild(stage_number_label);
@@ -222,7 +222,7 @@ void StartSettingPopup::setMain()
 			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 255, 255));
-			piece_number_label->disableOuterStroke();
+			piece_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			piece_number_label->setPosition(ccp(65, 250));
 			main_case->addChild(piece_number_label);
 			
@@ -269,7 +269,7 @@ void StartSettingPopup::setMain()
 		main_case->addChild(mission_title_back);
 		
 		KSLabelTTF* mission_title_label = KSLabelTTF::create("MISSION", mySGD->getFont().c_str(), 12.5f);
-		mission_title_label->disableOuterStroke();
+		mission_title_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		mission_title_label->setPosition(ccpFromSize(mission_title_back->getContentSize()/2.f) + ccp(0,1));
 		mission_title_back->addChild(mission_title_label);
 		
@@ -308,32 +308,32 @@ void StartSettingPopup::setMain()
 			if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 			else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
 			{
 				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true);
+				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, t_code, true, true);
 				
-				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
 			}
 		}
-		mySGD->changeGoods([=](Json::Value result_data)
-						   {
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							   {
-								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
-							   }
-						   });
+//		mySGD->changeGoods([=](Json::Value result_data)
+//						   {
+//							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//							   {
+////								   myDSH->saveUserData({kSaveUserData_Key_item}, nullptr);
+//							   }
+//						   });
 		
 		
 		
@@ -629,26 +629,30 @@ void StartSettingPopup::setMain()
 			{
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-				n_item_case->addChild(n_mount);
 				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_img->setScale(0.7f);
 				n_item_case->addChild(n_img);
 				
+				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+				n_mount->setScale(1.f/n_img->getScale());
+				n_img->addChild(n_mount);
+				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
-				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-				s_item_case->addChild(s_mount);
 				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setColor(ccGRAY);
 				s_img->setScale(0.7f);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
+				
+				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+				s_mount->setScale(1.f/s_img->getScale());
+				s_img->addChild(s_mount);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 				item_item->setTag(i+1);
@@ -739,19 +743,19 @@ void StartSettingPopup::setMain()
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-		mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+		mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 		mount_img->setScale(1.f/gacha_item->getScale());
-		gacha_item->addChild(mount_img);
+		gacha_item->addChild(mount_img, 1);
 	}
 	else
 	{
-		gacha_item = CCSprite::create("startsetting_item_gacha_inner.png");
+		gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
 		gacha_item->setPosition(ccp(410,185));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
-		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, 15.f));
+		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
 		gacha_item->addChild(gacha_label);
 	}
 	
@@ -978,13 +982,15 @@ void StartSettingPopup::setMain()
 		missile_img = t_gm;
 	}
 	
-	missile_data_level = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_level);
+	missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_level->setPosition(ccp(left_back->getPositionX()-29,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	setFormSetter(missile_data_power);
+	missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_power->setPosition(ccp(left_back->getPositionX()+29,95));
 	main_case->addChild(missile_data_power);
 	
@@ -1336,11 +1342,31 @@ void StartSettingPopup::gachaMenuCreate()
 																		   CCRect option_size = CCRectMake(0, 0, 200, 25);
 																		   CCPoint option_position = ccp(188, 117);
 																		   
-																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 11.5f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
+																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 10.f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 																			 setFormSetter(option_label);
 																		   option_label->setAnchorPoint(ccp(0,1));
 																		   option_label->setPosition(option_position);
 																		   main_case->addChild(option_label);
+																		   
+																		   if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+																			{
+																				item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
+																				option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
+																			}
+																		   else
+																			{
+																				CCPoint keep_position = gacha_item->getPosition();
+																				gacha_item->removeFromParent();
+																				
+																				gacha_item = KS::loadCCBI<CCSprite*>(this, "randomitem.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+																				gacha_item->setPosition(keep_position);
+																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+																				
+																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+																				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+																				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+																				gacha_item->addChild(gacha_label);
+																			}
 																		   
 																		   if(!buy_button)
 																			{
@@ -1697,6 +1723,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			selected_gacha_item = (ITEM_CODE)item_type;
 			mySGD->gacha_item = selected_gacha_item;
 			
+			item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
+			option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());
+			
 			CCPoint gacha_item_position = gacha_item->getPosition();
 			gacha_item->removeFromParent();
 			
@@ -1706,9 +1735,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 			
 			CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-			mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+			mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 			mount_img->setScale(1.f/gacha_item->getScale());
-			gacha_item->addChild(mount_img);
+			gacha_item->addChild(mount_img, 1);
 			
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 				buy_button->setPrice(PriceTypePass4, 0);
@@ -1799,9 +1828,9 @@ void StartSettingPopup::stopItemGacha()
 	main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 	
 	CCSprite* mount_img = CCSprite::create("startsetting_item_mounted_case.png");
-	mount_img->setPosition(ccp(gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().width/2.f-3, gacha_item->getContentSize().width/2.f + 37.5f - mount_img->getContentSize().height/2.f-3));
+	mount_img->setPosition(ccpFromSize(gacha_item->getContentSize()/2.f));
 	mount_img->setScale(1.f/gacha_item->getScale());
-	gacha_item->addChild(mount_img);
+	gacha_item->addChild(mount_img, 1);
 	
 	unschedule(schedule_selector(StartSettingPopup::itemGachaAction));
 }
@@ -1851,6 +1880,25 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		{
 			is_clicked_gacha_menu = false;
 			gacha_clicked_img->setVisible(false);
+			
+			if(selected_gacha_item > kIC_emptyBegin && selected_gacha_item < kIC_emptyEnd)
+			{
+				
+			}
+			else
+			{
+				CCPoint keep_position = gacha_item->getPosition();
+				gacha_item->removeFromParent();
+				
+				gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+				gacha_item->setPosition(keep_position);
+				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+				
+				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+				gacha_label->enableOuterStroke(ccBLACK, 1.f);
+				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+				gacha_item->addChild(gacha_label);
+			}
 		}
 		
 		clicked_item_idx = tag-1;
@@ -1920,26 +1968,30 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-				n_item_case->addChild(n_mount);
 				
 				CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				n_img->setScale(0.7f);
 				n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 				n_item_case->addChild(n_img);
 				
+				CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+				n_mount->setScale(1.f/n_img->getScale());
+				n_img->addChild(n_mount, 1);
+				
 				CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 				s_item_case->setColor(ccGRAY);
-				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-				s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-				s_item_case->addChild(s_mount);
 				
 				CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 				s_img->setColor(ccGRAY);
 				s_img->setScale(0.7f);
 				s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 				s_item_case->addChild(s_img);
+				
+				CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+				s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+				s_mount->setScale(1.f/s_img->getScale());
+				s_img->addChild(s_mount, 1);
 				
 				CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 				item_item->setTag(tag);
@@ -2460,7 +2512,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	
 	vector<CommandParam> t_command_list;
 	t_command_list.clear();
-	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
+//	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
 	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
 	{
@@ -2564,22 +2616,22 @@ void StartSettingPopup::acceptStartAction()
 	
 	if(mySGD->getRemoveMessageMailNo() != 0 && mySGD->getRemoveMessageMemberId() != 0)
 	{
-		vector<CommandParam> command_list;
-		
-		////////////////////////////// ksks
-		Json::Value p;
-		p["no"] = mySGD->getRemoveMessageMailNo();
-		p["memberID"] = mySGD->getRemoveMessageMemberId();
-		CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
-		command_list.push_back(ksooParam);
-		// create message remove command
-		// command_list.push_back(message remove command);
-		
-		//////////////////////////////
-		
-		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalAcceptStartAction)));
-		
-		hspConnector::get()->command(command_list);
+//		vector<CommandParam> command_list;
+//		
+//		////////////////////////////// ksks
+//		Json::Value p;
+//		p["no"] = mySGD->getRemoveMessageMailNo();
+//		p["memberID"] = mySGD->getRemoveMessageMemberId();
+//		CommandParam ksooParam("removemessage", p, bind(&ThisClassType::finalRemoveMessage, this, _1));
+//		command_list.push_back(ksooParam);
+//		// create message remove command
+//		// command_list.push_back(message remove command);
+//		
+//		//////////////////////////////
+//		
+//		command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), json_selector(this, StartSettingPopup::finalAcceptStartAction)));
+//		
+//		hspConnector::get()->command(command_list);
 	}
 	else
 	{
@@ -2825,26 +2877,30 @@ void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 		ITEM_CODE t_ic = item_list[t_clicked_item_idx];
 		
 		CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
-		CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
-		n_mount->setPosition(ccp(n_item_case->getContentSize().width - n_mount->getContentSize().width/2.f-3, n_item_case->getContentSize().height - n_mount->getContentSize().height/2.f-3));
-		n_item_case->addChild(n_mount);
 		
 		CCSprite* n_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 		n_img->setScale(0.7f);
 		n_img->setPosition(ccp(n_item_case->getContentSize().width/2.f,n_item_case->getContentSize().height/2.f));
 		n_item_case->addChild(n_img);
 		
+		CCSprite* n_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		n_mount->setPosition(ccpFromSize(n_img->getContentSize()/2.f));
+		n_mount->setScale(1.f/n_img->getScale());
+		n_img->addChild(n_mount, 1);
+		
 		CCSprite* s_item_case = CCSprite::create("startsetting_item_normal_case.png");
 		s_item_case->setColor(ccGRAY);
-		CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
-		s_mount->setPosition(ccp(s_item_case->getContentSize().width - s_mount->getContentSize().width/2.f-3, s_item_case->getContentSize().height - s_mount->getContentSize().height/2.f-3));
-		s_item_case->addChild(s_mount);
 		
 		CCSprite* s_img = CCSprite::create(CCString::createWithFormat("item%d.png", t_ic)->getCString());
 		s_img->setColor(ccGRAY);
 		s_img->setScale(0.7f);
 		s_img->setPosition(ccp(s_item_case->getContentSize().width/2.f,s_item_case->getContentSize().height/2.f));
 		s_item_case->addChild(s_img);
+		
+		CCSprite* s_mount = CCSprite::create("startsetting_item_mounted_case.png");
+		s_mount->setPosition(ccpFromSize(s_img->getContentSize()/2.f));
+		s_mount->setScale(1.f/s_img->getScale());
+		s_img->addChild(s_mount, 1);
 		
 		CCMenuItem* item_item = CCMenuItemSprite::create(n_item_case, s_item_case, this, menu_selector(StartSettingPopup::itemAction));
 		item_item->setTag(t_clicked_item_idx+1);
@@ -2882,14 +2938,15 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	if(t_code == kIC_attack)				return_value = "Attack";
 	else if(t_code == kIC_speedUp)			return_value = "SpeedUp";
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
-	else if(t_code == kIC_fast)				return_value = "Fast";
-	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
+	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(kMyLocalKey_item4title);
+	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(kMyLocalKey_item5title);
 	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
-	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
+	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(kMyLocalKey_item7title);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_item8title);
 	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
 	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
 	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
+	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(kMyLocalKey_item10title);
 	
 	return return_value.c_str();
 }

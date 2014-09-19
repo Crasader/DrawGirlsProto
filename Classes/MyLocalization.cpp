@@ -169,8 +169,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("자석"), kMyLocalKey_magnetTitle);
 	ko->setObject(CCString::create("골드와 아이템을 빨아들입니다."), kMyLocalKey_magnetContent);
 	ko->setObject(CCString::create("아이템 뽑기"), kMyLocalKey_itemGachaTitle);
-	ko->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	ko->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	ko->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	ko->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	ko->setObject(CCString::create("부활 아이템에 도전하세요!"), kMyLocalKey_itemGachaContent);
 	ko->setObject(CCString::create("젬상점"), kMyLocalKey_rubyShop);
 	ko->setObject(CCString::create("골드상점"), kMyLocalKey_goldShop);
@@ -989,7 +989,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ko->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ko->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ko->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ko->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ko->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ko->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ko->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -1132,6 +1132,11 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("추천인 입력 보상"), kMyLocalKey_introducerInputReward);
 	ko->setObject(CCString::create("추천인 일정 스테이지 달성 보상"), kMyLocalKey_introducerCompleteReward);
 	
+	ko->setObject(CCString::create("젬 이어하기"), kMyLocalKey_onContinueGem);
+	ko->setObject(CCString::create("부활석 이어하기"), kMyLocalKey_onContinueP1);
+	
+	ko->setObject(CCString::create("이벤트카드"), kMyLocalKey_eventCard);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()
@@ -1206,8 +1211,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	en->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	en->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
-	en->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	en->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	en->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	en->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	en->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	en->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	en->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
@@ -2009,7 +2014,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	en->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	en->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	en->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	en->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	en->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	en->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	en->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);
@@ -2177,8 +2182,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Additional time"), kMyLocalKey_longTimeTitle);
 	ja->setObject(CCString::create("Game time increases."), kMyLocalKey_longTimeContent);
 	ja->setObject(CCString::create("Items Draw"), kMyLocalKey_itemGachaTitle);
-	ja->setObject(CCString::create("어떤 아이템이 나올까요?"), kMyLocalKey_itemGachaDefaultContent1);
-	ja->setObject(CCString::create("뽑기에만 출몰하는 다양한 아이템!!"), kMyLocalKey_itemGachaDefaultContent2);
+	ja->setObject(CCString::create("뽑기에만 등장하는 아이템들!"), kMyLocalKey_itemGachaDefaultContent1);
+	ja->setObject(CCString::create("침묵, 대쉬, 목숨하나더, 부하몹제거"), kMyLocalKey_itemGachaDefaultContent2);
 	ja->setObject(CCString::create("Resurrection challenge your items!"), kMyLocalKey_itemGachaContent);
 	ja->setObject(CCString::create("RUBY SHOP"), kMyLocalKey_rubyShop);
 	ja->setObject(CCString::create("GOLD SHOP"), kMyLocalKey_goldShop);
@@ -2984,7 +2989,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이런곳은 처음인데 여긴 어디지?"), kMyLocalKey_scenarioMent18);
 	ja->setObject(CCString::create("시노비 결계 속 입니다.\n일반인의 안전을 위해 닌자들은\n이곳에서 훈련하죠."), kMyLocalKey_scenarioMent19);
 	ja->setObject(CCString::create("이곳은 처음이실테니\n컨트롤 방법부터 설명 드리겠습니다."), kMyLocalKey_scenarioMent20);
-	ja->setObject(CCString::create("옵션에는 조이스틱 크기조절,\n대각선이동, 조이스틱고정 등\n다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
+	ja->setObject(CCString::create("옵션에는 조이스틱 크기조절, 대각선이동,\n조이스틱고정 등 다양한 컨트롤 옵션이 있어요.\n제한시간 내에 달성도 85%를 넘기면\n시험 합격입니다.\n그럼 시작해볼까요?"), kMyLocalKey_scenarioMent21);
 	ja->setObject(CCString::create("잠깐!\n깜빡하고 지나갈 뻔했네요."), kMyLocalKey_scenarioMent22);
 	ja->setObject(CCString::create("시험을 잘 볼 수 있게 도와드릴게요.\n \n왼쪽에 보이는 것이 지금 플레이하고 있는\n스테이지의 미니맵이예요.\n여기서 보스와 나의 위치를 파악하면 되겠죠?"), kMyLocalKey_scenarioMent23);
 	ja->setObject(CCString::create("게임을 잠시 멈추거나 게임을 나가고 싶다면\n일시정지 버튼을 눌러주세요.\n일시정지에는 유용한 기능들이 있으니\n한번 확인해보세요."), kMyLocalKey_scenarioMent24);

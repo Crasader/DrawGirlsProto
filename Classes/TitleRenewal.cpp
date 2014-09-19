@@ -219,11 +219,11 @@ void TitleRenewalScene::endSplash()
 {
 	TRACE();
 	
-	setBackKeyFunc([=](){
-		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
-	});
-	
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+//	});
+//	
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -361,7 +361,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			if(myHSP->getSocialID() != myDSH->getStringForKey(kDSH_Key_savedMemberID))
 			{
 				CCLOG("resetalldata");
-				setBackKeyEnabled(false);
+//				setBackKeyEnabled(false);
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
@@ -1445,6 +1445,63 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopP1_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
+		Json::Value startPack = result_data["startPack"];
+		NSDS_SI(kSDS_GI_shopStartPack_no_i, startPack["no"].asInt(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_pID_s, startPack["pID"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_exchangeID_s, startPack["exchangeID"].asString(), false);
+		
+		Json::Value sp_data = startPack["data"];
+		NSDS_SI(kSDS_GI_shopStartPack_expireSec_i, sp_data["expireSec"].asInt(), false);
+		if(NSDS_GS(kSDS_GI_shopStartPack_img_s) != sp_data["img"].asString())
+		{
+			// check, after download ----------
+			DownloadFile t_df;
+			t_df.size = 0;
+			t_df.img = sp_data["img"].asString();
+			t_df.filename = "start_pack.png";
+			t_df.key = "sspImg";
+			
+			auto iter = find(character_download_list.begin(), character_download_list.end(), t_df);
+			if(iter == character_download_list.end())
+				character_download_list.push_back(t_df);
+			// ================================
+		}
+		NSDS_SS(kSDS_GI_shopStartPack_img_s, sp_data["img"].asString(), false);
+		
+		
+		Json::Value eventPack = result_data["eventPack"];
+		bool is_have_eventPack = eventPack["data"]["isHave"].asBool();
+		NSDS_SB(kSDS_GI_shopEventPack_isHave_b, is_have_eventPack, false);
+		if(is_have_eventPack)
+		{
+			NSDS_SI(kSDS_GI_shopEventPack_no_i, eventPack["no"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_pID_s, eventPack["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_exchangeID_s, eventPack["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_startDate_s, eventPack["startDate"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_endDate_s, eventPack["endDate"].asString(), false);
+			NSDS_SI(kSDS_GI_shopEventPack_startTime_i, eventPack["startTime"].asInt(), false);
+			NSDS_SI(kSDS_GI_shopEventPack_endTime_i, eventPack["endTime"].asInt(), false);
+			
+			Json::Value ep_data = eventPack["data"];
+			NSDS_SI(kSDS_GI_shopEventPack_isJustOne_b, ep_data["isJustOne"].asBool(), false);
+			if(NSDS_GS(kSDS_GI_shopEventPack_img_s) != ep_data["img"].asString())
+			{
+				// check, after download ----------
+				DownloadFile t_df;
+				t_df.size = 0;
+				t_df.img = ep_data["img"].asString();
+				t_df.filename = "event_pack.png";
+				t_df.key = "sepImg";
+				
+				auto iter = find(character_download_list.begin(), character_download_list.end(), t_df);
+				if(iter == character_download_list.end())
+					character_download_list.push_back(t_df);
+				// ================================
+			}
+			NSDS_SS(kSDS_GI_shopEventPack_img_s, ep_data["img"].asString(), false);
+		}
+		
+		
 		NSDS_SB(kSDS_GI_shop_isEvent_b, result_data["event"].asBool(), false);
 		NSDS_SI(kSDS_GI_shopVersion_i, result_data["version"].asInt());
 	}
@@ -1772,7 +1829,7 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		reader1.parse(result_data["data"].asString(), data1);
 		
 		myDSH->resetDSH();
-		myDSH->loadAllUserData(result_data);
+//		myDSH->loadAllUserData(result_data);
 		
 		if(myDSH->getStringForKey(kDSH_Key_nick) != result_data["nick"].asString())
 		{
@@ -2483,7 +2540,7 @@ void TitleRenewalScene::endingAction()
 
 void TitleRenewalScene::changeScene()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
@@ -3622,7 +3679,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	}
 	else if(tag >= kTitleRenewal_MT_puzzleBase)
 	{
-		setBackKeyEnabled(false);
+//		setBackKeyEnabled(false);
 		tag -= kTitleRenewal_MT_puzzleBase;
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
@@ -3647,7 +3704,7 @@ void TitleRenewalScene::joinAction()
 										 removeChildByTag(kTitleRenewal_MT_nick);
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
-										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+//										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										
 										 
@@ -3677,7 +3734,7 @@ void TitleRenewalScene::joinAction()
 										 //input_text->removeFromParent();
 										 //flag->removeFromParent();
 										 
-										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
+//										 myDSH->saveUserData({kSaveUserData_Key_nick}, nullptr);
 										 
 										 successLogin();
 									 }
@@ -3712,5 +3769,6 @@ void TitleRenewalScene::alertAction(int t1, int t2)
 
 void TitleRenewalScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+//	onBackKeyAction();
 }

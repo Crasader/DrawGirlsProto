@@ -9,7 +9,7 @@
 #ifndef __DGproto__BackKeyBase__
 #define __DGproto__BackKeyBase__
 
-#include "cocos2d.h"
+/*#include "cocos2d.h"
 #include "cocos-ext.h"
 
 USING_NS_CC;
@@ -32,6 +32,6 @@ public:
 private:
 	bool is_action_enabled;
 	function<void()> back_action;
-};
+};*/
 
 #endif /* defined(__DGproto__BackKeyBase__) */

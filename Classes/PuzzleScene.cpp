@@ -81,10 +81,10 @@ bool PuzzleScene::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		startBacking();
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		startBacking();
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -1735,7 +1735,7 @@ void PuzzleScene::puzzleOpenning()
 
 void PuzzleScene::puzzleBacking()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	CCSprite* title_name = CCSprite::create("temp_title_name.png");
 	title_name->setPosition(ccp(240,160));
@@ -2910,7 +2910,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 15);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 13);
 				rank_label->disableOuterStroke();
 				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
@@ -2931,7 +2931,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3 strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -2941,7 +2941,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			else
 			{
 				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-				nick_label->disableOuterStroke();
+				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
 				list_cell_case->addChild(nick_label);
 			}
@@ -2988,7 +2988,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + myDSH->getStringForKey(kDSH_Key_nick) + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -2998,7 +2998,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			else
 			{
 				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-				nick_label->disableOuterStroke();
+				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
 				list_cell_case->addChild(nick_label);
 			}
@@ -3338,8 +3338,9 @@ void PuzzleScene::setTop()
 //														return true;
 //													}));
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 8);
+	postbox_count_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 8);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
+	postbox_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
@@ -3353,7 +3354,8 @@ void PuzzleScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(6,6));
 	achieve_node->addChild(achievement_count_case);
 	
-	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	
@@ -3507,5 +3509,6 @@ void PuzzleScene::alertAction(int t1, int t2)
 
 void PuzzleScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(PuzzleScene::alertAction));
+//	onBackKeyAction();
 }

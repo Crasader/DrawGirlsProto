@@ -75,10 +75,10 @@ bool MainFlowScene::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -949,7 +949,7 @@ void MainFlowScene::tableEnter(function<void()> end_func)
 
 void MainFlowScene::puzzleLoadSuccess()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	mySGD->resetLabels();
 	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
@@ -2045,9 +2045,9 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
 																																											  }));
 																													}
-																													else if(is_unlock_puzzle == 4)
+																													else if(is_unlock_puzzle >= 4)
 																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4000);
+																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
 																														
 																														skip_menu->setEnabled(false);
 																														
@@ -2063,24 +2063,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																																					 scenario_node->removeFromParent();
 																																				 }));
 																													}
-																													else if(is_unlock_puzzle == 5)
-																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5000);
-																														
-																														skip_menu->setEnabled(false);
-																														
-																														mySGD->setIsUnlockPuzzle(0);
-																														is_unlock_puzzle = 0;
-																														
-																														endUnlockAnimation();
-																														
-																														t_end_func();
-																														
-																														addChild(KSTimer::create(0.1f, [=]()
-																																				 {
-																																					 scenario_node->removeFromParent();
-																																				 }));
-																													}
+																													
 																												}
 																											  else
 																												{
@@ -2914,8 +2897,9 @@ void MainFlowScene::setBottom()
 			n_percent_back->setPosition(ccp(n_mission->getContentSize().width-8, n_mission->getContentSize().height-n_percent_back->getContentSize().height+2));
 			n_mission->addChild(n_percent_back);
 			
-			CCLabelTTF* n_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			n_percent_back->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			n_percent_label->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			n_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
 			n_percent_back->addChild(n_percent_label);
 			
@@ -2923,8 +2907,9 @@ void MainFlowScene::setBottom()
 			s_percent_back->setPosition(ccp(s_mission->getContentSize().width-8, s_mission->getContentSize().height-s_percent_back->getContentSize().height+2));
 			s_mission->addChild(s_percent_back);
 			
-			CCLabelTTF* s_percent_label = CCLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			s_percent_back->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
+			s_percent_label->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			s_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
 			s_percent_back->addChild(s_percent_label);
 		}
@@ -3442,6 +3427,8 @@ void MainFlowScene::setBottom()
 	});
 	
 	etc_menu->addChild(etc_item);
+	
+	etc_item->setEnabled(puzzle_number);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
@@ -4802,8 +4789,9 @@ void MainFlowScene::setTop()
 //														return true;
 //													}));
 	
-	postbox_count_label = CCLabelTTF::create("0", mySGD->getFont().c_str(), 8);
+	postbox_count_label = KSLabelTTF::create("0", mySGD->getFont().c_str(), 8);
 	postbox_count_label->setColor(ccc3(255, 255, 255));
+	postbox_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
@@ -4817,7 +4805,8 @@ void MainFlowScene::setTop()
 	achievement_count_case->setPosition(achieve_menu->getPosition() + ccp(6, 6));
 	achieve_node->addChild(achievement_count_case);
 	
-	achievement_count_label = CCLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 8);
+	achievement_count_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	achievement_count_label->setPosition(ccp(achievement_count_case->getContentSize().width/2.f, achievement_count_case->getContentSize().height/2.f + 0));
 	achievement_count_case->addChild(achievement_count_label);
 	
@@ -5104,5 +5093,6 @@ void MainFlowScene::alertAction(int t1, int t2)
 
 void MainFlowScene::keyBackClicked()
 {
-	onBackKeyAction();
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+//	onBackKeyAction();
 }

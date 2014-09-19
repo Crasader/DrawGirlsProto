@@ -548,8 +548,10 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 			string rType = mail["reward"][0]["type"].asString();
 			if(rType=="fr" || rType=="pr")rType="r";
 			presentIcon= CCSprite::create(CCString::createWithFormat("icon_%s.png",rType.c_str())->getCString());
-		}else{
+		}else if(mail["reward"].isArray() && mail["reward"].size()>1){
 			presentIcon = CCSprite::create("postbox_present.png");
+		}else{
+			presentIcon = CCSprite::create("postbox_friendinvite.png");
 		}
 		profileImg->addChild(presentIcon);
 		presentIcon->setPosition(ccpFromSize(profileImg->getContentSize()) / 2.f);

@@ -16,6 +16,7 @@
 #include "KSUtil.h"
 #include "KSLabelTTF.h"
 #include "ShopPopup.h"
+#include "CommonButton.h"
 
 void ContinueContent::requestItemDelivery()
 {
@@ -74,6 +75,200 @@ void ContinueContent::endShow()
 	schedule(schedule_selector(ContinueContent::countingSchedule));
 }
 
+void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+	
+	unschedule(schedule_selector(ContinueContent::countingSchedule));
+	
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realContinue),[=]()
+										{
+											/*if(mySGD->is_endless_mode)
+											{
+												if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless())
+												{
+													LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+													t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+													addChild(t_popup, 9999);
+													
+													mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "이어하기(PvP)");
+													mySGD->changeGoods([=](Json::Value result_data)
+																	   {
+																		   t_popup->removeFromParent();
+																		   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																		   {
+																			   mySGD->pvp_continue_cnt++;
+																			   giveup_button->setEnabled(false);
+																			   continue_button->setEnabled(false);
+																			   
+																			   is_continue = true;
+																			   
+																			   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+																			   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+																			   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+																			   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+																			   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+																			   
+																			   price_type->runAction(t_seq2);
+																			   
+																			   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+																			   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+																			   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+																			   price_label->runAction(t_spawn2);
+																		   }
+																		   else
+																		   {
+																			   schedule(schedule_selector(ContinueContent::countingSchedule));
+																			   
+																			   mySGD->clearChangeGoods();
+																			   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																			   
+																			   is_menu_enable = true;
+																		   }
+																	   });
+												}
+												else
+												{
+													ShopPopup* t_popup = ShopPopup::create();
+													t_popup->setScale(myDSH->screen_convert_rate);
+													t_popup->setShopCode(kSC_gold);
+													t_popup->setCloseFunc([=]()
+																		  {
+																			  is_menu_enable = true;
+																			  schedule(schedule_selector(ContinueContent::countingSchedule));
+																		  });
+													getParent()->addChild(t_popup);
+												}
+											}
+											else */if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+											{
+												LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+												t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+												addChild(t_popup, 9999);
+												
+												mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
+												mySGD->changeGoods([=](Json::Value result_data)
+																   {
+																	   t_popup->removeFromParent();
+																	   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																	   {
+																		   mySGD->ingame_continue_cnt++;
+//																		   giveup_button->setEnabled(false);
+																		   continue_button2->setEnabled(false);
+																		   continue_button->setEnabled(false);
+																		   
+																		   is_continue = true;
+																		   
+																		   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+																		   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+																		   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+																		   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+																		   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+																		   
+																		   price_type2->runAction(t_seq2);
+																		   
+																		   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+																		   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+																		   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+																		   price_label2->runAction(t_spawn2);
+																	   }
+																	   else
+																	   {
+																		   schedule(schedule_selector(ContinueContent::countingSchedule));
+																		   
+																		   mySGD->clearChangeGoods();
+																		   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																		   
+																		   is_menu_enable = true;
+																	   }
+																   });
+											}
+											else
+											{
+//												if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
+//												{
+//													LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+//													t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+//													addChild(t_popup, 9999);
+//													
+//													mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(루비)");
+//													mySGD->changeGoods([=](Json::Value result_data)
+//																	   {
+//																		   t_popup->removeFromParent();
+//																		   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//																		   {
+//																			   giveup_button->setEnabled(false);
+//																			   continue_button->setEnabled(false);
+//																			   
+//																			   is_continue = true;
+//																			   
+//																			   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+//																			   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+//																			   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+//																			   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+//																			   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+//																			   
+//																			   price_type->runAction(t_seq2);
+//																			   
+//																			   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+//																			   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+//																			   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+//																			   price_label->runAction(t_spawn2);
+//																		   }
+//																		   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+//																		   {
+//																			   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+//																																{
+//																																	schedule(schedule_selector(ContinueContent::countingSchedule));
+//																																	mySGD->clearChangeGoods();
+//																																	is_menu_enable = true;
+//																																}), 9999);
+//																		   }
+//																		   else
+//																		   {
+//																			   schedule(schedule_selector(ContinueContent::countingSchedule));
+//																			   
+//																			   mySGD->clearChangeGoods();
+//																			   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
+//																																myLoc->getLocalForKey(kMyLocalKey_noti),
+//																																myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//																			   
+//																			   is_menu_enable = true;
+//																		   }
+//																	   });
+//												}
+//												else
+//												{
+													ShopPopup* t_popup = ShopPopup::create();
+													t_popup->setScale(myDSH->screen_convert_rate);
+													t_popup->setShopCode(kSC_p1);
+													t_popup->setCloseFunc([=]()
+																		  {
+																			  is_menu_enable = true;
+																			  schedule(schedule_selector(ContinueContent::countingSchedule));
+																		  });
+													t_popup->is_continue = true;
+													t_popup->continue_end = [=]()
+													{
+														continueAction(NULL, CCControlEventTouchUpInside);
+													};
+													getParent()->addChild(t_popup);
+//												}
+											}
+											
+										},12.f,ccp(0.01f,0.01f),true,true,[=](){
+											
+											schedule(schedule_selector(ContinueContent::countingSchedule));
+											
+											is_menu_enable = true;
+										}), 9999);
+}
+
 void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
@@ -102,7 +297,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									   {
 										   mySGD->pvp_continue_cnt++;
-										   giveup_button->setEnabled(false);
+//										   giveup_button->setEnabled(false);
 										   continue_button->setEnabled(false);
 										   
 										   is_continue = true;
@@ -144,63 +339,63 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				getParent()->addChild(t_popup);
 			}
 		}
-		else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
-		{
-			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
-			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
-			addChild(t_popup, 9999);
-			
-			mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
-			mySGD->changeGoods([=](Json::Value result_data)
-							   {
-								   t_popup->removeFromParent();
-								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								   {
-									   mySGD->ingame_continue_cnt++;
-									   giveup_button->setEnabled(false);
-									   continue_button->setEnabled(false);
-									   
-									   is_continue = true;
-									   
-									   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-									   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-									   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-									   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-									   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-									   
-									   price_type->runAction(t_seq2);
-									   
-									   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-									   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-									   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-									   price_label->runAction(t_spawn2);
-								   }
-								   else
-								   {
-									   schedule(schedule_selector(ContinueContent::countingSchedule));
-									   
-									   mySGD->clearChangeGoods();
-									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-									   
-									   is_menu_enable = true;
-								   }
-							   });
-		}
+//		else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+//		{
+//			LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
+//			t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
+//			addChild(t_popup, 9999);
+//			
+//			mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
+//			mySGD->changeGoods([=](Json::Value result_data)
+//							   {
+//								   t_popup->removeFromParent();
+//								   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//								   {
+//									   mySGD->ingame_continue_cnt++;
+//									   giveup_button->setEnabled(false);
+//									   continue_button->setEnabled(false);
+//									   
+//									   is_continue = true;
+//									   
+//									   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+//									   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+//									   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+//									   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+//									   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+//									   
+//									   price_type->runAction(t_seq2);
+//									   
+//									   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+//									   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+//									   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+//									   price_label->runAction(t_spawn2);
+//								   }
+//								   else
+//								   {
+//									   schedule(schedule_selector(ContinueContent::countingSchedule));
+//									   
+//									   mySGD->clearChangeGoods();
+//									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//									   
+//									   is_menu_enable = true;
+//								   }
+//							   });
+//		}
 		else
 		{
-			if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee())
+			if(mySGD->getGoodsValue(kGoodsType_ruby) >= mySGD->getPlayContinueFee() + myGD->getCommunication("Jack_getContinueOnCount")-1)
 			{
 				LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(루비)");
+				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, -(mySGD->getPlayContinueFee() + myGD->getCommunication("Jack_getContinueOnCount")-1), "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(루비)");
 				mySGD->changeGoods([=](Json::Value result_data)
 								   {
 									   t_popup->removeFromParent();
 									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									   {
-										   giveup_button->setEnabled(false);
+//										   giveup_button->setEnabled(false);
 										   continue_button->setEnabled(false);
 										   
 										   is_continue = true;
@@ -282,7 +477,7 @@ void ContinueContent::giveupAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	giveup_button->setEnabled(false);
+//	giveup_button->setEnabled(false);
 	continue_button->setEnabled(false);
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
@@ -361,51 +556,71 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	addChild(back_case);
 	
 	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(225,90));
-	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+11.f));
+	back_in->setContentSize(CCSizeMake(235,75));
+	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+25.f));
 	back_case->addChild(back_in,2);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
-	title_label->disableOuterStroke();
-	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-30));
+	title_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);// disableOuterStroke();
+	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-28));
 	back_case->addChild(title_label);
 	
 	counting_value = 10*60;
 	
-	counting_label = KSLabelTTF::create(CCString::createWithFormat("%d", counting_value/60)->getCString(), mySGD->getFont().c_str(), 100);
+	counting_label = KSLabelTTF::create(CCString::createWithFormat("%d", counting_value/60)->getCString(), mySGD->getFont().c_str(), 80);
 	counting_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	counting_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	counting_label->setScale(5.f);
 	counting_label->setOpacity(0);
 	counting_label->setAnchorPoint(ccp(0.5f,0.5f));
-	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f-4));
+	counting_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height/2.f-8));
 	back_in->addChild(counting_label);
 	counting_label->setVisible(false);
 	
 	
-	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
-	giveup_label->disableOuterStroke();
-	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_button_ing.png");
-	giveup_button = CCControlButton::create(giveup_label, giveup_back);
-	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::giveupAction), CCControlEventTouchUpInside);
-	giveup_button->setPreferredSize(CCSizeMake(101,44));
-	giveup_button->setPosition(ccp(back_case->getContentSize().width/2.f-77,back_case->getContentSize().height/2.f-65));
-	back_case->addChild(giveup_button);
+	CommonButton* cancel_button = CommonButton::createCloseButton(touch_priority-1);
+	cancel_button->setFunction([=](CCObject* sender)
+							   {
+								   if(!is_menu_enable)
+									   return;
+								   
+								   is_menu_enable = false;
+								   
+								   AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
+								   
+//								   giveup_button->setEnabled(false);
+								   cancel_button->setEnabled(false);
+								   continue_button->setEnabled(false);
+								   
+								   unschedule(schedule_selector(ContinueContent::countingSchedule));
+								   closeAction();
+							   });
+	cancel_button->setPosition(ccpFromSize(back_case->getContentSize()) + ccp(-20,-12));
+	back_case->addChild(cancel_button);
 	
-	giveup_button->setTouchPriority(touch_priority-1);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
+//	giveup_label->disableOuterStroke();
+//	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_button_ing.png");
+//	giveup_button = CCControlButton::create(giveup_label, giveup_back);
+//	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::giveupAction), CCControlEventTouchUpInside);
+//	giveup_button->setPreferredSize(CCSizeMake(101,44));
+//	giveup_button->setPosition(ccp(back_case->getContentSize().width/2.f-77,back_case->getContentSize().height/2.f-65));
+//	back_case->addChild(giveup_button);
+//	
+//	giveup_button->setTouchPriority(touch_priority-1);
 	
-	
+	continue_button2 = NULL;
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinue), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueGem), mySGD->getFont().c_str(), 13);
 	c_label->disableOuterStroke();
-	c_label->setAnchorPoint(ccp(0,0.5f));
-	c_label->setPosition(ccp(0,0));
+	c_label->setAnchorPoint(ccp(0.5f,0.5f));
+	c_label->setPosition(ccp(0,15));
 	
 	CCNode* price_node = CCNode::create();
-	price_node->setPosition(ccp(c_label->getContentSize().width + 1, c_label->getContentSize().height/2.f));
-	c_label->addChild(price_node);
+	price_node->setPosition(ccp(0, -10));
+	
 	
 //	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
 //	price_back->setContentSize(CCSizeMake(82, 26));
@@ -414,6 +629,21 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	
 	if(mySGD->is_endless_mode)
 	{
+		title_label->setPosition(title_label->getPosition() + ccp(0,-2));
+		
+		back_in->setContentSize(CCSizeMake(225, 90));
+		back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+11.f));
+		
+		counting_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0,-6));
+		
+		c_label->setString(myLoc->getLocalForKey(kMyLocalKey_onContinue));
+		c_label->setAnchorPoint(ccp(0,0.5f));
+		c_label->setPosition(ccp(0,0));
+		
+		price_node->setPosition(ccp(c_label->getContentSize().width + 1, c_label->getContentSize().height/2.f));
+		c_label->addChild(price_node);
+		r_label->addChild(c_label);
+		
 		price_type = CCSprite::create("price_gold_img.png");
 		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
 		price_node->addChild(price_type);
@@ -421,54 +651,156 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		price_label->setAnchorPoint(ccp(0,0.5f));
 		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
 		price_node->addChild(price_label);
+		
+		CCScale9Sprite* c_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
+		
+		continue_button = CCControlButton::create(r_label, c_back);
+		continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
+		continue_button->setPreferredSize(CCSizeMake(150,44));
+		continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-62));
+		back_case->addChild(continue_button);
+		
+		continue_button->setTouchPriority(touch_priority-1);
+		
+		c_label->setPositionX(-(c_label->getContentSize().width + 1 + price_type->getContentSize().width + 2 + price_label->getContentSize().width)/2.f);
+		
+		
+		return;
 	}
-	else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+	else if(myGD->getCommunication("Jack_getContinueOnCount") == 1)
 	{
-		price_type = CCSprite::create("pass_ticket1.png");
-		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
-		price_node->addChild(price_type);
+		// 버튼 두개(부활석, 젬 소모)
 		
-		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-		pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
-		price_type->addChild(pass_count_case);
+		CCScale9Sprite* price_back1 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		price_back1->setContentSize(CCSizeMake(80, 28));
+		price_back1->setPosition(ccp(0,0));
+		price_node->addChild(price_back1);
 		
-		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 8);
-		pass_count_label->setColor(ccc3(255, 255, 255));
-		float min_width = 10+pass_count_label->getContentSize().width;
-		if(min_width < 20)
-			min_width = 20;
-		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
-		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
-		pass_count_case->addChild(pass_count_label);
+		CCLabelTTF* r_label2 = CCLabelTTF::create();
 		
-		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
-		price_label->setAnchorPoint(ccp(0,0.5f));
-		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
-		price_node->addChild(price_label);
-	}
-	else
-	{
+		KSLabelTTF* c_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueP1), mySGD->getFont().c_str(), 13);
+		c_label2->disableOuterStroke();
+		c_label2->setAnchorPoint(ccp(0.5f,0.5f));
+		c_label2->setPosition(ccp(0,15));
+		r_label2->addChild(c_label2);
+		
+		CCNode* price_node2 = CCNode::create();
+		price_node2->setPosition(ccp(0,-10));
+		r_label2->addChild(price_node2);
+		
+		CCScale9Sprite* price_back2 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		price_back2->setContentSize(CCSizeMake(80, 28));
+		price_back2->setPosition(ccp(0,0));
+		price_node2->addChild(price_back2);
+		
+		price_type2 = CCSprite::create("pass_ticket1.png");
+		price_type2->setPosition(ccp(price_type2->getContentSize().width/2.f,0));
+		price_node2->addChild(price_type2);
+		
+//		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//		pass_count_case->setPosition(ccpFromSize(price_type2->getContentSize()/2.f) + ccp(9,6));
+//		price_type2->addChild(pass_count_case);
+//		
+//		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 8);
+//		pass_count_label->setColor(ccc3(255, 255, 255));
+//		float min_width = 10+pass_count_label->getContentSize().width;
+//		if(min_width < 20)
+//			min_width = 20;
+//		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
+//		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+//		pass_count_case->addChild(pass_count_label);
+		
+		price_label2 = CCLabelTTF::create(CCString::createWithFormat("%d", 1)->getCString(), mySGD->getFont().c_str(), 15);
+		price_label2->setAnchorPoint(ccp(0.5f,0.5f));
+		price_label2->setPosition(ccp(price_type2->getContentSize().width/2.f,0));
+		price_node2->addChild(price_label2);
+		
+		price_type2->setPositionX(-price_label2->getContentSize().width/2.f);
+		
+		
+		CCScale9Sprite* c_back2 = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
+		
+		continue_button2 = CCControlButton::create(r_label2, c_back2);
+		continue_button2->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction2), CCControlEventTouchUpInside);
+		continue_button2->setPreferredSize(CCSizeMake(120,70));
+		continue_button2->setPosition(ccp(back_case->getContentSize().width/2.f-61,back_case->getContentSize().height/2.f-53));
+		back_case->addChild(continue_button2);
+		
+		continue_button2->setTouchPriority(touch_priority-1);
+		
+//		c_label2->setPositionX(-(c_label2->getContentSize().width + 1 + price_type2->getContentSize().width + 2 + price_label2->getContentSize().width)/2.f);
+		
+		
+		
+		
 		price_type = CCSprite::create("price_ruby_img.png");
 		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
 		price_node->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee())->getCString(), mySGD->getFont().c_str(), 15);
-		price_label->setAnchorPoint(ccp(0,0.5f));
-		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee() + myGD->getCommunication("Jack_getContinueOnCount")-1)->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setAnchorPoint(ccp(0.5f,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width/2.f,0));
 		price_node->addChild(price_label);
+		price_type->setPositionX(-price_label->getContentSize().width/2.f);
+	}
+//	else if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
+//	{
+//		price_type = CCSprite::create("pass_ticket1.png");
+//		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+//		price_node->addChild(price_type);
+//		
+//		CCScale9Sprite* pass_count_case = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+//		pass_count_case->setPosition(ccpFromSize(price_type->getContentSize()/2.f) + ccp(9,6));
+//		price_type->addChild(pass_count_case);
+//		
+//		CCLabelTTF* pass_count_label = CCLabelTTF::create(ccsf("%d", mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 8);
+//		pass_count_label->setColor(ccc3(255, 255, 255));
+//		float min_width = 10+pass_count_label->getContentSize().width;
+//		if(min_width < 20)
+//			min_width = 20;
+//		pass_count_case->setContentSize(CCSizeMake(min_width, 20));
+//		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
+//		pass_count_case->addChild(pass_count_label);
+//		
+//		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+//		price_label->setAnchorPoint(ccp(0,0.5f));
+//		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
+//		price_node->addChild(price_label);
+//	}
+	else
+	{
+		CCScale9Sprite* price_back1 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+		price_back1->setContentSize(CCSizeMake(80, 28));
+		price_back1->setPosition(ccp(0,0));
+		price_node->addChild(price_back1);
+		
+		price_type = CCSprite::create("price_ruby_img.png");
+		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_type);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFee() + myGD->getCommunication("Jack_getContinueOnCount")-1)->getCString(), mySGD->getFont().c_str(), 15);
+		price_label->setAnchorPoint(ccp(0.5f,0.5f));
+		price_label->setPosition(ccp(price_type->getContentSize().width/2.f,0));
+		price_node->addChild(price_label);
+		price_type->setPositionX(-price_label->getContentSize().width/2.f);
 	}
 	
 	r_label->addChild(c_label);
+	r_label->addChild(price_node);
 	
 	
 	CCScale9Sprite* c_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	
 	continue_button = CCControlButton::create(r_label, c_back);
 	continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
-	continue_button->setPreferredSize(CCSizeMake(150,44));
-	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f+53,back_case->getContentSize().height/2.f-65));
+	continue_button->setPreferredSize(CCSizeMake(120,70));
+	continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-53));
 	back_case->addChild(continue_button);
 	
 	continue_button->setTouchPriority(touch_priority-1);
 	
-	c_label->setPositionX(-(c_label->getContentSize().width + 1 + price_type->getContentSize().width + 2 + price_label->getContentSize().width)/2.f);
+//	c_label->setPositionX(-(c_label->getContentSize().width + 1 + price_type->getContentSize().width + 2 + price_label->getContentSize().width)/2.f);
+	
+	if(continue_button2)
+	{
+		continue_button->setPosition(continue_button->getPosition() + ccp(61,0));
+	}
 }

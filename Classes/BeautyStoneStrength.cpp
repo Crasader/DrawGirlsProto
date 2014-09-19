@@ -762,26 +762,26 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 				t_suction->addChild(loading_label);
 
 				
-				myDSH->saveAllUserData([=](Json::Value result_data)
-									   {
-										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										   {
-											
-										   }
-										   else
-										   {
-											   
-										   }
-										   
-										   t_suction->removeFromParent();
-										   setStrengthNode(strength_stone_idx);
-										   offering_table->reloadData();
-										   setOfferingNode(-1);
-										   
-										   addChild(ASPopupView::getCommonNoti(-250, "강화 성공!!"), kBeautyStoneStrengthPopupZorder_popup);
-										   
-										   is_menu_enable = true;
-									   });
+//				myDSH->saveAllUserData([=](Json::Value result_data)
+//									   {
+//										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//										   {
+//											
+//										   }
+//										   else
+//										   {
+//											   
+//										   }
+//										   
+//										   t_suction->removeFromParent();
+//										   setStrengthNode(strength_stone_idx);
+//										   offering_table->reloadData();
+//										   setOfferingNode(-1);
+//										   
+//										   addChild(ASPopupView::getCommonNoti(-250, "강화 성공!!"), kBeautyStoneStrengthPopupZorder_popup);
+//										   
+//										   is_menu_enable = true;
+//									   });
 			}
 			else
 			{
@@ -805,25 +805,25 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 				loading_label->setPosition(ccp(240,160));
 				t_suction->addChild(loading_label);
 				
-				myDSH->saveAllUserData([=](Json::Value result_data)
-									   {
-										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										   {
-											   
-										   }
-										   else
-										   {
-											   
-										   }
-										   
-										   t_suction->removeFromParent();
-										   offering_table->reloadData();
-										   setOfferingNode(-1);
-										   
-										   addChild(ASPopupView::getCommonNoti(-250, "강화 실패!!"), kBeautyStoneStrengthPopupZorder_popup);
-										   
-										   is_menu_enable = true;
-									   });
+//				myDSH->saveAllUserData([=](Json::Value result_data)
+//									   {
+//										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//										   {
+//											   
+//										   }
+//										   else
+//										   {
+//											   
+//										   }
+//										   
+//										   t_suction->removeFromParent();
+//										   offering_table->reloadData();
+//										   setOfferingNode(-1);
+//										   
+//										   addChild(ASPopupView::getCommonNoti(-250, "강화 실패!!"), kBeautyStoneStrengthPopupZorder_popup);
+//										   
+//										   is_menu_enable = true;
+//									   });
 			}
 		}
 		else
@@ -918,26 +918,26 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 				t_suction->addChild(loading_label);
 				
 				
-				myDSH->saveAllUserData([=](Json::Value result_data)
-									   {
-										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										   {
-											   
-										   }
-										   else
-										   {
-											   
-										   }
-										   
-										   t_suction->removeFromParent();
-										   setStrengthNode(strength_stone_idx);
-										   offering_table->reloadData();
-										   setOfferingNode(-1);
-										   
-										   addChild(ASPopupView::getCommonNoti(-250, "강화 성공!!"), kBeautyStoneStrengthPopupZorder_popup);
-										   
-										   is_menu_enable = true;
-									   });
+//				myDSH->saveAllUserData([=](Json::Value result_data)
+//									   {
+//										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//										   {
+//											   
+//										   }
+//										   else
+//										   {
+//											   
+//										   }
+//										   
+//										   t_suction->removeFromParent();
+//										   setStrengthNode(strength_stone_idx);
+//										   offering_table->reloadData();
+//										   setOfferingNode(-1);
+//										   
+//										   addChild(ASPopupView::getCommonNoti(-250, "강화 성공!!"), kBeautyStoneStrengthPopupZorder_popup);
+//										   
+//										   is_menu_enable = true;
+//									   });
 			}
 			else
 			{
@@ -961,25 +961,25 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 				loading_label->setPosition(ccp(240,160));
 				t_suction->addChild(loading_label);
 				
-				myDSH->saveAllUserData([=](Json::Value result_data)
-									   {
-										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										   {
-											   
-										   }
-										   else
-										   {
-											   
-										   }
-										   
-										   t_suction->removeFromParent();
-										   offering_table->reloadData();
-										   setOfferingNode(-1);
-										   
-										   addChild(ASPopupView::getCommonNoti(-250, "강화 실패!!"), kBeautyStoneStrengthPopupZorder_popup);
-										   
-										   is_menu_enable = true;
-									   });
+//				myDSH->saveAllUserData([=](Json::Value result_data)
+//									   {
+//										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//										   {
+//											   
+//										   }
+//										   else
+//										   {
+//											   
+//										   }
+//										   
+//										   t_suction->removeFromParent();
+//										   offering_table->reloadData();
+//										   setOfferingNode(-1);
+//										   
+//										   addChild(ASPopupView::getCommonNoti(-250, "강화 실패!!"), kBeautyStoneStrengthPopupZorder_popup);
+//										   
+//										   is_menu_enable = true;
+//									   });
 			}
 		}
 		else

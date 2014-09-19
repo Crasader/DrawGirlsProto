@@ -43,7 +43,7 @@ private:
 	map<int, vector<function<void()>>> on_tag_list;
 };
 
-class ASPopupView : public CCLayer, public BackKeyBase
+class ASPopupView : public CCLayer//, public BackKeyBase
 {
 public:
 	static ASPopupView* create(int t_touch_priority)

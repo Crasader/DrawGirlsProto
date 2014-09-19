@@ -177,7 +177,10 @@ typedef enum t_DSH_Key{
 	kDSH_Key_cardSettingTableOffsetTake,
 	kDSH_Key_cardSettingTableOffsetTakeReverse,
 	kDSH_Key_cardSettingTableOffsetGrade,
-	kDSH_Key_cardSettingTableOffsetGradeReverse
+	kDSH_Key_cardSettingTableOffsetGradeReverse,
+	kDSH_Key_cardSettingTableOffsetEvent,
+	
+	kDSH_Key_savedStartPackFirstTime
 	
 }DSH_Key;
 
@@ -261,11 +264,11 @@ public:
 	CCPoint add_point;
 	CCPoint wideWidthFixTouch (CCPoint t_p);
 	string getKey (DSH_Key t_name);
-	Json::Value getSaveAllUserDataParam ();
-	void loadAllUserData (Json::Value result_data);
+//	Json::Value getSaveAllUserDataParam ();
+//	void loadAllUserData (Json::Value result_data);
 	void writeParamForKey (Json::Value & data, SaveUserData_Key t_key);
-	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
-	void saveAllUserData (jsonSelType t_saved);
+//	void saveUserData (vector <SaveUserData_Key> const & key_list, function <void(Json::Value)> t_selector);
+//	void saveAllUserData (jsonSelType t_saved);
 	void clear();
 	void resetDSH ();
 	bool isCheatKeyEnable ();

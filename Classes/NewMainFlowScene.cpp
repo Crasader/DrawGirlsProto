@@ -376,7 +376,7 @@ bool NewMainFlowScene::init()
 								  t_sm->addMent(false, "엘레베르", "talk_nametag_red.png", "이런 또 악령이 나타났구만.\n일단 악령을 처치한 후 이야기를 하지.\n악령이 있는곳엔 반드시 그림카드가 숨겨져있다네.\n악령을 피해 그걸 찾아야해! 이 마법붓을 이용하게!", [=]()
 								  {
 									  myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 2);
-									  myDSH->saveAllUserData(nullptr);
+//									  myDSH->saveAllUserData(nullptr);
 									  character_img->setVisible(true);
 									t_sm->removeFromParent();
 								  });
@@ -571,7 +571,7 @@ void NewMainFlowScene::hideClearPopup()
 						{
 							character_img->setVisible(true);
 							myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 3);
-							myDSH->saveAllUserData(nullptr);
+//							myDSH->saveAllUserData(nullptr);
 							t_sm->removeFromParent();
 						});
 					});
@@ -634,7 +634,7 @@ void NewMainFlowScene::hideClearPopup()
 				{
 					character_img->setVisible(true);
 					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 4);
-					myDSH->saveAllUserData(nullptr);
+//					myDSH->saveAllUserData(nullptr);
 					t_sm->removeFromParent();
 				});
 			});
@@ -687,7 +687,7 @@ void NewMainFlowScene::hideClearPopup()
 				{
 					character_img->setVisible(true);
 					myDSH->setIntegerForKey(kDSH_Key_storyReadPoint, 5);
-					myDSH->saveAllUserData(nullptr);
+//					myDSH->saveAllUserData(nullptr);
 					t_sm->removeFromParent();
 				});
 			});
@@ -1164,7 +1164,7 @@ void NewMainFlowScene::cellAction(CCObject* sender)
 								
 								save_userdata_list.push_back(kSaveUserData_Key_star);
 								
-								myDSH->saveUserData(save_userdata_list, nullptr);
+//								myDSH->saveUserData(save_userdata_list, nullptr);
 								
 								puzzle_table->updateCellAtIndex(tag);
 								puzzle_table->updateCellAtIndex(tag-1);

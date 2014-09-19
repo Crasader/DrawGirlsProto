@@ -70,6 +70,7 @@ private:
 //	void menuAction(CCObject* sender);
 	void giveupAction(CCObject* sender, CCControlEvent t_event);
 	void continueAction(CCObject* sender, CCControlEvent t_event);
+	void continueAction2(CCObject* sender, CCControlEvent t_event);
 	
 	LoadingLayer* inapp_loading;
 	
@@ -82,8 +83,12 @@ private:
 	CCSprite* price_type;
 	CCLabelTTF* price_label;
 	
-	CCControlButton* giveup_button;
+	CCSprite* price_type2;
+	CCLabelTTF* price_label2;
+	
+//	CCControlButton* giveup_button;
 	CCControlButton* continue_button;
+	CCControlButton* continue_button2;
 	
 //	void startHide()
 //	{

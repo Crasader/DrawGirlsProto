@@ -44,6 +44,7 @@
 #include "TouchSuctionLayer.h"
 #include "LabelTTFMarquee.h"
 #include "FiveRocksCpp.h"
+#include <chrono>
 
 typedef enum tMenuTagClearPopup{
 	kMT_CP_ok = 1,
@@ -352,7 +353,7 @@ bool ClearPopup::init()
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
 	ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
-	ok_label->disableOuterStroke();
+	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -368,7 +369,7 @@ bool ClearPopup::init()
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
 	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
-	replay_label->disableOuterStroke();
+	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_replay_node->addChild(replay_label);
 	
 	replay_menu = CCControlButton::create(t_replay_node, CCScale9Sprite::create("mainbutton_green.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -899,7 +900,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(read_data.get("nick", Json::Value()).asString().c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0,0.5f));
@@ -909,7 +910,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			else
 			{
 				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-				nick_label->disableOuterStroke();
+				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setAnchorPoint(ccp(0,0.5f));
 				nick_label->setPosition(ccp(64,15.5f));
 				list_cell_case->addChild(nick_label);
@@ -957,7 +958,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(myDSH->getStringForKey(kDSH_Key_nick).c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + myDSH->getStringForKey(kDSH_Key_nick) + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0,0.5f));
@@ -967,7 +968,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			else
 			{
 				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
-				nick_label->disableOuterStroke();
+				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setAnchorPoint(ccp(0,0.5f));
 				nick_label->setPosition(ccp(64,15.5f));
 				list_cell_case->addChild(nick_label);
@@ -1489,6 +1490,14 @@ void ClearPopup::endTakeCard()
 																		 
 																		 addChild(KSTimer::create(0.1f, [=]()
 																								  {
+																									  if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+																										{
+																											chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+																											std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+																											myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+																											CCLOG("saved StartPack time : %ld", now_time_t);
+																										}
+																									  
 																									  if(is_today_mission_success)
 																									  {
 																										  mySGD->is_today_mission_first = false;
@@ -1510,6 +1519,14 @@ void ClearPopup::endTakeCard()
 			
 			addChild(KSTimer::create(0.1f, [=]()
 									 {
+										 if(myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime) == 0)
+										 {
+											 chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+											 std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+											 myDSH->setIntegerForKey(kDSH_Key_savedStartPackFirstTime, now_time_t);
+											 CCLOG("saved StartPack time : %ld", now_time_t);
+										 }
+										 
 										 if(is_today_mission_success)
 										 {
 											 mySGD->is_today_mission_first = false;
@@ -1998,7 +2015,7 @@ void ClearPopup::resultSavedUserData(Json::Value result_data)
 	}
 	else
 	{
-		myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
+//		myDSH->saveAllUserData(json_selector(this, ClearPopup::resultSavedUserData));
 	}
 }
 

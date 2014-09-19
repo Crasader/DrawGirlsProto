@@ -21,6 +21,7 @@
 #include "RankUpPopup.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "AlertEngine.h"
 
 #define ZS_SCROLL_SPEED_MAX_BASE	20
 #define ZS_SCROLL_SPEED_DECEASE_BASE	0.2f
@@ -52,11 +53,11 @@ bool ZoomScript::init()
         return false;
     }
 	
-	setBackKeyFunc([=](){
-		CCNode* t_node = CCNode::create();
-		menuAction(t_node);
-	});
-	setBackKeyEnabled(true);
+//	setBackKeyFunc([=](){
+//		CCNode* t_node = CCNode::create();
+//		menuAction(t_node);
+//	});
+//	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
 	
@@ -141,7 +142,8 @@ bool ZoomScript::init()
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
-	
+	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)is_morphing = true;
+	else is_morphing = false;
 	
 	first_img->setPosition(ccp(160,230));
 	first_img->setAnchorPoint(ccp(0.5,0.5));
@@ -928,7 +930,7 @@ void ZoomScript::menuAction(CCObject *sender)
 
 void ZoomScript::nextScene()
 {
-	setBackKeyEnabled(false);
+//	setBackKeyEnabled(false);
 	
 	if(mySGD->is_endless_mode)
 	{
@@ -1156,8 +1158,7 @@ void ZoomScript::rankupAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
-	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)
-		showtime_morphing_label->setVisible(true);
+	if(is_morphing)showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1208,8 +1209,7 @@ void ZoomScript::showtimeSeventhAction()
 	
 	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
 	
-	if(mySGD->getStageGrade() == 4 || mySGD->getStageGrade() == 2)
-		showtime_morphing_label->setVisible(true);
+	if(is_morphing)showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1369,7 +1369,8 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 {
 	CCSetIterator iter;
 	CCTouch *touch;
-
+	
+	touch_mode=0;
 	for (iter = pTouches->begin(); iter != pTouches->end(); ++iter)
 	{
 		touch = (CCTouch*)(*iter);
@@ -1399,6 +1400,7 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_touch_p = int(touch);
 			first_touch_point = location;
 			is_scrolling = true;
+			target_node->ccTouchBegan(touch,pEvent);
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 //			{
 //				is_touched_menu = true;
@@ -1466,39 +1468,13 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			
 			if(multiTouchData.size() == 1)
 			{
-//				if(is_touched_menu)
-//				{
-//					next_button->ccTouchMoved(touch, pEvent);
-//				}
 				
-				if(is_spin_mode)
-				{
-					this->unschedule(schedule_selector(ZoomScript::moveAnimation));
-					moveSpeed_p = CCPointZero;
-					isAnimated = false;
-					
-					CCPoint rotate_sub = ccpSub(location, touch_p);
-					
-					float rotation_degree = target_node->getImageRotationDegree() + rotate_sub.x/5.f;
-					if(rotation_degree > 60.f)
-						rotation_degree = 60.f;
-					else if(rotation_degree < -60.f)
-						rotation_degree = -60.f;
-					target_node->setImageRotationDegree(rotation_degree);
-					
-					float rotation_degreeX = target_node->getImageRotationDegreeX() - rotate_sub.y/5.f;
-					if(rotation_degreeX > 60.f)
-						rotation_degreeX = 60.f;
-					else if(rotation_degreeX < -60.f)
-						rotation_degreeX = -60.f;
-					target_node->setImageRotationDegreeX(rotation_degreeX);
-				}
-				else
-					this->moveListXY(ccpSub(touch_p, location));
 				touch_p = location;
+				if(is_morphing)target_node->ccTouchMoved(touch,pEvent);
 			}
 			else if(multiTouchData.size() == 2)
 			{
+				touch_mode=2;
 				CCPoint sub_point = CCPointZero;
 				CCPoint avg_point = CCPointZero;
 				map<int, CCPoint>::iterator it;
@@ -1547,41 +1523,6 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				
 				old_center_pos = avg_point;
 
-				
-//				CCPoint a_p;
-//				{
-//					float comp_scale = before_scale < 1.5f ? 1.5f : before_scale;
-//					comp_scale = game_node->getScale() - comp_scale;
-//					
-//					a_p.x = game_node->getPositionX() - 320*comp_scale/2.f;
-//				}
-//				
-//				if(game_node->getScale() <= 1.5f)
-//				{
-//					if(a_p.x > (480.f-320.f*game_node->getScale())/2.f+40.f)
-//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f+40.f);
-//					else if(a_p.x < (480.f-320.f*game_node->getScale())/2.f-40.f)
-//						game_node->setPositionX((480.f-320.f*game_node->getScale())/2.f-40.f);
-//				}
-//				else
-//				{
-//					game_node->setPositionX(a_p.x);
-//
-//					if(game_node->getPositionX() > 40.f)
-//						game_node->setPositionX(40.f);
-//					else if(game_node->getPositionX() < 480-320*game_node->getScale()-40.f)
-//						game_node->setPositionX(480-320*game_node->getScale()-40.f);
-//				}
-//
-//				float comp_scale = before_scale;
-//				comp_scale = game_node->getScale() - comp_scale;
-//
-//				game_node->setPositionY(game_node->getPositionY() - 430*comp_scale/2.f);
-//
-//				if(game_node->getPositionY() > 0+40.f)
-//					game_node->setPositionY(0+40.f);
-//				else if(game_node->getPositionY() < -430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f)
-//					game_node->setPositionY(-430*game_node->getScale()+480*screen_size.height/screen_size.width-40.f);
 			}
 		}
 	}
@@ -1650,11 +1591,17 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
-					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+//					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+//						target_node->ccTouchEnded(touch, pEvent);
+					if(is_morphing && touch_mode!=2)
 						target_node->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
+					if(is_morphing && touch_mode!=2)
+						target_node->morphing(touch, pEvent);
+					return;
+
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 					
@@ -1675,16 +1622,25 @@ void ZoomScript::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
 	ccTouchesEnded(pTouches, pEvent);
 }
 
+void ZoomScript::alertAction(int t1, int t2)
+{
+	if(t1 == 1 && t2 == 0)
+	{
+		CCDirector::sharedDirector()->end();
+	}
+}
+
 void ZoomScript::keyBackClicked()
 {
-	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
-	{
-		onBackKeyAction();
-		
-		setBackKeyFunc([=](){
-			CCNode* t_node = CCNode::create();
-			menuAction(t_node);
-		});
-		setBackKeyEnabled(true);
-	}
+	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
+//	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
+//	{
+//		onBackKeyAction();
+//		
+//		setBackKeyFunc([=](){
+//			CCNode* t_node = CCNode::create();
+//			menuAction(t_node);
+//		});
+//		setBackKeyEnabled(true);
+//	}
 }

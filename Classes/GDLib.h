@@ -47,7 +47,8 @@ namespace GraphDogLib {
 	string dateFormat(string format, string datestring);
 		string dateFormat(string format, long long int datestring);
 	int match(const char *string, const char *pattern);
-
+	
+	std::string random_string( size_t length );
 	
 	
 }
