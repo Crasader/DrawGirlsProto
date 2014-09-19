@@ -481,7 +481,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		back->addChild(closeButton);
 		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
 		
-		StyledLabelTTF* content_label = StyledLabelTTF::create(ccsf("<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>",
+		StyledLabelTTF* content_label = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendRemoveFriendQ),
 																																memberInfo["nick"].asString().c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		content_label->setAnchorPoint(ccp(0.5f,0.5f));
 		content_label->setPosition(ccpFromSize(back->getContentSize() / 2.f) + ccp(0, 10));

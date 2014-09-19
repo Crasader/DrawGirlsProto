@@ -41,6 +41,10 @@ public:
 		{
 			input_text1->removeFromParent();
 		}
+		if(m_voteInputText)
+		{
+			m_voteInputText->removeFromParent();
+		}
 	}
 	
 	// a selector callback

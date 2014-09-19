@@ -18,6 +18,10 @@
 #include "KSUtil.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
+#include "KsLocal.h"
+#include "FormSetter.h"
+#include "FlagSelector.h"
+
 
 CardGiftPopup* CardGiftPopup::create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func)
 {
@@ -29,14 +33,15 @@ CardGiftPopup* CardGiftPopup::create(int t_touch_priority, int t_gift_card, func
 
 void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func)
 {
-	touch_priority = t_touch_priority;
+	startFormSetter(this);
+	m_touchPriority = t_touch_priority;
 	end_func = t_end_func;
 	close_func = t_close_func;
 	gift_card_number = t_gift_card;
 	
 	is_menu_enable = false;
 	
-	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority+1);
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(m_touchPriority+1);
 	t_suction->setTouchEnabled(true);
 	addChild(t_suction);
 	
@@ -52,22 +57,23 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray);
 	
-	main_case = CCSprite::create("popup_small_back.png");
+	main_case = CCSprite::create("popup_large_back.png");
 	main_case->setPosition(ccp(240,160));
 	addChild(main_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(getLocal(LK::kFriendGiftTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(main_case->getContentSize().width/2.f-85,main_case->getContentSize().height-35));
 	main_case->addChild(title_label);
 	
 	main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	main_inner->setContentSize(CCSizeMake(250, 110.f));
-	main_inner->setPosition(main_case->getContentSize().width/2.f, 82.f);
+	main_inner->setContentSize(CCSizeMake(250, 161.5f));
+	main_inner->setPosition(main_case->getContentSize().width/2.f, 109.5f);
 	main_case->addChild(main_inner);
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority);
+	setFormSetter(main_inner);
+	CommonButton* close_menu = CommonButton::createCloseButton(m_touchPriority);
 	close_menu->setPosition(ccp(main_case->getContentSize().width-25,main_case->getContentSize().height-22));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -76,10 +82,6 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 								
 								is_menu_enable = false;
 								
-								input_text->setEnabled(false);
-								input_text->setVisible(false);
-								
-								input_text->removeFromParent();
 								
 								CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
 								{
@@ -89,101 +91,228 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 							});
 	main_case->addChild(close_menu);
 	
-	StyledLabelTTF* my_id_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardGiftMyID), myDSH->getStringForKey(kDSH_Key_nick)/*KS::longLongToStrForDG(mySGD->user_index)*/.c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-	my_id_label->setAnchorPoint(ccp(0.5f,0.5f));
-	my_id_label->setPosition(ccp(main_inner->getContentSize().width/2.f, 95));
-	main_inner->addChild(my_id_label);
-	
-	CCPoint text_position = ccp(207,157);
-	
-	CCScale9Sprite* text_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(5, 5, 8, 8));
-	text_back->setContentSize(CCSizeMake(160, 30));
-	text_back->setPosition(text_position - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
-	main_inner->addChild(text_back, 999);
-	
-	CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(5, 5, 8, 8));
-	t_back1->setOpacity(0);
-	input_text = CCEditBox::create(CCSizeMake(160, 30), t_back1);
-	input_text->setAnchorPoint(ccp(0.5f, 0.5f));
-	input_text->setPosition(text_position); 			// dt (10.0,-1.0)
-	
-	input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_cardGiftInputText));
-	input_text->setReturnType(kKeyboardReturnTypeDone);
-	input_text->setFont(mySGD->getFont().c_str(), 13);
-	input_text->setInputMode(kEditBoxInputModeSingleLine);
-//	input_text->setInputFlag(cocos2d::extension::EditBoxInputFlag::kEditBoxInputFlagInitialCapsAllCharacters);
-	input_text->setDelegate(this);
-	input_text->setTouchPriority(touch_priority);
-	input_text->setEnabled(false);
-	input_text->setVisible(false);
-	
-	CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text, 99999);
-	
-	found_back = NULL;
-	
-	result_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound), mySGD->getFont().c_str(), 12);
-	result_label->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
-	main_inner->addChild(result_label, 1001);
-	
-	CommonButton* search_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSearch), 12, CCSizeMake(60, 35), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0, 0, 62, 32), CCRectMake(30, 15, 2, 2)), touch_priority-1);
-	search_button->setPosition(text_position + ccp(118,0) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
-	search_button->setFunction([=](CCObject* sender)
-							   {
-								   if(!is_menu_enable)
-									   return;
-								   
-								   if(string(input_text->getText()) == "")
-									{
-										if(found_back)
-										{
-											found_back->setVisible(false);
-										}
-										
-										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_pleaseInputID));
-										result_label->setVisible(true);
-										return;
-									}
-//								   else if(KS::strToLongLongForDG(input_text->getText()) <= 0)
-//									{
-//										if(found_back)
-//										{
-//											found_back->setVisible(false);
-//										}
-//										
-//										result_label->setString(myLoc->getLocalForKey(kMyLocalKey_invalidID));
-//										result_label->setVisible(true);
-//										return;
-//									}
-								   
-								   is_menu_enable = false;
-								   
-								   if(this->found_back)
-									{
-									   this->found_back->removeFromParent();
-										this->found_back = NULL;
-									}
-								   this->result_label->setVisible(false);
-								   
-								   t_loading = LoadingLayer::create(touch_priority-100);
-								   addChild(t_loading, 9999);
-								   
-								   string input_data = input_text->getText();
-								   
-								   Json::Value t_param;
-//								   t_param["userIndex"] = KS::strToLongLongForDG(input_data);
-								   t_param["nick"] = input_data;//myDSH->getStringForKey(kDSH_Key_nick);
-								   
-								   myHSP->command("getuserdata", t_param, json_selector(this, CardGiftPopup::resultGetUserData));
-							   });
-	main_inner->addChild(search_button, 1000);
 		
 	CommonAnimation::openPopup(this, main_case, gray,
 							   [=](){}, [=]()
 	{
 		is_menu_enable = true;
-		input_text->setEnabled(true);
-		input_text->setVisible(true);
 	});
+	
+	
+	Json::Value param;
+	param["memberID"] = myHSP->getMemberID();
+	myHSP->command("getfriendlist", param, [=](Json::Value v){
+		/*
+		 {
+		 "result":{
+		 "code":1
+		 },
+		 "list":[
+		 {
+		 "memberID":88899626759652560,
+		 "nick":"니코짱",
+		 "lastDate":20140911202136,
+		 "flag":"tw",
+		 "highPiece":1,
+		 "highScore":0
+		 }
+		 ],
+		 "log":[
+		 ]
+		 }
+		 */
+		
+		KS::KSLog("%", v);
+		if(v["result"]["code"] != GDSUCCESS)
+		{
+			addChild(ASPopupView::getCommonNoti(m_touchPriority, getLocal(LK::kFriendNoti),
+																					getLocal(LK::kFriendError), [=]()
+																					{
+																						
+																					}));
+			return;
+		}
+		
+		m_friends = v["list"];
+		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
+		m_friendTable = CCTableView::create(this, CCSizeMake(250, 148));
+		m_friendTable->setAnchorPoint(CCPointZero);
+		m_friendTable->setDirection(kCCScrollViewDirectionVertical);
+		m_friendTable->setVerticalFillOrder(kCCTableViewFillTopDown);
+		m_friendTable->setPosition(ccp(26.0, 34));
+
+		
+		m_friendTable->setDelegate(this);
+		main_case->addChild(m_friendTable);
+		m_friendTable->setTouchPriority(m_touchPriority);
+		
+		m_friendTable->reloadData();
+		setFormSetter(m_friendTable);
+		
+	});
+
+	
+	
+}
+
+CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
+{
+
+	CCTableViewCell* cell = new CCTableViewCell();
+	cell->init();
+	cell->autorelease();
+	
+	Json::Value memberInfo = m_friends[idx];
+	
+
+	std::string	cell_back_filename = "rank_normal2.png";
+	
+	CCScale9Sprite* cell_back;
+	cell_back = CCScale9Sprite::create(cell_back_filename.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+	cell_back->setContentSize(CCSizeMake(238, 34));
+	
+	cell_back->setAnchorPoint(CCPointZero);
+	cell_back->setPosition(ccp(7.0, 0.0)); 			// dt (4.0, -2.0)
+	cell->addChild(cell_back);
+	setFormSetter(cell_back);
+	
+	KSLabelTTF* nick = KSLabelTTF::create(memberInfo["nick"].asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+	cell_back->addChild(nick, 1);
+	nick->setAnchorPoint(ccp(0.f, 0.5f));
+	nick->setPosition(ccp(51.0, 17.f));
+	
+	nick->enableOuterStroke(ccc3(0, 0, 0), 1.f, 200, true);
+	setFormSetter(nick);
+	
+	
+	
+	
+	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(memberInfo["flag"].asString()).c_str());
+	setFormSetter(selectedFlagSpr);
+	cell_back->addChild(selectedFlagSpr, 1);
+	selectedFlagSpr->setPosition(ccp(25.5, 17.0)); 			// dt (25.5, 17.0)
+
+	
+	CommonButton* cardSendButton = CommonButton::create(CCSprite::create("friend_bt.png"), m_touchPriority);
+	cardSendButton->setTitle(getLocal(LK::kFriendGiftSend));
+	cardSendButton->setTitleSize(13.f);
+	cell_back->addChild(cardSendButton);
+	cardSendButton->setPosition(ccp(188.5, 17.0));
+	setFormSetter(cardSendButton);
+	cardSendButton->setFunction([=](CCObject*){
+		ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchPriority - 1);
+		
+		warningPopup->getDimmedSprite()->setVisible(false);
+		addChild(warningPopup);
+		
+		auto back = CCSprite::create("popup_small_back.png");
+		
+		CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
+		
+		auto front = CCScale9Sprite::create("common_grayblue.png",
+																				CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		
+		//	front->setVisible(false);
+		warningPopup->setContainerNode(back);
+		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
+		//	back->setContentSize(CCSizeMake(200, 200));
+		front->setContentSize(CCSizeMake(251, 68));
+		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,9));
+		
+		
+		back->addChild(front);
+		
+		//				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-12));
+		//				content_back->setPosition(ccp(0.0,-12)); 			// dt (0.0,-4.5)
+		
+		//				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
+		setFormSetter(front);
+		
+		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kFriendNoti), mySGD->getFont().c_str(), 12.f);
+		//	titleLbl->setColor(ccc3(255, 170, 20));
+		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+		back->addChild(titleLbl);
+		
+		
+		CommonButton* closeButton = CommonButton::createCloseButton(m_touchPriority - 2);
+		closeButton->setFunction([=](CCObject*)
+														 {
+															 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																													 [=]()
+																													 {
+																														 warningPopup->removeFromParent();
+																													 });
+														 });
+		back->addChild(closeButton);
+		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
+		
+		StyledLabelTTF* content_label = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendGiftQ),
+																																memberInfo["nick"].asString().c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
+		content_label->setPosition(ccpFromSize(back->getContentSize() / 2.f) + ccp(0, 10));
+		setFormSetter(content_label);
+		back->addChild(content_label);
+		
+		CommonButton* confirm = CommonButton::create("확인", 12.f, CCSizeMake(101, 44), CommonButtonAchievement, m_touchPriority - 2);
+		back->addChild(confirm);
+		confirm->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -50));
+		setFormSetter(confirm);
+		confirm->setFunction([=](CCObject*){
+			CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																	[=]()
+																	{
+																		warningPopup->removeFromParent();
+																	});
+			
+			Json::Value transaction_param;
+			transaction_param["memberID"] = hspConnector::get()->getMemberID();
+			command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+			
+			Json::Value send_card_param;
+			send_card_param["memberID"] = myHSP->getMemberID();
+			send_card_param["toMemberID"] = memberInfo["memberID"].asInt64();
+			send_card_param["cardNo"] = gift_card_number.getV();
+			command_list.push_back(CommandParam("sendcard", send_card_param, nullptr));
+			
+			Json::Value card_history_param;
+			card_history_param["memberID"] = myHSP->getMemberID();
+			command_list.push_back(CommandParam("getCardHistory", card_history_param, json_selector(this, CardGiftPopup::resultSendAction)));
+			
+			myHSP->command(command_list);
+			
+			
+			//			Json::Value param;
+			//			Json::Value param2;
+			//			param["memberID"] = myHSP->getMemberID();
+			//			param["friendID"] = memberInfo["memberID"].asString();
+			//			myHSP->command("removefriend", param, [=](Json::Value v){
+			//				CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+			//																		[=]()
+			//																		{
+			//																			warningPopup->removeFromParent();
+			//																		});
+			//
+			//
+			//				if(v["result"]["code"] != GDSUCCESS)
+			//				{
+			//					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+			//																							getLocal(LK::kFriendError), [=]()
+			//																							{
+			//
+			//																							}));
+			//					return;
+			//				}
+			//
+			//				// 성공 적으로 삭제했다.
+			//				m_afterActionFunc(0);
+			//				//							m_manageButtonCallback(0);
+			//			});
+		});
+		
+		
+	});
+	return cell;
 }
 
 void CardGiftPopup::resultSendAction(Json::Value result_data)
@@ -201,44 +330,50 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 		
 		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);
 		
-//		if(card_data_load_list.size() > 0)
+		//		if(card_data_load_list.size() > 0)
+		//		{
+		//			Json::Value card_param;
+		//			for(int i=0;i<card_data_load_list.size();i++)
+		//				card_param["noList"][i] = card_data_load_list[i];
+		//			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
+		//		}
+		//		else
+		//		{
+		mySGD->resetHasGottenCards();
+		//		}
+		
+//		t_loading->removeFromParent();
+		
+		CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
+																{
+																	end_func();
+																	removeFromParent();
+																});
+		is_menu_enable = true;
+		
+		
+//		if(mySGD->isHasGottenCards(gift_card_number.getV()) > 0)
 //		{
-//			Json::Value card_param;
-//			for(int i=0;i<card_data_load_list.size();i++)
-//				card_param["noList"][i] = card_data_load_list[i];
-//			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
+//			addChild(ASPopupView::getCommonNoti(m_touchPriority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
+//																					{
+//																						is_menu_enable = true;
+//																					}), 9999);
 //		}
 //		else
 //		{
-			mySGD->resetHasGottenCards();
+//			addChild(ASPopupView::getCommonNoti(m_touchPriority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
+//																					{
+//																						
+//																						
+//																						CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
+//																																				{
+//																																					close_func();
+//																																					removeFromParent();
+//																																				});
+//																					}), 9999);
 //		}
 		
-		t_loading->removeFromParent();
 		
-		if(mySGD->isHasGottenCards(gift_card_number.getV()) > 0)
-		{
-			addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
-			{
-				input_text->setVisible(true);
-				is_menu_enable = true;
-			}), 9999);
-		}
-		else
-		{
-			addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
-												{
-													input_text->setEnabled(false);
-													input_text->setVisible(false);
-													
-													input_text->removeFromParent();
-													
-													CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
-																				{
-																					close_func();
-																					removeFromParent();
-																				});
-												}), 9999);
-		}
 	}
 	else
 	{
@@ -257,145 +392,34 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 		else
 		{
 			addChild(KSTimer::create(0.5f, [=]()
-									 {
-										 myHSP->command(command_list);
-									 }));
+															 {
+																 myHSP->command(command_list);
+															 }));
 		}
 	}
 }
-
-void CardGiftPopup::resultGetUserData(Json::Value result_data)
+void CardGiftPopup::scrollViewDidScroll(CCScrollView* view)
 {
-	GraphDogLib::JsonToLog("result getuserdata", result_data);
+
+}
+void CardGiftPopup::scrollViewDidZoom(CCScrollView* view)
+{
+
+}
+
+void CardGiftPopup::tableCellTouched(CCTableView* table, CCTableViewCell* cell)
+{
+
+}
+CCSize CardGiftPopup::cellSizeForTable(CCTableView *table)
+{
+	return CCSizeMake(238, 34);
+}
+
+unsigned int CardGiftPopup::numberOfCellsInTableView(CCTableView *table)
+{
+	return m_friends.size();
 	
-	if(result_data["result"]["code"].asInt() == GDSUCCESS)
-	{
-		mySGD->network_check_cnt = 0;
-		
-		if(found_back)
-		{
-			found_back->removeFromParent();
-			found_back = NULL;
-		}
-		
-		found_back = CCScale9Sprite::create("rank_normal2.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-		found_back->setContentSize(CCSizeMake(224, 35));
-		found_back->setPosition(ccp(240,117) - (main_case->getPosition() + ccpFromSize(main_case->getContentSize()/(-2.f)) + main_inner->getPosition() + ccpFromSize(main_inner->getContentSize()/(-2.f))));
-		main_inner->addChild(found_back, 1001);
-		
-		KSLabelTTF* nick_label = KSLabelTTF::create(result_data["nick"].asString().c_str(), mySGD->getFont().c_str(), 12);
-		nick_label->setAnchorPoint(ccp(0,0.5f));
-		nick_label->setPosition(ccp(10, found_back->getContentSize().height/2.f));
-		found_back->addChild(nick_label);
-		
-		CommonButton* send_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftSend), 12, CCSizeMake(60, 35), CCScale9Sprite::create("tip.png", CCRectMake(0, 0, 55, 32), CCRectMake(27, 15, 1, 2)), touch_priority-2);
-		send_button->setPosition(ccp(found_back->getContentSize().width-31, found_back->getContentSize().height/2.f));
-		send_button->setFunction([=](CCObject* sender)
-								 {
-									 if(!is_menu_enable)
-										 return;
-									 
-									 is_menu_enable = false;
-									 input_text->setVisible(false);
-									 t_loading = LoadingLayer::create(touch_priority-100);
-									 addChild(t_loading, 9999);
-									 
-									 command_list.clear();
-									 
-									 Json::Value transaction_param;
-									 transaction_param["memberID"] = hspConnector::get()->getMemberID();
-									 command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
-									 
-									 Json::Value send_card_param;
-									 send_card_param["memberID"] = myHSP->getMemberID();
-									 send_card_param["toMemberID"] = result_data["memberID"].asInt64();
-									 send_card_param["cardNo"] = gift_card_number.getV();
-									 command_list.push_back(CommandParam("sendcard", send_card_param, nullptr));
-									 
-									 Json::Value card_history_param;
-									 card_history_param["memberID"] = myHSP->getMemberID();
-									 command_list.push_back(CommandParam("getCardHistory", card_history_param, json_selector(this, CardGiftPopup::resultSendAction)));
-									 
-									 myHSP->command(command_list);
-								 });
-		found_back->addChild(send_button);
-		
-		t_loading->removeFromParent();
-		is_menu_enable = true;
-	}
-	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
-	{
-		mySGD->network_check_cnt = 0;
-		
-		if(found_back)
-		{
-			found_back->setVisible(false);
-		}
-		
-		this->result_label->setString(myLoc->getLocalForKey(kMyLocalKey_cardGiftNotFound));
-		this->result_label->setVisible(true);
-		
-		t_loading->removeFromParent();
-		is_menu_enable = true;
-	}
-	else
-	{
-		mySGD->network_check_cnt++;
-		
-		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
-		{
-			mySGD->network_check_cnt = 0;
-			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
-				string input_data = input_text->getText();
-				
-				Json::Value t_param;
-				t_param["userIndex"] = KS::strToLongLongForDG(input_data);
-				
-				myHSP->command("getuserdata", t_param, json_selector(this, CardGiftPopup::resultGetUserData));
-			}, 1);
-			if(alert)
-				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
-		}
-		else
-		{
-			addChild(KSTimer::create(0.5f, [=]()
-									 {
-										 string input_data = input_text->getText();
-										 
-										 Json::Value t_param;
-										 t_param["userIndex"] = KS::strToLongLongForDG(input_data);
-										 
-										 myHSP->command("getuserdata", t_param, json_selector(this, CardGiftPopup::resultGetUserData));
-									 }));
-		}
-	}
 }
 
-void CardGiftPopup::editBoxEditingDidBegin(CCEditBox* editBox)
-{
-	CCLOG("edit begin");
-}
-void CardGiftPopup::editBoxEditingDidEnd(CCEditBox* editBox)
-{
-	CCLOG("edit end");
-}
-void CardGiftPopup::editBoxTextChanged(CCEditBox* editBox, const std::string& text)
-{
-	CCLOG("edit changed : %s", text.c_str());
-//	if(text.size() == 4)
-//	{
-//		if(editBox == input_text1)
-//		{
-//			input_text2->touchDownAction(nullptr, CCControlEvent());
-//		}
-//		else if(editBox == input_text2)
-//		{
-//			input_text3->touchDownAction(nullptr, CCControlEvent());
-//		}
-//	}
-}
-void CardGiftPopup::editBoxReturn(CCEditBox* editBox)
-{
-	CCLOG("edit return");
-}
+
