@@ -1,4 +1,6 @@
 #include "GDWebSprite.h"
+#include "GDLib.h"
+#include "StageImgLoader.h"
 
 void GDWebSprite::removeAllSprite(){
     GDWebSpriteManager::get()->webImages->removeAllObjects();
@@ -65,7 +67,7 @@ void* GDWebSprite::t_function(void * _caller)
         
         //CCLOG("start downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
         
-        GDWebSpriteMemoryStruct chunk = {(char*)malloc(1), 0};
+        GDWebSpriteMemoryStruct chunk = {(char*)malloc(1), 0, pURL};
         int downI = GDWebSpriteManager::get()->downloadIndex;
         curl_easy_setopt(curl_handle, CURLOPT_URL, pURL.c_str());
         curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, true);
@@ -108,7 +110,22 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
         
 		return (CCSprite *)defaultNode;
     }
-    
+	
+	
+	string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
+	Json::Value list = filecache;
+	
+	for (int i=0; i<list.size(); i++) {
+		Json::Value info = list[i];
+		if(info["url"].asString()==imgUrl){
+			string filename = info["filename"].asString();
+			CCSprite* spr = mySIL->getUnsafeLoadedImg(filename);
+			CCLOG("GDWebSprite find %s -> %s",info["url"].asString().c_str(),info["filename"].asString().c_str());
+			if(spr)return spr;
+		}
+	}
+	
+  
     //1. webImages 검사해서 값있으면 그냥 리턴
     for(int i=0;i<GDWebSpriteManager::get()->webImages->count();i++){
         GDWebSprite* image = (GDWebSprite*)GDWebSpriteManager::get()->webImages->objectAtIndex(i);
@@ -211,15 +228,55 @@ void GDWebSprite::finishDownload(){
         CCTexture2D* texture = new CCTexture2D();
         auto chunk_index = GDWebSpriteManager::get()->chunks.front();
         GDWebSpriteManager::get()->chunks.pop();
-        
-        
-        
+      
         
         try {
             
             if(img->initWithImageData(chunk_index.first.memory, (long)chunk_index.first.size, CCImage::kFmtUnKnown) == false)
                 throw "..";
-            
+          
+						string filename = "gdw"+GraphDogLib::random_string(10)+".png";
+						string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
+						Json::Value list = filecache;
+						Json::Value newfile;
+						newfile["url"]=chunk_index.first.url;
+						newfile["filename"]=filename;
+						list.append(newfile);
+						if(img->saveToFile((mySIL->getDocumentPath().c_str()+filename).c_str())){
+							
+							CCLOG("GDWebSprite : save ok %s, %s",newfile["url"].asString().c_str(),(mySIL->getDocumentPath().c_str()+filename).c_str());
+
+							if(list.size()>30){
+								//CCLOG("removed1 -> %s",list.toStyledString().c_str());
+								Json::Value rFileInfo =list[0];
+								string rFilename =rFileInfo.get("filename", "fn").asString();
+								CCLOG("remove file %s",(mySIL->getDocumentPath()+rFilename).c_str());
+
+								remove((mySIL->getDocumentPath()+rFilename).c_str());
+								CCLOG("removed1 -> %s",list.toStyledString().c_str());
+								
+								
+								Json::Value newObject;
+								int valueSize = list.size();
+								for(int i=1; i<valueSize; i++)
+								{
+										newObject.append(list[i]);
+								}
+								
+								CCLOG("removed2 -> %s",newObject.toStyledString().c_str());
+								CCUserDefault::sharedUserDefault()->setStringForKey("gdwebspritelist",newObject.asString().c_str());
+								//delete newimg;
+							}else{
+								CCUserDefault::sharedUserDefault()->setStringForKey("gdwebspritelist",list.asString().c_str());
+							}
+							
+							
+							CCUserDefault::sharedUserDefault()->flush();
+						}else{
+							CCLOG("GDWebSprite : save fail %s, %s",newfile["url"].asString().c_str(),newfile["filename"].asString().c_str());
+						}
+					
+					
             if(texture->initWithImage(img) == false)
                 throw "..";
             
@@ -242,7 +299,7 @@ void GDWebSprite::finishDownload(){
             texture->release();
             delete img;// in cocos2d-x 1.x
         }
-    }
+	}
 	
 	if(final_target && final_delegate)
 	{
