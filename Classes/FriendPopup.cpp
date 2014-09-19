@@ -1372,20 +1372,22 @@ void FriendPopup::setVoteFriendMenu()
 				KS::KSLog("%", v);
 				if(v["result"]["code"].asInt() != GDSUCCESS)
 					return;
+				v["introduceCnt"] = 10;
 				StyledLabelTTF* promotion1 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVotePromotion1), v["introduceCnt"].asInt()), mySGD->getFont().c_str(),
-																														18.f, 0, StyledAlignment::kCenterAlignment);
+																														20.f, 0, StyledAlignment::kCenterAlignment);
 				m_friendVoteContainer->addChild(promotion1);
 				setFormSetter(promotion1);
 				promotion1->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 82.5));
 				
 				StyledLabelTTF* promotion2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVotePromotion2), mySGD->getIntroduceStage()), mySGD->getFont().c_str(),
-																														13.f, 0, StyledAlignment::kCenterAlignment);
+																														12.f, 0, StyledAlignment::kCenterAlignment);
 				m_friendVoteContainer->addChild(promotion2);
 				promotion2->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 59.0));
 				setFormSetter(promotion2);
 				
 				Json::Value reward = v["reward"];
 				CCSprite* rewardImage = GDWebSprite::create(reward["image"].asString(), "friend_delete.png");
+				rewardImage->setAnchorPoint(ccp(0.5f, 0.5f));
 				rewardImage->setContentSize(CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
 				m_friendVoteContainer->addChild(rewardImage);
 				rewardImage->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
@@ -1416,11 +1418,11 @@ void FriendPopup::setVoteFriendMenu()
 				}
 				
 				
-				CCScale9Sprite* giftBack = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
-				giftBack->setContentSize(CCSizeMake(411, 97));
-				m_friendVoteContainer->addChild(giftBack);
-				giftBack->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -21));
-				setFormSetter(giftBack);
+//				CCScale9Sprite* giftBack = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+//				giftBack->setContentSize(CCSizeMake(411, 97));
+//				m_friendVoteContainer->addChild(giftBack);
+//				giftBack->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -21));
+//				setFormSetter(giftBack);
 				
 				
 				
@@ -1558,7 +1560,10 @@ void FriendPopup::setVoteFriendMenu()
 					
 					skipButton->setFunction([=](CCObject*){
 						m_voteFriendButtonCallbackSecond(0);
-						m_voteInputText->setVisible(false);
+						if(m_voteInputText)
+						{
+							m_voteInputText->setVisible(false);
+						}
 					});
 					
 					// 첫번 째 팝업에서 검색을 놀렀을 때.
