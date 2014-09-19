@@ -341,7 +341,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
 	ko->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
 	ko->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
-	ko->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ko->setObject(CCString::create("이전액자클리어\n+별%d개이상\n+%s골드"), kMyLocalKey_frameOpenConditionContentRuby);
 	ko->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ko->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ko->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
@@ -358,7 +358,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
 	
 	ko->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
-	ko->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ko->setObject(CCString::create("열기"), kMyLocalKey_directEnter);
 	ko->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	ko->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	ko->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
@@ -1137,6 +1137,10 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("이벤트카드"), kMyLocalKey_eventCard);
 	
+	ko->setObject(CCString::create("액자오픈"), kMyLocalKey_puzzleOpenTitle);
+	ko->setObject(CCString::create("<font newline=16>액자를 오픈하려면</font><font color=961>%s골드</font><font newline=16>가 필요합니다.</font><font>오픈하시겠습니까?</font>"), kMyLocalKey_puzzleOpenContent);
+	ko->setObject(CCString::create("오픈하기"), kMyLocalKey_puzzleOpenButton);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()
@@ -1383,7 +1387,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	en->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
 	en->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
-	en->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	en->setObject(CCString::create("이전액자클리어\n+별%d개이상\n+%s골드"), kMyLocalKey_frameOpenConditionContentRuby);
 	en->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	en->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	en->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
@@ -1400,7 +1404,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
 	
 	en->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
-	en->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	en->setObject(CCString::create("열기"), kMyLocalKey_directEnter);
 	en->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	en->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	en->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);
@@ -2354,7 +2358,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("Try one day to complete the mission! Gifts for you!"), kMyLocalKey_stageListDown);
 	ja->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
 	ja->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
-	ja->setObject(CCString::create("젬으로오픈"), kMyLocalKey_frameOpenConditionContentRuby);
+	ja->setObject(CCString::create("이전액자클리어\n+별%d개이상\n+%s골드"), kMyLocalKey_frameOpenConditionContentRuby);
 	ja->setObject(CCString::create("%s\n%d:00-%d:00"), kMyLocalKey_frameOpenConditionContentTimeWeek);
 	ja->setObject(CCString::create("%s월%s일%s:%s오픈"), kMyLocalKey_frameOpenConditionContentTimeDate);
 	ja->setObject(CCString::create("자세히보기"), kMyLocalKey_detailView);
@@ -2371,7 +2375,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("상점 바로가기"), kMyLocalKey_goShopButton);
 	
 	ja->setObject(CCString::create("액자를 플레이할 수 있는 시간이 지났습니다.\n홈으로 돌아갑니다."), kMyLocalKey_timeOutFrame);
-	ja->setObject(CCString::create("바로입장"), kMyLocalKey_directEnter);
+	ja->setObject(CCString::create("열기"), kMyLocalKey_directEnter);
 	ja->setObject(CCString::create("카드 승급 기회!!"), kMyLocalKey_rankUpTitle);
 	ja->setObject(CCString::create("승급 성공시 한 단계 높은 카드를 획득할 수 있어요!"), kMyLocalKey_rankUpSubTitle);
 	ja->setObject(CCString::create("현재 획득카드"), kMyLocalKey_recentTakeCard);

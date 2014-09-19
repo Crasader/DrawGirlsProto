@@ -1051,6 +1051,10 @@ typedef enum MyLocalKey_ {
 	
 	kMyLocalKey_eventCard,
 	
+	kMyLocalKey_puzzleOpenTitle,
+	kMyLocalKey_puzzleOpenContent,
+	kMyLocalKey_puzzleOpenButton,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

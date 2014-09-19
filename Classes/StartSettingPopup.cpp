@@ -696,8 +696,8 @@ void StartSettingPopup::setMain()
 			}
 			
 			int item_cnt = mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic));
-			if(is_show_item_popup)
-				item_cnt += mySGD->getBonusItemCnt(t_ic);
+//			if(is_show_item_popup)
+//				item_cnt += mySGD->getBonusItemCnt(t_ic);
 			CCLabelTTF* cnt_label = CCLabelTTF::create(CCString::createWithFormat("%d", item_cnt)->getCString(), mySGD->getFont().c_str(), 11);
 			cnt_label->setPosition(ccp(16.5f, -18));
 			item_parent->addChild(cnt_label, kStartSettingPopupItemZorder_cntLabel, kStartSettingPopupItemZorder_cntLabel);

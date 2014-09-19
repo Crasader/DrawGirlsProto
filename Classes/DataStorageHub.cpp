@@ -586,7 +586,7 @@ void DataStorageHub::resetDSH ()
 //		setBoolForKey(kDSH_Key_minigame_int1_isPlayed, stage_number, false, false);
 //	}
 //	
-//	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
+	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	
 	fFlush();
 }
