@@ -52,9 +52,19 @@ bool CardSettingPopup::init()
 	is_take_reverse = recent_sort_type == kCST_takeReverse;
 	is_rank_reverse = recent_sort_type == kCST_gradeDown;
 	
+	card_list.clear();
+	event_card_list.clear();
+	
 	for(int i=0;i<mySGD->getHasGottenCardsSize();i++)
 	{
-		card_list.push_back(mySGD->getHasGottenCardData(i));
+		CardSortInfo t_info = mySGD->getHasGottenCardData(i);
+		card_list.push_back(t_info);
+		
+		string t_category = NSDS_GS(kSDS_CI_int1_category_s, t_info.card_number.getV());
+		if(t_category == "event" || t_category == "ePuzzle")
+		{
+			event_card_list.push_back(t_info);
+		}
 	}
 	
 	changeSortType(CardSortType(recent_sort_type), true);
@@ -162,6 +172,8 @@ bool CardSettingPopup::init()
 	align_rank_menu = NULL;
 	rankMenuSet();
 	
+	event_card_menu = NULL;
+	eventMenuSet();
 	
 	
 	take_count_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
@@ -460,6 +472,47 @@ void CardSettingPopup::defaultMenuSet()
 		align_default_menu->setSelectedImage(s_default_img);
 	}
 }
+
+void CardSettingPopup::eventMenuSet()
+{
+	string filename;
+	
+	if(recent_sort_type == kCST_event)
+	{
+		filename = "tabbutton_up.png";
+	}
+	else
+	{
+		filename = "tabbutton_down.png";
+	}
+	
+	CCSprite* n_event_img = CCSprite::create(filename.c_str());
+	KSLabelTTF* n_event_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventCard), mySGD->getFont().c_str(), 12.5f);
+	n_event_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_event_label->setPosition(ccpFromSize(n_event_img->getContentSize()/2.f) + ccp(0,2));
+	n_event_img->addChild(n_event_label);
+	
+	CCSprite* s_event_img = CCSprite::create(filename.c_str());
+	s_event_img->setColor(ccGRAY);
+	KSLabelTTF* s_event_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_eventCard), mySGD->getFont().c_str(), 12.5f);
+	s_event_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_event_label->setPosition(ccpFromSize(s_event_img->getContentSize()/2.f) + ccp(0,2));
+	s_event_img->addChild(s_event_label);
+	
+	if(!event_card_menu)
+	{
+		event_card_menu = CCMenuItemSprite::create(n_event_img, s_event_img, this, menu_selector(CardSettingPopup::menuAction));
+		event_card_menu->setTag(kCSS_MT_eventCard);
+		event_card_menu->setPosition(ccp(169,256.5f));
+		tab_menu->addChild(event_card_menu);
+	}
+	else
+	{
+		event_card_menu->setNormalImage(n_event_img);
+		event_card_menu->setSelectedImage(s_event_img);
+	}
+}
+
 void CardSettingPopup::takeMenuSet()
 {
 	string filename;
@@ -567,6 +620,10 @@ void CardSettingPopup::beforeMenuReset(int keep_type)
 	{
 		rankMenuSet();
 	}
+	else if(keep_type == kCST_event)
+	{
+		eventMenuSet();
+	}
 }
 
 void CardSettingPopup::changeSortType( CardSortType t_type, bool is_init )
@@ -592,6 +649,10 @@ void CardSettingPopup::changeSortType( CardSortType t_type, bool is_init )
 		else if(recent_sort_type == kCST_gradeDown)
 		{
 			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+		}
+		else if(recent_sort_type == kCST_event)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent, card_table->getContentOffset().y);
 		}
 	}
 	
@@ -680,6 +741,10 @@ void CardSettingPopup::onEnter()
 	{
 		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse)));
 	}
+	else if(recent_sort_type == kCST_event && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent)));
+	}
 	
 	showPopup();
 }
@@ -756,6 +821,10 @@ void CardSettingPopup::hidePopup()
 	else if(recent_sort_type == kCST_gradeDown)
 	{
 		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+	}
+	else if(recent_sort_type == kCST_event)
+	{
+		myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent, card_table->getContentOffset().y);
 	}
 	
 	CommonAnimation::closePopup(this, main_case, gray, [=](){
@@ -849,6 +918,21 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			is_menu_enable = true;
 		}
+		else if(tag == kCSS_MT_eventCard)
+		{
+			if(myDSH->getIntegerForKey(kDSH_Key_cardSortType) != kCST_event)
+			{
+				int keep_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
+				
+				changeSortType(kCST_event);
+				alignChange();
+				eventMenuSet();
+				
+				beforeMenuReset(keep_sort_type);
+			}
+			
+			is_menu_enable = true;
+		}
 		else if(tag == kCSS_MT_alignRank)
 		{
 			int keep_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
@@ -922,6 +1006,10 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			else if(recent_sort_type == kCST_gradeDown)
 			{
 				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+			}
+			else if(recent_sort_type == kCST_event)
+			{
+				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent, card_table->getContentOffset().y);
 			}
 			
 			mySGD->selected_collectionbook = mySGD->getHasGottenCardsDataCardNumber(mySGD->getHasGottenCardsSize()-1);
@@ -1020,6 +1108,10 @@ void CardSettingPopup::alignChange()
 	else if(recent_sort_type == kCST_gradeDown && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse) != 0)
 	{
 		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse)));
+	}
+	else if(recent_sort_type == kCST_event && myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent) != 0)
+	{
+		card_table->setContentOffset(ccp(card_table->getContentOffset().x, myDSH->getIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent)));
 	}
 }
 
@@ -1142,6 +1234,84 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 					empty_back->addChild(stage_label);
 				}
 			}
+		}
+	}
+	else if(sort_type == kCST_event)
+	{
+		for(int i=idx*6;i<idx*6+6 && i<event_card_list.size();i++)
+		{
+			int card_number = event_card_list[i].card_number.getV();
+			CCPoint card_position = ccp(35.f + (i-idx*6)*(70.f), cellSizeForTable(table).height/2.f);
+			
+			CardSortInfo t_info = mySGD->getHasGottenCardDataForCardNumber(card_number);
+			string case_filename;
+			CCPoint add_position = CCPointZero;
+			int c_count = t_info.count.getV();
+			if(c_count == 1)
+			{
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+					case_filename = "cardsetting_on19.png";
+				else
+					case_filename = "cardsetting_on.png";
+			}
+			else
+			{
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+					case_filename = "cardsetting_on_many19.png";
+				else
+					case_filename = "cardsetting_on_many.png";
+				add_position = ccp(-2,3);
+			}
+			
+			CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			n_clipping->setAlphaThreshold(0.1f);
+			
+			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											   card_number)->getCString()));
+			n_card->setScale(0.5f);
+			n_clipping->addChild(n_card);
+			
+			CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
+			n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f) + add_position);
+			n_node->addChild(n_clipping);
+			
+			CCSprite* n_frame = CCSprite::create(case_filename.c_str());
+			n_frame->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
+			n_node->addChild(n_frame);
+			
+			KSLabelTTF* n_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
+			n_label->setPosition(ccp(n_node->getContentSize().width-16, 12) + add_position);
+			n_frame->addChild(n_label);
+			
+			
+			CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			s_clipping->setAlphaThreshold(0.1f);
+			
+			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+																											   card_number)->getCString()));
+			s_card->setScale(0.5f);
+			s_card->setColor(ccGRAY);
+			s_clipping->addChild(s_card);
+			
+			CCSprite* s_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
+			s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f) + add_position);
+			s_node->addChild(s_clipping);
+			
+			CCSprite* s_frame = CCSprite::create(case_filename.c_str());
+			s_frame->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
+			s_node->addChild(s_frame);
+			
+			KSLabelTTF* s_label = KSLabelTTF::create(ccsf("No.%d", NSDS_GI(kSDS_CI_int1_serial_i, card_number)), mySGD->getFont().c_str(), 9);
+			s_label->setPosition(ccp(s_node->getContentSize().width-16, 12) + add_position);
+			s_frame->addChild(s_label);
+			
+			CCMenuItem* t_card_item = CCMenuItemSprite::create(n_node, s_node, this, menu_selector(CardSettingPopup::menuAction));
+			t_card_item->setTag(kCSS_MT_cardMenuBase+card_number);
+			
+			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
+			t_card_menu->setPosition(card_position);
+			cell->addChild(t_card_menu);
+			t_card_menu->setTouchPriority(-180-3);
 		}
 	}
 	else
@@ -1289,6 +1459,13 @@ unsigned int CardSettingPopup::numberOfCellsInTableView( CCTableView *table )
 			return 0;
 		else
 			return (mySGD->total_card_cnt-1)/6+1;
+	}
+	else if(sort_type == kCST_event)
+	{
+		if(event_card_list.empty())
+			return 0;
+		else
+			return (event_card_list.size()-1)/6+1;
 	}
 	else
 	{

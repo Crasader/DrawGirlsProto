@@ -68,7 +68,8 @@ enum CardSortType{
 	kCST_take,
 	kCST_takeReverse,
 	kCST_gradeUp, // rank
-	kCST_gradeDown // rank
+	kCST_gradeDown, // rank
+	kCST_event
 };
 
 class CardSortInfo{

@@ -79,6 +79,7 @@ private:
 	CCMenuItemSprite* align_default_menu;
 	CCMenuItemSprite* align_take_menu;
 	CCMenuItemSprite* align_rank_menu;
+	CCMenuItemSprite* event_card_menu;
 	CCMenuItem* diary_menu;
 	
 	KSLabelTTF* n_take_label;
@@ -94,6 +95,7 @@ private:
 	void defaultMenuSet();
 	void takeMenuSet();
 	void rankMenuSet();
+	void eventMenuSet();
 	
 	void beforeMenuReset(int keep_type);
 	
@@ -123,6 +125,7 @@ private:
 	CCPoint getContentPosition(int t_tag);
 	
 	vector<CardSortInfo> card_list;
+	vector<CardSortInfo> event_card_list;
 	
 	void alignChange();
 	

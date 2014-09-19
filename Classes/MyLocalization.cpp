@@ -1135,6 +1135,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("젬 이어하기"), kMyLocalKey_onContinueGem);
 	ko->setObject(CCString::create("부활석 이어하기"), kMyLocalKey_onContinueP1);
 	
+	ko->setObject(CCString::create("이벤트카드"), kMyLocalKey_eventCard);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

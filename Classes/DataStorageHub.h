@@ -178,6 +178,7 @@ typedef enum t_DSH_Key{
 	kDSH_Key_cardSettingTableOffsetTakeReverse,
 	kDSH_Key_cardSettingTableOffsetGrade,
 	kDSH_Key_cardSettingTableOffsetGradeReverse,
+	kDSH_Key_cardSettingTableOffsetEvent,
 	
 	kDSH_Key_savedStartPackFirstTime
 	

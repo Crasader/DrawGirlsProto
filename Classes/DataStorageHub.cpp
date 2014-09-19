@@ -790,6 +790,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_cardSettingTableOffsetTakeReverse] = "cstotr";
 	return_value[kDSH_Key_cardSettingTableOffsetGrade] = "cstog";
 	return_value[kDSH_Key_cardSettingTableOffsetGradeReverse] = "cstogr";
+	return_value[kDSH_Key_cardSettingTableOffsetEvent] = "cstoe";
 	
 	return_value[kDSH_Key_savedStartPackFirstTime] = "sspft";
 }
