@@ -101,7 +101,7 @@ void* GDWebSprite::t_function(void * _caller)
     return NULL;
 }
 
-CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final, SEL_CallFunc d_final){
+CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageName,CCSize size, CCObject* t_final, SEL_CallFunc d_final){
 	
     if(imgUrl==""){
 		if(t_final && d_final){
@@ -125,6 +125,8 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 		}
 	}
 	
+	CCLOG("dont find");
+	
   
     //1. webImages 검사해서 값있으면 그냥 리턴
     for(int i=0;i<GDWebSpriteManager::get()->webImages->count();i++){
@@ -142,9 +144,9 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
                 ret->setPosition(CCPointZero);
                 ret->setContentSize(CCSizeMake(ret->getContentSize().width*image->xScale,ret->getContentSize().height*image->yScale));
                 newimg->setContentSize(ret->getContentSize());
-				if(t_final && d_final){
-					(t_final->*d_final)();
-				}
+								if(t_final && d_final){
+									(t_final->*d_final)();
+								}
                 return (CCSprite *)newimg;
             }
         }
@@ -153,7 +155,7 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
     
     //2. 새로운 이미지이면 webImages에 값넣고 스프라잇
     GDWebSprite* _ws = new GDWebSprite;
-    _ws->init(imgUrl, defaultNode, imageName, t_final, d_final);
+    _ws->init(imgUrl, defaultNode, imageName,size, t_final, d_final);
     _ws->autorelease();
     
     GDWebSprite::startDownload(_ws);
@@ -161,39 +163,49 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
     return (CCSprite*)_ws;
 }
 
-CCSprite* GDWebSprite::create(string imgUrl, string defaultImg, CCObject* t_final, SEL_CallFunc d_final){
+
+CCSprite* GDWebSprite::create(string imgUrl, string defaultImg,CCSize size, CCObject* t_final, SEL_CallFunc d_final){
+	CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
+	if(!defalutNode)
+		defalutNode = CCNode::create();
+	
+	return GDWebSprite::create(imgUrl,defalutNode,"",size, t_final, d_final);
+}
+
+
+CCSprite* GDWebSprite::create(string imgUrl, string defaultImg,CCObject* t_final, SEL_CallFunc d_final){
 	CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
 	if(!defalutNode)
 		defalutNode = CCNode::create();
 
-	return GDWebSprite::create(imgUrl,defalutNode,"", t_final, d_final);
+	return GDWebSprite::create(imgUrl,defalutNode,"",CCSizeMake(0, 0), t_final, d_final);
 }
 
 
 CCSprite* GDWebSprite::create(string imgUrl, CCNode* defaultNode, CCObject* t_final, SEL_CallFunc d_final){
-    return GDWebSprite::create(imgUrl,defaultNode,"", t_final, d_final);
+    return GDWebSprite::create(imgUrl,defaultNode,"",CCSizeMake(0, 0), t_final, d_final);
 }
 
 CCSprite* GDWebSprite::create(string imgUrl, string defaultImg, string imageName, CCObject* t_final, SEL_CallFunc d_final){
     CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
-    return GDWebSprite::create(imgUrl,defalutNode,imageName, t_final, d_final);
+    return GDWebSprite::create(imgUrl,defalutNode,imageName,CCSizeMake(0, 0), t_final, d_final);
 }
 
 
 bool GDWebSprite::init(string imgUrl, string defaultImg, CCObject* t_final, SEL_CallFunc d_final){
-    return this->init(imgUrl,defaultSprite,"", t_final, d_final);
+    return this->init(imgUrl,defaultSprite,"",CCSizeMake(0, 0), t_final, d_final);
 }
 
 bool GDWebSprite::init(string imgUrl, CCNode* defaultNode, CCObject* t_final, SEL_CallFunc d_final){
-    return this->init(imgUrl,defaultNode,"", t_final, d_final);
+    return this->init(imgUrl,defaultNode,"",CCSizeMake(0, 0), t_final, d_final);
 }
 
 bool GDWebSprite::init(string imgUrl, string defaultImg, string imageName, CCObject* t_final, SEL_CallFunc d_final){
     defaultSprite = CCSprite::create(defaultImg.c_str());
-    return this->init(imgUrl,defaultSprite,imageName, t_final, d_final);
+    return this->init(imgUrl,defaultSprite,imageName,CCSizeMake(0, 0), t_final, d_final);
 }
 
-bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final, SEL_CallFunc d_final){
+bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName,CCSize size, CCObject* t_final, SEL_CallFunc d_final){
     
     if(!CCNode::init()){
         return false;
@@ -201,11 +213,15 @@ bool GDWebSprite::init(string imgUrl, CCNode *defaultNode, string imageName, CCO
     
 	final_target = t_final;
 	final_delegate = d_final;
-	
     defaultSprite = defaultNode;
     this->addChild(defaultSprite,1);
-    this->setContentSize(CCSize(defaultSprite->getContentSize().width*defaultSprite->getScaleX(),defaultSprite->getContentSize().height*defaultSprite->getScaleY()));
-    CCSize s = getContentSize();
+	
+	if(size.width==0 && size.height==0)
+		this->setContentSize(CCSize(defaultSprite->getContentSize().width*defaultSprite->getScaleX(),defaultSprite->getContentSize().height*defaultSprite->getScaleY()));
+	else
+		this->setContentSize(size);
+  
+	CCSize s = getContentSize();
     defaultSprite->setAnchorPoint(ccp(0.5,0.5));
     defaultSprite->setPosition(ccp(s.width / 2, s.height / 2));
     this->imageName=imageName;
@@ -310,15 +326,39 @@ void GDWebSprite::finishDownload(){
 void GDWebSprite::changeWebSprite(CCTexture2D *pTexture){
     if(this->isDown)return;
     this->webSprite=CCSprite::createWithTexture(pTexture);
-    CCSize s = getContentSize();
-    this->xScale = this->defaultSprite->getContentSize().width/this->webSprite->getContentSize().width*this->defaultSprite->getScaleX();
-    this->yScale = this->defaultSprite->getContentSize().height/this->webSprite->getContentSize().height*this->defaultSprite->getScaleY();
+		CCSize s = getContentSize();
+    this->xScale = s.width/this->webSprite->getContentSize().width*this->getScaleX();
+		this->yScale = s.height/this->webSprite->getContentSize().height*this->getScaleY();
     this->webSprite->setAnchorPoint(ccp(0.5,0.5));
     this->webSprite->setPosition(ccp(s.width / 2, s.height / 2));
-    this->webSprite->setScaleX(xScale);
+		this->webSprite->setScaleX(xScale);
     this->webSprite->setScaleY(yScale);
     this->addChild(this->webSprite,2);
     this->isDown=true;
-    this->removeChild(this->defaultSprite);
+  
+	this->removeChild(this->defaultSprite);
     this->defaultSprite=NULL;
+}
+
+void GDWebSprite::printCache(){
+	
+	string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
+	CCLOG("gdwebsprite cache %s",filecache.c_str());
+	
+}
+
+void GDWebSprite::removeCache(){
+	GDWebSpriteManager::get()->webImages->removeAllObjects();
+	GDWebSpriteManager::get()->downloadIndex=0;
+	string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
+	Json::Value list = filecache;
+	
+	for(int i=0; i<filecache.size(); i++)
+	{
+		Json::Value rFileInfo =list[i];
+		string rFilename =rFileInfo.get("filename", "fn").asString();
+		remove((mySIL->getDocumentPath()+rFilename).c_str());
+	}
+	CCUserDefault::sharedUserDefault()->setStringForKey("gdwebspritelist", "[]");
+	CCUserDefault::sharedUserDefault()->flush();
 }
