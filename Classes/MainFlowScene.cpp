@@ -2299,7 +2299,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																											(CCNode*)content_label, [=](){is_menu_enable = true;},
 																											12.f, CCPointZero,true);
 		
-	//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
+		//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
 	else
@@ -2308,85 +2308,198 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int t_need_ruby = tag%10000;
 		
 		PuzzleOpenPopup* t_popup = PuzzleOpenPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
-														   {
-															   LoadingLayer* t_loading = LoadingLayer::create(-9999);
-															   addChild(t_loading, 9999);
-															   
-															   int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
-															   PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-															   t_history.is_open = true;
-															   t_history.open_type = "골드결제";
-															   
-//															   string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list
-															   
-															   vector<ChangeGoodsDataDetail> t_list;
-															   
-															   ChangeGoodsDataDetail t_detail;
-															   t_detail.m_type = kGoodsType_gold;
-															   t_detail.m_value = -t_need_ruby;
-															   t_detail.m_statsID = "";
-															   t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
-															   t_detail.m_content = "퍼즐오픈(골드)";
-															   t_detail.m_isPurchase = false;
-															   
-															   t_list.push_back(t_detail);
-															   
-															   ChangeGoodsDataDetail t_detail2;
-															   t_detail2.m_type = kGoodsType_pz;
-															   t_detail2.m_value = puzzle_number;
-															   t_detail2.m_statsID = "";
-															   t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
-															   t_detail2.m_content = "퍼즐오픈(골드)";
-															   t_detail2.m_isPurchase = false;
-															   
-															   t_list.push_back(t_detail2);
-															   
-															   mySGD->addChangeGoods("p_p_p", t_list);
-															   
-//															   mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
-															   
-															   vector<CommandParam> command_list;
-															   
-															   command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
-															   
-															   mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
-																							 {
-																								 t_loading->removeFromParent();
-																								 if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																								 {
-																									 is_menu_enable = true;
-																									 
-																									 CCPoint t_offset = puzzle_table->getContentOffset();
-																									 puzzle_table->reloadData();
-																									 puzzle_table->setContentOffset(t_offset);
-																									 //											  puzzle_table->updateCellAtIndex(t_index);
-																								 }
-																								 else
-																								 {
-																									 mySGD->clearChangeGoods();
-																									 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-																									 t_history.is_open = false;
-																									 t_history.open_type = "";
-																									 mySGD->setPuzzleHistoryForNotSave(t_history);
-																									 
-																									 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
-																									 
-																									 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
-																									 //											  {
-																									 //												  is_menu_enable = false;
-																									 //												  ShopPopup* t_shop = ShopPopup::create();
-																									 //												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-																									 //												  t_shop->targetHeartTime(heart_time);
-																									 //												  t_shop->setShopCode(kSC_ruby);
-																									 //												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-																									 //												  t_shop->addGray();
-																									 //												  addChild(t_shop, kMainFlowZorder_popup);
-																									 //											  }), 9999);
-																									 
-																									 is_menu_enable = true;
-																								 }
-																							 });
-														   }, t_need_ruby);
+																											 {
+																												 LoadingLayer* t_loading = LoadingLayer::create(-9999);
+																												 addChild(t_loading, 9999);
+																												 
+																												 int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
+																												 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+																												 t_history.is_open = true;
+																												 t_history.open_type = "골드결제";
+																												 
+																												 //															   string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list
+																												 
+																												 vector<ChangeGoodsDataDetail> t_list;
+																												 
+																												 ChangeGoodsDataDetail t_detail;
+																												 t_detail.m_type = kGoodsType_gold;
+																												 t_detail.m_value = -t_need_ruby;
+																												 t_detail.m_statsID = "";
+																												 t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+																												 t_detail.m_content = "퍼즐오픈(골드)";
+																												 t_detail.m_isPurchase = false;
+																												 
+																												 t_list.push_back(t_detail);
+																												 
+																												 ChangeGoodsDataDetail t_detail2;
+																												 t_detail2.m_type = kGoodsType_pz;
+																												 t_detail2.m_value = puzzle_number;
+																												 t_detail2.m_statsID = "";
+																												 t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+																												 t_detail2.m_content = "퍼즐오픈(골드)";
+																												 t_detail2.m_isPurchase = false;
+																												 
+																												 t_list.push_back(t_detail2);
+																												 
+																												 mySGD->addChangeGoods("p_p_p", t_list);
+																												 
+																												 //															   mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
+																												 
+																												 vector<CommandParam> command_list;
+																												 
+																												 command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
+																												 
+																												 mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
+																																											 {
+																																												 t_loading->removeFromParent();
+																																												 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																																												 {
+																																													 is_menu_enable = true;
+																																													 
+																																													 is_puzzle_enter_list.clear();
+																																													 
+																																													 TRACE();
+																																													 locked_puzzle_count = 0;
+																																													 
+																																													 TRACE();
+																																													 for(int i=0;i<not_event_puzzle_list.size();i++)
+																																													 {
+																																														 int t_puzzle_number = not_event_puzzle_list[i];
+																																														 
+																																														 PuzzleOpenInfo t_info;
+																																														 t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
+																																														 
+																																														 string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+																																														 
+																																														 Json::Value condition_list;
+																																														 Json::Reader reader;
+																																														 reader.parse(puzzle_condition, condition_list);
+																																														 
+																																														 TRACE();
+																																														 if(condition_list.size() <= 0)
+																																															 t_info.is_open = true;
+																																														 
+																																														 t_info.is_base_condition_success = true;
+																																														 t_info.is_have_week_condition = false;
+																																														 t_info.is_have_date_condition = false;
+																																														 t_info.is_have_ruby_condition = false;
+																																														 t_info.need_star_count = 0;
+																																														 
+																																														 for(int i=0;!t_info.is_open && i<condition_list.size();i++)
+																																														 {
+																																															 Json::Value t_condition_and = condition_list[i];
+																																															 
+																																															 bool and_open = true;
+																																															 bool is_time_condition = false;
+																																															 
+																																															 for(int j=0;j<t_condition_and.size();j++)
+																																															 {
+																																																 Json::Value t_condition = t_condition_and[j];
+																																																 string t_type = t_condition["type"].asString();
+																																																 if(t_type == "p")
+																																																 {
+																																																	 if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+																																																	 {
+																																																		 and_open = false;
+																																																		 t_info.is_base_condition_success = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "s")
+																																																 {
+																																																	 t_info.need_star_count = t_condition["value"].asInt();
+																																																	 if(mySGD->getClearStarCount() < t_info.need_star_count)
+																																																	 {
+																																																		 and_open = false;
+																																																		 t_info.is_base_condition_success = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "g")
+																																																 {
+																																																	 t_info.need_ruby_value = t_condition["value"].asInt();
+																																																	 and_open = false;
+																																																	 t_info.is_have_ruby_condition = true;
+																																																 }
+																																																 else if(t_type == "w")
+																																																 {
+																																																	 is_time_condition = true;
+																																																	 t_info.is_have_week_condition = true;
+																																																	 if(!mySGD->keep_time_info.is_loaded)
+																																																		 and_open = false;
+																																																	 else
+																																																	 {
+																																																		 int weekday = t_condition["weekday"].asInt();
+																																																		 t_info.keep_weekday = weekday;
+																																																		 if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+																																																			 and_open = false;
+																																																		 t_info.keep_week_start = t_condition["s"].asInt();
+																																																		 t_info.keep_week_end = t_condition["e"].asInt();
+																																																		 if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+																																																			 and_open = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "d")
+																																																 {
+																																																	 is_time_condition = true;
+																																																	 t_info.is_have_date_condition = true;
+																																																	 t_info.keep_date_start = t_condition["s"].asString();
+																																																	 if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+																																																		 and_open = false;
+																																																 }
+																																															 }
+																																															 
+																																															 TRACE();
+																																															 if(and_open)
+																																															 {
+																																																 t_info.is_open = true;
+																																																 if(!is_time_condition)
+																																																 {
+																																																	 PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+																																																	 t_history.is_open = true;
+																																																	 t_history.open_type = "무료";
+																																																	 mySGD->setPuzzleHistory(t_history, nullptr);
+																																																 }
+																																															 }
+																																														 }
+																																														 
+																																														 t_info.before_locked_puzzle_count = locked_puzzle_count;
+																																														 t_info.puzzle_number = t_puzzle_number;
+																																														 is_puzzle_enter_list.push_back(t_info);
+																																														 
+																																														 if(!t_info.is_open)
+																																															 locked_puzzle_count++;
+																																													 }
+																																													 
+																																													 CCPoint t_offset = puzzle_table->getContentOffset();
+																																													 puzzle_table->reloadData();
+																																													 puzzle_table->setContentOffset(t_offset);
+																																													 //											  puzzle_table->updateCellAtIndex(t_index);
+																																												 }
+																																												 else
+																																												 {
+																																													 mySGD->clearChangeGoods();
+																																													 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+																																													 t_history.is_open = false;
+																																													 t_history.open_type = "";
+																																													 mySGD->setPuzzleHistoryForNotSave(t_history);
+																																													 
+																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+																																													 
+																																													 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
+																																													 //											  {
+																																													 //												  is_menu_enable = false;
+																																													 //												  ShopPopup* t_shop = ShopPopup::create();
+																																													 //												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																													 //												  t_shop->targetHeartTime(heart_time);
+																																													 //												  t_shop->setShopCode(kSC_ruby);
+																																													 //												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+																																													 //												  t_shop->addGray();
+																																													 //												  addChild(t_shop, kMainFlowZorder_popup);
+																																													 //											  }), 9999);
+																																													 
+																																													 is_menu_enable = true;
+																																												 }
+																																											 });
+																											 }, t_need_ruby);
 		
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
