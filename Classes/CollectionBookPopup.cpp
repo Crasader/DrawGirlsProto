@@ -46,6 +46,7 @@ enum CBP_MenuTag{
 	kCBP_MT_next,
 	kCBP_MT_gift,
 	kCBP_MT_diary19,
+	kCBP_MT_takeCnt,
 //	kCBP_MT_inputText,
 	kCBP_MT_strength,
 //	kCBP_MT_second,
@@ -231,7 +232,13 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  
 //						  addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 999);;
 						  
-						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=](){is_menu_enable = true;}, [=]()
+						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=]()
+							{
+								is_menu_enable = true;
+								CardSortInfo t_card_info = mySGD->getHasGottenCardDataForCardNumber(card_number);
+								gift->setVisible(t_card_info.count.getV() >= 2);
+								((KSLabelTTF*)recent_left_img->getChildByTag(kCBP_MT_takeCnt))->setString(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), t_card_info.count.getV()));
+							}, [=]()
 						  {
 							  is_menu_enable = true;
 							  CCNode* t_node = CCNode::create();
@@ -441,7 +448,7 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	take_cnt_label->disableOuterStroke();
 	take_cnt_label->setAnchorPoint(ccp(0,0.5f));
 	take_cnt_label->setPosition(ccp(38,28));
-	target->addChild(take_cnt_label);
+	target->addChild(take_cnt_label, 0, kCBP_MT_takeCnt);
 	
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(0.57);
