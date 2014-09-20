@@ -172,6 +172,9 @@ CCSprite* GDWebSprite::create(string imgUrl, string defaultImg,CCSize size, CCOb
 	return GDWebSprite::create(imgUrl,defalutNode,"",size, t_final, d_final);
 }
 
+static CCSprite* create(string imgUrl, CCNode *defaultNode,  CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL){
+	return GDWebSprite::create(imgUrl,defaultNode,"",size, t_final, d_final);
+}
 
 CCSprite* GDWebSprite::create(string imgUrl, string defaultImg,CCObject* t_final, SEL_CallFunc d_final){
 	CCNode *defalutNode = CCSprite::create(defaultImg.c_str());
