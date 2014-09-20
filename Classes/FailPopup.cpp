@@ -306,6 +306,7 @@ bool FailPopup::init()
 	t_ok_node->addChild(ok_label);
 	
 	main_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	main_menu->setStringData("backkey");
 	main_menu->setPreferredSize(CCSizeMake(215, 65));
 	main_menu->setTag(kMT_FP_main);
 	main_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(FailPopup::controlButtonAction), CCControlEventTouchUpInside);

@@ -297,6 +297,29 @@ public:
 		
 		texture->release();
 	}
+	
+	
+	
+	void ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
+	{
+	
+	}
+	
+	void ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
+	{
+		
+	}
+	
+	void ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
+	{
+		ccTouchesEnded(pTouches, pEvent);
+	}
+	
 	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		CCPoint touchLocation = pTouch->getLocation();

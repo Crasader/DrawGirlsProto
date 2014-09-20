@@ -459,7 +459,7 @@ void CommonButton::setZoomOnTouchDown(bool var){
 
 void CommonButton::findBackBtn(cocos2d::CCNode* obj,vector<BackKeyData> &m_backkeyList,CCPoint pos){
 	if(!obj)return;
-	if(obj->getStringData()=="backkey"){
+	if(obj->getStringData()=="backkey" || obj->getTag()==930462){
 		m_backkeyList.push_back({obj,pos});
 	}
 	
@@ -504,6 +504,11 @@ void CommonButton::callBackKey(){
 			//checkobj1->activate();
 			if(maxPri>checkobj1->getTouchPriority()){
 				maxPri =checkobj1->getTouchPriority();
+				selectIndex=i;
+			}
+		}else if(CCLayer* checkobj4 = dynamic_cast<CCMenu*>(selectedObj->getParent())){
+			if(maxPri>checkobj4->getTouchPriority()){
+				maxPri =checkobj4->getTouchPriority();
 				selectIndex=i;
 			}
 		}

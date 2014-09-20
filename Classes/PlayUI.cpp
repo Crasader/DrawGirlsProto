@@ -3679,7 +3679,7 @@ void PlayUI::myInit ()
 	
 	CCMenuItem* home_item = CCMenuItemSprite::create(n_home, s_home, this, menu_selector(PlayUI::menuAction));
 	home_item->setTag(kMenuTagUI_home);
-	
+	home_item->setStringData("backkey");
 	home_menu = CCMenu::createWithItem(home_item);
 	home_menu->setPosition(ccp(25, myDSH->ui_top-25+UI_OUT_DISTANCE));
 	home_menu->setEnabled(false);

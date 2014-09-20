@@ -113,6 +113,7 @@ private:
 	virtual void ccTouchesCancelled(CCSet *pTouches, CCEvent *pEvent);
 	
 	virtual void registerWithTouchDispatcher(void);
+	virtual void keyBackClicked();
 	
 };
 

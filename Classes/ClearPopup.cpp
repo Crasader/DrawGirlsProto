@@ -357,6 +357,7 @@ bool ClearPopup::init()
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	ok_menu->setStringData("backkey");
 	ok_menu->setPreferredSize(CCSizeMake(215, 65));
 	ok_menu->setTag(kMT_CP_ok);
 	ok_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);

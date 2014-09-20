@@ -100,6 +100,7 @@ public:
 		}
 		btn->autorelease();
 		btn->setStringData("backkey");
+		btn->setTag(930462);
 		return btn;
 	}
 	

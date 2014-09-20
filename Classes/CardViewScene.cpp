@@ -879,3 +879,8 @@ void CardViewScene::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
 {
 	ccTouchesEnded(pTouches, pEvent);
 }
+
+void CardViewScene::keyBackClicked()
+{
+	CommonButton::callBackKey();
+}
