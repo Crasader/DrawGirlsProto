@@ -5,7 +5,7 @@
 //  Created by 사원3 on 2013. 11. 20..
 //
 //
-
+#include "StoryLayer.h"
 #include "OptionPopup.h"
 #include "MyLocalization.h"
 //#include "WorldMapScene.h"
@@ -46,7 +46,7 @@
 #include "LoadingLayer.h"
 #include "JoystickSizeQuestionPopup.h"
 #include "IntroducerPopup.h"
-
+#include "GDWebSprite.h"
 
 USING_NS_CC_EXT;
 
@@ -432,6 +432,7 @@ bool OptionPopup::init()
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.5f));
 	system_tab->addChild(system_label);
 	
+	system_tab->setStringData("testobj");
 	
 	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
 	bgm_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
@@ -937,8 +938,7 @@ bool OptionPopup::init()
 	diary_item->setTag(kOP_MT_toDiary19);
 	diary_item->setPosition(ccp(191,16));//293
 	tab_menu->addChild(diary_item);
-	
-	
+
 	
 	//	CCSprite* n_noti = CCSprite::create("option_noti.png");
 	//	CCSprite* s_noti = CCSprite::create("option_noti.png");
@@ -953,6 +953,22 @@ bool OptionPopup::init()
 	//	noti_menu->setTouchPriority(-171);
 	
 	is_menu_enable = false;
+	
+	
+	
+//	
+//	GDWebSprite::printCache();
+//	GDWebSprite::removeCache();
+//	CCSprite* gdwe = GDWebSprite::create("http://182.162.201.147:10010/images/ui/startpack.png", "icon_r.png", CCSizeMake(910/2.f, 440/2.f));
+//	gdwe->setAnchorPoint(ccp(0.5,0.5));
+//	gdwe->setPosition(ccp(100,100));
+//	addChild(gdwe,99999);
+	
+//	StoryLayer::startStory("puzzle1",[](){ CCLOG("ENDED STORY");});
+	
+	
+	
+	
 	
 	
 	return true;
@@ -1287,6 +1303,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(ment3_label);
 		
 		
+		
 		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
 		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-25));
 		close_button->setFunction([=](CCObject* sender)
@@ -1466,7 +1483,9 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_kakao)
 	{
-		int ret = hspConnector::get()->openKakaoMsg();
+		
+		Json::Value msgInfo = mySGD->getKakaoMsg();
+		int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
 		if(ret == 0) {
 			auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
 																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);

@@ -775,6 +775,11 @@ public:
 	
 	void setSpecialEventPuzzleNumber(int t_i);
 	int getSpecialEventPuzzleNumber();
+
+	
+	string getKakaoMsg();
+	void setKakaoMsg(string t_str);
+
 	
 	bool is_before_selected_event_stage;
 	
@@ -1142,6 +1147,7 @@ private:
 	KSProtectVar<int> special_event_puzzle_number;
 	
 	KSProtectStr all_clear_reward;
+	KSProtectStr kakao_msg;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
