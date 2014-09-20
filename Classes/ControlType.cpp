@@ -1208,7 +1208,6 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						{
 							control_circle->setPosition(after_circle_position);
 							
-							
 							float t_distance = distanceValue;
 							if(distanceValue > 25*joystick_size_value)
 								t_distance = 25*joystick_size_value;
@@ -1262,7 +1261,12 @@ void ControlJoystickButton::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						else
 						{
 							control_circle->setPosition(after_circle_position);
-							control_ball->setPosition(location);
+							float t_distance = distanceValue;
+							if(distanceValue > 25*joystick_size_value)
+								t_distance = 25*joystick_size_value;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							control_ball->setPosition(inner_position);
 						}
 					}
 					else

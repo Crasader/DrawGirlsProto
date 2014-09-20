@@ -376,6 +376,8 @@ private:
 	double minimumDistanceJ;
 	double JoystickCenterLimit;
 	
+	float joystick_size_value;
+	
 	bool isButtonAction;
 	
 	CCBAnimationManager* button_ani;
