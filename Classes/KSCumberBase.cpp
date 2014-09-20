@@ -1327,7 +1327,7 @@ n<m 인 부수기 공격은 m초 안에는 안함.
 void KSCumberBase::cumberAttack(float dt)
 {
 	
-	if(m_slience || (m_cumberState != kCumberStateMoving)) // 공격 못하는 조건이라면 패스.
+	if(m_slience || (m_cumberState != kCumberStateMoving) || m_cumberTimer < 3.f) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
