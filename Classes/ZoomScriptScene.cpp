@@ -312,7 +312,8 @@ void ZoomScript::typingAnimation()
 			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
-			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
+			if(grade == 2 || grade == 4)
 			{
 				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 				zoom_img = tuto.first;

@@ -20,13 +20,13 @@ using namespace std;
 
 class KSLabelTTF;
 class LoadingLayer;
-class CardGiftPopup : public CCNode, public CCEditBoxDelegate
+class CardGiftPopup : public CCNode, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
 	static CardGiftPopup* create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
 	
 private:
-	int touch_priority;
+	int m_touchPriority;
 	function<void()> end_func;
 	function<void()> close_func;
 	CCSprite* gray;
@@ -39,20 +39,26 @@ private:
 	
 	LoadingLayer* t_loading;
 	
-	CCEditBox* input_text;
 	KSLabelTTF* result_label;
 	CCScale9Sprite* found_back;
 	
-	void resultSendAction(Json::Value result_data);
 	
+	Json::Value m_friends;
+	CCTableView* m_friendTable;
+public:
 	void myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
+	void resultSendAction(Json::Value result_data)	;
+
+public: // table
+	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);
 	
-	void resultGetUserData(Json::Value result_data);
+	virtual void scrollViewDidScroll(CCScrollView* view);
+	virtual void scrollViewDidZoom(CCScrollView* view);
 	
-	virtual void editBoxEditingDidBegin(CCEditBox* editBox);
-    virtual void editBoxEditingDidEnd(CCEditBox* editBox);
-    virtual void editBoxTextChanged(CCEditBox* editBox, const std::string& text);
-    virtual void editBoxReturn(CCEditBox* editBox);
+	virtual void tableCellTouched(CCTableView* table, CCTableViewCell* cell);
+	virtual CCSize cellSizeForTable(CCTableView *table);
+	
+	virtual unsigned int numberOfCellsInTableView(CCTableView *table);
 };
 
 #endif /* defined(__DGproto__CardGiftPopup__) */

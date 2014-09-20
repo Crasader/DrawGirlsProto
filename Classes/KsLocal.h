@@ -78,7 +78,26 @@ enum class LK
 	kFriendRemoveFriendQ,
 	kFriendAddLimitMe,
 	kFriendAddLimitYou,
-	kFriendNotFountFriend
+	kFriendNotFountFriend,
+	kFriendVote1,
+	kFriendVote2,
+	kFriendInputSkip,
+	kFriendVoterInput,
+	kFriendKakaoTalkFriend,
+	kFriendDontFind,
+	kFriendNoti,
+	kFriendError,
+	kFriendSuccessfullyRecommend,
+	kFriendCurrentValue,
+	kFriendVotePromotion1,
+	kFriendVotePromotion1_1,
+	kFriendVotePromotion2,
+	kFriendRecommend,
+	kFriendGiftDesc,
+	kFriendGiftSend,
+	kFriendGiftTitle,
+	kFriendGiftQ,
+	kFriendGiftYes
 };
 class KsLocal
 {
