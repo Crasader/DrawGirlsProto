@@ -249,6 +249,7 @@ public:
 	void openHSPNotice();
 	void launchPromotion();
 	int openKakaoMsg();
+	int sendKakaoMsg(string title,string msg,string url);
 	
 	double getScreenRealWidth();
 	double getScreenRealHeight();
