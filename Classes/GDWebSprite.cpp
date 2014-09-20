@@ -120,6 +120,7 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 		if(info["url"].asString()==imgUrl){
 			string filename = info["filename"].asString();
 			CCSprite* spr = mySIL->getUnsafeLoadedImg(filename);
+			if(size.height!=0)spr->setContentSize(size);
 			CCLOG("GDWebSprite find %s -> %s",info["url"].asString().c_str(),info["filename"].asString().c_str());
 			if(spr)return spr;
 		}
@@ -328,14 +329,15 @@ void GDWebSprite::finishDownload(){
 
 void GDWebSprite::changeWebSprite(CCTexture2D *pTexture){
     if(this->isDown)return;
-    this->webSprite=CCSprite::createWithTexture(pTexture);
+	this->webSprite=CCSprite::createWithTexture(pTexture);
 		CCSize s = getContentSize();
+	this->webSprite->setPosition(s);
     this->xScale = s.width/this->webSprite->getContentSize().width*this->getScaleX();
 		this->yScale = s.height/this->webSprite->getContentSize().height*this->getScaleY();
     this->webSprite->setAnchorPoint(ccp(0.5,0.5));
     this->webSprite->setPosition(ccp(s.width / 2, s.height / 2));
-		this->webSprite->setScaleX(xScale);
-    this->webSprite->setScaleY(yScale);
+		//this->webSprite->setScaleX(xScale);
+    //this->webSprite->setScaleY(yScale);
     this->addChild(this->webSprite,2);
     this->isDown=true;
   
