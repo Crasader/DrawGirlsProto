@@ -28,10 +28,10 @@ public:
 
 	static CCSprite* create(string imgUrl, string defaultImg, CCSize size, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
 	static CCSprite* create(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
 	static CCSprite* create(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
 	static CCSprite* create(string imgUrl, CCNode *defaultNode,  CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    static CCSprite* create(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName, CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+  static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName, CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     
     bool init(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     bool init(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
