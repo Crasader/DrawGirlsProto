@@ -1288,8 +1288,8 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 20)
-								t_distance = 20;
+							if(distanceValue > 25*joystick_size_value)
+								t_distance = 25*joystick_size_value;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -1298,14 +1298,19 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						else
 						{
 							control_circle->setPosition(after_circle_position);
-							control_ball->setPosition(location);
+							float t_distance = distanceValue;
+							if(distanceValue > 25*joystick_size_value)
+								t_distance = 25*joystick_size_value;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							control_ball->setPosition(inner_position);
 						}
 					}
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25*joystick_size_value)
+							t_distance = 25*joystick_size_value;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1336,8 +1341,8 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 							control_circle->setPosition(circle_position);
 							
 							float t_distance = distanceValue;
-							if(distanceValue > 20)
-								t_distance = 20;
+							if(distanceValue > 25*joystick_size_value)
+								t_distance = 25*joystick_size_value;
 							
 							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 							
@@ -1346,14 +1351,19 @@ void TutoControler::ccTouchesMoved(CCSet *pTouches, CCEvent *pEvent)
 						else
 						{
 							control_circle->setPosition(after_circle_position);
-							control_ball->setPosition(location);
+							float t_distance = distanceValue;
+							if(distanceValue > 25*joystick_size_value)
+								t_distance = 25*joystick_size_value;
+							
+							CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
+							control_ball->setPosition(inner_position);
 						}
 					}
 					else
 					{
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25*joystick_size_value)
+							t_distance = 25*joystick_size_value;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1435,8 +1445,8 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25*joystick_size_value)
+							t_distance = 25*joystick_size_value;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1451,8 +1461,8 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 20)
-						t_distance = 20;
+					if(distanceValue > 25*joystick_size_value)
+						t_distance = 25*joystick_size_value;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					
@@ -1483,8 +1493,8 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 						control_circle->setPosition(circle_position);
 						
 						float t_distance = distanceValue;
-						if(distanceValue > 20)
-							t_distance = 20;
+						if(distanceValue > 25*joystick_size_value)
+							t_distance = 25*joystick_size_value;
 						
 						CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 						
@@ -1499,8 +1509,8 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 				else
 				{
 					float t_distance = distanceValue;
-					if(distanceValue > 20)
-						t_distance = 20;
+					if(distanceValue > 25*joystick_size_value)
+						t_distance = 25*joystick_size_value;
 					
 					CCPoint inner_position = ccpAdd(control_circle->getPosition(), ccpMult(ccp(cosf(angle/180.f*M_PI), sinf(angle/180.f*M_PI)), t_distance));
 					
@@ -1579,6 +1589,8 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	getMapData = t_getMapData;
 	setMapData = t_setMapData;
 	checkBeforeNewLine = t_checkBeforeNewLine;
+	
+	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f;
 	
 	TUTO_TouchOutWidth = 10.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
 	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
