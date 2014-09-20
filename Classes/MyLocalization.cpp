@@ -224,7 +224,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("%d일후 리셋"), kMyLocalKey_dayAfterReset);
 	ko->setObject(CCString::create("%d시간후 리셋"), kMyLocalKey_hourAfterReset);
 	ko->setObject(CCString::create("%d분후 리셋"), kMyLocalKey_secondAfterReset);
-	ko->setObject(CCString::create("선물함"), kMyLocalKey_giftbox);
+	ko->setObject(CCString::create("우편함"), kMyLocalKey_giftbox);
 	ko->setObject(CCString::create("<font color=#FFAA14 size=15>%s</font><br><font color=#FFFFFF>- %s -</font><br><font color=#CCCCCC size=10s>%s</font>"), kMyLocalKey_giftboxContent);
 	ko->setObject(CCString::create("모든선물 받기"), kMyLocalKey_allAccept);
 	ko->setObject(CCString::create("티켓함"), kMyLocalKey_ticketBox);
@@ -338,7 +338,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("내 미사일"), kMyLocalKey_mymissile);
 	ko->setObject(CCString::create("파워"), kMyLocalKey_power);
 	ko->setObject(CCString::create("뽑기"), kMyLocalKey_gacha);
-	ko->setObject(CCString::create("일일미션을 완료해보세요!\n선물함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
+	ko->setObject(CCString::create("일일미션을 완료해보세요!\n우편함으로 선물을 드려요! ^^"), kMyLocalKey_stageListDown);
 	ko->setObject(CCString::create("액자오픈조건"), kMyLocalKey_frameOpenConditionTitle);
 	ko->setObject(CCString::create("이전액자클리어\n+별%d개이상"), kMyLocalKey_frameOpenConditionContent);
 	ko->setObject(CCString::create("이전액자클리어\n+별%d개이상\n+%s골드"), kMyLocalKey_frameOpenConditionContentRuby);
@@ -467,7 +467,7 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
 //	ko->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
 //	ko->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
-	ko->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 선물함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
+	ko->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
 	ko->setObject(CCString::create("무료"), kMyLocalKey_free);
 	ko->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 //	ko->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
@@ -657,7 +657,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	ko->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ko->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
-	ko->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
+	ko->setObject(CCString::create("우편함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ko->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
 	ko->setObject(CCString::create("이미 사용한 쿠폰입니다."), kMyLocalKey_couponAlready);
 	ko->setObject(CCString::create("유효기간이 만료 쿠폰입니다."), kMyLocalKey_couponExpire);
@@ -717,7 +717,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
 	
 	ko->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
-	ko->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	ko->setObject(CCString::create("보상선물들은 우편함에서 확인하세요."), kMyLocalKey_rankRewardContent);
 	ko->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
@@ -726,8 +726,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ko->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ko->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
-	ko->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
-	ko->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	ko->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	ko->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
 	
 	ko->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
 	ko->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
@@ -761,7 +761,7 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
 	ko->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
-	ko->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ko->setObject(CCString::create("<font newline=20>우편함"), kMyLocalKey_mainflowDimmed3);
 	ko->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	ko->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
 	ko->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
@@ -1512,7 +1512,7 @@ void MyLocal::en()
 //	en->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
 //	en->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
 //	en->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
-	en->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 선물함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
+	en->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
 	en->setObject(CCString::create("무료"), kMyLocalKey_free);
 	en->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 //	en->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
@@ -1692,7 +1692,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	en->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	en->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
-	en->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
+	en->setObject(CCString::create("우편함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	en->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
 	en->setObject(CCString::create("이미 사용한 쿠폰입니다."), kMyLocalKey_couponAlready);
 	en->setObject(CCString::create("유효기간이 만료 쿠폰입니다."), kMyLocalKey_couponExpire);
@@ -1755,7 +1755,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
 
 	en->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
-	en->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	en->setObject(CCString::create("보상선물들은 우편함에서 확인하세요."), kMyLocalKey_rankRewardContent);
 	en->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
@@ -1764,8 +1764,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	en->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	en->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
-	en->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
-	en->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	en->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	en->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
 	
 	en->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
 	en->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
@@ -1800,7 +1800,7 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
 	en->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
-	en->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	en->setObject(CCString::create("<font newline=20>우편함"), kMyLocalKey_mainflowDimmed3);
 	en->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	en->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
 	en->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
@@ -2486,7 +2486,7 @@ void MyLocal::ja()
 //	ja->setObject(CCString::create("업그레이드 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass3);
 //	ja->setObject(CCString::create("아이템뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass4);
 //	ja->setObject(CCString::create("1프로뽑기 이용권이 지급되었습니다."), kMyLocalKey_todaymissionSuccessPass5);
-	ja->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 선물함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
+	ja->setObject(CCString::create("<font newline=16>오늘의 미션을 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다."), kMyLocalKey_todaymissionSuccessCommon);
 	ja->setObject(CCString::create("무료"), kMyLocalKey_free);
 	ja->setObject(CCString::create("영역 다시뽑기"), kMyLocalKey_areaReGacha);
 //	ja->setObject(CCString::create("버튼을 눌러주세요."), kMyLocalKey_pleaseClickButton);
@@ -2667,7 +2667,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("쿠폰등록"), kMyLocalKey_couponTitle);
 	ja->setObject(CCString::create("입력"), kMyLocalKey_couponContent);
 	ja->setObject(CCString::create("쿠폰등록성공"), kMyLocalKey_couponSuccess);
-	ja->setObject(CCString::create("선물함을 확인하세요."), kMyLocalKey_couponGiftbox);
+	ja->setObject(CCString::create("우편함을 확인하세요."), kMyLocalKey_couponGiftbox);
 	ja->setObject(CCString::create("쿠폰등록실패"), kMyLocalKey_couponFail);
 	ja->setObject(CCString::create("이미 사용한 쿠폰입니다."), kMyLocalKey_couponAlready);
 	ja->setObject(CCString::create("유효기간이 만료 쿠폰입니다."), kMyLocalKey_couponExpire);
@@ -2730,7 +2730,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("하트 공짜"), kMyLocalKey_heartFree);
 
 	ja->setObject(CCString::create("지난주 랭킹 결과"), kMyLocalKey_rankRewardTitle);
-	ja->setObject(CCString::create("보상선물들은 선물함에서 확인하세요."), kMyLocalKey_rankRewardContent);
+	ja->setObject(CCString::create("보상선물들은 우편함에서 확인하세요."), kMyLocalKey_rankRewardContent);
 	ja->setObject(CCString::create("주간 누적 랭킹"), kMyLocalKey_rankRewardStageTitle);
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardStageScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardStageRank);
@@ -2739,8 +2739,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("지난주 누적점수"), kMyLocalKey_rankRewardEndlessScore);
 	ja->setObject(CCString::create("지난주 내순위"), kMyLocalKey_rankRewardEndlessRank);
 	ja->setObject(CCString::create("지난주 연승기록"), kMyLocalKey_rankRewardEndlessVictory);
-	ja->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
-	ja->setObject(CCString::create("선물함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
+	ja->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardStageReward);
+	ja->setObject(CCString::create("우편함에서\n%s를 받으세요."), kMyLocalKey_rankRewardEndlessReward);
 	
 	ja->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardStageRankValue);
 	ja->setObject(CCString::create("위(%0.f%%)"), kMyLocalKey_rankRewardEndlessRankValue);
@@ -2775,7 +2775,7 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("<font newline=20>액자를 선택하면<font color=961 newline=20>퍼즐화면으로 이동합니다."), kMyLocalKey_mainflowDimmed1);
 	ja->setObject(CCString::create("<font newline=16>획득한<font color=999>별갯수"), kMyLocalKey_mainflowDimmed2);
-	ja->setObject(CCString::create("<font newline=20>선물함"), kMyLocalKey_mainflowDimmed3);
+	ja->setObject(CCString::create("<font newline=20>우편함"), kMyLocalKey_mainflowDimmed3);
 	ja->setObject(CCString::create("<font newline=20>업적"), kMyLocalKey_mainflowDimmed4);
 	ja->setObject(CCString::create("<font newline=20>설정"), kMyLocalKey_mainflowDimmed5);
 	ja->setObject(CCString::create("<font newline=20>이벤트"), kMyLocalKey_mainflowDimmed6);
