@@ -1369,12 +1369,14 @@ void FriendPopup::setVoteFriendMenu()
 			param1["memberID"] = myHSP->getMemberID();
 			TRACE();
 			CommandParam c1 = CommandParam("getintroducereward", param1, [=](Json::Value v){
+				TRACE();
 				KS::KSLog("%", v);
 				if(v["result"]["code"].asInt() != GDSUCCESS)
 					return;
-				v["introduceCnt"] = 10;
+//				v["introduceCnt"] = 10;
 				StyledLabelTTF* promotion1 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVotePromotion1), v["introduceCnt"].asInt()), mySGD->getFont().c_str(),
 																														20.f, 0, StyledAlignment::kCenterAlignment);
+				TRACE();
 				m_friendVoteContainer->addChild(promotion1);
 				setFormSetter(promotion1);
 				promotion1->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 82.5));
@@ -1385,14 +1387,16 @@ void FriendPopup::setVoteFriendMenu()
 				promotion2->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 59.0));
 				setFormSetter(promotion2);
 				
+				TRACE();
 				Json::Value reward = v["reward"];
-				CCSprite* rewardImage = GDWebSprite::create(reward["image"].asString(), "friend_delete.png");
+				CCSprite* rewardImage = GDWebSprite::create(reward["image"].asString(), CCNode::create(), CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
 				rewardImage->setAnchorPoint(ccp(0.5f, 0.5f));
-				rewardImage->setContentSize(CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
+//				rewardImage->setContentSize(CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
 				m_friendVoteContainer->addChild(rewardImage);
-				rewardImage->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+				rewardImage->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -18));
 				setFormSetter(rewardImage);
 				
+				TRACE();
 				vector<int> rewardCounts;
 				int stampCount = 0;
 				for(Json::ValueIterator iter = v["reward"]["count"].begin(); iter != v["reward"]["count"].end(); ++iter)
@@ -1403,6 +1407,7 @@ void FriendPopup::setVoteFriendMenu()
 					}
 				}
 				
+				TRACE();
 				int x = v["reward"]["position"]["x"].asInt();
 				int y = v["reward"]["position"]["y"].asInt();
 				int term = v["reward"]["position"]["term"].asInt();
@@ -1418,6 +1423,7 @@ void FriendPopup::setVoteFriendMenu()
 				}
 				
 				
+				TRACE();
 //				CCScale9Sprite* giftBack = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
 //				giftBack->setContentSize(CCSizeMake(411, 97));
 //				m_friendVoteContainer->addChild(giftBack);
@@ -1429,6 +1435,7 @@ void FriendPopup::setVoteFriendMenu()
 				
 				// {80, 119} {160, 119} {240, 119} {320, 119}, {400, 119} 가 상품 좌표
 				
+				TRACE();
 				if(m_introduced == false)
 				{
 					CommonButton* voterInput = CommonButton::create(CCSprite::create("endless_bt_up.png"), m_touchPriority);
@@ -1437,6 +1444,7 @@ void FriendPopup::setVoteFriendMenu()
 					voterInput->setTitleSize(13.f);
 					m_friendVoteContainer->addChild(voterInput);
 					voterInput->setFunction([=](CCObject*){
+						TRACE();
 						m_voteFriendButtonCallback(0);  // 첫번 째 팝업으로 돌아감.
 					});
 					setFormSetter(voterInput);
@@ -1451,8 +1459,10 @@ void FriendPopup::setVoteFriendMenu()
 
 			});
 
+			TRACE();
 			myHSP->command({c1});
 			
+			TRACE();
 			
 			
 	
@@ -1460,9 +1470,11 @@ void FriendPopup::setVoteFriendMenu()
 		
 		// 추천 첫번 째 팝업
 		m_voteFriendButtonCallback = [=](CCObject*){
+			TRACE();
 			Json::Value param;
 			param["memberID"] = myHSP->getMemberID();
 			myHSP->command("getuserdata", param, [=](Json::Value v){
+				TRACE();
 				if(v["result"]["code"] != GDSUCCESS)
 				{
 					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
@@ -1498,11 +1510,13 @@ void FriendPopup::setVoteFriendMenu()
 						input_text1->removeFromParent();
 						input_text1 = nullptr;
 					}
+					TRACE();
 					if(m_voteInputText)
 					{
 						m_voteInputText->removeFromParent();
 						m_voteInputText = nullptr;
 					}
+					TRACE();
 					if(friend_table)
 					{
 						friend_table->removeFromParent();
@@ -1540,9 +1554,9 @@ void FriendPopup::setVoteFriendMenu()
 					editbox->setMaxLength(20);
 					//				editbox->setEnabled(false);
 					//				editbox->setVisible(false);
-					
+					TRACE();
 					setFormSetter(m_voteInputText);
-					
+					TRACE();
 					CCScale9Sprite* searchButton = CCScale9Sprite::create("subbutton_purple3.png");
 					CommonButton* searchBtn = CommonButton::create(CCSprite::create("subbutton_purple3.png"), m_touchPriority);
 					searchBtn->setTitle(getLocal(LK::kFriendSearch));
@@ -1559,11 +1573,14 @@ void FriendPopup::setVoteFriendMenu()
 					setFormSetter(skipButton);
 					
 					skipButton->setFunction([=](CCObject*){
+						TRACE();
 						m_voteFriendButtonCallbackSecond(0);
-						if(m_voteInputText)
-						{
-							m_voteInputText->setVisible(false);
-						}
+						TRACE();
+						CCLog("m_voteInputText %x", m_voteInputText);
+//						if(m_voteInputText)
+//						{
+//							m_voteInputText->setVisible(false);
+//						}
 					});
 					
 					// 첫번 째 팝업에서 검색을 놀렀을 때.
