@@ -20,13 +20,13 @@ using namespace std;
 
 enum TutoMapType{
 	kTutoMapType_empty = 0,
-	kTutoMapType_line,
-	kTutoMapType_get,
-	kTutoMapType_checkLine,
-	kTutoMapType_checkGet,
-	kTutoMapType_newLine,
-	kTutoMapType_scanningEmpty,
-	kTutoMapType_newGet
+	kTutoMapType_line,          // 1
+	kTutoMapType_get,           // 2
+	kTutoMapType_checkLine,     // 3
+	kTutoMapType_checkGet,      // 4
+	kTutoMapType_newLine,       // 5
+	kTutoMapType_scanningEmpty, // 6
+	kTutoMapType_newGet         // 7
 };
 
 class T_BFS_Point
@@ -305,6 +305,7 @@ public:
 	void drawAnimation();
 	
 	function<void(void)> controlerStop;
+    function<bool(void)> is_controler_backing;
 	
 private:
 	
@@ -375,6 +376,8 @@ private:
 	double TUTO_JOYSTICK_FOLLOW_DISTANCE;
 	double minimumDistanceJ;
 	double JoystickCenterLimit;
+	
+	float joystick_size_value;
 	
 	bool isButtonAction;
 	

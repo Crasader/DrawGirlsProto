@@ -35,13 +35,18 @@ CCScene* TitleRenewalScene::scene()
 	CCScene *scene = CCScene::create();
 	
 	// 'layer' is an autorelease object
+	TRACE();
 	TitleRenewalScene *layer = TitleRenewalScene::create();
+	TRACE();
 	layer->setAnchorPoint(ccp(0.5,0));
+	TRACE();
 	layer->setScale(myDSH->screen_convert_rate);
+	TRACE();
 	layer->setPosition(ccpAdd(layer->getPosition(), myDSH->ui_zero_point));
 	// add layer as a child to scene
+	TRACE();
 	scene->addChild(layer);
-	
+	TRACE();
 	// return the scene
 	return scene;
 }
@@ -1123,6 +1128,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setSendPvpPlayDataRate(result_data["sendPvpPlayDataRate"].asInt());
 		
 		mySGD->setIntroduceStage(result_data["introduceStage"].asInt());
+		mySGD->setKakaoMsg(result_data["kakaoMsg"].asString());
 	}
 	else
 	{
@@ -3769,6 +3775,8 @@ void TitleRenewalScene::alertAction(int t1, int t2)
 
 void TitleRenewalScene::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+	
+	CommonButton::callBackKey();
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 //	onBackKeyAction();
 }

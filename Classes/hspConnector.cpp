@@ -995,6 +995,29 @@ int hspConnector::openKakaoMsg()
 #endif
 }
 
+int hspConnector::sendKakaoMsg(string title,string msg,string url){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "sendKakaoMsg", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I")) {
+		jstring param1 = t.env->NewStringUTF(title.c_str());
+		jstring param2 = t.env->NewStringUTF(msg.c_str());
+		jstring param3 = t.env->NewStringUTF(url.c_str());
+		r = t.env->CallStaticIntMethod(t.classID, t.methodID, param1,param2,param3);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+	return r;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	//	CCLog(url.c_str());
+	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+	
+	return 0;
+#endif
+}
+
 void hspConnector::launchPromotion()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID

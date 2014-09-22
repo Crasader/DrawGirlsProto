@@ -645,7 +645,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
 																																						 mail.get("content","Gift").asString().c_str(),
-																																						 mail.get("sender","GM").asString().c_str(),
+																																						// mail.get("sender","GM").asString().c_str(),
 																																						 GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																						 )->getCString();
 																		StyledLabelTTF* lbl;
@@ -663,9 +663,21 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				CCLOG("position : %f",back->getPositionX());
 																				
 																				CCSprite* spr;
-//																				KSLabelTTF* propName = KSLabelTTF::create("뽑기이용권", mySGD->getFont().c_str(), 13);
-//																				setFormSetter(propName);
-//																				back->addChild(propName);
+																				KSLabelTTF* rewardName = KSLabelTTF::create("",mySGD->getFont().c_str(), 13);
+																				if(rewardType=="fr" || rewardType=="pr" || rewardType=="r")rewardName->setString("젬");
+																				else if(rewardType=="g")rewardName->setString("골드");
+																				else if(rewardType=="h")rewardName->setString("하트");
+																				else if(rewardType=="i6")rewardName->setString("더블");
+																				else if(rewardType=="i9")rewardName->setString("신발");
+																				else if(rewardType=="i11")rewardName->setString("자석");
+																				else if(rewardType=="p1")rewardName->setString("부활석");
+																				else if(rewardType=="p2")rewardName->setString("맵뽑기권");
+																				else if(rewardType=="p3")rewardName->setString("업그레이드권");
+																				else if(rewardType=="p4")rewardName->setString("아이템뽑기권");
+																				else if(rewardType=="p5")rewardName->setString("99프로뽑기권");
+																				else if(rewardType=="p6")rewardName->setString("생명의돌");
+																				else if(rewardType=="cd")rewardName->setString("");
+																				else rewardName->setString("??");
 																				
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
@@ -675,19 +687,19 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}else{
 																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
-																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f+6));
-																					
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}
 																				
 																				
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
-																				
+																				rewardName->setPosition(ccp(back->getContentSize().width/2.f,53));
 																				setFormSetter(back);
 																				setFormSetter(spr);
 																				setFormSetter(count);
-																				back->addChild(count);
 																				back->addChild(spr);
+																				back->addChild(count);
+																				back->addChild(rewardName);
 																				itemlist->addChild(back);
 																				
 																			}
@@ -782,7 +794,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		
 																		
-																		lbl->setPosition(ccp(front->getContentSize().width/2.f,52));
+																		lbl->setPosition(ccp(front->getContentSize().width/2.f,48));
 																		front->addChild(lbl);
 																		setFormSetter(lbl);
 																		

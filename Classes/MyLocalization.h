@@ -1054,6 +1054,18 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_puzzleOpenTitle,
 	kMyLocalKey_puzzleOpenContent,
 	kMyLocalKey_puzzleOpenButton,
+    
+    kMyLocalKey_takeCount,
+    kMyLocalKey_joystickPositionSelectTitle,
+    kMyLocalKey_joystickPositionSelectContent,
+    kMyLocalKey_joystickPositionSelectRecommend,
+    
+    kMyLocalKey_missionFailContextCombo,
+    kMyLocalKey_missionFailContextGold,
+    kMyLocalKey_missionFailContextItemCollect,
+    kMyLocalKey_missionFailContextScore,
+    kMyLocalKey_missionFailContextSubCumberCatch,
+    kMyLocalKey_missionFailContextTurns,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

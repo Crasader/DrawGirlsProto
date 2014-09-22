@@ -336,6 +336,8 @@ private:
 	
 	void startStory();
 	void endIntro();
+    
+    void changeMonsterAutoLevel();
 	
 };
 

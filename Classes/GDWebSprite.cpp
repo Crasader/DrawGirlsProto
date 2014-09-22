@@ -120,6 +120,7 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 		if(info["url"].asString()==imgUrl){
 			string filename = info["filename"].asString();
 			CCSprite* spr = mySIL->getUnsafeLoadedImg(filename);
+			if(size.height!=0)spr->setContentSize(size);
 			CCLOG("GDWebSprite find %s -> %s",info["url"].asString().c_str(),info["filename"].asString().c_str());
 			if(spr)return spr;
 		}
@@ -251,7 +252,7 @@ void GDWebSprite::finishDownload(){
         
         try {
             
-            if(img->initWithImageData(chunk_index.first.memory, (long)chunk_index.first.size, CCImage::kFmtUnKnown) == false)
+            if(img->initWithImageData(chunk_index.first.memory, (long)chunk_index.first.size, CCImage::kFmtPng) == false)
                 throw "..";
           
 						string filename = "gdw"+GraphDogLib::random_string(10)+".png";
@@ -261,8 +262,8 @@ void GDWebSprite::finishDownload(){
 						newfile["url"]=chunk_index.first.url;
 						newfile["filename"]=filename;
 						list.append(newfile);
-						if(img->saveToFile((mySIL->getDocumentPath().c_str()+filename).c_str())){
-							
+						if(img->saveToFile((mySIL->getDocumentPath().c_str()+filename).c_str()), false){
+
 							CCLOG("GDWebSprite : save ok %s, %s",newfile["url"].asString().c_str(),(mySIL->getDocumentPath().c_str()+filename).c_str());
 
 							if(list.size()>30){
@@ -328,14 +329,15 @@ void GDWebSprite::finishDownload(){
 
 void GDWebSprite::changeWebSprite(CCTexture2D *pTexture){
     if(this->isDown)return;
-    this->webSprite=CCSprite::createWithTexture(pTexture);
+		this->webSprite=CCSprite::createWithTexture(pTexture);
 		CCSize s = getContentSize();
+		this->webSprite->setPosition(s);
     this->xScale = s.width/this->webSprite->getContentSize().width*this->getScaleX();
 		this->yScale = s.height/this->webSprite->getContentSize().height*this->getScaleY();
     this->webSprite->setAnchorPoint(ccp(0.5,0.5));
     this->webSprite->setPosition(ccp(s.width / 2, s.height / 2));
-		this->webSprite->setScaleX(xScale);
-    this->webSprite->setScaleY(yScale);
+		//this->webSprite->setScaleX(xScale);
+    //this->webSprite->setScaleY(yScale);
     this->addChild(this->webSprite,2);
     this->isDown=true;
   

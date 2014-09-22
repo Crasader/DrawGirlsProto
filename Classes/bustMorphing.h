@@ -323,10 +323,26 @@ public:
 	bool ccTouchBegan(CCTouch *pTouch, CCEvent *pEvent)
 	{
 		CCPoint touchLocation = pTouch->getLocation();
+		CCPoint local = convertToNodeSpace(touchLocation);
 		m_startPos = convertToNodeSpace(touchLocation);
 		m_stopTouch = false;
 		m_validTouch = false;
 		
+		m_waveRange = 0;
+		
+		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
+		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);
+		int cnt=0;
+		for(auto i : m_movingVertices){ // 움직여야 되는 점의 집합에 대해
+			Vertex3D backup = *i;
+				
+			CCPoint t = ccp(backup.x, backup.y);
+			if(ccpLength(t - local) <= 30)
+			{
+				m_waveRange=1;
+			}
+		}
+			
 		return true;
 	}
 	virtual void registerWithTouchDispatcher ()
@@ -349,7 +365,6 @@ public:
 		
 		if(m_stopTouch==true) return;
 		
-
 		CCPoint touchLocation = pTouch->getLocation();
 		CCPoint local = convertToNodeSpace(touchLocation);
 		CCPoint t = ccpMult(ccpSub(local,m_startPos),0.2f);
@@ -361,7 +376,6 @@ public:
 		}
 		
 		m_validTouch = false;
-		m_waveRange = 1000;
 		
 		float diffRad1 = atan2f(local.y - m_greenCenter.y, local.x - m_greenCenter.x );
 		float diffRad2 = atan2f(local.y - m_redCenter.y, local.x - m_redCenter.x);

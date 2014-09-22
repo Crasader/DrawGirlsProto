@@ -310,7 +310,7 @@ public:
 		rLabel->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 		contentBack->addChild(rLabel);
 	
-		// 보상선물은 선물함에서... 메시지인데 일단 없앰.
+		// 보상선물은 우편함에서... 메시지인데 일단 없앰.
 		StyledLabelTTF* comment = StyledLabelTTF::create(getLocal(LK::kBonusCong), mySGD->getFont().c_str(),
 																										 13.f, 999, StyledAlignment::kCenterAlignment);
 		contentBack->addChild(comment);

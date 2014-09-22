@@ -571,7 +571,7 @@ void Maingame::finalSetting()
 																		  });
 	game_node->addChild(floating_coin_parent, clearGoldZorder);
 	myGD->V_F["Main_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
-	
+	myGD->V_V["Main_changeMonsterAutoLevel"] = std::bind(&Maingame::changeMonsterAutoLevel, this);
 	
 	
 	myMS->scanMap();
@@ -5076,10 +5076,6 @@ void Maingame::showContinue(CCObject * t_end, SEL_CallFunc d_end, CCObject * t_c
 															   (t_continue->*d_continue)();
 															   continueAction();
 																 
-																 
-																 // ///////////////////////////////////////////////////// hs code bbu woo code for balance
-																 
-																 
 																 t_popup->removeFromParent();
 														   });
 	
@@ -5096,4 +5092,19 @@ void Maingame::continueAction()
 	startControl();
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
+}
+
+void Maingame::changeMonsterAutoLevel()
+{
+    // ######################## hs code bbu woo~ re autobalance ##############################
+    std::vector<KSCumberBase*> maincumbers = myCP->getMainCumbers();
+    for(int i=0;i<maincumbers.size();i++){
+        ((KSCumberBase*)maincumbers[i])->applyAutoBalance(mySGD->is_exchanged);
+    }
+    
+    std::vector<KSCumberBase*> subcumbers = myCP->getSubCumberArrayPointer();
+    for(int i=0;i<subcumbers.size();i++){
+        ((KSCumberBase*)subcumbers[i])->applyAutoBalance(mySGD->is_exchanged);
+    }
+    // ######################## hs code bbu woo~ ##############################
 }

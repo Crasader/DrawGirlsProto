@@ -831,9 +831,9 @@ void EndlessModeResult::setMain()
 	right_back->setPosition(ccp(main_case->getContentSize().width-132, main_case->getContentSize().height*0.58f+3));
 	main_case->addChild(right_back);
 	
-	CCSprite* you_back = CCSprite::create("endless_you.png");
-	you_back->setPosition(ccp(right_back->getContentSize().width-20,right_back->getContentSize().height-18));
-	right_back->addChild(you_back);
+//	CCSprite* you_back = CCSprite::create("endless_you.png");
+//	you_back->setPosition(ccp(right_back->getContentSize().width-20,right_back->getContentSize().height-18));
+//	right_back->addChild(you_back);
 //	KSLabelTTF* you_label = KSLabelTTF::create("You", mySGD->getFont().c_str(), 13);
 //	you_label->disableOuterStroke();
 //	you_label->setPosition(ccpFromSize(you_back->getContentSize()/2.f));
