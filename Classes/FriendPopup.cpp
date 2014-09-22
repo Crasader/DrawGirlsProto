@@ -117,7 +117,7 @@ bool FriendPopup::init()
 	
 	setListMenu();
 	setAddMenu();
-//	setManageMenu();
+	setManageMenu();
 	setVoteFriendMenu();
 	
 	list_menu->setEnabled(false);
