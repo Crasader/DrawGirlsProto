@@ -306,13 +306,20 @@ bool ClearPopup::init()
 		t_star->addChild(t_star_ani, 1, 1);
 	}
 	
+	is_end_take_diary = false;
+	is_end_network = false;
 	if(mySGD->is_clear_diary)
 	{
-		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level), [=](){endTakeCard();});
+		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level), [=]()
+		{
+			is_end_take_diary = true;
+			if(is_end_take_diary && is_end_network)
+				endTakeCard();
+		});
 		addChild(t_take_card_popup, kZ_CP_popup+5);
 	}
 	else
-		endTakeCard();
+		is_end_take_diary = true;
 	
 	CCScale9Sprite* left_total_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
 	left_total_back->setContentSize(CCSizeMake(193, 20));
@@ -524,15 +531,15 @@ bool ClearPopup::init()
                                                                           {
                                                                               is_today_mission_success = true;
                                                                           }
-																		  else if(!is_today_mission_success && result_data["isSuccess"].asBool())
-																			{
-																				is_today_mission_success = true;
-																			}
+																		  
 																		  else
 																			{
 																				is_today_mission_success = false;
 																			}
 																		  TRACE();
+																			
+																			if(is_end_take_diary && is_end_network)
+																				endTakeCard();
 																	  }
 																  }));
 	
@@ -584,6 +591,8 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 										  {
 											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
 										  }
+											
+											is_end_network = true;
 									  }
 									  else
 									  {
