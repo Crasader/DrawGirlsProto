@@ -58,7 +58,7 @@ void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, funct
 
 void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 {
-	if(my_point.isNull())
+	if(my_point.isNull() || is_controler_backing())
 		return;
 	
 	if((getMapData(my_point) != kTutoMapType_line && getMapData(my_point) != kTutoMapType_newLine) || (
@@ -1395,6 +1395,11 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			if(my_char->isDrawingOn)
 			{
 				my_char->rewindAnimation();
+                
+                my_char->changeDirection(directionStop, directionStop);
+                beforeDirection = directionStop;
+                unschedule(schedule_selector(TutoControler::directionKeeping));
+                
 				(target_main->*delegate_readyBack)();
 			}
 			
@@ -1541,6 +1546,11 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			if(isDisableDrawButton && my_char->isDrawingOn)
 			{
 				my_char->rewindAnimation();
+                
+                my_char->changeDirection(directionStop, directionStop);
+                beforeDirection = directionStop;
+                unschedule(schedule_selector(TutoControler::directionKeeping));
+                
 				(target_main->*delegate_readyBack)();
 			}
 			
@@ -1817,6 +1827,11 @@ bool PlayTutorial::init()
 	controler->delegate_readyBack = callfunc_selector(PlayTutorial::startBackTracking);
 	controler->pauseBackTracking = callfunc_selector(PlayTutorial::stopBackTracking);
 	addChild(controler, 5);
+    
+    character->is_controler_backing = [=]()
+    {
+        return controler->isBacking;
+    };
 	
 	character->controlerStop = [=](){controler->stopMySchedule(); controler->resetTouch();};
 	
