@@ -686,7 +686,7 @@ bool FailPopup::init()
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
-	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	is_today_mission_success = false;//mySGD->today_mission_info.is_success.getV();
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
@@ -694,7 +694,11 @@ bool FailPopup::init()
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
 																		  TRACE();
-																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
+                                                                          if(result_data["result"]["code"].asBool())
+                                                                          {
+                                                                              is_today_mission_success = true;
+                                                                          }
+																		  else if(!is_today_mission_success && result_data["isSuccess"].asBool())
 																			{
 																				is_today_mission_success = true;
 																			}

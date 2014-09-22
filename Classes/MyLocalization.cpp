@@ -1142,6 +1142,10 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("오픈하기"), kMyLocalKey_puzzleOpenButton);
     
     ko->setObject(CCString::create("보유수:%d"), kMyLocalKey_takeCount);
+    
+    ko->setObject(CCString::create("조이스틱위치"), kMyLocalKey_joystickPositionSelectTitle);
+    ko->setObject(CCString::create("<font newline=18>조이스틱위치를 정해주세요.</font><font>설정에서 바꿀 수 있어요.</font>"), kMyLocalKey_joystickPositionSelectContent);
+    ko->setObject(CCString::create("추천"), kMyLocalKey_joystickPositionSelectRecommend);
 	
 	setObject(ko, "ko");
 }

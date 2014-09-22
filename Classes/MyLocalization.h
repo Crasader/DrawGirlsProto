@@ -1056,6 +1056,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_puzzleOpenButton,
     
     kMyLocalKey_takeCount,
+    kMyLocalKey_joystickPositionSelectTitle,
+    kMyLocalKey_joystickPositionSelectContent,
+    kMyLocalKey_joystickPositionSelectRecommend,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;
