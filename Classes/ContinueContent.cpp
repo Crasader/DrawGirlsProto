@@ -151,42 +151,92 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 												t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 												addChild(t_popup, 9999);
 												
+                                                int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
+                                                if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
+                                                mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
+                                                
 												mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
-												mySGD->changeGoods([=](Json::Value result_data)
-																   {
-																	   t_popup->removeFromParent();
-																	   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																	   {
-																		   mySGD->ingame_continue_cnt++;
-//																		   giveup_button->setEnabled(false);
-																		   continue_button2->setEnabled(false);
-																		   continue_button->setEnabled(false);
-																		   
-																		   is_continue = true;
-																		   
-																		   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-																		   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-																		   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-																		   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-																		   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-																		   
-																		   price_type2->runAction(t_seq2);
-																		   
-																		   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-																		   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-																		   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-																		   price_label2->runAction(t_spawn2);
-																	   }
-																	   else
-																	   {
-																		   schedule(schedule_selector(ContinueContent::countingSchedule));
-																		   
-																		   mySGD->clearChangeGoods();
-																		   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-																		   
-																		   is_menu_enable = true;
-																	   }
-																   });
+                                                
+                                                vector<CommandParam> t_command_list;
+                                                t_command_list.clear();
+                                                t_command_list.push_back(mySGD->getChangeUserdataParam([=](Json::Value result_data)
+                                                                                                       {
+                                                                                                           if(result_data["result"]["code"].asInt() == GDSUCCESS)
+                                                                                                               myGD->communication("Main_changeMonsterAutoLevel");
+                                                                                                       }));
+                                                
+                                                mySGD->changeGoodsTransaction(t_command_list,[=](Json::Value result_data)
+                                                                              {
+                                                                                  t_popup->removeFromParent();
+                                                                                  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+                                                                                  {
+                                                                                      mySGD->ingame_continue_cnt++;
+                                                                                      //																		   giveup_button->setEnabled(false);
+                                                                                      continue_button2->setEnabled(false);
+                                                                                      continue_button->setEnabled(false);
+                                                                                      
+                                                                                      is_continue = true;
+                                                                                      
+                                                                                      CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+                                                                                      CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+                                                                                      CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+                                                                                      CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+                                                                                      CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+                                                                                      
+                                                                                      price_type2->runAction(t_seq2);
+                                                                                      
+                                                                                      CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+                                                                                      CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+                                                                                      CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+                                                                                      price_label2->runAction(t_spawn2);
+                                                                                  }
+                                                                                  else
+                                                                                  {
+                                                                                      schedule(schedule_selector(ContinueContent::countingSchedule));
+                                                                                      
+                                                                                      mySGD->clearChangeGoods();
+                                                                                      mySGD->clearChangeUserdata();
+                                                                                      getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+                                                                                      
+                                                                                      is_menu_enable = true;
+                                                                                  }
+                                                                              });
+                                                
+//												mySGD->changeGoods([=](Json::Value result_data)
+//																   {
+//																	   t_popup->removeFromParent();
+//																	   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//																	   {
+//																		   mySGD->ingame_continue_cnt++;
+////																		   giveup_button->setEnabled(false);
+//																		   continue_button2->setEnabled(false);
+//																		   continue_button->setEnabled(false);
+//																		   
+//																		   is_continue = true;
+//																		   
+//																		   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+//																		   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+//																		   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+//																		   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+//																		   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+//																		   
+//																		   price_type2->runAction(t_seq2);
+//																		   
+//																		   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+//																		   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+//																		   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+//																		   price_label2->runAction(t_spawn2);
+//																	   }
+//																	   else
+//																	   {
+//																		   schedule(schedule_selector(ContinueContent::countingSchedule));
+//																		   
+//																		   mySGD->clearChangeGoods();
+//																		   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//																		   
+//																		   is_menu_enable = true;
+//																	   }
+//																   });
 											}
 											else
 											{
@@ -389,51 +439,114 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
+                
+                int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
+                if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
+                mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
+                
+                
+                
 				mySGD->addChangeGoods("rp_r", kGoodsType_ruby, -(mySGD->getPlayContinueFee() + myGD->getCommunication("Jack_getContinueOnCount")-1), "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(루비)");
-				mySGD->changeGoods([=](Json::Value result_data)
-								   {
-									   t_popup->removeFromParent();
-									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-									   {
-//										   giveup_button->setEnabled(false);
-										   continue_button->setEnabled(false);
-										   
-										   is_continue = true;
-										   
-										   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
-										   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
-										   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
-										   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
-										   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
-										   
-										   price_type->runAction(t_seq2);
-										   
-										   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
-										   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
-										   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
-										   price_label->runAction(t_spawn2);
-									   }
-									   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
-									   {
-										   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
-																							{
-																								schedule(schedule_selector(ContinueContent::countingSchedule));
-																								mySGD->clearChangeGoods();
-																								is_menu_enable = true;
-																							}), 9999);
-									   }
-									   else
-									   {
-										   schedule(schedule_selector(ContinueContent::countingSchedule));
-										   
-										   mySGD->clearChangeGoods();
-										   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
-																							myLoc->getLocalForKey(kMyLocalKey_noti),
-																							myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
-										   
-										   is_menu_enable = true;
-									   }
-								   });
+                
+                vector<CommandParam> t_command_list;
+                t_command_list.clear();
+                t_command_list.push_back(mySGD->getChangeUserdataParam([=](Json::Value result_data)
+                                                                       {
+                                                                           if(result_data["result"]["code"].asInt() == GDSUCCESS)
+                                                                               myGD->communication("Main_changeMonsterAutoLevel");
+                                                                       }));
+                
+                mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data)
+                                              {
+                                                  t_popup->removeFromParent();
+                                                  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+                                                  {
+                                                      //										   giveup_button->setEnabled(false);
+                                                      continue_button->setEnabled(false);
+                                                      
+                                                      is_continue = true;
+                                                      
+                                                      CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+                                                      CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+                                                      CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+                                                      CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+                                                      CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+                                                      
+                                                      price_type->runAction(t_seq2);
+                                                      
+                                                      CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+                                                      CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+                                                      CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+                                                      price_label->runAction(t_spawn2);
+                                                  }
+                                                  else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+                                                  {
+                                                      getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+                                                                                                       {
+                                                                                                           schedule(schedule_selector(ContinueContent::countingSchedule));
+                                                                                                           mySGD->clearChangeGoods();
+                                                                                                           mySGD->clearChangeUserdata();
+                                                                                                           is_menu_enable = true;
+                                                                                                       }), 9999);
+                                                  }
+                                                  else
+                                                  {
+                                                      schedule(schedule_selector(ContinueContent::countingSchedule));
+                                                      
+                                                      mySGD->clearChangeGoods();
+                                                      mySGD->clearChangeUserdata();
+                                                      getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
+                                                                                                       myLoc->getLocalForKey(kMyLocalKey_noti),
+                                                                                                       myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+                                                      
+                                                      is_menu_enable = true;
+                                                  }
+                                              });
+                
+//				mySGD->changeGoods([=](Json::Value result_data)
+//								   {
+//									   t_popup->removeFromParent();
+//									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//									   {
+////										   giveup_button->setEnabled(false);
+//										   continue_button->setEnabled(false);
+//										   
+//										   is_continue = true;
+//										   
+//										   CCFadeTo* t_fade1 = CCFadeTo::create(1.f, 0);
+//										   CCMoveBy* t_move1 = CCMoveBy::create(1.f, ccp(0,50));
+//										   CCSpawn* t_spawn = CCSpawn::createWithTwoActions(t_fade1, t_move1);
+//										   CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ContinueContent::closeAction));
+//										   CCSequence* t_seq2 = CCSequence::create(t_spawn, t_call, NULL);
+//										   
+//										   price_type->runAction(t_seq2);
+//										   
+//										   CCFadeTo* t_fade3 = CCFadeTo::create(1.f, 0);
+//										   CCMoveBy* t_move2 = CCMoveBy::create(1.f, ccp(0,50));
+//										   CCSpawn* t_spawn2 = CCSpawn::createWithTwoActions(t_fade3, t_move2);
+//										   price_label->runAction(t_spawn2);
+//									   }
+//									   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
+//									   {
+//										   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+//																							{
+//																								schedule(schedule_selector(ContinueContent::countingSchedule));
+//																								mySGD->clearChangeGoods();
+//																								is_menu_enable = true;
+//																							}), 9999);
+//									   }
+//									   else
+//									   {
+//										   schedule(schedule_selector(ContinueContent::countingSchedule));
+//										   
+//										   mySGD->clearChangeGoods();
+//										   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
+//																							myLoc->getLocalForKey(kMyLocalKey_noti),
+//																							myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//										   
+//										   is_menu_enable = true;
+//									   }
+//								   });
 			}
 			else
 			{

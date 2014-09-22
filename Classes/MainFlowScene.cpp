@@ -5096,6 +5096,7 @@ void MainFlowScene::countingMessage()
 												if(result_data["result"]["code"].asInt() == GDSUCCESS)
 												{
 													is_not_first = true;
+                                                    
 													mySGD->initTodayMission(result_data);
 												}
 											}));

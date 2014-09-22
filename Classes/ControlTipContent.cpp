@@ -160,9 +160,14 @@ string ControlTipContent::getCCBfilenameForTipNumber(int t_code)
 {
 	string return_value = "";
 	if(t_code == kSpecialTutorialCode_lineTangle)
-		return_value = "tutorial_tip2.ccbi";
+		return_value = "tutorial_tip2";
 	else if(t_code == kSpecialTutorialCode_slimLine)
-		return_value = "tutorial_tip1.ccbi";
+		return_value = "tutorial_tip1";
+    
+    if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+        return_value += "_left.ccbi";
+    else
+        return_value += "_right.ccbi";
 	
 	return return_value;
 }
