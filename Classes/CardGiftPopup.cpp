@@ -285,6 +285,7 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 			send_card_param["memberID"] = myHSP->getMemberID();
 			send_card_param["toMemberID"] = memberInfo["memberID"].asInt64();
 			send_card_param["cardNo"] = gift_card_number.getV();
+			command_list.clear();
 			command_list.push_back(CommandParam("sendcard", send_card_param, [=](Json::Value v){
 				KS::KSLog("%", v);
 				
@@ -300,6 +301,8 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					string msg = ccsf(getLocal(LK::kFriendCardGiftErrorMessage), v["hourLimit"].asInt(), h, m);
 					StyledLabelTTF* slt = StyledLabelTTF::create(msg.c_str(), mySGD->getFont().c_str(), 13.f, 0, StyledAlignment::kCenterAlignment);
+					slt->setAnchorPoint(ccp(0.5f, 0.5f));
+					setFormSetter(slt);
 					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
 																							slt, [=]()
 																							{
@@ -310,7 +313,15 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 				else
 				{
 					m_failed = true;
-					
+//					string msg = ccsf(getLocal(LK::kFriendCardGiftErrorMessage), v["hourLimit"].asInt(), h, m);
+					StyledLabelTTF* slt = StyledLabelTTF::create(getLocal(LK::kFriendError), mySGD->getFont().c_str(), 13.f, 0, StyledAlignment::kCenterAlignment);
+					slt->setAnchorPoint(ccp(0.5f, 0.5f));
+					setFormSetter(slt);
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							slt, [=]()
+																							{
+																								
+																							}));
 				}
 					
 			}));
@@ -358,7 +369,11 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 void CardGiftPopup::resultSendAction(Json::Value result_data)
 {
 	KS::KSLog("%", result_data);
-	t_loading->removeFromParent();
+	if(t_loading)
+	{
+		t_loading->removeFromParent();
+		t_loading = nullptr; 
+	}
 	if(m_failed) // 이전에 sendcard 에서 실패했다면 이것도 그냥 무시.
 		return;
 	
