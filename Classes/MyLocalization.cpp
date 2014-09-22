@@ -1146,6 +1146,13 @@ void MyLocal::ko()
     ko->setObject(CCString::create("조이스틱위치"), kMyLocalKey_joystickPositionSelectTitle);
     ko->setObject(CCString::create("<font newline=18>조이스틱위치를 정해주세요.</font><font>설정에서 바꿀 수 있어요.</font>"), kMyLocalKey_joystickPositionSelectContent);
     ko->setObject(CCString::create("추천"), kMyLocalKey_joystickPositionSelectRecommend);
+    
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d콤보</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>"), kMyLocalKey_missionFailContextCombo);
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d골드</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>"), kMyLocalKey_missionFailContextGold);
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. 아이템 </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d개</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>"), kMyLocalKey_missionFailContextItemCollect);
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d점</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이 부족해요!</font>"), kMyLocalKey_missionFailContextScore);
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. 부하 </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d마리</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>"), kMyLocalKey_missionFailContextSubCumberCatch);
+    ko->setObject(CCString::create("<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d턴</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이 지나버렸어요!</font>"), kMyLocalKey_missionFailContextTurns);
 	
 	setObject(ko, "ko");
 }

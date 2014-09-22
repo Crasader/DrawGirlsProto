@@ -24,7 +24,10 @@ class CardGiftPopup : public CCNode, public CCTableViewDataSource, public CCTabl
 {
 public:
 	static CardGiftPopup* create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
-	
+	virtual ~CardGiftPopup()
+	{
+		myHSP->removeTarget(this);
+	}
 private:
 	int m_touchPriority;
 	function<void()> end_func;
@@ -45,6 +48,7 @@ private:
 	
 	Json::Value m_friends;
 	CCTableView* m_friendTable;
+	bool m_failed;
 public:
 	void myInit(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func);
 	void resultSendAction(Json::Value result_data)	;
