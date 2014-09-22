@@ -2476,12 +2476,15 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		return;
 	}
 	
-	if(!isExchange){
+	static bool isFirst=true;
+	if(isFirst){
+		isFirst=false;
 		//시도횟수에 따라 몬스터  hp 떨구기.
 		float hpBalance = MIN(playCount,10)*5;
 		m_remainHp -= m_remainHp*hpBalance/100.f;
 		
 		float speedBalance = MIN(0.2,playCount*0.02);
+		CCLOG("setAlpha %f",speedBalance);
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+speedBalance);
 	}
 	
