@@ -1453,6 +1453,8 @@ void FriendPopup::setManageMenu()
 		
 		manage_menu->setPosition(ccp(244 + 75*1,256.5f));
 		tab_menu->addChild(manage_menu);
+		manage_menu->setVisible(false);
+		manage_menu->setEnabled(false);
 	}
 }
 
