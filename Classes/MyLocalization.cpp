@@ -1140,6 +1140,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("액자오픈"), kMyLocalKey_puzzleOpenTitle);
 	ko->setObject(CCString::create("<font newline=16>액자를 오픈하려면</font><font color=961>%s골드</font><font newline=16>가 필요합니다.</font><font>오픈하시겠습니까?</font>"), kMyLocalKey_puzzleOpenContent);
 	ko->setObject(CCString::create("오픈하기"), kMyLocalKey_puzzleOpenButton);
+    
+    ko->setObject(CCString::create("보유수:%d"), kMyLocalKey_takeCount);
 	
 	setObject(ko, "ko");
 }

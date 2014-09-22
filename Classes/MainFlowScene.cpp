@@ -1429,7 +1429,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
-					detail_label->disableOuterStroke();
+					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
 					
