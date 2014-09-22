@@ -594,7 +594,8 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									}
 									else
 									{
-										time_label->setVisible(false);
+                                        if(time_label)
+                                            time_label->setVisible(false);
 										eventPack_menu->setVisible(false);
 										setShopCode(kSC_ruby);
 										is_menu_enable = true;
@@ -705,7 +706,8 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										}
 										else
 										{
-											time_label->setVisible(false);
+                                            if(time_label)
+                                                time_label->setVisible(false);
 											eventPack_menu->setVisible(false);
 											setShopCode(kSC_ruby);
 											is_menu_enable = true;
@@ -859,7 +861,8 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
 										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 										{
-											time_label->setVisible(false);
+                                            if(time_label)
+                                                time_label->setVisible(false);
 											eventPack_menu->setVisible(false);
 											setShopCode(kSC_ruby);
 										}
@@ -977,7 +980,8 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										{
 											if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 											{
-												time_label->setVisible(false);
+                                                if(time_label)
+                                                    time_label->setVisible(false);
 												eventPack_menu->setVisible(false);
 												setShopCode(kSC_ruby);
 											}
@@ -3673,7 +3677,8 @@ void ShopPopup::requestItemDeliveryStartPack()
 			}
 			else
 			{
-				time_label->setVisible(false);
+                if(time_label)
+                    time_label->setVisible(false);
 				eventPack_menu->setVisible(false);
 				setShopCode(kSC_ruby);
 				is_menu_enable = true;
@@ -3804,7 +3809,8 @@ void ShopPopup::requestItemDeliveryEventPack()
 			{
 				if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 				{
-					time_label->setVisible(false);
+                    if(time_label)
+                        time_label->setVisible(false);
 					eventPack_menu->setVisible(false);
 					setShopCode(kSC_ruby);
 				}
