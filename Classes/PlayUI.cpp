@@ -1762,6 +1762,73 @@ void PlayUI::addResultCCB(string ccb_filename)
 		mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93));
 		mission_fail_label->setOpacity(0);
 		addChild(mission_fail_label);
+        
+        StyledLabelTTF* context_label = NULL;
+        
+        if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_combo)
+        {
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextCombo), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - high_combo_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
+        else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_gold)
+        {
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextGold), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - mySGD->getStageGold()), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
+        else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_itemCollect)
+        {
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextItemCollect), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
+        else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_score)
+        {
+            int total_score;
+            
+            int grade_value = 1;
+            
+            if(is_exchanged && (beforePercentage^t_tta)/1000.f >= 1.f)		grade_value = 4;
+            else if(is_exchanged)											grade_value = 3;
+            else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 2;
+            
+            int recent_score = getScore();
+            
+            float t_game_time = countingCnt.getV();
+            float play_limit_time = NSDS_GI(mySD->getSilType(), kSDS_SI_playtime_i);
+            if(mySD->getClearCondition() == kCLEAR_timeLimit)
+            {
+                play_limit_time -= mySD->getClearConditionTimeLimit();
+            }
+            
+            int time_score = ((play_limit_time-t_game_time)*500*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
+            
+            total_score = recent_score + time_score;
+            total_score = total_score*grade_value;
+            
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextScore), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - total_score), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
+        else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_subCumberCatch)
+        {
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextSubCumberCatch), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
+        else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_turns)
+        {
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextTurns), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label->setAnchorPoint(ccp(0.5f,0.5f));
+            context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+            mission_fail_label->addChild(context_label);
+        }
 		
 		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
 		shadow->setOpacityOuterStroke(0);
@@ -1771,15 +1838,15 @@ void PlayUI::addResultCCB(string ccb_filename)
 																	   float convert_t;
 																	   if (t < 1 / 2.75)
 																	   {
-																		   convert_t = 7.5625f * t * t;
+																		   t = 7.5625f * t * t;
 																	   } else if (t < 2 / 2.75)
 																	   {
 																		   t -= 1.5f / 2.75f;
-																		   convert_t = 7.5625f * t * t + 0.75f;
+																		   t = 7.5625f * t * t + 0.75f;
 																	   } else if(t < 2.5 / 2.75)
 																	   {
 																		   t -= 2.25f / 2.75f;
-																		   convert_t = 7.5625f * t * t + 0.9375f;
+																		   t = 7.5625f * t * t + 0.9375f;
 																	   }
 																	   
 																	   t -= 2.625f / 2.75f;
