@@ -21,6 +21,7 @@
 #include "KsLocal.h"
 #include "FormSetter.h"
 #include "FlagSelector.h"
+#include "SendMessageUtil.h"
 
 
 CardGiftPopup* CardGiftPopup::create(int t_touch_priority, int t_gift_card, function<void()> t_end_func, function<void()> t_close_func)
@@ -80,6 +81,7 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 								if(!is_menu_enable)
 									return;
 								
+								AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								is_menu_enable = false;
 								
 								
@@ -101,7 +103,11 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	
 	Json::Value param;
 	param["memberID"] = myHSP->getMemberID();
-	myHSP->command("getfriendlist", param, [=](Json::Value v){
+	CCSprite* loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+	loadingCCBI->setPosition(ccpFromSize(main_inner->getContentSize()) / 2.f + ccp(0, 0));
+	main_inner->addChild(loadingCCBI, 100);
+	myHSP->command("getfriendlist", param, this, [=](Json::Value v){
+		loadingCCBI->removeFromParent();
 		/*
 		 {
 		 "result":{
@@ -200,6 +206,7 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 	cardSendButton->setPosition(ccp(188.5, 17.0));
 	setFormSetter(cardSendButton);
 	cardSendButton->setFunction([=](CCObject*){
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchPriority - 1);
 		
 		warningPopup->getDimmedSprite()->setVisible(false);
@@ -238,6 +245,7 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 		CommonButton* closeButton = CommonButton::createCloseButton(m_touchPriority - 2);
 		closeButton->setFunction([=](CCObject*)
 														 {
+															 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 															 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
 																													 [=]()
 																													 {
@@ -259,21 +267,53 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 		confirm->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -50));
 		setFormSetter(confirm);
 		confirm->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
 																	[=]()
 																	{
 																		warningPopup->removeFromParent();
 																	});
 			
+			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+			addChild(ll, 100);
+			t_loading = ll;
 			Json::Value transaction_param;
 			transaction_param["memberID"] = hspConnector::get()->getMemberID();
-			command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+//			command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
 			
 			Json::Value send_card_param;
 			send_card_param["memberID"] = myHSP->getMemberID();
 			send_card_param["toMemberID"] = memberInfo["memberID"].asInt64();
 			send_card_param["cardNo"] = gift_card_number.getV();
-			command_list.push_back(CommandParam("sendcard", send_card_param, nullptr));
+			command_list.push_back(CommandParam("sendcard", send_card_param, [=](Json::Value v){
+				KS::KSLog("%", v);
+				
+				if(v["result"]["code"].asInt() == GDSUCCESS)
+				{
+					m_failed = false;
+				}
+				else if(v["result"]["code"].asInt() == GDALREADY)
+				{
+					m_failed = true;
+					int h, m, s;
+					::timeSpliter(v["leftTime"].asInt64(), nullptr, nullptr, nullptr, &h, &m, &s);
+					
+					string msg = ccsf(getLocal(LK::kFriendCardGiftErrorMessage), v["hourLimit"].asInt(), h, m);
+					StyledLabelTTF* slt = StyledLabelTTF::create(msg.c_str(), mySGD->getFont().c_str(), 13.f, 0, StyledAlignment::kCenterAlignment);
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							slt, [=]()
+																							{
+																								
+																							}));
+					
+				}
+				else
+				{
+					m_failed = true;
+					
+				}
+					
+			}));
 			
 			Json::Value card_history_param;
 			card_history_param["memberID"] = myHSP->getMemberID();
@@ -318,6 +358,9 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 void CardGiftPopup::resultSendAction(Json::Value result_data)
 {
 	KS::KSLog("%", result_data);
+	t_loading->removeFromParent();
+	if(m_failed) // 이전에 sendcard 에서 실패했다면 이것도 그냥 무시.
+		return;
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
@@ -329,20 +372,9 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 		card_data_load_list.clear();
 		
 		mySGD->initTakeCardInfo(result_data["list"], card_data_load_list);
-		
-		//		if(card_data_load_list.size() > 0)
-		//		{
-		//			Json::Value card_param;
-		//			for(int i=0;i<card_data_load_list.size();i++)
-		//				card_param["noList"][i] = card_data_load_list[i];
-		//			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
-		//		}
-		//		else
-		//		{
+	
 		mySGD->resetHasGottenCards();
-		//		}
 		
-//		t_loading->removeFromParent();
 		
 		CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
 																{
@@ -350,30 +382,7 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 																	removeFromParent();
 																});
 		is_menu_enable = true;
-		
-		
-//		if(mySGD->isHasGottenCards(gift_card_number.getV()) > 0)
-//		{
-//			addChild(ASPopupView::getCommonNoti(m_touchPriority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
-//																					{
-//																						is_menu_enable = true;
-//																					}), 9999);
-//		}
-//		else
-//		{
-//			addChild(ASPopupView::getCommonNoti(m_touchPriority-100, myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessTitle), myLoc->getLocalForKey(kMyLocalKey_cardGiftSuccessContent), [=]()
-//																					{
-//																						
-//																						
-//																						CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
-//																																				{
-//																																					close_func();
-//																																					removeFromParent();
-//																																				});
-//																					}), 9999);
-//		}
-		
-		
+	
 	}
 	else
 	{

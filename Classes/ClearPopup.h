@@ -76,6 +76,9 @@ private:
 	
 	KSLabelTTF* ok_label;
 	
+	bool is_end_take_diary;
+	bool is_end_network;
+	
 //	KSLabelTTF* n_ok_label2;
 //	KSLabelTTF* s_ok_label2;
 //	KSLabelTTF* n_replay_label2;

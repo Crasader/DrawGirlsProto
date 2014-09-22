@@ -45,6 +45,7 @@ public:
 		{
 			m_voteInputText->removeFromParent();
 		}
+		myHSP->removeTarget(this);
 	}
 	
 	// a selector callback
@@ -58,6 +59,7 @@ public:
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 private:
+	CCSprite* m_loadingCCBI;
 	CCEditBox* input_text1;
 	CCEditBox* m_voteInputText;
 	

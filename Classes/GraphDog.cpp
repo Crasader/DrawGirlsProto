@@ -905,7 +905,9 @@ void GraphDog::receivedCommand(float dt)
 					}
 					
 					
-					if(!oParam.get("retry", false).asBool() || resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS || oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
+					if(!oParam.get("retry", false).asBool() ||
+						 resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS ||
+						 oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
 						
 						
 						CCLOG("graphdog:: call func for %s",ct.action.c_str());
