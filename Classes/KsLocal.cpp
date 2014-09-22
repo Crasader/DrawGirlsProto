@@ -174,6 +174,7 @@ void KsLocal::ko()
 	obj[LK::kFriendGiftTitle] = "카드선물하기";
 	obj[LK::kFriendGiftQ] = "%s 님께 카드선물을 하시겠습니까?";
 	obj[LK::kFriendGiftYes] = "예";
+	obj[LK::kFriendNothingExist] = "등록된 친구가 없습니다.";
 		// add friend !
 	m_mapper[__FUNCTION__] = obj;
 }

@@ -97,7 +97,8 @@ enum class LK
 	kFriendGiftSend,
 	kFriendGiftTitle,
 	kFriendGiftQ,
-	kFriendGiftYes
+	kFriendGiftYes,
+	kFriendNothingExist
 };
 class KsLocal
 {

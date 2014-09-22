@@ -37,6 +37,7 @@
 #include "KSProtect.h"
 #include "LabelTTFMarquee.h"
 #include "KSLocal.h"
+#include "LoadingLayer.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -1966,7 +1967,10 @@ void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
 			Json::Value param;
 			param["memberID"] = myHSP->getMemberID();
 			param["friendID"] = mail["data"].get("from", "0").asString();
+			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+			addChild(ll, 100);
 			myHSP->command("addfriend", param, [=](Json::Value v){
+				ll->removeFromParent();
 				if(v["result"]["code"] != GDSUCCESS)
 					return;
 				if(v["result"]["code"] == GDFRIENDMAX)
