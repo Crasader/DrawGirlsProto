@@ -177,6 +177,9 @@ void KsLocal::ko()
 	obj[LK::kFriendNothingExist] = "등록된 친구가 없습니다.";
 	obj[LK::kFriendCardGiftErrorMessage] = "<font color=#FFFFFF newline=13>카드선물은 %d 시간에 한번 가능합니다.</font>"
 																					"<font color=#FFFFFF>앞으로 %d시간 %d분 남았습니다.</font>";
+	
+	obj[LK::kFriendNickInputPlz] = "닉네임을 입력해주세요.";
+	
 		// add friend !
 	m_mapper[__FUNCTION__] = obj;
 }

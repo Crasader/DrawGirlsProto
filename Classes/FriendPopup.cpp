@@ -1268,7 +1268,7 @@ void FriendPopup::setAddMenu()
 					Json::Value param;
 					if(editbox->getText() == "")
 					{
-						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNotFountFriend), [=](){
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
 							if(input_text1)
 							{
 								input_text1->setVisible(true);
@@ -1277,6 +1277,8 @@ void FriendPopup::setAddMenu()
 						});
 						popup->getDimmedSprite()->setVisible(false);
 						addChild(popup);
+						
+						return;
 					}
 					param["nick"] = editbox->getText();
 					param["isPublic"] = true;

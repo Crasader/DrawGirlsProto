@@ -99,7 +99,8 @@ enum class LK
 	kFriendGiftQ,
 	kFriendGiftYes,
 	kFriendNothingExist,
-	kFriendCardGiftErrorMessage
+	kFriendCardGiftErrorMessage,
+	kFriendNickInputPlz
 
 };
 class KsLocal

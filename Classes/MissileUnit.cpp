@@ -3062,6 +3062,7 @@ void ThrowBomb::update (float dt)
 		
 		if(crash)
 		{
+			AudioEngine::sharedInstance()->playEffect("se_meteo_3.mp3");
 			crashMapForPoint(ccp2ip(m_parentMissile->getPosition()), m_pattern.get("area", 15).asInt());
 			m_step = 2;
 		}
