@@ -1974,7 +1974,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 		////			ticking_pad->setPosition(ccp(17,12));
 		//			ticking_main->addChild(ticking_pad);
 		
-		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
+		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "threeCushion_number.png", 9, 11, '1');
 		ticking_label->setAnchorPoint(ccp(0.5f, 0.5f));
 		ticking_label->setPosition(ccp(0, 0));
 		ticking_label->setScale(0.7f);
@@ -1982,7 +1982,7 @@ void TickingTimeBomb::myInit (IntPoint t_setPoint, int t_bombFrameOneTime, int t
 	}
 	else if(rangeCode == 2)
 	{
-		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "tickingTimeBomb_number.png", 9, 11, '1');
+		ticking_label = CCLabelAtlas::create(CCString::createWithFormat("%d",bombTimes)->getCString(), "threeCushion_number.png", 9, 11, '1');
 		ticking_label->setPosition(ccp(13,13));
 		ticking_main->addChild(ticking_label);
 		ticking_label->setScale(0.5f);
