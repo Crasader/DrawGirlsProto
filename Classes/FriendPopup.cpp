@@ -117,7 +117,7 @@ bool FriendPopup::init()
 	
 	setListMenu();
 	setAddMenu();
-	setManageMenu();
+//	setManageMenu();
 	setVoteFriendMenu();
 	
 	list_menu->setEnabled(false);
@@ -1086,7 +1086,7 @@ void FriendPopup::setListMenu()
 			
 		};
 		list_menu = CCMenuItemSpriteLambda::create(n_all_img, s_all_img, d_all_img, m_listButtonCallback);
-		list_menu->setPosition(ccp(244 + 75*(-1),256.5f));
+		list_menu->setPosition(ccp(244 + 75*(0),256.5f));
 		tab_menu->addChild(list_menu);
 	}
 }
@@ -1333,7 +1333,7 @@ void FriendPopup::setAddMenu()
 			
 		});
 		
-		add_menu->setPosition(ccp(244 + 75*0,256.5f));
+		add_menu->setPosition(ccp(244 + 75*1,256.5f));
 		tab_menu->addChild(add_menu);
 	}
 }
