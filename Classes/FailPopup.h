@@ -76,6 +76,9 @@ private:
 	CCControlButton* main_menu;
 	CCControlButton* replay_menu;
 	
+	bool is_end_take_diary;
+	bool is_end_network;
+	
 	void controlButtonAction(CCObject* sender, CCControlEvent t_event);
 	
 	//	CCMenu* help_menu;
