@@ -625,7 +625,9 @@ void StartSettingPopup::setMain()
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
 			is_price_usable = is_price_usable || (mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic)) > 0); // 소지하고 있는지
 			
-			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable && is_unlocked)
+            bool is_endless_tutorial = (mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1);
+            
+			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable && is_unlocked && !is_endless_tutorial)
 			{
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
