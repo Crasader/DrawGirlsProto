@@ -720,8 +720,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			itemlist->addChild(label);
 																			
 																			from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
-																																				".",
-																																				mail.get("sender","GM").asString().c_str(),
+																																				"",
 																																				GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																				)->getCString();
 																			
