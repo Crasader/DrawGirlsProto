@@ -717,7 +717,7 @@ bool FailPopup::init()
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
 																		  TRACE();
-                                                                          if(result_data["isFirstCheck"].asBool())
+                                                                          if(result_data["result"]["code"].asBool())
                                                                           {
                                                                               is_today_mission_success = true;
                                                                           }
@@ -1163,8 +1163,11 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 			list_cell_case->runAction(t_seq);
 		}
-		loading_img->removeFromParent();
-		loading_img = NULL;
+		if(loading_img)
+		{
+			loading_img->removeFromParent();
+			loading_img = NULL;
+		}
 	}
 	else
 	{

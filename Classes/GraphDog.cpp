@@ -772,6 +772,7 @@ void GraphDog::receivedCommand(float dt)
 			if(commands.chunk.resultCode == CURLE_AGAIN)
 			{
 				//CCLOG("commands.chunk.resultCode == CURLE_AGAIN");
+				TRACE();
 				throw commands.chunk.resultCode;
 			}
 			else if(commands.chunk.resultCode != CURLE_OK)
@@ -784,47 +785,66 @@ void GraphDog::receivedCommand(float dt)
 					std::vector<CommandParam> vcp;
 					for(std::map<string, CommandType>::const_iterator iter = commands.commands.begin(); iter != commands.commands.end(); ++iter)
 					{
+						TRACE();
 						Json::Value param;
 						param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
+						TRACE();
 						CommandParam cp;
+						TRACE();
 						cp.action = iter->second.action;
 						cp.param = param;
 						cp.func=iter->second.func;
+						TRACE();
 						vcp.push_back(cp);
+						TRACE();
 					}
 					
 					CCLOG("commands.errorCnt<=1");
 					if(commands.errorCnt<=1){
+						TRACE();
 						CCLOG("commands.chunk.resultCode != CURLE_OK");
 						this->command(vcp,commands.errorCnt+1);
+						TRACE();
 					}else{
+						TRACE();
 						commandRetryFunc(vcp);
+						TRACE();
 					}
 				}else{
-				
+					
+					TRACE();
 					for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
 					{
 						CCLOG("receivedCommand error");
 						//@ JsonBox::Object resultobj;
+						TRACE();
 						Json::Value resultobj;
 						CommandType command = commandTypeIter->second;
+						TRACE();
 						resultobj["state"] = "error";
 						resultobj["errorMsg"] = "check your network state";
 						resultobj["errorCode"] = 1002;
 						resultobj["result"]["code"]=GDCHECKNETWORK;
 						
+						TRACE();
 						//callbackparam
 						if(command.paramStr!=""){
+							TRACE();
 							//@ JsonBox::Object param =  GraphDogLib::StringToJsonObject(command.paramStr);
 							Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
+							TRACE();
 							//@ resultobj["param"]=JsonBox::Value(param);
 							resultobj["param"]=param;
+							TRACE();
 						}
 						//@@if(command.target!=0 && command.selector!=0)
 						//@@((command.target)->*(command.selector))(resultobj);
+						TRACE();
 						CCLOG("graphdog:: error call func for %s",command.action.c_str());
 						if(command.func!=NULL){
+							TRACE();
 							command.func(resultobj);
+							TRACE();
 						}else{
 							CCLOG("graphdog:: error call func back is null for %s",command.action.c_str());
 						}
@@ -833,133 +853,188 @@ void GraphDog::receivedCommand(float dt)
 					}
 				
 				}
+				TRACE();
 				throw commands.chunk.resultCode;
 			}
 			
 			//@ JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 			CCLOG("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ get data, sendSize:%d, getSize:%d $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",commands.commandStr.length()*2,commands.chunk.size);
+			TRACE();
 			Json::Value resultobj = commands.result;
 			
+			TRACE();
 			if(resultobj.get("checkDeviceError", false).asBool()){
 				CCLOG("GRAPHDOGERROR CHECKDEVICEERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
+				TRACE();
 				if(this->duplicateLoginFunc!=nullptr)this->duplicateLoginFunc();
+				TRACE();
 				
 			}else if(resultobj.get("cmdNoError", false).asBool()){
 				CCLOG("GRAPHDOGERROR CMDNOERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
+				TRACE();
 				if(this->cmdNoErrorFunc!=nullptr)this->cmdNoErrorFunc();
+				TRACE();
 				
 			}else if(resultobj.get("longTimeError", false).asBool()){
 				
 				CCLOG("GRAPHDOGERROR LONGTIMEERROR!!!!!!!!!!!!!!!!!!!!! client dviceID is %d , cmdNo is %d",this->deviceID,this->lastCmdNo);
 				this->log("resultobj : "+resultobj.asString());
 				this->lastCmdNo=0;
+				TRACE();
 				if(this->longTimeErrorFunc!=nullptr)this->longTimeErrorFunc();
+				TRACE();
 			
 			}else{
 				bool retryCnt=false;
+				TRACE();
 				std::vector<CommandParam> vcp;
+				TRACE();
 				for(std::map<string, CommandType>::iterator iter2 = commands.commands.begin(); iter2 != commands.commands.end(); ++iter2)
 				{
+					
+					TRACE();
 					CommandType ct = iter2->second;
+					TRACE();
 					Json::Value oParam =  ct.paramStr;
 					
+					TRACE();
 					if(ct.action=="login"){
+						TRACE();
 						if(resultobj.get("deviceID", 0).asInt()!=0){
+							TRACE();
 							this->deviceID=resultobj.get("deviceID", 0).asInt();
 							//this->lastCmdNo=1;
 							CCLOG("getDevice ID login is %d",this->deviceID);
 						}else{
+							TRACE();
 							this->deviceID=0;
 							CCLOG("fail login");
 						}
 					}else if(ct.action=="join"){
+						TRACE();
 						this->deviceID=resultobj.get("deviceID", 0).asInt();
 						//this->lastCmdNo=1;
 						CCLOG("getDevice ID join is %d",this->deviceID);
 					}else if(ct.action=="dropoutuser"){
+						TRACE();
 						this->deviceID=0;
 						this->lastCmdNo=0;
 					}
 					
 					if(resultobj[iter2->first.c_str()]["log"].isArray()){
+						TRACE();
 						CCLOG("###################################[START for %s ]##########################################",ct.action.c_str());
 						for(int i=0;i<resultobj[iter2->first.c_str()]["log"].size();i++){
+									TRACE();
 									string log = resultobj[iter2->first.c_str()]["log"][i].asString();
 									CCLOG("%s",log.c_str());
 									
 						}
+						TRACE();
 						resultobj[iter2->first.c_str()]["log"].clear();
+						TRACE();
 						Json::StyledStreamWriter w;
+						TRACE();
 						
 						CCLOG("=====================================[ Result ]=============================================");
 						CCLOG("Name : %s, Code : %d, Message: %s",resultobj[iter2->first.c_str()]["result"].get("name", "None").asString().c_str(),resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt(),resultobj[iter2->first.c_str()]["result"].get("message", "message is nothing").asString().c_str());
 						
 						
+						TRACE();
 						Json::StyledWriter wr;
+						TRACE();
 						CCLOG("%s",wr.write(resultobj[iter2->first.c_str()]).c_str());
 						CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@[END for %s ]@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@",ct.action.c_str());
 					}
 					
 					
+					TRACE();
 					if(!oParam.get("retry", false).asBool() ||
 						 resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS ||
 						 oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
 						
 						
+						TRACE();
 						CCLOG("graphdog:: call func for %s",ct.action.c_str());
 						if(ct.func!=NULL){
+							TRACE();
 							ct.func(resultobj[iter2->first.c_str()]);
 						}else{
+							TRACE();
 							CCLOG("graphdog:: call func is null for %s",ct.action.c_str());
 						}
+						TRACE();
 						CCLOG("graphdog:: call func finished for %s",ct.action.c_str());
 						if(commandFinishedFunc!=nullptr)commandFinishedFunc();
 						CCLOG("graphdog:: call commandFinishedFunc finished for %s",ct.action.c_str());
+						TRACE();
 					
 					}else if(resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()!=GDSUCCESS){
-						retryCnt=true;
+						
+						TRACE();retryCnt=true;
 						Json::Value param;
+						TRACE();
 						param = GraphDogLib::StringToJsonObject(iter2->second.paramStr);
+						TRACE();
 						CommandParam cp;
+						TRACE();
 						cp.action = iter2->second.action;
+						TRACE();
 						cp.param = param;
+						TRACE();
 						cp.func=iter2->second.func;
+						TRACE();
 						vcp.push_back(cp);
+						TRACE();
 					}
 				}
 				
+				TRACE();
 				if(retryCnt){
+					TRACE();
 					if(commands.errorCnt<=1){
-                        CCLOG("commands.errorCnt<=1");
+						CCLOG("commands.errorCnt<=1");
+						TRACE();
 						this->command(vcp,commands.errorCnt+1);
+						TRACE();
 					}else{
-                        CCLOG("!! commands.errorCnt<=1");
+						CCLOG("!! commands.errorCnt<=1");
+						TRACE();
 						commandRetryFunc(vcp);
+						TRACE();
 					}
 				}
 			}
 			
+			TRACE();
 			//메모리도 해제
 			if(commands.chunk.memory)
 				free(commands.chunk.memory);
 			
+			TRACE();
 			//명령을 삭제한다.
 			commandQueue.erase(commandQueueIter++);
+			TRACE();
 		}
 		catch (const CURLcode& resultCode) {
+			TRACE();
 			if(resultCode == CURLE_AGAIN)
 			{
+				TRACE();
 				++commandQueueIter;
 			}
 			else if(resultCode != CURLE_OK)
 			{
+				TRACE();
 				if(commands.chunk.memory)
 					free(commands.chunk.memory);
+				TRACE();
 				commandQueue.erase(commandQueueIter++);
+				TRACE();
 			}
 		}
 	}
