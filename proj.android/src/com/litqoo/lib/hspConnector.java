@@ -395,6 +395,44 @@ public class hspConnector {
 		}
 	}
 
+	public static int sendKakaoMsg(final String title,final String msg,final String url) {
+
+		/**
+		 * @param activity
+		 * @param url
+		 * @param message
+		 * @param appId
+		 * @param appVer
+		 * @param appName
+		 * @param encoding
+		 */
+
+		KakaoLink kakaoLink = KakaoLink
+				.getLink((Activity) hspConnector.sContext);
+
+		// check, intent is available.
+		if (!kakaoLink.isAvailableIntent()) {
+			return 0;
+		} else {
+			hspConnector.handler.post(new Runnable() {
+				public void run() {
+					KakaoLink kakaoLink = KakaoLink
+							.getLink((Activity) hspConnector.sContext);
+					//
+					// // check, intent is available.
+					// if (!kakaoLink.isAvailableIntent())
+					// return;
+					kakaoLink.openKakaoLink((Activity) hspConnector.sContext,
+							url,
+							msg,
+							"com.nhnent.SKSUMRAN", "1.0", title,
+							"UTF-8");
+
+				}
+			});
+			return 1;
+		}
+	}
 	public static void finishItemDelivery(final int _key, final String datas) {
 		try {
 			// Log.d("finishItemDelivery", datas);
