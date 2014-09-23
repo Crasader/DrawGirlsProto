@@ -62,7 +62,7 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	addChild(box_img);
 	
 	
-	typing_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 11);
+	typing_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 11, t_box_in_size, kCCTextAlignmentCenter);//create("", mySGD->getFont().c_str(), 11);
 	typing_label->disableOuterStroke();
 	typing_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	typing_label->setVerticalAlignment(CCVerticalTextAlignment::kCCVerticalTextAlignmentTop);
