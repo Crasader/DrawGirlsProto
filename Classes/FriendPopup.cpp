@@ -1621,6 +1621,9 @@ void FriendPopup::setVoteFriendMenu()
 				//			kakaoTalkInvite->setTitle(getLocal(LK::kFriendVoterInput));
 				//			kakaoTalkInvite->setTitleSize(13.f);
 				m_friendVoteContainer->addChild(kakaoTalkInvite);
+				kakaoTalkInvite->setFunction([=](CCObject*){
+					myHSP->openKakaoMsg();
+				});
 				setFormSetter(kakaoTalkInvite);
 				
 			});
