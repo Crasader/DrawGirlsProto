@@ -23,10 +23,13 @@ THE SOFTWARE.
 ****************************************************************************/
 package com.nhnent.SKSUMRAN;
 import io.fiverocks.android.FiveRocks;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONObject;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -39,14 +42,19 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
+import android.view.InputDevice;
+import android.view.InputEvent;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.WindowManager;
+import android.widget.Toast;
+
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
-import com.kamcord.android.Kamcord;
 import com.igaworks.IgawCommon;
+import com.kamcord.android.Kamcord;
 //import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
@@ -59,7 +67,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final int ANDROID_BUILD_GINGERBREAD = 9;
 	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
 	private static native int getUserState();
-	private static Cocos2dxGLSurfaceView glSurfaceView;
+	private static LuaGLSurfaceView glSurfaceView;
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		
@@ -165,7 +173,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
     }
     
     public Cocos2dxGLSurfaceView onCreateView() {
-    	glSurfaceView = new Cocos2dxGLSurfaceView(this);
+    	glSurfaceView = new LuaGLSurfaceView(this);
     	// hspConnector should create stencil buffer
     	mGLView = glSurfaceView;
 //    	setEGLConfigChooser
@@ -280,27 +288,183 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
       super.onStart();
       FiveRocks.onActivityStart(this);
     }
+    
 
     @Override
     protected void onStop() {
       FiveRocks.onActivityStop(this);
       super.onStop();
     }
+	@Override
+	public boolean dispatchGenericMotionEvent(MotionEvent ev) {
+		// TODO Auto-generated method stub
+		return super.dispatchGenericMotionEvent(ev);
+	}
+	@Override
+	public boolean dispatchKeyEvent(KeyEvent event) {
+		// TODO Auto-generated method stub
+		return super.dispatchKeyEvent(event);
+	}
+    
+    
 }
 
+class Dpad {
+    final static int UP       = 0;
+    final static int LEFT     = 1;
+    final static int RIGHT    = 2;
+    final static int DOWN     = 3;
+    final static int CENTER   = 4;
+
+    int directionPressed = -1; // initialized to -1
+
+    public int getDirectionPressed(InputEvent event) {
+        if (!isDpadDevice(event)) {
+           return -1;
+        }
+
+        // If the input event is a MotionEvent, check its hat axis values.
+        if (event instanceof MotionEvent) {
+
+            // Use the hat axis value to find the D-pad direction
+            MotionEvent motionEvent = (MotionEvent) event;
+            float xaxis = motionEvent.getAxisValue(MotionEvent.AXIS_HAT_X);
+            float yaxis = motionEvent.getAxisValue(MotionEvent.AXIS_HAT_Y);
+
+            // Check if the AXIS_HAT_X value is -1 or 1, and set the D-pad
+            // LEFT and RIGHT direction accordingly.
+            if (Float.compare(xaxis, -1.0f) == 0) {
+                directionPressed =  Dpad.LEFT;
+            } else if (Float.compare(xaxis, 1.0f) == 0) {
+                directionPressed =  Dpad.RIGHT;
+            }
+            // Check if the AXIS_HAT_Y value is -1 or 1, and set the D-pad
+            // UP and DOWN direction accordingly.
+            else if (Float.compare(yaxis, -1.0f) == 0) {
+                directionPressed =  Dpad.UP;
+            } else if (Float.compare(yaxis, 1.0f) == 0) {
+                directionPressed =  Dpad.DOWN;
+            }
+        }
+
+        // If the input event is a KeyEvent, check its key code.
+        else if (event instanceof KeyEvent) {
+
+           // Use the key code to find the D-pad direction.
+            KeyEvent keyEvent = (KeyEvent) event;
+            if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_LEFT) {
+                directionPressed = Dpad.LEFT;
+            } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_RIGHT) {
+                directionPressed = Dpad.RIGHT;
+            } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_UP) {
+                directionPressed = Dpad.UP;
+            } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+                directionPressed = Dpad.DOWN;
+            } else if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DPAD_CENTER) {
+                directionPressed = Dpad.CENTER;
+            }
+        }
+        return directionPressed;
+    }
+
+    public static boolean isDpadDevice(InputEvent event) {
+        // Check that input comes from a device with directional pads.
+        if ((event.getSource() & InputDevice.SOURCE_DPAD)
+             != InputDevice.SOURCE_DPAD) {
+             return true;
+         } else {
+             return false;
+         }
+     }
+}
 class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	
 	public LuaGLSurfaceView(Context context){
 		super(context);
 	}
-	
+
+	int downCount = 0;
+	int upCount = 0;
+	Dpad mDpad = new Dpad();
+	private static boolean isFireKey(int keyCode) {
+        // Here we treat Button_A and DPAD_CENTER as the primary action
+        // keys for the game.
+        return keyCode == KeyEvent.KEYCODE_DPAD_CENTER
+                || keyCode == KeyEvent.KEYCODE_BUTTON_A;
+    }	
+	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-    	// exit program when key back is entered
-    	if (keyCode == KeyEvent.KEYCODE_BACK) {
-    		android.os.Process.killProcess(android.os.Process.myPid());
-    	}
+		
+//		boolean handled = false;
+//        if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) {
+//            if (event.getRepeatCount() == 0) {
+//                switch (keyCode) {
+//                    default:
+//                         if (isFireKey(keyCode)) {
+//                             handled = true;
+//                         }
+//                     break;
+//                }
+//            }
+//            if (handled) {
+//                return true;
+//            }
+//        }
+      
+//		Toast.makeText(this.getContext(),
+//				"DOWN" + String.valueOf(downCount) + " : " + String.valueOf(keyCode), Toast.LENGTH_LONG)
+//				.show();	
+		downCount++;
         return super.onKeyDown(keyCode, event);
     }
+
+	@Override
+	public boolean onGenericMotionEvent(MotionEvent event) {
+		if (Dpad.isDpadDevice(event)) {
+
+			int press = mDpad.getDirectionPressed(event);
+			switch (press) {
+			case Dpad.LEFT:
+//				Toast.makeText(this.getContext(),
+//						"MOTION" + " LEFT", Toast.LENGTH_LONG)
+//						.show();	
+				// Do something for LEFT direction press
+				break;
+			case Dpad.RIGHT:
+//				Toast.makeText(this.getContext(),
+//						"MOTION" + " RIGHT", Toast.LENGTH_LONG)
+//						.show();	
+				// Do something for RIGHT direction press
+				break;
+			case Dpad.UP:
+//				Toast.makeText(this.getContext(),
+//						"MOTION" + " UP", Toast.LENGTH_LONG)
+//						.show();	
+				// Do something for UP direction press
+				break;
+			case Dpad.DOWN:
+//				Toast.makeText(this.getContext(),
+//						"MOTION" + " DOWN", Toast.LENGTH_LONG)
+//						.show();	
+				break;
+			}
+		}
+
+		// TODO Auto-generated method stub
+		return super.onGenericMotionEvent(event);
+	}
+
+	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		// TODO Auto-generated method stub
+//		Toast.makeText(this.getContext(),
+//				"UP" + String.valueOf(upCount) + " : " + String.valueOf(keyCode), Toast.LENGTH_LONG)
+//				.show();	
+		upCount++;
+		return super.onKeyUp(keyCode, event);
+	}
+	
+	
 }
 
 
