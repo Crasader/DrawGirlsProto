@@ -25,6 +25,7 @@ void MissileParent::bombCumber( CCObject* target )
 		bool canceled = false;
 		for(auto i : cumber->getCharges())
 		{
+			TRACE();
 			i->cancelCharge();
 			canceled = true;
 			
@@ -588,9 +589,15 @@ void MissileParent::subOneDie()
 
 int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternDParam, KSCumberBase* cb, bool exe)
 {
-	Json::Value patternData;
 	int valid = 1;
 	int invalid = 0;
+	// 캐스팅한지 1초 내면 캐스팅 노노
+	if(cb->m_lastCastTime + 3.f > cb->m_cumberTimer)
+	{
+		return invalid;
+	}
+	Json::Value patternData;
+	bool forceSubCreateCondition = mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0;
 	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
 	if(cb->getAttackQueue().empty() == false && cb->getAttackQueue().size()>0)
 	{
@@ -601,7 +608,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	else
 	{
 		// 사냥꾼 미션이고 부하몹이 0 이하라면 부하몹 생성.
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
+		if(forceSubCreateCondition)
 		{
 //			CCLOG("B");
 			Json::Reader reader;
@@ -660,9 +667,12 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 //		CCLOG("___ 계산된 맥스 : %d", adjustmentMax);
 		int n = MIN(adjustmentMax - myGD->getSubCumberCount(), patternData.get("childs", 1).asInt());
 		// 부하몹 테스트가 우선.
-		if(n <= 0) // 부하몹 생성할것이 없다면 false 리턴함.
+		if(n <= 0 && !forceSubCreateCondition) // 부하몹 생성할것거나 자연스러운 생성이었다면 false 리턴함.
 		{
 			return invalid;
+		}
+		else
+		{
 		}
 	}
 	
@@ -722,7 +732,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 
 //			cb->setChargeParent(t_ccn);
 		}
-		cb->m_lastCastTime = cb->m_cumberTimer;
+		
 		cb->setDamageMeasure(0.f);
 		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
 		myGD->showDetailMessage(warningFileName, "w");

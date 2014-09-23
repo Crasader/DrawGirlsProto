@@ -380,6 +380,7 @@ public:
 	{
 		// 옵션에 대해서 수행함.
 		
+		TRACE();
 		CCPoint cumberPosition = cumber->getPosition();
 		if(m_option & AttackOption::kPoisonedNiddle)
 		{
@@ -1350,6 +1351,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
+			TRACE();
 			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
 			
 			removeFromParentAndCleanup(true);
