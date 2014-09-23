@@ -717,7 +717,7 @@ bool FailPopup::init()
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
 																		  TRACE();
-                                                                          if(result_data["result"]["code"].asBool())
+                                                                          if(result_data["isFirstCheck"].asBool())
                                                                           {
                                                                               is_today_mission_success = true;
                                                                           }
