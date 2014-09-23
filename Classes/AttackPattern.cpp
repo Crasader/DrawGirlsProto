@@ -3583,7 +3583,7 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	auto grang = KS::loadCCBI<CCSprite*>(this, "summons_01.ccbi").first;
 	addChild(grang);
 	grang->setPosition(ip2ccp(mapPoint));
-	
+	stopMyAction();
 	addChild(KSTimer::create(1.5f, [=](){
 		addChild(KSSchedule::create([=](float dt){
 			Json::Reader reader;
@@ -3591,7 +3591,9 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 			reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "junior"), root);
 			
 			// 기본값으로 서버에서 설정된 부하몹 개수로 함.
-			int n = MIN(m_pattern.get("maxchilds", root.size()).asInt() - myGD->getSubCumberCount(), m_pattern.get("childs", 1).asInt());
+			int n = MIN(m_pattern.get("maxchilds", root.size()).asInt() - myGD->getSubCumberCount(),
+									m_pattern.get("childs", 1).asInt());
+			n = MAX(n, 1);
 			for(int i=0; i<n; ++i)
 			{
 				myGD->communication("CP_createSubCumber", mapPoint);
@@ -3599,6 +3601,7 @@ void PutChildWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 //			m_cumber->setAttackPattern(nullptr);
 //			myGD->communication("CP_onPatternEndOf", m_cumber);
 			removeFromParent();
+			
 			return false; // 한번만 실행
 		}));
 	}));
