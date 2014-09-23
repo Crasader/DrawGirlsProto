@@ -1661,8 +1661,15 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																													if(is_unlock_puzzle >= 2)
 																													{
 																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
-																														StoryLayer::startStory(CCString::createWithFormat("puzzle%d",is_unlock_puzzle)->getCString(), [](){
-																														});
+																														StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",is_unlock_puzzle)->getCString(), [=](){
+                                                                                                                            mySGD->setIsUnlockPuzzle(0);
+                                                                                                                            is_unlock_puzzle = 0;
+                                                                                                                            
+                                                                                                                            endUnlockAnimation();
+                                                                                                                            
+                                                                                                                            t_end_func();
+
+                                                                                                                        });
 																														
 																													}
 																													
@@ -1733,7 +1740,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													 endUnlockAnimation();
 //																																													 
 //																																													 t_end_func();
-//																																													 
+//
 //																																													 addChild(KSTimer::create(0.1f, [=]()
 //																																																			  {
 //																																																				  scenario_node->removeFromParent();
@@ -4377,7 +4384,7 @@ void MainFlowScene::topOnLight()
 		addChild(scenario_node, 9999);
 		typing_box2->setVisible(false);
 		typing_box->setVisible(false);
-		StoryLayer::startStory("puzzle1", [=](){
+		StoryLayer::startStory(this,"puzzle1", [=](){
 			
 			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
 																														{

@@ -86,7 +86,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.3")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.0.4")){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
@@ -131,16 +131,16 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	        // Set the content to appear under the system bars so that the content
 	        // doesn't resize when the system bars hide and show.
 		  
-		  if (Build.VERSION.SDK_INT >= 11){
+		  if (Build.VERSION.SDK_INT >= 19){
 			  int hideOption = Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_STABLE
 	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
 	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
 	                  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_HIDE_NAVIGATION; // hide nav bar
 	                //  | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_FULLSCREEN; // hide status bar
 			  
-			  if (Build.VERSION.SDK_INT >= 19){
+			  //if (Build.VERSION.SDK_INT >= 19){
 				  hideOption = hideOption | Cocos2dxGLSurfaceView.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-			    }
+			   // }
 			 
 			
 		        glSurfaceView.setSystemUiVisibility(hideOption);
