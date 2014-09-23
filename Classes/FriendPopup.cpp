@@ -1266,7 +1266,7 @@ void FriendPopup::setAddMenu()
 					
 					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 					Json::Value param;
-					if(editbox->getText() == "")
+					if(editbox->getText() == std::string(""))
 					{
 						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
 							if(input_text1)
@@ -1776,6 +1776,19 @@ void FriendPopup::setVoteFriendMenu()
 																	 {
 																		 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		 Json::Value param;
+																		 
+																		 if(m_voteInputText->getText() == std::string(""))
+																		 {
+																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
+																				 if(m_voteInputText)
+																				 {
+																					 m_voteInputText->setVisible(true);
+																				 }
+																			 });
+																			 popup->getDimmedSprite()->setVisible(false);
+																			 addChild(popup);
+																			 return;
+																		 }
 																		 param["memberID"] = myHSP->getSocialID();
 																		 param["nick"] = m_voteInputText->getText();
 																		 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
