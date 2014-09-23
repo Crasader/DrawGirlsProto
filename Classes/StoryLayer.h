@@ -21,6 +21,7 @@
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h";
 #include "EasingAction.h";
+#include "CCMenuLambda.h";
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
@@ -29,19 +30,25 @@ using namespace std;
 class StoryLayer : public CCLayer{
 public:
 	string storyID;
-	CCLayerColor *back;
+	CCLayerColor *black;
+	CCLayer *back;
 	CCLayerColor *top;
 	CCLayerColor *bottom;
 	TouchSuctionLayer *suction;
-	static StoryLayer* create(string storyID)
+	Json::Value storyData;
+	int storySeq;
+	function<void(void)> callbackFunc;
+	bool isAdd;
+    
+	static StoryLayer* create(string _storyID)
 	{
 		StoryLayer* obj = new StoryLayer();
-		obj->init(storyID);
+		obj->init(_storyID);
 		obj->autorelease();
 		return obj;
 	}
-	
-	bool init(string storyID){
+    
+	bool init(string _storyID){
 		if(!CCLayer::init()){
 			return false;
 		}
@@ -51,36 +58,69 @@ public:
 		addChild(suction);
 		
 		suction->setTouchEnabled(true);
-		
+		this->storyID=_storyID;
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
-		
+		float ui_top = myDSH->ui_top;
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		
-
-		top = CCLayerColor::create(ccc4(0,0,0,255), screen_size.width,50);
-		top->setAnchorPoint(ccp(0,0));
-		top->setPosition(ccp(0,myDSH->ui_top));
+       // CCLOG("init storyLayer %f,%f,%f,%f,%f,%f,%f",screen_size.width,screen_size.height,myDSH->ui_top);
+		top = CCLayerColor::create(ccc4(0,0,0,255), screen_scale_x*480,50);
+		top->setAnchorPoint(ccp(0.5,0));
+        top->ignoreAnchorPointForPosition(false);
+		top->setPosition(ccp(240,320*screen_scale_y));
 		addChild(top);
 		
-		bottom = CCLayerColor::create(ccc4(0,0,0,255), screen_size.width,50);
-		bottom->setAnchorPoint(ccp(0,0));
-		bottom->setPosition(ccp(0,0-50));
+		bottom = CCLayerColor::create(ccc4(0,0,0,255), screen_scale_x*480,50);
+		bottom->setAnchorPoint(ccp(0.5,0));
+        bottom->ignoreAnchorPointForPosition(false);
+		bottom->setPosition(ccp(240,0-50));
 		addChild(bottom);
 		
-		this->addChild(KSGradualValue<float>::create(0.f,50.f,0.5f,[=](float t){
+		this->addChild(KSGradualValue<float>::create(0.f,50.f,0.5f,[this,screen_scale_y](float t){
 			bottom->setPositionY(t-50);
-			top->setPosition(ccp(0,myDSH->ui_top-t));
+			top->setPositionY((320-t)*screen_scale_y);
 			
 		},[](float t){}));
 		
-				
-		back = CCLayerColor::create(ccc4(0,0,0,0));
+		
+		black = CCLayerColor::create(ccc4(0,0,0,0), 480, 320);
+        
+        black->setScaleX(screen_scale_x);
+        black->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
+        
+
+        addChild(black);
+        
+		back = CCLayer::create();
 		addChild(back);
 		
+        CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* s_skip = CCSprite::create("kt_skip.png");
+		s_skip->setColor(ccGRAY);
 		
+		CCMenuLambda* skip_menu = CCMenuLambda::create();
+		skip_menu->setPosition(ccp(50, 320*screen_scale_y-30));
+		skip_menu->setTouchPriority(-19999);
+		skip_menu->setEnabled(true );
+		
+		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [skip_menu,this](CCObject* sender)
+																	 {
+																		 skip_menu->setEnabled(false);
+                                                                         this->storySeq=this->storyData.size();
+                                                                         this->playScript();
+                                                                     });
+        skip_menu->addChild(skip_item);
+        
+		//this->storyData = Json::Value(Json::arrayValue);
+        this->storySeq=0;
+		this->m_sss=0;
+		this->addChild(skip_menu, 999);
+        
+        
+
 		return true;
 	}
 	
@@ -110,39 +150,45 @@ public:
 		kScriptTypeSpot = 3
 	};
 	
-	Json::Value storyData;
-	int storySeq;
-	function<void(void)> callbackFunc;
-	static void startStory(string storyID,function<void(void)> endFunc){
+	static void startStory(CCLayer* obj,string _storyID,function<void(void)> _endFunc){
 		
-		StoryLayer *sl  = StoryLayer::create(storyID);
-		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(sl,9999999);
-		sl->storyID = storyID;
-		sl->storySeq=0;
-		sl->m_sss=0;
-		sl->callbackFunc = endFunc;
-		sl->storyData = Json::Value(Json::arrayValue);
-		sl->loadStory();
-		sl->addChild(KSGradualValue<float>::create(0, 150, 1, [=](int a){
-			sl->back->setOpacity(a);
-		}, [=](int a){
-			sl->play();
+		StoryLayer *sl  = StoryLayer::create(_storyID);
+        TRACE();
+        sl->callbackFunc = _endFunc;
+		TRACE();
+        obj->addChild(sl,9999999);
+        
+		TRACE();
+        sl->loadStory();
+		TRACE();
+        sl->addChild(KSGradualValue<float>::create(0, 150, 1, [sl](int a){
+			sl->black->setOpacity(a);
+		}, [sl](int a){
+            CCLOG("play %s",sl->storyID.c_str());
+			sl->playScript();
 		}));
+        TRACE();
 	}
 	
-	bool isAdd;
-	void beginScene(string lang,string storyID){
-		if(this->storyID == storyID && lang == MyLocal::sharedInstance()->getLocalCode()->getCString())isAdd=true;
-		else isAdd=false;
+	void beginScene(string _lang,string _storyID){
+        string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
+        CCLOG("beginScene %s, %s,%s,%s",this->storyID.c_str(),_storyID.c_str(),_lang.c_str(),cliLang.c_str());
+		if(this->storyID == _storyID && _lang == cliLang){
+            CCLOG("isAdd true");
+                isAdd=true;
+        }else{ isAdd=false;
+            
+            CCLOG("isAdd false");}
 	}
 	
 	void loadStory(){
 		
+        CCLOG("load story");
 		
 		beginScene("ko","puzzle1");
 		addScript("","오래전부터 영주를 모시며 첩보,파괴,암살등을 생업으로 삼은 자들이 있었다.\n오랜기간 그 명맥을 유지하며 현대시대에도 보통사람들의 눈을 피해 활동하고있는 자들.\n그들을 우리는 닌자라 부른다.",kCCTextAlignmentCenter,kObjTypeText,kBoxBig);
 		
-		addScript("kt_cha_asuka_1.png","선생님.\n지시받은대로 전원집합했습니다!\n여긴 인기척도 없고 전력으로 훈련할 수 있곘는데요?",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
+		addScript("kt_cha_asuka_1.png","선생님.\n지시받은대로 전원집합했습니다!\n여긴 인기척도 없고 전력으로 훈련할 수 있겠는데요?",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png","네? 훈련 전에 우리들의 힘을 시험한다구요?\n으윽.. 시험은 그다지 좋아하지 않지만..\n알겠습니다.",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_ikaruga_1.png","역시나\n시노비 결계 속에서 가상의 적을 상대하면 되는건가요?\n어서 시작하시죠.",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png","자..잠깐 그전에 대전법을 조금 익혀야 할것 같은데요..",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
@@ -281,23 +327,23 @@ public:
 		////////////////////////////////////
 		beginScene("ko","puzzle15");
 		addScript("kt_cha_asuka_1.png","이런 다잡았는데 놓쳤어!\n학학….아까 그 사람 어디 갔을까?",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_ikaruga_1.png","응? 너는 아스카 아냐 그렇게 당황해서 어떻게 된 일이야?",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_homura_1.png","응? 너는 아스카 아냐 그렇게 당황해서 어떻게 된 일이야?",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","아, 호무라! 사실은 아까 지나가면서 지갑을 누가 훔쳐가서…",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_ikaruga_1.png","뭐야, 또 잃어버린거야?\n도둑은 번화가로 도망간것 같아.\n지갑을 다시 되돌리고 싶다면 상대해주겠어… 가자.",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_homura_1.png","뭐야, 또 잃어버린거야?\n도둑은 번화가로 도망간것 같아.\n지갑을 다시 되돌리고 싶다면 상대해주겠어… 가자.",kCCTextAlignmentRight,kObjTypeAll);
 		
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle16");
-		addScript("kt_cha_ikaruga_1.png","… 이거봐 또 잃어버리지마. 다음은 더 이상 없으니까",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_homura_1.png","… 이거봐 또 잃어버리지마. 다음은 더 이상 없으니까",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","고, 고마워 호무라\n전에 지갑 잃어버렸을 때도 되찾아줬었지. 미안해",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_ikaruga_1.png","쉽게 사과하지마. 그리고 나는 그 선생님을 찾고 있었을 분이고…\n잠깐 아무래도 또 마귀가 들어온 모양이네. 먼저 정리해야겠어.",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_homura_1.png","쉽게 사과하지마. 그리고 나는 그 선생님을 찾고 있었을 분이고…\n잠깐 아무래도 또 마귀가 들어온 모양이네. 먼저 정리해야겠어.",kCCTextAlignmentRight,kObjTypeAll);
 		
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle17");
-		addScript("kt_cha_ikaruga_1.png","흥, 이정도였군. 보람이 없군.\n그건 그렇고 너 내가 볼 때마다 지갑을 잃어버리고 있네…\n설마 너 바보니?",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_homura_1.png","흥, 이정도였군. 보람이 없군.\n그건 그렇고 너 내가 볼 때마다 지갑을 잃어버리고 있네…\n설마 너 바보니?",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","뭐, 잃어버리고 싶어서 잃어버린 게 아니라구!\n하지만 지갑 다시 찾는 거 도와줘서 고마워.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_ikaruga_1.png","인사치레는 필요없어.\n너는 더 자신을 엄격하게 훈련시킬필요가 있을 것 같군.\n그럼이만~",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_homura_1.png","인사치레는 필요없어.\n너는 더 자신을 엄격하게 훈련시킬필요가 있을 것 같군.\n그럼이만~",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","어, 호무라…! …가버렸네.\n사이좋게 지내고 싶은데\n역시 실력을 키우는 수밖에. 훈련이다 훈련!",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		
@@ -305,21 +351,21 @@ public:
 		beginScene("ko","puzzle18");
 		addScript("kt_cha_ikaruga_1.png","긴급지령이라고 듣고 급하게 여기까지 왔는데…\n슬슬 이번 임무내용을 알려주시겠어요?",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","선생님의 동료가 적에서부터 물자를 뺏은 다음에 이 부근에서 다시 뺏겼다고요…?",kCCTextAlignmentRight,kObjTypeText);
-		addScript("kt_cha_hibari_1.png","그래서 우리들이 다시 한 번 물자를 가지고 오는거죠?\n뺏고 또 다시 뺏긴 건 좀 한심하네요…\n어쨌든 싸우는 일은 빨리 정리하는게 우선이죠",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yomi_1.png","그래서 우리들이 다시 한 번 물자를 가지고 오는거죠?\n뺏고 또 다시 뺏긴 건 좀 한심하네요…\n어쨌든 싸우는 일은 빨리 정리하는게 우선이죠",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","요미님! 지금 케이스를 가진 닌자가 뒷길을 달려갔어요!",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_hibari_1.png","아이고. 보통 이 부근에서 닌자는 전혀 눈에 띄지 않는데…\n저런, 알기 쉬운 사람같으니! 금방 쫓아갈께요.",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_yomi_1.png","아이고. 보통 이 부근에서 닌자는 전혀 눈에 띄지 않는데…\n저런, 알기 쉬운 사람같으니! 금방 쫓아갈께요.",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle19");
 
 		addScript("kt_cha_asuka_1.png","도망가버렸어요…\n저 분들 케이스에 대해서 알고 있었던 것 같은데…\n이 부근은 복잡하게 얽혀있어서 어디에 숨었는지…",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_hibari_1.png","우후훗, 안심해주세요.\n이곳은 우리들의 학교 해비여자학원의 구역입니다.\n들어온 외부인이 있으면 냄새로 바로 알 수 있죠.\n지리에 대한 지식과 후각은 나에게 맡겨라죠. 절대 놓치지 않을 거예요!",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_yomi_1.png","우후훗, 안심해주세요.\n이곳은 우리들의 학교 해비여자학원의 구역입니다.\n들어온 외부인이 있으면 냄새로 바로 알 수 있죠.\n지리에 대한 지식과 후각은 나에게 맡겨라죠. 절대 놓치지 않을 거예요!",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle20");
 		
-		addScript("kt_cha_hibari_1.png","훗, 두 번 다시 얼씬 거리지마라고! 라고나 할까\n그래서 덜빠진 공무원이 떨어뜨린 물자가 들어간 케이스가 이거죠?\n도대체 안에는 뭐가 들어있는건가요?",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_asuka_1.png","…요미님 기다려주세요.\n…아직도 다른 적이 있습니다! 쳐부습시다!",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_yomi_1.png","훗, 두 번 다시 얼씬 거리지마라고! 라고나 할까\n그래서 덜빠진 공무원이 떨어뜨린 물자가 들어간 케이스가 이거죠?\n도대체 안에는 뭐가 들어있는건가요?",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_asuka_1.png","…요미님 기다려주세요.\n…아직도 다른 적이 있습니다! 쳐부숩시다!",kCCTextAlignmentLeft,kObjTypeAll);
 		
 	}
 	
@@ -344,6 +390,7 @@ public:
 	}
 	void addScript(string image,string script,CCTextAlignment align,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
 		if(isAdd){
+            CCLOG("add script %s",script.c_str());
 			Json::Value scriptInfo;
 			scriptInfo["type"]=kScriptTypeTalk;
 			scriptInfo["image"]=image;
@@ -357,6 +404,8 @@ public:
 	}
 		
 	void scriptTypeTalk(Json::Value script){
+        
+        TRACE();
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 		if(screen_scale_x < 1.f)
@@ -364,10 +413,12 @@ public:
 		
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		
+        TRACE();
 		
 		if(script["image"].asString()!=""){
 			CCSprite* actor=nullptr;
 			CCArray* ch = back->getChildren();
+            TRACE();
 			bool isOldObj = false;
 			if(ch){
 				for(int i=0;i<ch->count();i++){
@@ -378,6 +429,7 @@ public:
 					}
 				}
 			}
+            TRACE();
 			if(!actor){
 				actor = CCSprite::create(script["image"].asString().c_str());
 				actor->setStringData(script["image"].asString().c_str());
@@ -386,6 +438,7 @@ public:
 			}
 			
 			
+            TRACE();
 			if(!isOldObj){
 				if(script["align"].asInt()==kCCTextAlignmentLeft){
 					actor->setAnchorPoint(ccp(0,0));
@@ -402,8 +455,9 @@ public:
 					actor->setTag(kObjTypeActorCenter);
 				}
 				
+                TRACE();
 				
-				back->addChild(KSGradualValue<float>::create(0.f,1.f,0.3f,[=](float t){
+				back->addChild(KSGradualValue<float>::create(0.f,1.f,0.3f,[actor,screen_scale_x,screen_scale_y,script](float t){
 					if(script["align"].asInt()==kCCTextAlignmentLeft)
 						actor->setPositionX(240-240*screen_scale_x-actor->getContentSize().width + actor->getContentSize().width*2.f/3.f*t);
 					else if(script["align"].asInt()==kCCTextAlignmentRight)
@@ -411,18 +465,21 @@ public:
 					else
 						actor->setPosition(ccp(240, 160-160*screen_scale_y-500+500*t));
 					
-				},[=](float t){
+				},[actor](float t){
 					
 					CCLog("action pos is %f",actor->getPositionX());
 					
 				}));
 			}
 			
+            TRACE();
 		}
 		
 		
 		TypingBox* typing_box;
 		
+        TRACE();
+        CCLOG("test1 %d",this->storySeq);
 		if(script["box"].asInt()==kBoxBig){
 			if(script["align"].asInt()==kCCTextAlignmentLeft){
 				typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
@@ -436,13 +493,31 @@ public:
 		}else{
 			typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
 		}
+        TRACE();
 		typing_box->setTag(kObjTypeText);
 		back->addChild(typing_box, 11);
 		
-		typing_box->startTyping(script["script"].asString().c_str(),[=](){
-			this->clear(script);
-			this->play();
-		});
+        TRACE();
+        CCLOG("%s",script.toStyledString().c_str());
+		typing_box->startTyping(script["script"].asString().c_str(),[this](){
+
+            this->addChild(KSTimer::create(0.1,[this](){
+                TRACE();
+                CCLOG("test2-0 %d",this->storySeq);
+                this->clearScript();
+                CCLOG("test2-1 %d",this->storySeq);
+                TRACE();
+                
+                CCLOG("test3-1 %d",this->storySeq);
+                this->playScript();
+                CCLOG("test3-2 %d",this->storySeq);
+                TRACE();
+                TRACE();
+                CCLOG("test2-2 %d",this->storySeq);
+
+            }));
+           		});
+        TRACE();
 		typing_box->setTouchOffScrollAndButton();
 	
 	}
@@ -455,17 +530,16 @@ public:
 		back->addChild(titlelbl);
 		
 		
-		addChild(KSGradualValue<float>::create(0, 460, 0.5, [=](float a){
+		addChild(KSGradualValue<float>::create(0, 460, 0.5, [&titlelbl,this](float a){
 			titlelbl->setPositionX(240+480-a);
-		}, [=](int a){
-			addChild(KSGradualValue<float>::create(0, 40, 1.5, [=](float a){
+		}, [&titlelbl,this](int a){
+			addChild(KSGradualValue<float>::create(0, 40, 1.5, [&titlelbl,this](float a){
 				titlelbl->setPositionX(240+480-460-a);
-			}, [=](int a){
-				addChild(KSGradualValue<float>::create(0, 460, 0.5, [=](float a){
+			}, [&titlelbl,this](int a){
+				addChild(KSGradualValue<float>::create(0, 460, 0.5, [&titlelbl,this](float a){
 					titlelbl->setPositionX(240+480-460-40-titlelbl->getPositionX()-a);
-				}, [=](int a){
-					this->clear(script);
-					this->play();
+				}, [&titlelbl,this](int a){
+					this->clearScript();
 				}));
 			}));
 		}));
@@ -483,35 +557,51 @@ public:
 		dot->setAnchorPoint(ccp(0.5f,0.5f));
 		dot->setTag(kObjTypeSpot);
 		
-		addChild(KSTimer::create(0.3,[=](){
-			this->clear(script);
-			this->play();
+		addChild(KSTimer::create(0.3,[this](){
+			this->clearScript();
+			this->playScript();
 		}));
 	}
 
 	
 	int m_sss;
-	void play(){
+	void playScript(){
+        TRACE();
+        CCLOG("test3-1 %d",this->storySeq);
+        TRACE();
 		if(storySeq>=storyData.size()){
 			
-			CCLOG("clear last");
-			
-			addChild(KSGradualValue<float>::create(0, 50, 0.5, [=](int a){
-				bottom->setPosition(ccp(0,-a));
-				top->setPosition(ccp(0,myDSH->ui_top-50+a));
-				back->setOpacity(150-a*3.f);
-			}, [=](int a){
+            TRACE();
+			CCLOG("clear last1 %s",this->storyID.c_str());
+            TRACE();
+			addChild(KSGradualValue<float>::create(0, 50, 0.5, [this](int a){
+                CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+                float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+                if(screen_scale_x < 1.f)
+                    screen_scale_x = 1.f;
+                float ui_top = myDSH->ui_top;
+                float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+                
+                
+				bottom->setPositionY(-a);
+				top->setPositionY(screen_scale_y*(320+a));
+				black->setOpacity(150-a*3.f);
+			}, [this](int a){
 				CCLOG("all finish");
 				if(callbackFunc)callbackFunc();
 				this->removeFromParent();
 				
 			}));
+            TRACE();
+			CCLOG("clear last2 %s",this->storyID.c_str());
+            TRACE();
 			return;
 		}
 		
 		
+        CCLOG("get script");
 		Json::Value script = storyData[storySeq];
-		storySeq++;
+		
 		
 		if(script["type"].asInt()==kScriptTypeTalk){
 			scriptTypeTalk(script);
@@ -523,29 +613,43 @@ public:
 	}
 	
 
-	void clear(Json::Value script){
-		
+	void clearScript(){
+        int nowSeq = this->storySeq;
+        CCLOG("test4-1 %d",nowSeq);
+		Json::Value script = storyData[nowSeq];
+        CCLOG("test4-2 %d",nowSeq);
+        
+        TRACE();
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
+        CCLOG("test4-3 %d",nowSeq);
+        TRACE();
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		
 		CCArray *cr = back->getChildren();
 		
+        CCLOG("test4-4 %d",nowSeq);
 		
+        TRACE();
 		for(int i=0;i<cr->count();i++){
 			CCNode *obj = (CCNode*)cr->objectAtIndex(i);
 			
+            TRACE();
 			if(obj->getTag()==kObjTypeText && script["clear"].asInt()&kObjTypeText){
 				CCLOG("remove text");
+                CCLOG("test4-5 %d",nowSeq);
 				obj->removeFromParent();
 				
 			}else if((obj->getTag()==kObjTypeActorLeft && script["clear"].asInt()&kObjTypeActorLeft) || (obj->getTag()==kObjTypeActorRight && script["clear"].asInt()&kObjTypeActorRight)){
+                
+                
+                CCLOG("test4-6 %d",nowSeq);
 				
 				CCLOG("move actor %s", obj->getStringData().c_str());
-				back->addChild(KSGradualValue<float>::create(1.f,0.f,0.3f,[=](float t){
+				back->addChild(KSGradualValue<float>::create(1.f,0.f,0.3f,[this,obj,screen_scale_x](float t){
 					CCNode *myobj = obj;
 					if(myobj->getAnchorPoint().x==0.f){
 						myobj->setPositionX(240-240*screen_scale_x-obj->getContentSize().width + obj->getContentSize().width*2.f/3.f*t);
@@ -553,21 +657,30 @@ public:
 						myobj->setPositionX(240+240*screen_scale_x+obj->getContentSize().width - obj->getContentSize().width*2.f/3.f*t);
 					}
 					
-				},[=](float t){
+				},[this,obj](float t){
 						CCNode *myobj = obj;
 						CCLOG("remove actor %s",myobj->getStringData().c_str());
 						myobj->removeFromParent();
 				}));
 			}else if(obj->getTag()==kObjTypeTitle && script["clear"].asInt()&kObjTypeTitle){
+                
+                CCLOG("test4-7 %d",nowSeq);
 				CCLOG("remove title");
 				obj->removeFromParent();
 			}else if(obj->getTag()==kObjTypeSpot && script["clear"].asInt()&kObjTypeSpot){
-				CCLOG("remove spot");
+				
+                CCLOG("test4-8 %d",nowSeq);
+                CCLOG("remove spot");
 				obj->removeFromParent();
 			}
-				
+            
+            TRACE();
 			
 		}
+        
+        CCLOG("test4-9 %d",nowSeq);
+        this->storySeq++;
+        TRACE();
 		
 	}
 	
