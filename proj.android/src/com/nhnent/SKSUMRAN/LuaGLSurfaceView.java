@@ -102,11 +102,14 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	public void setCallbackKey(int key)
 	{
 		mCallbackKeyList.add(key);
-//		mCallbackKey = key; 
+		//		mCallbackKey = key; 
 	}
 	public void removeCallbackKey(int registeredKey)
 	{
-		mCallbackKeyList.remove(registeredKey);
+		if(mCallbackKeyList.contains(registeredKey))
+		{ 
+			mCallbackKeyList.remove(registeredKey);
+		}
 	}
 	Dpad mDpad = new Dpad();
 	private static boolean isFireKey(int keyCode) {
@@ -118,7 +121,7 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		JSONObject r = new JSONObject();
-		
+
 		try {
 			r.put("type", "keyup");
 			r.put("keycode", event.getKeyCode());
@@ -138,12 +141,12 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	}
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-        boolean handled = false;
+		boolean handled = false;
 		if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) {
 			if (event.getRepeatCount() == 0) {
 				// keyCode 다운을 보내줌.
 				JSONObject r = new JSONObject();
-				
+
 				try {
 					r.put("type", "keydown");
 					r.put("keycode", event.getKeyCode());
@@ -159,13 +162,13 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 						}
 					});						
 				}
-//				switch (keyCode) {
-//				default:
-//					if (isFireKey(keyCode)) {
-//						handled = true;
-//					}
-//					break;
-//				}
+				//				switch (keyCode) {
+				//				default:
+				//					if (isFireKey(keyCode)) {
+				//						handled = true;
+				//					}
+				//					break;
+				//				}
 			}
 			if (handled) {
 				return true;
@@ -181,7 +184,7 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 
 	@Override
 	public boolean onGenericMotionEvent(MotionEvent event) {
-		
+
 
 		if ((event.getSource() & InputDevice.SOURCE_JOYSTICK)
 				== InputDevice.SOURCE_JOYSTICK) {
@@ -195,16 +198,16 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 				float yaxis = motionEvent.getY();
 				int xaxis2 = (int) Math.rint(xaxis);
 				int yaxis2 = (int) Math.rint(yaxis);
-				
-//				Toast.makeText(this.getContext(),
-//						xaxis + ".." + yaxis, Toast.LENGTH_LONG)
-//						.show();	
+
+				//				Toast.makeText(this.getContext(),
+				//						xaxis + ".." + yaxis, Toast.LENGTH_LONG)
+				//						.show();	
 				if(Float.compare(xaxis2, directionX) !=0 || Float.compare(yaxis2, directionY) != 0)
 				{
 					directionX = xaxis2;
 					directionY = yaxis2;
 					JSONObject r = new JSONObject();
-					
+
 					try {
 						r.put("type", "motion");
 						r.put("x", directionX);
@@ -221,20 +224,20 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 							}
 						});						
 					} 
-//					hspConnector.send
-//					Toast.makeText(this.getContext(),
-//					xaxis2 + ".." + yaxis2, Toast.LENGTH_LONG)
-//					.show();		
-//					Toast.makeText(this.getContext(),
-//					event.toString(), Toast.LENGTH_LONG)
-//					.show();		
+					//					hspConnector.send
+					//					Toast.makeText(this.getContext(),
+					//					xaxis2 + ".." + yaxis2, Toast.LENGTH_LONG)
+					//					.show();		
+					//					Toast.makeText(this.getContext(),
+					//					event.toString(), Toast.LENGTH_LONG)
+					//					.show();		
 				}
 
-				
+
 			}
-//			return true;
+			//			return true;
 		} else {
-//			return false;
+			//			return false;
 		}
 
 		// TODO Auto-generated method stub
