@@ -104,6 +104,42 @@ extern "C"{
 		CCLOG("sendresultnative9");
 		return;
 	}
+	void Java_com_litqoo_lib_hspConnector_SendReactionNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
+	{
+		jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
+		string throwData = revStr;
+		jsonDelegator::get()->buff.append(throwData);
+		if(delesel.func!=NULL)
+		{
+			if(isFinish)
+			{
+				Json::Value resultData;
+				Json::Value resultObj;
+				Json::Reader rd;
+				rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
+				
+				//
+				resultObj["param"] = delesel.param;
+				resultObj["callback"] = delesel.callbackParam;
+				//((delesel.target)->*(delesel.selector))(resultObj);
+				delesel.func(resultObj);
+				jsonDelegator::get()->buff="";
+			}
+		}
+		
+		// 반응은 계속적으로 받아야 되는것이기 때문에 딜리게이트를 삭제 안함. 수동으로 삭제 해야 함
+//		if(isFinish)
+//		{
+//			jsonDelegator::get()->remove(_key);
+//		}
+		
+		env->ReleaseStringUTFChars(datas, revStr);
+		
+		return;
+	}
+
 	int Java_com_nhnent_SKSUMRAN_DGproto_getUserState(JNIEnv *env, jobject thiz)
 	{
 		jboolean isCopy = JNI_FALSE;
@@ -492,6 +528,7 @@ void hspConnector::withdrawAccount(jsonSelType func)
 	}
 #endif
 }
+
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:
@@ -1005,6 +1042,8 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 		jstring param3 = t.env->NewStringUTF(url.c_str());
 		r = t.env->CallStaticIntMethod(t.classID, t.methodID, param1,param2,param3);
 		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
@@ -1015,6 +1054,73 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 	
 	return 0;
+#endif
+}
+
+void hspConnector::getAdXConnectEventInstance(string event, string data, string currency)
+{
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getAdXConnectEventInstance",
+																		 "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(event.c_str());
+		jstring param2 = t.env->NewStringUTF(data.c_str());
+		jstring param3 = t.env->NewStringUTF(currency.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1,param2,param3);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+}
+int hspConnector::registerGamePadCallback(jsonSelType func)
+{
+	int registeredKey = -1;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "registerGamePadCallback",
+																		 "(I)V")) {
+		int _key =  jsonDelegator::get()->add(func,0,0);
+		registeredKey = _key;
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	} 
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+	return registeredKey;
+}
+void hspConnector::registerGamePadCallback(CCObject* target, jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLOG("checkDelegator sFunc call");
+		if(GraphDog::get()->checkTarget(target))
+			func(value);
+	};
+	registerGamePadCallback(sFunc);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+	
+
+}
+void hspConnector::unregisterGamePadCallback(int registeredKey)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "unregisterGamePadCallback",
+																		 "(I)V")) {
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, registeredKey);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #endif
 }
 
