@@ -120,22 +120,38 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	}	
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		JSONObject r = new JSONObject();
+		boolean handled = false;
+		if ((event.getSource() & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD) {
+			if (event.getRepeatCount() == 0) {
+				// keyCode 다운을 보내줌.
+				JSONObject r = new JSONObject();
 
-		try {
-			r.put("type", "keyup");
-			r.put("keycode", event.getKeyCode());
-		} catch (JSONException e) {
+				try {
+					r.put("type", "keyup");
+					r.put("keycode", event.getKeyCode());
+				} catch (JSONException e) {
 
-		}
-		for(Integer keys : mCallbackKeyList)
-		{
-			queueEvent(new KRunnable(keys.intValue(), r.toString()) {
-				public void run() {
-					hspConnector.SendResult(this.delekey,
-							this.totalSource);
 				}
-			});						
+				for(Integer keys : mCallbackKeyList)
+				{
+					queueEvent(new KRunnable(keys.intValue(), r.toString()) {
+						public void run() {
+							hspConnector.SendReaction(this.delekey,
+									this.totalSource);
+						}
+					});						
+				}
+				//				switch (keyCode) {
+				//				default:
+				//					if (isFireKey(keyCode)) {
+				//						handled = true;
+				//					}
+				//					break;
+				//				}
+			}
+			if (handled) {
+				return true;
+			}
 		}
 		return super.onKeyUp(keyCode, event);
 	}
@@ -219,7 +235,7 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 					{
 						queueEvent(new KRunnable(keys.intValue(), r.toString()) {
 							public void run() {
-								hspConnector.SendResult(this.delekey,
+								hspConnector.SendReaction(this.delekey,
 										this.totalSource);
 							}
 						});						
