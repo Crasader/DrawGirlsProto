@@ -107,8 +107,8 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 	public void removeCallbackKey(int registeredKey)
 	{
 		if(mCallbackKeyList.contains(registeredKey))
-		{ 
-			mCallbackKeyList.remove(registeredKey);
+        { 
+			mCallbackKeyList.remove(new Integer(registeredKey));
 		}
 	}
 	Dpad mDpad = new Dpad();
