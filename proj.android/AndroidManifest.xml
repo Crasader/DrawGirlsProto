@@ -19,8 +19,8 @@
 
 
 		<meta-data android:name="io.fiverocks.android.appstore" android:value="Google"/>
-		<meta-data android:name="APPNAME" andoroid:value="com.nhnent.SKSUMRAN"/>       <!-- 패키지네임과 일치시켜주세요. -->
-        <meta-data android:name="ADX_CLIENT_ID" andoroid:value="nhntrt809531jdr"/>          <!-- "nhntrt809531jdr"로 고정입니다. -->
+		<meta-data android:name="APPNAME" android:value="com.nhnent.SKSUMRAN"/>       <!-- 패키지네임과 일치시켜주세요. -->
+        <meta-data android:name="ADX_CLIENT_ID" android:value="nhntrt809531jdr"/>          <!-- "nhntrt809531jdr"로 고정입니다. -->
         <meta-data android:name="USEQASERVER" android:value="ON" /> <!-- 테스트 환경 -->
 		<receiver
         android:name="io.fiverocks.android.GCMReceiver"
