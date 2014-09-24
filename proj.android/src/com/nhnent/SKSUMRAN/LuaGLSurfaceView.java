@@ -154,7 +154,7 @@ public class LuaGLSurfaceView extends Cocos2dxGLSurfaceView{
 				{
 					queueEvent(new KRunnable(keys.intValue(), r.toString()) {
 						public void run() {
-							hspConnector.SendResult(this.delekey,
+							hspConnector.SendReaction(this.delekey,
 									this.totalSource);
 						}
 					});						
