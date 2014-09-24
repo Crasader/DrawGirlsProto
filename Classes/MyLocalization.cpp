@@ -1076,11 +1076,11 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	ko->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	ko->setObject(CCString::create("S다이어리"), kMyLocalKey_toDiary19);
 	
-	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	ko->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	ko->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ko->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	ko->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ko->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	ko->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	ko->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
@@ -2118,11 +2118,11 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	en->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	en->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19);
 	
-	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	en->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	en->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	en->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	en->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	en->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	en->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	en->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
@@ -3093,11 +3093,11 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	ja->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	ja->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19);
 	
-	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	ja->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	ja->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ja->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	ja->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ja->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	ja->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	ja->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
