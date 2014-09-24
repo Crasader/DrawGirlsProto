@@ -7,13 +7,12 @@
 # include "value.h"
 # include "writer.h"
 # include "reader.h"
+
 # ifndef JSON_USE_SIMPLE_INTERNAL_ALLOCATOR
 #  include "json_batchallocator.h"
 # endif // #ifndef JSON_USE_SIMPLE_INTERNAL_ALLOCATOR
 #endif // if !defined(JSON_IS_AMALGAMATION)
 
-
-#include "KSUtil.h"
 #include <sstream>
 #include <iostream>
 #include <utility>
@@ -174,28 +173,22 @@ Value::CZString::~CZString()
 
 void 
 Value::CZString::swap( CZString &other )
-	{
-		TRACE();
-		std::swap( cstr_, other.cstr_ );
-		TRACE();
-		std::swap( index_, other.index_ );
-		TRACE();
+{
+   std::swap( cstr_, other.cstr_ );
+   std::swap( index_, other.index_ );
 }
 
 Value::CZString &
 Value::CZString::operator =( const CZString &other )
-	{
-		TRACE();
-		CZString temp( other );
-		TRACE();
+{
+   CZString temp( other );
    swap( temp );
    return *this;
 }
 
 bool 
 Value::CZString::operator<( const CZString &other ) const 
-	{
-		TRACE();
+{
    if ( cstr_ )
       return strcmp( cstr_, other.cstr_ ) < 0;
    return index_ < other.index_;
@@ -203,8 +196,7 @@ Value::CZString::operator<( const CZString &other ) const
 
 bool 
 Value::CZString::operator==( const CZString &other ) const 
-	{
-		TRACE();
+{
    if ( cstr_ )
       return strcmp( cstr_, other.cstr_ ) == 0;
    return index_ == other.index_;
@@ -226,8 +218,7 @@ Value::CZString::c_str() const
 
 bool 
 Value::CZString::isStaticString() const
-	{
-		TRACE();
+{
    return index_ == noDuplication;
 }
 
@@ -253,24 +244,19 @@ Value::Value( ValueType type )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    switch ( type )
    {
-		 case nullValue:
-			 TRACE();
+   case nullValue:
       break;
    case intValue:
-		 case uintValue:
-			 TRACE();
+   case uintValue:
       value_.int_ = 0;
       break;
-		 case realValue:
-			 TRACE();
+   case realValue:
       value_.real_ = 0.0;
       break;
-		 case stringValue:
-			 TRACE();
+   case stringValue:
       value_.string_ = 0;
       break;
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
@@ -302,8 +288,7 @@ Value::Value( UInt value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.uint_ = value;
 }
 
@@ -313,8 +298,7 @@ Value::Value( Int value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.int_ = value;
 }
 
@@ -327,8 +311,7 @@ Value::Value( Int64 value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.int_ = value;
 }
 
@@ -339,8 +322,7 @@ Value::Value( UInt64 value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.uint_ = value;
 }
 
@@ -350,8 +332,7 @@ Value::Value( double value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.real_ = value;
 }
 
@@ -362,8 +343,7 @@ Value::Value( const char *value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.string_ = duplicateStringValue( value );
 }
 
@@ -376,8 +356,7 @@ Value::Value( const char *beginValue,
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.string_ = duplicateStringValue( beginValue, 
                                           (unsigned int)(endValue - beginValue) );
 }
@@ -390,8 +369,7 @@ Value::Value( const std::string &value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.string_ = duplicateStringValue( value.c_str(), 
                                           (unsigned int)value.length() );
 
@@ -404,8 +382,7 @@ Value::Value( const StaticString &value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.string_ = const_cast<char *>( value.c_str() );
 }
 
@@ -418,8 +395,7 @@ Value::Value( const CppTL::ConstString &value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.string_ = duplicateStringValue( value, value.length() );
 }
 # endif
@@ -430,8 +406,7 @@ Value::Value( bool value )
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
    , itemIsUsed_( 0 )
 #endif
-	{
-		TRACE();
+{
    value_.bool_ = value;
 }
 
@@ -443,7 +418,6 @@ Value::Value( const Value &other )
    , itemIsUsed_( 0 )
 #endif
 {
-	TRACE();
    switch ( type_ )
    {
    case nullValue:
@@ -451,42 +425,28 @@ Value::Value( const Value &other )
    case uintValue:
    case realValue:
    case booleanValue:
-			 
-			 TRACE();
-			 value_ = other.value_;
-			 
-			 TRACE();
-			 break;
+      value_ = other.value_;
+      break;
    case stringValue:
       if ( other.value_.string_ )
       {
-				
-				TRACE();
          value_.string_ = duplicateStringValue( other.value_.string_ );
-				
-				TRACE();
-				allocated_ = true;
+         allocated_ = true;
       }
       else
          value_.string_ = 0;
       break;
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    case arrayValue:
-		 case objectValue:
-			 TRACE();
-			 value_.map_ = new ObjectValues( *other.value_.map_ );
-			 TRACE();
+   case objectValue:
+      value_.map_ = new ObjectValues( *other.value_.map_ );
       break;
 #else
-		 case arrayValue:
-			 TRACE();
-			 value_.array_ = arrayAllocator()->newArrayCopy( *other.value_.array_ );
-			 TRACE();
+   case arrayValue:
+      value_.array_ = arrayAllocator()->newArrayCopy( *other.value_.array_ );
       break;
-		 case objectValue:
-			 TRACE();
-			 value_.map_ = mapAllocator()->newMapCopy( *other.value_.map_ );
-			 TRACE();
+   case objectValue:
+      value_.map_ = mapAllocator()->newMapCopy( *other.value_.map_ );
       break;
 #endif
    default:
@@ -494,9 +454,7 @@ Value::Value( const Value &other )
    }
    if ( other.comments_ )
    {
-		 TRACE();
-		 comments_ = new CommentInfo[numberOfCommentPlacement];
-		 TRACE();
+      comments_ = new CommentInfo[numberOfCommentPlacement];
       for ( int comment =0; comment < numberOfCommentPlacement; ++comment )
       {
          const CommentInfo &otherComment = other.comments_[comment];
@@ -1054,8 +1012,7 @@ Value::isConvertibleTo( ValueType other ) const
 /// Number of values in array or object
 ArrayIndex 
 Value::size() const
-	{
-		TRACE();
+{
    switch ( type_ )
    {
    case nullValue:
@@ -1066,11 +1023,8 @@ Value::size() const
 			 return 0;
 	 case stringValue:
 		 {
-			 TRACE();
-			 Json::Reader r;
-			 TRACE();
-			 Json::Value other;
-			 TRACE();
+				 Json::Reader r;
+				 Json::Value other;
 				 if(r.parse(value_.string_, other))return other.size();
 				 else return 0;
 		 }
@@ -1078,7 +1032,6 @@ Value::size() const
    case arrayValue:  // size of the array is highest index + 1
       if ( !value_.map_->empty() )
       {
-				TRACE();
          ObjectValues::const_iterator itLast = value_.map_->end();
          --itLast;
          return (*itLast).first.index()+1;
@@ -1171,32 +1124,22 @@ Value &
 Value::operator[]( ArrayIndex index )
 {
 	
-	TRACE();
 	if(type_ == stringValue){
-		TRACE();
 		Json::Reader r;
-		TRACE();
 		Json::Value other;
-		TRACE();
 		if(r.parse(value_.string_, other))swap( other );
-		TRACE();
 	}
 	
-	TRACE();
    JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
    if ( type_ == nullValue )
       *this = Value( arrayValue );
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
-	CZString key( index );
-	TRACE();
-	ObjectValues::iterator it = value_.map_->lower_bound( key );
-	TRACE();
+   CZString key( index );
+   ObjectValues::iterator it = value_.map_->lower_bound( key );
    if ( it != value_.map_->end()  &&  (*it).first == key )
       return (*it).second;
-	
-	TRACE();
-	ObjectValues::value_type defaultValue( key, null );
-	TRACE();
+
+   ObjectValues::value_type defaultValue( key, null );
    it = value_.map_->insert( it, defaultValue );
    return (*it).second;
 #else
@@ -1217,41 +1160,29 @@ const Value &
 Value::operator[]( ArrayIndex index ) const
 {
 	
-	TRACE();
 	if(type_ == stringValue){
-		TRACE();
 		Json::Reader r;
-		TRACE();
 		Json::Value other;
-		TRACE();
 		if(r.parse(value_.string_, other))return other[index];
-		TRACE();
 	}
 	
 	JSON_ASSERT( type_ == nullValue  ||  type_ == arrayValue );
 	
-	TRACE();
 	if ( type_ == nullValue )
 		return null;
-	
-	TRACE();
+    
     if(type_>objectValue){
         return null;
     }
 	
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
-	TRACE();
-	CZString key( index );
-	TRACE();
+   CZString key( index );
    ObjectValues::const_iterator it = value_.map_->find( key );
    if ( it == value_.map_->end() )
-		 return null;
-	TRACE();
+      return null;
    return (*it).second;
 #else
-	TRACE();
-	Value *value = value_.array_->find( index );
-	TRACE();
+   Value *value = value_.array_->find( index );
    return value ? *value : null;
 #endif
 }
@@ -1277,37 +1208,28 @@ Value::resolveReference( const char *key,
                          bool isStatic )
 {
 	if(type_ == stringValue){
-		TRACE();
 		Json::Reader r;
-		TRACE();
 		Json::Value other;
-		TRACE();
 		if(r.parse(value_.string_, other))swap( other );
-		TRACE();
 	}
-	
-	TRACE();
-	if(type_>objectValue){
-		TRACE();
+    
+    if(type_>objectValue){
         type_ = nullValue;
     }
 	
-	TRACE();
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
    if ( type_ == nullValue )
       *this = Value( objectValue );
 #ifndef JSON_VALUE_USE_INTERNAL_MAP
    CZString actualKey( key, isStatic ? CZString::noDuplication 
-											: CZString::duplicateOnCopy );
-	TRACE();
+                                     : CZString::duplicateOnCopy );
    ObjectValues::iterator it = value_.map_->lower_bound( actualKey );
    if ( it != value_.map_->end()  &&  (*it).first == actualKey )
       return (*it).second;
 
    ObjectValues::value_type defaultValue( actualKey, null );
    it = value_.map_->insert( it, defaultValue );
-	Value &value = (*it).second;
-	TRACE();
+   Value &value = (*it).second;
    return value;
 #else
    return value_.map_->resolveReference( key, isStatic );
@@ -1336,23 +1258,16 @@ const Value &
 Value::operator[]( const char *key ) const
 {
 	if(type_ == stringValue){
-		TRACE();
 		Json::Reader r;
-		TRACE();
 		Json::Value other;
-		TRACE();
 		if(r.parse(value_.string_, other))return other[key];
-		TRACE();
 	}
-	TRACE();
     if(type_>objectValue){
         return null;
     }
-	TRACE();
     if(!(type_ == nullValue  ||  type_ == objectValue)){
         return null;
     }
-	TRACE();
     JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
 	
 	if ( type_ == nullValue )
