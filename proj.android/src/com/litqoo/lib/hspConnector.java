@@ -26,6 +26,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPCore.HSPLoginType;
 import com.hangame.hsp.HSPCore.HSPWithdrawAccountCB;
@@ -36,7 +37,6 @@ import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPResult.HSPResultCode;
 import com.hangame.hsp.HSPServiceProperties;
 import com.hangame.hsp.HSPServiceProperties.HSPServerName;
-import com.hangame.hsp.HSPState;
 import com.hangame.hsp.HSPUtil;
 import com.hangame.hsp.HSPUtil.HSPAlertViewWithToastTermsCB;
 import com.hangame.hsp.cgp.HSPCGP;
@@ -94,7 +94,7 @@ public class hspConnector {
 	private static boolean sAccelerometerEnabled;
 	private static String sPackageName;
 	private static String sFileDirectory;
-	private static Context sContext = null;
+	private static Context sContext = null; // DGProto Activity 임.
 
 	// ===========================================================
 	// Constructors
@@ -522,7 +522,14 @@ public class hspConnector {
 			return 2.47f;
 		}
 	}
-	
+	public static void AdxLogin()
+	{ 
+		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), "Signup", "", "");
+	}
+	public static void getAdXConnectEventInstance(String event, String data, String currency);
+	{
+		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+	}
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
 		Log.d("", "login function");
@@ -575,6 +582,7 @@ public class hspConnector {
 
 							}
 
+							
 							mGLView.queueEvent(new KRunnable(_key, r.toString()) {
 								public void run() {
 

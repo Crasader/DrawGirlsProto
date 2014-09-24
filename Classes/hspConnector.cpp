@@ -1005,6 +1005,8 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 		jstring param3 = t.env->NewStringUTF(url.c_str());
 		r = t.env->CallStaticIntMethod(t.classID, t.methodID, param1,param2,param3);
 		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
@@ -1018,6 +1020,27 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 #endif
 }
 
+void hspConnector::getAdXConnectEventInstance(string event, string data, string currency)
+{
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getAdXConnectEventInstance",
+																		 "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(title.c_str());
+		jstring param2 = t.env->NewStringUTF(msg.c_str());
+		jstring param3 = t.env->NewStringUTF(url.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1,param2,param3);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+}
 void hspConnector::launchPromotion()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID

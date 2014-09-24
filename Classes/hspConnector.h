@@ -250,6 +250,7 @@ public:
 	void launchPromotion();
 	int openKakaoMsg();
 	int sendKakaoMsg(string title,string msg,string url);
+	void getAdXConnectEventInstance(string event, string data, string currency);
 	
 	double getScreenRealWidth();
 	double getScreenRealHeight();
