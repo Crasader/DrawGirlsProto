@@ -48,6 +48,7 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
+import com.nhnent.SKSUMRAN.LuaGLSurfaceView;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -57,21 +58,13 @@ import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
 //import com.kakao.api.Kakao.LogLevel;
 //import com.kakao.api.KakaoLeaderboard;
 
-abstract class KRunnable implements Runnable {
-	protected final String totalSource;
-	protected final int delekey;
 
-	KRunnable(final int key, String str) {
-		totalSource = str;
-		delekey = key;
-	}
-}
 
 public class hspConnector {
 	// public static KakaoLeaderboard kakaoLeaderboard;
 	// public static Kakao kakao;
 	public static String uniqId;
-	public static Cocos2dxGLSurfaceView mGLView;
+	public static LuaGLSurfaceView mGLView;
 	public static Context AppContext;
 	public static Handler handler = new Handler();
 	public static String CLIENT_ID = "89862538362910992";
@@ -101,7 +94,7 @@ public class hspConnector {
 	// ===========================================================
 
 	public static void kInit(final Context pContext,
-			Cocos2dxGLSurfaceView _mGLView, Context aContext) {
+			LuaGLSurfaceView _mGLView, Context aContext) {
 		final ApplicationInfo applicationInfo = pContext.getApplicationInfo();
 		hspConnector.mGLView = _mGLView;
 		hspConnector.sContext = pContext;
@@ -123,6 +116,8 @@ public class hspConnector {
 	private static native void SendResultNative(int _key, String datas,
 			boolean isFinish);
 
+	private static native void SendReactionNative(int _key, String datas,
+			boolean isFinish);
 	// private static native int getUserState();
 	public static native void SetupOnAndroid(int gameno, String gameid,
 			String gameVersion);
@@ -457,7 +452,28 @@ public class hspConnector {
 			e.printStackTrace();
 		}
 	}
+	public static void SendReaction(int _key, String datas) {
+		int size = datas.length();
+		String source = datas;
+		boolean isFinish = true;
+		if (size < 200) {
+			hspConnector.SendReactionNative(_key, source, isFinish);
+		} else {
+			int index = 0;
+			isFinish = false;
+			int sublen = 200;
+			while (isFinish == false) {
+				if (size < index + sublen) {
+					sublen = size - index;
+					isFinish = true;
+				}
+				hspConnector.SendReactionNative(_key,
+						source.substring(index, index + sublen), isFinish);
+				index += sublen;
+			}
+		}
 
+	}
 	public static void SendResult(int _key, String datas) {
 		int size = datas.length();
 		String source = datas;
@@ -526,9 +542,22 @@ public class hspConnector {
 	{ 
 		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), "Signup", "", "");
 	}
-	public static void getAdXConnectEventInstance(String event, String data, String currency);
+	public static void getAdXConnectEventInstance(String event, String data, String currency)
 	{
+		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
 		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+	}
+	public static void registerGamePadCallback(final int _key)
+	{ 
+		mGLView.setCallbackKey(_key);
+//		hspConnector. 
+//		sContext.
+	}
+	public static void unregisterGamePadCallback(int registeredKey)
+	{ 
+		mGLView.removeCallbackKey(registeredKey);
+//		hspConnector. 
+//		sContext.
 	}
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {

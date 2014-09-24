@@ -251,6 +251,11 @@ public:
 	int openKakaoMsg();
 	int sendKakaoMsg(string title,string msg,string url);
 	void getAdXConnectEventInstance(string event, string data, string currency);
+	int registerGamePadCallback(jsonSelType func);
+protected:
+	void registerGamePadCallback(CCObject* target, jsonSelType func);
+public:
+	void unregisterGamePadCallback(int registeredKey);
 	
 	double getScreenRealWidth();
 	double getScreenRealHeight();
