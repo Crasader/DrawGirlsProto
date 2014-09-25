@@ -1102,14 +1102,14 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font>오래 버티세요!"), kMyLocalKey_missionCondition8);
 	ko->setObject(CCString::create("<font color=961 size=13>%d%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionCondition9);
-	ko->setObject(CCString::create("<font color=961>%d점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
+	ko->setObject(CCString::create("<font color=961>%s점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
 	ko->setObject(CCString::create("<font color=961>%d콤보<font color=999>를 달성하세요!"), kMyLocalKey_missionCondition11);
-	ko->setObject(CCString::create("<font color=961>%d골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
+	ko->setObject(CCString::create("<font color=961>%s골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
 	ko->setObject(CCString::create("<font color=961>%d턴<font color=999>안에 게임을 클리어 하세요!"), kMyLocalKey_missionCondition13);
 	
-	ko->setObject(CCString::create("%d점"), kMyLocalKey_mission10Label);
+	ko->setObject(CCString::create("%s점"), kMyLocalKey_mission10Label);
 	ko->setObject(CCString::create("%d콤보"), kMyLocalKey_mission11Label);
-	ko->setObject(CCString::create("%d골드"), kMyLocalKey_mission12Label);
+	ko->setObject(CCString::create("%s골드"), kMyLocalKey_mission12Label);
 	ko->setObject(CCString::create("/%d턴"), kMyLocalKey_mission13Label);
 	
 	ko->setObject(CCString::create("추천인등록"), kMyLocalKey_recommenderReg);
