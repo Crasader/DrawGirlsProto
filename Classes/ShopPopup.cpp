@@ -1336,6 +1336,8 @@ bool ShopPopup::init()
 	
 	success_func = nullptr;
 	
+    is_use_goods_type_gold = false;
+    
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -1953,7 +1955,10 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        if(is_use_goods_type_gold)
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        else
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)), 9999);
 	}
 	else
 	{
@@ -1961,6 +1966,8 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		fail_func();
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 	}
+    
+    is_use_goods_type_gold = false;
 }
 
 void ShopPopup::menuAction(CCObject* pSender)
@@ -2229,6 +2236,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
+                                    is_use_goods_type_gold = true;
+                                    
 									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopP1_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 									
 									fail_func = [=]()
