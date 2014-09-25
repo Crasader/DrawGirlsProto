@@ -306,7 +306,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("이벤트 스테이지에서는 특별한 이미지와 선물이 기다립니다."), kMyLocalKey_titleLoading18);
 	ko->setObject(CCString::create("스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요."), kMyLocalKey_titleLoading19);
 	ko->setObject(CCString::create("한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다."), kMyLocalKey_titleLoading6);
-	ko->setObject(CCString::create("이어하기는 두 번 까지만 사용할 수 있습니다."), kMyLocalKey_titleLoading20);
+	ko->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading20);
 	ko->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	ko->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	ko->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);
@@ -1368,7 +1368,7 @@ void MyLocal::en()
 	en->setObject(CCString::create("이벤트 스테이지에서는 특별한 이미지와 선물이 기다립니다."), kMyLocalKey_titleLoading18);
 	en->setObject(CCString::create("스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요."), kMyLocalKey_titleLoading19);
 	en->setObject(CCString::create("한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다."), kMyLocalKey_titleLoading6);
-	en->setObject(CCString::create("이어하기는 두 번 까지만 사용할 수 있습니다."), kMyLocalKey_titleLoading20);
+	en->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading20);
 	en->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	en->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	en->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);
@@ -2339,7 +2339,7 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("이벤트 스테이지에서는 특별한 이미지와 선물이 기다립니다."), kMyLocalKey_titleLoading18);
 	ja->setObject(CCString::create("스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요."), kMyLocalKey_titleLoading19);
 	ja->setObject(CCString::create("한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다."), kMyLocalKey_titleLoading6);
-	ja->setObject(CCString::create("이어하기는 두 번 까지만 사용할 수 있습니다."), kMyLocalKey_titleLoading20);
+	ja->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading20);
 	ja->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	ja->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	ja->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);

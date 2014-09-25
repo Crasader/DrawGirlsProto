@@ -446,7 +446,7 @@ bool CardViewScene::init()
 																			});
 		
 		CCMenuLambda* to_diary_19_menu = CCMenuLambda::createWithItem(to_diary_19_item);
-		to_diary_19_menu->setPosition(ccp(30,30));
+		to_diary_19_menu->setPosition(ccp(40,64));
 		addChild(to_diary_19_menu, kCV_Z_next_button);
 	}
 	
