@@ -2491,6 +2491,20 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																													 CCPoint t_offset = puzzle_table->getContentOffset();
 																																													 puzzle_table->reloadData();
 																																													 puzzle_table->setContentOffset(t_offset);
+                                                                                                                                                                                     
+                                                                                                                                                                                     is_menu_enable = false;
+                                                                                                                                                                                     puzzle_table->setTouchEnabled(false);
+                                                                                                                                                                                     
+                                                                                                                                                                                     myDSH->setIntegerForKey(kDSH_Key_showedScenario, puzzle_number*1000);
+                                                                                                                                                                                     StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",puzzle_number)->getCString(), [=](){
+                                                                                                                                                                                         mySGD->setIsUnlockPuzzle(0);
+                                                                                                                                                                                         is_unlock_puzzle = 0;
+                                                                                                                                                                                         
+                                                                                                                                                                                         is_menu_enable = true;
+                                                                                                                                                                                         puzzle_table->setTouchEnabled(true);
+                                                                                                                                                                                     });
+                                                                                                                                                                                     
+                                                                                                                                                                                     
 																																													 //											  puzzle_table->updateCellAtIndex(t_index);
 																																												 }
 																																												 else
