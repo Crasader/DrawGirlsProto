@@ -88,6 +88,8 @@ bool FailPopup::init()
 	
 	refresh_achieve_func = nullptr;
 	
+    fail_label = NULL;
+    
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
 	
@@ -948,6 +950,13 @@ void FailPopup::resultGetTime(Json::Value result_data)
 void FailPopup::resultGetRank(Json::Value result_data)
 {
 	TRACE();
+    
+    if(fail_label)
+    {
+        fail_label->removeFromParent();
+        fail_label = NULL;
+    }
+    
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		TRACE();
@@ -1172,7 +1181,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 	else
 	{
 		TRACE();
-		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		if(loading_img)
 			fail_label->setPosition(loading_img->getPosition());
 		else
