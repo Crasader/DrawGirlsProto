@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?><configuartion-list>
 	<configuration key="HSP_LOGIN_IDP" value="toast"/>
 	
-	<configuration key="HSP_LAUNCHING_ZONE" value="ALPHA-KR"/>
+	<configuration key="HSP_LAUNCHING_ZONE" value="KAKAOGAME"/>
 	<configuration key="HSP_DEBUG_LEVEL" value="HIGH"/>
 	<configuration key="HSP_RESEND_FAILED_DATA" value="true"/>
 	<configuration key="HSP_TIMEOUT_TCP" value="20"/>
