@@ -1265,10 +1265,14 @@ void FriendPopup::setAddMenu()
 					// getuserdata 로 사람 찾아내어서 테이블에 띄움.
 					
 					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+					if(input_text1)
+					{
+						input_text1->setVisible(false);
+					}
 					Json::Value param;
 					if(editbox->getText() == std::string(""))
 					{
-						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
 							if(input_text1)
 							{
 								input_text1->setVisible(true);
@@ -1293,7 +1297,7 @@ void FriendPopup::setAddMenu()
 							{
 								input_text1->setVisible(false);
 							}
-							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNotFountFriend), [=](){
+							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNotFountFriend), [=](){
 								if(input_text1)
 								{
 									input_text1->setVisible(true);
@@ -1779,10 +1783,14 @@ void FriendPopup::setVoteFriendMenu()
 																	 {
 																		 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		 Json::Value param;
-																		 
+																		 if(m_voteInputText)
+																		 {
+																			 m_voteInputText->setVisible(false);
+																		 }
+ 
 																		 if(m_voteInputText->getText() == std::string(""))
 																		 {
-																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
+																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
 																				 if(m_voteInputText)
 																				 {
 																					 m_voteInputText->setVisible(true);

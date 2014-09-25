@@ -42,15 +42,27 @@ const char* KsLocal::getLocalForKey( LK key )
 {
 	languageType = getSupportLocalCode();
 	
-	auto findIter = m_mapper.find(languageType);
-	if(findIter == m_mapper.end())
+	vector<string> langTypes;
+	langTypes.push_back(languageType);
+//	vector<string> entries = {"en", "ja"};
+	langTypes.insert(langTypes.end(), {"en", "ja", "ko"});
+	for(auto& lang : langTypes)
 	{
-		return CCString::create("")->getCString();
+		auto findIter = m_mapper.find(lang);
+		if(findIter == m_mapper.end())
+		{
+//			return CCString::create("")->getCString();
+		}
+		else
+		{
+			if(m_mapper[lang].find(key) != m_mapper[lang].end())
+			{
+				return m_mapper[lang][key].c_str();
+			}
+		}
+		
 	}
-	else
-	{
-		return m_mapper[languageType][key].c_str();
-	}
+	return CCString::create("")->getCString();
 }
 
 KsLocal* KsLocal::sharedInstance()
