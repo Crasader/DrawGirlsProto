@@ -4279,8 +4279,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(235, 65));
-			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(290, 65));
+			t_stencil3->setPosition(ccp(146.5f,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			

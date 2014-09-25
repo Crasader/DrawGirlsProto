@@ -70,18 +70,18 @@ public:
 		top = CCLayerColor::create(ccc4(0,0,0,255), screen_scale_x*480,50);
 		top->setAnchorPoint(ccp(0.5,0));
         top->ignoreAnchorPointForPosition(false);
-		top->setPosition(ccp(240,320*screen_scale_y));
+		top->setPosition(ccp(240,320+(screen_scale_y*(320)-320)/2.f));
 		addChild(top);
 		
 		bottom = CCLayerColor::create(ccc4(0,0,0,255), screen_scale_x*480,50);
 		bottom->setAnchorPoint(ccp(0.5,0));
         bottom->ignoreAnchorPointForPosition(false);
-		bottom->setPosition(ccp(240,0-50));
+		bottom->setPosition(ccp(240,-(screen_scale_y*320-320)/2.f-50));
 		addChild(bottom);
 		
 		this->addChild(KSGradualValue<float>::create(0.f,50.f,0.5f,[this,screen_scale_y](float t){
-			bottom->setPositionY(t-50);
-			top->setPositionY((320-t)*screen_scale_y);
+			bottom->setPositionY(-(screen_scale_y*(320)-320)/2.f-50+t);
+			top->setPositionY(320+(screen_scale_y*(320)-320)/2.f-t);
 			
 		},[](float t){}));
 		
@@ -102,7 +102,7 @@ public:
 		s_skip->setColor(ccGRAY);
 		
 		CCMenuLambda* skip_menu = CCMenuLambda::create();
-		skip_menu->setPosition(ccp(50, 320*screen_scale_y-30));
+		skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150 - 150));
 		skip_menu->setTouchPriority(-19999);
 		skip_menu->setEnabled(true );
 		
@@ -583,9 +583,8 @@ public:
                 float ui_top = myDSH->ui_top;
                 float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
                 
-                
-				bottom->setPositionY(-a);
-				top->setPositionY(screen_scale_y*(320+a));
+                bottom->setPositionY(-(screen_scale_y*(320)-320)/2.f-a);
+                top->setPositionY(320+(screen_scale_y*(320)-320)/2.f-50+a);
 				black->setOpacity(150-a*3.f);
 			}, [this](int a){
 				CCLOG("all finish");
