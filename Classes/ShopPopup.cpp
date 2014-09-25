@@ -3577,6 +3577,8 @@ void ShopPopup::requestItemDelivery()
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
 			CCLOG("inapp success!! refresh!!!");
+            
+            mySGD->network_check_cnt = 0;
 			
 			mySGD->initProperties(t["list"]);
 //			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
@@ -3616,13 +3618,27 @@ void ShopPopup::requestItemDelivery()
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDelivery();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDelivery();
+                                         }));
+            }
 		}
 	});
 }
@@ -3642,6 +3658,8 @@ void ShopPopup::requestItemDeliveryStartPack()
 		{
 			CCLOG("inapp success!! refresh!!!");
 			
+            mySGD->network_check_cnt = 0;
+            
 			mySGD->initProperties(t["list"]);
 			//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
@@ -3684,13 +3702,27 @@ void ShopPopup::requestItemDeliveryStartPack()
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryStartPack();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryStartPack();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDeliveryStartPack();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDeliveryStartPack();
+                                         }));
+            }
 		}
 	}));
 	
@@ -3772,6 +3804,8 @@ void ShopPopup::requestItemDeliveryEventPack()
 		{
 			CCLOG("inapp success!! refresh!!!");
 			
+            mySGD->network_check_cnt = 0;
+            
 			mySGD->initProperties(t["list"]);
 			//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
@@ -3817,13 +3851,27 @@ void ShopPopup::requestItemDeliveryEventPack()
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryEventPack();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryEventPack();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDeliveryEventPack();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDeliveryEventPack();
+                                         }));
+            }
 		}
 	}));
 	

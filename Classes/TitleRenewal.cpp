@@ -648,6 +648,10 @@ void TitleRenewalScene::successLogin()
 	
 	receive_cnt = 0;
 	
+    Json::Value request_param;
+	request_param["memberID"] = hspConnector::get()->getMemberID();
+	command_list.push_back(CommandParam("requestItemDelivery", request_param, json_selector(this, TitleRenewalScene::resultRequestItemDelivery)));
+    
 	Json::Value commonsetting_param;
 	command_list.push_back(CommandParam("getcommonsetting", commonsetting_param, json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
 	
@@ -1034,6 +1038,24 @@ void TitleRenewalScene::resultGetPuzzleEvent(Json::Value result_data)
 	checkReceive();
 }
 
+void TitleRenewalScene::resultRequestItemDelivery(Json::Value result_data)
+{
+    if(result_data["result"]["code"].asInt() == GDSUCCESS)
+    {
+        mySGD->initProperties(result_data["list"]);
+    }
+    else
+    {
+        is_receive_fail = true;
+        Json::Value request_param;
+        request_param["memberID"] = myHSP->getSocialID();
+        command_list.push_back(CommandParam("requestItemDelivery", request_param, json_selector(this, TitleRenewalScene::resultRequestItemDelivery)));
+    }
+    
+    receive_cnt--;
+    checkReceive();
+}
+                           
 void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
