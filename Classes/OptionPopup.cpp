@@ -404,10 +404,10 @@ bool OptionPopup::init()
 //	d_kakao_img->addChild(d_kakao_label);
 	
 	
-	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
-	kakao_item->setTag(kOP_MT_kakao);
-	kakao_item->setPosition(ccp(169,256.5f));
-	tab_menu->addChild(kakao_item);
+//	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
+//	kakao_item->setTag(kOP_MT_kakao);
+//	kakao_item->setPosition(ccp(169,256.5f));
+//	tab_menu->addChild(kakao_item);
 	
 	
 	
