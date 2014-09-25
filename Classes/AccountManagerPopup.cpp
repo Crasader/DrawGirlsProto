@@ -246,7 +246,7 @@ bool AccountManagerPopup::init(int touchP)
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
 																			 tryName.c_str(),
 //																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
-																			 t["data"]["nick"].asString().c_str(), t["highPiece"].asInt(),
+																			 t["nick"].asString().c_str(), t["highPiece"].asInt(),
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
 																												 guidanceMsg.c_str() ,
