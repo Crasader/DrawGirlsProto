@@ -152,7 +152,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(item11);
 	
 	CCSprite* before_price_type = CCSprite::create("price_gold_img.png");
-	before_price_type->setPosition(ccp(-70,10));
+	before_price_type->setPosition(ccp(-80,10));
 	before_price_type->setScale(0.7f);
 	m_container->addChild(before_price_type);
 	
@@ -163,12 +163,12 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	KSLabelTTF* before_price = KSLabelTTF::create(KS::insert_separator(before_data["beforeDiscount"].asString()).c_str(), mySGD->getFont().c_str(), 14);
 	before_price->enableOuterStroke(ccBLACK, 0.5f);
-	before_price->setPosition(ccp(-45,10));
+	before_price->setPosition(ccp(-50,10));
 	m_container->addChild(before_price);
 	
 	
 	CCSprite* sale_arrow = CCSprite::create("sale_arrow.png");
-	sale_arrow->setPosition(ccp(-45,10));
+	sale_arrow->setPosition(ccp(-50,10));
 	m_container->addChild(sale_arrow);
 	
 	
@@ -229,7 +229,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 //	price_type->setScale(0.7f);
 	price_back->addChild(price_type);
 	CCLabelTTF* price_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type-1).c_str(), mySGD->getFont().c_str(), 15);
-	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-6,price_back->getContentSize().height/2.f));
+	price_type->setPosition(ccp(price_back->getContentSize().width/2.f-price_label->getContentSize().width/2.f-3,price_back->getContentSize().height/2.f));
 	price_label->setPosition(ccp(price_back->getContentSize().width/2.f+price_type->getContentSize().width/2.f-5,price_back->getContentSize().height/2.f-1));
 	price_back->addChild(price_label);
 	
