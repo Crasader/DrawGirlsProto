@@ -346,7 +346,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 	float angle = atan2(distancePoint.y, distancePoint.x)/M_PI*180.0; // -180 ~ 180
 	
 	//조이스틱 보정하기
-	if(distanceValue<20*joystick_size_value){
+	if(!t_b && distanceValue<20*joystick_size_value){
 		if(beforeDirection == directionLeft || beforeDirection == directionRight){
 			if(distancePoint.x<0){
 				beforeDirection=directionLeft;
@@ -364,6 +364,8 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		}
 		
 		myJack->changeDirection(beforeDirection, beforeDirection);
+        game_pad_direction = beforeDirection;
+//        game_pad_distance->setString(ccsf("368 changeDirection : %d , %d | rand : %d", beforeDirection, beforeDirection, rand()));
 		return;
 	}
 	
@@ -375,6 +377,8 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 		beforeSecondDirection = directionStop;
 		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 		myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
+        game_pad_direction = beforeDirection;
+//        game_pad_distance->setString(ccsf("381 changeDirection : %d , %d | rand : %d", directionStop, directionStop, rand()));
 //		joystick_touch = NULL;
 		return;
 	}
@@ -591,6 +595,8 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			beforeSecondDirection = directionStop;
 			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 			myJack->setTouchPointByJoystick(distancePoint, directionStop, t_b);
+            game_pad_direction = beforeDirection;
+//            game_pad_distance->setString(ccsf("599 changeDirection : %d , %d | rand : %d", directionStop, directionStop, rand()));
 			return;
 //		}
 	}
@@ -774,6 +780,8 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			else												secondDirection = directionUp;
 		}
 		
+//        game_pad_distance->setString(ccsf("direction %d | sec_dir : %d | rand : %d", angleDirection, secondDirection, rand()));
+        
 		if(myJack->isDrawingOn && !isEnableIrregularDirection){
 			secondDirection = angleDirection;
 		}
@@ -786,6 +794,7 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_drawing.mp3", false);
 			beforeDirection = angleDirection;
 			beforeSecondDirection = secondDirection;
+            game_pad_direction = beforeDirection;
 		}
 		else if(beforeSecondDirection != secondDirection)
 		{
@@ -793,17 +802,21 @@ void ControlJoystickButton::touchAction(CCPoint t_p, bool t_b)
 			schedule(schedule_selector(ControlJoystickButton::directionKeeping));
 			beforeDirection = angleDirection;
 			beforeSecondDirection = secondDirection;
+            game_pad_direction = beforeDirection;
 		}
 		
 		myJack->setTouchPointByJoystick(distancePoint, angleDirection, t_b);
 	}
 	else
 	{
+//        game_pad_distance->setString(ccsf("stop | distance : %.1f <= minimum : %.1f | rand : %d", distanceValue, minimumDistanceJ, rand()));
+        
 		if(myJack->isDrawingOn && myJack->getJackState() == jackStateDrawing)
 		{
 			myJack->changeDirection(directionStop, directionStop);
 //			AudioEngine::sharedInstance()->playEffect("sound_jack_drawing.mp3", false);
 			beforeDirection = directionStop;
+            game_pad_direction = beforeDirection;
 			unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 		}
 		myJack->setTouchPointByJoystick(distancePoint, directionStop, t_b);
@@ -846,6 +859,8 @@ void ControlJoystickButton::resetTouch()
 {
 	button_touch = NULL;
 	joystick_touch = NULL;
+    game_pad_direction = directionStop;
+    game_pad_draw_keycode = -1;
 	offButton();
 	myJack->willBackTracking = false;
 	myJack->setTouchPointByJoystick(CCPointZero, directionStop, true);
@@ -883,6 +898,191 @@ void ControlJoystickButton::invisibleControl()
 void ControlJoystickButton::offDrawButtonTutorial()
 {
 	keep_is_draw_button_tutorial_on = false;
+}
+
+ControlJoystickButton::~ControlJoystickButton()
+{
+    if(game_pad_key != -1)
+    {
+//        game_pad_state->setString(ccsf("unregister : %d | %d", game_pad_key, rand()));
+        myHSP->unregisterGamePadCallback(game_pad_key);
+        game_pad_key = -1;
+        game_pad_direction = directionStop;
+        game_pad_draw_keycode = -1;
+    }
+}
+
+CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
+{
+    CCPoint return_value = control_circle->getPosition();
+    
+    float t_distance = (20*joystick_size_value+2) > (minimumDistanceJ+2.f) ? (20*joystick_size_value+2) : (minimumDistanceJ+2.f);
+    
+    if(t_direction == directionLeft)
+    {
+        return_value = return_value + ccp(-t_distance, 0);
+    }
+    else if(t_direction == directionLeftUp)
+    {
+        return_value = return_value + ccp(-t_distance, t_distance);
+    }
+    else if(t_direction == directionUp)
+    {
+        return_value = return_value + ccp(0, t_distance);
+    }
+    else if(t_direction == directionRightUp)
+    {
+        return_value = return_value + ccp(t_distance, t_distance);
+    }
+    else if(t_direction == directionRight)
+    {
+        return_value = return_value + ccp(t_distance, 0);
+    }
+    else if(t_direction == directionRightDown)
+    {
+        return_value = return_value + ccp(t_distance, -t_distance);
+    }
+    else if(t_direction == directionDown)
+    {
+        return_value = return_value + ccp(0, -t_distance);
+    }
+    else if(t_direction == directionLeftDown)
+    {
+        return_value = return_value + ccp(-t_distance, -t_distance);
+    }
+    
+    return return_value;
+}
+
+void ControlJoystickButton::gamePadAction(Json::Value pad_data)
+{
+//    game_pad_state->setString(ccsf("in gamePadAction | %d", rand()));
+    if(isStun)
+    {
+        return;
+    }
+    
+    string pad_type = pad_data["type"].asString();
+    
+//    game_pad_state->setString(ccsf("pad type : %s | %d", pad_type.c_str(), rand()));
+    if(pad_type == "motion")
+    {
+        IntDirection t_direction;
+        
+        IntVector pad_point = IntVector(pad_data["x"].asInt(), pad_data["y"].asInt()*(-1));
+        t_direction = pad_point.getDirection();
+        
+        CCPoint dir_position = directionToTouchPoint(t_direction);
+        
+//        game_pad_motion->setString(ccsf("motion x : %d | y : %d | point x : %.1f | y : %.1f\nin_dir : %d | ori_dir : %d | rand : %d", pad_point.dx, pad_point.dy, dir_position.x, dir_position.y, t_direction, game_pad_direction, rand()));
+        
+        if(t_direction == game_pad_direction)
+            return;
+        
+        if(t_direction != directionStop)
+        {
+            unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
+            
+//            game_pad_distance->setString(ccsf("willBack : %d | isDisButt : %d | isBacking : %d | rand : %d", myJack->willBackTracking, isDisableDrawButton, isBacking, rand()));
+            
+            if(!myJack->willBackTracking && !isStun)
+            {
+//                game_pad_log->setString(ccsf("%d touchAction", __LINE__));
+                touchAction(directionToTouchPoint(t_direction), false);
+            }
+            
+            if(isDisableDrawButton && isBacking)
+            {
+                (target_main->*pauseBackTracking)();
+                
+                myJack->setJackState(jackStateDrawing);
+                
+                IntPoint jackPoint = myGD->getJackPoint();
+                if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+                {
+                    if(!isDisableLineOver)
+                        myGD->communication("PM_checkBeforeNewline", jackPoint);
+                    myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+                }
+                
+//                game_pad_log->setString(ccsf("%d touchAction", __LINE__));
+                touchAction(directionToTouchPoint(t_direction), false);
+            }
+        }
+        else
+        {
+//            game_pad_log->setString(ccsf("%d touchAction", __LINE__));
+			touchAction(directionToTouchPoint(t_direction), true);
+			
+			if(isDisableDrawButton && myJack->getJackState() == jackStateDrawing && !myJack->isStun)
+			{
+				(target_main->*delegate_readyBack)();
+			}
+			
+			game_pad_direction = directionStop;
+        }
+    }
+    else if(pad_type == "keydown")
+    {
+        if(game_pad_draw_keycode != -1)
+            return;
+        
+        myGD->communication("Main_hideDrawButtonTutorial");
+        keep_is_draw_button_tutorial_on = mySGD->is_draw_button_tutorial;
+        mySGD->is_draw_button_tutorial = false;
+        game_pad_draw_keycode = pad_data["keycode"].asInt();
+        myJack->isDrawingOn = true;
+        onButton(ccp(-500,-500));
+        
+        if(isBacking)
+        {
+            (target_main->*pauseBackTracking)();
+            
+            myJack->setJackState(jackStateDrawing);
+            
+            IntPoint jackPoint = myGD->getJackPoint();
+            if(myGD->mapState[jackPoint.x][jackPoint.y] == mapEmpty)
+            {
+                if(!isDisableLineOver)
+                    myGD->communication("PM_checkBeforeNewline", jackPoint);
+                myGD->mapState[jackPoint.x][jackPoint.y] = mapNewline;
+            }
+            
+            if(game_pad_direction != directionStop)
+            {
+                isButtonAction = true;
+                
+//                game_pad_log->setString(ccsf("%d touchAction", __LINE__));
+                touchAction(directionToTouchPoint(game_pad_direction), false);
+                
+                return;
+            }
+        }
+        
+        if(game_pad_direction != directionStop && !myJack->isMoving)
+        {
+            isButtonAction = true;
+            
+//            game_pad_log->setString(ccsf("%d touchAction", __LINE__));
+            touchAction(directionToTouchPoint(game_pad_direction), false);
+        }
+    }
+    else if(pad_type == "keyup")
+    {
+        if(game_pad_draw_keycode == -1)
+            return;
+        
+        mySGD->is_draw_button_tutorial = keep_is_draw_button_tutorial_on;
+        
+        myJack->isDrawingOn = false;
+        offButton();
+        //			draw_button->setColor(ccWHITE);
+        if(myJack->getJackState() == jackStateDrawing && !myJack->isStun)
+        {
+            (target_main->*delegate_readyBack)();
+        }
+        game_pad_draw_keycode = -1;
+    }
 }
 
 void ControlJoystickButton::ccTouchesBegan(CCSet *pTouches, CCEvent *pEvent)
@@ -1497,6 +1697,31 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 	ControlCommon::setTouchEnabled(t_b);
 	if(!t_b)
 	{
+        if(game_pad_key != -1)
+        {
+//            game_pad_state->setString(ccsf("unregister : %d | %d", game_pad_key, rand()));
+            myHSP->unregisterGamePadCallback(game_pad_key);
+            game_pad_key = -1;
+        }
+        { // game pad
+            if(game_pad_draw_keycode != -1)
+            {
+                offButton();
+                game_pad_draw_keycode = -1;
+            }
+            
+            if(game_pad_direction != directionStop)
+            {
+                if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+                else															control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+                
+                control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
+                myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
+                game_pad_direction = directionStop;
+            }
+        }
+        
+        
 		unschedule(schedule_selector(ControlJoystickButton::directionKeeping));
 		if(button_touch)
 		{
@@ -1508,19 +1733,48 @@ void ControlJoystickButton::setTouchEnabled( bool t_b )
 		if(joystick_touch)
 		{
 			if(controlJoystickDirection == kControlJoystickDirection_left)	control_circle->setPosition(ccp(JOYSTICK_SCREEN_IN_DISTANCE+myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
-			else																								control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
+			else															control_circle->setPosition(ccp(480-JOYSTICK_SCREEN_IN_DISTANCE-myGD->boarder_value, JOYSTICK_SCREEN_IN_DISTANCE));
 
 			control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 			myJack->setTouchPointByJoystick(CCPointZero, directionStop, t_b);
 			joystick_touch = NULL;
 		}
 	}
+    else
+    {
+        game_pad_key = myHSP->registerGamePadCallback(json_selector(this, ControlJoystickButton::gamePadAction));
+//        game_pad_state->setString(ccsf("register : %d | %d", game_pad_key, rand()));
+    }
 }
 
 void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, Jack* t_jack )
 {
 	CCLayer::init();
 	
+//    game_pad_state = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+//    game_pad_state->setAnchorPoint(ccp(0,1));
+//    game_pad_state->setPosition(ccp(5, myDSH->ui_top-50));
+//    addChild(game_pad_state);
+//    
+//    game_pad_motion = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+//    game_pad_motion->setAnchorPoint(ccp(0,1));
+//    game_pad_motion->setPosition(ccp(0,0));
+//    game_pad_state->addChild(game_pad_motion);
+//    
+//    game_pad_distance = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+//    game_pad_distance->setAnchorPoint(ccp(0,1));
+//    game_pad_distance->setPosition(ccp(0,0));
+//    game_pad_motion->addChild(game_pad_distance);
+//    
+//    game_pad_log = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+//    game_pad_log->setAnchorPoint(ccp(0,1));
+//    game_pad_log->setPosition(ccp(0,0));
+//    game_pad_distance->addChild(game_pad_log);
+    
+    game_pad_direction = directionStop;
+    game_pad_draw_keycode = -1;
+    game_pad_key = -1;
+    
 	is_show_draw_button_tutorial = false;
 	
 //	CCLog("device width : %.2lf", myHSP->getScreenRealWidth());

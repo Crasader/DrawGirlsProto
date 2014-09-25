@@ -121,6 +121,7 @@ private:
 //	void successDownloadActionSet(string t_filename);
 //	void failDownloadActionSet(string t_filename);
 	
+    void resultRequestItemDelivery(Json::Value result_data);
 	void resultGetCommonSetting(Json::Value result_data);
 	void resultGetPuzzleEvent(Json::Value result_data);
 	void resultGetAchieveList(Json::Value result_data);

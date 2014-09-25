@@ -310,8 +310,8 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	ko->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	ko->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);
-	ko->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
-	ko->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
+	ko->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading24);
+	ko->setObject(CCString::create("100%로 클리어 하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading25);
 	ko->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
 	ko->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	ko->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);
@@ -1102,14 +1102,14 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font>오래 버티세요!"), kMyLocalKey_missionCondition8);
 	ko->setObject(CCString::create("<font color=961 size=13>%d%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionCondition9);
-	ko->setObject(CCString::create("<font color=961>%d점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
+	ko->setObject(CCString::create("<font color=961>%s점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
 	ko->setObject(CCString::create("<font color=961>%d콤보<font color=999>를 달성하세요!"), kMyLocalKey_missionCondition11);
-	ko->setObject(CCString::create("<font color=961>%d골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
+	ko->setObject(CCString::create("<font color=961>%s골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
 	ko->setObject(CCString::create("<font color=961>%d턴<font color=999>안에 게임을 클리어 하세요!"), kMyLocalKey_missionCondition13);
 	
-	ko->setObject(CCString::create("%d점"), kMyLocalKey_mission10Label);
+	ko->setObject(CCString::create("%s점"), kMyLocalKey_mission10Label);
 	ko->setObject(CCString::create("%d콤보"), kMyLocalKey_mission11Label);
-	ko->setObject(CCString::create("%d골드"), kMyLocalKey_mission12Label);
+	ko->setObject(CCString::create("%s골드"), kMyLocalKey_mission12Label);
 	ko->setObject(CCString::create("/%d턴"), kMyLocalKey_mission13Label);
 	
 	ko->setObject(CCString::create("추천인등록"), kMyLocalKey_recommenderReg);
@@ -1372,8 +1372,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	en->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	en->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);
-	en->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
-	en->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
+	en->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading24);
+	en->setObject(CCString::create("100%로 클리어 하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading25);
 	en->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
 	en->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	en->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);
@@ -2343,8 +2343,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다."), kMyLocalKey_titleLoading21);
 	ja->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading22);
 	ja->setObject(CCString::create("85% 로 클리어 하면 별 1개를 획득합니다."), kMyLocalKey_titleLoading23);
-	ja->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading24);
-	ja->setObject(CCString::create("100%로 클리어 하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading25);
+	ja->setObject(CCString::create("change를 모두 모은 후 클리어하면 별 3개를 획득합니다."), kMyLocalKey_titleLoading24);
+	ja->setObject(CCString::create("100%로 클리어 하면 별 2개를 획득합니다."), kMyLocalKey_titleLoading25);
 	ja->setObject(CCString::create("change를 모두 모은 후 100%로 클리어하면 별 4개를 모을 수 있습니다."), kMyLocalKey_titleLoading26);
 	ja->setObject(CCString::create("다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요."), kMyLocalKey_titleLoading27);
 	ja->setObject(CCString::create("플레이 중 획득한 영역에 따라 골드를 드립니다."), kMyLocalKey_titleLoading28);

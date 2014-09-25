@@ -170,16 +170,6 @@ public:
         TRACE();
 	}
 	
-	void beginScene(string _lang,string _storyID){
-        string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
-        CCLOG("beginScene %s, %s,%s,%s",this->storyID.c_str(),_storyID.c_str(),_lang.c_str(),cliLang.c_str());
-		if(this->storyID == _storyID && _lang == cliLang){
-            CCLOG("isAdd true");
-                isAdd=true;
-        }else{ isAdd=false;
-            
-            CCLOG("isAdd false");}
-	}
 	
 	void loadStory(){
 		
@@ -200,57 +190,57 @@ public:
 		beginScene("ko","puzzle2");
 		addScript("kt_cha_asuka_1.png","휴... 이걸로 시험이 끝났겠지.. 첫발을 내딛었구나..",kCCTextAlignmentLeft,kObjTypeText|kObjTypeActorRight);
 		addScript("kt_cha_hibari_1.png","그래 이제 시작이야..\n히바리도 아스카와 같이 최고의 닌자가 될꺼야!",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","쉿. 일반 학생들이 다니는 교정 안에서는 닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는 일반 학생들에겐 비밀이니까!",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","흐응... 비밀이라니...\n조금 긴장하게 되..",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_asuka_1.png","쉿. 일반 학생들이 다니는 교정 안에서는 닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는 일반 학생들에겐 비밀이니까!",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_asuka_1.png","흐응... 비밀이라니...\n조금 긴장하게 되..",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_asuka_1.png","히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까.",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_hibari_1.png","응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!",kCCTextAlignmentRight,kObjTypeAll);
 		addScript("kt_cha_yagyu_1.png","히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_hibari_1.png","야규! 히바리를 도와주었구나! 고마워 야규짱!!",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","내가 이렇게 항상 지켜봐줄수 없으니\n 전투시엔 조심하도록해..\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자.",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_yagyu_1.png","내가 이렇게 항상 지켜봐줄수 없으니\n 전투시엔 조심하도록해..\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자.",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
 		
 		beginScene("ko","puzzle3");
 		addScript("kt_cha_hibari_1.png","야규, 아까는 도와줘서 고마워.\n히바리가 거치적거리니까\n이대로면 모두한테 폐를 끼치게 돼.",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_yagyu_1.png","히바리는 거치적 거리는 존재 따위가 아니야.\n우리들은 모두 강하다고 인정받았으니까.\n히바리의 강한 점은 내가 제일 잘 알고있고,\n또 모두들 알고 있어.\n그러니까 더 자신에게 자신감을 가져.",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
-		addScript("","야규짱..",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
-		addScript("","내.. 내가 말하고 싶은 건 그것뿐이야..\n히바리, 내일은 히바리가 좋아하는 우사네 찻집에 가자.",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
-		addScript("","응!!",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_hibari_1.png","야규짱..",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
+		addScript("kt_cha_yagyu_1.png","내.. 내가 말하고 싶은 건 그것뿐이야..\n히바리, 내일은 히바리가 좋아하는 우사네 찻집에 가자.",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
+		addScript("kt_cha_hibari_1.png","응!!",kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("kt_cha_katsuragi_1.png","이카루가.. 그리고\n야규, 아스카, 히바리도 마침 딱 있었네!",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
 		addScript("kt_cha_ikaruga_1.png","카츠라기님. 오늘 훈련은 끝났는데\n집에 안가세요?",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
-		addScript("","어, 응..음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨌든 좀 더 몸을 움직이려고... 응?",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
-		addScript("","아앗! 저건 뭐지?",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
-		addScript("","소매치기예요!! 꼬마의 과자를 훔쳐가네요!!",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
-		addScript("","아이의 즐거움을 뺏는\n배짱 좋은 녀석이군.\n저런 썩은 자식은 우리들이 혼내줄테다!!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","어, 응..음... 뭐라고 할까\n소화불량이라고나 할까...\n어쨌든 좀 더 몸을 움직이려고... 응?",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
+		addScript("kt_cha_katsuragi_1.png","아앗! 저건 뭐지?",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
+		addScript("kt_cha_ikaruga_1.png","소매치기예요!! 꼬마의 과자를 훔쳐가네요!!",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
+		addScript("kt_cha_katsuragi_1.png","아이의 즐거움을 뺏는\n배짱 좋은 녀석이군.\n저런 썩은 자식은 우리들이 혼내줄테다!!",kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle4");
 		addScript("kt_cha_katsuragi_1.png","헤헷, 봤지?\n과자도 돌아왔고 속이 시원하다!\n역시 몸을 움직이는건 최고로 좋아!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","카츠 언니 뭔가 흥분한 것 같네요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","뭐어? 그래보여?\n그나저나 아스카 너 이자식, 또 가슴이 커진거 아니야?\n오랜만에 한번 만져볼까? 흐흐흐",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","저기, 쫌… 이런 곳에서…!\n저..저기봐요\n도둑이 도망치고있어요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 쫒아가자!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","뭐어? 그래보여?\n그나저나 아스카 너 이자식, 또 가슴이 커진거 아니야?\n오랜만에 한번 만져볼까? 흐흐흐",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_asuka_1.png","저기, 쫌… 이런 곳에서…!\n저..저기봐요\n도둑이 도망치고있어요.",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 쫓아가자!",kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle5");
 		addScript("kt_cha_katsuragi_1.png","자 이제 사건종료!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","모두 무사해서 다행이예요.\n기념으로 시장에서 재료를 사서 나베 파티하는거 어때요?",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","나베파티 좋지! 그럼 재료는 내가 사올께..!",kCCTextAlignmentRight,kObjTypeActorLeft|kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png","나베파티 좋지! 그럼 재료는 내가 사올께..!",kCCTextAlignmentRight,kObjTypeActorLeft|kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","라고 말했는데 왜 줄줄이 따라오는거야?",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","카츠라기님한테 맡기면 라면으로만 꽉찰거라고 아스카님이…",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","그,그럴리가 없잖아. 대파랑 오뎅이랑 익힌 달걀이랑 여러가지...",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","응? 상점가의 입구쪽이 뭔가 시끄럽네.",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","음.. 저 불량배들때문에 시장상인들이 문을 닫고있군요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","반장으로서, 저 불한당들을 눈감아줄 수는 없지..",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","그,그럴리가 없잖아. 대파랑 오뎅이랑 익힌 달걀이랑 여러가지...",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png","응? 상점가의 입구쪽이 뭔가 시끄럽네.",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png","음.. 저 불량배들때문에 시장상인들이 문을 닫고있군요.",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png","반장으로서, 저 불한당들을 눈감아줄 수는 없지..",kCCTextAlignmentLeft,kObjTypeAll);
 		////////////////////////////////////////
 		
 		beginScene("ko","puzzle6");
 		addScript("kt_cha_ikaruga_1.png","불량배들이 없어져서 겨우 가게 문을 다시 열고있네요.\n이걸로 안심하고 재료를 사러 갈 수 있겠네요.",kCCTextAlignmentLeft,kObjTypeAll);
-		addScript("","자~ 오늘의 세일 상품 국산특급닭고기 완전 특별세일 선착선 10분에게 모십니다~!",kCCTextAlignmentCenter,kObjTypeText);
+		addScript("","[상인]\n자~ 오늘의 세일 상품 국산특급닭고기 완전 특별세일 선착선 10분에게 모십니다~!",kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","오~! 이건 우리들이 나설 차례네!\n저기, 비켜비켜! 그 국산 닭고기 우리거라고!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","하핫, 국산 닭고기 전부 가져왔습니다. 임무 완료네요… 응?",kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("","[불량배]\n야, 너희들! 우리 친구들을 때려눕혔다 이거지!\n이 원한을 백배로 갚아주겠다!",kCCTextAlignmentCenter,kObjTypeText);
-		addScript("kt_cha_ikaruga_1.png","아까 그 불량배들 편들인 것 같은데요…\n여기까지 친히 나와주셨는데 미안하지만, 퇴장시켜드리지요.",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_ikaruga_1.png","아까 그 불량배 편들인 것 같은데요…\n여기까지 친히 나와주셨는데 미안하지만, 퇴장시켜드리지요.",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		/////////////////////////////////////////
 		
@@ -259,14 +249,14 @@ public:
 		addScript("","[불량배]\n제기랄! 잊지 않겠어!!",kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","어이쿠, 또 오시겠네\n뭐, 그때도 우리들이 아주 혼쭐을 내줄테니까 문제없겠지.",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","카츠라기님은 너무 난폭해지지 않도록 적당하게 해주세요",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","그래그래, 결과가 좋으면 뭐든지 오케이!라고들 하잖아\n딱딱하게 말하지 말고 응?",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","그래그래, 결과가 좋으면 뭐든지 오케이!라고들 하잖아\n딱딱하게 말하지 말고 응?",kCCTextAlignmentRight,kObjTypeAll);
 		
 		/////////////////////////////////////////
 		
 		beginScene("ko","puzzle8");
 		addScript("kt_cha_hibari_1.png","아하하 히바리 완전 신나! 이걸 가질수있게 되다니!!",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_yagyu_1.png","다행이야. 이 마직막 남은 토깽이 인형을 살수있어서..",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","응 야규짱!\n한정판이라 더이상 구할수없는 건데. 너무 기뻐!",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_hibari_1.png","응 야규짱!\n한정판이라 더이상 구할수없는 건데. 너무 기뻐!",kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("","[불량배]\n이자식들! 그 토깽이 인형 내놔!",kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_yagyu_1.png","왜 우리가 토깽이 인형을 줘야하지?",kCCTextAlignmentRight,kObjTypeAll);
 		addScript("","[불량배]\n왜긴 왜야!\n그 토깽이 인형은 내꺼니까!",kCCTextAlignmentCenter,kObjTypeText);
@@ -281,23 +271,23 @@ public:
 		addScript("","[불량배]\n그렇네. 내가 나빴어. 다음부터는 확실히 줄설게.\n하지만 다음의 한정품을 내가 손에 넣어도 절대 양보 안하는 건 기억해둬!",kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_hibari_1.png","그래! 나도 양보 안할테니까. 내가 바라는바야!\n야규, 고마워.\n난 사실 같이 토깽이 좋아하는 사람이랑 싸우는 거 싫었어… ",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_yagyu_1.png","히바리는 누구한테나 친절하구나. 역시 나의 히바리야.",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","뭐? 야규 지금 뭐라고 했어?",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","아,아무것도 아니야!.\n후..훈련이나 하러가자.",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_hibari_1.png","뭐? 야규 지금 뭐라고 했어?",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yagyu_1.png","아,아무것도 아니야!.\n후..훈련이나 하러가자.",kCCTextAlignmentRight,kObjTypeAll);
 		
 		/////////////////////////////////////////////
 		
 		beginScene("ko","puzzle10");
 		addScript("kt_cha_ikaruga_1.png","선생님, 급한 소집인데요, 오늘은 어떤 지령인가요?",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","음. 다른 소집된팀들과 시합해서 우리들이 얼마나 얼마나 성장했는지를 증명하라는거군요.",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png","음. 다른 소집된팀들과 시합해서 우리들이 얼마나 얼마나 성장했는지를 증명하라는거군요.",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","와…확실히 본적은 없는 애들이 몇 명 있는 것 같아…\n우리들 이외에 몇 팀이나 있는거군요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","… 뭐! 이기지 못하는 팀은 오늘 당장 해산!?\n그건 너무 심한 거 아닌가요…",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("","우리들의 실력을 정말로 시험받는 때군요.\n선생님의 은혜에 보답하기 위해서라도 이 시합 질 수 없어요!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_asuka_1.png","… 뭐! 이기지 못하는 팀은 오늘 당장 해산!?\n그건 너무 심한 거 아닌가요…",kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png","우리들의 실력을 정말로 시험받는 때군요.\n선생님의 은혜에 보답하기 위해서라도 이 시합 질 수 없어요!",kCCTextAlignmentRight,kObjTypeAll);
 		
 		//////////////////////////////////////////
 		beginScene("ko","puzzle11");
 		addScript("kt_cha_asuka_1.png","임무달성!\n순조롭군 순조로워! 아직도 더 할 수 있어요!",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","앞으로 8시합 이기지 않으면 우리들 팀도 해산되어버려요.\n이것도 닌자의 어려움이죠…. 질 수 없죠.",kCCTextAlignmentRight,kObjTypeText);
-		addScript("","그러면 다음 시합도 긴장풀지 말고 합시다!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_ikaruga_1.png","그러면 다음 시합도 긴장풀지 말고 합시다!",kCCTextAlignmentRight,kObjTypeAll);
 
 		////////////////////////////////////
 		beginScene("ko","puzzle12");
@@ -369,6 +359,16 @@ public:
 		
 	}
 	
+	void beginScene(string _lang,string _storyID){
+		string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
+		CCLOG("Scene %s,",this->storyID.c_str());
+		if(this->storyID == _storyID && _lang == cliLang){
+			isAdd=true;
+		}else{
+			isAdd=false;
+		}
+	}
+	
 	void addTitle(string title,ObjType isClear=kObjTypeAll){
 		if(isAdd){
 			Json::Value scriptInfo;
@@ -389,8 +389,9 @@ public:
 		}
 	}
 	void addScript(string image,string script,CCTextAlignment align,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
+		 CCLOG("%s\t%s",image.c_str(),script.c_str());
 		if(isAdd){
-            CCLOG("add script %s",script.c_str());
+           // CCLOG("add script %s",script.c_str());
 			Json::Value scriptInfo;
 			scriptInfo["type"]=kScriptTypeTalk;
 			scriptInfo["image"]=image;
