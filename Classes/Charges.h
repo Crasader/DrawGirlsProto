@@ -14,6 +14,7 @@
 #include "AudioEngine.h"
 #include "GameData.h"
 #include "jsoncpp/json.h"
+#include "KSUtil.h"
 USING_NS_CC;
 
 class CCN_InnerNode : public CCSprite
@@ -105,7 +106,20 @@ class SpecialChargeNodeLambda : public ChargeParent
 public:
 	static SpecialChargeNodeLambda* create(CCPoint t_position, int t_frame,
 									 std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern);
-	
+	virtual ~SpecialChargeNodeLambda(){
+		TRACE();
+	}
+	virtual void removeFromParent()
+	{
+    this->removeFromParentAndCleanup(true);
+	}
+	void removeFromParentAndCleanup(bool cleanup)
+	{
+    if (m_pParent != NULL)
+    {
+			m_pParent->removeChild(this,cleanup);
+    }
+	}
 	void setChargeColor(ccColor4F change_color);
 	
 	void startCharge();

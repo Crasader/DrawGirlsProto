@@ -174,7 +174,12 @@ void ChargeNodeLambda::startCharge()
 void ChargeNodeLambda::cancelCharge()
 {
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
-	if(p) p->onCanceledCasting();
+	if(p)
+	{
+		p->onCanceledCasting();
+		
+	}
+	
 //	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_pattern_cancel%d.mp3", ks19937::getIntValue(1, 4))->getCString());
 //	AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //	AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
@@ -207,6 +212,7 @@ void ChargeNodeLambda::charging()
 			cb->m_castFrameCount = 0;
 			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();
+			cb->m_lastCastTime = cb->m_cumberTimer;
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
 				cb->setCumberState(cb->m_cumberState | kCumberStateMoving);
@@ -293,6 +299,7 @@ void SpecialChargeNodeLambda::startCharge()
 
 void SpecialChargeNodeLambda::cancelCharge()
 {
+	TRACE();
 	auto p = dynamic_cast<KSCumberBase*>(real_target);
 	if(p) 
 		p->onCanceledCasting();
@@ -326,6 +333,7 @@ void SpecialChargeNodeLambda::charging()
 		{
 			cb->m_castFrameCount = 0;
 			cb->m_stopFrameCount = 0;
+			cb->m_lastCastTime = cb->m_cumberTimer;
 			cb->resetCastingCancelCount();
 //			cb->m_cumberState = 0;
 			if(m_pattern.get("movingshot", false).asInt())
@@ -365,6 +373,7 @@ void SpecialChargeNodeLambda::removeSelf()
 
 void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
+	TRACE();
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
@@ -453,6 +462,7 @@ void CrashChargeNodeLambda::charging()
 		
 		if(cb)
 		{
+			cb->m_lastCastTime = cb->m_cumberTimer;
 			cb->m_castFrameCount = 0;
 			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();

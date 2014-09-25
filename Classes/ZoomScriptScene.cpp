@@ -1470,7 +1470,7 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				}
 			}
 			
-			if(multiTouchData.size() == 1 && is_morphing && first_img->m_waveRange==1)
+			if(multiTouchData.size() == 1 && is_morphing && target_node->m_waveRange==1)
 			{
 				
 				touch_p = location;

@@ -363,7 +363,7 @@ void MissileUnit3::move ()
 																																			}));
 														 }));
 		
-		CCLOG("warning!!");
+//		CCLOG("warning!!");
 	}
 	if(afterPosition.y < -mSize.height-60.f)
 	{

@@ -99,6 +99,10 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 	{
 		is_menu_enable = true;
 	});
+	KSLabelTTF* ment = KSLabelTTF::create(getLocal(LK::kFriendGiftDesc), mySGD->getFont().c_str(), 13.f);
+	main_case->addChild(ment);
+	setFormSetter(ment);
+	ment->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 73.0f));
 	
 	
 	Json::Value param;
@@ -153,6 +157,14 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 		m_friendTable->setTouchPriority(m_touchPriority);
 		
 		m_friendTable->reloadData();
+		
+		if(m_friends.empty())
+		{
+			KSLabelTTF* nothing = KSLabelTTF::create(getLocal(LK::kFriendNothingExist), mySGD->getFont().c_str(), 13.f);
+			main_case->addChild(nothing, 100);
+			nothing->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -19.5f));
+			setFormSetter(nothing);
+		}
 		setFormSetter(m_friendTable);
 		
 	});

@@ -383,7 +383,18 @@ void SumranMailPopup::takeAllReward(CCObject* sender)
 				{
 					rewardDown(r["list"],[=](bool isSuccess){
 						//테이블 리로드
-						m_mailList.clear();
+						
+						Json::Value newList = Json::Value(Json::arrayValue);
+						
+						for(int i=0;i<m_mailList.size();i++){
+							Json::Value info = m_mailList[i];
+							if(info.get("reward","list").asString()==""){
+								newList.append(info);
+							}
+						}
+						m_mailList.swap(newList);
+						
+						
 						this->filterWithMailFilter();
 						this->mailTableView->reloadData();
 						mySGD->saveChangeGoodsTransaction(r);

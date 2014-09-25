@@ -1076,11 +1076,11 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	ko->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	ko->setObject(CCString::create("S다이어리"), kMyLocalKey_toDiary19);
 	
-	ko->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	ko->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	ko->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ko->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	ko->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ko->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	ko->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	ko->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
@@ -1102,14 +1102,14 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font>오래 버티세요!"), kMyLocalKey_missionCondition8);
 	ko->setObject(CCString::create("<font color=961 size=13>%d%%이상<font color=999 size=13> 획득하라!"), kMyLocalKey_missionCondition9);
-	ko->setObject(CCString::create("<font color=961>%d점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
+	ko->setObject(CCString::create("<font color=961>%s점<font color=999>이상으로 클리어하세요!"), kMyLocalKey_missionCondition10);
 	ko->setObject(CCString::create("<font color=961>%d콤보<font color=999>를 달성하세요!"), kMyLocalKey_missionCondition11);
-	ko->setObject(CCString::create("<font color=961>%d골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
+	ko->setObject(CCString::create("<font color=961>%s골드<font color=999>를 획득하세요!"), kMyLocalKey_missionCondition12);
 	ko->setObject(CCString::create("<font color=961>%d턴<font color=999>안에 게임을 클리어 하세요!"), kMyLocalKey_missionCondition13);
 	
-	ko->setObject(CCString::create("%d점"), kMyLocalKey_mission10Label);
+	ko->setObject(CCString::create("%s점"), kMyLocalKey_mission10Label);
 	ko->setObject(CCString::create("%d콤보"), kMyLocalKey_mission11Label);
-	ko->setObject(CCString::create("%d골드"), kMyLocalKey_mission12Label);
+	ko->setObject(CCString::create("%s골드"), kMyLocalKey_mission12Label);
 	ko->setObject(CCString::create("/%d턴"), kMyLocalKey_mission13Label);
 	
 	ko->setObject(CCString::create("추천인등록"), kMyLocalKey_recommenderReg);
@@ -2118,11 +2118,11 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	en->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	en->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19);
 	
-	en->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	en->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	en->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	en->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	en->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	en->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	en->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	en->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
@@ -3093,11 +3093,11 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("조이스틱\n크기"), kMyLocalKey_joystickSize);
 	ja->setObject(CCString::create("대각선\n사용"), kMyLocalKey_useSideDirection);
-	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19);
+	ja->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19);
 	
-	ja->setObject(CCString::create("19+ 다이어리"), kMyLocalKey_toDiary19Title);
-	ja->setObject(CCString::create("<font size=12 newline=15>보조앱(19+ 다이어리)이 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
-	ja->setObject(CCString::create("19+ 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
+	ja->setObject(CCString::create("S 다이어리"), kMyLocalKey_toDiary19Title);
+	ja->setObject(CCString::create("<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>"), kMyLocalKey_toDiary19Content);
+	ja->setObject(CCString::create("S 다이어리 다운 받기"), kMyLocalKey_toDiary19Button);
 	ja->setObject(CCString::create("조이스틱\n진동"), kMyLocalKey_joystickVib);
 	
 	ja->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);

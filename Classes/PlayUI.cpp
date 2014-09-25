@@ -4145,7 +4145,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission10Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_mission10Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
@@ -4197,7 +4197,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission12Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_mission12Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);

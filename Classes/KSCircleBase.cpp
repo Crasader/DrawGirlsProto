@@ -70,6 +70,7 @@ bool KSCircleBase::startDamageReaction(float damage, float angle, bool castCance
 	
 	m_attackCanceled = true;
 	
+	TRACE();
 	if(castCancel)
 	{
 		CCLOG("캔슬 상황");
@@ -153,7 +154,9 @@ void KSCircleBase::startAnimationNoDirection()
 		m_noDirection.startingPoint = getPosition();
 		m_noDirection.rotationCnt = 0;
 		m_noDirection.state = 1;
+		CCLOG("...........................................");
 		schedule(schedule_selector(KSCircleBase::animationNoDirection));
+		CCLOG("'''''''''''''''''''''''''''''''''''''''''''");
 	}
 }
 
@@ -181,6 +184,7 @@ void KSCircleBase::damageReaction(float)
 
 void KSCircleBase::animationNoDirection(float dt)
 {
+	
 	m_noDirection.timer += 1.f/60.f;
 	if(m_noDirection.state == 1)
 	{
@@ -204,6 +208,7 @@ void KSCircleBase::animationNoDirection(float dt)
 			CCLOG("분노임~");
 		}
 		m_noDirection.state = 0;
+		unschedule(schedule_selector(ThisClassType::animationNoDirection));
 //		unschedule(schedule_selector(KSCircleBase::animationNoDirection));
 		mAnimationManager->runAnimationsForSequenceNamed(CCString::createWithFormat("cast%dstop", lastCastNum)->getCString()); //##
 	}
