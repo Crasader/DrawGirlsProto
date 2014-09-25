@@ -209,7 +209,7 @@ public:
 		m_objList.clear();
 		m_selectedObjNumber=-1;
 		m_isEnabledRemocon = false;
-		CommonButton* next = CommonButton::create("next", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		CommonButton* next = CommonButton::create("next", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		next->setFunction([this](CCObject *){
 				if(m_selectedObjNumber>=0){
 				m_selectedObjNumber++;
@@ -220,7 +220,7 @@ public:
 			}
 		});
 		next->setPosition(50,0);
-		CommonButton* prev = CommonButton::create("prev", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		CommonButton* prev = CommonButton::create("prev", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		prev->setFunction([this](CCObject *){
 			if(m_selectedObjNumber>=0){
 				m_selectedObjNumber--;
@@ -232,7 +232,7 @@ public:
 		});
 		prev->setPosition(0,0);
 		
-		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		CommonButton* showSetting = CommonButton::create("log", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		showSetting->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
 			logFormSetting();
@@ -246,7 +246,7 @@ public:
 		showSetting->setPosition(50,80);
 		
 		
-		CommonButton* exit = CommonButton::create("exit", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		CommonButton* exit = CommonButton::create("exit", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		exit->setFunction([this](CCObject *){
 			remocon->setVisible(false);
 			m_guideLine->setVisible(false);
@@ -260,7 +260,7 @@ public:
 		
 		exit->setPosition(-50,80);
 		
-		m_pauseBtn = CommonButton::create("||", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		m_pauseBtn = CommonButton::create("||", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		m_pauseBtn->setFunction([this](CCObject *){
 			if(CCDirector::sharedDirector()->isPaused()){
 				CCDirector::sharedDirector()->resume();
@@ -275,7 +275,7 @@ public:
 		m_pauseBtn->setPosition(100,80);
 
 		
-		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		m_modeBtn = CommonButton::create("mode", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		m_modeBtn->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
 			
@@ -290,7 +290,7 @@ public:
 		m_modeBtn->setPosition(0,40);
 		m_modeBtn->setTag(0);
 		
-		m_resetBtn = CommonButton::create("reset", 13, CCSizeMake(50, 50), CommonButtonOrange, (INT_MAX-3)*-1);
+		m_resetBtn = CommonButton::create("reset", 13, CCSizeMake(50, 50), CommonButtonBlue, (INT_MAX-3)*-1);
 		m_resetBtn->setFunction([this](CCObject *){
 			if(m_selectedObjNumber<0)return;
 			CCNode* obj =  m_objList[m_selectedObjNumber].obj;

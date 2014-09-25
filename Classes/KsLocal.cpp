@@ -44,8 +44,8 @@ const char* KsLocal::getLocalForKey( LK key )
 	
 	vector<string> langTypes;
 	langTypes.push_back(languageType);
-//	vector<string> entries = {"en", "ja"};
-	langTypes.insert(langTypes.end(), {"en", "ja", "ko"});
+	vector<string> entries = {"en", "ja", "ko"};
+	langTypes.insert(langTypes.end(), entries.begin(), entries.end());
 	for(auto& lang : langTypes)
 	{
 		auto findIter = m_mapper.find(lang);
