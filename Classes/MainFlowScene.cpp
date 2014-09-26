@@ -2491,6 +2491,20 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																													 CCPoint t_offset = puzzle_table->getContentOffset();
 																																													 puzzle_table->reloadData();
 																																													 puzzle_table->setContentOffset(t_offset);
+                                                                                                                                                                                     
+                                                                                                                                                                                     is_menu_enable = false;
+                                                                                                                                                                                     puzzle_table->setTouchEnabled(false);
+                                                                                                                                                                                     
+                                                                                                                                                                                     myDSH->setIntegerForKey(kDSH_Key_showedScenario, puzzle_number*1000);
+                                                                                                                                                                                     StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",puzzle_number)->getCString(), [=](){
+                                                                                                                                                                                         mySGD->setIsUnlockPuzzle(0);
+                                                                                                                                                                                         is_unlock_puzzle = 0;
+                                                                                                                                                                                         
+                                                                                                                                                                                         is_menu_enable = true;
+                                                                                                                                                                                         puzzle_table->setTouchEnabled(true);
+                                                                                                                                                                                     });
+                                                                                                                                                                                     
+                                                                                                                                                                                     
 																																													 //											  puzzle_table->updateCellAtIndex(t_index);
 																																												 }
 																																												 else
@@ -4279,8 +4293,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(235, 65));
-			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(290, 65));
+			t_stencil3->setPosition(ccp(146.5f,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			

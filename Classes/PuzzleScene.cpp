@@ -922,30 +922,30 @@ bool PuzzleScene::init()
 					
 					CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
 					t_arrow1->setScale(0.6f);
-					t_arrow1->setRotation(180);
-					t_arrow1->setPosition(ccp(230,233));
+					t_arrow1->setRotation(-25);
+					t_arrow1->setPosition(ccp(160,223));
 					t_clipping->addChild(t_arrow1);
 					
-					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kRightAlignment);
-					t_ment1->setAnchorPoint(ccp(1,0.5f));
-					t_ment1->setPosition(t_arrow1->getPosition() + ccp(-t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() - 3, 0));
+					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+					t_ment1->setAnchorPoint(ccp(0,0.5f));
+					t_ment1->setPosition(t_arrow1->getPosition() + ccp(-t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() - 3 + 55, 10));
 					t_clipping->addChild(t_ment1);
 					
 					CCSprite* t_arrow2 = CCSprite::create("kt_arrow_big.png");
 					t_arrow2->setScale(0.6f);
-					t_arrow2->setRotation(45);
-					t_arrow2->setPosition(ccp(170,140));
+					t_arrow2->setRotation(90);
+					t_arrow2->setPosition(ccp(230,110));
 					t_clipping->addChild(t_arrow2);
 					
 					CCSprite* t_arrow3 = CCSprite::create("kt_arrow_big.png");
 					t_arrow3->setScale(0.6f);
-					t_arrow3->setRotation(-45);
-					t_arrow3->setPosition(ccp(170,88));
+					t_arrow3->setRotation(-25);
+					t_arrow3->setPosition(ccp(170,58));
 					t_clipping->addChild(t_arrow3);
 					
 					StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
 					t_ment2->setAnchorPoint(ccp(0.f,0.5f));
-					t_ment2->setPosition(ccp(190, (t_arrow2->getPositionY()+t_arrow3->getPositionY())/2.f));
+					t_ment2->setPosition(ccp(195, 75));
 					t_clipping->addChild(t_ment2);
 					
 					CCSprite* t_arrow4 = CCSprite::create("kt_arrow_big.png");
@@ -973,12 +973,12 @@ bool PuzzleScene::init()
 					
 					CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 					t_stencil1->setContentSize(CCSizeMake(70, 70));
-					t_stencil1->setPosition(ccp(291, 234));
+					t_stencil1->setPosition(ccp(111, 174));//ccp(291, 234));
 					t_stencil_node->addChild(t_stencil1);
 					
 					CCScale9Sprite* t_stencil2 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 					t_stencil2->setContentSize(CCSizeMake(70, 70));
-					t_stencil2->setPosition(ccp(111, 174));
+					t_stencil2->setPosition(ccp(231, 174));//ccp(111, 174));
 					t_stencil_node->addChild(t_stencil2);
 					
 					CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
