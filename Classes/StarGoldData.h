@@ -990,6 +990,9 @@ public:
 	
 	void setIntroduceStage(int t_i);
 	int getIntroduceStage();
+    
+    Json::Value product_infos;
+    Json::Value getProductInfo(string t_id);
 	
 private:
 	

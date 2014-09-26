@@ -284,6 +284,11 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 			CCLOG("FirstPurchase purchaseProduct success");
 //			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
 			mySGD->setUserdataIsFirstBuy(1); // true
+            
+            Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, kPurchaseGuideType_firstPurchase-1));
+            if(!t_info.empty())
+                myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+            
 			requestItemDelivery();
 		}
 		else

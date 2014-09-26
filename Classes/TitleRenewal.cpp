@@ -549,7 +549,7 @@ void TitleRenewalScene::nextPreloadStep()
 		
 		CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		
-		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 		{
 			CCDelayTime* t_delay = CCDelayTime::create(2.f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
@@ -620,7 +620,7 @@ void TitleRenewalScene::successLogin()
 								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 								TRACE();
 								CCLog("%d %d %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
-								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 								{
 									CCDelayTime* t_delay = CCDelayTime::create(2.f);
 									TRACE();
@@ -644,6 +644,8 @@ void TitleRenewalScene::successLogin()
 	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
 	addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);}));
 	
+    is_loaded_productInfo = false;
+    
 	is_loaded_server = false;
 	
 	receive_cnt = 0;
@@ -736,6 +738,8 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
+    myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
+    
 	is_loaded_cgp = false;
 	
 	addChild(KSTimer::create(5.f, [=]()
@@ -2514,6 +2518,24 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 	checkReceive();
 }
 
+void TitleRenewalScene::resultRequestProductInfos(Json::Value result_data)
+{
+    if(result_data["issuccess"].asBool())
+    {
+        mySGD->product_infos = result_data;
+        
+        is_loaded_productInfo = true;
+        endingAction();
+    }
+    else
+    {
+        addChild(KSTimer::create(1.f, [=]()
+                                 {
+                                     myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
+                                 }));
+    }
+}
+
 //void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
 //{
 //	if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -2547,9 +2569,9 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
-	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
+	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d | is_loaded_productInfo : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect, is_loaded_productInfo);
 	
-	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 	{
 //	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
 //	{

@@ -778,6 +778,9 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopStartPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryStartPack();
 									}
 									else
@@ -1054,6 +1057,9 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopEventPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryEventPack();
 									}
 									else
@@ -2094,6 +2100,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 										KS::KSLog("in-app test \n%", v);
 										if(v["issuccess"].asInt())
 										{
+                                            Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
+                                            if(!t_info.empty())
+                                                myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											requestItemDelivery();
 										}
 										else

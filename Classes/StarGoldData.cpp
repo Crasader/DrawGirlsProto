@@ -3363,6 +3363,22 @@ void StarGoldData::resetAttendance()
 	attendance_data.clear();
 }
 
+Json::Value StarGoldData::getProductInfo(string t_id)
+{
+    Json::Value t_infos = product_infos["info"];
+    int loop_cnt = t_infos.size();
+    for(int i=0;i<loop_cnt;i++)
+    {
+        Json::Value t_info = t_infos[i];
+        if(t_info["productid"].asString() == t_id)
+        {
+            return t_info;
+        }
+    }
+    
+    return Json::Value();
+}
+
 void StarGoldData::initRankReward(Json::Value result_data)
 {
 	if(result_data["sendGift"].asBool())
