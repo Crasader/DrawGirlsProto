@@ -790,6 +790,182 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
 	};
 	checkCGP(param, callbackParam, sFunc);
 }
+
+/*
+ {
+ "issuccess":true,
+ "info":[
+ {
+ "productid":"g_10331_001",
+ "price":1100,
+ "currency":"KRW",
+ "productname":"젬 10"
+ },
+ {
+ "productid":"g_10331_002",
+ "price":4500,
+ "currency":"KRW",
+ "productname":"젬 50"
+ },
+ {
+ "productid":"g_10331_003",
+ "price":8000,
+ "currency":"KRW",
+ "productname":"젬 100"
+ },
+ {
+ "productid":"g_10331_004",
+ "price":21000,
+ "currency":"KRW",
+ "productname":"젬 300"
+ },
+ {
+ "productid":"g_10331_005",
+ "price":30000,
+ "currency":"KRW",
+ "productname":"젬 500"
+ },
+ {
+ "productid":"g_10331_006",
+ "price":50000,
+ "currency":"KRW",
+ "productname":"젬 1000"
+ },
+ {
+ "productid":"g_10331_007",
+ "price":4000,
+ "currency":"KRW",
+ "productname":"젬 100개(첫구매)"
+ },
+ {
+ "productid":"g_10331_008",
+ "price":2900,
+ "currency":"KRW",
+ "productname":"젬 30"
+ },
+ {
+ "productid":"g_10331_009",
+ "price":5200,
+ "currency":"KRW",
+ "productname":"젬 56"
+ },
+ {
+ "productid":"g_10331_010",
+ "price":9900,
+ "currency":"KRW",
+ "productname":"젬 112"
+ },
+ {
+ "productid":"g_10331_011",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"젬 411"
+ },
+ {
+ "productid":"g_10331_012",
+ "price":54000,
+ "currency":"KRW",
+ "productname":"젬 696"
+ },
+ {
+ "productid":"g_10331_013",
+ "price":99700,
+ "currency":"KRW",
+ "productname":"젬 1439"
+ },
+ {
+ "productid":"g_10331_014",
+ "price":4450,
+ "currency":"KRW",
+ "productname":"젬 112"
+ },
+ {
+ "productid":"g_10331_015",
+ "price":2900,
+ "currency":"KRW",
+ "productname":"이벤트 젬 42"
+ },
+ {
+ "productid":"g_10331_016",
+ "price":5200,
+ "currency":"KRW",
+ "productname":"이벤트 젬 78"
+ },
+ {
+ "productid":"g_10331_017",
+ "price":9900,
+ "currency":"KRW",
+ "productname":"이벤트 젬 157"
+ },
+ {
+ "productid":"g_10331_018",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"이벤트 젬 575"
+ },
+ {
+ "productid":"g_10331_019",
+ "price":54000,
+ "currency":"KRW",
+ "productname":"이벤트 젬 974"
+ },
+ {
+ "productid":"g_10331_020",
+ "price":99700,
+ "currency":"KRW",
+ "productname":"이벤트 젬 2015"
+ },
+ {
+ "productid":"g_10331_021",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"스타터팩"
+ }
+ ]
+ }
+ */
+void hspConnector::requestProductInfos(jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	jsonSelType nextFunc = [=](Json::Value obj){
+		int delekey = dkey;
+		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+		if(delsel.func){
+			delsel.func(obj);
+		}
+		jsonDelegator::get()->remove(delekey);
+	};
+	
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "requestProductInfos", "(I)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	Json::Value dummy;
+	dummy["issuccess"] = 1;
+//	dummy["korean"] = 0;
+	func(dummy);
+#endif
+}
+void hspConnector::requestProductInfos(CCObject* target, jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLOG("checkDelegator sFunc call");
+		if(GraphDog::get()->checkTarget(target))
+			func(value);
+	};
+	requestProductInfos(sFunc);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+}
+
 void hspConnector::completePromotion()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID

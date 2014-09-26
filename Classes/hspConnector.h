@@ -234,6 +234,8 @@ public:
 	
 	void checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	void checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func);
+	void requestProductInfos(jsonSelType func);
+	void requestProductInfos(CCObject* target, jsonSelType func);
 	void completePromotion();
 	void completeInstallPromotion();
 	void purchaseProduct(Json::Value param,Json::Value callbackParam, jsonSelType func);
