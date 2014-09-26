@@ -406,7 +406,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			CCSprite* s_img = mySIL->getLoadedImg("event_pack.png");
 			s_img->setColor(ccGRAY);
 			
-			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyStartPack));
+			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyEventPack));
 			
 			CCMenu* img_menu = CCMenu::createWithItem(img_item);
 			img_menu->setPosition(ccp(0,-15));
@@ -3672,10 +3672,19 @@ void ShopPopup::requestItemDeliveryStartPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
-			CCLOG("inapp success!! refresh!!!");
+            CCLOG("inapp success!! refresh!!! 7-> %s",t.toStyledString().c_str());
+			TRACE();
+            
 			
             mySGD->network_check_cnt = 0;
             
@@ -3744,13 +3753,6 @@ void ShopPopup::requestItemDeliveryStartPack()
             }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 //	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 //		if(t["result"]["code"].asInt() == GDSUCCESS)
 //		{
@@ -3818,7 +3820,14 @@ void ShopPopup::requestItemDeliveryEventPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
 			CCLOG("inapp success!! refresh!!!");
@@ -3893,13 +3902,6 @@ void ShopPopup::requestItemDeliveryEventPack()
             }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 	//	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 	//		if(t["result"]["code"].asInt() == GDSUCCESS)
 	//		{
