@@ -1239,7 +1239,8 @@ void RankPopup::successAction ()
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
-			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
 			
 			t_texture->release();
 			target_img->release();
