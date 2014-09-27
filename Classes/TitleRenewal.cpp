@@ -1163,6 +1163,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setIntroduceStage(result_data["introduceStage"].asInt());
 		mySGD->setKakaoMsg(result_data["kakaoMsg"].asString());
+		mySGD->setAddGemReward(result_data["addGemReward"].asInt());
 	}
 	else
 	{

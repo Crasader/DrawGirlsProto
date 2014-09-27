@@ -30,7 +30,7 @@ using namespace std;
 #define COMMON_VAR(varType, varName, funcName)\
 protected: KSProtectVar<varType> varName;\
 public: virtual varType get##funcName(void){return varName.getV(); }\
-public: virtual void set##funName(varType var){ varName = var; }
+public: virtual void set##funcName(varType var){ varName = var; }
 typedef enum tImgType{
 	kImgType_Empty = 0,
 	kImgType_specialMap, // 각 챕터마다 5, 10스테이지는 특별 스테이지로 특별한 이미지가 나옵니다.
@@ -1197,6 +1197,7 @@ private:
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
 	
 	COMMON_VAR(int, testInt, TestInt);
+	COMMON_VAR(int, addGemReward, AddGemReward);
 	
 };
 
