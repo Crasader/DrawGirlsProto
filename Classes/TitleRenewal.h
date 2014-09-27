@@ -158,6 +158,9 @@ private:
 	
     void resultRequestProductInfos(Json::Value result_data);
     
+    int reduce_frame;
+    void reduceAction();
+    
 	int audio_preload_step;
 	void nextPreloadStep();
 	void checkThreadPreload();
