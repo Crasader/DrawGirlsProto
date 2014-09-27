@@ -7,7 +7,7 @@ include "lib.php";
 #iconv_set_encoding("output_encoding", "UTF-8");
 
 //echo "2dhqLCia6H379CQaBAPFAFU7YhDpsAay7JQM6jiDSY0=#";
-
+//sleep(1);
 $nowurl = $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"];
 $_dirs = explode("/",$_SERVER["REQUEST_URI"]);
 unset($_dirs[count($_dirs)-1]);
@@ -26,7 +26,7 @@ function webLog($log){
     global $mode;
     if($mode){
         echo $log;
-    }
+    } 
 }
 
 if($mode){
@@ -76,7 +76,7 @@ if(CurrentUserInfo::$memberID){
             $error = "checkDeviceError";
         }else if($userData->lastCmdNo>=$param["cmdNo"]){
             $error = "cmdNoError";
-        }else if((TimeManager::getTime()-$userData->lastTime)>60*30){
+        }else if((TimeManager::getTime()-$userData->lastTime)>60*60*24){
             $error = "longTimeError";
         }else{
             //save deviceID, save checkDeviceError, save longtimeerror
@@ -110,7 +110,10 @@ if($error){
    $checklorj = false;
    for($c=0;$c<count($param);$c++){
         $cmd = (string)$c;
-        if(!$param[$cmd])continue;
+        if(!$param[$cmd]){
+            $cmd = (string)str_pad($cmd, 3,"0",STR_PAD_LEFT);
+            if(!$param[$cmd])continue;
+        }
         $p = $param[$cmd]["p"];
         $a = strtolower($param[$cmd]["a"]);
         if($a=="login" || $a=="join"){
@@ -133,7 +136,10 @@ if($error!=""){
     $checkUserdata = false;
     for($c=0;$c<count($param);$c++){
         $cmd = (string)$c;
-        if(!$param[$cmd])continue;
+        if(!$param[$cmd]){
+            $cmd = (string)str_pad($cmd, 3,"0",STR_PAD_LEFT);
+            if(!$param[$cmd])continue;
+        }
         $p = $param[$cmd]["p"];
         $a = strtolower($param[$cmd]["a"]);
         

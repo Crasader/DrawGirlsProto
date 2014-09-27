@@ -5,11 +5,13 @@ include "header.php";
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
-		<th field='category' viewer='{"type":"text"}' editor='{"type":"text"}' >category</th>
+		<th field='category' viewer='{"type":"text"}' editor='{"type":"select","element":["missile","crash","special"]}' >category</th>
+		<th field='isUse' viewer='{"type":"text"}' editor='{"type":"bool"}' >isUse</th>
 		<th field='type' viewer='{"type":"text"}' editor='{"type":"text"}' >type</th>
 		<th field='name' viewer='{"type":"text"}' editor='{"type":"text"}' >name</th>
 		<th field='image' viewer='{"type":"imageViewer"}' editor='{"type":"imageSelector"}' >image</th>
-		<th field='template' viewer='{"type":"text"}' editor='{"type":"dictionary"}' >template</th>
+		<th field='template' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}' >template</th>
+		<th field='propInfo' viewer='{"type":"autoViewer"}' editor='{"type":"array","element":{"type":"dictionary","element":[{"type":"text","field":"propName"},{"type":"text","field":"max"},{"type":"text","field":"min"},{"type":"text","field":"variation"}]}}' >propInfo</th>
 		<th field='comment' viewer='{"type":"text"}' editor='{"type":"textarea"}' >comment</th>
 		<th manage='[delete,update,insert]' ></th>
 		</tr> 

@@ -1,5 +1,5 @@
 
-<?
+<?php
 function dbchecker($name){
 $mainDB = DBGroup::create($name);
 
@@ -13,6 +13,7 @@ for($i=0;$i<$mainDB->getMasterCount();$i++){
 	echo $master->m_name."<br>";
 	if($master->m_server->selectDB($master->m_name)){
 		echo "<font color=green>OK</font> <br>";
+		
 	}else{
 		echo "<font color=red>ERROR</font> <br>"; 
 	}
@@ -23,7 +24,13 @@ for($i=0;$i<$mainDB->getMasterCount();$i++){
 		echo $slave->m_server->m_host."<br>";
 		echo $slave->m_name."<br>";
 		if($slave->m_server->selectDB($slave->m_name)){
+			$r = UserData::getQueryResult("select count(*) as cnt from ".UserData::getDBTable(),$slave->getConnection());
+			if($r){
+				$cnt = mysql_fetch_array($r);
+				echo "<font color=orange>".$cnt["cnt"]." Users</font><br>";
+			}
 			echo "<font color=green>OK</font> <br>";
+			
 		}else{
 			echo "<font color=red>ERROR</font> <br>"; 
 		}

@@ -34,7 +34,7 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|카드관리</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Card" dbWhere='{}' dbLimit='20' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Card" dbWhere='{}' dbLimit='50' name="datatable" border=1>
 	<thead>
 		<tr>
 		<th primary title='카드번호' field='no' viewer='{"type":"text"}' >카드번호</th>

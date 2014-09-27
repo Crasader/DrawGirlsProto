@@ -84,6 +84,7 @@ if(!$gid){
 <td><a href=admin_convertor.php?gid=<?=$gid?>>convertor<br><font color=red>convertor</font></a></td>
 <td><a href=admin_pushMessage.php?gid=<?=$gid?>>pushMessage<br><font color=red>푸쉬메세지</font></a></td>
 <td><a href=admin_usingfilelist.php?gid=<?=$gid?>>usingfilelist<br><font color=red>사용파일목록</font></a></td>
+<td><a href=admin_autoLeveling.php?gid=<?=$gid?>>autoLeveling<br><font color=red>레벨링</font></a></td>
 </tr>
 </table>
 
@@ -96,6 +97,7 @@ if(!$gid){
 <td><a href=admin_puzzle.php?gid=<?=$gid?>>puzzle<br><font color=red>퍼즐</font></a></td>
 <td><a href=admin_piece.php?gid=<?=$gid?>>piece<br><font color=red>피스</font></a></td>
 <td><a href=admin_card.php?gid=<?=$gid?>>card<br><font color=red>카드</font></a></td>
+<td><a href=admin_hellMode.php?gid=<?=$gid?>>hellMode<br><font color=red>헬모드</font></a></td>
 <td><a href=admin_character.php?gid=<?=$gid?>>character<br><font color=red>캐릭터</font></a></td>
 <td><a href=admin_item.php?gid=<?=$gid?>>item<br><font color=red>아이템</font></a></td>
 <td><a href=admin_shop.php?gid=<?=$gid?>>shop<br><font color=red>상점</font></a></td>

@@ -8,7 +8,7 @@
 
 <br><br>
 <h2 id="tables-contextual-classes">|업적관리</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Archivement" dbLimit="20" dbWhere='{}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Archivement" dbLimit="50" dbWhere='{}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
 		<th primary title='고유번호' field='no' viewer='{"type":"text"}' editor='{"type":"text"}' >고유번호</th>

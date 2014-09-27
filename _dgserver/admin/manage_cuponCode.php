@@ -127,7 +127,31 @@ var cuponMaker_value = function(obj){
 		</td></tr></table>
 </div>
 <br><br>
+<table width="100%"><tr><td>
 <h2 id="tables-contextual-classes">|쿠폰코드</h2>
+</td>
+<td align=right>
+	<script>
+
+		$(document).ready(function(){
+
+			$('body').on('click','#downAll',function(){
+				var dataview = getDataTable("datatable");
+				var id = $("#findNo").val();
+				var selectType = $('.active[id=findType]').val();
+				if(!id || id==0){
+					alert("Error","쿠폰번호로 조회해주세요");
+					return;
+				}
+				$(location).attr('href',"manage_cuponCode_download.php?gid="+gid+"&type="+selectType+"&id="+id);				
+
+			});
+		});
+
+	</script>
+	<button class="btn btn-default" id="downAll">일괄저장</a>
+</td>
+</table>
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="cuponCode" dbWhere='{"type":"cuponNo","id":<?=$_GET["cuponNo"]?>}' dbLimit="10" dbSort='{"no":"desc"}' editRowOnly="ture" editType="form" name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

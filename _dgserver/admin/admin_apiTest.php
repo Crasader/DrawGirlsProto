@@ -47,7 +47,7 @@ $(document).ready(function(){
 	$('body').on('click','.doAction',function(){
 		var api = $(".custom-combobox-input").val();
 		var pdata = getLQEditorValue("p");
-		var param = {"mode":"nodes","version":"2"};
+		var param = {"mode":"nodes","version":"2","gid":gid};
 		var apiurl = "../data.php";
 
 		param["a"]=j2s(api);
@@ -66,11 +66,13 @@ $(document).ready(function(){
 				    	//result = "요청:"+apiurl+"<br>파마메터:"+j2s(param)+"<br><br>결과:<br><textarea cols=130 rows=5>"+j2s(data["0"])+"</textarea>";
 						result = "요청:"+apiurl+"<br>파마메터:"+j2s(param)+"<br><br>결과:<br><textarea cols=130 rows=5>"+j2s(data["0"])+"";
 						result+="\n\n\n";
+
+              if(typeof(data["0"]["log"]) == "object"){
 				    	for(var i=0; i<data["0"]["log"].length;i++){
 				    		result+=data["0"]["log"][i]+"\n\n";
 
 				    	}
-
+              }
 				    	result+="</textarea>";
 
 

@@ -107,11 +107,11 @@ var pathSelector = function(value,option){
 		<th field='shopItems' viewer='{"type":"json"}' editor='{"type":"table","element":[{"title":"아이템번호","field":"type","type":"text","datatype":"int"},{"title":"통화","field":"currency","type":"select","element":["gold","ruby","social"]},{"title":"가격","field":"price","type":"text","datatype":"int"},{"title":"옵션","field":"option","type":"dictionary","element":[]}]}' >shopItems</th>
 		<th field='defItems' viewer='{"type":"json"}' editor='{"type":"table","element":[{"title":"아이템번호","field":"type","type":"text","datatype":"int"},{"title":"옵션","field":"option","type":"dictionary","element":[]}]}' >defItems</th>
 		<th field='cards' viewer='{"type":"json"}' editor='{"type":"array","element":{"type":"text","datatype":"int"}}' >cards</th>
-		<th field='no' viewer='{"type":"text"}' >no</th>
-		<th field='pieceNo' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >pieceNo</th>
+		<th virtual field='pieceNo' viewer='{"type":"text"}' editor='{"type":"text"}' >pieceNo</th>
 		<th field='condition' viewer='{"type":"json"}' editor='{"type":"dictionary","element":[{"field":"gold","type":"text","datatype":"int"},{"field":"pieceNo","type":"text","datatype":"int"}]}' >condition</th>
 		<th always field='version' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >version</th>
 		<th field='type' viewer='{"type":"text"}' editor='{"type":"select","element":["normal","special"]}' >type</th>
+		<th field='scale' viewer='{"type":"text"}' editor='{"type":"text"}' >scale</th>
 		<th title='오토레벨적용여부' field='autoLevel' viewer='{"type":"text"}' editor='{"type":"bool"}' >오토레벨적용여부</th>
 		<th manage='delete update insert' ></th>
 		</tr> 
