@@ -16,7 +16,7 @@ using namespace std;
 
 //void testF(string tt);
 //string readF();
-void testF(string filePath, string tt);
+int testF(string filePath, string tt);
 string readF(string filePath);
 void addF(string filePath, string tt);
 

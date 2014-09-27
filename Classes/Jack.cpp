@@ -1894,9 +1894,9 @@ void Jack::setTouchPointByJoystick( CCPoint t_p, IntDirection t_direction, bool 
 	}
 	else
 	{
-		touchPointSpr_byJoystick->setVisible(false); // true
-		directionSpr_byJoystick->setVisible(false); // true
-		joystickSpr_byJoystick->setVisible(false); // true
+		touchPointSpr_byJoystick->setVisible(true); // true
+		directionSpr_byJoystick->setVisible(true); // true
+		joystickSpr_byJoystick->setVisible(true); // true
 	}
 
 	touchPointSpr_byJoystick->setPosition(ccpMult(t_p, 0.385f));
@@ -1924,6 +1924,29 @@ void Jack::setTouchPointByJoystick( CCPoint t_p, IntDirection t_direction, bool 
 	{
 		directionSpr_byJoystick->setVisible(false);
 	}
+    else if(isEnableIrregularDirection)
+    {
+        if(t_direction == directionLeftUp)
+        {
+            directionSpr_byJoystick->setRotation(-45);
+            directionSpr_byJoystick->setPosition(ccp(30*cos(deg2Rad(135.f)),30*sin(deg2Rad(135.f))));
+        }
+        else if(t_direction == directionRightUp)
+        {
+            directionSpr_byJoystick->setRotation(45);
+            directionSpr_byJoystick->setPosition(ccp(30*cos(deg2Rad(45.f)),30*sin(deg2Rad(45.f))));
+        }
+        else if(t_direction == directionRightDown)
+        {
+            directionSpr_byJoystick->setRotation(135);
+            directionSpr_byJoystick->setPosition(ccp(30*cos(deg2Rad(-45.f)),30*sin(deg2Rad(-45.f))));
+        }
+        else if(t_direction == directionLeftDown)
+        {
+            directionSpr_byJoystick->setRotation(-135);
+            directionSpr_byJoystick->setPosition(ccp(30*cos(deg2Rad(-135.f)),30*sin(deg2Rad(-135.f))));
+        }
+    }
 }
 
 void Jack::takeSpeedUpItem()
@@ -2468,6 +2491,7 @@ void Jack::myInit()
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;
 	isDrawingOn = myDSH->getBoolForKey(kDSH_Key_isDisableDrawButton);
+    isEnableIrregularDirection = myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection);
 	//		isReverseGesture = false;
 	isReverse = false;
 	t_se = NULL;

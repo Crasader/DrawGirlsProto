@@ -738,7 +738,11 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
     myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
+#else
+    is_loaded_productInfo = true;
+#endif
     
 	is_loaded_cgp = false;
 	

@@ -101,22 +101,26 @@
 //	return result;
 //}
 
-void testF(string filePath, string tt)
+int testF(string filePath, string tt)
 {
-	string t_path = CCFileUtils::sharedFileUtils()->getWritablePath() + "temp";
+    int return_value = 0;
+    
+	string t_path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
 	FILE* t_fp = fopen( t_path.c_str(), "w" );
 	if(!t_fp)
 	{
 		CCLOG("file failure");
 	}
-	fprintf(t_fp, "%s", tt.c_str());
+	return_value = fprintf(t_fp, "%s", tt.c_str());
 	fclose(t_fp);
+    
+    return return_value;
 	
-	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
-	int rename_result;
-	rename_result = rename( t_path.c_str(), path.c_str() );
-	if(rename_result != 0)
-		CCLOG("file failure(rename)");
+//	string path = CCFileUtils::sharedFileUtils()->getWritablePath() + filePath;
+//	int rename_result;
+//	rename_result = rename( t_path.c_str(), path.c_str() );
+//	if(rename_result != 0)
+//		CCLOG("file failure(rename)");
 }
 string readF(string filePath)
 {

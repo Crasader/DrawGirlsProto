@@ -115,7 +115,7 @@ void SaveData::setKeyValue(string filename, string _key, string _value, bool dis
 	if(diskWrite)
 	{
 		Json::FastWriter writer;
-		testF(filename, writer.write(file_sync[file_key]));
+		while(testF(filename, writer.write(file_sync[file_key])) <= -1){}
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, string _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -161,7 +161,7 @@ void SaveData::resetData(string filename)
 	
 	Json::Reader reader;
 	reader.parse("{}", file_sync[file_key]);
-	testF(filename, "");
+	while(testF(filename, "") <= -1){}
 }
 
 void SaveData::resetAllData()
@@ -198,7 +198,7 @@ void SaveData::setKeyValue(string filename, string _key, int _value, bool diskWr
 	if(diskWrite)
 	{
 		Json::FastWriter writer;
-		testF(filename, writer.write(file_sync[file_key]));
+		while(testF(filename, writer.write(file_sync[file_key])) <= -1){}
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, int _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -221,7 +221,7 @@ void SaveData::setKeyValue(string filename, string _key, double _value, bool dis
 	if(diskWrite)
 	{
 		Json::FastWriter writer;
-		testF(filename, writer.write(file_sync[file_key]));
+		while(testF(filename, writer.write(file_sync[file_key])) <= -1){}
 	}
 }
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
@@ -296,7 +296,7 @@ void SaveData::fFlush(string filename)
 	string file_key = stringEncWithAES(filename);
 		
 	Json::FastWriter writer;
-	testF(filename, writer.write(file_sync[file_key]));
+	while(testF(filename, writer.write(file_sync[file_key])) <= -1){}
 }
 void SaveData::fFlush(SaveDataFile t_sdf){			fFlush(getSyncKey(t_sdf));		}
 void SaveData::fFlush(SaveDataFile t_sdf, int i1){	fFlush(getSyncKey(t_sdf, i1));	}

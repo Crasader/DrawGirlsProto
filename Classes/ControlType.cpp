@@ -924,7 +924,7 @@ CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
     }
     else if(t_direction == directionLeftUp)
     {
-        return_value = return_value + ccp(-t_distance, t_distance);
+        return_value = return_value + ccp(t_distance*cos(deg2Rad(135.f)), t_distance*sin(deg2Rad(135.f)));
     }
     else if(t_direction == directionUp)
     {
@@ -932,7 +932,7 @@ CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
     }
     else if(t_direction == directionRightUp)
     {
-        return_value = return_value + ccp(t_distance, t_distance);
+        return_value = return_value + ccp(t_distance*cos(deg2Rad(45.f)), t_distance*sin(deg2Rad(45.f)));
     }
     else if(t_direction == directionRight)
     {
@@ -940,7 +940,7 @@ CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
     }
     else if(t_direction == directionRightDown)
     {
-        return_value = return_value + ccp(t_distance, -t_distance);
+        return_value = return_value + ccp(t_distance*cos(deg2Rad(-45.f)), t_distance*sin(deg2Rad(-45.f)));
     }
     else if(t_direction == directionDown)
     {
@@ -948,7 +948,7 @@ CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
     }
     else if(t_direction == directionLeftDown)
     {
-        return_value = return_value + ccp(-t_distance, -t_distance);
+        return_value = return_value + ccp(t_distance*cos(deg2Rad(-135.f)), t_distance*sin(deg2Rad(-135.f)));
     }
     
     return return_value;
