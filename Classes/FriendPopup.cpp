@@ -1494,6 +1494,7 @@ void FriendPopup::setVoteFriendMenu()
 		d_ing_img->addChild(d_ing_label);
 		// 추천 두번 째 팝업
 		m_voteFriendButtonCallbackSecond = [=](CCObject*){
+			TRACE();
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(true);
@@ -1502,6 +1503,7 @@ void FriendPopup::setVoteFriendMenu()
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			TRACE();
 			if(input_text1)
 			{
 				input_text1->removeFromParent();
@@ -1512,21 +1514,13 @@ void FriendPopup::setVoteFriendMenu()
 				m_voteInputText->removeFromParent();
 				m_voteInputText = nullptr;
 			}
+			TRACE();
 			if(friend_table)
 			{
 				friend_table->removeFromParent();
 				friend_table = NULL;
 			}
-			if(input_text1)
-			{
-				input_text1->removeFromParent();
-				input_text1 = nullptr;
-			}
-			if(m_voteInputText)
-			{
-				m_voteInputText->removeFromParent();
-				m_voteInputText = nullptr;
-			}
+			TRACE();
 			Json::Value param1;
 			param1["memberID"] = myHSP->getMemberID();
 			TRACE();
@@ -1537,7 +1531,7 @@ void FriendPopup::setVoteFriendMenu()
 //			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 //			addChild(ll, INT_MAX);
 
-;
+
 
 			TRACE();
 			myHSP->command("getintroducereward", param1, this, [=](Json::Value v){
@@ -1673,16 +1667,7 @@ void FriendPopup::setVoteFriendMenu()
 				friend_table->removeFromParent();
 				friend_table = NULL;
 			}
-			if(input_text1)
-			{
-				input_text1->removeFromParent();
-				input_text1 = nullptr;
-			}
-			if(m_voteInputText)
-			{
-				m_voteInputText->removeFromParent();
-				m_voteInputText = nullptr;
-			}
+			
 
 			TRACE();
 			Json::Value param;
@@ -1730,7 +1715,7 @@ void FriendPopup::setVoteFriendMenu()
 					voteDesc1->setPosition (ccpFromSize(main_case->getContentSize()) / 2 + ccp(0, 54));
 					setFormSetter(voteDesc1);
 					
-					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(getLocal(LK::kFriendVote2), mySGD->getFont().c_str(),
+					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVote2), mySGD->getAddGemReward()), mySGD->getFont().c_str(),
 																														 13.f, 0, StyledAlignment::kCenterAlignment);
 					setFormSetter(voteDesc2);
 					m_friendVoteContainer->addChild(voteDesc2);
@@ -1773,11 +1758,12 @@ void FriendPopup::setVoteFriendMenu()
 					setFormSetter(skipButton);
 					
 					skipButton->setFunction([=](CCObject*){
+						TRACE();
 						AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 						TRACE();
 						m_voteFriendButtonCallbackSecond(0);
 						TRACE();
-						CCLog("m_voteInputText %x", m_voteInputText);
+//						CCLog("m_voteInputText %x", m_voteInputText);
 //						if(m_voteInputText)
 //						{
 //							m_voteInputText->setVisible(false);
