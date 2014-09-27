@@ -11,7 +11,7 @@ include "manage_header.php";
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="Shop" dbWhere='{}' name="datatable" border=1 align=center dbSort='{"no":"asc"}' dbLimit="30" editRowOnly="true" editType="form"  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
-		<th primary title='고유번호' field='no' viewer='{"type":"text"}' editor='{"type":"text"}' >고유번호</th>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}'>고유번호</th>
 		<th title='국가코드' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelectorOnce"}' >국가코드</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
 		<th title='설명' field='comment' viewer='{"type":"text"}' editor='{"type":"textarea"}' >설명</th>

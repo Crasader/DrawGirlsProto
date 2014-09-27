@@ -129,8 +129,39 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_stageRank.php?gid=<?=$gid?>>스테이지</a></li>
 								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>PVP</a></li>
 								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>주간누적랭킹</a></li>
+								<li><a href=manage_goldRank.php?gid=<?=$gid?>>골드랭킹</a></li>
+								<li><a href=manage_freeRubyRank.php?gid=<?=$gid?>>무료루비랭킹</a></li>
+								<li><a href=manage_purchaseRubyRank.php?gid=<?=$gid?>>유료루비랭킹</a></li>
 							</ul>
 		            	</li>
+						
+						<?php
+							}
+
+							if($admin->checkPermission("stats","read")){
+						?>
+		            	<li>통계
+							<ul class="nav">
+								<li><a href=manage_dbcheck.php?gid=<?=$gid?>>DB서버상태</a></li>
+								<li><a href=manage_userStats.php?gid=<?=$gid?>>NRU/DAU</a></li>
+								<li><a href=manage_goldStats.php?gid=<?=$gid?>>스테이지별 획득 골드</a></li>
+								<li><a href=manage_itemPurchasStats.php?gid=<?=$gid?>>아이템 사용 통계</a></li>
+								<li><a href=manage_morphingStats.php?gid=<?=$gid?>>카드별 생명의돌 사용량1</a></li>
+								<li><a href=manage_morphingStats2.php?gid=<?=$gid?>>카드별 생명의돌 사용량2</a></li>
+								<li><a href=manage_archiveStats.php?gid=<?=$gid?>>업적별 달성수</a></li>
+								<li><a href=manage_gababoResultStats.php?gid=<?=$gid?>>가위바위보 게임결과</a></li>
+								<li><a href=manage_todayMissionRewardStats.php?gid=<?=$gid?>>오늘의미션 보상 통계</a></li>
+								<li><a href=manage_goldTakeUseStats.php?gid=<?=$gid?>>골드 사용/획득 출처</a></li>
+								<li><a href=manage_continueRateStats.php?gid=<?=$gid?>>이어하기 종류</a></li>
+								<li><a href=manage_stageClearStats.php?gid=<?=$gid?>>스테이지별 클리어 통계</a></li>
+								<li><a href=manage_stageRetryStats.php?gid=<?=$gid?>>스테이지별 재시도 평균</a></li>
+								<li><a href=manage_charLevelStats.php?gid=<?=$gid?>>레벨 통계</a></li>
+
+
+							</ul>
+		            	</li>
+
+
 						<?php
 							}
 
@@ -158,14 +189,16 @@ $left_menu[]=array("title"=>"","url"=>"");
 		            	<li>게임관리
 							<ul class="nav">
 								<li><a href=manage_commonSetting.php?gid=<?=$gid?>>기본설정</a></li>
-								<li><a href=manage_exchange.php?gid=<?=$gid?>>교환ID</a></li>
+								<li><a href=manage_exchange.php?gid=<?=$gid?>>교환ID(시스템)</a></li>
+								<li><a href=manage_exchangeForEvent.php?gid=<?=$gid?>>교환ID(이벤트)</a></li>
 								<li><a href=manage_archivement.php?gid=<?=$gid?>>업적</a></li>
 								<li><a href=manage_cardText.php?gid=<?=$gid?>>카드 스크립트/프로필</a></li>
 								<li><a href=manage_shop.php?gid=<?=$gid?>>상점</a></li>
+								<li><a href=manage_character.php?gid=<?=$gid?>>캐릭터</a></li>
 								<li><a href=manage_puzzleOpen.php?gid=<?=$gid?>>퍼즐오픈조건</a></li>
 								<li><a href=manage_endlessPlayList.php?gid=<?=$gid?>>PVP플레이데이터</a></li>
+								<li><a href=manage_pattern.php?gid=<?=$gid?>>패턴</a></li>
 								<li><a href=manage_balance.php?gid=<?=$gid?>>벨런스</a></li>
-								<li><a href=manage_dbcheck.php?gid=<?=$gid?>>DB구조</a></li>
 							</ul>
 						</li>
 						<li><a href=admin_help.php?gid=<?=$gid?>>관리툴</a></li>
@@ -180,7 +213,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 						<?php
 							}
 						?>
-				  		<li><a href="logout.php">로그아웃</a></li>
+				  		<li><a href="logout.php?gid=<?=$gid?>">로그아웃</a></li>
 				  	</ul>
 
 				</div>

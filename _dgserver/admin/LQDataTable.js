@@ -99,7 +99,7 @@ var datetimeFormat = function (datetime, fmt) {
 	fmt=fmt.replace("i",i);
 	fmt=fmt.replace("s",s);
 
-	log("datetimeFormat-"+datetime+"-"+fmt);
+	//log("datetimeFormat-"+datetime+"-"+fmt);
 	return fmt;
 }
 
@@ -158,7 +158,7 @@ var getFieldInfo = function(obj){
 		}else{
 			selectedObj = selectedObj.parent();
 			if(depth>10){
-				log("dont find table");
+				//log("dont find table");
 				return null;
 			}
 		}
@@ -169,7 +169,7 @@ var getFieldInfo = function(obj){
 	selectedObj = obj;
 	depth=0;
 	while(1){
-		log("find row");
+		//log("find row");
 		if(selectedObj.hasClass("LQDataRow") || selectedObj.hasClass("LQDataAddRow")){
 			result["row"]=selectedObj;
 			break;
@@ -177,7 +177,7 @@ var getFieldInfo = function(obj){
 			selectedObj = selectedObj.parent();
 			
 			if(depth>10){
-				log("dont find row");
+				//log("dont find row");
 				break;
 			}
 		}
@@ -1091,7 +1091,7 @@ var startUpdateMode = function(obj){
 				}
 
 				
-				if(fInfo["editor"]!=undefined){
+				if(fInfo["editor"]!=undefined && fInfo["isVirtual"]!=true){
 					fInfo["editor"]["rowData"]=fInfo["rowData"];
 					viewValue = editorSelector(fInfo["editor"],v);
 				}
@@ -1815,7 +1815,7 @@ $('body').on('click','.LQDelete',function(){
 	//if(!confirm("really?"))return;
 
 
-	var param={"mode":"delete","table":tInfo["dbTable"],"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"],"dbMode":"delete"};
+	var param={"gid":gid,"mode":"delete","table":tInfo["dbTable"],"primaryKey":tInfo["primaryKey"],"primaryValue":tInfo["primaryValue"],"dbMode":"delete"};
 	
 
 	if(typeof(tInfo["dbClass"]) != "undefined")
@@ -1823,7 +1823,7 @@ $('body').on('click','.LQDelete',function(){
 		var lastData = s2j(tInfo["dbLoadParam"]);
 		lastData["shardIndex"]=tInfo["shardIndex"];
 		lastData["data"]=tInfo["rowData"];
-		param={"dbClass":tInfo["dbClass"],"dbFunc":tInfo["deleteFunc"],"param":j2s(lastData),"dbMode":"delete"};
+		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":tInfo["deleteFunc"],"param":j2s(lastData),"dbMode":"delete"};
 	}
 
 	
@@ -2126,7 +2126,7 @@ var requestUpdate = function(obj,modal){
 
 				log("click LQModifyApply newvalue is "+j2s(newValue)+" in Finfo is"+fInfo["editorValue"]);
 				
-				if(newValue != undefined && newValue !=fInfo["value"] && fInfo["isVirtual"]==false){
+				if(newValue != undefined && newValue !=fInfo["value"] && fInfo["isVirtual"]!=true){
 					oldData[fInfo["field"]]=tInfo["rowData"][fInfo["field"]];
 					changeData[fInfo["field"]]=newValue;
 					//tInfo["rowData"][fInfo["field"]]=j2s(newValue);
@@ -2148,7 +2148,7 @@ var requestUpdate = function(obj,modal){
 
 	if(typeof(tInfo["dbClass"]) == "undefined")
 	{
-		param={"mode":"update","table":tInfo["dbTable"],"primaryValue":tInfo["primaryValue"],"data":j2s(changeData),"oldData":j2s(oldData),"dbMode":"update"};
+		param={"gid":gid,"mode":"update","table":tInfo["dbTable"],"primaryValue":tInfo["primaryValue"],"data":j2s(changeData),"oldData":j2s(oldData),"dbMode":"update"};
 	}else{
 
 		// var lastData = {"data":changeData,"shardIndex":tInfo["shardIndex"],"oldData":oldData};
@@ -2169,7 +2169,7 @@ var requestUpdate = function(obj,modal){
 			dbFunc=obj.attr("func");
 			dbMode = "custom";
 		}
-		param={"dbClass":tInfo["dbClass"],"dbFunc":dbFunc,"param":j2s(lastData),"dbMode":dbMode};
+		param={"gid":gid,"dbClass":tInfo["dbClass"],"dbFunc":dbFunc,"param":j2s(lastData),"dbMode":dbMode};
 	}
 	param["callbackFunc"]=callbackFunc;
 

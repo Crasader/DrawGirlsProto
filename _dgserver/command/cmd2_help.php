@@ -35,6 +35,7 @@ public static function help_requestitemdelivery(){
 	//$r["param"]
 	
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"deliveryTxId","type"=>"string or int","description"=>"배송 요청에 대한 transactionId.");
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(3001,"httpgateway 접속실패");
@@ -185,6 +186,42 @@ public static function help_getcardlist(){
 	return $r;
 }
 
+
+
+public static function help_getallcardlist(){
+
+	$r["description"] = "버전보다 높은 모든 카드정보 목록을 받아옵니다.";
+	
+	$r["param"][] = array("name"=>"noList","type"=>"array(int)","description"=>"카드번호목록");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+	
+	//$r["return"]
+	
+	$r["result"][]=ResultState::toArray(1002,"fail to get mainConnection");
+	$r["result"][]=ResultState::toArray(2001,"버전이 같을경우 아무런 값도 리턴하지 않습니다.");
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
+
+
+public static function help_getcardlistbylist(){
+
+	$r["description"] = "파라메터로 넣은 카드목록중 업데이트된 카드목록만 가져옵니다.";
+	
+	$r["param"][] = array("name"=>"noList","type"=>"array(int)","description"=>"카드번호목록");
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+	
+	//$r["return"]
+	
+	$r["result"][]=ResultState::toArray(1002,"fail to get mainConnection");
+	$r["result"][]=ResultState::toArray(2001,"버전이 같을경우 아무런 값도 리턴하지 않습니다.");
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
 public static function help_getpuzzlelist(){
 
 	$r["description"] = "퍼즐 정보 목록을 가져옵니다.";
@@ -233,6 +270,7 @@ public static function help_login(){
 	$r["description"] = "로그인";
 	
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
+	$r["param"][] = array("name"=>"diaryCode","type"=>"string","description"=>"다이어리앱일경우 인증코드");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2007,"가입필요");
@@ -241,6 +279,67 @@ public static function help_login(){
 	return $r;
 }
 
+
+public static function help_saveIntroducer(){
+
+	$r["description"] = "추천인저장 및 보상받기";
+	
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"추천인 닉네임");
+	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"선물메세지 내용");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"추천인을 찾지 못함");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFINDUSER,"유저를 찾지 못함");
+	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"이미 저장된 추천인이 있음");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장실패");
+	return $r;
+}
+
+
+public static function help_completeIntroducer(){
+
+	$r["description"] = "추천인에게 보상주기";
+	
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
+	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"추천인에게 갈 선물메세지 내용");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDPARAMETER,"추천인이 저장되어 있지 않음");
+	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"이미 추천인 보상을 주었음");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"추천인을 찾을수 없음");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장실패");
+	return $r;
+}
+
+public static function help_sendmessage(){
+
+	$r["description"] = "메세지보내기";
+	
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string or int","description"=>"friendID");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"nick");
+	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"내용");
+	$r["param"][] = array("name"=>"data","type"=>"string or dict","description"=>"data");
+	$r["param"][] = array("name"=>"exchangeID","type"=>"string or dict","description"=>"exchangeID");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+	$r["result"][]=ResultState::toArray(2014,"dont save");
+	return $r;
+}
+
+public static function help_makediarycode(){
+
+	$r["description"] = "디이어리코드를 생성합니다.";
+	
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+	$r["result"][]=ResultState::toArray(1001,"저장오류");
+	return $r;
+}
 
 public static function help_join(){
 
@@ -284,6 +383,7 @@ public static function help_getuserdata(){
 	$r["param"][] = array("name"=>"userIndex","type"=>"int or string","description"=>"유저인덱스로 찾기");
 	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임 으로 찾기");
 	$r["param"][] = array("name"=>"keyList","type"=>"array(string)","description"=>"받아올키목록, 없으면 모두 받아옴");
+	$r["param"][] = array("name"=>"isPublic","type"=>"bool","description"=>"다른유저의 정보받아올때 true, 기본 false");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID를 안넣음");
@@ -311,14 +411,14 @@ public static function help_updateuserdata(){
 	$r["description"] = "유저데이터 업데이트";
 
 	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
-	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"저장할데이터 json string");
 	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
 	$r["param"][] = array("name"=>"isVIP","type"=>"int","description"=>"0이면 무료유저, 1이면 인앱구매유저");
-	$r["param"][] = array("name"=>"isFirstBuy","type"=>"int","description"=>"구매유도플로우저장용");
+	$r["param"][] = array("name"=>"onlyOneBuyPack","type"=>"int","description"=>"구매유도플로우저장용");
+	$r["param"][] = array("name"=>"isFirstBuy","type"=>"int","description"=>"이벤트팩구입저장용");
 	$r["param"][] = array("name"=>"totalPlayCount","type"=>"int","description"=>"총플레이횟수");
 	$r["param"][] = array("name"=>"failCount","type"=>"int","description"=>"연속실패카운트");
 	$r["param"][] = array("name"=>"autoLevel","type"=>"int","description"=>"오토벨런싱용레벨");
-	$r["param"][] = array("name"=>"selectedCharNo","type"=>"int","description"=>"선택된캐릭터번호");
+	$r["param"][] = array("name"=>"selectedCharNO","type"=>"int","description"=>"선택된캐릭터번호");
 	$r["param"][] = array("name"=>"highScore","type"=>"int","description"=>"최고점수");
 	$r["param"][] = array("name"=>"highPiece","type"=>"int","description"=>"최고피스");
 	$r["param"][] = array("name"=>"aMapGacha","type"=>"int","description"=>"업적수치(맵가챠카운트)");
@@ -337,6 +437,131 @@ public static function help_updateuserdata(){
 	return $r;
 }
 
+
+public static function help_getuserlistbyrandom(){
+
+	$r["description"] = "추천친구목록";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(2006,"정보저장실패");
+	
+	return $r;
+}
+
+
+public static function help_getuserlist(){
+
+	$r["description"] = "유저데이터목록";
+
+	$r["param"][] = array("name"=>"memberIDList","type"=>"array(string)","description"=>"멤버ID array");
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFINDUSER,"유저목록이 없거나 찾지못함");
+	
+	return $r;
+}
+
+
+public static function help_getintroducereward(){
+
+	$r["description"] = "추천인보상정보불러오기";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID ");
+
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"오류");
+	
+	return $r;
+}
+
+
+public static function help_gethellmodelist(){
+
+	$r["description"] = "헬모드목록불러오기";
+
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDSAMEVERSION,"버전이 같음");
+	
+	return $r;
+}
+public static function help_getfriendlist(){
+
+	$r["description"] = "친구목록불러오기";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버ID");
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDPARAMETER,"memberID없음");
+	
+	return $r;
+}
+
+public static function help_addfriend(){
+
+	$r["description"] = "친구추가";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string","description"=>"친구추가할 멤버ID");
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFINDUSER,"유저를 찾지 못함");
+	$r["result"][]=ResultState::toArray(ResultState::GDFRIENDMAX,"내친구 제한 넘었을때는 [result][message] 필드에 'me', 상대방이 넘었을땐 'you' 들어옴");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장실패");
+	
+	return $r;
+}
+
+public static function help_removefriend(){
+
+	$r["description"] = "친구삭제";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string","description"=>"멤버ID");
+	$r["param"][] = array("name"=>"friendID","type"=>"string","description"=>"삭제할 친구 멤버ID");
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFINDUSER,"유저를 찾지 못함");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"삭제오류");
+	
+	return $r;
+}
+
+public static function help_addweeklyscore(){
+
+	$r["description"] = "주간점수누적하기";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
+	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
+	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
+
+public static function help_getweeklyrankbyalluser(){
+
+	$r["description"] = "주간점수목록(같은서버유저전체)";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"내아이디");
+	$r["param"][] = array("name"=>"weekNo","type"=>"int","description"=>"주간번호, 없을경우 이번주");
+	$r["param"][] = array("name"=>"start","type"=>"int","description"=>"시작등수(기본값 1)");
+	$r["param"][] = array("name"=>"limit","type"=>"int","description"=>"시작등수로 부터 아래로 몇까지?(기본 10, 최대 50)");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
+public static function help_checkweeklyreward(){
+
+	$r["description"] = "주간점수목록(같은서버유저전체)";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"내아이디");
+
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
 // public static function help_adduserdata(){
 
 // 	$r["description"] = "유저데이터 키 더하기";
@@ -1164,7 +1389,6 @@ public static function help_updatecharacterhistory(){
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"유저아이디(필수)");
 	$r["param"][] = array("name"=>"characterNo","type"=>"int","description"=>"캐릭터번호");
 	$r["param"][] = array("name"=>"level","type"=>"int","description"=>"레벨");
-	$r["param"][] = array("name"=>"isSelected","type"=>"bool","description"=>"사용중여부");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or characterNo");
@@ -1485,10 +1709,9 @@ public static function help_sendcard(){
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1001,"저장오류");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
-	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"이미사용함");
-	$r["result"][]=ResultState::toArray(ResultState::GDEXPIRE,"기간지남");
-	$r["result"][]=ResultState::toArray(ResultState::GDOSERROR,"os안맞음");
-	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"찾을수없음");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"정보를 찾을수없음");
+	$r["result"][]=ResultState::toArray(ResultState::GDEXPIRE,"2장이상 있어야 카드 선물가능");
+	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"시간제한에 걸림 hourLimit(한번선물가능시간(시간단위)),leftTime(남은시간(초단위)) 같이 리턴됨.");
 
 	return $r;
 }
