@@ -631,7 +631,10 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
+				param["template"] = "msgRquestFriend";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
 				param["data"] = param2;
 				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 				addChild(ll, INT_MAX);
@@ -741,7 +744,11 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
+				param["template"] = "msgSendHeart";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
 				//			param["data"] = param2;
 				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 				addChild(ll, INT_MAX);
