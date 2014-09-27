@@ -1708,7 +1708,7 @@ void FriendPopup::setVoteFriendMenu()
 					voteDesc1->setPosition (ccpFromSize(main_case->getContentSize()) / 2 + ccp(0, 54));
 					setFormSetter(voteDesc1);
 					
-					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(getLocal(LK::kFriendVote2), mySGD->getFont().c_str(),
+					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVote2), mySGD->getAddGemReward()), mySGD->getFont().c_str(),
 																														 13.f, 0, StyledAlignment::kCenterAlignment);
 					setFormSetter(voteDesc2);
 					m_friendVoteContainer->addChild(voteDesc2);
