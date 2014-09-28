@@ -6,7 +6,7 @@
         <key>texturePackerVersion</key>
         <string>3.3.4</string>
         <key>fileName</key>
-        <string>/Users/jinsilgim/cocos2d-x-2.1.5/projects/dgproto/_webResource/pvrcczResources/character.tps</string>
+        <string>/Users/jinsilgim/cocos2d-x-2.1.5/projects/dgproto/_webResource/pvrcczResources/cha_dia.tps</string>
         <key>autoSDSettings</key>
         <array>
             <struct type="AutoSDSettings">
@@ -55,7 +55,7 @@
         <key>dataFormat</key>
         <string>cocos2d</string>
         <key>textureFileName</key>
-        <filename>../character/{v}character.pvr.ccz</filename>
+        <filename>../character/{v}cha_dia.pvr.ccz</filename>
         <key>flipPVR</key>
         <false/>
         <key>ditherType</key>
@@ -89,9 +89,9 @@
         <key>maxTextureSize</key>
         <QSize>
             <key>width</key>
-            <int>2048</int>
+            <int>1024</int>
             <key>height</key>
-            <int>2048</int>
+            <int>1024</int>
         </QSize>
         <key>fixedTextureSize</key>
         <QSize>
@@ -148,13 +148,13 @@
             <key>data</key>
             <struct type="DataFile">
                 <key>name</key>
-                <filename>../character/{v}character.plist</filename>
+                <filename>../character/{v}cha_dia.plist</filename>
             </struct>
         </map>
         <key>multiPack</key>
         <false/>
         <key>forceIdenticalLayout</key>
-        <false/>
+        <true/>
         <key>outputFormat</key>
         <enum type="SettingsBase::OutputFormat">RGBA8888</enum>
         <key>contentProtection</key>
@@ -189,19 +189,14 @@
         </struct>
         <key>fileList</key>
         <array>
-            <filename>character/_block.png</filename>
-            <filename>character/cha_ruby_fire.png</filename>
-            <filename>character/cha_ruby_ball.png</filename>
-            <filename>character/cha_back_bottom.png</filename>
-            <filename>character/cha_back_hand.png</filename>
-            <filename>character/cha_back_head.png</filename>
-            <filename>character/cha_back_top.png</filename>
-            <filename>character/cha_front_bottom.png</filename>
-            <filename>character/cha_front_hand.png</filename>
-            <filename>character/cha_front_head.png</filename>
-            <filename>character/cha_front_top.png</filename>
-            <filename>character/cha_left_all.png</filename>
-            <filename>character/cha_dia.png</filename>
+            <filename>boss_tree/_block.png</filename>
+            <filename>boss_yellow/_block.png</filename>
+            <filename>cha_asuka/_block.png</filename>
+            <filename>cha_dia/_block.png</filename>
+            <filename>cha_dia/cha_arrow.png</filename>
+            <filename>cha_dia/cha_dia.png</filename>
+            <filename>cha_dia/cha_ruby_ball.png</filename>
+            <filename>cha_dia/cha_ruby_fire.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
