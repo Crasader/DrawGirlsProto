@@ -247,7 +247,9 @@ public:
 	void getIsUsimKorean(jsonSelType func); // value["korean"] 이 1이면 약관 페이지 띄워야 함.
 	
 	string getUniqId();
-	int getLoginType(); 
+	int getLoginType();
+    int getIsEnablePushNotification();
+    void setIsEnablePushNotification(int p);
 	void openHSPNotice();
 	void launchPromotion();
 	int openKakaoMsg();

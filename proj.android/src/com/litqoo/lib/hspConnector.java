@@ -751,6 +751,12 @@ public class hspConnector {
 			}
 		});
 	}
+	public static int getIsEnablePushNotification(){
+		return HSPMessage.isEnablePushNotification() == false ? 0 : 1; // : true;		
+	}
+	public static void setIsEnablePushNotification(int truefalse){
+		HSPMessage.setPushNotification(truefalse == 0 ? false : true);	
+	}
 	public static int getLoginType()
 	{
 		for(HSPLoginType t: HSPLoginType.values())
