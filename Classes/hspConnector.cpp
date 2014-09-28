@@ -1178,6 +1178,46 @@ int hspConnector::getLoginType()
 	
 }
 
+
+int hspConnector::getIsEnablePushNotification()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	jint ret = -1;
+	JniMethodInfo t;
+
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsEnablePushNotification", "()I")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
+		CCLog("ret = %d ", ret);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	return (int)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return 1;
+	// not implementation
+    //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+}
+void hspConnector::setIsEnablePushNotification(int p)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	jint ret = -1;
+	JniMethodInfo t;
+    
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "setIsEnablePushNotification", "(I)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, p);
+//		CCLog("ret = %d ", ret);
+		t.env->DeleteLocalRef(t.classID);
+	}
+//	return (int)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	return 1;
+	// not implementation
+    //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+}
+
 void hspConnector::openHSPNotice()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
