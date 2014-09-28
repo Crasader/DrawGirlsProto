@@ -2525,8 +2525,11 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::resultRequestProductInfos(Json::Value result_data)
 {
+    TRACE();
     if(result_data["issuccess"].asBool())
     {
+        
+        TRACE();
         mySGD->product_infos = result_data;
         
         is_loaded_productInfo = true;
@@ -2534,11 +2537,14 @@ void TitleRenewalScene::resultRequestProductInfos(Json::Value result_data)
     }
     else
     {
+        TRACE();
         addChild(KSTimer::create(1.f, [=]()
                                  {
                                      myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
                                  }));
     }
+    
+    TRACE();
 }
 
 //void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
@@ -2681,7 +2687,6 @@ void TitleRenewalScene::startFileDownloadSet()
 	else
 	{
 		unschedule(schedule_selector(TitleRenewalScene::checkDownloading));
-		
 		
 		// reduce and divide
 		
@@ -2849,9 +2854,57 @@ void TitleRenewalScene::startFileDownloadSet()
 			img->release();
 		}
 		
-        reduce_frame = 0;
-        
-        schedule(schedule_selector(TitleRenewalScene::reduceAction));
+        if(card_reduction_list.size() > 0)
+        {
+            reduce_frame = 0;
+            
+            schedule(schedule_selector(TitleRenewalScene::reduceAction));
+        }
+        else
+        {
+            if(character_download_list.size() > 0)
+            {
+                for(int i=0;i<character_download_list.size();i++)
+                {
+                    SDS_SS(kSDF_gameInfo, character_download_list[i].key, character_download_list[i].img, false);
+                }
+                NSDS_SI(kSDS_GI_characterVersion_i, character_download_version, false);
+                mySDS->fFlush(kSDS_GI_characterCount_i);
+            }
+            
+            if(monster_download_list.size() > 0)
+            {
+                for(int i=0;i<monster_download_list.size();i++)
+                {
+                    SDS_SS(kSDF_gameInfo, monster_download_list[i].key, monster_download_list[i].img, false);
+                }
+                NSDS_SI(kSDS_GI_monsterVersion_i, monster_download_version, false);
+                mySDS->fFlush(kSDS_GI_monsterCount_i);
+            }
+            
+            if(card_download_list.size() > 0)
+            {
+                for(int i=0;i<card_download_list.size();i++)
+                {
+                    SDS_SS(kSDF_cardInfo, card_download_list[i].key,
+                           card_download_list[i].img, false);
+                }
+                mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+            }
+            
+            if(puzzle_download_list.size() > 0)
+            {
+                for(int i=0;i<puzzle_download_list.size();i++)
+                {
+                    SDS_SS(kSDF_gameInfo, puzzle_download_list[i].key,
+                           puzzle_download_list[i].img, false);
+                }
+                mySDS->fFlush(kSDS_GI_base);
+            }
+            
+            endingCheck();
+            
+        }
         
 //		// reduce
 //		for(int i=0;i<card_reduction_list.size();i++)
@@ -2948,8 +3001,8 @@ void TitleRenewalScene::reduceAction()
     float download_percent = 100.f*reduce_frame/card_reduction_list.size();
 	if(download_percent > 100.f)
 		download_percent = 100.f;
+    
 	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
-	
 	progress_timer->setPercentage(download_percent);
     
     int i = reduce_frame;
@@ -2998,6 +3051,7 @@ void TitleRenewalScene::reduceAction()
     
     reduce_frame++;
     
+    
     if(reduce_frame >= card_reduction_list.size())
     {
         unschedule(schedule_selector(TitleRenewalScene::reduceAction));
@@ -3041,7 +3095,7 @@ void TitleRenewalScene::reduceAction()
 			}
 			mySDS->fFlush(kSDS_GI_base);
 		}
-		
+        
 		endingCheck();
     }
 }

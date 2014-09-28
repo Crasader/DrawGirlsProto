@@ -21,10 +21,10 @@ LOCAL_CFLAGS := -DENABLE_OPENSL
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes
 LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../boost_1_55_0
 
-LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
-LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
-#LOCAL_HEADER_FILES += $(LOCAL_PATH)/../../5rocks-android-sdk/sdk/jni/include/FiveRocksC.h
-LOCAL_LDLIBS :=  -L$(call host-path, $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)) -lkamcord
+#LOCAL_C_INCLUDES += $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/
+#LOCAL_HEADER_FILES := $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/jni/Kamcord-C-Interface.h
+##LOCAL_HEADER_FILES += $(LOCAL_PATH)/../../5rocks-android-sdk/sdk/jni/include/FiveRocksC.h
+#LOCAL_LDLIBS :=  -L$(call host-path, $(LOCAL_PATH)/../../kamcord-android-sdk/kamcord/libs/$(TARGET_ARCH_ABI)) -lkamcord
 
 
 LOCAL_STATIC_LIBRARIES := curl_static_prebuilt
