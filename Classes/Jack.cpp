@@ -1894,9 +1894,9 @@ void Jack::setTouchPointByJoystick( CCPoint t_p, IntDirection t_direction, bool 
 	}
 	else
 	{
-		touchPointSpr_byJoystick->setVisible(true); // true
-		directionSpr_byJoystick->setVisible(true); // true
-		joystickSpr_byJoystick->setVisible(true); // true
+		touchPointSpr_byJoystick->setVisible(false); // true
+		directionSpr_byJoystick->setVisible(false); // true
+		joystickSpr_byJoystick->setVisible(false); // true
 	}
 
 	touchPointSpr_byJoystick->setPosition(ccpMult(t_p, 0.385f));
