@@ -1,5 +1,5 @@
 <?php
-
+exit;
 $sInfo["gameID"]="SKDDMK";
 $sInfo["gameNo"]="10316";
 $sInfo["HTTPGATEWAY_URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
@@ -29,12 +29,12 @@ Infomation::setStaticInfo($sInfo);
 	//DB그룹 생성 - mainDB : 대부분 읽기전용 자료들. 운영자만 추가/수정/삭제 가능한 자료들. 퍼즐/피스/카드/몬스터/캐릭터목록/벨런스데이터 등 /////////////////////////////////////
 	$mainGroup = DBGroup::create("main");
 	
-	//새로 작성할때 $memberID에 따라 접속할 서버번호 지정해주기 - mainDB는 한대이므로 1로 설정
+	//새로 작성할때 $memberID에 따라 접속할 서버번호 지정해주기 - mainDB는 한대이므로 1로 설정, 여러개가 된다면 rand(1,서버대수) 같은식으로 랜덤으로 정해지도록..
 	$mainGroup->setNewShardKeyFunc(function($memberID){		
 		return 1;
 	});
 
-	//있는 자료 읽어올때 $memberID에 따라 접속할 서버번호 지정해주기 - mainDB는 한대이므로 1로설정
+	//있는 자료 읽어올때 $memberID에 따라 접속할 서버번호 지정해주기 - mainDB는 한대이므로 1로 설정, 여러개가 된다면 rand(1,서버대수) 같은식으로 랜덤으로 정해지도록..
 	$mainGroup->setGetShardKeyFunc(function($key){
 		return 1;
 	});
@@ -83,7 +83,7 @@ Infomation::setStaticInfo($sInfo);
 	$userGroup = DBGroup::create("user");
 
 
-	//새로 가입할때 $memberID에 따라 저장할 서버번호 지정하기 - 멤버ID를 2로나누고 +1한 값으로 서버번호지정.(1 or 2) 
+	//새로 가입할때 $memberID에 따라 저장할 서버번호 지정하기 - 무조건 1번으로 설정, DB가 여러대가 된다면 $memberID%서버대수+1 과 같은식으로 하여 분산시킬수있음.
 	$userGroup->setNewShardKeyFunc(function($memberID){		
 		//LogManager::addLog("setNewShardKeyFunc");
 		return 1;
@@ -182,9 +182,11 @@ Infomation::setStaticInfo($sInfo);
 		return 1;
 	});
 
-	//기존의 회원이 접속할 서버번호를 지정하기. - 서버가 한대밖에 없으니 무조건 1번 서버접속
+
+	//기존의 회원이 접속할 서버번호를 지정하기. main db userindex table 참고하여 지정
 	$logGroup->setGetShardKeyFunc(function($memberID){
-		return 1;
+		$userIndex = UserIndex::create($memberID);
+		return $userIndex->logShardOrder;
 	});
 
 

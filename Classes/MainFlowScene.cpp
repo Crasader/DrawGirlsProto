@@ -55,7 +55,7 @@
 #include "FriendPopup.h"
 #include "AccountLinkLeadPopup.h"
 #include "PuzzleOpenPopup.h"
-
+#include "StoryLayer.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -1429,7 +1429,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //					c_label->addChild(price_value_label);
 					
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
-					detail_label->disableOuterStroke();
+					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
 					
@@ -1657,444 +1657,463 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																											  
 																											  if(myDSH->getIntegerForKey(kDSH_Key_showedScenario)%1000 == 0 && myDSH->getIntegerForKey(kDSH_Key_showedScenario)/1000+1 == is_unlock_puzzle)
 																												{
-																													CCNode* scenario_node = CCNode::create();
-																													addChild(scenario_node, 9999);
 																													
-																													CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-																													float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-																													if(screen_scale_x < 1.f)
-																														screen_scale_x = 1.f;
-																													
-																													float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-																													
-																													
-																													CCNode* t_stencil_node = CCNode::create();
-																													
-																													
-																													CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
-																													t_clipping->setAlphaThreshold(0.1f);
-																													
-																													float change_scale = 1.f;
-																													CCPoint change_origin = ccp(0,0);
-																													if(screen_scale_x > 1.f)
+																													if(is_unlock_puzzle >= 2)
 																													{
-																														change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-																														change_scale = screen_scale_x;
+																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
+																														StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",is_unlock_puzzle)->getCString(), [=](){
+                                                                                                                            mySGD->setIsUnlockPuzzle(0);
+                                                                                                                            is_unlock_puzzle = 0;
+                                                                                                                            
+                                                                                                                            endUnlockAnimation();
+                                                                                                                            
+                                                                                                                            t_end_func();
+
+                                                                                                                        });
+																														
 																													}
-																													if(screen_scale_y > 1.f)
-																														change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-																													CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-																													t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 																													
-																													
-																													CCSprite* t_gray = CCSprite::create("back_gray.png");
-																													t_gray->setScaleX(screen_scale_x);
-																													t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
-																													t_gray->setOpacity(0);
-																													t_gray->setPosition(ccp(240,160));
-																													t_clipping->addChild(t_gray);
-																													
-																													t_clipping->setInverted(true);
-																													scenario_node->addChild(t_clipping, 0);
-																													
-																													TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
-																													scenario_node->addChild(typing_box, 2);
-																													
-																													TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(239, 96));
-																													scenario_node->addChild(typing_box2, 2);
-																													
-																													CCSprite* n_skip = CCSprite::create("kt_skip.png");
-																													CCSprite* s_skip = CCSprite::create("kt_skip.png");
-																													s_skip->setColor(ccGRAY);
-																													
-																													CCMenuLambda* skip_menu = CCMenuLambda::create();
-																													skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
-																													scenario_node->addChild(skip_menu, 3);
-																													skip_menu->setTouchPriority(-19999);
-																													skip_menu->setEnabled(false);
-																													
-																													CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
-																																												 {
-																																													 skip_menu->setEnabled(false);
-																																													 
-																																													 mySGD->setIsUnlockPuzzle(0);
-																																													 is_unlock_puzzle = 0;
-																																													 
-																																													 endUnlockAnimation();
-																																													 
-																																													 t_end_func();
-																																													 
-																																													 addChild(KSTimer::create(0.1f, [=]()
-																																																			  {
-																																																				  scenario_node->removeFromParent();
-																																																			  }));
-																																												 });
-																													skip_menu->addChild(skip_item);
-																													
-																													if(is_unlock_puzzle == 2)
-																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 2000);
-																														
-																														CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
-																														asuka->setAnchorPoint(ccp(0,0));
-																														asuka->setPosition(ccp(240-240*screen_scale_x-asuka->getContentSize().width, 160-160*screen_scale_y));
-																														scenario_node->addChild(asuka, 1);
-																														
-																														CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
-																														hibari->setAnchorPoint(ccp(1,0));
-																														hibari->setPosition(ccp(240+240*screen_scale_x+hibari->getContentSize().width, 160-160*screen_scale_y));
-																														hibari->setVisible(false);
-																														scenario_node->addChild(hibari, 1);
-																														
-																														CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
-																														yagyu->setAnchorPoint(ccp(0,0));
-																														yagyu->setPosition(ccp(240-240*screen_scale_x-yagyu->getContentSize().width, 160-160*screen_scale_y));
-																														yagyu->setVisible(false);
-																														scenario_node->addChild(yagyu, 1);
-																														
-																														typing_box->setHide();
-																														
-																														typing_box2->setTouchOffScrollAndButton();
-																														typing_box2->setVisible(false);
-																														typing_box2->setTouchSuction(false);
-																														
-																														typing_box->showAnimation(0.3f);
-																														
-																														function<void()> end_func9 = [=]()
-																														{
-																															skip_menu->setEnabled(false);
-																															
-																															mySGD->setIsUnlockPuzzle(0);
-																															is_unlock_puzzle = 0;
-																															
-																															endUnlockAnimation();
-																															
-																															t_end_func();
-																															
-																															addChild(KSTimer::create(0.1f, [=]()
-																																					 {
-																																						 scenario_node->removeFromParent();
-																																					 }));
-																														};
-																														
-																														function<void()> end_func8 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, yagyu);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent41), end_func9);
-																														};
-																														
-																														function<void()> end_func7 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, yagyu, hibari);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent40), end_func8);
-																														};
-																														
-																														function<void()> end_func6 = [=]()
-																														{
-																															hibari->setVisible(false);
-																															yagyu->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box->setVisible(true);
-																																													  typing_box->setTouchSuction(true);
-																																													  
-																																													  typing_box2->setTouchSuction(false);
-																																													  
-																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent39), end_func7);
-																																												  }));
-																															typing_box2->setTouchOffScrollAndButton();
-																															typing_box2->setVisible(false);
-																														};
-																														
-																														function<void()> end_func5 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent38), end_func6);
-																														};
-																														
-																														function<void()> end_func4 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent37), end_func5);
-																														};
-																														
-																														function<void()> end_func3 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent36), end_func4);
-																														};
-																														
-																														function<void()> end_func2 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent35), end_func3);
-																														};
-																														
-																														function<void()> end_func1 = [=]()
-																														{
-																															asuka->setVisible(false);
-																															hibari->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box2->setVisible(true);
-																																													  typing_box2->setTouchSuction(true);
-																																													  
-																																													  typing_box->setTouchSuction(false);
-																																													  
-																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent34), end_func2);
-																																												  }));
-																															typing_box->setTouchOffScrollAndButton();
-																															typing_box->setVisible(false);
-																														};
-																														
-																														scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																																											  {
-																																												  t_gray->setOpacity(t*255);
-																																												  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																																											  }, [=](float t)
-																																											  {
-																																												  t_gray->setOpacity(255);
-																																												  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																																												  skip_menu->setEnabled(true);
-																																												  
-																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent33), end_func1);
-																																											  }));
-																													}
-																													else if(is_unlock_puzzle == 3)
-																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 3000);
-																														
-																														CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
-																														hibari->setAnchorPoint(ccp(0,0));
-																														hibari->setPosition(ccp(240-240*screen_scale_x-hibari->getContentSize().width, 160-160*screen_scale_y));
-																														scenario_node->addChild(hibari, 1);
-																														
-																														CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
-																														yagyu->setAnchorPoint(ccp(1,0));
-																														yagyu->setPosition(ccp(240+240*screen_scale_x+yagyu->getContentSize().width, 160-160*screen_scale_y));
-																														yagyu->setVisible(false);
-																														scenario_node->addChild(yagyu, 1);
-																														
-																														CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-																														katsuragi->setAnchorPoint(ccp(1,0));
-																														katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-																														katsuragi->setVisible(false);
-																														scenario_node->addChild(katsuragi, 1);
-																														
-																														CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-																														ikaruga->setAnchorPoint(ccp(0,0));
-																														ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-																														ikaruga->setVisible(false);
-																														scenario_node->addChild(ikaruga, 1);
-																														
-																														CCSprite* boy = CCSprite::create("kt_cha_black.png");
-																														boy->setAnchorPoint(ccp(1,0));
-																														boy->setPosition(ccp(240+240*screen_scale_x+boy->getContentSize().width, 160-160*screen_scale_y));
-																														boy->setVisible(false);
-																														scenario_node->addChild(boy, 1);
-																														
-																														typing_box->setHide();
-																														
-																														typing_box2->setTouchOffScrollAndButton();
-																														typing_box2->setVisible(false);
-																														typing_box2->setTouchSuction(false);
-																														
-																														typing_box->showAnimation(0.3f);
-																														
-																														function<void()> end_func11 = [=]()
-																														{
-																															skip_menu->setEnabled(false);
-																															
-																															mySGD->setIsUnlockPuzzle(0);
-																															is_unlock_puzzle = 0;
-																															
-																															endUnlockAnimation();
-																															
-																															t_end_func();
-																															
-																															addChild(KSTimer::create(0.1f, [=]()
-																																					 {
-																																						 scenario_node->removeFromParent();
-																																					 }));
-																														};
-																														
-																														function<void()> end_func10 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent52), end_func11);
-																														};
-																														
-																														function<void()> end_func9 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, katsuragi, ikaruga);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent51), end_func10);
-																														};
-																														
-																														function<void()> end_func8 = [=]()
-																														{
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
-//																															katsuragi->setVisible(false);
-//																															boy->setVisible(true);
+//																													
+//																													CCNode* scenario_node = CCNode::create();
+//																													//addChild(scenario_node, 9999);
+//																													
+//																													CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//																													float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//																													if(screen_scale_x < 1.f)
+//																														screen_scale_x = 1.f;
+//																													
+//																													float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//																													
+//																													
+//																													CCNode* t_stencil_node = CCNode::create();
+//																													
+//																													
+//																													CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+//																													t_clipping->setAlphaThreshold(0.1f);
+//																													
+//																													float change_scale = 1.f;
+//																													CCPoint change_origin = ccp(0,0);
+//																													if(screen_scale_x > 1.f)
+//																													{
+//																														change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//																														change_scale = screen_scale_x;
+//																													}
+//																													if(screen_scale_y > 1.f)
+//																														change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//																													CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//																													t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//																													
+//																													
+//																													CCSprite* t_gray = CCSprite::create("back_gray.png");
+//																													t_gray->setScaleX(screen_scale_x);
+//																													t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+//																													t_gray->setOpacity(0);
+//																													t_gray->setPosition(ccp(240,160));
+//																													t_clipping->addChild(t_gray);
+//																													
+//																													t_clipping->setInverted(true);
+//																													scenario_node->addChild(t_clipping, 0);
+//																													
+//																													TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
+//																													scenario_node->addChild(typing_box, 2);
+//																													
+//																													TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(239, 96));
+//																													scenario_node->addChild(typing_box2, 2);
+//																													
+//																													CCSprite* n_skip = CCSprite::create("kt_skip.png");
+//																													CCSprite* s_skip = CCSprite::create("kt_skip.png");
+//																													s_skip->setColor(ccGRAY);
+//																													
+//																													CCMenuLambda* skip_menu = CCMenuLambda::create();
+//																													skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
+//																													scenario_node->addChild(skip_menu, 3);
+//																													skip_menu->setTouchPriority(-19999);
+//																													skip_menu->setEnabled(false);
+//																													
+//																													CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+//																																												 {
+//																																													 skip_menu->setEnabled(false);
+//																																													 
+//																																													 mySGD->setIsUnlockPuzzle(0);
+//																																													 is_unlock_puzzle = 0;
+//																																													 
+//																																													 endUnlockAnimation();
+//																																													 
+//																																													 t_end_func();
+//
+//																																													 addChild(KSTimer::create(0.1f, [=]()
+//																																																			  {
+//																																																				  scenario_node->removeFromParent();
+//																																																			  }));
+//																																												 });
+//																													skip_menu->addChild(skip_item);
+//																													
+//																													if(is_unlock_puzzle == 2)
+//																													{
+//																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 2000);
+//																														
+//																													
+//																														
+//																														CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+//																														asuka->setAnchorPoint(ccp(0,0));
+//																														asuka->setPosition(ccp(240-240*screen_scale_x-asuka->getContentSize().width, 160-160*screen_scale_y));
+//																														scenario_node->addChild(asuka, 1);
+//																														
+//																														CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
+//																														hibari->setAnchorPoint(ccp(1,0));
+//																														hibari->setPosition(ccp(240+240*screen_scale_x+hibari->getContentSize().width, 160-160*screen_scale_y));
+//																														hibari->setVisible(false);
+//																														scenario_node->addChild(hibari, 1);
+//																														
+//																														CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
+//																														yagyu->setAnchorPoint(ccp(0,0));
+//																														yagyu->setPosition(ccp(240-240*screen_scale_x-yagyu->getContentSize().width, 160-160*screen_scale_y));
+//																														yagyu->setVisible(false);
+//																														scenario_node->addChild(yagyu, 1);
+//																														
+//																														typing_box->setHide();
+//																														
+//																														typing_box2->setTouchOffScrollAndButton();
+//																														typing_box2->setVisible(false);
+//																														typing_box2->setTouchSuction(false);
+//																														
+//																														typing_box->showAnimation(0.3f);
+//																														
+//																														function<void()> end_func9 = [=]()
+//																														{
+//																															skip_menu->setEnabled(false);
+//																															
+//																															mySGD->setIsUnlockPuzzle(0);
+//																															is_unlock_puzzle = 0;
+//																															
+//																															endUnlockAnimation();
+//																															
+//																															t_end_func();
+//																															
+//																															addChild(KSTimer::create(0.1f, [=]()
+//																																					 {
+//																																						 scenario_node->removeFromParent();
+//																																					 }));
+//																														};
+//																														
+//																														function<void()> end_func8 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, yagyu);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent41), end_func9);
+//																														};
+//																														
+//																														function<void()> end_func7 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, yagyu, hibari);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent40), end_func8);
+//																														};
+//																														
+//																														function<void()> end_func6 = [=]()
+//																														{
+//																															hibari->setVisible(false);
+//																															yagyu->setVisible(true);
 //																															
 //																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
 //																																												  {
-//																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+//																																													  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
 //																																												  }, [=](float t)
 //																																												  {
-//																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+//																																													  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
 //																																													  
 //																																													  typing_box->setVisible(true);
 //																																													  typing_box->setTouchSuction(true);
 //																																													  
 //																																													  typing_box2->setTouchSuction(false);
 //																																													  
-//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent39), end_func7);
 //																																												  }));
 //																															typing_box2->setTouchOffScrollAndButton();
 //																															typing_box2->setVisible(false);
-																														};
-																														
-																														function<void()> end_func7 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent49), end_func8);
-																														};
-																														
-																														function<void()> end_func6 = [=]()
-																														{
-																															katsuragi->setVisible(false);
-																															ikaruga->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box->setVisible(true);
-																																													  typing_box->setTouchSuction(true);
-																																													  
-																																													  typing_box2->setTouchSuction(false);
-																																													  
-																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent48), end_func7);
-																																												  }));
-																															typing_box2->setTouchOffScrollAndButton();
-																															typing_box2->setVisible(false);
-																														};
-																														
-																														function<void()> end_func5 = [=]()
-																														{
-																															hibari->setVisible(false);
-																															yagyu->setVisible(false);
-																															katsuragi->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box2->setVisible(true);
-																																													  typing_box2->setTouchSuction(true);
-																																													  
-																																													  typing_box->setTouchSuction(false);
-																																													  
-																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent47), end_func6);
-																																												  }));
-																															typing_box->setTouchOffScrollAndButton();
-																															typing_box->setVisible(false);
-																														};
-																														
-																														function<void()> end_func4 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent46), end_func5);
-																														};
-																														
-																														function<void()> end_func3 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box, typing_box2, hibari, yagyu);
-																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent45), end_func4);
-																														};
-																														
-																														function<void()> end_func2 = [=]()
-																														{
-																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent44), end_func3);
-																														};
-																														
-																														function<void()> end_func1 = [=]()
-																														{
-																															hibari->setVisible(false);
-																															yagyu->setVisible(true);
-																															
-																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																																												  {
-																																													  yagyu->setPositionX(240+240*screen_scale_x+yagyu->getContentSize().width - yagyu->getContentSize().width*2.f/3.f*t);
-																																												  }, [=](float t)
-																																												  {
-																																													  yagyu->setPositionX(240+240*screen_scale_x+yagyu->getContentSize().width - yagyu->getContentSize().width*2.f/3.f*t);
-																																													  
-																																													  typing_box2->setVisible(true);
-																																													  typing_box2->setTouchSuction(true);
-																																													  
-																																													  typing_box->setTouchSuction(false);
-																																													  
-																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent43), end_func2);
-																																												  }));
-																															typing_box->setTouchOffScrollAndButton();
-																															typing_box->setVisible(false);
-																														};
-																														
-																														scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																																											  {
-																																												  t_gray->setOpacity(t*255);
-																																												  hibari->setPositionX(240-240*screen_scale_x-hibari->getContentSize().width + hibari->getContentSize().width*2.f/3.f*t);
-																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																																											  }, [=](float t)
-																																											  {
-																																												  t_gray->setOpacity(255);
-																																												  hibari->setPositionX(240-240*screen_scale_x-hibari->getContentSize().width + hibari->getContentSize().width*2.f/3.f*t);
-																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																																												  skip_menu->setEnabled(true);
-																																												  
-																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
-																																											  }));
-																													}
-																													else if(is_unlock_puzzle >= 4)
-																													{
-																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
-																														
-																														skip_menu->setEnabled(false);
-																														
-																														mySGD->setIsUnlockPuzzle(0);
-																														is_unlock_puzzle = 0;
-																														
-																														endUnlockAnimation();
-																														
-																														t_end_func();
-																														
-																														addChild(KSTimer::create(0.1f, [=]()
-																																				 {
-																																					 scenario_node->removeFromParent();
-																																				 }));
-																													}
+//																														};
+//																														
+//																														function<void()> end_func5 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent38), end_func6);
+//																														};
+//																														
+//																														function<void()> end_func4 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent37), end_func5);
+//																														};
+//																														
+//																														function<void()> end_func3 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent36), end_func4);
+//																														};
+//																														
+//																														function<void()> end_func2 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent35), end_func3);
+//																														};
+//																														
+//																														function<void()> end_func1 = [=]()
+//																														{
+//																															asuka->setVisible(false);
+//																															hibari->setVisible(true);
+//																															
+//																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																																												  {
+//																																													  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+//																																													  
+//																																													  typing_box2->setVisible(true);
+//																																													  typing_box2->setTouchSuction(true);
+//																																													  
+//																																													  typing_box->setTouchSuction(false);
+//																																													  
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent34), end_func2);
+//																																												  }));
+//																															typing_box->setTouchOffScrollAndButton();
+//																															typing_box->setVisible(false);
+//																														};
+//																														
+//																														scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																																											  {
+//																																												  t_gray->setOpacity(t*255);
+//																																												  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																																											  }, [=](float t)
+//																																											  {
+//																																												  t_gray->setOpacity(255);
+//																																												  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																																												  skip_menu->setEnabled(true);
+//																																												  
+//																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent33), end_func1);
+//																																											  }));
+//																													}
+//																													else if(is_unlock_puzzle == 3)
+//																													{
+//																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, 3000);
+//																														
+//																														CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
+//																														hibari->setAnchorPoint(ccp(0,0));
+//																														hibari->setPosition(ccp(240-240*screen_scale_x-hibari->getContentSize().width, 160-160*screen_scale_y));
+//																														scenario_node->addChild(hibari, 1);
+//																														
+//																														CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
+//																														yagyu->setAnchorPoint(ccp(1,0));
+//																														yagyu->setPosition(ccp(240+240*screen_scale_x+yagyu->getContentSize().width, 160-160*screen_scale_y));
+//																														yagyu->setVisible(false);
+//																														scenario_node->addChild(yagyu, 1);
+//																														
+//																														CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//																														katsuragi->setAnchorPoint(ccp(1,0));
+//																														katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//																														katsuragi->setVisible(false);
+//																														scenario_node->addChild(katsuragi, 1);
+//																														
+//																														CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//																														ikaruga->setAnchorPoint(ccp(0,0));
+//																														ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//																														ikaruga->setVisible(false);
+//																														scenario_node->addChild(ikaruga, 1);
+//																														
+//																														CCSprite* boy = CCSprite::create("kt_cha_black.png");
+//																														boy->setAnchorPoint(ccp(1,0));
+//																														boy->setPosition(ccp(240+240*screen_scale_x+boy->getContentSize().width, 160-160*screen_scale_y));
+//																														boy->setVisible(false);
+//																														scenario_node->addChild(boy, 1);
+//																														
+//																														typing_box->setHide();
+//																														
+//																														typing_box2->setTouchOffScrollAndButton();
+//																														typing_box2->setVisible(false);
+//																														typing_box2->setTouchSuction(false);
+//																														
+//																														typing_box->showAnimation(0.3f);
+//																														
+//																														function<void()> end_func11 = [=]()
+//																														{
+//																															skip_menu->setEnabled(false);
+//																															
+//																															mySGD->setIsUnlockPuzzle(0);
+//																															is_unlock_puzzle = 0;
+//																															
+//																															endUnlockAnimation();
+//																															
+//																															t_end_func();
+//																															
+//																															addChild(KSTimer::create(0.1f, [=]()
+//																																					 {
+//																																						 scenario_node->removeFromParent();
+//																																					 }));
+//																														};
+//																														
+//																														function<void()> end_func10 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent52), end_func11);
+//																														};
+//																														
+//																														function<void()> end_func9 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, katsuragi, ikaruga);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent51), end_func10);
+//																														};
+//																														
+//																														function<void()> end_func8 = [=]()
+//																														{
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+////																															katsuragi->setVisible(false);
+////																															boy->setVisible(true);
+////																															
+////																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+////																																												  {
+////																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+////																																												  }, [=](float t)
+////																																												  {
+////																																													  boy->setPositionX(240+240*screen_scale_x+boy->getContentSize().width - boy->getContentSize().width*2.f/3.f*t);
+////																																													  
+////																																													  typing_box->setVisible(true);
+////																																													  typing_box->setTouchSuction(true);
+////																																													  
+////																																													  typing_box2->setTouchSuction(false);
+////																																													  
+////																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+////																																												  }));
+////																															typing_box2->setTouchOffScrollAndButton();
+////																															typing_box2->setVisible(false);
+//																														};
+//																														
+//																														function<void()> end_func7 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent49), end_func8);
+//																														};
+//																														
+//																														function<void()> end_func6 = [=]()
+//																														{
+//																															katsuragi->setVisible(false);
+//																															ikaruga->setVisible(true);
+//																															
+//																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																																												  {
+//																																													  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																																													  
+//																																													  typing_box->setVisible(true);
+//																																													  typing_box->setTouchSuction(true);
+//																																													  
+//																																													  typing_box2->setTouchSuction(false);
+//																																													  
+//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent48), end_func7);
+//																																												  }));
+//																															typing_box2->setTouchOffScrollAndButton();
+//																															typing_box2->setVisible(false);
+//																														};
+//																														
+//																														function<void()> end_func5 = [=]()
+//																														{
+//																															hibari->setVisible(false);
+//																															yagyu->setVisible(false);
+//																															katsuragi->setVisible(true);
+//																															
+//																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																																												  {
+//																																													  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																																													  
+//																																													  typing_box2->setVisible(true);
+//																																													  typing_box2->setTouchSuction(true);
+//																																													  
+//																																													  typing_box->setTouchSuction(false);
+//																																													  
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent47), end_func6);
+//																																												  }));
+//																															typing_box->setTouchOffScrollAndButton();
+//																															typing_box->setVisible(false);
+//																														};
+//																														
+//																														function<void()> end_func4 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent46), end_func5);
+//																														};
+//																														
+//																														function<void()> end_func3 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box, typing_box2, hibari, yagyu);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent45), end_func4);
+//																														};
+//																														
+//																														function<void()> end_func2 = [=]()
+//																														{
+//																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
+//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent44), end_func3);
+//																														};
+//																														
+//																														function<void()> end_func1 = [=]()
+//																														{
+//																															hibari->setVisible(false);
+//																															yagyu->setVisible(true);
+//																															
+//																															scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																																												  {
+//																																													  yagyu->setPositionX(240+240*screen_scale_x+yagyu->getContentSize().width - yagyu->getContentSize().width*2.f/3.f*t);
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  yagyu->setPositionX(240+240*screen_scale_x+yagyu->getContentSize().width - yagyu->getContentSize().width*2.f/3.f*t);
+//																																													  
+//																																													  typing_box2->setVisible(true);
+//																																													  typing_box2->setTouchSuction(true);
+//																																													  
+//																																													  typing_box->setTouchSuction(false);
+//																																													  
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent43), end_func2);
+//																																												  }));
+//																															typing_box->setTouchOffScrollAndButton();
+//																															typing_box->setVisible(false);
+//																														};
+//																														
+//																														scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																																											  {
+//																																												  t_gray->setOpacity(t*255);
+//																																												  hibari->setPositionX(240-240*screen_scale_x-hibari->getContentSize().width + hibari->getContentSize().width*2.f/3.f*t);
+//																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																																											  }, [=](float t)
+//																																											  {
+//																																												  t_gray->setOpacity(255);
+//																																												  hibari->setPositionX(240-240*screen_scale_x-hibari->getContentSize().width + hibari->getContentSize().width*2.f/3.f*t);
+//																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																																												  skip_menu->setEnabled(true);
+//																																												  
+//																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
+//																																											  }));
+//																													}
+//																													else if(is_unlock_puzzle >= 4)
+//																													{
+//																														myDSH->setIntegerForKey(kDSH_Key_showedScenario, is_unlock_puzzle*1000);
+//																														
+//																														skip_menu->setEnabled(false);
+//																														
+//																														mySGD->setIsUnlockPuzzle(0);
+//																														is_unlock_puzzle = 0;
+//																														
+//																														endUnlockAnimation();
+//																														
+//																														t_end_func();
+//																														
+//																														addChild(KSTimer::create(0.1f, [=]()
+//																																				 {
+//																																					 scenario_node->removeFromParent();
+//																																				 }));
+//																													}
 																													
 																												}
 																											  else
@@ -2299,7 +2318,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																											(CCNode*)content_label, [=](){is_menu_enable = true;},
 																											12.f, CCPointZero,true);
 		
-	//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
+		//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
 	else
@@ -2308,85 +2327,212 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 		int t_need_ruby = tag%10000;
 		
 		PuzzleOpenPopup* t_popup = PuzzleOpenPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
-														   {
-															   LoadingLayer* t_loading = LoadingLayer::create(-9999);
-															   addChild(t_loading, 9999);
-															   
-															   int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
-															   PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-															   t_history.is_open = true;
-															   t_history.open_type = "골드결제";
-															   
-//															   string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list
-															   
-															   vector<ChangeGoodsDataDetail> t_list;
-															   
-															   ChangeGoodsDataDetail t_detail;
-															   t_detail.m_type = kGoodsType_gold;
-															   t_detail.m_value = -t_need_ruby;
-															   t_detail.m_statsID = "";
-															   t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
-															   t_detail.m_content = "퍼즐오픈(골드)";
-															   t_detail.m_isPurchase = false;
-															   
-															   t_list.push_back(t_detail);
-															   
-															   ChangeGoodsDataDetail t_detail2;
-															   t_detail2.m_type = kGoodsType_pz;
-															   t_detail2.m_value = puzzle_number;
-															   t_detail2.m_statsID = "";
-															   t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
-															   t_detail2.m_content = "퍼즐오픈(골드)";
-															   t_detail2.m_isPurchase = false;
-															   
-															   t_list.push_back(t_detail2);
-															   
-															   mySGD->addChangeGoods("p_p_p", t_list);
-															   
-//															   mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
-															   
-															   vector<CommandParam> command_list;
-															   
-															   command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
-															   
-															   mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
-																							 {
-																								 t_loading->removeFromParent();
-																								 if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																								 {
-																									 is_menu_enable = true;
-																									 
-																									 CCPoint t_offset = puzzle_table->getContentOffset();
-																									 puzzle_table->reloadData();
-																									 puzzle_table->setContentOffset(t_offset);
-																									 //											  puzzle_table->updateCellAtIndex(t_index);
-																								 }
-																								 else
-																								 {
-																									 mySGD->clearChangeGoods();
-																									 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
-																									 t_history.is_open = false;
-																									 t_history.open_type = "";
-																									 mySGD->setPuzzleHistoryForNotSave(t_history);
-																									 
-																									 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
-																									 
-																									 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
-																									 //											  {
-																									 //												  is_menu_enable = false;
-																									 //												  ShopPopup* t_shop = ShopPopup::create();
-																									 //												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-																									 //												  t_shop->targetHeartTime(heart_time);
-																									 //												  t_shop->setShopCode(kSC_ruby);
-																									 //												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-																									 //												  t_shop->addGray();
-																									 //												  addChild(t_shop, kMainFlowZorder_popup);
-																									 //											  }), 9999);
-																									 
-																									 is_menu_enable = true;
-																								 }
-																							 });
-														   }, t_need_ruby);
+																											 {
+																												 LoadingLayer* t_loading = LoadingLayer::create(-9999);
+																												 addChild(t_loading, 9999);
+																												 
+																												 int puzzle_number = not_event_puzzle_list[t_index];// NSDS_GI(kSDS_GI_puzzleList_int1_no_i, t_index+1);
+																												 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+																												 t_history.is_open = true;
+																												 t_history.open_type = "골드결제";
+																												 
+																												 //															   string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list
+																												 
+																												 vector<ChangeGoodsDataDetail> t_list;
+																												 
+																												 ChangeGoodsDataDetail t_detail;
+																												 t_detail.m_type = kGoodsType_gold;
+																												 t_detail.m_value = -t_need_ruby;
+																												 t_detail.m_statsID = "";
+																												 t_detail.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+																												 t_detail.m_content = "퍼즐오픈(골드)";
+																												 t_detail.m_isPurchase = false;
+																												 
+																												 t_list.push_back(t_detail);
+																												 
+																												 ChangeGoodsDataDetail t_detail2;
+																												 t_detail2.m_type = kGoodsType_pz;
+																												 t_detail2.m_value = puzzle_number;
+																												 t_detail2.m_statsID = "";
+																												 t_detail2.m_statsValue = ccsf("%d", mySGD->getUserdataHighPiece());
+																												 t_detail2.m_content = "퍼즐오픈(골드)";
+																												 t_detail2.m_isPurchase = false;
+																												 
+																												 t_list.push_back(t_detail2);
+																												 
+																												 mySGD->addChangeGoods("p_p_p", t_list);
+																												 
+																												 //															   mySGD->addChangeGoods(CCString::createWithFormat("p_p_%d", puzzle_number)->getCString());
+																												 
+																												 vector<CommandParam> command_list;
+																												 
+																												 command_list.push_back(mySGD->getUpdatePuzzleHistoryParam(t_history, nullptr));
+																												 
+																												 mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data)
+																																											 {
+																																												 t_loading->removeFromParent();
+																																												 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																																												 {
+																																													 is_menu_enable = true;
+																																													 
+																																													 is_puzzle_enter_list.clear();
+																																													 
+																																													 TRACE();
+																																													 locked_puzzle_count = 0;
+																																													 
+																																													 TRACE();
+																																													 for(int i=0;i<not_event_puzzle_list.size();i++)
+																																													 {
+																																														 int t_puzzle_number = not_event_puzzle_list[i];
+																																														 
+																																														 PuzzleOpenInfo t_info;
+																																														 t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
+																																														 
+																																														 string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+																																														 
+																																														 Json::Value condition_list;
+																																														 Json::Reader reader;
+																																														 reader.parse(puzzle_condition, condition_list);
+																																														 
+																																														 TRACE();
+																																														 if(condition_list.size() <= 0)
+																																															 t_info.is_open = true;
+																																														 
+																																														 t_info.is_base_condition_success = true;
+																																														 t_info.is_have_week_condition = false;
+																																														 t_info.is_have_date_condition = false;
+																																														 t_info.is_have_ruby_condition = false;
+																																														 t_info.need_star_count = 0;
+																																														 
+																																														 for(int i=0;!t_info.is_open && i<condition_list.size();i++)
+																																														 {
+																																															 Json::Value t_condition_and = condition_list[i];
+																																															 
+																																															 bool and_open = true;
+																																															 bool is_time_condition = false;
+																																															 
+																																															 for(int j=0;j<t_condition_and.size();j++)
+																																															 {
+																																																 Json::Value t_condition = t_condition_and[j];
+																																																 string t_type = t_condition["type"].asString();
+																																																 if(t_type == "p")
+																																																 {
+																																																	 if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+																																																	 {
+																																																		 and_open = false;
+																																																		 t_info.is_base_condition_success = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "s")
+																																																 {
+																																																	 t_info.need_star_count = t_condition["value"].asInt();
+																																																	 if(mySGD->getClearStarCount() < t_info.need_star_count)
+																																																	 {
+																																																		 and_open = false;
+																																																		 t_info.is_base_condition_success = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "g")
+																																																 {
+																																																	 t_info.need_ruby_value = t_condition["value"].asInt();
+																																																	 and_open = false;
+																																																	 t_info.is_have_ruby_condition = true;
+																																																 }
+																																																 else if(t_type == "w")
+																																																 {
+																																																	 is_time_condition = true;
+																																																	 t_info.is_have_week_condition = true;
+																																																	 if(!mySGD->keep_time_info.is_loaded)
+																																																		 and_open = false;
+																																																	 else
+																																																	 {
+																																																		 int weekday = t_condition["weekday"].asInt();
+																																																		 t_info.keep_weekday = weekday;
+																																																		 if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+																																																			 and_open = false;
+																																																		 t_info.keep_week_start = t_condition["s"].asInt();
+																																																		 t_info.keep_week_end = t_condition["e"].asInt();
+																																																		 if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+																																																			 and_open = false;
+																																																	 }
+																																																 }
+																																																 else if(t_type == "d")
+																																																 {
+																																																	 is_time_condition = true;
+																																																	 t_info.is_have_date_condition = true;
+																																																	 t_info.keep_date_start = t_condition["s"].asString();
+																																																	 if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+																																																		 and_open = false;
+																																																 }
+																																															 }
+																																															 
+																																															 TRACE();
+																																															 if(and_open)
+																																															 {
+																																																 t_info.is_open = true;
+																																																 if(!is_time_condition)
+																																																 {
+																																																	 PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+																																																	 t_history.is_open = true;
+																																																	 t_history.open_type = "무료";
+																																																	 mySGD->setPuzzleHistory(t_history, nullptr);
+																																																 }
+																																															 }
+																																														 }
+																																														 
+																																														 t_info.before_locked_puzzle_count = locked_puzzle_count;
+																																														 t_info.puzzle_number = t_puzzle_number;
+																																														 is_puzzle_enter_list.push_back(t_info);
+																																														 
+																																														 if(!t_info.is_open)
+																																															 locked_puzzle_count++;
+																																													 }
+																																													 
+																																													 CCPoint t_offset = puzzle_table->getContentOffset();
+																																													 puzzle_table->reloadData();
+																																													 puzzle_table->setContentOffset(t_offset);
+                                                                                                                                                                                     
+                                                                                                                                                                                     is_menu_enable = false;
+                                                                                                                                                                                     puzzle_table->setTouchEnabled(false);
+                                                                                                                                                                                     
+                                                                                                                                                                                     myDSH->setIntegerForKey(kDSH_Key_showedScenario, puzzle_number*1000);
+                                                                                                                                                                                     StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",puzzle_number)->getCString(), [=](){
+                                                                                                                                                                                         mySGD->setIsUnlockPuzzle(0);
+                                                                                                                                                                                         is_unlock_puzzle = 0;
+                                                                                                                                                                                         
+                                                                                                                                                                                         is_menu_enable = true;
+                                                                                                                                                                                         puzzle_table->setTouchEnabled(true);
+                                                                                                                                                                                     });
+                                                                                                                                                                                     
+                                                                                                                                                                                     
+																																													 //											  puzzle_table->updateCellAtIndex(t_index);
+																																												 }
+																																												 else
+																																												 {
+																																													 mySGD->clearChangeGoods();
+																																													 PuzzleHistory t_history = mySGD->getPuzzleHistory(puzzle_number);
+																																													 t_history.is_open = false;
+																																													 t_history.open_type = "";
+																																													 mySGD->setPuzzleHistoryForNotSave(t_history);
+																																													 
+																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+																																													 
+																																													 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
+																																													 //											  {
+																																													 //												  is_menu_enable = false;
+																																													 //												  ShopPopup* t_shop = ShopPopup::create();
+																																													 //												  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																													 //												  t_shop->targetHeartTime(heart_time);
+																																													 //												  t_shop->setShopCode(kSC_ruby);
+																																													 //												  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+																																													 //												  t_shop->addGray();
+																																													 //												  addChild(t_shop, kMainFlowZorder_popup);
+																																													 //											  }), 9999);
+																																													 
+																																													 is_menu_enable = true;
+																																												 }
+																																											 });
+																											 }, t_need_ruby);
 		
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
@@ -2618,10 +2764,70 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
+            ShopCode t_code;
+            
+            chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+            std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+            ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+            time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+            
+            int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+            
+            bool is_on_time_startPack = sub_time <= expireSec;
+            bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+            ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+            bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+            bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+            bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+            bool is_on_time_eventPack = false;
+            
+            tm* now_tm = localtime(&now_time_t);
+            string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+            string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+            
+            int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+            int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+            
+            if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+               atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+               NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+               NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+            {
+                is_on_time_eventPack = true;
+            }
+            
+            bool is_useable_eventPack = true;
+            if(is_have_eventPack && is_on_time_eventPack)
+            {
+                if(is_just_one)
+                {
+                    if(!is_buyed_eventPack)
+                        is_useable_eventPack = true;
+                    else
+                        is_useable_eventPack = false;
+                }
+                else
+                    is_useable_eventPack = true;
+            }
+            else
+            {
+                is_useable_eventPack = false;
+            }
+            
+            if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
+            {
+                t_code = kSC_eventPack;
+            }
+            else
+            {
+                t_code = kSC_gold;
+            }
+            
+            
 			ShopPopup* t_shop = ShopPopup::create();
 			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_gold);
+			t_shop->setShopCode(t_code);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
 			t_shop->addGray();
 			addChild(t_shop, kMainFlowZorder_popup);
@@ -3794,6 +4000,54 @@ void MainFlowScene::topOnLight()
 		mySGD->is_today_mission_first = false;
 	}
 	
+    chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+    std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+    ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+    time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+    
+    int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+    
+    bool is_on_time_startPack = sub_time <= expireSec;
+    bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+    bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+    bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+    bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    bool is_on_time_eventPack = false;
+    
+    tm* now_tm = localtime(&now_time_t);
+    string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+    string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+    
+    int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+    int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+    
+    if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+       atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+       NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+       NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+    {
+        is_on_time_eventPack = true;
+    }
+    
+    bool is_useable_eventPack = true;
+    if(is_have_eventPack && is_on_time_eventPack)
+    {
+        if(is_just_one)
+        {
+            if(!is_buyed_eventPack)
+                is_useable_eventPack = true;
+            else
+                is_useable_eventPack = false;
+        }
+        else
+            is_useable_eventPack = true;
+    }
+    else
+    {
+        is_useable_eventPack = false;
+    }
+    
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
 	{
@@ -3804,7 +4058,7 @@ void MainFlowScene::topOnLight()
 		mySGD->is_today_mission_first = false;
 		
 		CCNode* scenario_node = CCNode::create();
-		addChild(scenario_node, 9999);
+
 		
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -3852,7 +4106,7 @@ void MainFlowScene::topOnLight()
 		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
 		ikaruga->setAnchorPoint(ccp(1,0));
 		ikaruga->setPosition(ccp(240+240*screen_scale_x+ikaruga->getContentSize().width, 160-160*screen_scale_y));
-		ikaruga->setVisible(false);
+		//ikaruga->setVisible(false);
 		scenario_node->addChild(ikaruga, 1);
 		
 		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
@@ -4087,8 +4341,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(235, 65));
-			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(290, 65));
+			t_stencil3->setPosition(ccp(146.5f,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			
@@ -4186,20 +4440,50 @@ void MainFlowScene::topOnLight()
 			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent2), end_func2);
 		};
 		
-		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-															  {
-																  t_gray->setOpacity(t*255);
-																  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-															  }, [=](float t)
-															  {
-																  t_gray->setOpacity(255);
-																  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																  skip_menu->setEnabled(true);
-																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent1), end_func1);
-															  }));
+		
+		
+		
+		addChild(scenario_node, 9999);
+		typing_box2->setVisible(false);
+		typing_box->setVisible(false);
+		StoryLayer::startStory(this,"puzzle1", [=](){
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																														{
+																															asuka->setVisible(false);
+																															t_gray->setOpacity(t*255);
+																															asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+																															ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
+																														}, [=](float t)
+																														{
+																															t_gray->setOpacity(255);
+																															asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f);
+																															ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f);
+																															end_func9();
+																														}));
+
+			
+			
+//			asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*1);
+//			ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*1);
+//			end_func10();
+		});
+		
+		
+//		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//															  {
+//																  t_gray->setOpacity(t*255);
+//																  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//															  }, [=](float t)
+//															  {
+//																  t_gray->setOpacity(255);
+//																  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																  skip_menu->setEnabled(true);
+//																  
+//																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent1), end_func10);
+//															  }));
 	}
 	else if(mySGD->is_on_attendance)
 	{
@@ -4238,6 +4522,16 @@ void MainFlowScene::topOnLight()
 																																																	 });
 																																		addChild(t_popup, kMainFlowZorder_popup);
 																																	}
+                                                                                                                                   else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                   {
+                                                                                                                                       ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                       t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                       t_shop->targetHeartTime(heart_time);
+                                                                                                                                       t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                       t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                       t_shop->addGray();
+                                                                                                                                       addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                   }
 																																   else
 																																	   is_menu_enable = true;
 																															   });
@@ -4266,6 +4560,16 @@ void MainFlowScene::topOnLight()
 																																																});
 																																   addChild(t_popup, kMainFlowZorder_popup);
 																															   }
+                                                                                                                               else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                               {
+                                                                                                                                   ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                   t_shop->targetHeartTime(heart_time);
+                                                                                                                                   t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                   t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                   t_shop->addGray();
+                                                                                                                                   addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                               }
 																															   else
 																																   is_menu_enable = true;
 																														   }
@@ -4301,6 +4605,16 @@ void MainFlowScene::topOnLight()
 																																			 });
 																				addChild(t_popup, kMainFlowZorder_popup);
 																			}
+                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                            {
+                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                t_shop->addGray();
+                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                            }
 																			else
 																				is_menu_enable = true;
 																		});
@@ -4329,6 +4643,16 @@ void MainFlowScene::topOnLight()
 																																		 });
 																			addChild(t_popup, kMainFlowZorder_popup);
 																		}
+                                                                        else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                        {
+                                                                            ShopPopup* t_shop = ShopPopup::create();
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->targetHeartTime(heart_time);
+                                                                            t_shop->setShopCode(kSC_eventPack);
+                                                                            t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                            t_shop->addGray();
+                                                                            addChild(t_shop, kMainFlowZorder_popup);
+                                                                        }
 																		else
 																			is_menu_enable = true;
 																	}
@@ -4360,7 +4684,7 @@ void MainFlowScene::topOnLight()
 																																																	 }
 																																																	 else
 																																																		{
-																																																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                                                                                                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																																			{
 																																																				mySGD->is_on_accountLinkLead = true;
 																																																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4381,6 +4705,16 @@ void MainFlowScene::topOnLight()
 																																																																			 });
 																																																				addChild(t_popup, kMainFlowZorder_popup);
 																																																			}
+                                                                                                                                                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                                                                                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                                                                                                t_shop->addGray();
+                                                                                                                                                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                                                                                            }
 																																																			else
 																																																				is_menu_enable = true;
 																																																		}
@@ -4418,6 +4752,16 @@ void MainFlowScene::topOnLight()
 																																																				 });
 																																					addChild(t_popup, kMainFlowZorder_popup);
 																																				}
+                                                                                                                                                else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                                {
+                                                                                                                                                    ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                    t_shop->targetHeartTime(heart_time);
+                                                                                                                                                    t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                                    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                                    t_shop->addGray();
+                                                                                                                                                    addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                                }
 																																				else
 																																					is_menu_enable = true;
 																																			}
@@ -4456,7 +4800,7 @@ void MainFlowScene::topOnLight()
 																	   }
 																	   else
 																		{
-																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																			{
 																				mySGD->is_on_accountLinkLead = true;
 																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4477,6 +4821,16 @@ void MainFlowScene::topOnLight()
 																																			 });
 																				addChild(t_popup, kMainFlowZorder_popup);
 																			}
+                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                            {
+                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                t_shop->addGray();
+                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                            }
 																			else
 																				is_menu_enable = true;
 																		}
@@ -4493,7 +4847,7 @@ void MainFlowScene::topOnLight()
 																   }
 																   else
 																	{
-																		if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                        if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																		{
 																			mySGD->is_on_accountLinkLead = true;
 																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4514,6 +4868,16 @@ void MainFlowScene::topOnLight()
 																																		 });
 																			addChild(t_popup, kMainFlowZorder_popup);
 																		}
+                                                                        else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                        {
+                                                                            ShopPopup* t_shop = ShopPopup::create();
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->targetHeartTime(heart_time);
+                                                                            t_shop->setShopCode(kSC_eventPack);
+                                                                            t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                            t_shop->addGray();
+                                                                            addChild(t_shop, kMainFlowZorder_popup);
+                                                                        }
 																		else
 																			is_menu_enable = true;
 																	}
@@ -4537,7 +4901,7 @@ void MainFlowScene::topOnLight()
 			}
 			else
 			{
-				if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 				{
 					mySGD->is_on_accountLinkLead = true;
 					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4558,6 +4922,16 @@ void MainFlowScene::topOnLight()
 																				 });
 					addChild(t_popup, kMainFlowZorder_popup);
 				}
+                else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                {
+                    ShopPopup* t_shop = ShopPopup::create();
+                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                    t_shop->targetHeartTime(heart_time);
+                    t_shop->setShopCode(kSC_eventPack);
+                    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                    t_shop->addGray();
+                    addChild(t_shop, kMainFlowZorder_popup);
+                }
 				else
 					is_menu_enable = true;
 			}
@@ -4591,6 +4965,16 @@ void MainFlowScene::topOnLight()
 																	 });
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
+    else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+    {
+        ShopPopup* t_shop = ShopPopup::create();
+        t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+        t_shop->targetHeartTime(heart_time);
+        t_shop->setShopCode(kSC_eventPack);
+        t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+        t_shop->addGray();
+        addChild(t_shop, kMainFlowZorder_popup);
+    }
 	else
 		is_menu_enable = true;
 }
@@ -4684,7 +5068,7 @@ void MainFlowScene::setTop()
 //	top_case->setAnchorPoint(ccp(0.f,1.f));
 //	top_case->setPosition(ccp(0,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 //	addChild(top_case, kMainFlowZorder_top);
-//	
+//
 //	CCSprite* top_case2 = CCSprite::create("mainflow_top2.png");
 //	top_case2->setAnchorPoint(ccp(0.f,1.f));
 //	top_case2->setPosition(ccp(top_case->getContentSize().width,top_case->getContentSize().height));
@@ -4983,6 +5367,7 @@ void MainFlowScene::countingMessage()
 												if(result_data["result"]["code"].asInt() == GDSUCCESS)
 												{
 													is_not_first = true;
+                                                    
 													mySGD->initTodayMission(result_data);
 												}
 											}));
@@ -5160,6 +5545,8 @@ void MainFlowScene::alertAction(int t1, int t2)
 
 void MainFlowScene::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+	
+	CommonButton::callBackKey();
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
 //	onBackKeyAction();
 }

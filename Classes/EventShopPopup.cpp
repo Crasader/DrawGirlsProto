@@ -270,6 +270,9 @@ void EventShopPopup::menuAction(CCObject* sender)
 								KS::KSLog("in-app test \n%", v);
 								if(v["issuccess"].asInt())
 								{
+                                    Json::Value t_info = mySGD->getProductInfo(mySGD->getEventInappProduct(t_index));
+                                    if(!t_info.empty())
+                                        myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 									requestItemDelivery();
 								}
 								else
@@ -294,6 +297,8 @@ void EventShopPopup::requestItemDelivery()
 		{
 			CCLOG("inapp success!! refresh!!!");
 			
+            mySGD->network_check_cnt = 0;
+            
 			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
 			
 			mySGD->initProperties(t["list"]);
@@ -302,13 +307,27 @@ void EventShopPopup::requestItemDelivery()
 			loading_layer->removeFromParent();
 			is_menu_enable = true;
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDelivery();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDelivery();
+                                         }));
+            }
 		}
 	});
 }

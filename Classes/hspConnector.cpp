@@ -104,6 +104,42 @@ extern "C"{
 		CCLOG("sendresultnative9");
 		return;
 	}
+	void Java_com_litqoo_lib_hspConnector_SendReactionNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
+	{
+		jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
+		string throwData = revStr;
+		jsonDelegator::get()->buff.append(throwData);
+		if(delesel.func!=NULL)
+		{
+			if(isFinish)
+			{
+				Json::Value resultData;
+				Json::Value resultObj;
+				Json::Reader rd;
+				rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
+				
+				//
+				resultObj["param"] = delesel.param;
+				resultObj["callback"] = delesel.callbackParam;
+				//((delesel.target)->*(delesel.selector))(resultObj);
+				delesel.func(resultObj);
+				jsonDelegator::get()->buff="";
+			}
+		}
+		
+		// 반응은 계속적으로 받아야 되는것이기 때문에 딜리게이트를 삭제 안함. 수동으로 삭제 해야 함
+//		if(isFinish)
+//		{
+//			jsonDelegator::get()->remove(_key);
+//		}
+		
+		env->ReleaseStringUTFChars(datas, revStr);
+		
+		return;
+	}
+
 	int Java_com_nhnent_SKSUMRAN_DGproto_getUserState(JNIEnv *env, jobject thiz)
 	{
 		jboolean isCopy = JNI_FALSE;
@@ -382,7 +418,7 @@ string hspConnector::getCountryCode(){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+	r = [countryCode UTF8String];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
@@ -399,9 +435,9 @@ string hspConnector::getCountryCode(){
 	}
 #endif
 
-	
-	
 	std::transform(r.begin(), r.end(), r.begin(), towlower);
+	
+	if(r=="")r="kr";
 	
 	return r;
 }
@@ -492,6 +528,7 @@ void hspConnector::withdrawAccount(jsonSelType func)
 	}
 #endif
 }
+
 void hspConnector::logout(jsonSelType func){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:
@@ -753,6 +790,182 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
 	};
 	checkCGP(param, callbackParam, sFunc);
 }
+
+/*
+ {
+ "issuccess":true,
+ "info":[
+ {
+ "productid":"g_10331_001",
+ "price":1100,
+ "currency":"KRW",
+ "productname":"젬 10"
+ },
+ {
+ "productid":"g_10331_002",
+ "price":4500,
+ "currency":"KRW",
+ "productname":"젬 50"
+ },
+ {
+ "productid":"g_10331_003",
+ "price":8000,
+ "currency":"KRW",
+ "productname":"젬 100"
+ },
+ {
+ "productid":"g_10331_004",
+ "price":21000,
+ "currency":"KRW",
+ "productname":"젬 300"
+ },
+ {
+ "productid":"g_10331_005",
+ "price":30000,
+ "currency":"KRW",
+ "productname":"젬 500"
+ },
+ {
+ "productid":"g_10331_006",
+ "price":50000,
+ "currency":"KRW",
+ "productname":"젬 1000"
+ },
+ {
+ "productid":"g_10331_007",
+ "price":4000,
+ "currency":"KRW",
+ "productname":"젬 100개(첫구매)"
+ },
+ {
+ "productid":"g_10331_008",
+ "price":2900,
+ "currency":"KRW",
+ "productname":"젬 30"
+ },
+ {
+ "productid":"g_10331_009",
+ "price":5200,
+ "currency":"KRW",
+ "productname":"젬 56"
+ },
+ {
+ "productid":"g_10331_010",
+ "price":9900,
+ "currency":"KRW",
+ "productname":"젬 112"
+ },
+ {
+ "productid":"g_10331_011",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"젬 411"
+ },
+ {
+ "productid":"g_10331_012",
+ "price":54000,
+ "currency":"KRW",
+ "productname":"젬 696"
+ },
+ {
+ "productid":"g_10331_013",
+ "price":99700,
+ "currency":"KRW",
+ "productname":"젬 1439"
+ },
+ {
+ "productid":"g_10331_014",
+ "price":4450,
+ "currency":"KRW",
+ "productname":"젬 112"
+ },
+ {
+ "productid":"g_10331_015",
+ "price":2900,
+ "currency":"KRW",
+ "productname":"이벤트 젬 42"
+ },
+ {
+ "productid":"g_10331_016",
+ "price":5200,
+ "currency":"KRW",
+ "productname":"이벤트 젬 78"
+ },
+ {
+ "productid":"g_10331_017",
+ "price":9900,
+ "currency":"KRW",
+ "productname":"이벤트 젬 157"
+ },
+ {
+ "productid":"g_10331_018",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"이벤트 젬 575"
+ },
+ {
+ "productid":"g_10331_019",
+ "price":54000,
+ "currency":"KRW",
+ "productname":"이벤트 젬 974"
+ },
+ {
+ "productid":"g_10331_020",
+ "price":99700,
+ "currency":"KRW",
+ "productname":"이벤트 젬 2015"
+ },
+ {
+ "productid":"g_10331_021",
+ "price":33200,
+ "currency":"KRW",
+ "productname":"스타터팩"
+ }
+ ]
+ }
+ */
+void hspConnector::requestProductInfos(jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	int dkey = jsonDelegator::get()->add(func, 0, 0);
+	jsonSelType nextFunc = [=](Json::Value obj){
+		int delekey = dkey;
+		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
+		if(delsel.func){
+			delsel.func(obj);
+		}
+		jsonDelegator::get()->remove(delekey);
+	};
+	
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "requestProductInfos", "(I)V")) {
+		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	Json::Value dummy;
+	dummy["issuccess"] = 1;
+//	dummy["korean"] = 0;
+	func(dummy);
+#endif
+}
+void hspConnector::requestProductInfos(CCObject* target, jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLOG("checkDelegator sFunc call");
+		if(GraphDog::get()->checkTarget(target))
+			func(value);
+	};
+	requestProductInfos(sFunc);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+}
+
 void hspConnector::completePromotion()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -992,6 +1205,98 @@ int hspConnector::openKakaoMsg()
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 
 	return 0;
+#endif
+}
+
+int hspConnector::sendKakaoMsg(string title,string msg,string url){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "sendKakaoMsg", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)I")) {
+		jstring param1 = t.env->NewStringUTF(title.c_str());
+		jstring param2 = t.env->NewStringUTF(msg.c_str());
+		jstring param3 = t.env->NewStringUTF(url.c_str());
+		r = t.env->CallStaticIntMethod(t.classID, t.methodID, param1,param2,param3);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+	return r;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// not implementation
+	//	CCLog(url.c_str());
+	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+	
+	return 0;
+#endif
+}
+
+void hspConnector::getAdXConnectEventInstance(string event, string data, string currency)
+{
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getAdXConnectEventInstance",
+																		 "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(event.c_str());
+		jstring param2 = t.env->NewStringUTF(data.c_str());
+		jstring param3 = t.env->NewStringUTF(currency.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1,param2,param3);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(param3);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+}
+int hspConnector::registerGamePadCallback(jsonSelType func)
+{
+	int registeredKey = -1;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "registerGamePadCallback",
+																		 "(I)V")) {
+		int _key =  jsonDelegator::get()->add(func,0,0);
+		registeredKey = _key;
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
+		t.env->DeleteLocalRef(t.classID);
+	} 
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+	return registeredKey;
+}
+void hspConnector::registerGamePadCallback(CCObject* target, jsonSelType func)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	GraphDog::get()->addTarget(target);
+	function<void(Json::Value)> sFunc = [=](Json::Value value){
+		CCLOG("checkDelegator sFunc call");
+		if(GraphDog::get()->checkTarget(target))
+			func(value);
+	};
+	registerGamePadCallback(sFunc);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#endif
+	
+
+}
+void hspConnector::unregisterGamePadCallback(int registeredKey)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "unregisterGamePadCallback",
+																		 "(I)V")) {
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, registeredKey);
+		t.env->DeleteLocalRef(t.classID);
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #endif
 }
 

@@ -27,6 +27,10 @@
 using namespace cocos2d;
 using namespace std;
 
+#define COMMON_VAR(varType, varName, funcName)\
+protected: KSProtectVar<varType> varName;\
+public: virtual varType get##funcName(void){return varName.getV(); }\
+public: virtual void set##funcName(varType var){ varName = var; }
 typedef enum tImgType{
 	kImgType_Empty = 0,
 	kImgType_specialMap, // 각 챕터마다 5, 10스테이지는 특별 스테이지로 특별한 이미지가 나옵니다.
@@ -773,6 +777,11 @@ public:
 	
 	void setSpecialEventPuzzleNumber(int t_i);
 	int getSpecialEventPuzzleNumber();
+
+	
+	string getKakaoMsg();
+	void setKakaoMsg(string t_str);
+
 	
 	bool is_before_selected_event_stage;
 	
@@ -985,6 +994,9 @@ public:
 	
 	void setIntroduceStage(int t_i);
 	int getIntroduceStage();
+    
+    Json::Value product_infos;
+    Json::Value getProductInfo(string t_id);
 	
 private:
 	
@@ -1142,6 +1154,7 @@ private:
 	KSProtectVar<int> special_event_puzzle_number;
 	
 	KSProtectStr all_clear_reward;
+	KSProtectStr kakao_msg;
 	
 	vector<ChangeUserdataValue> changed_userdata_list;
 	jsonSelType change_userdata_callback;
@@ -1186,6 +1199,9 @@ private:
 	
 	CC_SYNTHESIZE(long long, remove_message_member_id, RemoveMessageMemberId);
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
+	
+	COMMON_VAR(int, testInt, TestInt);
+	COMMON_VAR(int, addGemReward, AddGemReward);
 	
 };
 

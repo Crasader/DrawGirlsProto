@@ -1528,9 +1528,12 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
 	int random_value = rand()%100;
+    if(mySGD->getStageGold() >= 500)
+        random_value = 99;
+    
 	if(random_value < 2)
 	{
-		m_gold = t_gold*100;
+		m_gold = t_gold*100*2;
 		
 		int start_cut = rand()%6;
 		
@@ -1594,7 +1597,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	}
 	else if(random_value < 22)
 	{
-		m_gold = t_gold*10;
+		m_gold = t_gold*10*2;
 		
 		int start_cut = rand()%6;
 		
@@ -1622,7 +1625,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	}
 	else
 	{
-		m_gold = t_gold;
+		m_gold = t_gold*2;
 		
 		int start_cut = rand()%6;
 		

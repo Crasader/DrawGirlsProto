@@ -7,7 +7,7 @@
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{58,2},{1,1}}</string>
+                <string>{{60,2},{1,1}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,7 +20,7 @@
             <key>cha_back_bottom.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{18,54},{13,13}}</string>
+                <string>{{35,58},{13,13}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -33,7 +33,7 @@
             <key>cha_back_hand.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,25},{19,7}}</string>
+                <string>{{35,49},{19,7}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -46,7 +46,7 @@
             <key>cha_back_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{35,24},{19,20}}</string>
+                <string>{{2,44},{19,20}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,20 +59,33 @@
             <key>cha_back_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{22,40},{11,12}}</string>
+                <string>{{50,58},{11,12}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{6,0},{11,12}}</string>
                 <key>sourceSize</key>
                 <string>{23,12}</string>
             </dict>
+            <key>cha_dia.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{2,25},{17,23}}</string>
+                <key>offset</key>
+                <string>{0,0}</string>
+                <key>rotated</key>
+                <true/>
+                <key>sourceColorRect</key>
+                <string>{{0,0},{17,23}}</string>
+                <key>sourceSize</key>
+                <string>{17,23}</string>
+            </dict>
             <key>cha_front_bottom.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{23,25},{13,10}}</string>
+                <string>{{50,71},{13,10}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -85,7 +98,7 @@
             <key>cha_front_hand.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{53,62},{7,7}}</string>
+                <string>{{24,61},{7,7}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -98,7 +111,7 @@
             <key>cha_front_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{35,2},{21,20}}</string>
+                <string>{{35,27},{21,20}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -111,7 +124,7 @@
             <key>cha_front_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{53,45},{15,9}}</string>
+                <string>{{24,44},{15,9}}</string>
                 <key>offset</key>
                 <string>{1,0}</string>
                 <key>rotated</key>
@@ -134,57 +147,31 @@
                 <key>sourceSize</key>
                 <string>{23,31}</string>
             </dict>
-            <key>cha_ruby.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,62},{10,10}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{10,10}}</string>
-                <key>sourceSize</key>
-                <string>{10,10}</string>
-            </dict>
             <key>cha_ruby_ball.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,34},{18,18}}</string>
+                <string>{{35,2},{23,23}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,0},{18,18}}</string>
+                <string>{{0,0},{23,23}}</string>
                 <key>sourceSize</key>
-                <string>{18,18}</string>
+                <string>{23,23}</string>
             </dict>
             <key>cha_ruby_fire.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,54},{14,6}}</string>
+                <string>{{27,25},{16,6}}</string>
                 <key>offset</key>
-                <string>{0,8}</string>
+                <string>{0,11}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{4,0},{14,6}}</string>
+                <string>{{6,0},{16,6}}</string>
                 <key>sourceSize</key>
-                <string>{22,22}</string>
-            </dict>
-            <key>cha_ruby_orange.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{35,45},{16,16}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{2,2},{16,16}}</string>
-                <key>sourceSize</key>
-                <string>{20,20}</string>
+                <string>{28,28}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -196,7 +183,7 @@
             <key>size</key>
             <string>{64,128}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:d0a991a03a6a70f1d1b59bc320c77f0a:bd21ba22f013929153da792a2e27ddf4:c00d5954cbd88b41a84ddf8f1f8b93fd$</string>
+            <string>$TexturePacker:SmartUpdate:c8b114d8d14905d58f76bea2b0c3679a:3f8742c8c09f0bef410d955e2e8d7490:c00d5954cbd88b41a84ddf8f1f8b93fd$</string>
             <key>textureFileName</key>
             <string>character.pvr.ccz</string>
         </dict>

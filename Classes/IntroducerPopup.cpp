@@ -314,6 +314,8 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 		
 		loading_layer->removeFromParent();
 		
+		mySGD->setIntroducerID(result_data["introducerID"].asString());
+		
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), ccsf(myLoc->getLocalForKey(kMyLocalKey_introducerSuccess), input_text1->getText()), [=]()
 											{
 												is_menu_enable = false;

@@ -1327,7 +1327,7 @@ n<m 인 부수기 공격은 m초 안에는 안함.
 void KSCumberBase::cumberAttack(float dt)
 {
 	
-	if(m_slience || (m_cumberState != kCumberStateMoving)) // 공격 못하는 조건이라면 패스.
+	if(m_slience || (m_cumberState != kCumberStateMoving) || m_cumberTimer < 3.f) // 공격 못하는 조건이라면 패스.
 	{
 		return;
 	}
@@ -1336,7 +1336,9 @@ void KSCumberBase::cumberAttack(float dt)
 	
 	//분노카운터,재공격카운터 계속 증가
 	m_reAttackCnt++;
+//	m_reAttackCnt += 10000;
 	m_furyCnt++;
+//	m_reAttackCnt += 10000;
 	m_reAttackCnt = 102;
 	if(m_reAttackCnt<100)return;
 	//거리분노룰 - 분노카운터와 리어택카운터가 0이상일때, 보스-유저의 거리가 떨어져있으면 부수기공격
@@ -1714,11 +1716,6 @@ void KSCumberBase::cumberAttack(float dt)
 			}
 		}
 	}
-
-
-
-
-
 }
 
 void KSCumberBase::speedAdjustment(float dt)
@@ -2352,6 +2349,8 @@ void KSCumberBase::onCanceledCasting()
 {
 	m_castingCancelCount++;
 //	myGD->communication("Main_showDetailMessage", std::string());
+	TRACE();
+	m_lastCastTime = m_cumberTimer;
 	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
@@ -2476,12 +2475,15 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		return;
 	}
 	
-	if(!isExchange){
+	static bool isFirst=true;
+	if(isFirst){
+		isFirst=false;
 		//시도횟수에 따라 몬스터  hp 떨구기.
 		float hpBalance = MIN(playCount,10)*5;
 		m_remainHp -= m_remainHp*hpBalance/100.f;
 		
 		float speedBalance = MIN(0.2,playCount*0.02);
+		CCLOG("setAlpha %f",speedBalance);
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+speedBalance);
 	}
 	

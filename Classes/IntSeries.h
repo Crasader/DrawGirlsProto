@@ -68,6 +68,8 @@ public:
 	
 	IntDirection getDirection()
 	{
+        if(dx == 0 && dy == 0)
+            return directionStop;
 		// 대각선 불가
 		if(dx == 0)
 		{

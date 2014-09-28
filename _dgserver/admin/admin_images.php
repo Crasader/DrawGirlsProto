@@ -67,7 +67,7 @@ include "header.php";
 	<tr><td>
 
 <?php
-$categorys = array("card","cbt","monster","sil","item","mission","pattern","theme","thumbnail","puzzle","piece","ui","etc","frame");
+$categorys = array("card","cbt","obt","monster","sil","item","mission","pattern","theme","thumbnail","puzzle","piece","ui","etc","frame");
 
 
 $uploaderForm = '<select name="category" id="imageCategory">';

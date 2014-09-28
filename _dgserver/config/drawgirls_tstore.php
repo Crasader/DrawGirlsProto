@@ -1,7 +1,7 @@
 <?php
 
 $sInfo["gameID"]="SKDDMK";
-$sInfo["gameNo"]="10316";
+$sInfo["gameNo"]="10331";
 $sInfo["HTTPGATEWAY_URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/nomad.json";
 $sInfo["HTTPGATEWAY_HELP_URL"]="http://alpha-httpgw.hangame.com/hsp/httpgw/help.json";
 $sInfo["HTTPGATEWAY_VERSION"]="1.3";

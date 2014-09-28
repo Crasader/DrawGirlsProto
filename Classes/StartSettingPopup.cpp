@@ -625,7 +625,9 @@ void StartSettingPopup::setMain()
 			bool is_price_usable = false; // 소지하고 있거나 장착 가능한 가격
 			is_price_usable = is_price_usable || (mySGD->getGoodsValue(mySGD->getItemCodeToGoodsType(t_ic)) > 0); // 소지하고 있는지
 			
-			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable && is_unlocked)
+            bool is_endless_tutorial = (mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1);
+            
+			if(getSelectedItemCount() < 3 && (is_before_used_item || is_show_item_popup) && is_price_usable && is_unlocked && !is_endless_tutorial)
 			{
 				// mount
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
@@ -749,9 +751,11 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
-		gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+        auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi");
+		gacha_item = t_ccb.first;//CCSprite::create("startsetting_item_gacha_inner.png");
 		gacha_item->setPosition(ccp(410,185));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+        t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
@@ -1330,7 +1334,7 @@ void StartSettingPopup::gachaMenuCreate()
 //																			   buy_button->removeFromParent();
 																		   
 																		   CCRect title_size = CCRectMake(0, 0, 200, 20);
-																		   CCPoint title_position = ccp(188, 130);
+																		   CCPoint title_position = ccp(188, 133);
 																		   
 																		   item_title_label = CCLabelTTF::create(convertToItemCodeToItemName(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 15, title_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentTop);
 																			 setFormSetter(item_title_label);
@@ -1339,8 +1343,8 @@ void StartSettingPopup::gachaMenuCreate()
 																		   item_title_label->setPosition(title_position);
 																		   main_case->addChild(item_title_label);
 																		   
-																		   CCRect option_size = CCRectMake(0, 0, 200, 25);
-																		   CCPoint option_position = ccp(188, 117);
+																		   CCRect option_size = CCRectMake(0, 0, 160, 25);
+																		   CCPoint option_position = ccp(188, 115);
 																		   
 																		   option_label = CCLabelTTF::create(mySD->getItemScript(kIC_itemGacha).c_str(), mySGD->getFont().c_str(), 10.f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 																			 setFormSetter(option_label);
@@ -1890,9 +1894,11 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				CCPoint keep_position = gacha_item->getPosition();
 				gacha_item->removeFromParent();
 				
-				gacha_item = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
+                auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi");
+				gacha_item = t_ccb.first;//CCSprite::create("startsetting_item_gacha_inner.png");
 				gacha_item->setPosition(keep_position);
 				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
+                t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 				
 				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 				gacha_label->enableOuterStroke(ccBLACK, 1.f);
@@ -2056,7 +2062,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 //			buy_button->removeFromParent();
 		
 		CCRect title_size = CCRectMake(0, 0, 200, 20);
-		CCPoint title_position = ccp(188, 130);
+		CCPoint title_position = ccp(188, 133);
 		
 		//		CCSprite* title_rect = CCSprite::create("whitePaper.png", title_size);
 		//		title_rect->setOpacity(100);
@@ -2071,14 +2077,14 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		item_title_label->setPosition(title_position);
 		main_case->addChild(item_title_label);
 		
-		CCRect option_size = CCRectMake(0, 0, 200, 25);
-		CCPoint option_position = ccp(188, 117);
+		CCRect option_size = CCRectMake(0, 0, 160, 25);
+		CCPoint option_position = ccp(188, 115);
 		
-		//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
-		//		option_rect->setOpacity(100);
-		//		option_rect->setAnchorPoint(ccp(0,1));
-		//		option_rect->setPosition(option_position);
-		//		main_case->addChild(option_rect);
+//		CCSprite* option_rect = CCSprite::create("whitePaper.png", option_size);
+//		option_rect->setOpacity(100);
+//		option_rect->setAnchorPoint(ccp(0,1));
+//		option_rect->setPosition(option_position);
+//		main_case->addChild(option_rect);
 		
 		option_label = CCLabelTTF::create(mySD->getItemScript(item_list[tag-1]).c_str(), mySGD->getFont().c_str(), 10.f, option_size.size, kCCTextAlignmentLeft, kCCVerticalTextAlignmentCenter);
 		setFormSetter(option_label);

@@ -20,13 +20,13 @@ using namespace std;
 
 enum TutoMapType{
 	kTutoMapType_empty = 0,
-	kTutoMapType_line,
-	kTutoMapType_get,
-	kTutoMapType_checkLine,
-	kTutoMapType_checkGet,
-	kTutoMapType_newLine,
-	kTutoMapType_scanningEmpty,
-	kTutoMapType_newGet
+	kTutoMapType_line,          // 1
+	kTutoMapType_get,           // 2
+	kTutoMapType_checkLine,     // 3
+	kTutoMapType_checkGet,      // 4
+	kTutoMapType_newLine,       // 5
+	kTutoMapType_scanningEmpty, // 6
+	kTutoMapType_newGet         // 7
 };
 
 class T_BFS_Point
@@ -305,6 +305,7 @@ public:
 	void drawAnimation();
 	
 	function<void(void)> controlerStop;
+    function<bool(void)> is_controler_backing;
 	
 private:
 	
@@ -325,6 +326,8 @@ private:
 	
 	CCSprite* character_img;
 	CCBAnimationManager* character_manager;
+    
+    CCSprite* line_edge;
 	
 	void myInit(function<TutoMapType(IntPoint)> t_getMapData, function<void(IntPoint, TutoMapType)> t_setMapData, int t_height, function<void(IntPointVector)> t_addPath, function<void(void)> t_cleanPath, function<void(void)> t_scanMap, function<int(void)> t_getRecentStep, function<void(void)> t_nextStep);
 };

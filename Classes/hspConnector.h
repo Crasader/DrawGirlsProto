@@ -234,6 +234,8 @@ public:
 	
 	void checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func);
 	void checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func);
+	void requestProductInfos(jsonSelType func);
+	void requestProductInfos(CCObject* target, jsonSelType func);
 	void completePromotion();
 	void completeInstallPromotion();
 	void purchaseProduct(Json::Value param,Json::Value callbackParam, jsonSelType func);
@@ -249,6 +251,13 @@ public:
 	void openHSPNotice();
 	void launchPromotion();
 	int openKakaoMsg();
+	int sendKakaoMsg(string title,string msg,string url);
+	void getAdXConnectEventInstance(string event, string data, string currency);
+	int registerGamePadCallback(jsonSelType func);
+protected:
+	void registerGamePadCallback(CCObject* target, jsonSelType func);
+public:
+	void unregisterGamePadCallback(int registeredKey);
 	
 	double getScreenRealWidth();
 	double getScreenRealHeight();

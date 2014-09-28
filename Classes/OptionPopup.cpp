@@ -5,7 +5,7 @@
 //  Created by 사원3 on 2013. 11. 20..
 //
 //
-
+#include "StoryLayer.h"
 #include "OptionPopup.h"
 #include "MyLocalization.h"
 //#include "WorldMapScene.h"
@@ -46,7 +46,7 @@
 #include "LoadingLayer.h"
 #include "JoystickSizeQuestionPopup.h"
 #include "IntroducerPopup.h"
-
+#include "GDWebSprite.h"
 
 USING_NS_CC_EXT;
 
@@ -404,10 +404,10 @@ bool OptionPopup::init()
 //	d_kakao_img->addChild(d_kakao_label);
 	
 	
-	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
-	kakao_item->setTag(kOP_MT_kakao);
-	kakao_item->setPosition(ccp(169,256.5f));
-	tab_menu->addChild(kakao_item);
+//	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
+//	kakao_item->setTag(kOP_MT_kakao);
+//	kakao_item->setPosition(ccp(169,256.5f));
+//	tab_menu->addChild(kakao_item);
 	
 	
 	
@@ -432,9 +432,11 @@ bool OptionPopup::init()
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.5f));
 	system_tab->addChild(system_label);
 	
+	system_tab->setStringData("testobj");
 	
 	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
-	bgm_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	bgm_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    bgm_label->disableOuterStroke();
 	bgm_label->setAnchorPoint(ccp(0,0.5f));
 	bgm_label->setPosition(ccpAdd(getContentPosition(kOP_MT_bgm), ccp(-100,0)));
 	main_case->addChild(bgm_label, kOP_Z_back);
@@ -462,7 +464,8 @@ bool OptionPopup::init()
 	
 	
 	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
-	effect_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	effect_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    effect_label->disableOuterStroke();
 	effect_label->setAnchorPoint(ccp(0,0.5f));
 	effect_label->setPosition(ccpAdd(getContentPosition(kOP_MT_effect), ccp(-100,0)));
 	main_case->addChild(effect_label, kOP_Z_back);
@@ -547,7 +550,8 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* joystick_size_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickSize), mySGD->getFont().c_str(), 11.5f);
 	joystick_size_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
-	joystick_size_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	joystick_size_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    joystick_size_label->disableOuterStroke();
 	joystick_size_label->setAnchorPoint(ccp(0,0.5f));
 	joystick_size_label->setPosition(ccpAdd(getContentPosition(kOP_MT_joystickSize), ccp(-100,0)));
 	main_case->addChild(joystick_size_label, kOP_Z_back);
@@ -674,7 +678,8 @@ bool OptionPopup::init()
 	
 	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
 	safety_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
-	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    safety_label->disableOuterStroke();
 	safety_label->setAnchorPoint(ccp(0,0.5f));
 	safety_label->setPosition(ccpAdd(getContentPosition(kOP_MT_safety), ccp(-100,0)));
 	main_case->addChild(safety_label, kOP_Z_back);
@@ -712,7 +717,8 @@ bool OptionPopup::init()
 	
 	
 	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 11.5f);
-	push_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	push_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    push_label->disableOuterStroke();
 	push_label->setAnchorPoint(ccp(0,0.5f));
 	push_label->setPosition(ccpAdd(getContentPosition(kOP_MT_push), ccp(-100,0)));
 	main_case->addChild(push_label, kOP_Z_back);
@@ -937,8 +943,7 @@ bool OptionPopup::init()
 	diary_item->setTag(kOP_MT_toDiary19);
 	diary_item->setPosition(ccp(191,16));//293
 	tab_menu->addChild(diary_item);
-	
-	
+
 	
 	//	CCSprite* n_noti = CCSprite::create("option_noti.png");
 	//	CCSprite* s_noti = CCSprite::create("option_noti.png");
@@ -953,6 +958,22 @@ bool OptionPopup::init()
 	//	noti_menu->setTouchPriority(-171);
 	
 	is_menu_enable = false;
+	
+	
+	
+//	
+//	GDWebSprite::printCache();
+//	GDWebSprite::removeCache();
+//	CCSprite* gdwe = GDWebSprite::create("http://182.162.201.147:10010/images/ui/startpack.png", "icon_r.png", CCSizeMake(910/2.f, 440/2.f));
+//	gdwe->setAnchorPoint(ccp(0.5,0.5));
+//	gdwe->setPosition(ccp(100,100));
+//	addChild(gdwe,99999);
+	
+//	StoryLayer::startStory("puzzle1",[](){ CCLOG("ENDED STORY");});
+	
+	
+	
+	
 	
 	
 	return true;
@@ -1058,8 +1079,8 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_help)
 	{
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
-//		myHSP->openCSCenter("supports.cscenter");
+		myHSP->openCSCenter("");
+//		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_recommender)
@@ -1287,6 +1308,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(ment3_label);
 		
 		
+		
 		CommonButton* close_button = CommonButton::createCloseButton(t_popup->getTouchPriority()-5);
 		close_button->setPosition(ccp(case_back->getContentSize().width/2.f-22, case_back->getContentSize().height/2.f-25));
 		close_button->setFunction([=](CCObject* sender)
@@ -1466,7 +1488,14 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_kakao)
 	{
-		int ret = hspConnector::get()->openKakaoMsg();
+		
+		Json::Value msgInfo = mySGD->getKakaoMsg();
+		
+		string msg = msgInfo["msg"].asString();
+		GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
+		int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+		
+		
 		if(ret == 0) {
 			auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
 																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
@@ -1510,7 +1539,8 @@ void OptionPopup::resetBgmMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(bgm_img->getContentSize().width/2.f, bgm_img->getContentSize().height/2.f));
 	bgm_img->addChild(inner_label);
 	
@@ -1542,7 +1572,8 @@ void OptionPopup::resetEffectMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(effect_img->getContentSize().width/2.f, effect_img->getContentSize().height/2.f));
 	effect_img->addChild(inner_label);
 	
@@ -1575,7 +1606,8 @@ void OptionPopup::resetJoystickPositioningMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(joystick_positioning_img->getContentSize().width/2.f, joystick_positioning_img->getContentSize().height/2.f));
 	joystick_positioning_img->addChild(inner_label);
 	
@@ -1607,7 +1639,8 @@ void OptionPopup::resetJoystickMovingMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(joystick_moving_img->getContentSize().width/2.f, joystick_moving_img->getContentSize().height/2.f));
 	joystick_moving_img->addChild(inner_label);
 	
@@ -1639,7 +1672,8 @@ void OptionPopup::resetJoystickVibMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(joystick_vib_img->getContentSize().width/2.f, joystick_vib_img->getContentSize().height/2.f));
 	joystick_vib_img->addChild(inner_label);
 	
@@ -1671,7 +1705,8 @@ void OptionPopup::resetUseSideDirectionMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(use_side_direction_img->getContentSize().width/2.f, use_side_direction_img->getContentSize().height/2.f));
 	use_side_direction_img->addChild(inner_label);
 	
@@ -1703,7 +1738,8 @@ void OptionPopup::resetSafetyMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(safety_img->getContentSize().width/2.f, safety_img->getContentSize().height/2.f));
 	safety_img->addChild(inner_label);
 	
@@ -1735,7 +1771,8 @@ void OptionPopup::resetPushMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(push_img->getContentSize().width/2.f, push_img->getContentSize().height/2.f));
 	push_img->addChild(inner_label);
 	
@@ -1767,7 +1804,8 @@ void OptionPopup::resetMessageMenu()
 	}
 	
 	KSLabelTTF* inner_label = KSLabelTTF::create(inner_text.c_str(), mySGD->getFont().c_str(), 12);
-	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+//	inner_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
+    inner_label->disableOuterStroke();
 	inner_label->setPosition(ccp(message_img->getContentSize().width/2.f, message_img->getContentSize().height/2.f));
 	message_img->addChild(inner_label);
 	

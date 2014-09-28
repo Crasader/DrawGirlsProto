@@ -5,7 +5,7 @@
 #include "curl/curl.h"
 #include <pthread.h>
 #include <queue>
-#include "Json.h"
+#include "jsoncpp/json.h"
 using namespace cocos2d;
 using namespace std;
 
@@ -26,15 +26,17 @@ public:
 	CCObject* final_target;
 	SEL_CallFunc final_delegate;
 
-    static CCSprite* create(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    static CCSprite* create(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    static CCSprite* create(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, string defaultImg, CCSize size, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+	static CCSprite* create(string imgUrl, CCNode *defaultNode,  CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+  static CCSprite* create(string imgUrl, CCNode *defaultNode, string imageName, CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     
     bool init(string imgUrl, string defaultImg, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     bool init(string imgUrl, CCNode *defaultNode, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
     bool init(string imgUrl, string defaultImg, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
-    bool init(string imgUrl, CCNode *defaultNode, string imageName, CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
+    bool init(string imgUrl, CCNode *defaultNode, string imageName, CCSize size,CCObject* t_final = NULL, SEL_CallFunc d_final = NULL);
 
     static void removeAllSprite(); //remove all sprite
     
@@ -45,7 +47,8 @@ public:
     static void* t_function(void * _caller);
     void finishDownload();
     void changeWebSprite(CCTexture2D *pTexture);
-    
+	static void removeCache();
+	static void printCache();
 };
 
 struct GDWebSpriteMemoryStruct {

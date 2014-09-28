@@ -75,7 +75,7 @@ var clearList = function(value,option){
 <br><br>
 
 <h2 id="tables-contextual-classes">|주간누적랭킹</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="WeeklyScore" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="WeeklyScore" autoLoad="false" dbWhere='{}' dbLimit="50" dbSort='{"score":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' >no</th>

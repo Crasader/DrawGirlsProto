@@ -260,7 +260,7 @@ bool RankNewPopup::init()
 	param["start"]=1;
 	param["limit"]=50;
 	
-	hspConnector::get()->command("getweeklyrankbyalluser", param, json_selector(this, RankNewPopup::resultGetRank));
+	hspConnector::get()->command("getweeklyrankbyalluser", param, this, json_selector(this, RankNewPopup::resultGetRank));
 	
 	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_rank))
 	{

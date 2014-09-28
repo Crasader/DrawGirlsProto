@@ -163,17 +163,17 @@ bool CommonButton::init(string title, float fontSize, CCSize size, CCScale9Sprit
 CCScale9Sprite* CommonButton::getBackgroundByType(CommonButtonType btnType){
 	
 	string btnBackImg;
-	if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
+	if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellowup.png";
 	else if(btnType==CommonButtonYellow) btnBackImg = "common_button_yellow.png";
 	else if(btnType==CommonButtonGray) btnBackImg = "common_button_gray.png";
 	else if(btnType==CommonButtonGray2) btnBackImg = "common_button_gray2.png";
 	else if(btnType==CommonButtonBlue) btnBackImg = "common_button_blue.png";
-	else if(btnType==CommonButtonGreen) btnBackImg = "common_button_green.png";
-	else if(btnType==CommonButtonOrange) btnBackImg = "common_button_orange.png";
-	else if(btnType==CommonButtonPupple) btnBackImg = "common_button_pupple.png";
-	else if(btnType==CommonButtonDarkPupple)	btnBackImg = "common_button_darkpupple.png";
-	else if(btnType==CommonButtonLightPupple)	btnBackImg = "common_button_lightpupple.png";
-	else if(btnType==CommonButtonYellowDown)	btnBackImg = "common_button_yellowdown.png";
+	else if(btnType==CommonButtonGreen) btnBackImg = "common_button_yellowup.png";
+	else if(btnType==CommonButtonOrange) btnBackImg = "common_button_blue.png";
+	else if(btnType==CommonButtonPupple) btnBackImg = "common_button_yellowup.png";
+	else if(btnType==CommonButtonDarkPupple)	btnBackImg = "common_button_yellowup.png";
+	else if(btnType==CommonButtonLightPupple)	btnBackImg = "common_button_yellowup.png";
+	else if(btnType==CommonButtonYellowDown)	btnBackImg = "common_button_yellowup.png";
 	else if(btnType==CommonButtonYellowUp)		btnBackImg = "common_button_yellowup.png";
 	else if(btnType==CommonButtonClose) btnBackImg = "common_button_close.png";
 	else if(btnType==CommonButtonAchievement) btnBackImg = "achievement_button_success.png";
@@ -459,7 +459,7 @@ void CommonButton::setZoomOnTouchDown(bool var){
 
 void CommonButton::findBackBtn(cocos2d::CCNode* obj,vector<BackKeyData> &m_backkeyList,CCPoint pos){
 	if(!obj)return;
-	if(obj->getStringData()=="backkey"){
+	if(obj->getStringData()=="backkey" || obj->getTag()==930462){
 		m_backkeyList.push_back({obj,pos});
 	}
 	
@@ -504,6 +504,11 @@ void CommonButton::callBackKey(){
 			//checkobj1->activate();
 			if(maxPri>checkobj1->getTouchPriority()){
 				maxPri =checkobj1->getTouchPriority();
+				selectIndex=i;
+			}
+		}else if(CCLayer* checkobj4 = dynamic_cast<CCMenu*>(selectedObj->getParent())){
+			if(maxPri>checkobj4->getTouchPriority()){
+				maxPri =checkobj4->getTouchPriority();
 				selectIndex=i;
 			}
 		}

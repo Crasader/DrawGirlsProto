@@ -27,6 +27,7 @@
 #include "StyledLabelTTF.h"
 #include <boost/lexical_cast.hpp>
 #include "SendMessageUtil.h"
+#include "GDWebSprite.h"
 enum FriendPopupZorder{
 	kFriendPopupZorder_gray = 1,
 	kFriendPopupZorder_back,
@@ -50,9 +51,12 @@ bool FriendPopup::init()
 	{
 		return false;
 	}
+	
+	m_introduced = false;
 	m_touchPriority = -190;
 	startFormSetter(this);
 	input_text1 = nullptr;
+	m_voteInputText = nullptr;
 	is_menu_enable = false;
 	setTouchEnabled(true);
 	
@@ -85,6 +89,7 @@ bool FriendPopup::init()
 	
 	
 	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	m_front = main_inner;
 	main_inner->setContentSize(CCSizeMake(424, 194));
 	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f + 5);
 	main_case->addChild(main_inner);
@@ -104,6 +109,8 @@ bool FriendPopup::init()
 	main_case->addChild(m_friendManageContainer, kFriendPopupZorder_popup);
 	m_friendListContainer = CCNode::create();
 	main_case->addChild(m_friendListContainer, kFriendPopupZorder_popup);
+	m_friendVoteContainer = CCNode::create();
+	main_case->addChild(m_friendVoteContainer, kFriendPopupZorder_popup);
 	friend_table = NULL;
 	//	m_scrollBar = NULL;
 	setFriendTable();
@@ -111,6 +118,7 @@ bool FriendPopup::init()
 	setListMenu();
 	setAddMenu();
 	setManageMenu();
+	setVoteFriendMenu();
 	
 	list_menu->setEnabled(false);
 	recent_code = FriendTabCode::kList;
@@ -119,6 +127,7 @@ bool FriendPopup::init()
 	close_menu->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 													{
+														AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 														hidePopup();
 													});
 	main_case->addChild(close_menu, kFriendPopupZorder_menu);
@@ -140,6 +149,12 @@ bool FriendPopup::init()
 	//	addChild(tip_menu, kAchievePopupZorder_menu);
 	//
 	//	tip_menu->setTouchPriority(-190);
+	
+	
+	m_loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+	addChild(m_loadingCCBI, INT_MAX);
+	m_loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+	m_loadingCCBI->setVisible(false);
 	
 	m_listButtonCallback(0);
 //	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_achieve))
@@ -273,7 +288,10 @@ void FriendPopup::hidePopup()
 //	setBackKeyEnabled(false);
 	
 	is_menu_enable = false;
-	friend_table->setTouchEnabled(false);
+	if(friend_table)
+	{
+		friend_table->setTouchEnabled(false);
+	}
 	
 	CommonAnimation::closePopup(this, main_case, gray, [=](){
 		
@@ -367,6 +385,16 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 	cell->init();
 	cell->autorelease();
 	
+	Json::Value memberInfo;
+	
+	if(recent_code == FriendTabCode::kAdd)
+	{
+		memberInfo = m_votedFriendList[idx];
+	}
+	else if(recent_code == FriendTabCode::kList || recent_code == FriendTabCode::kManage)
+	{
+		memberInfo = m_friendList[idx];
+	}
 	auto userAttacher = [=](CCNode* cell_back, Json::Value memberInfo)
 	{
 		KSLabelTTF* nick = KSLabelTTF::create(memberInfo["nick"].asString().c_str(), mySGD->getFont().c_str(), 12.5f);
@@ -379,8 +407,9 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		
 		KSLabelTTF* lastConnection = KSLabelTTF::create(ccsf(getLocal(LK::kFriendLastConnection), GraphDogLib::dateFormat("m/d H:i", memberInfo["lastDate"].asLargestInt()).c_str()),
 																										mySGD->getFont().c_str(), 10.f);
+		lastConnection->setAnchorPoint(ccp(0.f, 0.5f));
 		lastConnection->setColor(ccc3(50, 40, 150));
-		lastConnection->setPosition(ccp(105.5, 8.0));
+		lastConnection->setPosition(ccp(51.0, 8.0));
 		cell_back->addChild(lastConnection, 1);
 		setFormSetter(lastConnection);
 		
@@ -392,7 +421,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		cell_back->addChild(currentStage, 1);
 		
 		setFormSetter(currentStage);
-		currentStage->setPosition(ccp(292.f, 17.5));
+		currentStage->setPosition(ccp(238.0, 17.5f));
 
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(memberInfo["flag"].asString()).c_str());
@@ -400,6 +429,119 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		cell_back->addChild(selectedFlagSpr, 1);
 		selectedFlagSpr->setPosition(ccp(25.5, 17.0)); 			// dt (25.5, 17.0)
 		
+	};
+	
+	
+	auto removeQ = [=](CCObject*){
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+		//			memberID	string or int	memberID
+		//			friendID	string or int	friendID
+		//			nick	string	nick
+		//			content	string	내용
+		//			data	string or dict	data
+		//			exchangeID	string or dict	exchangeID
+		
+		// 삭제할거냐 팝업 띄우고 삭제.
+		
+		ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchPriority - 1);
+		
+		warningPopup->getDimmedSprite()->setVisible(false);
+		addChild(warningPopup);
+		
+		auto back = CCSprite::create("popup_small_back.png");
+		
+		CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
+		
+		auto front = CCScale9Sprite::create("common_grayblue.png",
+																				CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+		
+		//	front->setVisible(false);
+		warningPopup->setContainerNode(back);
+		//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
+		//	back->setContentSize(CCSizeMake(200, 200));
+		front->setContentSize(CCSizeMake(251, 68));
+		front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,9));
+		
+		
+		back->addChild(front);
+		
+		//				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-12));
+		//				content_back->setPosition(ccp(0.0,-12)); 			// dt (0.0,-4.5)
+		
+		//				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
+		setFormSetter(front);
+		
+		KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
+		//	titleLbl->setColor(ccc3(255, 170, 20));
+		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
+		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
+		back->addChild(titleLbl);
+		
+		
+		CommonButton* closeButton = CommonButton::createCloseButton(m_touchPriority - 2);
+		closeButton->setFunction([=](CCObject*)
+														 {
+															 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+															 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																													 [=]()
+																													 {
+																														 warningPopup->removeFromParent();
+																													 });
+														 });
+		back->addChild(closeButton);
+		closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
+		
+		StyledLabelTTF* content_label = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendRemoveFriendQ),
+																																memberInfo["nick"].asString().c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
+		content_label->setPosition(ccpFromSize(back->getContentSize() / 2.f) + ccp(0, 10));
+		setFormSetter(content_label);
+		back->addChild(content_label);
+		
+		CommonButton* confirm = CommonButton::create("확인", 12.f, CCSizeMake(101, 44), CommonButtonAchievement, m_touchPriority - 2);
+		back->addChild(confirm);
+		confirm->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -50));
+		setFormSetter(confirm);
+		confirm->setFunction([=](CCObject*){
+			
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+			Json::Value param;
+			Json::Value param2;
+			param["memberID"] = myHSP->getMemberID();
+			param["friendID"] = memberInfo["memberID"].asString();
+			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+			addChild(ll, INT_MAX);
+
+			myHSP->command("removefriend", param, [=](Json::Value v){
+				ll->removeFromParent();
+				CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
+																		[=]()
+																		{
+																			warningPopup->removeFromParent();
+																		});
+				
+				
+				if(v["result"]["code"] != GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							getLocal(LK::kFriendError), [=]()
+																							{
+																								
+																							}));
+					return;
+				}
+				
+				// 성공 적으로 삭제했다.
+				m_afterActionFunc(0);
+				//							m_manageButtonCallback(0);
+			});
+		});
+		
+		
+		
+		
+		
+		CCLOG("remove friend");
 	};
 	if(recent_code == FriendTabCode::kAdd)
 	{
@@ -449,7 +591,6 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		 
 		 ]
 		 */
-		Json::Value memberInfo = m_votedFriendList[idx];
 		
 		std::string	cell_back_filename = "rank_normal2.png";
 		
@@ -482,6 +623,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				//			content	string	내용
 				//			data	string or dict	data
 				//			exchangeID	string or dict	exchangeID
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 				Json::Value param;
 				Json::Value param2;
 				param2["friendreq"] = 1;
@@ -489,11 +631,25 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
+				param["template"] = "msgRquestFriend";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
 				param["data"] = param2;
+				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+				addChild(ll, INT_MAX);
+
 				myHSP->command("sendmessage", param, [=](Json::Value v){
+					ll->removeFromParent();
 					if(v["result"]["code"] != GDSUCCESS)
+					{
+						addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																								getLocal(LK::kFriendError), [=]()
+																								{
+																									
+																								}));
 						return;
+					}
 					
 					if(input_text1)
 					{
@@ -529,7 +685,6 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 	}
 	else if(recent_code == FriendTabCode::kList)
 	{
-		Json::Value memberInfo = m_friendList[idx];
 		
 		std::string	cell_back_filename = "rank_normal2.png";
 		
@@ -542,13 +697,28 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		cell->addChild(cell_back);
 		setFormSetter(cell_back);
 		
+		KS::KSLog("%", memberInfo);
 		userAttacher(cell_back, memberInfo);
 		
 		int remainTime = getHeartSendingRemainTime(memberInfo["memberID"].asString(), mySGD->getHeartSendCoolTime());
 		if(remainTime == 0 && memberInfo["memberID"].asInt64() != myHSP->getMemberID())
 		{
+			CommonButton* miniRemoveFriend = CommonButton::create( CCSprite::create("friend_delete.png"),
+																														m_touchPriority);
+			miniRemoveFriend->setTitleSize(13.f);
+//			CommonButton* miniRemoveFriend = CommonButton::create(getLocal(LK::kFriendRemoveFriend), 13.f, CCSizeMake(100, 30),
+//																														CCScale9Sprite::create("friend_delete.png"),
+//																														m_touchPriority);
+			cell_back->addChild(miniRemoveFriend, 1);
+			miniRemoveFriend->setPosition(ccp(378.5, 17.0));
+			setFormSetter(miniRemoveFriend);
+			m_afterActionFunc = m_listButtonCallback;
+			miniRemoveFriend->setFunction(removeQ);
+			
+
+			
 			CommonButton* sendHeart = CommonButton::create(getLocal(LK::kFriendHeartSend), 13.f, CCSizeMake(100, 30),
-																										 CCScale9Sprite::create("subbutton_purple3.png" , CCRectMake(0,0, 100, 39), CCRectMake(57, 22, 2, 2)),
+																										 CCScale9Sprite::create("friend_bt.png"),
 																										 m_touchPriority);
 			CCSprite* rubySprite = CCSprite::create("shop_coin1.png");
 			rubySprite->setPosition(ccp(26.0, 6.0));
@@ -556,7 +726,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 			sendHeart->getBackgroundSprite()->addChild(rubySprite);
 			setFormSetter(rubySprite);
 			cell_back->addChild(sendHeart, 1);
-			sendHeart->setPosition(ccp(349.0, 17.0));
+			sendHeart->setPosition(ccp(310.5, 17.0));
 			setFormSetter(sendHeart);
 			sendHeart->setFunction([=](CCObject*){
 				//			memberID	string or int	memberID
@@ -565,6 +735,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				//			content	string	내용
 				//			data	string or dict	data
 				//			exchangeID	string or dict	exchangeID
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 				Json::Value param;
 				Json::Value param2;
 				//			param2["friendreq"] = 1;
@@ -573,11 +744,26 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
+				param["template"] = "msgSendHeart";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
 				//			param["data"] = param2;
+				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+				addChild(ll, INT_MAX);
+
 				myHSP->command("sendmessage", param, [=](Json::Value v){
+					ll->removeFromParent();
 					if(v["result"]["code"] != GDSUCCESS)
+					{
+						addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																								getLocal(LK::kFriendError), [=]()
+																								{
+																									
+																								}));
 						return;
+					}
 					
 					if(input_text1)
 					{
@@ -595,10 +781,24 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					addChild(successPopup);
 					setHeartSendTime(memberInfo["memberID"].asString());
 					sendHeart->setVisible(false);
+					
+					CCScale9Sprite* remainTimeBack = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+					remainTimeBack->setContentSize(CCSizeMake(91.0, 25.5));
+					remainTimeBack->setPosition(ccp(310.5f, 18.0));
+					cell_back->addChild(remainTimeBack);
+					setFormSetter(remainTimeBack);
+					
+//					std::string remainTimeStr = getRemainTimeMsg(mySGD->getHeartSendCoolTime());
+					int h, i, s;
+					timeSpliter(mySGD->getHeartSendCoolTime(), 0, 0, 0, &h, &i, &s);
+					KSLabelTTF* remainTimeFnt = KSLabelTTF::create(ccsf("%02d:%02d:%02d", h, i, s), mySGD->getFont().c_str(), 13.f);
+					remainTimeBack->addChild(remainTimeFnt);
+					remainTimeFnt->setPosition(ccpFromSize(remainTimeBack->getContentSize()) / 2.f + ccp(0, -2));
+					
 				});
 				
 				
-				
+								
 				
 				CCLOG("add friend");
 			});
@@ -606,8 +806,8 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		else // 남은 시간이 있다면.
 		{
 			CCScale9Sprite* remainTimeBack = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-			remainTimeBack->setContentSize(CCSizeMake(91.0, 23.5));
-			remainTimeBack->setPosition(ccp(348.5, 18.0));
+			remainTimeBack->setContentSize(CCSizeMake(91.0, 25.5));
+			remainTimeBack->setPosition(ccp(310.5f, 18.0));
 			cell_back->addChild(remainTimeBack);
 			setFormSetter(remainTimeBack);
 			
@@ -616,7 +816,19 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 			timeSpliter(remainTime, 0, 0, 0, &h, &i, &s);
 			KSLabelTTF* remainTimeFnt = KSLabelTTF::create(ccsf("%02d:%02d:%02d", h, i, s), mySGD->getFont().c_str(), 13.f);
 			remainTimeBack->addChild(remainTimeFnt);
-			remainTimeFnt->setPosition(ccpFromSize(remainTimeBack->getContentSize()) / 2.f + ccp(0, 0));
+			remainTimeFnt->setPosition(ccpFromSize(remainTimeBack->getContentSize()) / 2.f + ccp(0, -2));
+			
+			CommonButton* miniRemoveFriend = CommonButton::create( CCSprite::create("friend_delete.png"),
+																														m_touchPriority);
+			miniRemoveFriend->setTitleSize(13.f);
+			//			CommonButton* miniRemoveFriend = CommonButton::create(getLocal(LK::kFriendRemoveFriend), 13.f, CCSizeMake(100, 30),
+			//																														CCScale9Sprite::create("friend_delete.png"),
+			//																														m_touchPriority);
+			cell_back->addChild(miniRemoveFriend, 1);
+			miniRemoveFriend->setPosition(ccp(378.5, 17.0));
+			setFormSetter(miniRemoveFriend);
+			m_afterActionFunc = m_listButtonCallback;
+			miniRemoveFriend->setFunction(removeQ);
 		}
 
 //		CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddFriend), 13.f, CCSizeMake(100, 30),
@@ -632,7 +844,6 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 	else if(recent_code == FriendTabCode::kManage)
 	{
 		{
-			Json::Value memberInfo = m_friendList[idx];
 			
 			std::string	cell_back_filename = "rank_normal2.png";
 			
@@ -650,106 +861,13 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 			if(memberInfo["memberID"].asString() != boost::lexical_cast<std::string>(myHSP->getMemberID()))
 			{
 				CommonButton* removeFriend = CommonButton::create(getLocal(LK::kFriendRemoveFriend), 13.f, CCSizeMake(100, 30),
-																													CCScale9Sprite::create("subbutton_purple3.png" , CCRectMake(0,0, 100, 39), CCRectMake(57, 22, 2, 2)),
+																													CCScale9Sprite::create("friend_bt.png"),
 																													m_touchPriority);
 				cell_back->addChild(removeFriend, 1);
 				removeFriend->setPosition(ccp(349.0, 17.0));
 				setFormSetter(removeFriend);
-				removeFriend->setFunction([=](CCObject*){
-					//			memberID	string or int	memberID
-					//			friendID	string or int	friendID
-					//			nick	string	nick
-					//			content	string	내용
-					//			data	string or dict	data
-					//			exchangeID	string or dict	exchangeID
-					
-					// 삭제할거냐 팝업 띄우고 삭제.
-					
-					ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchPriority - 1);
-					
-					warningPopup->getDimmedSprite()->setVisible(false);
-					addChild(warningPopup);
-					
-					auto back = CCSprite::create("popup_small_back.png");
-					
-					CommonAnimation::openPopup(warningPopup, back, warningPopup->getDimmedSprite(), nullptr, nullptr);
-					
-					auto front = CCScale9Sprite::create("common_grayblue.png",
-																							CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-					
-					//	front->setVisible(false);
-					warningPopup->setContainerNode(back);
-					//	back->setContentSize(CCSizeMake(550 / 2.f, 506 / 2.f));
-					//	back->setContentSize(CCSizeMake(200, 200));
-					front->setContentSize(CCSizeMake(251, 68));
-					front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0,9));
-					
-					
-					back->addChild(front);
-					
-					//				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-12));
-					//				content_back->setPosition(ccp(0.0,-12)); 			// dt (0.0,-4.5)
-					
-					//				front->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(0, 15));
-					setFormSetter(front);
-					
-					KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kWarningDesc), mySGD->getFont().c_str(), 12.f);
-					//	titleLbl->setColor(ccc3(255, 170, 20));
-					titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
-					titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
-					back->addChild(titleLbl);
-					
-					
-					CommonButton* closeButton = CommonButton::createCloseButton(m_touchPriority - 2);
-					closeButton->setFunction([=](CCObject*)
-																	 {
-																		 CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
-																																 [=]()
-																																 {
-																																	 warningPopup->removeFromParent();
-																																 });
-																	 });
-					back->addChild(closeButton);
-					closeButton->setPosition(ccp(back->getContentSize().width-25, back->getContentSize().height-22));
-					
-					StyledLabelTTF* content_label = StyledLabelTTF::create(ccsf("<font newline=13>%s 님과</font><font>친구를 끊으시겠습니까?</font>",
-																																			memberInfo["nick"].asString().c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-					content_label->setAnchorPoint(ccp(0.5f,0.5f));
-					content_label->setPosition(ccpFromSize(back->getContentSize() / 2.f) + ccp(0, 10));
-					setFormSetter(content_label);
-					back->addChild(content_label);
-					
-					CommonButton* confirm = CommonButton::create("확인", 12.f, CCSizeMake(101, 44), CommonButtonAchievement, m_touchPriority - 2);
-					back->addChild(confirm);
-					confirm->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -50));
-					setFormSetter(confirm);
-					confirm->setFunction([=](CCObject*){
-						Json::Value param;
-						Json::Value param2;
-						param["memberID"] = myHSP->getMemberID();
-						param["friendID"] = memberInfo["memberID"].asString();
-						myHSP->command("removefriend", param, [=](Json::Value v){
-							CommonAnimation::closePopup(this, back, warningPopup->getDimmedSprite(), nullptr,
-																					[=]()
-																					{
-																						warningPopup->removeFromParent();
-																					});
-							
-							
-							if(v["result"]["code"] != GDSUCCESS)
-								return;
-							
-							// 성공 적으로 삭제했다.
-							m_manageButtonCallback(0);
-						});
-					});
-					
-					
-					
-					
-					
-					CCLOG("remove friend");
-				});
+				m_afterActionFunc = m_manageButtonCallback;
+				removeFriend->setFunction(removeQ);
 			}
 			
 			//		CommonButton* addFriend = CommonButton::create(getLocal(LK::kFriendAddFriend), 13.f, CCSizeMake(100, 30),
@@ -858,13 +976,42 @@ void FriendPopup::setListMenu()
 		
 		m_listButtonCallback = [=](CCObject*)
 		{
+			m_friendListContainer->removeAllChildren();
+			m_friendAddContainer->removeAllChildren();
+			m_friendManageContainer->removeAllChildren();
+			m_friendVoteContainer->removeAllChildren();
+			if(friend_table)
+			{
+				friend_table->removeFromParent();
+				friend_table = NULL;
+			}
+			if(input_text1)
+			{
+				input_text1->removeFromParent();
+				input_text1 = nullptr;
+			}
+			if(m_voteInputText)
+			{
+				m_voteInputText->removeFromParent();
+				m_voteInputText = nullptr;
+			}
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(false);
 			manage_menu->setEnabled(true);
-			
+			vote_friend_menu->setEnabled(true);
 			Json::Value param;
 			param["memberID"] = myHSP->getMemberID();
-			myHSP->command("getfriendlist", param, [=](Json::Value v){
+			
+//			CCSprite* loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+//			m_friendListContainer->addChild(loadingCCBI);
+//			loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+			m_loadingCCBI->setVisible(true);
+
+			myHSP->command("getfriendlist", param, this, [=](Json::Value v){
+				if(list_menu->isEnabled() == true)
+					return;
+				m_loadingCCBI->setVisible(false);
+//				loadingCCBI->removeFromParent();
 				/*
 				 {
 				 "result":{
@@ -887,23 +1034,41 @@ void FriendPopup::setListMenu()
 				
 				KS::KSLog("%", v);
 				if(v["result"]["code"] != GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							getLocal(LK::kFriendError), [=]()
+																							{
+																								
+																							}));
 					return;
+				}
 				
 				CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 				recent_code = FriendTabCode::kList;
 				setFriendTable();
 				m_friendList = v["list"];
 				friend_table->reloadData();
-				m_friendListContainer->removeAllChildren();
-				m_friendAddContainer->removeAllChildren();
-				m_friendManageContainer->removeAllChildren();
+				
+				if(m_friendList.empty())
+				{
+					
+					KSLabelTTF* nothing = KSLabelTTF::create(getLocal(LK::kFriendNothingExist), mySGD->getFont().c_str(), 13.f);
+					m_friendListContainer->addChild(nothing, 100);
+					nothing->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+				}
 				if(input_text1)
 				{
 					input_text1->removeFromParent();
 					input_text1 = nullptr;
 				}
+				if(m_voteInputText)
+				{
+					m_voteInputText->removeFromParent();
+					m_voteInputText = nullptr;
+				}
+
 				
-				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf("친구는 %d명까지 등록가능합니다.", 50), mySGD->getFont().c_str(), 11.f);
+				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf("친구는 %d명까지 등록가능합니다.", mySGD->getGameFriendMax()), mySGD->getFont().c_str(), 11.f);
 				leftMent->setAnchorPoint(ccp(0.f, 0.5f));
 				m_friendListContainer->addChild(leftMent);
 				setFormSetter(leftMent);
@@ -928,7 +1093,7 @@ void FriendPopup::setListMenu()
 			
 		};
 		list_menu = CCMenuItemSpriteLambda::create(n_all_img, s_all_img, d_all_img, m_listButtonCallback);
-		list_menu->setPosition(ccp(244,256.5f));
+		list_menu->setPosition(ccp(244 + 75*(0),256.5f));
 		tab_menu->addChild(list_menu);
 	}
 }
@@ -960,10 +1125,39 @@ void FriendPopup::setAddMenu()
 			add_menu->setEnabled(false);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(true);
-			
+			vote_friend_menu->setEnabled(true);
+			m_friendListContainer->removeAllChildren();
+			m_friendAddContainer->removeAllChildren();
+			m_friendManageContainer->removeAllChildren();
+			m_friendVoteContainer->removeAllChildren();
+			if(friend_table)
+			{
+				friend_table->removeFromParent();
+				friend_table = NULL;
+			}
+			if(input_text1)
+			{
+				input_text1->removeFromParent();
+				input_text1 = nullptr;
+			}
+			if(m_voteInputText)
+			{
+				m_voteInputText->removeFromParent();
+				m_voteInputText = nullptr;
+			}
 			Json::Value param;
 			param["memberID"] = myHSP->getMemberID();
-			myHSP->command("getuserlistbyrandom", param, [=](Json::Value v){
+//			CCSprite* loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+//			m_friendAddContainer->addChild(loadingCCBI);
+//			loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+			m_loadingCCBI->setVisible(true);
+			myHSP->command("getuserlistbyrandom", param, this, [=](Json::Value v){
+				if(add_menu->isEnabled() == true)
+					return;
+
+				m_loadingCCBI->setVisible(false);
+//				ll->removeFromParent();
+//				loadingCCBI->removeFromParent();
 				/*
 				 {
 				 "result":{
@@ -1018,27 +1212,38 @@ void FriendPopup::setAddMenu()
 				 */
 					
 				if(v["result"]["code"] != GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							getLocal(LK::kFriendError), [=]()
+																							{
+																								
+																							}));
 					return;
+				}
 				
 				CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 				recent_code = FriendTabCode::kAdd;
 				setFriendTable();
 				m_votedFriendList = v["list"];
 				friend_table->reloadData();
-				m_friendListContainer->removeAllChildren();
-				m_friendAddContainer->removeAllChildren();
-				m_friendManageContainer->removeAllChildren();
+				
 				if(input_text1)
 				{
 					input_text1->removeFromParent();
 					input_text1 = nullptr;
 				}
+				if(m_voteInputText)
+				{
+					m_voteInputText->removeFromParent();
+					m_voteInputText = nullptr;
+				}
+
 
 				
-				CCScale9Sprite* t_back1 = CCScale9Sprite::create("common_gray.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+				CCScale9Sprite* t_back1 = CCScale9Sprite::create("friend_search.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
 //				t_back1->setOpacity(0);
-				input_text1 = CCEditBox::create(CCSizeMake(305.f, 34), t_back1);
-				input_text1->setPosition(ccp(36.0, 209.5));
+				input_text1 = CCEditBox::create(CCSizeMake(241.f, 34), t_back1);
+				input_text1->setPosition(ccp(63.0, 209.5));
 				CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(input_text1, 99999);
 				CCEditBox* editbox = input_text1;
 				editbox->setAnchorPoint(ccp(0.0f, 0.5f));
@@ -1060,16 +1265,38 @@ void FriendPopup::setAddMenu()
 				CommonButton* searchBtn = CommonButton::create(CCSprite::create("subbutton_purple3.png"), m_touchPriority);
 				searchBtn->setTitle(getLocal(LK::kFriendSearch));
 				searchBtn->setTitleSize(13.f);
-				searchBtn->setPosition(ccp(392.5, 203.0));
+				searchBtn->setPosition(ccp(363.0, 203.0));
 				m_friendAddContainer->addChild(searchBtn);
 				setFormSetter(searchBtn);
 				searchBtn->setFunction([=](CCObject*){
 					// getuserdata 로 사람 찾아내어서 테이블에 띄움.
 					
+					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+					if(input_text1)
+					{
+						input_text1->setVisible(false);
+					}
 					Json::Value param;
+					if(editbox->getText() == std::string(""))
+					{
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
+							if(input_text1)
+							{
+								input_text1->setVisible(true);
+							}
+							
+						});
+						popup->getDimmedSprite()->setVisible(false);
+						addChild(popup);
+						
+						return;
+					}
 					param["nick"] = editbox->getText();
 					param["isPublic"] = true;
+					LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+					addChild(ll, INT_MAX); 
 					myHSP->command("getuserdata", param, [=](Json::Value v){
+						ll->removeFromParent();
 						KS::KSLog("%", v);
 						if(v["result"]["code"] != GDSUCCESS)
 						{
@@ -1077,7 +1304,7 @@ void FriendPopup::setAddMenu()
 							{
 								input_text1->setVisible(false);
 							}
-							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNotFountFriend), [=](){
+							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNotFountFriend), [=](){
 								if(input_text1)
 								{
 									input_text1->setVisible(true);
@@ -1117,7 +1344,7 @@ void FriendPopup::setAddMenu()
 			
 		});
 		
-		add_menu->setPosition(ccp(319,256.5f));
+		add_menu->setPosition(ccp(244 + 75*1,256.5f));
 		tab_menu->addChild(add_menu);
 	}
 }
@@ -1151,13 +1378,39 @@ void FriendPopup::setManageMenu()
 		d_ing_img->addChild(d_ing_label);
 		
 		m_manageButtonCallback = [=](CCObject*){
+			
+
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(false);
-			
+			vote_friend_menu->setEnabled(true);
+			m_friendListContainer->removeAllChildren();
+			m_friendAddContainer->removeAllChildren();
+			m_friendManageContainer->removeAllChildren();
+			m_friendVoteContainer->removeAllChildren();
+			if(friend_table)
+			{
+				friend_table->removeFromParent();
+				friend_table = NULL;
+			}
+			if(input_text1)
+			{
+				input_text1->removeFromParent();
+				input_text1 = nullptr;
+			}
+			if(m_voteInputText)
+			{
+				m_voteInputText->removeFromParent();
+				m_voteInputText = nullptr;
+			}
 			Json::Value param;
 			param["memberID"] = myHSP->getMemberID();
-			myHSP->command("getfriendlist", param, [=](Json::Value v){
+			m_loadingCCBI->setVisible(true);
+
+			myHSP->command("getfriendlist", param, this, [=](Json::Value v){
+				if(manage_menu->isEnabled() == true)
+					return;
+				m_loadingCCBI->setVisible(false);
 				/*
 				 {
 				 "result":{
@@ -1180,7 +1433,14 @@ void FriendPopup::setManageMenu()
 				
 				KS::KSLog("%", v);
 				if(v["result"]["code"] != GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							getLocal(LK::kFriendError), [=]()
+																							{
+																								
+																							}));
 					return;
+				}
 				
 				CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 				recent_code = FriendTabCode::kManage;
@@ -1188,36 +1448,444 @@ void FriendPopup::setManageMenu()
 				m_friendList = v["list"];
 				friend_table->reloadData();
 				
-				m_friendListContainer->removeAllChildren();
-				m_friendAddContainer->removeAllChildren();
-				m_friendManageContainer->removeAllChildren();
-				if(input_text1)
+				if(m_friendList.empty())
 				{
-					input_text1->removeFromParent();
-					input_text1 = nullptr;
+					
+					KSLabelTTF* nothing = KSLabelTTF::create(getLocal(LK::kFriendNothingExist), mySGD->getFont().c_str(), 13.f);
+					m_friendListContainer->addChild(nothing, 100);
+					nothing->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
 				}
+	
+				
+
 			});
 		};
 		manage_menu = CCMenuItemSpriteLambda::create(n_ing_img, s_ing_img, d_ing_img, m_manageButtonCallback);
-		manage_menu->setPosition(ccp(394,256.5f));
+		
+		manage_menu->setPosition(ccp(244 + 75*1,256.5f));
 		tab_menu->addChild(manage_menu);
+		manage_menu->setVisible(false);
+		manage_menu->setEnabled(false);
 	}
 }
 
+void FriendPopup::setVoteFriendMenu()
+{
+	if(!vote_friend_menu)
+	{
+		CCSprite* n_ing_img = CCSprite::create("tabbutton_down.png");
+		KSLabelTTF* n_ing_label = KSLabelTTF::create(getLocal(LK::kFriendRecommend), mySGD->getFont().c_str(), 12.5f);
+		n_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		n_ing_label->setPosition(ccpFromSize(n_ing_img->getContentSize()/2.f) + ccp(0,2));
+		n_ing_img->addChild(n_ing_label);
+		
+		CCSprite* s_ing_img = CCSprite::create("tabbutton_down.png");
+		s_ing_img->setColor(ccGRAY);
+		KSLabelTTF* s_ing_label = KSLabelTTF::create(getLocal(LK::kFriendRecommend), mySGD->getFont().c_str(), 12.5f);
+		s_ing_label->setColor(ccGRAY);
+		s_ing_label->disableOuterStroke();
+		s_ing_label->setPosition(ccpFromSize(s_ing_img->getContentSize()/2.f) + ccp(0,2));
+		s_ing_img->addChild(s_ing_label);
+		
+		CCSprite* d_ing_img = CCSprite::create("tabbutton_up.png");
+		KSLabelTTF* d_ing_label = KSLabelTTF::create(getLocal(LK::kFriendRecommend), mySGD->getFont().c_str(), 12.5f);
+		d_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
+		d_ing_img->addChild(d_ing_label);
+		// 추천 두번 째 팝업
+		m_voteFriendButtonCallbackSecond = [=](CCObject*){
+			TRACE();
+			add_menu->setEnabled(true);
+			list_menu->setEnabled(true);
+			manage_menu->setEnabled(true);
+			vote_friend_menu->setEnabled(false);
+			m_friendListContainer->removeAllChildren();
+			m_friendAddContainer->removeAllChildren();
+			m_friendManageContainer->removeAllChildren();
+			m_friendVoteContainer->removeAllChildren();
+			TRACE();
+			if(input_text1)
+			{
+				input_text1->removeFromParent();
+				input_text1 = nullptr;
+			}
+			if(m_voteInputText)
+			{
+				m_voteInputText->removeFromParent();
+				m_voteInputText = nullptr;
+			}
+			TRACE();
+			if(friend_table)
+			{
+				friend_table->removeFromParent();
+				friend_table = NULL;
+			}
+			TRACE();
+			Json::Value param1;
+			param1["memberID"] = myHSP->getMemberID();
+			TRACE();
+//			CCSprite* loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+//			m_friendVoteContainer->addChild(loadingCCBI);
+//			loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
+			m_loadingCCBI->setVisible(true);
+//			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+//			addChild(ll, INT_MAX);
 
 
 
+			TRACE();
+			myHSP->command("getintroducereward", param1, this, [=](Json::Value v){
+				if(vote_friend_menu->isEnabled() == true)
+					return;
+				m_loadingCCBI->setVisible(false);
+				//				ll->removeFromParent();
+				TRACE();
+				KS::KSLog("%", v);
+				if(v["result"]["code"].asInt() != GDSUCCESS)
+					return;
+				//				v["introduceCnt"] = 10;
+				StyledLabelTTF* promotion1 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVotePromotion1), v["introduceCnt"].asInt()), mySGD->getFont().c_str(),
+																														20.f, 0, StyledAlignment::kCenterAlignment);
+				TRACE();
+				m_friendVoteContainer->addChild(promotion1);
+				setFormSetter(promotion1);
+				promotion1->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 82.5));
+				
+				StyledLabelTTF* promotion2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVotePromotion2), mySGD->getIntroduceStage()), mySGD->getFont().c_str(),
+																														12.f, 0, StyledAlignment::kCenterAlignment);
+				m_friendVoteContainer->addChild(promotion2);
+				promotion2->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 59.0));
+				setFormSetter(promotion2);
+				
+				TRACE();
+				Json::Value reward = v["reward"];
+				CCSprite* rewardImage = GDWebSprite::create(reward["image"].asString(), CCNode::create(), CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
+				rewardImage->setAnchorPoint(ccp(0.5f, 0.5f));
+				//				rewardImage->setContentSize(CCSizeMake(v["reward"]["size"]["w"].asInt(), v["reward"]["size"]["h"].asInt()));
+				m_friendVoteContainer->addChild(rewardImage);
+				rewardImage->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -18));
+				setFormSetter(rewardImage);
+				
+				TRACE();
+				vector<int> rewardCounts;
+				int stampCount = 0;
+				for(Json::ValueIterator iter = v["reward"]["count"].begin(); iter != v["reward"]["count"].end(); ++iter)
+				{
+					if((*iter).asInt() <= v["introduceCnt"].asInt())
+					{
+						stampCount++;
+					}
+				}
+				
+				TRACE();
+				int x = v["reward"]["position"]["x"].asInt();
+				int y = v["reward"]["position"]["y"].asInt();
+				int term = v["reward"]["position"]["term"].asInt();
+				for(int i=0; i<stampCount; i++)
+				{
+					int newX = x + i * term;
+					int newY = y;
+					
+					CCSprite* stampSprite = CCSprite::create("friend_gain.png");
+					m_friendVoteContainer->addChild(stampSprite);
+					stampSprite->setPosition(ccp(newX, newY));
+					
+				}
+				
+				
+				TRACE();
+				//				CCScale9Sprite* giftBack = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+				//				giftBack->setContentSize(CCSizeMake(411, 97));
+				//				m_friendVoteContainer->addChild(giftBack);
+				//				giftBack->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, -21));
+				//				setFormSetter(giftBack);
+				
+				
+				
+				
+				// {80, 119} {160, 119} {240, 119} {320, 119}, {400, 119} 가 상품 좌표
+				
+				TRACE();
+				if(m_introduced == false)
+				{
+					CommonButton* voterInput = CommonButton::create(CCSprite::create("endless_bt_up.png"), m_touchPriority);
+					voterInput->setPosition(ccp(303.0, 52.5));
+					voterInput->setTitle(getLocal(LK::kFriendVoterInput));
+					voterInput->setTitleSize(13.f);
+					m_friendVoteContainer->addChild(voterInput);
+					voterInput->setFunction([=](CCObject*){
+						AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+						TRACE();
+						m_voteFriendButtonCallback(0);  // 첫번 째 팝업으로 돌아감.
+					});
+					setFormSetter(voterInput);
+				}
+				
+				CommonButton* kakaoTalkInvite = CommonButton::create(CCSprite::create("friend_kakao.png"), m_touchPriority);
+				kakaoTalkInvite->setPosition(ccp(400.5, 53.5));
+				//			kakaoTalkInvite->setTitle(getLocal(LK::kFriendVoterInput));
+				//			kakaoTalkInvite->setTitleSize(13.f);
+				m_friendVoteContainer->addChild(kakaoTalkInvite);
+				kakaoTalkInvite->setFunction([=](CCObject*){
+					
+					Json::Value msgInfo = mySGD->getKakaoMsg();
+					string msg = msgInfo["msg"].asString();
+					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
+					CCLOG("%s",msgInfo["msg"].asString().c_str());
+					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+					
+					if(ret == 0) {
+						auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+						ASPopupView* as = ASPopupView::getCommonNoti2(-9999999, "에러",
+																													ment, nullptr, ccp(0, 0), true);
+						addChild(as, 9999999);
+					}
+					
 
+					
+				});
+				setFormSetter(kakaoTalkInvite);
+				
+			});
+			
+//			TRACE();
+			
+			
+	
+		};
+		
+		// 추천 첫번 째 팝업
+		/////////////////////////////////////////////////////////여 기 가 시 작 //////////////////////
+		m_voteFriendButtonCallback = [=](CCObject*){
+			
 
+			add_menu->setEnabled(true);
+			list_menu->setEnabled(true);
+			manage_menu->setEnabled(true);
+			vote_friend_menu->setEnabled(false);
+			m_friendListContainer->removeAllChildren();
+			m_friendAddContainer->removeAllChildren();
+			m_friendManageContainer->removeAllChildren();
+			m_friendVoteContainer->removeAllChildren();
+			if(input_text1)
+			{
+				input_text1->removeFromParent();
+				input_text1 = nullptr;
+			}
+			if(m_voteInputText)
+			{
+				m_voteInputText->removeFromParent();
+				m_voteInputText = nullptr;
+			}
+			if(friend_table)
+			{
+				friend_table->removeFromParent();
+				friend_table = NULL;
+			}
+			
 
+			TRACE();
+			Json::Value param;
+			param["memberID"] = myHSP->getMemberID();
+//			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+//			addChild(ll, INT_MAX);
+//			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+//			addChild(ll, INT_MAX);
 
+			m_loadingCCBI->setVisible(true);
+//			CCSprite* loadingCCBI = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+//			m_friendVoteContainer->addChild(loadingCCBI);
+//			loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
 
+			myHSP->command("getuserdata", param, this, [=](Json::Value v){
+				if(vote_friend_menu->isEnabled() == true)
+					return;
+				m_loadingCCBI->setVisible(false);
+//				ll->removeFromParent();
+//				loadingCCBI->removeFromParent();
+				TRACE();
+				if(v["result"]["code"] != GDSUCCESS)
+				{
+					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																							getLocal(LK::kFriendError), [=]()
+																							{
+																								
+																							}));
+					return;
+				}
+				
+				// 추천인이 있으면 두번 째 팝업으로 넘어감.
+				if(v["introducerID"].asInt64() != 0)
+				{
+					m_introduced = true;
+					m_voteFriendButtonCallbackSecond(0);
+					
+				}
+				// 추천인이 없으면 진짜 첫번 째 팝업 코드 실행됨.
+				else
+				{
+					KSLabelTTF* voteDesc1 = KSLabelTTF::create(getLocal(LK::kFriendVote1), mySGD->getFont().c_str(), 18.f);
+					voteDesc1->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
+					m_friendVoteContainer->addChild(voteDesc1);
+					voteDesc1->setPosition (ccpFromSize(main_case->getContentSize()) / 2 + ccp(0, 54));
+					setFormSetter(voteDesc1);
+					
+					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVote2), mySGD->getAddGemReward()), mySGD->getFont().c_str(),
+																														 13.f, 0, StyledAlignment::kCenterAlignment);
+					setFormSetter(voteDesc2);
+					m_friendVoteContainer->addChild(voteDesc2);
+					voteDesc2->setPosition (ccpFromSize(main_case->getContentSize()) / 2 + ccp(0, 36));
+					
+					CCScale9Sprite* t_back1 = CCScale9Sprite::create("friend_search.png", CCRectMake(0, 0, 40, 40), CCRectMake(19, 19, 2, 2));
+					//				t_back1->setOpacity(0);
+					m_voteInputText = CCEditBox::create(CCSizeMake(241.f, 34), t_back1);
+					m_voteInputText->setPosition(ccp(63.0, 126));
+					CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(m_voteInputText, 99999);
+					CCEditBox* editbox = m_voteInputText;
+					editbox->setAnchorPoint(ccp(0.0f, 0.5f));
+					editbox->setPlaceHolder(getLocal(LK::kFriendInputNickName));
+					editbox->setReturnType(kKeyboardReturnTypeDone);
+					editbox->setFont(mySGD->getFont().c_str(), 15);
+					editbox->setInputMode(kEditBoxInputModeSingleLine);
+					editbox->setInputFlag(cocos2d::extension::EditBoxInputFlag::kEditBoxInputFlagInitialCapsAllCharacters);
+					editbox->setDelegate(this);
+					//	m_container->addChild(input_text);
+					editbox->setTouchPriority(m_touchPriority);
+					editbox->setMaxLength(20);
+					//				editbox->setEnabled(false);
+					//				editbox->setVisible(false);
+					TRACE();
+					setFormSetter(m_voteInputText);
+					TRACE();
+					CCScale9Sprite* searchButton = CCScale9Sprite::create("subbutton_purple3.png");
+					CommonButton* searchBtn = CommonButton::create(CCSprite::create("subbutton_purple3.png"), m_touchPriority);
+					searchBtn->setTitle(getLocal(LK::kFriendSearch));
+					searchBtn->setTitleSize(13.f);
+					searchBtn->setPosition(ccp(363.0, 120));
+					m_friendAddContainer->addChild(searchBtn);
+					setFormSetter(searchBtn);
+					
+					CommonButton* skipButton = CommonButton::create(CCSprite::create("endless_bt_up.png"), m_touchPriority);
+					skipButton->setTitleSize(13.f);
+					skipButton->setTitle(getLocal(LK::kFriendInputSkip));
+					skipButton->setPosition(ccp(406.5, 55.0));
+					m_friendVoteContainer->addChild(skipButton);
+					setFormSetter(skipButton);
+					
+					skipButton->setFunction([=](CCObject*){
+						TRACE();
+						AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+						TRACE();
+						m_voteFriendButtonCallbackSecond(0);
+						TRACE();
+//						CCLog("m_voteInputText %x", m_voteInputText);
+//						if(m_voteInputText)
+//						{
+//							m_voteInputText->setVisible(false);
+//						}
+					});
+					
+					// 첫번 째 팝업에서 검색을 놀렀을 때.
+					searchBtn->setFunction([=](CCObject*)
+																 {
+																	 {
+																		 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		 Json::Value param;
+																		 if(m_voteInputText)
+																		 {
+																			 m_voteInputText->setVisible(false);
+																		 }
+ 
+																		 if(m_voteInputText->getText() == std::string(""))
+																		 {
+																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
+																				 if(m_voteInputText)
+																				 {
+																					 m_voteInputText->setVisible(true);
+																				 }
+																			 });
+																			 popup->getDimmedSprite()->setVisible(false);
+																			 addChild(popup);
+																			 return;
+																		 }
+																		 param["memberID"] = myHSP->getSocialID();
+																		 param["nick"] = m_voteInputText->getText();
+																		 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
+																		 LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
+																		 addChild(ll, INT_MAX);
 
+																		 myHSP->command("saveIntroducer", param, [=](Json::Value v2){
+																			 ll->removeFromParent();
+																			 if(v2["result"]["code"] == GDSUCCESS)
+																			 {
+																				 m_voteInputText->setVisible(false);
+																				 addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																																						 getLocal(LK::kFriendSuccessfullyRecommend), [=]()
+																																						 {
+																																							 if(m_voteInputText)
+																																							 {
+																																								 m_voteInputText->setVisible(true);
+																																							 }
+																																						 }));
+																				 m_voteFriendButtonCallbackSecond(0);
+																				 
+																				 
+																			 }
+																			 else if(v2["result"]["code"] == GDDONTFIND)
+																			 {
+																				 m_voteInputText->setVisible(false);
+																				 addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																																						 getLocal(LK::kFriendDontFind), [=]()
+																																						 {
+																																							 if(m_voteInputText)
+																																							 {
+																																								 m_voteInputText->setVisible(true);
+																																							 }
 
+																																						 }));
+																				 
+																			 }
+																			 //																	 else if(v2["result"]["code"] == GDALREADY)
+																			 //																	 {
+																			 //
+																			 //																	 }
+																			 else
+																			 {
+																				 m_voteInputText->setVisible(false);
+																				 addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																																						 getLocal(LK::kFriendError), [=]()
+																																						 {
+																																							 if(m_voteInputText)
+																																							 {
+																																								 m_voteInputText->setVisible(true);
+																																							 }
+																																						 }));
+																				 
+																			 }
+																		 });
+																	 }
+																	 
+																 });
+					
+				}
 
-
-
-
-
-
-
+			});
+			
+			
+			
+			
+		};
+		TRACE();
+		vote_friend_menu = CCMenuItemSpriteLambda::create(n_ing_img, s_ing_img, d_ing_img, m_voteFriendButtonCallback);
+		TRACE();
+		vote_friend_menu->setPosition(ccp(244 + 75*2,256.5f));
+		TRACE();
+		tab_menu->addChild(vote_friend_menu);
+		TRACE();
+		/////////////////////////////// 탭버튼 추가 끝
+		
+		
+	}
+}

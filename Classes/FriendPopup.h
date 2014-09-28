@@ -41,6 +41,11 @@ public:
 		{
 			input_text1->removeFromParent();
 		}
+		if(m_voteInputText)
+		{
+			m_voteInputText->removeFromParent();
+		}
+		myHSP->removeTarget(this);
 	}
 	
 	// a selector callback
@@ -54,7 +59,9 @@ public:
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
 private:
+	CCSprite* m_loadingCCBI;
 	CCEditBox* input_text1;
+	CCEditBox* m_voteInputText;
 	
 	FriendTabCode recent_code;
 	
@@ -63,23 +70,30 @@ private:
 	
 	CCSprite* gray;
 	CCSprite* main_case;
+	bool m_introduced;
 	
 	//	ScrollBar* m_scrollBar;
 	std::vector<std::string> m_sendList; // 친구요청 보낸 리스트. 버튼 감추기 위해 필요함.
+	std::function<void(CCObject*)> m_voteFriendButtonCallback;
+	std::function<void(CCObject*)> m_voteFriendButtonCallbackSecond;
 	std::function<void(CCObject*)> m_manageButtonCallback;
 	std::function<void(CCObject*)> m_listButtonCallback;
+	std::function<void(CCObject*)> m_afterActionFunc;
 	bool is_menu_enable;
 	int m_touchPriority;
 	CCMenuLambda* tab_menu;
 	CCMenuItemLambda* list_menu;
 	CCMenuItemLambda* add_menu;
 	CCMenuItemLambda* manage_menu;
+	CCMenuItemLambda* vote_friend_menu;
 	
 	CCNode* m_friendListContainer;
 	CCNode* m_friendAddContainer;
 	CCNode* m_friendManageContainer;
+	CCNode* m_friendVoteContainer;
 	Json::Value m_votedFriendList;
 	Json::Value m_friendList;
+	CCScale9Sprite* m_front;
 //	CCMenuItem* all_reward_menu;
 	
 	CCTableView* friend_table;
@@ -117,7 +131,7 @@ private:
 	void setListMenu();
 	void setAddMenu();
 	void setManageMenu();
-	
+	void setVoteFriendMenu();
 	void setFriendTable();
 	void resultAllTakeSaveUserData(Json::Value result_data);
 };

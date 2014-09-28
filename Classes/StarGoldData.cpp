@@ -3365,6 +3365,22 @@ void StarGoldData::resetAttendance()
 	attendance_data.clear();
 }
 
+Json::Value StarGoldData::getProductInfo(string t_id)
+{
+    Json::Value t_infos = product_infos["info"];
+    int loop_cnt = t_infos.size();
+    for(int i=0;i<loop_cnt;i++)
+    {
+        Json::Value t_info = t_infos[i];
+        if(t_info["productid"].asString() == t_id)
+        {
+            return t_info;
+        }
+    }
+    
+    return Json::Value();
+}
+
 void StarGoldData::initRankReward(Json::Value result_data)
 {
 	if(result_data["sendGift"].asBool())
@@ -3817,6 +3833,12 @@ int StarGoldData::getUnlockFrameCnt(){	return unlock_frame_cnt.getV();	}
 
 void StarGoldData::setSpecialEventPuzzleNumber(int t_i){	special_event_puzzle_number = t_i;	}
 int StarGoldData::getSpecialEventPuzzleNumber(){	return special_event_puzzle_number.getV();	}
+
+
+string StarGoldData::getKakaoMsg(){	return kakao_msg.getV();	}
+void StarGoldData::setKakaoMsg(string t_str){	kakao_msg = t_str;	}
+
+
 
 //void StarGoldData::setUserdataPGuide(string t_s){	userdata_pGuide = t_s;}
 //string StarGoldData::getUserdataPGuide(){	return userdata_pGuide.getV();}

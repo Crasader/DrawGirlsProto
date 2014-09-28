@@ -55,32 +55,34 @@ using namespace std;
 //	return result;
 //}
 
-void testF(string filePath, string tt)
+int testF(string filePath, string tt)
 {
+    int return_value = 0;
+    
 	NSArray* t_paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
 	NSString* t_documentsDirectory = [t_paths objectAtIndex:0];
-	NSString* t_nsfilePath = [NSString stringWithUTF8String:"test"];
+	NSString* t_nsfilePath = [NSString stringWithUTF8String:filePath.c_str()];
 	NSString* t_fullFileName = [NSString stringWithFormat:@"%@/%@", t_documentsDirectory, t_nsfilePath ];
 	const char* t_szFilePath = [t_fullFileName UTF8String];
 	FILE* t_fp = fopen( t_szFilePath, "w" );
-	fprintf(t_fp, "%s", tt.c_str());
+	return_value = fprintf(t_fp, "%s", tt.c_str());
 	fclose(t_fp);
 	
+    return return_value;
 	
-	
-	NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
-	NSString* documentsDirectory = [paths objectAtIndex:0];
-	NSString* nsfilePath = [NSString stringWithUTF8String:filePath.c_str()];
-	NSString* fullFileName = [NSString stringWithFormat:@"%@/%@", documentsDirectory, nsfilePath ];
-	const char* szFilePath = [fullFileName UTF8String];
-	
-	int rename_result;
-	rename_result = rename(t_szFilePath, szFilePath);
-	
-	if(rename_result != 0)
-	{
-		// file fail(rename)
-	}
+//	NSArray* paths = NSSearchPathForDirectoriesInDomains( NSDocumentDirectory, NSUserDomainMask, YES );
+//	NSString* documentsDirectory = [paths objectAtIndex:0];
+//	NSString* nsfilePath = [NSString stringWithUTF8String:filePath.c_str()];
+//	NSString* fullFileName = [NSString stringWithFormat:@"%@/%@", documentsDirectory, nsfilePath ];
+//	const char* szFilePath = [fullFileName UTF8String];
+//	
+//	int rename_result;
+//	rename_result = rename(t_szFilePath, szFilePath);
+//	
+//	if(rename_result != 0)
+//	{
+//		// file fail(rename)
+//	}
 	
 //	FILE* fp = fopen( szFilePath, "w" );
 //	fprintf(fp, "%s", tt.c_str());

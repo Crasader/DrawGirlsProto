@@ -88,6 +88,8 @@ bool FailPopup::init()
 	
 	refresh_achieve_func = nullptr;
 	
+    fail_label = NULL;
+    
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	myLog->addLog(kLOG_remainHeart_i, -1, myDSH->getIntegerForKey(kDSH_Key_heartCnt));
 	
@@ -306,6 +308,7 @@ bool FailPopup::init()
 	t_ok_node->addChild(ok_label);
 	
 	main_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	main_menu->setStringData("backkey");
 	main_menu->setPreferredSize(CCSizeMake(215, 65));
 	main_menu->setTag(kMT_FP_main);
 	main_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(FailPopup::controlButtonAction), CCControlEventTouchUpInside);
@@ -338,6 +341,9 @@ bool FailPopup::init()
 	loading_img->setPosition(ccp(347,130));
 	main_case->addChild(loading_img, kZ_FP_img);
 	reader->release();
+	
+	is_end_take_diary = false;
+	is_end_network = false;
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 6)
 	{
@@ -431,12 +437,16 @@ bool FailPopup::init()
 																										  CCLOG("saved StartPack time : %ld", now_time_t);
 																									  }
 																									  
-																									  if(is_today_mission_success)
-																									  {
-																										  mySGD->is_today_mission_first = false;
-																										  TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-																										  addChild(t_popup, kZ_FP_popup);
-																									  }
+																										is_end_take_diary = true;
+																										if(is_end_take_diary && is_end_network)
+																										{
+																											if(is_today_mission_success)
+																											{
+																												mySGD->is_today_mission_first = false;
+																												TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+																												addChild(t_popup, kZ_FP_popup);
+																											}
+																										}
 																									  
 																									  scenario_node->removeFromParent();
 																								  }));
@@ -459,11 +469,15 @@ bool FailPopup::init()
 											 CCLOG("saved StartPack time : %ld", now_time_t);
 										 }
 										 
-										 if(is_today_mission_success)
+										 is_end_take_diary = true;
+										 if(is_end_take_diary && is_end_network)
 										 {
-											 mySGD->is_today_mission_first = false;
-											 TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-											 addChild(t_popup, kZ_FP_popup);
+											 if(is_today_mission_success)
+											 {
+												 mySGD->is_today_mission_first = false;
+												 TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+												 addChild(t_popup, kZ_FP_popup);
+											 }
 										 }
 										 
 										 scenario_node->removeFromParent();
@@ -582,11 +596,15 @@ bool FailPopup::init()
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
 		{
-			if(is_today_mission_success)
+			is_end_take_diary = true;
+			if(is_end_take_diary && is_end_network)
 			{
-				mySGD->is_today_mission_first = false;
-				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-				addChild(t_popup, kZ_FP_popup);
+				if(is_today_mission_success)
+				{
+					mySGD->is_today_mission_first = false;
+					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+					addChild(t_popup, kZ_FP_popup);
+				}
 			}
 		}, [=](){}, kPurchaseGuideType_emptyItem);
 		addChild(t_popup, kZ_FP_popup+1);
@@ -596,11 +614,15 @@ bool FailPopup::init()
 	{
 		EmptyItemSalePopup* t_popup = EmptyItemSalePopup::create(-300, [=]()
 		{
-			if(is_today_mission_success)
+			is_end_take_diary = true;
+			if(is_end_take_diary && is_end_network)
 			{
-				mySGD->is_today_mission_first = false;
-				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-				addChild(t_popup, kZ_FP_popup);
+				if(is_today_mission_success)
+				{
+					mySGD->is_today_mission_first = false;
+					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+					addChild(t_popup, kZ_FP_popup);
+				}
 			}
 		}, [=](){}, kPurchaseGuideType_stupidNpuHelp);
 		addChild(t_popup, kZ_FP_popup+1);
@@ -620,11 +642,15 @@ bool FailPopup::init()
 //	}
 	else
 	{
-		if(is_today_mission_success)
+		is_end_take_diary = true;
+		if(is_end_take_diary && is_end_network)
 		{
-			mySGD->is_today_mission_first = false;
-			TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
-			addChild(t_popup, kZ_FP_popup);
+			if(is_today_mission_success)
+			{
+				mySGD->is_today_mission_first = false;
+				TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+				addChild(t_popup, kZ_FP_popup);
+			}
 		}
 	}
 	
@@ -685,7 +711,7 @@ bool FailPopup::init()
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
-	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	is_today_mission_success = false;//mySGD->today_mission_info.is_success.getV();
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
@@ -693,13 +719,24 @@ bool FailPopup::init()
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
 																		  TRACE();
-																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
-																			{
-																				is_today_mission_success = true;
-																			}
+                                                                          if(result_data["result"]["code"].asBool())
+                                                                          {
+                                                                              is_today_mission_success = true;
+                                                                          }
+																		  
 																		  else
 																			{
 																				is_today_mission_success = false;
+																			}
+																			
+																			if(is_end_take_diary && is_end_network)
+																			{
+																				if(is_today_mission_success)
+																				{
+																					mySGD->is_today_mission_first = false;
+																					TodayMissionPopup* t_popup = TodayMissionPopup::create(-280, [=](){});
+																					addChild(t_popup, kZ_FP_popup);
+																				}
 																			}
 																	  }
 																	  TRACE();
@@ -763,6 +800,8 @@ void FailPopup::tryTransaction(CCNode* t_loading)
 										  {
 											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
 										  }
+											
+											is_end_network = true;
 									  }
 									  else
 									  {
@@ -911,6 +950,13 @@ void FailPopup::resultGetTime(Json::Value result_data)
 void FailPopup::resultGetRank(Json::Value result_data)
 {
 	TRACE();
+    
+    if(fail_label)
+    {
+        fail_label->removeFromParent();
+        fail_label = NULL;
+    }
+    
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		TRACE();
@@ -1126,13 +1172,16 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			CCSequence* t_seq = CCSequence::create(t_delay, t_move, NULL);
 			list_cell_case->runAction(t_seq);
 		}
-		loading_img->removeFromParent();
-		loading_img = NULL;
+		if(loading_img)
+		{
+			loading_img->removeFromParent();
+			loading_img = NULL;
+		}
 	}
 	else
 	{
 		TRACE();
-		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		if(loading_img)
 			fail_label->setPosition(loading_img->getPosition());
 		else

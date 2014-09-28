@@ -21,6 +21,7 @@
 #include "TouchSuctionLayer.h"
 #include "AchieveNoti.h"
 #include "TypingBox.h"
+#include "JoystickPositionSelectPopup.h"
 
 void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, function<void(IntPoint, TutoMapType)> t_setMapData, int t_height)
 {
@@ -58,7 +59,7 @@ void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, funct
 
 void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 {
-	if(my_point.isNull())
+	if(my_point.isNull() || is_controler_backing())
 		return;
 	
 	if((getMapData(my_point) != kTutoMapType_line && getMapData(my_point) != kTutoMapType_newLine) || (
@@ -113,8 +114,9 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	
 	if(c_d != directionStop && d_valid && getMapData(d_point) == kTutoMapType_line)
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
+        line_edge->setVisible(false);
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -139,23 +141,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
-				character_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_d == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_d == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
+//				character_manager->runAnimationsForSequenceNamed("move");
+//			
+//			if(c_d == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_d == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		if(getMapData(my_point) == kTutoMapType_line)
 		{
@@ -178,8 +180,9 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_d != directionStop && d_valid && isDrawingOn && (getMapData(d_point) == kTutoMapType_empty || getMapData(d_point) == kTutoMapType_newLine))
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
+        line_edge->setVisible(true);
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -204,23 +207,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-				character_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(c_d == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_d == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//				character_manager->runAnimationsForSequenceNamed("draw");
+//			
+//			if(c_d == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_d == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		addPath(IntPointVector(my_point.x, my_point.y, d_vector.dx, d_vector.dy));
 		setCharacterPoint(d_point);
@@ -228,8 +231,9 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_sd != directionStop && sd_valid && getMapData(sd_point) == kTutoMapType_line)
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
+        line_edge->setVisible(false);
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -254,23 +258,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
-				character_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_sd == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_sd == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
+//				character_manager->runAnimationsForSequenceNamed("move");
+//			
+//			if(c_sd == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_sd == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		if(getMapData(my_point) == kTutoMapType_line)
 		{
@@ -294,8 +298,9 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_sd != directionStop && sd_valid && isDrawingOn && (getMapData(sd_point) == kTutoMapType_empty || getMapData(sd_point) == kTutoMapType_newLine))
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
+        line_edge->setVisible(true);
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -320,23 +325,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-				character_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(c_sd == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_sd == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//				character_manager->runAnimationsForSequenceNamed("draw");
+//			
+//			if(c_sd == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_sd == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		addPath(IntPointVector(my_point.x, my_point.y, sd_vector.dx, sd_vector.dy));
 		setCharacterPoint(sd_point);
@@ -346,19 +351,20 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 		if(!isDrawingOn)
 		{
+            line_edge->setVisible(false);
 			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("stop"))
 			{
 				character_manager->runAnimationsForSequenceNamed("stop");
-				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 					jack_img_direction = directionStop;
 			}
 		}
 		else
 		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("drawStop"))
+			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw_stop"))
 			{
-				character_manager->runAnimationsForSequenceNamed("drawStop");
-				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+				character_manager->runAnimationsForSequenceNamed("draw_stop");
+//				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 					jack_img_direction = directionStop;
 			}
 		}
@@ -489,20 +495,22 @@ void TutoCharacter::setCharacterPoint(IntPoint t_point)
 
 void TutoCharacter::rewindAnimation()
 {
+    line_edge->setVisible(false);
 	if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("rewind"))
 	{
 		character_manager->runAnimationsForSequenceNamed("rewind");
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			jack_img_direction = directionStop;
 	}
 }
 
 void TutoCharacter::drawAnimation()
 {
-	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
-		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-			character_manager->runAnimationsForSequenceNamed("draw");
-	else
+    line_edge->setVisible(true);
+//	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+//		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//			character_manager->runAnimationsForSequenceNamed("draw");
+//	else
 		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw_down"))
 			character_manager->runAnimationsForSequenceNamed("draw_down");
 }
@@ -520,6 +528,11 @@ void TutoCharacter::myInit(function<TutoMapType(IntPoint)> t_getMapData, functio
 	
 	height_value = t_height;
 	
+    line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
+	line_edge->setVisible(false);
+	line_edge->setScale(0.5f);
+	addChild(line_edge);
+    
 	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi");
 	
 	character_img = t_pair.first;
@@ -530,11 +543,12 @@ void TutoCharacter::myInit(function<TutoMapType(IntPoint)> t_getMapData, functio
 	if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("stop"))
 	{
 		character_manager->runAnimationsForSequenceNamed("stop");
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			jack_img_direction = directionStop;
 	}
-	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
-		jack_img_direction = directionRight;
+    jack_img_direction = directionStop;
+//	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+//		jack_img_direction = directionRight;
 	
 	isDrawingOn = false;
 }
@@ -1395,6 +1409,11 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			if(my_char->isDrawingOn)
 			{
 				my_char->rewindAnimation();
+                
+                my_char->changeDirection(directionStop, directionStop);
+                beforeDirection = directionStop;
+                unschedule(schedule_selector(TutoControler::directionKeeping));
+                
 				(target_main->*delegate_readyBack)();
 			}
 			
@@ -1541,6 +1560,11 @@ void TutoControler::ccTouchesEnded(CCSet *pTouches, CCEvent *pEvent)
 			if(isDisableDrawButton && my_char->isDrawingOn)
 			{
 				my_char->rewindAnimation();
+                
+                my_char->changeDirection(directionStop, directionStop);
+                beforeDirection = directionStop;
+                unschedule(schedule_selector(TutoControler::directionKeeping));
+                
 				(target_main->*delegate_readyBack)();
 			}
 			
@@ -1811,14 +1835,7 @@ bool PlayTutorial::init()
 	character->setCharacterPoint(IntPoint(120,height_value/2-12));
 	addChild(character, 3);
 	
-	controler = TutoControler::create(character, height_value-1, [=](IntPoint t_p){ return getMapData(t_p.x, t_p.y); }, [=](IntPoint t_p, TutoMapType t_type){ setMapData(t_p.x, t_p.y, t_type); },
-									  [=](IntPoint t_p){ path_manager->checkBeforeNewline(t_p); });
-	controler->target_main = this;
-	controler->delegate_readyBack = callfunc_selector(PlayTutorial::startBackTracking);
-	controler->pauseBackTracking = callfunc_selector(PlayTutorial::stopBackTracking);
-	addChild(controler, 5);
 	
-	character->controlerStop = [=](){controler->stopMySchedule(); controler->resetTouch();};
 	
 	top_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 18);
 	top_label->setColor(ccc3(255, 170, 20));
@@ -1831,8 +1848,7 @@ bool PlayTutorial::init()
 	mark_img->setPosition(ccp(240, height_value+24));
 	addChild(mark_img, 2);
 	
-	controler->buttonSetVisible(false);
-	controler->joystickSetVisible(false);
+	
 	
 	tutorial_step = 0;
 	
@@ -1888,8 +1904,6 @@ bool PlayTutorial::init()
 	typing_box2->setBoxScale(myDSH->screen_convert_rate);
 	scenario_node->addChild(typing_box2, 2);
 	typing_box2->setHide();
-	
-	typing_box2->showAnimation(0.3f);
 	
 	function<void()> end_func3 = [=]()
 	{
@@ -1954,18 +1968,42 @@ bool PlayTutorial::init()
 		typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent19), end_func2);
 	};
 	
-	scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-														  {
-															  t_gray->setOpacity(t*255);
-															  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
-														  }, [=](float t)
-														  {
-															  t_gray->setOpacity(255);
-															  asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
-															  
-															  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent18), end_func1);
-														  }));
-	
+    JoystickPositionSelectPopup* t_popup = JoystickPositionSelectPopup::create(-99999, [=]()
+                                                                               {
+                                                                                   controler = TutoControler::create(character, height_value-1, [=](IntPoint t_p){ return getMapData(t_p.x, t_p.y); }, [=](IntPoint t_p, TutoMapType t_type){ setMapData(t_p.x, t_p.y, t_type); },
+                                                                                                                     [=](IntPoint t_p){ path_manager->checkBeforeNewline(t_p); });
+                                                                                   controler->target_main = this;
+                                                                                   controler->delegate_readyBack = callfunc_selector(PlayTutorial::startBackTracking);
+                                                                                   controler->pauseBackTracking = callfunc_selector(PlayTutorial::stopBackTracking);
+                                                                                   addChild(controler, 5);
+                                                                                   
+                                                                                   character->is_controler_backing = [=]()
+                                                                                   {
+                                                                                       return controler->isBacking;
+                                                                                   };
+                                                                                   
+                                                                                   character->controlerStop = [=](){controler->stopMySchedule(); controler->resetTouch();};
+                                                                                   
+                                                                                   controler->buttonSetVisible(false);
+                                                                                   controler->joystickSetVisible(false);
+                                                                                   
+                                                                                   typing_box2->showAnimation(0.3f);
+                                                                                   
+                                                                                   scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+                                                                                                                                         {
+                                                                                                                                             t_gray->setOpacity(t*255);
+                                                                                                                                             asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+                                                                                                                                         }, [=](float t)
+                                                                                                                                         {
+                                                                                                                                             t_gray->setOpacity(255);
+                                                                                                                                             asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+                                                                                                                                             
+                                                                                                                                             typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent18), end_func1);
+                                                                                                                                         }));
+                                                                               });
+    addChild(t_popup, 99999);
+    
+    
 	return true;
 }
 
@@ -2002,7 +2040,14 @@ void PlayTutorial::nextStep()
 		controler->buttonSetVisible(true);
 		
 		area_take_sample = CCClippingNode::create(CCSprite::create("tutorial_ccb_mask.png"));
-		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, "tutorial_new.ccbi").first;
+        
+        string ccbi_name;
+        if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
+            ccbi_name = "tutorial_new_left.ccbi";
+        else
+            ccbi_name = "tutorial_new_right.ccbi";
+        
+		CCSprite* t_ccbi = KS::loadCCBI<CCSprite*>(this, ccbi_name.c_str()).first;
 		area_take_sample->addChild(t_ccbi);
 		area_take_sample->setPosition(ccp(240,210));
 		addChild(area_take_sample, 100);

@@ -206,11 +206,14 @@ bool AccountManagerPopup::init(int touchP)
 //#else
 ////		param["memberID"] = myHSP->getMemberID();
 //#endif
-		
+		CCLog("-----------------------------------------------------------------------");
+		TRACE();
+
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
 		myHSP->command("getUserData", param, [=](Json::Value t){
 			ll->removeFromParent();
+			TRACE();
 			KS::KSLog("%", t);
 			if(t["result"]["code"].asInt() == GDSUCCESS)
 			{
@@ -246,7 +249,7 @@ bool AccountManagerPopup::init(int touchP)
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
 																			 tryName.c_str(),
 //																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
-																			 t["data"]["nick"].asString().c_str(), t["highPiece"].asInt(),
+																			 t["nick"].asString().c_str(), t["highPiece"].asInt(),
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
 																												 guidanceMsg.c_str() ,
@@ -282,9 +285,12 @@ bool AccountManagerPopup::init(int touchP)
 					auto loadFunction = [=]()
 					{
 						{
+							CCLog("-----------------------------------------------------------------------");
+							TRACE();
 							LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 							addChild(ll, INT_MAX);
 							hspConnector::get()->logout([=](Json::Value result_data){
+								TRACE();
 								ll->removeFromParent();
 								CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 								if(result_data["error"]["isSuccess"].asBool())
@@ -365,9 +371,14 @@ bool AccountManagerPopup::init(int touchP)
 					ment->setAnchorPoint(ccp(0.5f, 0.5f));
 					this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, [=]()
 														{
+															CCLog("-----------------------------------------------------------------------");
+															TRACE();
+
 															LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 															addChild(ll, INT_MAX);
+															
 															hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
+																TRACE();
 																ll->removeFromParent();
 																KS::KSLog("force %", t);
 																if(t["error"]["isSuccess"].asInt())
@@ -389,9 +400,12 @@ bool AccountManagerPopup::init(int touchP)
 			else
 			{
 				// 원래는 에러가 떠야 하지만 원래 없었던 데이터 처럼 로그인 시킴.
+				CCLog("-----------------------------------------------------------------------");
+				TRACE();
 				LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 				addChild(ll, INT_MAX);
 				hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
+					TRACE();
 					ll->removeFromParent();
 					KS::KSLog("force %", t);
 					if(t["error"]["isSuccess"].asInt())
@@ -465,10 +479,15 @@ bool AccountManagerPopup::init(int touchP)
 		});
 	};
 	auto doLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
-		
+		CCLog("-----------------------------------------------------------------------");
+		TRACE();
+	
 		LoadingLayer* ll = LoadingLayer::create(touchP - 100);
 		addChild(ll, INT_MAX);
 		hspConnector::get()->mappingToAccount(hspmap, false, [=](Json::Value t){
+			CCLog("-----------------------------------------------------------------------");
+			TRACE();
+
 			KS::KSLog("hhh %", t);
 			KS::KSLog("%", t);
 			ll->removeFromParent();

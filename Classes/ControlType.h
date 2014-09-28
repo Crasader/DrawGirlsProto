@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "IntSeries.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC_EXT;
 
@@ -215,6 +216,8 @@ public:
 	void hideDrawButtonTutorial();
 	
 	void offDrawButtonTutorial();
+    
+    virtual ~ControlJoystickButton();
 	
 private:
 	bool is_show_draw_button_tutorial;
@@ -279,6 +282,17 @@ private:
 //    virtual void ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent);
 	
 	virtual void registerWithTouchDispatcher(void);
+    
+//    KSLabelTTF* game_pad_state;
+//    KSLabelTTF* game_pad_motion;
+//    KSLabelTTF* game_pad_distance;
+//    KSLabelTTF* game_pad_log;
+    
+    IntDirection game_pad_direction;
+    int game_pad_draw_keycode;
+    int game_pad_key;
+    CCPoint directionToTouchPoint(IntDirection t_direction);
+    void gamePadAction(Json::Value pad_data);
 };
 
 //class ControlJoystick : public ControlCommon

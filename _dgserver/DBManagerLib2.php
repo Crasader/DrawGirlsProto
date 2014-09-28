@@ -491,7 +491,7 @@ class DBTable2{
 	}
 	
 	public function jsonToObj($field){
-		$this->m__data[$field]=json_decode($this->m__data[$field],true);
+		if(is_string($this->m__data[$field]))$this->m__data[$field]=json_decode($this->m__data[$field],true);
 	}
 
 	public function load($where){
@@ -597,7 +597,7 @@ class DBTable2{
 	}
 
 	public function getLocalizedValueInData($data){
-		return $data[CurrentUserInfo::$language]?$data[CurrentUserInfo::$language]:$data["en"];	
+		return $data[CurrentUserInfo::$country]?$data[CurrentUserInfo::$country]:$data["default"];	
 	}
 
 	public function __get($name) {
@@ -824,10 +824,10 @@ class DBTable2{
 		//limit 쿼리붙이기
 		$limitQuery="";
 		if($param["limit"]){
-			if(!$param["where"] || !$param["where"]["start"]){
-				$param["where"]["start"]=1;
-			}
-			$result["nextInfo"]=array("start"=>$param["where"]["start"]+$param["limit"]);
+			// if(!$param["where"] || !$param["where"]["startList"]){
+			// 	$param["where"]["start"]=1;
+			// }
+			// $result["nextInfo"]=array("start"=>$param["where"]["start"]+$param["limit"]);
 
 			$limitOfServer = $param["where"]["startList"];
 			if(count($limitOfServer)>0){
@@ -871,7 +871,14 @@ class DBTable2{
 
 	    $serveri=0;
 	    $oShard=-1;
-	    while($data = self::getRowByQuery($query.$limitQuery)){
+	    
+	    $whereFunc = function($cnt) use ($query,$limitOfServer,$param){
+	    	if(!$limitOfServer[$cnt])$limitOfServer[$cnt]=0;
+	    	$limitQuery = " limit ".($limitOfServer[$cnt]).",".$param["limit"];
+	    	return $query.$limitQuery;
+	    };
+	    
+	    while($data = self::getRowByQuery($query.$limitQuery,null,"*",$whereFunc)){
 
 
 	    	$serveri++;
@@ -921,6 +928,7 @@ class DBTable2{
 				$nShard = self::getShardIndexNow();
 				if(!$limitOfServer[$nShard])$limitOfServer[$nShard]=0;
 				$limitQuery =" limit ".($limitOfServer[$nShard]).",".$param["limit"];
+				
 			//}
 			}
 
@@ -1217,6 +1225,16 @@ class DBTable2{
 	// static public function getShardDBInfoList(){
 	// 	return UserIndex::getShardDBInfoList();
 	// }
+
+
+	static public function getQueryResultWithShardOrder($query,$shardOrder,$isForRead=true){
+		self::initial();
+
+		$con = static::$m__DBGroup->getConnectionForRead(null,$shardOrder,self::getDBTable()); 
+		//LogManager::addLog("getQueryResult query0->".$query);
+		return self::getQueryResult($query,$con,$isForRead);
+	}
+
 	static public function getQueryResultWithShardKey($query,$shardKey,$isForRead=true){
 		self::initial();
 
@@ -1277,6 +1295,20 @@ class DBTable2{
 		return static::$m__qCnt;
 	}
 
+	static public function getRowByQueryWithRandom($where="",$fields="*"){
+		self::initial();
+
+		$con = static::$m__DBGroup->getConnectionForReadByRand(); 
+		return self::getRowByQuery($where,$con,$fields);
+	}
+
+	static public function getRowByQueryWithShardOrder($where="",$shardOrder,$fields="*"){
+		self::initial();
+
+		$con = static::$m__DBGroup->getConnectionForRead(null,$shardOrder,self::getDBTable()); 
+		return self::getRowByQuery($where,$con,$fields);
+	}
+
 	static public function getRowByQueryWithShardKey($where="",$shardKey,$fields="*"){
 		self::initial();
 
@@ -1284,7 +1316,8 @@ class DBTable2{
 		return self::getRowByQuery($where,$con,$fields);
 	}
 
-	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*"){
+	static public function getRowByQuery($where="",$dbcon=NULL,$fields="*",$whereFunc=null){
+
 		self::initial();
 		if(static::$m__qCnt==-1){
 			$newvalue1=1;
@@ -1317,6 +1350,7 @@ class DBTable2{
 			return false;
 		}
 		
+		//첫시작
 		if(!static::$m__qResult){
 			if($dbcon==NULL) $dbconn = static::$m__dbList[static::$m__qCnt]->getSlaveByRand()->getConnection();
 			else $dbconn = $dbcon;
@@ -1324,16 +1358,22 @@ class DBTable2{
 			static::$m__qResult = mysql_query("select ".$fields." from ".static::$m__DBTable." ".$where,$dbconn);
 		}
 		
+		//구문에 오류가 있다면 리턴
 		if(!static::$m__qResult)return NULL;
 
+		//LogManager::addLog($where." with shardOrder is ".static::$m__qCnt);
 		$result = mysql_fetch_array(static::$m__qResult,MYSQL_ASSOC);
 
+		//결과가 있으면 리턴
 		if($result || $dbcon!=NULL)return $result;
 		
+		
+		//결과가 없으면 다시 한번 시도
 		static::$m__qResult="";
 		static::$m__qCnt++;
 
-		return self::getRowByQuery($where);
+		if($whereFunc)$where = $whereFunc(static::$m__qCnt);
+		return self::getRowByQuery($where,$dbcon,$fields,$whereFunc);
 	}
 
 	static public function getObjectByQueryWithShardKey($where="",$shardKey){

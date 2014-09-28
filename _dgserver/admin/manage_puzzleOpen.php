@@ -7,7 +7,7 @@ include "manage_header.php";
 
 <br><br>
 <h2 id="tables-contextual-classes">|퍼즐오픈조건</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Puzzle" dbSort='{"order":"asc"}' dbWhere='{}' name="openCondition" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Puzzle" dbSort='{"order":"asc"}' dbWhere='{}' dbLimit="50" name="openCondition" border=1>
 	<thead>
 		<tr>
 		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>

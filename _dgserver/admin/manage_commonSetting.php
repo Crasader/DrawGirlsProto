@@ -11,6 +11,8 @@ include "manage_header.php";
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
+		<th field='forClient' viewer='{"type":"text"}' editor='{"type":"bool"}' >forClient</th>
+		<th field='isLocal' viewer='{"type":"text"}' editor='{"type":"bool"}' >isLocal</th>
 		<th field='key' viewer='{"type":"text"}' editor='{"type":"text"}' >key</th>
 		<th field='value' viewer='{"type":"autoViewer"}' editor='{"type":"autoEditor"}' >value</th>
 		<th field='comment' viewer='{"type":"text"}' editor='{"type":"textarea"}' >comment</th>

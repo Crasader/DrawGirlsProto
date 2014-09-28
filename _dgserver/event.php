@@ -23,12 +23,15 @@
 <table border=0 width=100%>
 <?php
 
-	$nowDate = TimeManager::getCurrentDateTime();
+	$nowDate = TimeManager::
+	getCurrentDateTime();
 
-	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isList=1 order by `no` desc")){
+	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isList=1 order by `order` asc")){
 
 		$imgInfo = json_decode($obj->banner,true); 
-		echo"<tr><td align=center><a href=event.php?no=".$obj->no."><img src='".$imgInfo["img"]."' border=0></a></td></tr>";
+		$url = "event.php?no=".$obj->no;
+		if($obj->linkURL)$url = $obj->linkURL;
+		echo"<tr><td align=center><a href='".$url."'><img src='".$imgInfo["img"]."' border=0></a></td></tr>";
 	}
 ?>
 </table>

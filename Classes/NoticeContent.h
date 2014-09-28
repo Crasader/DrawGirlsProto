@@ -51,7 +51,7 @@ private:
 	CCLabelTTF* content_label;
 	StyledLabelTTF* stTxt;
 	CCSprite* loading_circle;
-	
+	bool isBreak;
 	
 	//CCMenu* check_menu;
 	//CCSprite* check_img;
@@ -68,8 +68,10 @@ private:
 	void loadedAction()
 	{
 		
-		day3Btn->setVisible(true);
-		closeBtn->setVisible(true);
+		if(!isBreak){
+			day3Btn->setVisible(true);
+			closeBtn->setVisible(true);
+		}
 		loading_circle->setVisible(false);
 		is_menu_enable=true;
 		//show_content->setPosition(ccp(-show_content->getContentSize().width/2.f, -show_content->getContentSize().height/2.f-16));

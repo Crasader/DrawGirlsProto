@@ -406,7 +406,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			CCSprite* s_img = mySIL->getLoadedImg("event_pack.png");
 			s_img->setColor(ccGRAY);
 			
-			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyStartPack));
+			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyEventPack));
 			
 			CCMenu* img_menu = CCMenu::createWithItem(img_item);
 			img_menu->setPosition(ccp(0,-15));
@@ -472,11 +472,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(!sale_str.empty())
 			{
 				CCSprite* tab = CCSprite::create("shop_tab.png");
-				tab->setPosition(ccp(-42,35.5f));
+				tab->setPosition(ccp(-34,38.f));
 				content_node->addChild(tab, 4);
 				
-				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
-				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
+				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 12);
+				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f));
 				tab->addChild(sale_label);
 			}
 			
@@ -594,7 +594,8 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									}
 									else
 									{
-										time_label->setVisible(false);
+                                        if(time_label)
+                                            time_label->setVisible(false);
 										eventPack_menu->setVisible(false);
 										setShopCode(kSC_ruby);
 										is_menu_enable = true;
@@ -705,7 +706,8 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										}
 										else
 										{
-											time_label->setVisible(false);
+                                            if(time_label)
+                                                time_label->setVisible(false);
 											eventPack_menu->setVisible(false);
 											setShopCode(kSC_ruby);
 											is_menu_enable = true;
@@ -776,6 +778,9 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopStartPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryStartPack();
 									}
 									else
@@ -859,7 +864,8 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
 										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 										{
-											time_label->setVisible(false);
+                                            if(time_label)
+                                                time_label->setVisible(false);
 											eventPack_menu->setVisible(false);
 											setShopCode(kSC_ruby);
 										}
@@ -977,7 +983,8 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										{
 											if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 											{
-												time_label->setVisible(false);
+                                                if(time_label)
+                                                    time_label->setVisible(false);
 												eventPack_menu->setVisible(false);
 												setShopCode(kSC_ruby);
 											}
@@ -1050,6 +1057,9 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopEventPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryEventPack();
 									}
 									else
@@ -1332,6 +1342,8 @@ bool ShopPopup::init()
 	
 	success_func = nullptr;
 	
+    is_use_goods_type_gold = false;
+    
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -1949,7 +1961,10 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        if(is_use_goods_type_gold)
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        else
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)), 9999);
 	}
 	else
 	{
@@ -1957,6 +1972,8 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		fail_func();
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 	}
+    
+    is_use_goods_type_gold = false;
 }
 
 void ShopPopup::menuAction(CCObject* pSender)
@@ -2083,6 +2100,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 										KS::KSLog("in-app test \n%", v);
 										if(v["issuccess"].asInt())
 										{
+                                            Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
+                                            if(!t_info.empty())
+                                                myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											requestItemDelivery();
 										}
 										else
@@ -2225,6 +2245,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
+                                    is_use_goods_type_gold = true;
+                                    
 									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopP1_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 									
 									fail_func = [=]()
@@ -3417,7 +3439,8 @@ void ShopPopup::successAction()
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
-			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
 			
 			t_texture->release();
 			target_img->release();
@@ -3573,6 +3596,8 @@ void ShopPopup::requestItemDelivery()
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
 			CCLOG("inapp success!! refresh!!!");
+            
+            mySGD->network_check_cnt = 0;
 			
 			mySGD->initProperties(t["list"]);
 //			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
@@ -3612,13 +3637,27 @@ void ShopPopup::requestItemDelivery()
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDelivery();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDelivery();
+                                         }));
+            }
 		}
 	});
 }
@@ -3633,11 +3672,22 @@ void ShopPopup::requestItemDeliveryStartPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
-			CCLOG("inapp success!! refresh!!!");
+            CCLOG("inapp success!! refresh!!! 7-> %s",t.toStyledString().c_str());
+			TRACE();
+            
 			
+            mySGD->network_check_cnt = 0;
+            
 			mySGD->initProperties(t["list"]);
 			//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
@@ -3673,28 +3723,36 @@ void ShopPopup::requestItemDeliveryStartPack()
 			}
 			else
 			{
-				time_label->setVisible(false);
+                if(time_label)
+                    time_label->setVisible(false);
 				eventPack_menu->setVisible(false);
 				setShopCode(kSC_ruby);
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryStartPack();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryStartPack();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDeliveryStartPack();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDeliveryStartPack();
+                                         }));
+            }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 //	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 //		if(t["result"]["code"].asInt() == GDSUCCESS)
 //		{
@@ -3762,11 +3820,20 @@ void ShopPopup::requestItemDeliveryEventPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
 			CCLOG("inapp success!! refresh!!!");
 			
+            mySGD->network_check_cnt = 0;
+            
 			mySGD->initProperties(t["list"]);
 			//			mySGD->refreshGoodsData(t["list"]["type"].asString(), t["list"]["count"].asInt());
 			
@@ -3804,29 +3871,37 @@ void ShopPopup::requestItemDeliveryEventPack()
 			{
 				if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 				{
-					time_label->setVisible(false);
+                    if(time_label)
+                        time_label->setVisible(false);
 					eventPack_menu->setVisible(false);
 					setShopCode(kSC_ruby);
 				}
 				is_menu_enable = true;
 			}
 		}
-		else if(t["result"]["code"].asInt() == 2016) // GDNOTINGWORK
-		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryEventPack();}));
-		}
 		else
 		{
-			addChild(KSTimer::create(3.f, [=](){requestItemDeliveryEventPack();}));
+            mySGD->network_check_cnt++;
+            
+            if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+            {
+                mySGD->network_check_cnt = 0;
+                
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                    requestItemDeliveryEventPack();
+                }, 1);
+                if(alert)
+                    ((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+            }
+            else
+            {
+                addChild(KSTimer::create(0.5f, [=]()
+                                         {
+                                             requestItemDeliveryEventPack();
+                                         }));
+            }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 	//	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 	//		if(t["result"]["code"].asInt() == GDSUCCESS)
 	//		{

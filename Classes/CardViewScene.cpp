@@ -446,7 +446,7 @@ bool CardViewScene::init()
 																			});
 		
 		CCMenuLambda* to_diary_19_menu = CCMenuLambda::createWithItem(to_diary_19_item);
-		to_diary_19_menu->setPosition(ccp(30,30));
+		to_diary_19_menu->setPosition(ccp(40,64));
 		addChild(to_diary_19_menu, kCV_Z_next_button);
 	}
 	
@@ -746,13 +746,17 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				}
 			}
 			
-			if(multiTouchData.size() == 1)
+			if(multiTouchData.size() == 1 && is_morphing && first_img->m_waveRange==1)
 			{
 				
 				touch_p = location;
 				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
-			}
-			else if(multiTouchData.size() == 2)
+			}else if(multiTouchData.size() == 1){
+				
+				this->moveListXY(ccpSub(touch_p, location));
+				touch_p = location;
+			
+			}else if(multiTouchData.size() == 2)
 			{
 				touch_mode=2;
 				CCPoint sub_point = CCPointZero;
@@ -878,4 +882,9 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 void CardViewScene::ccTouchesCancelled( CCSet *pTouches, CCEvent *pEvent )
 {
 	ccTouchesEnded(pTouches, pEvent);
+}
+
+void CardViewScene::keyBackClicked()
+{
+	CommonButton::callBackKey();
 }

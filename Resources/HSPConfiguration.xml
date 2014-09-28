@@ -23,6 +23,5 @@
 	
 	<configuration key="HSP_MARKET" value="KG"/>
 	<configuration key="HSP_PAYMENT_STORE_ID" value="GG"/>
-	<configuration key="HSP_PAYMENT_TSTORE_IS_REAL" value="true"/>
 	
 </configuartion-list>

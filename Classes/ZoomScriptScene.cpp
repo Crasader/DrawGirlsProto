@@ -61,6 +61,8 @@ bool ZoomScript::init()
 	
 	setKeypadEnabled(true);
 	
+    safety_img = NULL;
+    
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
 	typing_sound_number = 1;
@@ -312,7 +314,8 @@ void ZoomScript::typingAnimation()
 			AudioEngine::sharedInstance()->playEffect("sound_crashed_map.mp3", false);
 			unschedule(schedule_selector(ZoomScript::typingAnimation));
 			
-			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+			int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
+			if(grade == 2 || grade == 4)
 			{
 				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 				zoom_img = tuto.first;
@@ -356,7 +359,7 @@ void ZoomScript::typingAnimation()
 		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
 		t_touch->autorelease();
 		
-		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
 			target_node->ccTouchEnded(t_touch, NULL);
 		
 		unschedule(schedule_selector(ZoomScript::typingAnimation));
@@ -388,14 +391,14 @@ void ZoomScript::moveChecking()
 	
 	if(is_scrolling)
 	{
-		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
 			target_node->movingDistance(ccpSub(after_position, save_position));
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
-		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
+		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
 			target_node->movingDistance(CCPointZero);
 	}
 	save_position = after_position;
@@ -630,7 +633,7 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   }
 																   
 																   mySGD->setStageGrade(after_value);
-
+                                                                   is_morphing = (mySGD->getStageGrade() == 2 || mySGD->getStageGrade() == 4);
 																   
 																   target_node->removeFromParent();
 																   
@@ -648,6 +651,20 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   game_node->addChild(target_node, kZS_Z_second_img);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
+                                                                   if(mySGD->is_safety_mode)
+                                                                   {
+                                                                       if(safety_img)
+                                                                       {
+                                                                           safety_img->removeFromParent();
+                                                                           safety_img = NULL;
+                                                                       }
+                                                                       
+                                                                       safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()));
+                                                                       safety_img->setSilhouetteConvert(0);
+                                                                       safety_img->setPosition(ccp(160, 230));
+                                                                       game_node->addChild(safety_img, kZS_Z_second_img);
+                                                                   }
+                                                                   
 																   game_node->setScale(0.5f);
 																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
@@ -866,9 +883,26 @@ void ZoomScript::menuAction(CCObject *sender)
 																   t_node->setVisible(true);
 																   game_node->reorderChild(target_node, kZS_Z_second_img);
 																   
+                                                                   if(mySGD->is_safety_mode)
+                                                                   {
+                                                                       if(safety_img)
+                                                                       {
+                                                                           safety_img->removeFromParent();
+                                                                           safety_img = NULL;
+                                                                       }
+                                                                       
+                                                                       safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", t_card_number)->getCString()));
+                                                                       safety_img->setSilhouetteConvert(0);
+                                                                       safety_img->setPosition(ccp(160, 230));
+                                                                       game_node->addChild(safety_img, kZS_Z_second_img);
+                                                                   }
+                                                                   
 																   game_node->setScale(0.5f);
 																   game_node->setPosition(ccp(240,myDSH->ui_center_y));
 															   }, [=](){
+                                                                   
+                                                                   is_morphing = (mySGD->getStageGrade() == 2 || mySGD->getStageGrade() == 4);
+                                                                   
 																	 CCDelayTime* delay1 = CCDelayTime::create(0.5f);
 																	 CCMoveTo* move1 = CCMoveTo::create(0.5f, ccp(240,myDSH->ui_center_y));
 																	 CCDelayTime* delay2 = CCDelayTime::create(0.5f);
@@ -1003,7 +1037,11 @@ void ZoomScript::showtimeFirstAction()
 	
 	if(mySGD->is_safety_mode)
 	{
-		safety_img->removeFromParent();
+        if(safety_img)
+        {
+            safety_img->removeFromParent();
+            safety_img = NULL;
+        }
 		
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
@@ -1086,7 +1124,11 @@ void ZoomScript::showtimeFifthAction()
 	
 	if(mySGD->is_safety_mode)
 	{
-		safety_img->removeFromParent();
+        if(safety_img)
+        {
+            safety_img->removeFromParent();
+            safety_img = NULL;
+        }
 		
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
 		safety_img->setSilhouetteConvert(0);
@@ -1488,13 +1530,17 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 				}
 			}
 			
-			if(multiTouchData.size() == 1)
+			if(multiTouchData.size() == 1 && is_morphing && target_node->m_waveRange==1)
 			{
 				
 				touch_p = location;
 				if(is_morphing)target_node->ccTouchMoved(touch,pEvent);
-			}
-			else if(multiTouchData.size() == 2)
+			}else if(multiTouchData.size() == 1){
+				
+				this->moveListXY(ccpSub(touch_p, location));
+				touch_p = location;
+				
+			}else if(multiTouchData.size() == 2)
 			{
 				touch_mode=2;
 				CCPoint sub_point = CCPointZero;
@@ -1654,7 +1700,11 @@ void ZoomScript::alertAction(int t1, int t2)
 
 void ZoomScript::keyBackClicked()
 {
-	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
+	
+	
+	CommonButton::callBackKey();
+	
+//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
 //	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
 //	{
 //		onBackKeyAction();

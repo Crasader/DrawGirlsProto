@@ -20,6 +20,8 @@ function ExchangeEditor(value,option){
 	this.saveReward = function(){
 		var obj = this;
 		var dataRow = [];
+
+		if(!this.exchangeID || this.exchangeID=="")return;
 		//var statsValue = obj.option["rowData"][obj.option["statsValueField"]
 		this.editTable.find("tr[datarow]").each(function(){
 			dataRow.push({"type":$(this).find("select").val(),"count":$(this).find("input").val(),"statsID":obj.option["statsID"],"content":obj.option["content"]});
@@ -30,7 +32,7 @@ function ExchangeEditor(value,option){
 		//ajax로 생성
 		$.ajax({
 	    url : "dataManager2.php", 
-	    data : {"dbMode":"custom","dbFunc":"saveExchangeID","dbClass":"Exchange","param":j2s({"id":this.exchangeID,"list":dataRow})},
+	    data : {"gid":gid,"dbMode":"custom","dbFunc":"saveExchangeID","dbClass":"Exchange","param":j2s({"id":this.exchangeID,"list":dataRow})},
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){
@@ -88,7 +90,7 @@ function ExchangeEditor(value,option){
 			if(!this.exchangeID){
 				alert("신규교환생성","랜덤으로 신규 교환ID를 생성합니다.",null,{"확인":function(){obj.ajaxMakeExchangeID();$(this).dialog("close");}});
 			}else{
-				alert("교환정보로드","입력한 교환ID로 기존교환정보를 로드합니다.<br> 이때 교환정보를 수정할경우 데이터 무결성을 보장하지 않습니다.<br> 해당정보가 없을경우 해당ID로 새로운 교환을 생성합니다.",null,{"확인":function(){obj.ajaxMakeExchangeID();$(this).dialog("close");}});
+				alert("교환정보로드","입력한 교환ID로 기존교환정보를 로드합니다.<br> 이때 교환정보를 수정할경우 동일한 교환ID를 사용한 곳의 데이터 무결성을 보장하지 않습니다.<br> 해당정보가 없을경우 해당ID로 새로운 교환을 생성합니다. <br> 이벤트용일경우 제일첫 문자가 @ 이어야 합니다.",null,{"확인":function(){obj.ajaxMakeExchangeID();$(this).dialog("close");}});
 			}
 		}else{
 			this.ajaxMakeExchangeID();
@@ -100,7 +102,7 @@ function ExchangeEditor(value,option){
 		//ajax로 생성
 		$.ajax({
 	    url : "dataManager2.php", 
-	    data : {"dbMode":"custom","dbFunc":"makeExchangeIDByRandom","dbClass":"Exchange","param":j2s({"id":this.exchangeID})},
+	    data : {"gid":gid,"dbMode":"custom","dbFunc":"makeExchangeIDByRandom","dbClass":"Exchange","param":j2s({"id":this.exchangeID})},
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){
@@ -134,7 +136,7 @@ function ExchangeEditor(value,option){
 			//추가모드
 			$("<input>").attr("id","myID").addClass("form-control").attr("placeholder","교환ID").appendTo(this.editor);
 			$("<button>").addClass("btn btn-primary").append("교환정보로드").appendTo(this.editor).on("click",{"obj":obj},function(event){event.data.obj.createExchangeID()});
-			$("<button>").addClass("btn btn-info").append("교환자동생성").appendTo(this.editor).on("click",{"obj":obj},function(event){event.data.obj.createExchangeID()});
+			$("<button>").addClass("btn btn-info").append("교환자동생성(추천)").appendTo(this.editor).on("click",{"obj":obj},function(event){event.data.obj.createExchangeID()});
 			$("<br>").appendTo(this.editor);
 			$("<br>").appendTo(this.editor);			
 		}else{
@@ -221,7 +223,7 @@ function ExchangeViewer(value,option){
 		//ajax로 생성
 		$.ajax({
 	    url : "dataManager2.php", 
-	    data : {"dbMode":"custom","dbFunc":"exchangeViewer","dbClass":"Exchange","param":j2s({"id":this.exchangeID})},
+	    data : {"gid":gid,"dbMode":"custom","dbFunc":"exchangeViewer","dbClass":"Exchange","param":j2s({"id":this.exchangeID})},
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){
@@ -234,7 +236,8 @@ function ExchangeViewer(value,option){
 	    		obj.createRewardEditor(data["list"]);
 
 	    	}else{
-	    		alert("error",data["result"]["msg"],function(){obj.exchangeID=null;obj.createForm();$(this).dialog("close");});
+	    		//alert("error",data["result"]["msg"],function(){obj.exchangeID=null;obj.createForm();$(this).dialog("close");});
+	    		this.editor.html("");
 	    	}
 	    },
 	    error : function(e){
@@ -342,7 +345,8 @@ var languageEditor_value = function(obj){
 
 
 var cuponCodeViewer = function(value,option){
-	return value.substr(0,4)+"-"+value.substr(4,4)+"-"+value.substr(8,4);
+	return value;
+	//return value.substr(0,4)+"-"+value.substr(4,4)+"-"+value.substr(8,4);
 }
 
 var textareaViewer = function(obj,value){
@@ -351,7 +355,7 @@ var textareaViewer = function(obj,value){
 
 var imageInfoViewer = function(value,option){
 	data = s2j(value);
-	return '<img src='+data["img"]+' width=100>';
+	return '<img src="'+data["img"]+'" width=100>';
 }
 /////////////////////////////////////////////////////
 
@@ -430,6 +434,7 @@ var puzzleOpenConditionViewer = function(value,option){
 		var cell = $("<td>").appendTo(row);
 		var conStr = "";
 		for(var j in value[i]){
+			if(value[i][j]["type"]=="g")conStr+="골드 "+value[i][j]["value"]+"로 구매";
 			if(value[i][j]["type"]=="s")conStr+="별 "+value[i][j]["value"]+"개 이상 보유";
 			if(value[i][j]["type"]=="p")conStr+=value[i][j]["value"]+"번 퍼즐 클리어";
 			if(value[i][j]["type"]=="r")conStr+=value[i][j]["value"]+"젬 으로 구매";
@@ -730,7 +735,7 @@ var propChange = function(value){
 		case "i8":return "시간추가아이템";
 		case "i9":return "신발아이템";
 		case "i11":return "자석아이템";
-		case "p1":return "이어하기권";
+		case "p1":return "부활석";
 		case "p2":return "맵가챠권";
 		case "p3":return "캐릭업글권";
 		case "p4":return "아이템뽑기권";
@@ -739,11 +744,12 @@ var propChange = function(value){
 		case "cd":return "카드";
 		case "pc":return "피스";
 		case "pz":return "퍼즐";
+		case "cu":return "캐릭업글";
 	}
 }
 
 var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","이어하기권","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz"]});
+ return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","부활석","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐","캐릭업글"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz","cu"]});
 }
 
 var rewardViewer = function(value,option){
@@ -1014,12 +1020,12 @@ function FileUploader(value,option){
 		$('body').on('click','.imageSelectorBtn',function(){
 
 			var delkey = addDelegate2($(this).parent());
-			window.open('./admin_images.php?gid=nothing&delkey='+delkey,'imageselector','width=1000 height=800 menubar=no status=no');
+			window.open('./admin_images.php?gid='+gid+'&delkey='+delkey,'imageselector','width=1000 height=800 menubar=no status=no');
 		});
 		
 		$('body').on('click','.resourceSelectorBtn',function(){
 
 			var delkey = addDelegate2($(this).parent());
-			window.open('./admin_resources.php?gid=nothing&delkey='+delkey,'resourceselector','width=1000 height=800 menubar=no status=no');
+			window.open('./admin_resources.php?gid='+gid+'&delkey='+delkey,'resourceselector','width=1000 height=800 menubar=no status=no');
 		});
 	});

@@ -4,7 +4,7 @@
         <key>fileFormatVersion</key>
         <int>3</int>
         <key>texturePackerVersion</key>
-        <string>3.3.1</string>
+        <string>3.3.4</string>
         <key>fileName</key>
         <string>/Users/jinsilgim/cocos2d-x-2.1.5/projects/dgproto/_webResource/pvrcczResources/character.tps</string>
         <key>autoSDSettings</key>
@@ -184,13 +184,13 @@
             <enum type="SpriteSettings::TrimMode">Trim</enum>
             <key>heuristicMask</key>
             <false/>
+            <key>pivotPoint</key>
+            <enum type="SpriteSettings::PivotPoint">Center</enum>
         </struct>
         <key>fileList</key>
         <array>
             <filename>character/_block.png</filename>
-            <filename>character/cha_ruby_orange.png</filename>
             <filename>character/cha_ruby_fire.png</filename>
-            <filename>character/cha_ruby.png</filename>
             <filename>character/cha_ruby_ball.png</filename>
             <filename>character/cha_back_bottom.png</filename>
             <filename>character/cha_back_hand.png</filename>
@@ -201,6 +201,7 @@
             <filename>character/cha_front_head.png</filename>
             <filename>character/cha_front_top.png</filename>
             <filename>character/cha_left_all.png</filename>
+            <filename>character/cha_dia.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

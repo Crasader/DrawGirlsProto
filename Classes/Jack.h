@@ -276,12 +276,14 @@ private:
 	bool is_double_moving;
 	
 	bool is_hard; // is_noShield
+    
+    bool isEnableIrregularDirection;
 	
 	int check_turn_cnt;
 	
 	Chaos* t_chaos;
 	
-//	CCSprite* line_edge;
+	CCSprite* line_edge;
 	
 	CCSprite* jackImg;
 	CCBAnimationManager* jack_ccb_manager;

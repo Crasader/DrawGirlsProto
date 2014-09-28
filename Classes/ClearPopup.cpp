@@ -306,13 +306,20 @@ bool ClearPopup::init()
 		t_star->addChild(t_star_ani, 1, 1);
 	}
 	
+	is_end_take_diary = false;
+	is_end_network = false;
 	if(mySGD->is_clear_diary)
 	{
-		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level), [=](){endTakeCard();});
+		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level), [=]()
+		{
+			is_end_take_diary = true;
+			if(is_end_take_diary && is_end_network)
+				endTakeCard();
+		});
 		addChild(t_take_card_popup, kZ_CP_popup+5);
 	}
 	else
-		endTakeCard();
+		is_end_take_diary = true;
 	
 	CCScale9Sprite* left_total_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
 	left_total_back->setContentSize(CCSizeMake(193, 20));
@@ -357,6 +364,7 @@ bool ClearPopup::init()
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
+	ok_menu->setStringData("backkey");
 	ok_menu->setPreferredSize(CCSizeMake(215, 65));
 	ok_menu->setTag(kMT_CP_ok);
 	ok_menu->addTargetWithActionForControlEvents(this, cccontrol_selector(ClearPopup::controlButtonAction), CCControlEventTouchUpInside);
@@ -511,7 +519,7 @@ bool ClearPopup::init()
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
-	is_today_mission_success = mySGD->today_mission_info.is_success.getV();
+	is_today_mission_success = false;//mySGD->today_mission_info.is_success.getV();
 	
 	send_command_list.push_back(mySGD->getUpdateTodayMissionParam([=](Json::Value result_data)
 																  {
@@ -519,15 +527,19 @@ bool ClearPopup::init()
 																	  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																	  {
 																		  TRACE();
-																		  if(!is_today_mission_success && result_data["isSuccess"].asBool())
-																			{
-																				is_today_mission_success = true;
-																			}
+                                                                          if(result_data["isFirstCheck"].asBool())
+                                                                          {
+                                                                              is_today_mission_success = true;
+                                                                          }
+																		  
 																		  else
 																			{
 																				is_today_mission_success = false;
 																			}
 																		  TRACE();
+																			
+																			if(is_end_take_diary && is_end_network)
+																				endTakeCard();
 																	  }
 																  }));
 	
@@ -579,6 +591,8 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 										  {
 											  addChild(KSTimer::create(0.1f, refresh_achieve_func));
 										  }
+											
+											is_end_network = true;
 									  }
 									  else
 									  {
@@ -2023,13 +2037,11 @@ void ClearPopup::endLoad()
 {
 	if(is_end_popup_animation && is_saved_user_data)// && is_loaded_list)
 	{
-		/* close cbt
 		if(mySGD->getPlayCountHighIsOn() != 0 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_eventRubyShop) && mySGD->getUserdataTotalPlayCount() >= mySGD->getPlayCountHighValue())
 		{
 			EventShopPopup* t_popup = EventShopPopup::create(-300, [=](){});
 			addChild(t_popup, kZ_CP_popup);
 		}
-		 */
 		
 		is_menu_enable = true;
 	}
