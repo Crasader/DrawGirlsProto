@@ -356,9 +356,9 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 		}
 		else
 		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("drawStop"))
+			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw_stop"))
 			{
-				character_manager->runAnimationsForSequenceNamed("drawStop");
+				character_manager->runAnimationsForSequenceNamed("draw_stop");
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 					jack_img_direction = directionStop;
 			}
