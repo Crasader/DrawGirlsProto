@@ -3417,7 +3417,6 @@ void TitleRenewalScene::reduceAction()
         unschedule(schedule_selector(TitleRenewalScene::reduceAction));
         
         if(character_download_list.size() > 0)
->>>>>>> 445ea6663add41f3b73743d3dc821eae62ca2de6
 		{
 			for(int i=0;i<character_download_list.size();i++)
 			{
