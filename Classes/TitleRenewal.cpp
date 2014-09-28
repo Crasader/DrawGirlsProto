@@ -1571,7 +1571,7 @@ void TitleRenewalScene::resultGetNoticeList(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetCommonSetting)));
+		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	}
 	
 	receive_cnt--;
