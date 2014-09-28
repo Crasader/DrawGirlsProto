@@ -343,7 +343,7 @@ bool HellModeResult::init()
 	
 
 	Json::Value param2;
-	param2["myScore"]=mySGD->hell_play_time.getV();
+	param2["myScore"]=mySGD->hell_play_time.getV()*100.f;
 	param2["stageNo"]=mySD->getSilType();
 	param2["memberID"] = hspConnector::get()->getSocialID();
 	param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
@@ -623,7 +623,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asFloat(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(55, 35, 150));

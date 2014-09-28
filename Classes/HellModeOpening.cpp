@@ -439,7 +439,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asFloat(), "%.1f").c_str()), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5f));
@@ -497,7 +497,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(result_data["myscore"].asFloat(), "%.1f").c_str()), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(result_data["myscore"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5f));
