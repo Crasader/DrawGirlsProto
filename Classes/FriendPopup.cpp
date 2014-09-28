@@ -1627,7 +1627,24 @@ void FriendPopup::setVoteFriendMenu()
 				//			kakaoTalkInvite->setTitleSize(13.f);
 				m_friendVoteContainer->addChild(kakaoTalkInvite);
 				kakaoTalkInvite->setFunction([=](CCObject*){
-					myHSP->openKakaoMsg();
+					
+					Json::Value msgInfo = mySGD->getKakaoMsg();
+					string msg = msgInfo["msg"].asString();
+					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
+					CCLOG("%s",msgInfo["msg"].asString().c_str());
+					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+					
+					if(ret == 0) {
+						auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+						ASPopupView* as = ASPopupView::getCommonNoti2(-9999999, "에러",
+																													ment, nullptr, ccp(0, 0), true);
+						addChild(as, 9999999);
+					}
+					
+
+					
 				});
 				setFormSetter(kakaoTalkInvite);
 				
