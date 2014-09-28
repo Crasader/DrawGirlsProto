@@ -193,23 +193,20 @@
             <filename>boss_tree/_block.png</filename>
             <filename>boss_yellow/_block.png</filename>
             <filename>cha_asuka/_block.png</filename>
-            <filename>cha_asuka/asuka_back_arm.png</filename>
             <filename>cha_asuka/asuka_back_body.png</filename>
+            <filename>cha_asuka/asuka_back_head.png</filename>
             <filename>cha_asuka/asuka_back_leg.png</filename>
             <filename>cha_asuka/asuka_front_arm.png</filename>
             <filename>cha_asuka/asuka_front_body.png</filename>
             <filename>cha_asuka/asuka_front_eye.png</filename>
+            <filename>cha_asuka/asuka_front_head.png</filename>
             <filename>cha_asuka/asuka_front_leg.png</filename>
-            <filename>cha_asuka/asuka_side_arm1.png</filename>
-            <filename>cha_asuka/asuka_side_arm2.png</filename>
             <filename>cha_asuka/asuka_side_body.png</filename>
             <filename>cha_asuka/asuka_side_eye.png</filename>
-            <filename>cha_asuka/asuka_side_foot1.png</filename>
-            <filename>cha_asuka/asuka_side_foot2.png</filename>
-            <filename>cha_asuka/asuka_back_head.png</filename>
-            <filename>cha_asuka/asuka_front_head.png</filename>
             <filename>cha_asuka/asuka_side_head.png</filename>
-            <filename>cha_asuka/asuka_slde_front.png</filename>
+            <filename>cha_asuka/asuka_slde_bottom1.png</filename>
+            <filename>cha_asuka/asuka_slde_bottom2.png</filename>
+            <filename>cha_asuka/asuka_side_arm.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

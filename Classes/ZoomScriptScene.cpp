@@ -423,7 +423,29 @@ void ZoomScript::menuAction(CCObject *sender)
 		target_node->setTouchEnabled(false);
 		unschedule(schedule_selector(ZoomScript::moveAnimation));
 		
-		if(is_showtime)
+		if(mySGD->is_hell_mode)
+		{
+			AudioEngine::sharedInstance()->stopSound();
+			
+			if(mySGD->isHasGottenCards(mySD->getSilType(), mySGD->getStageGrade()) > 0)
+			{
+				nextScene();
+			}
+			else
+			{
+				mySGD->is_clear_diary = true;
+				
+				CCScaleTo* t_scale = CCScaleTo::create(0.3f, 1.5f);
+				CCMoveTo* t_move = CCMoveTo::create(0.3f, ccp(240,myDSH->ui_center_y));
+				
+				CCSpawn* t_spawn = CCSpawn::create(t_scale, t_move, NULL);
+				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ZoomScript::nextScene));
+				CCSequence* t_seq = CCSequence::create(t_spawn, t_call, NULL);
+				
+				game_node->runAction(t_seq);
+			}
+		}
+		else if(is_showtime)
 		{
 			AudioEngine::sharedInstance()->playEffect("ment_showtime.mp3");
 			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
@@ -966,7 +988,7 @@ void ZoomScript::nextScene()
 {
 //	setBackKeyEnabled(false);
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 	}

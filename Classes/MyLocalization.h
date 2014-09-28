@@ -1072,6 +1072,25 @@ typedef enum MyLocalKey_ {
     kMyLocalKey_missionFailContextSubCumberCatch,
     kMyLocalKey_missionFailContextTurns,
 	
+	kMyLocalKey_hellMode,
+	kMyLocalKey_hellMarquee,
+	kMyLocalKey_hellNotOpen,
+	
+	kMyLocalKey_mycharacter,
+	kMyLocalKey_missileUpgrade2,
+	kMyLocalKey_changeCharacter,
+	kMyLocalKey_selectCharacter,
+	kMyLocalKey_characterMarquee,
+	kMyLocalKey_characterSelected,
+	kMyLocalKey_characterSelect,
+	
+	kMyLocalKey_takeCharacterCard,
+	kMyLocalKey_haveCharacterCard,
+	
+	kMyLocalKey_hellTitleGold,
+	kMyLocalKey_hellTitleTime,
+	kMyLocalKey_hellContentTime,
+	
 	kMyLocalKey_lastkey
 }MyLocalKey;
 

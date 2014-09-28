@@ -215,7 +215,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = boost::str(boost::format("jack_missile_%||.png") % ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), ((grade - 1) * 5 + level));
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());

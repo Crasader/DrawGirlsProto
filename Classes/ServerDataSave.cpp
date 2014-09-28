@@ -742,6 +742,13 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopEventPack_isJustOne_b)			rv = "sepIsJustOne";
 	else if(t_key == kSDS_GI_shopEventPack_img_s)				rv = "sepImg";
 	else if(t_key == kSDS_GI_serial_int1_cardNumber_i)			rv = "srl%dcd";
+	else if(t_key == kSDS_GI_hellMode_version_i)				rv = "hlVersion";
+	else if(t_key == kSDS_GI_hellMode_listCount_i)				rv = "hlListCnt";
+	else if(t_key == kSDS_GI_hellMode_int1_openPieceNo_i)		rv = "hl%dopn";
+	else if(t_key == kSDS_GI_hellMode_int1_cellImgInfo_s)		rv = "hl%dcellImg";
+	else if(t_key == kSDS_GI_hellMode_int1_pieceNo_i)			rv = "hl%dpcNo";
+	else if(t_key == kSDS_GI_hellMode_int1_title_s)				rv = "hl%dtitle";
+	else if(t_key == kSDS_GI_hellMode_int1_content_s)			rv = "hl%dcontent";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
