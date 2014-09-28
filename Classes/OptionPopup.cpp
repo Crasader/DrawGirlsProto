@@ -740,6 +740,8 @@ bool OptionPopup::init()
 	main_case->addChild(push_menu, kOP_Z_content);
 	push_menu->setTouchPriority(-171);
 	
+	myDSH->setBoolForKey(kDSH_Key_isPushOff, !myHSP->getIsEnablePushNotification());
+	
 	push_img = NULL;
 	resetPushMenu();
 	
@@ -1452,6 +1454,9 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_push)
 	{
+		myDSH->setBoolForKey(kDSH_Key_isPushOff, !myDSH->getBoolForKey(kDSH_Key_isPushOff));
+		myHSP->setIsEnablePushNotification(!myDSH->getBoolForKey(kDSH_Key_isPushOff));
+		resetPushMenu();
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_message)

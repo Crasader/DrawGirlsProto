@@ -2910,9 +2910,9 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 13);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
 				rank_label->disableOuterStroke();
-				rank_label->setPosition(rank_position);
+				rank_label->setPosition(ccp(25.5f, rank_position.y+8));//rank_position);
 				list_cell_case->addChild(rank_label);
 			}
 
@@ -2922,7 +2922,10 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			
 			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
+			if(i >= 3)
+				selectedFlagSpr->setPosition(ccp(25.5f, rank_position.y-5));
+			else
+				selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
@@ -2971,15 +2974,15 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			list_cell_case->setPosition(ccp(right_body->getContentSize().width/2.f,130-3*36.f));
 			right_body->addChild(list_cell_case);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 15);
+			KSLabelTTF* rank_label = KSLabelTTF::create(KS::insert_separator(myrank).c_str(), mySGD->getFont().c_str(), 10);
 			rank_label->disableOuterStroke();
-			rank_label->setPosition(ccp(14,list_cell_case->getContentSize().height/2.f));
+			rank_label->setPosition(ccp(25.5f,list_cell_case->getContentSize().height/2.f+8));
 			list_cell_case->addChild(rank_label);
 			
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
+			selectedFlagSpr->setPosition(ccp(25.5f,list_cell_case->getContentSize().height/2.f-5));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			

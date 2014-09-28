@@ -403,9 +403,9 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 13);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
 				rank_label->disableOuterStroke();
-				rank_label->setPosition(rank_position);
+				rank_label->setPosition(ccp(27.f, rank_position.y+8));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -415,7 +415,10 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(40,list_cell_case->getContentSize().height/2.f));
+			if(i >= 3)
+				selectedFlagSpr->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f-5));
+			else
+				selectedFlagSpr->setPosition(ccp(40,list_cell_case->getContentSize().height/2.f));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
@@ -465,15 +468,15 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			list_cell_case->setPosition(ccp(0,20-3*36.f));
 			right_info_node->addChild(list_cell_case);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 15);
+			KSLabelTTF* rank_label = KSLabelTTF::create(KS::insert_separator(myrank).c_str(), mySGD->getFont().c_str(), 10);
 			rank_label->disableOuterStroke();
-			rank_label->setPosition(ccp(14,list_cell_case->getContentSize().height/2.f));
+			rank_label->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f+8));
 			list_cell_case->addChild(rank_label);
 			
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(40,list_cell_case->getContentSize().height/2.f));
+			selectedFlagSpr->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f-5));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
