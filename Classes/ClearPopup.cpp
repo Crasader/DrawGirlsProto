@@ -400,14 +400,12 @@ bool ClearPopup::init()
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
 	param2["memberID"] = hspConnector::get()->getSocialID();
+	param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p2_data;
-	p2_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	p2_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
 	p2_data["highstage"] = mySGD->suitable_stage;
-	p2_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	p2_data["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-	Json::FastWriter p2_data_writer;
-	param2["data"] = p2_data_writer.write(p2_data);
+	param2["data"] = p2_data;
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;

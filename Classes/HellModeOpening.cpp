@@ -302,6 +302,7 @@ void HellModeOpening::setRight(int t_stage_number)
 		Json::Value t_param;
 		t_param["memberID"] = myHSP->getSocialID();
 		t_param["stageNo"] = called_stage;
+		
 		myHSP->command("getstagerankbyalluser", t_param, this, json_selector(this, HellModeOpening::resultGetRank));
 	}
 	else if(selected_stage == t_stage_number)
