@@ -202,6 +202,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	gohome_button->setTouchPriority(touch_priority-1);
 	
+	gohome_button->setEnabled(!mySGD->is_hell_mode);
+	
 	
 	
 	CCLabelTTF* t3_label = CCLabelTTF::create();
@@ -220,6 +222,8 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	addChild(replay_button);
 	
 	replay_button->setTouchPriority(touch_priority-1);
+	
+	replay_button->setEnabled(!mySGD->is_hell_mode);
 	
 
 	

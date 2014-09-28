@@ -220,6 +220,7 @@ enum ChildTagInPlayUI
 };
 class RollingButton;
 class GraySprite;
+class ConvexGraph;
 class PlayUI : public CCNode
 {
 public:
@@ -259,6 +260,7 @@ public:
 	void checkStageGoldMission(int t_gold);
 	void addTurnCnt();
 	void checkScoreMission();
+	void hellModeResult();
 	
 	function<void(function<void()>, function<void()>)> clear_time_event_func;
 	
@@ -350,6 +352,9 @@ private:
 	void addResultClearCCB();
 	void addResultCCB(string ccb_filename);
 	KSProtectVar<float> keep_percentage;
+	
+	ConvexGraph* progress_timer;
+	
 	
 	CCNode* thumb_node;
 	

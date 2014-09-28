@@ -699,6 +699,8 @@ public:
 	int getUserdataHighPiece();
 	void setUserdataOnlyOneBuyPack(int t_i);
 	int getUserdataOnlyOneBuyPack();
+	void setUserdataSelectedCharNO(int t_i);
+	int getUserdataSelectedCharNO();
 	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();
@@ -813,6 +815,8 @@ public:
 	Json::Value replay_playing_info;
 	
 	bool is_endless_mode;
+	bool is_hell_mode;
+	KSProtectVar<float> hell_play_time;
 	KSProtectVar<bool> endless_my_victory_on;
 	KSProtectVar<int> endless_my_victory;
 //	KSProtectVar<int> endless_my_total_score;

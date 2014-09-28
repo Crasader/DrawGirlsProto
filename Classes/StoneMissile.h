@@ -1149,6 +1149,13 @@ public:
 		object->autorelease();
 		return object;
 	}
+	static GuidedMissile* createForShowStartSettingPopup(CCNode* start_node, const string& filename, bool selfRotation, int grade, int level)
+	{
+		GuidedMissile* object = new GuidedMissile();
+		object->initForShowStartSettingPopup(start_node, filename, selfRotation, grade, level);
+		object->autorelease();
+		return object;
+	}
 	
 	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
 	{
@@ -1156,6 +1163,7 @@ public:
 		
 		m_particle = NULL;
 		m_streak = NULL;
+		m_start_node = NULL;
 		
 		m_initSpeed = initSpeed;
 		m_option = ao;
@@ -1187,9 +1195,39 @@ public:
 		return true;
 	}
 	
+	bool initForShowStartSettingPopup(CCNode* start_node, const string& fileName, bool selfRotation, int grade, int level)
+	{
+		StoneAttack::init();
+		m_start_node = start_node;
+		m_showWindow.fileName = fileName;
+		m_selfRotation = selfRotation;
+		m_showWindow.grade = grade;
+		m_showWindow.level = level;
+		schedule(schedule_selector(GuidedMissile::showWindow));
+		
+		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 150));
+		//m_back->setOpacity(color.a);
+		
+		//addChild(m_showWindow.whiteBoard);
+		m_showWindow.clippingNode = CCClippingNode::create();
+		CCClippingNode* cNode = m_showWindow.clippingNode;
+		//cNode->setContentSize(CCSizeMake(100, 100));
+		//cNode->setAnchorPoint(ccp(0.5,0.f));
+		cNode->setPosition(ccp(0,0));
+		cNode->setStencil(m_showWindow.whiteBoard);
+		cNode->setInverted(false);
+		this->addChild(cNode,1);
+		m_showWindow.explosionNode = CCSpriteBatchNode::create("fx_monster_hit.png");
+		
+		cNode->addChild(m_showWindow.explosionNode);
+		
+		return true;
+	}
+	
 	bool initForShowWindow(const string& fileName, bool selfRotation, int grade, int level )
 	{
 		StoneAttack::init();
+		m_start_node = NULL;
 		m_showWindow.fileName = fileName;	
 		m_selfRotation = selfRotation;
 		m_showWindow.grade = grade;
@@ -1249,12 +1287,21 @@ public:
 			beautifier(m_showWindow.grade, m_showWindow.level, &missile.streak, &missile.particleQuad);
 
 			m_showWindow.clippingNode->addChild(missile.missileSprite);
-			missile.missileSprite->setPosition(ccp(100 * cosf(creationRad), 100 * sinf(creationRad)));
+			if(m_start_node)
+				missile.missileSprite->setPosition(m_start_node->getPosition() - getPosition());
+			else
+				missile.missileSprite->setPosition(ccp(100 * cosf(creationRad), 100 * sinf(creationRad)));
+			
 			if(missile.streak)
 				missile.streak->setPosition(missile.missileSprite->getPosition());
 			if(missile.particleQuad)
 				missile.particleQuad->setPosition(missile.missileSprite->getPosition());
-			missile.missileRad = creationRad;
+			
+			if(m_start_node)
+				missile.missileRad = (m_start_node->getPosition() - getPosition()).getAngle();// creationRad;
+			else
+				missile.missileRad = creationRad;
+			
 			int random_value = rand()%7 - 3;
 			float random_float = random_value/10.f;
 			float speed = 1.4f+random_float + m_showWindow.grade / 10.f;
@@ -1570,6 +1617,7 @@ protected:
 	CCSprite* m_missileSprite; // 미사일 객체.
 	CCParticleSystemQuad* m_particle;
 	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
 	struct ShowWindow
 	{
 		ShowWindow()

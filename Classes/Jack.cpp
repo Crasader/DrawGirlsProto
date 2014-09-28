@@ -2235,8 +2235,15 @@ void Jack::dieEffect()
 			{
 //				if(mySGD->is_endless_mode || continue_on_count < 2)
 //				{
+				if(!mySGD->is_hell_mode)
+				{
 					continue_on_count = continue_on_count.getV() + 1;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
+				}
+				else
+				{
+					myGD->communication("UI_hellModeResult");
+				}
 //				}
 //				else
 //				{

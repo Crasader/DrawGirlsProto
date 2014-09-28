@@ -1141,6 +1141,25 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("<font newline=16>액자를 오픈하려면</font><font color=961>%s골드</font><font newline=16>가 필요합니다.</font><font>오픈하시겠습니까?</font>"), kMyLocalKey_puzzleOpenContent);
 	ko->setObject(CCString::create("오픈하기"), kMyLocalKey_puzzleOpenButton);
 	
+	ko->setObject(CCString::create("헬모드"), kMyLocalKey_hellMode);
+	ko->setObject(CCString::create("마스터카드를 획득하면 캐릭터를 장착할 수 있어요."), kMyLocalKey_hellMarquee);
+	ko->setObject(CCString::create("<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>"), kMyLocalKey_hellNotOpen);
+	
+	ko->setObject(CCString::create("내캐릭터"), kMyLocalKey_mycharacter);
+	ko->setObject(CCString::create("미사일\n업그레이드"), kMyLocalKey_missileUpgrade2);
+	ko->setObject(CCString::create("캐릭터변경"), kMyLocalKey_changeCharacter);
+	ko->setObject(CCString::create("캐릭터선택"), kMyLocalKey_selectCharacter);
+	ko->setObject(CCString::create("캐릭터는 마스터피스를 획득하시면 됩니다."), kMyLocalKey_characterMarquee);
+	ko->setObject(CCString::create("선택중"), kMyLocalKey_characterSelected);
+	ko->setObject(CCString::create("선  택"), kMyLocalKey_characterSelect);
+	
+	ko->setObject(CCString::create("캐릭터 카드 획득!"), kMyLocalKey_takeCharacterCard);
+	ko->setObject(CCString::create("<font newline=16>이미 획득한 카드 입니다.</font><font newline=16>헬모드에서는 다양한 캐릭터 카드를</font><font>획득할 수 있어요.</font>"), kMyLocalKey_haveCharacterCard);
+	
+	ko->setObject(CCString::create("골드"), kMyLocalKey_hellTitleGold);
+	ko->setObject(CCString::create("타임"), kMyLocalKey_hellTitleTime);
+	ko->setObject(CCString::create("%s sec"), kMyLocalKey_hellContentTime);
+	
 	setObject(ko, "ko");
 }
 void MyLocal::en()

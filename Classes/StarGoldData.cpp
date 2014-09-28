@@ -373,6 +373,8 @@ void StarGoldData::setGameStart()
 	is_clear_diary = false;
 	is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	
+	hell_play_time = 0.f;
+	
 	stage_attack_count = 0;
 	
 	ingame_gold = 0;
@@ -3532,6 +3534,7 @@ void StarGoldData::myInit()
 	is_on_attendance = false;
 	is_on_rank_reward = false;
 	is_endless_mode = false;
+	is_hell_mode = false;
 	is_on_accountLinkLead = false;
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
@@ -3915,6 +3918,19 @@ void StarGoldData::setUserdataOnlyOneBuyPack(int t_i)
 	}
 }
 int StarGoldData::getUserdataOnlyOneBuyPack(){	return userdata_storage[kUserdataType_onlyOneBuyPack].getV();	}
+
+void StarGoldData::setUserdataSelectedCharNO(int t_i)
+{
+	if(userdata_storage[kUserdataType_selectedCharNO].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_selectedCharNO;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataSelectedCharNO(){	return userdata_storage[kUserdataType_selectedCharNO].getV();	}
 
 void StarGoldData::setUserdataEndlessIngWin(int t_i)
 {

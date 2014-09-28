@@ -127,6 +127,7 @@ private:
 	void resultGetShopList(Json::Value result_data);
 	void resultGetNoticeList(Json::Value result_data);
 	void resultGetTimeEvent(Json::Value result_data);
+	void resultGetHellModeList(Json::Value result_data);
 	
 	void resultGetCharacterInfo(Json::Value result_data);
 	vector<DownloadFile> character_download_list;

@@ -62,7 +62,7 @@ namespace KS
 		}
 		else
 		{
-			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			string t_total = CCString::createWithFormat(format.c_str(), s)->getCString();
 			size_t pos = t_total.find(".");
 			if(pos != std::string::npos)
 			{
@@ -91,7 +91,7 @@ namespace KS
 		}
 		else
 		{
-			string t_total = CCString::createWithFormat(format.c_str(), -s)->getCString();
+			string t_total = CCString::createWithFormat(format.c_str(), s)->getCString();
 			size_t pos = t_total.find(".");
 			if(pos != std::string::npos)
 			{

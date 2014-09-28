@@ -15,6 +15,7 @@
 #include "KSJuniorBase.h"
 #include "OnePercentTutorial.h"
 #include "CommonAnimation.h"
+#include "ConvexGraph.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -1739,6 +1740,82 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 	}
 }
 
+void PlayUI::hellModeResult()
+{
+	if(is_cleared_cdt)
+	{
+		myGD->communication("GIM_stopCoin");
+		
+		int boss_count = myGD->getMainCumberCount();
+		for(int i=0;i<boss_count;i++)
+		{
+			myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+		}
+		
+		isGameover = true;
+		myGD->setIsGameover(true);
+		myGD->communication("CP_setGameover");
+		myGD->removeAllPattern();
+		stopCounting();
+		myGD->communication("Main_allStopSchedule");
+		myGD->communication("Main_startMoveToBossPosition");
+		myGD->communication("CP_startDieAnimation");
+		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+		
+		CCDelayTime* t_delay = CCDelayTime::create(1.5f);
+		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::addResultClearCCB));
+		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+		runAction(t_seq);
+		
+		endGame(false);
+		
+//		for(int i=kAchievementCode_fastClear1;i<=kAchievementCode_fastClear3;i++)
+//		{
+//			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+//			   use_time <= myAchieve->getCondition((AchievementCode)i))
+//			{
+//				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
+//				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+//				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//			}
+//		}
+		
+//		for(int i=kAchievementCode_hidden_breathtaking1;i<=kAchievementCode_hidden_breathtaking2;i++)
+//		{
+//			if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+//			{
+//				if(!myAchieve->isNoti(AchievementCode(i)) && playtime_limit.getV() - countingCnt.getV() <= myAchieve->getCondition(AchievementCode(i)))
+//				{
+//					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition(AchievementCode(i)));
+//					AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+//					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//				}
+//			}
+//		}
+		
+//		myGD->communication("Main_startClearFloatingCoin", last_get_percentage);
+	}
+	else
+	{
+		conditionFail();
+		
+		mySGD->fail_code = kFC_missionfail;
+		
+		stopCounting();
+		// timeover
+		isGameover = true;
+		myGD->communication("CP_setGameover");
+		myGD->removeAllPattern();
+		myGD->communication("Main_allStopSchedule");
+		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+		
+		addResultCCB("ui_missonfail.ccbi");
+		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+		
+		endGame(false);
+	}
+}
+
 void PlayUI::addResultClearCCB()
 {
 	addResultCCB("ui_stageclear.ccbi");
@@ -2794,16 +2871,19 @@ int PlayUI::getUseTime ()
 void PlayUI::takeCoinModeOn ()
 {
 //	top_center_node->setPosition(ccpAdd(top_center_node->getPosition(), ccp(0,8)));
-	
 	is_show_exchange_coin = true;
-	taked_coin_cnt = 0;
-	for(int i=1;i<=6;i++)
+	
+	if(!mySGD->is_hell_mode)
 	{
-		CCSprite* t_gray_coin = (CCSprite*)exchange_dic->objectForKey(i);
-		t_gray_coin->setVisible(true);
+		taked_coin_cnt = 0;
+		for(int i=1;i<=6;i++)
+		{
+			CCSprite* t_gray_coin = (CCSprite*)exchange_dic->objectForKey(i);
+			t_gray_coin->setVisible(true);
+		}
+		myGD->communication("Main_showCoin");
+		myGD->communication("Main_showTakeCoin");
 	}
-	myGD->communication("Main_showCoin");
-	myGD->communication("Main_showTakeCoin");
 }
 
 void PlayUI::checkMapTimeVector()
@@ -2984,26 +3064,26 @@ void PlayUI::counting ()
 		}
 		
 		
-		if(countingCnt-1 == playtime_limit/3)
+		if(countingCnt-1 == playtime_limit/3 && !mySGD->is_hell_mode)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", false);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 			if(myGD->game_step == kGS_limited)
 				myGD->communication("Main_setUnlimitMap");
 		}
-		else if(countingCnt-1 == playtime_limit-50)
+		else if(countingCnt-1 == playtime_limit-50 && !mySGD->is_hell_mode)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", false);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", false);
 		}
-		else if(countingCnt-1 == playtime_limit-30)
+		else if(countingCnt-1 == playtime_limit-30 && !mySGD->is_hell_mode)
 		{
 			AudioEngine::sharedInstance()->playEffect("se_clock.mp3", true);
 			AudioEngine::sharedInstance()->playEffect("ment_30second.mp3", false, true);
 //			AudioEngine::sharedInstance()->playEffect("sound_time_noti.mp3", true);
 		}
 		
-		if(countingCnt.getV()-1 >= playtime_limit.getV())
+		if(countingCnt.getV()-1 >= playtime_limit.getV() && !mySGD->is_hell_mode)
 		{
 			if(!is_used_longTimeItem && mySGD->isUsingItem(kIC_longTime))
 			{
@@ -3134,7 +3214,16 @@ void PlayUI::counting ()
 		if(!t_is_die)
 		{
 			if(clr_cdt_type == kCLEAR_hellMode)
+			{
 				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
+				float percentage_value = 100.f*(float(label_value) + (detail_counting_cnt/6)/10.f)/(playtime_limit.getV()+1);
+				progress_timer->setPercentage(percentage_value);
+				if(percentage_value >= 100.f)
+				{
+					conditionClear();
+				}
+				mySGD->hell_play_time = float(label_value) + (detail_counting_cnt/6)/10.f;
+			}
 			else
 				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 		}
@@ -3156,7 +3245,16 @@ void PlayUI::counting ()
 		countingLabel->setScale(1.f);
 		countingLabel->setPosition(ccp(240,17));
 		if(clr_cdt_type == kCLEAR_hellMode)
+		{
 			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
+			float percentage_value = 100.f*(float(label_value) + (detail_counting_cnt/6)/10.f)/(playtime_limit.getV()+1);
+			progress_timer->setPercentage(percentage_value);
+			if(percentage_value >= 100.f)
+			{
+				conditionClear();
+			}
+			mySGD->hell_play_time = float(label_value) + (detail_counting_cnt/6)/10.f;
+		}
 		else
 			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, 9 - detail_counting_cnt/6)->getCString());
 	}
@@ -3275,7 +3373,7 @@ void PlayUI::endGame (bool is_show_reason)
 		{
 			keep_percentage = getPercentage();
 			
-			if(jack_life > 0)
+			if(jack_life > 0 && !mySGD->is_hell_mode)
 			{
 				CCDelayTime* t_delay = CCDelayTime::create(4.f);
 				CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::createBonusScore));
@@ -3289,6 +3387,9 @@ void PlayUI::endGame (bool is_show_reason)
 				if(is_exchanged && (beforePercentage^t_tta)/1000.f >= 1.f)		grade_value = 4;
 				else if(is_exchanged)											grade_value = 3;
 				else if((beforePercentage^t_tta)/1000.f >= 1.f)					grade_value = 2;
+				
+				if(mySGD->is_hell_mode)
+					grade_value = 1;
 				
 				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt.getV(), use_time, total_time);
 				CCDelayTime* n_d = CCDelayTime::create(4.5f);
@@ -3778,6 +3879,8 @@ void PlayUI::myInit ()
 //	condition_back->setPosition(icon_menu_position);
 //	addChild(condition_back);
 	
+	progress_timer = NULL;
+	
 	mission_back = NULL;
 	mission_clear_remove_nodes.clear();
 	
@@ -4061,7 +4164,19 @@ void PlayUI::myInit ()
 	}
 	else if(clr_cdt_type == kCLEAR_hellMode)
 	{
-		is_cleared_cdt = true;
+		is_cleared_cdt = false;
+		
+		progress_timer = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+		progress_timer->setPosition(ccp(240,myDSH->ui_top-25));
+		addChild(progress_timer);
+		
+		progress_timer->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+		progress_timer->setBack("loading_progress_back.png");
+		
+		CCSprite* star_img = CCSprite::create("star_gold.png");
+		star_img->setScale(0.5f);
+		star_img->setPosition(ccp(110,2));
+		progress_timer->addChild(star_img);
 	}
 	else if(clr_cdt_type == kCLEAR_percentage)
 	{
@@ -4300,7 +4415,8 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_writeContinue"] = std::bind(&PlayUI::writeContinue, this);
 	myGD->V_V["UI_takeSilenceItem"] = std::bind(&PlayUI::takeSilenceItem, this);
 	myGD->V_V["UI_addTurnCnt"] = std::bind(&PlayUI::addTurnCnt, this);
-	myGD->V_V["checkScoreMission"] = std::bind(&PlayUI::checkScoreMission, this);
+	myGD->V_V["UI_checkScoreMission"] = std::bind(&PlayUI::checkScoreMission, this);
+	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
 }
 
 void PlayUI::hideThumb()
