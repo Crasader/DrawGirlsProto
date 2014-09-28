@@ -108,6 +108,9 @@ private:
 	
 	void menuAction(CCObject* sender);
 	
+    int reduce_frame;
+    void reduceAction();
+    
 	void startDownload();
 	void startDownloadSet();
 	
