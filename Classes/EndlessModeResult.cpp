@@ -278,9 +278,13 @@ bool EndlessModeResult::init()
 		param.clear();
 		param["memberID"] = myHSP->getMemberID();
 		param["score"] = left_total_score.getV();// int(mySGD->getScore());
+		param["victory"] = left_total_score.getV() > right_total_score.getV();
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-		param["victory"] = left_total_score.getV() > right_total_score.getV();
+		Json::Value p1_data;
+		p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+		p1_data["highPiece"] = mySGD->suitable_stage;
+		param["data"] = p1_data;
 		
 		send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
 												 {
@@ -2369,11 +2373,14 @@ void EndlessModeResult::reSetEndlessRank()
 	param.clear();
 	param["memberID"] = myHSP->getMemberID();
 	param["score"] = int(mySGD->getScore());
-	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	param["level"] = mySGD->endless_my_level.getV();
-	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	param["victory"] = left_total_score.getV() > right_total_score.getV();
-	
+	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+	Json::Value p1_data;
+	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+	p1_data["highPiece"] = mySGD->suitable_stage;
+	param["data"] = p1_data;
+
 	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)
 										{
 											TRACE();
