@@ -62,7 +62,7 @@ function CuponManager(value,option){
 		//ajax로 생성
 		$.ajax({
 	    url : "dataManager2.php", 
-	    data : {"dbMode":"custom","dbFunc":"getCuponList","dbClass":"CuponCode","param":j2s({"cuponNo":this.option["rowData"]["no"]})},
+	    data : {"gid":gid,"dbMode":"custom","dbFunc":"getCuponList","dbClass":"CuponCode","param":j2s({"cuponNo":this.option["rowData"]["no"]})},
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){

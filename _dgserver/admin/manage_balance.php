@@ -45,8 +45,9 @@ while($data = mysql_fetch_assoc($result)){
 	$ps="";
 	$pc="";
 	foreach ($boss[0]["pattern"] as $key => $value) {
-		if($boss[0]["pattern"][$key]["atype"]=="special")$ps.=$boss[0]["pattern"][$key]["pattern"].",";
-		if($boss[0]["pattern"][$key]["atype"]=="crash")$pc=$boss[0]["pattern"][$key]["pattern"].",";
+		$pattern = new Pattern($boss[0]["pattern"][$key]["pattern"]);
+		if($boss[0]["pattern"][$key]["atype"]=="special")$ps.=$pattern->name.",";
+		if($boss[0]["pattern"][$key]["atype"]=="crash")$pc.=$pattern->name.",";
 	}
 	$bgcolor="ffffff";
 	if($data[no]%2)$bgcolor="eeeeee";

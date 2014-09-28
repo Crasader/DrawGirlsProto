@@ -406,7 +406,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			CCSprite* s_img = mySIL->getLoadedImg("event_pack.png");
 			s_img->setColor(ccGRAY);
 			
-			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyStartPack));
+			CCMenuItem* img_item = CCMenuItemSprite::create(n_img, s_img, this, menu_selector(ShopPopup::buyEventPack));
 			
 			CCMenu* img_menu = CCMenu::createWithItem(img_item);
 			img_menu->setPosition(ccp(0,-15));
@@ -778,6 +778,9 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopStartPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryStartPack();
 									}
 									else
@@ -1054,6 +1057,9 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									KS::KSLog("in-app test \n%", v);
 									if(v["issuccess"].asInt())
 									{
+                                        Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopEventPack_pID_s));
+                                        if(!t_info.empty())
+                                            myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										requestItemDeliveryEventPack();
 									}
 									else
@@ -1336,6 +1342,8 @@ bool ShopPopup::init()
 	
 	success_func = nullptr;
 	
+    is_use_goods_type_gold = false;
+    
 	is_set_close_func = false;
 	target_heartTime = NULL;
 	
@@ -1953,7 +1961,10 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        if(is_use_goods_type_gold)
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        else
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)), 9999);
 	}
 	else
 	{
@@ -1961,6 +1972,8 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		fail_func();
 		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
 	}
+    
+    is_use_goods_type_gold = false;
 }
 
 void ShopPopup::menuAction(CCObject* pSender)
@@ -2087,6 +2100,9 @@ void ShopPopup::menuAction(CCObject* pSender)
 										KS::KSLog("in-app test \n%", v);
 										if(v["issuccess"].asInt())
 										{
+                                            Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
+                                            if(!t_info.empty())
+                                                myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											requestItemDelivery();
 										}
 										else
@@ -2229,6 +2245,8 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
+                                    is_use_goods_type_gold = true;
+                                    
 									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopP1_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
 									
 									fail_func = [=]()
@@ -3421,7 +3439,8 @@ void ShopPopup::successAction()
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
-			t_texture->saveToFile(cf_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
 			
 			t_texture->release();
 			target_img->release();
@@ -3653,10 +3672,19 @@ void ShopPopup::requestItemDeliveryStartPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
-			CCLOG("inapp success!! refresh!!!");
+            CCLOG("inapp success!! refresh!!! 7-> %s",t.toStyledString().c_str());
+			TRACE();
+            
 			
             mySGD->network_check_cnt = 0;
             
@@ -3725,13 +3753,6 @@ void ShopPopup::requestItemDeliveryStartPack()
             }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 //	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 //		if(t["result"]["code"].asInt() == GDSUCCESS)
 //		{
@@ -3799,7 +3820,14 @@ void ShopPopup::requestItemDeliveryEventPack()
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getSocialID();
 	
-	t_command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value t){
+	t_command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
+	
+	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
+	Json::Value param;
+	param["memberID"] = hspConnector::get()->getMemberID();
+	
+	t_command_list.push_back(CommandParam("requestItemDelivery", param, [=](Json::Value t){
 		if(t["result"]["code"].asInt() == GDSUCCESS)
 		{
 			CCLOG("inapp success!! refresh!!!");
@@ -3874,13 +3902,6 @@ void ShopPopup::requestItemDeliveryEventPack()
             }
 		}
 	}));
-	
-	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	Json::Value param;
-	param["memberID"] = hspConnector::get()->getMemberID();
-	
-	t_command_list.push_back(CommandParam("requestItemDelivery", param, nullptr));
 	//	GraphDog::get()->command("requestItemDelivery", param, [=](Json::Value t){
 	//		if(t["result"]["code"].asInt() == GDSUCCESS)
 	//		{

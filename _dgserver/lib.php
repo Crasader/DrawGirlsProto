@@ -1,4 +1,5 @@
 <?php
+session_cache_expire(60*60*24);
 session_start();
 
 error_reporting( E_ALL ^ E_NOTICE );
@@ -11,19 +12,20 @@ include_once("DBManager.php");
 
 $GAMEID = $_POST["gid"];
 if(!$GAMEID)$GAMEID = $_GET["gid"];
-
+if(!$GAMEID)$GAMEID = $_SESSION['game_id'];
 $gid = $GAMEID;
 
 if($checkdb=="test"){
 	include_once("config_test.php");
 }else{
+	LogManager::addLog("select db ->".$gid);
 	if(!@include_once("config/".$gid.".php")){
 		include_once("config.php");
 	}			
 }
 
 $AES_KEY = "qrqhyrlgprghedvh";
-
+  
 
 function decryptByAESWithBase64($text,$key=null){
 
@@ -179,11 +181,6 @@ class kvManager{
 }
 
 
-
-
-
-
-
 function reloadPuzzleInfo(){
 
 
@@ -197,6 +194,25 @@ function reloadPuzzleInfo(){
 	//mysql_query("update aCardTable set ability='[]'",DBManager::getMainConnection());
 
 	//퍼즐보상카드
+
+	while($obj=HellMode::GetObjectByQuery("")){
+		$piece = new Piece($obj->pieceNo);
+		
+		if($piece->isLoaded()){
+			$piece->cards = array($obj->cardNo);
+			$piece->puzzle = -1;
+			$piece->save();
+		}
+
+		$card = new Card($obj->cardNo);
+		if($card->isLoaded()){
+			$card->piece = $obj->pieceNo;
+			$card->grade = 1;
+			$card->save();
+		}
+
+	}
+
 	$query = mysql_query("select * from ".Puzzle::getDBTable(),DBGroup::create("main")->getConnectionForReadByRand());
 	while($pData = mysql_fetch_assoc($query)){
 		$clearReward = json_decode($pData["clearReward"],true);
@@ -207,11 +223,9 @@ function reloadPuzzleInfo(){
 		if($clearReward["perfect"]){
 			mysql_query("update ".Card::getDBTable()." set category='nPuzzle' where no=".$clearReward["perfect"],DBGroup::create("main")->getConnectionForWrite(1));
 		}
-
-
 	}
 
-	$query = mysql_query("select * from ".Piece::getDBTable()." where no<10000 order by no asc",DBGroup::create("main")->getConnectionForReadByRand());
+	$query = mysql_query("select * from ".Piece::getDBTable()." order by no asc",DBGroup::create("main")->getConnectionForReadByRand());
 	//LogManager::addLog(mysql_error());
 	$puzzleOrder=1;
 	$puzzleCount=0;
@@ -284,9 +298,161 @@ function reloadPuzzleInfo(){
 	kvManager::increase("puzzleListVer");
 }
 
+function userStats($sDate,$eDate){
+	$allData = array();
+	$cDate = $sDate;
+
+	$where = $type."='".$statsID."'";
+	
+	while(1){
+		$cnt=0;		
+		while($result = UserData::getQueryResult("select count(no) from ".UserData::getDBTable()." where `joinDate` like '".$cDate."%'")){
+			$data = mysql_fetch_array($result);
+			$cnt+=$data[0];
+		}
+		$allData[$cDate]["nru"]=$cnt;
+		$cnt=0;
+		while($result = UserPropertyHistory::getQueryResult("select count(DISTINCT memberID) from "."UserPropertyHistory_".$cDate)){
+			$data = mysql_fetch_array($result);
+			$cnt+=$data[0];
+		}
+
+		$allData[$cDate]["dau"]=$cnt;
+
+		if($cDate==$eDate)break;
+		$cTimestamp = TimeManager::dateStringToDate($cDate);
+		$cDate = date("Ymd",$cTimestamp+24*60*60);
+
+	}
+	ksort($allData);
+	return $allData;
+}
 
 
+function userPropStats($statsID,$sDate,$eDate,$groupField,$type="statsID"){
+	$allData = array();
+	$cDate = $sDate;
+
+	$where = $type."='".$statsID."'";
+	
+	while(1){
+		UserPropertyHistory::setDBTable("UserPropertyHistory_".$cDate);
+		// statsID, statsValue 가 카테고리 나누는용도
+		
+		// while($q = UserPropertyHistory::getQueryResult("select DISTINCT statsID from `".UserPropertyHistory::getDBTable())){
+		// 	while($data=mysql_fetch_assoc($q)){
+		// 		echo $data["statsID"].",";
+		// 	}
+		// }
+		while($q = UserPropertyHistory::getQueryResult("select `".$groupField."`,statsID,count(*) as `cnt`,sum(`count`) as `sum`,max(`count`) as `max`,min(`count`) as `min`,avg(`count`) as `avg` from `".UserPropertyHistory::getDBTable()."` where ".$where." group by `".$groupField."`")){
+			
+			while($data=mysql_fetch_assoc($q)){
+				if(!$allData[$data[$groupField]]["max"] || $allData[$data[$groupField]]["max"]<$data["max"])$allData[$data[$groupField]]["max"]=$data["max"];
+				if(!$allData[$data[$groupField]]["min"] || $allData[$data[$groupField]]["min"]>$data["min"])$allData[$data[$groupField]]["min"]=$data["min"];
+				$allData[$data[$groupField]]["sum"]+=$data["sum"];
+				$allData[$data[$groupField]]["cnt"]+=$data["cnt"];
+				$allData[$data[$groupField]]["avg"]=$allData[$data[$groupField]]["sum"]/$allData[$data[$groupField]]["cnt"];
+			};
+			
+		}
+
+		if($cDate==$eDate)break;
+		$cTimestamp = TimeManager::dateStringToDate($cDate);
+		$cDate = date("Ymd",$cTimestamp+24*60*60);
+
+	}
+
+	ksort($allData);
+	return $allData;
+}
+
+function pieceHistoryStats($statsField,$where=""){
+	$allData = array();
+	$groupField="pieceNo";
+	//$statsField="retryCount";
+
+	while($q = PieceHistory::getQueryResult("select `".$groupField."`,count(*) as `cnt`,sum(`".$statsField."`) as `sum`,max(`".$statsField."`) as `max`,min(`".$statsField."`) as `min`,avg(`".$statsField."`) as `avg` from `".PieceHistory::getDBTable()."` ".$where." group by `".$groupField."`")){			
+		while($data=mysql_fetch_assoc($q)){
+			if(!$allData[$data[$groupField]]["max"] || $allData[$data[$groupField]]["max"]<$data["max"])$allData[$data[$groupField]]["max"]=$data["max"];
+			if(!$allData[$data[$groupField]]["min"] || $allData[$data[$groupField]]["min"]>$data["min"])$allData[$data[$groupField]]["min"]=$data["min"];
+			$allData[$data[$groupField]]["sum"]+=$data["sum"];
+			$allData[$data[$groupField]]["cnt"]+=$data["cnt"];
+			$allData[$data[$groupField]]["avg"]=$allData[$data[$groupField]]["sum"]/$allData[$data[$groupField]]["cnt"];
+		};
+			
+	}
+
+	ksort($allData);
+	return $allData;
+}
+
+function cardHistoryStats($statsField,$where=""){
+	$allData = array();
+	$groupField="cardNo";
+	//$statsField="retryCount";
+
+	while($q = CardHistory::getQueryResult("select `".$groupField."`,count(*) as `cnt`,sum(`".$statsField."`) as `sum`,max(`".$statsField."`) as `max`,min(`".$statsField."`) as `min`,avg(`".$statsField."`) as `avg` from `".CardHistory::getDBTable()."` ".$where." group by `".$groupField."`")){			
+		while($data=mysql_fetch_assoc($q)){
+			if(!$allData[$data[$groupField]]["max"] || $allData[$data[$groupField]]["max"]<$data["max"])$allData[$data[$groupField]]["max"]=$data["max"];
+			if(!$allData[$data[$groupField]]["min"] || $allData[$data[$groupField]]["min"]>$data["min"])$allData[$data[$groupField]]["min"]=$data["min"];
+			$allData[$data[$groupField]]["sum"]+=$data["sum"];
+			$allData[$data[$groupField]]["cnt"]+=$data["cnt"];
+			$allData[$data[$groupField]]["avg"]=$allData[$data[$groupField]]["sum"]/$allData[$data[$groupField]]["cnt"];
+		};
+			
+	}
+
+	ksort($allData);
+	return $allData;
+}
 
 
+function charHistoryStats($statsField,$where=""){
+	$allData = array();
+	$groupField="level";
+	//$statsField="retryCount";
+
+	while($q = CharacterHistory::getQueryResult("select `".$groupField."`,count(*) as `cnt`,sum(`".$statsField."`) as `sum`,max(`".$statsField."`) as `max`,min(`".$statsField."`) as `min`,avg(`".$statsField."`) as `avg` from `".CharacterHistory::getDBTable()."` ".$where." group by `".$groupField."`")){			
+		while($data=mysql_fetch_assoc($q)){
+			if(!$allData[$data[$groupField]]["max"] || $allData[$data[$groupField]]["max"]<$data["max"])$allData[$data[$groupField]]["max"]=$data["max"];
+			if(!$allData[$data[$groupField]]["min"] || $allData[$data[$groupField]]["min"]>$data["min"])$allData[$data[$groupField]]["min"]=$data["min"];
+			$allData[$data[$groupField]]["sum"]+=$data["sum"];
+			$allData[$data[$groupField]]["cnt"]+=$data["cnt"];
+			$allData[$data[$groupField]]["avg"]=$allData[$data[$groupField]]["sum"]/$allData[$data[$groupField]]["cnt"];
+		};
+			
+	}
+
+	ksort($allData);
+	return $allData;
+}
+
+function printStatsList($allData){
+
+	$print = '</td></tr></table>
+	<table class="table table-bordered">
+	<tr>
+		<td>category</td><td>count</td><td>sum</td><td>avg</td><td>min</td><td>max</td>
+	<tr>';
+
+	$gData = array();
+
+	foreach ($allData as $key => $value) {
+		$gData["avg"][]=array($key,$value["avg"]);
+		$gData["max"][]=array($key,$value["max"]);
+		$gData["min"][]=array($key,$value["min"]);
+		$gData["sum"][]=array($key,$value["sum"]);
+		$gData["cnt"][]=array($key,$value["cnt"]);
+		# code...
+
+		$print.= "	<tr>
+			<td>".$key."</td><td>".$value["cnt"]."</td><td>".$value["sum"]."</td><td>".$value["avg"]."</td><td>".$value["min"]."</td><td>".$value["max"]."</td>
+		<tr>";
+	}
+
+	$print.= "</table>";
+
+	return array($gData,$print);
+}
 
 	?>

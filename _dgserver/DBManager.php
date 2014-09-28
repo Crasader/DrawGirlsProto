@@ -378,7 +378,7 @@ class SendItem extends DBTable2{
 
 		$exchange = new Exchange($data["exchangeID"]);
 
-		if(!$exchange->isLoaded())return ResultState::makeReturn(ResultState::GDDONTSAVE,"교환정보 로드실패");
+		if(!$exchange->isLoaded() && $data["exchangeID"])return ResultState::makeReturn(ResultState::GDDONTSAVE,"교환정보 로드실패");
 
 		$result["exchangeID"]=$exchange->id;
 		$result["reward"]=$exchange->list;
@@ -398,6 +398,7 @@ class SendItem extends DBTable2{
 				$param["memberID"]=$mID;
 				$param["sender"]="GM";
 				$param["content"]=$data["sendType"]["message"];
+				$param["data"]=$data["sendType"]["data"];
 				$param["exchangeID"]=$exchange->id;
 				$param["reward"]=$exchange->list;
 				$sR = commandClass::sendgiftboxhistory($param);
@@ -471,6 +472,7 @@ class UserData extends DBTable2{
 			if($userIndex && $userIndex->isLoaded()){
 				$this->memberID=$userIndex->memberID;
 				if(parent::load("memberID='".$userIndex->memberID."'")){
+					$this->nick=$userIndex->nick;
 					// $this->jsonToObj("archiveData");
 					// $this->jsonToObj("eventCheckData");
 					// $this->jsonToObj("TMInfo");
@@ -501,6 +503,19 @@ class UserData extends DBTable2{
 
 	public function getLevel(){
 		return intval($this->exp/10+1);
+	}
+	
+	public function getArrayDataForPublic(){
+		$data=array();
+		$data["memberID"]=$this->memberID;
+		$data["nick"]=$this->nick;
+		$data["lastDate"]=$this->lastDate;
+		$data["lastTime"]=$this->lastTime;
+		$data["flag"]=$this->flag;
+		$data["highPiece"]=$this->highPiece;
+		$data["highScore"]=$this->highScore;
+		$data["introduceCnt"]=$this->introduceCnt;
+		return $data;
 	}
 
 	public function getArrayData($isIncludePrimaryKey=false,$keyList=null){
@@ -592,6 +607,8 @@ class UserData extends DBTable2{
 		
 		$p["api"]="GetProfileDetail2";
 		$p["memberNo"]=$user->memberID;
+		$p["introducerID"]=$user->introducerID;
+		$p["introduceCnt"]=$user->introduceCnt;
 		
 		$hgr = commandClass::httpgateway($p);
 		
@@ -607,6 +624,10 @@ class UserData extends DBTable2{
 		$r["tm_date"]=$tm["date"];
 		$r["tm_reward"]=$tm["rewardInfo"]["reward"][0]["type"];
 		$r["tm_success"]=$tm["isSuccess"];
+		$r["tm_todayCnt"]=$tm["todayCnt"];
+
+		$r["userShardOrder"] = $user->getUserIndex()->userShardOrder;
+		$r["logShardOrder"] = $user->getUserIndex()->logShardOrder;
 
 		$character = new CharacterHistory($user->memberID,$user->selectedCharNO);
 		//LogManager::addLog("character".$user->memberID."-".$user->selectedCharNO);
@@ -651,6 +672,16 @@ class UserData extends DBTable2{
 
 		}
 
+		if(array_key_exists("introducerID",$param["data"])){
+			self::updateWithLQTable($param);
+
+		}
+
+
+		if(array_key_exists("introduceCnt",$param["data"])){
+			self::updateWithLQTable($param);
+
+		}
 
 		if(array_key_exists("tm_date",$param["data"])){
 			$user = UserData::create($param["primaryValue"]);
@@ -669,7 +700,7 @@ class UserData extends DBTable2{
 		if(array_key_exists("tm_goal",$param["data"])){
 			$user = UserData::create($param["primaryValue"]);
 			$tm =& $user->getRef("TMInfo");
-			$tm["goal"]=$param["data"]["goal"];
+			$tm["goal"]=$param["data"]["tm_goal"];
 			$user->save();
 		}
 
@@ -677,6 +708,20 @@ class UserData extends DBTable2{
 			$user = UserData::create($param["primaryValue"]);
 			$tm =& $user->getRef("TMInfo");
 			$tm["count"]=$param["data"]["tm_count"];
+			$user->save();
+		}
+
+		if(array_key_exists("tm_todayCnt",$param["data"])){
+			$user = UserData::create($param["primaryValue"]);
+			$tm =& $user->getRef("TMInfo");
+			$tm["todayCnt"]=$param["data"]["tm_todayCnt"];
+			$user->save();
+		}
+
+		if(array_key_exists("tm_success",$param["data"])){
+			$user = UserData::create($param["primaryValue"]);
+			$tm =& $user->getRef("TMInfo");
+			$tm["isSuccess"]=$param["data"]["tm_success"];
 			$user->save();
 		}
 
@@ -889,7 +934,7 @@ class Piece extends DBTable2{
 		$stageInfo[mission]=json_decode($stageInfo[mission],true);
 		$card = array();
 
-		while($myCard = Card::getObjectByQuery("where piece='".$stageInfo[no]."'",0)){
+		while($myCard = Card::getObjectByQuery("where piece='".$stageInfo[no]."' order by rank asc",0)){
 		//for($i=0;$i<count($stageInfo[cards]);$i++){
 			//$myCard = new Card($stageInfo[cards][$i]);
 			//if($myCard->isLoaded()){
@@ -917,7 +962,7 @@ class Piece extends DBTable2{
 		if(CommitManager::commit("main")){
 			return $r;
 		}else{
-			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!".mysql_error());
 		}
 	}
 
@@ -933,13 +978,13 @@ class Piece extends DBTable2{
 		kvManager::increase("pieceListVer");
 		$p["data"]["version"]=kvManager::get("pieceListVer",1);
  
-		$r = parent::updateWithLQTable($p);
+		$r = parent::insertWithLQTable($p);
 		CommitManager::setSuccess("main",ResultState::successCheck($r["result"]));
 
 		if(CommitManager::commit("main")){
 			return $r;
 		}else{
-			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!");
+			return ResultState::makeReturn(ResultState::GDDONTSAVE,"저장에러!!".mysql_error());
 		}
 	}
 
@@ -948,6 +993,59 @@ class Piece extends DBTable2{
 		return parent::deleteWithLQTable($p);
 	}
 }
+
+
+class HellMode extends DBTable2{
+
+	static public function construct(){
+		self::setPrimarykey("no",false);
+		self::setDBGroup("main");
+		self::setDBTable("aHellModeTable");
+	}
+
+	public function __construct($no=null){
+		
+		parent::__construct();
+		
+		
+		if($no)$this->no=$no;
+
+		if($no){
+			$query = "no=".$no;
+			if(parent::load($query)){
+			
+			};
+		}
+	}
+	
+	public function getArrayDataForClient(){
+
+		$r = $this->getArrayData(true);
+		$pieceInfo = new Piece($this->openPieceNo);
+		$r["pieceInfo"]=$pieceInfo->getArrayDataForClient();
+		return $r;
+	}
+
+	public static function updateWithLQTable($p){
+		reloadPuzzleInfo();
+		kvManager::increase("hellModeListVer");
+		$r = parent::updateWithLQTable($p);
+		return $r;
+	}
+	public static function insertWithLQTable($p){
+		reloadPuzzleInfo();
+		kvManager::increase("hellModeListVer");
+		$r = parent::insertWithLQTable($p);
+		return $r;
+	}
+
+	public static function deleteWithLQTable($p){
+		reloadPuzzleInfo();
+		kvManager::increase("hellModeListVer");
+		return parent::deleteWithLQTable($p);
+	}
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //	카드정보
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -1258,6 +1356,10 @@ class Archivement extends DBTable2{
 	}
 
 	public static function updateWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
 
 		$r = parent::updateWithLQTable($p);
 
@@ -1266,6 +1368,11 @@ class Archivement extends DBTable2{
 		return $r;
 	}
 	public static function insertWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+
 		$r = parent::insertWithLQTable($p);
 
 		kvManager::increase("arcListVer");
@@ -1377,8 +1484,10 @@ class GiftBoxHistory extends DBTable2{
 
 		$elist=array();
 		while($rData = self::getRowByQueryWithShardKey("where memberID='".$memberID."' and confirmDate=0",$memberID)){
+	LogManager::addLog("->".mysql_error());
 			if($rData["exchangeID"])$elist[]=$rData["exchangeID"];
 		}
+	LogManager::addLog("->".mysql_error());
 
 		return $elist;
 	}
@@ -1388,7 +1497,10 @@ class GiftBoxHistory extends DBTable2{
 
 		//LogManager::addLog("comfirmAll start ".$memberID);
 		$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
-		$result = self::getQueryResultWithShardKey("update ".self::getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$memberID."' and confirmDate=0 and regDate>$lastDay",$memberID,false);
+	LogManager::addLog("->".mysql_error());
+		$result = self::getQueryResultWithShardKey("update ".self::getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$memberID."' and confirmDate=0 and regDate>$lastDay and exchangeID<>''",$memberID,false);
+		
+	LogManager::addLog("->".mysql_error()."confirmall is".json_encode($result));
 		return $result;
 	}
 
@@ -1611,6 +1723,23 @@ class LoginEvent extends DBTable2{
 		}
 		return $data;
 	}
+
+	static public function insertWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::insertWithLQTable($p);
+	}
+
+
+	static public function updateWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::updateWithLQTable($p);
+	}
 	
 }
 
@@ -1690,6 +1819,25 @@ class AttendenceEventDay extends DBTable2{
 		}
 		
 	}
+
+
+	static public function insertWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::insertWithLQTable($p);
+	}
+
+
+	static public function updateWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::updateWithLQTable($p);
+	}
+
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //	미션이벤트
@@ -1772,6 +1920,22 @@ class CuponManager extends DBTable2{
 	}
 
 	
+	static public function insertWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::insertWithLQTable($p);
+	}
+
+
+	static public function updateWithLQTable($p){
+		if($p["data"]["exchangeID"]){
+			$exchange = new Exchange($p["data"]["exchangeID"]);
+			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
+		}
+		return parent::updateWithLQTable($p);
+	}
 
 }
 
@@ -2335,16 +2499,31 @@ class Character extends DBTable2{
 		}
 	}
 
-	static public function getPowerInfo($level){
-		$r["nextPrice"]=$level*1000;
-    	$r["power"]=$level*10;
-    	$r["nextPower"]=($level+1)*10;
-    	$r["prevPower"]=($level-1)*10;
-    	$r["isMaxLevel"]=false;
-    	if($level>=30)$r["isMaxLevel"]=true;
+	public function getPowerInfo($level){
+		$mInfo =& $this->getRef("missileInfo");
+		$nextLevInfo = $mInfo[$level];
+		$isMax=false;
 
+		if($level-1>=0)$currentLevInfo = $mInfo[$level-1];
+		else $currentLevInfo=array(0,0);
+		
+		if($level-2>=0)$prevLevInfo = $mInfo[$level-2];
+		else $prevLevInfo=array(0,0);
+
+		if($level>=count($mInfo)){
+			$isMax=true;
+			$nextLevInfo=array(0,0);
+		}
+
+		$r["nextPrice"]=$nextLevInfo[1];
+    	$r["power"]=$currentLevInfo[0];
+    	$r["nextPower"]=$nextLevInfo[0];
+    	$r["prevPower"]= $prevLevInfo[0];
+    	$r["isMaxLevel"]=$isMax;
+    	
     	return $r;
 	}
+
 	public static function updateWithLQTable($p){
 		$r = parent::updateWithLQTable($p);
 		kvManager::increase("charListVer");
@@ -2631,9 +2810,60 @@ class ShopEvent extends DBTable2{
 
 }
 
+
+class Item extends DBTable2{
+	
+
+	static public function construct(){
+		self::setPrimarykey("no",no);
+		self::setDBGroup("main");
+		self::setDBTable("aItemTable");
+	}
+
+	public function __construct($characterNo=null){
+
+		parent::__construct();
+
+		if($characterNo){
+			$q_where = "no=".$characterNo;
+			if(parent::load($q_where)){
+
+			}
+		}
+	}
+
+
+}
+
 ////////////////////////////////////////////////////////////////////////////////////////
 //	몬스터
 ////////////////////////////////////////////////////////////////////////////////////////
+
+class MonsterMovement extends DBTable2{
+	
+
+	static public function construct(){
+		self::setPrimarykey("type",false);
+		self::setDBGroup("main");
+		self::setDBTable("aMonsterMovementTable");
+	}
+
+	public function __construct($characterNo=null){
+
+		parent::__construct();
+
+		if($characterNo){
+			$q_where = "`type`=".$characterNo;
+			if(parent::load($q_where)){
+
+			}
+		}
+	}
+
+
+}
+
+
 class Monster extends DBTable2{
 
 	static public function construct(){
@@ -2643,17 +2873,19 @@ class Monster extends DBTable2{
 	}
 
 
-	public function __construct($cardNo=null){
+	public function __construct($mobNo=null,$puzzleNo=null,$isBoss=null){
 		
 		parent::__construct();
 		
 
 
-		if($cardNo)$this->no=$cardNo;
+		if($mobNo)$this->no=$mobNo;
 
-		if($cardNo){
-			$query = "no=".$cardNo;
+		if($mobNo){
+			$query = "no=".$mobNo;
 			parent::load($query);
+		}else if($puzzleNo){
+			parent::load("puzzleNo=".$puzzleNo." and isBoss=".$isBoss);
 		}
 	}
 
@@ -2694,16 +2926,18 @@ class Pattern extends DBTable2{
 		self::setDBTable("aPatternTable");
 	}
 
-	public function __construct($cardNo=null){
+	public function __construct($patternNo=null,$type=null){
 		
 		parent::__construct();
 		
 
-		if($cardNo)$this->no=$cardNo;
+		if($patternNo)$this->no=$patternNo;
 
-		if($cardNo){
-			$query = "no=".$cardNo;
+		if($patternNo){
+			$query = "type=".$patternNo;
 			parent::load($query);
+		}else if($type){
+			parent::load("category='".$type."' and isUse=1 order by rand() limit 1");
 		}
 	}
 
@@ -2727,6 +2961,12 @@ class Exchange extends DBTable2{
 
 		parent::__construct();
 		
+		if($id){
+			if(substr($id,0,1)=="@"){
+				self::setDBTable("aExchangeManagerForEvent");
+			}
+		}
+
 		self::setLQTableInsertCustomFunction(function ($param){
 			return "`id`=".$param["data"]["id"];
 		});
@@ -2755,40 +2995,6 @@ class Exchange extends DBTable2{
 		$r["exchangeID"]=$exchange->id;
 		$r["list"]=$exchange->list;
 		$r["result"]=ResultState::successToArray();
-		return $r;
-	}
-
-	public static function makeExchangeIDByRandom($param){
-		$r["param"]=$param;
-		if($param["id"]){
-			//LogManager::addLog("exchangeID is ".$param["id"]);
-			$exchange = new Exchange($param["id"]);
-			//LogManager::addLog("exchangelist is ".json_encode($exchange->list));
-			$r["exchangeID"]=$exchange->id;
-			$r["list"]=$exchange->list;
-			$r["result"]=ResultState::successToArray();
-			return $r;
-			
-		}
-
-		$exchange = new Exchange(CuponCode::getRandomString(10));
-		
-		$cnt = 0;
-		while($exchange->isLoaded()){
-			$newExID = CuponCode::getRandomString(10);
-			$exchange = new Exchange($newExID);
-			$cnt++;
-			if($cnt>100)return ResultState::makeReturn(GDUNKNOWNRESULT,"생성실패");
-		}
-
-		
-		if($exchange->save()){
-			$r["exchangeID"]=$exchange->id;
-			$r["list"]=$exchange->list;
-			$r["result"]=ResultState::successToArray();
-		}else{
-			$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"exchangeID생성실패");
-		}
 		return $r;
 	}
 
@@ -2831,6 +3037,39 @@ class Exchange extends DBTable2{
 	}
 
 
+	public static function makeExchangeIDByRandom($param){
+		$r["param"]=$param;
+		if($param["id"]){
+			//if(substr($param["id"],0,1)!="@")$param["id"]="@".$param["id"];
+			//LogManager::addLog("exchangeID is ".$param["id"]);
+			$exchange = new Exchange($param["id"]);
+			//LogManager::addLog("exchangelist is ".json_encode($exchange->list));
+			$r["exchangeID"]=$exchange->id;
+			$r["list"]=$exchange->list;
+			$r["result"]=ResultState::successToArray();
+			return $r;
+			
+		}
+
+		$exchange = new Exchange("@".CuponCode::getRandomString(10));
+		$cnt = 0;
+		while($exchange->isLoaded()){
+			$newExID = "@".CuponCode::getRandomString(10);
+			$exchange = new Exchange($newExID);
+			$cnt++;
+			if($cnt>100)return ResultState::makeReturn(GDUNKNOWNRESULT,"생성실패");
+		}
+
+		
+		if($exchange->save()){
+			$r["exchangeID"]=$exchange->id;
+			$r["list"]=$exchange->list;
+			$r["result"]=ResultState::successToArray();
+		}else{
+			$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE,"exchangeID생성실패");
+		}
+		return $r;
+	}
 	// public static function updateWithLQTable($p){
 		
 	// 	$r = parent::updateWithLQTable($p);
@@ -2878,6 +3117,47 @@ class Exchange extends DBTable2{
 }
 
 
+class ExchangeForEvent extends Exchange{
+
+	static public function construct(){
+		self::setPrimarykey("no",true);
+		self::setDBGroup("main");
+		self::setDBTable("aExchangeManagerForEvent");
+	}
+	public function __construct($id=null){
+
+		parent::__construct();
+		
+		if($id){
+			if(substr($id,0,1)!="@"){
+				$id="@".$id;
+			}
+		}
+
+		self::setLQTableInsertCustomFunction(function ($param){
+			return "`id`=".$param["data"]["id"];
+		});
+
+		self::setLQTableSelectQueryCustomFunction(function ($param){
+			if($param["where"]["id"]=="*")return "";
+			if($param["where"]["type"]=="id")return "where `id`='".$param["where"]["id"]."'";
+			if($param["where"]["type"]=="content")return "where `content` like '%".$param["where"]["id"]."%'";
+		});
+
+
+		$this->id=$id;
+		if($id){
+			$q_where = "`id`='".$id."'";
+			if(parent::load($q_where)){
+				$this->jsonToObj("list");
+			}
+		}
+	}
+
+
+
+
+}
 
 class FormSetter extends DBTable2{
 
@@ -3217,9 +3497,10 @@ class CommonSetting extends DBTable2{
 			$this->key = $key;
 			$q_where = "`key`='".$key."'";
 			if(parent::load($q_where)){
-				$this->jsonToObj("value");
-				if($conv){
-					$this->value = $conv;
+				if($this->isLocal==1){
+					$this->value=CurrentUserInfo::getLocalizedValueInData(json_decode($this->value,true));
+				}else{
+					$this->jsonToObj("value");
 				}
 			}
 		}
@@ -3465,6 +3746,10 @@ class AdminUser extends DBTable2{
 
 		//유저관리
 		self::$m__permissinoGroup["user"]=array("유저관리","UserData","ModifyHistory","PuzzleHistory","PieceHistory","CharacterHistory","CardHistory","ArchivementHistory","GiftBoxHistory","UserStorage","UserPropertyHistory","UserLog","UserIndex","CuponHistory");
+		
+		//통계
+		self::$m__permissinoGroup["stats"]=array("통계","UserData","ModifyHistory","PuzzleHistory","PieceHistory","CharacterHistory","CardHistory","ArchivementHistory","GiftBoxHistory","UserStorage","UserPropertyHistory","UserLog","UserIndex","CuponHistory");
+
 		//랭킹
 		self::$m__permissinoGroup["rank"]=array("랭킹","StageScore","EndlessRank","WeeklyScore");
 		//이벤트관리
@@ -3516,6 +3801,7 @@ class AdminUser extends DBTable2{
 	public function logout(){
 		unset($_SESSION['admin_id']);
 		unset($_SESSION['admin_no']);
+		unset($_SESSION['game_id']);
 	}
 	
 	public function checkPermission($where,$permission){
@@ -3540,6 +3826,8 @@ class AdminUser extends DBTable2{
 		foreach (self::$m__permissinoGroup as $key => $value) {
 			if(in_array($cls,self::$m__permissinoGroup[$key])){$where=$key; break;}
 		}
+
+		if(!$where)return true;
 		//LogManager::addLog("check per group is ".$where);
 		return $this->checkPermission($where,$permission);
 	}
@@ -3592,22 +3880,20 @@ class Mission extends DBTable2{
 	
 
 	static public function construct(){
-		self::setPrimarykey("no",true);
+		self::setPrimarykey("type",false);
 		self::setDBGroup("main");
 		self::setDBTable("aMissionTable");
 	}
 
-	public function __construct($characterNo=null){
+	public function __construct(){
 
 		parent::__construct();
 
-		if($characterNo){
-			$q_where = "no=".$characterNo;
-			if(parent::load($q_where)){
+		if(parent::load("isUse=1 order by rand() limit 1")){
 
-			}
 		}
 	}
+
 
 
 }

@@ -140,6 +140,8 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
+    bool is_use_goods_type_gold;
+    
 	void buyStartPack(CCObject* sender);
 	void buyEventPack(CCObject* sender);
 	

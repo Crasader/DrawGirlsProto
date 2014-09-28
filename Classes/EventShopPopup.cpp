@@ -270,6 +270,9 @@ void EventShopPopup::menuAction(CCObject* sender)
 								KS::KSLog("in-app test \n%", v);
 								if(v["issuccess"].asInt())
 								{
+                                    Json::Value t_info = mySGD->getProductInfo(mySGD->getEventInappProduct(t_index));
+                                    if(!t_info.empty())
+                                        myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 									requestItemDelivery();
 								}
 								else

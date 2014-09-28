@@ -631,7 +631,10 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
+				param["template"] = "msgRquestFriend";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 친구 요청 보냈습니다.";
 				param["data"] = param2;
 				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 				addChild(ll, INT_MAX);
@@ -741,7 +744,11 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param["friendID"] = memberInfo["memberID"].asString();
 				param["nick"] = memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
-				param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
+				param["template"] = "msgSendHeart";
+				param["custom"] = Json::Value(Json::arrayValue);
+				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
+				
+				//param["content"] = myDSH->getStringForKey(kDSH_Key_nick) + "님이 하트를 보냈습니다.";
 				//			param["data"] = param2;
 				LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 				addChild(ll, INT_MAX);
@@ -1265,10 +1272,14 @@ void FriendPopup::setAddMenu()
 					// getuserdata 로 사람 찾아내어서 테이블에 띄움.
 					
 					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+					if(input_text1)
+					{
+						input_text1->setVisible(false);
+					}
 					Json::Value param;
 					if(editbox->getText() == std::string(""))
 					{
-						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
 							if(input_text1)
 							{
 								input_text1->setVisible(true);
@@ -1293,7 +1304,7 @@ void FriendPopup::setAddMenu()
 							{
 								input_text1->setVisible(false);
 							}
-							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNotFountFriend), [=](){
+							auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNotFountFriend), [=](){
 								if(input_text1)
 								{
 									input_text1->setVisible(true);
@@ -1483,6 +1494,7 @@ void FriendPopup::setVoteFriendMenu()
 		d_ing_img->addChild(d_ing_label);
 		// 추천 두번 째 팝업
 		m_voteFriendButtonCallbackSecond = [=](CCObject*){
+			TRACE();
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(true);
@@ -1491,6 +1503,7 @@ void FriendPopup::setVoteFriendMenu()
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			TRACE();
 			if(input_text1)
 			{
 				input_text1->removeFromParent();
@@ -1501,21 +1514,13 @@ void FriendPopup::setVoteFriendMenu()
 				m_voteInputText->removeFromParent();
 				m_voteInputText = nullptr;
 			}
+			TRACE();
 			if(friend_table)
 			{
 				friend_table->removeFromParent();
 				friend_table = NULL;
 			}
-			if(input_text1)
-			{
-				input_text1->removeFromParent();
-				input_text1 = nullptr;
-			}
-			if(m_voteInputText)
-			{
-				m_voteInputText->removeFromParent();
-				m_voteInputText = nullptr;
-			}
+			TRACE();
 			Json::Value param1;
 			param1["memberID"] = myHSP->getMemberID();
 			TRACE();
@@ -1526,7 +1531,7 @@ void FriendPopup::setVoteFriendMenu()
 //			LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 //			addChild(ll, INT_MAX);
 
-;
+
 
 			TRACE();
 			myHSP->command("getintroducereward", param1, this, [=](Json::Value v){
@@ -1622,7 +1627,24 @@ void FriendPopup::setVoteFriendMenu()
 				//			kakaoTalkInvite->setTitleSize(13.f);
 				m_friendVoteContainer->addChild(kakaoTalkInvite);
 				kakaoTalkInvite->setFunction([=](CCObject*){
-					myHSP->openKakaoMsg();
+					
+					Json::Value msgInfo = mySGD->getKakaoMsg();
+					string msg = msgInfo["msg"].asString();
+					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
+					CCLOG("%s",msgInfo["msg"].asString().c_str());
+					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+					
+					if(ret == 0) {
+						auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+						ASPopupView* as = ASPopupView::getCommonNoti2(-9999999, "에러",
+																													ment, nullptr, ccp(0, 0), true);
+						addChild(as, 9999999);
+					}
+					
+
+					
 				});
 				setFormSetter(kakaoTalkInvite);
 				
@@ -1662,16 +1684,7 @@ void FriendPopup::setVoteFriendMenu()
 				friend_table->removeFromParent();
 				friend_table = NULL;
 			}
-			if(input_text1)
-			{
-				input_text1->removeFromParent();
-				input_text1 = nullptr;
-			}
-			if(m_voteInputText)
-			{
-				m_voteInputText->removeFromParent();
-				m_voteInputText = nullptr;
-			}
+			
 
 			TRACE();
 			Json::Value param;
@@ -1719,7 +1732,7 @@ void FriendPopup::setVoteFriendMenu()
 					voteDesc1->setPosition (ccpFromSize(main_case->getContentSize()) / 2 + ccp(0, 54));
 					setFormSetter(voteDesc1);
 					
-					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(getLocal(LK::kFriendVote2), mySGD->getFont().c_str(),
+					StyledLabelTTF* voteDesc2 = StyledLabelTTF::create(ccsf(getLocal(LK::kFriendVote2), mySGD->getAddGemReward()), mySGD->getFont().c_str(),
 																														 13.f, 0, StyledAlignment::kCenterAlignment);
 					setFormSetter(voteDesc2);
 					m_friendVoteContainer->addChild(voteDesc2);
@@ -1762,11 +1775,12 @@ void FriendPopup::setVoteFriendMenu()
 					setFormSetter(skipButton);
 					
 					skipButton->setFunction([=](CCObject*){
+						TRACE();
 						AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 						TRACE();
 						m_voteFriendButtonCallbackSecond(0);
 						TRACE();
-						CCLog("m_voteInputText %x", m_voteInputText);
+//						CCLog("m_voteInputText %x", m_voteInputText);
 //						if(m_voteInputText)
 //						{
 //							m_voteInputText->setVisible(false);
@@ -1779,10 +1793,14 @@ void FriendPopup::setVoteFriendMenu()
 																	 {
 																		 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																		 Json::Value param;
-																		 
+																		 if(m_voteInputText)
+																		 {
+																			 m_voteInputText->setVisible(false);
+																		 }
+ 
 																		 if(m_voteInputText->getText() == std::string(""))
 																		 {
-																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, "", getLocal(LK::kFriendNickInputPlz), [=](){
+																			 auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti), getLocal(LK::kFriendNickInputPlz), [=](){
 																				 if(m_voteInputText)
 																				 {
 																					 m_voteInputText->setVisible(true);

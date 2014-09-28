@@ -18,7 +18,7 @@ while($pData = Shop::getRowByQuery("",null,"id,priceName,countName,comment")){
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="ShopEvent" dbWhere='{}' name="datatable" border=1 align=center editRowOnly="true" editType="form" commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
-		<th primary title='고유번호' field='no' viewer='{"type":"text"}' editor='{"type":"text"}' >고유번호</th>
+		<th primary title='고유번호' field='no' viewer='{"type":"text"}'>고유번호</th>
 		<th virtual title='진행상태' field='state' viewer='{"type":"text"}' >진행상태</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
 		<th title='국가' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelector"}' >국가</th>

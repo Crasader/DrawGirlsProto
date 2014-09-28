@@ -404,10 +404,10 @@ bool OptionPopup::init()
 //	d_kakao_img->addChild(d_kakao_label);
 	
 	
-	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
-	kakao_item->setTag(kOP_MT_kakao);
-	kakao_item->setPosition(ccp(169,256.5f));
-	tab_menu->addChild(kakao_item);
+//	CCMenuItem* kakao_item = CCMenuItemSprite::create(n_kakao_img, s_kakao_img, d_kakao_img, this, menu_selector(OptionPopup::menuAction));
+//	kakao_item->setTag(kOP_MT_kakao);
+//	kakao_item->setPosition(ccp(169,256.5f));
+//	tab_menu->addChild(kakao_item);
 	
 	
 	
@@ -1490,7 +1490,12 @@ void OptionPopup::menuAction(CCObject* pSender)
 	{
 		
 		Json::Value msgInfo = mySGD->getKakaoMsg();
+		
+		string msg = msgInfo["msg"].asString();
+		GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
 		int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+		
+		
 		if(ret == 0) {
 			auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
 																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);

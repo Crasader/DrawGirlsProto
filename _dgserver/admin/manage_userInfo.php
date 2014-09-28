@@ -57,6 +57,8 @@ $(document).ready(function(){
 			<th>전화번호</th>
 			<th>최근로그인</th>
 			<th>회원가입일시</th>
+			<th>정보서버</th>
+			<th>로그서버</th>
 		</tr>
 		</thead>
 		<tr>
@@ -67,6 +69,8 @@ $(document).ready(function(){
 			<td field="phoneNo" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="lastDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 			<td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
+			<td field="userShardOrder"></td>
+			<td field="logShardOrder"></td>
 		</tr>
 	</table>
 	<br>
@@ -80,7 +84,7 @@ $(document).ready(function(){
 		<tr>
 			<td>케릭터레벨</td><td field="characterLevel" viewer='{"type":"text"}'></td>
 			<td>출석상태</td><td field="eventAtdCount" viewer='{"type":"text"}'></td>
-			<td></td><td></td>
+			<td>추천인</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 		<tr>
 			<td>게임시작일시</td><td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
@@ -100,7 +104,7 @@ $(document).ready(function(){
 		<tr>
 			<td>연속출석일수</td><td field="eventAtdCount" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>출석일자</td><td field="eventCheckDate" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-			<td></td><td></td>
+			<td>추천인수</td><td field="introduceCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 	</table>
 	<br>
@@ -108,6 +112,7 @@ $(document).ready(function(){
 	<table class="table table-bordered">	 
 		<tr>
 			<td>날짜</td><td field="tm_date" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>오늘횟수</td><td field="tm_todayCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>타입</td><td field="tm_type" viewer='{"type":"select","element":["영역획득","점수합산","골드모으기","부하몹사냥"],"value":[1,2,3,4]}' editor='{"type":"select","element":["영역획득","점수합산","골드모으기","부하몹사냥"],"value":[1,2,3,4]}' ></td>
 			<td>보상</td><td field="tm_reward" viewer='{"type":"propertyViewer"}'></td>
 			
@@ -115,10 +120,11 @@ $(document).ready(function(){
 		<tr>
 			<td>목표</td><td field="tm_goal" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>달성</td><td field="tm_count" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-			<td>완료여부</td><td field="tm_success" viewer='{"type":"text"}'></td>
+			<td>완료여부</td><td field="tm_success" viewer='{"type":"text"}' editor='{"type":"bool"}'></td>
+			<td></td><td></td>
 		</tr>
 		<tr>
-			<td>오토레벨</td><td field="TMLevel" viewer='{"type":"titleArrayViewer","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' editor='{"type":"keyArrayEditor","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' colspan=5></td>
+			<td>오토레벨</td><td field="TMLevel" viewer='{"type":"titleArrayViewer","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' editor='{"type":"keyArrayEditor","title":["영역획득","점수합산","골드모으기","부하몹사냥"]}' colspan=7></td>
 		</tr>
 	</table>
 	<br>

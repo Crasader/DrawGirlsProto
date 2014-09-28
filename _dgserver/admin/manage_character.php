@@ -2,54 +2,50 @@
 include "manage_header.php";
 ?>
 <script>
+	var powerInfoEditor = function(value,option){
+		value = s2j(value);
+		if(typeof(value)!="object")value=[];
+		var table = $("<table>").addClass("table").addClass("table-bordered").addClass("LQEditor").attr("editor",j2s(option));
+		var title_tr = $("<tr>").appendTo(table).append("<td>level</td><td>power</td><td>price</td>");
 
-	var loadFunc = function(table,data){
-		var defaultData = s2j(table.attr("defaultData"));
-		if(typeof(defaultData)=="undefined")defaultData={};
+		for(var i=0;i<30;i++){
+			if(typeof(value[i])!="object")value[i]=[0,0];
+			$("<tr>").addClass("powerRow").append(
+				$("<td>").append(i+1),
+				$("<td>").append(editorSelector({"type":"text","datatype":"int"}, value[i][0])),
+				$("<td>").append(editorSelector({"type":"text","datatype":"int"}, value[i][1]))
+			).appendTo(table);
+		}
 
-		if(typeof(data["data"])=="object" && data["data"].length>0 && typeof(data["data"][0]["memberID"])!="undefined"){
-			defaultData["memberID"]=data["data"][0]["memberID"];
-		} 
-
-		table.attr("defaultData",j2s(defaultData));
+		return table;
 	}
 
-$(document).ready(function(){
-
-	setLoadDataCallBack("datatable",loadFunc);
-
-	$('body').on('click','.findUser',function(){
-		
-		var datatable = getDataTable("datatable");
-		var idType = $("input[name=type]").val();
-		var id = $("#findNo").val();
-		 
-		datatable.attr("dbWhere",'{"type":"'+idType+'","id":"'+id+'"}');
-		loadDataTable(datatable);
-	});
-});
+	var powerInfoEditor_value = function(obj){
+		var r = [];
+		var n = 0;
+		obj.find(".powerRow").each(function(l){	
+			var pow = getObjValue($(this).find(".LQEditor:first"));
+			var price = getObjValue($(this).find(".LQEditor:last"));
+			r.push([pow,price]);
+		});
+		return r;
+	}
 
 </script>
-<center>
-<input name="gid" value="<?=$gid?>" type="hidden">
-<table border=1>
-	<tr>
-		<td>조회대상</td>
-		<td><input type="radio" name="type" value="fb">페이스북ID <input type="radio" name="type" value="pc">Payco ID <input type="radio" name="type" value="sno" checked>회원번호 </td>
-		<td><input type="text" id="findNo"><td>
-		<td><input type="submit" value="조회" class="findUser"></td>
-	</tr>
-</table>
 
-<br><br>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Character" dbFunc='{"select":"getHistory"}' dbWhere='' name="datatable" border=1>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Character" dbWhere='{}' dbLimit="30" name="datatable" border=1 align=center>
 	<thead>
 		<tr>
-			<th field="no" viewer='{"type":"text"}' primary>no</th>
-			<th field="name" viewer='{"type":"text"}'>이름</th>
-			<th field="upgrade" viewer='{"type":"text"}'>업그레이드</th>
-			<th field="isSelected" viewer='{"type":"text"}'>선택여부</th>
-		</tr>
+		<th primary field='no' viewer='{"type":"text"}' >no</th>
+		<th field='name' viewer='{"type":"koreanViewer"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}' >name</th>
+		<th field='sale' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >sale</th>
+		<th field='purchaseInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"type","type":"text"},{"field":"value","type":"text","datatype":"int"}]}' >purchaseInfo</th>
+		<th field='statInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"gold","type":"text","datatype":"int"},{"field":"percent","type":"text","datatype":"int"},{"field":"feverTime","type":"text","datatype":"int"},{"field":"speed","type":"text","datatype":"int"},{"field":"life","type":"text","datatype":"int"},{"field":"color","type":"select","element":[0,1,2,3,4,5,6]}]}' >statInfo</th>
+		<th field='resourceInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"ccbiID","type":"text"},{"field":"ccbi","type":"resourceSelector"},{"field":"imageID","type":"text"},{"field":"plist","type":"resourceSelector"},{"field":"pvrccz","type":"resourceSelector"},{"field":"size","type":"text","datatype":"int"}]}' >resourceInfo</th>
+		<th field='missileInfo' viewer='{"type":"autoViewer"}' editor='{"type":"powerInfoEditor"}' >missileInfo</th>
+		<th field='comment' viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}' >comment</th>
+		<th manage='delete update insert' ></th>
+		</tr> 
 	</thead>
 	<tbody datazone>
 

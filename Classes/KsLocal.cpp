@@ -42,15 +42,27 @@ const char* KsLocal::getLocalForKey( LK key )
 {
 	languageType = getSupportLocalCode();
 	
-	auto findIter = m_mapper.find(languageType);
-	if(findIter == m_mapper.end())
+	vector<string> langTypes;
+	langTypes.push_back(languageType);
+	vector<string> entries = {"en", "ja", "ko"};
+	langTypes.insert(langTypes.end(), entries.begin(), entries.end());
+	for(auto& lang : langTypes)
 	{
-		return CCString::create("")->getCString();
+		auto findIter = m_mapper.find(lang);
+		if(findIter == m_mapper.end())
+		{
+//			return CCString::create("")->getCString();
+		}
+		else
+		{
+			if(m_mapper[lang].find(key) != m_mapper[lang].end())
+			{
+				return m_mapper[lang][key].c_str();
+			}
+		}
+		
 	}
-	else
-	{
-		return m_mapper[languageType][key].c_str();
-	}
+	return CCString::create("")->getCString();
 }
 
 KsLocal* KsLocal::sharedInstance()
@@ -157,7 +169,7 @@ void KsLocal::ko()
 	obj[LK::kFriendNotFountFriend] = "찾을 수 없습니다.";
 	obj[LK::kFriendVote1] = "이 친구를 추천합니다!!";
 	obj[LK::kFriendVote2] = "<font color=#FFFFFF newline=14>이 게임을 추천해준 친구의 닉네임을 입력하세요.</font>"
-													"<font color=#FFAA14>추천인 입력시 보상으로 5젬을 드립니다.</font>";
+													"<font color=#FFAA14>추천인 입력시 보상으로 %d젬을 드립니다.</font>";
 	obj[LK::kFriendInputSkip] = "SKIP";
 	obj[LK::kFriendVoterInput] = "추천인 입력";
 	obj[LK::kFriendKakaoTalkFriend] = "카톡친구초대";

@@ -2,12 +2,12 @@ package com.litqoo.lib;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TimeZone;
 import java.util.UUID;
 
-import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +43,8 @@ import com.hangame.hsp.cgp.HSPCGP;
 import com.hangame.hsp.cgp.model.PromotionItem;
 import com.hangame.hsp.itemdelivery.HSPItemDelivery;
 import com.hangame.hsp.payment.HSPPayment;
+import com.hangame.hsp.payment.HSPPayment.ProductInfosCB;
+import com.hangame.hsp.payment.HSPPaymentProductInfo;
 import com.hangame.hsp.ui.HSPUiFactory;
 import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
@@ -167,16 +169,16 @@ public class hspConnector {
 		PromotionItem pi = hspConnector.mPromoItem;
 		Log.d("", "dsf");
 		HSPCGP.launchPromotion((Activity) sContext, hspConnector.mPromoItem);
-//		HSPCGP.launchPromotion((Activity) sContext);
-//		hspConnector.handler.post(new Runnable() {
-//			public void run() {
-//				HSPCGP.launchPromotion((Activity) sContext, hspConnector.mPromoItem);
-//				mGLView.queueEvent(new Runnable() {
-//					public void run() {
-//					}
-//				});
-//			}
-//		});
+		//		HSPCGP.launchPromotion((Activity) sContext);
+		//		hspConnector.handler.post(new Runnable() {
+		//			public void run() {
+		//				HSPCGP.launchPromotion((Activity) sContext, hspConnector.mPromoItem);
+		//				mGLView.queueEvent(new Runnable() {
+		//					public void run() {
+		//					}
+		//				});
+		//			}
+		//		});
 	}
 
 	public static void openUrl(final String url) {
@@ -204,92 +206,92 @@ public class hspConnector {
 			// Boolean isOverWriteMapping = true; // true 이면 이미 매핑한 sno를 강제로
 			// 매핑시킨다는 의미이다.
 			Boolean isOverWriteMapping = Boolean.valueOf(force); // false 이면 이미
-																	// 매핑한 sno는
-																	// 건들지 않고
-																	// 얼럿으로
-																	// 알려주기만 한다.
+			// 매핑한 sno는
+			// 건들지 않고
+			// 얼럿으로
+			// 알려주기만 한다.
 
 			HSPMappingType mt2 = HSPMappingType.values()[mt];
 			HSPCore.getInstance().requestMappingToAccount(mt2,
 					isOverWriteMapping,
 					new HSPCore.HSPReMappingAndMemberNoCB() {
 
-						@Override
-						public void onIdpIDMap(HSPResult result,
-								long prevMemberNo) {
-							HSPCore core = HSPCore.getInstance();
-							Log.d("after cur State", core.getState().toString());
-							Log.d("mapping",
-									"@@@@@@ HSPCore.login callback => "
-											+ result);
-							JSONObject r = new JSONObject();
-							JSONObject error = new JSONObject();
-							// 매핑을 성공한 케이스.
-							if (result.isSuccess() == true) {
-								Toast.makeText(hspConnector.sContext,
-										"로그인 성공", Toast.LENGTH_LONG)
-										.show();
+				@Override
+				public void onIdpIDMap(HSPResult result,
+						long prevMemberNo) {
+					HSPCore core = HSPCore.getInstance();
+					Log.d("after cur State", core.getState().toString());
+					Log.d("mapping",
+							"@@@@@@ HSPCore.login callback => "
+									+ result);
+					JSONObject r = new JSONObject();
+					JSONObject error = new JSONObject();
+					// 매핑을 성공한 케이스.
+					if (result.isSuccess() == true) {
+						Toast.makeText(hspConnector.sContext,
+								"로그인 성공", Toast.LENGTH_LONG)
+								.show();
 
-							} else { // 매핑을 실패한 케이스
-								Log.d("mapping",
-										"HSP Remapping Failed - error = "
-												+ result);
-								if (result.getCode() == HSPResultCode.HSP_RESULT_CODE_ALREADY_MAPPED_ACCOUNT_TO_SNO) {
+					} else { // 매핑을 실패한 케이스
+						Log.d("mapping",
+								"HSP Remapping Failed - error = "
+										+ result);
+						if (result.getCode() == HSPResultCode.HSP_RESULT_CODE_ALREADY_MAPPED_ACCOUNT_TO_SNO) {
 
-									// 만약 이미 매핑되어 있는 id라고 하면 매핑되어 있는 memberNo를
-									// 얻을 수 있다.
+							// 만약 이미 매핑되어 있는 id라고 하면 매핑되어 있는 memberNo를
+							// 얻을 수 있다.
 
-									Log.d("TAG", "previous member number : "
-											+ prevMemberNo);
+							Log.d("TAG", "previous member number : "
+									+ prevMemberNo);
 
-								}
-								// 상세 에러코드 확인
-								Log.d("mapping", "Detail Error code = "
-										+ result.getCode() + ", domain = "
-										+ result.getDomain() + ", detail = "
-										+ result.getDetail());
+						}
+						// 상세 에러코드 확인
+						Log.d("mapping", "Detail Error code = "
+								+ result.getCode() + ", domain = "
+								+ result.getDomain() + ", detail = "
+								+ result.getDetail());
 
-//								Toast.makeText(hspConnector.sContext,
-//										" Remapping Failed: " + result,
-//										Toast.LENGTH_LONG).show();
-							}
-							Log.d("mapping",
-									"END - HSPRequestMappingToAccountCB ");
+						//								Toast.makeText(hspConnector.sContext,
+						//										" Remapping Failed: " + result,
+						//										Toast.LENGTH_LONG).show();
+					}
+					Log.d("mapping",
+							"END - HSPRequestMappingToAccountCB ");
 
-							if (result.isSuccess() == false) {
-								// Log.i("litqoo", "HSP Login Error = " +
-								// result);
+					if (result.isSuccess() == false) {
+						// Log.i("litqoo", "HSP Login Error = " +
+						// result);
 
-								// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占�
-								// 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
-								int errorCode = result.getCode();
-								String errorDescription = result.getDetail();
+						// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 ���占쏙옙占쏙옙���占�
+						// 占쏙옙占쏙옙占쎈��占쏙옙占쏙옙占�.
+						int errorCode = result.getCode();
+						String errorDescription = result.getDetail();
 
-								// Log.i("litqoo", "code = " + errorCode +
-								// ", message = " + errorDescription);
-							} else {
-								// Log.i("litqoo", "success");
-							}
+						// Log.i("litqoo", "code = " + errorCode +
+						// ", message = " + errorDescription);
+					} else {
+						// Log.i("litqoo", "success");
+					}
 
-							try {
-								r.put("account", mt);
-								r.put("prevMemberNo", prevMemberNo);
-								error.put("code", result.getCode());
-								error.put("isSuccess", result.isSuccess());
-								error.put("localizedDescription",
-										result.getDetail());
-								r.put("error", error);
-							} catch (JSONException e) {
+					try {
+						r.put("account", mt);
+						r.put("prevMemberNo", prevMemberNo);
+						error.put("code", result.getCode());
+						error.put("isSuccess", result.isSuccess());
+						error.put("localizedDescription",
+								result.getDetail());
+						r.put("error", error);
+					} catch (JSONException e) {
 
-							}
-							mGLView.queueEvent(new KRunnable(_key, r.toString()) {
-								public void run() {
-									hspConnector.SendResult(this.delekey,
-											this.totalSource);
-								}
-							});
+					}
+					mGLView.queueEvent(new KRunnable(_key, r.toString()) {
+						public void run() {
+							hspConnector.SendResult(this.delekey,
+									this.totalSource);
 						}
 					});
+				}
+			});
 
 		} else {
 			// 초기화가 되지 않은 경우
@@ -428,6 +430,45 @@ public class hspConnector {
 			return 1;
 		}
 	}
+
+
+
+	public static void requestProductInfos(final int _key){
+		HSPPayment.requestProductInfos(new ProductInfosCB() {
+
+			@Override
+			public void onProductInfos(List<HSPPaymentProductInfo> productInfos, HSPResult result) { 
+				JSONObject r = new JSONObject();
+				JSONArray jArray = new JSONArray();
+				
+				try {
+//					r.put("issuccess", true);
+					if (result.isSuccess()) {
+						r.put("issuccess", true);
+						for (HSPPaymentProductInfo productInfo : productInfos) {
+							JSONObject arrayElement = new JSONObject();
+							arrayElement.put("productid", productInfo.getProductID());
+							arrayElement.put("productname", productInfo.getProductName());
+							arrayElement.put("currency", productInfo.getCurrency());
+							arrayElement.put("price", productInfo.getPrice());
+							jArray.put(arrayElement);
+						}
+						r.put("info", jArray);
+					} else {
+						r.put("issuccess", false);
+					}
+					mGLView.queueEvent(new KRunnable(_key, r.toString()) {
+						public void run() {
+							hspConnector.SendResult(this.delekey, this.totalSource);
+						}
+					});
+				} catch (JSONException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			}
+		});
+	}
 	public static void finishItemDelivery(final int _key, final String datas) {
 		try {
 			// Log.d("finishItemDelivery", datas);
@@ -518,7 +559,7 @@ public class hspConnector {
 	public static double getScreenRealWidth() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		
+
 		if(dm.xdpi>0){
 			double x = dm.widthPixels/dm.xdpi;
 			return x;
@@ -526,11 +567,11 @@ public class hspConnector {
 			return 4.2f;
 		}
 	}
-	
+
 	public static double getScreenRealHeight() {
 		DisplayMetrics dm = new DisplayMetrics();
 		((WindowManager)AppContext.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getMetrics(dm);
-		
+
 		if(dm.ydpi>0){
 			double y = dm.heightPixels/dm.ydpi;
 			return y;
@@ -550,14 +591,14 @@ public class hspConnector {
 	public static void registerGamePadCallback(final int _key)
 	{ 
 		mGLView.setCallbackKey(_key);
-//		hspConnector. 
-//		sContext.
+		//		hspConnector. 
+		//		sContext.
 	}
 	public static void unregisterGamePadCallback(int registeredKey)
 	{ 
 		mGLView.removeCallbackKey(registeredKey);
-//		hspConnector. 
-//		sContext.
+		//		hspConnector. 
+		//		sContext.
 	}
 	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
@@ -571,7 +612,7 @@ public class hspConnector {
 				if (core != null) {
 					// Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
-					
+
 					HSPOAuthProvider lType = HSPOAuthProvider.values()[loginType];
 					core.login(activity, lType, new HSPCore.HSPLoginCB() {
 
@@ -611,7 +652,7 @@ public class hspConnector {
 
 							}
 
-							
+
 							mGLView.queueEvent(new KRunnable(_key, r.toString()) {
 								public void run() {
 
@@ -685,30 +726,30 @@ public class hspConnector {
 		if(tz.getID()=="")return"Asia/seoul";
 		return tz.getID();
 	}
-	
+
 	public static void getIsUsimKorean(final int _key){
 		HSPUtil.alertViewWithToastTerms((Activity)hspConnector.sContext, new HSPAlertViewWithToastTermsCB() {
-	           
-            @Override
-            public void onCheckResult(Boolean agreeTrueFalse) {
-                // TODO Auto-generated method stub
-//                Log.d("Result : " + agreeTrueFalse);
-                JSONObject r= new JSONObject();
-//                JSONObject error = new JSONObject();
-                try {
-                	r.put("korean", !agreeTrueFalse);
-                	r.put("isSuccess", 1);
-//                	error.put("localizedDescription", result.getDetail());
-//                	r.put("error", error);
-                } catch (JSONException e) {
-                } 
-                mGLView.queueEvent(new KRunnable(_key,r.toString()) {
-                	public void run() {
-                		hspConnector.SendResult(this.delekey,this.totalSource);
-                	}
-                });
-            }
-        });
+
+			@Override
+			public void onCheckResult(Boolean agreeTrueFalse) {
+				// TODO Auto-generated method stub
+				//                Log.d("Result : " + agreeTrueFalse);
+				JSONObject r= new JSONObject();
+				//                JSONObject error = new JSONObject();
+				try {
+					r.put("korean", !agreeTrueFalse);
+					r.put("isSuccess", 1);
+					//                	error.put("localizedDescription", result.getDetail());
+					//                	r.put("error", error);
+				} catch (JSONException e) {
+				} 
+				mGLView.queueEvent(new KRunnable(_key,r.toString()) {
+					public void run() {
+						hspConnector.SendResult(this.delekey,this.totalSource);
+					}
+				});
+			}
+		});
 	}
 	public static int getLoginType()
 	{
@@ -837,11 +878,11 @@ public class hspConnector {
 
 			@Override
 			public void onAfterLogin() {
-				
-//				requestItemDeliveryNative();
-				
+
+				//				requestItemDeliveryNative();
+
 				//RequestItemDelivery(); 호출하여 미 배송 아이템 존재 유무 체크
-                //아이템 존재 한다면 지급 프로세스 및  FinishItemDelivery();
+				//아이템 존재 한다면 지급 프로세스 및  FinishItemDelivery();
 				// TODO Auto-generated method stub
 				// Log.i("litqoo","~~~~~~HSPAfterLoginListener");
 
@@ -882,7 +923,7 @@ public class hspConnector {
 		HSPCore.getInstance().addBeforeLoginListener(beforeLoginListener);
 		HSPCore.getInstance().addAfterLogoutListener(afterLogoutListener);
 		HSPCore.getInstance()
-				.addAfterResetAccountListener(afterAccountListener);
+		.addAfterResetAccountListener(afterAccountListener);
 		return true;
 	}
 
@@ -899,16 +940,16 @@ public class hspConnector {
 
 		HSPMessage.sendPacket(mReceiver, 0, data,
 				new HSPMessage.HSPSendPacketCB() {
-					@Override
-					public void onPacketSend(HSPResult result) {
-						if (result.isSuccess()) {
-							// Log.i("litqoo","Send Packet has been successful.");
-						} else {
-							// Log.i("litqoo","Failed to send packet: " +
-							// result);
-						}
-					}
-				});
+			@Override
+			public void onPacketSend(HSPResult result) {
+				if (result.isSuccess()) {
+					// Log.i("litqoo","Send Packet has been successful.");
+				} else {
+					// Log.i("litqoo","Failed to send packet: " +
+					// result);
+				}
+			}
+		});
 	}
 
 	public static void sendPushMessage() {
@@ -929,16 +970,16 @@ public class hspConnector {
 
 		HSPMessage.sendPushNotification(mReceiver, "test ~!!", mapData,
 				new HSPMessage.HSPSendPushNotificationCB() {
-					@Override
-					public void onPushNotificationSend(HSPResult result) {
-						if (result.isSuccess()) {
-							// Log.i("litqoo","Send Push message has been successful.");
-						} else {
-							// Log.i("litqoo","Failed to Send push message. ( "
-							// + result + " )");
-						}
-					}
-				});
+			@Override
+			public void onPushNotificationSend(HSPResult result) {
+				if (result.isSuccess()) {
+					// Log.i("litqoo","Send Push message has been successful.");
+				} else {
+					// Log.i("litqoo","Failed to Send push message. ( "
+					// + result + " )");
+				}
+			}
+		});
 	}
 
 	public static void testRegisterListener() {
@@ -985,7 +1026,7 @@ public class hspConnector {
 		};
 
 		HSPMessage
-				.addPushNotificationReceiveListener(mReceivePushNotificationListener);
+		.addPushNotificationReceiveListener(mReceivePushNotificationListener);
 	}
 
 	public static String getCocos2dxPackageName() {

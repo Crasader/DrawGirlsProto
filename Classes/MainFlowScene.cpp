@@ -2491,6 +2491,20 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																													 CCPoint t_offset = puzzle_table->getContentOffset();
 																																													 puzzle_table->reloadData();
 																																													 puzzle_table->setContentOffset(t_offset);
+                                                                                                                                                                                     
+                                                                                                                                                                                     is_menu_enable = false;
+                                                                                                                                                                                     puzzle_table->setTouchEnabled(false);
+                                                                                                                                                                                     
+                                                                                                                                                                                     myDSH->setIntegerForKey(kDSH_Key_showedScenario, puzzle_number*1000);
+                                                                                                                                                                                     StoryLayer::startStory(this,CCString::createWithFormat("puzzle%d",puzzle_number)->getCString(), [=](){
+                                                                                                                                                                                         mySGD->setIsUnlockPuzzle(0);
+                                                                                                                                                                                         is_unlock_puzzle = 0;
+                                                                                                                                                                                         
+                                                                                                                                                                                         is_menu_enable = true;
+                                                                                                                                                                                         puzzle_table->setTouchEnabled(true);
+                                                                                                                                                                                     });
+                                                                                                                                                                                     
+                                                                                                                                                                                     
 																																													 //											  puzzle_table->updateCellAtIndex(t_index);
 																																												 }
 																																												 else
@@ -3986,6 +4000,54 @@ void MainFlowScene::topOnLight()
 		mySGD->is_today_mission_first = false;
 	}
 	
+    chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+    std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+    ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+    time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+    
+    int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+    
+    bool is_on_time_startPack = sub_time <= expireSec;
+    bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+    bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+    bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+    bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    bool is_on_time_eventPack = false;
+    
+    tm* now_tm = localtime(&now_time_t);
+    string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+    string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+    
+    int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+    int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+    
+    if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+       atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+       NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+       NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+    {
+        is_on_time_eventPack = true;
+    }
+    
+    bool is_useable_eventPack = true;
+    if(is_have_eventPack && is_on_time_eventPack)
+    {
+        if(is_just_one)
+        {
+            if(!is_buyed_eventPack)
+                is_useable_eventPack = true;
+            else
+                is_useable_eventPack = false;
+        }
+        else
+            is_useable_eventPack = true;
+    }
+    else
+    {
+        is_useable_eventPack = false;
+    }
+    
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
 	{
@@ -4279,8 +4341,8 @@ void MainFlowScene::topOnLight()
 			t_stencil_node->addChild(t_stencil2);
 			
 			CCScale9Sprite* t_stencil3 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil3->setContentSize(CCSizeMake(235, 65));
-			t_stencil3->setPosition(ccp(119,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
+			t_stencil3->setContentSize(CCSizeMake(290, 65));
+			t_stencil3->setPosition(ccp(146.5f,-(myDSH->puzzle_ui_top-320.f)/2.f+42));
 			t_stencil_node->addChild(t_stencil3);
 			
 			
@@ -4460,6 +4522,16 @@ void MainFlowScene::topOnLight()
 																																																	 });
 																																		addChild(t_popup, kMainFlowZorder_popup);
 																																	}
+                                                                                                                                   else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                   {
+                                                                                                                                       ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                       t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                       t_shop->targetHeartTime(heart_time);
+                                                                                                                                       t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                       t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                       t_shop->addGray();
+                                                                                                                                       addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                   }
 																																   else
 																																	   is_menu_enable = true;
 																															   });
@@ -4488,6 +4560,16 @@ void MainFlowScene::topOnLight()
 																																																});
 																																   addChild(t_popup, kMainFlowZorder_popup);
 																															   }
+                                                                                                                               else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                               {
+                                                                                                                                   ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                   t_shop->targetHeartTime(heart_time);
+                                                                                                                                   t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                   t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                   t_shop->addGray();
+                                                                                                                                   addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                               }
 																															   else
 																																   is_menu_enable = true;
 																														   }
@@ -4523,6 +4605,16 @@ void MainFlowScene::topOnLight()
 																																			 });
 																				addChild(t_popup, kMainFlowZorder_popup);
 																			}
+                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                            {
+                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                t_shop->addGray();
+                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                            }
 																			else
 																				is_menu_enable = true;
 																		});
@@ -4551,6 +4643,16 @@ void MainFlowScene::topOnLight()
 																																		 });
 																			addChild(t_popup, kMainFlowZorder_popup);
 																		}
+                                                                        else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                        {
+                                                                            ShopPopup* t_shop = ShopPopup::create();
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->targetHeartTime(heart_time);
+                                                                            t_shop->setShopCode(kSC_eventPack);
+                                                                            t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                            t_shop->addGray();
+                                                                            addChild(t_shop, kMainFlowZorder_popup);
+                                                                        }
 																		else
 																			is_menu_enable = true;
 																	}
@@ -4582,7 +4684,7 @@ void MainFlowScene::topOnLight()
 																																																	 }
 																																																	 else
 																																																		{
-																																																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                                                                                                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																																			{
 																																																				mySGD->is_on_accountLinkLead = true;
 																																																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4603,6 +4705,16 @@ void MainFlowScene::topOnLight()
 																																																																			 });
 																																																				addChild(t_popup, kMainFlowZorder_popup);
 																																																			}
+                                                                                                                                                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                                                                                            {
+                                                                                                                                                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                                                                                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                                                                                                t_shop->addGray();
+                                                                                                                                                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                                                                                            }
 																																																			else
 																																																				is_menu_enable = true;
 																																																		}
@@ -4640,6 +4752,16 @@ void MainFlowScene::topOnLight()
 																																																				 });
 																																					addChild(t_popup, kMainFlowZorder_popup);
 																																				}
+                                                                                                                                                else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                                                                                                {
+                                                                                                                                                    ShopPopup* t_shop = ShopPopup::create();
+                                                                                                                                                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                    t_shop->targetHeartTime(heart_time);
+                                                                                                                                                    t_shop->setShopCode(kSC_eventPack);
+                                                                                                                                                    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                                                                                    t_shop->addGray();
+                                                                                                                                                    addChild(t_shop, kMainFlowZorder_popup);
+                                                                                                                                                }
 																																				else
 																																					is_menu_enable = true;
 																																			}
@@ -4678,7 +4800,7 @@ void MainFlowScene::topOnLight()
 																	   }
 																	   else
 																		{
-																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																			{
 																				mySGD->is_on_accountLinkLead = true;
 																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4699,6 +4821,16 @@ void MainFlowScene::topOnLight()
 																																			 });
 																				addChild(t_popup, kMainFlowZorder_popup);
 																			}
+                                                                            else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                            {
+                                                                                ShopPopup* t_shop = ShopPopup::create();
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->targetHeartTime(heart_time);
+                                                                                t_shop->setShopCode(kSC_eventPack);
+                                                                                t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                                t_shop->addGray();
+                                                                                addChild(t_shop, kMainFlowZorder_popup);
+                                                                            }
 																			else
 																				is_menu_enable = true;
 																		}
@@ -4715,7 +4847,7 @@ void MainFlowScene::topOnLight()
 																   }
 																   else
 																	{
-																		if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                        if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																		{
 																			mySGD->is_on_accountLinkLead = true;
 																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4736,6 +4868,16 @@ void MainFlowScene::topOnLight()
 																																		 });
 																			addChild(t_popup, kMainFlowZorder_popup);
 																		}
+                                                                        else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                                                                        {
+                                                                            ShopPopup* t_shop = ShopPopup::create();
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->targetHeartTime(heart_time);
+                                                                            t_shop->setShopCode(kSC_eventPack);
+                                                                            t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                                                                            t_shop->addGray();
+                                                                            addChild(t_shop, kMainFlowZorder_popup);
+                                                                        }
 																		else
 																			is_menu_enable = true;
 																	}
@@ -4759,7 +4901,7 @@ void MainFlowScene::topOnLight()
 			}
 			else
 			{
-				if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
 				{
 					mySGD->is_on_accountLinkLead = true;
 					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4780,6 +4922,16 @@ void MainFlowScene::topOnLight()
 																				 });
 					addChild(t_popup, kMainFlowZorder_popup);
 				}
+                else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+                {
+                    ShopPopup* t_shop = ShopPopup::create();
+                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                    t_shop->targetHeartTime(heart_time);
+                    t_shop->setShopCode(kSC_eventPack);
+                    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+                    t_shop->addGray();
+                    addChild(t_shop, kMainFlowZorder_popup);
+                }
 				else
 					is_menu_enable = true;
 			}
@@ -4813,6 +4965,16 @@ void MainFlowScene::topOnLight()
 																	 });
 		addChild(t_popup, kMainFlowZorder_popup);
 	}
+    else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+    {
+        ShopPopup* t_shop = ShopPopup::create();
+        t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+        t_shop->targetHeartTime(heart_time);
+        t_shop->setShopCode(kSC_eventPack);
+        t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+        t_shop->addGray();
+        addChild(t_shop, kMainFlowZorder_popup);
+    }
 	else
 		is_menu_enable = true;
 }
@@ -4906,7 +5068,7 @@ void MainFlowScene::setTop()
 //	top_case->setAnchorPoint(ccp(0.f,1.f));
 //	top_case->setPosition(ccp(0,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-3));
 //	addChild(top_case, kMainFlowZorder_top);
-//	
+//
 //	CCSprite* top_case2 = CCSprite::create("mainflow_top2.png");
 //	top_case2->setAnchorPoint(ccp(0.f,1.f));
 //	top_case2->setPosition(ccp(top_case->getContentSize().width,top_case->getContentSize().height));

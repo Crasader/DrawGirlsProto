@@ -66,7 +66,7 @@ $(document).ready(function(){
 <br><br>
 
 <h2 id="tables-contextual-classes">|카드정보</h2>
-<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CardHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
+<table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CardHistory" autoLoad="false" dbWhere='{}' dbLimit="30" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
 			<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>

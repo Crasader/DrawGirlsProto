@@ -205,7 +205,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		diary_19_item->setTag(kCBP_MT_diary19);
 		
 		CCMenu* diary_19_menu = CCMenu::createWithItem(diary_19_item);
-		diary_19_menu->setPosition(ccp(180,74));
+		diary_19_menu->setPosition(ccp(185,84));
 		target->addChild(diary_19_menu, 1, kCBP_MT_diary19);
 		diary_19_menu->setTouchPriority(-191);
 	}

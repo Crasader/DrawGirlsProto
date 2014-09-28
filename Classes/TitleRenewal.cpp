@@ -549,7 +549,7 @@ void TitleRenewalScene::nextPreloadStep()
 		
 		CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		
-		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+		if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 		{
 			CCDelayTime* t_delay = CCDelayTime::create(2.f);
 			CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(TitleRenewalScene::changeScene));
@@ -620,7 +620,7 @@ void TitleRenewalScene::successLogin()
 								CCLOG("end preload effects !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 								TRACE();
 								CCLog("%d %d %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
-								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+								if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 								{
 									CCDelayTime* t_delay = CCDelayTime::create(2.f);
 									TRACE();
@@ -644,6 +644,8 @@ void TitleRenewalScene::successLogin()
 	AudioEngine::sharedInstance()->playEffect("ment_title.mp3");
 	addChild(KSTimer::create(2.8f, [=](){AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);}));
 	
+    is_loaded_productInfo = false;
+    
 	is_loaded_server = false;
 	
 	receive_cnt = 0;
@@ -736,6 +738,12 @@ void TitleRenewalScene::successLogin()
 	
 	startCommand();
 	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+    myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
+#else
+    is_loaded_productInfo = true;
+#endif
+    
 	is_loaded_cgp = false;
 	
 	addChild(KSTimer::create(5.f, [=]()
@@ -1155,6 +1163,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setIntroduceStage(result_data["introduceStage"].asInt());
 		mySGD->setKakaoMsg(result_data["kakaoMsg"].asString());
+		mySGD->setAddGemReward(result_data["addGemReward"].asInt());
 	}
 	else
 	{
@@ -2514,6 +2523,24 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 	checkReceive();
 }
 
+void TitleRenewalScene::resultRequestProductInfos(Json::Value result_data)
+{
+    if(result_data["issuccess"].asBool())
+    {
+        mySGD->product_infos = result_data;
+        
+        is_loaded_productInfo = true;
+        endingAction();
+    }
+    else
+    {
+        addChild(KSTimer::create(1.f, [=]()
+                                 {
+                                     myHSP->requestProductInfos(this, json_selector(this, TitleRenewalScene::resultRequestProductInfos));
+                                 }));
+    }
+}
+
 //void TitleRenewalScene::resultGetPathInfo(Json::Value result_data)
 //{
 //	if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -2547,9 +2574,9 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 
 void TitleRenewalScene::endingAction()
 {
-	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect);
+	CCLOG("ttttt is_loaded_cgp : %d | is_loaded_server : %d | is_preloaded_effect : %d | is_loaded_productInfo : %d", is_loaded_cgp, is_loaded_server, is_preloaded_effect, is_loaded_productInfo);
 	
-	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect)
+	if(is_loaded_cgp && is_loaded_server && is_preloaded_effect && is_loaded_productInfo)
 	{
 //	if(myDSH->getIntegerForKey(kDSH_Key_storyReadPoint) == 0)
 //	{
@@ -2822,52 +2849,160 @@ void TitleRenewalScene::startFileDownloadSet()
 			img->release();
 		}
 		
-		// reduce
-		for(int i=0;i<card_reduction_list.size();i++)
-		{
-			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
-			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-			if(card_reduction_list[i].is_ani)
-			{
-				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
-																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
-				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
-				target_img->addChild(ani_img);
-			}
-			
-			if(card_reduction_list[i].is_ccb)
-			{
-				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
-				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-				target_img->addChild(face_img);
-			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->beginWithClear(0, 0, 0, 0);
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
-		
-		if(character_download_list.size() > 0)
+        reduce_frame = 0;
+        
+        schedule(schedule_selector(TitleRenewalScene::reduceAction));
+        
+//		// reduce
+//		for(int i=0;i<card_reduction_list.size();i++)
+//		{
+//			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+//			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+//			
+//			CCSprite* target_img = new CCSprite();
+//			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+//			target_img->setAnchorPoint(ccp(0,0));
+//			
+//			if(card_reduction_list[i].is_ani)
+//			{
+//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+//																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+//				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+//				target_img->addChild(ani_img);
+//			}
+//			
+//			if(card_reduction_list[i].is_ccb)
+//			{
+//				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
+//				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+//				target_img->addChild(face_img);
+//			}
+//			
+//			target_img->setScale(0.4f);
+//			
+//			CCRenderTexture* t_texture = new CCRenderTexture();
+//			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//			t_texture->setSprite(target_img);
+//			t_texture->beginWithClear(0, 0, 0, 0);
+//			t_texture->getSprite()->visit();
+//			t_texture->end();
+//			
+//			if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//                CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
+//			
+//			t_texture->release();
+//			target_img->release();
+//			
+//			if(i % 3 == 0)
+//			{
+//				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+//			}
+//		}
+//		
+//		if(character_download_list.size() > 0)
+//		{
+//			for(int i=0;i<character_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, character_download_list[i].key, character_download_list[i].img, false);
+//			}
+//			NSDS_SI(kSDS_GI_characterVersion_i, character_download_version, false);
+//			mySDS->fFlush(kSDS_GI_characterCount_i);
+//		}
+//		
+//		if(monster_download_list.size() > 0)
+//		{
+//			for(int i=0;i<monster_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, monster_download_list[i].key, monster_download_list[i].img, false);
+//			}
+//			NSDS_SI(kSDS_GI_monsterVersion_i, monster_download_version, false);
+//			mySDS->fFlush(kSDS_GI_monsterCount_i);
+//		}
+//		
+//		if(card_download_list.size() > 0)
+//		{
+//			for(int i=0;i<card_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_cardInfo, card_download_list[i].key,
+//					   card_download_list[i].img, false);
+//			}
+//			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+//		}
+//		
+//		if(puzzle_download_list.size() > 0)
+//		{
+//			for(int i=0;i<puzzle_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, puzzle_download_list[i].key,
+//					   puzzle_download_list[i].img, false);
+//			}
+//			mySDS->fFlush(kSDS_GI_base);
+//		}
+//		
+//		endingCheck();
+	}
+}
+
+void TitleRenewalScene::reduceAction()
+{
+    float download_percent = 100.f*reduce_frame/card_reduction_list.size();
+	if(download_percent > 100.f)
+		download_percent = 100.f;
+	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+	
+	progress_timer->setPercentage(download_percent);
+    
+    int i = reduce_frame;
+    
+    mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+    mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+    
+    CCSprite* target_img = new CCSprite();
+    target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+    target_img->setAnchorPoint(ccp(0,0));
+    
+    if(card_reduction_list[i].is_ani)
+    {
+        CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+                                                        CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+        ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+        target_img->addChild(ani_img);
+    }
+    
+    if(card_reduction_list[i].is_ccb)
+    {
+        CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
+        face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+        target_img->addChild(face_img);
+    }
+    
+    target_img->setScale(0.4f);
+    
+    CCRenderTexture* t_texture = new CCRenderTexture();
+    t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+    t_texture->setSprite(target_img);
+    t_texture->beginWithClear(0, 0, 0, 0);
+    t_texture->getSprite()->visit();
+    t_texture->end();
+    
+    if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+        CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
+    
+    t_texture->release();
+    target_img->release();
+    
+    if(i % 3 == 0)
+    {
+        CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+    }
+    
+    reduce_frame++;
+    
+    if(reduce_frame >= card_reduction_list.size())
+    {
+        unschedule(schedule_selector(TitleRenewalScene::reduceAction));
+        
+        if(character_download_list.size() > 0)
 		{
 			for(int i=0;i<character_download_list.size();i++)
 			{
@@ -2908,7 +3043,7 @@ void TitleRenewalScene::startFileDownloadSet()
 		}
 		
 		endingCheck();
-	}
+    }
 }
 
 void TitleRenewalScene::checkDownloading()
@@ -3379,7 +3514,8 @@ void TitleRenewalScene::successDownloadAction()
 			t_texture->getSprite()->visit();
 			t_texture->end();
 			
-			t_texture->saveToFile(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG);
+			if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+                CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
 			
 			t_texture->release();
 			target_img->release();

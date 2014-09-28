@@ -67,6 +67,7 @@ private:
 	
 	bool is_loaded_cgp;
 	bool is_loaded_server;
+    bool is_loaded_productInfo;
 	int loginCnt;
 	int ing_download_cnt;
 	float ing_download_per;
@@ -155,6 +156,11 @@ private:
 	
 	void resultGetTimeInfo(Json::Value result_data);
 	
+    void resultRequestProductInfos(Json::Value result_data);
+    
+    int reduce_frame;
+    void reduceAction();
+    
 	int audio_preload_step;
 	void nextPreloadStep();
 	void checkThreadPreload();

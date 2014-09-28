@@ -47,7 +47,7 @@ $(document).ready(function(){
 		</td></tr></table>
 </div>
 <br><br>
-<h2 id="tables-contextual-classes">|교환ID</h2>
+<h2 id="tables-contextual-classes">|교환ID(시스템)</h2>
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Exchange" dbWhere='{}' dbLimit="100" dbSort='{"no":"asc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

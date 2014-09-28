@@ -30,8 +30,9 @@ var editor_sendType = function(value,option){
 	var neditor = $("<div>").addClass("LQEditor").attr("editor",j2s(option));
 	var select = $("<div>").addClass("btn-group radio-btn LQEditor").appendTo(neditor);
 	$("<button>").attr("id","sendType").attr("value","direct").append("직접지급").appendTo(select).addClass("btn btn-default");
-	$("<button>").attr("id","sendType").attr("value","giftbox").append("선물함지급").appendTo(select).addClass("btn btn-default active");;
-	$("<input>").attr("id","message").appendTo(select).addClass("form-control").attr("placeholder","선물메세지");
+	$("<button>").attr("id","sendType").attr("value","giftbox").append("선물함지급").appendTo(select).addClass("btn btn-default active");
+	$("<textarea>").attr("id","message").appendTo(select).addClass("form-control").attr("placeholder","선물메세지");
+	$("<textarea>").attr("id","data").appendTo(select).addClass("form-control").attr("placeholder","data");
 
 	return neditor;
 }
@@ -39,7 +40,8 @@ var editor_sendType = function(value,option){
 var editor_sendType_value = function(obj){
 	var t = obj.find('.active[id=sendType]').val();
 	var v = obj.find('[id=message]').val();
-	return {"type":t,"message":v};
+	var d = obj.find('[id=data]').val();
+	return {"type":t,"message":v,"data":d};
 }
 
 var editor_propData = function(value,option){
@@ -132,7 +134,7 @@ var excelMemberList = function(value,option){
 			memberlist.push(m);
 		}
 		//[{"type":$('.active[id=findType]').val(),"find":$("#findNo").val()}]
-		var dbparam = {"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s(memberlist)};
+		var dbparam = {"gid":gid,"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s(memberlist)};
 		log(dbparam);
 			$.ajax({
 			    url : "dataManager2.php", 
@@ -211,7 +213,7 @@ var addByID = function(obj){
 	var i_span = $("<span>").addClass("input-group-btn").appendTo(i_div2);
 	var findbtn = $("<button>").attr("id","findBtn").addClass("btn").addClass("btn-default").appendTo(i_span).html("추가").on("click",function(){	
 
-	var dbparam = {"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s([{"type":$('.active[id=findType]').val(),"find":$("#findNo").val()}])};
+	var dbparam = {"gid":gid,"dbMode":"custom","dbFunc":"getNickName","dbClass":"UserIndex","param":j2s([{"type":$('.active[id=findType]').val(),"find":$("#findNo").val()}])};
 	log(dbparam);
 		$.ajax({
 		    url : "dataManager2.php", 
