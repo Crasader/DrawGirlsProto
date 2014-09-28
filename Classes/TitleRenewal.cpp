@@ -28,6 +28,7 @@
 #include "ConvexGraph.h"
 #include <algorithm>
 #include "FiveRocksCpp.h"
+#include "TypingBox.h"
 
 CCScene* TitleRenewalScene::scene()
 {
@@ -2270,6 +2271,16 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 		{
 			myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
 		}
+		
+		//9 6 11
+		if(mySGD->getUserdataHighPiece() > mySGD->getItem9OpenStage())
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(kIC_baseSpeedUp), true);
+		if(mySGD->getUserdataHighPiece() > mySGD->getItem6OpenStage())
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(kIC_doubleItem), true);
+		if(mySGD->getUserdataHighPiece() > mySGD->getItem11OpenStage())
+			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(kIC_magnet), true);
+		if(mySGD->getUserdataHighPiece() > mySGD->getItemGachaOpenStage())
+			myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha), true);
 		
 		mySGD->user_index = result_data["userIndex"].asInt64();
 	}

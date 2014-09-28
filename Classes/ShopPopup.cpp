@@ -594,12 +594,12 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									}
 									else
 									{
-                                        if(time_label)
-                                            time_label->setVisible(false);
-										eventPack_menu->setVisible(false);
 										setShopCode(kSC_ruby);
 										is_menu_enable = true;
 									}
+									if(time_label)
+										time_label->setVisible(false);
+									eventPack_menu->setVisible(false);
 								}
 								else
 								{
@@ -706,12 +706,12 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										}
 										else
 										{
-                                            if(time_label)
-                                                time_label->setVisible(false);
-											eventPack_menu->setVisible(false);
 											setShopCode(kSC_ruby);
 											is_menu_enable = true;
 										}
+										if(time_label)
+											time_label->setVisible(false);
+										eventPack_menu->setVisible(false);
 									}
 									else
 									{
@@ -862,14 +862,14 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									}
 									else
 									{
-										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-										{
-                                            if(time_label)
-                                                time_label->setVisible(false);
-											eventPack_menu->setVisible(false);
-											setShopCode(kSC_ruby);
-										}
 										is_menu_enable = true;
+									}
+									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+									{
+										if(time_label)
+											time_label->setVisible(false);
+										eventPack_menu->setVisible(false);
+										setShopCode(kSC_ruby);
 									}
 								}
 								else
@@ -981,14 +981,14 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										}
 										else
 										{
-											if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-											{
-                                                if(time_label)
-                                                    time_label->setVisible(false);
-												eventPack_menu->setVisible(false);
-												setShopCode(kSC_ruby);
-											}
 											is_menu_enable = true;
+										}
+										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+										{
+											if(time_label)
+												time_label->setVisible(false);
+											eventPack_menu->setVisible(false);
+											setShopCode(kSC_ruby);
 										}
 									}
 									else
@@ -1631,7 +1631,7 @@ bool ShopPopup::init()
 								   
 								   int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
 								   
-								   if(sub_time <= expireSec)
+								   if(time_label->isVisible() && sub_time <= expireSec)
 									{
 										string show_time = "";
 										int e_s_sub_time = expireSec - sub_time;
@@ -3723,12 +3723,12 @@ void ShopPopup::requestItemDeliveryStartPack()
 			}
 			else
 			{
-                if(time_label)
-                    time_label->setVisible(false);
-				eventPack_menu->setVisible(false);
 				setShopCode(kSC_ruby);
 				is_menu_enable = true;
 			}
+			if(time_label)
+				time_label->setVisible(false);
+			eventPack_menu->setVisible(false);
 		}
 		else
 		{
@@ -3869,14 +3869,14 @@ void ShopPopup::requestItemDeliveryEventPack()
 			}
 			else
 			{
-				if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-				{
-                    if(time_label)
-                        time_label->setVisible(false);
-					eventPack_menu->setVisible(false);
-					setShopCode(kSC_ruby);
-				}
 				is_menu_enable = true;
+			}
+			if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+			{
+				if(time_label)
+					time_label->setVisible(false);
+				eventPack_menu->setVisible(false);
+				setShopCode(kSC_ruby);
 			}
 		}
 		else
