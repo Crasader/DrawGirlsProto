@@ -83,6 +83,9 @@ public:
 	
 	void showEndlessOpening();
 	void showEndlessResult();
+	
+	void showHellResult();
+	void showHellOpening();
     
     void showShopPopup(int t_code);
     

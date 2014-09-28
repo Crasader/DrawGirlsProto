@@ -99,11 +99,19 @@ private:
 	void startButtonAction(CCObject* sender, CCControlEvent t_event);
 	
 	void closeAction();
+	void characterClose();
+	
+	CCScale9Sprite* left_back;
+	
+	CCSprite* character_img;
+	CCBAnimationManager* character_manager;
+	function<void()> repeat_character_action;
 	
 	CCMenu* upgrade_menu;
 	KSLabelTTF* missile_data_level;
 	KSLabelTTF* missile_data_power;
 	void upgradeAction(CCObject* sender);
+	void changeCharacterAction(CCObject* sender);
 	
 	CCMenuLambda* item_gacha_menu;
 	bool is_clicked_gacha_menu;

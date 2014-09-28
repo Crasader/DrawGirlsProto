@@ -55,7 +55,9 @@
 #include "FriendPopup.h"
 #include "AccountLinkLeadPopup.h"
 #include "PuzzleOpenPopup.h"
-
+#include "HellModeOpening.h"
+#include "HellModeResult.h"
+#include "StartSettingPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -374,6 +376,13 @@ bool MainFlowScene::init()
         TRACE();
 		showEndlessResult();
         TRACE();
+	}
+	else if(mySGD->is_hell_mode)
+	{
+		is_menu_enable = false;
+		puzzle_table->setTouchEnabled(false);
+		
+		showHellResult();
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
@@ -2356,6 +2365,119 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																								 {
 																									 is_menu_enable = true;
 																									 
+																									 is_puzzle_enter_list.clear();
+																									 
+																									 TRACE();
+																									 locked_puzzle_count = 0;
+																									 
+																									 TRACE();
+																									 for(int i=0;i<not_event_puzzle_list.size();i++)
+																									 {
+																										 int t_puzzle_number = not_event_puzzle_list[i];
+																										 
+																										 PuzzleOpenInfo t_info;
+																										 t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
+																										 
+																										 string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+																										 
+																										 Json::Value condition_list;
+																										 Json::Reader reader;
+																										 reader.parse(puzzle_condition, condition_list);
+																										 
+																										 TRACE();
+																										 if(condition_list.size() <= 0)
+																											 t_info.is_open = true;
+																										 
+																										 t_info.is_base_condition_success = true;
+																										 t_info.is_have_week_condition = false;
+																										 t_info.is_have_date_condition = false;
+																										 t_info.is_have_ruby_condition = false;
+																										 t_info.need_star_count = 0;
+																										 
+																										 for(int i=0;!t_info.is_open && i<condition_list.size();i++)
+																										 {
+																											 Json::Value t_condition_and = condition_list[i];
+																											 
+																											 bool and_open = true;
+																											 bool is_time_condition = false;
+																											 
+																											 for(int j=0;j<t_condition_and.size();j++)
+																											 {
+																												 Json::Value t_condition = t_condition_and[j];
+																												 string t_type = t_condition["type"].asString();
+																												 if(t_type == "p")
+																												 {
+																													 if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+																													 {
+																														 and_open = false;
+																														 t_info.is_base_condition_success = false;
+																													 }
+																												 }
+																												 else if(t_type == "s")
+																												 {
+																													 t_info.need_star_count = t_condition["value"].asInt();
+																													 if(mySGD->getClearStarCount() < t_info.need_star_count)
+																													 {
+																														 and_open = false;
+																														 t_info.is_base_condition_success = false;
+																													 }
+																												 }
+																												 else if(t_type == "g")
+																												 {
+																													 t_info.need_ruby_value = t_condition["value"].asInt();
+																													 and_open = false;
+																													 t_info.is_have_ruby_condition = true;
+																												 }
+																												 else if(t_type == "w")
+																												 {
+																													 is_time_condition = true;
+																													 t_info.is_have_week_condition = true;
+																													 if(!mySGD->keep_time_info.is_loaded)
+																														 and_open = false;
+																													 else
+																													 {
+																														 int weekday = t_condition["weekday"].asInt();
+																														 t_info.keep_weekday = weekday;
+																														 if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+																															 and_open = false;
+																														 t_info.keep_week_start = t_condition["s"].asInt();
+																														 t_info.keep_week_end = t_condition["e"].asInt();
+																														 if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+																															 and_open = false;
+																													 }
+																												 }
+																												 else if(t_type == "d")
+																												 {
+																													 is_time_condition = true;
+																													 t_info.is_have_date_condition = true;
+																													 t_info.keep_date_start = t_condition["s"].asString();
+																													 if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+																														 and_open = false;
+																												 }
+																											 }
+																											 
+																											 TRACE();
+																											 if(and_open)
+																											 {
+																												 t_info.is_open = true;
+																												 if(!is_time_condition)
+																												 {
+																													 PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+																													 t_history.is_open = true;
+																													 t_history.open_type = "무료";
+																													 mySGD->setPuzzleHistory(t_history, nullptr);
+																												 }
+																											 }
+																										 }
+																										 
+																										 t_info.before_locked_puzzle_count = locked_puzzle_count;
+																										 t_info.puzzle_number = t_puzzle_number;
+																										 is_puzzle_enter_list.push_back(t_info);
+																										 
+																										 if(!t_info.is_open)
+																											 locked_puzzle_count++;
+																									 }
+																									 
 																									 CCPoint t_offset = puzzle_table->getContentOffset();
 																									 puzzle_table->reloadData();
 																									 puzzle_table->setContentOffset(t_offset);
@@ -3308,7 +3430,7 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
+	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton2);
 	bottom_list.push_back(endless_menu);
@@ -3465,7 +3587,7 @@ void MainFlowScene::setBottom()
 	
 	
 	CCMenuLambda* etc_menu = CCMenuLambda::create();
-	etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
+	etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
 	//		etc_frame->addChild(etc_menu);
 	addChild(etc_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(etc_menu);
@@ -3496,6 +3618,70 @@ void MainFlowScene::setBottom()
 	etc_menu->addChild(etc_item);
 	
 	etc_item->setEnabled(puzzle_number);
+	
+	
+	bool is_hell_open = false;
+	
+	int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+	for(int i=0;!is_hell_open && i<hell_count;i++)
+	{
+		int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
+		PieceHistory t_history = mySGD->getPieceHistory(open_piece_number);
+		if(t_history.is_clear[0].getV() || t_history.is_clear[1].getV() || t_history.is_clear[2].getV() || t_history.is_clear[3].getV())
+			is_hell_open = true;
+	}
+	
+	CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
+	((GraySprite*)n_hell_img)->setGray(!is_hell_open);
+	
+	CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
+	if(is_hell_open)
+		s_hell_img->setColor(ccGRAY);
+	else
+		((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
+	
+	CCMenuLambda* hell_menu = CCMenuLambda::create();
+	hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
+	//		etc_frame->addChild(etc_menu);
+	addChild(hell_menu, kMainFlowZorder_uiButton);
+	bottom_list.push_back(hell_menu);
+	
+	hell_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+	
+	CCMenuItemLambda* hell_item = CCMenuItemSpriteLambda::create(n_hell_img, s_hell_img, [=](CCObject* sender){
+		showHellOpening();
+	});
+	
+	hell_menu->addChild(hell_item);
+	
+	hell_item->setEnabled(is_hell_open);
+}
+
+void MainFlowScene::showHellOpening()
+{
+	is_menu_enable = false;
+	
+	HellModeOpening* t_popup = HellModeOpening::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
+void MainFlowScene::showHellResult()
+{
+	is_menu_enable = false;
+	puzzle_table->setTouchEnabled(false);
+	
+	HellModeResult* t_popup = HellModeResult::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showHellOpening));
+	t_popup->replay_func = [=](){
+		mySGD->is_hell_mode = true;
+		mySD->setSilType(mySD->getSilType());
+		
+		StartSettingPopup* t_popup = StartSettingPopup::create();
+		t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showHellOpening));
+		addChild(t_popup, kMainFlowZorder_popup);
+	};
+	addChild(t_popup, kMainFlowZorder_popup);
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
