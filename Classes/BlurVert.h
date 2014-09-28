@@ -16,6 +16,3 @@ v_texCoord = a_texCoord;
 }
 
 )";
-
-
-
