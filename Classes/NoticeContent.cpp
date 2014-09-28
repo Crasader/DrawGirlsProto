@@ -55,6 +55,8 @@ void NoticeContent::loadNotice(){
 	loading_circle->setVisible(true);
 	
 	is_not_show_three_day = false;
+	
+	isBreak = notice_list[ing_close_cnt].get("isBreak",false).asBool();
 	if(notice_list[ing_close_cnt].get("content", "").asString()!=""){
 		//텍스트모드
 
@@ -81,6 +83,7 @@ void NoticeContent::loadNotice(){
 		is_menu_enable=true;
 		
 		loadedAction();
+		
 	}else if(show_content==NULL){
 		//그림모드
 		is_menu_enable=false;
@@ -111,7 +114,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	end_selector = t_selector;
 	
 	notice_list = t_noti_list;
-	
+	isBreak = false;
 	
 	CCSprite* white_paper = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 480, 320));
 	white_paper->setScale(2);
