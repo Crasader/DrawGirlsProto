@@ -361,7 +361,7 @@ public:
 	
 	void beginScene(string _lang,string _storyID){
 		string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
-		CCLOG("Scene %s,",this->storyID.c_str());
+		//CCLOG("Scene %s,",this->storyID.c_str());
 		if(this->storyID == _storyID && _lang == cliLang){
 			isAdd=true;
 		}else{
@@ -389,7 +389,7 @@ public:
 		}
 	}
 	void addScript(string image,string script,CCTextAlignment align,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
-		 CCLOG("%s\t%s",image.c_str(),script.c_str());
+		 //CCLOG("%s\t%s",image.c_str(),script.c_str());
 		if(isAdd){
            // CCLOG("add script %s",script.c_str());
 			Json::Value scriptInfo;
