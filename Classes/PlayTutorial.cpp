@@ -116,6 +116,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 //		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //		{
+        line_edge->setVisible(false);
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -181,6 +182,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 //		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //		{
+        line_edge->setVisible(true);
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -231,6 +233,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 //		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //		{
+        line_edge->setVisible(false);
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -297,6 +300,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 //		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //		{
+        line_edge->setVisible(true);
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -347,6 +351,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	{
 		if(!isDrawingOn)
 		{
+            line_edge->setVisible(false);
 			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("stop"))
 			{
 				character_manager->runAnimationsForSequenceNamed("stop");
@@ -490,6 +495,7 @@ void TutoCharacter::setCharacterPoint(IntPoint t_point)
 
 void TutoCharacter::rewindAnimation()
 {
+    line_edge->setVisible(false);
 	if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("rewind"))
 	{
 		character_manager->runAnimationsForSequenceNamed("rewind");
@@ -500,6 +506,7 @@ void TutoCharacter::rewindAnimation()
 
 void TutoCharacter::drawAnimation()
 {
+    line_edge->setVisible(true);
 //	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
 //		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
 //			character_manager->runAnimationsForSequenceNamed("draw");
@@ -521,6 +528,11 @@ void TutoCharacter::myInit(function<TutoMapType(IntPoint)> t_getMapData, functio
 	
 	height_value = t_height;
 	
+    line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
+	line_edge->setVisible(false);
+	line_edge->setScale(0.5f);
+	addChild(line_edge);
+    
 	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi");
 	
 	character_img = t_pair.first;
