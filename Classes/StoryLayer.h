@@ -219,7 +219,7 @@ public:
 		addScript("kt_cha_asuka_1.png","카츠 언니 뭔가 흥분한 것 같네요.",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","뭐어? 그래보여?\n그나저나 아스카 너 이자식, 또 가슴이 커진거 아니야?\n오랜만에 한번 만져볼까? 흐흐흐",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","저기, 쫌… 이런 곳에서…!\n저..저기봐요\n도둑이 도망치고있어요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_katsuragi_1.png","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 쫒아가자!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 어서 뒤따라가자!",kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle5");
