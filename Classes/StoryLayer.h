@@ -97,7 +97,7 @@ public:
 		back = CCLayer::create();
 		addChild(back);
 		
-        CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* n_skip = CCSprite::create("kt_skip.png");
 		CCSprite* s_skip = CCSprite::create("kt_skip.png");
 		s_skip->setColor(ccGRAY);
 		
@@ -487,13 +487,15 @@ public:
 			}else if(script["align"].asInt()==kCCTextAlignmentRight){
 				typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(239, 96));
 			}else{
-				typing_box = TypingBox::create(-9999, "talk_mentbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(12, 12, 23-12, 23-12), CCRectMake(7, 10, 23, 64), CCSizeMake(240, 110), ccp(239, 96));
+				typing_box = TypingBox::create(-9999, "kt_talkbox_orange.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(240, 60), ccp(240, 96));
 				
 //				TypeingBox::create(int t_touch_priority, string t_box_filename, cocos2d::CCRect t_box_9_out, cocos2d::CCRect t_box_9_in, cocos2d::CCRect t_box_in_label, cocos2d::CCSize t_box_in_size, cocos2d::CCPoint t_box_position)
 			}
 		}else{
-			typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
+			typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(7, 10, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
 		}
+		
+		//TypingBox::create(int t_touch_priority, string t_box_filename, cocos2d::CCRect t_box_9_out, cocos2d::CCRect t_box_9_in, cocos2d::CCRect t_box_in_label, cocos2d::CCSize t_box_in_size, cocos2d::CCPoint t_box_position)
         TRACE();
 		typing_box->setTag(kObjTypeText);
 		back->addChild(typing_box, 11);
