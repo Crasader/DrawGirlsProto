@@ -998,6 +998,8 @@ public:
     Json::Value product_infos;
     Json::Value getProductInfo(string t_id);
 	
+	bool is_hell_mode_enabled;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

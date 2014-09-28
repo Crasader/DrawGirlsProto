@@ -3526,6 +3526,8 @@ int StarGoldData::getAppVersion()
 
 void StarGoldData::myInit()
 {
+	is_hell_mode_enabled = false;
+	
 	app_type = "light1";
 	app_version = 2;
 	

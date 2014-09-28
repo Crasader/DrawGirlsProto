@@ -3551,8 +3551,10 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
-//	endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3)); // after hell
+	if(mySGD->is_hell_mode_enabled)
+		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
+	else
+		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton2);
 	bottom_list.push_back(endless_menu);
@@ -3709,8 +3711,10 @@ void MainFlowScene::setBottom()
 	
 	
 	CCMenuLambda* etc_menu = CCMenuLambda::create();
-	etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
-//	etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3)); // after hell
+	if(mySGD->is_hell_mode_enabled)
+		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
+	else
+		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
 	//		etc_frame->addChild(etc_menu);
 	addChild(etc_menu, kMainFlowZorder_uiButton);
 	bottom_list.push_back(etc_menu);
@@ -3742,43 +3746,44 @@ void MainFlowScene::setBottom()
 	
 	etc_item->setEnabled(puzzle_number);
 	
-	/* after hell
-	bool is_hell_open = false;
-	
-	int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
-	for(int i=0;!is_hell_open && i<hell_count;i++)
+	if(mySGD->is_hell_mode_enabled)
 	{
-		int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
-		PieceHistory t_history = mySGD->getPieceHistory(open_piece_number);
-		if(t_history.is_clear[0].getV() || t_history.is_clear[1].getV() || t_history.is_clear[2].getV() || t_history.is_clear[3].getV())
-			is_hell_open = true;
+		bool is_hell_open = false;
+		
+		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		for(int i=0;!is_hell_open && i<hell_count;i++)
+		{
+			int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
+			PieceHistory t_history = mySGD->getPieceHistory(open_piece_number);
+			if(t_history.is_clear[0].getV() || t_history.is_clear[1].getV() || t_history.is_clear[2].getV() || t_history.is_clear[3].getV())
+				is_hell_open = true;
+		}
+		
+		CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
+		((GraySprite*)n_hell_img)->setGray(!is_hell_open);
+		
+		CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
+		if(is_hell_open)
+			s_hell_img->setColor(ccGRAY);
+		else
+			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
+		
+		CCMenuLambda* hell_menu = CCMenuLambda::create();
+		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
+		//		etc_frame->addChild(etc_menu);
+		addChild(hell_menu, kMainFlowZorder_uiButton);
+		bottom_list.push_back(hell_menu);
+		
+		hell_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+		
+		CCMenuItemLambda* hell_item = CCMenuItemSpriteLambda::create(n_hell_img, s_hell_img, [=](CCObject* sender){
+			showHellOpening();
+		});
+		
+		hell_menu->addChild(hell_item);
+		
+		hell_item->setEnabled(is_hell_open);
 	}
-	
-	CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
-	((GraySprite*)n_hell_img)->setGray(!is_hell_open);
-	
-	CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
-	if(is_hell_open)
-		s_hell_img->setColor(ccGRAY);
-	else
-		((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
-	
-	CCMenuLambda* hell_menu = CCMenuLambda::create();
-	hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
-	//		etc_frame->addChild(etc_menu);
-	addChild(hell_menu, kMainFlowZorder_uiButton);
-	bottom_list.push_back(hell_menu);
-	
-	hell_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-	
-	CCMenuItemLambda* hell_item = CCMenuItemSpriteLambda::create(n_hell_img, s_hell_img, [=](CCObject* sender){
-		showHellOpening();
-	});
-	
-	hell_menu->addChild(hell_item);
-	
-	hell_item->setEnabled(is_hell_open);
-	 */
 }
 
 void MainFlowScene::cgpReward(CCObject* sender, CCControlEvent t_event)
