@@ -418,7 +418,7 @@ string hspConnector::getCountryCode(){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
 	NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
+	r = [countryCode UTF8String];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
@@ -435,9 +435,9 @@ string hspConnector::getCountryCode(){
 	}
 #endif
 
-	
-	
 	std::transform(r.begin(), r.end(), r.begin(), towlower);
+	
+	if(r=="")r="kr";
 	
 	return r;
 }
