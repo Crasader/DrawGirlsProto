@@ -51,6 +51,7 @@ CCSprite* StageImgLoader::getLoadedImg(string filename)
 	}
 	else
 	{
+		CCLOG("not found img texture : %s", filename.c_str());
 		return nullptr;
 	}
 

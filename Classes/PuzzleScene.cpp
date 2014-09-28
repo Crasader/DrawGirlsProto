@@ -2920,18 +2920,18 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
-			string flag = read_data.get("flag", "kr").asString().c_str();
+			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 			selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3 strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3 strokeopacity=50>" + user_list[i].get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -2940,7 +2940,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setPosition(ccp(84,list_cell_case->getContentSize().height/2.f + 7));
 				list_cell_case->addChild(nick_label);

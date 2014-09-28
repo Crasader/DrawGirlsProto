@@ -44,6 +44,8 @@ void StageInfoDown::resultGetStageInfo(Json::Value result_data)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 		else if(t_mission["type"].asInt() == kCLEAR_timeLimit)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionSec_i, t_option["sec"].asInt(), false);
+		else if(t_mission["type"].asInt() == kCLEAR_hellMode)
+			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionSec_i, t_option["sec"].asInt(), false);
 		else if(t_mission["type"].asInt() == kCLEAR_percentage)
 			NSDS_SI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 		else if(t_mission["type"].asInt() == kCLEAR_score)

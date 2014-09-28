@@ -3212,6 +3212,24 @@ void Maingame::endCloseShutter()
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 	}
+	else if(mySGD->is_hell_mode)
+	{
+		if(mySGD->getIsCleared())
+		{
+			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+			
+			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+			CCDirector::sharedDirector()->replaceScene(t_trans);
+		}
+		else
+		{
+			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+			
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+			//			mySGD->setNextSceneName("newmainflow");
+			//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
+		}
+	}
 	else
 	{
 		if(mySGD->getIsCleared())

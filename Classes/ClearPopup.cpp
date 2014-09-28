@@ -116,14 +116,12 @@ bool ClearPopup::init()
 	Json::Value p1;
 	p1["memberID"] = hspConnector::get()->getSocialID();
 	p1["score"]=int(mySGD->getScore());
+	p1["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	p1["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p1_data;
-	p1_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	p1_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
-	p1_data["highstage"] = mySGD->suitable_stage;
-	p1_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	p1_data["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-	Json::FastWriter p1_data_writer;
-	p1["data"] = p1_data_writer.write(p1_data);
+	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+	p1_data["highPiece"] = mySGD->suitable_stage;
+	p1["data"] = p1_data;
 	
 	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
 	
@@ -402,14 +400,12 @@ bool ClearPopup::init()
 	param2["myScore"]=int(mySGD->getScore());
 	param2["stageNo"]=mySD->getSilType();
 	param2["memberID"] = hspConnector::get()->getSocialID();
+	param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p2_data;
-	p2_data["selectedcard"] = myDSH->getIntegerForKey(kDSH_Key_selectedCard);
-	p2_data["allhighscore"] = mySGD->getScore();//myDSH->getIntegerForKey(kDSH_Key_allHighScore);
+	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
 	p2_data["highstage"] = mySGD->suitable_stage;
-	p2_data["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	p2_data["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-	Json::FastWriter p2_data_writer;
-	param2["data"] = p2_data_writer.write(p2_data);
+	param2["data"] = p2_data;
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
@@ -903,18 +899,18 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
-			string flag = read_data.get("flag", "kr").asString().c_str();
+			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 			selectedFlagSpr->setPosition(ccp(49,15.5f));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + user_list[i].get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0,0.5f));
@@ -923,7 +919,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setAnchorPoint(ccp(0,0.5f));
 				nick_label->setPosition(ccp(64,15.5f));

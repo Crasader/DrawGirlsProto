@@ -97,7 +97,7 @@ public:
 		back = CCLayer::create();
 		addChild(back);
 		
-        CCSprite* n_skip = CCSprite::create("kt_skip.png");
+		CCSprite* n_skip = CCSprite::create("kt_skip.png");
 		CCSprite* s_skip = CCSprite::create("kt_skip.png");
 		s_skip->setColor(ccGRAY);
 		
@@ -178,7 +178,7 @@ public:
 		beginScene("ko","puzzle1");
 		addScript("","오래전부터 영주를 모시며 첩보,파괴,암살등을 생업으로 삼은 자들이 있었다.\n오랜기간 그 명맥을 유지하며 현대시대에도 보통사람들의 눈을 피해 활동하고있는 자들.\n그들을 우리는 닌자라 부른다.",kCCTextAlignmentCenter,kObjTypeText,kBoxBig);
 		
-		addScript("kt_cha_asuka_1.png","선생님.\n지시받은대로 전원집합했습니다!\n여긴 인기척도 없고 전력으로 훈련할 수 있겠는데요?",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
+		addScript("kt_cha_asuka_1.png","선생님.\n지시받은대로 전원 집합했습니다!\n여긴 인기척도 없고 전력으로 훈련할 수 있겠는데요?",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png","네? 훈련 전에 우리들의 힘을 시험한다구요?\n으윽.. 시험은 그다지 좋아하지 않지만..\n알겠습니다.",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_ikaruga_1.png","역시나\n시노비 결계 속에서 가상의 적을 상대하면 되는건가요?\n어서 시작하시죠.",kCCTextAlignmentRight,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png","자..잠깐 그전에 대전법을 조금 익혀야 할것 같은데요..",kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
@@ -196,7 +196,7 @@ public:
 		addScript("kt_cha_hibari_1.png","응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!",kCCTextAlignmentRight,kObjTypeAll);
 		addScript("kt_cha_yagyu_1.png","히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_hibari_1.png","야규! 히바리를 도와주었구나! 고마워 야규짱!!",kCCTextAlignmentRight,kObjTypeText);
-		addScript("kt_cha_yagyu_1.png","내가 이렇게 항상 지켜봐줄수 없으니\n 전투시엔 조심하도록해..\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자.",kCCTextAlignmentLeft,kObjTypeAll);
+		addScript("kt_cha_yagyu_1.png","내가 이렇게 항상 지켜봐줄 수 없으니\n 전투시엔 조심하도록해..\n교내에도 아직 적이 남아 있으니\n주변의 적을 해치우자.",kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
 		
@@ -215,11 +215,11 @@ public:
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle4");
-		addScript("kt_cha_katsuragi_1.png","헤헷, 봤지?\n과자도 돌아왔고 속이 시원하다!\n역시 몸을 움직이는건 최고로 좋아!",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png","헤헷, 봤지?\n과자도 되찾았으니 속이 시원하다!\n역시 몸을 움직이는건 최고로 좋아!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","카츠 언니 뭔가 흥분한 것 같네요.",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","뭐어? 그래보여?\n그나저나 아스카 너 이자식, 또 가슴이 커진거 아니야?\n오랜만에 한번 만져볼까? 흐흐흐",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","저기, 쫌… 이런 곳에서…!\n저..저기봐요\n도둑이 도망치고있어요.",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_katsuragi_1.png","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 쫓아가자!",kCCTextAlignmentRight,kObjTypeAll);
+		addScript("kt_cha_katsuragi_1.png","이런 젠장 오랜만에 만질기회였는데..\n뒷산으로 가는군 어서 뒤따라가자!",kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
 		beginScene("ko","puzzle5");
@@ -236,7 +236,7 @@ public:
 		
 		beginScene("ko","puzzle6");
 		addScript("kt_cha_ikaruga_1.png","불량배들이 없어져서 겨우 가게 문을 다시 열고있네요.\n이걸로 안심하고 재료를 사러 갈 수 있겠네요.",kCCTextAlignmentLeft,kObjTypeAll);
-		addScript("","[상인]\n자~ 오늘의 세일 상품 국산특급닭고기 완전 특별세일 선착선 10분에게 모십니다~!",kCCTextAlignmentCenter,kObjTypeText);
+		addScript("","[상인]\n자~ 오늘의 세일 상품 국산특급닭고기 완전 특별세일 선착순 10분에게 모십니다~!",kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png","오~! 이건 우리들이 나설 차례네!\n저기, 비켜비켜! 그 국산 닭고기 우리거라고!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png","하핫, 국산 닭고기 전부 가져왔습니다. 임무 완료네요… 응?",kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("","[불량배]\n야, 너희들! 우리 친구들을 때려눕혔다 이거지!\n이 원한을 백배로 갚아주겠다!",kCCTextAlignmentCenter,kObjTypeText);
@@ -487,13 +487,15 @@ public:
 			}else if(script["align"].asInt()==kCCTextAlignmentRight){
 				typing_box = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(239, 96));
 			}else{
-				typing_box = TypingBox::create(-9999, "talk_mentbox.png", CCRectMake(0, 0, 35, 35), CCRectMake(12, 12, 23-12, 23-12), CCRectMake(7, 10, 23, 64), CCSizeMake(240, 110), ccp(239, 96));
+				typing_box = TypingBox::create(-9999, "kt_talkbox_orange.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(240, 60), ccp(240, 96));
 				
 //				TypeingBox::create(int t_touch_priority, string t_box_filename, cocos2d::CCRect t_box_9_out, cocos2d::CCRect t_box_9_in, cocos2d::CCRect t_box_in_label, cocos2d::CCSize t_box_in_size, cocos2d::CCPoint t_box_position)
 			}
 		}else{
-			typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
+			typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(7, 10, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
 		}
+		
+		//TypingBox::create(int t_touch_priority, string t_box_filename, cocos2d::CCRect t_box_9_out, cocos2d::CCRect t_box_9_in, cocos2d::CCRect t_box_in_label, cocos2d::CCSize t_box_in_size, cocos2d::CCPoint t_box_position)
         TRACE();
 		typing_box->setTag(kObjTypeText);
 		back->addChild(typing_box, 11);

@@ -278,9 +278,13 @@ bool EndlessModeResult::init()
 		param.clear();
 		param["memberID"] = myHSP->getMemberID();
 		param["score"] = left_total_score.getV();// int(mySGD->getScore());
+		param["victory"] = left_total_score.getV() > right_total_score.getV();
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
-		param["victory"] = left_total_score.getV() > right_total_score.getV();
+		Json::Value p1_data;
+		p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+		p1_data["highPiece"] = mySGD->suitable_stage;
+		param["data"] = p1_data;
 		
 		send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
 												 {
@@ -2369,11 +2373,14 @@ void EndlessModeResult::reSetEndlessRank()
 	param.clear();
 	param["memberID"] = myHSP->getMemberID();
 	param["score"] = int(mySGD->getScore());
-	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-	param["level"] = mySGD->endless_my_level.getV();
-	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	param["victory"] = left_total_score.getV() > right_total_score.getV();
-	
+	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
+	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
+	Json::Value p1_data;
+	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
+	p1_data["highPiece"] = mySGD->suitable_stage;
+	param["data"] = p1_data;
+
 	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)
 										{
 											TRACE();
@@ -2505,6 +2512,18 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 	else if(t_mission["type"].asInt() == kCLEAR_timeLimit)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionSec_i, t_option["sec"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_hellMode)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionSec_i, t_option["sec"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_percentage)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_score)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["score"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_combo)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["combo"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_gold)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_turns)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
 	
 	
 	Json::Value shopItems = result_data["shopItems"];
