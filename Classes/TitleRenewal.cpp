@@ -2272,7 +2272,6 @@ void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 			myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
 		}
 		
-		//9 6 11
 		if(mySGD->getUserdataHighPiece() > mySGD->getItem9OpenStage())
 			myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(kIC_baseSpeedUp), true);
 		if(mySGD->getUserdataHighPiece() > mySGD->getItem6OpenStage())
