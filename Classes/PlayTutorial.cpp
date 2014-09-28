@@ -114,8 +114,8 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	
 	if(c_d != directionStop && d_valid && getMapData(d_point) == kTutoMapType_line)
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -140,23 +140,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
-				character_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_d == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_d == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
+//				character_manager->runAnimationsForSequenceNamed("move");
+//			
+//			if(c_d == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_d == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		if(getMapData(my_point) == kTutoMapType_line)
 		{
@@ -179,8 +179,8 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_d != directionStop && d_valid && isDrawingOn && (getMapData(d_point) == kTutoMapType_empty || getMapData(d_point) == kTutoMapType_newLine))
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
 			IntDirection t_direction = c_d;
 			
 			if(t_direction == directionLeft)
@@ -205,23 +205,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-				character_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(c_d == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_d == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//				character_manager->runAnimationsForSequenceNamed("draw");
+//			
+//			if(c_d == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_d == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		addPath(IntPointVector(my_point.x, my_point.y, d_vector.dx, d_vector.dy));
 		setCharacterPoint(d_point);
@@ -229,8 +229,8 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_sd != directionStop && sd_valid && getMapData(sd_point) == kTutoMapType_line)
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -255,23 +255,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
-				character_manager->runAnimationsForSequenceNamed("move");
-			
-			if(c_sd == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_sd == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("move"))
+//				character_manager->runAnimationsForSequenceNamed("move");
+//			
+//			if(c_sd == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_sd == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		if(getMapData(my_point) == kTutoMapType_line)
 		{
@@ -295,8 +295,8 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 	}
 	else if(c_sd != directionStop && sd_valid && isDrawingOn && (getMapData(sd_point) == kTutoMapType_empty || getMapData(sd_point) == kTutoMapType_newLine))
 	{
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
-		{
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		{
 			IntDirection t_direction = c_sd;
 			
 			if(t_direction == directionLeft)
@@ -321,23 +321,23 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			}
 			
 			jack_img_direction = t_direction;
-		}
-		else
-		{
-			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-				character_manager->runAnimationsForSequenceNamed("draw");
-			
-			if(c_sd == directionLeft && jack_img_direction == directionRight)
-			{
-				character_img->setScaleX(-1.f);
-				jack_img_direction = directionLeft;
-			}
-			else if(c_sd == directionRight && jack_img_direction == directionLeft)
-			{
-				character_img->setScaleX(1.f);
-				jack_img_direction = directionRight;
-			}
-		}
+//		}
+//		else
+//		{
+//			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//				character_manager->runAnimationsForSequenceNamed("draw");
+//			
+//			if(c_sd == directionLeft && jack_img_direction == directionRight)
+//			{
+//				character_img->setScaleX(-1.f);
+//				jack_img_direction = directionLeft;
+//			}
+//			else if(c_sd == directionRight && jack_img_direction == directionLeft)
+//			{
+//				character_img->setScaleX(1.f);
+//				jack_img_direction = directionRight;
+//			}
+//		}
 		
 		addPath(IntPointVector(my_point.x, my_point.y, sd_vector.dx, sd_vector.dy));
 		setCharacterPoint(sd_point);
@@ -350,7 +350,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("stop"))
 			{
 				character_manager->runAnimationsForSequenceNamed("stop");
-				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 					jack_img_direction = directionStop;
 			}
 		}
@@ -359,7 +359,7 @@ void TutoCharacter::changeDirection(IntDirection t_d, IntDirection t_sd)
 			if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("drawStop"))
 			{
 				character_manager->runAnimationsForSequenceNamed("drawStop");
-				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 					jack_img_direction = directionStop;
 			}
 		}
@@ -493,17 +493,17 @@ void TutoCharacter::rewindAnimation()
 	if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("rewind"))
 	{
 		character_manager->runAnimationsForSequenceNamed("rewind");
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			jack_img_direction = directionStop;
 	}
 }
 
 void TutoCharacter::drawAnimation()
 {
-	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
-		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
-			character_manager->runAnimationsForSequenceNamed("draw");
-	else
+//	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+//		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw"))
+//			character_manager->runAnimationsForSequenceNamed("draw");
+//	else
 		if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("draw_down"))
 			character_manager->runAnimationsForSequenceNamed("draw_down");
 }
@@ -531,11 +531,12 @@ void TutoCharacter::myInit(function<TutoMapType(IntPoint)> t_getMapData, functio
 	if(character_manager->getRunningSequenceName() == NULL || character_manager->getRunningSequenceName() != string("stop"))
 	{
 		character_manager->runAnimationsForSequenceNamed("stop");
-		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
+//		if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 			jack_img_direction = directionStop;
 	}
-	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
-		jack_img_direction = directionRight;
+    jack_img_direction = directionStop;
+//	if(mySGD->getSelectedCharacterHistory().characterNo.getV() != 2)
+//		jack_img_direction = directionRight;
 	
 	isDrawingOn = false;
 }

@@ -472,11 +472,11 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			if(!sale_str.empty())
 			{
 				CCSprite* tab = CCSprite::create("shop_tab.png");
-				tab->setPosition(ccp(-42,35.5f));
+				tab->setPosition(ccp(-34,38.f));
 				content_node->addChild(tab, 4);
 				
-				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
-				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
+				CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 12);
+				sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f));
 				tab->addChild(sale_label);
 			}
 			
