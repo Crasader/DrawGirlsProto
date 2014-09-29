@@ -785,7 +785,7 @@ void StartSettingPopup::setMain()
 	{
         auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi");
 		gacha_item = t_ccb.first;//CCSprite::create("startsetting_item_gacha_inner.png");
-		gacha_item->setPosition(ccp(410,185));
+		gacha_item->setPosition(ccp(410,195));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
         t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 		
