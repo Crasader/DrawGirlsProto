@@ -1616,7 +1616,7 @@ bool ShopPopup::init()
 		{
 			time_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 12);
 			time_label->setPosition(getContentPosition(kSP_MT_eventPack) + ccp(0,20));
-			main_case->addChild(time_label);
+			main_case->addChild(time_label, kSP_Z_content+1);
 
 			CCSprite* time_back = CCSprite::create("mainflow_new3.png");
 			time_back->setPosition(ccpFromSize(time_label->getContentSize()/2.f));
