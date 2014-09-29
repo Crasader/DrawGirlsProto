@@ -1381,20 +1381,20 @@ void SumranMailPopup::successCardDownload()
 			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
-			if(card_reduction_list[i].is_ani)
-			{
-				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
-																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
-				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
-				target_img->addChild(ani_img);
-			}
-			
-			if(card_reduction_list[i].is_ccb)
-			{
-				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
-				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-				target_img->addChild(face_img);
-			}
+//			if(card_reduction_list[i].is_ani)
+//			{
+//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+//																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+//				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+//				target_img->addChild(ani_img);
+//			}
+//			
+//			if(card_reduction_list[i].is_ccb)
+//			{
+//				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
+//				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+//				target_img->addChild(face_img);
+//			}
 			
 			target_img->setScale(0.4f);
 			
@@ -1841,19 +1841,19 @@ void SumranMailPopup::successAction ()
 			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
 			target_img->setAnchorPoint(ccp(0,0));
 			
-			if(cf_list[i].is_ani)
-			{
-				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-				target_img->addChild(ani_img);
-			}
-			
-			if(cf_list[i].is_ccb)
-			{
-				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
-				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-				target_img->addChild(face_img);
-			}
+//			if(cf_list[i].is_ani)
+//			{
+//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+//				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+//				target_img->addChild(ani_img);
+//			}
+//			
+//			if(cf_list[i].is_ccb)
+//			{
+//				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
+//				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+//				target_img->addChild(face_img);
+//			}
 			
 			target_img->setScale(0.4f);
 			
