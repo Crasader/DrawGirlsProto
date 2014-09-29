@@ -1858,6 +1858,7 @@ void Jack::showMB()
 	{
 		MissileBarrier* t_mb = MissileBarrier::create();
 //		t_mb->setScale(0.8f);
+		t_mb->setPosition(ccp(0,9));
 		addChild(t_mb, kJackZ_ActiveBarrier);
 	}
 }
