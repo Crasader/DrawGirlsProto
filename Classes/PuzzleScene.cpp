@@ -3405,42 +3405,75 @@ void PuzzleScene::countingMessage()
 {
 	TRACE();
 	postbox_count_case->setVisible(false);
+	
+	vector<CommandParam> command_list;
+	command_list.clear();
+	
 	Json::Value p;
 	p["memberID"]=hspConnector::get()->getSocialID();
 	// 0 이 아니면 해당하는 타입의 메시지가 들어옴.
 	
 	//USE GETMESSAGELIST
-	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
-															 {
-																 TRACE();
-																 GraphDogLib::JsonToLog("checkgiftboxhistory", r);
-																 TRACE();
-																 if(r["result"]["code"].asInt() != GDSUCCESS)
-																	{
-																		TRACE();
-																		return;
-																	}
-																 
-																 int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
-																 
-																 if(message_cnt > 0)
-																 {
-																	 int t_count = message_cnt;
-																	 int base_width = 20;
-																	 while (t_count/10 > 0)
-																	 {
-																		 base_width+=5;
-																		 t_count /= 10;
-																	 }
-																	 
-																	 postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
-																 }
-																 
-																 postbox_count_case->setVisible(message_cnt > 0);
-																 postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
-																 postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
-																 TRACE();
-															 }, -1);
+	command_list.push_back(CommandParam("checkgiftboxhistory",p,[=](Json::Value r)
+										{
+											TRACE();
+											GraphDogLib::JsonToLog("checkgiftboxhistory", r);
+											TRACE();
+											if(r["result"]["code"].asInt() != GDSUCCESS)
+											{
+												TRACE();
+												return;
+											}
+											
+											int message_cnt = r.get("haveNewGiftCnt", 0).asInt();
+											
+											if(message_cnt > 0)
+											{
+												int t_count = message_cnt;
+												int base_width = 20;
+												while (t_count/10 > 0)
+												{
+													base_width+=5;
+													t_count /= 10;
+												}
+												
+												postbox_count_case->setContentSize(CCSizeMake(base_width, 20));
+											}
+											
+											postbox_count_case->setVisible(message_cnt > 0);
+											postbox_count_label->setString(CCString::createWithFormat("%d", message_cnt)->getCString());
+											postbox_count_label->setPosition(ccpFromSize(postbox_count_case->getContentSize()/2.f));
+											TRACE();
+										}));
+	
+	Json::Value real_time_message_param;
+	real_time_message_param["version"] = NSDS_GI(kSDS_GI_realTimeMessageVersion_i);
+	command_list.push_back(CommandParam("getrealtimemessage", real_time_message_param, [=](Json::Value result_data)
+										{
+											if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											{
+												NSDS_SI(kSDS_GI_realTimeMessageVersion_i, result_data["version"].asInt());
+												
+												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
+												real_message->setColor(ccc3(255, 100, 100));
+												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
+												real_message->setPosition(ccp(240,160));
+												addChild(real_message, 99999999);
+												
+												addChild(KSTimer::create(3.f, [=](){
+													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																						   {
+																							   real_message->setOpacity(255*t);
+																						   }, [=](float t)
+																						   {
+																							   real_message->setOpacity(255*t);
+																							   real_message->removeFromParent();
+																						   }));}));
+											}
+										}));
+	
+	myHSP->command(command_list, -1);
+	
     TRACE();
 }
 

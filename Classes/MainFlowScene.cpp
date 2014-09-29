@@ -5455,6 +5455,32 @@ void MainFlowScene::countingMessage()
 											}));
 	}
 	
+	Json::Value real_time_message_param;
+	real_time_message_param["version"] = 0;//NSDS_GI(kSDS_GI_realTimeMessageVersion_i);
+	command_list.push_back(CommandParam("getrealtimemessage", real_time_message_param, [=](Json::Value result_data)
+										{
+											if(result_data["result"]["code"].asInt() == GDSUCCESS)
+											{
+												NSDS_SI(kSDS_GI_realTimeMessageVersion_i, result_data["version"].asInt());
+												
+												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
+												real_message->setColor(ccc3(255, 100, 100));
+												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
+												real_message->setPosition(ccp(240,160));
+												addChild(real_message, 99999999);
+												
+												addChild(KSTimer::create(3.f, [=](){
+													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+																										 {
+																											 real_message->setOpacity(255*t);
+																										 }, [=](float t)
+																										 {
+																											 real_message->setOpacity(255*t);
+																											 real_message->removeFromParent();
+																										 }));}));
+											}
+										}));
+	
 	myHSP->command(command_list, -1);
 	
 //	hspConnector::get()->command("checkgiftboxhistory",p,[=](Json::Value r)
