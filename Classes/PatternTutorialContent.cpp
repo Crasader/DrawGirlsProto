@@ -284,6 +284,8 @@ int PatternTutorialContent::getContentLocalKeyForPatternNumber(int t_pattern)
 		return_value = kMyLocalKey_patternContent1017;
 	else if(t_pattern == 1018)
 		return_value = kMyLocalKey_patternContent1018;
+	else if(t_pattern == 1019)
+		return_value = kMyLocalKey_patternContent1019;
 	else if(t_pattern == 1020)
 		return_value = kMyLocalKey_patternContent1020;
 	

@@ -579,6 +579,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
 	ko->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
 	ko->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	ko->setObject(CCString::create("보스몬스터가 거대해 져요."), kMyLocalKey_patternContent1019);
 	ko->setObject(CCString::create("부하몬스터를 새로 소환합니다."), kMyLocalKey_patternContent1020);
 	
 //	ko->setObject(CCString::create("서버에 연결할 수 없습니다."), kMyLocalKey_canNotConnectedServer);
@@ -1658,6 +1659,8 @@ void MyLocal::en()
 	en->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
 	en->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
 	en->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	en->setObject(CCString::create("보스몬스터가 거대해 져요."), kMyLocalKey_patternContent1019);
+    en->setObject(CCString::create("부하몬스터를 새로 소환합니다."), kMyLocalKey_patternContent1020);
 	
 	en->setObject(CCString::create("가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
 	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
@@ -2637,6 +2640,8 @@ void MyLocal::ja()
 	ja->setObject(CCString::create("카운트가 끝나면 폭발해요."), kMyLocalKey_patternContent1016);
 	ja->setObject(CCString::create("일정시간 맵을 따라 움직여요."), kMyLocalKey_patternContent1017);
 	ja->setObject(CCString::create("언제 폭발할지 몰라요."), kMyLocalKey_patternContent1018);
+	ja->setObject(CCString::create("보스몬스터가 거대해 져요."), kMyLocalKey_patternContent1019);
+	ja->setObject(CCString::create("부하몬스터를 새로 소환합니다."), kMyLocalKey_patternContent1020);
 	
 
 	

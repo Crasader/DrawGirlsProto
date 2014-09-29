@@ -551,6 +551,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_patternContent1016,
 	kMyLocalKey_patternContent1017,
 	kMyLocalKey_patternContent1018,
+    kMyLocalKey_patternContent1019,
 	kMyLocalKey_patternContent1020,
 	kMyLocalKey_controlTip_lineTangle_title,
 	kMyLocalKey_controlTip_lineTangle_content,
