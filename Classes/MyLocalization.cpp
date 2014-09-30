@@ -336,6 +336,7 @@ void MyLocal::ko()
     ko->setObject(CCString::create("PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다."), kMyLocalKey_titleLoading47);
     ko->setObject(CCString::create("6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다."), kMyLocalKey_titleLoading48);
     ko->setObject(CCString::create("설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다."), kMyLocalKey_titleLoading49);
+	ko->setObject(CCString::create("성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다."), kMyLocalKey_titleLoading50);
 	ko->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 	
 	ko->setObject(CCString::create("게임시작"), kMyLocalKey_gamestart);
@@ -1423,6 +1424,7 @@ void MyLocal::en()
     en->setObject(CCString::create("PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다."), kMyLocalKey_titleLoading47);
     en->setObject(CCString::create("6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다."), kMyLocalKey_titleLoading48);
     en->setObject(CCString::create("설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다."), kMyLocalKey_titleLoading49);
+	en->setObject(CCString::create("성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다."), kMyLocalKey_titleLoading50);
 	en->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 				
 	en->setObject(CCString::create("START"), kMyLocalKey_gamestart);
@@ -2401,6 +2403,7 @@ void MyLocal::ja()
     ja->setObject(CCString::create("PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다."), kMyLocalKey_titleLoading47);
     ja->setObject(CCString::create("6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다."), kMyLocalKey_titleLoading48);
     ja->setObject(CCString::create("설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다."), kMyLocalKey_titleLoading49);
+	ja->setObject(CCString::create("성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다."), kMyLocalKey_titleLoading50);
 	ja->setObject(CCString::create(""), kMyLocalKey_titleLoadingEnd);
 	
 	ja->setObject(CCString::create("START"), kMyLocalKey_gamestart);
