@@ -258,75 +258,75 @@ enum MessageRecvType
 enum AchievementCode
 {
 	kAchievementCode_base = 0,
-	kAchievementCode_gold1,//	골드서민 : 1000골드 모으기. 완
-	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기. 완
-	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기. 완
+	kAchievementCode_gold1,//	골드서민 : 1000골드 모으기. 완							1
+	kAchievementCode_gold2,//	골드부자 : 10000골드 모으기. 완							2
+	kAchievementCode_gold3,//	골드재벌 : 100000골드 모으기. 완							3
 	
-	kAchievementCode_ruby1,//	젬서민 : 10골드모으기. 완
-	kAchievementCode_ruby2,//	젬부자 : 100젬모으기. 완
-	kAchievementCode_ruby3,//	젬재벌 : 1000젬모으기. 완
+	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기 완						4
+	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기 완						5
+	kAchievementCode_mapGacha3,//	맵가챠맨3 : 맵가챠 30회 돌리기 완						6
 	
-	kAchievementCode_mapGacha1,//	맵가챠맨1 : 맵가챠 10회 돌리기 완
-	kAchievementCode_mapGacha2,//	맵가챠맨2 : 맵가챠 20회 돌리기 완
-	kAchievementCode_mapGacha3,//	맵가챠맨3 : 맵가챠 30회 돌리기 완
+	kAchievementCode_luckySeven1,//	럭키세븐1 : 한번에 7% 먹기 완							7
+	kAchievementCode_luckySeven2,//	럭키세븐2 : 한번에 7.7% 먹기 완						8
+	kAchievementCode_luckySeven3,//	럭키세븐3 : 한번에 77.7% 먹기 완						9
 	
-	kAchievementCode_luckySeven1,//	럭키세븐1 : 한번에 7% 먹기 완
-	kAchievementCode_luckySeven2,//	럭키세븐2 : 한번에 7.7% 먹기 완
-	kAchievementCode_luckySeven3,//	럭키세븐3 : 한번에 77.7% 먹기 완
+	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성 완							10
+	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성 완							11
+	kAchievementCode_comboMania3,//	콤보매니아3 : 30콤보달성 완							12
 	
-	kAchievementCode_comboMania1,//	콤보매니아1 : 10콤보달성 완
-	kAchievementCode_comboMania2,//	콤보매니아2 : 20콤보달성 완
-	kAchievementCode_comboMania3,//	콤보매니아3 : 30콤보달성 완
+	kAchievementCode_noFail1,//	실패란없다1 : 5회연속 클리어 완							13
+	kAchievementCode_noFail2,//	실패란없다2 : 10회연속클리어 완							14
+	kAchievementCode_noFail3,//	실패란없다3 : 20회연속클리어 완							15
 	
-	kAchievementCode_noFail1,//	실패란없다1 : 5회연속 클리어 완
-	kAchievementCode_noFail2,//	실패란없다2 : 10회연속클리어 완
-	kAchievementCode_noFail3,//	실패란없다3 : 20회연속클리어 완
+	kAchievementCode_attacker1,//	닥치고공격1 : 한판에 20회공격 성공 완					16
+	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공 완					17
+	kAchievementCode_attacker3,//	닥치고공격3 : 한판에 40회공격 성공 완					18
 	
-	kAchievementCode_attacker1,//	닥치고공격1 : 한판에 20회공격 성공 완
-	kAchievementCode_attacker2,//	닥치고공격2 : 한판에 30회공격 성공 완
-	kAchievementCode_attacker3,//	닥치고공격3 : 한판에 40회공격 성공 완
+	kAchievementCode_hunter1,//	사냥꾼1 : 부하몹 5마리 가두어잡기 완						19
+	kAchievementCode_hunter2,//	사냥꾼2 : 부하몹 10마리 가두어잡기 완						20
+	kAchievementCode_hunter3,//	사냥꾼3 : 부하몹 20마리 가두어잡기 완						21
 	
-	kAchievementCode_hunter1,//	사냥꾼1 : 부하몹 5마리 가두어잡기 완
-	kAchievementCode_hunter2,//	사냥꾼2 : 부하몹 10마리 가두어잡기 완
-	kAchievementCode_hunter3,//	사냥꾼3 : 부하몹 20마리 가두어잡기 완
+	kAchievementCode_dieHard1,//	다이하드1 : 1~3level 에서 한목숨도 안죽고 클리어			22
+	kAchievementCode_dieHard2,//	다이하드2 : 4~9level 에서 한목숨도 안죽고 클리어			23
+	kAchievementCode_dieHard3,//	다이하드3 : 10level 이상에서 한목숨도 안죽고 클리어		24
 	
-	kAchievementCode_dieHard1,//	다이하드1 : 1~3level 에서 한목숨도 안죽고 클리어
-	kAchievementCode_dieHard2,//	다이하드2 : 4~9level 에서 한목숨도 안죽고 클리어
-	kAchievementCode_dieHard3,//	다이하드3 : 10level 이상에서 한목숨도 안죽고 클리어
+	kAchievementCode_scoreHigh1,//	경쟁의신1 : 50000점 이상 획득 완						25
+	kAchievementCode_scoreHigh2,//	경쟁의신2 : 100000점 이상 획득 완						26
+	kAchievementCode_scoreHigh3,//	경쟁의신3 : 150000점 이상 획득 완						27
 	
-	kAchievementCode_scoreHigh1,//	경쟁의신1 : 50000점 이상 획득 완
-	kAchievementCode_scoreHigh2,//	경쟁의신2 : 100000점 이상 획득 완
-	kAchievementCode_scoreHigh3,//	경쟁의신3 : 150000점 이상 획득 완
+	kAchievementCode_fastClear1,//	초스피드클리어1 : 30초안에 클리어 완					28
+	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어 완					29
+	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어 완						30
 	
-	kAchievementCode_fastClear1,//	초스피드클리어1 : 30초안에 클리어 완
-	kAchievementCode_fastClear2,//	초스피드클리어2 : 10초안에 클리어 완
-	kAchievementCode_fastClear3,//	초스피드클리어3 : 5초안에 클리어 완
+	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지 완							31
+	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지 완							32
+	kAchievementCode_changeMania3,//	체인지3 : 30회 체인지 완							33
 	
-	kAchievementCode_changeMania1,//	체인지1 : 10회 체인지 완
-	kAchievementCode_changeMania2,//	체인지2 : 20회 체인지 완
-	kAchievementCode_changeMania3,//	체인지3 : 30회 체인지 완
+	kAchievementCode_fail1,//	실패는 성공의 어머니1 : 게임실패 10회 완						34
+	kAchievementCode_fail2,//	실패는 성공의 어머니2 : 게임실패 50회 완						35
+	kAchievementCode_fail3,//	실패는 성공의 어머니3 : 게임실패 100회 완					36
 	
-	kAchievementCode_fail1,//	실패는 성공의 어머니1 : 게임실패 10회 완
-	kAchievementCode_fail2,//	실패는 성공의 어머니2 : 게임실패 50회 완
-	kAchievementCode_fail3,//	실패는 성공의 어머니3 : 게임실패 100회 완
+	kAchievementCode_cardCollection1,//	카드컬렉터1: 카드 50장모으기 완					37
+	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기 완					38
+	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기 완					39
 	
-	kAchievementCode_cardCollection1,//	카드컬렉터1: 카드 50장모으기 완
-	kAchievementCode_cardCollection2,//	카드컬렉터2: 카드 100장모으기 완
-	kAchievementCode_cardCollection3,//	카드컬렉터3: 카드 200장모으기 완
+	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회 완						40
+	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회 완						41
+	kAchievementCode_perfect3,//	대단한성과3 : 100%클리어 50회 완						42
 	
-	kAchievementCode_perfect1,//	대단한성과1 : 100%클리어 10회 완
-	kAchievementCode_perfect2,//	대단한성과2 : 100%클리어 30회 완
-	kAchievementCode_perfect3,//	대단한성과3 : 100%클리어 50회 완
+	kAchievementCode_seqAttendance1,//	개근1 : 7일 연속출첵							43
+	kAchievementCode_seqAttendance2,//	개근2 : 14일 연속출첵							44
+	kAchievementCode_seqAttendance3,//	개근3 : 21일 연속출첵							45
 	
-	kAchievementCode_seqAttendance1,//	개근1 : 7일 연속출첵
-	kAchievementCode_seqAttendance2,//	개근2 : 14일 연속출첵
-	kAchievementCode_seqAttendance3,//	개근3 : 21일 연속출첵
+	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공 완						46
+	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기 완							47
+	kAchievementCode_cardSet,//	셋트완성 : 한스테이지의 1,2,3단계 카드셋트 완성 완				48
 	
-	kAchievementCode_luckyGuy,//	럭키가이 : 시작행운아이템 5회성공 완
-	kAchievementCode_tutorial,//	초보자 : 튜토리얼다 보기 완
-	kAchievementCode_cardSet,//	셋트완성 : 한스테이지의 1,2,3단계 카드셋트 완성 완
+	kAchievementCode_ruby1,//	젬서민 : 10골드모으기. 완									49
+	kAchievementCode_ruby2,//	젬부자 : 100젬모으기. 완									50
+	kAchievementCode_ruby3,//	젬재벌 : 1000젬모으기. 완								51
 	
-	kAchievementCode_reviewer,//	리뷰어 : 리뷰남겨주기
+	kAchievementCode_reviewer,//	리뷰어 : 리뷰남겨주기									52
 	
 	kAchievementCode_end,
 	kAchievementCode_hidden_base,
