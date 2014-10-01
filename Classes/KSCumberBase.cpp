@@ -2979,15 +2979,13 @@ void KSCumberBase::observeStopBoss(float dt)
 		m_stopFrameCount = 0;
 		CCLOG("force moving");
 	}
-	if(m_castFrameCount >= 60 * 6.f)
+	if(m_castFrameCount >= 60 * 8.f)
 	{
 		
-//		setCumberState(kCumberStateMoving);
+		setCumberState(kCumberStateMoving);
 		m_castFrameCount = 0;
 		CCLOG("force moving2");
-
 	}
-	
 }
 template <typename T>
 void FixedSizeDeque<T>::push_back( const T& p )

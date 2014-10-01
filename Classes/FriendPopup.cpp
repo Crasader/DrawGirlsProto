@@ -789,8 +789,9 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					setFormSetter(remainTimeBack);
 					
 //					std::string remainTimeStr = getRemainTimeMsg(mySGD->getHeartSendCoolTime());
-					int h, i, s;
-					timeSpliter(mySGD->getHeartSendCoolTime(), 0, 0, 0, &h, &i, &s);
+					int d, h, i, s;
+					timeSpliter(mySGD->getHeartSendCoolTime(), 0, 0, &d, &h, &i, &s);
+					h += d * 24;
 					KSLabelTTF* remainTimeFnt = KSLabelTTF::create(ccsf("%02d:%02d:%02d", h, i, s), mySGD->getFont().c_str(), 13.f);
 					remainTimeBack->addChild(remainTimeFnt);
 					remainTimeFnt->setPosition(ccpFromSize(remainTimeBack->getContentSize()) / 2.f + ccp(0, -2));
