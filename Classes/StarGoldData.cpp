@@ -2713,7 +2713,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				fiverocks_param2 = "UserLv31~";
 			
 			
-			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str());
+			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV());
 			is_ingame_gold = false;
 		}
 		

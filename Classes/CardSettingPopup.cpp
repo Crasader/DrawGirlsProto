@@ -186,10 +186,10 @@ bool CardSettingPopup::init()
 	mycard_count->setAnchorPoint(ccp(0.5f,0.5f));
 	take_count_back->addChild(mycard_count);
 	
-	KSLabelTTF* total_card_count = KSLabelTTF::create(ccsf("/%d", mySGD->total_card_cnt), mySGD->getFont().c_str(), 10);
-	total_card_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-	total_card_count->setAnchorPoint(ccp(0.5f,0.5f));
-	take_count_back->addChild(total_card_count);
+//	KSLabelTTF* total_card_count = KSLabelTTF::create(ccsf("/%d", mySGD->total_card_cnt), mySGD->getFont().c_str(), 10);
+//	total_card_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+//	total_card_count->setAnchorPoint(ccp(0.5f,0.5f));
+//	take_count_back->addChild(total_card_count);
 	
 	KSLabelTTF* take_card_count = KSLabelTTF::create(ccsf("%d", mySGD->getHasGottenCardsSize()), mySGD->getFont().c_str(), 10);
 	take_card_count->setColor(ccc3(255, 170, 20));
@@ -197,11 +197,11 @@ bool CardSettingPopup::init()
 	take_card_count->setAnchorPoint(ccp(0.5f,0.5f));
 	take_count_back->addChild(take_card_count);
 	
-	take_count_back->setContentSize(CCSizeMake(5 + mycard_count->getContentSize().width + total_card_count->getContentSize().width + take_card_count->getContentSize().width + 5, 18));
+	take_count_back->setContentSize(CCSizeMake(5 + mycard_count->getContentSize().width/* + total_card_count->getContentSize().width*/ + take_card_count->getContentSize().width + 5, 18));
 	
 	mycard_count->setPosition(ccp(5 + mycard_count->getContentSize().width/2.f , take_count_back->getContentSize().height/2.f));
 	take_card_count->setPosition(ccp(mycard_count->getPositionX() + mycard_count->getContentSize().width/2.f + take_card_count->getContentSize().width/2.f, take_count_back->getContentSize().height/2.f));
-	total_card_count->setPosition(ccp(take_card_count->getPositionX() + take_card_count->getContentSize().width/2.f + total_card_count->getContentSize().width/2.f, take_count_back->getContentSize().height/2.f));
+//	total_card_count->setPosition(ccp(take_card_count->getPositionX() + take_card_count->getContentSize().width/2.f + total_card_count->getContentSize().width/2.f, take_count_back->getContentSize().height/2.f));
 	
 	
 	CCSprite* n_diary_img = CCSprite::create("subbutton_pink.png");
