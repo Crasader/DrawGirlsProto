@@ -370,12 +370,12 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hunter1 || t_code == kAchievementCode_hunter2 || t_code == kAchievementCode_hunter3)
 	{	return_value = mySGD->getUserdataAchieveHunter();	}
-	else if(t_code == kAchievementCode_dieHard1)
-	{	return_value = data_map[t_code].getIngCount();	}
-	else if(t_code == kAchievementCode_dieHard2)
-	{	return_value = data_map[t_code].getIngCount();	}
-	else if(t_code == kAchievementCode_dieHard3)
-	{	return_value = data_map[t_code].getIngCount();	}
+//	else if(t_code == kAchievementCode_dieHard1)
+//	{	return_value = data_map[t_code].getIngCount();	}
+//	else if(t_code == kAchievementCode_dieHard2)
+//	{	return_value = data_map[t_code].getIngCount();	}
+//	else if(t_code == kAchievementCode_dieHard3)
+//	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_scoreHigh1)
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_scoreHigh2)
@@ -398,8 +398,8 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	}
 	else if(t_code == kAchievementCode_perfect1 || t_code == kAchievementCode_perfect2 || t_code == kAchievementCode_perfect3)
 	{	return_value = mySGD->getUserdataAchievePerfect();	}
-	else if(t_code == kAchievementCode_seqAttendance1 || t_code == kAchievementCode_seqAttendance2 || t_code == kAchievementCode_seqAttendance3)
-	{	return_value = mySGD->getUserdataAchieveSeqAttendance();	}
+//	else if(t_code == kAchievementCode_seqAttendance1 || t_code == kAchievementCode_seqAttendance2 || t_code == kAchievementCode_seqAttendance3)
+//	{	return_value = mySGD->getUserdataAchieveSeqAttendance();	}
 	else if(t_code == kAchievementCode_luckyGuy)
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_tutorial)
@@ -407,11 +407,11 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	else if(t_code == kAchievementCode_cardSet)
 	{	return_value = data_map[t_code].getIngCount();	}
 	
-	else if(t_code == kAchievementCode_reviewer)
-	{	return_value = data_map[t_code].getIngCount();	}
+//	else if(t_code == kAchievementCode_reviewer)
+//	{	return_value = data_map[t_code].getIngCount();	}
 	
-	else if(t_code == kAchievementCode_hidden_returnee) // (히든)
-	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_returnee);	}
+//	else if(t_code == kAchievementCode_hidden_returnee) // (히든)
+//	{	return_value = myDSH->getIntegerForKey(kDSH_Key_achieveData_int1_value, kAchievementCode_hidden_returnee);	}
 	else if(t_code == kAchievementCode_hidden_bigHand1 || t_code == kAchievementCode_hidden_bigHand2) // (히든)
 	{	return_value = data_map[t_code].getIngCount();	}
 	else if(t_code == kAchievementCode_hidden_holder) // (히든)
