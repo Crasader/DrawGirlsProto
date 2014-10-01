@@ -191,7 +191,7 @@ public:
 		addScript("kt_cha_asuka_1.png","휴... 이걸로 시험이 끝났겠지.. 첫발을 내딛었구나..",kCCTextAlignmentLeft,kObjTypeText|kObjTypeActorRight);
 		addScript("kt_cha_hibari_1.png","그래 이제 시작이야..\n히바리도 아스카와 같이 최고의 닌자가 될꺼야!",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","쉿. 일반 학생들이 다니는 교정 안에서는 닌자에 관한 이야기는 하지 않는게 좋아.\n이곳의 닌자 양성 클래스는 일반 학생들에겐 비밀이니까!",kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_asuka_1.png","흐응... 비밀이라니...\n조금 긴장하게 되..",kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_asuka_1.png","흐응... 비밀이라니...\n조금 긴장하게 돼..",kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png","히바리, 긴장할 필요 까진 없어.\n언제나처럼 시노비결계 안에서 훈련하기\n때문에 보통 사람들은 볼 수 없으니까.",kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_hibari_1.png","응, 알고는 있는데... 아스카짱 고마워\n앞으로나 완전 열심히 할꺼야!",kCCTextAlignmentRight,kObjTypeAll);
 		addScript("kt_cha_yagyu_1.png","히바리 위험해!!!\n긴장을 늦추지 마. 적은 남아 있다구!!",kCCTextAlignmentLeft,kObjTypeText);
