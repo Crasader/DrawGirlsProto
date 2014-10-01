@@ -3076,7 +3076,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	t_command_list.clear();
 //	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
-	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
+	if(!mySGD->is_endless_mode && !mySGD->is_hell_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
 	{
 		mySGD->setUserdataHighPiece(mySD->getSilType());
 	}
