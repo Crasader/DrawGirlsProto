@@ -1821,7 +1821,7 @@ void StartSettingPopup::gachaMenuCreate()
 																				gacha_item->removeFromParent();
 																				
 																				gacha_item = KS::loadCCBI<CCSprite*>(this, "randomitem.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
-																				gacha_item->setPosition(keep_position);
+																				gacha_item->setPosition(keep_position + ccp(0,-8));
 																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 																				
 																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
@@ -2163,6 +2163,7 @@ void StartSettingPopup::startItemGacha()
 	{
 		is_first_gacha = true;
 		myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, true);
+		random_value = 999;
 	}
 	else
 	{
