@@ -785,13 +785,13 @@ void StartSettingPopup::setMain()
 	{
         auto t_ccb = KS::loadCCBI<CCSprite*>(this, "startsetting_question2.ccbi");
 		gacha_item = t_ccb.first;//CCSprite::create("startsetting_item_gacha_inner.png");
-		gacha_item->setPosition(ccp(410,195));
+		gacha_item->setPosition(ccp(410,193));
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
         t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 		
 		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
-		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 23.f));
 		gacha_item->addChild(gacha_label);
 	}
 	
@@ -2458,7 +2458,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				
 				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 				gacha_label->enableOuterStroke(ccBLACK, 1.f);
-				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
+				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 23.f));
 				gacha_item->addChild(gacha_label);
 			}
 		}
@@ -3103,7 +3103,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 											  if(result_data["result"]["code"].asInt() == GDSUCCESS)
 											  {
 												  mySGD->heartRefreshSuccess(result_data);
-												  if(mySGD->is_endless_mode)
+												  if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 												  {
 													  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
 												  }
@@ -3115,7 +3115,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 											  else if(result_data["result"]["code"].asInt() == GDEXPIRE)
 											  {
 												  mySGD->heartRefreshSuccess(result_data);
-												  if(mySGD->is_endless_mode)
+												  if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 												  {
 													  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
 												  }
