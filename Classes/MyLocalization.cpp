@@ -616,8 +616,8 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ko->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ko->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
-	ko->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ko->setObject(CCString::create("매일 매일 출석 하자!!"), kMyLocalKey_attendanceSeqTitle);
+	ko->setObject(CCString::create("누적출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	ko->setObject(CCString::create("<font size=13.5>%d<font size=10>젬"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
@@ -1695,8 +1695,8 @@ void MyLocal::en()
 //	en->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	en->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	en->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
-	en->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	en->setObject(CCString::create("매일 매일 출석 하자!!"), kMyLocalKey_attendanceSeqTitle);
+	en->setObject(CCString::create("누적출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	en->setObject(CCString::create("<font size=13.5>%d<font size=10>젬"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);
@@ -2678,8 +2678,8 @@ void MyLocal::ja()
 //	ja->setObject(CCString::create("포기하시면 1패가 추가됩니다.\n계속 하시겠습니까?"), kMyLocalKey_endlessCheckGiveup);
 	
 	ja->setObject(CCString::create("스페셜데이"), kMyLocalKey_attendanceSpecialTitle);
-	ja->setObject(CCString::create("매일 매일 연속 출석!!"), kMyLocalKey_attendanceSeqTitle);
-	ja->setObject(CCString::create("연속출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
+	ja->setObject(CCString::create("매일 매일 출석 하자!!"), kMyLocalKey_attendanceSeqTitle);
+	ja->setObject(CCString::create("누적출석 일수에 따라 더욱 푸짐한 선물을 드립니다."), kMyLocalKey_attendanceSpecialContent);
 	
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>골드"), kMyLocalKey_attendanceSpecialGoodsTypeGold);
 	ja->setObject(CCString::create("<font size=13.5>%d<font size=10>젬"), kMyLocalKey_attendanceSpecialGoodsTypeRuby);

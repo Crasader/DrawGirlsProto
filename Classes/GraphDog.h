@@ -356,6 +356,7 @@ public:
 private:
 	//    GDStruct gdchunk;
 	pthread_mutex_t t_functionMutex;
+	pthread_mutex_t t_functionMutex2;
 	//	pthread_mutex_t cmdsMutex;
 	//	pthread_mutex_t authMutex;
 	string aID;
@@ -399,6 +400,7 @@ private:
 	GraphDog(){
 		
 		pthread_mutex_init(&t_functionMutex, NULL);
+		pthread_mutex_init(&t_functionMutex2, NULL);
 		//		pthread_mutex_init(&cmdsMutex, NULL);
 		//pthread_mutex_lock(&authMutex);
 		curl_global_init(CURL_GLOBAL_ALL);
