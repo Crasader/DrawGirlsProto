@@ -484,11 +484,11 @@ void* GraphDog::t_function(void *_insertIndex)
 	//	std::map<int, CommandType>& commands = graphdog->commands;
 	//	pthread_mutex_lock(&graphdog->cmdsMutex);
 	CommandsType& command = graphdog->commandQueue[insertIndex];
-	Json::Value costr = command.commandStr;
 	
 	
 	
 	pthread_mutex_lock(&command.caller->t_functionMutex);
+	Json::Value costr = command.commandStr;
     
     
     int add = (int)(rand()%10)+1;
@@ -500,6 +500,10 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLOG("t_function2");
 	//string token="";
 	//CCLOG("t_function2");
+	
+	
+	pthread_mutex_unlock(&command.caller->t_functionMutex);
+	
 	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ command start, t_function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 	CCLOG("request %s",command.commandStr.c_str());
@@ -529,7 +533,13 @@ void* GraphDog::t_function(void *_insertIndex)
 	CCLOG("t_function4");
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
+	
+	pthread_mutex_lock(&command.caller->t_functionMutex2);
 	CURLcode resultCode = curl_easy_perform(handle);
+	pthread_mutex_unlock(&command.caller->t_functionMutex2);
+	
+	pthread_mutex_lock(&command.caller->t_functionMutex);
+	
 	CCLOG("result code is %d",resultCode);
 	//##
 	//@ JsonBox::Object resultobj;
@@ -764,6 +774,8 @@ void GraphDog::removeCommand(cocos2d::CCObject *target)
 void GraphDog::receivedCommand(float dt)
 {
 	//##
+	
+	pthread_mutex_lock(&graphdog->t_functionMutex);
 	
 	for(std::map<int, CommandsType>::iterator commandQueueIter = commandQueue.begin(); commandQueueIter != commandQueue.end();)
 	{
@@ -1038,6 +1050,10 @@ void GraphDog::receivedCommand(float dt)
 			}
 		}
 	}
+	
+	
+	
+	pthread_mutex_unlock(&graphdog->t_functionMutex);
 }
 //std::string GraphDog::getDeviceID() {
 //	//    string _id;
