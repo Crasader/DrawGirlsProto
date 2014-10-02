@@ -1092,6 +1092,9 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_hellTitleGold,
 	kMyLocalKey_hellTitleTime,
 	kMyLocalKey_hellContentTime,
+	kMyLocalKey_hellTakeCharacter,
+	
+	kMyLocalKey_failHellMode,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

@@ -158,6 +158,8 @@ bool HellModeResult::init()
 			
 			// 캐릭터 획득 이미지
 			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
+			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
 			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,25));
 			star_back->addChild(take_character_card);
 			
@@ -176,14 +178,34 @@ bool HellModeResult::init()
 			tt_history.level = 1;
 			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(tt_history, nullptr));
 			
+			CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
+			light_back->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
+			star_back->addChild(light_back);
+			
 			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_index) + ".ccbi").first;
 			character_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
 			star_back->addChild(character_img);
 			
-			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
-			card_img->setScale(0.15f);
-			card_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
-			star_back->addChild(card_img);
+			
+			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			t_clipping->setAlphaThreshold(0.1f);
+			
+			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+			t_clipping->addChild(t_card);
+			t_card->setScale(0.2f);
+			
+			t_clipping->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+			t_clipping->setScale(1.f/0.2f*0.15f);
+			star_back->addChild(t_clipping);
+			
+			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+			t_frame->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+			star_back->addChild(t_frame);
+			
+//			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+//			card_img->setScale(0.15f);
+//			card_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+//			star_back->addChild(card_img);
 		}
 		else
 		{
@@ -197,8 +219,12 @@ bool HellModeResult::init()
 	else
 	{
 		// 실패 디자인
-		title_string = myLoc->getLocalForKey(kMyLocalKey_failTitleMissionfail);
+		title_string = myLoc->getLocalForKey(kMyLocalKey_failTitleGameover);
 		
+		StyledLabelTTF* have_character_card = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failHellMode), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		have_character_card->setAnchorPoint(ccp(0.5f,0.5f));
+		have_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f));
+		star_back->addChild(have_character_card);
 	}
 	
 	CCScale9Sprite* gold_time_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
@@ -259,7 +285,10 @@ bool HellModeResult::init()
 	
 	title = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21.5f);
 //	title->setScale(0);
-	title->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
+	if(is_clear)
+		title->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
+	else
+		title->setColor(ccc3(255, 30, 30));
 	title->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title, kZ_HMR_menu);
 	
@@ -315,7 +344,7 @@ bool HellModeResult::init()
 //	ok_menu->setVisible(false);
 //	ok_menu->setEnabled(false);
 	main_case->addChild(ok_menu, kZ_HMR_menu);
-	ok_menu->setTouchPriority(-200);
+	ok_menu->setTouchPriority(-400);
 	
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
@@ -331,7 +360,7 @@ bool HellModeResult::init()
 //	replay_menu->setVisible(false);
 //	replay_menu->setEnabled(false);
 	main_case->addChild(replay_menu, kZ_HMR_menu);
-	replay_menu->setTouchPriority(-200);
+	replay_menu->setTouchPriority(-400);
 	
 	
 	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
@@ -602,12 +631,12 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3f strokeopacity=50>" + user_list[i].get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0,0.5f));
@@ -616,7 +645,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 				nick_label->setAnchorPoint(ccp(0,0.5f));
 				nick_label->setPosition(ccp(64,15.5f));

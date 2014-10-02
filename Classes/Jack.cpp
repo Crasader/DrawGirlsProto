@@ -2238,6 +2238,10 @@ void Jack::dieEffect()
 				
 				startReviveAnimation(jackImg);
 			}
+			else if(mySGD->is_hell_mode)
+			{
+				myGD->communication("UI_hellModeResult");
+			}
 			else if(myGD->getCommunicationBool("UI_beRevivedJack"))
 			{
 				speed_up_value = 0.f;
@@ -2259,15 +2263,8 @@ void Jack::dieEffect()
 			{
 //				if(mySGD->is_endless_mode || continue_on_count < 2)
 //				{
-				if(!mySGD->is_hell_mode)
-				{
 					continue_on_count = continue_on_count.getV() + 1;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
-				}
-				else
-				{
-					myGD->communication("UI_hellModeResult");
-				}
 //				}
 //				else
 //				{

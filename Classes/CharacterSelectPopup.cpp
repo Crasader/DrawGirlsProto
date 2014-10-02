@@ -228,6 +228,10 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
 		back_img->addChild(inner_back);
 		
+		CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
+		light_back->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
+		inner_back->addChild(light_back);
+		
 		CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[idx].m_character + ".ccbi").first;
 		character_img->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
 		inner_back->addChild(character_img);
@@ -279,10 +283,20 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		
 		if(history_list[idx].m_card != -1)
 		{
-			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
-			card_img->setScale(0.10f);
-			card_img->setPosition(ccp(25,27));
-			inner_back->addChild(card_img);
+			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			t_clipping->setAlphaThreshold(0.1f);
+			
+			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
+			t_clipping->addChild(t_card);
+			t_card->setScale(0.2f);
+			
+			t_clipping->setPosition(ccp(25,27));
+			t_clipping->setScale(0.5f);
+			inner_back->addChild(t_clipping);
+			
+			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+			t_frame->setPosition(ccp(25,27));
+			inner_back->addChild(t_frame);
 			
 			StyledLabelTTF* comment_label = StyledLabelTTF::create(history_list[idx].m_comment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 			comment_label->setAnchorPoint(ccp(0,0.5f));

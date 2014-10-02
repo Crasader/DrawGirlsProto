@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>31</integer>
+	<integer>16</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -26,18 +26,6 @@
 			<key>position</key>
 			<real>0.0</real>
 		</dict>
-		<dict>
-			<key>orientation</key>
-			<integer>0</integer>
-			<key>position</key>
-			<real>111</real>
-		</dict>
-		<dict>
-			<key>orientation</key>
-			<integer>0</integer>
-			<key>position</key>
-			<real>28</real>
-		</dict>
 	</array>
 	<key>jsControlled</key>
 	<false/>
@@ -51,7 +39,36 @@
 				<key>animatedProperties</key>
 				<dict>
 					<key>16</key>
-					<dict/>
+					<dict>
+						<key>position</key>
+						<dict>
+							<key>keyframes</key>
+							<array>
+								<dict>
+									<key>easing</key>
+									<dict>
+										<key>type</key>
+										<integer>1</integer>
+									</dict>
+									<key>name</key>
+									<string>position</string>
+									<key>time</key>
+									<real>0.0</real>
+									<key>type</key>
+									<integer>3</integer>
+									<key>value</key>
+									<array>
+										<real>0.0</real>
+										<real>-20</real>
+									</array>
+								</dict>
+							</array>
+							<key>name</key>
+							<string>position</string>
+							<key>type</key>
+							<integer>3</integer>
+						</dict>
+					</dict>
 					<key>17</key>
 					<dict>
 						<key>scale</key>
@@ -2848,7 +2865,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
+									<real>-1</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -5904,7 +5921,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>-1</real>
+											<real>1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -8681,39 +8698,29 @@
 																<string>cha_asuka.plist</string>
 															</array>
 														</dict>
+														<dict>
+															<key>easing</key>
+															<dict>
+																<key>type</key>
+																<integer>0</integer>
+															</dict>
+															<key>name</key>
+															<string>displayFrame</string>
+															<key>time</key>
+															<real>0.80000001192092896</real>
+															<key>type</key>
+															<integer>7</integer>
+															<key>value</key>
+															<array>
+																<string>asuka_front_eye.png</string>
+																<string>cha_asuka.plist</string>
+															</array>
+														</dict>
 													</array>
 													<key>name</key>
 													<string>displayFrame</string>
 													<key>type</key>
 													<integer>7</integer>
-												</dict>
-												<key>position</key>
-												<dict>
-													<key>keyframes</key>
-													<array>
-														<dict>
-															<key>easing</key>
-															<dict>
-																<key>type</key>
-																<integer>1</integer>
-															</dict>
-															<key>name</key>
-															<string>position</string>
-															<key>time</key>
-															<real>0.0</real>
-															<key>type</key>
-															<integer>3</integer>
-															<key>value</key>
-															<array>
-																<real>0.0</real>
-																<real>10.150001525878906</real>
-															</array>
-														</dict>
-													</array>
-													<key>name</key>
-													<string>position</string>
-													<key>type</key>
-													<integer>3</integer>
 												</dict>
 												<key>scale</key>
 												<dict>
@@ -12637,7 +12644,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>-1</real>
+											<real>1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -12777,6 +12784,23 @@
 				<key>properties</key>
 				<array>
 					<dict>
+						<key>baseValue</key>
+						<array>
+							<real>0.0</real>
+							<real>0.0</real>
+						</array>
+						<key>name</key>
+						<string>position</string>
+						<key>type</key>
+						<string>Position</string>
+						<key>value</key>
+						<array>
+							<real>0.0</real>
+							<real>-20</real>
+							<integer>0</integer>
+						</array>
+					</dict>
+					<dict>
 						<key>name</key>
 						<string>anchorPoint</string>
 						<key>type</key>
@@ -12790,8 +12814,8 @@
 					<dict>
 						<key>baseValue</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.72000002861022949</real>
+							<real>0.72000002861022949</real>
 						</array>
 						<key>name</key>
 						<string>scale</string>
@@ -12799,9 +12823,9 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.30000001192092896</real>
-							<real>0.30000001192092896</real>
-							<false/>
+							<real>0.72000002861022949</real>
+							<real>0.72000002861022949</real>
+							<true/>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -12834,6 +12858,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -12925,7 +12951,7 @@
 	<array>
 		<dict>
 			<key>autoPlay</key>
-			<false/>
+			<true/>
 			<key>callbackChannel</key>
 			<dict>
 				<key>keyframes</key>
@@ -12942,7 +12968,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

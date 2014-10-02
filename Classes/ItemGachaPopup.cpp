@@ -105,12 +105,12 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
 						}
-						else if(item_type = kIC_silence) // 250
+						else if(item_type == kIC_silence) // 250
 						{
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
 						}
-						else if(item_type = kIC_longTime) // 250
+						else if(item_type == kIC_longTime) // 250
 						{
 							title_str = myLoc->getLocalForKey(kMyLocalKey_item8title);
 							ment_str = myLoc->getLocalForKey(kMyLocalKey_item8ment);

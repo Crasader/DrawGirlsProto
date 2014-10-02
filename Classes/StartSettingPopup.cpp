@@ -216,7 +216,8 @@ void StartSettingPopup::setMain()
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellMode), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
 		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		stage_number_label->setPosition(ccp(65, 250));
+		stage_number_label->setAnchorPoint(ccp(0,0.5f));
+		stage_number_label->setPosition(ccp(30, 250));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
 		
@@ -228,7 +229,8 @@ void StartSettingPopup::setMain()
 		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
 		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		stage_number_label->setPosition(ccp(65, 250));
+		stage_number_label->setAnchorPoint(ccp(0,0.5f));
+		stage_number_label->setPosition(ccp(30, 250));
 		setFormSetter(stage_number_label);
 		main_case->addChild(stage_number_label);
 		
@@ -242,7 +244,8 @@ void StartSettingPopup::setMain()
 			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			stage_number_label->setColor(ccc3(255, 255, 255));
 			stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-			stage_number_label->setPosition(ccp(65, 250));
+			stage_number_label->setAnchorPoint(ccp(0,0.5f));
+			stage_number_label->setPosition(ccp(30, 250));
 			setFormSetter(stage_number_label);
 			main_case->addChild(stage_number_label);
 			
@@ -255,7 +258,8 @@ void StartSettingPopup::setMain()
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 255, 255));
 			piece_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-			piece_number_label->setPosition(ccp(65, 250));
+			piece_number_label->setAnchorPoint(ccp(0,0.5f));
+			piece_number_label->setPosition(ccp(30, 250));
 			main_case->addChild(piece_number_label);
 			
 			is_before_selected_event_stage = false;
@@ -1821,7 +1825,7 @@ void StartSettingPopup::gachaMenuCreate()
 																				gacha_item->removeFromParent();
 																				
 																				gacha_item = KS::loadCCBI<CCSprite*>(this, "randomitem.ccbi").first;//CCSprite::create("startsetting_item_gacha_inner.png");
-																				gacha_item->setPosition(keep_position);
+																				gacha_item->setPosition(keep_position + ccp(0,-8));
 																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 																				
 																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
@@ -2163,6 +2167,7 @@ void StartSettingPopup::startItemGacha()
 	{
 		is_first_gacha = true;
 		myDSH->setBoolForKey(kDSH_Key_isNotFirstItemGacha, true);
+		random_value = 999;
 	}
 	else
 	{
@@ -3076,7 +3081,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	t_command_list.clear();
 //	t_command_list.push_back(CommandParam("updateUserData", myDSH->getSaveAllUserDataParam(), nullptr));
 	
-	if(!mySGD->is_endless_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
+	if(!mySGD->is_endless_mode && !mySGD->is_hell_mode && mySD->getSilType() > mySGD->getUserdataHighPiece())
 	{
 		mySGD->setUserdataHighPiece(mySD->getSilType());
 	}
@@ -3112,7 +3117,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 													  ((PuzzleScene*)getParent())->heart_time->refreshHeartTime();
 												  }
 											  }
-											  else if(result_data["result"]["code"].asInt() == GDEXPIRE)
+											  else if(result_data["isMinus"].asBool())
 											  {
 												  mySGD->heartRefreshSuccess(result_data);
 												  if(mySGD->is_endless_mode || mySGD->is_hell_mode)

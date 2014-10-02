@@ -112,13 +112,25 @@ bool MainFlowScene::init()
 			int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 			int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 			
-			int card_take_cnt = mySGD->getHasGottenCardsSize();
-			for(int i=0;i<card_take_cnt;i++)
+//			int card_take_cnt = mySGD->getHasGottenCardsSize();
+//			for(int i=0;i<card_take_cnt;i++)
+//			{
+//				int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+//				int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+//				if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
+//					have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+//			}
+			
+			for(int j=start_stage;j<start_stage+stage_count;j++)
 			{
-				int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-				int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-				if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
-					have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+				PieceHistory t_history = mySGD->getPieceHistory(j);
+				for(int k=0;k<4;k++)
+				{
+					if(t_history.is_clear[k].getV())
+					{
+						have_card_cnt += k+1;
+					}
+				}
 			}
 			
 			have_card_count_for_puzzle_index.push_back(have_card_cnt);
