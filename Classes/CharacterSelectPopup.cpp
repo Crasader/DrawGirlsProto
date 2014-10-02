@@ -204,10 +204,11 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	cell->init();
 	cell->autorelease();
 	
-	CCScale9Sprite* back_img;
 	
 	if(idx < list_cnt && history_list[idx].is_have.getV())
 	{
+		CCScale9Sprite* back_img;
+		
 		if(history_list[idx].m_number == selected_character_number)
 		{
 			back_img = CCScale9Sprite::create("cha_select.png", CCRectMake(0, 0, 60, 60), CCRectMake(29, 29, 2, 2));
@@ -341,19 +342,27 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	}
 	else
 	{
-		back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		back_img->setContentSize(CCSizeMake(142, 190));
-		back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-		cell->addChild(back_img);
+		CCSprite* not_have_img = CCSprite::create("cha_lock.png");
+		not_have_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+		cell->addChild(not_have_img);
 		
-		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		inner_back->setContentSize(CCSizeMake(131, 120));
-		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
-		back_img->addChild(inner_back);
+		StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_needHaveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		ment_label->setPosition(ccpFromSize(not_have_img->getContentSize()/2.f) + ccp(0,-5));
+		not_have_img->addChild(ment_label);
 		
-		KSLabelTTF* question_label = KSLabelTTF::create("?", mySGD->getFont().c_str(), 50);
-		question_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
-		inner_back->addChild(question_label);
+//		back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+//		back_img->setContentSize(CCSizeMake(142, 190));
+//		back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+//		cell->addChild(back_img);
+//		
+//		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//		inner_back->setContentSize(CCSizeMake(131, 120));
+//		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
+//		back_img->addChild(inner_back);
+//		
+//		KSLabelTTF* question_label = KSLabelTTF::create("?", mySGD->getFont().c_str(), 50);
+//		question_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
+//		inner_back->addChild(question_label);
 	}
 	
 	return cell;

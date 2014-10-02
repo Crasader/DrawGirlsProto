@@ -1095,6 +1095,7 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_hellTakeCharacter,
 	
 	kMyLocalKey_failHellMode,
+	kMyLocalKey_needHaveCharacterCard,
 	
 	kMyLocalKey_lastkey
 }MyLocalKey;

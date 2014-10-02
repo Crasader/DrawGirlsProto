@@ -1186,6 +1186,7 @@ void MyLocal::ko()
 	ko->setObject(CCString::create("획득!"), kMyLocalKey_hellTakeCharacter);
 	
 	ko->setObject(CCString::create("<font newline=16>이런.. 조금 더 힘내요!</font><font color=961>클리어시 캐릭터카드</font><font newline=16>를</font><font>획득할 수 있어요!</font>"), kMyLocalKey_failHellMode);
+	ko->setObject(CCString::create("<font strokecolor=000 strokesize=0.5 strokeopacity=60 newline=15>캐릭터카드를</font><font strokecolor=000 strokesize=0.5 strokeopacity=60>획득하세요!</font>"), kMyLocalKey_needHaveCharacterCard);
 	
 	setObject(ko, "ko");
 }
