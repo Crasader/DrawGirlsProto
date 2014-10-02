@@ -177,7 +177,7 @@ void StartSettingPopup::setMain()
 		left_tab->setPosition(ccp(27,left_back->getContentSize().height-15));
 		left_back->addChild(left_tab);
 		
-		KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycharacter), mySGD->getFont().c_str(), 12.f);
+		KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycharacter), mySGD->getFont().c_str(), 12.f);
 		tab_label->setColor(ccc3(255, 255, 255));
 		tab_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f-3,left_tab->getContentSize().height/2.f-1.f));
@@ -194,7 +194,7 @@ void StartSettingPopup::setMain()
 		left_tab->setPosition(ccp(left_back->getContentSize().width/2.f,left_back->getContentSize().height-7));
 		left_back->addChild(left_tab);
 		
-		KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mymissile), mySGD->getFont().c_str(), 12.5f);
 		tab_label->setColor(ccc3(20, 50, 70));
 		tab_label->disableOuterStroke();
 		tab_label->setPosition(ccp(left_tab->getContentSize().width/2.f,left_tab->getContentSize().height/2.f+1.5f));
@@ -213,7 +213,7 @@ void StartSettingPopup::setMain()
 	
 	if(mySGD->is_hell_mode)
 	{
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellMode), mySGD->getFont().c_str(), 17.5f);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellMode), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
 		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		stage_number_label->setAnchorPoint(ccp(0,0.5f));
@@ -226,7 +226,7 @@ void StartSettingPopup::setMain()
 	}
 	else if(mySGD->is_endless_mode)
 	{
-		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
+		KSLabelTTF* stage_number_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessStartSettingTitle), mySGD->getFont().c_str(), 17.5f);
 		stage_number_label->setColor(ccc3(255, 255, 255));
 		stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		stage_number_label->setAnchorPoint(ccp(0,0.5f));
@@ -241,7 +241,7 @@ void StartSettingPopup::setMain()
 	{
 		if(mySGD->is_before_selected_event_stage)
 		{
-			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
+			KSLabelTTF* stage_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			stage_number_label->setColor(ccc3(255, 255, 255));
 			stage_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			stage_number_label->setAnchorPoint(ccp(0,0.5f));
@@ -254,7 +254,7 @@ void StartSettingPopup::setMain()
 		}
 		else
 		{
-			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
+			KSLabelTTF* piece_number_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), stage_number)->getCString(),	mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(piece_number_label);
 			piece_number_label->setColor(ccc3(255, 255, 255));
 			piece_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
@@ -315,7 +315,7 @@ void StartSettingPopup::setMain()
 //		mission_img->setPosition(ccp(198,255));
 //		main_case->addChild(mission_img);
 //		
-//		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
+//		KSLabelTTF* mission_img_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mission), mySGD->getFont().c_str(), 12);
 //		mission_img_label->setColor(ccc3(255, 170, 20));
 //		mission_img_label->setPosition(ccp(mission_img->getContentSize().width/2.f, mission_img->getContentSize().height/2.f));
 //		mission_img->addChild(mission_img_label);
@@ -521,7 +521,7 @@ void StartSettingPopup::setMain()
 			t_clipping->removeChildByTag(1);
 			t_stencil_node->removeChildByTag(2);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent17), end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent17), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -532,7 +532,7 @@ void StartSettingPopup::setMain()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent16), end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent16), end_func3);
 			
 			CCSprite* t_arrow1 = CCSprite::create("kt_arrow_big.png");
 			t_arrow1->setScale(0.6f);
@@ -561,7 +561,7 @@ void StartSettingPopup::setMain()
 			t_arrow1->setRotation(90);
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageSettingDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stageSettingDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment1->setAnchorPoint(ccp(0.5f,1));
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, -t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() - 3));
 			t_clipping->addChild(t_ment1);
@@ -572,7 +572,7 @@ void StartSettingPopup::setMain()
 			t_arrow2->setRotation(-90);
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageSettingDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stageSettingDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment2->setAnchorPoint(ccp(0.5f,0));
 			t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() + 3));
 			t_clipping->addChild(t_ment2);
@@ -619,7 +619,7 @@ void StartSettingPopup::setMain()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent15), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent15), end_func1);
 															  }));
 	}
 	
@@ -793,7 +793,7 @@ void StartSettingPopup::setMain()
 		main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
         t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 		
-		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 		gacha_label->enableOuterStroke(ccBLACK, 1.f);
 		gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 23.f));
 		gacha_item->addChild(gacha_label);
@@ -895,7 +895,7 @@ void StartSettingPopup::setMain()
 			function<void()> end_func2 = [=]()
 			{
 				TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-				typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial10), end_func3);
+				typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial10), end_func3);
 			};
 			
 			function<void()> end_func1 = [=]()
@@ -915,7 +915,7 @@ void StartSettingPopup::setMain()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial9), end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial9), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -930,7 +930,7 @@ void StartSettingPopup::setMain()
 																	  t_gray->setOpacity(255);
 																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial8), end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial8), end_func1);
 																  }));
 		}
 	}
@@ -945,11 +945,11 @@ void StartSettingPopup::setMain()
 	const char* readyLbl;
 	if(mySGD->is_endless_mode)
 	{
-		readyLbl = myLoc->getLocalForKey(kMyLocalKey_battleStart);
+		readyLbl = myLoc->getLocalForKey(LK::kMyLocalKey_battleStart);
 	}
 	else
 	{
-		readyLbl = myLoc->getLocalForKey(kMyLocalKey_gamestart);
+		readyLbl = myLoc->getLocalForKey(LK::kMyLocalKey_gamestart);
 	}
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
@@ -963,7 +963,7 @@ void StartSettingPopup::setMain()
 		time_event_back->setPosition(ccp(0,-20) + ccp(88.5f, 20.5f));
 		t_label->addChild(time_event_back);
 		setFormSetter(time_event_back);
-		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
+		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
 		time_event_back_lbl->disableOuterStroke();
 		time_event_back->addChild(time_event_back_lbl);
 		time_event_back_lbl->setPosition(ccpFromSize(time_event_back->getContentSize()) / 2.f + ccp(3, -5.f));
@@ -1072,13 +1072,13 @@ void StartSettingPopup::setMain()
 			missile_img = t_gm;
 		}
 		
-		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_level);
 		missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,75));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,75));
@@ -1088,12 +1088,12 @@ void StartSettingPopup::setMain()
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			//		setFormSetter(n_upgrade);
-			//		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+			//		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 			//		setFormSetter(n_level);
 			//		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			//		n_level->setPosition(ccp(70,46));
 			//		n_upgrade->addChild(n_level);
-			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 			n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 			n_label->setPosition(ccpFromSize(n_upgrade->getContentSize()/2.f));
 			n_upgrade->addChild(n_label);
@@ -1101,23 +1101,23 @@ void StartSettingPopup::setMain()
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			s_upgrade->setColor(ccGRAY);
 			//		setFormSetter(s_upgrade);
-			//		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+			//		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 			//		setFormSetter(s_level);
 			//		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			//		s_level->setPosition(ccp(70,46));
 			//		s_upgrade->addChild(s_level);
-			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 			s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 			s_label->setPosition(ccpFromSize(s_upgrade->getContentSize()/2.f));
 			s_upgrade->addChild(s_label);
 			
-			//		KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+			//		KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 			//		setFormSetter(n_price_label);
 			//		n_price_label->disableOuterStroke();
 			//		n_price_label->setPosition(ccp(70,20));
 			//		n_upgrade->addChild(n_price_label);
 			//
-			//		KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+			//		KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 			//		setFormSetter(s_price_label);
 			//		s_price_label->disableOuterStroke();
 			//		s_price_label->setPosition(ccp(70,20));
@@ -1136,21 +1136,21 @@ void StartSettingPopup::setMain()
 		else
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 			n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 			n_label->setPosition(ccpFromSize(n_upgrade->getContentSize()/2.f));
 			n_upgrade->addChild(n_label);
 			
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			s_upgrade->setColor(ccGRAY);
-			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 			s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 			s_label->setPosition(ccpFromSize(s_upgrade->getContentSize()/2.f));
 			s_upgrade->addChild(s_label);
 			
 			//		CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			//		setFormSetter(n_upgrade);
-			//		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+			//		KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 			//		setFormSetter(n_level);
 			//		n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			//		n_level->setPosition(ccp(70,46));
@@ -1159,7 +1159,7 @@ void StartSettingPopup::setMain()
 			//		CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			//		setFormSetter(s_upgrade);
 			//		s_upgrade->setColor(ccGRAY);
-			//		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+			//		KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 			//		setFormSetter(s_level);
 			//		s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			//		s_level->setPosition(ccp(70,46));
@@ -1188,7 +1188,7 @@ void StartSettingPopup::setMain()
 			//				pass_count_case->addChild(pass_count_label);
 			//			}
 			//
-			//			KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+			//			KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 			//			n_free_label->disableOuterStroke();
 			//			n_free_label->setPosition(ccp(78,20));
 			//			n_upgrade->addChild(n_free_label);
@@ -1212,7 +1212,7 @@ void StartSettingPopup::setMain()
 			//				pass_count_case->addChild(pass_count_label);
 			//			}
 			//
-			//			KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+			//			KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 			//			s_free_label->disableOuterStroke();
 			//			s_free_label->setPosition(ccp(78,20));
 			//			s_upgrade->addChild(s_free_label);
@@ -1249,7 +1249,7 @@ void StartSettingPopup::setMain()
 		}
 		
 		CCSprite* n_changeCharacter = CCSprite::create("startsetting_upgrade.png");
-		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
 		n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 		n_label->setPosition(ccpFromSize(n_changeCharacter->getContentSize()/2.f));
 		n_changeCharacter->addChild(n_label);
@@ -1257,7 +1257,7 @@ void StartSettingPopup::setMain()
 		
 		CCSprite* s_changeCharacter = CCSprite::create("startsetting_upgrade.png");
 		s_changeCharacter->setColor(ccGRAY);
-		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
 		s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 		s_label->setPosition(ccpFromSize(s_changeCharacter->getContentSize()/2.f));
 		s_changeCharacter->addChild(s_label);
@@ -1316,13 +1316,13 @@ void StartSettingPopup::setMain()
 			missile_img = t_gm;
 		}
 		
-		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_level);
 		missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,95));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,95));
@@ -1332,7 +1332,7 @@ void StartSettingPopup::setMain()
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			setFormSetter(n_upgrade);
-			KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 			setFormSetter(n_level);
 			n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			n_level->setPosition(ccp(70,46));
@@ -1341,20 +1341,20 @@ void StartSettingPopup::setMain()
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			s_upgrade->setColor(ccGRAY);
 			setFormSetter(s_upgrade);
-			KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 			setFormSetter(s_level);
 			s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			s_level->setPosition(ccp(70,46));
 			s_upgrade->addChild(s_level);
 			
 			
-			KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+			KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(n_price_label);
 			n_price_label->disableOuterStroke();
 			n_price_label->setPosition(ccp(70,20));
 			n_upgrade->addChild(n_price_label);
 			
-			KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+			KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 			setFormSetter(s_price_label);
 			s_price_label->disableOuterStroke();
 			s_price_label->setPosition(ccp(70,20));
@@ -1374,7 +1374,7 @@ void StartSettingPopup::setMain()
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			setFormSetter(n_upgrade);
-			KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 			setFormSetter(n_level);
 			n_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			n_level->setPosition(ccp(70,46));
@@ -1383,7 +1383,7 @@ void StartSettingPopup::setMain()
 			CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 			setFormSetter(s_upgrade);
 			s_upgrade->setColor(ccGRAY);
-			KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 			setFormSetter(s_level);
 			s_level->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 			s_level->setPosition(ccp(70,46));
@@ -1412,7 +1412,7 @@ void StartSettingPopup::setMain()
 					pass_count_case->addChild(pass_count_label);
 				}
 				
-				KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+				KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 				n_free_label->disableOuterStroke();
 				n_free_label->setPosition(ccp(78,20));
 				n_upgrade->addChild(n_free_label);
@@ -1436,7 +1436,7 @@ void StartSettingPopup::setMain()
 					pass_count_case->addChild(pass_count_label);
 				}
 				
-				KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+				KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 				s_free_label->disableOuterStroke();
 				s_free_label->setPosition(ccp(78,20));
 				s_upgrade->addChild(s_free_label);
@@ -1485,9 +1485,9 @@ void StartSettingPopup::setMain()
 	
 	string option_ment;
 	if(is_have_unlock_item)
-		option_ment = myLoc->getLocalForKey(kMyLocalKey_selectUseItem);
+		option_ment = myLoc->getLocalForKey(LK::kMyLocalKey_selectUseItem);
 	else
-		option_ment = myLoc->getLocalForKey(kMyLocalKey_notUseItem);
+		option_ment = myLoc->getLocalForKey(LK::kMyLocalKey_notUseItem);
 	
 	option_label = CCLabelTTF::create(option_ment.c_str(), mySGD->getFont().c_str(), 11, option_size.size, kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	setFormSetter(option_label);
@@ -1828,7 +1828,7 @@ void StartSettingPopup::gachaMenuCreate()
 																				gacha_item->setPosition(keep_position + ccp(0,-8));
 																				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
 																				
-																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+																				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 																				gacha_label->enableOuterStroke(ccBLACK, 1.f);
 																				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 15.f));
 																				gacha_item->addChild(gacha_label);
@@ -1849,7 +1849,7 @@ void StartSettingPopup::gachaMenuCreate()
 																					buy_button->setPrice(PriceTypePass4, 0);
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
-//																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
+//																				buy_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_itemRegacha));
 																			}
 																		   else
 																			{
@@ -1857,7 +1857,7 @@ void StartSettingPopup::gachaMenuCreate()
 																					buy_button->setPrice(PriceTypePass4, 0);
 																				else
 																					buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaGoldFee());
-//																				buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
+//																				buy_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_buy));
 																			}
 																		   buy_button->setFunction([=](CCObject* sender)
 																								   {
@@ -1891,8 +1891,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 			
-			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
 			
 			CCPoint keep_position = missile_img->getPosition();
 			missile_img->removeFromParent();
@@ -1931,14 +1931,14 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 				n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 				n_label->setPosition(ccpFromSize(n_upgrade->getContentSize()/2.f));
 				n_upgrade->addChild(n_label);
 				
 				CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 				s_upgrade->setColor(ccGRAY);
-				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 				s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 				s_label->setPosition(ccpFromSize(s_upgrade->getContentSize()/2.f));
 				s_upgrade->addChild(s_label);
@@ -1956,14 +1956,14 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			else
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 				n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 				n_label->setPosition(ccpFromSize(n_upgrade->getContentSize()/2.f));
 				n_upgrade->addChild(n_label);
 				
 				CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 				s_upgrade->setColor(ccGRAY);
-				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
 				s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
 				s_label->setPosition(ccpFromSize(s_upgrade->getContentSize()/2.f));
 				s_upgrade->addChild(s_label);
@@ -1985,8 +1985,8 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 			
-			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
 			
 			CCPoint missile_position;
 			if(missile_img)
@@ -2032,22 +2032,22 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 				n_level->setPosition(ccp(70,46));
 				n_upgrade->addChild(n_level);
 				
 				CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 				s_upgrade->setColor(ccGRAY);
-				KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
 				s_level->setPosition(ccp(70,46));
 				s_upgrade->addChild(s_level);
 				
 				
-				KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+				KSLabelTTF* n_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 				n_price_label->setPosition(ccp(70,20));
 				n_upgrade->addChild(n_price_label);
 				
-				KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
+				KSLabelTTF* s_price_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endUpgrade), mySGD->getFont().c_str(), 17.5f);
 				s_price_label->setPosition(ccp(70,20));
 				s_upgrade->addChild(s_price_label);
 				
@@ -2064,13 +2064,13 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			else
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
-				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 				n_level->setPosition(ccp(70,46));
 				n_upgrade->addChild(n_level);
 				
 				CCSprite* s_upgrade = CCSprite::create("startsetting_upgrade.png");
 				s_upgrade->setColor(ccGRAY);
-				KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
+				KSLabelTTF* s_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_upgradeLevelValue), missile_level+1)->getCString(), mySGD->getFont().c_str(), 14);
 				s_level->setPosition(ccp(70,46));
 				s_upgrade->addChild(s_level);
 				
@@ -2079,7 +2079,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					CCSprite* n_pass_ticket = CCSprite::create("pass_ticket3.png");
 					n_pass_ticket->setPosition(ccp(28,21.f));
 					n_upgrade->addChild(n_pass_ticket);
-					KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+					KSLabelTTF* n_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 					n_free_label->setPosition(ccp(78,20));
 					n_upgrade->addChild(n_free_label);
 					
@@ -2101,7 +2101,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					CCSprite* s_pass_ticket = CCSprite::create("pass_ticket3.png");
 					s_pass_ticket->setPosition(ccp(28,21.f));
 					s_upgrade->addChild(s_pass_ticket);
-					KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
+					KSLabelTTF* s_free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 17.5f);
 					s_free_label->setPosition(ccp(78,20));
 					s_upgrade->addChild(s_free_label);
 					
@@ -2308,7 +2308,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 				buy_button->setPrice(PriceTypePass4, 0);
 			else
 				buy_button->setPrice(PriceTypeGold, mySGD->getItemGachaReplayGoldFee());
-//			buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_itemRegacha));
+//			buy_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_itemRegacha));
 		}, gacha_item_type);
 		addChild(t_popup, kStartSettingPopupZorder_popup);
 	}
@@ -2322,7 +2322,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		CCLOG("save userdata fail!!!");
 		mySGD->clearChangeGoods();
 		
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}
@@ -2461,7 +2461,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				main_case->addChild(gacha_item, kStartSettingPopupZorder_main);
                 t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
 				
-				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+				KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
 				gacha_label->enableOuterStroke(ccBLACK, 1.f);
 				gacha_label->setPosition(ccp(gacha_item->getContentSize().width/2.f, gacha_item->getContentSize().height/2.f - 23.f));
 				gacha_item->addChild(gacha_label);
@@ -2575,7 +2575,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 				mySGD->setBeforeUseItem(t_ic, false);
 				
 				if(getSelectedItemCount() >= 3)
-					addChild(ASPopupView::getCommonNoti(-210, myLoc->getLocalForKey(kMyLocalKey_totalItemSelectCount3)), kStartSettingPopupZorder_popup);
+					addChild(ASPopupView::getCommonNoti(-210, myLoc->getLocalForKey(LK::kMyLocalKey_totalItemSelectCount3)), kStartSettingPopupZorder_popup);
 				
 				// normal
 				CCSprite* n_item_case = CCSprite::create("startsetting_item_normal_case.png");
@@ -2673,7 +2673,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 		}
 		
 		buy_button->setPrice(priceType, mySD->getItemPrice(item_list[tag-1]));
-//		buy_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_buy));
+//		buy_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_buy));
 		buy_button->setFunction([=](CCObject* sender)
 								{
 									if(!is_menu_enable)
@@ -2719,7 +2719,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
@@ -2762,7 +2762,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), 9999);
+													addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), 9999);
 //													addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-200, kGoodsType_ruby, [=]()
 //																										{
 //																											ShopPopup* t_shop = ShopPopup::create();
@@ -2779,7 +2779,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 												else
 												{
 													mySGD->clearChangeGoods();
-													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+													addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 													is_menu_enable = true;
 												}
 											});
@@ -2994,7 +2994,7 @@ void StartSettingPopup::callStart()
 			if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 				tutorial_fail_func();
 			is_go_to_mainflow = true;
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_timeOutFrame)), 9999);
 			closeAction();
 			
 			return;
@@ -3505,15 +3505,15 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	if(t_code == kIC_attack)				return_value = "Attack";
 	else if(t_code == kIC_speedUp)			return_value = "SpeedUp";
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
-	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(kMyLocalKey_item4title);
-	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(kMyLocalKey_item5title);
-	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
-	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(kMyLocalKey_item7title);
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_item8title);
-	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
-	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
-	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
-	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(kMyLocalKey_item10title);
+	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item4title);
+	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item5title);
+	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_doubleItemTitle);
+	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item7title);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item8title);
+	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_magnetTitle);
+	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaTitle);
+	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item10title);
 	
 	return return_value.c_str();
 }

@@ -66,14 +66,14 @@ void AccountLinkLeadPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLinkLeadTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLinkLeadTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLinkLeadContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLinkLeadContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 	slttf->setAnchorPoint(ccp(0.5f,0.5f));
 	slttf->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 	back_in->addChild(slttf);
@@ -88,7 +88,7 @@ void AccountLinkLeadPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	m_container->addChild(close_button);
 	
 	
-	KSLabelTTF* action_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLinkLeadButton), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* action_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLinkLeadButton), mySGD->getFont().c_str(), 13);
 	CCScale9Sprite* action_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	CCControlButton*	action_button = CCControlButton::create(action_label, action_back);
 	action_button->addTargetWithActionForControlEvents(this, cccontrol_selector(AccountLinkLeadPopup::actionAction), CCControlEventTouchUpInside);

@@ -158,7 +158,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	loading_tip_back->addChild(ok_img);
 	ok_img->setVisible(false);
 	
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 	ok_label->disableOuterStroke();
 	ok_label->setPosition(ccpFromSize(ok_img->getContentSize()/2.f));
 	ok_img->addChild(ok_label);
@@ -198,7 +198,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	
 	if(mission_type == kCLEAR_bossLifeZero)
 	{
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
 		mission_back->addChild(main_ment);
@@ -261,12 +261,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			}
 		}
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(18,0));
 		mission_back->addChild(t_condition_label);
 		
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 		mission_back->addChild(main_ment);
@@ -283,7 +283,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			loading_tip_back->addChild(no_img);
 			no_img->setVisible(false);
 			
-			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
 			no_label->disableOuterStroke();
 			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
 			no_img->addChild(no_label);
@@ -372,7 +372,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial12), end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial12), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -385,7 +385,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial11), end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial11), end_func1);
 																  }));
 		}
 		
@@ -400,12 +400,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		int percent_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,10));
 		mission_back->addChild(t_condition_label);
 		
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-10));
 		mission_back->addChild(main_ment);
@@ -420,7 +420,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 		mission_back->addChild(t_condition_label);
@@ -441,7 +441,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			loading_tip_back->addChild(no_img);
 			no_img->setVisible(false);
 			
-			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
 			no_label->disableOuterStroke();
 			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
 			no_img->addChild(no_label);
@@ -528,7 +528,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial14), end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial14), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -541,7 +541,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial13), end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial13), end_func1);
 																  }));
 		}
 		
@@ -588,12 +588,12 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
 		mission_back->addChild(time_img);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(20,0));
 		mission_back->addChild(t_condition_label);
 		
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 		mission_back->addChild(main_ment);
@@ -610,7 +610,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			loading_tip_back->addChild(no_img);
 			no_img->setVisible(false);
 			
-			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
 			no_label->disableOuterStroke();
 			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
 			no_img->addChild(no_label);
@@ -695,7 +695,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																		  
 																		  typing_box->setTouchSuction(false);
 																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial16), end_func2);
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial16), end_func2);
 																	  }));
 				typing_box->setTouchOffScrollAndButton();
 				typing_box->setVisible(false);
@@ -708,7 +708,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 																  {
 																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
 																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial15), end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial15), end_func1);
 																  }));
 		}
 		
@@ -720,7 +720,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	}
 	else if(mission_type == kCLEAR_sequenceChange)
 	{
-		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 		main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 		main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,0));
 		mission_back->addChild(main_ment);
@@ -735,7 +735,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 //		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 //		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -744,7 +744,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -753,7 +753,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition10), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition10), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -762,7 +762,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -771,7 +771,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition12), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition12), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -780,7 +780,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -860,7 +860,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		
 		if(mission_type == kCLEAR_bossLifeZero)
 		{
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
 			mission_back->addChild(main_ment);
@@ -917,12 +917,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 				}
 			}
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), catch_count)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(18,0));
 			mission_back->addChild(t_condition_label);
 			
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 			mission_back->addChild(main_ment);
@@ -932,12 +932,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			int percent_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
 			int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), percent_value, count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,10));
 			mission_back->addChild(t_condition_label);
 			
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-10));
 			mission_back->addChild(main_ment);
@@ -946,7 +946,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int count_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), count_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 			mission_back->addChild(t_condition_label);
@@ -986,19 +986,19 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			time_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-20,0));
 			mission_back->addChild(time_img);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionCondition0+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionCondition0)+mission_type)), sec_value)->getCString(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(20,0));
 			mission_back->addChild(t_condition_label);
 			
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-26));
 			mission_back->addChild(main_ment);
 		}
 		else if(mission_type == kCLEAR_sequenceChange)
 		{
-			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_missionDiscription0+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* main_ment = StyledLabelTTF::create(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_missionDiscription0)+mission_type)), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 			main_ment->setAnchorPoint(ccp(0.5f,0.5f));
 			main_ment->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,0));
 			mission_back->addChild(main_ment);
@@ -1007,7 +1007,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			//		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			//
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1016,7 +1016,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition9), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1025,7 +1025,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition10), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition10), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1034,7 +1034,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition11), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1043,7 +1043,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition12), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition12), KS::insert_separator(condition_value).c_str()), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1052,7 +1052,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);
@@ -1127,7 +1127,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		
 		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 		
-		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
+		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 		content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 		loading_tip_back->addChild(content_label);
 
@@ -1161,7 +1161,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 
 CCNode* LoadingTipScene::getCurtainTipImage()
 {
-	int total_loading_tip = kMyLocalKey_titleLoadingEnd - kMyLocalKey_titleLoadingBegin - 1;
+	int total_loading_tip = int(LK::kMyLocalKey_titleLoadingEnd) - int(LK::kMyLocalKey_titleLoadingBegin) - 1;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCNode* loading_tip_node = CCNode::create();
@@ -1240,7 +1240,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 	content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 	loading_tip_back->addChild(content_label);
 	
@@ -1267,12 +1267,12 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 
 CCSprite* LoadingTipScene::getLoadingTipImage()
 {
-	int total_loading_tip = kMyLocalKey_titleLoadingEnd - kMyLocalKey_titleLoadingBegin - 1;
+	int total_loading_tip = int(LK::kMyLocalKey_titleLoadingEnd) - int(LK::kMyLocalKey_titleLoadingBegin) - 1;
 	int selected_loading_tip = rand()%total_loading_tip;
 	
 	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(MyLocalKey(selected_loading_tip+kMyLocalKey_titleLoadingBegin+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 200), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
+	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 200), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 	content_label->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f));
 	loading_tip_back->addChild(content_label);
 	
@@ -1473,5 +1473,5 @@ void LoadingTipScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(LoadingTipScene::alertAction));
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(LoadingTipScene::alertAction));
 }

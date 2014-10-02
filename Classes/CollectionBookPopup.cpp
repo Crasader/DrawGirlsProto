@@ -101,7 +101,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(r_stage_script);
 	
 	
-	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
 	r_profile_label->disableOuterStroke();
 	r_profile_label->setPosition(ccp(32,208));
 	r_profile_label->setAnchorPoint(ccp(0,0.5f));
@@ -122,7 +122,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(r_stage_profile);
 	
 	
-	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
 	r_card_elemental_label->disableOuterStroke();
 	r_card_elemental_label->setPosition(ccp(32,111));
 	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
@@ -147,7 +147,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		elemental_filename = "diary_icon_sun.png";
 	}
 	
-	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
 	r_elemental->setColor(ccBLACK);
 	r_elemental->setPosition(ccp(45,95));
 	target->addChild(r_elemental);
@@ -156,7 +156,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	elemental_img->setPosition(ccp(45,74));
 	target->addChild(elemental_img);
 	
-	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
 	r_touch->setColor(ccBLACK);
 	r_touch->setPosition(ccp(90,95));
 	target->addChild(r_touch);
@@ -176,7 +176,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	
 	if(NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number) > 0)
 	{
-		KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
+		KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
 		r_sound->setColor(ccBLACK);
 		r_sound->setPosition(ccp(135,95));
 		target->addChild(r_sound);
@@ -220,7 +220,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	close->setPosition(getContentPosition(kCBP_MT_close));
 	target->addChild(close, 1, kCBP_MT_close);
 	
-	CommonButton* gift = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cardGiftTitle), 9, CCSizeMake(80,32), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), -191);
+	CommonButton* gift = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardGiftTitle), 9, CCSizeMake(80,32), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), -191);
 	KSLabelTTF* gift_label = gift->getTitleLabel();
 	gift_label->disableOuterStroke();
 	gift->setFunction([=](CCObject* sender)
@@ -230,14 +230,14 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 						  
 						  is_menu_enable = false;
 						  
-//						  addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 999);;
+//						  addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 999);;
 						  
 						  CardGiftPopup* t_popup = CardGiftPopup::create(-300, card_number, [=]()
 							{
 								is_menu_enable = true;
 								CardSortInfo t_card_info = mySGD->getHasGottenCardDataForCardNumber(card_number);
 								gift->setVisible(t_card_info.count.getV() >= 2);
-								((KSLabelTTF*)recent_left_img->getChildByTag(kCBP_MT_takeCnt))->setString(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), t_card_info.count.getV()));
+								((KSLabelTTF*)recent_left_img->getChildByTag(kCBP_MT_takeCnt))->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_cardTakeCnt), t_card_info.count.getV()));
 							}, [=]()
 						  {
 							  is_menu_enable = true;
@@ -355,7 +355,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //		{
 //			CCSprite* no_img = CCSprite::create("diary_nophoto.png");
 //			
-//			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
+//			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_diaryNoImg), mySGD->getFont().c_str(), 8);
 //			no_label->disableOuterStroke();
 //			no_label->setColor(ccc3(60, 60, 60));
 //			no_label->setPosition(ccp(no_img->getContentSize().width/2.f, no_img->getContentSize().height/2.f));
@@ -403,7 +403,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 //		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 //		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 //		
-//		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+//		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
 //		r_stage_label->setAnchorPoint(ccp(0,0.5f));
 //		r_stage_label->setPosition(ccp(138, 287));
 //		r_stage_label->setColor(ccBLACK);
@@ -422,7 +422,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
 		r_stage_label->setAnchorPoint(ccp(1,0.5f));
 		r_stage_label->setPosition(ccp(167, 288));
 		r_stage_label->setColor(ccBLACK);
@@ -432,7 +432,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	{
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
 		r_stage_label->setAnchorPoint(ccp(1,0.5f));
 		r_stage_label->setPosition(ccp(167, 288));
 		r_stage_label->setColor(ccBLACK);
@@ -443,7 +443,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 
 void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 {
-	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
 	take_cnt_label->setColor(ccBLACK);
 	take_cnt_label->disableOuterStroke();
 	take_cnt_label->setAnchorPoint(ccp(0,0.5f));
@@ -573,7 +573,7 @@ bool CollectionBookPopup::init()
 	
 //	string input_data = mySGD->getCardComment(recent_card_number);
 //    if(input_data == "")
-//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//        input_data = myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease);
 //    
 //    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 //	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -586,7 +586,7 @@ bool CollectionBookPopup::init()
 //	
 //    recent_right_img->addChild(input_text, kCBP_Z_cover);
 //	
-//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//    if(input_data != myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease))
 //        input_text->setText(input_data.c_str());
 	
 	if(is_enable_pageturn)
@@ -945,7 +945,7 @@ void CollectionBookPopup::startNextPage()
 	
 //	string input_data = mySGD->getCardComment(recent_card_number);
 //    if(input_data == "")
-//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//        input_data = myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease);
 //    
 //    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 //	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -957,7 +957,7 @@ void CollectionBookPopup::startNextPage()
 //	recent_right_img->addChild(input_text, kCBP_Z_cover);
 //	input_text->setTouchPriority(-191);
 //    
-//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//    if(input_data != myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease))
 //        input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, next_number);
@@ -1112,7 +1112,7 @@ void CollectionBookPopup::startPreSelectedPage()
 	
 //	string input_data = mySGD->getCardComment(recent_card_number);
 //    if(input_data == "")
-//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//        input_data = myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease);
 //    
 //    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 //	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -1124,7 +1124,7 @@ void CollectionBookPopup::startPreSelectedPage()
 //	covered_right_img->addChild(input_text, kCBP_Z_cover);
 //	input_text->setTouchPriority(-191);
 //    
-//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//    if(input_data != myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease))
 //        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);
@@ -1214,7 +1214,7 @@ void CollectionBookPopup::startNextSelectedPage()
 	
 //	string input_data = mySGD->getCardComment(recent_card_number);
 //    if(input_data == "")
-//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//        input_data = myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease);
 //    
 //    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 //	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -1226,7 +1226,7 @@ void CollectionBookPopup::startNextSelectedPage()
 //	recent_right_img->addChild(input_text, kCBP_Z_cover);
 //	input_text->setTouchPriority(-191);
 //    
-//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//    if(input_data != myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease))
 //        input_text->setText(input_data.c_str());
 	
 	setLeftPage(covered_left_img, recent_card_number);
@@ -1464,7 +1464,7 @@ void CollectionBookPopup::startPrePage()
 	
 //	string input_data = mySGD->getCardComment(recent_card_number);
 //    if(input_data == "")
-//        input_data = myLoc->getLocalForKey(kMyLocalKey_inputPlease);
+//        input_data = myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease);
 //    
 //    input_text = CCEditBox::create(CCSizeMake(190, 50), CCScale9Sprite::create("diary_text_box.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1)));
 //	input_text->setPosition(getContentPosition(kCBP_MT_inputText));
@@ -1476,7 +1476,7 @@ void CollectionBookPopup::startPrePage()
 //	covered_right_img->addChild(input_text, kCBP_Z_cover);
 //	input_text->setTouchPriority(-191);
 //    
-//    if(input_data != myLoc->getLocalForKey(kMyLocalKey_inputPlease))
+//    if(input_data != myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease))
 //        input_text->setText(input_data.c_str());
 	
 	((CommonButton*)covered_right_img->getChildByTag(kCBP_MT_close))->setEnabled(false);

@@ -89,14 +89,14 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_couponTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
-	KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_couponMent), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_couponMent), mySGD->getFont().c_str(), 13);
 //	ment_label->disableOuterStroke();
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment_label->setPosition(ccp(0,35));
@@ -162,7 +162,7 @@ void CouponPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 //	setFormSetter(nick_case3);
 		
 	CCLabelTTF* t_label = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 	ok_label->disableOuterStroke();
 	t_label->addChild(ok_label);
 	
@@ -202,6 +202,12 @@ void CouponPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
+	if(std::string(input_text1->getText()) == "")
+	{
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponMent));
+		return;
+	}
+	
 	loading_layer = LoadingLayer::create(touch_priority-100);
 	addChild(loading_layer, 999);
 	
@@ -219,27 +225,27 @@ void CouponPopup::resultUseCoupon(Json::Value result_data)
 	CCLOG("resultUseCoupon : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponSuccess), myLoc->getLocalForKey(kMyLocalKey_couponGiftbox), true);
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponSuccess), myLoc->getLocalForKey(LK::kMyLocalKey_couponGiftbox), true);
 	}
 	else if(result_data["result"]["code"].asInt() == GDALREADY)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponAlready));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponAlready));
 	}
 	else if(result_data["result"]["code"].asInt() == GDEXPIRE)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponExpire));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponExpire));
 	}
 	else if(result_data["result"]["code"].asInt() == GDOSERROR)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponOserror));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponOserror));
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponDontfind));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponDontfind));
 	}
 	else
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponOtherError));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponOtherError));
 	}
 	loading_layer->removeFromParent();
 }
@@ -419,7 +425,7 @@ void CouponPopup::createResultPopup(string title, string content, bool is_succes
 //	
 //	CCLabelTTF* t2_label = CCLabelTTF::create();
 //	
-//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 //	ok_label->setPosition(ccp(0,0));
 //	t2_label->addChild(ok_label);
 //	
@@ -472,7 +478,7 @@ void CouponPopup::editBoxReturn(CCEditBox* editBox)
 void CouponPopup::initiateEditBox(CCEditBox* editbox)
 {
 	editbox->setAnchorPoint(ccp(0.5f, 0.5f));
-	editbox->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_couponContent));
+	editbox->setPlaceHolder(myLoc->getLocalForKey(LK::kMyLocalKey_couponContent));
 	editbox->setReturnType(kKeyboardReturnTypeDone);
 	editbox->setFont(mySGD->getFont().c_str(), 15);
 	editbox->setInputMode(kEditBoxInputModeSingleLine);

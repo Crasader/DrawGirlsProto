@@ -3,17 +3,19 @@
 
 #include "cocos2d.h"
 #include "platform/android/jni/Java_org_cocos2dx_lib_Cocos2dxHelper.h"
+#include "KSLocal.h"
 
 using namespace cocos2d;
 using namespace std;
 /*
  
- myLoc->getLocalForKey(kMyLocalKey_tutorial7)
+ myLoc->getLocalForKey(LK::kMyLocalKey_tutorial7)
  
  */
 
 
 typedef enum MyLocalKey_ {
+	/*
 //	kMyLocalKey_canNotConnectedServer = 1,
 //	kMyLocalKey_touchPlease,
 	kMyLocalKey_tutorial1 = 1,
@@ -1098,13 +1100,14 @@ typedef enum MyLocalKey_ {
 	kMyLocalKey_needHaveCharacterCard,
 	
 	kMyLocalKey_lastkey
+ */
 }MyLocalKey;
 
 
 
 
 
-#define myLoc MyLocal::sharedInstance()
+//#define myLoc MyLocal::sharedInstance()
 
 class MyLocal : public CCDictionary
 {
@@ -1122,7 +1125,7 @@ public:
 	const char* getSupportLocalCode();
 	CCString* getLocalCode();
 	
-	string printList();
+//	string printList();
 private:
 	MyLocal() : CCDictionary()
 	{

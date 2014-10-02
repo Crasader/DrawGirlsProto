@@ -71,7 +71,7 @@ void EndlessSeqWinRewardPopup::myInit(int t_touch_priority, function<void()> t_e
 	
 	int victory_value = t_reward["endlessData"]["ing_win"].asInt();
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardTitle), victory_value), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardTitle), victory_value), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85, back_case->getContentSize().height/2.f-35));
@@ -115,7 +115,7 @@ void EndlessSeqWinRewardPopup::myInit(int t_touch_priority, function<void()> t_e
 	reward_node->setPosition(ccp(back_in->getContentSize().width/2.f, 75));
 	back_in->addChild(reward_node);
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardContent), victory_value), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* content_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardContent), victory_value), mySGD->getFont().c_str(), 12);
 	content_label->setColor(ccc3(255, 170, 20));
 	content_label->setPosition(ccp(back_in->getContentSize().width/2.f, 42));
 	back_in->addChild(content_label);
@@ -144,51 +144,51 @@ string EndlessSeqWinRewardPopup::getRewardString(string t_type, int t_count)
 	
 	if(goods_type == kGoodsType_gold)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeGold), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeGold), t_count);
 	}
 	else if(goods_type == kGoodsType_ruby)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeRuby), t_count);
 	}
 	else if(goods_type == kGoodsType_item9)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeItem9), t_count);
 	}
 	else if(goods_type == kGoodsType_item6)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeItem6), t_count);
 	}
 	else if(goods_type == kGoodsType_item11)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeItem11), t_count);
 	}
 	else if(goods_type == kGoodsType_pass1)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass1), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass1), t_count);
 	}
 	else if(goods_type == kGoodsType_pass2)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass2), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass2), t_count);
 	}
 	else if(goods_type == kGoodsType_pass3)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass3), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass3), t_count);
 	}
 	else if(goods_type == kGoodsType_pass4)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass4), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass4), t_count);
 	}
 	else if(goods_type == kGoodsType_pass5)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass5), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass5), t_count);
 	}
 	else if(goods_type == kGoodsType_pass6)
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypePass6), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass6), t_count);
 	}
 	else
 	{
-		return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessSeqWinRewardGoodsTypeMany), t_count);
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeMany), t_count);
 	}
 	
 	return return_value;

@@ -944,7 +944,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 	}
 	else
 	{
-		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 			CCNode* t_node = CCNode::create();
 			t_node->setTag(kSLD_MT_receive);
 			menuAction(t_node);
@@ -952,7 +952,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 		if(alert)
 			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 		
-//		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
+//		CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
 //		replay_menu->setPosition(ccp(300,100));
 //		replay_menu->setFunction([=](CCObject* sender)
 //								 {
@@ -977,7 +977,7 @@ void StageListDown::startOpenning()
 
 void StageListDown::endOpenning()
 {
-	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	talk_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stageListDown), mySGD->getFont().c_str(), 12, CCSizeMake(300, 70), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	talk_label->disableOuterStroke();//enableOuterStroke(ccBLACK, 1.f);
 	talk_label->setAnchorPoint(ccp(0.5,0.5f));
 	
@@ -1022,9 +1022,9 @@ void StageListDown::endOpenning()
 	
 	tip_list.clear();
 	
-	for(int i=kMyLocalKey_titleLoadingBegin+1;i<kMyLocalKey_titleLoadingEnd;i++)
+	for(int i=int(LK::kMyLocalKey_titleLoadingBegin)+1;i<int(LK::kMyLocalKey_titleLoadingEnd);i++)
 	{
-		tip_list.push_back(myLoc->getLocalForKey((MyLocalKey)i));
+		tip_list.push_back(myLoc->getLocalForKey((LK)i));
 	}
 	
 	random_shuffle(tip_list.begin(), tip_list.end());
@@ -1502,7 +1502,7 @@ void StageListDown::failAction()
 	unschedule(schedule_selector(StageListDown::downloadingAction));
 	is_downloading = false;
 	
-	CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
+	CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, -201);
 	replay_menu->setPosition(ccp(300,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {

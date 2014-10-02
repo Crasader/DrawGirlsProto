@@ -124,13 +124,13 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 //	}
 	
 	
-	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_img = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_newItemTitle), mySGD->getFont().c_str(), 12);
 	title_img->disableOuterStroke();
 	title_img->setAnchorPoint(ccp(0.5f, 0.5f));
 	title_img->setPosition(ccp(-85,case_back->getContentSize().height/2.f-35));
 	addChild(title_img);
 	
-	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* bonus_ment_img = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_newItemMent), mySGD->getFont().c_str(), 12);
 	bonus_ment_img->disableOuterStroke();
 	bonus_ment_img->setColor(ccc3(255,170,20));
 	bonus_ment_img->setPosition(ccp(0,-57));
@@ -217,18 +217,18 @@ void ShowItemContent::myInit(int t_touch_priority, function<void(CCObject*)> t_s
 		
 		if(item_list[ing_close_cnt] == kIC_baseSpeedUp)
 		{
-			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial17);
-			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial18);
+			kt_string1 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial17);
+			kt_string2 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial18);
 		}
 		else if(item_list[ing_close_cnt] == kIC_doubleItem)
 		{
-			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial19);
-			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial20);
+			kt_string1 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial19);
+			kt_string2 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial20);
 		}
 		else if(item_list[ing_close_cnt] == kIC_magnet)
 		{
-			kt_string1 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial21);
-			kt_string2 = myLoc->getLocalForKey(kMyLocalKey_kindTutorial22);
+			kt_string1 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial21);
+			kt_string2 = myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial22);
 		}
 		
 		function<void()> end_func2 = [=]()
@@ -286,12 +286,12 @@ string ShowItemContent::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_addTime)			return_value = "AddTime";
 	else if(t_code == kIC_fast)				return_value = "Fast";
 	else if(t_code == kIC_subOneDie)		return_value = "SubOneDie";
-	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemTitle);
+	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_doubleItemTitle);
 	else if(t_code == kIC_silence)			return_value = "Silence";
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_longTimeTitle);
-	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpTitle);
-	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetTitle);
-	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_longTimeTitle);
+	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpTitle);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_magnetTitle);
+	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaTitle);
 	
 	return return_value.c_str();
 }

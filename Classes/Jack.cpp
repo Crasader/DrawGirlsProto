@@ -1566,7 +1566,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 //				content_back->setPosition(ccp(0,0));
 //				t_container->addChild(content_back);
 //				
-//				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial3), mySGD->getFont().c_str(), 12.5f);
+//				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_dieTutorial3), mySGD->getFont().c_str(), 12.5f);
 //				content_label->setHorizontalAlignment(kCCTextAlignmentLeft);
 //				content_label->setAnchorPoint(ccp(0,0.5));
 //				content_label->setPosition(ccp(60,35));
@@ -1654,12 +1654,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
+				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
 				warning_label->disableOuterStroke();
 				warning_label->setPosition(ccp(52,66));
 				content_back->addChild(warning_label);
 			
-				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_dieTutorial1), mySGD->getFont().c_str(), 12.5f);
 				content_label->setColor(ccc3(20, 50, 70));
 				content_label->disableOuterStroke();
 				content_label->setAnchorPoint(ccp(0.5f,0.5f));
@@ -1737,12 +1737,12 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 				content_back->setPosition(ccp(0,0));
 				t_container->addChild(content_back);
 				
-				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
+				KSLabelTTF* warning_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_warningDie), mySGD->getFont().c_str(), 15.f);
 				warning_label->disableOuterStroke();
 				warning_label->setPosition(ccp(52,66));
 				content_back->addChild(warning_label);
 			
-				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
+				KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_dieTutorial2), mySGD->getFont().c_str(), 12.5f);
 				content_label->setColor(ccc3(20, 50, 70));
 				content_label->disableOuterStroke();
 				content_label->setAnchorPoint(ccp(0.5f,0.5f));

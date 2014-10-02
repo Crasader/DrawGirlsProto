@@ -44,8 +44,10 @@ void ClearShowTime::visit()
 	glDisable(GL_SCISSOR_TEST);
 }
 
-void ClearShowTime::startClearView()
+void ClearShowTime::startClearView(CCPoint t_p)
 {
+	side_back->setPosition(getPosition() - t_p);
+	
 	frame_cnt = 0;
 	schedule(schedule_selector(ClearShowTime::addViewHeight));
 }
@@ -161,7 +163,7 @@ void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CC
 //		}
 //	}
 	
-	CCSprite* side_back = CCSprite::create("ingame_outback.png");
+	side_back = CCSprite::create("ingame_outback.png");
 	side_back->setPosition(ccp(240,myDSH->ui_center_y));
 	addChild(side_back);
 	

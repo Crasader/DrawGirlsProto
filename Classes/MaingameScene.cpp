@@ -1370,7 +1370,7 @@ void Maingame::gachaOn()
 									  else
 									  {
 										  mySGD->clearChangeGoods();
-										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=](){
+										  addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=](){
 											  mControl->isStun = false;
 											  myJack->isStun = t_jack_stun;
 											  exit_target->onEnter();
@@ -1497,7 +1497,7 @@ void Maingame::keyBackClicked()
 	
 	CommonButton::callBackKey();
 	
-//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(Maingame::alertAction));
+//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(Maingame::alertAction));
 //	if(!myUI->isGameover)
 //	{
 //		onBackKeyAction();
@@ -1718,7 +1718,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow3->runAction(t_repeat);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent25), end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent25), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -1739,7 +1739,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow2->runAction(t_repeat);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent24), end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent24), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -1764,7 +1764,7 @@ void Maingame::removeConditionLabel()
 			
 			t_arrow1->runAction(t_repeat);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent23), end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent23), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -1779,7 +1779,7 @@ void Maingame::removeConditionLabel()
 																  skip_menu->setPositionY(myDSH->ui_top - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent22), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent22), end_func1);
 															  }));
 	}
 	else if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
@@ -1848,7 +1848,7 @@ void Maingame::removeConditionLabel()
 		{
 			scenario_node->removeChildByTag(1);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent59), end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent59), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -1875,7 +1875,7 @@ void Maingame::removeConditionLabel()
 //			
 //			t_arrow2->runAction(t_repeat2);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent58), end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent58), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -1885,7 +1885,7 @@ void Maingame::removeConditionLabel()
 															  {
 																  asuka->setPositionX(480+asuka->getContentSize().width*asuka->getScale() - asuka->getContentSize().width*asuka->getScale()*2.f/3.f*t);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent57), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent57), end_func1);
 															  }));
 		
 		
@@ -1945,7 +1945,7 @@ void Maingame::removeConditionLabel()
 //		t_arrow1->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15,0));
 //		t_clipping->addChild(t_arrow1);
 //		
-//		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent6), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent6), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 //		t_ment1->setAnchorPoint(ccp(0.f,0.5f));
 //		t_ment1->setPosition(t_arrow1->getPosition() + ccp(t_arrow1->getContentSize().width/2.f + 3, 0));
 //		t_clipping->addChild(t_ment1);
@@ -1955,7 +1955,7 @@ void Maingame::removeConditionLabel()
 //		t_arrow2->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -25));
 //		t_clipping->addChild(t_arrow2);
 //		
-//		StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 //		t_ment2->setAnchorPoint(ccp(0.f,0.5f));
 //		t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f + 3, 0));
 //		t_clipping->addChild(t_ment2);
@@ -1965,7 +1965,7 @@ void Maingame::removeConditionLabel()
 //		t_arrow3->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, -43));
 //		t_clipping->addChild(t_arrow3);
 //		
-//		StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent8), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//		StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent8), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 //		t_ment3->setAnchorPoint(ccp(0.f,0.5f));
 //		t_ment3->setPosition(t_arrow3->getPosition() + ccp(t_arrow3->getContentSize().width/2.f + 3, 0));
 //		t_clipping->addChild(t_ment3);
@@ -2039,7 +2039,7 @@ void Maingame::removeConditionLabel()
 //													   t_arrow4->setPosition(t_stencil1->getPosition() + ccp(-t_stencil1->getContentSize().width/2.f - 15, 0));
 //													   t_clipping->addChild(t_arrow4);
 //													   
-//													   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent9), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
+//													   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent9), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 //													   t_ment4->setAnchorPoint(ccp(1.f,0.5f));
 //													   t_ment4->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f - 3, 0));
 //													   t_clipping->addChild(t_ment4);
@@ -2072,7 +2072,7 @@ void Maingame::removeConditionLabel()
 //														   t_arrow5->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, 0));
 //														   t_clipping->addChild(t_arrow5);
 //														   
-//														   StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent10), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//														   StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent10), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 //														   t_ment5->setAnchorPoint(ccp(0.f,0.5f));
 //														   t_ment5->setPosition(t_arrow5->getPosition() + ccp(t_arrow5->getContentSize().width/2.f + 3, 0));
 //														   t_clipping->addChild(t_ment5);
@@ -2090,7 +2090,7 @@ void Maingame::removeConditionLabel()
 //															   
 //															   t_stencil1->setPosition(ccp(-100,-100));
 //															   
-//															   KSLabelTTF* t_final_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent11), mySGD->getFont().c_str(), 15);
+//															   KSLabelTTF* t_final_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent11), mySGD->getFont().c_str(), 15);
 //															   t_final_label->setColor(ccc3(100, 200, 255));
 //															   t_final_label->enableOuterStroke(ccBLACK, 2.f);
 //															   t_final_label->setPosition(ccp(240, 50));
@@ -2300,7 +2300,7 @@ void Maingame::gameover()
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
 		game_node->addChild(t_cst, clearshowtimeZorder);
 
-		t_cst->startClearView();
+		t_cst->startClearView(game_node->getPosition());
 
 		myUI->setVisible(false);
 	}
@@ -2313,7 +2313,7 @@ void Maingame::gameover()
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		KSLabelTTF* game_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleGameover), mySGD->getFont().c_str(), 45);
+		KSLabelTTF* game_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleGameover), mySGD->getFont().c_str(), 45);
 		game_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 		game_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		game_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
@@ -2469,7 +2469,7 @@ void Maingame::clearScenario2()
 ////					  title_img->setOpacity(0);
 ////					  t_container->addChild(title_img);
 ////					  
-////					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
+////					  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_selectClearBox), mySGD->getFont().c_str(), 18);
 ////					  title_label->enableOuterStroke(ccBLACK, 1.f);
 ////					  title_label->setPosition(ccp(0,40));
 ////					  title_label->setOpacity(0);
@@ -3437,7 +3437,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 	t_position.x += rand()%21 - 10;
 	t_position.y += rand()%21 - 10;
 
-	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
+	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
 	miss_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());
@@ -3493,7 +3493,7 @@ void Maingame::showComboImage(CCPoint t_position, int t_combo_value)
 	container->setPosition(ccpAdd(t_position, ccp(0,20)));
 	game_node->addChild(container, goldZorder);
 	
-	combo_value_img = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), t_combo_value), mySGD->getFont().c_str(), 30);
+	combo_value_img = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), t_combo_value), mySGD->getFont().c_str(), 30);
 	combo_value_img->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	combo_value_img->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(combo_value_img, combo_value_img->getFontSize());
@@ -3584,41 +3584,41 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	
 	// 바뀜 테스트.
 	// 또 바뀌나??
-	std::map<std::string, MyLocalKey> fileName2Language;
-	fileName2Language["warning_9.ccbi"] = kMyLocalKey_warning9;
-	fileName2Language["warning_105.ccbi"] = kMyLocalKey_warning105;
-	fileName2Language["warning_106.ccbi"] = kMyLocalKey_warning106;
-	fileName2Language["warning_107.ccbi"] = kMyLocalKey_warning107;
-	fileName2Language["warning_108.ccbi"] = kMyLocalKey_warning108;
-	fileName2Language["warning_109.ccbi"] = kMyLocalKey_warning109;
-	fileName2Language["warning_110.ccbi"] = kMyLocalKey_warning110;
-	fileName2Language["warning_111.ccbi"] = kMyLocalKey_warning111;
-	fileName2Language["warning_112.ccbi"] = kMyLocalKey_warning112;
-	fileName2Language["warning_113.ccbi"] = kMyLocalKey_warning113;
-	fileName2Language["warning_1001.ccbi"] = kMyLocalKey_warning1001;
-	fileName2Language["warning_1002.ccbi"] = kMyLocalKey_warning1002;
-	fileName2Language["warning_1003.ccbi"] = kMyLocalKey_warning1003;
-	fileName2Language["warning_1004.ccbi"] = kMyLocalKey_warning1004;
-	fileName2Language["warning_1005.ccbi"] = kMyLocalKey_warning1005;
-	fileName2Language["warning_1006.ccbi"] = kMyLocalKey_warning1006;
-	fileName2Language["warning_1007.ccbi"] = kMyLocalKey_warning1007;
-	fileName2Language["warning_1008.ccbi"] = kMyLocalKey_warning1008;
-	fileName2Language["warning_1009.ccbi"] = kMyLocalKey_warning1009;
-	fileName2Language["warning_1010.ccbi"] = kMyLocalKey_warning1010;
-	fileName2Language["warning_1011.ccbi"] = kMyLocalKey_warning1011;
-	fileName2Language["warning_1012.ccbi"] = kMyLocalKey_warning1012;
-	fileName2Language["warning_1013.ccbi"] = kMyLocalKey_warning1013;
-	fileName2Language["warning_1014.ccbi"] = kMyLocalKey_warning1014;
-	fileName2Language["warning_1015.ccbi"] = kMyLocalKey_warning1015;
-	fileName2Language["warning_1016.ccbi"] = kMyLocalKey_warning1016;
-	fileName2Language["warning_1017.ccbi"] = kMyLocalKey_warning1017;
-	fileName2Language["warning_1018.ccbi"] = kMyLocalKey_warning1018;
-	fileName2Language["warning_1019.ccbi"] = kMyLocalKey_warning1019;
-	fileName2Language["warning_1020.ccbi"] = kMyLocalKey_warning1020;
-	fileName2Language["warning_boss_success.ccbi"] = kMyLocalKey_warningBossSuccess;
-	fileName2Language["warning_over_02.ccbi"] = kMyLocalKey_warningLastLife;
+	std::map<std::string, LK> fileName2Language;
+	fileName2Language["warning_9.ccbi"] = LK::kMyLocalKey_warning9;
+	fileName2Language["warning_105.ccbi"] = LK::kMyLocalKey_warning105;
+	fileName2Language["warning_106.ccbi"] = LK::kMyLocalKey_warning106;
+	fileName2Language["warning_107.ccbi"] = LK::kMyLocalKey_warning107;
+	fileName2Language["warning_108.ccbi"] = LK::kMyLocalKey_warning108;
+	fileName2Language["warning_109.ccbi"] = LK::kMyLocalKey_warning109;
+	fileName2Language["warning_110.ccbi"] = LK::kMyLocalKey_warning110;
+	fileName2Language["warning_111.ccbi"] = LK::kMyLocalKey_warning111;
+	fileName2Language["warning_112.ccbi"] = LK::kMyLocalKey_warning112;
+	fileName2Language["warning_113.ccbi"] = LK::kMyLocalKey_warning113;
+	fileName2Language["warning_1001.ccbi"] = LK::kMyLocalKey_warning1001;
+	fileName2Language["warning_1002.ccbi"] = LK::kMyLocalKey_warning1002;
+	fileName2Language["warning_1003.ccbi"] = LK::kMyLocalKey_warning1003;
+	fileName2Language["warning_1004.ccbi"] = LK::kMyLocalKey_warning1004;
+	fileName2Language["warning_1005.ccbi"] = LK::kMyLocalKey_warning1005;
+	fileName2Language["warning_1006.ccbi"] = LK::kMyLocalKey_warning1006;
+	fileName2Language["warning_1007.ccbi"] = LK::kMyLocalKey_warning1007;
+	fileName2Language["warning_1008.ccbi"] = LK::kMyLocalKey_warning1008;
+	fileName2Language["warning_1009.ccbi"] = LK::kMyLocalKey_warning1009;
+	fileName2Language["warning_1010.ccbi"] = LK::kMyLocalKey_warning1010;
+	fileName2Language["warning_1011.ccbi"] = LK::kMyLocalKey_warning1011;
+	fileName2Language["warning_1012.ccbi"] = LK::kMyLocalKey_warning1012;
+	fileName2Language["warning_1013.ccbi"] = LK::kMyLocalKey_warning1013;
+	fileName2Language["warning_1014.ccbi"] = LK::kMyLocalKey_warning1014;
+	fileName2Language["warning_1015.ccbi"] = LK::kMyLocalKey_warning1015;
+	fileName2Language["warning_1016.ccbi"] = LK::kMyLocalKey_warning1016;
+	fileName2Language["warning_1017.ccbi"] = LK::kMyLocalKey_warning1017;
+	fileName2Language["warning_1018.ccbi"] = LK::kMyLocalKey_warning1018;
+	fileName2Language["warning_1019.ccbi"] = LK::kMyLocalKey_warning1019;
+	fileName2Language["warning_1020.ccbi"] = LK::kMyLocalKey_warning1020;
+	fileName2Language["warning_boss_success.ccbi"] = LK::kMyLocalKey_warningBossSuccess;
+	fileName2Language["warning_over_02.ccbi"] = LK::kMyLocalKey_warningLastLife;
 	
-	KSLabelTTF* textMessage = KSLabelTTF::create(MyLocal::sharedInstance()->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
+	KSLabelTTF* textMessage = KSLabelTTF::create(myLoc->getLocalForKey(fileName2Language[fileName]), mySGD->getFont().c_str(), 30.f);
 	detailWarningQueue.push_back(textMessage);
 	textMessage->setColor(ccc3(255, 0, 0));
 	textMessage->enableOuterStroke(ccc3(0, 0, 0), 3.f, true);

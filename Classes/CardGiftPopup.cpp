@@ -419,7 +419,7 @@ void CardGiftPopup::resultSendAction(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 				myHSP->command(command_list);
 			}, 1);
 			if(alert)

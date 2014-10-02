@@ -241,11 +241,11 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	string title_str;
 	if(is_time_event)
-		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventTitle);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_rankUpEventTitle);
 	else
 	{
 		myDSH->setIntegerForKey(kDSH_Key_showedCardRankUp, myDSH->getIntegerForKey(kDSH_Key_showedCardRankUp)+1);
-		title_str = myLoc->getLocalForKey(kMyLocalKey_rankUpTitle);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_rankUpTitle);
 	}
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
@@ -265,9 +265,9 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	string content_str;
 	if(is_time_event)
-		content_str = myLoc->getLocalForKey(kMyLocalKey_rankUpEventContent);
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_rankUpEventContent);
 	else
-		content_str = myLoc->getLocalForKey(kMyLocalKey_rankUpSubTitle);
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_rankUpSubTitle);
 	
 	KSLabelTTF* sub_title_label = KSLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12);
 	sub_title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-60));
@@ -299,7 +299,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	recent_take_card->setPosition(ccp(-55,8));
 	m_container->addChild(recent_take_card);
 	
-	KSLabelTTF* recent_card_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recentTakeCard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* recent_card_ment = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_recentTakeCard), mySGD->getFont().c_str(), 12);
 	recent_card_ment->setColor(ccc3(255, 170, 0));
 	recent_card_ment->enableOuterStroke(ccBLACK, 1.f);
 	recent_card_ment->setPosition(ccp(-55,46));
@@ -361,7 +361,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	rankup_rate_back->setPosition(ccp(0,13));
 	m_container->addChild(rankup_rate_back);
 	
-	KSLabelTTF* rate_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpRate), mySGD->getFont().c_str(), 8);
+	KSLabelTTF* rate_ment = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankUpRate), mySGD->getFont().c_str(), 8);
 	rate_ment->setColor(ccBLACK);
 	rate_ment->disableOuterStroke();
 	rate_ment->setPosition(ccp(rankup_rate_back->getContentSize().width/2.f-5, rankup_rate_back->getContentSize().height/2.f+12));
@@ -380,7 +380,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	
 	
-//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
 //	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
 //	giveup_button = CCControlButton::create(giveup_label, giveup_back);
 //	giveup_button->addTargetWithActionForControlEvents(this, cccontrol_selector(RankUpPopup::giveupAction), CCControlEventTouchUpInside);
@@ -394,7 +394,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	KSLabelTTF* rankup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankup), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* rankup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankup), mySGD->getFont().c_str(), 15);
 	rankup_label->disableOuterStroke();
 	rankup_label->setAnchorPoint(ccp(0,0.5));
 	rankup_label->setPosition(ccp(0,0));
@@ -413,7 +413,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	if(is_time_event)
 	{
-		price_label->setString(myLoc->getLocalForKey(kMyLocalKey_free));
+		price_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_free));
 		CCSprite* event_img = CCSprite::create("puzzle_event.png");
 		event_img->setPosition(price_label->getPosition() + ccp(15,16));
 		price_back->addChild(event_img);
@@ -436,14 +436,14 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	
 	if(!is_time_event)
 	{
-		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* fail_rate_up_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_rankUpFailRateUp), mySGD->getRankUpRateDistance()*100.f), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		fail_rate_up_label->setAnchorPoint(ccp(0.5f,0.5f));
 		fail_rate_up_label->setPosition(rankup_button->getPosition() + ccp(0,41));
 		m_container->addChild(fail_rate_up_label);
 	}
 	else
 	{
-		StyledLabelTTF* rank_up_event_sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankUpEventSubMent), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* rank_up_event_sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankUpEventSubMent), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
 		rank_up_event_sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 		rank_up_event_sub_label->setPosition(rankup_button->getPosition() + ccp(0,41));
 		m_container->addChild(rank_up_event_sub_label);
@@ -515,13 +515,13 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 			else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 			{
 				mySGD->clearChangeGoods();
-				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 				is_menu_enable = true;
 			}
 			else
 			{
 				mySGD->clearChangeGoods();
-				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 				is_menu_enable = true;
 			}
 		});
@@ -529,7 +529,7 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 	else
 	{
 //		is_menu_enable = true;
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 		
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, GoodsType::kGoodsType_ruby, [=]()
 															{
@@ -607,7 +607,7 @@ void RankUpPopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}

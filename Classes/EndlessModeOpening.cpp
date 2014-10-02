@@ -99,7 +99,7 @@ void EndlessModeOpening::setMain()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-10));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 14);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1.5f));
@@ -165,11 +165,11 @@ void EndlessModeOpening::setMain()
 	main_case->addChild(tip_marquee_back);
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee1));
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee2));
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee3));
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee4));
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_endlessOpeningMarquee5));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpeningMarquee1));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpeningMarquee2));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpeningMarquee3));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpeningMarquee4));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpeningMarquee5));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -190,7 +190,7 @@ void EndlessModeOpening::setMain()
 	main_case->addChild(left_back);
 	
 	
-	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessWeeklyranking), mySGD->getFont().c_str(), 12);
 	left_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	left_title->setAnchorPoint(ccp(0.5f,0.5f));
 	left_title->setPosition(ccp(40,left_back->getContentSize().height-15));
@@ -203,12 +203,12 @@ void EndlessModeOpening::setMain()
 	rest_back = CCScale9Sprite::create("common_shadowgray.png", CCRectMake(0, 0, 34, 34), CCRectMake(8, 8, 18, 18));
 	left_back->addChild(rest_back);
 	
-	rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTime), mySGD->getFont().c_str(), 11);
+	rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_restTime), mySGD->getFont().c_str(), 11);
 	rest_time_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	rest_time_title->setAnchorPoint(ccp(0.5f,0.5f));
 	rest_back->addChild(rest_time_title);
 	
-	rest_time_value = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), 0), mySGD->getFont().c_str(), 11);
+	rest_time_value = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeHour), 0), mySGD->getFont().c_str(), 11);
 	rest_time_value->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	rest_time_value->setVisible(false);
 	rest_time_value->setAnchorPoint(ccp(0.5f,0.5f));
@@ -238,18 +238,18 @@ void EndlessModeOpening::setMain()
 	right_top_menu->setTouchPriority(touch_priority);
 	
 	CCSprite* n_info = CCSprite::create("endless_bt_down.png");
-	KSLabelTTF* n_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_info_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
 	n_info_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_info_label->setPosition(ccpFromSize(n_info->getContentSize()/2.f));
 	n_info->addChild(n_info_label);
 	CCSprite* s_info = CCSprite::create("endless_bt_down.png");
 	s_info->setColor(ccGRAY);
-	KSLabelTTF* s_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_info_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
 	s_info_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_info_label->setPosition(ccpFromSize(s_info->getContentSize()/2.f));
 	s_info->addChild(s_info_label);
 	CCSprite* d_info = CCSprite::create("endless_bt_up.png");
-	KSLabelTTF* d_info_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* d_info_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpInfo), mySGD->getFont().c_str(), 12);
 	d_info_label->setColor(ccc3(20, 50, 70));
 	d_info_label->disableOuterStroke();
 	d_info_label->setPosition(ccpFromSize(d_info->getContentSize()/2.f));
@@ -271,18 +271,18 @@ void EndlessModeOpening::setMain()
 	right_top_menu->addChild(info_item);
 	
 	CCSprite* n_reward = CCSprite::create("endless_bt_down.png");
-	KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
 	n_reward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_reward_label->setPosition(ccpFromSize(n_reward->getContentSize()/2.f));
 	n_reward->addChild(n_reward_label);
 	CCSprite* s_reward = CCSprite::create("endless_bt_down.png");
 	s_reward->setColor(ccGRAY);
-	KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
 	s_reward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	s_reward_label->setPosition(ccpFromSize(s_reward->getContentSize()/2.f));
 	s_reward->addChild(s_reward_label);
 	CCSprite* d_reward = CCSprite::create("endless_bt_up.png");
-	KSLabelTTF* d_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* d_reward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pvpReward), mySGD->getFont().c_str(), 12);
 	d_reward_label->setColor(ccc3(20, 50, 70));
 	d_reward_label->disableOuterStroke();
 	d_reward_label->setPosition(ccpFromSize(d_reward->getContentSize()/2.f));
@@ -327,7 +327,7 @@ void EndlessModeOpening::setMain()
 	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 60.f));
 	right_info_node->addChild(record_back);
 	
-	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 11);
 	record_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	record_title->setAnchorPoint(ccp(0,0.5f));
 	record_title->setPosition(ccp(5, record_back->getContentSize().height/2.f));
@@ -339,7 +339,7 @@ void EndlessModeOpening::setMain()
 	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f, 37.f));
 	right_info_node->addChild(highscore_back);
 	
-	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 11);
 	highscore_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
 	highscore_title->setPosition(ccp(5, highscore_back->getContentSize().height/2.f));
@@ -357,7 +357,7 @@ void EndlessModeOpening::setMain()
 	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 14.f));
 	right_info_node->addChild(straight_back);
 	
-	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 11);
 	straight_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	straight_title->setAnchorPoint(ccp(0,0.5f));
 	straight_title->setPosition(ccp(5, straight_back->getContentSize().height/2.f));
@@ -370,7 +370,7 @@ void EndlessModeOpening::setMain()
 																		straight_back->getContentSize().height/2.f));
 	straight_back->addChild(straight_content);
 	
-	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_endlessReady), 18.5f, CCSizeMake(156, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
+	ready_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessReady), 18.5f, CCSizeMake(156, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
 	ready_button->setPosition(ccp(right_back->getContentSize().width/2.f,-28));
 	right_back->addChild(ready_button);
 	ready_button->setFunction([=](CCObject* sender)
@@ -500,7 +500,7 @@ void EndlessModeOpening::setMain()
 																											  }));
 																				 };
 																				 
-																				 typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent56), end_func3);
+																				 typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent56), end_func3);
 																			 };
 																			 
 																			 this->tutorial_fail_func = [=]()
@@ -576,7 +576,7 @@ void EndlessModeOpening::setMain()
 												 }));
 					};
 					
-					typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent56), end_func3);
+					typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent56), end_func3);
 				};
 				
 				this->tutorial_fail_func = [=]()
@@ -616,7 +616,7 @@ void EndlessModeOpening::setMain()
 				t_clipping->addChild(t_arrow2, 0, 2);
 
 				
-				typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent55), end_func2);
+				typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent55), end_func2);
 			};
 			
 			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -644,7 +644,7 @@ void EndlessModeOpening::setMain()
 																	  t_clipping->addChild(t_arrow1, 0, 1);
 
 																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent54), end_func1);
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent54), end_func1);
 																  }));
 			
 			
@@ -700,7 +700,7 @@ void EndlessModeOpening::setMain()
 //			t_arrow1->setPosition(t_stencil1->getPosition() + ccp(0,t_stencil1->getContentSize().height/2.f + 15));
 //			t_clipping->addChild(t_arrow1);
 //
-//			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+//			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 //			t_ment1->setAnchorPoint(ccp(0.5f,0.f));
 //			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f + 3));
 //			t_clipping->addChild(t_ment1);
@@ -740,7 +740,7 @@ void EndlessModeOpening::setMain()
 //														   t_arrow2->setPosition(t_stencil1->getPosition() + ccp(t_stencil1->getContentSize().width/2.f + 15, 0));
 //														   t_clipping->addChild(t_arrow2);
 //
-//														   StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent3), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//														   StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent3), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 //														   t_ment2->setAnchorPoint(ccp(0.f,0.5f));
 //														   t_ment2->setPosition(t_arrow2->getPosition() + ccp(t_arrow2->getContentSize().width/2.f + 3, 0));
 //														   t_clipping->addChild(t_ment2);
@@ -767,7 +767,7 @@ void EndlessModeOpening::setMain()
 //															   t_arrow3->setPosition(t_stencil1->getPosition() + ccp(0, t_stencil1->getContentSize().height/2.f + 15));
 //															   t_clipping->addChild(t_arrow3);
 //															   
-//															   StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+//															   StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 //															   t_ment3->setAnchorPoint(ccp(0.5f,0.f));
 //															   t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, t_arrow3->getContentSize().height/2.f + 3));
 //															   t_clipping->addChild(t_ment3);
@@ -790,7 +790,7 @@ void EndlessModeOpening::setMain()
 //																	   t_stencil1->setContentSize(CCSizeMake(300, 130));
 //																	   t_stencil1->setPosition(ccp(240,143));
 //																	   
-//																	   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessTutorialMent18), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+//																	   StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessTutorialMent18), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 //																	   t_ment4->setAnchorPoint(ccp(0.5f,0.5f));
 //																	   t_ment4->setPosition(ccp(240,143) + ccp(0, -80));
 //																	   t_clipping->addChild(t_ment4);
@@ -877,7 +877,7 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_endlessServerError)), 999);
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 		{
@@ -1301,7 +1301,7 @@ void EndlessModeOpening::successAction()
 
 void EndlessModeOpening::failAction()
 {
-	addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_endlessDownloadFail), [=]()
+	addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(LK::kMyLocalKey_endlessDownloadFail), [=]()
 							   {
 								   startDownload();
 							   }, CCPointZero));
@@ -1634,7 +1634,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			
 			if(mySGD->endless_my_ing_win.getV() > 0)
 			{
-				ready_button->setTitle(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
+				ready_button->setTitle(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessReadyIngWin), mySGD->endless_my_ing_win.getV()+1)->getCString());
 			}
 		}
 		else
@@ -1647,13 +1647,13 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		int remain_time = remainTime.getV();
 		if(remain_time < 60)
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), 0)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeMinute), 0)->getCString());
 		else if(remain_time < 60*60)
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), remain_time/60)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeMinute), remain_time/60)->getCString());
 		else if(remain_time < 60*60*24)
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), remain_time/60/60)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeHour), remain_time/60/60)->getCString());
 		else
-			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDay), remain_time/60/60/24)->getCString());
+			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeDay), remain_time/60/60/24)->getCString());
 		
 		rest_time_value->setVisible(true);
 		
@@ -1789,7 +1789,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(score_label);
 		
 		StyledLabelTTF* victory_label =
-				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
+				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 		victory_label->setPosition(ccp(185, list_cell_case->getContentSize().height/2.f));
@@ -1918,7 +1918,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	list_cell_case->addChild(score_label);
 	
 	StyledLabelTTF* victory_label =
-	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
+	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
 	victory_label->setPosition(ccp(185,list_cell_case->getContentSize().height/2.f));
@@ -1993,7 +1993,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 		record_content->removeFromParent();
 		record_content = NULL;
 	}
-	record_content = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessInfoScoreValue2), win_count, lose_count, win_rate)->getCString(),
+	record_content = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessInfoScoreValue2), win_count, lose_count, win_rate)->getCString(),
 																					mySGD->getFont().c_str(),
 																					11.f, 0, StyledAlignment::kRightAlignment);
 	record_content->setAnchorPoint(ccp(1,0.5f));
@@ -2001,7 +2001,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	record_back->addChild(record_content);
 	
 	highscore_content->setString(KS::insert_separator(CCString::createWithFormat("%d", info["endlessData"]["score"].asInt())->getCString()).c_str());
-	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessHighStraightValue2), info["endlessData"]["victory"].asInt())->getCString());
+	straight_content->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue2), info["endlessData"]["victory"].asInt())->getCString());
 	
 	int	alluser = info["alluser"].asInt();
 	int	myrank = info["rank"].asInt();

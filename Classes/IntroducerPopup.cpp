@@ -91,14 +91,14 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_introducerTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_introducerTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* ment_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_introducerContent), mySGD->getIntroduceStage(), 5), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* ment_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_introducerContent), mySGD->getIntroduceStage(), 5), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
 //	ment_label->enableOuterStroke(ccBLACK, 0.3f, (GLubyte)50, true);
 	ment_label->setPosition(ccp(0,30));
@@ -154,7 +154,7 @@ void IntroducerPopup::myInit(int t_touch_priority, function<void()> t_end_func, 
 	initiateEditBox(input_text1);
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_introducerOk), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_introducerOk), mySGD->getFont().c_str(), 12);
 	ok_label->disableOuterStroke();
 	t_label->addChild(ok_label);
 	
@@ -220,7 +220,7 @@ void IntroducerPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	if(string(input_text1->getText()) == "")
 	{
 		input_text1->setVisible(false);
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_introducerPleaseInputNick), [=]()
+		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_introducerPleaseInputNick), [=]()
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
@@ -231,7 +231,7 @@ void IntroducerPopup::couponAction(CCObject* sender, CCControlEvent t_event)
 	else if(string(input_text1->getText()) == myDSH->getStringForKey(kDSH_Key_nick))
 	{
 		input_text1->setVisible(false);
-		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_introducerSelfNotIntroduce), [=]()
+		addChild(ASPopupView::getCommonNoti(touch_priority-100, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_introducerSelfNotIntroduce), [=]()
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
@@ -258,14 +258,14 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		Json::Value param;
 		param["memberID"] = myHSP->getSocialID();
 		param["nick"] = input_text1->getText();
-		param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
+		param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerInputReward);
 		myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
 		mySGD->network_check_cnt = 0;
 		
-		addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_introducerDonFindNick), [=]()
+		addChild(ASPopupView::getCommonNoti(-99999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_introducerDonFindNick), [=]()
 		{
 			is_menu_enable = true;
 			input_text1->setVisible(true);
@@ -282,7 +282,7 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 				string input_data = input_text1->getText();
 				
 				Json::Value t_param;
@@ -316,7 +316,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 		
 		mySGD->setIntroducerID(result_data["introducerID"].asString());
 		
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), ccsf(myLoc->getLocalForKey(kMyLocalKey_introducerSuccess), input_text1->getText()), [=]()
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_introducerSuccess), input_text1->getText()), [=]()
 											{
 												is_menu_enable = false;
 												input_text1->setEnabled(false);
@@ -337,11 +337,11 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["nick"] = input_text1->getText();
-				param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
+				param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerInputReward);
 				myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 			}, 1);
 			if(alert)
@@ -354,7 +354,7 @@ void IntroducerPopup::resultSaveIntroducer(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["nick"] = input_text1->getText();
-										 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
+										 param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerInputReward);
 										 myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 									 }));
 		}
@@ -366,27 +366,27 @@ void IntroducerPopup::resultUseCoupon(Json::Value result_data)
 	CCLOG("resultUseCoupon : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponSuccess), myLoc->getLocalForKey(kMyLocalKey_couponGiftbox), true);
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponSuccess), myLoc->getLocalForKey(LK::kMyLocalKey_couponGiftbox), true);
 	}
 	else if(result_data["result"]["code"].asInt() == GDALREADY)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponAlready));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponAlready));
 	}
 	else if(result_data["result"]["code"].asInt() == GDEXPIRE)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponExpire));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponExpire));
 	}
 	else if(result_data["result"]["code"].asInt() == GDOSERROR)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponOserror));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponOserror));
 	}
 	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponDontfind));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponDontfind));
 	}
 	else
 	{
-		createResultPopup(myLoc->getLocalForKey(kMyLocalKey_couponFail), myLoc->getLocalForKey(kMyLocalKey_couponOtherError));
+		createResultPopup(myLoc->getLocalForKey(LK::kMyLocalKey_couponFail), myLoc->getLocalForKey(LK::kMyLocalKey_couponOtherError));
 	}
 	loading_layer->removeFromParent();
 }
@@ -566,7 +566,7 @@ void IntroducerPopup::createResultPopup(string title, string content, bool is_su
 	//
 	//	CCLabelTTF* t2_label = CCLabelTTF::create();
 	//
-	//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 	//	ok_label->setPosition(ccp(0,0));
 	//	t2_label->addChild(ok_label);
 	//
@@ -619,7 +619,7 @@ void IntroducerPopup::editBoxReturn(CCEditBox* editBox)
 void IntroducerPopup::initiateEditBox(CCEditBox* editbox)
 {
 	editbox->setAnchorPoint(ccp(0.5f, 0.5f));
-	editbox->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_introducerPlaceHolder));
+	editbox->setPlaceHolder(myLoc->getLocalForKey(LK::kMyLocalKey_introducerPlaceHolder));
 	editbox->setReturnType(kKeyboardReturnTypeDone);
 	editbox->setFont(mySGD->getFont().c_str(), 15);
 	editbox->setInputMode(kEditBoxInputModeSingleLine);

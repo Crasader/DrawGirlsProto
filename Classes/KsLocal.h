@@ -14,6 +14,7 @@ using namespace std;
  
  */
 
+#define myLoc KsLocal::sharedInstance()
 #define getLocal(X) (KsLocal::sharedInstance()->getLocalForKey(X))
 enum class LK
 {
@@ -101,7 +102,7 @@ enum class LK
 	kFriendNothingExist,
 	kFriendCardGiftErrorMessage,
 	kFriendNickInputPlz,
-	
+
 	kMyLocalKey_tutorial1,
 	kMyLocalKey_tutorial2,
 	kMyLocalKey_tutorial3,
@@ -284,11 +285,11 @@ enum class LK
 	kMyLocalKey_titleLoading42,
 	kMyLocalKey_titleLoading43,
 	kMyLocalKey_titleLoading44,
-    kMyLocalKey_titleLoading45,
-    kMyLocalKey_titleLoading46,
-    kMyLocalKey_titleLoading47,
-    kMyLocalKey_titleLoading48,
-    kMyLocalKey_titleLoading49,
+	kMyLocalKey_titleLoading45,
+	kMyLocalKey_titleLoading46,
+	kMyLocalKey_titleLoading47,
+	kMyLocalKey_titleLoading48,
+	kMyLocalKey_titleLoading49,
 	kMyLocalKey_titleLoading50,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
@@ -492,7 +493,7 @@ enum class LK
 	kMyLocalKey_patternContent1016,
 	kMyLocalKey_patternContent1017,
 	kMyLocalKey_patternContent1018,
-    kMyLocalKey_patternContent1019,
+	kMyLocalKey_patternContent1019,
 	kMyLocalKey_patternContent1020,
 	kMyLocalKey_controlTip_lineTangle_title,
 	kMyLocalKey_controlTip_lineTangle_content,
@@ -934,16 +935,16 @@ enum class LK
 	kMyLocalKey_puzzleOpenTitle,
 	kMyLocalKey_puzzleOpenContent,
 	kMyLocalKey_puzzleOpenButton,
-    kMyLocalKey_takeCount,
-    kMyLocalKey_joystickPositionSelectTitle,
-    kMyLocalKey_joystickPositionSelectContent,
-    kMyLocalKey_joystickPositionSelectRecommend,
-    kMyLocalKey_missionFailContextCombo,
-    kMyLocalKey_missionFailContextGold,
-    kMyLocalKey_missionFailContextItemCollect,
-    kMyLocalKey_missionFailContextScore,
-    kMyLocalKey_missionFailContextSubCumberCatch,
-    kMyLocalKey_missionFailContextTurns,
+	kMyLocalKey_takeCount,
+	kMyLocalKey_joystickPositionSelectTitle,
+	kMyLocalKey_joystickPositionSelectContent,
+	kMyLocalKey_joystickPositionSelectRecommend,
+	kMyLocalKey_missionFailContextCombo,
+	kMyLocalKey_missionFailContextGold,
+	kMyLocalKey_missionFailContextItemCollect,
+	kMyLocalKey_missionFailContextScore,
+	kMyLocalKey_missionFailContextSubCumberCatch,
+	kMyLocalKey_missionFailContextTurns,
 	kMyLocalKey_hellMode,
 	kMyLocalKey_hellMarquee,
 	kMyLocalKey_hellNotOpen,
@@ -962,6 +963,7 @@ enum class LK
 	kMyLocalKey_hellTakeCharacter,
 	kMyLocalKey_failHellMode,
 	kMyLocalKey_needHaveCharacterCard
+
 };
 class KsLocal
 {

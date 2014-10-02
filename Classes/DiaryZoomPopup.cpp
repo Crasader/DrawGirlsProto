@@ -110,15 +110,15 @@ bool DiaryZoomPopup::init()
 	
 	is_spin_mode = false;
 	
-	mode_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_move), 10, CCSizeMake(40, 30), CommonButtonOrange, -252);
+	mode_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_move), 10, CCSizeMake(40, 30), CommonButtonOrange, -252);
 	mode_button->setPosition(ccp(480-60,290));
 	mode_button->setFunction([=](CCObject* sender)
 							{
 								is_spin_mode = !is_spin_mode;
 //								if(is_spin_mode)
-//									mode_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_rotation));
+//									mode_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_rotation));
 //								else
-//									mode_button->setTitle(myLoc->getLocalForKey(kMyLocalKey_move));
+//									mode_button->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_move));
 							});
 	mode_button->setVisible(false);
 	addChild(mode_button, kDZP_Z_next_button);

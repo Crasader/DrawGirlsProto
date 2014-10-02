@@ -1667,7 +1667,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	{
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString(),this));
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
@@ -1675,7 +1675,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		addChild(draw_button);
 		reader->release();
 		
-		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
 		click_label->enableOuterStroke(ccBLACK, 0.5f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);
@@ -1927,7 +1927,7 @@ bool PlayTutorial::init()
 									 
 									 
 									 
-									 t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial1), [=]()
+									 t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial1), [=]()
 												   //"가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
 												   {
 													   gray->runAction(CCFadeTo::create(0.3f, 0));
@@ -1941,10 +1941,10 @@ bool PlayTutorial::init()
 //															   
 //														   }));
 //													   }));
-													   t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial2), [=]()
+													   t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial2), [=]()
 																	 //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 																	 {
-																		 top_label->setString(myLoc->getLocalForKey(kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
+																		 top_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
 																		 tutorial_step = 1;
 																		 t_sm->removeFromParent();
 																	 }, CCSizeMake(350,100), ccp(0,-110), 12, true);
@@ -1959,13 +1959,13 @@ bool PlayTutorial::init()
 	
 	function<void()> end_func2 = [=]()
 	{
-		typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent20), end_func3);
+		typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent20), end_func3);
 	};
 	
 	function<void()> end_func1 = [=]()
 	{
 		TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-		typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent19), end_func2);
+		typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent19), end_func2);
 	};
 	
     JoystickPositionSelectPopup* t_popup = JoystickPositionSelectPopup::create(-99999, [=]()
@@ -1998,7 +1998,7 @@ bool PlayTutorial::init()
                                                                                                                                              t_gray->setOpacity(255);
                                                                                                                                              asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
                                                                                                                                              
-                                                                                                                                             typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent18), end_func1);
+                                                                                                                                             typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent18), end_func1);
                                                                                                                                          }));
                                                                                });
     addChild(t_popup, 99999);
@@ -2059,14 +2059,14 @@ void PlayTutorial::nextStep()
 //			}));
 //		}));
 		
-		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
+		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
 			controler->setTouchEnabled(true);
 			area_take_sample->removeFromParent();
 			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
 			mark_img->setVisible(true);
 			
-			top_label->setString(myLoc->getLocalForKey(kMyLocalKey_tutorial5));//"영역 획득하기");
+			top_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_tutorial5));//"영역 획득하기");
 			tutorial_step = 3;
 
 			startCatching();
@@ -2105,7 +2105,7 @@ void PlayTutorial::nextStep()
 		
 //		AudioEngine::sharedInstance()->playEffect("ment_tutorial9.mp3", false, true);
 		
-		t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial6), [=]()
+		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {
 						  t_sm->cleanSM();
@@ -2114,7 +2114,7 @@ void PlayTutorial::nextStep()
 						  ui_percent->stopAllActions();
 						  ui_percent->setVisible(true);
 						  
-						  CCSprite* clear_condition = CCSprite::create(CCString::createWithFormat("play_tutorial_gage_guide_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+						  CCSprite* clear_condition = CCSprite::create(CCString::createWithFormat("play_tutorial_gage_guide_%s.png", myLoc->getLocalCode().c_str())->getCString());
 						  clear_condition->setPosition(ccp(240,myDSH->ui_top-58));
 						  addChild(clear_condition, 4);
 						  
@@ -2131,7 +2131,7 @@ void PlayTutorial::nextStep()
 						  CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 3);
 						  time_label->runAction(t_repeat2);
 						  
-						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getLocalCode().c_str())->getCString());
 						  time_case->setPosition(ccp(240,37));
 						  addChild(time_case, 4);
 						  
@@ -2144,7 +2144,7 @@ void PlayTutorial::nextStep()
 						  ment_box->setPosition(ccp(240,myDSH->ui_center_y));
 						  addChild(ment_box, 4);
 						  
-						  StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_tutorial7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						  StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_tutorial7), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 							ment_label->setOldAnchorPoint();
 						  ment_label->setPosition(ccp(ment_box->getContentSize().width/2.f, ment_box->getContentSize().height/2.f));
 						  ment_box->addChild(ment_label);
@@ -2260,12 +2260,12 @@ void PlayTutorial::nextStep()
 																		   }));
 											  };
 											  
-											  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent21), end_func1);
+											  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent21), end_func1);
 											  
 											  
 											  
 											  
-//											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(kMyLocalKey_tutorial8), [=]()
+//											  t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial8), [=]()
 //															//"기본 튜토리얼을 모두 진행하셨습니다.\n본 게임으로 들아갑니다.", [=]()
 //															{
 //																AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);

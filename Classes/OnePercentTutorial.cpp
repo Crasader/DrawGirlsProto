@@ -78,7 +78,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	setFormSetter(back_img);
 	setFormSetter(inner_back);
 	
-	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
 	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(89.0, 247.5));
 //	titleLbl->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height-25)); 			// dt (6.0, 112.5)
@@ -98,7 +98,7 @@ bool OnePercentTutorial::init(float originalPercent,
 
 	m_container->addChild(puppleInner, kOnePercentTutorial_Z_back);
 	setFormSetter(puppleInner);
-	m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial2),
+	m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial2),
 																			 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	m_container->addChild(m_gachaDesc, kOnePercentTutorial_Z_content);
 	m_gachaDesc->setAnchorPoint(ccp(0.5f,0.5f));
@@ -112,7 +112,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	CCScale9Sprite* gacha_back = CCScale9Sprite::create("subbutton_purple3.png" , CCRectMake(0,0, 100, 39), CCRectMake(57, 22, 2, 2));
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial3), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial3), mySGD->getFont().c_str(), 15);
 	gacha_label->disableOuterStroke();
 	t_label->addChild(gacha_label);
 
@@ -159,7 +159,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		CCPoint t_position = m_gachaDesc->getPosition();
 		m_gachaDesc->removeFromParent();
 		
-		m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial4),
+		m_gachaDesc = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial4),
 																				 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		t_parent->addChild(m_gachaDesc, kOnePercentTutorial_Z_content);
 		m_gachaDesc->setAnchorPoint(ccp(0.5f,0.5f));
@@ -186,7 +186,7 @@ void OnePercentTutorial::gachaAction(CCObject* sender, CCControlEvent t_event)
 		m_container->addChild(m_cursor, kOnePercentTutorial_Z_content);
 		
 		StyledLabelTTF* desc2 = StyledLabelTTF::create(
-																									 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
+																									 CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
 																									 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 		m_container->addChild(desc2, kOnePercentTutorial_Z_content);
 		desc2->setPosition(ccp(0.0, -39.0 - 5.f));

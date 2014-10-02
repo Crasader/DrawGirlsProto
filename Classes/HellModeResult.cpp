@@ -103,7 +103,7 @@ bool HellModeResult::init()
 	bool is_clear = mySGD->getIsCleared();
 	if(is_clear)
 	{
-		title_string = myLoc->getLocalForKey(kMyLocalKey_clearTitle);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_clearTitle);
 		if(!mySGD->isTimeEvent(kTimeEventType_heart))
 		{
 			mySGD->addChangeGoods("clearHeartUp", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getGameUseTime()), "클리어하트충전");
@@ -157,7 +157,7 @@ bool HellModeResult::init()
 			}
 			
 			// 캐릭터 획득 이미지
-			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
+			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
 			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
 			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,25));
@@ -210,7 +210,7 @@ bool HellModeResult::init()
 		else
 		{
 			// 이미 획득한 카드입니다.
-			StyledLabelTTF* have_character_card = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_haveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* have_character_card = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_haveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 			have_character_card->setAnchorPoint(ccp(0.5f,0.5f));
 			have_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f));
 			star_back->addChild(have_character_card);
@@ -219,9 +219,9 @@ bool HellModeResult::init()
 	else
 	{
 		// 실패 디자인
-		title_string = myLoc->getLocalForKey(kMyLocalKey_failTitleGameover);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_failTitleGameover);
 		
-		StyledLabelTTF* have_character_card = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failHellMode), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* have_character_card = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failHellMode), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		have_character_card->setAnchorPoint(ccp(0.5f,0.5f));
 		have_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f));
 		star_back->addChild(have_character_card);
@@ -232,7 +232,7 @@ bool HellModeResult::init()
 	gold_time_back->setPosition(ccp(inner_left->getContentSize().width/2.f,30));
 	inner_left->addChild(gold_time_back);
 	
-	KSLabelTTF* gold_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellTitleGold), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* gold_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTitleGold), mySGD->getFont().c_str(), 12);
 	gold_title->setAnchorPoint(ccp(0,0.5f));
 	gold_title->setPosition(ccp(8, gold_time_back->getContentSize().height/2.f+12));
 	gold_time_back->addChild(gold_title);
@@ -270,13 +270,13 @@ bool HellModeResult::init()
 	
 	
 	
-	KSLabelTTF* time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellTitleTime), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* time_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTitleTime), mySGD->getFont().c_str(), 12);
 	time_title->setAnchorPoint(ccp(0,0.5f));
 	time_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	time_title->setPosition(ccp(8, gold_time_back->getContentSize().height/2.f-12));
 	gold_time_back->addChild(time_title);
 	
-	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
 	time_content->setAnchorPoint(ccp(1,0.5f));
 	time_content->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	time_content->setPosition(ccp(gold_time_back->getContentSize().width-8, gold_time_back->getContentSize().height/2.f-12));
@@ -299,7 +299,7 @@ bool HellModeResult::init()
 	int stage_number = mySD->getSilType();
 	
 	
-	KSLabelTTF* piece_number_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellMode), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* piece_number_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellMode), mySGD->getFont().c_str(), 11);
 	piece_number_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	piece_number_label->setPosition(ccpFromSize(stage_tab->getContentSize()/2.f) + ccp(0,1));
 	stage_tab->addChild(piece_number_label);
@@ -319,7 +319,7 @@ bool HellModeResult::init()
 //	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 15));
 //	inner_left->addChild(left_total_back);
 //	
-//	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
+//	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
 //	left_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 //	left_total_title->setAnchorPoint(ccp(0,0.5f));
 //	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
@@ -332,7 +332,7 @@ bool HellModeResult::init()
 //	left_total_back->addChild(left_total_content);
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
 	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_ok_node->addChild(ok_label);
 	
@@ -348,7 +348,7 @@ bool HellModeResult::init()
 	
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
-	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
 	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_replay_node->addChild(replay_label);
 	
@@ -430,7 +430,7 @@ void HellModeResult::tryTransaction(CCNode* t_loading)
 										  {
 											  mySGD->network_check_cnt = 0;
 											  
-											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
+											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
 												  tryTransaction(t_loading);
 											  }, 1);
 											  
@@ -483,22 +483,22 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 		graph_back->setPosition(ccp(347,240));
 		main_case->addChild(graph_back, kZ_HMR_img);
 		
-		//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 		//		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_a->setPosition(ccp(25,8));
 		//		graph_back->addChild(t_rank_a);
 		//
-		//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 		//		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_b->setPosition(ccp(25+49,8));
 		//		graph_back->addChild(t_rank_b);
 		//
-		//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 		//		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_c->setPosition(ccp(25+98,8));
 		//		graph_back->addChild(t_rank_c);
 		//
-		//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 		//		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_d->setPosition(ccp(25+147,8));
 		//		graph_back->addChild(t_rank_d);
@@ -515,7 +515,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 		//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 		//		main_case->addChild(all_user_label, kZ_CP_img);
 		//
-		//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		//		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		//		main_case->addChild(my_rank_label, kZ_CP_img);
@@ -652,7 +652,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(55, 35, 150));
@@ -710,7 +710,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(55, 35, 150));
@@ -821,7 +821,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 		TRACE();
 		//		hspConnector::get()->command(send_command_list, -1); // 987987987
 		
-		//		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		//		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		//		fail_label->setPosition(loading_img->getPosition());
 		//		main_case->addChild(fail_label, kZ_CP_img);
 	}

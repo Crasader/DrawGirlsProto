@@ -132,27 +132,27 @@ bool GaBaBo::init(int touchPriority, const std::vector<BonusGameReward>& rewards
 	lbl2WinReward->setPosition(ccp(60.0,140.5)); 			// dt (60.0,140.5)
 	lbl3WinReward->setPosition(ccp(60.0,195.5)); 			// dt (60.0,195.5)
 	
-	KSLabelTTF* lbl0Win = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_reward), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* lbl0Win = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_reward), mySGD->getFont().c_str(), 12.f);
 	addChild(lbl0Win);
 	lbl0Win->setPosition(ccp(60, 67));
 	
 	lbl0Win->setColor(ccc3(253, 147, 60));
 	lbl0Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	
-	KSLabelTTF* lbl1Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* lbl1Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(LK::kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
 	addChild(lbl1Win);
 	lbl1Win->setPosition(ccp(60, 123));
 	lbl1Win->setColor(ccc3(253, 147, 60));
 	lbl1Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	
-	KSLabelTTF* lbl2Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* lbl2Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(LK::kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
 	addChild(lbl2Win);
 	lbl2Win->setPosition(ccp(60, 179));
 
 	lbl2Win->setColor(ccc3(253, 147, 60));
 	lbl2Win->enableOuterStroke(ccc3(0, 0, 0), 1.f);
 	
-	KSLabelTTF* lbl3Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* lbl3Win = KSLabelTTF::create((std::string("1") + myLoc->getLocalForKey(LK::kMyLocalKey_win)).c_str(), mySGD->getFont().c_str(), 12.f);
 	addChild(lbl3Win);
 	lbl3Win->setPosition(ccp(60, 235));
 	lbl3Win->setColor(ccc3(253, 147, 60));
@@ -554,7 +554,7 @@ void GaBaBo::showResult()
 	closeBtn->setPosition(ccp(275, 225));
 	main_case->addChild(closeBtn);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gameResult), mySGD->getFont().c_str(), 17);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gameResult), mySGD->getFont().c_str(), 17);
 	title_label->setPosition(ccp(45,227));
 	main_case->addChild(title_label);
 	

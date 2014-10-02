@@ -70,7 +70,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-33));
@@ -89,7 +89,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	ruby_img->setPosition(ccp(0,18));
 	m_container->addChild(ruby_img);
 	
-	KSLabelTTF* ruby100_img = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gem100), mySGD->getFont().c_str(), 20);
+	KSLabelTTF* ruby100_img = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gem100), mySGD->getFont().c_str(), 20);
 	ruby100_img->setColor(ccc3(40, 215, 255));
 	ruby100_img->enableOuterStroke(ccBLACK, 1);
 	ruby100_img->setPosition(ccp(45,43));
@@ -126,7 +126,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(stamp_case);
 	
 	
-	KSLabelTTF* first_sale_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseSale), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* first_sale_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseSale), mySGD->getFont().c_str(), 10);
 	first_sale_label->disableOuterStroke();
 	first_sale_label->setPosition(ccp(35,33));
 	stamp_case->addChild(first_sale_label);
@@ -140,7 +140,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	stamp_case->addChild(sale_value_label);
 	
 	
-	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	sub_ment1->setColor(ccc3(255,170,20));
 	sub_ment1->disableOuterStroke();
 	sub_ment1->setAnchorPoint(ccp(1.f,0.5f));
@@ -148,7 +148,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(sub_ment1);
 	
 	
-	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseMent2), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent2), mySGD->getFont().c_str(), 12);
 	sub_ment2->disableOuterStroke();
 	sub_ment2->setAnchorPoint(ccp(0.f, 0.5f));
 	sub_ment2->setPositionY(-15);
@@ -161,13 +161,13 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	sub_ment1->setPositionX(w1 - (w1+w2)/2.f);
 	sub_ment2->setPositionX(w1 - (w1+w2)/2.f);
 	
-	KSLabelTTF* sub_ment3 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_firstPurchaseMent3), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment3 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent3), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
 	sub_ment3->disableOuterStroke();
 	sub_ment3->setPosition(ccp(0,-32));
 	m_container->addChild(sub_ment3);
 	
 	
-//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
 //	giveup_label->setColor(ccBLACK);
 //	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
 //	giveup_button = CCControlButton::create(giveup_label, giveup_back);
@@ -182,7 +182,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	CCLabelTTF* p_label = CCLabelTTF::create();
 	
-	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
 	purchase_label->disableOuterStroke();
 	purchase_label->setAnchorPoint(ccp(0,0.5f));
 	purchase_label->setPosition(ccp(0,0));
@@ -267,7 +267,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 		{
 			mySGD->clearChangeGoods();
 			mySGD->clearChangeUserdata();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
 	});
@@ -296,7 +296,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 			CCLOG("FirstPurchase purchaseProduct fail");
 			inapp_loading->removeFromParent();
 			mySGD->clearChangeUserdata();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
 	});
@@ -364,7 +364,7 @@ void FirstPurchasePopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}

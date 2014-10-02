@@ -1843,7 +1843,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	{
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode()->getCString())->getCString(),this));
+		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
 		button_ani = reader->getAnimationManager();
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)
@@ -1864,7 +1864,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		}
 		addChild(draw_button);
 		
-		click_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
+		click_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
 		click_label->enableOuterStroke(ccBLACK, 0.5f);
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);
@@ -1922,7 +1922,7 @@ void ControlJoystickButton::showDrawButtonTutorial()
 	draw_button_tutorial_img->setPosition(ccp(240, myDSH->ui_center_y));
 	addChild(draw_button_tutorial_img);
 	
-	StyledLabelTTF* t_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_buttonTutorialMent), mySGD->getFont().c_str(), 16, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* t_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_buttonTutorialMent), mySGD->getFont().c_str(), 16, 999, StyledAlignment::kCenterAlignment);
 	t_label->setAnchorPoint(ccp(0.5f,0.5f));
 	t_label->setPosition(ccpFromSize(draw_button_tutorial_img->getContentSize()/2.f));
 	draw_button_tutorial_img->addChild(t_label);

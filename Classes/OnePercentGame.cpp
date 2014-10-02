@@ -139,7 +139,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	back_img->setPosition(ccp(0,0));
 	m_container->addChild(back_img, kOnePercentGame_Z_back);
 	
-	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
+	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
 	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(89.0, 247.5));
 //	titleLbl->setPosition(ccp(back_img->getContentSize().width/2.f, back_img->getContentSize().height - 25)); 			// dt (6.0, 112.5)
@@ -156,7 +156,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	inner_back->setPosition(ccp(0.0, 6.0));
 	m_container->addChild(inner_back, kOnePercentGame_Z_back);
 	
-	StyledLabelTTF* desc = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame1),
+	StyledLabelTTF* desc = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame1),
 																								mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
 	desc->setAnchorPoint(ccp(0.5f,0.5f));
 	m_container->addChild(desc, kOnePercentGame_Z_content);
@@ -164,7 +164,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	desc->setPosition(0, 30);
 	setFormSetter(desc);
 
-	StyledLabelTTF* desc3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame2),
+	StyledLabelTTF* desc3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame2),
 																								mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
 	m_container->addChild(desc3, kOnePercentGame_Z_content);
 	desc3->setAnchorPoint(ccp(0.5f,0.5f));
@@ -172,7 +172,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	setFormSetter(desc3);
 	m_desc3 = desc3;
 	
-	StyledLabelTTF* currentGainArea = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame3), mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* currentGainArea = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame3), mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
 //	StyledLabelTTF* currentGainArea = StyledLabelTTF::create("<font color=#FFAA14 size=13 newline=12>100% 에 성공시</font><font color=#FFAA14 size=13 tag=1>한단계 높은 카드를 획득할 수 있어요.</font>", mySGD->getFont().c_str(), 99, 0, StyledAlignment::kCenterAlignment);
 	currentGainArea->setAnchorPoint(ccp(0.5f,0.5f));
 	m_currentGainArea = currentGainArea;
@@ -204,7 +204,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	
 	m_toDown(); // 최초로 내림.
 	
-	StyledLabelTTF* command1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame4),
+	StyledLabelTTF* command1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame4),
 																										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	command1->setAnchorPoint(ccp(0.5f,0.5f));
 	command1->setPosition(ccpFromSize(tutorialBox->getContentSize()) / 2.f + ccp(-1.f, 10));
@@ -213,7 +213,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	m_container->addChild(tutorialBox, kOnePercentGame_Z_content + 1);
 	setFormSetter(command1);
 	StyledLabelTTF* desc2 = StyledLabelTTF::create(
-			CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
+			CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentDesc2), 3, 0.3f)->getCString(),
 			mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 	m_container->addChild(desc2, kOnePercentGame_Z_content);
 	desc2->setPosition(ccp(0.0,-39.0 - 5.f)); 			// dt (0.0,-36.5)
@@ -248,7 +248,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
 //	gacha_label->setColor(ccBLACK);
 	gacha_label->setPosition(ccp(0,0));
 	t_label->addChild(gacha_label);
@@ -280,7 +280,7 @@ bool OnePercentGame::init(float originalPercent, std::function<void(void)> cance
 		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 		pass_count_case->addChild(pass_count_label);
 		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 13);
 		free_label->setColor(ccWHITE);
 		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(free_label);
@@ -496,7 +496,7 @@ void OnePercentGame::gameUISetting(bool hide)
 //	}
 	
 //	CCScale9Sprite* gacha_back = CCScale9Sprite::create("common_button_yellowup.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame5), mySGD->getFont().c_str(), 13.f);
+	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame5), mySGD->getFont().c_str(), 13.f);
 	gacha_button->removeFromParent();
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
@@ -590,7 +590,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				else
 				{
 					mySGD->clearChangeGoods();
-//					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){}), 9999);
+//					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=](){}), 9999);
 					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
 																		{
 																			ShopPopup* t_popup = ShopPopup::create();
@@ -628,12 +628,12 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 				}
 				else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 				{
-					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 				}
 				else
 				{
 					mySGD->clearChangeGoods();
-//					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+//					addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, kGoodsType_ruby, [=]()
 																		{
 																			ShopPopup* t_popup = ShopPopup::create();
@@ -651,7 +651,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 		}
 		else
 		{
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 			ShopPopup* t_popup = ShopPopup::create();
 			t_popup->setScale(myDSH->screen_convert_rate);
 			t_popup->setShopCode(kSC_ruby);
@@ -753,7 +753,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					addChild(KSTimer::create(0.f, [=](){
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
-																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 2, 0.3f)->getCString(),
+																													 CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentDesc2), 2, 0.3f)->getCString(),
 																													 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 						m_container->addChild(desc2, kOnePercentGame_Z_content);
 						m_desc2 = desc2;
@@ -860,7 +860,7 @@ void OnePercentGame::gachaAction(CCObject* sender, CCControlEvent t_event)
 					addChild(KSTimer::create(0.f, [=](){
 						m_desc2->removeFromParent();
 						StyledLabelTTF* desc2 = StyledLabelTTF::create(
-																													 CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_onePercentDesc2), 1, 0.4f)->getCString(),
+																													 CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentDesc2), 1, 0.4f)->getCString(),
 																													 mySGD->getFont().c_str(), 10.f, 0, StyledAlignment::kCenterAlignment);
 						m_container->addChild(desc2, kOnePercentGame_Z_content);
 						desc2->setPosition(ccp(0.0,-39.0 - 5.f)); 			// dt (0.0,-36.5)
@@ -1025,7 +1025,7 @@ void OnePercentGame::showFail()
 	failBox->setPosition(ccp(0, 28));
 	m_failBox = failBox;
 	m_container->addChild(failBox, kOnePercentGame_Z_content);
-	KSLabelTTF* failTitle = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame6), mySGD->getFont().c_str(), 20.f);
+	KSLabelTTF* failTitle = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame6), mySGD->getFont().c_str(), 20.f);
 	m_failTitle = failTitle;
 	AudioEngine::sharedInstance()->playEffect("ment_gameover1.mp3", false);
 	failTitle->setPosition(ccp(0.0, 14.5 + 28.f)); 			// dt (0.0, 14.5)
@@ -1033,7 +1033,7 @@ void OnePercentGame::showFail()
 	m_container->addChild(failTitle, kOnePercentGame_Z_content);
 	
 	StyledLabelTTF* failContent = StyledLabelTTF::create(
-																 ccsf(myLoc->getLocalForKey(kMyLocalKey_onePercentGame7), m_totalPercent * 100.f),
+																 ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame7), m_totalPercent * 100.f),
 																	 mySGD->getFont().c_str(),
 																					 12.f,
 																					 999,
@@ -1088,7 +1088,7 @@ void OnePercentGame::showFail()
 		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 		pass_count_case->addChild(pass_count_label);
 		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 15);
 		free_label->setColor(ccWHITE);
 		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(free_label);
@@ -1117,7 +1117,7 @@ void OnePercentGame::showFail()
 	gacha_button->setPosition(ccp(back_img->getContentSize().width/2.f, 32.5));
 	back_img->addChild(gacha_button);
 	gacha_button->setTouchPriority(-180);
-//	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame8), mySGD->getFont().c_str(), 20.f);
+//	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame8), mySGD->getFont().c_str(), 20.f);
 //	stopFnt->setColor(ccc3(22, 11, 0));
 //	gacha_button->getTitleLabel()->removeAllChildren();
 //	
@@ -1138,7 +1138,7 @@ void OnePercentGame::showSuccess()
 	label->setPosition(label->getPosition() + ccp(0, 28));
 	
 	m_99State = 999;
-	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onePercentGame10), mySGD->getFont().c_str(), 20.f);
+	CCLabelTTF* stopFnt = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentGame10), mySGD->getFont().c_str(), 20.f);
 	gacha_button->getTitleLabel()->removeAllChildren();
 	
 	gacha_button->getTitleLabel()->addChild(stopFnt);

@@ -113,12 +113,12 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
 				
-//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 //				stop_label->setColor(ccBLACK);
 //				stop_label->setPosition(ccp(0,15));
 //				t_label->addChild(stop_label);
 //				
-//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 //				stop_label2->setColor(ccBLACK);
 //				stop_label2->setPosition(ccp(0,-12));
 //				t_label->addChild(stop_label2);
@@ -142,7 +142,7 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 			else
 			{
 				mySGD->clearChangeGoods();
-				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 				is_menu_enable = true;
 			}
 		});
@@ -164,12 +164,12 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 				
 				CCLabelTTF* t_label = CCLabelTTF::create();
 				
-//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//				KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 //				stop_label->setColor(ccBLACK);
 //				stop_label->setPosition(ccp(0,15));
 //				t_label->addChild(stop_label);
 //				
-//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//				KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 //				stop_label2->setColor(ccBLACK);
 //				stop_label2->setPosition(ccp(0,-12));
 //				t_label->addChild(stop_label2);
@@ -193,14 +193,14 @@ void OnePercentGacha::gachaAction(CCObject* sender, CCControlEvent t_event)
 			else
 			{
 				mySGD->clearChangeGoods();
-				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 				is_menu_enable = true;
 			}
 		});
 	}
 	else
 	{
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), 9999);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}), 9999);
 		
 //		ShopPopup* t_popup = ShopPopup::create();
 //		t_popup->setScale(myDSH->screen_convert_rate);
@@ -231,12 +231,12 @@ void OnePercentGacha::requestItemDelivery()
 												
 												CCLabelTTF* t_label = CCLabelTTF::create();
 												
-//												KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
+//												KSLabelTTF* stop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pleaseClickButton), mySGD->getFont().c_str(), 13);
 //												stop_label->setColor(ccBLACK);
 //												stop_label->setPosition(ccp(0,15));
 //												t_label->addChild(stop_label);
 //												
-//												KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
+//												KSLabelTTF* stop_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stop), mySGD->getFont().c_str(), 28);
 //												stop_label2->setColor(ccBLACK);
 //												stop_label2->setPosition(ccp(0,-12));
 //												t_label->addChild(stop_label2);
@@ -362,7 +362,7 @@ void OnePercentGacha::setBack ()
 	inner_back->setPosition(ccp(0,-20));
 	m_container->addChild(inner_back, kOnePercentGacha_Z_back);
 	
-	KSLabelTTF* recent_percent_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymissionTotalPercent4), mySGD->getFont().c_str(), 18);
+	KSLabelTTF* recent_percent_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_todaymissionTotalPercent4), mySGD->getFont().c_str(), 18);
 	recent_percent_label->setPosition(ccp(-70,95));
 	m_container->addChild(recent_percent_label, kOnePercentGacha_Z_content);
 	
@@ -404,7 +404,7 @@ void OnePercentGacha::setBack ()
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_go100percent), mySGD->getFont().c_str(), 13);
 	gacha_label->setColor(ccBLACK);
 	gacha_label->setPosition(ccp(0,15));
 	t_label->addChild(gacha_label);
@@ -434,7 +434,7 @@ void OnePercentGacha::setBack ()
 		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 		pass_count_case->addChild(pass_count_label);
 		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 20);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 20);
 		free_label->setColor(ccWHITE);
 		free_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 		price_back->addChild(free_label);

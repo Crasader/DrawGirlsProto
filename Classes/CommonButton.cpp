@@ -326,7 +326,7 @@ void CommonButton::setPrice(PriceType priceType, string price){
 	
 	if(m_priceLbl==NULL){
 		if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
-			m_priceLbl=KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 13);
+			m_priceLbl=KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 13);
 		else
 			m_priceLbl=KSLabelTTF::create(price.c_str(), mySGD->getFont().c_str(), 13);
 		
@@ -342,7 +342,7 @@ void CommonButton::setPrice(PriceType priceType, string price){
 		m_btn->addChild(m_priceLbl,10);
 	}else{
 		if(m_priceType >= PriceTypePass1 && m_priceType <= PriceTypePass5)
-			m_priceLbl->setString(myLoc->getLocalForKey(kMyLocalKey_free));
+			m_priceLbl->setString(myLoc->getLocalForKey(LK::kMyLocalKey_free));
 		else
 			m_priceLbl->setString(price.c_str());
 		
@@ -519,7 +519,7 @@ void CommonButton::callBackKey(){
 
 		
 		
-		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, [](int t1,int t2){	if(t1 == 1 && t2 == 0)
+		AlertEngine::sharedInstance()->addDoubleAlert("Exit", myLoc->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, [](int t1,int t2){	if(t1 == 1 && t2 == 0)
 		{
 			CCDirector::sharedDirector()->end();
 		}});

@@ -125,7 +125,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	front->setContentSize(CCSizeMake(538 / 2.f, 156 / 2.f));
 	back->addChild(front);
 	m_front1 = front;
-	auto tuto1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent1),
+	auto tuto1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent1),
 										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	setFormSetter(tuto1);
 	tuto1->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(0, 37.5 - 2.f));
@@ -333,7 +333,7 @@ void JsGababo::setupReward()
 	m_front2 = front2;
 	
 	
-	auto rewardTitleLbl = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent2),
+	auto rewardTitleLbl = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent2),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 //	rewardTitleLbl->setAnchorPoint(ccp(0.5f, 0.5f));
 	
@@ -372,10 +372,10 @@ void JsGababo::setupReward()
 		_1winReward->addChild(_1winRewardLbl);
 		return make_pair(_1winBox, _1winTagLbl);
 	};
-	auto _0 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent3), 0);
-	auto _1 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent4), 1);
-	auto _2 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent5), 2);
-	auto _3 = addReward(myLoc->getLocalForKey(kMyLocalKey_gababoContent6), 3);
+	auto _0 = addReward(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent3), 0);
+	auto _1 = addReward(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent4), 1);
+	auto _2 = addReward(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent5), 2);
+	auto _3 = addReward(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent6), 3);
 	CCNode* _0winBox = _0.first;
 	CCNode* _1winBox = _1.first;
 	CCNode* _2winBox = _2.first;
@@ -671,7 +671,7 @@ void JsGababo::setupCongMessage()
 
 	m_front3 = front;
 	
-	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent7),
+	StyledLabelTTF* message = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent7),
 													 mySGD->getFont().c_str(),
 													 12.f, 999, StyledAlignment::kCenterAlignment);
 	m_message = message;
@@ -680,7 +680,7 @@ void JsGababo::setupCongMessage()
 	message->setPosition(ccpFromSize(front->getContentSize()) / 2.f + ccp(-29, 0));
 	front->addChild(message);
 	
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 46), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), m_touchPriority - 1);
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent8), 12.f, CCSizeMake(69, 46), CCScale9Sprite::create("subbutton_purple2.png", CCRectMake(0,0,62,32), CCRectMake(30, 15, 2, 2)), m_touchPriority - 1);
 	
 	m_confirmButton = button;
 	m_confirmButton->setEnabled(false);
@@ -943,7 +943,7 @@ void JsGababo::showHandsMotionWrapper()
 			
 			if(m_mySelection == computer) // Draw
 			{
-				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent10));
+				m_message->setStringByTag(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent10));
 //				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 6, 10 + 6.5 - 3));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
@@ -967,12 +967,12 @@ void JsGababo::showHandsMotionWrapper()
 				
 				if(m_winCount != 3)
 				{
-					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent11));
+					m_message->setStringByTag(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent11));
 //					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f - 6));
 				}
 				else
 				{
-					m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent12)
+					m_message->setStringByTag(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent12)
 											  );
 //					m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29 - 4.5, 15.f + 21.f));
 				}
@@ -1007,7 +1007,7 @@ void JsGababo::showHandsMotionWrapper()
 					win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 					result_stamp->addChild(win_label);
 					
-					CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+					CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
 					win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
 					result_stamp->addChild(win_ment);
 					
@@ -1102,7 +1102,7 @@ void JsGababo::showHandsMotionWrapper()
 			else // Lose
 			{
 				CCLOG("lose~");
-				m_message->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent13));
+				m_message->setStringByTag(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent13));
 //				m_message->setPosition(ccpFromSize(m_front3->getContentSize()) / 2.f + ccp(-29, 8.f));
 				this->contextSwitching(m_front2, m_front3, nullptr, [=](){
 					m_confirmButton->setEnabled(true);
@@ -1125,7 +1125,7 @@ void JsGababo::showResult()
 {
 	BonusGameReward gr1 = m_rewards[m_winCount];
 	//	gr1.spriteName = "shop_ruby2.png";
-	//	gr1.desc = myLoc->getLocalForKey(kMyLocalKey_gababoContent14);
+	//	gr1.desc = myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent14);
 	auto tempEndFunction = m_endFunction;
 	auto winCount = m_winCount;
 	CurtainNodeForBonusGame* curtain = CurtainNodeForBonusGame::createForEnding((int)Curtain::kTouchPriority, gr1,
@@ -1159,7 +1159,7 @@ void JsGababo::setupTutorial()
 	puppleInner->setContentSize(CCSizeMake(205.0, 177.5));
 	m_back->addChild(puppleInner, 5);
 	
-	StyledLabelTTF* message1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent15),
+	StyledLabelTTF* message1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent15),
 													 mySGD->getFont().c_str(),
 													 12.f, 999, StyledAlignment::kCenterAlignment);
 	//	m_message = message;
@@ -1168,7 +1168,7 @@ void JsGababo::setupTutorial()
 	m_back->addChild(message1, 6);
 
 	CCScale9Sprite* button9Scale = nullptr;
-	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_gababoContent16), 15.f, CCSizeMake(114.5, 63.5),
+	CommonButton* button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent16), 15.f, CCSizeMake(114.5, 63.5),
 							button9Scale = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0,0,92,45), CCRectMake(45, 21, 2, 2)), m_touchPriority - 1);
 //	button->setContentSize(CCSizeMake(92, 65));
 //	button->setContentSize(CCSizeMake(120, 80));
@@ -1186,7 +1186,7 @@ void JsGababo::setupTutorial()
 		CCSprite* tutoGababo;
 		if(m_tutorialStep == 1)
 		{
-			message1->setStringByTag(myLoc->getLocalForKey(kMyLocalKey_gababoContent17)
+			message1->setStringByTag(myLoc->getLocalForKey(LK::kMyLocalKey_gababoContent17)
 									);
 			CCSprite* tutoGababo;
 			tutoGababo = CCSprite::create("gababo_sum.png");

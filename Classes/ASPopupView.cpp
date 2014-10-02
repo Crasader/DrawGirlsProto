@@ -207,7 +207,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_title, CC
 	}
 	
 	if((Xbutton && towButton) || !Xbutton){
-		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
+		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		setFormSetter(close_button);
 		close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));
 		close_button->setFunction([=](CCObject* sender)
@@ -383,7 +383,7 @@ ASPopupView* ASPopupView::getCommonNoti2(int t_touch_priority, string t_title, C
 	}
 	else
 	{
-		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
+		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		setFormSetter(close_button);
 		close_button->setPosition(ccp(0,case_back->getContentSize().height/2.f*-1+45));
 		close_button->setFunction([=](CCObject* sender)
@@ -542,7 +542,7 @@ ASPopupView* ASPopupView::getCommonNoti(int t_touch_priority, string t_comment, 
 	}
 	else
 	{
-		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
+		CommonButton* close_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		setFormSetter(close_button);
 		close_button->setPosition(ccp(0, -case_back->getContentSize().height/2.f+45));
 		close_button->setFunction([=](CCObject* sender)
@@ -596,11 +596,11 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	
 	string title_string;
 	if(t_type == kGoodsType_ruby)
-		title_string = myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought);
 	else if(t_type == kGoodsType_gold)
-		title_string = myLoc->getLocalForKey(kMyLocalKey_goldNotEnought);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought);
 	else if(t_type == kGoodsType_money)
-		title_string = myLoc->getLocalForKey(kMyLocalKey_heartNotEnought);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_heartNotEnought);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
@@ -608,7 +608,7 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	t_container->addChild(title_label);
 	
-	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_enoughtGoodsContent), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_enoughtGoodsContent), mySGD->getFont().c_str(), 12);
 	sub_label->disableOuterStroke();
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 	sub_label->setPosition(ccp(0,16));
@@ -654,7 +654,7 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 	
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	KSLabelTTF* goshop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goShopButton), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* goshop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_goShopButton), mySGD->getFont().c_str(), 13);
 	goshop_label->disableOuterStroke();
 	goshop_label->setPosition(ccp(0,0));
 	t2_label->addChild(goshop_label);

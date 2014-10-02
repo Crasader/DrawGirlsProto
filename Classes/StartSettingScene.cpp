@@ -162,7 +162,7 @@ void StartSettingScene::setMain()
 	left_tab->setPosition(ccp(55,225));
 	main_case->addChild(left_tab);
 	
-	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* tab_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mymissile), mySGD->getFont().c_str(), 11);
 	tab_label->setColor(ccc3(54, 35, 12));
 	tab_label->enableOuterStroke(ccc3(54, 35, 12), 0.25f);
 	tab_label->setPosition(ccp(36.5f,12.5f));
@@ -452,7 +452,7 @@ void StartSettingScene::setMain()
 	gacha_item->setPosition(ccp(425,190));
 	main_case->addChild(gacha_item, kStartSettingZorder_main);
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 15);
 	gacha_label->enableOuterStroke(ccBLACK, 1.f);
 	gacha_label->setPosition(ccp(37.5f, 23.5f));
 	gacha_item->addChild(gacha_label);
@@ -476,7 +476,7 @@ void StartSettingScene::setMain()
 	
 	
 	CCSprite* n_start = CCSprite::create("startsetting_start.png");
-	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	KSLabelTTF* n_start_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
 	n_start_label->setColor(ccc3(47, 30, 6));
 	n_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	n_start_label->setPosition(ccp(147.5f,40.5f));
@@ -484,7 +484,7 @@ void StartSettingScene::setMain()
 	
 	CCSprite* s_start = CCSprite::create("startsetting_start.png");
 	s_start->setColor(ccGRAY);
-	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
+	KSLabelTTF* s_start_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gamestart), mySGD->getFont().c_str(), 32.5f);
 	s_start_label->setColor(ccc3(47, 30, 6));
 	s_start_label->enableOuterStroke(ccc3(47, 30, 6), 0.25f);
 	s_start_label->setPosition(ccp(147.5f,40.5f));
@@ -2368,5 +2368,5 @@ void StartSettingScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StartSettingScene::alertAction));
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(StartSettingScene::alertAction));
 }

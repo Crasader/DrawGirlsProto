@@ -968,7 +968,7 @@ void CardChangePopup::showMissMissile(CCPoint t_position, int t_damage)
 	t_position.x += rand()%21 - 10;
 	t_position.y += rand()%21 - 10;
 	
-	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
+	KSLabelTTF* miss_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_miss), mySGD->getFont().c_str(), 30);
 	miss_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	miss_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(miss_label, miss_label->getFontSize());

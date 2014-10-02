@@ -3032,5 +3032,5 @@ void NewMainFlowScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(NewMainFlowScene::alertAction));
+//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(NewMainFlowScene::alertAction));
 }

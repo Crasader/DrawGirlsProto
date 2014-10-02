@@ -90,7 +90,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giftbox), mySGD->getFont().c_str(), 15);
 	title_label->disableOuterStroke();
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	setFormSetter(title_label);
@@ -99,7 +99,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	CommonAnimation::applyShadow(title_label);
 
 	
-	m_nothingMessage = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nogift), mySGD->getFont().c_str(), 14);
+	m_nothingMessage = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_nogift), mySGD->getFont().c_str(), 14);
 	m_nothingMessage->setPosition(ccpMult(main_case->getContentSize(),0.5));
 	main_case->addChild(m_nothingMessage, 1);
 	setFormSetter(m_nothingMessage);
@@ -144,14 +144,14 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	_menu->setTouchPriority(m_touchPriority);
 	main_case->addChild(_menu, 4);
 	CCSprite* n_allReward_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
 	n_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	n_allReward_label->setPosition(ccpFromSize(n_allReward_img->getContentSize()/2.f) + ccp(0,-1));
 	n_allReward_img->addChild(n_allReward_label);
 	
 	CCSprite* s_allReward_img = CCSprite::create("subbutton_pink.png");
 	s_allReward_img->setColor(ccGRAY);
-	KSLabelTTF* s_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
 	s_allReward_label->setColor(ccGRAY);
 	s_allReward_label->disableOuterStroke();
 	s_allReward_label->setPosition(ccpFromSize(s_allReward_img->getContentSize()/2.f) + ccp(0,-1));
@@ -159,7 +159,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	
 	CCSprite* d_allReward_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)d_allReward_img)->setGray(true);
-	KSLabelTTF* d_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_allReward_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_allAccept), mySGD->getFont().c_str(), 12.5f);
 	d_allReward_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	d_allReward_label->setPosition(ccpFromSize(d_allReward_img->getContentSize()/2.f) + ccp(0,-1));
 	d_allReward_img->addChild(d_allReward_label);
@@ -173,7 +173,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 //	allReceive = CommonButton::create(CCSprite::create("subbutton_pink.png"), m_touchPriority);
 //	
 //	allReceive->setTitleSize(12.f);
-//	allReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_allAccept));
+//	allReceive->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_allAccept));
 //	allReceive->getTitleLabel()->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 ////	allReceive->setBackgroundTypeForDisabled(CommonButtonGray);
 //	allReceive->setTitleColor(ccc3(255, 255, 255));
@@ -195,7 +195,7 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	main_case->addChild(giftBoxAlertBox);
 
 	
-	KSLabelTTF* giftboxAlert = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* giftboxAlert = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giftboxAlert), mySGD->getFont().c_str(), 12);
 	giftboxAlert->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	setFormSetter(giftboxAlert);
 	setFormSetter(giftBoxAlertBox);
@@ -204,12 +204,12 @@ void SumranMailPopup::myInit (CCObject * t_close, SEL_CallFunc d_close, std::fun
 	giftBoxAlertBox->addChild(giftboxAlert, 1);
 	
 	
-	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority); // ? 티켓함?이 맞음? From YH To KS
-	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
-	CommonButton* ticketFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
-	CommonButton* challengeFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_challengeBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
-	CommonButton* coinFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_heartBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
-	CommonButton* totalFilter = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_allView), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* giftFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority); // ? 티켓함?이 맞음? From YH To KS
+	CommonButton* helpFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_helpBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* ticketFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ticketBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* challengeFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_challengeBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* coinFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartBox), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
+	CommonButton* totalFilter = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_allView), 12, CCSizeMake(65,38), CommonButtonGray, m_touchPriority);
 	
 	// 모든 필터를 감춤. 섬란 버전에서는.
 	giftFilter->setVisible(false);
@@ -613,7 +613,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 				
 				btnReceive = CommonButton::create(CCSprite::create("subbutton_purple.png"), m_touchPriority);
 				setFormSetter(btnReceive);
-				btnReceive->setTitle(myLoc->getLocalForKey(kMyLocalKey_take));
+				btnReceive->setTitle(myLoc->getLocalForKey(LK::kMyLocalKey_take));
 				btnReceive->setTitleSize(12.f);
 				btnReceive->setTouchPriority(m_touchPriority);
 				btnReceive->setTitleColor(ccc3(255, 255, 255));
@@ -641,7 +641,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		
 																		
 																		if(isSuccess==false){
-																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,myLoc->getLocalForKey(kMyLocalKey_fail), myLoc->getLocalForKey(kMyLocalKey_failedConnect),[=](){
+																			ASPopupView *alert = ASPopupView::getCommonNoti(-9999,myLoc->getLocalForKey(LK::kMyLocalKey_fail), myLoc->getLocalForKey(LK::kMyLocalKey_failedConnect),[=](){
 																				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																			});
 																			this->addChild(alert, 2000);
@@ -654,7 +654,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		CCScrollView* rewardScroll = CCScrollView::create();
 																		setFormSetter(itemlist);
 																		
-																		string from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																		string from = CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_giftboxContent),
 																																						 mail.get("content","Gift").asString().c_str(),
 																																						// mail.get("sender","GM").asString().c_str(),
 																																						 GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
@@ -730,7 +730,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			
 																			itemlist->addChild(label);
 																			
-																			from = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_giftboxContent),
+																			from = CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_giftboxContent),
 																																				"",
 																																				GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																				)->getCString();
@@ -795,7 +795,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																		setFormSetter(front);
 																		
 																		setFormSetter(itemlist);
-																		KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_confirmGift), mySGD->getFont().c_str(), 12.f);
+																		KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_confirmGift), mySGD->getFont().c_str(), 12.f);
 																		titleLbl->setAnchorPoint(ccp(0.5f,0.5f));
 																		titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 																		back->addChild(titleLbl);
@@ -1322,7 +1322,7 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 				Json::Value card_param;
 				card_param["noList"][0] = download_card_no.getV();
 				myHSP->command("getcardlist", card_param, json_selector(this, SumranMailPopup::resultGetCardInfo));
@@ -1436,7 +1436,7 @@ void SumranMailPopup::failCardDownload()
 	{
 		mySGD->network_check_cnt = 0;
 		
-		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 			startCardDownload();
 		}, 1);
 		if(alert)
@@ -1490,7 +1490,7 @@ void SumranMailPopup::takedCard(int cardNo, function<void()> t_end_func){
 			{
 				mySGD->network_check_cnt = 0;
 				
-				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 					takedCard(cardNo, t_end_func);
 				}, 1);
 				if(alert)
@@ -1903,7 +1903,7 @@ void SumranMailPopup::failAction ()
 	card_img->setScale(0.34f);
 	card_img->setPosition(ccp(99.f,156.f));
 	
-	CCLabelTTF* t_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo), mySGD->getFont().c_str(), 20);
+	CCLabelTTF* t_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failLoadInfo), mySGD->getFont().c_str(), 20);
 	t_label->setColor(ccBLACK);
 	t_label->setPosition(ccp(160,215));
 	card_img->addChild(t_label);
@@ -1975,7 +1975,7 @@ Json::Value SumranMailPopup::getButton(Json::Value mail){
 	}
 	else
 	{
-		btn[0] = myLoc->getLocalForKey(kMyLocalKey_ok);
+		btn[0] = myLoc->getLocalForKey(LK::kMyLocalKey_ok);
 	}
 	
 	return btn;

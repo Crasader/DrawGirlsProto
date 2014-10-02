@@ -226,7 +226,7 @@ void TitleRenewalScene::endSplash()
 	TRACE();
 	
 //	setBackKeyFunc([=](){
-//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 //	});
 //	
 //	setBackKeyEnabled(true);
@@ -270,7 +270,7 @@ void TitleRenewalScene::endSplash()
 	ratings->setPosition(ccpFromSize(title_img->getContentSize()/2.f) + ccp(240-10, 160-10) + convert_position);
 	title_img->addChild(ratings);
 	
-	state_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
+	state_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_connectingServer), mySGD->getFont().c_str(), 15, CCSizeMake(350, 80), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 	state_label->enableOuterStroke(ccBLACK, 1.f);
 	state_label->setPosition(ccp(240,30)); // 190
 	addChild(state_label, 2);
@@ -424,7 +424,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			else{
 				
 				loginCnt=0;
-				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),
+				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert2),
 																												tryLogin);
 				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 			}
@@ -446,7 +446,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	{
 		is_menu_enable = true;
 		
-		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_connectingServer));
+		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_connectingServer));
 		state_label->stopAllActions();
 		state_label->setVisible(false);
 		
@@ -455,7 +455,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		nick_back->setPosition(ccp(240,220));
 		addChild(nick_back,100);
 
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nickTitle), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_nickTitle), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setPosition(ccpFromSize(nick_back->getContentSize()/2.f) + ccp(-85, nick_back->getContentSize().height/2.f-35));
 		nick_back->addChild(title_label);
@@ -481,7 +481,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		input_text = CCEditBox::create(CCSizeMake(160, 35), t_back);
 		input_text->setPosition(ccp(110,56));
-		input_text->setPlaceHolder(myLoc->getLocalForKey(kMyLocalKey_inputPlease));
+		input_text->setPlaceHolder(myLoc->getLocalForKey(LK::kMyLocalKey_inputPlease));
 		input_text->setReturnType(kKeyboardReturnTypeDone);
 		input_text->setFont(mySGD->getFont().c_str(), 13);
 		input_text->setInputMode(kEditBoxInputModeSingleLine);
@@ -492,7 +492,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		flag->setPosition(35,94);
 		nick_back->addChild(flag,100000);
 		
-		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 13, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), kCCMenuHandlerPriority);
+		CommonButton* ok_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), 13, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), kCCMenuHandlerPriority);
 		ok_menu->setPosition(ccp(237,56));
 		ok_menu->setFunction([=](CCObject* sender)
 							 {
@@ -502,7 +502,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 							 });
 		nick_back->addChild(ok_menu, 10, kTitleRenewal_MT_nick);
 	
-	KSLabelTTF* bottom_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nickBottomMent), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* bottom_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_nickBottomMent), mySGD->getFont().c_str(), 9);
 	bottom_label->disableOuterStroke();
 	bottom_label->setColor(ccBLACK);
 	bottom_label->setPosition(ccp(nick_back->getContentSize().width/2.f, 28));
@@ -518,9 +518,9 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		TRACE();
 
 		CCLog("ffff %s",result_data["blockReason"].asString().c_str());
-		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
+		CCLog("ffff %s",CCString::createWithFormat("%s \n\n %s",myLoc->getLocalForKey(LK::kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString());
 		
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_blocked), CCString::createWithFormat("%s \n%s",myLoc->getLocalForKey(kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString(),[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_blocked), CCString::createWithFormat("%s \n%s",myLoc->getLocalForKey(LK::kMyLocalKey_blockedMsg),result_data["blockReason"].asString().c_str())->getCString(),[](){
 			//mySGD->resetLabels();
 			//CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 		});
@@ -562,7 +562,7 @@ void TitleRenewalScene::nextPreloadStep()
 	{
 		TRACE();
 
-		state_label->setString(myLoc->getLocalForKey(MyLocalKey(kMyLocalKey_titleTempScript1+audio_preload_step-1)));
+		state_label->setString(myLoc->getLocalForKey(LK(int(LK::kMyLocalKey_titleTempScript1)+audio_preload_step-1)));
 		AudioEngine::sharedInstance()->preloadThreadAction(audio_preload_step);
 		schedule(schedule_selector(TitleRenewalScene::checkThreadPreload));
 	}
@@ -592,7 +592,7 @@ void TitleRenewalScene::successLogin()
 	addChild(KSTimer::create(1.f/60.f, [=]()
 	{
 //		nextPreloadStep();
-		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript1));
+		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_titleTempScript1));
 		
 		addChild(KSTimer::create(1.f/60.f, [=]()
 		{
@@ -601,7 +601,7 @@ void TitleRenewalScene::successLogin()
 			
 			addChild(KSTimer::create(20.f/60.f, [=]()
 			{
-				state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript2));
+				state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_titleTempScript2));
 				TRACE();
 				addChild(KSTimer::create(1.f/60.f, [=]()
 				{
@@ -609,7 +609,7 @@ void TitleRenewalScene::successLogin()
 					TRACE();
 					addChild(KSTimer::create(1.f/60.f, [=]()
 					{
-						state_label->setString(myLoc->getLocalForKey(kMyLocalKey_titleTempScript3));
+						state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_titleTempScript3));
 						TRACE();
 						addChild(KSTimer::create(1.f/60.f, [=]()
 						{
@@ -942,9 +942,9 @@ void TitleRenewalScene::checkReceive()
 						
 						tip_list.clear();
 						
-						for(int i=kMyLocalKey_titleLoadingBegin+1;i<kMyLocalKey_titleLoadingEnd;i++)
+						for(int i=int(LK::kMyLocalKey_titleLoadingBegin)+1;i<int(LK::kMyLocalKey_titleLoadingEnd);i++)
 						{
-							tip_list.push_back(myLoc->getLocalForKey((MyLocalKey)i));
+							tip_list.push_back(myLoc->getLocalForKey((LK)i));
 						}
 						
 						random_shuffle(tip_list.begin(), tip_list.end());
@@ -988,7 +988,7 @@ void TitleRenewalScene::checkReceive()
 			{
 				mySGD->network_check_cnt = 0;
 				
-				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 					startCommand();
 				}, 1);
 				if(alert)
@@ -1002,9 +1002,9 @@ void TitleRenewalScene::checkReceive()
 										 }));
 			}
 			
-//			state_label->setString(myLoc->getLocalForKey(kMyLocalKey_failLoadInfo));
+//			state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_failLoadInfo));
 //			
-//			CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
+//			CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 //			replay_menu->setPosition(ccp(240,160));
 //			replay_menu->setFunction([=](CCObject* sender)
 //									 {
@@ -4196,9 +4196,9 @@ void TitleRenewalScene::downloadingFileAction()
 
 void TitleRenewalScene::failDownloadAction()
 {
-	state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgFail));
+	state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_downImgFail));
 	
-	CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
+	CommonButton* replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, kCCMenuHandlerPriority);
 	replay_menu->setPosition(ccp(240,160));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {
@@ -4248,7 +4248,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	else if(tag == kTitleRenewal_MT_redown)
 	{
 		removeChildByTag(kTitleRenewal_MT_redown);
-		state_label->setString(myLoc->getLocalForKey(kMyLocalKey_downImgInfo));
+		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_downImgInfo));
 		ing_download_cnt--;
 		
 		if(ing_download_cnt < 1)
@@ -4268,8 +4268,8 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		else
 		{
 			
-			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
-																					myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
+																					myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 			
 			is_menu_enable = true;
 		}
@@ -4294,7 +4294,7 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
-										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
 										 setTouchEnabled(false);
@@ -4310,21 +4310,21 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
-																												 myLoc->getLocalForKey(kMyLocalKey_sameNick), nullptr, CCPointZero, true), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(LK::kMyLocalKey_sameNick), nullptr, CCPointZero, true), 999);
 										 
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
-																												 myLoc->getLocalForKey(kMyLocalKey_invalidNick), nullptr, CCPointZero, true), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(LK::kMyLocalKey_invalidNick), nullptr, CCPointZero, true), 999);
 
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
-										 //state_label->setString(myLoc->getLocalForKey(kMyLocalKey_successLogin));
+										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
 										 setTouchEnabled(false);
@@ -4339,16 +4339,16 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
-																												 myLoc->getLocalForKey(kMyLocalKey_longNick), nullptr, CCPointZero, true), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
+																												 myLoc->getLocalForKey(LK::kMyLocalKey_longNick), nullptr, CCPointZero, true), 999);
 										 
-//										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_longNick)), 999);
+//										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_longNick)), 999);
 										 is_menu_enable = true;
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
-										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_nicknameError),
-															myLoc->getLocalForKey(kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
+										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
+															myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 										 is_menu_enable = true;
 									 }
 									 else
@@ -4370,6 +4370,6 @@ void TitleRenewalScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(TitleRenewalScene::alertAction));
 //	onBackKeyAction();
 }

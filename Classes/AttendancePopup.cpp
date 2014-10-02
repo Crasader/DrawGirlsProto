@@ -63,7 +63,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	m_container->addChild(back_case);
 	setFormSetter(back_case);
 
-	KSLabelTTF* main_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceTitle), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* main_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceTitle), mySGD->getFont().c_str(), 14);
 	main_title->disableOuterStroke();
 	main_title->setAnchorPoint(ccp(0.5f,0.5f));
 	main_title->setPosition(ccp(61,back_case->getContentSize().height-24));
@@ -73,7 +73,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	CommonAnimation::applyShadow(main_title);
 
 	
-	KSLabelTTF* main_content = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceContent), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* main_content = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceContent), mySGD->getFont().c_str(), 10);
 	main_content->disableOuterStroke();
 	main_content->setAnchorPoint(ccp(0.5f,0.5f));
 	main_content->setPosition(ccp(320, back_case->getContentSize().height-33.f));
@@ -81,14 +81,14 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	setFormSetter(main_content);
 	
 	
-	KSLabelTTF* title_label1 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceSeqTitle), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* title_label1 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceSeqTitle), mySGD->getFont().c_str(), 13);
 	title_label1->disableOuterStroke();
 	setFormSetter(title_label1);
 	title_label1->setAnchorPoint(ccp(0.f,0.f));
 	title_label1->setPosition(ccp(38,247));
 	back_case->addChild(title_label1);
 	
-	KSLabelTTF* content_label1 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceSpecialContent), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* content_label1 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceSpecialContent), mySGD->getFont().c_str(), 9);
 	content_label1->disableOuterStroke();
 	content_label1->setAnchorPoint(ccp(0,0.f));
 	content_label1->setPosition(ccp(title_label1->getContentSize().width+5, 0));
@@ -124,7 +124,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		}
 		
 
-//		KSLabelTTF* list_number_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceDay), mySGD->getFont().c_str(), 8);
+//		KSLabelTTF* list_number_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceDay), mySGD->getFont().c_str(), 8);
 //		list_number_d->disableOuterStroke();
 //		list_number_d->setAnchorPoint(ccp(0,0));
 //		list_number_d->setPosition(ccp(list_number->getContentSize().width+2,0));
@@ -138,7 +138,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		t_back->addChild(t_goods_node);
 		
 		
-		string daystring = CCString::createWithFormat("%d%s", i+1,myLoc->getLocalForKey(kMyLocalKey_attendanceDay))->getCString();
+		string daystring = CCString::createWithFormat("%d%s", i+1,myLoc->getLocalForKey(LK::kMyLocalKey_attendanceDay))->getCString();
 		KSLabelTTF* list_number = KSLabelTTF::create(daystring.c_str(), mySGD->getFont().c_str(), 10);
 		list_number->disableOuterStroke();
 		list_number->setAnchorPoint(ccp(0.5,0));
@@ -203,14 +203,14 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //	day_table->setTouchPriority(touch_priority);
 	
 	
-	KSLabelTTF* title_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceSpecialTitle), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceSpecialTitle), mySGD->getFont().c_str(), 15);
 	title_label2->disableOuterStroke();
 	setFormSetter(title_label2);
 	title_label2->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label2->setPosition(ccp(405,256));
 	back_case->addChild(title_label2);
 
-	KSLabelTTF* plus_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_plusGive), mySGD->getFont().c_str(), 8);
+	KSLabelTTF* plus_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_plusGive), mySGD->getFont().c_str(), 8);
 	plus_label->disableOuterStroke();
 	plus_label->setPosition(ccp(434,271));
 	back_case->addChild(plus_label);
@@ -276,7 +276,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 
 	
-//	KSLabelTTF* content_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceSpecialContent), mySGD->getFont().c_str(), 10);
+//	KSLabelTTF* content_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceSpecialContent), mySGD->getFont().c_str(), 10);
 //	content_label2->setAnchorPoint(ccp(0,0.5f));
 //	content_label2->setPosition(ccp(title_label2->getContentSize().width+5, title_label2->getContentSize().height/2.f));
 //	title_label2->addChild(content_label2);
@@ -483,51 +483,51 @@ string AttendancePopup::getGoodsTypeLocalData(string t_type)
 	string return_value = "";
 	if(t_goods == kGoodsType_gold)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeGold);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeGold);
 	}
 	else if(t_goods == kGoodsType_ruby)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeRuby);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeRuby);
 	}
 	else if(t_goods == kGoodsType_item9)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem9);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem9);
 	}
 	else if(t_goods == kGoodsType_item6)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem6);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem6);
 	}
 	else if(t_goods == kGoodsType_item11)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem11);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem11);
 	}
 	else if(t_goods == kGoodsType_pass1)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass1);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass1);
 	}
 	else if(t_goods == kGoodsType_pass2)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass2);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass2);
 	}
 	else if(t_goods == kGoodsType_pass3)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass3);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass3);
 	}
 	else if(t_goods == kGoodsType_pass4)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass4);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass4);
 	}
 	else if(t_goods == kGoodsType_pass5)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass5);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass5);
 	}
 	else if(t_goods == kGoodsType_pass6)
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypePass6);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass6);
 	}
 	else
 	{
-		return_value = myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeMany);
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeMany);
 	}
 	
 	return return_value;
@@ -706,17 +706,17 @@ CCNode* AttendancePopup::getGoodsSmallNodeAndCount(string t_type, int t_count)
 	}
 	else if(t_goods == kGoodsType_item9)
 	{
-		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem9)).c_str(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem9)).c_str(), mySGD->getFont().c_str(), 10);
 		return_node->addChild(count_label);
 	}
 	else if(t_goods == kGoodsType_item6)
 	{
-		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem6)).c_str(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem6)).c_str(), mySGD->getFont().c_str(), 10);
 		return_node->addChild(count_label);
 	}
 	else if(t_goods == kGoodsType_item11)
 	{
-		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeItem11)).c_str(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* count_label = KSLabelTTF::create((KS::insert_separator(ccsf("%d", t_count)) + myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeItem11)).c_str(), mySGD->getFont().c_str(), 10);
 		return_node->addChild(count_label);
 	}
 	else if(t_goods == kGoodsType_pass1)
@@ -781,7 +781,7 @@ CCNode* AttendancePopup::getGoodsSmallNodeAndCount(string t_type, int t_count)
 	}
 	else
 	{
-		KSLabelTTF* count_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_attendanceGoodsTypeMany), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* count_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeMany), mySGD->getFont().c_str(), 10);
 		return_node->addChild(count_label);
 	}
 	

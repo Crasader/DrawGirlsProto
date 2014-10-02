@@ -102,6 +102,7 @@ void MyLocal::ko()
 {
 	
 	CCDictionary* ko = CCDictionary::create();
+	/*
 	ko->setObject(CCString::create("서버에 접속 중입니다..."), kMyLocalKey_connectingServer);
 //	ko->setObject(CCString::create("닉네임 입력"), kMyLocalKey_inputNick);
 	ko->setObject(CCString::create(" 닉네임을 입력해주세요."), kMyLocalKey_inputPlease);
@@ -1187,14 +1188,14 @@ void MyLocal::ko()
 	
 	ko->setObject(CCString::create("<font newline=16>이런.. 조금 더 힘내요!</font><font color=961>클리어시 캐릭터카드</font><font newline=16>를</font><font>획득할 수 있어요!</font>"), kMyLocalKey_failHellMode);
 	ko->setObject(CCString::create("<font strokecolor=000 strokesize=0.5 strokeopacity=60 newline=15>캐릭터카드를</font><font strokecolor=000 strokesize=0.5 strokeopacity=60>획득하세요!</font>"), kMyLocalKey_needHaveCharacterCard);
-	
+	*/
 	setObject(ko, "ko");
 }
 void MyLocal::en()
 {
 	
 	CCDictionary* en = CCDictionary::create();
-	
+	/*
 	en->setObject(CCString::create("Server Online"), kMyLocalKey_connectingServer);
 //	en->setObject(CCString::create("Nickname enter"), kMyLocalKey_inputNick);
 	en->setObject(CCString::create("Please enter."), kMyLocalKey_inputPlease);
@@ -2166,14 +2167,14 @@ void MyLocal::en()
 	
 	en->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
 	en->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
-	
+	*/
 	setObject(en, "en");
 }
 void MyLocal::ja()
 {
 	
 	CCDictionary* ja = CCDictionary::create();
-	
+	/*
 	ja->setObject(CCString::create("Server Online"), kMyLocalKey_connectingServer);
 //	ja->setObject(CCString::create("Nickname enter"), kMyLocalKey_inputNick);
 	ja->setObject(CCString::create("Please enter."), kMyLocalKey_inputPlease);
@@ -3149,7 +3150,7 @@ void MyLocal::ja()
 	
 	ja->setObject(CCString::create("조이스틱 크기조절"), kMyLocalKey_joystickSizeQuestionTitle);
 	ja->setObject(CCString::create("<font newline=17>게임에서 사용되는 조이스틱의 크기를</font><font newline=17>9단계의 크기로 조절하고 있습니다.</font><font color=961>평균 5단계를 사용합니다.</font>"), kMyLocalKey_joystickSizeQuestionContent);
-
+*/
 	setObject(ja, "ja");
 }
 
@@ -3163,7 +3164,7 @@ void ReplaceString(std::string & strCallId, const char * pszBefore, const char *
 		iPos = strCallId.find( pszBefore, iPos );
 	}
 }
-
+/*
 string MyLocal::printList(){
 	CCDictionary* loDic = (CCDictionary*)(myLoc->objectForKey("ko"));
 	CCArray *keys = loDic->allKeys();
@@ -3210,3 +3211,4 @@ string MyLocal::printList(){
 	
 	return r;
 }
+*/

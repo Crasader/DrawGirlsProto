@@ -44,7 +44,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 	gacha_node->setPosition(ccpFromSize(back->getContentSize()/2.f));
 	back->addChild(gacha_node, 1);
 	
-	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_areaReGacha), mySGD->getFont().c_str(), 11);
 	gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	gacha_label->setPosition(ccp(-56,0));
 	gacha_node->addChild(gacha_label);
@@ -73,7 +73,7 @@ void StartMapGacha::myInit (CCObject * t_gacha, SEL_CallFunc d_gacha)
 		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 		pass_count_case->addChild(pass_count_label);
 		
-		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* free_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 11);
 		free_label->disableOuterStroke();
 		free_label->setPosition(ccp(-13.f,0));
 		price_node->addChild(free_label);

@@ -212,7 +212,7 @@ bool ZoomScript::init()
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
 	
-	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
+	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
 	showtime_morphing_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);
 	showtime_morphing_label->setAnchorPoint(ccp(0,0));
 	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
@@ -220,7 +220,7 @@ bool ZoomScript::init()
 	script_case->addChild(showtime_morphing_label);
 	
 	
-	next_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
+	next_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
 	next_button->setPosition(ccp(480-50,30));
 	is_next_on = false;
@@ -448,7 +448,7 @@ void ZoomScript::menuAction(CCObject *sender)
 		else if(is_showtime)
 		{
 			AudioEngine::sharedInstance()->playEffect("ment_showtime.mp3");
-			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
+			showtime_back = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_showtime), mySGD->getFont().c_str(), 45);// CCSprite::create("showtime_back.png");
 			showtime_back->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 			showtime_back->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 			KSLabelTTF* shadow = CommonAnimation::applyBigShadow(showtime_back, showtime_back->getFontSize());
@@ -1704,7 +1704,7 @@ void ZoomScript::keyBackClicked()
 	
 	CommonButton::callBackKey();
 	
-//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
+//	AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(ZoomScript::alertAction));
 //	if(isBackKeyEnabled() && next_button->isEnabled() && next_button->isVisible())
 //	{
 //		onBackKeyAction();

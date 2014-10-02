@@ -177,15 +177,15 @@ bool ClearPopup::init()
 	title_list.clear();
 	left_content_list.clear();
 	
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleAreaScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamageScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleComboScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamagedScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleAreaScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleDamageScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleComboScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleLifeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTimeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleGradeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleDamagedScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTakeGold));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTakeArea));
 	
 	left_content_list.push_back(KS::insert_separator(mySGD->area_score.getV()));
 	left_content_list.push_back(KS::insert_separator(mySGD->damage_score.getV()));
@@ -198,7 +198,7 @@ bool ClearPopup::init()
 	left_content_list.push_back(KS::insert_separator(int(mySGD->getPercentage()*100.f)) + "%");
 	
 	
-	title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 21.5f);
+	title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 21.5f);
 	title->setScale(0);
 	title->setGradientColor(ccc4(255, 230, 10, 255), ccc4(255, 130, 7, 255), ccp(0,-1));
 	title->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
@@ -308,7 +308,7 @@ bool ClearPopup::init()
 	is_end_network = false;
 	if(mySGD->is_clear_diary)
 	{
-		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, take_level), [=]()
+		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, mySGD->getStageGrade()), [=]()
 		{
 			is_end_take_diary = true;
 			if(is_end_take_diary && is_end_network)
@@ -324,7 +324,7 @@ bool ClearPopup::init()
 	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 15));
 	inner_left->addChild(left_total_back);
 	
-	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
 	left_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	left_total_title->setAnchorPoint(ccp(0,0.5f));
 	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
@@ -357,7 +357,7 @@ bool ClearPopup::init()
 		
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
-	ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
+	ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_nextStage), mySGD->getFont().c_str(), 27.5f);
 	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_ok_node->addChild(ok_label);
 	
@@ -374,7 +374,7 @@ bool ClearPopup::init()
 	
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
-	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
 	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_replay_node->addChild(replay_label);
 	
@@ -415,7 +415,7 @@ bool ClearPopup::init()
 	{
 		Json::Value t_param;
 		t_param["memberID"] = myHSP->getSocialID();
-		t_param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerCompleteReward);
+		t_param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerCompleteReward);
 		send_command_list.push_back(CommandParam("completeIntroducer", t_param, json_selector(this, ClearPopup::resultCompleteIntroducer)));
 	}
 	
@@ -552,7 +552,7 @@ void ClearPopup::resultCompleteIntroducer(Json::Value result_data)
 
 void ClearPopup::onMainButton()
 {
-	ok_label->setString(myLoc->getLocalForKey(kMyLocalKey_toMain));
+	ok_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_toMain));
 }
 
 void ClearPopup::onEnterTransitionDidFinish()
@@ -601,11 +601,11 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 										  {
 											  mySGD->network_check_cnt = 0;
 											  
-											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
+											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
 												  tryTransaction(t_loading);
 											  }, 1);
 											  
-//											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //												  tryTransaction(t_loading);
 //											  });
 											  if(alert)
@@ -757,22 +757,22 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		graph_back->setPosition(ccp(347,240));
 		main_case->addChild(graph_back, kZ_CP_img);
 		
-//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 //		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_a->setPosition(ccp(25,8));
 //		graph_back->addChild(t_rank_a);
 //		
-//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 //		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_b->setPosition(ccp(25+49,8));
 //		graph_back->addChild(t_rank_b);
 //		
-//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 //		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_c->setPosition(ccp(25+98,8));
 //		graph_back->addChild(t_rank_c);
 //		
-//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 //		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_d->setPosition(ccp(25+147,8));
 //		graph_back->addChild(t_rank_d);
@@ -789,7 +789,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 //		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 //		main_case->addChild(all_user_label, kZ_CP_img);
 //		
-//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 //		my_rank_label->setAnchorPoint(ccp(1,0.5));
 //		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 //		main_case->addChild(my_rank_label, kZ_CP_img);
@@ -1095,7 +1095,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		TRACE();
 //		hspConnector::get()->command(send_command_list, -1); // 987987987
 		
-//		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+//		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 //		fail_label->setPosition(loading_img->getPosition());
 //		main_case->addChild(fail_label, kZ_CP_img);
 	}
@@ -1552,7 +1552,7 @@ void ClearPopup::endTakeCard()
 		function<void()> end_func3 = [=]()
 		{
 			TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, asuka);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent31), end_func4);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent31), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -1562,7 +1562,7 @@ void ClearPopup::endTakeCard()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent30), end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent30), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -1580,7 +1580,7 @@ void ClearPopup::endTakeCard()
 			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(0,48));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent29), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent29), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment1->setAnchorPoint(ccp(0.5f,0));
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() + 3));
 			t_clipping->addChild(t_ment1);
@@ -1597,7 +1597,7 @@ void ClearPopup::endTakeCard()
 			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(0,5));
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent28), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent28), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment2->setAnchorPoint(ccp(0.5f,1));
 			t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() - 3));
 			t_clipping->addChild(t_ment2);
@@ -1610,7 +1610,7 @@ void ClearPopup::endTakeCard()
 			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(0,5));
 			t_clipping->addChild(t_arrow3);
 			
-			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent27), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent27), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment3->setAnchorPoint(ccp(0.5f,1));
 			t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height/2.f*t_arrow3->getScale() - 3));
 			t_clipping->addChild(t_ment3);
@@ -1654,7 +1654,7 @@ void ClearPopup::endTakeCard()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent26), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent26), end_func1);
 															  }));
 	}
 	else
@@ -2569,7 +2569,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 		{
 			if(is_go_to_mainflow)
 			{
-				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+				addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_timeOutFrame)), 9999);
 			}
 			
 			AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");

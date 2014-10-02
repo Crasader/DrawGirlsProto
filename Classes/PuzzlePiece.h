@@ -582,7 +582,7 @@ private:
 		stage_number_label->setPosition(ccp(piece_img->getContentSize().width/2.f-17, piece_img->getContentSize().height/2.f-20));
 		piece_img->addChild(stage_number_label);
 		
-//		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* stage_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stage), mySGD->getFont().c_str(), 9);
 //		stage_label->setColor(ccWHITE);
 //		stage_label->enableOuterStroke(ccBLACK, 1.f);
 //		stage_label->setPosition(ccp(piece_img->getContentSize().width/2.f, piece_img->getContentSize().height/2.f - 7));
