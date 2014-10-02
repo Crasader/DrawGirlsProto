@@ -178,22 +178,34 @@ bool HellModeResult::init()
 			tt_history.level = 1;
 			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(tt_history, nullptr));
 			
-			CCSprite* light_img = CCSprite::create("showtime_spin_light.png");
-			light_img->setScale(0.5f);
-			light_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
-			star_back->addChild(light_img);
-			
-			CCRepeatForever* t_repeat = CCRepeatForever::create(CCRotateBy::create(1.f, 130));
-			light_img->runAction(t_repeat);
+			CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
+			light_back->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
+			star_back->addChild(light_back);
 			
 			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_index) + ".ccbi").first;
 			character_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
 			star_back->addChild(character_img);
 			
-			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
-			card_img->setScale(0.15f);
-			card_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
-			star_back->addChild(card_img);
+			
+			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			t_clipping->setAlphaThreshold(0.1f);
+			
+			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+			t_clipping->addChild(t_card);
+			t_card->setScale(0.2f);
+			
+			t_clipping->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+			t_clipping->setScale(1.f/0.2f*0.15f);
+			star_back->addChild(t_clipping);
+			
+			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+			t_frame->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+			star_back->addChild(t_frame);
+			
+//			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+//			card_img->setScale(0.15f);
+//			card_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+//			star_back->addChild(card_img);
 		}
 		else
 		{
