@@ -119,6 +119,8 @@ void ComboParent::showCombo (int t_combo)
 		
 		if(mySGD->is_endless_mode)
 			t_cv->setPosition(ccp(40,myDSH->ui_center_y+60));
+		else if(mySGD->is_hell_mode)
+			t_cv->setPosition(ccp(480-8,myDSH->ui_top-46));
 		else
 			t_cv->setPosition(ccp(480-8,myDSH->ui_top-65));
 		addChild(t_cv,0,1);// 1 : ComboView
@@ -440,7 +442,7 @@ void GoldLabel::myInit ()
 	stopIncreasing();
 	setAnchorPoint(ccp(1.f,0.5));
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 	{
 		setPosition(ccp(480-8, myDSH->ui_top-25));
 	}
