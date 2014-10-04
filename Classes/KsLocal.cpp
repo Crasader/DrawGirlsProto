@@ -171,6 +171,66 @@ void KsLocal::ko()
 	
 	obj[LK::kFriendNickInputPlz] = "닉네임을 입력해주세요.";
 	
+	
+	obj[LK::kMyLocalKey_connectingServer] = "서버에 접속 중입니다...";
+	obj[LK::kMyLocalKey_inputPlease] = " 닉네임을 입력해주세요.";
+	obj[LK::kMyLocalKey_ok] = "확인";
+	obj[LK::kMyLocalKey_downImgInfo] = "이미지 정보를 받아옵니다.";
+	obj[LK::kMyLocalKey_failLoadInfo] = "정보 불러오기 실패";
+	obj[LK::kMyLocalKey_replay] = "재시도";
+	obj[LK::kMyLocalKey_downImgFail] = "이미지 받아오기 실패";
+	obj[LK::kMyLocalKey_sameNick] = "사용할 수 없는 닉네임 입니다.";
+	obj[LK::kMyLocalKey_invalidNick] = "사용할 수 없는 닉네임 입니다.";
+	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.";
+	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.";
+	obj[LK::kMyLocalKey_openRightNow] = "지금 열기";
+	obj[LK::kMyLocalKey_openRubyValue] = "RUBY %d 로 오픈";
+	obj[LK::kMyLocalKey_cgpNormalTitle] = "CGP 일반 보상";
+	obj[LK::kMyLocalKey_cgpNormalContent] = "보상받기를 눌러주세요.";
+	obj[LK::kMyLocalKey_getReward] = "보상받기";
+	obj[LK::kMyLocalKey_take] = "받기";
+	obj[LK::kMyLocalKey_cgpAllPopupTitle] = "CGP 전체 팝업 보상";
+	obj[LK::kMyLocalKey_shop] = "상점";
+	obj[LK::kMyLocalKey_ranking] = "랭킹";
+	obj[LK::kMyLocalKey_mycard] = "내카드";
+	obj[LK::kMyLocalKey_todaymission] = "오늘의 임무";
+	obj[LK::kMyLocalKey_event] = "이벤트";
+	obj[LK::kMyLocalKey_openStage] = "스페셜 스테이지";
+	obj[LK::kMyLocalKey_openStageContent] = "스페셜 스테이지를 오픈하시겠습니까?";
+	obj[LK::kMyLocalKey_doOpen] = "오픈하기";
+	obj[LK::kMyLocalKey_view] = "보기";
+	obj[LK::kMyLocalKey_condition1] = "영역 85%";
+	obj[LK::kMyLocalKey_condition2] = "영역 100%";
+	obj[LK::kMyLocalKey_condition3] = "체인지 + 영역 85%";
+	obj[LK::kMyLocalKey_condition4] = "체인지 + 영역 100%";
+	obj[LK::kMyLocalKey_stageValue] = "%d 스테이지";
+	obj[LK::kMyLocalKey_failCheckRanking] = "랭킹 정보 확인 실패";
+	obj[LK::kMyLocalKey_stage] = "스테이지";
+	obj[LK::kMyLocalKey_selectUseItem] = "게임에 사용할 아이템을 선택하세요.";
+	obj[LK::kMyLocalKey_levelValue] = "레벨 %d";
+	obj[LK::kMyLocalKey_powerValue] = "파워 %s";
+	obj[LK::kMyLocalKey_upgradeLevelValue] = "레벨 %d 업그레이드";
+	obj[LK::kMyLocalKey_upgradeLevelValue2] = "레벨 %d\n업그레이드";
+	obj[LK::kMyLocalKey_totalItemSelectCount3] = "아이템은 최대 3개까지\n선택이 가능합니다.";
+	obj[LK::kMyLocalKey_goldNotEnought] = "골드가 부족합니다.";
+	obj[LK::kMyLocalKey_rubyNotEnought] = "젬이 부족합니다.";
+	obj[LK::kMyLocalKey_heartNotEnought] = "하트가 부족합니다.";
+	obj[LK::kMyLocalKey_baseSpeedUpTitle] = "기본속도향상";
+	obj[LK::kMyLocalKey_baseSpeedUpContent] = "유저 속도가 빠른상태로 시작합니다.";
+	obj[LK::kMyLocalKey_doubleItemTitle] = "더블아이템";
+	obj[LK::kMyLocalKey_doubleItemContent] = "아이템을 빠르게 생성합니다.";
+	obj[LK::kMyLocalKey_longTimeTitle] = "시간추가";
+	obj[LK::kMyLocalKey_longTimeContent] = "게임시간을 증가시킵니다.";
+	obj[LK::kMyLocalKey_magnetTitle] = "자석";
+	obj[LK::kMyLocalKey_magnetContent] = "골드와 아이템을 빨아들입니다.";
+	obj[LK::kMyLocalKey_itemGachaTitle] = "아이템 뽑기";
+	obj[LK::kMyLocalKey_itemGachaDefaultContent1] = "뽑기에만 등장하는 아이템들!";
+	obj[LK::kMyLocalKey_itemGachaDefaultContent2] = "침묵, 대쉬, 목숨하나더, 부하몹제거";
+	obj[LK::kMyLocalKey_itemGachaContent] = "부활 아이템에 도전하세요!";
+	obj[LK::kMyLocalKey_rubyShop] = "젬상점";
+	obj[LK::kMyLocalKey_goldShop] = "골드상점";
+	
+	
 	obj[LK::kMyLocalKey_heartShop] = "하트상점";
 	obj[LK::kMyLocalKey_realBuy] = "구매하시겠습니까?";
 	obj[LK::kMyLocalKey_option] = "설정";
