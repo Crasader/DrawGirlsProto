@@ -312,7 +312,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading5] = "'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading7] = "Clear 등급에 따라 획득되는 별의 개수가 다릅니다. 별이 모이면 다음 액자를 열 수 있어요.";
 	obj[LK::kMyLocalKey_titleLoading8] = "'업적' 창에서 달성한 업적을 보상받으세요. 달성한 정도에 따라 젬을 드립니다.";
-	obj[LK::kMyLocalKey_titleLoading9] = "일일임무에 도전해 보세요. 일일 임무을 달성하시면 다양한 선물을 드립니다.";
+	obj[LK::kMyLocalKey_titleLoading9] = "일일임무에 도전해 보세요. 일일 임무를 달성하시면 다양한 선물을 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading10] = "주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading11] = "change 글자를 모아서 특별한 이미지를 확인하세요.";
 	obj[LK::kMyLocalKey_titleLoading12] = "미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다.";
@@ -334,7 +334,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading27] = "다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요.";
 	obj[LK::kMyLocalKey_titleLoading28] = "플레이 중 획득한 영역에 따라 골드를 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading29] = "30%나 할인되는 종합 아이템 구매 찬스를 놓치지 마세요!";
-	obj[LK::kMyLocalKey_titleLoading30] = "임무스테이지에서는 임무을 먼저 완료한 후 클리어가 가능합니다.";
+	obj[LK::kMyLocalKey_titleLoading30] = "임무가 있는 스테이지에서는 임무를 먼저 완료한 후 클리어가 가능합니다.";
 	obj[LK::kMyLocalKey_titleLoading31] = "미사일 공격 시 그리는 선에 미사일이 닿으면 유도 공격을 당해요.";
 	obj[LK::kMyLocalKey_titleLoading32] = "게임 중 시간추가 아이템을 먹으면 남은 시간에서 10초가 추가됩니다.";
 	obj[LK::kMyLocalKey_titleLoading33] = "선을 그리다가 꾸욱 버튼에서 손을 떼면 캐릭터가 안전 영역으로 되돌아 갑니다.";
@@ -361,7 +361,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_mymissile] = "내 미사일";
 	obj[LK::kMyLocalKey_power] = "파워";
 	obj[LK::kMyLocalKey_gacha] = "뽑기";
-	obj[LK::kMyLocalKey_stageListDown] = "일일임무을 완료해보세요!\n우편함으로 선물을 드려요! ^^";
+	obj[LK::kMyLocalKey_stageListDown] = "일일임무를 완료해보세요!\n우편함으로 선물을 드려요! ^^";
 	obj[LK::kMyLocalKey_frameOpenConditionTitle] = "액자오픈조건";
 	obj[LK::kMyLocalKey_frameOpenConditionContent] = "이전액자클리어\n+별%d개이상";
 	obj[LK::kMyLocalKey_frameOpenConditionContentRuby] = "이전액자클리어\n+별%d개이상\n+%s골드";
@@ -470,7 +470,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_ingameOut] = "나가기";
 	obj[LK::kMyLocalKey_ingameReplay] = "재시작";
 	obj[LK::kMyLocalKey_publicPlaceMode] = "대중교통\n모드";
-	obj[LK::kMyLocalKey_todaymissionSuccessCommon] = "<font newline=16>오늘의 임무을 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다.";
+	obj[LK::kMyLocalKey_todaymissionSuccessCommon] = "<font newline=16>오늘의 임무를 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다.";
 	obj[LK::kMyLocalKey_free] = "무료";
 	obj[LK::kMyLocalKey_areaReGacha] = "영역 다시뽑기";
 	obj[LK::kMyLocalKey_go100percent] = "도전하기";

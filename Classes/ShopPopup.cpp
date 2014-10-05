@@ -1961,7 +1961,7 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-        if(is_use_goods_type_gold)
+        if(!is_use_goods_type_gold)
             addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
         else
             addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought)), 9999);
