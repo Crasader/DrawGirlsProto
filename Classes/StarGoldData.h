@@ -989,8 +989,8 @@ public:
 	
 	bool is_on_accountLinkLead;
 	
-	string getIntroducerID();
-	void setIntroducerID(string t_id);
+	long long getIntroducerID();
+	void setIntroducerID(long long t_id);
 	
 	void setIntroduceStage(int t_i);
 	int getIntroduceStage();
@@ -1183,7 +1183,7 @@ private:
 	jsonSelType update_today_mission_callback;
 	void resultUpdateTodayMission(Json::Value result_data);
 	
-	KSProtectStr introducerID;
+	KSProtectVar<long long> introducerID;
 	
 	vector<TimeEventInfo> time_event_list;
 	

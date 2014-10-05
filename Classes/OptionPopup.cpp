@@ -1087,7 +1087,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_recommender)
 	{
-		if(atoi(mySGD->getIntroducerID().c_str()) == 0)
+		if(mySGD->getIntroducerID() == 0)
 		{
 			IntroducerPopup* t_popup = IntroducerPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
 			{

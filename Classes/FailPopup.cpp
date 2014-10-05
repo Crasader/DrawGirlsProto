@@ -108,8 +108,8 @@ bool FailPopup::init()
 	p1["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	p1["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p1_data;
-	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p1_data["highPiece"] = mySGD->suitable_stage;
+	p1_data["character"] = mySGD->getUserdataSelectedCharNO();
+	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 	p1["data"] = p1_data;
 	
 	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
@@ -659,15 +659,15 @@ bool FailPopup::init()
 	param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p2_data;
-	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p2_data["highstage"] = mySGD->suitable_stage;
+	p2_data["character"] = mySGD->getUserdataSelectedCharNO();
+	p2_data["highPiece"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
-	if(mySD->getSilType() == mySGD->getIntroduceStage() && mySGD->getIntroducerID() != "0" && mySGD->getIntroducerID() != "-1")
+	if(mySD->getSilType() >= mySGD->getIntroduceStage() && mySGD->getIntroducerID()>0)
 	{
 		Json::Value t_param;
 		t_param["memberID"] = myHSP->getSocialID();
@@ -753,7 +753,7 @@ void FailPopup::resultCompleteIntroducer(Json::Value result_data)
 {
 	if(result_data["result"]["code"] == GDSUCCESS)
 	{
-		mySGD->setIntroducerID("-1");
+		mySGD->setIntroducerID(mySGD->getIntroducerID()*-1);
 	}
 }
 

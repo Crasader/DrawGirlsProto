@@ -1821,7 +1821,7 @@ void FriendPopup::setVoteFriendMenu()
 																			 ll->removeFromParent();
 																			 if(v2["result"]["code"] == GDSUCCESS)
 																			 {
-                                                                                 mySGD->setIntroducerID(v2["introducerID"].asString());
+                                                                                 mySGD->setIntroducerID(v2["introducerID"].asInt64());
 																				 m_voteInputText->setVisible(false);
 																				 addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
 																																						 getLocal(LK::kFriendSuccessfullyRecommend), [=]()

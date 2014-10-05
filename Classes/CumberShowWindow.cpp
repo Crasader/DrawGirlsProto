@@ -32,7 +32,7 @@ bool CumberShowWindow::init()
 		std::string ccbiName = "boss_bee";
 		std::string ccbiname2 = ccbiName;
 		if(ccbiName.length()<3) {
-			ccbiname2="cherry";
+			ccbiname2="boss_bee";
 		}
 		////////////////////////////////////////////
 		
@@ -111,7 +111,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	if(bossShape == "circle")
 	{
 		if(ccbiName.length()<3) {
-			ccbiname2="cherry";
+			ccbiname2="boss_bee";
 		}
 		////////////////////////////////////////////
 		

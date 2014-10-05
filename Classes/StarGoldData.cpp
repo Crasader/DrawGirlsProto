@@ -26,7 +26,7 @@ void StarGoldData::withdraw()
 	
 	time_event_list.clear();
 	
-	setIntroducerID("");
+	setIntroducerID(0);
 	
 	endless_my_victory_on = false;
 	is_morphing_noti = true;
@@ -3269,7 +3269,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
 	}
 	
-	setIntroducerID(result_data.get("introducerID", Json::Value()).asString());
+	setIntroducerID(result_data.get("introducerID", 0).asInt64());
 }
 
 bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
@@ -3526,7 +3526,7 @@ int StarGoldData::getAppVersion()
 
 void StarGoldData::myInit()
 {
-	is_hell_mode_enabled = true;
+	is_hell_mode_enabled = false;
 	
 	app_type = "light1";
 	app_version = 2;
@@ -3545,7 +3545,7 @@ void StarGoldData::myInit()
 	
 	heart_time = NULL;
 	
-	setIntroducerID("");
+	setIntroducerID(0);
 	
 	is_new_puzzle_card = false;
 	
@@ -3649,11 +3649,11 @@ void StarGoldData::myInit()
 	}
 }
 
-string StarGoldData::getIntroducerID()
+long long StarGoldData::getIntroducerID()
 {
 	return introducerID.getV();
 }
-void StarGoldData::setIntroducerID(string t_id)
+void StarGoldData::setIntroducerID(long long t_id)
 {
 	introducerID = t_id;
 }

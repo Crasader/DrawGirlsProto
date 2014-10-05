@@ -282,8 +282,8 @@ bool EndlessModeResult::init()
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 		param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 		Json::Value p1_data;
-		p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-		p1_data["highPiece"] = mySGD->suitable_stage;
+		p1_data["character"] = mySGD->getUserdataSelectedCharNO();
+		p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 		param["data"] = p1_data;
 		
 		send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
@@ -2377,8 +2377,8 @@ void EndlessModeResult::reSetEndlessRank()
 	param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	param["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p1_data;
-	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p1_data["highPiece"] = mySGD->suitable_stage;
+	p1_data["character"] = mySGD->getUserdataSelectedCharNO();
+	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 	param["data"] = p1_data;
 
 	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)

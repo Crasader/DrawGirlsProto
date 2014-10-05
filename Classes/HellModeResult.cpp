@@ -379,7 +379,7 @@ bool HellModeResult::init()
 	param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p2_data;
 	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p2_data["highstage"] = mySGD->suitable_stage;
+	p2_data["highstage"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
 	
 	
