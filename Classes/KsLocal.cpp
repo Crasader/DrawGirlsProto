@@ -312,7 +312,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading5] = "'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading7] = "Clear 등급에 따라 획득되는 별의 개수가 다릅니다. 별이 모이면 다음 액자를 열 수 있어요.";
 	obj[LK::kMyLocalKey_titleLoading8] = "'업적' 창에서 달성한 업적을 보상받으세요. 달성한 정도에 따라 젬을 드립니다.";
-	obj[LK::kMyLocalKey_titleLoading9] = "일일임무에 도전해 보세요. 일일 임무를 달성하시면 다양한 선물을 드립니다.";
+	obj[LK::kMyLocalKey_titleLoading9] = "오늘의 임무에 도전해 보세요. 오늘의 임무를 달성하시면 다양한 선물을 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading10] = "주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading11] = "change 글자를 모아서 특별한 이미지를 확인하세요.";
 	obj[LK::kMyLocalKey_titleLoading12] = "미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다.";
@@ -910,7 +910,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scenarioMent55] = "다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠.";
 	obj[LK::kMyLocalKey_scenarioMent56] = "제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요.";
 	obj[LK::kMyLocalKey_scenarioMent57] = "아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요.";
-	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수가 추가됩니다.";
+	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수도 추가됩니다.\n";
 	obj[LK::kMyLocalKey_scenarioMent59] = "행운을 빌어요.";
 	obj[LK::kMyLocalKey_scenarioMent60] = "첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..";
 	obj[LK::kMyLocalKey_scenarioMent61] = "PVP가 끝나면 이곳으로 와요.";
@@ -925,9 +925,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial8] = "드디어 뽑기상자가 등장했네요.";
 	obj[LK::kMyLocalKey_kindTutorial9] = "이건 뭐죠? 아이템인가요?";
 	obj[LK::kMyLocalKey_kindTutorial10] = "특별한 아이템을 뽑을 수 있는 상자입니다.\n운이 좋으면 목숨 하나가 추가되는\n부활아이템을 얻을 수 있죠.";
-	obj[LK::kMyLocalKey_kindTutorial11] = "껄끄러운 게임임무이로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 개수만큼 가둬 잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.";
+	obj[LK::kMyLocalKey_kindTutorial11] = "껄끄러운 게임임무로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 개수만큼 가둬 잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.";
 	obj[LK::kMyLocalKey_kindTutorial12] = "응! 야규짱!";
-	obj[LK::kMyLocalKey_kindTutorial13] = "이번엔 게임임무이 조금 다른 것 같아요.";
+	obj[LK::kMyLocalKey_kindTutorial13] = "이번엔 게임임무가 조금 다른 것 같아요.";
 	obj[LK::kMyLocalKey_kindTutorial14] = "네. 주어진 개수만큼 생성되는 아이템을\n먹어야 클리어 됩니다.\n클리어하기 더 어려워지겠는데요?";
 	obj[LK::kMyLocalKey_kindTutorial15] = "게임시간이 엄청나게 줄어들었어요.\n조금 서둘러야겠는걸요.";
 	obj[LK::kMyLocalKey_kindTutorial16] = "알고있어!! 게임 중에 생기는 시간아이템을\n적절히 먹으면서 플레이하면 문제없을꺼야!!";
