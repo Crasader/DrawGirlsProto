@@ -1721,7 +1721,7 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 		t_coin_count = roundf(t_percent/t_d);
 	else
-		t_coin_count = roundf(t_percent/(t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10)));
+		t_coin_count = roundf(t_percent/t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10));
 	if(t_coin_count > 0)
 		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterNo.getV())), myGD->getJackPoint().convertToCCP()));
 }

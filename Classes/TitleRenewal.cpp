@@ -380,6 +380,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
+		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	
 	
@@ -532,6 +533,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
+		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
 	}
 }

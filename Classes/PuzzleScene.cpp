@@ -2474,8 +2474,10 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(1.f, [=](){
+		countingMessage();
+	}));
 	is_menu_enable = true;
     TRACE();
 }
@@ -3173,6 +3175,7 @@ void PuzzleScene::setTop()
 	
 	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(PuzzleScene::menuAction));
 	cancel_item->setTag(kPuzzleMenuTag_cancel);
+	cancel_item->setStringData("backkey");
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
 	cancel_menu->setPosition(ccp(28,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
@@ -3351,8 +3354,10 @@ void PuzzleScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(1.f, [=](){
+		countingMessage();
+	}));
 	TRACE();
 	
 	

@@ -5461,8 +5461,10 @@ void MainFlowScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(0.5, [=](){
+		countingMessage();
+	}));
 	TRACE();
 	
 	
@@ -5712,7 +5714,9 @@ void MainFlowScene::friendPopupClose()
 void MainFlowScene::mailPopupClose()
 {
     TRACE();
+	addChild(KSTimer::create(0.5, [=](){
 	countingMessage();
+	}));
 	is_menu_enable = true;
     TRACE();
 }
