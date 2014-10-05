@@ -504,7 +504,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	//CCLOG("t_function2");
 	
 	
-	pthread_mutex_unlock(&command.caller->t_functionMutex);
+	//pthread_mutex_unlock(&command.caller->t_functionMutex);
 	
 	string paramStr =  CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), command.commandStr.c_str()); //toBase64(desEncryption(graphdog->sKey, command.commandStr));
 	CCLOG("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ command start, t_function @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
@@ -536,11 +536,11 @@ void* GraphDog::t_function(void *_insertIndex)
 	//		curl_setopt($ch,CURLOPT_TIMEOUT,1000);
 	//	pthread_mutex_unlock(&graphdog->cmdsMutex);
 	
-	pthread_mutex_lock(&command.caller->t_functionMutex2);
+	//pthread_mutex_lock(&command.caller->t_functionMutex2);
 	CURLcode resultCode = curl_easy_perform(handle);
-	pthread_mutex_unlock(&command.caller->t_functionMutex2);
+	//pthread_mutex_unlock(&command.caller->t_functionMutex2);
 	
-	pthread_mutex_lock(&command.caller->t_functionMutex);
+	//pthread_mutex_lock(&command.caller->t_functionMutex);
 	
 	CCLOG("result code is %d",resultCode);
 	//##
@@ -777,7 +777,7 @@ void GraphDog::receivedCommand(float dt)
 {
 	//##
 	
-	pthread_mutex_lock(&graphdog->t_functionMutex);
+	//pthread_mutex_lock(&graphdog->t_functionMutex);
 	
 	for(std::map<int, CommandsType>::iterator commandQueueIter = commandQueue.begin(); commandQueueIter != commandQueue.end();)
 	{
@@ -1055,7 +1055,7 @@ void GraphDog::receivedCommand(float dt)
 	
 	
 	
-	pthread_mutex_unlock(&graphdog->t_functionMutex);
+	//pthread_mutex_unlock(&graphdog->t_functionMutex);
 }
 //std::string GraphDog::getDeviceID() {
 //	//    string _id;
