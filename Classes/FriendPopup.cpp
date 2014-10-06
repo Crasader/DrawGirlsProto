@@ -1632,11 +1632,11 @@ void FriendPopup::setVoteFriendMenu()
 					Json::Value msgInfo = mySGD->getKakaoMsg();
 					string msg = msgInfo["msg"].asString();
 					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
-					CCLOG("%s",msgInfo["msg"].asString().c_str());
-					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msgInfo["msg"].asString(),msgInfo["url"].asString());
+					CCLOG("%s",msg.c_str());
+					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msg.c_str(),msgInfo["url"].asString());
 					
 					if(ret == 0) {
-						auto ment = StyledLabelTTF::create("<font color=#FFFFFF>카카오톡을 설치를 하셔야 합니다.</font>",
+						auto ment = StyledLabelTTF::create(getLocal(LK::kFriendNeedKakao),
 																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 						ment->setAnchorPoint(ccp(0.5f, 0.5f));
 						ASPopupView* as = ASPopupView::getCommonNoti2(-9999999, "에러",

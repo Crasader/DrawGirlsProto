@@ -342,7 +342,8 @@ public:
 		GraphDog* caller;
 		GDStruct chunk;
 		//@ JsonBox::Object result;
-		Json::Value result;
+		//Json::Value result;
+		string resultStr;
 		int errorCnt;
 	};
 	std::map<int, CommandsType> commandQueue;
@@ -380,7 +381,6 @@ private:
 	string getToken();
 	string getUdid();
 	string getCTime();
-	int errorCount;
 	void setAuID(string appuserID);
 	void setUdid(string _id);
 	void setCTime(string cTime);
@@ -420,7 +420,6 @@ private:
 		
 		
 		isLogin=false;
-		errorCount=0;
 		this->gdVersion = GRAPHDOG_VERSION;
 		this->deviceInfo = "";
 		this->timestamp = 9;

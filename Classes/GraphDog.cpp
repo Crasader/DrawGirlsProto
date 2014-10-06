@@ -545,7 +545,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	CCLOG("result code is %d",resultCode);
 	//##
 	//@ JsonBox::Object resultobj;
-	Json::Value resultobj;
+	//Json::Value resultobj;
 	string resultStr;
 	if(resultCode == CURLE_OK)
 	{
@@ -565,21 +565,9 @@ void* GraphDog::t_function(void *_insertIndex)
 				resultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
 				
 				CCLOG("check3");
-				resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
+				//resultobj = GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 				
-				GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
-				Json::Value commandParam = command.commandStr;
-				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
-					
-					resultCode = CURLE_CHUNK_FAILED;
-					CCLOG("cmd check error %s",resultobj.asString().c_str());
-					//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
-				}else{
-					
-					CCLOG("reset by server cmdNo is %d",GraphDog::get()->lastCmdNo);
-					GraphDog::get()->lastCmdNo=commandParam["cmdNo"].asInt();
-				}
-				//CCLOG("t_function OK2 %s",resultStr.c_str());
+								//CCLOG("t_function OK2 %s",resultStr.c_str());
 			}
 			catch(const std::string& msg)
 			{
@@ -612,107 +600,14 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	
 	CCLOG("check5");
-	//callbackparam 통신과 무관함. 넣어준거 그대로 피드백.
-	for(auto iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-	{
-		if(iter->second.paramStr != "")
-		{
-			//@ JsonBox::Object param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-			Json::Value param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-			//@ resultobj[iter->first]["param"] = JsonBox::Value(param);
-			resultobj[iter->first]["param"] = param;
-			resultobj[iter->first]["param"]["action"]=iter->second.action;
-		}
-	}
+
 	
 	CCLOG("check6");
-	//	bool newToken = false;
-	//	// 새토큰발급일 경우
-	//	//if(resultobj["tokenUpdate"].getString()=="ok"){
-	//		//정상결과시 AuID,Token 다시 세팅
-	//		if(resultobj["state"].getString()=="ok"){
-	//			command.caller->setAuID(resultobj["auID"].getString());
-	//			command.caller->setCTime(resultobj["createTime"].getString());
-	//			command.caller->isLogin=true;
-	//		}else{
-	//			command.caller->setCTime("9999");
-	//		}
-	//		//첫실행일경우 받아온 nick,flag 저장.
-	////		if(resultobj["isFirst"].getBoolean()==true){
-	////			command.caller->setNick(resultobj["nick"].getString());
-	////			command.caller->setFlag(resultobj["flag"].getString());
-	////		}
-	//		//기존명령 다시 등록
-	//		std::vector<CommandParam> vcp;
-	//		for(std::map<string, CommandType>::const_iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-	//		{
-	//			JsonBox::Value param;
-	//			param.loadFromString(iter->second.paramStr);
-	//			vcp.push_back(CommandParam(iter->second.action, param.getObject(), iter->second.target, iter->second.selector ));
-	//		}
-	//		command.caller->command(vcp);
-	//
-	//		for(std::map<string, CommandType>::iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-	//		{
-	//			iter->second.target = 0;
-	//			iter->second.selector = 0;
-	//		}
-	//		newToken = true;
-	//	}
-	
-	//CCLOG("t_function 11");
-	
-	//@ if(resultobj["errorcode"].getInt()==9999){
-	if(resultobj["errorcode"].asInt()==9999){
-		//CCLOG("t_function errorcode");
-		command.caller->setCTime("9999");
-		command.caller->errorCount++;
-		if(command.caller->errorCount<5){
-			std::vector<CommandParam> vcp;
-			for(std::map<string, CommandType>::const_iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-			{
-				//@ JsonBox::Value param;
-				Json::Value param;
-				
-				//@param.loadFromString(iter->second.paramStr);
-				param = GraphDogLib::StringToJsonObject(iter->second.paramStr);
-				CommandParam cp;
-				cp.action = iter->second.action;
-				//@ cp.param = param.getObject();
-				cp.param = param;
-				//@@cp.selector = iter->second.selector;
-				//@@cp.target = iter->second.target;
-				cp.func=iter->second.func;
-				vcp.push_back(cp);
-			}
-			command.caller->command(vcp);
-			for(std::map<string, CommandType>::iterator iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-			{
-				//@@iter->second.target = 0;
-				//@@iter->second.selector = 0;
-				iter->second.func=NULL;
-			}
-		}
-		//newToken = true;
-	}
-	
-	//	if(newToken == false) // 새토큰 발급이 아닌 경우.
-	//	{
-	//		for(auto iter = command.commands.begin(); iter != command.commands.end(); ++iter)
-	//		{
-	//			CommandType test = iter->second;
-	//			CCLOG("dummy");
-	//		}
+
 	
 	
 	CCLOG("check8");
-	//CCLOG("t_function 12");
-	//@if(resultobj["state"].getString()=="ok"){
-	if(resultobj["state"].asString()=="ok"){
-		
-		//CCLOG("t_function 13");
-		command.caller->errorCount=0;
-	}
+
 	
 	
 	//CCLOG("t_function 14");
@@ -729,17 +624,13 @@ void* GraphDog::t_function(void *_insertIndex)
 //	}
 	
 	CCLOG("check9");
-	GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
-	GraphDog::get()->date=resultobj.get("date", 0).asInt64();
-	GraphDog::get()->weekNo=resultobj.get("weekNo", 0).asInt();
-	GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
 	
 	
 	CCLOG("check10");
-	command.result = resultobj;
+	command.resultStr = resultStr;
 	command.chunk.resultCode = resultCode;
 	//	}
-	
+	usleep(1000000/60);
 	CCLOG("check11");
 	pthread_mutex_unlock(&command.caller->t_functionMutex);
 	
@@ -782,6 +673,30 @@ void GraphDog::receivedCommand(float dt)
 	for(std::map<int, CommandsType>::iterator commandQueueIter = commandQueue.begin(); commandQueueIter != commandQueue.end();)
 	{
 		CommandsType commands = commandQueueIter->second;
+		Json::Value resultobj;
+		
+		if(commands.chunk.resultCode!=CURLE_AGAIN){
+			 resultobj = commands.resultStr;
+			
+			GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
+			Json::Value commandParam = commands.commandStr;
+			if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
+				
+				commands.chunk.resultCode = CURLE_CHUNK_FAILED;
+				CCLOG("cmd check error %s",resultobj.asString().c_str());
+				//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
+			}else{
+				
+				CCLOG("reset by server cmdNo is %d",GraphDog::get()->lastCmdNo);
+				GraphDog::get()->lastCmdNo=commandParam["cmdNo"].asInt();
+				GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
+				GraphDog::get()->date=resultobj.get("date", 0).asInt64();
+				GraphDog::get()->weekNo=resultobj.get("weekNo", 0).asInt();
+				GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
+			}
+
+		}
+		
 		try {
 			if(commands.chunk.resultCode == CURLE_AGAIN)
 			{
@@ -832,13 +747,13 @@ void GraphDog::receivedCommand(float dt)
 						CCLOG("receivedCommand error");
 						//@ JsonBox::Object resultobj;
 						//TRACE();
-						Json::Value resultobj;
+						Json::Value returnobj;
 						CommandType command = commandTypeIter->second;
 						//TRACE();
-						resultobj["state"] = "error";
-						resultobj["errorMsg"] = "check your network state";
-						resultobj["errorCode"] = 1002;
-						resultobj["result"]["code"]=GDCHECKNETWORK;
+						returnobj["state"] = "error";
+						returnobj["errorMsg"] = "check your network state";
+						returnobj["errorCode"] = 1002;
+						returnobj["result"]["code"]=GDCHECKNETWORK;
 						
 						//TRACE();
 						//callbackparam
@@ -848,7 +763,7 @@ void GraphDog::receivedCommand(float dt)
 							Json::Value param =  GraphDogLib::StringToJsonObject(command.paramStr);
 							//TRACE();
 							//@ resultobj["param"]=JsonBox::Value(param);
-							resultobj["param"]=param;
+							returnobj["param"]=param;
 							//TRACE();
 						}
 						//@@if(command.target!=0 && command.selector!=0)
@@ -857,7 +772,7 @@ void GraphDog::receivedCommand(float dt)
 						CCLOG("graphdog:: error call func for %s",command.action.c_str());
 						if(command.func!=NULL){
 							//TRACE();
-							command.func(resultobj);
+							command.func(returnobj);
 							//TRACE();
 						}else{
 							CCLOG("graphdog:: error call func back is null for %s",command.action.c_str());
@@ -874,7 +789,7 @@ void GraphDog::receivedCommand(float dt)
 			//@ JsonBox::Object resultobj = commands.result; //GraphDogLib::StringToJsonObject(resultStr);// result.getObject();
 			CCLOG("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$ get data, sendSize:%d, getSize:%d $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$",commands.commandStr.length()*2,commands.chunk.size);
 			//TRACE();
-			Json::Value resultobj = commands.result;
+			
 			
 			//TRACE();
 			if(resultobj.get("checkDeviceError", false).asBool()){
@@ -976,6 +891,11 @@ void GraphDog::receivedCommand(float dt)
 						CCLOG("graphdog:: call func for %s",ct.action.c_str());
 						if(ct.func!=NULL){
 							//TRACE();
+							
+							if(ct.paramStr!=""){
+								resultobj[iter2->first.c_str()]["param"]=ct.paramStr;
+							}
+							
 							ct.func(resultobj[iter2->first.c_str()]);
 						}else{
 							//TRACE();

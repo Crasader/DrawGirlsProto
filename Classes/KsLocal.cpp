@@ -136,6 +136,7 @@ void KsLocal::ko()
 	obj[LK::kFriendCurrentStage] = "%d스테이지";
 	obj[LK::kFriendHeartSend] = "   보내기";
 	obj[LK::kFriendHeartReSend] = "다시 보낼 수 있어요.";
+	obj[LK::kFriendNeedKakao] = "카카오톡이 설치되어있어야 합니다.";
 	
 	obj[LK::kFriendInputNickName] = "닉네임을 입력해주세요.";
 	obj[LK::kFriendAddFriend] = " + 친구요청";
@@ -910,7 +911,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scenarioMent55] = "다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠.";
 	obj[LK::kMyLocalKey_scenarioMent56] = "제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요.";
 	obj[LK::kMyLocalKey_scenarioMent57] = "아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요.";
-	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수도 추가됩니다.\n";
+	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고\n콤보점수도 추가됩니다.\n";
 	obj[LK::kMyLocalKey_scenarioMent59] = "행운을 빌어요.";
 	obj[LK::kMyLocalKey_scenarioMent60] = "첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..";
 	obj[LK::kMyLocalKey_scenarioMent61] = "PVP가 끝나면 이곳으로 와요.";

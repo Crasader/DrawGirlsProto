@@ -85,6 +85,7 @@ enum class LK
 	kFriendInputSkip,
 	kFriendVoterInput,
 	kFriendKakaoTalkFriend,
+	kFriendNeedKakao,
 	kFriendDontFind,
 	kFriendNoti,
 	kFriendError,
