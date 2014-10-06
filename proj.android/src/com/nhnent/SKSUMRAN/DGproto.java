@@ -49,7 +49,6 @@ import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.WindowManager;
 
 import com.AdX.tag.AdXConnect;
-import com.facebook.Session;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
