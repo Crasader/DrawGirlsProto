@@ -18,7 +18,7 @@
             android:name="io.fiverocks.android.appstore"
             android:value="Google" />
         <meta-data
-            android:name="APPNAME"
+            android:name="APP_NAME"
             android:value="com.nhnent.SKSUMRAN" /> <!-- 패키지네임과 일치시켜주세요. -->
         <meta-data
             android:name="ADX_CLIENT_ID"
