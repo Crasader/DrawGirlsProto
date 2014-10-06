@@ -1217,12 +1217,18 @@ void ZoomScript::showtimeSixthAction()
 
 void ZoomScript::rankupAction()
 {
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
+	
+	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
+	
+	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
 	
-	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
-	
-	if(is_morphing)showtime_morphing_label->setVisible(true);
+	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1268,12 +1274,18 @@ void ZoomScript::showtimeSeventhAction()
 //	{
 //		startStageAnimation();
 //	}
+	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
+	
+	CCLabelTTF* t_label = CCLabelTTF::create(save_text.c_str(), mySGD->getFont().c_str(), 16);
+	
+	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
+	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
+	
+	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
 	
-	save_text = NSDS_GS(kSDS_CI_int1_script_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade()));
-	
-	if(is_morphing)showtime_morphing_label->setVisible(true);
+	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));

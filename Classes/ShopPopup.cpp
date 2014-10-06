@@ -1857,16 +1857,16 @@ void ShopPopup::showPopup()
 
 void ShopPopup::endShowPopup()
 {
-	/* close cbt
 	if(!mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
 	{
 		FirstPurchasePopup* t_popup = FirstPurchasePopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=](){is_menu_enable = true;});
 		addChild(t_popup, kSP_Z_popup);
 		return;
 	}
-	 */
-	
-	is_menu_enable = true;
+	else
+	{
+		is_menu_enable = true;
+	}
 }
 
 void ShopPopup::hidePopup()

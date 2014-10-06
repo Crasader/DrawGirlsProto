@@ -4433,6 +4433,18 @@ void MainFlowScene::topOnLight()
 			t_clipping->addChild(t_ment10);
 			
 			
+			CCSprite* t_arrow10 = CCSprite::create("kt_arrow_big.png");
+			t_arrow10->setScale(0.6f);
+			t_arrow10->setPosition(ccp(32+55*4.f, -(myDSH->puzzle_ui_top-320.f)/2.f+38 + 58));
+			t_arrow10->setRotation(-90);
+			t_clipping->addChild(t_arrow10);
+			
+			StyledLabelTTF* t_ment11 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kFriendList), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_ment11->setAnchorPoint(ccp(0.5f,0));
+			t_ment11->setPosition(t_arrow10->getPosition() + ccp(0, t_arrow10->getContentSize().height/2.f*t_arrow10->getScale() + 3));
+			t_clipping->addChild(t_ment11);
+			
+			
 			
 			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 			t_stencil1->setContentSize(CCSizeMake(50, 40));
@@ -4467,6 +4479,7 @@ void MainFlowScene::topOnLight()
 				t_arrow7->removeFromParent();
 				t_arrow8->removeFromParent();
 				t_arrow9->removeFromParent();
+				t_arrow10->removeFromParent();
 				t_ment2->removeFromParent();
 				t_ment3->removeFromParent();
 				t_ment4->removeFromParent();
@@ -4476,6 +4489,7 @@ void MainFlowScene::topOnLight()
 				t_ment8->removeFromParent();
 				t_ment9->removeFromParent();
 				t_ment10->removeFromParent();
+				t_ment11->removeFromParent();
 				end_func11();
 				t_suction->removeFromParent();
 			};
