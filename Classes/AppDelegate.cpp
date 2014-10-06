@@ -312,7 +312,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setDuplicateLoginFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert1),[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert1),[](){
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -322,7 +322,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setCmdNoErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert2),[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert2),[](){
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -331,7 +331,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	});
 	
 	GraphDog::get()->setLongTimeErrorFunc([](){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert3),[](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert3),[](){
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -340,7 +340,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	});
 	
 	GraphDog::get()->setCommandRetryFunc([](std::vector<CommandParam> vcp){
-		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 			GraphDog::get()->command(vcp);
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);

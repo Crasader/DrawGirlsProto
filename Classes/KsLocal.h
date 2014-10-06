@@ -14,6 +14,7 @@ using namespace std;
  
  */
 
+#define myLoc KsLocal::sharedInstance()
 #define getLocal(X) (KsLocal::sharedInstance()->getLocalForKey(X))
 enum class LK
 {

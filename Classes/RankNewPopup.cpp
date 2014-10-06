@@ -70,7 +70,7 @@ bool RankNewPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);
@@ -321,7 +321,7 @@ bool RankNewPopup::init()
 		
 		function<void()> end_func1 = [=]()
 		{
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial7), end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial7), end_func2);
 		};
 		
 		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -334,7 +334,7 @@ bool RankNewPopup::init()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial6), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial6), end_func1);
 															  }));
 	}
 	
@@ -357,22 +357,22 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		
 		rankBack->addChild(graph_back, kZ_CP_img);
 		setFormSetter(graph_back);
-		//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 		//		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_a->setPosition(ccp(25,8));
 		//		graph_back->addChild(t_rank_a);
 		//
-		//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 		//		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_b->setPosition(ccp(25+49,8));
 		//		graph_back->addChild(t_rank_b);
 		//
-		//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 		//		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_c->setPosition(ccp(25+98,8));
 		//		graph_back->addChild(t_rank_c);
 		//
-		//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+		//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 		//		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 		//		t_rank_d->setPosition(ccp(25+147,8));
 		//		graph_back->addChild(t_rank_d);
@@ -382,11 +382,11 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		int myrank = result_data["myrank"].asInt();
 		//		string lefttimestr;
 		//		if(lefttime>60*60*24){
-		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_dayAfterReset), lefttime/(60*60*24)+1)->getCString();
+		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_dayAfterReset), lefttime/(60*60*24)+1)->getCString();
 		//		}else if(lefttime>60*60){
-		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_hourAfterReset), lefttime/(60*60)+1)->getCString();
+		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_hourAfterReset), lefttime/(60*60)+1)->getCString();
 		//		}else{
-		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_secondAfterReset), lefttime/60+1)->getCString();
+		//			lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_secondAfterReset), lefttime/60+1)->getCString();
 		//		}
 		
 		CCScale9Sprite* rest_back = CCScale9Sprite::create("common_deepgray.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -400,7 +400,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		rest_back->addChild(lefttime_label); // , kZ_CP_img);
 		setFormSetter(rest_back);
 		
-		KSLabelTTF* rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_restTime), mySGD->getFont().c_str(), 10.5f);
+		KSLabelTTF* rest_time_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_restTime), mySGD->getFont().c_str(), 10.5f);
 		rest_time_title->setColor(ccc3(255, 255, 255));
 		rest_time_title->setAnchorPoint(ccp(0,0.5f));
 		rest_time_title->setPosition(ccp(10, rest_back->getContentSize().height / 2.f));
@@ -408,14 +408,14 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		setFormSetter(rest_time_title);
 		setFormSetter(lefttime_label);
 		if(lefttime < 60)
-			//			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeSecond), remain_time)->getCString());
-			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), 0)->getCString());
+			//			rest_time_value->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeSecond), remain_time)->getCString());
+			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeMinute), 0)->getCString());
 		else if(lefttime < 60*60)
-			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeMinute), lefttime/60)->getCString());
+			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeMinute), lefttime/60)->getCString());
 		else if(lefttime < 60*60*24)
-			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeHour), lefttime/60/60)->getCString());
+			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeHour), lefttime/60/60)->getCString());
 		else
-			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_restTimeDay), lefttime/60/60/24)->getCString());
+			lefttime_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_restTimeDay), lefttime/60/60/24)->getCString());
 		
 		
 		
@@ -439,9 +439,9 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		CCRect mission_size = CCRectMake(0, 0, 225, 22);
 		CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-23.5f);
 		LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, "");
-		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee1));
-		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee2));
-		tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_rankNewMarquee3));
+		tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_rankNewMarquee1));
+		tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_rankNewMarquee2));
+		tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_rankNewMarquee3));
 		tipMaquee->setPosition(mission_position);
 		tipMaquee->startMarquee();
 		tipMaquee->setFontSize(12.f);
@@ -464,7 +464,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 		//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 		//		rankBack->addChild(all_user_label, kZ_CP_img);
 		//
-		//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+		//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 		//		my_rank_label->setAnchorPoint(ccp(1,0.5));
 		//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 		//		rankBack->addChild(my_rank_label, kZ_CP_img);
@@ -583,7 +583,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(loading_img->getPosition());
 		rankBack->addChild(fail_label, kZ_CP_img);
 	}

@@ -27,13 +27,14 @@ public:
 	
 	virtual void visit();
 	
-	void startClearView();
+	void startClearView(CCPoint t_p);
 	
 private:
 	
 	CCRect view_rect;
 	bool is_showtime;
 	CCNode* game_node;
+	CCSprite* side_back;
 	
 	int frame_cnt;
 	

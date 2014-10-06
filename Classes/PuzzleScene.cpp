@@ -580,11 +580,11 @@ bool PuzzleScene::init()
 														  {
 															  mySGD->network_check_cnt = 0;
 															  
-															  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
+															  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
 																  myHSP->command(this->clear_command_list, -1);
 															  }, 1);
 															  
-//															  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//															  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //																  myHSP->command(this->clear_command_list);
 //															  });
 															  if(alert)
@@ -908,7 +908,7 @@ bool PuzzleScene::init()
 					typing_box->setVisible(true);
 					typing_box->setTouchSuction(true);
 					
-					typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent14), end_func3);
+					typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent14), end_func3);
 				};
 				
 				function<void()> end_func1 = [=]()
@@ -926,7 +926,7 @@ bool PuzzleScene::init()
 					t_arrow1->setPosition(ccp(160,223));
 					t_clipping->addChild(t_arrow1);
 					
-					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+					StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleDimmed1), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
 					t_ment1->setAnchorPoint(ccp(0,0.5f));
 					t_ment1->setPosition(t_arrow1->getPosition() + ccp(-t_arrow1->getContentSize().width/2.f*t_arrow1->getScale() - 3 + 55, 10));
 					t_clipping->addChild(t_ment1);
@@ -943,7 +943,7 @@ bool PuzzleScene::init()
 					t_arrow3->setPosition(ccp(170,58));
 					t_clipping->addChild(t_arrow3);
 					
-					StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+					StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
 					t_ment2->setAnchorPoint(ccp(0.f,0.5f));
 					t_ment2->setPosition(ccp(195, 75));
 					t_clipping->addChild(t_ment2);
@@ -954,7 +954,7 @@ bool PuzzleScene::init()
 					t_arrow4->setPosition(ccp(434.5f,270));
 					t_clipping->addChild(t_arrow4);
 					
-					StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+					StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 					t_ment3->setAnchorPoint(ccp(1,0.5f));
 					t_ment3->setPosition(t_arrow4->getPosition() + ccp(-t_arrow4->getContentSize().width/2.f*t_arrow4->getScale() - 3, 0));
 					t_clipping->addChild(t_ment3);
@@ -965,7 +965,7 @@ bool PuzzleScene::init()
 					t_arrow5->setPosition(ccp(315,32));
 					t_clipping->addChild(t_arrow5);
 					
-					StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_puzzleDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kRightAlignment);
+					StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kRightAlignment);
 					t_ment4->setAnchorPoint(ccp(1,0.5f));
 					t_ment4->setPosition(t_arrow5->getPosition() + ccp(-t_arrow5->getContentSize().width/2.f*t_arrow5->getScale() - 3, 0));
 					t_clipping->addChild(t_ment4);
@@ -1035,7 +1035,7 @@ bool PuzzleScene::init()
 																							  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																							  skip_menu->setEnabled(true);
 																							  
-																							  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent13), end_func1);
+																							  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent13), end_func1);
 																						  }));
 														}));
 			}
@@ -1222,7 +1222,7 @@ void PuzzleScene::updateCardHistory(CCNode *t_loading)
 										 {
 											 mySGD->network_check_cnt = 0;
 											 
-											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
+											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
 												 updateCardHistory(t_loading);
 											 }, 1);
 											 if(alert)
@@ -1382,17 +1382,17 @@ void PuzzleScene::endGetStar()
 				
 				BonusGameReward gr1;
 				gr1.spriteName = "morphing_heart3.png";
-				gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
+				gr1.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 				
 				BonusGameReward gr2;
 				gr2.spriteName = "morphing_heart3.png";
-				gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
+				gr2.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 				BonusGameReward gr3;
 				gr3.spriteName = "morphing_heart3.png";
-				gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
+				gr3.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 				BonusGameReward gr4;
 				gr4.spriteName = "morphing_heart3.png";
-				gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
+				gr4.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 //				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //											 {
 //												 if(clear_is_first_puzzle_success)
@@ -2182,7 +2182,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
@@ -2237,17 +2237,17 @@ void PuzzleScene::menuAction(CCObject* sender)
 //					
 //					BonusGameReward gr1;
 //					gr1.spriteName = "morphing_heart2.png";
-//					gr1.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
+//					gr1.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 //					
 //					BonusGameReward gr2;
 //					gr2.spriteName = "morphing_heart2.png";
-//					gr2.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
+//					gr2.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 //					BonusGameReward gr3;
 //					gr3.spriteName = "morphing_heart2.png";
-//					gr3.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
+//					gr3.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 //					BonusGameReward gr4;
 //					gr4.spriteName = "morphing_heart2.png";
-//					gr4.desc = ccsf(myLoc->getLocalForKey(kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
+//					gr4.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 ////					GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 ////																			 {
 ////																				 is_menu_enable = true;
@@ -2336,11 +2336,11 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 								{
 									mySGD->network_check_cnt = 0;
 									
-									ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4), [=](){
+									ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999, myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
 										tryGababoReward(t_loading, success_func);
 									}, 1);
 									
-//									ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//									ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //										tryGababoReward(t_loading, success_func);
 //									});
 									if(alert)
@@ -2474,8 +2474,10 @@ void PuzzleScene::openSettingPopup()
 
 void PuzzleScene::mailPopupClose()
 {
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(1.f, [=](){
+		countingMessage();
+	}));
 	is_menu_enable = true;
     TRACE();
 }
@@ -2628,23 +2630,27 @@ void PuzzleScene::setRight()
 				
 				t_clipping->addChild(t_inner);
 				
-				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
-				for(int j=0;j<card_rank;j++)
+				
+				if(mySGD->getPieceHistory(selected_stage_number).is_clear[i-1].getV())
 				{
-					CCSprite* t_star = CCSprite::create("star_on.png");
-					t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
-					right_body->addChild(t_star);
+					int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+					for(int j=0;j<card_rank;j++)
+					{
+						CCSprite* t_star = CCSprite::create("star_on.png");
+						t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
+						right_body->addChild(t_star);
+					}
 				}
 				
 				CCSprite* n_show = CCSprite::create("puzzle_right_view.png");
-				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_view), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_view), mySGD->getFont().c_str(), 12);
 				n_label->disableOuterStroke();
 				n_label->setPosition(ccpFromSize(n_show->getContentSize()/2.f) + ccp(2,0));
 				n_show->addChild(n_label);
 				
 				CCSprite* s_show = CCSprite::create("puzzle_right_view.png");
 				s_show->setColor(ccGRAY);
-				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_view), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_view), mySGD->getFont().c_str(), 12);
 				s_label->disableOuterStroke();
 				s_label->setPosition(ccpFromSize(s_show->getContentSize()/2.f) + ccp(2,0));
 				s_show->addChild(s_label);
@@ -2688,13 +2694,13 @@ void PuzzleScene::setRight()
 				
 				string condition_string;
 				if(i == 1)
-					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition1);
+					condition_string = myLoc->getLocalForKey(LK::kMyLocalKey_condition1);
 				else if(i == 2)
-					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition2);
+					condition_string = myLoc->getLocalForKey(LK::kMyLocalKey_condition2);
 				else if(i == 3)
-					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition3);
+					condition_string = myLoc->getLocalForKey(LK::kMyLocalKey_condition3);
 				else
-					condition_string = myLoc->getLocalForKey(kMyLocalKey_condition4);
+					condition_string = myLoc->getLocalForKey(LK::kMyLocalKey_condition4);
 				
 				KSLabelTTF* condition_label = KSLabelTTF::create(condition_string.c_str(), mySGD->getFont().c_str(), 10);
 				condition_label->disableOuterStroke();
@@ -2755,12 +2761,12 @@ void PuzzleScene::setRight()
 	
 	CCSprite* n_ready = CCSprite::create("puzzle_right_ready.png");
 	
-	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+	CCLabelTTF* n_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 11);
 	n_stage->setPosition(ccp(n_ready->getContentSize().width/2.f,n_ready->getContentSize().height/2.f+9));
 	n_ready->addChild(n_stage);
 	
-	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
+	KSLabelTTF* n_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
 	n_ready_label->disableOuterStroke();
 	n_ready_label->setPosition(ccp(n_ready->getContentSize().width/2.f, n_ready->getContentSize().height*0.4f-1));
 	n_ready->addChild(n_ready_label);
@@ -2768,12 +2774,12 @@ void PuzzleScene::setRight()
 	CCSprite* s_ready = CCSprite::create("puzzle_right_ready.png");
 	s_ready->setColor(ccGRAY);
 	
-	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), selected_stage_number)->getCString(),
+	CCLabelTTF* s_stage = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), selected_stage_number)->getCString(),
 												 mySGD->getFont().c_str(), 11);
 	s_stage->setPosition(ccp(s_ready->getContentSize().width/2.f,s_ready->getContentSize().height/2.f+9));
 	s_ready->addChild(s_stage);
 	
-	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
+	KSLabelTTF* s_ready_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ready), mySGD->getFont().c_str(), 18.5f);
 	s_ready_label->disableOuterStroke();
 	s_ready_label->setPosition(ccp(s_ready->getContentSize().width/2.f, s_ready->getContentSize().height*0.4f-1));
 	s_ready->addChild(s_ready_label);
@@ -2814,22 +2820,22 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 		graph_back->setPosition(ccp(right_body->getContentSize().width/2.f,177));
 		right_body->addChild(graph_back);
 		
-//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 //		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_a->setPosition(ccp(16,8));
 //		graph_back->addChild(t_rank_a);
 //		
-//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 //		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_b->setPosition(ccp(16+28,8));
 //		graph_back->addChild(t_rank_b);
 //		
-//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 //		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_c->setPosition(ccp(17+56,8));
 //		graph_back->addChild(t_rank_c);
 //		
-//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 //		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_d->setPosition(ccp(17+84,8));
 //		graph_back->addChild(t_rank_d);
@@ -2843,7 +2849,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 //		all_user_label->setPosition(ccp(right_body->getContentSize().width-10, 204));
 //		right_body->addChild(all_user_label);
 //		
-//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 //		my_rank_label->setAnchorPoint(ccp(1,0.5));
 //		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 //		right_body->addChild(my_rank_label);
@@ -3026,7 +3032,7 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 	else
 	{
 		TRACE();
-		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* fail_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 		right_body->addChild(fail_label);
 	}
@@ -3044,19 +3050,19 @@ void PuzzleScene::setRightTopButton()
 	if(!stage_button)
 	{
 		CCSprite* n_stage = CCSprite::create("puzzle_right_top_off.png");
-		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
 		n_label->disableOuterStroke();
 		n_label->setPosition(ccpFromSize(n_stage->getContentSize()/2.f));
 		n_stage->addChild(n_label);
 		CCSprite* s_stage = CCSprite::create("puzzle_right_top_off.png");
 		s_stage->setColor(ccGRAY);
-		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
 		s_label->disableOuterStroke();
 		s_label->setColor(ccGRAY);
 		s_label->setPosition(ccpFromSize(s_stage->getContentSize()/2.f));
 		s_stage->addChild(s_label);
 		CCSprite* d_stage = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_stage->getContentSize().width, n_stage->getContentSize().height));
-		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_stage), mySGD->getFont().c_str(), 12.5f);
 		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_stage->getContentSize()/2.f));
@@ -3076,19 +3082,19 @@ void PuzzleScene::setRightTopButton()
 	if(!ranking_button)
 	{
 		CCSprite* n_ranking = CCSprite::create("puzzle_right_top_off.png");
-		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
 		n_label->disableOuterStroke();
 		n_label->setPosition(ccpFromSize(n_ranking->getContentSize()/2.f));
 		n_ranking->addChild(n_label);
 		CCSprite* s_ranking = CCSprite::create("puzzle_right_top_off.png");
 		s_ranking->setColor(ccGRAY);
-		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
 		s_label->disableOuterStroke();
 		s_label->setColor(ccGRAY);
 		s_label->setPosition(ccpFromSize(s_ranking->getContentSize()/2.f));
 		s_ranking->addChild(s_label);
 		CCSprite* d_ranking = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_ranking->getContentSize().width, n_ranking->getContentSize().height));
-		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* d_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ranking), mySGD->getFont().c_str(), 12.5f);
 		d_label->setColor(ccc3(20, 50, 70));
 		d_label->disableOuterStroke();
 		d_label->setPosition(ccpFromSize(d_ranking->getContentSize()/2.f));
@@ -3169,6 +3175,7 @@ void PuzzleScene::setTop()
 	
 	CCMenuItem* cancel_item = CCMenuItemSprite::create(n_cancel, s_cancel, this, menu_selector(PuzzleScene::menuAction));
 	cancel_item->setTag(kPuzzleMenuTag_cancel);
+	cancel_item->setStringData("backkey");
 	
 	CCMenu* cancel_menu = CCMenu::createWithItem(cancel_item);
 	cancel_menu->setPosition(ccp(28,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22));
@@ -3347,8 +3354,10 @@ void PuzzleScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(1.f, [=](){
+		countingMessage();
+	}));
 	TRACE();
 	
 	
@@ -3547,6 +3556,6 @@ void PuzzleScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(PuzzleScene::alertAction));
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(PuzzleScene::alertAction));
 //	onBackKeyAction();
 }

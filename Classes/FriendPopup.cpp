@@ -218,7 +218,7 @@ bool FriendPopup::init()
 //		
 //		function<void()> end_func1 = [=]()
 //		{
-//			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial2), end_func2);
+//			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial2), end_func2);
 //		};
 //		
 //		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
@@ -231,7 +231,7 @@ bool FriendPopup::init()
 //																														skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 //																														skip_menu->setEnabled(true);
 //																														
-//																														typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_kindTutorial1), end_func1);
+//																														typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial1), end_func1);
 //																														
 ////																														typing_box->setBackKeyFunc([=](){
 ////																															skip_menu->setEnabled(false);
@@ -1813,7 +1813,7 @@ void FriendPopup::setVoteFriendMenu()
 																		 }
 																		 param["memberID"] = myHSP->getSocialID();
 																		 param["nick"] = m_voteInputText->getText();
-																		 param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerInputReward);
+																		 param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerInputReward);
 																		 LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
 																		 addChild(ll, INT_MAX);
 
@@ -1821,7 +1821,7 @@ void FriendPopup::setVoteFriendMenu()
 																			 ll->removeFromParent();
 																			 if(v2["result"]["code"] == GDSUCCESS)
 																			 {
-                                                                                 mySGD->setIntroducerID(v2["introducerID"].asString());
+                                                                                 mySGD->setIntroducerID(v2["introducerID"].asInt64());
 																				 m_voteInputText->setVisible(false);
 																				 addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
 																																						 getLocal(LK::kFriendSuccessfullyRecommend), [=]()

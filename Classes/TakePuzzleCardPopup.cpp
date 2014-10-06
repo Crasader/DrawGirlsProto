@@ -80,13 +80,13 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	string title_str, content_str;
 	if(is_perfect)
 	{
-		title_str = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectCardTitle);
-		content_str = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectCardContent);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_puzzlePerfectCardTitle);
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_puzzlePerfectCardContent);
 	}
 	else
 	{
-		title_str = myLoc->getLocalForKey(kMyLocalKey_puzzleClearCardTitle);
-		content_str = myLoc->getLocalForKey(kMyLocalKey_puzzleClearCardContent);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_puzzleClearCardTitle);
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_puzzleClearCardContent);
 	}
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);

@@ -67,7 +67,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	title_back->setPosition(ccp(80,back_case->getContentSize().height-10));
 	back_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardTitle), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardTitle), mySGD->getFont().c_str(), 15);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
 	
@@ -80,7 +80,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	back_case->addChild(tip_marquee_back);
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
-	tipMaquee->addText(ccsf("<font size=12>%s</font>", myLoc->getLocalForKey(kMyLocalKey_rankRewardContent)));
+	tipMaquee->addText(ccsf("<font size=12>%s</font>", myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardContent)));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -127,12 +127,12 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_back->setPosition(ccp(back_case->getContentSize().width/2.f+109,123.5));
 	back_case->addChild(right_back);
 	
-	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageTitle), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageTitle), mySGD->getFont().c_str(), 13);
 	left_title->setAnchorPoint(ccp(0,0.5f));
 	left_title->setPosition(ccp(15, 191));
 	left_back->addChild(left_title);
 	
-	KSLabelTTF* right_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessTitle), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessTitle), mySGD->getFont().c_str(), 13);
 	right_title->setAnchorPoint(ccp(0,0.5f));
 	right_title->setPosition(ccp(15, 191));
 	right_back->addChild(right_title);
@@ -241,7 +241,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_first_back->setPosition(ccp(left_back->getContentSize().width/2.f, 122));
 	left_back->addChild(left_first_back);
 	
-	KSLabelTTF* left_first_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* left_first_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageScore), mySGD->getFont().c_str(), 11);
 	left_first_title->setAnchorPoint(ccp(0,0.5));
 	left_first_title->setPosition(ccp(10, left_first_back->getContentSize().height/2.f));
 	left_first_back->addChild(left_first_title);
@@ -258,12 +258,12 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_second_back->setPosition(ccp(left_back->getContentSize().width/2.f, 99.5));
 	left_back->addChild(left_second_back);
 	
-	KSLabelTTF* left_second_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageRank), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* left_second_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageRank), mySGD->getFont().c_str(), 11);
 	left_second_title->setAnchorPoint(ccp(0,0.5));
 	left_second_title->setPosition(ccp(10, left_second_back->getContentSize().height/2.f));
 	left_second_back->addChild(left_second_title);
 	
-	KSLabelTTF* left_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["stage"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageRankValue), stage_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["stage"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageRankValue), stage_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 	left_second_content->setColor(ccc3(255, 170, 20));
 	left_second_content->setAnchorPoint(ccp(1,0.5));
 	left_second_content->setPosition(ccp(left_second_back->getContentSize().width-10, left_second_back->getContentSize().height/2.f));
@@ -275,7 +275,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_third_back->setPosition(ccp(left_back->getContentSize().width/2.f, 77));
 	left_back->addChild(left_third_back);
 	
-	KSLabelTTF* left_third_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardStagePlayCount), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* left_third_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStagePlayCount), mySGD->getFont().c_str(), 11);
 	left_third_title->setAnchorPoint(ccp(0,0.5));
 	left_third_title->setPosition(ccp(10, left_third_back->getContentSize().height/2.f));
 	left_third_back->addChild(left_third_title);
@@ -418,7 +418,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_first_back->setPosition(ccp(right_back->getContentSize().width/2.f, 122));
 	right_back->addChild(right_first_back);
 	
-	KSLabelTTF* right_first_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* right_first_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessScore), mySGD->getFont().c_str(), 11);
 	right_first_title->setAnchorPoint(ccp(0,0.5));
 	right_first_title->setPosition(ccp(10, right_first_back->getContentSize().height/2.f));
 	right_first_back->addChild(right_first_title);
@@ -435,12 +435,12 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_second_back->setPosition(ccp(right_back->getContentSize().width/2.f, 99.5));
 	right_back->addChild(right_second_back);
 	
-	KSLabelTTF* right_second_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessRank), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* right_second_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessRank), mySGD->getFont().c_str(), 11);
 	right_second_title->setAnchorPoint(ccp(0,0.5));
 	right_second_title->setPosition(ccp(10, right_second_back->getContentSize().height/2.f));
 	right_second_back->addChild(right_second_title);
 	
-	KSLabelTTF* right_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["endless"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessRankValue), endless_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["endless"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessRankValue), endless_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 	right_second_content->setColor(ccc3(255, 170, 20));
 	right_second_content->setAnchorPoint(ccp(1,0.5));
 	right_second_content->setPosition(ccp(right_second_back->getContentSize().width-10, right_second_back->getContentSize().height/2.f));
@@ -452,12 +452,12 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_third_back->setPosition(ccp(right_back->getContentSize().width/2.f, 77));
 	right_back->addChild(right_third_back);
 	
-	KSLabelTTF* right_third_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessVictory), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* right_third_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessVictory), mySGD->getFont().c_str(), 11);
 	right_third_title->setAnchorPoint(ccp(0,0.5));
 	right_third_title->setPosition(ccp(10, right_third_back->getContentSize().height/2.f));
 	right_third_back->addChild(right_third_title);
 	
-	KSLabelTTF* right_third_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardEndlessVictoryScript), KS::insert_separator(mySGD->rank_reward_data["endless"]["count"].asInt()).c_str())->getCString(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_third_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessVictoryScript), KS::insert_separator(mySGD->rank_reward_data["endless"]["count"].asInt()).c_str())->getCString(), mySGD->getFont().c_str(), 13);
 	right_third_content->setColor(ccc3(255, 170, 20));
 	right_third_content->setAnchorPoint(ccp(1,0.5));
 	right_third_content->setPosition(ccp(right_third_back->getContentSize().width-10, right_third_back->getContentSize().height/2.f));
@@ -504,7 +504,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			else
 				stage_after_position = stage_percent_case->getPosition() + ccp(-left_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["stage"]["myrank"].asInt()/mySGD->rank_reward_data["stage"]["alluser"].asInt()), 0);
 			stage_percent_label->setFontSize(12);
-			stage_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["stage"]["myrank"].asInt())->getCString());
+			stage_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["stage"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
@@ -526,7 +526,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			else
 				endless_after_position = endless_percent_case->getPosition() + ccp(-right_graph_case->getContentSize().width*(1.f-1.f*mySGD->rank_reward_data["endless"]["myrank"].asInt()/mySGD->rank_reward_data["endless"]["alluser"].asInt()), 0);
 			endless_percent_label->setFontSize(12);
-			endless_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["endless"]["myrank"].asInt())->getCString());
+			endless_percent_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardRankValue), mySGD->rank_reward_data["endless"]["myrank"].asInt())->getCString());
 		}
 		else
 		{
@@ -554,51 +554,51 @@ CCNode* RankRewardPopup::getTakeRewardScript(Json::Value reward_list)
 	CCNode* return_node = NULL;
 	if(t_type == kGoodsType_gold)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeGold), KS::insert_separator(reward_list[0]["count"].asInt()).c_str())->getCString())->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeGold), KS::insert_separator(reward_list[0]["count"].asInt()).c_str())->getCString())->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_ruby)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeRuby), KS::insert_separator(reward_list[0]["count"].asInt()).c_str())->getCString())->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeRuby), KS::insert_separator(reward_list[0]["count"].asInt()).c_str())->getCString())->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_item9)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeItem9))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeItem9))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_item6)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeItem6))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeItem6))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_item11)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeItem11))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeItem11))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass1)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass1))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass1))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass2)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass2))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass2))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass3)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass3))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass3))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass4)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass4))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass4))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass5)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass5))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass5))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else if(t_type == kGoodsType_pass6)
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypePass6))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass6))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	else
 	{
-		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(kMyLocalKey_rankRewardGoodsTypeMany))->getCString(), mySGD->getFont().c_str(), 12);
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeMany))->getCString(), mySGD->getFont().c_str(), 12);
 	}
 	
 	return return_node;

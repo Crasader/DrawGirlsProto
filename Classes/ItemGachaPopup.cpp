@@ -97,28 +97,28 @@ void ItemGachaPopup::completedAnimationSequenceNamed (char const * name)
 						string title_str, ment_str;
 						if(item_type == kIC_fast) // 200
 						{
-							title_str = myLoc->getLocalForKey(kMyLocalKey_item4title);
-							ment_str = myLoc->getLocalForKey(kMyLocalKey_item4ment);
+							title_str = myLoc->getLocalForKey(LK::kMyLocalKey_item4title);
+							ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_item4ment);
 						}
 						else if(item_type == kIC_subOneDie) // 200
 						{
-							title_str = myLoc->getLocalForKey(kMyLocalKey_item5title);
-							ment_str = myLoc->getLocalForKey(kMyLocalKey_item5ment);
+							title_str = myLoc->getLocalForKey(LK::kMyLocalKey_item5title);
+							ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_item5ment);
 						}
-						else if(item_type = kIC_silence) // 250
+						else if(item_type == kIC_silence) // 250
 						{
-							title_str = myLoc->getLocalForKey(kMyLocalKey_item7title);
-							ment_str = myLoc->getLocalForKey(kMyLocalKey_item7ment);
+							title_str = myLoc->getLocalForKey(LK::kMyLocalKey_item7title);
+							ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_item7ment);
 						}
-						else if(item_type = kIC_longTime) // 250
+						else if(item_type == kIC_longTime) // 250
 						{
-							title_str = myLoc->getLocalForKey(kMyLocalKey_item8title);
-							ment_str = myLoc->getLocalForKey(kMyLocalKey_item8ment);
+							title_str = myLoc->getLocalForKey(LK::kMyLocalKey_item8title);
+							ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_item8ment);
 						}
 						else // 100 item_type == kIC_heartUp
 						{
-							title_str = myLoc->getLocalForKey(kMyLocalKey_item10title);
-							ment_str = myLoc->getLocalForKey(kMyLocalKey_item10ment);
+							title_str = myLoc->getLocalForKey(LK::kMyLocalKey_item10title);
+							ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_item10ment);
 						}
 						
 						item_img = CCSprite::create(CCString::createWithFormat("item%d.png", item_type)->getCString());
@@ -239,7 +239,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->addChild(back_case);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
@@ -266,12 +266,12 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	m_container->addChild(question_box);
 	
 	
-	item_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 15);
+	item_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaDefaultContent1), mySGD->getFont().c_str(), 15);
 	item_title->disableOuterStroke();
 	item_title->setPosition(ccp(0,-17));
 	m_container->addChild(item_title);
 	
-	item_ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemGachaDefaultContent2), mySGD->getFont().c_str(), 12);
+	item_ment = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaDefaultContent2), mySGD->getFont().c_str(), 12);
 	item_ment->disableOuterStroke();
 	item_ment->setColor(ccc3(255, 170, 20));
 	item_ment->setPosition(ccp(0,-32));
@@ -280,7 +280,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
+	regacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_itemRegacha), mySGD->getFont().c_str(), 13);
 	regacha_label->disableOuterStroke();
 	regacha_label->setPosition(ccp(0,10));
 	r_label->addChild(regacha_label);
@@ -304,7 +304,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 		
 		float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
 		
-		KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+		KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
 		stamp_label->disableOuterStroke();
 		stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
 		stamp_label->setColor(ccc3(255,222,0));
@@ -338,7 +338,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 //		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 //		pass_count_case->addChild(pass_count_label);
 //		
-//		CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+//		CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 12);
 //		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 //		price_back->addChild(price_label);
 //	}
@@ -357,7 +357,7 @@ void ItemGachaPopup::myInit(int t_touch_priority, function<void()> t_end_func, f
 	regacha_button->setTouchPriority(touch_priority);
 	
 	
-	KSLabelTTF* use_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_thisItemUse), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* use_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_thisItemUse), mySGD->getFont().c_str(), 13);
 	use_label->disableOuterStroke();
 	CCScale9Sprite* use_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
 	use_button = CCControlButton::create(use_label, use_back);
@@ -497,7 +497,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 //			
 //			float discount_value = ((0.f + mySGD->getItemGachaGoldFee()) - mySGD->getItemGachaReplayGoldFee()) / mySGD->getItemGachaGoldFee() * 100.f;
 //			
-//			KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
+//			KSLabelTTF* stamp_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_itemRegachaDiscountValue), discount_value)->getCString(), mySGD->getFont().c_str(), 9);
 //			stamp_label->setPosition(ccp(stamp_size.width/2.f, stamp_size.height/2.f));
 //			stamp_label->setColor(ccc3(255,222,0));
 //			stamp_back->addChild(stamp_label);
@@ -535,7 +535,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 //			pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 //			pass_count_case->addChild(pass_count_label);
 //			
-//			CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 12);
+//			CCLabelTTF* price_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 12);
 //			price_label->setPosition(ccp(price_back->getContentSize().width/2.f+8,price_back->getContentSize().height/2.f));
 //			price_back->addChild(price_label);
 //			
@@ -552,7 +552,7 @@ void ItemGachaPopup::resultSaveUserData(Json::Value result_data)
 		CCLOG("missile upgrade fail!!");
 		
 		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 		
 		is_menu_enable = true;
 	}

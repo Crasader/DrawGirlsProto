@@ -86,7 +86,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realContinue),[=]()
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realContinue),[=]()
 										{
 											/*if(mySGD->is_endless_mode)
 											{
@@ -126,7 +126,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 																			   schedule(schedule_selector(ContinueContent::countingSchedule));
 																			   
 																			   mySGD->clearChangeGoods();
-																			   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+																			   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 																			   
 																			   is_menu_enable = true;
 																		   }
@@ -194,7 +194,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
                                                                                   {
                                                                                       mySGD->clearChangeGoods();
                                                                                       mySGD->clearChangeUserdata();
-                                                                                      addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=]()
+                                                                                      addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=]()
                                                                                                                                                     {
                                                                                                                                                         schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                                                                                     },ccp(0.01f,0.01f)), 9999999);
@@ -233,7 +233,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 //																		   schedule(schedule_selector(ContinueContent::countingSchedule));
 //																		   
 //																		   mySGD->clearChangeGoods();
-//																		   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//																		   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //																		   
 //																		   is_menu_enable = true;
 //																	   }
@@ -273,7 +273,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 //																		   }
 //																		   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 //																		   {
-//																			   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+//																			   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=]()
 //																																{
 //																																	schedule(schedule_selector(ContinueContent::countingSchedule));
 //																																	mySGD->clearChangeGoods();
@@ -286,8 +286,8 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 //																			   
 //																			   mySGD->clearChangeGoods();
 //																			   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
-//																																myLoc->getLocalForKey(kMyLocalKey_noti),
-//																																myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//																																myLoc->getLocalForKey(LK::kMyLocalKey_noti),
+//																																myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //																			   
 //																			   is_menu_enable = true;
 //																		   }
@@ -331,7 +331,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	
 	unschedule(schedule_selector(ContinueContent::countingSchedule));
 	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realContinue),[=]()
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realContinue),[=]()
 	{
 		if(mySGD->is_endless_mode)
 		{
@@ -369,7 +369,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   else
 									   {
 										   mySGD->clearChangeGoods();
-										   addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=]()
+										   addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=]()
                                                                                             {
                                                                                                 schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                             },ccp(0.01f,0.01f)), 9999999);
@@ -427,7 +427,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 //									   schedule(schedule_selector(ContinueContent::countingSchedule));
 //									   
 //									   mySGD->clearChangeGoods();
-//									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//									   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //									   
 //									   is_menu_enable = true;
 //								   }
@@ -487,7 +487,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
                                                       mySGD->clearChangeUserdata();
                                                       is_menu_enable = true;
                                                       
-                                                      addChild(ASPopupView::getCommonNoti(-9999999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+                                                      addChild(ASPopupView::getCommonNoti(-9999999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=]()
                                                                                                        {
                                                                                                            schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                                        },ccp(0.01f,0.01f)), 9999999);
@@ -497,8 +497,8 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
                                                       mySGD->clearChangeGoods();
                                                       mySGD->clearChangeUserdata();
                                                       addChild(ASPopupView::getCommonNoti(touch_priority-200,
-                                                                                                       myLoc->getLocalForKey(kMyLocalKey_noti),
-                                                                                                       myLoc->getLocalForKey(kMyLocalKey_failPurchase), [=]()
+                                                                                                       myLoc->getLocalForKey(LK::kMyLocalKey_noti),
+                                                                                                       myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=]()
                                                                                                        {
                                                                                                            schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                                        },ccp(0.01f,0.01f)), 9999999);
@@ -532,7 +532,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 //									   }
 //									   else if(result_data["result"]["code"] == GDPROPERTYISMINUS)
 //									   {
-//										   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+//										   getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=]()
 //																							{
 //																								schedule(schedule_selector(ContinueContent::countingSchedule));
 //																								mySGD->clearChangeGoods();
@@ -545,8 +545,8 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 //										   
 //										   mySGD->clearChangeGoods();
 //										   getParent()->addChild(ASPopupView::getCommonNoti(touch_priority-200,
-//																							myLoc->getLocalForKey(kMyLocalKey_noti),
-//																							myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//																							myLoc->getLocalForKey(LK::kMyLocalKey_noti),
+//																							myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //										   
 //										   is_menu_enable = true;
 //									   }
@@ -554,7 +554,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 			}
 			else
 			{
-//				getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=]()
+//				getParent()->addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=]()
 //																 {
 //																	 schedule(schedule_selector(ContinueContent::countingSchedule));
 //																	 is_menu_enable = true;
@@ -677,7 +677,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	back_in->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f+25.f));
 	back_case->addChild(back_in,3);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_doYouWantToContinue), mySGD->getFont().c_str(), 16);
 	title_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);// disableOuterStroke();
 	title_label->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height-28));
 	back_case->addChild(title_label);
@@ -715,7 +715,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	cancel_button->setPosition(ccpFromSize(back_case->getContentSize()) + ccp(-20,-12));
 	back_case->addChild(cancel_button);
 	
-//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_offContinue), mySGD->getFont().c_str(), 15);
 //	giveup_label->disableOuterStroke();
 //	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_button_ing.png");
 //	giveup_button = CCControlButton::create(giveup_label, giveup_back);
@@ -730,7 +730,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
 	
-	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueGem), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* c_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onContinueGem), mySGD->getFont().c_str(), 13);
 	c_label->disableOuterStroke();
 	c_label->setAnchorPoint(ccp(0.5f,0.5f));
 	c_label->setPosition(ccp(0,15));
@@ -753,7 +753,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		counting_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0,-6));
 		
-		c_label->setString(myLoc->getLocalForKey(kMyLocalKey_onContinue));
+		c_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_onContinue));
 		c_label->setAnchorPoint(ccp(0,0.5f));
 		c_label->setPosition(ccp(0,0));
 		
@@ -788,7 +788,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	{
 		// 버튼 두개(부활석, 젬 소모)
 		
-        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
+        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
         take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         float wide_value = take_count->getContentSize().width - 40;
@@ -813,13 +813,13 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		CCLabelTTF* r_label2 = CCLabelTTF::create();
 		
-		KSLabelTTF* c_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_onContinueP1), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* c_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onContinueP1), mySGD->getFont().c_str(), 13);
 		c_label2->disableOuterStroke();
 		c_label2->setAnchorPoint(ccp(0.5f,0.5f));
 		c_label2->setPosition(ccp(0,15));
 		r_label2->addChild(c_label2);
 		
-        KSLabelTTF* take_count2 = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
+        KSLabelTTF* take_count2 = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
         take_count2->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         wide_value = take_count2->getContentSize().width - 40;
@@ -913,14 +913,14 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 //		pass_count_label->setPosition(ccp(pass_count_case->getContentSize().width/2.f-0.5f, pass_count_case->getContentSize().height/2.f+0.5f));
 //		pass_count_case->addChild(pass_count_label);
 //		
-//		price_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_free), mySGD->getFont().c_str(), 15);
+//		price_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_free), mySGD->getFont().c_str(), 15);
 //		price_label->setAnchorPoint(ccp(0,0.5f));
 //		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
 //		price_node->addChild(price_label);
 //	}
 	else
 	{
-        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
+        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
         take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         float wide_value = take_count->getContentSize().width - 40;

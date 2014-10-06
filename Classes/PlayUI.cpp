@@ -29,8 +29,8 @@ ComboView * ComboView::create (int combo)
 }
 void ComboView::changeCombo (int combo)
 {
-	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
-	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo)->getCString());
+	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo)->getCString());
+	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo)->getCString());
 	if(shadow_label->getAnchorPoint().equals(ccp(1,0.5f)))
 	{
 		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
@@ -58,7 +58,7 @@ void ComboView::myInit (int combo)
 	
 	if(mySGD->is_endless_mode)
 	{
-		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
+		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
 		combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		shadow_label = CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
@@ -77,7 +77,7 @@ void ComboView::myInit (int combo)
 	}
 	else
 	{
-		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
+		combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo), mySGD->getFont().c_str(), 30);
 		combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 		combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 		shadow_label = CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
@@ -119,6 +119,8 @@ void ComboParent::showCombo (int t_combo)
 		
 		if(mySGD->is_endless_mode)
 			t_cv->setPosition(ccp(40,myDSH->ui_center_y+60));
+		else if(mySGD->is_hell_mode)
+			t_cv->setPosition(ccp(480-8,myDSH->ui_top-46));
 		else
 			t_cv->setPosition(ccp(480-8,myDSH->ui_top-65));
 		addChild(t_cv,0,1);// 1 : ComboView
@@ -440,7 +442,7 @@ void GoldLabel::myInit ()
 	stopIncreasing();
 	setAnchorPoint(ccp(1.f,0.5));
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 	{
 		setPosition(ccp(480-8, myDSH->ui_top-25));
 	}
@@ -700,7 +702,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 			}
 		}
 		
-		speed_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
+		speed_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_maxSpeed), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 		shadow = CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
@@ -710,7 +712,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	}
 	else
 	{
-		speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
+		speed_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_speed), t_step), mySGD->getFont().c_str(), 30);
 		speed_label->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 		speed_label->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 		shadow = CommonAnimation::applyBigShadow(speed_label, speed_label->getFontSize());
@@ -849,7 +851,7 @@ void TakeCoin::startMyAction()
 	CCNode* take_coin_node = CCNode::create();
 	addChild(take_coin_node);
 	
-	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
+	KSLabelTTF* ment = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
 	ment->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 	ment->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(ment, ment->getFontSize());
@@ -892,7 +894,7 @@ void TakeCoin::startMyAction()
 																					}));
 												 }));
 	
-	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
+	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_collectChange), mySGD->getFont().c_str(), 35);
 	light->enableOuterStroke(ccc3(0, 25, 45), 2.5f, 255, true);
 	light->setGradientColor(ccc4(95, 255, 255, 255), ccc4(50, 155, 255, 255), ccp(0,-1));
 //	CommonAnimation::applyBigShadow(light, light->getFontSize());
@@ -1077,7 +1079,7 @@ AreaScroll * AreaScroll::create ()
 }
 void AreaScroll::startAction ()
 {
-	KSLabelTTF* main_view = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_unlockedAreaScroll), mySGD->getFont().c_str(), 25);
+	KSLabelTTF* main_view = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_unlockedAreaScroll), mySGD->getFont().c_str(), 25);
 	main_view->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	main_view->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	CommonAnimation::applyBigShadow(main_view, main_view->getFontSize());
@@ -1146,7 +1148,7 @@ void ChangeCard::startMyAction()
 {
 	unschedule(schedule_selector(ChangeCard::startMyAction));
 	
-	KSLabelTTF* card_change_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
+	KSLabelTTF* card_change_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
 	card_change_label->enableOuterStroke(ccBLACK, 2.5f, int(255*0.3), true);
 	card_change_label->setGradientColor(ccc4(255, 155, 255, 255), ccc4(145, 45, 215, 255), ccp(0,-1));
 	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
@@ -1188,7 +1190,7 @@ void ChangeCard::startMyAction()
 																											  }));
 															  }));
 	
-	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
+	KSLabelTTF* light = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardChange), mySGD->getFont().c_str(), 45);
 	light->enableOuterStroke(ccBLACK, 2.5f, int(255*0.3), true);
 	light->setGradientColor(ccc4(255, 155, 255, 255), ccc4(145, 45, 215, 255), ccp(0,-1));
 //	CommonAnimation::applyBigShadow(card_change_label, card_change_label->getFontSize());
@@ -1833,7 +1835,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 {
 	if(ccb_filename == "ui_missonfail.ccbi")
 	{
-		KSLabelTTF* mission_fail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleMissionfail), mySGD->getFont().c_str(), 45);
+		KSLabelTTF* mission_fail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleMissionfail), mySGD->getFont().c_str(), 45);
 		mission_fail_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 		mission_fail_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 		mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93));
@@ -1844,21 +1846,21 @@ void PlayUI::addResultCCB(string ccb_filename)
         
         if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_combo)
         {
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextCombo), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - high_combo_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextCombo), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - high_combo_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
         else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_gold)
         {
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextGold), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - mySGD->getStageGold()), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextGold), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - mySGD->getStageGold()), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
         else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_itemCollect)
         {
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextItemCollect), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextItemCollect), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
@@ -1887,21 +1889,21 @@ void PlayUI::addResultCCB(string ccb_filename)
             total_score = recent_score + time_score;
             total_score = total_score*grade_value;
             
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextScore), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - total_score), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextScore), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i) - total_score), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
         else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_subCumberCatch)
         {
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextSubCumberCatch), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextSubCumberCatch), clr_cdt_cnt - ing_cdt_cnt), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
         else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_turns)
         {
-            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_missionFailContextTurns), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+            context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextTurns), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
             context_label->setAnchorPoint(ccp(0.5f,0.5f));
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
@@ -1958,7 +1960,7 @@ void PlayUI::addResultCCB(string ccb_filename)
 	}
 	else if(ccb_filename == "ui_stageclear.ccbi")
 	{
-		KSLabelTTF* stage_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 45);
+		KSLabelTTF* stage_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_clearTitle), mySGD->getFont().c_str(), 45);
 		stage_clear_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 		stage_clear_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 		stage_clear_label->setPosition(ccp(240,myDSH->ui_center_y));
@@ -2049,7 +2051,7 @@ void PlayUI::conditionClear ()
 	if(mission_back)
 	{
 		mission_back->removeAllChildren();
-		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getLocalCode()->getCString())->getCString());
+		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getLocalCode().c_str())->getCString());
 		t_success_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
 		mission_back->addChild(t_success_img);
 	}
@@ -2068,7 +2070,7 @@ void PlayUI::conditionClear ()
 	
 	AudioEngine::sharedInstance()->playEffect("ment_mission_success.mp3", false, true);
 	
-	KSLabelTTF* mission_complete_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missionComplete), mySGD->getFont().c_str(), 40);
+	KSLabelTTF* mission_complete_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missionComplete), mySGD->getFont().c_str(), 40);
 	mission_complete_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	mission_complete_label->enableOuterStroke(ccc3(60, 20, 0), 2.5f, 255, true);
 	mission_complete_label->setPosition(ccp(240-200,myDSH->ui_center_y));
@@ -2594,7 +2596,7 @@ void PlayUI::scoreAttackMissile(int t_damage)
 	
 	int cnt = t_damage/3000;
 	
-	KSLabelTTF* combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(kMyLocalKey_combo), cnt*5), mySGD->getFont().c_str(), 30);
+	KSLabelTTF* combo_label = KSLabelTTF::create(ccsf("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), cnt*5), mySGD->getFont().c_str(), 30);
 	combo_label->enableOuterStroke(ccc3(0, 45, 10), 2.5f, 255, true);
 	combo_label->setGradientColor(ccc4(240, 255, 10, 255), ccc4(110, 190, 5, 255), ccp(0,-1));
 	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(combo_label, combo_label->getFontSize());
@@ -3195,7 +3197,7 @@ void PlayUI::counting ()
 				//			}
 				
 				
-				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
+				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
 				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
 				time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
 				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
@@ -4260,7 +4262,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_mission10Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_mission10Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
@@ -4286,7 +4288,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission11Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_mission11Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
@@ -4312,7 +4314,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_mission12Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_mission12Label), KS::insert_separator(NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i)).c_str()), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
@@ -4338,7 +4340,7 @@ void PlayUI::myInit ()
 		addChild(mission_back, 2);
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
-		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_mission13Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_mission13Label), NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i))->getCString(), mySGD->getFont().c_str(), 12);
 		t_condition_label->setAnchorPoint(ccp(0.f,0.5f));
 		addChild(t_condition_label, 2);
 		

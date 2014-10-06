@@ -86,7 +86,7 @@ void HellModeOpening::setMain()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-10));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_hellMode), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellMode), mySGD->getFont().c_str(), 14);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,1.5f));
@@ -124,7 +124,7 @@ void HellModeOpening::setMain()
 	main_case->addChild(tip_marquee_back);
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_hellMarquee));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_hellMarquee));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -247,7 +247,7 @@ void HellModeOpening::setMain()
 		setRight(clicked_stage);
 	}
 	
-	ready_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ready), 18.5f, CCSizeMake(156, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
+	ready_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ready), 18.5f, CCSizeMake(156, 50), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), touch_priority);
 	ready_button->setPosition(ccp(right_back->getContentSize().width/2.f,-28));
 	right_back->addChild(ready_button);
 	ready_button->setFunction([=](CCObject* sender)
@@ -335,7 +335,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 		
 		Json::Value user_list = result_data["list"];
 		
-		CCSprite* graph_back = CCSprite::create("puzzle_rank_graph.png");
+		CCSprite* graph_back = CCSprite::create("endless_graph.png");
 		graph_back->setPosition(ccp(0,67));
 		right_info_node->addChild(graph_back);
 		
@@ -346,8 +346,8 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");//"puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,1));
-		rank_percent_case->setPosition(ccp(-115.f/2.f,67));
-		right_info_node->addChild(rank_percent_case);
+		rank_percent_case->setPosition(ccp(graph_back->getContentSize().width,7));
+		graph_back->addChild(rank_percent_case);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
 		percent_label->addChild(KSGradualValue<float>::create(100.f, rank_percent*100.f,
@@ -360,7 +360,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f-3));
 		rank_percent_case->addChild(percent_label);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(-115.f/2.f + 115.f*rank_percent,67));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(graph_back->getContentSize().width - graph_back->getContentSize().width*(1.f-rank_percent),7));
 		rank_percent_case->runAction(t_move);
 		
 		int limit_count = 3;
@@ -369,17 +369,17 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			string case_name;
 			if(myrank == i+1)
 			{
-				case_name = "mainpopup_purple.png";
+				case_name = "mainpopup_purple_s.png";
 				limit_count++;
 			}
 			else
 			{
-				case_name = "rank_normal2.png";
+				case_name = "rank_normal2_s.png";
 			}
 			
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			list_cell_case->setContentSize(CCSizeMake(145, 36));
-			list_cell_case->setPosition(ccp(0,20-i*36.f));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create(case_name.c_str(), CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(145, 28.5f));
+			list_cell_case->setPosition(ccp(0,22-i*29.f));
 			right_info_node->addChild(list_cell_case);
 			
 			CCPoint rank_position = ccp(14,list_cell_case->getContentSize().height/2.f);
@@ -387,25 +387,28 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			{
 				CCSprite* gold_medal = CCSprite::create("rank_gold.png");
 				gold_medal->setPosition(rank_position);
+				gold_medal->setScale(0.85f);
 				list_cell_case->addChild(gold_medal);
 			}
 			else if(i == 1)
 			{
 				CCSprite* silver_medal = CCSprite::create("rank_silver.png");
 				silver_medal->setPosition(rank_position);
+				silver_medal->setScale(0.85f);
 				list_cell_case->addChild(silver_medal);
 			}
 			else if(i == 2)
 			{
 				CCSprite* bronze_medal = CCSprite::create("rank_bronze.png");
 				bronze_medal->setPosition(rank_position);
+				bronze_medal->setScale(0.85f);
 				list_cell_case->addChild(bronze_medal);
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 12);
 				rank_label->disableOuterStroke();
-				rank_label->setPosition(ccp(27.f, rank_position.y+8));
+				rank_label->setPosition(rank_position);//ccp(27.f, rank_position.y+8));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -415,34 +418,34 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			if(i >= 3)
-				selectedFlagSpr->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f-5));
-			else
+//			if(i >= 3)
+//				selectedFlagSpr->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f-5));
+//			else
 				selectedFlagSpr->setPosition(ccp(40,list_cell_case->getContentSize().height/2.f));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
-			CCLabelTTF* t_nick_size = CCLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)
 			{
 				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 70, 15, "");
 				nick_marquee->setSpace(30);
-				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3 strokeopacity=50>" + read_data.get("nick", Json::Value()).asString() + "</font>").c_str());
+				nick_marquee->addText(("<font strokecolor=000 strokesize=0.3 strokeopacity=50>" + user_list[i].get("nick", Json::Value()).asString() + "</font>").c_str());
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
-				nick_marquee->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 7));
+				nick_marquee->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 5));
 				list_cell_case->addChild(nick_marquee);
 			}
 			else
 			{
-				KSLabelTTF* nick_label = KSLabelTTF::create(read_data.get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
+				KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-				nick_label->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 7));
+				nick_label->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 5));
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(user_list[i]["score"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5f));
@@ -463,20 +466,20 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 		
 		if(myrank > 3)
 		{
-			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_purple.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			list_cell_case->setContentSize(CCSizeMake(145, 36));
-			list_cell_case->setPosition(ccp(0,20-3*36.f));
+			CCScale9Sprite* list_cell_case = CCScale9Sprite::create("mainpopup_purple_s.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+			list_cell_case->setContentSize(CCSizeMake(145, 28.5f));
+			list_cell_case->setPosition(ccp(0,22-3*29.f));
 			right_info_node->addChild(list_cell_case);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(KS::insert_separator(myrank).c_str(), mySGD->getFont().c_str(), 10);
+			KSLabelTTF* rank_label = KSLabelTTF::create(KS::insert_separator(myrank).c_str(), mySGD->getFont().c_str(), 12);
 			rank_label->disableOuterStroke();
-			rank_label->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f+8));
+			rank_label->setPosition(ccp(14,list_cell_case->getContentSize().height/2.f));//ccp(27,list_cell_case->getContentSize().height/2.f+8));
 			list_cell_case->addChild(rank_label);
 			
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(27,list_cell_case->getContentSize().height/2.f-5));
+			selectedFlagSpr->setPosition(ccp(40,list_cell_case->getContentSize().height/2.f));//ccp(27,list_cell_case->getContentSize().height/2.f-5));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
 			
@@ -489,18 +492,18 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 				nick_marquee->startMarquee();
 				nick_marquee->setFontSize(12.5f);
 				nick_marquee->setAnchorPoint(ccp(0.5f,0.5f));
-				nick_marquee->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 7));
+				nick_marquee->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 5));
 				list_cell_case->addChild(nick_marquee);
 			}
 			else
 			{
 				KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f); // user_list[i]["nick"].asString().c_str()
 				nick_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-				nick_label->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 7));
+				nick_label->setPosition(ccp(93,list_cell_case->getContentSize().height/2.f + 5));
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellContentTime), KS::insert_separator(result_data["myscore"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* score_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(result_data["myscore"].asInt64()/100.f, "%.1f").c_str()), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(54, 36, 148));
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5f));
@@ -510,7 +513,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 	}
 	else
 	{
-		KSLabelTTF* fail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* fail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		fail_label->setPosition(ccp(0,0));
 		right_info_node->addChild(fail_label);
 		
@@ -550,6 +553,8 @@ void HellModeOpening::menuAction(CCObject *sender)
 	}
 	else
 	{
+		clicked_stage = t_tag;
+		
 		setRight(t_tag);
 		
 		CCPoint t_offset = hell_table->getContentOffset();
@@ -583,17 +588,21 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 		
 		
 		KSLabelTTF* character_name = KSLabelTTF::create(hell_list[idx].character_name.c_str(), mySGD->getFont().c_str(), 12);
-		character_name->setPosition(ccp(30,15));
+		character_name->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		character_name->setPosition(ccp(30,12));
 		cell->addChild(character_name);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(hell_list[idx].title.c_str(), mySGD->getFont().c_str(), 18);
 		title_label->setAnchorPoint(ccp(0,0.5f));
-		title_label->setPosition(ccp(50,35));
+		title_label->setPosition(ccp(55,33));
+		title_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		title_label->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
 		cell->addChild(title_label);
 		
 		KSLabelTTF* content_label = KSLabelTTF::create(hell_list[idx].content.c_str(), mySGD->getFont().c_str(), 12);
 		content_label->setAnchorPoint(ccp(0,0.5f));
-		content_label->setPosition(ccp(50,20));
+		content_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		content_label->setPosition(ccp(55,15));
 		cell->addChild(content_label);
 		
 		if(clicked_stage == hell_list[idx].stage_number)
@@ -603,35 +612,32 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 			clicked_img->setPosition(ccpFromSize(n_back_img->getContentSize()/2.f));
 			cell->addChild(clicked_img);
 		}
+		
+		if(mySGD->isHasGottenCards(NSDS_GI(hell_list[idx].stage_number, kSDS_SI_level_int1_card_i, 1)))
+		{
+			CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			take_back->setContentSize(CCSizeMake(50, 25));
+			take_back->setPosition(ccp(30,27));
+			take_back->setRotation(-20);
+			cell->addChild(take_back);
+			
+			KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTakeCharacter), mySGD->getFont().c_str(), 12);
+			take_label->setColor(ccc3(255, 255, 30));
+			take_label->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+			take_label->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+			take_back->addChild(take_label);
+		}
 	}
 	else
 	{
-		CCSprite* back_img = mySIL->getLoadedImg(ccsf("hell_cell%d_img.png", idx+1));
+		CCSprite* back_img = CCSprite::create("hell_lock.png");
 		back_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f));
 		cell->addChild(back_img);
 		
-		KSLabelTTF* character_name = KSLabelTTF::create(hell_list[idx].character_name.c_str(), mySGD->getFont().c_str(), 12);
-		character_name->setPosition(ccp(30,15));
-		cell->addChild(character_name);
-		
-		KSLabelTTF* title_label = KSLabelTTF::create(hell_list[idx].title.c_str(), mySGD->getFont().c_str(), 18);
-		title_label->setAnchorPoint(ccp(0,0.5f));
-		title_label->setPosition(ccp(50,35));
-		cell->addChild(title_label);
-		
-		KSLabelTTF* content_label = KSLabelTTF::create(hell_list[idx].content.c_str(), mySGD->getFont().c_str(), 12);
-		content_label->setAnchorPoint(ccp(0,0.5f));
-		content_label->setPosition(ccp(50,20));
-		cell->addChild(content_label);
-		
-		CCSprite* lock_img = CCSprite::create("hell_lock.png");
-		lock_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f));
-		cell->addChild(lock_img);
-		
-		StyledLabelTTF* lock_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_hellNotOpen), hell_list[idx].condition_stage), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* lock_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellNotOpen), hell_list[idx].condition_stage), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		lock_label->setAnchorPoint(ccp(0,0.5f));
 		lock_label->setPosition(ccp(100, back_img->getContentSize().height/2.f));
-		lock_img->addChild(lock_label);
+		back_img->addChild(lock_label);
 	}
 	
 	return cell;

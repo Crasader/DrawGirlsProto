@@ -59,7 +59,7 @@ bool CharacterSelectPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_selectCharacter), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_selectCharacter), mySGD->getFont().c_str(), 15);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
 	
@@ -76,7 +76,7 @@ bool CharacterSelectPopup::init()
 	main_case->addChild(tip_marquee_back);
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
-	tipMaquee->addText(myLoc->getLocalForKey(kMyLocalKey_characterMarquee));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_characterMarquee));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -204,10 +204,11 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	cell->init();
 	cell->autorelease();
 	
-	CCScale9Sprite* back_img;
 	
 	if(idx < list_cnt && history_list[idx].is_have.getV())
 	{
+		CCScale9Sprite* back_img;
+		
 		if(history_list[idx].m_number == selected_character_number)
 		{
 			back_img = CCScale9Sprite::create("cha_select.png", CCRectMake(0, 0, 60, 60), CCRectMake(29, 29, 2, 2));
@@ -227,6 +228,10 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		inner_back->setContentSize(CCSizeMake(131, 120));
 		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
 		back_img->addChild(inner_back);
+		
+		CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
+		light_back->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
+		inner_back->addChild(light_back);
 		
 		CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[idx].m_character + ".ccbi").first;
 		character_img->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
@@ -259,12 +264,12 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		missile_back->setPosition(ccp(31, 101));
 		inner_back->addChild(missile_back);
 		
-		KSLabelTTF* level_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_levelValue), history_list[idx].m_level), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* level_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), history_list[idx].m_level), mySGD->getFont().c_str(), 11);
 		level_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		level_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,7));
 		missile_back->addChild(level_label);
 		
-		KSLabelTTF* damage_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_powerValue), KS::insert_separator(history_list[idx].m_damage).c_str()), mySGD->getFont().c_str(), 11);
+		KSLabelTTF* damage_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(history_list[idx].m_damage).c_str()), mySGD->getFont().c_str(), 11);
 		damage_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		damage_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,-9));
 		missile_back->addChild(damage_label);
@@ -279,10 +284,20 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		
 		if(history_list[idx].m_card != -1)
 		{
-			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
-			card_img->setScale(0.10f);
-			card_img->setPosition(ccp(25,27));
-			inner_back->addChild(card_img);
+			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+			t_clipping->setAlphaThreshold(0.1f);
+			
+			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
+			t_clipping->addChild(t_card);
+			t_card->setScale(0.2f);
+			
+			t_clipping->setPosition(ccp(25,27));
+			t_clipping->setScale(0.5f);
+			inner_back->addChild(t_clipping);
+			
+			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+			t_frame->setPosition(ccp(25,27));
+			inner_back->addChild(t_frame);
 			
 			StyledLabelTTF* comment_label = StyledLabelTTF::create(history_list[idx].m_comment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 			comment_label->setAnchorPoint(ccp(0,0.5f));
@@ -296,7 +311,7 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 			button_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,-71));
 			back_img->addChild(button_img);
 			
-			KSLabelTTF* button_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_characterSelected), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelected), mySGD->getFont().c_str(), 14);
 			button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
 			button_label->setPosition(ccpFromSize(button_img->getContentSize()/2.f));
 			button_img->addChild(button_label);
@@ -304,14 +319,14 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		else
 		{
 			CCSprite* n_button_img = CCSprite::create("subbutton_purple3.png");
-			KSLabelTTF* n_button_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* n_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
 			n_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
 			n_button_label->setPosition(ccpFromSize(n_button_img->getContentSize()/2.f));
 			n_button_img->addChild(n_button_label);
 			
 			CCSprite* s_button_img = CCSprite::create("subbutton_purple3.png");
 			s_button_img->setColor(ccGRAY);
-			KSLabelTTF* s_button_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* s_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
 			s_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
 			s_button_label->setPosition(ccpFromSize(s_button_img->getContentSize()/2.f));
 			s_button_img->addChild(s_button_label);
@@ -327,19 +342,27 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	}
 	else
 	{
-		back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-		back_img->setContentSize(CCSizeMake(142, 190));
-		back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-		cell->addChild(back_img);
+		CCSprite* not_have_img = CCSprite::create("cha_lock.png");
+		not_have_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+		cell->addChild(not_have_img);
 		
-		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		inner_back->setContentSize(CCSizeMake(131, 120));
-		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
-		back_img->addChild(inner_back);
+		StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_needHaveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		ment_label->setPosition(ccpFromSize(not_have_img->getContentSize()/2.f) + ccp(0,-5));
+		not_have_img->addChild(ment_label);
 		
-		KSLabelTTF* question_label = KSLabelTTF::create("?", mySGD->getFont().c_str(), 50);
-		question_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
-		inner_back->addChild(question_label);
+//		back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+//		back_img->setContentSize(CCSizeMake(142, 190));
+//		back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+//		cell->addChild(back_img);
+//		
+//		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//		inner_back->setContentSize(CCSizeMake(131, 120));
+//		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
+//		back_img->addChild(inner_back);
+//		
+//		KSLabelTTF* question_label = KSLabelTTF::create("?", mySGD->getFont().c_str(), 50);
+//		question_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
+//		inner_back->addChild(question_label);
 	}
 	
 	return cell;
@@ -402,7 +425,7 @@ void CharacterSelectPopup::resultUpdateCharacterHistory(Json::Value result_data)
 		{
 			mySGD->network_check_cnt = 0;
 			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 				mySGD->changeUserdata(json_selector(this, CharacterSelectPopup::resultUpdateCharacterHistory));
 			}, 1);
 			if(alert)

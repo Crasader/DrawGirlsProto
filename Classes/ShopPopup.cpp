@@ -606,7 +606,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									is_menu_enable = true;
 									mySGD->clearChangeUserdata();
 									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 								}
 							});
 							
@@ -654,7 +654,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 //								{
 //									is_menu_enable = true;
 //									mySGD->clearChangeGoods();
-//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //								}
 //							});
 							
@@ -718,7 +718,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										is_menu_enable = true;
 										mySGD->clearChangeUserdata();
 										mySGD->clearChangeGoods();
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 									}
 								});
 								
@@ -766,7 +766,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 //									{
 //										is_menu_enable = true;
 //										mySGD->clearChangeGoods();
-//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //									}
 //								});
 							}
@@ -787,7 +787,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									{
 										loading_layer->removeFromParent();
 										
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 										
 										is_menu_enable = true;
 									}
@@ -878,7 +878,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 										mySGD->clearChangeUserdata();
 									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 								}
 							});
 							
@@ -926,7 +926,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 							//								{
 							//									is_menu_enable = true;
 							//									mySGD->clearChangeGoods();
-							//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+							//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 							//								}
 							//							});
 							
@@ -997,7 +997,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 											mySGD->clearChangeUserdata();
 										mySGD->clearChangeGoods();
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 									}
 								});
 								
@@ -1045,7 +1045,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 								//									{
 								//										is_menu_enable = true;
 								//										mySGD->clearChangeGoods();
-								//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+								//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 								//									}
 								//								});
 							}
@@ -1066,7 +1066,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
 										loading_layer->removeFromParent();
 										
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 										
 										is_menu_enable = true;
 									}
@@ -1174,9 +1174,9 @@ void ShopPopup::cellAction(CCObject* sender)
 		else
 		{
 			if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_gold))
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 			else if(condition_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
-				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
+				addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought), [=](){is_menu_enable = true;}, CCPointZero), kSP_Z_popup);
 			CCLOG("not enough condition");
 		}
 	}
@@ -1365,7 +1365,7 @@ bool ShopPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 15);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
 	
@@ -1423,7 +1423,7 @@ bool ShopPopup::init()
 	tab_menu->setTouchPriority(touch_priority-4);
 	
 	CCSprite* n_ruby_img = CCSprite::create("shoptap_down.png");
-	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	n_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_ruby_label->disableOuterStroke();
 	n_ruby_label->setPosition(ccpFromSize(n_ruby_img->getContentSize()/2.f) + ccp(0,2));
@@ -1431,14 +1431,14 @@ bool ShopPopup::init()
 	
 	CCSprite* s_ruby_img = CCSprite::create("shoptap_down.png");
 	s_ruby_img->setColor(ccGRAY);
-	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	s_ruby_label->setColor(ccGRAY);
 	s_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_ruby_label->setPosition(ccpFromSize(s_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	s_ruby_img->addChild(s_ruby_label);
 	
 	CCSprite* d_ruby_img = CCSprite::create("shoptap_up.png");
-	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
 	d_ruby_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_ruby_label->setPosition(ccpFromSize(d_ruby_img->getContentSize()/2.f) + ccp(0,2));
 	d_ruby_img->addChild(d_ruby_label);
@@ -1451,21 +1451,21 @@ bool ShopPopup::init()
 	
 	
 	CCSprite* n_gold_img = CCSprite::create("shoptap_down.png");
-	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	n_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_gold_label->setPosition(ccpFromSize(n_gold_img->getContentSize()/2.f) + ccp(0,2));
 	n_gold_img->addChild(n_gold_label);
 	
 	CCSprite* s_gold_img = CCSprite::create("shoptap_down.png");
 	s_gold_img->setColor(ccGRAY);
-	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	s_gold_label->setColor(ccGRAY);
 	s_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_gold_label->setPosition(ccpFromSize(s_gold_img->getContentSize()/2.f) + ccp(0,2));
 	s_gold_img->addChild(s_gold_label);
 	
 	CCSprite* d_gold_img = CCSprite::create("shoptap_up.png");
-	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_gold_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_goldShop), mySGD->getFont().c_str(), 12.5f);
 	d_gold_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_gold_label->setPosition(ccpFromSize(d_gold_img->getContentSize()/2.f) + ccp(0,2));
 	d_gold_img->addChild(d_gold_label);
@@ -1478,21 +1478,21 @@ bool ShopPopup::init()
 	
 	
 	CCSprite* n_heart_img = CCSprite::create("shoptap_down.png");
-	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	n_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_heart_label->setPosition(ccpFromSize(n_heart_img->getContentSize()/2.f) + ccp(0,2));
 	n_heart_img->addChild(n_heart_label);
 	
 	CCSprite* s_heart_img = CCSprite::create("shoptap_down.png");
 	s_heart_img->setColor(ccGRAY);
-	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	s_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_heart_label->setColor(ccGRAY);
 	s_heart_label->setPosition(ccpFromSize(s_heart_img->getContentSize()/2.f) + ccp(0,2));
 	s_heart_img->addChild(s_heart_label);
 	
 	CCSprite* d_heart_img = CCSprite::create("shoptap_up.png");
-	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_heart_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartShop), mySGD->getFont().c_str(), 12.5f);
 	d_heart_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_heart_label->setPosition(ccpFromSize(d_heart_img->getContentSize()/2.f) + ccp(0,2));
 	d_heart_img->addChild(d_heart_label);
@@ -1505,21 +1505,21 @@ bool ShopPopup::init()
 	
 	
 	CCSprite* n_p1_img = CCSprite::create("shoptap_down.png");
-	KSLabelTTF* n_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
 	n_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_p1_label->setPosition(ccpFromSize(n_p1_img->getContentSize()/2.f) + ccp(0,2));
 	n_p1_img->addChild(n_p1_label);
 	
 	CCSprite* s_p1_img = CCSprite::create("shoptap_down.png");
 	s_p1_img->setColor(ccGRAY);
-	KSLabelTTF* s_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
 	s_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_p1_label->setColor(ccGRAY);
 	s_p1_label->setPosition(ccpFromSize(s_p1_img->getContentSize()/2.f) + ccp(0,2));
 	s_p1_img->addChild(s_p1_label);
 	
 	CCSprite* d_p1_img = CCSprite::create("shoptap_up.png");
-	KSLabelTTF* d_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_p1_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_p1Shop), mySGD->getFont().c_str(), 12.5f);
 	d_p1_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_p1_label->setPosition(ccpFromSize(d_p1_img->getContentSize()/2.f) + ccp(0,2));
 	d_p1_img->addChild(d_p1_label);
@@ -1585,21 +1585,21 @@ bool ShopPopup::init()
 	if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) // 스타트팩을 구입한적 없고 스타트팩 시간이 맞는 경우 || 이벤트팩이 존재하고 해당 이벤트팩의 시간이 맞는 경우
 	{
 		CCSprite* n_eventPack_img = CCSprite::create("shoptap_down.png");
-		KSLabelTTF* n_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* n_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
 		n_eventPack_label->disableOuterStroke();
 		n_eventPack_label->setPosition(ccpFromSize(n_eventPack_img->getContentSize()/2.f) + ccp(0,2));
 		n_eventPack_img->addChild(n_eventPack_label);
 		
 		CCSprite* s_eventPack_img = CCSprite::create("shoptap_down.png");
 		s_eventPack_img->setColor(ccGRAY);
-		KSLabelTTF* s_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* s_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
 		s_eventPack_label->disableOuterStroke();
 		s_eventPack_label->setColor(ccGRAY);
 		s_eventPack_label->setPosition(ccpFromSize(s_eventPack_img->getContentSize()/2.f) + ccp(0,2));
 		s_eventPack_img->addChild(s_eventPack_label);
 		
 		CCSprite* d_eventPack_img = CCSprite::create("shoptap_up.png");
-		KSLabelTTF* d_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
+		KSLabelTTF* d_eventPack_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12.5f);
 		d_eventPack_label->disableOuterStroke();
 		d_eventPack_label->setPosition(ccpFromSize(d_eventPack_img->getContentSize()/2.f) + ccp(0,2));
 		d_eventPack_img->addChild(d_eventPack_label);
@@ -1804,20 +1804,20 @@ bool ShopPopup::init()
 	
 	showPopup();
 	
-	int i = kAchievementCode_hidden_shopper1;
-	int after_value = myAchieve->getRecentValue(kAchievementCode_hidden_shopper1) + 1;
-	
-	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
-	{
-		myAchieve->changeIngCount(AchievementCode(i), after_value);
-		if(!myAchieve->isNoti(AchievementCode(i)) && after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
-		{
-			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
-			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
-			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-		}
-		myAchieve->updateAchieve(nullptr);
-	}
+//	int i = kAchievementCode_hidden_shopper1;
+//	int after_value = myAchieve->getRecentValue(kAchievementCode_hidden_shopper1) + 1;
+//	
+//	if(!myAchieve->isCompleted(AchievementCode(i)) && !myAchieve->isAchieve(AchievementCode(i)))
+//	{
+//		myAchieve->changeIngCount(AchievementCode(i), after_value);
+//		if(!myAchieve->isNoti(AchievementCode(i)) && after_value >= myAchieve->getCondition(kAchievementCode_hidden_shopper1))
+//		{
+//			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
+//			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
+//			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//		}
+//		myAchieve->updateAchieve(nullptr);
+//	}
 	
     return true;
 }
@@ -1954,23 +1954,23 @@ void ShopPopup::resultSetUserData(Json::Value result_data)
 		}
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_successPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_successPurchase)), 9999);
 		CCLOG("userdata was save to server");
 	}
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{
 		CCLOG("fail!! not enought property");
 		fail_func();
-        if(is_use_goods_type_gold)
-            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+        if(!is_use_goods_type_gold)
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
         else
-            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_goldNotEnought)), 9999);
+            addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought)), 9999);
 	}
 	else
 	{
 		CCLOG("fail!! save userdata to server");
 		fail_func();
-		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 	}
     
     is_use_goods_type_gold = false;
@@ -1995,7 +1995,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSP_MT_ruby)
 	{
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 		
 		setShopCode(kSC_ruby);
 		is_menu_enable = true;
@@ -2034,7 +2034,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 	{
 		if(recent_shop_code == kSC_ruby)
 		{
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);;
 			
 			
 			createCheckBuyPopup([=]()
@@ -2088,7 +2088,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
 											is_menu_enable = true;
 											mySGD->clearChangeGoods();
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 										}
 									});
 									
@@ -2109,7 +2109,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
 											loading_layer->removeFromParent();
 											
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 											
 											is_menu_enable = true;
 										}
@@ -3028,13 +3028,13 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 //	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+16.5f));
 //	back_case->addChild(back_in);
 //	
-//	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_checkBuy), mySGD->getFont().c_str(), 12);
 //	title_label->disableOuterStroke();
 //	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 //	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 //	t_container->addChild(title_label);
 //	
-//	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_realBuy), mySGD->getFont().c_str(), 12);
 //	sub_label->disableOuterStroke();
 //	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 //	sub_label->setPosition(ccp(0,16));
@@ -3079,7 +3079,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 //	
 //	CCLabelTTF* t2_label = CCLabelTTF::create();
 //	
-//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 //	ok_label->disableOuterStroke();
 //	ok_label->setPosition(ccp(0,0));
 //	t2_label->addChild(ok_label);
@@ -3105,7 +3105,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 
 
 	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_realBuy),[=](){
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realBuy),[=](){
 		
 		buy_action();
 
@@ -3380,7 +3380,7 @@ void ShopPopup::resultCardGacha(Json::Value result_data)
 	}
 	else
 	{
-		replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
+		replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
 		replay_menu->setPosition(ccp(240,100));
 		replay_menu->setFunction([=](CCObject* sender)
 								 {
@@ -3535,7 +3535,7 @@ void ShopPopup::failAction()
 {
 	is_downloading = false;
 	
-	replay_menu = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
+	replay_menu = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_replay), 12, CCSizeMake(80,45), CommonButtonYellow, touch_priority-50);
 	replay_menu->setPosition(ccp(240,100));
 	replay_menu->setFunction([=](CCObject* sender)
 							 {
@@ -3645,7 +3645,7 @@ void ShopPopup::requestItemDelivery()
             {
                 mySGD->network_check_cnt = 0;
                 
-                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
                     requestItemDelivery();
                 }, 1);
                 if(alert)
@@ -3738,7 +3738,7 @@ void ShopPopup::requestItemDeliveryStartPack()
             {
                 mySGD->network_check_cnt = 0;
                 
-                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
                     requestItemDeliveryStartPack();
                 }, 1);
                 if(alert)
@@ -3887,7 +3887,7 @@ void ShopPopup::requestItemDeliveryEventPack()
             {
                 mySGD->network_check_cnt = 0;
                 
-                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+                ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
                     requestItemDeliveryEventPack();
                 }, 1);
                 if(alert)

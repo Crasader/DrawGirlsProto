@@ -80,7 +80,7 @@ void TypingBox::myInit(int t_touch_priority, string t_box_filename, CCRect t_box
 	scroll_view->setTouchEnabled(false);
 	
 	CCLabelTTF* label_node = CCLabelTTF::create();
-	KSLabelTTF* next_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_tutorialNextButton), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* next_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_tutorialNextButton), mySGD->getFont().c_str(), 12);
 	label_node->addChild(next_label);
 	
 	next_button = CCControlButton::create(label_node, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));

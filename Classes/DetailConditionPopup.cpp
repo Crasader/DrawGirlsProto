@@ -67,14 +67,14 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupTitle), mySGD->getFont().c_str(), 15);
 	title_label->setColor(ccc3(255, 170, 20));
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 	content_label->setOldAnchorPoint();
 	content_label->setPosition(ccp(0,40));
 	m_container->addChild(content_label);
@@ -82,21 +82,21 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	
 
 	
-//	KSLabelTTF* sub1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent1), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub1_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent1), mySGD->getFont().c_str(), 12);
 //	sub1_label->setPosition(ccp(0,30));
 //	m_container->addChild(sub1_label);
 //	
-//	StyledLabelTTF* sub2_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+//	StyledLabelTTF* sub2_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 //	sub2_label->setPosition(ccp(0,-5));
 //	m_container->addChild(sub2_label);
 	
 //
-//	KSLabelTTF* sub2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub2_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent2), mySGD->getFont().c_str(), 12);
 //	sub2_label->setColor(ccYELLOW);
 //	sub2_label->setAnchorPoint(ccp(1,0.5f));
 //	m_container->addChild(sub2_label);
 //	
-//	KSLabelTTF* sub3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent3), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub3_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent3), mySGD->getFont().c_str(), 12);
 //	sub3_label->setAnchorPoint(ccp(0, 0.5f));
 //	m_container->addChild(sub3_label);
 	
@@ -110,13 +110,13 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 //	sub3_label->setPosition(ccp(x_value, -10));
 	
 	
-//	KSLabelTTF* sub4_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent4), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub4_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent4), mySGD->getFont().c_str(), 12);
 //	sub4_label->setColor(ccYELLOW);
 //	sub4_label->setAnchorPoint(ccp(1,0.5f));
 //	sub4_label->setPosition(ccp(0,-25));
 //	m_container->addChild(sub4_label);
 //	
-//	KSLabelTTF* sub5_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent5), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* sub5_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent5), mySGD->getFont().c_str(), 12);
 //	sub5_label->setAnchorPoint(ccp(0,0.5f));
 //	sub5_label->setPosition(ccp(0,-25));
 //	m_container->addChild(sub5_label);
@@ -132,7 +132,7 @@ void DetailConditionPopup::myInit(int t_touch_priority, function<void()> t_end_f
 	
 //	CCLabelTTF* t_label = CCLabelTTF::create();
 //	
-//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+//	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 //	ok_label->setPosition(ccp(0,0));
 //	t_label->addChild(ok_label);
 //	

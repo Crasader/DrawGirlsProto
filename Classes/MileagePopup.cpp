@@ -49,22 +49,22 @@ void MileagePopup::myInit(int t_touch_priority, function<void()> t_end_func, int
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mileageTitle), mySGD->getFont().c_str(), 21);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mileageTitle), mySGD->getFont().c_str(), 21);
 	title_label->setColor(ccc3(50, 250, 255));
 	title_label->setPosition(ccp(0,70));
 	m_container->addChild(title_label);
 	
-	KSLabelTTF* sub_ment1 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mileageMent1), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment1 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mileageMent1), mySGD->getFont().c_str(), 12);
 	sub_ment1->setColor(ccYELLOW);
 	sub_ment1->setPosition(ccp(0,39));
 	m_container->addChild(sub_ment1);
 	
 	
-	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mileageMent2), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mileageMent2), mySGD->getFont().c_str(), 12);
 	sub_ment2->setPosition(ccp(0,22));
 	m_container->addChild(sub_ment2);
 	
-	KSLabelTTF* sub_ment3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mileageMent3), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* sub_ment3 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mileageMent3), mySGD->getFont().c_str(), 12);
 	sub_ment3->setColor(ccYELLOW);
 	sub_ment3->setPosition(ccp(0,5));
 	m_container->addChild(sub_ment3);

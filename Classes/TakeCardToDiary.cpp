@@ -202,7 +202,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	target->addChild(r_stage_script);
 	
 	
-	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* r_profile_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_profile), mySGD->getFont().c_str(), 10);
 	r_profile_label->setPosition(ccp(32,208));
 	r_profile_label->setAnchorPoint(ccp(0,0.5f));
 	target->addChild(r_profile_label);
@@ -215,7 +215,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	target->addChild(r_stage_profile);
 	
 	
-	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* r_card_elemental_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardElemental), mySGD->getFont().c_str(), 10);
 	r_card_elemental_label->disableOuterStroke();
 	r_card_elemental_label->setPosition(ccp(32,111));
 	r_card_elemental_label->setAnchorPoint(ccp(0,0.5f));
@@ -241,7 +241,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	}
 	
 	
-	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* r_elemental = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_elementalValue), elemental_str.c_str()), mySGD->getFont().c_str(), 9);
 	r_elemental->setColor(ccBLACK);
 	r_elemental->setPosition(ccp(45,95));
 	target->addChild(r_elemental);
@@ -250,7 +250,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	elemental_img->setPosition(ccp(45,74));
 	target->addChild(elemental_img);
 
-	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* r_touch = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_touch), mySGD->getFont().c_str(), 9);
 	r_touch->setColor(ccBLACK);
 	r_touch->setPosition(ccp(90,95));
 	target->addChild(r_touch);
@@ -270,7 +270,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	
 	if(NSDS_GI(kSDS_CI_int1_soundCnt_i, card_number) > 0)
 	{
-		KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
+		KSLabelTTF* r_sound = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_sound), mySGD->getFont().c_str(), 9);
 		r_sound->setColor(ccBLACK);
 		r_sound->setPosition(ccp(135,95));
 		target->addChild(r_sound);
@@ -297,7 +297,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
 		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
 		r_stage_label->setAnchorPoint(ccp(1,0.5f));
 		r_stage_label->setPosition(ccp(167, 288));
 		r_stage_label->setColor(ccBLACK);
@@ -307,7 +307,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	{
 		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
 		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
+		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_stageValue), stage_number)->getCString(), mySGD->getFont().c_str(), 8);
 		r_stage_label->setAnchorPoint(ccp(1,0.5f));
 		r_stage_label->setPosition(ccp(167, 288));
 		r_stage_label->setColor(ccBLACK);
@@ -317,7 +317,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 
 void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 {
-	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
+	KSLabelTTF* take_cnt_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_cardTakeCnt), mySGD->getHasGottenCardDataForCardNumber(card_number).count.getV()), mySGD->getFont().c_str(), 9);
 	take_cnt_label->setColor(ccBLACK);
 	take_cnt_label->disableOuterStroke();
 	take_cnt_label->setAnchorPoint(ccp(0,0.5f));

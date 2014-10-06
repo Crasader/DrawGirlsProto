@@ -321,20 +321,20 @@ std::string SilhouetteData::getConditionTitle()
 
 	CLEAR_CONDITION my_clear_condition = getClearCondition();
 
-	if(my_clear_condition == kCLEAR_bossLifeZero)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle1);
-	else if(my_clear_condition == kCLEAR_subCumberCatch)	return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle2);
-	else if(my_clear_condition == kCLEAR_bigArea)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle3);
-	else if(my_clear_condition == kCLEAR_itemCollect)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle4);
-	else if(my_clear_condition == kCLEAR_perfect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle5);
-	else if(my_clear_condition == kCLEAR_sequenceChange)	return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle6);
-	else if(my_clear_condition == kCLEAR_timeLimit)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle7);
-	else if(my_clear_condition == kCLEAR_hellMode)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle8);
-	else if(my_clear_condition == kCLEAR_percentage)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle9);
-	else if(my_clear_condition == kCLEAR_score)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle10);
-	else if(my_clear_condition == kCLEAR_combo)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle11);
-	else if(my_clear_condition == kCLEAR_gold)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle12);
-	else if(my_clear_condition == kCLEAR_turns)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle13);
-	else													return_value = myLoc->getLocalForKey(kMyLocalKey_missionTitle0);
+	if(my_clear_condition == kCLEAR_bossLifeZero)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle1);
+	else if(my_clear_condition == kCLEAR_subCumberCatch)	return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle2);
+	else if(my_clear_condition == kCLEAR_bigArea)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle3);
+	else if(my_clear_condition == kCLEAR_itemCollect)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle4);
+	else if(my_clear_condition == kCLEAR_perfect)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle5);
+	else if(my_clear_condition == kCLEAR_sequenceChange)	return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle6);
+	else if(my_clear_condition == kCLEAR_timeLimit)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle7);
+	else if(my_clear_condition == kCLEAR_hellMode)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle8);
+	else if(my_clear_condition == kCLEAR_percentage)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle9);
+	else if(my_clear_condition == kCLEAR_score)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle10);
+	else if(my_clear_condition == kCLEAR_combo)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle11);
+	else if(my_clear_condition == kCLEAR_gold)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle12);
+	else if(my_clear_condition == kCLEAR_turns)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle13);
+	else													return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle0);
 
 	return return_value;
 }
@@ -350,27 +350,27 @@ std::string SilhouetteData::getConditionContent( int t_type )
 
 	t_type = getClearCondition(t_type);
 
-	if(t_type == kCLEAR_bossLifeZero)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription1);
-	else if(t_type == kCLEAR_subCumberCatch)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription2);
-	else if(t_type == kCLEAR_bigArea)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription3);
-	else if(t_type == kCLEAR_itemCollect)			return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription4);
-	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription5);
-	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription6);
-	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription7);
-	else if(t_type == kCLEAR_hellMode)				return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription8);
-	else if(t_type == kCLEAR_percentage)			return_value = ccsf(myLoc->getLocalForKey(kMyLocalKey_missionDiscription9), NSDS_GI(getSilType(), kSDS_SI_missionOptionPercent_i));
-	else if(t_type == kCLEAR_score)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription10);
-	else if(t_type == kCLEAR_combo)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription11);
-	else if(t_type == kCLEAR_gold)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription12);
-	else if(t_type == kCLEAR_turns)					return_value = myLoc->getLocalForKey(kMyLocalKey_missionDiscription13);
+	if(t_type == kCLEAR_bossLifeZero)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription1);
+	else if(t_type == kCLEAR_subCumberCatch)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription2);
+	else if(t_type == kCLEAR_bigArea)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription3);
+	else if(t_type == kCLEAR_itemCollect)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription4);
+	else if(t_type == kCLEAR_perfect)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription5);
+	else if(t_type == kCLEAR_sequenceChange)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription6);
+	else if(t_type == kCLEAR_timeLimit)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription7);
+	else if(t_type == kCLEAR_hellMode)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription8);
+	else if(t_type == kCLEAR_percentage)			return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription9), NSDS_GI(getSilType(), kSDS_SI_missionOptionPercent_i));
+	else if(t_type == kCLEAR_score)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription10);
+	else if(t_type == kCLEAR_combo)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription11);
+	else if(t_type == kCLEAR_gold)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription12);
+	else if(t_type == kCLEAR_turns)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription13);
 	else
 	{
 		if(mySGD->isTimeEvent(kTimeEventType_clear))
 		{
-			return_value = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_missionDiscription0), mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString();
+			return_value = CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription0), mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString();
 		}
 		else
-			return_value = CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_missionDiscription0), 85.f)->getCString();
+			return_value = CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription0), 85.f)->getCString();
 	}
 
 	return return_value;
@@ -474,15 +474,15 @@ std::string SilhouetteData::getItemScript( ITEM_CODE t_code )
 	if(t_code == kIC_attack)				return_value = "획득시 보스에게 미사일 공격을 가한다.";
 	else if(t_code == kIC_speedUp)			return_value = "획득시 유저의 속도가 올라간다.";
 	else if(t_code == kIC_addTime)			return_value = "획득시 남은 시간이 일정량 증가한다.";
-	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(kMyLocalKey_item4ment);
-	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(kMyLocalKey_item5ment);
-	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(kMyLocalKey_doubleItemContent);
-	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(kMyLocalKey_item7ment);
-	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(kMyLocalKey_item8ment);
-	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(kMyLocalKey_baseSpeedUpContent);
-	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(kMyLocalKey_magnetContent);
-	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(kMyLocalKey_itemGachaContent);
-	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(kMyLocalKey_item10ment);
+	else if(t_code == kIC_fast)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item4ment);
+	else if(t_code == kIC_subOneDie)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item5ment);
+	else if(t_code == kIC_doubleItem)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_doubleItemContent);
+	else if(t_code == kIC_silence)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item7ment);
+	else if(t_code == kIC_longTime)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item8ment);
+	else if(t_code == kIC_baseSpeedUp)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpContent);
+	else if(t_code == kIC_magnet)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_magnetContent);
+	else if(t_code == kIC_itemGacha)		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_itemGachaContent);
+	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item10ment);
 	else									return_value = "아이템을 사용할 수 있습니다.";
 
 	return return_value;

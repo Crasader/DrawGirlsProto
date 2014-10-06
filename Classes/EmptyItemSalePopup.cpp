@@ -80,7 +80,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	{
 		myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale1, myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)+1);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleTitle), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_emptyItemSaleTitle), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
 		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
@@ -90,7 +90,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	{
 		myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale2, myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)+1);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_itemPackageChance), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_itemPackageChance), mySGD->getFont().c_str(), 12);
 		title_label->disableOuterStroke();
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
 		title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
@@ -107,9 +107,9 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	string ment1_str;
 	if(m_type == kPurchaseGuideType_emptyItem)
-		ment1_str = myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent1);
+		ment1_str = myLoc->getLocalForKey(LK::kMyLocalKey_emptyItemSaleMent1);
 	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
-		ment1_str = myLoc->getLocalForKey(kMyLocalKey_stupidNpuHelpMent1);
+		ment1_str = myLoc->getLocalForKey(LK::kMyLocalKey_stupidNpuHelpMent1);
 	
 	KSLabelTTF* sub_ment1 = KSLabelTTF::create(ment1_str.c_str(), mySGD->getFont().c_str(), 12);
 	sub_ment1->disableOuterStroke();
@@ -118,9 +118,9 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	string ment2_str;
 	if(m_type == kPurchaseGuideType_emptyItem)
-		ment2_str = myLoc->getLocalForKey(kMyLocalKey_emptyItemSaleMent2);
+		ment2_str = myLoc->getLocalForKey(LK::kMyLocalKey_emptyItemSaleMent2);
 	else if(m_type == kPurchaseGuideType_stupidNpuHelp)
-		ment2_str = myLoc->getLocalForKey(kMyLocalKey_stupidNpuHelpMent2);
+		ment2_str = myLoc->getLocalForKey(LK::kMyLocalKey_stupidNpuHelpMent2);
 	
 	string sale_percent_string = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_sale_s, m_type-1);
 	
@@ -190,7 +190,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(stamp_case);
 	
 	
-	KSLabelTTF* package_sale_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_packageItemSale), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* package_sale_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_packageItemSale), mySGD->getFont().c_str(), 10);
 	package_sale_label->setPosition(ccp(37.5f,33));
 	stamp_case->addChild(package_sale_label);
 	
@@ -200,7 +200,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	stamp_case->addChild(sale_value_label);
 	
 	
-//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
+//	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);
 //	giveup_label->setColor(ccBLACK);
 //	CCScale9Sprite* giveup_back = CCScale9Sprite::create("achievement_cellback_normal.png", CCRectMake(0,0,47,47), CCRectMake(23, 23, 1, 1));
 //	giveup_button = CCControlButton::create(giveup_label, giveup_back);
@@ -215,7 +215,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	CCLabelTTF* p_label = CCLabelTTF::create();
 	
-	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
 	purchase_label->disableOuterStroke();
 	purchase_label->setAnchorPoint(ccp(0,0.5f));
 	purchase_label->setPosition(ccp(0,0));
@@ -316,7 +316,7 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 																{
 																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
 																}), 9999);
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
 	});
@@ -335,7 +335,7 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 //		else
 //		{
 //			inapp_loading->removeFromParent();
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //			is_menu_enable = true;
 //		}
 //	});
@@ -392,7 +392,7 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 //		CCLOG("missile upgrade fail!!");
 //		
 //		mySGD->clearChangeGoods();
-//		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+//		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //		
 //		is_menu_enable = true;
 //	}

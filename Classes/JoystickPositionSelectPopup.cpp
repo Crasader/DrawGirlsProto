@@ -53,21 +53,21 @@ void JoystickPositionSelectPopup::myInit(int t_touch_priority, function<void()> 
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPositionSelectTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickPositionSelectTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPositionSelectContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickPositionSelectContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 	slttf->setAnchorPoint(ccp(0.5f,0.5f));
 	slttf->setPosition(ccp(0,18));
 	m_container->addChild(slttf);
 	
 	
     CCLabelTTF* l_label = CCLabelTTF::create();
-    KSLabelTTF* left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_left), mySGD->getFont().c_str(), 15);
+    KSLabelTTF* left_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_left), mySGD->getFont().c_str(), 15);
     left_label->setPosition(ccp(0,0));
     l_label->addChild(left_label);
     
@@ -75,7 +75,7 @@ void JoystickPositionSelectPopup::myInit(int t_touch_priority, function<void()> 
     recommend_back->setPosition(ccp(30,20));
     l_label->addChild(recommend_back);
     
-    KSLabelTTF* recommend_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPositionSelectRecommend), mySGD->getFont().c_str(), 13);
+    KSLabelTTF* recommend_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickPositionSelectRecommend), mySGD->getFont().c_str(), 13);
     recommend_label->setColor(ccRED);
     recommend_label->enableOuterStroke(ccYELLOW, 0.3f, 50, true);
     recommend_label->setPosition(ccpFromSize(recommend_back->getContentSize()/2.f));
@@ -91,7 +91,7 @@ void JoystickPositionSelectPopup::myInit(int t_touch_priority, function<void()> 
     
     
 	CCLabelTTF* r_label = CCLabelTTF::create();
-    KSLabelTTF* right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_right), mySGD->getFont().c_str(), 15);
+    KSLabelTTF* right_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_right), mySGD->getFont().c_str(), 15);
     right_label->setPosition(ccp(0,0));
     r_label->addChild(right_label);
     
@@ -105,7 +105,7 @@ void JoystickPositionSelectPopup::myInit(int t_touch_priority, function<void()> 
     
     
 	
-    //	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+    //	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
     //	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
     //	close_button = CCControlButton::create(close_label, close_back);
     //	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardLockedPopup::closeAction), CCControlEventTouchUpInside);

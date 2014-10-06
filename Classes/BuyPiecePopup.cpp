@@ -89,14 +89,14 @@ void BuyPiecePopup::myInit(int t_touch_priority, function<void()> t_end_func, fu
 	m_container->addChild(close_button);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStage), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_openStage), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
-	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openStageContent), mySGD->getFont().c_str(), 12);
-	// CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_openGoldValue), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString()
+	KSLabelTTF* sub_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_openStageContent), mySGD->getFont().c_str(), 12);
+	// CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_openGoldValue), NSDS_GI(puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number))->getCString()
 	sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 	sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 	back_in->addChild(sub_label);
@@ -105,7 +105,7 @@ void BuyPiecePopup::myInit(int t_touch_priority, function<void()> t_end_func, fu
 	
 	CCLabelTTF* t_label = CCLabelTTF::create();
 	
-	KSLabelTTF* buy_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_doOpen), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* buy_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_doOpen), mySGD->getFont().c_str(), 12);
 	buy_label->disableOuterStroke();
 	buy_label->setPosition(ccp(-40,0));
 	t_label->addChild(buy_label);
@@ -179,8 +179,8 @@ void BuyPiecePopup::buyAction(CCObject* sender, CCControlEvent t_event)
 										  if(result_data["result"]["code"].asInt() != GDSUCCESS)
 										  {
 											  mySGD->clearChangeGoods();
-											  addChild(ASPopupView::getCommonNoti(-9999, std::string(myLoc->getLocalForKey(kMyLocalKey_noti)),
-																														std::string(myLoc->getLocalForKey(kMyLocalKey_failPurchase))), 9999);
+											  addChild(ASPopupView::getCommonNoti(-9999, std::string(myLoc->getLocalForKey(LK::kMyLocalKey_noti)),
+																														std::string(myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase))), 9999);
 										  }
 										  else
 										  {

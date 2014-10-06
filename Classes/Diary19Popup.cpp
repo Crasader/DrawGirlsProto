@@ -68,8 +68,8 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	back_case->addChild(back_in);
 	
 	string title_str, content_str;
-	title_str = myLoc->getLocalForKey(kMyLocalKey_toDiary19Title);
-	content_str = myLoc->getLocalForKey(kMyLocalKey_toDiary19Content);
+	title_str = myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Title);
+	content_str = myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Content);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
@@ -104,7 +104,7 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
-	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19Button), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Button), mySGD->getFont().c_str(), 13);
 	rightnow_label->disableOuterStroke();
 	r_label->addChild(rightnow_label);
 	

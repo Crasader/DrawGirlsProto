@@ -231,7 +231,7 @@ bool OptionPopup::init()
 	setTouchEnabled(true);
 	
 	
-//	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //		
 //		CCLOG("ok@@");
 //		
@@ -266,7 +266,7 @@ bool OptionPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_option), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_option), mySGD->getFont().c_str(), 15);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,2));
 	title_back->addChild(title_label);
@@ -301,14 +301,14 @@ bool OptionPopup::init()
 	tab_menu->setTouchPriority(-171);
 	
 	CCSprite* n_coupon_img = CCSprite::create("tabbutton_up.png");
-	KSLabelTTF* n_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
 	n_coupon_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_coupon_label->setPosition(ccpFromSize(n_coupon_img->getContentSize()/2.f) + ccp(0,2));
 	n_coupon_img->addChild(n_coupon_label);
 	
 	CCSprite* s_coupon_img = CCSprite::create("tabbutton_up.png");
 	s_coupon_img->setColor(ccGRAY);
-	KSLabelTTF* s_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
 	s_coupon_label->disableOuterStroke();
 	s_coupon_label->setColor(ccGRAY);
 	s_coupon_label->setPosition(ccpFromSize(s_coupon_img->getContentSize()/2.f) + ccp(0,2));
@@ -316,7 +316,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_coupon_img = CCSprite::create("tabbutton_down.png");
 	d_coupon_img->setColor(ccGRAY);
-	KSLabelTTF* d_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_coupon_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regCoupon), mySGD->getFont().c_str(), 12.5f);
 	d_coupon_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_coupon_label->setPosition(ccpFromSize(d_coupon_img->getContentSize()/2.f) + ccp(0,2));
 	d_coupon_img->addChild(d_coupon_label);
@@ -329,14 +329,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_community_img = CCSprite::create("tabbutton_up.png");
-	KSLabelTTF* n_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_community_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
 	n_community_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_community_label->setPosition(ccpFromSize(n_community_img->getContentSize()/2.f) + ccp(0,2));
 	n_community_img->addChild(n_community_label);
 	
 	CCSprite* s_community_img = CCSprite::create("tabbutton_up.png");
 	s_community_img->setColor(ccGRAY);
-	KSLabelTTF* s_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_community_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
 	s_community_label->disableOuterStroke();
 	s_community_label->setColor(ccGRAY);
 	s_community_label->setPosition(ccpFromSize(s_community_img->getContentSize()/2.f) + ccp(0,2));
@@ -344,7 +344,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_community_img = CCSprite::create("tabbutton_down.png");
 	d_community_img->setColor(ccGRAY);
-	KSLabelTTF* d_community_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_community_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
 	d_community_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_community_label->setPosition(ccpFromSize(d_community_img->getContentSize()/2.f) + ccp(0,2));
 	d_community_img->addChild(d_community_label);
@@ -357,14 +357,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_tip_img = CCSprite::create("tabbutton_up.png");
-	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	n_tip_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_tip_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
 	n_tip_img->addChild(n_tip_label);
 	
 	CCSprite* s_tip_img = CCSprite::create("tabbutton_up.png");
 	s_tip_img->setColor(ccGRAY);
-	KSLabelTTF* s_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	s_tip_label->disableOuterStroke();
 	s_tip_label->setColor(ccGRAY);
 	s_tip_label->setPosition(ccpFromSize(s_tip_img->getContentSize()/2.f) + ccp(0,2));
@@ -372,7 +372,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_tip_img = CCSprite::create("tabbutton_down.png");
 	d_tip_img->setColor(ccGRAY);
-	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_tip_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_recommenderReg), mySGD->getFont().c_str(), 12.5f);
 	d_tip_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_tip_label->setPosition(ccpFromSize(d_tip_img->getContentSize()/2.f) + ccp(0,2));
 	d_tip_img->addChild(d_tip_label);
@@ -386,20 +386,20 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_kakao_img = CCSprite::create("option_kakao.png");
-//	KSLabelTTF* n_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	KSLabelTTF* n_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 //	n_kakao_label->setPosition(ccpFromSize(n_kakao_img->getContentSize()/2.f) + ccp(0,-1));
 //	n_kakao_img->addChild(n_kakao_label);
 	
 	CCSprite* s_kakao_img = CCSprite::create("option_kakao.png");
 	s_kakao_img->setColor(ccGRAY);
-//	KSLabelTTF* s_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	KSLabelTTF* s_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 //	s_kakao_label->setColor(ccGRAY);
 //	s_kakao_label->setPosition(ccpFromSize(s_kakao_img->getContentSize()/2.f) + ccp(0,-1));
 //	s_kakao_img->addChild(s_kakao_label);
 	
 	CCSprite* d_kakao_img = CCSprite::create("option_kakao.png");
 	d_kakao_img->setColor(ccGRAY);
-//	KSLabelTTF* d_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+//	KSLabelTTF* d_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 //	d_kakao_label->setPosition(ccpFromSize(d_kakao_img->getContentSize()/2.f) + ccp(0,-1));
 //	d_kakao_img->addChild(d_kakao_label);
 	
@@ -426,7 +426,7 @@ bool OptionPopup::init()
 	system_tab->setPosition(ccp(50, 210));
 	main_case->addChild(system_tab, kOP_Z_back);
 	
-	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_system), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* system_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_system), mySGD->getFont().c_str(), 12);
 	system_label->setColor(ccc3(20, 50, 70));
 	system_label->disableOuterStroke();
 	system_label->setPosition(ccp(system_tab->getContentSize().width*0.45f, system_tab->getContentSize().height*0.5f));
@@ -434,7 +434,7 @@ bool OptionPopup::init()
 	
 	system_tab->setStringData("testobj");
 	
-	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* bgm_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
 //	bgm_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
     bgm_label->disableOuterStroke();
 	bgm_label->setAnchorPoint(ccp(0,0.5f));
@@ -463,7 +463,7 @@ bool OptionPopup::init()
 	
 	
 	
-	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
 //	effect_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
     effect_label->disableOuterStroke();
 	effect_label->setAnchorPoint(ccp(0,0.5f));
@@ -491,7 +491,7 @@ bool OptionPopup::init()
 	resetEffectMenu();
 	
 	
-	KSLabelTTF* joystick_position_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickPosition), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* joystick_position_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickPosition), mySGD->getFont().c_str(), 11.5f);
 	joystick_position_label->disableOuterStroke();
 //	joystick_position_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	joystick_position_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
@@ -520,7 +520,7 @@ bool OptionPopup::init()
 	resetJoystickPositioningMenu();
 	
 	
-	KSLabelTTF* joystick_moving_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickControl), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* joystick_moving_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickControl), mySGD->getFont().c_str(), 11.5f);
 	joystick_moving_label->disableOuterStroke();
 	joystick_moving_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	joystick_moving_label->setAnchorPoint(ccp(0,0.5f));
@@ -548,7 +548,7 @@ bool OptionPopup::init()
 	resetJoystickMovingMenu();
 	
 	
-	KSLabelTTF* joystick_size_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickSize), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* joystick_size_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickSize), mySGD->getFont().c_str(), 11.5f);
 	joystick_size_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 //	joystick_size_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
     joystick_size_label->disableOuterStroke();
@@ -617,7 +617,7 @@ bool OptionPopup::init()
 	question_menu->setTouchPriority(-171);
 	
 	
-	KSLabelTTF* joystick_vib_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickVib), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* joystick_vib_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickVib), mySGD->getFont().c_str(), 11.5f);
 	joystick_vib_label->disableOuterStroke();
 	joystick_vib_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	joystick_vib_label->setAnchorPoint(ccp(0,0.5f));
@@ -646,7 +646,7 @@ bool OptionPopup::init()
 	
 	
 //	myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection)
-	KSLabelTTF* use_side_direction_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_useSideDirection), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* use_side_direction_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_useSideDirection), mySGD->getFont().c_str(), 11.5f);
 	use_side_direction_label->disableOuterStroke();
 	use_side_direction_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	use_side_direction_label->setAnchorPoint(ccp(0,0.5f));
@@ -676,7 +676,7 @@ bool OptionPopup::init()
 	
 	
 	
-	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_safetyMode), mySGD->getFont().c_str(), 11.5f);
 	safety_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 //	safety_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
     safety_label->disableOuterStroke();
@@ -709,14 +709,14 @@ bool OptionPopup::init()
 	alert_tab->setPosition(ccp(50, 88));
 	main_case->addChild(alert_tab, kOP_Z_back);
 	
-	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_noti), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* alert_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noti), mySGD->getFont().c_str(), 12);
 	alert_label->setColor(ccc3(20, 50, 70));
 	alert_label->disableOuterStroke();
 	alert_label->setPosition(ccp(alert_tab->getContentSize().width*0.45f, alert_tab->getContentSize().height*0.5f));
 	alert_tab->addChild(alert_label);
 	
 	
-	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* push_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pushNoti), mySGD->getFont().c_str(), 11.5f);
 //	push_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
     push_label->disableOuterStroke();
 	push_label->setAnchorPoint(ccp(0,0.5f));
@@ -746,7 +746,7 @@ bool OptionPopup::init()
 	resetPushMenu();
 	
 	
-	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 11.5f);
 	message_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
 	message_label->setAnchorPoint(ccp(0,0.5f));
 	message_label->disableOuterStroke();
@@ -785,7 +785,7 @@ bool OptionPopup::init()
 	info_line->setPosition(ccp(220, 17.5f));
 	info_back->addChild(info_line);
 	
-	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_memberID), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* id_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_memberID), mySGD->getFont().c_str(), 11.5f);
 	id_label->setColor(ccc3(54, 36, 148));
 	id_label->disableOuterStroke();
 	id_label->setAnchorPoint(ccp(0,0.5f));
@@ -801,7 +801,7 @@ bool OptionPopup::init()
 	info_back->addChild(my_id_label, kOP_Z_content);
 	
 	
-	KSLabelTTF* version_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_gameversion), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* version_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gameversion), mySGD->getFont().c_str(), 11.5f);
 	version_label->setColor(ccc3(54, 36, 148));
 	version_label->disableOuterStroke();
 	version_label->setAnchorPoint(ccp(0,0.5f));
@@ -820,7 +820,7 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_withdraw_img = CCSprite::create("option_withdraw.png");
-	KSLabelTTF* n_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* n_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
 	n_withdraw_label->setColor(ccc3(54, 36, 148));
 	n_withdraw_label->disableOuterStroke();
 	n_withdraw_label->setPosition(ccpFromSize(n_withdraw_img->getContentSize()/2.f) + ccp(0,0));
@@ -828,7 +828,7 @@ bool OptionPopup::init()
 	
 	CCSprite* s_withdraw_img = CCSprite::create("option_withdraw.png");
 	s_withdraw_img->setColor(ccGRAY);
-	KSLabelTTF* s_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* s_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
 	s_withdraw_label->setColor(ccc3(54, 36, 148));
 	s_withdraw_label->disableOuterStroke();
 	s_withdraw_label->setPosition(ccpFromSize(s_withdraw_img->getContentSize()/2.f) + ccp(0,0));
@@ -836,7 +836,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_withdraw_img = CCSprite::create("option_withdraw.png");
 	d_withdraw_img->setColor(ccGRAY);
-	KSLabelTTF* d_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* d_withdraw_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdraw), mySGD->getFont().c_str(), 11.5f);
 	d_withdraw_label->setColor(ccc3(54, 36, 148));
 	d_withdraw_label->disableOuterStroke();
 	d_withdraw_label->setPosition(ccpFromSize(d_withdraw_img->getContentSize()/2.f) + ccp(0,0));
@@ -863,14 +863,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_accountLink_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 	n_accountLink_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_accountLink_label->setPosition(ccpFromSize(n_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
 	n_accountLink_img->addChild(n_accountLink_label);
 	
 	CCSprite* s_accountLink_img = CCSprite::create("subbutton_pink.png");
 	s_accountLink_img->setColor(ccGRAY);
-	KSLabelTTF* s_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 	s_accountLink_label->setColor(ccGRAY);
 	s_accountLink_label->disableOuterStroke();
 	s_accountLink_label->setPosition(ccpFromSize(s_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
@@ -878,7 +878,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_accountLink_img = CCSprite::create("subbutton_pink.png");
 	d_accountLink_img->setColor(ccGRAY);
-	KSLabelTTF* d_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_accountLink_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);
 	d_accountLink_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_accountLink_label->setPosition(ccpFromSize(d_accountLink_img->getContentSize()/2.f) + ccp(0,-1));
 	d_accountLink_img->addChild(d_accountLink_label);
@@ -891,14 +891,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_help_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_help_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
 	n_help_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_help_label->setPosition(ccpFromSize(n_help_img->getContentSize()/2.f) + ccp(0,-1));
 	n_help_img->addChild(n_help_label);
 	
 	CCSprite* s_help_img = CCSprite::create("subbutton_pink.png");
 	s_help_img->setColor(ccGRAY);
-	KSLabelTTF* s_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_help_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
 	s_help_label->setColor(ccGRAY);
 	s_help_label->disableOuterStroke();
 	s_help_label->setPosition(ccpFromSize(s_help_img->getContentSize()/2.f) + ccp(0,-1));
@@ -906,7 +906,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_help_img = CCSprite::create("subbutton_pink.png");
 	d_help_img->setColor(ccGRAY);
-	KSLabelTTF* d_help_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_help_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_callCenter), mySGD->getFont().c_str(), 12.5f);
 	d_help_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_help_label->setPosition(ccpFromSize(d_help_img->getContentSize()/2.f) + ccp(0,-1));
 	d_help_img->addChild(d_help_label);
@@ -920,14 +920,14 @@ bool OptionPopup::init()
 	
 	
 	CCSprite* n_diary_img = CCSprite::create("option_19.png");
-	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
 	n_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	n_diary_img->addChild(n_diary_label);
 	
 	CCSprite* s_diary_img = CCSprite::create("option_19.png");
 	s_diary_img->setColor(ccGRAY);
-	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
 	s_diary_label->setColor(ccGRAY);
 	s_diary_label->disableOuterStroke();
 	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
@@ -935,7 +935,7 @@ bool OptionPopup::init()
 	
 	CCSprite* d_diary_img = CCSprite::create("option_19.png");
 	d_diary_img->setColor(ccGRAY);
-	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
 	d_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	d_diary_img->addChild(d_diary_label);
@@ -1082,12 +1082,12 @@ void OptionPopup::menuAction(CCObject* pSender)
 	else if(tag == kOP_MT_help)
 	{
 		myHSP->openCSCenter("");
-//		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(kMyLocalKey_communityNotOpenContent)), 999);
+//		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenContent)), 999);
 		is_menu_enable = true;
 	}
 	else if(tag == kOP_MT_recommender)
 	{
-		if(atoi(mySGD->getIntroducerID().c_str()) == 0)
+		if(mySGD->getIntroducerID() == 0)
 		{
 			IntroducerPopup* t_popup = IntroducerPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
 			{
@@ -1104,7 +1104,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		}
 		else
 		{
-			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_introducerAfter), [=](){is_menu_enable = true;}), 999);
+			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_introducerAfter), [=](){is_menu_enable = true;}), 999);
 		}
 	}
 	else if(tag == kOP_MT_toDiary19)
@@ -1183,13 +1183,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		content_back->setContentSize(CCSizeMake(220, 140));
 		
-		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_checkLogout),	mySGD->getFont().c_str(), 15);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_checkLogout),	mySGD->getFont().c_str(), 15);
 		ment_label->setPosition(ccp(0,25));
 		t_container->addChild(ment_label);
 		
 		
 		
-		CommonButton* cancel_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_cancel), 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
+		CommonButton* cancel_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_cancel), 15, CCSizeMake(100, 50), CommonButtonGreen, t_popup->getTouchPriority()-5);
 		cancel_button->setPosition(ccp(-55,-75));
 		cancel_button->setFunction([=](CCObject* sender)
 															 {
@@ -1199,7 +1199,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(cancel_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_ok), 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), 15, CCSizeMake(100, 50), CommonButtonOrange, t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(55,-75));
 		ok_button->setFunction([=](CCObject* sender)
 													 {
@@ -1284,25 +1284,25 @@ void OptionPopup::menuAction(CCObject* pSender)
 		case_back->addChild(back_in);
 		
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdrawTitle), mySGD->getFont().c_str(), 12);
 		title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		title_label->setAnchorPoint(ccp(0.5f,0.5f));
 		title_label->setPosition(ccp(-85, case_back->getContentSize().height/2.f-35));
 		t_container->addChild(title_label);
 		
-		KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent1), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment1_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdrawContent1), mySGD->getFont().c_str(), 12);
 		ment1_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		ment1_label->setAnchorPoint(ccp(0.5f,0.5f));
 		ment1_label->setPosition(ccp(0,28));
 		t_container->addChild(ment1_label);
 		
-		KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent2), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment2_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdrawContent2), mySGD->getFont().c_str(), 12);
 		ment2_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		ment2_label->setAnchorPoint(ccp(0.5f,0.5f));
 		ment2_label->setPosition(ccp(0,8));
 		t_container->addChild(ment2_label);
 		
-		KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_withdrawContent3), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment3_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_withdrawContent3), mySGD->getFont().c_str(), 12);
 		ment3_label->setColor(ccc3(255, 170, 20));
 		ment3_label->disableOuterStroke();
 		ment3_label->setAnchorPoint(ccp(0.5f,0.5f));
@@ -1321,7 +1321,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		t_container->addChild(close_button);
 		
 		
-		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(kMyLocalKey_doWithdraw), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
+		CommonButton* ok_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_doWithdraw), 12, CCSizeMake(101, 44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), t_popup->getTouchPriority()-5);
 		ok_button->setPosition(ccp(0,-53));
 		ok_button->setFunction([=](CCObject* sender)
 													 {
@@ -1442,13 +1442,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		string ment_str;
 		if(mySGD->is_safety_mode)
-			ment_str = myLoc->getLocalForKey(kMyLocalKey_optionSecretOn);
+			ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_optionSecretOn);
 		else
-			ment_str = myLoc->getLocalForKey(kMyLocalKey_optionSecretOff);
+			ment_str = myLoc->getLocalForKey(LK::kMyLocalKey_optionSecretOff);
 		
 		StyledLabelTTF* ment_label = StyledLabelTTF::create(ment_str.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 		ment_label->setAnchorPoint(ccp(0.5f,0.5f));
-		addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(kMyLocalKey_optionSecretTitle), ment_label, [=](){is_menu_enable = true;}), kOP_Z_popup);
+		addChild(ASPopupView::getCommonNoti(-300, myLoc->getLocalForKey(LK::kMyLocalKey_optionSecretTitle), ment_label, [=](){is_menu_enable = true;}), kOP_Z_popup);
 		
 		resetSafetyMenu();
 	}
@@ -1534,12 +1534,12 @@ void OptionPopup::resetBgmMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_bgmOff))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1567,12 +1567,12 @@ void OptionPopup::resetEffectMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_effectOff))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1601,12 +1601,12 @@ void OptionPopup::resetJoystickPositioningMenu()
 	CCPoint img_position;
 	if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_right)
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_right);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_right);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_left);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_left);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1634,12 +1634,12 @@ void OptionPopup::resetJoystickMovingMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed))//ControlJoystickNotFixed))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_fix);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_fix);
 		img_position = ccp(-28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_move);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_move);
 		img_position = ccp(28,0);
 	}
 	
@@ -1667,12 +1667,12 @@ void OptionPopup::resetJoystickVibMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib))//ControlJoystickNotFixed))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1700,12 +1700,12 @@ void OptionPopup::resetUseSideDirectionMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection))//ControlJoystickNotFixed))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	
@@ -1733,12 +1733,12 @@ void OptionPopup::resetSafetyMenu()
 	CCPoint img_position;
 	if(!myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1766,12 +1766,12 @@ void OptionPopup::resetPushMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isPushOff))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	
@@ -1799,12 +1799,12 @@ void OptionPopup::resetMessageMenu()
 	CCPoint img_position;
 	if(myDSH->getBoolForKey(kDSH_Key_isMessageOff))
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOff);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOff);
 		img_position = ccp(28,0);
 	}
 	else
 	{
-		inner_text = myLoc->getLocalForKey(kMyLocalKey_lightOn);
+		inner_text = myLoc->getLocalForKey(LK::kMyLocalKey_lightOn);
 		img_position = ccp(-28,0);
 	}
 	

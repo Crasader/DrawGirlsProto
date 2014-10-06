@@ -87,7 +87,7 @@ void PauseContent::gohomeAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->is_endless_mode && myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_notGohomeEndlessTutorialMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
 	}
 	else
 		gohome_selector();
@@ -108,7 +108,7 @@ void PauseContent::replayAction(CCObject* sender, CCControlEvent t_event)
 	
 	if(mySGD->is_endless_mode)
 	{
-		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_notReplayEndlessMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
+		addChild(ASPopupView::getCommonNoti(touch_priority-10, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_notReplayEndlessMent), [=](){is_menu_enable = true;}, ccp(0.1f,0.1f)), 9999);
 	}
 	else
 		replay_selector();
@@ -141,7 +141,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	addChild(case_back);
 	
 	
-	CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_pause), mySGD->getFont().c_str(), 12);
+	CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_pause), mySGD->getFont().c_str(), 12);
 	title_label->setPosition(ccp(-85, 60));
 	addChild(title_label);
 	
@@ -168,7 +168,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCLabelTTF* t1_label = CCLabelTTF::create();
 	
-	KSLabelTTF* resume_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_continue), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* resume_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_continue), mySGD->getFont().c_str(), 15);
 	resume_label->disableOuterStroke();
 	resume_label->setPosition(ccp(0,0));
 	t1_label->addChild(resume_label);
@@ -187,7 +187,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	KSLabelTTF* gohome_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ingameOut), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* gohome_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ingameOut), mySGD->getFont().c_str(), 15);
 	gohome_label->disableOuterStroke();
 	gohome_label->setPosition(ccp(0,0));
 	t2_label->addChild(gohome_label);
@@ -208,7 +208,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	CCLabelTTF* t3_label = CCLabelTTF::create();
 	
-	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ingameReplay), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ingameReplay), mySGD->getFont().c_str(), 15);
 	replay_label->disableOuterStroke();
 	replay_label->setPosition(ccp(0,0));
 	t3_label->addChild(replay_label);
@@ -232,7 +232,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	addChild(safety_node);
 	
 	
-	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_publicPlaceMode), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* safety_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_publicPlaceMode), mySGD->getFont().c_str(), 11);
 	safety_label->disableOuterStroke();
 	safety_label->setPosition(ccp(-41,-73));
 	safety_node->addChild(safety_label);
@@ -247,14 +247,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	on_off_menu->setTouchPriority(touch_priority-1);
 	
 	CCSprite* n_on = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_on_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_on_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	n_on_label->disableOuterStroke();
 	n_on_label->setPosition(ccp(n_on->getContentSize().width/2.f, n_on->getContentSize().height/2.f));
 	n_on->addChild(n_on_label);
 	
 	CCSprite* s_on = CCSprite::create("subbutton_purple2.png");
 	s_on->setColor(ccGRAY);
-	KSLabelTTF* s_on_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_on_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	s_on_label->disableOuterStroke();
 	s_on_label->setPosition(ccp(s_on->getContentSize().width/2.f, s_on->getContentSize().height/2.f));
 	s_on->addChild(s_on_label);
@@ -273,14 +273,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	
 	CCSprite* n_off = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_off_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_off_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	n_off_label->disableOuterStroke();
 	n_off_label->setPosition(ccp(n_off->getContentSize().width/2.f, n_off->getContentSize().height/2.f));
 	n_off->addChild(n_off_label);
 	
 	CCSprite* s_off = CCSprite::create("subbutton_purple2.png");
 	s_off->setColor(ccGRAY);
-	KSLabelTTF* s_off_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_off_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	s_off_label->disableOuterStroke();
 	s_off_label->setPosition(ccp(s_off->getContentSize().width/2.f, s_off->getContentSize().height/2.f));
 	s_off->addChild(s_off_label);
@@ -312,7 +312,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	addChild(sound_node);
 	
 	
-	KSLabelTTF* sound_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* sound_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_bgm), mySGD->getFont().c_str(), 11.5f);
 	sound_label->disableOuterStroke();
 	sound_label->setPosition(ccp(-41,-73));
 	sound_node->addChild(sound_label);
@@ -327,14 +327,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	on_off_menu2->setTouchPriority(touch_priority-1);
 	
 	CCSprite* n_on2 = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	n_on_label2->disableOuterStroke();
 	n_on_label2->setPosition(ccp(n_on2->getContentSize().width/2.f, n_on2->getContentSize().height/2.f));
 	n_on2->addChild(n_on_label2);
 	
 	CCSprite* s_on2 = CCSprite::create("subbutton_purple2.png");
 	s_on2->setColor(ccGRAY);
-	KSLabelTTF* s_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_on_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	s_on_label2->disableOuterStroke();
 	s_on_label2->setPosition(ccp(s_on2->getContentSize().width/2.f, s_on2->getContentSize().height/2.f));
 	s_on2->addChild(s_on_label2);
@@ -353,14 +353,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	
 	CCSprite* n_off2 = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	n_off_label2->disableOuterStroke();
 	n_off_label2->setPosition(ccp(n_off2->getContentSize().width/2.f, n_off2->getContentSize().height/2.f));
 	n_off2->addChild(n_off_label2);
 	
 	CCSprite* s_off2 = CCSprite::create("subbutton_purple2.png");
 	s_off2->setColor(ccGRAY);
-	KSLabelTTF* s_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_off_label2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	s_off_label2->disableOuterStroke();
 	s_off_label2->setPosition(ccp(s_off2->getContentSize().width/2.f, s_off2->getContentSize().height/2.f));
 	s_off2->addChild(s_off_label2);
@@ -391,7 +391,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	addChild(effect_node);
 	
 	
-	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
+	KSLabelTTF* effect_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_effect), mySGD->getFont().c_str(), 11.5f);
 	effect_label->disableOuterStroke();
 	effect_label->setPosition(ccp(-41,-73));
 	effect_node->addChild(effect_label);
@@ -406,14 +406,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	on_off_menu3->setTouchPriority(touch_priority-1);
 	
 	CCSprite* n_on3 = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	n_on_label3->disableOuterStroke();
 	n_on_label3->setPosition(ccp(n_on3->getContentSize().width/2.f, n_on3->getContentSize().height/2.f));
 	n_on3->addChild(n_on_label3);
 	
 	CCSprite* s_on3 = CCSprite::create("subbutton_purple2.png");
 	s_on3->setColor(ccGRAY);
-	KSLabelTTF* s_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_on_label3 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOn), mySGD->getFont().c_str(), 12);
 	s_on_label3->disableOuterStroke();
 	s_on_label3->setPosition(ccp(s_on3->getContentSize().width/2.f, s_on3->getContentSize().height/2.f));
 	s_on3->addChild(s_on_label3);
@@ -432,14 +432,14 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	
 	CCSprite* n_off3 = CCSprite::create("subbutton_purple2.png");
-	KSLabelTTF* n_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	n_off_label3->disableOuterStroke();
 	n_off_label3->setPosition(ccp(n_off3->getContentSize().width/2.f, n_off3->getContentSize().height/2.f));
 	n_off3->addChild(n_off_label3);
 	
 	CCSprite* s_off3 = CCSprite::create("subbutton_purple2.png");
 	s_off3->setColor(ccGRAY);
-	KSLabelTTF* s_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_off_label3 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_lightOff), mySGD->getFont().c_str(), 12);
 	s_off_label3->disableOuterStroke();
 	s_off_label3->setPosition(ccp(s_off3->getContentSize().width/2.f, s_off3->getContentSize().height/2.f));
 	s_off3->addChild(s_off_label3);

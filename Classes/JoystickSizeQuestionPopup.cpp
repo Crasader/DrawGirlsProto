@@ -65,14 +65,14 @@ void JoystickSizeQuestionPopup::myInit(int t_touch_priority, function<void()> t_
 	back_case->addChild(back_in);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickSizeQuestionTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickSizeQuestionTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f, 0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
-	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_joystickSizeQuestionContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* slttf = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_joystickSizeQuestionContent), mySGD->getFont().c_str(), 13, 999, StyledAlignment::kCenterAlignment);
 	slttf->setAnchorPoint(ccp(0.5f,0.5f));
 	slttf->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 	back_in->addChild(slttf);
@@ -87,7 +87,7 @@ void JoystickSizeQuestionPopup::myInit(int t_touch_priority, function<void()> t_
 	m_container->addChild(close_button);
 	
 	
-	//	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
+	//	KSLabelTTF* close_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 13);
 	//	CCScale9Sprite* close_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
 	//	close_button = CCControlButton::create(close_label, close_back);
 	//	close_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardLockedPopup::closeAction), CCControlEventTouchUpInside);

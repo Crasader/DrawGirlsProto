@@ -70,13 +70,13 @@ void PuzzleSuccessAndPerfect::myInit(int t_touch_priority, function<void()> t_en
 	string title_string, ment_string;
 	if(is_success)
 	{
-		title_string = myLoc->getLocalForKey(kMyLocalKey_puzzleSuccessTitle);
-		ment_string = myLoc->getLocalForKey(kMyLocalKey_puzzleSuccessMent);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_puzzleSuccessTitle);
+		ment_string = myLoc->getLocalForKey(LK::kMyLocalKey_puzzleSuccessMent);
 	}
 	else
 	{
-		title_string = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectTitle);
-		ment_string = myLoc->getLocalForKey(kMyLocalKey_puzzlePerfectMent);
+		title_string = myLoc->getLocalForKey(LK::kMyLocalKey_puzzlePerfectTitle);
+		ment_string = myLoc->getLocalForKey(LK::kMyLocalKey_puzzlePerfectMent);
 	}
 	
 	StyledLabelTTF* title_label = StyledLabelTTF::create(title_string.c_str(), mySGD->getFont().c_str(), 21, 299, StyledAlignment::kCenterAlignment);

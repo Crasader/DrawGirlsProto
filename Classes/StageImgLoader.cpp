@@ -79,11 +79,19 @@ void StageImgLoader::removeTextureCache(string filename)
 
 CCTexture2D * StageImgLoader::addImage(const char * path)
 {
-	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), true);
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), true);
+	if(!t_texture)
+		return CCTextureCache::sharedTextureCache()->addImage("whitepaper2.png");
+	
+	return t_texture;
 }
 CCTexture2D * StageImgLoader::addNakedImage(const char * path)
 {
-	return CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), false);
+	CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage(path, true, getDocumentPath(), false);
+	if(!t_texture)
+		return CCTextureCache::sharedTextureCache()->addImage("whitepaper2.png");
+	
+	return t_texture;
 }
 void StageImgLoader::addImageAsync(const char *path, cocos2d::CCObject *target, SEL_CallFuncO selector)
 {

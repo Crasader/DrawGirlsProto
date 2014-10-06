@@ -108,8 +108,8 @@ bool FailPopup::init()
 	p1["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	p1["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p1_data;
-	p1_data["character"]=myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p1_data["highPiece"] = mySGD->suitable_stage;
+	p1_data["character"] = mySGD->getUserdataSelectedCharNO();
+	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 	p1["data"] = p1_data;
 	
 	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
@@ -183,15 +183,15 @@ bool FailPopup::init()
 	title_list.clear();
 	left_content_list.clear();
 	
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleAreaScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamageScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleComboScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleLifeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTimeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleGradeScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleDamagedScore));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeGold));
-	title_list.push_back(myLoc->getLocalForKey(kMyLocalKey_endlessCalcTitleTakeArea));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleAreaScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleDamageScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleComboScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleLifeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTimeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleGradeScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleDamagedScore));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTakeGold));
+	title_list.push_back(myLoc->getLocalForKey(LK::kMyLocalKey_endlessCalcTitleTakeArea));
 	
 	left_content_list.push_back(KS::insert_separator(mySGD->area_score.getV()));
 	left_content_list.push_back(KS::insert_separator(mySGD->damage_score.getV()));
@@ -207,11 +207,11 @@ bool FailPopup::init()
 	
 	string title_str;
 	if(fail_code == kFC_timeover)
-		title_str = myLoc->getLocalForKey(kMyLocalKey_failTitleTimeover);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover);
 	else if(fail_code == kFC_missionfail)
-		title_str = myLoc->getLocalForKey(kMyLocalKey_failTitleMissionfail);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_failTitleMissionfail);
 	else
-		title_str = myLoc->getLocalForKey(kMyLocalKey_failTitleGameover);
+		title_str = myLoc->getLocalForKey(LK::kMyLocalKey_failTitleGameover);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 21.5f);
 	title_label->setColor(ccc3(240, 45, 45));
@@ -266,7 +266,7 @@ bool FailPopup::init()
 	left_total_back->setPosition(ccp(inner_left->getContentSize().width/2.f, 15));
 	inner_left->addChild(left_total_back);
 	
-	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_total_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_totalScore), mySGD->getFont().c_str(), 13);
 	left_total_title->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 //	left_total_title->setColor(ccc3(255, 170, 20));
 	left_total_title->setAnchorPoint(ccp(0,0.5f));
@@ -301,7 +301,7 @@ bool FailPopup::init()
 	
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
+	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
 	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_ok_node->addChild(ok_label);
 	
@@ -318,7 +318,7 @@ bool FailPopup::init()
 	
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
-	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
+	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
 	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	t_replay_node->addChild(replay_label);
 	
@@ -485,7 +485,7 @@ bool FailPopup::init()
 		function<void()> end_func3 = [=]()
 		{
 			TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, asuka);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent31), end_func4);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent31), end_func4);
 		};
 		
 		function<void()> end_func2 = [=]()
@@ -495,7 +495,7 @@ bool FailPopup::init()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent30), end_func3);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent30), end_func3);
 		};
 		
 		function<void()> end_func1 = [=]()
@@ -513,7 +513,7 @@ bool FailPopup::init()
 			t_arrow1->setPosition(ccp(132,20-14) + ccp(0,280*0.58f+33.5f) + ccp(0,48));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent29), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment1 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent29), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment1->setAnchorPoint(ccp(0.5f,0));
 			t_ment1->setPosition(t_arrow1->getPosition() + ccp(0, t_arrow1->getContentSize().height/2.f*t_arrow1->getScale() + 3));
 			t_clipping->addChild(t_ment1);
@@ -530,7 +530,7 @@ bool FailPopup::init()
 			t_arrow2->setPosition(ccp(132,20-14) + ccp(0,280*0.58f-115.f) + ccp(0,5));
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent28), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent28), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment2->setAnchorPoint(ccp(0.5f,1));
 			t_ment2->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f*t_arrow2->getScale() - 3));
 			t_clipping->addChild(t_ment2);
@@ -543,7 +543,7 @@ bool FailPopup::init()
 			t_arrow3->setPosition(ccp(347,20-14) + ccp(0,280*0.58f-115) + ccp(0,5));
 			t_clipping->addChild(t_arrow3);
 			
-			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_scenarioMent27), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent27), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment3->setAnchorPoint(ccp(0.5f,1));
 			t_ment3->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height/2.f*t_arrow3->getScale() - 3));
 			t_clipping->addChild(t_ment3);
@@ -587,7 +587,7 @@ bool FailPopup::init()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent32), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent32), end_func1);
 															  }));
 	}
 	else if(mySD->getSilType() >= 5 && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_emptyItem) && mySGD->getGoodsValue(kGoodsType_item9) + mySGD->getGoodsValue(kGoodsType_item6) + mySGD->getGoodsValue(kGoodsType_item11) <= 0)
@@ -659,19 +659,19 @@ bool FailPopup::init()
 	param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 	param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 	Json::Value p2_data;
-	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
-	p2_data["highstage"] = mySGD->suitable_stage;
+	p2_data["character"] = mySGD->getUserdataSelectedCharNO();
+	p2_data["highPiece"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
-	if(mySD->getSilType() == mySGD->getIntroduceStage() && mySGD->getIntroducerID() != "0" && mySGD->getIntroducerID() != "-1")
+	if(mySD->getSilType() >= mySGD->getIntroduceStage() && mySGD->getIntroducerID()>0)
 	{
 		Json::Value t_param;
 		t_param["memberID"] = myHSP->getSocialID();
-		t_param["content"] = myLoc->getLocalForKey(kMyLocalKey_introducerCompleteReward);
+		t_param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerCompleteReward);
 		send_command_list.push_back(CommandParam("completeIntroducer", t_param, json_selector(this, FailPopup::resultCompleteIntroducer)));
 	}
 	
@@ -753,7 +753,7 @@ void FailPopup::resultCompleteIntroducer(Json::Value result_data)
 {
 	if(result_data["result"]["code"] == GDSUCCESS)
 	{
-		mySGD->setIntroducerID("-1");
+		mySGD->setIntroducerID(mySGD->getIntroducerID()*-1);
 	}
 }
 
@@ -810,11 +810,11 @@ void FailPopup::tryTransaction(CCNode* t_loading)
 										  {
 											  mySGD->network_check_cnt = 0;
 											  
-											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											  ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 												  tryTransaction(t_loading);
 											  }, 1);
 											  
-//											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+//											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //												  tryTransaction(t_loading);
 //											  });
 											  if(alert)
@@ -964,22 +964,22 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		main_case->addChild(graph_back, kZ_FP_img);
 		setFormSetter(graph_back);
 		
-//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 //		t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_a->setPosition(ccp(25,8));
 //		graph_back->addChild(t_rank_a);
 //		
-//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 //		t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_b->setPosition(ccp(25+49,8));
 //		graph_back->addChild(t_rank_b);
 //		
-//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 //		t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_c->setPosition(ccp(25+98,8));
 //		graph_back->addChild(t_rank_c);
 //		
-//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//		KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 //		t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //		t_rank_d->setPosition(ccp(25+147,8));
 //		graph_back->addChild(t_rank_d);
@@ -993,7 +993,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 //		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 //		main_case->addChild(all_user_label, kZ_FP_img);
 //		
-//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 //		my_rank_label->setAnchorPoint(ccp(1,0.5));
 //		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 //		main_case->addChild(my_rank_label, kZ_FP_img);
@@ -1178,7 +1178,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 	else
 	{
 		TRACE();
-		fail_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
+		fail_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failCheckRanking), mySGD->getFont().c_str(), 12);
 		if(loading_img)
 			fail_label->setPosition(loading_img->getPosition());
 		else
@@ -1766,7 +1766,7 @@ void FailPopup::menuAction(CCObject* pSender)
 	{
 		if(is_go_to_mainflow)
 		{
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_timeOutFrame)), 9999);
+			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_timeOutFrame)), 9999);
 		}
 		
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");

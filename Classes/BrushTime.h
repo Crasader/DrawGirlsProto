@@ -240,7 +240,7 @@ private:
 		}
 		else
 		{
-			AlertEngine::sharedInstance()->addSingleAlert("error", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_canNotConnectedServer), "Ok", 0, this, alertfuncII_selector(BrushTime::alertAction));
+			AlertEngine::sharedInstance()->addSingleAlert("error", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_canNotConnectedServer), "Ok", 0, this, alertfuncII_selector(BrushTime::alertAction));
 		}
 	}
 	

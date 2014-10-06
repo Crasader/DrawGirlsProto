@@ -89,7 +89,7 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	addChild(case_back);
 	
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventTitle), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_clearTimeEventTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setPosition(ccp(-85, case_back->getContentSize().height/2.f-35));
 	addChild(title_label);
@@ -116,14 +116,14 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	
 	
 	
-	StyledLabelTTF* ment_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_clearTimeEventMent), 85.f, mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* ment_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_clearTimeEventMent), 85.f, mySGD->getTimeEventFloatValue(kTimeEventType_clear))->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	ment_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment_label->setPosition(ccpFromSize(content_back->getContentSize()/2.f) + ccp(0,21));
 	content_back->addChild(ment_label);
 	
 	CCLabelTTF* t1_label = CCLabelTTF::create();
 	
-	KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_no), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_no), mySGD->getFont().c_str(), 12);
 	no_label->disableOuterStroke();
 	no_label->setPosition(ccp(0,0));
 	t1_label->addChild(no_label);
@@ -142,7 +142,7 @@ void ClearTimeEventContent::myInit(int t_touch_priority, function<void(void)> t_
 	
 	CCLabelTTF* t2_label = CCLabelTTF::create();
 	
-	KSLabelTTF* yes_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_yes), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* yes_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_yes), mySGD->getFont().c_str(), 12);
 	yes_label->disableOuterStroke();
 	yes_label->setPosition(ccp(0,0));
 	t2_label->addChild(yes_label);

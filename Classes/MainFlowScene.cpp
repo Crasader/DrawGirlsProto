@@ -81,7 +81,7 @@ bool MainFlowScene::init()
     }
 	
 //	setBackKeyFunc([=](){
-//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+//		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
 //	});
 //	setBackKeyEnabled(true);
 	
@@ -112,13 +112,25 @@ bool MainFlowScene::init()
 			int start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 			int stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
 			
-			int card_take_cnt = mySGD->getHasGottenCardsSize();
-			for(int i=0;i<card_take_cnt;i++)
+//			int card_take_cnt = mySGD->getHasGottenCardsSize();
+//			for(int i=0;i<card_take_cnt;i++)
+//			{
+//				int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
+//				int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+//				if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
+//					have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+//			}
+			
+			for(int j=start_stage;j<start_stage+stage_count;j++)
 			{
-				int card_number = mySGD->getHasGottenCardsDataCardNumber(i);
-				int card_stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-				if(card_stage_number >= start_stage && card_stage_number < start_stage+stage_count)
-					have_card_cnt += NSDS_GI(kSDS_CI_int1_grade_i, card_number);
+				PieceHistory t_history = mySGD->getPieceHistory(j);
+				for(int k=0;k<4;k++)
+				{
+					if(t_history.is_clear[k].getV())
+					{
+						have_card_cnt += k+1;
+					}
+				}
 			}
 			
 			have_card_count_for_puzzle_index.push_back(have_card_cnt);
@@ -132,6 +144,8 @@ bool MainFlowScene::init()
 	
     TRACE();
 	locked_puzzle_count = 0;
+	
+	is_unlock_puzzle = -1;
 	
     TRACE();
 	for(int i=0;i<not_event_puzzle_list.size();i++)
@@ -229,6 +243,7 @@ bool MainFlowScene::init()
 					t_history.is_open = true;
 					t_history.open_type = "무료";
 					mySGD->setPuzzleHistory(t_history, nullptr);
+					is_unlock_puzzle = t_puzzle_number;
 				}
 			}
 		}
@@ -249,7 +264,8 @@ bool MainFlowScene::init()
     TRACE();
 	start_unlock_animation = nullptr;
 	
-	is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
+	if(is_unlock_puzzle == -1)
+		is_unlock_puzzle = mySGD->getIsUnlockPuzzle();
 	is_perfect_puzzle = mySGD->getIsPerfectPuzzle();
 	
     TRACE();
@@ -506,13 +522,13 @@ bool MainFlowScene::init()
 				
                 TRACE();
 				
-				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allPuzzleClearTitle), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_allPuzzleClearTitle), mySGD->getFont().c_str(), 12);
 				title_label->disableOuterStroke();
 				title_label->setAnchorPoint(ccp(0.5f,0.5f));
 				title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 				t_container->addChild(title_label);
 				
-				StyledLabelTTF* sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_allPuzzleClearMent), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				StyledLabelTTF* sub_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_allPuzzleClearMent), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 				sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 				sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f)); 			// dt (0.0,-13.5)
 				back_in->addChild(sub_label);
@@ -606,7 +622,7 @@ void MainFlowScene::updateCardHistory(CCNode *t_loading)
 											 TRACE();
 											 mySGD->network_check_cnt = 0;
 											 
-											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(kMyLocalKey_reConnect), myLoc->getLocalForKey(kMyLocalKey_reConnectAlert4),[=](){
+											 ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 												 updateCardHistory(t_loading);
 											 }, 1);
 											 if(alert)
@@ -1086,11 +1102,11 @@ void MainFlowScene::cellAction(CCObject* sender)
 			
 			content_back->setContentSize(CCSizeMake(202, 146));
 			
-			CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_openRightNow), mySGD->getFont().c_str(), 20);
+			CCLabelTTF* title_label = CCLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_openRightNow), mySGD->getFont().c_str(), 20);
 			title_label->setPosition(ccp(0, 102));
 			t_container->addChild(title_label);
 			
-			CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_openRubyValue), NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
+			CCLabelTTF* content_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_openRubyValue), NSDS_GI(puzzle_number, kSDS_PZ_point_i))->getCString(), mySGD->getFont().c_str(), 18);
 			content_label->setPosition(CCPointZero);
 			t_container->addChild(content_label);
 			
@@ -1144,7 +1160,7 @@ void MainFlowScene::cellAction(CCObject* sender)
 													  if(result_data["result"]["code"].asInt() != GDSUCCESS)
 														{
 															mySGD->clearChangeGoods();
-															addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_failPurchase)), 9999);
+															addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 														}
 													  else
 														{
@@ -1239,7 +1255,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //		rate_label->setPosition(ccp(-15, -71.5f));
 //		cell_node->addChild(rate_label);
 		
-		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* locked_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_waitForUpdate), mySGD->getFont().c_str(), 10);
 		locked_label->setColor(ccc3(50, 145, 145));
 		locked_label->enableOuterStroke(ccBLACK, 1.f);
 		locked_label->setPosition(ccp(67.5f,95.f));
@@ -1405,7 +1421,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			
 			if(t_info.before_locked_puzzle_count == 0)
 			{
-				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
+				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 121));
@@ -1431,14 +1447,14 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					else if(t_info.keep_weekday == 6)
 						weekday_string = "토요일";
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentTimeWeek), weekday_string.c_str(), t_info.keep_week_start, t_info.keep_week_end)->getCString(), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
 				else if(t_info.is_have_date_condition)
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentTimeDate), t_info.keep_date_start.substr(4,2).c_str(), t_info.keep_date_start.substr(6,2).c_str(), t_info.keep_date_start.substr(8,2).c_str(), t_info.keep_date_start.substr(10,2).c_str())->getCString(), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
@@ -1447,7 +1463,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 100.f));
 					not_clear_img->addChild(condition_content);
@@ -1465,7 +1481,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //					price_value_label->disableOuterStroke();
 //					c_label->addChild(price_value_label);
 					
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_directEnter), mySGD->getFont().c_str(), 10);
 					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
@@ -1490,7 +1506,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				else
 				{
 					CCLabelTTF* c_label = CCLabelTTF::create();
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
 					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
@@ -1507,7 +1523,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 			else
 			{
-//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
 //				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
 //				not_clear_label->setPosition(ccp(67.5f,138.5f));
 //				not_clear_img->addChild(not_clear_label);
@@ -1526,7 +1542,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			
 			if(t_info.before_locked_puzzle_count == 0)
 			{
-				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
+				KSLabelTTF* condition_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionTitle), mySGD->getFont().c_str(), 11.5f);
 				condition_title->setColor(ccc3(255, 177, 38));
 				condition_title->disableOuterStroke();
 				condition_title->setPosition(ccp(67.5f, 121));
@@ -1536,13 +1552,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 100.f));
 					not_clear_img->addChild(condition_content);
 					
 					CCLabelTTF* c_label = CCLabelTTF::create();
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
 					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
@@ -1558,13 +1574,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				}
 				else
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
+					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
 					condition_content->disableOuterStroke();
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 					
 					CCLabelTTF* c_label = CCLabelTTF::create();
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
 					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 					detail_label->setPosition(ccp(0,0));
 					c_label->addChild(detail_label);
@@ -1581,7 +1597,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 			}
 			else
 			{
-//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 10);
+//				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 10);
 //				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
 //				not_clear_label->setPosition(ccp(67.5f,138.5f));
 //				not_clear_img->addChild(not_clear_label);
@@ -1634,7 +1650,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				not_clear_img->setPosition(CCPointZero);
 				cell_node->addChild(not_clear_img);
 				
-				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* not_clear_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_beforeNotClearPuzzle), mySGD->getFont().c_str(), 12);
 				not_clear_label->enableOuterStroke(ccBLACK, 1.f);
 				not_clear_label->setPosition(ccp(67.5f,138.5f));
 				not_clear_img->addChild(not_clear_label);
@@ -1836,13 +1852,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																														function<void()> end_func8 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, yagyu);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent41), end_func9);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent41), end_func9);
 //																														};
 //																														
 //																														function<void()> end_func7 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, yagyu, hibari);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent40), end_func8);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent40), end_func8);
 //																														};
 //																														
 //																														function<void()> end_func6 = [=]()
@@ -1862,7 +1878,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													  
 //																																													  typing_box2->setTouchSuction(false);
 //																																													  
-//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent39), end_func7);
+//																																													  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent39), end_func7);
 //																																												  }));
 //																															typing_box2->setTouchOffScrollAndButton();
 //																															typing_box2->setVisible(false);
@@ -1871,25 +1887,25 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																														function<void()> end_func5 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent38), end_func6);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent38), end_func6);
 //																														};
 //																														
 //																														function<void()> end_func4 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent37), end_func5);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent37), end_func5);
 //																														};
 //																														
 //																														function<void()> end_func3 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, asuka, hibari);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent36), end_func4);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent36), end_func4);
 //																														};
 //																														
 //																														function<void()> end_func2 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, hibari, asuka);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent35), end_func3);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent35), end_func3);
 //																														};
 //																														
 //																														function<void()> end_func1 = [=]()
@@ -1909,7 +1925,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													  
 //																																													  typing_box->setTouchSuction(false);
 //																																													  
-//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent34), end_func2);
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent34), end_func2);
 //																																												  }));
 //																															typing_box->setTouchOffScrollAndButton();
 //																															typing_box->setVisible(false);
@@ -1927,7 +1943,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 //																																												  skip_menu->setEnabled(true);
 //																																												  
-//																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent33), end_func1);
+//																																												  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent33), end_func1);
 //																																											  }));
 //																													}
 //																													else if(is_unlock_puzzle == 3)
@@ -1991,18 +2007,18 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																														function<void()> end_func10 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent52), end_func11);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent52), end_func11);
 //																														};
 //																														
 //																														function<void()> end_func9 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, katsuragi, ikaruga);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent51), end_func10);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent51), end_func10);
 //																														};
 //																														
 //																														function<void()> end_func8 = [=]()
 //																														{
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent50), end_func9);
 ////																															katsuragi->setVisible(false);
 ////																															boy->setVisible(true);
 ////																															
@@ -2018,7 +2034,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 ////																																													  
 ////																																													  typing_box2->setTouchSuction(false);
 ////																																													  
-////																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent50), end_func9);
+////																																													  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent50), end_func9);
 ////																																												  }));
 ////																															typing_box2->setTouchOffScrollAndButton();
 ////																															typing_box2->setVisible(false);
@@ -2027,7 +2043,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																														function<void()> end_func7 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, ikaruga, katsuragi);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent49), end_func8);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent49), end_func8);
 //																														};
 //																														
 //																														function<void()> end_func6 = [=]()
@@ -2047,7 +2063,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													  
 //																																													  typing_box2->setTouchSuction(false);
 //																																													  
-//																																													  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent48), end_func7);
+//																																													  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent48), end_func7);
 //																																												  }));
 //																															typing_box2->setTouchOffScrollAndButton();
 //																															typing_box2->setVisible(false);
@@ -2071,7 +2087,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													  
 //																																													  typing_box->setTouchSuction(false);
 //																																													  
-//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent47), end_func6);
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent47), end_func6);
 //																																												  }));
 //																															typing_box->setTouchOffScrollAndButton();
 //																															typing_box->setVisible(false);
@@ -2080,19 +2096,19 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																														function<void()> end_func4 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent46), end_func5);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent46), end_func5);
 //																														};
 //																														
 //																														function<void()> end_func3 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box, typing_box2, hibari, yagyu);
-//																															typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent45), end_func4);
+//																															typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent45), end_func4);
 //																														};
 //																														
 //																														function<void()> end_func2 = [=]()
 //																														{
 //																															TypingBox::changeTypingBox(typing_box2, typing_box, yagyu, hibari);
-//																															typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent44), end_func3);
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent44), end_func3);
 //																														};
 //																														
 //																														function<void()> end_func1 = [=]()
@@ -2112,7 +2128,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																													  
 //																																													  typing_box->setTouchSuction(false);
 //																																													  
-//																																													  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent43), end_func2);
+//																																													  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent43), end_func2);
 //																																												  }));
 //																															typing_box->setTouchOffScrollAndButton();
 //																															typing_box->setVisible(false);
@@ -2130,7 +2146,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //																																												  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 //																																												  skip_menu->setEnabled(true);
 //																																												  
-//																																												  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent42), end_func1);
+//																																												  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent42), end_func1);
 //																																											  }));
 //																													}
 //																													else if(is_unlock_puzzle >= 4)
@@ -2251,13 +2267,13 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																												  back_case->addChild(back_in);
 																												  
 																												  
-																												  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 12);
+																												  KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle), mySGD->getFont().c_str(), 12);
 																												  title_label->disableOuterStroke();
 																												  title_label->setAnchorPoint(ccp(0.5f,0.5f));
 																												  title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 																												  t_container->addChild(title_label);
 																												  
-																												  StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																												  StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 																												  sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 																												  sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f)); 			// dt (0.0,-13.5)
 																												  back_in->addChild(sub_label);
@@ -2347,11 +2363,11 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	
 	if(tag == 0)
 	{
-		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContent), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
 		content_label->setAnchorPoint(ccp(0.5f,0.5f));
 		
 		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800,
-																											myLoc->getLocalForKey(kMyLocalKey_detailConditionPopupTitle),
+																											myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupTitle),
 																											(CCNode*)content_label, [=](){is_menu_enable = true;},
 																											12.f, CCPointZero,true);
 		
@@ -2552,7 +2568,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																													 t_history.open_type = "";
 																																													 mySGD->setPuzzleHistoryForNotSave(t_history);
 																																													 
-																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_rubyNotEnought)), 9999);
+																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 																																													 
 																																													 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
 																																													 //											  {
@@ -2671,7 +2687,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		
 		if(tag == kMainFlowMenuTag_rubyShop)
 		{
-//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 			ShopPopup* t_shop = ShopPopup::create();
 			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			t_shop->targetHeartTime(heart_time);
@@ -2927,11 +2943,11 @@ void MainFlowScene::menuAction(CCObject* sender)
 		{
 			if(mySGD->getUserdataHighPiece() < mySGD->getEndlessMinPiece())
 			{
-				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 				sub_label->setAnchorPoint(ccp(0.5f,0.5f));
 				
 				addChild(ASPopupView::getCommonNoti(-999,
-																						myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;},
+																						myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpenConditionTitle), sub_label, [=](){is_menu_enable = true;},
 																						12.f, ccp(0,0), true), 999);
 				
 //				ASPopupView* t_popup = ASPopupView::create(-999);
@@ -2966,13 +2982,13 @@ void MainFlowScene::menuAction(CCObject* sender)
 //				back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f-17));
 //				back_case->addChild(back_in);
 //				
-//				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
+//				KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpenConditionTitle), mySGD->getFont().c_str(), 15);
 //				title_label->setColor(ccc3(255, 170, 20));
 //				title_label->setAnchorPoint(ccp(0.5,0.5f));
 //				title_label->setPosition(ccp(0,back_case->getContentSize().height/2.f-25));
 //				t_container->addChild(title_label);
 //				
-//				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//				StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessOpenConditionContent), mySGD->getEndlessMinPiece())->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 //				sub_label->setPosition(ccp(0,-10));
 //				sub_label->setOldAnchorPoint();
 //				t_container->addChild(sub_label);
@@ -3085,13 +3101,13 @@ void MainFlowScene::setBottom()
 	
 	
 	CCSprite* n_rank = CCSprite::create("mainflow_rank.png");
-	KSLabelTTF* n_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
 	n_rank_label->enableOuterStroke(ccBLACK, 1.f);
 	n_rank_label->setPosition(ccp(n_rank->getContentSize().width/2.f, 7));
 	n_rank->addChild(n_rank_label);
 	CCSprite* s_rank = CCSprite::create("mainflow_rank.png");
 	s_rank->setColor(ccGRAY);
-	KSLabelTTF* s_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_rank_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_ranking), mySGD->getFont().c_str(), 12);
 	s_rank_label->enableOuterStroke(ccBLACK, 1.f);
 	s_rank_label->setPosition(ccp(s_rank->getContentSize().width/2.f, 7));
 	s_rank->addChild(s_rank_label);
@@ -3115,13 +3131,13 @@ void MainFlowScene::setBottom()
 	
 	
 	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
-	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
 	n_shop_label->enableOuterStroke(ccBLACK, 1.f);
 	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
 	n_shop->addChild(n_shop_label);
 	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
 	s_shop->setColor(ccGRAY);
-	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
 	s_shop_label->enableOuterStroke(ccBLACK, 1.f);
 	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
 	s_shop->addChild(s_shop_label);
@@ -3156,13 +3172,13 @@ void MainFlowScene::setBottom()
 //	}
 		
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
-	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
 	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
 	n_cardsetting->addChild(n_cardsetting_label);
 	CCSprite* s_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	s_cardsetting->setColor(ccGRAY);
-	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
 	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
 	s_cardsetting->addChild(s_cardsetting_label);
@@ -3186,13 +3202,13 @@ void MainFlowScene::setBottom()
 	
 	
 	CCSprite* n_mission = CCSprite::create("mainflow_mission.png");
-	KSLabelTTF* n_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* n_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
 	n_mission_label->enableOuterStroke(ccBLACK, 1.f);
 	n_mission_label->setPosition(ccp(n_mission->getContentSize().width/2.f, 7));
 	n_mission->addChild(n_mission_label);
 	CCSprite* s_mission = CCSprite::create("mainflow_mission.png");
 	s_mission->setColor(ccGRAY);
-	KSLabelTTF* s_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
+	KSLabelTTF* s_mission_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_todaymission), mySGD->getFont().c_str(), 10);
 	s_mission_label->enableOuterStroke(ccBLACK, 1.f);
 	s_mission_label->setPosition(ccp(s_mission->getContentSize().width/2.f, 7));
 	s_mission->addChild(s_mission_label);
@@ -3295,14 +3311,14 @@ void MainFlowScene::setBottom()
 		 */
 		
 		CCSprite* n_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
-		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
 		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 15));
 		n_cgp->addChild(n_cgp_label);
 		
 		CCSprite* s_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		s_cgp->setColor(ccGRAY);
-		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
 		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 15));
 		s_cgp->addChild(s_cgp_label);
@@ -3329,7 +3345,7 @@ void MainFlowScene::setBottom()
 			
 			cgp_menu->removeFromParent();
 //			CCSprite* n_etc_img = CCSprite::create("mainflow_etc_event.png");
-//			KSLabelTTF* n_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+//			KSLabelTTF* n_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 //			n_etc_label->enableOuterStroke(ccBLACK, 1.f);
 //			n_etc_label->setPosition(ccp(n_etc_img->getContentSize().width/2.f, 7));
 //			n_etc_img->addChild(n_etc_label);
@@ -3343,7 +3359,7 @@ void MainFlowScene::setBottom()
 //			
 //			CCSprite* s_etc_img = CCSprite::create("mainflow_etc_event.png");
 //			s_etc_img->setColor(ccGRAY);
-//			KSLabelTTF* s_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_event), mySGD->getFont().c_str(), 12);
+//			KSLabelTTF* s_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
 //			s_etc_label->enableOuterStroke(ccBLACK, 1.f);
 //			s_etc_label->setPosition(ccp(s_etc_img->getContentSize().width/2.f, 7));
 //			s_etc_img->addChild(s_etc_label);
@@ -3436,16 +3452,16 @@ void MainFlowScene::setBottom()
 		back_case->setPosition(ccp(0,0));
 		t_container->addChild(back_case);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalTitle), mySGD->getFont().c_str(), 16);;
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalTitle), mySGD->getFont().c_str(), 16);;
 		title_label->setPosition(ccp(0,100));
 		t_container->addChild(title_label);
 		
-		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
 		ment_label->setPosition(ccp(0,0));
 		t_container->addChild(ment_label);
 		
 		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
 		take_label->setPosition(ccp(0,0));
 		t_label->addChild(take_label);
 		
@@ -3494,16 +3510,16 @@ void MainFlowScene::setBottom()
 		back_case->setPosition(ccp(0,0));
 		t_container->addChild(back_case);
 		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpAllPopupTitle), mySGD->getFont().c_str(), 16);;
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpAllPopupTitle), mySGD->getFont().c_str(), 16);;
 		title_label->setPosition(ccp(0,100));
 		t_container->addChild(title_label);
 		
-		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
 		ment_label->setPosition(ccp(0,0));
 		t_container->addChild(ment_label);
 		
 		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
 		take_label->setPosition(ccp(0,0));
 		t_label->addChild(take_label);
 		
@@ -3536,13 +3552,13 @@ void MainFlowScene::setBottom()
 	
 	
 	GraySprite* n_endless = GraySprite::create("mainflow_endless.png");
-//	KSLabelTTF* n_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* n_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
 //	n_endless_label->enableOuterStroke(ccBLACK, 1.f);
 //	n_endless_label->setPosition(ccp(n_endless->getContentSize().width/2.f, 7));
 //	n_endless->addChild(n_endless_label);
 	GraySprite* s_endless = GraySprite::create("mainflow_endless.png");
 	s_endless->setColor(ccGRAY);
-//	KSLabelTTF* s_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
+//	KSLabelTTF* s_endless_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessMode), mySGD->getFont().c_str(), 12);
 //	s_endless_label->enableOuterStroke(ccBLACK, 1.f);
 //	s_endless_label->setPosition(ccp(s_endless->getContentSize().width/2.f, 7));
 //	s_endless->addChild(s_endless_label);
@@ -3581,7 +3597,7 @@ void MainFlowScene::setBottom()
 				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 				n_endless->addChild(n_win_back);
 				
-				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
 				n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				n_win_back->addChild(n_win_label);
 				
@@ -3592,7 +3608,7 @@ void MainFlowScene::setBottom()
 				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 				s_endless->addChild(s_win_back);
 				
-				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
+				KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), ing_win)->getCString(), mySGD->getFont().c_str(), 9.5f);
 				s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 				s_win_back->addChild(s_win_label);
 				
@@ -3604,8 +3620,8 @@ void MainFlowScene::setBottom()
 				{
 					if(mySGD->endless_my_victory.getV() > 0)
 					{
-						n_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
-						s_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
+						n_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
+						s_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
 					}
 					else
 					{
@@ -3624,7 +3640,7 @@ void MainFlowScene::setBottom()
 						CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 						n_endless->addChild(n_win_back);
 						
-						KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
 						n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						n_win_back->addChild(n_win_label);
 						
@@ -3635,7 +3651,7 @@ void MainFlowScene::setBottom()
 						CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 						s_endless->addChild(s_win_back);
 						
-						KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+						KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
 						s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 						s_win_back->addChild(s_win_label);
 						
@@ -3727,7 +3743,7 @@ void MainFlowScene::setBottom()
 		
 		is_menu_enable = false;
 		
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(kMyLocalKey_noti), myLoc->getLocalForKey(kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 		
 		
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
@@ -3914,6 +3930,12 @@ void MainFlowScene::topOnLight()
 	ruby_light->setPosition(ccp(ruby_img->getContentSize().width/2.f, ruby_img->getContentSize().height/2.f));
 	ruby_img->addChild(ruby_light);
 	
+	if(mySGD->is_hell_mode)
+	{
+		is_menu_enable = true;
+		return;
+	}
+	
 	
 	function<void()> pvp_tutorial = [=]()
 	{
@@ -4071,7 +4093,7 @@ void MainFlowScene::topOnLight()
 																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 																  skip_menu->setEnabled(true);
 																  
-																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent53), end_func1);
+																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent53), end_func1);
 															  }));
 	};
 	
@@ -4275,7 +4297,7 @@ void MainFlowScene::topOnLight()
 		function<void()> end_func12 = [=]()
 		{
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent12), end_func13);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent12), end_func13);
 			
 			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
 			t_stencil1->setContentSize(CCSizeMake(120, 210));
@@ -4295,7 +4317,7 @@ void MainFlowScene::topOnLight()
 			typing_box->setVisible(true);
 			typing_box->setTouchSuction(true);
 			
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent11), end_func12);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent11), end_func12);
 		};
 		
 		function<void()> end_func10 = [=]()
@@ -4313,7 +4335,7 @@ void MainFlowScene::topOnLight()
 			t_arrow1->setPosition(ccp(26, (myDSH->puzzle_ui_top-320.f)/2.f + 320.f-22 - 40));
 			t_clipping->addChild(t_arrow1);
 			
-			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
+			StyledLabelTTF* t_ment2 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed2), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kLeftAlignment);
 			t_ment2->setAnchorPoint(ccp(0.5f,1));
 			t_ment2->setPosition(t_arrow1->getPosition() + ccp(0, -t_arrow1->getContentSize().height/2.f - 3));
 			t_clipping->addChild(t_ment2);
@@ -4324,7 +4346,7 @@ void MainFlowScene::topOnLight()
 			t_arrow2->setPosition(ccp(374,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20 - 43));
 			t_clipping->addChild(t_arrow2);
 			
-			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment3 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed3), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment3->setAnchorPoint(ccp(0.5f,1));
 			t_ment3->setPosition(t_arrow2->getPosition() + ccp(0, -t_arrow2->getContentSize().height/2.f - 3));
 			t_clipping->addChild(t_ment3);
@@ -4335,7 +4357,7 @@ void MainFlowScene::topOnLight()
 			t_arrow3->setPosition(ccp(401,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20 - 43 + t_arrow2->getContentSize().height/2.f));
 			t_clipping->addChild(t_arrow3);
 			
-			StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment4 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed4), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment4->setAnchorPoint(ccp(0.5f,1));
 			t_ment4->setPosition(t_arrow3->getPosition() + ccp(0, -t_arrow3->getContentSize().height - 3));
 			t_clipping->addChild(t_ment4);
@@ -4346,7 +4368,7 @@ void MainFlowScene::topOnLight()
 			t_arrow4->setPosition(ccp(429,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20 - 43));
 			t_clipping->addChild(t_arrow4);
 			
-			StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment5 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed5), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment5->setAnchorPoint(ccp(0.5f,1));
 			t_ment5->setPosition(t_arrow4->getPosition() + ccp(0, -t_arrow4->getContentSize().height/2.f - 3));
 			t_clipping->addChild(t_ment5);
@@ -4357,7 +4379,7 @@ void MainFlowScene::topOnLight()
 			t_arrow5->setPosition(ccp(458,(myDSH->puzzle_ui_top-320.f)/2.f + 320.f-20 - 43 + t_arrow2->getContentSize().height/2.f));
 			t_clipping->addChild(t_arrow5);
 			
-			StyledLabelTTF* t_ment6 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed6), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment6 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed6), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment6->setAnchorPoint(ccp(0.5f,1));
 			t_ment6->setPosition(t_arrow5->getPosition() + ccp(0, -t_arrow5->getContentSize().height - 3));
 			t_clipping->addChild(t_ment6);
@@ -4369,7 +4391,7 @@ void MainFlowScene::topOnLight()
 			t_arrow6->setRotation(-90);
 			t_clipping->addChild(t_arrow6);
 			
-			StyledLabelTTF* t_ment7 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed7), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment7 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed7), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment7->setAnchorPoint(ccp(0.5f,0));
 			t_ment7->setPosition(t_arrow6->getPosition() + ccp(0, t_arrow6->getContentSize().height/2.f*t_arrow6->getScale() + 3));
 			t_clipping->addChild(t_ment7);
@@ -4381,7 +4403,7 @@ void MainFlowScene::topOnLight()
 			t_arrow7->setRotation(-90);
 			t_clipping->addChild(t_arrow7);
 			
-			StyledLabelTTF* t_ment8 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment8 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment8->setAnchorPoint(ccp(0.5f,0));
 			t_ment8->setPosition(t_arrow7->getPosition() + ccp(0, t_arrow7->getContentSize().height/2.f*t_arrow7->getScale() + 3));
 			t_clipping->addChild(t_ment8);
@@ -4393,7 +4415,7 @@ void MainFlowScene::topOnLight()
 			t_arrow8->setRotation(-90);
 			t_clipping->addChild(t_arrow8);
 			
-			StyledLabelTTF* t_ment9 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed9), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment9 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed9), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment9->setAnchorPoint(ccp(0.5f,0));
 			t_ment9->setPosition(t_arrow8->getPosition() + ccp(0, t_arrow8->getContentSize().height/2.f*t_arrow8->getScale() + 3));
 			t_clipping->addChild(t_ment9);
@@ -4405,7 +4427,7 @@ void MainFlowScene::topOnLight()
 			t_arrow9->setRotation(-90);
 			t_clipping->addChild(t_arrow9);
 			
-			StyledLabelTTF* t_ment10 = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_mainflowDimmed10), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* t_ment10 = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mainflowDimmed10), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_ment10->setAnchorPoint(ccp(0.5f,0));
 			t_ment10->setPosition(t_arrow9->getPosition() + ccp(0, t_arrow9->getContentSize().height/2.f*t_arrow9->getScale() + 3));
 			t_clipping->addChild(t_ment10);
@@ -4464,36 +4486,36 @@ void MainFlowScene::topOnLight()
 		
 		function<void()> end_func9 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent10), end_func10);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent10), end_func10);
 		};
 		
 		function<void()> end_func8 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent9), end_func9);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent9), end_func9);
 		};
 		
 		function<void()> end_func7 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent8), end_func8);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent8), end_func8);
 		};
 		
 		function<void()> end_func6 = [=](){
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent7), end_func7);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent7), end_func7);
 		};
 		
 		function<void()> end_func5 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent6), end_func6);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent6), end_func6);
 		};
 		
 		function<void()> end_func4 = [=](){
 			TypingBox::changeTypingBox(typing_box, typing_box2, asuka, ikaruga);
-			typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent5), end_func5);
+			typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent5), end_func5);
 		};
 		
 		function<void()> end_func3 = [=](){
 			TypingBox::changeTypingBox(typing_box2, typing_box, ikaruga, asuka);
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent4), end_func4);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent4), end_func4);
 		};
 		
 		function<void()> end_func2 = [=](){
@@ -4512,14 +4534,14 @@ void MainFlowScene::topOnLight()
 																	  
 																	  typing_box->setTouchSuction(false);
 																	  
-																	  typing_box2->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent3), end_func3);
+																	  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent3), end_func3);
 																  }));
 			typing_box->setTouchOffScrollAndButton();
 			typing_box->setVisible(false);
 		};
 		
 		function<void()> end_func1 = [=](){
-			typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent2), end_func2);
+			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent2), end_func2);
 		};
 		
 		
@@ -4564,7 +4586,7 @@ void MainFlowScene::topOnLight()
 //																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
 //																  skip_menu->setEnabled(true);
 //																  
-//																  typing_box->startTyping(myLoc->getLocalForKey(kMyLocalKey_scenarioMent1), end_func10);
+//																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent1), end_func10);
 //															  }));
 	}
 	else if(mySGD->is_on_attendance)
@@ -4863,6 +4885,117 @@ void MainFlowScene::topOnLight()
 																		}
 																   });
 		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(start_unlock_animation != nullptr)
+	{
+		function<void()> t_after_func = [=]()
+		{
+			if(mySGD->is_on_rank_reward)
+			{
+				RankRewardPopup* t_popup = RankRewardPopup::create(-300, [=]()
+																   {
+																	   if(mySGD->is_today_mission_first)
+																	   {
+																		   mySGD->is_today_mission_first = false;
+																		   
+																		   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
+																																  {
+																																	  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																																	  {
+																																		  myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																																		  
+																																		  pvp_tutorial();
+																																	  }
+																																	  else
+																																	  {
+																																		  if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																		  {
+																																			  mySGD->is_on_accountLinkLead = true;
+																																			  AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																																		   {
+																																																			   is_menu_enable = false;
+																																																			   OptionPopup* t_popup = OptionPopup::create();
+																																																			   t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																																			   addChild(t_popup, kMainFlowZorder_popup);
+																																																			   
+																																																			   t_popup->open_message_popup_func = [=]()
+																																																			   {
+																																																				   is_menu_enable = false;
+																																																				   SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																																				   addChild(t_pp, kMainFlowZorder_popup);
+																																																				   
+																																																				   postbox_count_case->setVisible(false);
+																																																			   };
+																																																		   });
+																																			  addChild(t_popup, kMainFlowZorder_popup);
+																																		  }
+																																		  else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+																																		  {
+																																			  ShopPopup* t_shop = ShopPopup::create();
+																																			  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																			  t_shop->targetHeartTime(heart_time);
+																																			  t_shop->setShopCode(kSC_eventPack);
+																																			  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+																																			  t_shop->addGray();
+																																			  addChild(t_shop, kMainFlowZorder_popup);
+																																		  }
+																																		  else
+																																			  is_menu_enable = true;
+																																	  }
+																																  });
+																		   addChild(t_popup, kMainFlowZorder_popup);
+																	   }
+																	   else
+																	   {
+																		   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece())
+																		   {
+																			   myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, 1);
+																			   
+																			   pvp_tutorial();
+																		   }
+																		   else
+																		   {
+																			   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																			   {
+																				   mySGD->is_on_accountLinkLead = true;
+																				   AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
+																																				{
+																																					is_menu_enable = false;
+																																					OptionPopup* t_popup = OptionPopup::create();
+																																					t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																					addChild(t_popup, kMainFlowZorder_popup);
+																																					
+																																					t_popup->open_message_popup_func = [=]()
+																																					{
+																																						is_menu_enable = false;
+																																						SumranMailPopup* t_pp = SumranMailPopup::create(this, callfunc_selector(MainFlowScene::mailPopupClose), bind(&MainFlowScene::heartRefresh, this));
+																																						addChild(t_pp, kMainFlowZorder_popup);
+																																						
+																																						postbox_count_case->setVisible(false);
+																																					};
+																																				});
+																				   addChild(t_popup, kMainFlowZorder_popup);
+																			   }
+																			   else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
+																			   {
+																				   ShopPopup* t_shop = ShopPopup::create();
+																				   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																				   t_shop->targetHeartTime(heart_time);
+																				   t_shop->setShopCode(kSC_eventPack);
+																				   t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+																				   t_shop->addGray();
+																				   addChild(t_shop, kMainFlowZorder_popup);
+																			   }
+																			   else
+																				   is_menu_enable = true;
+																		   }
+																	   }
+																   });
+				addChild(t_popup, kMainFlowZorder_popup);
+			}
+		};
+		
+		start_unlock_animation(t_after_func);
 	}
 	else if(mySGD->is_on_rank_reward)
 	{
@@ -5328,8 +5461,10 @@ void MainFlowScene::setTop()
 	postbox_count_label->setPosition(ccp(postbox_count_case->getContentSize().width/2.f-0.5f, postbox_count_case->getContentSize().height/2.f+0.5f));
 	postbox_count_case->addChild(postbox_count_label);
 	
-    TRACE();
-	countingMessage();
+	TRACE();
+	addChild(KSTimer::create(0.5, [=](){
+		countingMessage();
+	}));
 	TRACE();
 	
 	
@@ -5579,7 +5714,9 @@ void MainFlowScene::friendPopupClose()
 void MainFlowScene::mailPopupClose()
 {
     TRACE();
+	addChild(KSTimer::create(0.5, [=](){
 	countingMessage();
+	}));
 	is_menu_enable = true;
     TRACE();
 }
@@ -5655,6 +5792,6 @@ void MainFlowScene::keyBackClicked()
 {
 	
 	CommonButton::callBackKey();
-	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
+	//AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
 //	onBackKeyAction();
 }

@@ -171,6 +171,66 @@ void KsLocal::ko()
 	
 	obj[LK::kFriendNickInputPlz] = "닉네임을 입력해주세요.";
 	
+	
+	obj[LK::kMyLocalKey_connectingServer] = "서버에 접속 중입니다...";
+	obj[LK::kMyLocalKey_inputPlease] = " 닉네임을 입력해주세요.";
+	obj[LK::kMyLocalKey_ok] = "확인";
+	obj[LK::kMyLocalKey_downImgInfo] = "이미지 정보를 받아옵니다.";
+	obj[LK::kMyLocalKey_failLoadInfo] = "정보 불러오기 실패";
+	obj[LK::kMyLocalKey_replay] = "재시도";
+	obj[LK::kMyLocalKey_downImgFail] = "이미지 받아오기 실패";
+	obj[LK::kMyLocalKey_sameNick] = "사용할 수 없는 닉네임 입니다.";
+	obj[LK::kMyLocalKey_invalidNick] = "사용할 수 없는 닉네임 입니다.";
+	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.";
+	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.";
+	obj[LK::kMyLocalKey_openRightNow] = "지금 열기";
+	obj[LK::kMyLocalKey_openRubyValue] = "RUBY %d 로 오픈";
+	obj[LK::kMyLocalKey_cgpNormalTitle] = "CGP 일반 보상";
+	obj[LK::kMyLocalKey_cgpNormalContent] = "보상받기를 눌러주세요.";
+	obj[LK::kMyLocalKey_getReward] = "보상받기";
+	obj[LK::kMyLocalKey_take] = "받기";
+	obj[LK::kMyLocalKey_cgpAllPopupTitle] = "CGP 전체 팝업 보상";
+	obj[LK::kMyLocalKey_shop] = "상점";
+	obj[LK::kMyLocalKey_ranking] = "랭킹";
+	obj[LK::kMyLocalKey_mycard] = "내카드";
+	obj[LK::kMyLocalKey_todaymission] = "오늘의 임무";
+	obj[LK::kMyLocalKey_event] = "이벤트";
+	obj[LK::kMyLocalKey_openStage] = "스페셜 스테이지";
+	obj[LK::kMyLocalKey_openStageContent] = "스페셜 스테이지를 오픈하시겠습니까?";
+	obj[LK::kMyLocalKey_doOpen] = "오픈하기";
+	obj[LK::kMyLocalKey_view] = "보기";
+	obj[LK::kMyLocalKey_condition1] = "영역 85%";
+	obj[LK::kMyLocalKey_condition2] = "영역 100%";
+	obj[LK::kMyLocalKey_condition3] = "체인지 + 영역 85%";
+	obj[LK::kMyLocalKey_condition4] = "체인지 + 영역 100%";
+	obj[LK::kMyLocalKey_stageValue] = "%d 스테이지";
+	obj[LK::kMyLocalKey_failCheckRanking] = "랭킹 정보 확인 실패";
+	obj[LK::kMyLocalKey_stage] = "스테이지";
+	obj[LK::kMyLocalKey_selectUseItem] = "게임에 사용할 아이템을 선택하세요.";
+	obj[LK::kMyLocalKey_levelValue] = "레벨 %d";
+	obj[LK::kMyLocalKey_powerValue] = "파워 %s";
+	obj[LK::kMyLocalKey_upgradeLevelValue] = "레벨 %d 업그레이드";
+	obj[LK::kMyLocalKey_upgradeLevelValue2] = "레벨 %d\n업그레이드";
+	obj[LK::kMyLocalKey_totalItemSelectCount3] = "아이템은 최대 3개까지\n선택이 가능합니다.";
+	obj[LK::kMyLocalKey_goldNotEnought] = "골드가 부족합니다.";
+	obj[LK::kMyLocalKey_rubyNotEnought] = "젬이 부족합니다.";
+	obj[LK::kMyLocalKey_heartNotEnought] = "하트가 부족합니다.";
+	obj[LK::kMyLocalKey_baseSpeedUpTitle] = "기본속도향상";
+	obj[LK::kMyLocalKey_baseSpeedUpContent] = "유저 속도가 빠른상태로 시작합니다.";
+	obj[LK::kMyLocalKey_doubleItemTitle] = "더블아이템";
+	obj[LK::kMyLocalKey_doubleItemContent] = "아이템을 빠르게 생성합니다.";
+	obj[LK::kMyLocalKey_longTimeTitle] = "시간추가";
+	obj[LK::kMyLocalKey_longTimeContent] = "게임시간을 증가시킵니다.";
+	obj[LK::kMyLocalKey_magnetTitle] = "자석";
+	obj[LK::kMyLocalKey_magnetContent] = "골드와 아이템을 빨아들입니다.";
+	obj[LK::kMyLocalKey_itemGachaTitle] = "아이템 뽑기";
+	obj[LK::kMyLocalKey_itemGachaDefaultContent1] = "뽑기에만 등장하는 아이템들!";
+	obj[LK::kMyLocalKey_itemGachaDefaultContent2] = "침묵, 대쉬, 목숨하나더, 부하몹제거";
+	obj[LK::kMyLocalKey_itemGachaContent] = "부활 아이템에 도전하세요!";
+	obj[LK::kMyLocalKey_rubyShop] = "젬상점";
+	obj[LK::kMyLocalKey_goldShop] = "골드상점";
+	
+	
 	obj[LK::kMyLocalKey_heartShop] = "하트상점";
 	obj[LK::kMyLocalKey_realBuy] = "구매하시겠습니까?";
 	obj[LK::kMyLocalKey_option] = "설정";
@@ -252,7 +312,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading5] = "'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading7] = "Clear 등급에 따라 획득되는 별의 개수가 다릅니다. 별이 모이면 다음 액자를 열 수 있어요.";
 	obj[LK::kMyLocalKey_titleLoading8] = "'업적' 창에서 달성한 업적을 보상받으세요. 달성한 정도에 따라 젬을 드립니다.";
-	obj[LK::kMyLocalKey_titleLoading9] = "일일임무에 도전해 보세요. 일일 임무을 달성하시면 다양한 선물을 드립니다.";
+	obj[LK::kMyLocalKey_titleLoading9] = "오늘의 임무에 도전해 보세요. 오늘의 임무를 달성하시면 다양한 선물을 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading10] = "주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading11] = "change 글자를 모아서 특별한 이미지를 확인하세요.";
 	obj[LK::kMyLocalKey_titleLoading12] = "미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다.";
@@ -274,7 +334,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading27] = "다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요.";
 	obj[LK::kMyLocalKey_titleLoading28] = "플레이 중 획득한 영역에 따라 골드를 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading29] = "30%나 할인되는 종합 아이템 구매 찬스를 놓치지 마세요!";
-	obj[LK::kMyLocalKey_titleLoading30] = "임무스테이지에서는 임무을 먼저 완료한 후 클리어가 가능합니다.";
+	obj[LK::kMyLocalKey_titleLoading30] = "임무가 있는 스테이지에서는 임무를 먼저 완료한 후 클리어가 가능합니다.";
 	obj[LK::kMyLocalKey_titleLoading31] = "미사일 공격 시 그리는 선에 미사일이 닿으면 유도 공격을 당해요.";
 	obj[LK::kMyLocalKey_titleLoading32] = "게임 중 시간추가 아이템을 먹으면 남은 시간에서 10초가 추가됩니다.";
 	obj[LK::kMyLocalKey_titleLoading33] = "선을 그리다가 꾸욱 버튼에서 손을 떼면 캐릭터가 안전 영역으로 되돌아 갑니다.";
@@ -301,7 +361,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_mymissile] = "내 미사일";
 	obj[LK::kMyLocalKey_power] = "파워";
 	obj[LK::kMyLocalKey_gacha] = "뽑기";
-	obj[LK::kMyLocalKey_stageListDown] = "일일임무을 완료해보세요!\n우편함으로 선물을 드려요! ^^";
+	obj[LK::kMyLocalKey_stageListDown] = "일일임무를 완료해보세요!\n우편함으로 선물을 드려요! ^^";
 	obj[LK::kMyLocalKey_frameOpenConditionTitle] = "액자오픈조건";
 	obj[LK::kMyLocalKey_frameOpenConditionContent] = "이전액자클리어\n+별%d개이상";
 	obj[LK::kMyLocalKey_frameOpenConditionContentRuby] = "이전액자클리어\n+별%d개이상\n+%s골드";
@@ -410,7 +470,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_ingameOut] = "나가기";
 	obj[LK::kMyLocalKey_ingameReplay] = "재시작";
 	obj[LK::kMyLocalKey_publicPlaceMode] = "대중교통\n모드";
-	obj[LK::kMyLocalKey_todaymissionSuccessCommon] = "<font newline=16>오늘의 임무을 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다.";
+	obj[LK::kMyLocalKey_todaymissionSuccessCommon] = "<font newline=16>오늘의 임무를 완료하였습니다.<font color=961 newline=16>보상은 우편함으로 지급됩니다.";
 	obj[LK::kMyLocalKey_free] = "무료";
 	obj[LK::kMyLocalKey_areaReGacha] = "영역 다시뽑기";
 	obj[LK::kMyLocalKey_go100percent] = "도전하기";
@@ -850,7 +910,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scenarioMent55] = "다른 친구를 누르면 해당친구의 정보를\n볼 수 있어요.\n \nPVP를 시작해보죠.";
 	obj[LK::kMyLocalKey_scenarioMent56] = "제가 당신과 붙을 만한 상대 세분을\n골라봤어요.\n \n셋중 한명을 선택해주세요.";
 	obj[LK::kMyLocalKey_scenarioMent57] = "아아아!! 죄송해요!!\n평소 대전과 달라서 설명을 드려야하는걸\n제가 까먹었네요.";
-	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n조심하세요! 상대방이 절 공격 못하게!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수가 추가됩니다.";
+	obj[LK::kMyLocalKey_scenarioMent58] = "폭탄이예요! 5콤보시마다 미사일을\n발사해서 상대방의 점수를 깎을 수 있어요!\n영역을 획득할 때 발사되는 미사일이\n보스를 타격하게 되면 콤보가 쌓이게 되고,\n콤보점수도 추가됩니다.\n";
 	obj[LK::kMyLocalKey_scenarioMent59] = "행운을 빌어요.";
 	obj[LK::kMyLocalKey_scenarioMent60] = "첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..";
 	obj[LK::kMyLocalKey_scenarioMent61] = "PVP가 끝나면 이곳으로 와요.";
@@ -865,9 +925,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial8] = "드디어 뽑기상자가 등장했네요.";
 	obj[LK::kMyLocalKey_kindTutorial9] = "이건 뭐죠? 아이템인가요?";
 	obj[LK::kMyLocalKey_kindTutorial10] = "특별한 아이템을 뽑을 수 있는 상자입니다.\n운이 좋으면 목숨 하나가 추가되는\n부활아이템을 얻을 수 있죠.";
-	obj[LK::kMyLocalKey_kindTutorial11] = "껄끄러운 게임임무이로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 개수만큼 가둬 잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.";
+	obj[LK::kMyLocalKey_kindTutorial11] = "껄끄러운 게임임무로군.\n히바리. 이번 게임에선 부하몬스터를\n표시된 개수만큼 가둬 잡아야 클리어할 수 있어.\n너라면 충분히 해낼 수 있을꺼야.";
 	obj[LK::kMyLocalKey_kindTutorial12] = "응! 야규짱!";
-	obj[LK::kMyLocalKey_kindTutorial13] = "이번엔 게임임무이 조금 다른 것 같아요.";
+	obj[LK::kMyLocalKey_kindTutorial13] = "이번엔 게임임무가 조금 다른 것 같아요.";
 	obj[LK::kMyLocalKey_kindTutorial14] = "네. 주어진 개수만큼 생성되는 아이템을\n먹어야 클리어 됩니다.\n클리어하기 더 어려워지겠는데요?";
 	obj[LK::kMyLocalKey_kindTutorial15] = "게임시간이 엄청나게 줄어들었어요.\n조금 서둘러야겠는걸요.";
 	obj[LK::kMyLocalKey_kindTutorial16] = "알고있어!! 게임 중에 생기는 시간아이템을\n적절히 먹으면서 플레이하면 문제없을꺼야!!";

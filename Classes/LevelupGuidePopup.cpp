@@ -69,7 +69,7 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	back_in->setPosition(ccp(back_case->getContentSize().width/2.f, back_case->getContentSize().height/2.f+8));
 	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
@@ -94,27 +94,27 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 							  });
 	back_case->addChild(close_button);
 	
-	StyledLabelTTF* ment1_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);// KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 12.f);
+	StyledLabelTTF* ment1_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);// KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent1), mySGD->getFont().c_str(), 12.f);
 //	ment1_label->setColor(ccc3(255, 170, 20));
 //	ment1_label->disableOuterStroke();
 	ment1_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment1_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-13));
 	back_in->addChild(ment1_label);
 	
-	StyledLabelTTF* ment2_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 12.f);
+	StyledLabelTTF* ment2_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent2), mySGD->getFont().c_str(), 12.f);
 //	ment2_label->setColor(ccc3(255, 170, 20));
 //	ment2_label->disableOuterStroke();
 	ment2_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment2_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-28));
 	back_in->addChild(ment2_label);
 	
-	StyledLabelTTF* ment3_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 12.f);
+	StyledLabelTTF* ment3_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent3), mySGD->getFont().c_str(), 12.f);
 //	ment3_label->disableOuterStroke();
 	ment3_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment3_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-43));
 	back_in->addChild(ment3_label);
 	
-	StyledLabelTTF* ment4_label = StyledLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.f);
+	StyledLabelTTF* ment4_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.f, 999, StyledAlignment::kCenterAlignment);//KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGuideMent4), mySGD->getFont().c_str(), 12.f);
 //	ment4_label->disableOuterStroke();
 	ment4_label->setAnchorPoint(ccp(0.5f,0.5f));
 	ment4_label->setPosition(ccp(back_in->getContentSize().width/2.f,back_in->getContentSize().height-58));
@@ -125,7 +125,7 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	
 	CCLabelTTF* r_label = CCLabelTTF::create();
-	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_levelupGo), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_levelupGo), mySGD->getFont().c_str(), 13);
 	rightnow_label->disableOuterStroke();
 	r_label->addChild(rightnow_label);
 	

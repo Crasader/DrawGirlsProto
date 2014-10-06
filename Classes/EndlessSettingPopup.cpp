@@ -127,22 +127,22 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	main_case->addChild(graph_back);
 
 
-//	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
+//	KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
 //	t_rank_a->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //	t_rank_a->setPosition(ccp(25,8));
 //	graph_back->addChild(t_rank_a);
 //	
-//	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
+//	KSLabelTTF* t_rank_b = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankB), mySGD->getFont().c_str(), 9);
 //	t_rank_b->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //	t_rank_b->setPosition(ccp(25+49,8));
 //	graph_back->addChild(t_rank_b);
 //	
-//	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
+//	KSLabelTTF* t_rank_c = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankC), mySGD->getFont().c_str(), 9);
 //	t_rank_c->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //	t_rank_c->setPosition(ccp(25+98,8));
 //	graph_back->addChild(t_rank_c);
 //	
-//	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
+//	KSLabelTTF* t_rank_d = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankD), mySGD->getFont().c_str(), 9);
 //	t_rank_d->enableOuterStroke(ccc3(41, 41, 41), 1.f);
 //	t_rank_d->setPosition(ccp(25+147,8));
 //	graph_back->addChild(t_rank_d);
@@ -152,11 +152,11 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	int myrank = 33; // result_data["myrank"].asInt();
 	string lefttimestr;
 	if(lefttime>60*60*24){
-		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_dayAfterReset), lefttime/(60*60*24)+1)->getCString();
+		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_dayAfterReset), lefttime/(60*60*24)+1)->getCString();
 	}else if(lefttime>60*60){
-		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_hourAfterReset), lefttime/(60*60)+1)->getCString();
+		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_hourAfterReset), lefttime/(60*60)+1)->getCString();
 	}else{
-		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_secondAfterReset), lefttime/60+1)->getCString();
+		lefttimestr=CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_secondAfterReset), lefttime/60+1)->getCString();
 	}
 	
 	CCLabelTTF* lefttime_label = CCLabelTTF::create(lefttimestr.c_str(),mySGD->getFont().c_str(), 10);
@@ -170,7 +170,7 @@ void EndlessSettingPopup::addMyPosition(CCNode* main_case)
 	//		all_user_label->setPosition(ccp(main_case->getContentSize().width-30, 210));
 	//		rankBack->addChild(all_user_label, kZ_CP_img);
 	//
-	//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
+	//		CCLabelTTF* my_rank_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_myrankValue), myrank)->getCString(), mySGD->getFont().c_str(), 10);
 	//		my_rank_label->setAnchorPoint(ccp(1,0.5));
 	//		my_rank_label->setPosition(ccp(all_user_label->getPositionX()-all_user_label->getContentSize().width, all_user_label->getPositionY()));
 	//		rankBack->addChild(my_rank_label, kZ_CP_img);

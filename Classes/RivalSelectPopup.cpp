@@ -67,7 +67,7 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 	title_tag->setPosition(ccp(80, back_case->getContentSize().height-35));
 	back_case->addChild(title_tag);
 	
-	title_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 12);
+	title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rivalSearch), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccp(-75,back_case->getContentSize().height/2.f-35));
@@ -208,11 +208,11 @@ void RivalSelectPopup::startRivalAnimation()
 								left_nick->setPosition(ccp(0, -3));
 								left_node->addChild(left_nick);
 								
-//								KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[0]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//								KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalLevel), mySGD->dummy_list[0]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
 //								left_level->setPosition(ccp(0, -10));
 //								left_node->addChild(left_level);
 								
-								KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[0]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
+								KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalIngWin), mySGD->dummy_list[0]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 								left_ing_win->setColor(ccc3(255,170,20));
 								left_ing_win->setPosition(ccp(0, -19));
 								left_node->addChild(left_ing_win);
@@ -257,11 +257,11 @@ void RivalSelectPopup::startRivalAnimation()
 													center_nick->setPosition(ccp(0, -3));
 													center_node->addChild(center_nick);
 													
-//													KSLabelTTF* center_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[1]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//													KSLabelTTF* center_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalLevel), mySGD->dummy_list[1]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
 //													center_level->setPosition(ccp(0, -10));
 //													center_node->addChild(center_level);
 													
-													KSLabelTTF* center_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[1]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
+													KSLabelTTF* center_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalIngWin), mySGD->dummy_list[1]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 													center_ing_win->setColor(ccc3(255,170,20));
 													center_ing_win->setPosition(ccp(0, -19));
 													center_node->addChild(center_ing_win);
@@ -305,11 +305,11 @@ void RivalSelectPopup::startRivalAnimation()
 																		right_nick->setPosition(ccp(0, -3));
 																		right_node->addChild(right_nick);
 																		
-//																		KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalLevel), mySGD->dummy_list[2]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
+//																		KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalLevel), mySGD->dummy_list[2]["level"].asInt())->getCString(), mySGD->getFont().c_str(), 12);
 //																		right_level->setPosition(ccp(0, -10));
 //																		right_node->addChild(right_level);
 																		
-																		KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(kMyLocalKey_rivalIngWin), mySGD->dummy_list[2]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
+																		KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalIngWin), mySGD->dummy_list[2]["victory"].asInt())->getCString(), mySGD->getFont().c_str(), 15);
 																		right_ing_win->setColor(ccc3(255,170,20));
 																		right_ing_win->setPosition(ccp(0, -19));
 																		right_node->addChild(right_ing_win);
@@ -326,7 +326,7 @@ void RivalSelectPopup::startRivalAnimation()
 																														   }, [=](float t)
 																														   {
 																															   title_label->setOpacity(0);
-																															   title_label->setString(myLoc->getLocalForKey(kMyLocalKey_rivalSelect));
+																															   title_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_rivalSelect));
 																															   addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
 																																									  {
 																																										  title_label->setOpacity(t*255);
@@ -335,12 +335,12 @@ void RivalSelectPopup::startRivalAnimation()
 																																										  title_label->setOpacity(255);
 																																										  
 																																										  CCSprite* n_left = CCSprite::create("subbutton_purple4.png");
-																																										  KSLabelTTF* n_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* n_left_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_left_label->setPosition(ccpFromSize(n_left->getContentSize()/2.f));
 																																										  n_left->addChild(n_left_label);
 																																										  CCSprite* s_left = CCSprite::create("subbutton_purple4.png");
 																																										  s_left->setColor(ccGRAY);
-																																										  KSLabelTTF* s_left_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* s_left_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_left_label->setPosition(ccpFromSize(s_left->getContentSize()/2.f));
 																																										  s_left->addChild(s_left_label);
 																																										  
@@ -351,12 +351,12 @@ void RivalSelectPopup::startRivalAnimation()
 																																										  
 																																										  
 																																										  CCSprite* n_center = CCSprite::create("subbutton_purple4.png");
-																																										  KSLabelTTF* n_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* n_center_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_center_label->setPosition(ccpFromSize(n_center->getContentSize()/2.f));
 																																										  n_center->addChild(n_center_label);
 																																										  CCSprite* s_center = CCSprite::create("subbutton_purple4.png");
 																																										  s_center->setColor(ccGRAY);
-																																										  KSLabelTTF* s_center_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* s_center_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_center_label->setPosition(ccpFromSize(s_center->getContentSize()/2.f));
 																																										  s_center->addChild(s_center_label);
 																																										  
@@ -366,12 +366,12 @@ void RivalSelectPopup::startRivalAnimation()
 																																										  
 																																										  
 																																										  CCSprite* n_right = CCSprite::create("subbutton_purple4.png");
-																																										  KSLabelTTF* n_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* n_right_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  n_right_label->setPosition(ccpFromSize(n_right->getContentSize()/2.f));
 																																										  n_right->addChild(n_right_label);
 																																										  CCSprite* s_right = CCSprite::create("subbutton_purple4.png");
 																																										  s_right->setColor(ccGRAY);
-																																										  KSLabelTTF* s_right_label = KSLabelTTF::create(myLoc->getLocalForKey(kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
+																																										  KSLabelTTF* s_right_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 																																										  s_right_label->setPosition(ccpFromSize(s_right->getContentSize()/2.f));
 																																										  s_right->addChild(s_right_label);
 																																										  
