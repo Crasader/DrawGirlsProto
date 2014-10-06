@@ -180,10 +180,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_failLoadInfo] = "정보 불러오기 실패";
 	obj[LK::kMyLocalKey_replay] = "재시도";
 	obj[LK::kMyLocalKey_downImgFail] = "이미지 받아오기 실패";
-	obj[LK::kMyLocalKey_sameNick] = "사용할 수 없는 닉네임 입니다.";
+	obj[LK::kMyLocalKey_sameNick] = "이미 사용중인 닉네임 입니다.";
 	obj[LK::kMyLocalKey_invalidNick] = "사용할 수 없는 닉네임 입니다.";
-	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.";
-	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.";
+	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.\n닉네임은 3~8글자로 생성 가능합니다.";
+	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.\n닉네임은 3~8글자로 생성 가능합니다.";
 	obj[LK::kMyLocalKey_openRightNow] = "지금 열기";
 	obj[LK::kMyLocalKey_openRubyValue] = "RUBY %d 로 오픈";
 	obj[LK::kMyLocalKey_cgpNormalTitle] = "CGP 일반 보상";
@@ -570,9 +570,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_patternContent1019] = "보스몬스터가 거대해 져요.";
 	obj[LK::kMyLocalKey_patternContent1020] = "부하몬스터를 새로 소환합니다.";
 	obj[LK::kMyLocalKey_tutorial1] = "가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.";
-	obj[LK::kMyLocalKey_tutorial2] = "먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.";
+	obj[LK::kMyLocalKey_tutorial2] = "먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.";
 	obj[LK::kMyLocalKey_tutorial3] = "캐릭터를 위로 이동시키기";
-	obj[LK::kMyLocalKey_tutorial4] = "다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요.";
+	obj[LK::kMyLocalKey_tutorial4] = "다음에는 영역을 획득하는 방법을 알아보도록 해요.\n아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요.";
 	obj[LK::kMyLocalKey_tutorial5] = "영역획득하기";
 	obj[LK::kMyLocalKey_tutorial6] = "파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.";
 	obj[LK::kMyLocalKey_tutorial7] = "<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!";

@@ -11,6 +11,29 @@
 #import "HSPError.h"
 
 /**
+ * @brief AddressBook Personal Info interface.
+ */
+@interface AddressBookPersonalInfo : NSObject
+{
+	NSString*	_name;
+	NSString*	_phoneNo;
+}
+
+/**
+ * @brief The name of personal Info in AddressBook.
+ * @serviceDomain ALL
+ */
+@property (nonatomic, retain)	NSString*	name;
+
+/**
+ * @brief The phone number of personal Info in AddressBook.
+ * @serviceDomain ALL
+ */
+@property (nonatomic, retain)	NSString*	phoneNo;
+
+@end
+
+/**
  * @brief Utility interface.
  */
 @interface HSPUtil : NSObject
@@ -122,6 +145,16 @@
 + (void)getSelectedImageFromGalleryWithCompletionHandler:(void (^)(UIImage* image, HSPError* error))completionHandler;
 
 /**
+ * @brief Requests Toast user agreement terms with alertView
+ *
+ * This block needs the following parameters:
+ * @param agreed
+ *
+ * @serviceDomain TOASTGAME
+ */
++ (void)alertViewWithToastTermsWithCompletionHandler:(void (^)(BOOL agreed))completionHandler;
+
+/**
  * @brief Requests age requirement with alertView
  *
  * This block needs the following parameters:
@@ -151,6 +184,60 @@
  */
 + (void)alertViewWithAgeRequirementWithCompletionHandler:(void (^)(HSPAgeRequirement ageRequirement))completionHandler;
 
+/**
+ * @brief Requests launch JOGA view
+ *
+ * This block needs the following parameters:
+ * @param jogaResult
+ *
+ * @code
+ * [HSPUtil jogaWebViewWithCompletionHandler:^(HSPJogaResult jogaResult) {
+ * 	if ( jogaResult == HSP_JOGA_AGREE )
+ * 	{
+ * 		NSLog(@"User agreed joga.");
+ * 	}
+ *	else if ( jogaResult == HSP_JOGA_CANCELED )
+ * 	{
+ * 		NSLog(@"User Canceled joga");
+ * 	}
+ *	else if ( jogaResult == HSP_JOGA_ALREADY_AGREED )
+ * 	{
+ *		// No web view show and immediately
+ * 		NSLog(@"User already agreed joga.");
+ * 	}
+ * }];
+ * @endcode
+ * @serviceDomain HANGAME
+ */
++ (void)jogaWebViewWithCompletionHandler:(void (^)(HSPJogaResult jogaResult))completionHandler;
+
+/**
+ * @brief Retrieve user contact info. ( Name, PhoneNumber )
+ *
+ * This block needs the following parameters:
+ * @param addressBookPersonalInfos The list of AddressBookPersonalInfo object
+ * @param error Error.<br>If successful, the error code is 0.
+ *
+ * @code
+ *[HSPUtil queryAddressBookInfoWithCompletionHandler:^(NSArray *addressBookPersonalInfos, HSPError *error) {
+ *	if ( [error isSuccess] == YES )
+ *	{
+ *		for ( int index = 0; index < [addressBookPersonalInfos count]; index++ )
+ *		{
+ *			AddressBookPersonalInfo* addressBookPersonalInfo = [addressBookPersonalInfos objectAtIndex:index];
+ *			NSLog(@"name : %@, phoneNo : %@", addressBookPersonalInfo.name, addressBookPersonalInfo.phoneNo);
+ *		}
+ *	}
+ *	else
+ *	{
+ *		NSLog(@"error : %@", error);
+ *	}
+ *}];
+ * @endcode
+ * @serviceDomain ALL
+ */
++ (void)queryAddressBookInfoWithCompletionHandler:(void (^)(NSArray* addressBookPersonalInfos, HSPError* error))completionHandler;
+
 @end
 
 #ifdef  __cplusplus
@@ -161,12 +248,12 @@ extern "C" {
 #define IS_CHEATED( sec_result ) ( [[[HSPCore sharedHSPCore].serviceProperties valueFromKey:@"currentTime"] hash] != ( sec_result ) )
 
 /**
- * @brief Requests the server to inspect whether the device is rooted or not.
+ * @brief Requests the server to inspect whether the device is jailbreak or not.
  *
  * @param isCrackedHandler Is called when a response to the request is received from the server.
  *
  * This block needs the following parameters:
- * @param secResult Whether the device is rooted or not.(You can check secResult using IS_CRACKED macro that is device cracked).
+ * @param secResult Whether the device is jailbreak or not.(You can check secResult using IS_CRACKED macro that is device cracked).
  * @param error Error.<br>If successful, the error code is 0.
  *
  * @code
@@ -175,9 +262,9 @@ extern "C" {
  * 	{
  *      if ( IS_CRACKED(isCracked_SecResult) == YES )
  *      {
- *          NSLog(@"The device is rooted.");
+ *          NSLog(@"The device is jailbreak.");
  *      } else {
- *          NSLog(@"The device is not rooted.");
+ *          NSLog(@"The device is not jailbreak.");
  *      }
  * 	} else
  * 	{

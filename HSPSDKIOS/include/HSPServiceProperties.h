@@ -14,19 +14,22 @@
  */
 typedef enum
 {
-    HSP_WEBNAME_PRIVACY_URL				= 0,	/**< privacyUrl web name. */
-    HSP_WEBNAME_TERMS_URL				= 1,	/**< termsUrl web name. */
-	HSP_WEBNAME_SMART_TERMS_URL			= 2,	/**< smartTermsURL web name. */
-    HSP_WEBNAME_DOWNLOAD_URL			= 3,	/**< URL download web name.  */
-    HSP_WEBNAME_SMS_CERT_HELP_URL		= 4,	/**< SMS certification web name. */
-    HSP_WEBNAME_FAQ_URL					= 5,	/**< FAQ web name. */
-    HSP_WEBNAME_PUNISH_INFO_URL			= 6,	/**< Punishment information web name. */
-    HSP_WEBNAME_MINI_BANNER_URL			= 7,	/**< Mini banner web name. */
-    HSP_WEBNAME_WEB_CS_URL				= 8,	/**< CS web name. */
-    HSP_WEBNAME_GAME_REDIRECTION		= 9,	/**< Game Redirection server's web name */
-    HSP_WEBNAME_WEBUIBASE				= 10,	/**< HSP Web UI server's web name */
-    HSP_WEBNAME_MAINTENANCE_INFO_URL	= 11,	/**< maintenance info name */
-	HSP_WEBNAME_PUNISH_REASON_URL		= 12	/**< Punishment reason info web name */
+    HSP_WEBNAME_PRIVACY_URL						= 0,	/**< privacyUrl web name. */
+    HSP_WEBNAME_TERMS_URL						= 1,	/**< termsUrl web name. */
+	HSP_WEBNAME_SMART_TERMS_URL					= 2,	/**< smartTermsURL web name. */
+    HSP_WEBNAME_DOWNLOAD_URL					= 3,	/**< URL download web name.  */
+    HSP_WEBNAME_SMS_CERT_HELP_URL				= 4,	/**< SMS certification web name. */
+    HSP_WEBNAME_FAQ_URL							= 5,	/**< FAQ web name. */
+    HSP_WEBNAME_PUNISH_INFO_URL					= 6,	/**< Punishment information web name. */
+    HSP_WEBNAME_MINI_BANNER_URL					= 7,	/**< Mini banner web name. */
+    HSP_WEBNAME_WEB_CS_URL						= 8,	/**< CS web name. */
+    HSP_WEBNAME_GAME_REDIRECTION				= 9,	/**< Game Redirection server's web name */
+    HSP_WEBNAME_WEBUIBASE						= 10,	/**< HSP Web UI server's web name */
+    HSP_WEBNAME_MAINTENANCE_INFO_URL			= 11,	/**< maintenance info name */
+	HSP_WEBNAME_PUNISH_REASON_URL				= 12,	/**< Punishment reason info web name */
+	HSP_WEBNAME_CS_URL							= 13,	/**< CS web name */
+	HSP_WEBNAME_PERSONAL_INFO_COLLECTION_URL	= 14,	/**< personalInfoCollection web name */
+	HSP_WEBNAME_TOAST_EVENT_URL					= 15	/**< toast event web name */
 } HSPWebName;
 
 /**

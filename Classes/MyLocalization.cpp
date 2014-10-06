@@ -588,9 +588,9 @@ void MyLocal::ko()
 //	ko->setObject(CCString::create("화면을 터치 해주세요."), kMyLocalKey_touchPlease);
 	
 	ko->setObject(CCString::create("가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
-	ko->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	ko->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	ko->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
-	ko->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	ko->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	ko->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	ko->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	ko->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
@@ -1671,9 +1671,9 @@ void MyLocal::en()
     en->setObject(CCString::create("부하몬스터를 새로 소환합니다."), kMyLocalKey_patternContent1020);
 	
 	en->setObject(CCString::create("가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
-	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	en->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	en->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
-	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	en->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	en->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	en->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	en->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);
@@ -2655,9 +2655,9 @@ void MyLocal::ja()
 
 	
 	ja->setObject(CCString::create("가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다."), kMyLocalKey_tutorial1);
-	ja->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
+	ja->setObject(CCString::create("먼저 영역 위를 이동하는 방법을 알려드리겠습니다.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있습니다.\n조이스틱으로 캐릭터를 위로 이동시켜보세요."), kMyLocalKey_tutorial2);
 	ja->setObject(CCString::create("캐릭터를 위로 이동시키기"), kMyLocalKey_tutorial3);
-	ja->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
+	ja->setObject(CCString::create("다음에는 영역을 획득하는 방법을 알아보도록 해요.\n아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있습니다.\n보이는 것처럼 영역을 획득해보세요."), kMyLocalKey_tutorial4);
 	ja->setObject(CCString::create("영역획득하기"), kMyLocalKey_tutorial5);
 	ja->setObject(CCString::create("파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다."), kMyLocalKey_tutorial6);
 	ja->setObject(CCString::create("<font strokesize=0>제한시간 내에 달성도 <font color=961 newline=13 strokesize=0>85%를 넘기면 클리어!!"), kMyLocalKey_tutorial7);

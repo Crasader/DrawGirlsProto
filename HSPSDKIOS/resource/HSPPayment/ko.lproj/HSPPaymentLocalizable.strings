@@ -18,6 +18,7 @@
 "network status is not stable"="접속 상태가 고르지 못합니다. 잠시 후 다시 시도해주세요.";
 "transaction is not finished yet"="진행중인 결제창이 존재합니다.";
 "payment is cancelled"="구입이 취소되었습니다.";
+"gree payment is cancelled"="아이템 구입이 취소되었습니다.";
 "device is not allowed to make purchase"="응용프로그램 내 구입이 차단되어 있습니다. 설정 변경 후 이용해주세요.";
 "appstore is under maintenance"="시스템 점검 중 입니다. 잠시 후 이용해주세요.";
 "payment success"="결제가 성공되었습니다.";

@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+#define CDN_HSP 9999
+#define CDN_LINE 9998
+
 #define OPT_CHECK_JAILBREAK 0x01
 #define OPT_CHECK_CHEAT     0x02
 
@@ -27,11 +30,13 @@
 
 + (int) getVersion;
 + (int) getPatternVersion;
++ (long) getCDN;
 
 - (void) setFuncLogOpt:(long) opt;
 - (void) setLogOpt:(long) opt;
 
 - (int) LitmusInit;
+- (int) LitmusUpdate:(long)cdn;
 - (void)setGameVersion:(NSString* )ver;
 - (void)setGameSno:(long )sno;
 - (void)setGameUDID:(NSString *)udid;

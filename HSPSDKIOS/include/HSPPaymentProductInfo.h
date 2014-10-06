@@ -11,16 +11,17 @@
 /**
  * @brief Deals with payment product info.
  */
-@interface HSPPaymentProductInfo : NSObject {
-	NSString*				_productID;
-	NSString*				_productName;
-	NSString*				_productDescription;
-	NSString*				_productInformation;
-	NSString*				_currency;
-	NSNumber*				_price;
-	NSDate*					_validStartDate;
-	NSDate*					_validEndDate;
-	NSArray*				_ItemInfos;
+@interface HSPPaymentProductInfo : NSObject
+{
+	NSString*	_productID;
+	NSString*	_productName;
+	NSString*	_productDescription;
+	NSString*	_productInformation;
+	NSString*	_currency;
+	NSNumber*	_price;
+	NSDate*		_validStartDate;
+	NSDate*		_validEndDate;
+	NSArray*	_ItemInfos;
 }
 
 /**

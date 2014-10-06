@@ -105,6 +105,8 @@
  */
 + (BOOL)launchLine;
 
++ (BOOL)launchLineShopWithPakcageId:(NSString*)packageId;
+
 /**
  * @brief Launches LINE shop for downloading mission sticker.<br>
  * It is available even if not logged in the HSP.
@@ -112,12 +114,12 @@
  *
  * @code
  * if ( [HSPLine isInstalled] == YES ) {
- * 		[HSPLine launchLineShopWithPakcageId:@"Browny Sticker"];
+ * 		[HSPLine launchLineShopWithPackageId:@"Browny Sticker"];
  * }
  * @endcode
  * @serviceDomain HANGAME LINEGAME
  */
-+ (BOOL)launchLineShopWithPakcageId:(NSString*)packageId;
++ (BOOL)launchLineShopWithPackageId:(NSString*)packageId;
 
 /**
  * @brief Checks if LINE is already installed in the current device and is available.<br>

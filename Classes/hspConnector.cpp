@@ -554,12 +554,6 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	
 	
 	
-	bool ManualLogin =true;
-	int LoginType = (int)HSPLogin::GUEST;
-	if(param!=0 && param!=NULL){
-		ManualLogin = param.get("ManualLogin",true).asBool();
-		LoginType = param.get("LoginType", LoginType).asInt();
-	}
 
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 
@@ -579,31 +573,41 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		if(delsel.func)delsel.func(obj);
 		jsonDelegator::get()->remove(delekey);
 
-		//		});
+		//		}); 
 
 		};
 
 
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#ifdef LQTEST	
+	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
+#endif
+#ifndef LQTEST
+	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GAMECENTER completionHandler:
+#endif
+	 ^(BOOL playable, HSPError* error) {
+		// 로그인 응답 처리
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
+		 
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
 
-[[HSPCore sharedHSPCore] loginWithManualLogin:ManualLogin completionHandler:
-^(BOOL playable, HSPError *error)
-{
-
-	NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-	[resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
-
-	addErrorInResult(resultDict, error);
-	callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
-}
-];
+	}];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-JniMethodInfo t;
-if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
-	int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
-	t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
-	t.env->DeleteLocalRef(t.classID);
+	bool ManualLogin =true;
+	int LoginType = (int)HSPLogin::GUEST;
+	if(param!=0 && param!=NULL){
+		ManualLogin = param.get("ManualLogin",true).asBool();
+		LoginType = param.get("LoginType", LoginType).asInt();
+	}
+
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
+		int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
+		t.env->DeleteLocalRef(t.classID);
 }
 #endif
 }

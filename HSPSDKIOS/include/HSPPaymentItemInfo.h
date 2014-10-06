@@ -30,7 +30,8 @@ typedef enum
 /**
  * @brief Deals with payment item info.
  */
-@interface HSPPaymentItemInfo : NSObject {
+@interface HSPPaymentItemInfo : NSObject
+{
 	NSString*				_itemID;
 	NSString*				_itemName;
 	HSPItemProvideType		_itemProvideType;
@@ -43,37 +44,36 @@ typedef enum
 /**
  * @brief Item ID. (read only)
  */
-@property (nonatomic, retain, readonly)     NSString*   itemID;
+@property (nonatomic, retain, readonly) NSString*   itemID;
 
 /**
  * @brief Item name. (read only)
  */
-@property (nonatomic, retain, readonly)     NSString*   itemName;
+@property (nonatomic, retain, readonly) NSString*   itemName;
 
 /**
  * @brief Item give type. (read only)
  */
-@property (nonatomic, readonly)				HSPItemProvideType   itemProvideType;
+@property (nonatomic, readonly)			HSPItemProvideType   itemProvideType;
 
 /**
  * @brief Item use type. (read only)
  */
-@property (nonatomic, readonly)				HSPItemUseType	itemUseType;
+@property (nonatomic, readonly)			HSPItemUseType	itemUseType;
 
 /**
  * @brief Item description. (read only)
  */
-@property (nonatomic, retain, readonly)     NSString*   itemDescription;
+@property (nonatomic, retain, readonly) NSString*   itemDescription;
 
 /**
  * @brief Item infomation. (read only)
  */
-@property (nonatomic, retain, readonly)     NSString*   itemInfomation;
+@property (nonatomic, retain, readonly) NSString*   itemInfomation;
 
 /**
  * @brief Item quantity. (read only)
  */
-@property (nonatomic, retain, readonly)     NSNumber* 	itemQuantity;
+@property (nonatomic, retain, readonly) NSNumber* 	itemQuantity;
 
 @end
-

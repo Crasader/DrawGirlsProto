@@ -99,7 +99,7 @@ typedef enum
  */
 + (void)reportConnectedInfoWithCompletionHandler:(void (^)(HSPError *error))completionHandler;
 
-/**
+/*
  * @brief Sends the log message to the NELO server.
  *
  * @param neloLogLevel log level.
@@ -121,5 +121,36 @@ typedef enum
 					   message:(NSString*)message
 					 errorCode:(NSString*)errorCode
 					  location:(NSString*)location;
+
+/**
+ * @brief Sends the log message to the NELO server.
+ *
+ * @param neloLogLevel log level.
+ * @param stabilityCode stability code.
+ * @param errorCode error code.
+ *
+ * @code
+ * [HSPBip reportNeloStabilityIndexWithLevel:HSP_NELOLOGLEVEL_INFO
+ *                             stabilityCode:@"GAME_LOADING_START"
+ *                                 errorCode:[error code]];
+ * @endcode
+ */
++ (void)reportNeloStabilityIndexWithLevel:(HSPNeloLogLevel)neloLogLevel
+                            stabilityCode:(NSString*)stabilityCode
+                                errorCode:(NSString*)errorCode;
+
+/**
+ * @brief Sends the log message to the NELO server.
+ *
+ * @param neloLogLevel log level.
+ * @param message log message.
+ *
+ * @code
+ * [HSPBip reportNeloLogWithLevel:HSP_NELOLOGLEVEL_INFO
+ *						  message:@"game loading started."];
+ * @endcode
+ */
++ (void)reportNeloLogWithLevel:(HSPNeloLogLevel)neloLogLevel
+                       message:(NSString*)message;
 
 @end

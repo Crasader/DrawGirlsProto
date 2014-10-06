@@ -19,6 +19,8 @@
 	NSMutableDictionary*    _handlerMap;
 }
 
+@property (nonatomic, assign) NSInteger detailCode;
+
 /**
  * @brief Requests the error page URL from the server.
  * 
