@@ -2,14 +2,12 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>HSP_USE_LITMUS</key>
-	<true/>
 	<key>HSP_IMAGE_FORMAT</key>
 	<string>JPEG</string>
 	<key>HSP_DEBUG_LEVEL</key>
 	<string>LOW</string>
 	<key>HSP_ENABLE_ASSERTION</key>
-	<true/>
+	<false/>
 	<key>HSP_LAUNCHING_ZONE</key>
 	<string>ALPHA-KR</string>
 	<key>HSP_RESEND_FAILED_DATA</key>
@@ -38,8 +36,6 @@
 	<true/>
 	<key>HSP_ENFORCED_GUEST_LOGIN</key>
 	<false/>
-	<key>HSP_ENFORCED_DEVICE_LOGIN</key>
-	<false/>
 	<key>HSP_PAYMENT_GAMBLING</key>
 	<false/>
 	<key>HSP_SHOW_UI_PUNISHMENT</key>
@@ -48,5 +44,13 @@
 	<true/>
 	<key>HSP_ENABLE_LINE_EMAIL_LOGIN</key>
 	<true/>
+	<key>HSP_USE_XCODE5_LATER</key>
+	<true/>
+	<key>HSP_USE_JOGA</key>
+	<true/>
+	<key>HSP_TOPBAR_COLOR</key>
+	<string>#ff1414</string>
+	<key>HSP_FACEBOOK_USE_V1</key>
+	<false/>
 </dict>
 </plist>

@@ -50,12 +50,13 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>kakao89958125601566961</string>
-			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb273858252806037</string>
+                         <string>SKSUMRAN</string>
+			</array>
 		</dict>
 	</array>
 </dict>

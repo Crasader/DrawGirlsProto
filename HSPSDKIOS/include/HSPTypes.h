@@ -158,9 +158,29 @@ typedef enum
 	HSP_LOGIN_TYPE_FACEBOOK,
 	
 	/**
+	 * Facebook Login.
+	 */
+	HSP_LOGIN_TYPE_KAKAO,
+	
+	/**
 	 * Creating Account Login.
 	 */
 	HSP_LOGIN_TYPE_CREATINGACCOUNT,
+	
+	/**
+	 * Toast Login.
+	 */
+	HSP_LOGIN_TYPE_TOAST,
+	
+	/**
+	 * Payco Login.
+	 */
+	HSP_LOGIN_TYPE_PAYCO,
+
+	/**
+	 * Gamecenter Login.
+	 */
+	HSP_LOGIN_TYPE_GAMECENTER,
 } HSPLoginType;
 
 /**
@@ -188,5 +208,26 @@ typedef enum
      */
 	HSP_ALREADY_AUTHENTICATED_AS_ADULT,
 } HSPAgeRequirement;
+
+/**
+ * Defines JOGA Web View Result types.
+ */
+typedef enum
+{
+	/**
+     * HSP JOGA Agreed by User
+     */
+	HSP_JOGA_AGREE = 0,
+	
+	/**
+     * HSP JOGA Canceled by User
+     */
+	HSP_JOGA_CANCELED,
+	
+	/**
+     * HSP JOGA Already agreed by user
+     */
+	HSP_JOGA_ALREADY_AGREED,
+} HSPJogaResult;
 
 #endif

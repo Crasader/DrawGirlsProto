@@ -17,6 +17,8 @@
     NSString *itemId;
     int64_t itemSequence;
     int quantity;
+    NSString *storeId;
+    int64_t sentMemberNo;
 }
 
 /**
@@ -33,6 +35,16 @@
  * @brief The number of items.
  */
 @property (nonatomic)           int quantity;
+
+/**
+ * @brief The store ID.
+ */
+@property (nonatomic, retain)   NSString *storeId;
+
+/**
+ * @brief The memberNo who sent the item.
+ */
+@property (nonatomic)           int64_t sentMemberNo;
 
 @end
 

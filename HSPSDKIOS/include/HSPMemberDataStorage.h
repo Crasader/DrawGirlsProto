@@ -68,6 +68,34 @@
 +(void)	loadMemberDataWithKeyArray:(NSArray*)dataKeyArray completionHandler:(void (^)(NSDictionary* dataDic, HSPError* error))completionHandler;
 
 /**
+ * @brief Requests to load the specific user data dictionary that corresponds to the key list.
+ *
+ * @param memberNo member number.
+ * @param dataKeyArray data key(type:NSString) array.
+ * @param completionHandler Is called when a response to the request is received from the server.
+ *
+ * This block needs the following parameter:
+ * @param dataDic data dictionary.
+ * @param error Error.<br>If successful, the error code is 0.
+ *
+ * @code
+ * NSMutableArray* dataKeyArray = [NSMutableArray array];
+ * [dataKeyArray addObject:@"win"];
+ * [dataKeyArray addObject:@"lose"];
+ *
+ * [HSPMemberDataStorage loadMemberDataWithMemberNo:799018257320175415 keyArray:dataKeyArray completionHandler:^(NSDictionary* dataDic, HSPError *error) {
+ * 	if ( [error isSuccess] == YES )
+ * 	{
+ *      NSLog(@"Win Count : %@", [data objectForKey:@"win"]);
+ *      NSLog(@"Lose Count : %@", [data objectForKey:@"lose"]);
+ * 	}
+ * }];
+ * @endcode
+ * @serviceDomain ALL
+ */
++(void) loadMemberDataWithMemberNo:(int64_t)memberNo keyArray:(NSArray*)dataKeyArray completionHandler:(void (^)(NSDictionary* dataDic, HSPError* error))completionHandler;
+
+/**
  * @brief Requests to remove the some data that corresponds to the key list.
  *
  * @param dataKeyArray data key(type:NSString) array.

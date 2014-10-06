@@ -27,6 +27,7 @@
 	<string>APPL</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
+	
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
@@ -34,8 +35,8 @@
 			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao89958125601566961</string>
-				<string>DGproto</string>
+				<string>fb273858252806037</string>
+                         <string>SKSUMRAN</string>
 			</array>
 		</dict>
 	</array>
@@ -65,6 +66,7 @@
 	<array>
 		<string>UIInterfaceOrientationLandscapeLeft</string>
 		<string>UIInterfaceOrientationLandscapeRight</string>
+		<string>UIInterfaceOrientationPortrait</string>
 	</array>
 </dict>
 </plist>

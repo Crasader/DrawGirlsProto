@@ -115,11 +115,6 @@
 #define HSP_USE_AUTOSUSPEND					(@"HSP_USE_AUTOSUSPEND")
 
 /**
- * @brief A key of isEnforedDeviceLogin value stored in the dictionary of HSPConfiguration. 
- */
-#define HSP_ENFORCED_DEVICE_LOGIN			(@"HSP_ENFORCED_DEVICE_LOGIN")
-
-/**
  * @brief A key of isEnforedGuestLogin value stored in the dictionary of HSPConfiguration.
  */
 #define HSP_ENFORCED_GUEST_LOGIN			(@"HSP_ENFORCED_GUEST_LOGIN")
@@ -155,9 +150,25 @@
 #define HSP_USE_NELO						(@"HSP_USE_NELO")
 
 /**
- * @brief A key of isUseLitmus value stored in the dictionary of HSPConfiguration.
+ * @brief A key of Login idp value stored in the dictionary of HSPConfiguration.
  */
-#define HSP_USE_LITMUS						(@"HSP_USE_LITMUS")
+#define HSP_LOGIN_IDP                       (@"HSP_LOGIN_IDP")
+
+/**
+ * @brief A key of isUseXcode5Later value stored in the dictionary of HSPConfiguration.
+ */
+#define HSP_USE_XCODE5_LATER				(@"HSP_USE_XCODE5_LATER")
+
+/**
+ * @brief A key of isUseJoga value stored in the dictionary of HSPConfiguration.
+ */
+#define HSP_USE_JOGA						(@"HSP_USE_JOGA")
+
+/**
+ * @brief A key for Facebook URL scheme suffix used while in Facebook App-to-App authentication.
+ * The suffix can be registered on Facebook developer's settings page for the app
+ */
+#define HSP_FACEBOOK_URL_SCHEME_SUFFIX (@"HSP_FACEBOOK_URL_SCHEME_SUFFIX")
 
 /**
  * Information that can be returned by the debug method.
@@ -378,13 +389,6 @@
 - (BOOL)isUseNelo;
 
 /**
- * @brief Returns whether to support Litmus service
- * @return BOOL (YES: Use Litmus service, NO: Not use).
- * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
- */
-- (BOOL)isUseLitmus;
-
-/**
  * @brief Returns whether to support popover style on iPad (not supported on iPhone).<br>Default value is YES.
  * @return BOOL (YES: Use popover style, NO: Not use).
  * @serviceDomain 
@@ -406,20 +410,11 @@
 - (BOOL)isUseAutoSuspend;
 
 /**
- * @brief Returns whether to support device based login only.
- * @return BOOL Whether to support device based login only (YES: Support device based login only, NO: Support welcome UI and ID based login as well)
- * @serviceDomain HANGAME LINEGAME
- */
-- (BOOL)isEnforcedDeviceLogin;
-
-/**
  * @brief Returns whether to support guest login only.
  * @return BOOL Whether to support guest login only (YES: Support guest login only, NO: Support welcome UI and ID based login as well)
  * @serviceDomain GLOBALGAME_SG
  */
 - (BOOL)isEnforcedGuestLogin;
-
-//- (BOOL)isUseDataCache;
 
 /**
  * @brief Returns whether to show punishment game page automatically when a user who punished logs in. 
@@ -441,6 +436,27 @@
  * @serviceDomain LINEGAME
  */
 - (BOOL)enableLineEmailLogin;
+
+/**
+ * @brief Returns the login IDP.
+ * @return NSString* The login IDP.
+ * @serviceDomain GLOBALGAME_CN
+ */
+- (NSString*)loginIDP;
+
+/**
+ * @brief Returns whether use xcode5 later
+ * @return BOOL (YES : xcode5 later, NO : xcode4 eariler).
+ * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
+ */
+- (BOOL)isUseXcode5Later;
+
+/**
+ * @brief Returns whether use joga
+ * @return BOOL (YES : Use joga, NO : Do not use joga).
+ * @serviceDomain HANGAME
+ */
+- (BOOL)isUseJoga;
 
 /**
  * @brief Sets the HSP launching zone.<br>This function does not change HSPConfiguration.plist.
@@ -590,13 +606,6 @@
 - (void)setUseNelo:(BOOL)use;
 
 /**
- * @brief Sets whether to support the litmus service.<br>This function does not change HSPConfiguration.plist.
- * @param use (YES: Use litmus service, NO: Not use).
- * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
- */
-- (void)setUseLitmus:(BOOL)use;
-
-/**
  * @brief Sets whether to support popover style on iPad (not supported on iPhone).<br>Default value is YES.<br>This function does not change HSPConfiguration.plist.
  * @param use (YES: Use popover style, NO: Not use).
  * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
@@ -616,13 +625,6 @@
  * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
  */
 - (void)setUseAutoSuspend:(BOOL)use;
-
-/**
- * @brief Sets whether to support device based login only. <br> When the parameter 'use' is set to YES, HSP uses device based login only and does not display welcome UI.
- * @param  use Whether to support device based login only (YES: Use device based login only, NO: Use welcome UI and ID based login as well)
- * @serviceDomain HANGAME LINEGAME
- */
-- (void)setEnforcedDeviceLogin:(BOOL)use;
 
 /**
  * @brief Sets whether to support guest login only. <br> When the parameter 'use' is set to YES, HSP uses guest login only and does not display welcome UI.
@@ -651,5 +653,26 @@
  * @serviceDomain LINEGAME
  */
 - (void)setEnableLineEmailLogin:(BOOL)enable;
+
+/**
+ * @brief Sets the locale of the login IDP.<br>This function does not change HSPConfiguration.plist.
+ * @param loginIDP Login IDP to set.
+ * @serviceDomain GLOBALGAME_CN
+ */
+- (void)setLoginIDP:(NSString*)loginIDP;
+
+/**
+ * @brief Sets whether use xcode5 later or not <br>This function does not change HSPConfiguration.plist.
+ * @param use (YES : xcode5 later, NO : xcode4 eariler).
+ * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
+ */
+- (void)setUseXCode5Later:(BOOL)use;
+
+/**
+ * @brief Sets whether use JOGA agree view or not. <br>This function does not change HSPConfiguration.plist.
+ * @param use (YES : Use JOGA agree view, NO : Do not use JOGA agree view).
+ * @serviceDomain HANGAME
+ */
+- (void)setUseJoga:(BOOL)use;
 
 @end

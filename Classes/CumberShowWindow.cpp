@@ -111,7 +111,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 	if(bossShape == "circle")
 	{
 		if(ccbiName.length()<3) {
-			ccbiname2="boss_bee";
+			ccbiname2="boss_snake";
 		}
 		////////////////////////////////////////////
 		

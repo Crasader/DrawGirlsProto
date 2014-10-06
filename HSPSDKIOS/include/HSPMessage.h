@@ -261,12 +261,34 @@ typedef enum
  * 	}
  * }];
  * @endcode
- * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
+ * @serviceDomain ALL
  */
 +(void)     sendPushNotificationToReceiver:(int64_t)memberNo
                                    message:(NSString*)message
                                       data:(NSDictionary*)data
                          completionHandler:(void (^)(HSPError *error))completionHandler;
+
+/**
+ * @brief Sets the push notification enable/disable.
+ *
+ * @param enable enable push notification.
+ * @param completionHandler Is called when a response to the request is received from the server.
+ *
+ * This block needs the following parameter:
+ * @param error Error.<br>If successful, the error code is 0.
+ *
+ * @return success to set push notification.
+ * @serviceDomain ALL
+ */
++(BOOL)		setPushNotification:(BOOL)enable completionHandler:(void (^)(HSPError *error))completionHandler;
+
+/**
+ * @brief Checks whether push notification is enabled.
+ *
+ * @return if push notification is enable returns true, els returns false.
+ * @serviceDomain ALL
+ */
++(BOOL)		isEnablePushNotification;
 
 /**
  * @brief Requests an original image for the image message.

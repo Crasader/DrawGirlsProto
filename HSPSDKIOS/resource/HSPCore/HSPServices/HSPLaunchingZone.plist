@@ -38,24 +38,6 @@
 		<key>HSP_LOCALE</key>
 		<string>JP</string>
 	</dict>
-	<key>DR-JP</key>
-	<dict>
-		<key>HSP_IS_REALZONE</key>
-		<true/>
-		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://111.91.128.89:10080/hsp/lnc</string>
-		<key>HSP_LOCALE</key>
-		<string>JP</string>
-	</dict>
-	<key>ALPHA-GLOBAL-KR</key>
-	<dict>
-		<key>HSP_IS_REALZONE</key>
-		<false/>
-		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://222.122.200.212:10080/hsp/lnc</string>
-		<key>HSP_LOCALE</key>
-		<string>GLOBAL</string>
-	</dict>
 	<key>REAL-GLOBAL-KR</key>
 	<dict>
 		<key>HSP_IS_REALZONE</key>
@@ -65,21 +47,12 @@
 		<key>HSP_LOCALE</key>
 		<string>GLOBAL</string>
 	</dict>
-	<key>AWS-GLOBAL</key>
-	<dict>
-		<key>HSP_IS_REALZONE</key>
-		<false/>
-		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://184.169.222.48:10080/hsp/lnc</string>
-		<key>HSP_LOCALE</key>
-		<string>GLOBAL</string>
-	</dict>
 	<key>PLATFORMQA-KR</key>
 	<dict>
 		<key>HSP_IS_REALZONE</key>
 		<false/>
 		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://112.175.154.219:10080/hsp/lnc</string>
+		<string>http://alpha-platform-lnc.m.hangame.com:10080/hsp/lnc</string>
 		<key>HSP_LOCALE</key>
 		<string>KR</string>
 	</dict>
@@ -88,18 +61,9 @@
 		<key>HSP_IS_REALZONE</key>
 		<false/>
 		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://112.175.154.219:10080/hsp/lnc</string>
+		<string>http://alpha-platform-lnc.m.hangame.com:10080/hsp/lnc</string>
 		<key>HSP_LOCALE</key>
 		<string>GLOBAL</string>
-	</dict>
-	<key>PLATFORMQA-JP</key>
-	<dict>
-		<key>HSP_IS_REALZONE</key>
-		<false/>
-		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://112.175.154.219:10080/hsp/lnc</string>
-		<key>HSP_LOCALE</key>
-		<string>JP</string>
 	</dict>
 	<key>LINEGAME</key>
 	<dict>
@@ -113,7 +77,7 @@
 	<key>ALPHA-LINEGAME</key>
 	<dict>
 		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://203.104.130.187:10080/hsp/lnc</string>
+		<string>http://alpha-lnc.linegame.jp:10080/hsp/lnc</string>
 		<key>HSP_IS_REALZONE</key>
 		<false/>
 		<key>HSP_LOCALE</key>
@@ -128,21 +92,39 @@
 		<key>HSP_LOCALE</key>
 		<string>KR</string>
 	</dict>
-	<key>ALPHA-GLOBAL-SG</key>
-	<dict>
-		<key>HSP_IS_REALZONE</key>
-		<string>NO</string>
-		<key>HSP_ADDRESS_LAUNCHING</key>
-		<string>http://125.209.255.120:10080/hsp/lnc</string>
-		<key>HSP_LOCALE</key>
-		<string>GLOBAL</string>
-	</dict>
 	<key>REAL-GLOBAL-SG</key>
 	<dict>
 		<key>HSP_IS_REALZONE</key>
 		<string>YES</string>
 		<key>HSP_ADDRESS_LAUNCHING</key>
 		<string>http://lnc.hsp.gsquare.com:10080/hsp/lnc</string>
+		<key>HSP_LOCALE</key>
+		<string>GLOBAL</string>
+	</dict>
+	<key>REAL-GLOBALGAME-MB</key>
+	<dict>
+		<key>HSP_IS_REALZONE</key>
+		<string>YES</string>
+		<key>HSP_ADDRESS_LAUNCHING</key>
+		<string>http://lnc.mb.hangame.com:10080/hsp/lnc</string>
+		<key>HSP_LOCALE</key>
+		<string>GLOBAL</string>
+	</dict>
+	<key>REAL-US</key>
+	<dict>
+		<key>HSP_IS_REALZONE</key>
+		<string>YES</string>
+		<key>HSP_ADDRESS_LAUNCHING</key>
+		<string>http://lnc.usp.toastoven.net:10080/hsp/lnc</string>
+		<key>HSP_LOCALE</key>
+		<string>GLOBAL</string>
+	</dict>
+	<key>ALPHA-US</key>
+	<dict>
+		<key>HSP_IS_REALZONE</key>
+		<string>NO</string>
+		<key>HSP_ADDRESS_LAUNCHING</key>
+		<string>http://alpha-lnc.usp.toastoven.net:10080/hsp/lnc</string>
 		<key>HSP_LOCALE</key>
 		<string>GLOBAL</string>
 	</dict>

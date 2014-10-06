@@ -4,7 +4,7 @@
 <dict>
 	<key>LOGIN</key>
 	<dict>
-		<key>KAKAO_WELCOME_VIEW</key>
+		<key>TOAST_WELCOME_VIEW</key>
 		<dict>
 			<key>PORTRAIT_VIEW_BG</key>
 			<string></string>
@@ -18,79 +18,16 @@
 			<string></string>
 			<key>LANDSCAPE_VIEW_BG_IPAD</key>
 			<string></string>
-			<key>ACCOUNT_LOGIN_BUTTON_BG</key>
-			<string>kakao_btn_account_login</string>
-			<key>ACCOUNT_LOGIN_BUTTON_TEXTCOLOR</key>
+			<key>EMAIL_REGISTER_GUIDE_TEXT_COLOR</key>
 			<dict>
 				<key>RED</key>
-				<integer>0</integer>
+				<integer>255</integer>
 				<key>GREEN</key>
-				<integer>0</integer>
+				<integer>255</integer>
 				<key>BLUE</key>
-				<integer>0</integer>
+				<integer>255</integer>
 				<key>ALPHA</key>
 				<integer>255</integer>
-			</dict>
-			<key>ACCOUNT_LOGIN_BUTTON_SHADOWCOLOR</key>
-			<dict>
-				<key>RED</key>
-				<integer>0</integer>
-				<key>GREEN</key>
-				<integer>0</integer>
-				<key>BLUE</key>
-				<integer>0</integer>
-				<key>ALPHA</key>
-				<integer>127</integer>
-			</dict>
-			<key>GUEST_LOGIN_BUTTON_BG</key>
-			<string>kakao_btn_guest_login</string>
-			<key>GUEST_LOGIN_BUTTON_TEXTCOLOR</key>
-			<dict>
-				<key>RED</key>
-				<integer>91</integer>
-				<key>GREEN</key>
-				<integer>89</integer>
-				<key>BLUE</key>
-				<integer>77</integer>
-				<key>ALPHA</key>
-				<integer>255</integer>
-			</dict>
-			<key>GUEST_LOGIN_BUTTON_SHADOWCOLOR</key>
-			<dict>
-				<key>RED</key>
-				<integer>247</integer>
-				<key>GREEN</key>
-				<integer>247</integer>
-				<key>BLUE</key>
-				<integer>245</integer>
-				<key>ALPHA</key>
-				<integer>255</integer>
-			</dict>
-			<key>CHECK_BUTTON_BG</key>
-			<string>kakao_btn_check</string>
-			<key>UNCHECK_BUTTON_BG</key>
-			<string>kakao_btn_uncheck</string>
-			<key>CHECK_BUTTON_TEXTCOLOR</key>
-			<dict>
-				<key>RED</key>
-				<integer>0</integer>
-				<key>GREEN</key>
-				<integer>0</integer>
-				<key>BLUE</key>
-				<integer>0</integer>
-				<key>ALPHA</key>
-				<integer>255</integer>
-			</dict>
-			<key>CHECK_BUTTON_SHADOWCOLOR</key>
-			<dict>
-				<key>RED</key>
-				<integer>0</integer>
-				<key>GREEN</key>
-				<integer>0</integer>
-				<key>BLUE</key>
-				<integer>0</integer>
-				<key>ALPHA</key>
-				<integer>127</integer>
 			</dict>
 		</dict>
 	</dict>

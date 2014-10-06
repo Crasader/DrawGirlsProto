@@ -49,6 +49,11 @@
 #define HSP_COMMON_URI_SUPPORT_TERMS_PUNISH		(@"HSPUI://supports.terms.punish")
 
 /**
+ * @brief A URI of Toast Event WebView
+ */
+#define HSP_COMMON_URI_SUPPORT_TOAST_EVENT		(@"HSPUI://supports.toast.event")
+
+/**
  * @brief Parses URI used in HSP.
  */
 @interface HSPUri : NSObject<NSCopying>

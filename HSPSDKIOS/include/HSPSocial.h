@@ -10,6 +10,26 @@
 #import "HSPError.h"
 #import "HSPProfile.h"
 
+typedef enum
+{
+	FRIEND_IDP_FACEBOOK,
+	FRIEND_IDP_GOOGLEPLUS,
+	FRIEND_IDP_APPLE_GAMECENTER
+} GlobalIdp;
+
+@interface SocialFriendProfile : NSObject
+{
+	NSString*	_socialId;
+	NSString*	_socialNickname;
+	NSString*	_socialPhotoUrl;
+}
+
+@property (nonatomic, retain, readonly)	NSString*	socialId;
+@property (nonatomic, retain, readonly)	NSString*	socialNickname;
+@property (nonatomic, retain, readonly)	NSString*	socialPhotoUrl;
+
+@end
+
 /**
  * @brief Deals with my relationship with other users.
  */
@@ -536,6 +556,73 @@
  */
 + (void)queryIdpIdsWithMemberNos:(NSArray*)memberNos
 			   completionHandler:(void(^)(NSDictionary* idpIdDictionary, HSPError* error))completionHandler;
+
+/**
+ * @brief Requests a list of IDP IDs of HSP users from the server.
+ * You can requests IDP IDs of up to 500 users; for member number of a user who does not authenticated to IDP, the callback returns blank (@"").
+ * @param memberNos List of member numbers to request<br>Array of NSNumber instances.
+ * @param completionHandler Is called when a response to the request is received from the server.
+ *
+ * @code
+ * [HSPSocial queryIdpIdsWithMemberNos:memberNos
+ *	    	    	completionHandler:^(NSDictionary* idpIdDictionary, HSPError* error) {
+ *      if ( [error isSuccess] == YES )
+ *      {
+ *          NSLog(@"Successfully received IDP IDs");
+ *          for ( NSNumber* memberNo in memberNos )
+ *          {
+ *              NSString* idpId = [idpIdDictionary objectForKey:memberNo];
+ *              if ( idpId != nil && [idpId length] != 0 )
+ *              {
+ *                  NSLog(@"memberNo : %@, IDP ID : %@", memberNo, idpId);
+ *              }
+ *              else
+ *              {
+ *                  NSLog(@"%@ is not an IDP user.", memberNo);
+ *              }
+ *          }
+ *      }
+ *      else
+ *      {
+ *          NSLog(@"Failed to receive IDP IDs.");
+ *      }
+ * }];
+ * @endcode
+ * @serviceDomain ALL
+ */
++ (void)loadFriendsWithIdp:(GlobalIdp)globalIdp
+					 index:(int32_t)index
+					 count:(int32_t)count
+		 completionHandler:(void (^)(NSArray* friendProfileList, HSPError* error))completionHandler;
+
+/**
+ * @brief Requests a list of HSP Member numbers of IDP(ID Provider) users from the server. <br>
+ * You can requests IDP IDs of up to 500 users; for IDP ID of a user who does not authenticated to HSP, the callback returns 0.
+ * @param globalIds List of globalIdp IDs.
+ * @param completionHandler Is called when a response to the request is received from the server.
+ * @return void
+ *
+ * This block needs the following parameters:
+ * @param memberNos list of HSP memberNo
+ * @param error Error.<br>If successful, the error code is 0.
+ *
+ * @code
+ * [HSPSocial queryHSPMemberNosWithGlobalIds:[NSArray arrayWithObject:idpId] completionHandler:^(NSDictionary* memberNoMap, HSPError* error) {
+ *      if ( [error isSuccess] == YES )
+ *		{
+ *			for ( NSString* idpId in memberNoMap.allKeys )
+ *			{
+ *				NSLog(@"hsp memberNo : %ld", [[memberNoMap objectForKey:idpId] longLongValue]);
+ *			}
+ *		}
+ *      else
+ *          NSLog(@"Failed to query hspmemberNo with idpId(%@)", error);
+ * }];
+ * @endcode
+ * @serviceDomain TOASTGAME
+ */
++ (void)queryHSPMemberNosWithGlobalIds:(NSArray*)globalIds
+					 completionHandler:(void (^)(NSDictionary* memberNoMap, HSPError* error))completionHandler;
 
 @end
 
