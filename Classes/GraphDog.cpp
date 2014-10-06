@@ -630,8 +630,15 @@ void* GraphDog::t_function(void *_insertIndex)
 	command.resultStr = resultStr;
 	command.chunk.resultCode = resultCode;
 	//	}
-	usleep(1000000/60);
-	CCLOG("check11");
+	//usleep(1000000/60);
+	
+	int j=0;
+	for(int i=0;i<10000;i++){
+		int b=1;
+		j++;
+		b=j+b;
+	}
+	CCLOG("check11 %s",resultStr.c_str());
 	pthread_mutex_unlock(&command.caller->t_functionMutex);
 	
 	CCLOG("check12");
@@ -680,19 +687,22 @@ void GraphDog::receivedCommand(float dt)
 			
 			GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
 			Json::Value commandParam = commands.commandStr;
-			if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
-				
-				commands.chunk.resultCode = CURLE_CHUNK_FAILED;
-				CCLOG("cmd check error %s",resultobj.asString().c_str());
-				//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
-			}else{
-				
-				CCLOG("reset by server cmdNo is %d",GraphDog::get()->lastCmdNo);
-				GraphDog::get()->lastCmdNo=commandParam["cmdNo"].asInt();
-				GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
-				GraphDog::get()->date=resultobj.get("date", 0).asInt64();
-				GraphDog::get()->weekNo=resultobj.get("weekNo", 0).asInt();
-				GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
+			
+			if(commands.chunk.resultCode == CURLE_OK){
+				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
+					
+					commands.chunk.resultCode = CURLE_CHUNK_FAILED;
+					CCLOG("cmd check error %s",resultobj.asString().c_str());
+					//CCAssert(false, "정상적인 이용으로는 이곳에 들어오면 안된다.");
+				}else{
+					
+					CCLOG("reset by server cmdNo is %d",GraphDog::get()->lastCmdNo);
+					GraphDog::get()->lastCmdNo=commandParam["cmdNo"].asInt();
+					GraphDog::get()->timestamp=resultobj.get("timestamp", 0).asInt64();
+					GraphDog::get()->date=resultobj.get("date", 0).asInt64();
+					GraphDog::get()->weekNo=resultobj.get("weekNo", 0).asInt();
+					GraphDog::get()->localTimestamp=GraphDog::get()->getTime();
+				}
 			}
 
 		}
