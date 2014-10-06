@@ -1614,13 +1614,13 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		
 		if(!result_data["myInfo"].isNull())
 		{
-			mySGD->endless_my_high_victory = result_data["myInfo"]["victory"].asInt();
-			mySGD->endless_my_lose = result_data["myInfo"]["lose"].asInt();
-			mySGD->endless_my_high_score = result_data["myInfo"]["score"].asInt();
-			mySGD->endless_my_win = result_data["myInfo"]["win"].asInt();
+			mySGD->endless_my_high_victory = result_data["myInfo"].get("victory", 0).asInt();
+			mySGD->endless_my_lose = result_data["myInfo"].get("lose", 0).asInt();
+			mySGD->endless_my_high_score = result_data["myInfo"].get("score", 0).asInt();
+			mySGD->endless_my_win = result_data["myInfo"].get("win", 0).asInt();
 			
-			mySGD->endless_my_ing_win = result_data["myInfo"]["ing_win"].asInt();
-			mySGD->endless_my_victory = result_data["myInfo"]["ing_win"].asInt();
+			mySGD->endless_my_ing_win = result_data["myInfo"].get("ing_win", 0).asInt();
+			mySGD->endless_my_victory = result_data["myInfo"].get("ing_win", 0).asInt();
 			
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			
@@ -1630,7 +1630,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 				refresh_ing_win_func = nullptr;
 			}
 			
-			mySGD->endless_my_ing_score = result_data["myInfo"]["ing_score"].asInt();
+			mySGD->endless_my_ing_score = result_data["myInfo"].get("ing_score", 0).asInt();
 			
 			if(mySGD->endless_my_ing_win.getV() > 0)
 			{
@@ -1692,10 +1692,10 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		mySelection->setFunction([=](CCObject* obj){
 			Json::Value param;
 			param["endlessData"] = Json::Value();
-			param["endlessData"]["victory"] = result_data["myInfo"]["victory"].asInt();
-			param["endlessData"]["lose"] = result_data["myInfo"]["lose"].asInt();
-			param["endlessData"]["win"] = result_data["myInfo"]["win"].asInt();
-			param["endlessData"]["score"] = result_data["myInfo"]["score"].asInt();
+			param["endlessData"]["victory"] = result_data["myInfo"].get("victory", 0).asInt();
+			param["endlessData"]["lose"] = result_data["myInfo"].get("lose", 0).asInt();
+			param["endlessData"]["win"] = result_data["myInfo"].get("win", 0).asInt();
+			param["endlessData"]["score"] = result_data["myInfo"].get("score", 0).asInt();
 			param["rank"] = result_data["myrank"].asInt();
 			param["alluser"] = result_data["alluser"].asInt();
 			param["level"] = result_data["level"].asInt();
@@ -1745,16 +1745,19 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		}
 		else
 		{
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", my_rank)->getCString(), mySGD->getFont().c_str(), 12);
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", my_rank)->getCString(), mySGD->getFont().c_str(), 10);
 			rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
-			rank_label->setPosition(rank_position);
+			rank_label->setPosition(ccp(35,rank_position.y+8));
 			list_cell_case->addChild(rank_label);
 		}
 		
 		string flag = myDSH->getStringForKey(kDSH_Key_flag);
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-		selectedFlagSpr->setPosition(ccp(50, list_cell_case->getContentSize().height/2.f));
+		if(my_rank > 3)
+			selectedFlagSpr->setPosition(ccp(35, rank_position.y-5));
+		else
+			selectedFlagSpr->setPosition(ccp(50, list_cell_case->getContentSize().height/2.f));
 		selectedFlagSpr->setScale(0.8f);
 		list_cell_case->addChild(selectedFlagSpr);
 		
@@ -1799,10 +1802,10 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		Json::Value param;
 		
 		param["endlessData"] = Json::Value();
-		param["endlessData"]["victory"] = result_data["myInfo"]["victory"].asInt();
-		param["endlessData"]["lose"] = result_data["myInfo"]["lose"].asInt();
-		param["endlessData"]["win"] = result_data["myInfo"]["win"].asInt();
-		param["endlessData"]["score"] = result_data["myInfo"]["score"].asInt();
+		param["endlessData"]["victory"] = result_data["myInfo"].get("victory", 0).asInt();
+		param["endlessData"]["lose"] = result_data["myInfo"].get("lose", 0).asInt();
+		param["endlessData"]["win"] = result_data["myInfo"].get("win", 0).asInt();
+		param["endlessData"]["score"] = result_data["myInfo"].get("score", 0).asInt();
 		param["rank"] = result_data["myrank"].asInt();
 		param["alluser"] = result_data["alluser"].asInt();
 		param["level"] = result_data["level"].asInt();
@@ -1875,16 +1878,19 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	}
 	else
 	{
-		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
 		rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
-		rank_label->setPosition(rank_position);
+		rank_label->setPosition(ccp(35,rank_position.y+8));
 		list_cell_case->addChild(rank_label);
 	}
 	
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
+	if(idx >= 3)
+		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
+	else
+		selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
 	

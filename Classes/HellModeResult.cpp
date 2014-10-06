@@ -616,8 +616,8 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 15);
-				rank_label->setPosition(rank_position);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
+				rank_label->setPosition(ccp(33,rank_position.y+8));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -627,7 +627,10 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 			
 			string flag = read_data.get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(49,15.5f));
+			if(i >= 3)
+				selectedFlagSpr->setPosition(ccp(33,rank_position.y-5));
+			else
+				selectedFlagSpr->setPosition(ccp(49,15.5f));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			
@@ -679,13 +682,13 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 			t_list_cell_case = list_cell_case;
 			main_case->addChild(list_cell_case, kZ_HMR_img);
 			
-			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 15);
-			rank_label->setPosition(ccp(17,15.5f));
+			KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", myrank)->getCString(), mySGD->getFont().c_str(), 10);
+			rank_label->setPosition(ccp(33,15.5f+8));
 			list_cell_case->addChild(rank_label);
 			
 			string flag = myDSH->getStringForKey(kDSH_Key_flag);
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			selectedFlagSpr->setPosition(ccp(49,15.5f));
+			selectedFlagSpr->setPosition(ccp(33,15.5f-5));
 			selectedFlagSpr->setScale(0.8);
 			list_cell_case->addChild(selectedFlagSpr);
 			

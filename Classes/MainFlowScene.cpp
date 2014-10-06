@@ -1012,7 +1012,7 @@ void MainFlowScene::puzzleLoadSuccess()
 
 void MainFlowScene::cellAction(CCObject* sender)
 {
-	if(!is_menu_enable)
+	if(!is_menu_enable || is_table_openning)
 		return;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
@@ -2352,7 +2352,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 
 void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 {
-	if(!is_menu_enable)
+	if(!is_menu_enable || is_table_openning)
 		return;
 	
 	is_menu_enable = false;
