@@ -1942,7 +1942,7 @@ bool PlayTutorial::init()
 //														   }));
 //													   }));
 													   t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial2), [=]()
-																	 //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n오른쪽 아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
+																	 //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 																	 {
 																		 top_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
 																		 tutorial_step = 1;
@@ -2059,7 +2059,7 @@ void PlayTutorial::nextStep()
 //			}));
 //		}));
 		
-		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n왼쪽 아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
+		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
 			controler->setTouchEnabled(true);
 			area_take_sample->removeFromParent();

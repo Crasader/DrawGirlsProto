@@ -478,8 +478,10 @@ bool PuzzleScene::init()
 	
 	if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
-		int take_level;
+		int take_level, before_take_level;
 		take_level = mySGD->getStageGrade();
+		before_take_level = mySGD->getBeforeRankUpStageGrade();
+		
 //		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
 //		else if(mySGD->is_showtime)							take_level = 3;
 //		else if(mySGD->is_exchanged)						take_level = 2;
@@ -494,8 +496,8 @@ bool PuzzleScene::init()
 		
 		bool is_not_empty_card[4] = {false,};
 		
-		clear_star_take_level = take_level;
-		clear_is_empty_star = !is_not_empty_card[take_level-1];
+		clear_star_take_level = before_take_level;
+		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
 		clear_is_empty_piece = true;
 		int played_stage_number = mySD->getSilType();
@@ -662,14 +664,14 @@ bool PuzzleScene::init()
 		
 		if(!mySGD->isClearPiece(mySD->getSilType()))
 		{
-			t_history.is_clear[take_level-1] = true;
+			t_history.is_clear[before_take_level-1] = true;
 			t_history.clear_count = t_history.try_count;
 			
 			is_change_history = true;
 		}
-		else if(!t_history.is_clear[take_level-1])
+		else if(!t_history.is_clear[before_take_level-1])
 		{
-			t_history.is_clear[take_level-1] = true;
+			t_history.is_clear[before_take_level-1] = true;
 			
 			is_change_history = true;
 		}
