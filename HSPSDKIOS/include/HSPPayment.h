@@ -18,9 +18,6 @@
 
 + (BOOL)handleOpenURL:(NSURL*)url;
 
-+ (void)redeemWithCode:(NSString*)code
-	 completionHandler:(void (^)(HSPError *error))completionHandler;
-
 /**
  * @brief Requests the server to purchase a specific product.
  * @param productId Product ID to purchase.
@@ -54,7 +51,7 @@
  * @param products List of product information. Array of SKProduct objects.
  * @param error Error.<br>If successful, the error code is 0.
  */
-+ (void)productsRequestWithIds:(NSSet *)productIds
++ (void)productsRequestWithIds:(NSSet*)productIds
 			 completionHandler:(void (^)(NSArray* products, HSPError *error))completionHandler;
 
 

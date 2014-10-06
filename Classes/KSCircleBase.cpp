@@ -20,7 +20,7 @@ bool KSCircleBase::init(const string& ccbiName)
 	////////////////////////////////////// by hs.k
 	string ccbiname2 = ccbiName;
 	if(ccbiName.length()<3) {
-		ccbiname2="cherry";
+		ccbiname2="boss_snake";
 	}
 	////////////////////////////////////////////
 	

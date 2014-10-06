@@ -70,6 +70,11 @@
 #endif
 }
 
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation
+{
+	return UIInterfaceOrientationLandscapeLeft;
+}
+
 - (BOOL) shouldAutorotate {
     return YES;
 }

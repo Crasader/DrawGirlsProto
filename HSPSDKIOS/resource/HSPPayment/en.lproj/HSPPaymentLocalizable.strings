@@ -18,6 +18,7 @@
 "network status is not stable"="The network is unstable. Please try again later.";
 "transaction is not finished yet"="You already have an active Payment window. Please close the app and try again if the problem continues.";
 "payment is cancelled"="You canceled your purchase.";
+"gree payment is cancelled"="You canceled your item purchase.";
 "device is not allowed to make purchase"="The In-Game perchases option is disabled. Please change the setting.";
 "appstore is under maintenance"="AppStore is under maintenance. Please try again later.";
 "payment success"="The transaction is completed.";

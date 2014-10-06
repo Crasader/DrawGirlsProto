@@ -18,6 +18,7 @@
 "network status is not stable"="ネットワーク接続が不安定です。\nしばらくしてから再度お試しください。";
 "transaction is not finished yet"="他の決済が進行中です。既存の画面を閉じて再度お試しください。(この問題が続く場合、アプリを完全に終了してから再起動してください。)";
 "payment is cancelled"="ご購入がキャンセルされました。";
+"gree payment is cancelled"="アイテム購入がキャンセルされました。";
 "device is not allowed to make purchase"="端末の設定メニューから[一般]>[機能制限]>[App内での購入]設定がオンであることをお確かめの上、再度お試しください。";
 "appstore is under maintenance"="AppStoreがメンテナンス中です。しばらくしてから再度お試しください。";
 "payment success"="決済が完了されました。";

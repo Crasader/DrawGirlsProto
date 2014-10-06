@@ -49,7 +49,7 @@ static AppDelegate s_sharedApplication;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 
     // Override point for customization after application launch.
-    hspConnector::get()->setupHSPonIOS(10226, "SKDRAWGIRLS", "1.0.0", launchOptions);
+    hspConnector::get()->setupHSPonIOS(10331, "SKSUMRAN", "1.0.0", launchOptions);
 	
 	
 		[FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];

@@ -44,9 +44,9 @@
  */
 typedef enum
 {
-    HSP_OAUTHPROVIDER_TWITTER = 0,  /**< Twitter. */
-    HSP_OAUTHPROVIDER_MIXI,			/**< Mixi. */
-    HSP_OAUTHPROVIDER_FACEBOOK,     /**< Facebook. */
+	HSP_OAUTHPROVIDER_TWITTER = 0,  /**< Twitter. */
+	HSP_OAUTHPROVIDER_MIXI,			/**< Mixi. */
+	HSP_OAUTHPROVIDER_FACEBOOK,     /**< Facebook. */
 	HSP_OAUTHPROVIDER_YAHOO,		/**< Yahoo. */
 	HSP_OAUTHPROVIDER_GOOGLE,		/**< Google. */
 	HSP_OAUTHPROVIDER_HANGAME,		/**< Hangame. */
@@ -57,6 +57,10 @@ typedef enum
 	HSP_OAUTHPROVIDER_HANGAME_EX,	/**< Hangame_ex. */
 	HSP_OAUTHPROVIDER_GSQUARE,		/**< GSquare. */
 	HSP_OAUTHPROVIDER_POKETROKET,	/**< pocketroket. */
+	HSP_OAUTHPROVIDER_NEID,         /**< NEID. */
+	HSP_OAUTHPROVIDER_GUEST,        /**< Guest. */
+	HSP_OAUTHPROVIDER_WEIBO,		/**< Weibo. */
+	HSP_OAUTHPROVIDER_GAMECENTER,	/**< Apple Game Center. */
 } HSPOAuthProvider;
 
 /**
@@ -64,9 +68,34 @@ typedef enum
  */
 typedef enum
 {
-    HSP_MAPPINGTYPE_HANGAME = 0,	/**< Hangame mapping type. */
-    HSP_MAPPINGTYPE_EMAIL,			/**< Email mapping type. */
+	HSP_MAPPINGTYPE_HANGAME = 0,	/**< Hangame mapping type. */
+	HSP_MAPPINGTYPE_EMAIL,			/**< Email mapping type. */
+	HSP_MAPPINGTYPE_FACEBOOK,       /**< Facebook mapping type. */
+	HSP_MAPPINGTYPE_TWITTER,        /**< Twitter mapping type. */
+	HSP_MAPPINGTYPE_GAMECENTER,		/**< Game Center mapping type. */
 } HSPMappingType;
+
+/**
+ * @brief Deals with Login Profile.
+ */
+@interface HSPLoginProfile : NSObject
+{
+	NSString*		_nickname;
+	NSString*		_profileImageUrl;
+}
+
+/**
+ * @brief nickname.
+ */
+@property(nonatomic, retain)		NSString*		nickname;
+
+/**
+ * @brief profile image url.
+ */
+@property(nonatomic, retain)		NSString*		profileImageUrl;
+
+@end
+
 
 /**
  * @brief Deals with OAuthData that needs for OAuth Login.
@@ -415,6 +444,31 @@ typedef enum
 - (void)addAfterMappingToAccountListener:(void (^)())listener;
 
 /**
+ * @brief set a handler to be called to set login profile on the way to login.
+ * You can change the login profile data;
+ *
+ * @param handler A handler.
+ *
+ * @code
+ * [[HSPCore sharedHSPCore] setLoginProfileHandler:^(HSPLoginProfile* loginProfile) {
+ *      [loginProfile setNickname:@"PIG"];
+ *		[loginProfile setProfileImageUrl:@""];
+ * }];
+ * @endcode
+ * @serviceDomain KAKAOGAME
+ */
+- (void)setLoginProfileHandler:(void (^)(HSPLoginProfile* loginProfile))handler;
+
+/**
+ * @brief Set the gree delegate.
+ *
+ * @param delegate A delegate.
+ * @endcode
+ * @serviceDomain GREEGAME
+ */
+- (void)setGreeDelegate:(id)delegate;
+
+/**
  * @brief Attempts to log in the HSP server.<br>
  * If logged in before, HSP attempts to log in the server with the same account automatically. If it succeeds, HSP gets the login result through the added handler. If it fails, HSP attempts to log in manually depending on the value of manualLogin; this process needs ID and password.<br>
  * After the login result is returned through the handler, you can use the 'state' function to analyze the current state and handle exceptions.
@@ -446,10 +500,33 @@ typedef enum
  * @brief Attempts to log with oAuth Data in the HSP server.<br>
  *
  * @param oAuthProvider OAuth Provider.
+ * @param completionHandler Is called when a response to the request to log in is received from the server.
+ *
+ * This block needs the following parameters:
+ * @param playable "playable" value of LaunchingService (LNC).
+ * @param error Error.<br>If the funcion succeeds, this value is 0.
+ *
+ * @code
+ *
+ * [[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GSQUARE
+ *								 completionHandler:^(BOOL playable, HSPError *error) {
+ *										NSLog(@"[LOGIN TEST] Login With GSquare Access Token : %@", error);
+ * }];
+ * @endcode
+ * @serviceDomain ALL
+ */
+- (void)loginWithOAuthProvider:(HSPOAuthProvider)oAuthProvider
+			 completionHandler:(void (^)(BOOL playable, HSPError *error))completionHandler;
+
+/**
+ * @brief Attempts to log with oAuth Data in the HSP server.<br>
+ *
+ * @param oAuthProvider OAuth Provider.
  * @param oAuthData data for OAuth login.
  * @param completionHandler Is called when a response to the request to log in is received from the server.
  *
  * This block needs the following parameters:
+ * @param playable "playable" value of LaunchingService (LNC).
  * @param error Error.<br>If the funcion succeeds, this value is 0.
  *
  * @code
@@ -460,7 +537,7 @@ typedef enum
  *
  * [[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GSQUARE
  *										 oAuthData:oAuthData
- *								 completionHandler:^(HSPError *error) {
+ *								 completionHandler:^(BOOL playable, HSPError *error) {
  *										NSLog(@"[LOGIN TEST] Login With GSquare Access Token : %@", error);
  * }];
  * @endcode
@@ -468,7 +545,7 @@ typedef enum
  */
 - (void)loginWithOAuthProvider:(HSPOAuthProvider)oAuthProvider
 					 oAuthData:(HSPOAuthData*)oAuthData
-			 completionHandler:(void (^)(HSPError *error))completionHandler;
+			 completionHandler:(void (^)(BOOL playalbe, HSPError *error))completionHandler;
 
 /**
  * @brief Attempts to log by guest in the HSP server.<br>
@@ -477,10 +554,11 @@ typedef enum
  * @param completionHandler Is called when a response to the request to log in is received from the server.
  *
  * This block needs the following parameters:
+ * @param playable "playable" value of LaunchingService (LNC).
  * @param error Error.<br>If the funcion succeeds, this value is 0.
  *
  * @code
- * [[HSPCore sharedHSPCore] loginByLoginType:HSP_LOGIN_TYPE_GSQUARE completionHandler:^(HSPError *error) {
+ * [[HSPCore sharedHSPCore] loginByLoginType:HSP_LOGIN_TYPE_GSQUARE completionHandler:^(BOOL playable, HSPError *error) {
  * 	if ( [error isSuccess] == YES )
  * 	{
  * 		NSLog(@"Logged in successfully");
@@ -493,7 +571,7 @@ typedef enum
  * @serviceDomain GLOBALGAME_SG
  */
 - (void)loginByLoginType:(HSPLoginType)loginType
-	   completionHandler:(void (^)(HSPError *error))completionHandler;
+	   completionHandler:(void (^)(BOOL playable, HSPError *error))completionHandler;
 
 /**
  * @brief Attempts to log out the HSP server.
@@ -613,7 +691,7 @@ typedef enum
 
 /**
  * @brief Requests the server to map the logged-in member numbers with other service accounts only for HANGAME domain.<br>
- * In Korea & Japna, map with the Hangame accounts or email account.
+ * In Korea & Japan, map with the Hangame accounts or email account.
  *
  * @param completionHandler Is called when a response to the request to map with other service accounts is received from the server.
  *
@@ -638,6 +716,20 @@ typedef enum
 							 completionHandler:(void (^)(HSPError *error))completionHandler;
 
 /**
+ * @brief Requests the server to re-map the logged-in member numbers with other service accounts only for TOASTGAME-US domain.<br>
+ *
+ * @param completionHandler Is called when a response to the request to re-map with other service accounts is received from the server.
+ *
+ * This block needs the following parameter:
+ * @param error Error.<br>If successful, the error code is 0.
+ * @param memberNo member number from previous mapping
+ *
+ * @serviceDomain TOASTGAME
+ */
+- (void)requestMappingToAccountWithMappingType:(HSPMappingType)mappingType
+									 overwrite:(BOOL)overwrite
+							 completionHandler:(void (^)(HSPError *error, int64_t memberNo))completionHandler;
+/**
  * @brief Requests Universal Time Coordinated (UTC) of the HSP server currently connected.<br>
  * This function is used to know the time synchronized with the server, since the time on a device can be updated by a user.
  * 
@@ -660,6 +752,30 @@ typedef enum
  * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
  */
 - (void)requestServerUTCWithCompletionHandler:(void (^)(NSDate* date, HSPError *error))completionHandler;
+
+/**
+ * @brief Requests Change current guest memberNo in HANGAME_JP Domain.<br>
+ * This function is used to change guest memberNo in Guest Login User. If you use this api in Hangame login User, the error will be returned.
+ *
+ * @param completionHandler Is called when a response to the request for UTC is received from the server.
+ *
+ * This block needs the following parameter:
+ * @param error Error.<br>If successful, the error code is 0.
+ *
+ * @code
+ * [[HSPCore sharedHSPCore] requestChangeGuestMemberNoWithCompletionHandler:^(HSPError* error) {
+ * 	if ( [error isSuccess] == YES )
+ * 	{
+ * 		NSLog(@"Success to change memberNo.);
+ * 	} else
+ * 	{
+ * 		NSLog(@"Failed to change memberNo(%@)", error);
+ * 	}
+ * }];
+ * @endcode
+ * @serviceDomain HANGAME_JP
+ */
+- (void)requestChangeGuestMemberNoWithCompletionHandler:(void (^)(HSPError *error))completionHandler;
 
 /**
  * @brief Returns an authentication ticket. <br>
@@ -711,7 +827,7 @@ typedef enum
  *
  * @return login type.
  * @see HSPLoginType
- * @serviceDomain GLOBALGAME_SG
+ * @serviceDomain KAKAOGAME GLOBALGAME_SG GLOBALGAME_CN
  */ 
 - (HSPLoginType)loginType;
 
@@ -740,6 +856,32 @@ typedef enum
  * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
  */
 - (int8_t)memberAge;
+
+/**
+ * @brief Returns my member ID.
+ *
+ * @return Member ID. Returns nil if not registered.
+ *
+ * @code
+ * NSString* memberID = [HSPCore sharedHSPCore].memberID;
+ * NSLog(@"Member ID = %@", memberID);
+ * @endcode
+ * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
+ */
+- (NSString*)memberID;
+
+/**
+ * @brief Returns facebook accessToken.
+ *
+ * @return facebook accessToken. Returns nil if not logged in with facebook.
+ *
+ * @code
+ * NSString* accessToken = [[HSPCore sharedHSPCore] getOAuthAccessToken];
+ * NSLog(@"accessToken = %@", accessToken);
+ * @endcode
+ * @serviceDomain HANGAME GLOBALGAME_SG TOASTGAME
+ */
+- (NSString*)getOAuthAccessToken;
 
 @end
 

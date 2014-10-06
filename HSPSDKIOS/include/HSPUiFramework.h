@@ -95,7 +95,8 @@ typedef enum
  * @param selectedItem GNBItem for which the event occurs [in]
  * @see HSPUiGNBItem
  */
-- (void)didItemSelected:(id<HSPUiGNBView>)gnbView selectedItem:(id<HSPUiGNBItem>)selectedItem;
+- (void)didItemSelected:(id<HSPUiGNBView>)gnbView
+		   selectedItem:(id<HSPUiGNBItem>)selectedItem;
 
 @end
 
@@ -239,7 +240,8 @@ typedef enum
  * @return HSPUiViewFrame Instance.
  * @see HSPUiGNBItem
  */
-- (id)initWithGNBItems:(NSArray*)gnbItems selectedGnbItem:(id<HSPUiGNBItem>)selected;
+- (id)initWithGNBItems:(NSArray*)gnbItems
+	   selectedGnbItem:(id<HSPUiGNBItem>)selected;
 
 /**
  * @brief Creates internal components of HSPUiViewFrame.
@@ -252,7 +254,8 @@ typedef enum
  * @param animate Flag to set whether to apply the animation effect when the view controller is applied to the client area of view frame [in]
  * @see HSPUiViewController
  */
-- (void)attachViewFrameToViewController:(HSPUiViewController*)viewController animate:(BOOL)animate;
+- (void)attachViewFrameToViewController:(HSPUiViewController*)viewController
+								animate:(BOOL)animate;
 
 /**
  * @brief Detaches the view controller applied to HSPUiViewFrame.
@@ -302,14 +305,16 @@ typedef enum
  * @param show Whether to show GNB (YES: show, NO: not show).
  * @param animate Whether to apply animation effect (YES: apply, NO: not apply).
  */
-- (void)showGNB:(BOOL)show animate:(BOOL)animate;
+- (void)showGNB:(BOOL)show
+		animate:(BOOL)animate;
 
 /**
  * Sets whether to show top bar on the current view frame.
  * @param show Whether to show top bar (YES: show, NO: not show).
  * @param animate Whether to apply animation effect (YES: apply, NO: not apply).
  */
-- (void)showTopBar:(BOOL)show animate:(BOOL)animate;
+- (void)showTopBar:(BOOL)show
+		   animate:(BOOL)animate;
 
 @end
 
@@ -326,7 +331,9 @@ typedef enum
  * @return delegate Delegate to receive events from HSPUiViewController.
  * @see HSPUiViewControllerDelegate
  */
-- (id)initWithGNBItems:(NSArray*)gnbItems rootUri:(HSPUri*)uri delegate:(id<HSPUiViewControllerDelegate>)delegate;;
+- (id)initWithGNBItems:(NSArray*)gnbItems
+			   rootUri:(HSPUri*)uri
+			  delegate:(id<HSPUiViewControllerDelegate>)delegate;;
 
 /**
  * @brief Checks if GNB is shown on the current view frame.
@@ -345,14 +352,16 @@ typedef enum
  * @param show Whether to show GNB (YES: show, NO: not show).
  * @param animate Whether to apply animation effect (YES: apply, NO: not apply)
  */
-- (void)showGNB:(BOOL)show animate:(BOOL)animate;
+- (void)showGNB:(BOOL)show
+		animate:(BOOL)animate;
 
 /**
  * @brief Sets whether to show top bar on the current view frame.
  * @param show whether to show top bar (YES: show, NO: not show).
  * @param animate Whether to apply animation effect (YES: apply, NO: not apply)
  */
-- (void)showTopBar:(BOOL)show animate:(BOOL)animate;
+- (void)showTopBar:(BOOL)show
+		   animate:(BOOL)animate;
 
 /**
  * @brief Creates a top bar button instance for the pentagonal button to be on the top bar. 
@@ -361,7 +370,9 @@ typedef enum
  * @param selector Selector to call when the top bar button is clicked.
  * @return UIBarButtonItem* Instance of the created top bar button
  */
-- (UIBarButtonItem*)prevBarButtonItem:(NSString*)title target:(id<NSObject>)target selector:(SEL)selector;
+- (UIBarButtonItem*)prevBarButtonItem:(NSString*)title
+							   target:(id<NSObject>)target
+							 selector:(SEL)selector;
 
 /**
  * @brief Creates a top bar button instance for the quadrilateral button to be on the top bar.
@@ -370,7 +381,9 @@ typedef enum
  * @param selector Selector to call when the top bar button is clicked.
  * @return UIBarButtonItem* Instance of the created top bar button
  */
-- (UIBarButtonItem*)rectBarButtonItem:(NSString*)title target:(id<NSObject>)target selector:(SEL)selector;
+- (UIBarButtonItem*)rectBarButtonItem:(NSString*)title
+							   target:(id<NSObject>)target
+							 selector:(SEL)selector;
 
 /**
  * @brief Gets the view frame instance applied to the current container.
@@ -420,7 +433,8 @@ typedef enum
  * @param animate Whether to apply the animation effect [in]
  * @see HSPUiViewController
  */
-- (void)pushHSPViewController:(HSPUiViewController*)viewController animate:(BOOL)animate;
+- (void)pushHSPViewController:(HSPUiViewController*)viewController
+					  animate:(BOOL)animate;
 
 /**
  * @brief Removes a view controller from the stact of HSPUiViewContainer.
@@ -435,7 +449,8 @@ typedef enum
  * @param animate Whether to apply the animation effect [in]
  * @see HSPUiViewController
  */
-- (void)popToHSPViewController:(HSPUiViewController*)viewController animate:(BOOL)animate;
+- (void)popToHSPViewController:(HSPUiViewController*)viewController
+					   animate:(BOOL)animate;
 
 /**
  * @brief Re-arranges the view frame of HSPUiViewContainer.
