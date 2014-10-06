@@ -838,7 +838,7 @@ void GraphDog::receivedCommand(float dt)
 					//TRACE();
 					CommandType ct = iter2->second;
 					//TRACE();
-					Json::Value oParam =  ct.paramStr;
+					Json::Value oParam =  GraphDogLib::StringToJsonObject(ct.paramStr);
 					
 					//TRACE();
 					if(ct.action=="login"){
@@ -891,12 +891,18 @@ void GraphDog::receivedCommand(float dt)
 					}
 					
 					
+					
+					int resultCode = resultobj.get(iter2->first.c_str(),Json::Value(Json::objectValue)).get("result",Json::Value(Json::objectValue)).get("code", 0).asInt();
+					CCLOG("result check1");
+					bool check1 = !oParam.get("retry", false).asBool();
+					CCLOG("result check2");
+					bool check2 = resultCode==GDSUCCESS;
+					CCLOG("result check3");
+					bool check3 = resultCode==oParam.get("passCode", -1).asInt();
+					CCLOG("result check4");
+					
 					//TRACE();
-					if(!oParam.get("retry", false).asBool() ||
-						 resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()==GDSUCCESS ||
-						 oParam.get("passCode", -1).asInt()==resultobj[iter2->first.c_str()]["result"].get("code", 0).asInt()){
-						
-						
+					if(check1 || check2 || check3){
 						//TRACE();
 						CCLOG("graphdog:: call func for %s",ct.action.c_str());
 						if(ct.func!=NULL){
