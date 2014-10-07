@@ -774,8 +774,8 @@ void BigSaw::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSi
 
 	float baseAngle;
 
-	if(distance < 200)			baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%91 - 45;
-	else						baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f + rand()%31 - 15;
+	if(distance < 200)			baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;// + rand()%91 - 45;
+	else						baseAngle = atan2f(subPosition.y, subPosition.x)/M_PI*180.f;// + rand()%31 - 15;
 
 
 	int left = t_tmCnt / 2;
@@ -784,7 +784,7 @@ void BigSaw::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSi
 	for(int i=1; i<=left; i++)
 	{
 		float t_angle = baseAngle - i*unitDegree;
-		if(t_type==14)t_angle=baseAngle;//105패턴은 조준사격
+		if(t_type==11)t_angle=baseAngle;//105패턴은 조준사격
 		if(t_angle >= 180)		t_angle -= 360;
 		if(t_angle < -180)		t_angle += 360;
 
@@ -794,7 +794,7 @@ void BigSaw::myInit( CCPoint t_sp, int t_type, float t_speed, int t_tmCnt, IntSi
 	}
 	for (int i=0; i<right; i++) {
 		float t_angle = baseAngle + i*unitDegree;
-		if(t_type==14)t_angle=baseAngle; //105패턴은 조준사격
+		if(t_type==11)t_angle=baseAngle; //105패턴은 조준사격
 		if(t_angle >= 180)		t_angle -= 360;
 		if(t_angle < -180)		t_angle += 360;
 
