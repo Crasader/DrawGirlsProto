@@ -31,13 +31,13 @@ void ComboView::changeCombo (int combo)
 {
 	combo_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo)->getCString());
 	shadow_label->setString(CCString::createWithFormat("%s%d", myLoc->getLocalForKey(LK::kMyLocalKey_combo), combo)->getCString());
-	if(shadow_label->getAnchorPoint().equals(ccp(1,0.5f)))
+	if(!mySGD->is_endless_mode)
 	{
 		shadow_label->setPosition(ccp(combo_label->getContentSize().width, combo_label->getContentSize().height/2.f) + ccp(0, -4));
 	}
 	else
 	{
-		shadow_label->setPosition(ccpFromSize(combo_label->getContentSize()) + ccp(0,-4));
+		shadow_label->setPosition(ccpFromSize(combo_label->getContentSize()/2.f) + ccp(0,-4));
 	}
 //	if(!mySGD->is_endless_mode)
 //		combo_front->setPosition(ccp(combo_label->getPositionX()-combo_label->getContentSize().width-5,0));
