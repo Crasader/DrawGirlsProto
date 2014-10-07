@@ -1762,7 +1762,7 @@ void FriendPopup::setVoteFriendMenu()
 					TRACE();
 					CCScale9Sprite* searchButton = CCScale9Sprite::create("subbutton_purple3.png");
 					CommonButton* searchBtn = CommonButton::create(CCSprite::create("subbutton_purple3.png"), m_touchPriority);
-					searchBtn->setTitle(getLocal(LK::kFriendSearch));
+					searchBtn->setTitle(getLocal(LK::kFriendConfirm));
 					searchBtn->setTitleSize(13.f);
 					searchBtn->setPosition(ccp(363.0, 120));
 					m_friendAddContainer->addChild(searchBtn);
