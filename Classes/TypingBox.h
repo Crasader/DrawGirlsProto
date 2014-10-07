@@ -26,7 +26,12 @@ enum KindTutorialType
 	kUI_achieve,
 	kUI_card,
 	kUI_diary,
-	kUI_rank
+	kUI_rank,
+	kNewMission_percent,
+	kNewMission_score,
+	kNewMission_combo,
+	kNewMission_gold,
+	kNewMission_turn
 };
 
 class TouchSuctionLayer;

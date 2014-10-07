@@ -261,7 +261,7 @@ void IntroducerPopup::resultUserData(Json::Value result_data)
 		param["content"] = myLoc->getLocalForKey(LK::kMyLocalKey_introducerInputReward);
 		myHSP->command("saveIntroducer", param, json_selector(this, IntroducerPopup::resultSaveIntroducer));
 	}
-	else if(result_data["result"]["code"].asInt() == GDDONTFIND)
+	else if(result_data["result"]["code"].asInt() == GDDONTFINDUSER)
 	{
 		mySGD->network_check_cnt = 0;
 		

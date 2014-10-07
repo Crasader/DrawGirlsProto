@@ -748,6 +748,120 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_percent))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_percent, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial24), end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial23), end_func1);
+																  }));
+		}
 	}
 	else if(mission_type == kCLEAR_score)
 	{
@@ -757,6 +871,120 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_score))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_score, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial26), end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial25), end_func1);
+																  }));
+		}
 	}
 	else if(mission_type == kCLEAR_combo)
 	{
@@ -766,6 +994,120 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_combo))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_combo, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial28), end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial27), end_func1);
+																  }));
+		}
 	}
 	else if(mission_type == kCLEAR_gold)
 	{
@@ -775,6 +1117,120 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_gold))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_gold, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial30), end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial29), end_func1);
+																  }));
+		}
 	}
 	else if(mission_type == kCLEAR_turns)
 	{
@@ -784,6 +1240,120 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_turn))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_turn, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			
+			CCNode* scenario_node = CCNode::create();
+			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			loading_tip_back->addChild(scenario_node, 2);
+			
+			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			if(screen_scale_x < 1.f)
+				screen_scale_x = 1.f;
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			
+			
+			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			ikaruga->setAnchorPoint(ccp(0,0));
+			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			scenario_node->addChild(ikaruga, 1);
+			
+			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			katsuragi->setAnchorPoint(ccp(1,0));
+			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			katsuragi->setVisible(false);
+			scenario_node->addChild(katsuragi, 1);
+			
+			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			typing_box->setHide();
+			scenario_node->addChild(typing_box, 2);
+			
+			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			scenario_node->addChild(typing_box2, 2);
+			
+			typing_box2->setTouchOffScrollAndButton();
+			typing_box2->setVisible(false);
+			typing_box2->setTouchSuction(false);
+			
+			typing_box->showAnimation(0.3f);
+			
+			function<void()> end_func2 = [=]()
+			{
+				addChild(KSTimer::create(0.1f, [=]()
+										 {
+											 scenario_node->removeFromParent();
+										 }));
+			};
+			
+			function<void()> end_func1 = [=]()
+			{
+				ikaruga->setVisible(false);
+				katsuragi->setVisible(true);
+				
+				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																	  }, [=](float t)
+																	  {
+																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+																		  
+																		  typing_box2->setVisible(true);
+																		  typing_box2->setTouchSuction(true);
+																		  
+																		  typing_box->setTouchSuction(false);
+																		  
+																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial32), end_func2);
+																	  }));
+				typing_box->setTouchOffScrollAndButton();
+				typing_box->setVisible(false);
+			};
+			
+			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																  }, [=](float t)
+																  {
+																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+																	  
+																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial31), end_func1);
+																  }));
+		}
 	}
 	
 //	mission_back->setScale(1.5f);
@@ -1127,9 +1697,12 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		
 		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 		
-		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
-		content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
-		loading_tip_back->addChild(content_label);
+		if(back_number != 6)
+		{
+			KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
+			content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
+			loading_tip_back->addChild(content_label);
+		}
 
 		
 //		string tip_filename = "loading_tip_";
@@ -1167,13 +1740,14 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	CCNode* loading_tip_node = CCNode::create();
 	
 	string back_img_filename;
+	int rand_value;
 	if(myDSH->getBoolForKey(kDSH_Key_isSafetyMode))
 	{
 		back_img_filename = "main_back.png";
 	}
 	else
 	{
-		int rand_value = rand()%5+1;
+		rand_value = rand()%6+1;
 		mySGD->loading_tip_back_number = rand_value;
 		
 		back_img_filename = ccsf("loading_%d.png", rand_value);
@@ -1240,9 +1814,12 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
-	content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
-	loading_tip_back->addChild(content_label);
+	if(rand_value != 6)
+	{
+		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
+		content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
+		loading_tip_back->addChild(content_label);
+	}
 	
 //	string tip_filename = "loading_tip_";
 //	if(selected_loading_tip == 0)
@@ -1382,21 +1959,21 @@ void LoadingTipScene::showButton()
 {
 	int mission_type = NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i);
 	
-	if(mission_type == kCLEAR_bossLifeZero && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_bossLifeZero))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_subCumberCatch && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_subCumberCatch))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_bigArea && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_bigArea))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_itemCollect && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_itemCollect))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_perfect && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_perfect))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_timeLimit && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_timeLimit))
-		onMinimumTime();
-	else if(mission_type == kCLEAR_sequenceChange && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_sequenceChange))
-		onMinimumTime();
-	else
+//	if(mission_type == kCLEAR_bossLifeZero && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_bossLifeZero))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_subCumberCatch && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_subCumberCatch))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_bigArea && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_bigArea))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_itemCollect && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_itemCollect))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_perfect && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_perfect))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_timeLimit && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_timeLimit))
+//		onMinimumTime();
+//	else if(mission_type == kCLEAR_sequenceChange && myDSH->getBoolForKey(kDSH_Key_mission_willNeverWatch_sequenceChange))
+//		onMinimumTime();
+//	else
 	{
 		ok_img->setVisible(true);
 		if(no_img)
