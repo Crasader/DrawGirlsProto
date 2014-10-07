@@ -1878,18 +1878,18 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	}
 	else
 	{
-		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
 		rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
-		rank_label->setPosition(ccp(35,rank_position.y+8));
+		rank_label->setPosition(rank_position);//ccp(35,rank_position.y+8));
 		list_cell_case->addChild(rank_label);
 	}
 	
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	if(idx >= 3)
-		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
-	else
+//	if(idx >= 3)
+//		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
+//	else
 		selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);

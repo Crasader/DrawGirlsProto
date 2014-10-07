@@ -5596,6 +5596,11 @@ void MainFlowScene::countingMessage()
 													is_not_first = true;
                                                     
 													mySGD->initTodayMission(result_data);
+													
+													if(result_data["isFirstCheck"].asBool())
+													{
+														mySGD->is_today_mission_first = true;
+													}
 												}
 											}));
 	}
