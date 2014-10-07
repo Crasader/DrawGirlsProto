@@ -54,7 +54,7 @@ public:
 		}
 		
 		isAdd=false;
-		suction = TouchSuctionLayer::create(-10000);
+		suction = TouchSuctionLayer::create(-9998);
 		addChild(suction);
 		
 		suction->setTouchEnabled(true);
