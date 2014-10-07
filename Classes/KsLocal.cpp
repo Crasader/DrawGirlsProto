@@ -40,7 +40,7 @@ const char* KsLocal::getSupportLocalCode()
 
 const char* KsLocal::getLocalForKey( LK key )
 {
-	languageType = getSupportLocalCode();
+	languageType = "ko";// getSupportLocalCode();
 	
 	vector<string> langTypes;
 	langTypes.push_back(languageType);
