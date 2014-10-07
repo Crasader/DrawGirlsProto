@@ -22,36 +22,50 @@ public class PurchaseCBImpl implements PurchaseCB {
 		
 	}
     public void onPurchase(HSPResult hspResult, Object context) {
-        if (hspResult == null) {
+
+    	Log.i("litqoo.sumran",hspResult.toString());
+    	
+    	if (hspResult == null) {
+        	Log.i("litqoo.sumran","return null");
             return;
         }
 
         JSONObject r = new JSONObject();
+        
+
         if (hspResult.getCode() == PaymentErrorCode.PURCHASE_SUCCESS) {
-            // °áÁ¦ ¼º°ø
-//        	Log.d("litqoo", "°áÁ¦ ¼º°ø");
+        	Log.i("litqoo.sumran","it's success");
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//        	Log.d("litqoo", "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½");
 //        	hspResult.
         	try {
 				r.put("issuccess", 1);
 			} catch (JSONException e) {
+	        	Log.i("litqoo.sumran","it's success2");
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
         	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
         } else {
-            // °áÁ¦ ½ÇÆÐ
-//        	Log.d("litqoo", "°áÁ¦ ½ÇÆÐ" + Integer.toString(hspResult.getCode()));
+        	Log.i("litqoo.sumran","it's fail");
+        	// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+//        	Log.d("litqoo", "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½" + Integer.toString(hspResult.getCode()));
         	try {
 				r.put("issuccess", 0);
 			} catch (JSONException e) {
 				// TODO Auto-generated catch block
+	        	Log.i("litqoo.sumran","it's fail2");
 				e.printStackTrace();
 			}
+        	
+            
+            m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
+            	public void run() {
+            		hspConnector.SendResult(this.delekey,this.totalSource);
+            	}
+            });
         }
-        m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
-        	public void run() {
-        		hspConnector.SendResult(this.delekey,this.totalSource);
-        	}
-        });
+        
+
     }
 }

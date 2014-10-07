@@ -26,7 +26,6 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 	public void onRequestItemDelivery(HSPResult hspResult, long transactionId, List<HSPItemInfo> itemInfoList, String receipt)
 	{
 		JSONObject r = new JSONObject();
-		
 		if (hspResult.isSuccess()) {
 			Log.d("litqoo", "success on RequestItemDeli");
 			try {
@@ -37,13 +36,13 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 				e.printStackTrace();
 			}
 			if (itemInfoList.size() > 0) {
-				Log.d("promo", "¹ÞÀº ¾ÆÅÛÀÌ ÀÖÀ½.");
-				// ¹ÞÀº ¾ÆÀÌÅÛÀÌ ÀÖÀ½                
-				// ¾ÆÀÌÅÛ Àû¿ë¹ý1: Game Server°¡ ÀÖÀ¸¸é °ÔÀÓ ¼­¹ö¿¡ ¾ÆÀÌÅÛ Àû¿ë ¿äÃ» (Game Server´Â Item ¼­¹ö¿¡ receipt¸¦ ÀÌ¿ëÇØ¼­ °ËÁõÀ» ÇØ¾ßÇÔ)
-				// ¾ÆÀÌÅÛ Àû¿ë¹ý2: Standalone Çü °ÔÀÓÀº °ÔÀÓÅ¬¶óÀÌ¾ðÆ® ÀÚÃ¼ÀûÀ¸·Î ¾ÆÀÌÅÛ Àû¿ë (ItemInfoÀÇ itemSequence´Â ÀÚÃ¼ÀûÀ¸·Î Áßº¹Ã³¸®¸¦ ÇØ¾ßÇÔ)
+				Log.d("promo", "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.");
+				// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½                
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½1: Game Serverï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½Ã» (Game Serverï¿½ï¿½ Item ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ receiptï¿½ï¿½ ï¿½Ì¿ï¿½ï¿½Ø¼ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½)
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½2: Standalone ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Å¬ï¿½ï¿½ï¿½Ì¾ï¿½Æ® ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ (ItemInfoï¿½ï¿½ itemSequenceï¿½ï¿½ ï¿½ï¿½Ã¼ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ßºï¿½Ã³ï¿½ï¿½ï¿½ï¿½ ï¿½Ø¾ï¿½ï¿½ï¿½)
 
-				//                                                    applyItems(itemInfoList); //°ÔÀÓ¿¡¼­ ÀÚÃ¼ ±¸ÇöÇÔ
-				// ¾ÆÀÌÅÛ Àû¿ë ¿Ï·áÈÄ finishItemDelivery È£Ãâ
+				//                                                    applyItems(itemInfoList); //ï¿½ï¿½ï¿½Ó¿ï¿½ï¿½ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ï·ï¿½ï¿½ï¿½ finishItemDelivery È£ï¿½ï¿½
 //				ArrayList<Long> itemSeq = new ArrayList<Long>();
 				JSONArray jsonItemSeq = new JSONArray();
 				
@@ -59,10 +58,10 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq); // finishItemDelivery ´Â C++ ¿¡°Ô ¸Ã±è. 
+//				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq); // finishItemDelivery ï¿½ï¿½ C++ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã±ï¿½. 
 			}
 			else {
-				// ¹è¼ÛÇÒ »óÇ°ÀÌ ¾øÀ½
+				// ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ç°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 				try {
 					r.put("issuccess", 0);
 				} catch (JSONException e) {
@@ -78,9 +77,8 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// ¿äÃ» ½ÇÆÐ
+			// ï¿½ï¿½Ã» ï¿½ï¿½ï¿½ï¿½
 		}
-		Log.d("graphdog", "@@" + r.toString());
 		m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
 			@Override
 			public void run() {

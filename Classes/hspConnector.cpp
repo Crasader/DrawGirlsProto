@@ -59,38 +59,42 @@ extern "C"{
 	void Java_com_litqoo_lib_hspConnector_SendResultNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
 	{
 		CCLOG("sendresultnative1 %d", _key);
-		jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
+		jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_key);
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
 		string throwData = revStr;
 		
-		CCLOG("sendresultnative1");
-		jsonDelegator::get()->buff.append(throwData);
+		//CCLOG("sendresultnative1 - %s",delesel->result.c_str());
+		//CCLOG("sendresultnative2 - %s",throwData.c_str());
 		
+		if(throwData!=""){
+			delesel->result=delesel->result+throwData;
+		}
 		
-		CCLOG("sendresultnative3");
-		if(delesel.func!=NULL)
+	//	CCLOG("sendresultnative3 %s",throwData.c_str());
+		//CCLOG("sendresultnative3-1 %s",delesel->result.c_str());
+		
+		if(delesel->func!=NULL)
 		{
 			
 			CCLOG("sendresultnative4");
 			if(isFinish){
 				
-				CCLOG("sendresultnative5");
-				Json::Value resultData;
-				
+				//CCLOG("sendresultnative5 %s",delesel->result.c_str());
 				Json::Value resultObj;
 				Json::Reader rd;
-				rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
+				rd.parse(delesel->result.c_str(),resultObj);
 				
 				//
-				CCLOG("sendresultnative6");
-				resultObj["param"] = delesel.param;
-				resultObj["callback"] = delesel.callbackParam;
+				CCLOG("sendresultnative6-1");
+				resultObj["param"] = delesel->param;
+				CCLOG("sendresultnative6-2");
+				resultObj["callback"] = delesel->callbackParam;
+				CCLOG("sendresultnative6-3");
 				//((delesel.target)->*(delesel.selector))(resultObj);
-				delesel.func(resultObj);
+				delesel->func(resultObj);
 				
 				
-				jsonDelegator::get()->buff="";
 				
 				CCLOG("sendresultnative7");
 			}
@@ -106,26 +110,24 @@ extern "C"{
 	}
 	void Java_com_litqoo_lib_hspConnector_SendReactionNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
 	{
-		jsonDelegator::DeleSel delesel = jsonDelegator::get()->load(_key);
+		jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_key);
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
 		string throwData = revStr;
-		jsonDelegator::get()->buff.append(throwData);
-		if(delesel.func!=NULL)
+		delesel->result.append(throwData);
+		//CCLOG("sendresultnative3 %s",throwData.c_str());
+		if(delesel->func!=NULL)
 		{
 			if(isFinish)
 			{
-				Json::Value resultData;
+			//	CCLOG("sendreactionnative5 %s",delesel->result.c_str());
 				Json::Value resultObj;
 				Json::Reader rd;
-				rd.parse(jsonDelegator::get()->buff.c_str(),resultObj);
-				
-				//
-				resultObj["param"] = delesel.param;
-				resultObj["callback"] = delesel.callbackParam;
+				rd.parse(delesel->result.c_str(),resultObj);
+				resultObj["param"] = delesel->param;
+				resultObj["callback"] = delesel->callbackParam;
 				//((delesel.target)->*(delesel.selector))(resultObj);
-				delesel.func(resultObj);
-				jsonDelegator::get()->buff="";
+				delesel->func(resultObj);
 			}
 		}
 		
@@ -569,8 +571,8 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 			graphdog->setSocialID(hspids);
 		}
 		
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func)delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func)delsel->func(obj);
 		jsonDelegator::get()->remove(delekey);
 
 		//		}); 
@@ -763,9 +765,9 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelT
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func){
-			delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func){
+			delsel->func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
 		
@@ -934,9 +936,9 @@ void hspConnector::requestProductInfos(jsonSelType func)
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func){
-			delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func){
+			delsel->func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
 	};
@@ -997,9 +999,9 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func){
-			delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func){
+			delsel->func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
 	};
@@ -1086,9 +1088,9 @@ void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType 
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func){
-			delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func){
+			delsel->func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
 	};
@@ -1113,9 +1115,9 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	jsonSelType nextFunc = [=](Json::Value obj){
 		int delekey = dkey;
-		jsonDelegator::DeleSel delsel = jsonDelegator::get()->load(delekey);
-		if(delsel.func){
-			delsel.func(obj);
+		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+		if(delsel->func){
+			delsel->func(obj);
 		}
 		jsonDelegator::get()->remove(delekey);
 	};

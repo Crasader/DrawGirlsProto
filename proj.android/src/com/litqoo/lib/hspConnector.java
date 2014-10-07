@@ -440,7 +440,6 @@ public class hspConnector {
 			public void onProductInfos(List<HSPPaymentProductInfo> productInfos, HSPResult result) { 
 				JSONObject r = new JSONObject();
 				JSONArray jArray = new JSONArray();
-				
 				try {
 //					r.put("issuccess", true);
 					if (result.isSuccess()) {

@@ -36,6 +36,7 @@ public:
 		jsonSelType func;
 		Json::Value param;
 		Json::Value callbackParam;
+		string result;
 	};
 	
 	
@@ -58,8 +59,9 @@ public:
 		//temp.target = target;
 		//temp.selector = selector;
 		temp.func = func;
-		temp.param = param;
-		temp.callbackParam = callbackParam;
+		temp.param = (param==0)?Json::Value():param;
+		temp.callbackParam = (callbackParam==0)?Json::Value():callbackParam;
+		temp.result = "";
 		DeleSelTable[key] = temp;
 		return key;
 	}
@@ -68,11 +70,11 @@ public:
 		if(DeleSelTable.find(_key) != DeleSelTable.end())
 			DeleSelTable.erase(_key);
 	}
-	DeleSel load(int _key)
+	DeleSel* load(int _key)
 	{
 		if(DeleSelTable.find(_key) != DeleSelTable.end())
 		{
-			return DeleSelTable[_key];
+			return &(DeleSelTable[_key]);
 		}
 		else
 		{
@@ -80,7 +82,7 @@ public:
 			//_t.target = 0;
 			//_t.selector = 0;
 			_t.func=NULL;
-			return _t;
+			return &_t;
 		}
 	}
 	
@@ -97,15 +99,12 @@ private:
 	jsonDelegator()
 	{
 		key = 0;
-		buff="";
 	}
 	~jsonDelegator(){}
 private:
 	map<int, DeleSel> DeleSelTable;
 	int key;
-	
-public:
-	string buff;
+
 };
 
 
@@ -120,7 +119,7 @@ public:
 	}
 	
 	hspConnector(){
-		
+		string bt;
 	}
 	
 	Json::Value frineds;
