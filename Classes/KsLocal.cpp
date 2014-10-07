@@ -938,6 +938,16 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial20] = "게임 중에 아이템이 두 배로 더 많이\n나오도록 해주는 인법서군요.\n많은 도움이 될겁니다.";
 	obj[LK::kMyLocalKey_kindTutorial21] = "이건 자석인가?";
 	obj[LK::kMyLocalKey_kindTutorial22] = "네. 게임 중에 생기는 골드나 아이템을\n더 쉽게 먹을 수 있도록 도와주는\n아이템입니다.";
+	obj[LK::kMyLocalKey_kindTutorial23] = "획득해야 하는 영역이 바뀌었어요.";
+	obj[LK::kMyLocalKey_kindTutorial24] = "이정도 미션이야 껌이지!";
+	obj[LK::kMyLocalKey_kindTutorial25] = "일정 점수 이상을 기록해야 하는 미션이네요.";
+	obj[LK::kMyLocalKey_kindTutorial26] = "점수가 모자라지 않도록 조심해야겠어!";
+	obj[LK::kMyLocalKey_kindTutorial27] = "콤보를 기록해야 하는 미션도 있군요.";
+	obj[LK::kMyLocalKey_kindTutorial28] = "미사일 연속 발사로 몬스터를 괴롭혀야겠군.";
+	obj[LK::kMyLocalKey_kindTutorial29] = "골드도 모아야 하나요?";
+	obj[LK::kMyLocalKey_kindTutorial30] = "물론! 골드는 많으면 많을수록 좋지!";
+	obj[LK::kMyLocalKey_kindTutorial31] = "영역 획득 횟수를 제한한다니...\n정말 어렵겠어요.";
+	obj[LK::kMyLocalKey_kindTutorial32] = "나에겐 문제없다구!";
 	obj[LK::kMyLocalKey_maxSpeed] = "최고스피드!";
 	obj[LK::kMyLocalKey_showtime] = "쇼타임!";
 	obj[LK::kMyLocalKey_miss] = "미스";
