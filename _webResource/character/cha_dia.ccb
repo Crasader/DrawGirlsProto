@@ -59,7 +59,7 @@
 									<key>value</key>
 									<array>
 										<real>0.0</real>
-										<real>-18</real>
+										<real>-10</real>
 									</array>
 								</dict>
 							</array>
@@ -2724,7 +2724,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-360</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -5163,7 +5163,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>-18</real>
+							<real>-10</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -5225,6 +5225,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -5333,7 +5335,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
