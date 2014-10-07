@@ -133,7 +133,7 @@ void LevelupGuidePopup::myInit(int t_touch_priority, function<void()> t_end_func
 	
 	rightnow_button = CCControlButton::create(r_label, rightnow_back);
 	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(LevelupGuidePopup::rightnowAction), CCControlEventTouchUpInside);
-	rightnow_button->setPreferredSize(CCSizeMake(101,44));
+	rightnow_button->setPreferredSize(CCSizeMake(181,44));
 	rightnow_button->setPosition(ccp(0,-51));
 	m_container->addChild(rightnow_button);
 	
