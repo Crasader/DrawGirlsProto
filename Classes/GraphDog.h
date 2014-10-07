@@ -345,6 +345,7 @@ public:
 		//Json::Value result;
 		string resultStr;
 		int errorCnt;
+		int cmdNo;
 	};
 	std::map<int, CommandsType> commandQueue;
 	void removeCommand(cocos2d::CCObject *target);

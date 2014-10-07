@@ -493,10 +493,10 @@ void* GraphDog::t_function(void *_insertIndex)
 	Json::Value costr = command.commandStr;
     
     
-    int add = (int)(rand()%10)+1;
-	GraphDog::get()->lastCmdNo += add;
-	costr["cmdNo"]=GraphDog::get()->lastCmdNo;
+	int newCmdNo = GraphDog::get()->lastCmdNo + (int)(rand()%10)+1;
+	costr["cmdNo"]=newCmdNo;
 	command.commandStr = costr.asString();
+	command.cmdNo =newCmdNo;
 	CCLOG("cmdNo is %d",GraphDog::get()->lastCmdNo);
     
 	//CCLOG("t_function2");
@@ -627,6 +627,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	
 	CCLOG("check10");
+	GraphDog::get()->lastCmdNo = newCmdNo;
 	command.resultStr = resultStr;
 	command.chunk.resultCode = resultCode;
 	//	}
@@ -684,12 +685,18 @@ void GraphDog::receivedCommand(float dt)
 		
 		if(commands.chunk.resultCode!=CURLE_AGAIN){
 			 resultobj = commands.resultStr;
-			
+			 
 			GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
 			Json::Value commandParam = commands.commandStr;
 			
 			if(commands.chunk.resultCode == CURLE_OK){
-				if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
+				if(resultobj.get("restart", false).asBool()){
+					
+					commands.chunk.resultCode = CURLE_CHUNK_FAILED;
+					CCLOG("restart %s",resultobj.asString().c_str());
+					
+					
+				}else if(commandParam["cmdNo"].asInt()!=resultobj["cmdNo"].asInt()){
 					
 					commands.chunk.resultCode = CURLE_CHUNK_FAILED;
 					CCLOG("cmd check error %s",resultobj.asString().c_str());
