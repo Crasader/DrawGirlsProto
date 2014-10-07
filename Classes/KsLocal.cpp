@@ -1005,7 +1005,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_introducerOk] = "확인";
 	obj[LK::kMyLocalKey_introducerAfter] = "이미 추천인 등록을 하셨습니다.";
 	obj[LK::kMyLocalKey_introducerPleaseInputNick] = "닉네임을 입력해주세요.";
-	obj[LK::kMyLocalKey_introducerDonFindNick] = "해당 닉네임을 찾을 수 없습니다.";
+	obj[LK::kMyLocalKey_introducerDonFindNick] = "존재하지 않는 닉네임 입니다.";
 	obj[LK::kMyLocalKey_introducerSuccess] = "%s 님을 추천인으로 등록하셨습니다.";
 	obj[LK::kMyLocalKey_introducerSelfNotIntroduce] = "자신을 추천인으로 등록할 수 없습니다.";
 	obj[LK::kMyLocalKey_p1Shop] = "부활석";
