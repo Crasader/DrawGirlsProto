@@ -159,11 +159,6 @@
         </activity>
         <!-- HSP Activity End -->
 
-        <receiver android:name="com.hangame.hsp.referrer.InstallReceiver" >
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver>
 <!--         <receiver
             android:name="com.igaworks.adbrixtracersdk.cores.ADBrixReceiver"
             android:exported="true" >
