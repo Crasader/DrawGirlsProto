@@ -2144,8 +2144,47 @@ void StageListDown::startDownloadSet()
 			img->release();
 		}
 		
-        reduce_frame = 0;
-        schedule(schedule_selector(StageListDown::reduceAction));
+		if(cf_list.size() > 0)
+		{
+			reduce_frame = 0;
+			schedule(schedule_selector(StageListDown::reduceAction));
+		}
+		else
+		{
+			if(!df_list.empty())
+			{
+				for(int i=0;i<df_list.size();i++)
+				{
+					SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
+				}
+			}
+			
+			if(!sf_list.empty())
+			{
+				for(int i=0;i<sf_list.size();i++)
+				{
+					SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
+				}
+				mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+			}
+			
+			for(int i=0;i<save_version_list.size();i++)
+			{
+				NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
+				mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
+			}
+			
+			NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
+			mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+			
+			addChild(KSTimer::create(0.3f, [=]()
+									 {
+										 if(success_func == nullptr)
+											 (target_success->*delegate_success)();
+										 else
+											 outOpenning();
+									 }));
+		}
 		
 //		// reduce
 //		for(int i=0;i<cf_list.size();i++)
