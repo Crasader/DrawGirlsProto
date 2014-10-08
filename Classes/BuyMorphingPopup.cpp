@@ -83,7 +83,7 @@ void BuyMorphingPopup::myInit(int t_touch_priority, function<void()> t_end_func,
 								  
 								  is_menu_enable = false;
 								  
-								  AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
 									CommonAnimation::closePopup(this, m_container, gray, [=](){
 										

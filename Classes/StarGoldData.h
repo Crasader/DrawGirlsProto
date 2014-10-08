@@ -1204,6 +1204,7 @@ private:
 	
 	COMMON_VAR(int, testInt, TestInt);
 	COMMON_VAR(int, addGemReward, AddGemReward);
+	COMMON_VAR(string, diaryDownUrl, DiaryDownUrl);
 	
 };
 

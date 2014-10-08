@@ -132,7 +132,7 @@ void Diary19Popup::buttonAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
-	// 다이어리 앱 다운받으러 감
+	myHSP->openUrl(mySGD->getDiaryDownUrl().c_str());
 	
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
