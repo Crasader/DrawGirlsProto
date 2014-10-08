@@ -2499,7 +2499,6 @@ GoodsType StarGoldData::getItemCodeToGoodsType(ITEM_CODE t_code)
 
 void StarGoldData::initProperties(Json::Value t_list)
 {
-	goods_data.clear();
 	for(int i=0;i<t_list.size();i++)
 	{
 		GoodsType t_type = getGoodsKeyToType(t_list[i]["type"].asString());
@@ -2731,8 +2730,6 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				int before_value = goods_data[t_type].getV();
 				goods_data[t_type] = t_count;
 				
-				CCLOG("changed goods type : %s | count : %d", result_list[i]["type"].asString().c_str(), result_list[i]["count"].asInt());
-				
 				if(t_type == kGoodsType_ruby && star_label)
 				{
 					star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
@@ -2793,8 +2790,6 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			int t_count = result_data["minusCount"].asInt();
 			int before_value = goods_data[t_type].getV();
 			goods_data[t_type] = t_count;
-			
-			CCLOG("minus changed goods type : %s | count : %d", result_data["minusType"].asString().c_str(), result_data["minusCount"].asInt());
 			
 			if(t_type == kGoodsType_ruby && star_label)
 			{
@@ -2858,8 +2853,6 @@ void StarGoldData::refreshGoodsData(string t_key, int t_count)
 	{
 		int before_value = goods_data[t_type].getV();
 		goods_data[t_type] = t_count;
-		
-		CCLOG("refresh goods type : %s | count : %d", t_key.c_str(), t_count);
 		
 		if(t_type == kGoodsType_ruby && star_label)
 		{
@@ -3012,8 +3005,6 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 				int before_value = goods_data[t_type].getV();
 				goods_data[t_type] = t_count;
 				
-				CCLOG("changed goods type : %s | count : %d", result_list[i]["type"].asString().c_str(), result_list[i]["count"].asInt());
-				
 				if(t_type == kGoodsType_ruby && star_label)
 				{
 					star_label->setString(CCString::createWithFormat("%d", t_count)->getCString());
@@ -3075,8 +3066,6 @@ void StarGoldData::resultChangeGoods(Json::Value result_data)
 			int t_count = result_data["minusCount"].asInt();
 			
 			goods_data[t_type] = t_count;
-			
-			CCLOG("minus changed goods type : %s | count : %d", result_data["minusType"].asString().c_str(), result_data["minusCount"].asInt());
 			
 			if(t_type == kGoodsType_ruby && star_label)
 			{
@@ -3537,6 +3526,8 @@ int StarGoldData::getAppVersion()
 void StarGoldData::myInit()
 {
 	is_hell_mode_enabled = false;
+	
+	goods_data.clear();
 	
 	app_type = "light1";
 	app_version = 2;
