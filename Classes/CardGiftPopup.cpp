@@ -274,7 +274,7 @@ CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned in
 		setFormSetter(content_label);
 		back->addChild(content_label);
 		
-		CommonButton* confirm = CommonButton::create("확인", 12.f, CCSizeMake(101, 44), CommonButtonAchievement, m_touchPriority - 2);
+		CommonButton* confirm = CommonButton::create(getLocal(LK::kMyLocalKey_ok), 12.f, CCSizeMake(101, 44), CommonButtonAchievement, m_touchPriority - 2);
 		back->addChild(confirm);
 		confirm->setPosition(ccpFromSize(back->getContentSize()) / 2.f + ccp(0, -50));
 		setFormSetter(confirm);
