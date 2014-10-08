@@ -34,6 +34,7 @@ enum class LK
 	kBonusCong,
 	kAccountConf,
 	kLinkingGoogle,
+	kLinkingGameCenter,
 	kLinkingFacebook,
 	kLinkingX,
 	kLinkingUnknown,

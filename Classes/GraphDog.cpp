@@ -684,10 +684,10 @@ void GraphDog::receivedCommand(float dt)
 		Json::Value resultobj;
 		
 		if(commands.chunk.resultCode!=CURLE_AGAIN){
-			 resultobj = commands.resultStr;
+			 resultobj = GraphDogLib::StringToJsonObject(commands.resultStr);
 			 
 			GraphDog::get()->log("------ check4 result obj --------\n"+resultobj.asString()+"\n ------- end check4 result obj  ---------");
-			Json::Value commandParam = commands.commandStr;
+			Json::Value commandParam = GraphDogLib::StringToJsonObject(commands.commandStr);
 			
 			if(commands.chunk.resultCode == CURLE_OK){
 				if(resultobj.get("restart", false).asBool()){
