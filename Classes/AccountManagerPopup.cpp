@@ -10,6 +10,9 @@
 #include "LoadingLayer.h"
 #include <boost/lexical_cast.hpp>
 #include "KsLocal.h"
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import "HSPCore.h"
+#endif
 AccountManagerPopup::AccountManagerPopup()
 {
 	
@@ -98,7 +101,11 @@ bool AccountManagerPopup::init(int touchP)
 	std::string mappedAccountMsg = "";
 	if(loginType == HSPLoginTypeGOOGLE) // 구글 로긴 타입임.
 	{
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 		mappedAccountMsg = getLocal(LK::kLinkingGoogle);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+		mappedAccountMsg = getLocal(LK::kLinkingGameCenter);
+#endif
 	}
 	else
 	if(loginType == HSPLoginTypeFACEBOOK)
@@ -146,8 +153,15 @@ bool AccountManagerPopup::init(int touchP)
 	front->addChild(seper0);
 	seper0->setPosition(ccp(125.5, 153.5));
 	
-	KSLabelTTF* googleGuide = KSLabelTTF::create(getLocal(LK::kSaveDesc1),
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	KSLabelTTF* googleGuide = KSLabelTTF::create(ccsf(getLocal(LK::kSaveDesc1), "GameCenter"),
 																							 mySGD->getFont().c_str(), 10.f);
+
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	KSLabelTTF* googleGuide = KSLabelTTF::create(ccsf(getLocal(LK::kSaveDesc1), "Google"),
+																							 mySGD->getFont().c_str(), 10.f);
+	
+#endif
 	googleGuide->setPosition(ccp(67, 98.f));
 	front->addChild(googleGuide);
 	
@@ -158,7 +172,12 @@ bool AccountManagerPopup::init(int touchP)
 	}
 	else
 	{
-		gButtonLbl = getLocal(LK::kGoogleButton);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+		gButtonLbl = ccsf(getLocal(LK::kGoogleButton), "GameCenter");
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+		gButtonLbl = ccsf(getLocal(LK::kGoogleButton), "GOOGLE+");
+#endif
+		
 	}
 	CommonButton* googleLogin = CommonButton::create(gButtonLbl.c_str(), 14.f, CCSizeMake(101, 60),
 																										 CommonButtonAchievement, touchP - 1);
@@ -195,7 +214,7 @@ bool AccountManagerPopup::init(int touchP)
 	front->addChild(facebookLogin);
 	
 	
-	auto anotherAccountFunctor = [=](enum HSPMapping mm, HSPLogin mm2, long long prevMemberNo,
+	auto anotherAccountFunctor = [=](int mm, HSPLogin mm2, long long prevMemberNo,
 																	 std::string tryName){
 		CCLog("another!!!");
 		Json::Value param;
@@ -478,7 +497,7 @@ bool AccountManagerPopup::init(int touchP)
 			}
 		});
 	};
-	auto doLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
+	auto doLogin = [=](int hspmap, const std::string& tryName, HSPLogin willSaveLogin){
 		CCLog("-----------------------------------------------------------------------");
 		TRACE();
 	
@@ -537,7 +556,7 @@ bool AccountManagerPopup::init(int touchP)
 		});
 	};
 	
-	auto tryLogin = [=](HSPMapping hspmap, const std::string& tryName, HSPLogin willSaveLogin){
+	auto tryLogin = [=](int hspmap, const std::string& tryName, HSPLogin willSaveLogin){
 		HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
 		doLogin(hspmap, tryName, willSaveLogin);
 //		if(loginType == HSPLoginTypeGUEST) { // 뭔가에 연결 되어 있다면...
@@ -551,14 +570,19 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
 	{
 		facebookLogin->setFunction([=](CCObject*){
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			tryLogin(HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+			tryLogin(HSPMappingType::HSP_MAPPINGTYPE_FACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
+#endif
+			
 		});
 	}
 	
 	if(loginType != HSPLoginTypeGOOGLE) // 구글로그인이 안되어있는 경우에만...
 	{
 		googleLogin->setFunction([=](CCObject*){
-			tryLogin(HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
+			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 		});
 
 	}
