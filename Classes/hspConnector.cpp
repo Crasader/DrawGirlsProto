@@ -180,7 +180,7 @@ extern "C"{
 
 long long int hspConnector::getMemberID(){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return [HSPCore sharedHSPCore].memberNo;
+	return [[HSPCore sharedHSPCore] memberNo];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getHSPMemberNo", "()J")) {
@@ -360,7 +360,7 @@ void callFuncMainQueue(Json::Value param,Json::Value callbackParam,CCObject *tar
 }
 
 
-void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType func,void*resultDict){
+void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,int _dkey,void*resultDict){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSData *_jdata= [NSJSONSerialization dataWithJSONObject:(NSDictionary *)resultDict options:NSJSONWritingPrettyPrinted error:nil];
 	NSString *jsonString = [[NSString alloc] initWithData:_jdata encoding:NSUTF8StringEncoding];
@@ -368,13 +368,15 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType 
 	Json::Value resultObj;
 
 	reader.parse([jsonString cStringUsingEncoding:NSUTF8StringEncoding], resultObj);
-
+	
+	jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_dkey);
 
 	if(!param.isNull())resultObj["param"] = param;
 	if(!callbackParam.isNull())resultObj["callback"] = callbackParam;
 	dispatch_async(dispatch_get_main_queue(),
 								 ^{
-									 if(func != NULL)func(resultObj);
+									 if(delesel->func != NULL)delesel->func(resultObj);
+									 jsonDelegator::get()->remove(_dkey);
 								 }
 								);
 #endif
@@ -401,14 +403,13 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	 {
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(0,0,func,resultDict);
+		 callFuncMainQueue2(0,0,dkey,resultDict);
 	 }
 	 ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "mappingToAccount", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
-		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, dkey);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -512,19 +513,19 @@ string hspConnector::getServerAddress(){
 }
 void hspConnector::withdrawAccount(jsonSelType func)
 {
+		int _key =  jsonDelegator::get()->add(func,0,0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] withdrawAccountWithCompletionHandler:
 	 ^(HSPError *error)
 	 {
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(0,0,func,resultDict);
+		 callFuncMainQueue2(0,0,_key,resultDict);
 	 }
 	 ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "withdrawAccount", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -532,19 +533,19 @@ void hspConnector::withdrawAccount(jsonSelType func)
 }
 
 void hspConnector::logout(jsonSelType func){
+		int _key =  jsonDelegator::get()->add(func,0,0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:
 		^(HSPError *error)
 		{
 			NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 			addErrorInResult(resultDict, error);
-			callFuncMainQueue2(0,0,func,resultDict);
+			callFuncMainQueue2(0,0,_key,resultDict);
 		}
 	];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "logout", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -558,9 +559,10 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	
 
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
-
+	TRACE();
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
-
+		TRACE();
+		KS::KSLog("aaaa %", obj);
 		int delekey = dkey;
 		
 		if(obj["error"]["isSuccess"].asBool()){
@@ -580,22 +582,25 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		};
 
 
-	
+	TRACE();
+	int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST	
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
 #endif
 #ifndef LQTEST
-	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GAMECENTER completionHandler:
+	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
 #endif
 	 ^(BOOL playable, HSPError* error) {
+		 TRACE();
+		 KS::KSLog("----------------------------------%", myHSP->getMemberID());
 		// 로그인 응답 처리
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
-		 
+		 TRACE();
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
-
+		 callFuncMainQueue2(param,callbackParam, _key,resultDict);
+		 TRACE();
 	}];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	bool ManualLogin =true;
@@ -607,7 +612,6 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
-		int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
 		t.env->DeleteLocalRef(t.classID);
 }
@@ -760,29 +764,40 @@ double hspConnector::getScreenRealHeight()
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
-	
+	int _key =  jsonDelegator::get()->add(func, param, callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-		
-	};
+//	int dkey = jsonDelegator::get()->add(func, 0, 0);
+//	jsonSelType nextFunc = [=](Json::Value obj){
+//		int delekey = dkey;
+//		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+//		if(delsel->func){
+//			delsel->func(obj);
+//		}
+//		jsonDelegator::get()->remove(delekey);
+//		
+//	};
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkCGP", "(I)Z")) {
-		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		
 		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 // not implementation
-	Json::Value dummy;
-	dummy["promotionstate"] = "CGP_NONE";
-	func(dummy);
+//	Json::Value dummy;
+//	dummy["promotionstate"] = "CGP_NONE";
+//	func(dummy);
+	[[HSPCore sharedHSPCore] withdrawAccountWithCompletionHandler:
+	 ^(HSPError *error)
+	 {
+		 
+		 
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(0,0,_key,resultDict);
+	 }
+	 ];
+
 #endif
 }
 
@@ -932,21 +947,12 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
  */
 void hspConnector::requestProductInfos(jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
 	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "requestProductInfos", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -995,19 +1001,10 @@ void hspConnector::completeInstallPromotion()
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
 	
+	int _key =  jsonDelegator::get()->add(func, param, callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchaseProduct", "(ILjava/lang/String;)Z")) {
-		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		jstring param1 = t.env->NewStringUTF(param.get("productid", "").asString().c_str());
 		
 		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, param1);
@@ -1082,19 +1079,10 @@ void hspConnector::openCSCenter(const std::string& url)
 #endif
 
 }
-void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func)
+void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
-	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(IIZ)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
@@ -1103,24 +1091,48 @@ void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType 
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	Json::Value test;
-	test["error"]["code"] = 0x0014006D;
-	func(test);
+//		^(BOOL playable, HSPError* error) {
+//			// 로그인 응답 처리
+//			NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+//			[resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
+//			
+//			addErrorInResult(resultDict, error);
+//			callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
+//			
+//		}
+	 
+	[[HSPCore sharedHSPCore] requestMappingToAccountWithMappingType:(HSPMappingType)mt overwrite:force
+			completionHandler:^(HSPError *error, int64_t memberNo) {
+				
+				Json::Value obj;
+				NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+				
+				addErrorInResult(resultDict, error);
+				callFuncMainQueue2(0,0,_key,resultDict);
+			}];
+	
+	
+//	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:^(HSPError* error) {
+//		if ( [error isSuccess] == YES )
+//		{
+//			NSLog(@"계정 연동에 성공했습니다.");
+//		}
+//		else
+//		{
+//			NSLog(@"계정 연동 실패 (%@)", error);
+//		}
+//	}];
+	
+//	// not implementation
+//	Json::Value test;
+//	test["error"]["code"] = 0x0014006D;
+//	func(test);
 #endif
 }
 void hspConnector::getIsUsimKorean(jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
 	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
@@ -1177,7 +1189,7 @@ int hspConnector::getLoginType()
 	}
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	return [[HSPCore sharedHSPCore] loginType];
 	// not implementation
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
