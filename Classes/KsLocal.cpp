@@ -100,13 +100,14 @@ void KsLocal::ko()
 	
 	obj[LK::kAccountConf] = "계정 설정";
 	obj[LK::kLinkingGoogle] = "구글과 연결되어 있습니다.";
+	obj[LK::kLinkingGameCenter] = "게임센터와 연결되어 있습니다.";
 	obj[LK::kLinkingFacebook] = "페이스북과 연결되어 있습니다.";
 	obj[LK::kLinkingX] = "연결이 안되어 있습니다.";
 	obj[LK::kLinkingUnknown] = "알 수 없습니다.";
 	obj[LK::kLinkingAccount] = "연결 계정";
 	obj[LK::kMemberNo] = "회원번호";
-	obj[LK::kSaveDesc1] = "게임을 저장하시려면\n Google+ ID를\n연결해 주세요.";
-	obj[LK::kGoogleButton] = "GOOGLE+\nID 연결";
+	obj[LK::kSaveDesc1] = "게임을 저장하시려면\n %s ID를\n연결해 주세요.";
+	obj[LK::kGoogleButton] = "%s\nID 연결";
 	obj[LK::kSaveDesc2] = "여러기기에서 게임을\n 즐기시려면 facebook ID를 \n 연결해 주세요.";
 	obj[LK::kFacebookButton] = "FACEBOOK\n ID 연결";
 	obj[LK::kWarningDesc] = "유의사항";
