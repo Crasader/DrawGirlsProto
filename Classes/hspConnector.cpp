@@ -15,6 +15,11 @@
 #import "HSPMyProfile.h"
 #import "HSPMemberDataStorage.h"
 #import "HSPRanking.h"
+#import "HSPServiceProperties.h"
+#import "HSPCgp.h"
+#import "HSPUtil.h"
+#import "AdXTracking.h"
+#import "HSPMessage.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
 #endif
@@ -398,9 +403,11 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:
 	 ^(HSPError *error)
 	 {
+		 CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
 		 callFuncMainQueue2(0,0,dkey,resultDict);
@@ -479,14 +486,13 @@ string hspConnector::getTimeZone(){
 
 
 string hspConnector::getServerAddress(){
-	string r;
+	string serverAddr;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	r = "http://182.162.201.147:10010";
+	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
+	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
+	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
+	serverAddr = "http://182.162.201.147:10010";
 	
-	//r = "http://182.162.196.182:10080";
-	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
-	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
@@ -501,12 +507,12 @@ string hspConnector::getServerAddress(){
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
-	r = "http://"+r;
-	r = "http://182.162.201.147:10010";
+//	r = "http://"+r;
+	serverAddr = "http://182.162.201.147:10010";
 #endif
 	
 	
-	return r.c_str();
+	return serverAddr.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
 	//return r;
@@ -589,7 +595,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
 #endif
 #ifndef LQTEST
-	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
+	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GAMECENTER completionHandler:
 #endif
 	 ^(BOOL playable, HSPError* error) {
 		 TRACE();
@@ -783,23 +789,34 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelT
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-// not implementation
-//	Json::Value dummy;
-//	dummy["promotionstate"] = "CGP_NONE";
-//	func(dummy);
-	[[HSPCore sharedHSPCore] withdrawAccountWithCompletionHandler:
-	 ^(HSPError *error)
+	[HSPCGP checkPromotionWithCompletionHandler:^(PromotionState promotionState,  HSPError* error)
 	 {
-		 
-		 
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 
+		 if ([error isSuccess])
+		 {
+			 switch (promotionState)
+			 {
+				 case CGP_NONE:
+					 [resultDict setObject:@"CGP_NONE" forKey:@"promotionstate"];
+					 // 프로모션 없음
+					 break;
+				 case CGP_PROMOTION_EXISTS:
+					 [resultDict setObject:@"CGP_PROMOTION_EXISTS" forKey:@"promotionstate"];
+					 // 노출해야 할 프로모션 있음
+					 break;
+				 case CGP_REWARD_REQUIRED:
+					 [resultDict setObject:@"CGP_REWARD_REQUIRED" forKey:@"promotionstate"];
+					 // 이용자에게 보상해야할 정보가 있음
+					 break;
+			 }
+		 }
 		 addErrorInResult(resultDict, error);
 		 callFuncMainQueue2(0,0,_key,resultDict);
-	 }
-	 ];
-
-#endif
+	 }];
 }
+#endif
+
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
 {
@@ -1101,8 +1118,10 @@ void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 //			
 //		}
 	 
+	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithMappingType:(HSPMappingType)mt overwrite:force
 			completionHandler:^(HSPError *error, int64_t memberNo) {
+				CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				
 				Json::Value obj;
 				NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
@@ -1133,7 +1152,6 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 {
 	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
@@ -1142,11 +1160,21 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPUtil alertViewWithToastTermsWithCompletionHandler:^(BOOL agreed) {
+		NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		
+//		addErrorInResult(resultDict, error);
+		[resultDict setObject:[NSNumber numberWithInt:1] forKey:@"isSuccess"];
+		[resultDict setObject:[NSNumber numberWithBool:!agreed] forKey:@"korean"];
+		callFuncMainQueue2(0,0,_key,resultDict);
+//		CCLOG("agreed : %d", agreed);
+//		Json::Value dummy;
+//		dummy["isSuccess"] = 1;
+//		dummy["korean"] = !agreed;
+//		func(dummy);
+	}];
 	// not implementation
-	Json::Value dummy;
-	dummy["isSuccess"] = 1;
-	dummy["korean"] = 0;
-	func(dummy);
+	
 #endif
 	
 }
@@ -1211,7 +1239,7 @@ int hspConnector::getIsEnablePushNotification()
 	}
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	return [HSPMessage isEnablePushNotification];
 	// not implementation
     //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
@@ -1230,6 +1258,10 @@ void hspConnector::setIsEnablePushNotification(int p)
 	}
 //	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPMessage setPushNotification:p completionHandler:^(HSPError *error) {
+		
+		
+	}];
 //	return 1;
 	// not implementation
     //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
@@ -1258,6 +1290,8 @@ int hspConnector::openKakaoMsg()
 
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+						 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
 	// not implementation
 //	CCLog(url.c_str());
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
@@ -1283,6 +1317,8 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+																							 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
 	// not implementation
 	//	CCLog(url.c_str());
 	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
@@ -1310,6 +1346,7 @@ void hspConnector::getAdXConnectEventInstance(string event, string data, string 
 	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	
 #endif
 }
 int hspConnector::registerGamePadCallback(jsonSelType func)
