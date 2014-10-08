@@ -1208,7 +1208,13 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			}
 			else
 			{
-				CCSprite* empty_back = CCSprite::create("cardsetting_off.png");
+				string empty_back_filename;
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+					empty_back_filename = "cardsetting_off19.png";
+				else
+					empty_back_filename = "cardsetting_off.png";
+				
+				CCSprite* empty_back = CCSprite::create(empty_back_filename.c_str());
 				empty_back->setPosition(card_position);
 				cell->addChild(empty_back);
 				
