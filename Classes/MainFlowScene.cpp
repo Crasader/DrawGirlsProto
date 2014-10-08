@@ -3224,7 +3224,7 @@ void MainFlowScene::setBottom()
 			n_mission->addChild(n_percent_back);
 			
 			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			n_percent_label->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			n_percent_back->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
 			n_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
 			n_percent_back->addChild(n_percent_label);
@@ -3234,7 +3234,7 @@ void MainFlowScene::setBottom()
 			s_mission->addChild(s_percent_back);
 			
 			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			s_percent_label->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			s_percent_back->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
 			s_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
 			s_percent_back->addChild(s_percent_label);

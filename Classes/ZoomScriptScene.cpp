@@ -1227,6 +1227,7 @@ void ZoomScript::rankupAction()
 	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
@@ -1284,6 +1285,7 @@ void ZoomScript::showtimeSeventhAction()
 	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
+	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
