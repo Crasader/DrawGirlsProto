@@ -898,7 +898,7 @@ void GraphDog::receivedCommand(float dt)
 					}
 					
 					
-					
+					CCLOG("result check0");
 					int resultCode = resultobj.get(iter2->first.c_str(),Json::Value(Json::objectValue)).get("result",Json::Value(Json::objectValue)).get("code", 0).asInt();
 					CCLOG("result check1");
 					bool check1 = !oParam.get("retry", false).asBool();
