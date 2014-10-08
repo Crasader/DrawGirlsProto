@@ -4094,3 +4094,5 @@ int StarGoldData::getUserdataAchieveItemBuyCount(){	return userdata_storage[kUse
 
 
 
+void StarGoldData::setDiaryDownUrl(string t_str){	diaryDownUrl = t_str.c_str();	}
+string StarGoldData::getDiaryDownUrl(){	return diaryDownUrl;	}
