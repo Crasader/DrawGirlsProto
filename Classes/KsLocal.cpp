@@ -40,7 +40,7 @@ const char* KsLocal::getSupportLocalCode()
 
 const char* KsLocal::getLocalForKey( LK key )
 {
-	languageType = getSupportLocalCode();
+	languageType = "ko";// getSupportLocalCode();
 	
 	vector<string> langTypes;
 	langTypes.push_back(languageType);
@@ -385,9 +385,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_rankup] = "승급하기";
 	obj[LK::kMyLocalKey_purchase] = "구매하기";
 	obj[LK::kMyLocalKey_firstPurchaseSale] = "첫구매시 할인";
-	obj[LK::kMyLocalKey_firstPurchaseMent1] = "%s할인은 첫 구매 회원님께만";
-	obj[LK::kMyLocalKey_firstPurchaseMent2] = " 적용됩니다.";
-	obj[LK::kMyLocalKey_firstPurchaseMent3] = "이 창을 닫으면 %s 할인 기회는 사라집니다.";
+	obj[LK::kMyLocalKey_firstPurchaseMent1] = "<font color=961>가격 할인은</font><font newline=17> 첫 구매 회원님께만 적용됩니다.</font><font>이 창을 닫으면 </font><font color=961>%s 가격할인</font><font> 기회는 사라집니다.</font>";
+//	obj[LK::kMyLocalKey_firstPurchaseMent2] = " 적용됩니다.";
+//	obj[LK::kMyLocalKey_firstPurchaseMent3] = "이 창을 닫으면 %s 할인 기회는 사라집니다.";
 	obj[LK::kMyLocalKey_emptyItemSaleMent1] = "지금 묶음 아이템을 구매하시면";
 	obj[LK::kMyLocalKey_emptyItemSaleMent2] = "%s 할인해 드립니다.";
 	obj[LK::kMyLocalKey_stupidNpuHelpMent1] = "플레이를 도와주는 기능성 아이템을";
@@ -398,18 +398,18 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_mileageMent3] = "혜택을 꼭! 확인해주세요.";
 	obj[LK::kMyLocalKey_eventShopTitle] = "단 한번의 구매 찬스";
 	obj[LK::kMyLocalKey_eventShopMent1] = "당신만을 위한 특별한 기회!";
-	obj[LK::kMyLocalKey_eventShopMent2] = "%s 보너스 혜택을 드려요.";
+	obj[LK::kMyLocalKey_eventShopMent2] = "지금 여기서만 %s 보너스 혜택을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_eventShopMent3] = "이 창을 닫으면 %s 보너스 기회는 사라집니다.";
-	obj[LK::kMyLocalKey_levelupGuideMent1] = "<font>미사일 레벨을 올리면 </font><font color=961>부하몬스터를 쉽게 죽이고,</font>";
-	obj[LK::kMyLocalKey_levelupGuideMent2] = "<font color=961>패턴공격을 빨리 저지시킬 수 있으며,</font>";
-	obj[LK::kMyLocalKey_levelupGuideMent3] = "<font color=961>고득점 기록에 도움이 됩니다.</font>";
-	obj[LK::kMyLocalKey_levelupGuideMent4] = "<font>미사일 업그레이드를 하러 갈까요?</font>";
-	obj[LK::kMyLocalKey_levelupGo] = "업그레이드";
+	obj[LK::kMyLocalKey_levelupGuideMent1] = "<font>미사일을 업그레이드 하면,</font>";
+	obj[LK::kMyLocalKey_levelupGuideMent2] = "<font>부하 몬스터를 쉽게 죽이고</font>";
+	obj[LK::kMyLocalKey_levelupGuideMent3] = "<font>패턴 공격을 빨리 저지시킬 수 있어서</font>";
+	obj[LK::kMyLocalKey_levelupGuideMent4] = "<font color=961>3,4등급 카드 획득에 매우 유리합니다.</font>";
+	obj[LK::kMyLocalKey_levelupGo] = "미사일 업그레이드 하러 가기";
 	obj[LK::kMyLocalKey_achievement] = "업적";
 	obj[LK::kMyLocalKey_allRewardGet] = "모든보상 받기";
 	obj[LK::kMyLocalKey_itemPackageChance] = "종합 아이템 구매 찬스!";
 	obj[LK::kMyLocalKey_emptyItemSaleTitle] = "아이템이 하나도 없네요.";
-	obj[LK::kMyLocalKey_firstPurchaseSaleTitle] = "첫구매 대폭할인!!";
+	obj[LK::kMyLocalKey_firstPurchaseSaleTitle] = "첫구매 감사 할인";
 	obj[LK::kMyLocalKey_mileageTitle] = "사랑합니다. 고객님!";
 	obj[LK::kMyLocalKey_missileUpgrade] = "미사일 업그레이드";
 	obj[LK::kMyLocalKey_todaymissionTotalPercent1] = "<font>누적영역</font><font color=961>%d%%</font><font strokesize=0.5 strokeopacity=150>를 획득하라</font>";
@@ -808,7 +808,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_cardGiftSearch] = "검색";
 	obj[LK::kMyLocalKey_cardGiftSend] = "선물하기";
 	obj[LK::kMyLocalKey_cardGiftNotFound] = "검색결과가 없습니다.";
-	obj[LK::kMyLocalKey_rankUpFailRateUp] = "<font color=999>실패시 다음번 승급 성공확률이 <font color=961>%.0f%%<font color=999> 올라갑니다.";
+	obj[LK::kMyLocalKey_rankUpFailRateUp] = "<font color=999 newline=12>승급에 실패해도 획득한 카드는 사라지지 않으며,</font><font color=999>다음 번 </font><font color=961>승급 성공 확률이 증가됩니다.</font>";
 	obj[LK::kMyLocalKey_rankUpEventSubMent] = "<font color=999>이벤트를 놓치지 마세요!!";
 	obj[LK::kMyLocalKey_failTitleTimeover] = "타임 오버";
 	obj[LK::kMyLocalKey_failTitleMissionfail] = "임무 실패";
@@ -1006,7 +1006,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_introducerOk] = "확인";
 	obj[LK::kMyLocalKey_introducerAfter] = "이미 추천인 등록을 하셨습니다.";
 	obj[LK::kMyLocalKey_introducerPleaseInputNick] = "닉네임을 입력해주세요.";
-	obj[LK::kMyLocalKey_introducerDonFindNick] = "해당 닉네임을 찾을 수 없습니다.";
+	obj[LK::kMyLocalKey_introducerDonFindNick] = "존재하지 않는 닉네임 입니다.";
 	obj[LK::kMyLocalKey_introducerSuccess] = "%s 님을 추천인으로 등록하셨습니다.";
 	obj[LK::kMyLocalKey_introducerSelfNotIntroduce] = "자신을 추천인으로 등록할 수 없습니다.";
 	obj[LK::kMyLocalKey_p1Shop] = "부활석";

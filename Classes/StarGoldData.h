@@ -1000,6 +1000,9 @@ public:
 	
 	bool is_hell_mode_enabled;
 	
+	void setDiaryDownUrl(string t_str);
+	string getDiaryDownUrl();
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1193,6 +1196,8 @@ private:
 	
 	KSProtectVar<int> introduce_stage;
 	
+	string diaryDownUrl;
+	
 	string app_type;
 	int app_version;
 	
@@ -1203,6 +1208,7 @@ private:
 	CC_SYNTHESIZE(int, remove_message_mail_no, RemoveMessageMailNo);
 	
 	COMMON_VAR(int, testInt, TestInt);
+	
 	COMMON_VAR(int, addGemReward, AddGemReward);
 	
 };

@@ -20,6 +20,8 @@
 #include "PuzzleScene.h"
 #include "FormSetter.h"
 #include "CommonAnimation.h"
+#include "StyledLabelTTF.h"
+
 FirstPurchasePopup* FirstPurchasePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
 {
 	FirstPurchasePopup* t_mup = new FirstPurchasePopup();
@@ -73,7 +75,7 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseSaleTitle), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
-	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-33));
+	title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 	m_container->addChild(title_label);
 	
 	
@@ -140,31 +142,36 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	stamp_case->addChild(sale_value_label);
 	
 	
-	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
-	sub_ment1->setColor(ccc3(255,170,20));
-	sub_ment1->disableOuterStroke();
-	sub_ment1->setAnchorPoint(ccp(1.f,0.5f));
-	sub_ment1->setPositionY(-15);
-	m_container->addChild(sub_ment1);
+	StyledLabelTTF* sub_ment = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str()), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+	sub_ment->setAnchorPoint(ccp(0.5f,0.5f));
+	sub_ment->setPosition(ccp(0,-23.5f));
+	m_container->addChild(sub_ment);
 	
-	
-	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent2), mySGD->getFont().c_str(), 12);
-	sub_ment2->disableOuterStroke();
-	sub_ment2->setAnchorPoint(ccp(0.f, 0.5f));
-	sub_ment2->setPositionY(-15);
-	m_container->addChild(sub_ment2);
-	
-	
-	float w1 = sub_ment1->getContentSize().width;
-	float w2 = sub_ment2->getContentSize().width;
-	
-	sub_ment1->setPositionX(w1 - (w1+w2)/2.f);
-	sub_ment2->setPositionX(w1 - (w1+w2)/2.f);
-	
-	KSLabelTTF* sub_ment3 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent3), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
-	sub_ment3->disableOuterStroke();
-	sub_ment3->setPosition(ccp(0,-32));
-	m_container->addChild(sub_ment3);
+//	KSLabelTTF* sub_ment1 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent1), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
+//	sub_ment1->setColor(ccc3(255,170,20));
+//	sub_ment1->disableOuterStroke();
+//	sub_ment1->setAnchorPoint(ccp(1.f,0.5f));
+//	sub_ment1->setPositionY(-15);
+//	m_container->addChild(sub_ment1);
+//	
+//	
+//	KSLabelTTF* sub_ment2 = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent2), mySGD->getFont().c_str(), 12);
+//	sub_ment2->disableOuterStroke();
+//	sub_ment2->setAnchorPoint(ccp(0.f, 0.5f));
+//	sub_ment2->setPositionY(-15);
+//	m_container->addChild(sub_ment2);
+//	
+//	
+//	float w1 = sub_ment1->getContentSize().width;
+//	float w2 = sub_ment2->getContentSize().width;
+//	
+//	sub_ment1->setPositionX(w1 - (w1+w2)/2.f);
+//	sub_ment2->setPositionX(w1 - (w1+w2)/2.f);
+//	
+//	KSLabelTTF* sub_ment3 = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_firstPurchaseMent3), sale_percent_string.c_str())->getCString(), mySGD->getFont().c_str(), 12);
+//	sub_ment3->disableOuterStroke();
+//	sub_ment3->setPosition(ccp(0,-32));
+//	m_container->addChild(sub_ment3);
 	
 	
 //	KSLabelTTF* giveup_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_giveup), mySGD->getFont().c_str(), 15);

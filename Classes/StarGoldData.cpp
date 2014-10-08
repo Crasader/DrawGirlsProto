@@ -2499,7 +2499,6 @@ GoodsType StarGoldData::getItemCodeToGoodsType(ITEM_CODE t_code)
 
 void StarGoldData::initProperties(Json::Value t_list)
 {
-	goods_data.clear();
 	for(int i=0;i<t_list.size();i++)
 	{
 		GoodsType t_type = getGoodsKeyToType(t_list[i]["type"].asString());
@@ -3528,6 +3527,8 @@ void StarGoldData::myInit()
 {
 	is_hell_mode_enabled = false;
 	
+	goods_data.clear();
+	
 	app_type = "light1";
 	app_version = 2;
 	
@@ -4084,3 +4085,5 @@ int StarGoldData::getUserdataAchieveItemBuyCount(){	return userdata_storage[kUse
 
 
 
+void StarGoldData::setDiaryDownUrl(string t_str){	diaryDownUrl = t_str.c_str();	}
+string StarGoldData::getDiaryDownUrl(){	return diaryDownUrl;	}

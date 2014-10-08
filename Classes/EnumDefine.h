@@ -331,15 +331,16 @@ enum AchievementCode
 	
 	kAchievementCode_hidden_noSound,//	(히든) 사운드따윈필요없어 : 설정에 사운드 끄고 플레이후 클리어 완	51
 	
-	kAchievementCode_hidden_shopper2,//	(히든) 쇼핑홀릭2 : 아이템 50번째 구매 완			52
-	kAchievementCode_hidden_shopper3,//	(히든) 쇼핑홀릭3 : 아이템 100번째 구매 완			53
+	kAchievementCode_hidden_shopper1,//	(히든) 쇼핑홀릭 : 상점메뉴 100회 진입시. 완			52
+	kAchievementCode_hidden_shopper2,//	(히든) 쇼핑홀릭2 : 아이템 50번째 구매 완			53
+	kAchievementCode_hidden_shopper3,//	(히든) 쇼핑홀릭3 : 아이템 100번째 구매 완			54
 	
-	kAchievementCode_hidden_breathtaking1,//	(히든)아슬아슬 : 5초이하로 남기고 클리어 완	54
-	kAchievementCode_hidden_breathtaking2,//	(히든)아슬아슬2 : 1초이하로 남기고 클리어 완	55
+	kAchievementCode_hidden_breathtaking1,//	(히든)아슬아슬 : 5초이하로 남기고 클리어 완	55
+	kAchievementCode_hidden_breathtaking2,//	(히든)아슬아슬2 : 1초이하로 남기고 클리어 완	56
 	
-	kAchievementCode_hidden_dieEasy,//	(히든)다이이지 : 게임시작 5초안에 죽기 완				56
+	kAchievementCode_hidden_dieEasy,//	(히든)다이이지 : 게임시작 5초안에 죽기 완				57
 	
-	kAchievementCode_hidden_speedMania,//	(히든)스피드매니아 : 스피드 max찍기 완			57
+	kAchievementCode_hidden_speedMania,//	(히든)스피드매니아 : 스피드 max찍기 완			58
 	
 //	kAchievementCode_dieHard1,//	다이하드1 : 1~3level 에서 한목숨도 안죽고 클리어
 //	kAchievementCode_dieHard2,//	다이하드2 : 4~9level 에서 한목숨도 안죽고 클리어
@@ -352,8 +353,6 @@ enum AchievementCode
 //	kAchievementCode_reviewer,//	리뷰어 : 리뷰남겨주기	
 	
 //	kAchievementCode_hidden_returnee,//	(히든) 오랜만이야 : 일주일만에 접속.
-	
-//	kAchievementCode_hidden_shopper1,//	(히든) 쇼핑홀릭 : 상점메뉴 100회 진입시. 완
 	
 	kAchievementCode_hidden_end
 };

@@ -135,6 +135,11 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	item9->setPosition(ccp(-70,50));
 	m_container->addChild(item9);
 	
+	KSLabelTTF* item9_name = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpTitle), mySGD->getFont().c_str(), 12);
+	item9_name->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+	item9_name->setPosition(ccp(item9->getContentSize().width/2.f, item9->getContentSize().height - 20));
+	item9->addChild(item9_name);
+	
 	KSLabelTTF* plus1 = KSLabelTTF::create("+", mySGD->getFont().c_str(), 20);
 	plus1->setPosition(ccp(-35,50));
 	m_container->addChild(plus1);
@@ -143,6 +148,11 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	item6->setPosition(ccp(0,50));
 	m_container->addChild(item6);
 	
+	KSLabelTTF* item6_name = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_doubleItemTitle), mySGD->getFont().c_str(), 12);
+	item6_name->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+	item6_name->setPosition(ccp(item6->getContentSize().width/2.f, item6->getContentSize().height - 20));
+	item6->addChild(item6_name);
+	
 	KSLabelTTF* plus2 = KSLabelTTF::create("+", mySGD->getFont().c_str(), 20);
 	plus2->setPosition(ccp(35,50));
 	m_container->addChild(plus2);
@@ -150,6 +160,11 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	CCSprite* item11 = CCSprite::create("item11.png");
 	item11->setPosition(ccp(70,50));
 	m_container->addChild(item11);
+	
+	KSLabelTTF* item11_name = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_magnetTitle), mySGD->getFont().c_str(), 12);
+	item11_name->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+	item11_name->setPosition(ccp(item11->getContentSize().width/2.f, item11->getContentSize().height - 20));
+	item11->addChild(item11_name);
 	
 	CCSprite* before_price_type = CCSprite::create("price_gold_img.png");
 	before_price_type->setPosition(ccp(-80,10));
@@ -185,7 +200,7 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	CCScale9Sprite* stamp_case = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	stamp_case->setContentSize(CCSizeMake(75, 45));
-	stamp_case->setPosition(ccp(90,30));
+	stamp_case->setPosition(ccp(90,20));
 	stamp_case->setRotation(-15);
 	m_container->addChild(stamp_case);
 	

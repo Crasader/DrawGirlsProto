@@ -419,14 +419,14 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		card_category = "normal";
 	if(card_category == "nPuzzle" || card_category == "ePuzzle")
 	{
-		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
-		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
-		
-		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
-		r_stage_label->setAnchorPoint(ccp(1,0.5f));
-		r_stage_label->setPosition(ccp(167, 288));
-		r_stage_label->setColor(ccBLACK);
-		target->addChild(r_stage_label);
+//		int stage_number = NSDS_GI(kSDS_CI_int1_stage_i, card_number);
+//		int puzzle_number = NSDS_GI(stage_number, kSDS_SI_puzzle_i);
+//		
+//		CCLabelTTF* r_stage_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_puzzleValue), puzzle_number)->getCString(), mySGD->getFont().c_str(), 8);
+//		r_stage_label->setAnchorPoint(ccp(1,0.5f));
+//		r_stage_label->setPosition(ccp(167, 288));
+//		r_stage_label->setColor(ccBLACK);
+//		target->addChild(r_stage_label);
 	}
 	else
 	{

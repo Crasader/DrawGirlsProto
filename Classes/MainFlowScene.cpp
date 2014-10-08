@@ -3142,7 +3142,57 @@ void MainFlowScene::setBottom()
 	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
 	s_shop->addChild(s_shop_label);
 	
-	if(NSDS_GB(kSDS_GI_shop_isEvent_b))
+	
+	chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+    std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+    ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+    time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+    
+    int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+    
+    bool is_on_time_startPack = sub_time <= expireSec;
+    bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+    bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+    bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+    bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+    bool is_on_time_eventPack = false;
+    
+    tm* now_tm = localtime(&now_time_t);
+    string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+    string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+    
+    int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+    int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+    
+    if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+       atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+       NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+       NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+    {
+        is_on_time_eventPack = true;
+    }
+    
+    bool is_useable_eventPack = true;
+    if(is_have_eventPack && is_on_time_eventPack)
+    {
+        if(is_just_one)
+        {
+            if(!is_buyed_eventPack)
+                is_useable_eventPack = true;
+            else
+                is_useable_eventPack = false;
+        }
+        else
+            is_useable_eventPack = true;
+    }
+    else
+    {
+        is_useable_eventPack = false;
+    }
+	
+	
+	if(NSDS_GB(kSDS_GI_shop_isEvent_b) || ((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack))
 	{
 		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
 		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
@@ -3224,7 +3274,7 @@ void MainFlowScene::setBottom()
 			n_mission->addChild(n_percent_back);
 			
 			KSLabelTTF* n_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			n_percent_label->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
+			n_percent_back->setContentSize(CCSizeMake(15+n_percent_label->getContentSize().width, 20));
 			n_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			n_percent_label->setPosition(ccp(n_percent_back->getContentSize().width/2.f, n_percent_back->getContentSize().height/2.f));
 			n_percent_back->addChild(n_percent_label);
@@ -3234,7 +3284,7 @@ void MainFlowScene::setBottom()
 			s_mission->addChild(s_percent_back);
 			
 			KSLabelTTF* s_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", t_percent)->getCString(), mySGD->getFont().c_str(), 8);
-			s_percent_label->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
+			s_percent_back->setContentSize(CCSizeMake(15+s_percent_label->getContentSize().width, 20));
 			s_percent_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 			s_percent_label->setPosition(ccp(s_percent_back->getContentSize().width/2.f, s_percent_back->getContentSize().height/2.f));
 			s_percent_back->addChild(s_percent_label);
@@ -5596,6 +5646,11 @@ void MainFlowScene::countingMessage()
 													is_not_first = true;
                                                     
 													mySGD->initTodayMission(result_data);
+													
+													if(result_data["isFirstCheck"].asBool())
+													{
+														mySGD->is_today_mission_first = true;
+													}
 												}
 											}));
 	}

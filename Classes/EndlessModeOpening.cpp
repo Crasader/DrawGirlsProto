@@ -1784,7 +1784,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			list_cell_case->addChild(nick_label);
 		}
 		
-		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 		score_label->setColor(ccc3(53, 41, 144));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->disableOuterStroke();
@@ -1792,7 +1792,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(score_label);
 		
 		StyledLabelTTF* victory_label =
-				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
+				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 		victory_label->setPosition(ccp(185, list_cell_case->getContentSize().height/2.f));
@@ -1878,18 +1878,18 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	}
 	else
 	{
-		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 10);
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
 		rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
-		rank_label->setPosition(ccp(35,rank_position.y+8));
+		rank_label->setPosition(rank_position);//ccp(35,rank_position.y+8));
 		list_cell_case->addChild(rank_label);
 	}
 	
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-	if(idx >= 3)
-		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
-	else
+//	if(idx >= 3)
+//		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
+//	else
 		selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);

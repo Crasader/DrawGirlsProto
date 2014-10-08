@@ -1685,20 +1685,19 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		black_img->runAction(black_seq);
 		
 		
-		
-		CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
-		content_back->setContentSize(CCSizeMake(400, 80));
-		content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
-		loading_tip_back->addChild(content_back);
-		
-		CCSprite* tip_title = CCSprite::create("loading_tip.png");
-		tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
-		content_back->addChild(tip_title);
+		if(back_number != 6)
+		{
+			CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
+			content_back->setContentSize(CCSizeMake(400, 80));
+			content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
+			loading_tip_back->addChild(content_back);
+			
+			CCSprite* tip_title = CCSprite::create("loading_tip.png");
+			tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
+			content_back->addChild(tip_title);
 		
 		//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 		
-		if(back_number != 6)
-		{
 			KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 			content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 			loading_tip_back->addChild(content_label);
@@ -1801,21 +1800,22 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 //	CCMoveTo* right_in = CCMoveTo::create(0.5f, ccp(0,0));
 //	right_curtain->runAction(right_in);
 	
-	CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
-	content_back->setContentSize(CCSizeMake(400, 80));
-	content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
-	loading_tip_back->addChild(content_back);
-	
-	CCSprite* tip_title = CCSprite::create("loading_tip.png");
-	tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
-	content_back->addChild(tip_title);
-	
 	mySGD->before_curtain_tip_type = selected_loading_tip;
-	
-	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
 	
 	if(rand_value != 6)
 	{
+		CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
+		content_back->setContentSize(CCSizeMake(400, 80));
+		content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
+		loading_tip_back->addChild(content_back);
+		
+		CCSprite* tip_title = CCSprite::create("loading_tip.png");
+		tip_title->setPosition(ccp(35, content_back->getContentSize().height-5));
+		content_back->addChild(tip_title);
+	
+	//	CCSprite* loading_tip_back = CCSprite::create("loading_tip_back.png");
+	
+	
 		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 		content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 		loading_tip_back->addChild(content_label);
