@@ -1784,7 +1784,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			list_cell_case->addChild(nick_label);
 		}
 		
-		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", mySGD->endless_my_high_score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 		score_label->setColor(ccc3(53, 41, 144));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->disableOuterStroke();
@@ -1792,7 +1792,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(score_label);
 		
 		StyledLabelTTF* victory_label =
-				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), mySGD->endless_my_high_victory.getV()),
+				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
 		victory_label->setPosition(ccp(185, list_cell_case->getContentSize().height/2.f));
