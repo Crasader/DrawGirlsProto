@@ -1173,6 +1173,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setAddGemReward(result_data["addGemReward"].asInt());
 		
 		mySGD->setDiaryDownUrl(result_data["appDownUrls"]["diary"].asString());
+		mySGD->setIosMenuVisible(result_data["iosMenuVisible"].asInt());
 	}
 	else
 	{
