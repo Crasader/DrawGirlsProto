@@ -395,8 +395,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_mileageMent3] = "혜택을 꼭! 확인해주세요.";
 	obj[LK::kMyLocalKey_eventShopTitle] = "단 한번의 구매 찬스";
 	obj[LK::kMyLocalKey_eventShopMent1] = "당신만을 위한 특별한 기회!";
-	obj[LK::kMyLocalKey_eventShopMent2] = "지금 여기서만 %s 보너스 혜택을 받을 수 있습니다.";
-	obj[LK::kMyLocalKey_eventShopMent3] = "이 창을 닫으면 %s 보너스 기회는 사라집니다.";
+	obj[LK::kMyLocalKey_eventShopMent2] = "지금 여기서만 %s 혜택을 받을 수 있습니다.";
+	obj[LK::kMyLocalKey_eventShopMent3] = "이 창을 닫으면 %s 기회는 사라집니다.";
 	obj[LK::kMyLocalKey_levelupGuideMent1] = "<font>미사일을 업그레이드 하면,</font>";
 	obj[LK::kMyLocalKey_levelupGuideMent2] = "<font>부하 몬스터를 쉽게 죽이고</font>";
 	obj[LK::kMyLocalKey_levelupGuideMent3] = "<font>패턴 공격을 빨리 저지시킬 수 있어서</font>";
@@ -585,7 +585,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessInfoScoreValue2] = "<font color=999 strokecolor=000 strokesize=0>%d승 %d패 </font><font color=950 strokecolor=000 strokesize=0>(승률%d%%)</font>";
 	obj[LK::kMyLocalKey_endlessHighScore] = "최고점수";
 	obj[LK::kMyLocalKey_endlessHighStraight] = "최고연승";
-	obj[LK::kMyLocalKey_endlessHighStraightValue1] = "<font size=16 color=#FFFFFF>%d</font><font size=10 color=#FFFFFF>연승</font>";
+	obj[LK::kMyLocalKey_endlessHighStraightValue1] = "<font size=13 color=#FFFFFF>%d</font><font size=9 color=#FFFFFF>연승</font>";
 	obj[LK::kMyLocalKey_endlessHighStraightValue2] = "%d연승";
 	obj[LK::kMyLocalKey_endlessServerError] = "뭔가 문제가 발생하였습니다.\n다시 시도해주세요.";
 	obj[LK::kMyLocalKey_endlessDownloadFail] = "스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다.";

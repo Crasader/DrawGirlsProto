@@ -1345,6 +1345,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					Json::Value t_card = cards[i];
 					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 					NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
+					NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
@@ -2333,10 +2334,18 @@ void TitleRenewalScene::resultGetCardHistory(Json::Value result_data)
 		
 		if(card_data_load_list.size() > 0)
 		{
+			bool is_zero_version = false;
+			for(int i=0;!is_zero_version && i<card_data_load_list.size();i++)
+			{
+				if(NSDS_GI(kSDS_CI_int1_version_i, card_data_load_list[i]) == 0)
+					is_zero_version = true;
+			}
+			
 			Json::Value card_param;
+			card_param["version"] = (is_zero_version ? 0 : NSDS_GI(kSDS_GI_card_version_i));
 			for(int i=0;i<card_data_load_list.size();i++)
 				card_param["noList"][i] = card_data_load_list[i];
-			command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
+			command_list.push_back(CommandParam("getcardlistbylist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
 		}
 		else
 		{
@@ -2487,6 +2496,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			Json::Value t_card = cards[i];
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
+			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 //			NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -2703,13 +2713,25 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		
 		mySGD->resetHasGottenCards();
 	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		mySGD->resetHasGottenCards();
+	}
 	else
 	{
 		is_receive_fail = true;
+		bool is_zero_version = false;
+		for(int i=0;!is_zero_version && i<card_data_load_list.size();i++)
+		{
+			if(NSDS_GI(kSDS_CI_int1_version_i, card_data_load_list[i]) == 0)
+				is_zero_version = true;
+		}
+		
 		Json::Value card_param;
+		card_param["version"] = (is_zero_version ? 0 : NSDS_GI(kSDS_GI_card_version_i));
 		for(int i=0;i<card_data_load_list.size();i++)
 			card_param["noList"][i] = card_data_load_list[i];
-		command_list.push_back(CommandParam("getcardlist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
+		command_list.push_back(CommandParam("getcardlistbylist", card_param, json_selector(this, TitleRenewalScene::resultLoadedCardData)));
 	}
 	
 	receive_cnt--;
@@ -2884,6 +2906,10 @@ void TitleRenewalScene::resultGetPuzzleList( Json::Value result_data )
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber) == 0)
 			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, NSDS_GI(kSDS_GI_puzzleList_int1_no_i, 1));
+	}
+	else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+	{
+		
 	}
 	else
 	{

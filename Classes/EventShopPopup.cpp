@@ -148,7 +148,7 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		
 		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
-		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-7));
+		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-4));
 		inner->addChild(ruby_label, 3);
 		
 		content_node->addChild(inner, 2);
@@ -159,18 +159,18 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		if(!sale_str.empty())
 		{
 			CCSprite* tab = CCSprite::create("shop_tab.png");
-			tab->setPosition(ccp(-42,35.5f));
+			tab->setPosition(ccp(-34,38.f));
 			content_node->addChild(tab, 4);
 			
-			CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 14);
-			sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f+1));
+			CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 12);
+			sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f));
 			tab->addChild(sale_label);
 		}
 		
 //		if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 //		{
 			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 14);
-			won_label->setPosition(ccp(0, -24));
+			won_label->setPosition(ccp(0, -27));
 			content_node->addChild(won_label, 3);
 //		}
 //		else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
