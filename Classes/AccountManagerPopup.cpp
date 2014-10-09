@@ -571,7 +571,7 @@ bool AccountManagerPopup::init(int touchP)
 	{
 		facebookLogin->setFunction([=](CCObject*){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-			tryLogin(HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
+			tryLogin((int)HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 			tryLogin(HSPMappingType::HSP_MAPPINGTYPE_FACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
 #endif

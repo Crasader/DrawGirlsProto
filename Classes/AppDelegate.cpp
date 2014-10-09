@@ -104,7 +104,23 @@ struct AA
 };
 bool AppDelegate::applicationDidFinishLaunching()
 {
-	CCLOG("finish l");
+	CCLog("finish l");
+//	string plainText = "AAABBVCBCVBVV";
+//	string encText = CipherUtils::encryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), plainText.c_str());
+//	CCLog("asdasdsa %s", encText.c_str());
+//	CCLog("encText length : %d", encText.size());
+//	encText = "e9EeE1UV7v+UwZS0z0wzlg==";
+//	string re = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(),
+//																						encText.c_str());
+//	CCLog("re %s", re.c_str());
+//	return false;
+	
+//	CCLOG("TEST RESULT : %s", re.c_str());
+//	string resultStr = "es1hmm2BeF8wfgnRfKN7D3zgX78TbuzEj4GjeKaQG6tqqxmeHmCbagw6OfUjLnROF4XhcTl8gertaZppPtb8FoNFk5dBCot7D81iEnWfiEd1OsX2mqM8aRsHsbR+DMl8YRkz+LgWpFS+rfyMSet2ntVF7Mu2UOb2DIm6wvJoF5fsjf4y3y3EOlRkyUziccR/6P1jAaLij8bYyFWu45tpDuih2xQKb+Zh100Ep7eBJpBFjAWFn5JpBFjAWFn5iCa9t5dL/swLeVJ6oTyVqKvW/wXfau+krKvdqskiJ23Dk2SqndpUFBD7RNKDq9MbZKH7MRQthfxmiG";
+//	
+//	string rawResultStr = CipherUtils::decryptAESBASE64(encryptChars("nonevoidmodebase").c_str(), resultStr.c_str());
+//	CCLOG("%s", rawResultStr.c_str());
+//	return false;
 //	std::chrono::time_point<std::chrono::system_clock> recent;
 //    recent = std::chrono::system_clock::now();
 //	std::time_t recent_time = std::chrono::system_clock::to_time_t(recent);
@@ -407,4 +423,7 @@ void AppDelegate::applicationWillEnterForeground()
 																					  CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 																				  }));
 	}
+	
+	
+	
 }

@@ -285,6 +285,11 @@
 		D70B56BC1814BE8E001FC90A /* ZoomScriptScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D70B563D1814BE8E001FC90A /* ZoomScriptScene.cpp */; };
 		D71DFB15186BB28E00BD3BCD /* KSProtect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71DFB13186BB28E00BD3BCD /* KSProtect.cpp */; };
 		D71DFB18186BB92F00BD3BCD /* CardMatching.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D71DFB16186BB92F00BD3BCD /* CardMatching.cpp */; };
+		D721EB1E19E528B30008EE63 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D721EB1D19E528B30008EE63 /* iAd.framework */; };
+		D721EB1F19E528C60008EE63 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D721EB1D19E528B30008EE63 /* iAd.framework */; };
+		D721EB2319E529640008EE63 /* AdXTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = D721EB2119E529640008EE63 /* AdXTracking.m */; };
+		D721EB2619E533400008EE63 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D721EB2419E533400008EE63 /* Info.plist */; };
+		D721EB2719E533400008EE63 /* DGprotoforEnt.plist in Resources */ = {isa = PBXBuildFile; fileRef = D721EB2519E533400008EE63 /* DGprotoforEnt.plist */; };
 		D7289AB0195A948B00200284 /* Terms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7289AAF195A948B00200284 /* Terms.cpp */; };
 		D72B9FDA19D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B9FD819D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp */; };
 		D72ECE5819E26B2700871F1E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3D415EB7BE500256477 /* AVFoundation.framework */; };
@@ -344,6 +349,7 @@
 		D753BE921897CCC300B316B0 /* GachaShowReward.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D753BE901897CCC300B316B0 /* GachaShowReward.cpp */; };
 		D753BE961898C01700B316B0 /* GoldClicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D753BE941898C01700B316B0 /* GoldClicker.cpp */; };
 		D760C724187EA2B2005AC105 /* TouchSuctionLayer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D760C722187EA2B2005AC105 /* TouchSuctionLayer.cpp */; };
+		D767C43419E54633008C5D3E /* AdXTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = D721EB2119E529640008EE63 /* AdXTracking.m */; };
 		D769736A18EBFFB900E3FD55 /* 3way.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769726718EBFFB800E3FD55 /* 3way.cpp */; };
 		D769736B18EBFFB900E3FD55 /* adler32.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769726918EBFFB800E3FD55 /* adler32.cpp */; };
 		D769736C18EBFFB900E3FD55 /* algebra.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769726C18EBFFB800E3FD55 /* algebra.cpp */; };
@@ -1769,7 +1775,7 @@
 		B24861D6185706BE004CF7D7 /* HorseGacha.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HorseGacha.h; sourceTree = "<group>"; };
 		B24861D7185706BE004CF7D7 /* ShowItemContent.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ShowItemContent.cpp; sourceTree = "<group>"; };
 		B24861D8185706BE004CF7D7 /* ShowItemContent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ShowItemContent.h; sourceTree = "<group>"; };
-		B24861D9185706BE004CF7D7 /* TitleRenewal.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TitleRenewal.cpp; sourceTree = "<group>"; };
+		B24861D9185706BE004CF7D7 /* TitleRenewal.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = TitleRenewal.cpp; sourceTree = "<group>"; };
 		B24861DA185706BE004CF7D7 /* TitleRenewal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TitleRenewal.h; sourceTree = "<group>"; };
 		B2B6D88E1842EA3000231A95 /* ChallengeSend.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ChallengeSend.cpp; sourceTree = "<group>"; };
 		B2B6D88F1842EA3000231A95 /* ChallengeSend.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ChallengeSend.h; sourceTree = "<group>"; };
@@ -1797,7 +1803,7 @@
 		B2C5358A19949A8200516F99 /* libFiveRocks.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libFiveRocks.a; sourceTree = "<group>"; };
 		B2C5358C19949A9200516F99 /* ConvexGraph.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ConvexGraph.cpp; sourceTree = "<group>"; };
 		B2C5358D19949A9200516F99 /* ConvexGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ConvexGraph.h; sourceTree = "<group>"; };
-		B2C5358E19949A9200516F99 /* AccountManagerPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AccountManagerPopup.cpp; sourceTree = "<group>"; };
+		B2C5358E19949A9200516F99 /* AccountManagerPopup.cpp */ = {isa = PBXFileReference; explicitFileType = sourcecode.cpp.objcpp; fileEncoding = 4; path = AccountManagerPopup.cpp; sourceTree = "<group>"; };
 		B2C5358F19949A9200516F99 /* AccountManagerPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AccountManagerPopup.h; sourceTree = "<group>"; };
 		B2C5359019949A9200516F99 /* TypingBox.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TypingBox.cpp; sourceTree = "<group>"; };
 		B2C5359119949A9200516F99 /* TypingBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TypingBox.h; sourceTree = "<group>"; };
@@ -2070,6 +2076,12 @@
 		D71DFB14186BB28E00BD3BCD /* KSProtect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KSProtect.h; sourceTree = "<group>"; };
 		D71DFB16186BB92F00BD3BCD /* CardMatching.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CardMatching.cpp; sourceTree = "<group>"; };
 		D71DFB17186BB92F00BD3BCD /* CardMatching.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardMatching.h; sourceTree = "<group>"; };
+		D721EB1D19E528B30008EE63 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
+		D721EB2119E529640008EE63 /* AdXTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdXTracking.m; sourceTree = "<group>"; };
+		D721EB2219E529640008EE63 /* AdXTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdXTracking.h; sourceTree = "<group>"; };
+		D721EB2419E533400008EE63 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D721EB2519E533400008EE63 /* DGprotoforEnt.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DGprotoforEnt.plist; sourceTree = "<group>"; };
+		D721EE1E19E533760008EE63 /* DGproto copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "DGproto copy-Info.plist"; path = "/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.ios/DGproto copy-Info.plist"; sourceTree = "<absolute>"; };
 		D7289AAE195A948B00200284 /* Terms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terms.h; sourceTree = "<group>"; };
 		D7289AAF195A948B00200284 /* Terms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terms.cpp; sourceTree = "<group>"; };
 		D72B9FD819D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoystickPositionSelectPopup.cpp; sourceTree = "<group>"; };
@@ -2893,7 +2905,6 @@
 		D79EF60519D80CF700979D79 /* spine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = spine.h; sourceTree = "<group>"; };
 		D79EF70519D8DBC200979D79 /* cocos2dx.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = cocos2dx.xcodeproj; path = ../../../cocos2dx/proj.ios/cocos2dx.xcodeproj; sourceTree = "<group>"; };
 		D7A8A3FB19DD0B6000158A61 /* DGproto copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "DGproto copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		D7A8A3FC19DD0B6100158A61 /* DGproto copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "DGproto copy2-Info.plist"; path = "/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.ios/DGproto copy2-Info.plist"; sourceTree = "<absolute>"; };
 		D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JackMissileShow.cpp; sourceTree = "<group>"; };
 		D7AF3846189239EA00A3AD05 /* JackMissileShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JackMissileShow.h; sourceTree = "<group>"; };
 		D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PuzzleListShadow.cpp; sourceTree = "<group>"; };
@@ -3072,6 +3083,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
+				D721EB1E19E528B30008EE63 /* iAd.framework in Frameworks */,
+				D7A8A39819DD0B6000158A61 /* SystemConfiguration.framework in Frameworks */,
 				D7A8A39119DD0B6000158A61 /* GameKit.framework in Frameworks */,
 				D7A8A39219DD0B6000158A61 /* Twitter.framework in Frameworks */,
 				D7A8A39319DD0B6000158A61 /* CFNetwork.framework in Frameworks */,
@@ -3079,7 +3093,6 @@
 				D7A8A39519DD0B6000158A61 /* libsqlite3.dylib in Frameworks */,
 				D7A8A39619DD0B6000158A61 /* Security.framework in Frameworks */,
 				D7A8A39719DD0B6000158A61 /* StoreKit.framework in Frameworks */,
-				D7A8A39819DD0B6000158A61 /* SystemConfiguration.framework in Frameworks */,
 				D7A8A39919DD0B6000158A61 /* MessageUI.framework in Frameworks */,
 				D7A8A39A19DD0B6000158A61 /* AddressBook.framework in Frameworks */,
 				D7A8A39B19DD0B6000158A61 /* CoreText.framework in Frameworks */,
@@ -3095,7 +3108,6 @@
 				D7A8A3A519DD0B6000158A61 /* Accounts.framework in Frameworks */,
 				D7A8A3A619DD0B6000158A61 /* libXPlatformStatic.a in Frameworks */,
 				D7A8A3A719DD0B6000158A61 /* Nelo2SDK.framework in Frameworks */,
-				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
 				D7A8A3A919DD0B6000158A61 /* ImageIO.framework in Frameworks */,
 				D7A8A3AA19DD0B6000158A61 /* libLitmus.a in Frameworks */,
 				D7A8A3AB19DD0B6000158A61 /* libXInNetworkStatic.a in Frameworks */,
@@ -3129,6 +3141,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D721EB1F19E528C60008EE63 /* iAd.framework in Frameworks */,
+				A71A441917D583ED004B9F01 /* AdSupport.framework in Frameworks */,
+				A71A441F17D583ED004B9F01 /* SystemConfiguration.framework in Frameworks */,
 				D72ECE5819E26B2700871F1E /* AVFoundation.framework in Frameworks */,
 				D741D9F419DBD1ED0051C63D /* GameKit.framework in Frameworks */,
 				D741D9F219DBD0960051C63D /* Twitter.framework in Frameworks */,
@@ -3137,7 +3152,6 @@
 				D70B54361814BC25001FC90A /* libsqlite3.dylib in Frameworks */,
 				A71A441C17D583ED004B9F01 /* Security.framework in Frameworks */,
 				A71A441E17D583ED004B9F01 /* StoreKit.framework in Frameworks */,
-				A71A441F17D583ED004B9F01 /* SystemConfiguration.framework in Frameworks */,
 				A71A441B17D583ED004B9F01 /* MessageUI.framework in Frameworks */,
 				D70B54FC1814BC85001FC90A /* AddressBook.framework in Frameworks */,
 				D70B54351814BC25001FC90A /* CoreText.framework in Frameworks */,
@@ -3153,7 +3167,6 @@
 				A71A441817D583ED004B9F01 /* Accounts.framework in Frameworks */,
 				D741D9CA19DBCB0A0051C63D /* libXPlatformStatic.a in Frameworks */,
 				D741D9C519DBCB0A0051C63D /* Nelo2SDK.framework in Frameworks */,
-				A71A441917D583ED004B9F01 /* AdSupport.framework in Frameworks */,
 				A71A441A17D583ED004B9F01 /* ImageIO.framework in Frameworks */,
 				D741D9C319DBCB090051C63D /* libLitmus.a in Frameworks */,
 				D741D9C919DBCB0A0051C63D /* libXInNetworkStatic.a in Frameworks */,
@@ -3647,6 +3660,7 @@
 		D70B551A1814BE8D001FC90A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D721EB2019E529570008EE63 /* adx */,
 				D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */,
 				D7B6352B19D9665C00BA4785 /* CharacterSelectPopup.h */,
 				D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */,
@@ -4241,6 +4255,15 @@
 				D70B55B91814BE8E001FC90A /* writer.h */,
 			);
 			path = jsoncpp;
+			sourceTree = "<group>";
+		};
+		D721EB2019E529570008EE63 /* adx */ = {
+			isa = PBXGroup;
+			children = (
+				D721EB2119E529640008EE63 /* AdXTracking.m */,
+				D721EB2219E529640008EE63 /* AdXTracking.h */,
+			);
+			name = adx;
 			sourceTree = "<group>";
 		};
 		D741D93219DBCB090051C63D /* HSPSDKIOS */ = {
@@ -5589,6 +5612,8 @@
 		F293B3BD15EB7BE500256477 = {
 			isa = PBXGroup;
 			children = (
+				D721EB2419E533400008EE63 /* Info.plist */,
+				D721EB2519E533400008EE63 /* DGprotoforEnt.plist */,
 				D741D93219DBCB090051C63D /* HSPSDKIOS */,
 				D79EF70519D8DBC200979D79 /* cocos2dx.xcodeproj */,
 				D79EF45719D80CF600979D79 /* extensions */,
@@ -5619,7 +5644,7 @@
 				F293B6E815EB807E00256477 /* Other Sources */,
 				F293B3C915EB7BE500256477 /* Products */,
 				F293BC4615EB859D00256477 /* Resources */,
-				D7A8A3FC19DD0B6100158A61 /* DGproto copy2-Info.plist */,
+				D721EE1E19E533760008EE63 /* DGproto copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5635,6 +5660,7 @@
 		F293B3CB15EB7BE500256477 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D721EB1D19E528B30008EE63 /* iAd.framework */,
 				D741D9F319DBD1ED0051C63D /* GameKit.framework */,
 				D741D9F119DBD0960051C63D /* Twitter.framework */,
 				D71DFB101869297600BD3BCD /* libdyld.dylib */,
@@ -5876,11 +5902,13 @@
 				D741D9E219DBCB0A0051C63D /* loginService.strings in Resources */,
 				A71A477E17D59D34004B9F01 /* Icon-Small@2x.png in Resources */,
 				D741D9E019DBCB0A0051C63D /* hspuibase_btn_navi_close.png in Resources */,
+				D721EB2719E533400008EE63 /* DGprotoforEnt.plist in Resources */,
 				A71A477F17D59D34004B9F01 /* Icon.png in Resources */,
 				D741D9D919DBCB0A0051C63D /* HSPConfiguration.plist in Resources */,
 				D741D9EF19DBCB0A0051C63D /* HSPPaymentLocalizable.strings in Resources */,
 				A71A478017D59D34004B9F01 /* Icon@2x.png in Resources */,
 				D7DD859E18E003BF008003D4 /* pixelation.fsh in Resources */,
+				D721EB2619E533400008EE63 /* Info.plist in Resources */,
 				A71A516017D6E96C004B9F01 /* res_img in Resources */,
 				D741D9E519DBCB0A0051C63D /* login_img_etc_welcome_logo@2x.png in Resources */,
 				A71A516117D6E96C004B9F01 /* res_sound in Resources */,
@@ -6204,6 +6232,7 @@
 				D7A8A23319DD0B6000158A61 /* b2PrismaticJoint.cpp in Sources */,
 				D7A8A23419DD0B6000158A61 /* CardSettingPopup.cpp in Sources */,
 				D7A8A23519DD0B6000158A61 /* b2PulleyJoint.cpp in Sources */,
+				D767C43419E54633008C5D3E /* AdXTracking.m in Sources */,
 				D7A8A23619DD0B6000158A61 /* FormSetter.cpp in Sources */,
 				D7A8A23719DD0B6000158A61 /* camellia.cpp in Sources */,
 				D7A8A23819DD0B6000158A61 /* GoldClicker.cpp in Sources */,
@@ -6853,6 +6882,7 @@
 				15C155451683118600D239F2 /* b2PrismaticJoint.cpp in Sources */,
 				B2ED1045183C82DC0030A857 /* CardSettingPopup.cpp in Sources */,
 				15C155461683118600D239F2 /* b2PulleyJoint.cpp in Sources */,
+				D721EB2319E529640008EE63 /* AdXTracking.m in Sources */,
 				D7DD85A918E3CF21008003D4 /* FormSetter.cpp in Sources */,
 				D769737718EBFFB900E3FD55 /* camellia.cpp in Sources */,
 				D753BE961898C01700B316B0 /* GoldClicker.cpp in Sources */,
@@ -7281,9 +7311,8 @@
 				COPY_PHASE_STRIP = NO;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ksook/Downloads,
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/HSPSDKIOS/lib/externals/Facebook",
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/HSPSDKIOS/lib/externals/Nelo2",
+					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
+					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7316,7 +7345,7 @@
 					"\"$(SRCROOT)/../../../extensions\"",
 					"\"$(SRCROOT)/../boost_1_55_0\"",
 				);
-				INFOPLIST_FILE = "DGproto copy2-Info.plist";
+				INFOPLIST_FILE = DGprotoforEnt.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries",
@@ -7366,10 +7395,10 @@
 				COPY_PHASE_STRIP = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/ksook/Downloads,
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/HSPSDKIOS/lib/externals/Facebook",
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/HSPSDKIOS/lib/externals/Nelo2",
+					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
+					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 				);
+				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7378,6 +7407,7 @@
 					CC_TARGET_OS_IPHONE,
 					"CC_LUA_ENGINE_ENABLED=1",
 					"CC_ENABLE_CHIPMUNK_INTEGRATION=1",
+					"COCOS2D_DEBUG=1",
 				);
 				"GCC_THUMB_SUPPORT[arch=armv6]" = "";
 				GCC_WARN_INHIBIT_ALL_WARNINGS = YES;
@@ -7399,7 +7429,7 @@
 					"\"$(SRCROOT)/../../../extensions\"",
 					"\"$(SRCROOT)/../boost_1_55_0\"",
 				);
-				INFOPLIST_FILE = "DGproto copy2-Info.plist";
+				INFOPLIST_FILE = DGprotoforEnt.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries",
@@ -7521,6 +7551,7 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7605,6 +7636,7 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 				);
+				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (

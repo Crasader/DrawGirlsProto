@@ -20,11 +20,17 @@
 #import "HSPUtil.h"
 #import "AdXTracking.h"
 #import "HSPMessage.h"
+#import "AppController.h"
+#import "HSPPayment.h"
+#import "HSPUiLauncher.h"
+#import "HSPItemDelivery.h"
+//#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
 #endif
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import "AppController.h"
 #import <sys/types.h>
 #import <sys/sysctl.h>
 //#import "KALocalUser.h"
@@ -501,7 +507,7 @@ string hspConnector::getServerAddress(){
 		
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
-		r = revStr;
+		serverAddr = revStr;
 		
 		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
@@ -798,24 +804,55 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelT
 			 switch (promotionState)
 			 {
 				 case CGP_NONE:
+				 {
 					 [resultDict setObject:@"CGP_NONE" forKey:@"promotionstate"];
 					 // 프로모션 없음
 					 break;
+				 }
 				 case CGP_PROMOTION_EXISTS:
+				 {
 					 [resultDict setObject:@"CGP_PROMOTION_EXISTS" forKey:@"promotionstate"];
+					 PromotionInfo *promoInfo = [HSPCGP getPromotionInfo];
+					 switch(promoInfo->typeCode)
+					 {
+						 case 1:
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->eventUrl] forKey:@"eventurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->buttonUrl] forKey:@"buttonurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bubbleText] forKey:@"bubbletext"];
+							 
+							 break;
+						 case 2:
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bannerLandUrl] forKey:@"bannerlandurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bannerPortUrl] forKey:@"bannerporturl"];
+							 break;
+					 }
+					 
 					 // 노출해야 할 프로모션 있음
 					 break;
+				 }
 				 case CGP_REWARD_REQUIRED:
+				 {
 					 [resultDict setObject:@"CGP_REWARD_REQUIRED" forKey:@"promotionstate"];
+					 PromotionInfo *promoInfo = [HSPCGP getPromotionInfo];
 					 // 이용자에게 보상해야할 정보가 있음
+					 
+					 NSMutableArray* rewardArray = [NSMutableArray array];
+					 NSMutableDictionary* rewardDict = [NSMutableDictionary dictionary];
+					 [rewardDict setObject:[NSNumber numberWithInt:promoInfo->rewardValue] forKey:@"rewardvalue"];
+					 [rewardDict setObject:[NSString stringWithUTF8String:promoInfo->rewardCode] forKey:@"rewardcode"];
+					 [rewardDict setObject:[NSNumber numberWithInt:promoInfo->promotionId] forKey:@"promotiontype"];
+					 
+					 [rewardArray addObject:rewardDict];
+					 [resultDict setObject:rewardArray forKey:@"rewards"];
 					 break;
+				 }
 			 }
 		 }
 		 addErrorInResult(resultDict, error);
 		 callFuncMainQueue2(0,0,_key,resultDict);
 	 }];
-}
 #endif
+}
 
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
@@ -974,11 +1011,38 @@ void hspConnector::requestProductInfos(jsonSelType func)
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	Json::Value dummy;
-	dummy["issuccess"] = 1;
-//	dummy["korean"] = 0;
-	func(dummy);
+	[HSPPayment requestProductInfosWithCompletionHandler:^(NSArray* productInfos, HSPError* error) {
+		
+		NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		
+		NSMutableArray* jArray = [NSMutableArray array];
+		[resultDict setObject:[NSNumber numberWithInteger:[error isSuccess]] forKey:@"issuccess"];
+		if ( [error isSuccess] == YES )
+		{
+			for ( HSPPaymentProductInfo* productInfo in productInfos )
+			{
+				NSMutableDictionary *arrayElement = [NSMutableDictionary dictionary];
+				/*
+				 arrayElement.put("productid", productInfo.getProductID());
+				 arrayElement.put("productname", productInfo.getProductName());
+				 arrayElement.put("currency", productInfo.getCurrency());
+				 arrayElement.put("price", productInfo.getPrice());
+				 jArray.put(arrayElement)
+				 */
+				[arrayElement setObject:[productInfo productID] forKey:@"productid"];
+				[arrayElement setObject:[productInfo productName] forKey:@"productname"];
+				[arrayElement setObject:[productInfo currency] forKey:@"currency"];
+				[arrayElement setObject:[productInfo price] forKey:@"price"];
+				[jArray addObject:arrayElement];
+			}
+			[resultDict setObject:jArray forKey:@"info"];
+		}
+		else
+		{
+			NSLog(@"Failed to load productInfo : %@", error);
+		}
+		callFuncMainQueue2(0,0,_key,resultDict);
+	}];
 #endif
 }
 void hspConnector::requestProductInfos(CCObject* target, jsonSelType func)
@@ -1003,7 +1067,10 @@ void hspConnector::completePromotion()
 		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPCGP completePromotion];
 #endif
+	
 }
 void hspConnector::completeInstallPromotion()
 {
@@ -1013,6 +1080,8 @@ void hspConnector::completeInstallPromotion()
 		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPCGP completePromotionByInstall];
 #endif
 }
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
@@ -1029,10 +1098,21 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-// not implementation
-	Json::Value dummy;
-	dummy["issuccess"] = 1;
-	func(dummy);
+	[HSPPayment purchaseWithProductId:[NSString stringWithUTF8String:param.get("productid", "").asString().c_str()]
+									completionHandler:^(HSPError* error)
+	 {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 [resultDict setObject:[NSNumber numberWithBool:[error isSuccess]] forKey:@"issuccess"];
+		 NSLog(@"HSPPayment purchase result : %@", error);
+		 if ([error isSuccess] == YES)
+		 {
+			 callFuncMainQueue2(0,0,_key,resultDict);
+		 }
+		 else
+		 {
+			 callFuncMainQueue2(0,0,_key,resultDict);
+		 }
+	 }];
 #endif
 }
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
@@ -1057,7 +1137,6 @@ void hspConnector::openUrl(const std::string& url)
 		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
@@ -1074,7 +1153,14 @@ void hspConnector::openHSPUrl(const std::string& url)
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
+//	HSPUri* uriMyProfile = [HSPUri uriWithString:@"HSPUI://webview"];
+//	[HSPUiFactory]
+//	
+//	
+//	// 게임 위에 해당 HSPUri 인스턴스에 해당하는 HSP화면을 출력한다.
+//	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
+
+	
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
@@ -1091,6 +1177,11 @@ void hspConnector::openCSCenter(const std::string& url)
 		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// 내 정보 URI(HSPUI_URI_PROFILE_MYPROFILE)으로 HSPUri 인스턴스를 생성한다.
+	HSPUri* uriMyProfile = [HSPUri uriWithString:HSP_COMMON_URI_SUPPORT_CSCENTER];
+	
+	// 게임 위에 해당 HSPUri 인스턴스에 해당하는 HSP화면을 출력한다.
+	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
 	// not implementation
 	//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
@@ -1102,8 +1193,6 @@ void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(IIZ)V")) {
-		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key, (int)mt, force);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -1155,7 +1244,6 @@ void hspConnector::getIsUsimKorean(jsonSelType func)
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -1290,13 +1378,12 @@ int hspConnector::openKakaoMsg()
 
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	[[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
 						 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
 	// not implementation
 //	CCLog(url.c_str());
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 
-	return 0;
 #endif
 }
 
@@ -1317,13 +1404,8 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	[[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
 																							 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
-	// not implementation
-	//	CCLog(url.c_str());
-	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
-	
-	return 0;
 #endif
 }
 
@@ -1346,6 +1428,9 @@ void hspConnector::getAdXConnectEventInstance(string event, string data, string 
 	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+						withData:[NSString stringWithUTF8String:data.c_str()]
+				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
 	
 #endif
 }
@@ -1407,6 +1492,7 @@ void hspConnector::launchPromotion()
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
 	
+	[HSPCGP launchPromotion];
 #endif
 }
 //
