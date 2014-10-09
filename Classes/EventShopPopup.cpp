@@ -243,27 +243,27 @@ void EventShopPopup::menuAction(CCObject* sender)
 							loading_layer = LoadingLayer::create();
 							addChild(loading_layer, 999);
 							
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopEventRuby_int1_exchangeID_s, t_index), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
-							
-							mySGD->changeGoods([=](Json::Value result_data){
-								loading_layer->removeFromParent();
-								
-								if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								{
-									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_successPurchase)), 9999);
-								}
-								else
-								{
-									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-								}
-								is_menu_enable = true;
-							});
-							
-							
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopEventRuby_int1_exchangeID_s, t_index), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+//							
+//							mySGD->changeGoods([=](Json::Value result_data){
+//								loading_layer->removeFromParent();
+//								
+//								if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//								{
+//									mySGD->clearChangeGoods();
+//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_successPurchase)), 9999);
+//								}
+//								else
+//								{
+//									mySGD->clearChangeGoods();
+//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//								}
+//								is_menu_enable = true;
+//							});
+//							
+//							
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 							Json::Value param;
 							param["productid"] = mySGD->getEventInappProduct(t_index);
 							hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -284,7 +284,7 @@ void EventShopPopup::menuAction(CCObject* sender)
 									is_menu_enable = true;
 								}
 							});
-#endif
+//#endif
 						});
 }
 

@@ -256,31 +256,31 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	inapp_loading = LoadingLayer::create(-9999, true);
 	addChild(inapp_loading);
 	
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	mySGD->addChangeGoods("pg_fp");
-	
-	mySGD->setUserdataIsFirstBuy(1); // true
-	vector<CommandParam> command_list;
-	command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-	
-	mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data){
-		inapp_loading->removeFromParent();
-		if(result_data["result"]["code"].asInt() == GDSUCCESS)
-		{
-			is_menu_enable = true;
-			giveupAction(sender, t_event);
-		}
-		else
-		{
-			mySGD->clearChangeGoods();
-			mySGD->clearChangeUserdata();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-			is_menu_enable = true;
-		}
-	});
-	
-	
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	mySGD->addChangeGoods("pg_fp");
+//	
+//	mySGD->setUserdataIsFirstBuy(1); // true
+//	vector<CommandParam> command_list;
+//	command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+//	
+//	mySGD->changeGoodsTransaction(command_list, [=](Json::Value result_data){
+//		inapp_loading->removeFromParent();
+//		if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//		{
+//			is_menu_enable = true;
+//			giveupAction(sender, t_event);
+//		}
+//		else
+//		{
+//			mySGD->clearChangeGoods();
+//			mySGD->clearChangeUserdata();
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//			is_menu_enable = true;
+//		}
+//	});
+//	
+//	
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	Json::Value param;
 	param["productid"] = NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, kPurchaseGuideType_firstPurchase-1); //
 	CCLOG("productid : %s", param["productid"].asString().c_str());
@@ -307,7 +307,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 			is_menu_enable = true;
 		}
 	});
-#endif
+//#endif
 	
 }
 

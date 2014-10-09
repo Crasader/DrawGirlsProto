@@ -550,67 +550,15 @@ void ShopPopup::buyStartPack(CCObject* sender)
 							
 							bool is_exchange = NSDS_GS(kSDS_GI_shopStartPack_pID_s) == "";
 							
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
-							
-							mySGD->setUserdataOnlyOneBuyPack(NSDS_GI(kSDS_GI_shopStartPack_no_i));
-							
-							vector<CommandParam> t_command_list;
-							t_command_list.clear();
-							t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-							mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data){
-								loading_layer->removeFromParent();
-								
-								if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								{
-									if(is_continue)
-									{
-										is_menu_enable = false;
-										
-										if(is_add_gray)
-										{
-											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
-																				   {
-																					   gray->setOpacity(255*t);
-																				   }, [=](float t)
-																				   {
-																					   gray->setOpacity(255*t);
-																					   gray->removeFromParent();
-																				   }));
-										}
-										
-										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-											
-										}, [=]()
-																	{
-																		if(target_final)
-																			(target_final->*delegate_final)();
-																		if(is_set_close_func)
-																			close_func();
-																		if(continue_end != nullptr)
-																			continue_end();
-																		removeFromParent();
-																	});
-									}
-									else
-									{
-										setShopCode(kSC_ruby);
-										is_menu_enable = true;
-									}
-									if(time_label)
-										time_label->setVisible(false);
-									eventPack_menu->setVisible(false);
-								}
-								else
-								{
-									is_menu_enable = true;
-									mySGD->clearChangeUserdata();
-									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-								}
-							});
-							
-//							mySGD->changeGoods([=](Json::Value result_data){
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+//							
+//							mySGD->setUserdataOnlyOneBuyPack(NSDS_GI(kSDS_GI_shopStartPack_no_i));
+//							
+//							vector<CommandParam> t_command_list;
+//							t_command_list.clear();
+//							t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+//							mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data){
 //								loading_layer->removeFromParent();
 //								
 //								if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -649,18 +597,70 @@ void ShopPopup::buyStartPack(CCObject* sender)
 //										setShopCode(kSC_ruby);
 //										is_menu_enable = true;
 //									}
+//									if(time_label)
+//										time_label->setVisible(false);
+//									eventPack_menu->setVisible(false);
 //								}
 //								else
 //								{
 //									is_menu_enable = true;
+//									mySGD->clearChangeUserdata();
 //									mySGD->clearChangeGoods();
 //									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 //								}
 //							});
-							
-							
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-							
+//							
+////							mySGD->changeGoods([=](Json::Value result_data){
+////								loading_layer->removeFromParent();
+////								
+////								if(result_data["result"]["code"].asInt() == GDSUCCESS)
+////								{
+////									if(is_continue)
+////									{
+////										is_menu_enable = false;
+////										
+////										if(is_add_gray)
+////										{
+////											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+////																				   {
+////																					   gray->setOpacity(255*t);
+////																				   }, [=](float t)
+////																				   {
+////																					   gray->setOpacity(255*t);
+////																					   gray->removeFromParent();
+////																				   }));
+////										}
+////										
+////										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+////											
+////										}, [=]()
+////																	{
+////																		if(target_final)
+////																			(target_final->*delegate_final)();
+////																		if(is_set_close_func)
+////																			close_func();
+////																		if(continue_end != nullptr)
+////																			continue_end();
+////																		removeFromParent();
+////																	});
+////									}
+////									else
+////									{
+////										setShopCode(kSC_ruby);
+////										is_menu_enable = true;
+////									}
+////								}
+////								else
+////								{
+////									is_menu_enable = true;
+////									mySGD->clearChangeGoods();
+////									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+////								}
+////							});
+//							
+//							
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//							
 							if(is_exchange)
 							{
 								mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
@@ -793,7 +793,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									}
 								});
 							}
-#endif
+//#endif
 						});
 }
 
@@ -815,124 +815,124 @@ void ShopPopup::buyEventPack(CCObject* sender)
 							
 							bool is_exchange = NSDS_GS(kSDS_GI_shopEventPack_pID_s) == "";
 							
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
-							
-							vector<CommandParam> t_command_list;
-							t_command_list.clear();
-							if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-							{
-								mySGD->setUserdataOnlyOneBuyPack(NSDS_GI(kSDS_GI_shopEventPack_no_i));
-								t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
-							}
-							
-							mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data){
-								loading_layer->removeFromParent();
-								
-								if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								{
-									if(is_continue)
-									{
-										is_menu_enable = false;
-										
-										if(is_add_gray)
-										{
-											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
-																				   {
-																					   gray->setOpacity(255*t);
-																				   }, [=](float t)
-																				   {
-																					   gray->setOpacity(255*t);
-																					   gray->removeFromParent();
-																				   }));
-										}
-										
-										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-											
-										}, [=]()
-																	{
-																		if(target_final)
-																			(target_final->*delegate_final)();
-																		if(is_set_close_func)
-																			close_func();
-																		if(continue_end != nullptr)
-																			continue_end();
-																		removeFromParent();
-																	});
-									}
-									else
-									{
-										is_menu_enable = true;
-									}
-									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-									{
-										if(time_label)
-											time_label->setVisible(false);
-										eventPack_menu->setVisible(false);
-										setShopCode(kSC_ruby);
-									}
-								}
-								else
-								{
-									is_menu_enable = true;
-									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
-										mySGD->clearChangeUserdata();
-									mySGD->clearChangeGoods();
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-								}
-							});
-							
-							//							mySGD->changeGoods([=](Json::Value result_data){
-							//								loading_layer->removeFromParent();
-							//
-							//								if(result_data["result"]["code"].asInt() == GDSUCCESS)
-							//								{
-							//									if(is_continue)
-							//									{
-							//										is_menu_enable = false;
-							//
-							//										if(is_add_gray)
-							//										{
-							//											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
-							//																				   {
-							//																					   gray->setOpacity(255*t);
-							//																				   }, [=](float t)
-							//																				   {
-							//																					   gray->setOpacity(255*t);
-							//																					   gray->removeFromParent();
-							//																				   }));
-							//										}
-							//
-							//										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-							//
-							//										}, [=]()
-							//																	{
-							//																		if(target_final)
-							//																			(target_final->*delegate_final)();
-							//																		if(is_set_close_func)
-							//																			close_func();
-							//																		if(continue_end != nullptr)
-							//																			continue_end();
-							//																		removeFromParent();
-							//																	});
-							//									}
-							//									else
-							//									{
-							//										setShopCode(kSC_ruby);
-							//										is_menu_enable = true;
-							//									}
-							//								}
-							//								else
-							//								{
-							//									is_menu_enable = true;
-							//									mySGD->clearChangeGoods();
-							//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-							//								}
-							//							});
-							
-							
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-							
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//							mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+//							
+//							vector<CommandParam> t_command_list;
+//							t_command_list.clear();
+//							if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+//							{
+//								mySGD->setUserdataOnlyOneBuyPack(NSDS_GI(kSDS_GI_shopEventPack_no_i));
+//								t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+//							}
+//							
+//							mySGD->changeGoodsTransaction(t_command_list, [=](Json::Value result_data){
+//								loading_layer->removeFromParent();
+//								
+//								if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//								{
+//									if(is_continue)
+//									{
+//										is_menu_enable = false;
+//										
+//										if(is_add_gray)
+//										{
+//											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+//																				   {
+//																					   gray->setOpacity(255*t);
+//																				   }, [=](float t)
+//																				   {
+//																					   gray->setOpacity(255*t);
+//																					   gray->removeFromParent();
+//																				   }));
+//										}
+//										
+//										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+//											
+//										}, [=]()
+//																	{
+//																		if(target_final)
+//																			(target_final->*delegate_final)();
+//																		if(is_set_close_func)
+//																			close_func();
+//																		if(continue_end != nullptr)
+//																			continue_end();
+//																		removeFromParent();
+//																	});
+//									}
+//									else
+//									{
+//										is_menu_enable = true;
+//									}
+//									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+//									{
+//										if(time_label)
+//											time_label->setVisible(false);
+//										eventPack_menu->setVisible(false);
+//										setShopCode(kSC_ruby);
+//									}
+//								}
+//								else
+//								{
+//									is_menu_enable = true;
+//									if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
+//										mySGD->clearChangeUserdata();
+//									mySGD->clearChangeGoods();
+//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//								}
+//							});
+//							
+//							//							mySGD->changeGoods([=](Json::Value result_data){
+//							//								loading_layer->removeFromParent();
+//							//
+//							//								if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//							//								{
+//							//									if(is_continue)
+//							//									{
+//							//										is_menu_enable = false;
+//							//
+//							//										if(is_add_gray)
+//							//										{
+//							//											addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+//							//																				   {
+//							//																					   gray->setOpacity(255*t);
+//							//																				   }, [=](float t)
+//							//																				   {
+//							//																					   gray->setOpacity(255*t);
+//							//																					   gray->removeFromParent();
+//							//																				   }));
+//							//										}
+//							//
+//							//										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+//							//
+//							//										}, [=]()
+//							//																	{
+//							//																		if(target_final)
+//							//																			(target_final->*delegate_final)();
+//							//																		if(is_set_close_func)
+//							//																			close_func();
+//							//																		if(continue_end != nullptr)
+//							//																			continue_end();
+//							//																		removeFromParent();
+//							//																	});
+//							//									}
+//							//									else
+//							//									{
+//							//										setShopCode(kSC_ruby);
+//							//										is_menu_enable = true;
+//							//									}
+//							//								}
+//							//								else
+//							//								{
+//							//									is_menu_enable = true;
+//							//									mySGD->clearChangeGoods();
+//							//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//							//								}
+//							//							});
+//							
+//							
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//							
 							if(is_exchange)
 							{
 								mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopStartPack_exchangeID_s), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
@@ -1072,7 +1072,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									}
 								});
 							}
-#endif
+//#endif
 						});
 }
 
