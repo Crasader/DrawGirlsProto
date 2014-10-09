@@ -507,7 +507,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 			score_label->setColor(ccc3(54, 36, 148));
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5f));
-			score_label->setPosition(ccp(130,list_cell_case->getContentSize().height/2.f - 7));
+			score_label->setPosition(ccp(135,list_cell_case->getContentSize().height/2.f - 7));
 			list_cell_case->addChild(score_label);
 		}
 	}
