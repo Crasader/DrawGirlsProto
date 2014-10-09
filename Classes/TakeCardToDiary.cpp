@@ -226,7 +226,7 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	
 	if(card_type == 0)
 	{
-		elemental_str = "성";
+		elemental_str = "섬란";
 		elemental_filename = "diary_icon_light.png";
 	}
 	else if(card_type == 1)
