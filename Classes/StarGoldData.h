@@ -1210,7 +1210,7 @@ private:
 	COMMON_VAR(int, testInt, TestInt);
 	
 	COMMON_VAR(int, addGemReward, AddGemReward);
-	
+	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
 };
 
 #endif
