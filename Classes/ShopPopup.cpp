@@ -2042,58 +2042,58 @@ void ShopPopup::menuAction(CCObject* pSender)
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
-									
-									mySGD->changeGoods([=](Json::Value result_data){
-										loading_layer->removeFromParent();
-										
-										if(result_data["result"]["code"].asInt() == GDSUCCESS)
-										{
-											if(is_continue)
-											{
-												is_menu_enable = false;
-												
-												if(is_add_gray)
-												{
-													addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
-																						   {
-																							   gray->setOpacity(255*t);
-																						   }, [=](float t)
-																						   {
-																							   gray->setOpacity(255*t);
-																							   gray->removeFromParent();
-																						   }));
-												}
-												
-												CommonAnimation::closePopup(this, main_case, nullptr, [=](){
-													
-												}, [=]()
-																			{
-																				if(target_final)
-																					(target_final->*delegate_final)();
-																				if(is_set_close_func)
-																					close_func();
-																				if(continue_end != nullptr)
-																					continue_end();
-																				removeFromParent();
-																			});
-											}
-											else
-											{
-												is_menu_enable = true;
-											}
-										}
-										else
-										{
-											is_menu_enable = true;
-											mySGD->clearChangeGoods();
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-										}
-									});
-									
-									
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//									mySGD->addChangeGoods(NSDS_GS(kSDS_GI_shopRuby_int1_exchangeID_s, tag-kSP_MT_content1), kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+//									
+//									mySGD->changeGoods([=](Json::Value result_data){
+//										loading_layer->removeFromParent();
+//										
+//										if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//										{
+//											if(is_continue)
+//											{
+//												is_menu_enable = false;
+//												
+//												if(is_add_gray)
+//												{
+//													addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t)
+//																						   {
+//																							   gray->setOpacity(255*t);
+//																						   }, [=](float t)
+//																						   {
+//																							   gray->setOpacity(255*t);
+//																							   gray->removeFromParent();
+//																						   }));
+//												}
+//												
+//												CommonAnimation::closePopup(this, main_case, nullptr, [=](){
+//													
+//												}, [=]()
+//																			{
+//																				if(target_final)
+//																					(target_final->*delegate_final)();
+//																				if(is_set_close_func)
+//																					close_func();
+//																				if(continue_end != nullptr)
+//																					continue_end();
+//																				removeFromParent();
+//																			});
+//											}
+//											else
+//											{
+//												is_menu_enable = true;
+//											}
+//										}
+//										else
+//										{
+//											is_menu_enable = true;
+//											mySGD->clearChangeGoods();
+//											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//										}
+//									});
+//									
+//									
+//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 									Json::Value param;
 									param["productid"] = mySGD->getInappProduct(tag-kSP_MT_content1);
 									hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -2114,7 +2114,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 											is_menu_enable = true;
 										}
 									});
-#endif
+//#endif
 								});
 		}
 		else if(recent_shop_code == kSC_gold)
