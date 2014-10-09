@@ -226,17 +226,32 @@ void TakeCardToDiary::setRightPage(CCNode *target, int card_number)
 	
 	if(card_type == 0)
 	{
-		elemental_str = "섬란";
+		elemental_str = "음";
 		elemental_filename = "diary_icon_light.png";
 	}
 	else if(card_type == 1)
 	{
-		elemental_str = "음";
+		elemental_str = "양";
 		elemental_filename = "diary_icon_shaded.png";
 	}
 	else if(card_type == 2)
 	{
-		elemental_str = "양";
+		elemental_str = "섬";
+		elemental_filename = "diary_icon_sun.png";
+	}
+	else if(card_type == 3)
+	{
+		elemental_str = "음란";
+		elemental_filename = "diary_icon_sun.png";
+	}
+	else if(card_type == 4)
+	{
+		elemental_str = "양란";
+		elemental_filename = "diary_icon_sun.png";
+	}
+	else if(card_type == 5)
+	{
+		elemental_str = "섬란";
 		elemental_filename = "diary_icon_sun.png";
 	}
 	
