@@ -288,8 +288,6 @@
 		D721EB1E19E528B30008EE63 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D721EB1D19E528B30008EE63 /* iAd.framework */; };
 		D721EB1F19E528C60008EE63 /* iAd.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D721EB1D19E528B30008EE63 /* iAd.framework */; };
 		D721EB2319E529640008EE63 /* AdXTracking.m in Sources */ = {isa = PBXBuildFile; fileRef = D721EB2119E529640008EE63 /* AdXTracking.m */; };
-		D721EB2619E533400008EE63 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D721EB2419E533400008EE63 /* Info.plist */; };
-		D721EB2719E533400008EE63 /* DGprotoforEnt.plist in Resources */ = {isa = PBXBuildFile; fileRef = D721EB2519E533400008EE63 /* DGprotoforEnt.plist */; };
 		D7289AB0195A948B00200284 /* Terms.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7289AAF195A948B00200284 /* Terms.cpp */; };
 		D72B9FDA19D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D72B9FD819D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp */; };
 		D72ECE5819E26B2700871F1E /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3D415EB7BE500256477 /* AVFoundation.framework */; };
@@ -626,7 +624,6 @@
 		D79EF66A19D80CF700979D79 /* TriggerBase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF55C19D80CF600979D79 /* TriggerBase.cpp */; };
 		D79EF66B19D80CF700979D79 /* TriggerMng.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF55E19D80CF600979D79 /* TriggerMng.cpp */; };
 		D79EF66C19D80CF700979D79 /* TriggerObj.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF56019D80CF600979D79 /* TriggerObj.cpp */; };
-		D79EF66D19D80CF700979D79 /* cscope.files in Resources */ = {isa = PBXBuildFile; fileRef = D79EF56219D80CF600979D79 /* cscope.files */; };
 		D79EF66E19D80CF700979D79 /* CCControl.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF56719D80CF600979D79 /* CCControl.cpp */; };
 		D79EF66F19D80CF700979D79 /* CCControlButton.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF56919D80CF600979D79 /* CCControlButton.cpp */; };
 		D79EF67019D80CF700979D79 /* CCControlColourPicker.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D79EF56B19D80CF600979D79 /* CCControlColourPicker.cpp */; };
@@ -1405,7 +1402,6 @@
 		D7A8A3E919DD0B6000158A61 /* res_sound in Resources */ = {isa = PBXBuildFile; fileRef = A71A515F17D6E96C004B9F01 /* res_sound */; };
 		D7A8A3EA19DD0B6000158A61 /* login_bg_bridge_login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D741D9A719DBCB090051C63D /* login_bg_bridge_login@2x.png */; };
 		D7A8A3EB19DD0B6000158A61 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = A71A516217D6EBD0004B9F01 /* Icon-72.png */; };
-		D7A8A3EC19DD0B6000158A61 /* cscope.files in Resources */ = {isa = PBXBuildFile; fileRef = D79EF56219D80CF600979D79 /* cscope.files */; };
 		D7A8A3ED19DD0B6000158A61 /* LoginOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D741D9B219DBCB090051C63D /* LoginOAuthViewController.xib */; };
 		D7A8A3EE19DD0B6000158A61 /* json_internalarray.inl in Resources */ = {isa = PBXBuildFile; fileRef = D70B55AF1814BE8E001FC90A /* json_internalarray.inl */; };
 		D7A8A3EF19DD0B6000158A61 /* json_internalmap.inl in Resources */ = {isa = PBXBuildFile; fileRef = D70B55B01814BE8E001FC90A /* json_internalmap.inl */; };
@@ -2079,9 +2075,6 @@
 		D721EB1D19E528B30008EE63 /* iAd.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = iAd.framework; path = System/Library/Frameworks/iAd.framework; sourceTree = SDKROOT; };
 		D721EB2119E529640008EE63 /* AdXTracking.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AdXTracking.m; sourceTree = "<group>"; };
 		D721EB2219E529640008EE63 /* AdXTracking.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AdXTracking.h; sourceTree = "<group>"; };
-		D721EB2419E533400008EE63 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D721EB2519E533400008EE63 /* DGprotoforEnt.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = DGprotoforEnt.plist; sourceTree = "<group>"; };
-		D721EE1E19E533760008EE63 /* DGproto copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "DGproto copy-Info.plist"; path = "/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.ios/DGproto copy-Info.plist"; sourceTree = "<absolute>"; };
 		D7289AAE195A948B00200284 /* Terms.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Terms.h; sourceTree = "<group>"; };
 		D7289AAF195A948B00200284 /* Terms.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Terms.cpp; sourceTree = "<group>"; };
 		D72B9FD819D03F5A0075CE55 /* JoystickPositionSelectPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JoystickPositionSelectPopup.cpp; sourceTree = "<group>"; };
@@ -2806,7 +2799,6 @@
 		D79EF55F19D80CF600979D79 /* TriggerMng.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerMng.h; sourceTree = "<group>"; };
 		D79EF56019D80CF600979D79 /* TriggerObj.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TriggerObj.cpp; sourceTree = "<group>"; };
 		D79EF56119D80CF600979D79 /* TriggerObj.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TriggerObj.h; sourceTree = "<group>"; };
-		D79EF56219D80CF600979D79 /* cscope.files */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cscope.files; sourceTree = "<group>"; };
 		D79EF56319D80CF600979D79 /* ExtensionExport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionExport.h; sourceTree = "<group>"; };
 		D79EF56419D80CF600979D79 /* ExtensionMacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ExtensionMacros.h; sourceTree = "<group>"; };
 		D79EF56719D80CF600979D79 /* CCControl.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CCControl.cpp; sourceTree = "<group>"; };
@@ -4901,7 +4893,6 @@
 				D79EF45C19D80CF600979D79 /* CCBReader */,
 				D79EF49119D80CF600979D79 /* cocos-ext.h */,
 				D79EF49219D80CF600979D79 /* CocoStudio */,
-				D79EF56219D80CF600979D79 /* cscope.files */,
 				D79EF56319D80CF600979D79 /* ExtensionExport.h */,
 				D79EF56419D80CF600979D79 /* ExtensionMacros.h */,
 				D79EF56519D80CF600979D79 /* GUI */,
@@ -5612,8 +5603,6 @@
 		F293B3BD15EB7BE500256477 = {
 			isa = PBXGroup;
 			children = (
-				D721EB2419E533400008EE63 /* Info.plist */,
-				D721EB2519E533400008EE63 /* DGprotoforEnt.plist */,
 				D741D93219DBCB090051C63D /* HSPSDKIOS */,
 				D79EF70519D8DBC200979D79 /* cocos2dx.xcodeproj */,
 				D79EF45719D80CF600979D79 /* extensions */,
@@ -5644,7 +5633,6 @@
 				F293B6E815EB807E00256477 /* Other Sources */,
 				F293B3C915EB7BE500256477 /* Products */,
 				F293BC4615EB859D00256477 /* Resources */,
-				D721EE1E19E533760008EE63 /* DGproto copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
@@ -5853,7 +5841,6 @@
 				D7A8A3E919DD0B6000158A61 /* res_sound in Resources */,
 				D7A8A3EA19DD0B6000158A61 /* login_bg_bridge_login@2x.png in Resources */,
 				D7A8A3EB19DD0B6000158A61 /* Icon-72.png in Resources */,
-				D7A8A3EC19DD0B6000158A61 /* cscope.files in Resources */,
 				D7A8A3ED19DD0B6000158A61 /* LoginOAuthViewController.xib in Resources */,
 				D7A8A3EE19DD0B6000158A61 /* json_internalarray.inl in Resources */,
 				D7A8A3EF19DD0B6000158A61 /* json_internalmap.inl in Resources */,
@@ -5902,19 +5889,16 @@
 				D741D9E219DBCB0A0051C63D /* loginService.strings in Resources */,
 				A71A477E17D59D34004B9F01 /* Icon-Small@2x.png in Resources */,
 				D741D9E019DBCB0A0051C63D /* hspuibase_btn_navi_close.png in Resources */,
-				D721EB2719E533400008EE63 /* DGprotoforEnt.plist in Resources */,
 				A71A477F17D59D34004B9F01 /* Icon.png in Resources */,
 				D741D9D919DBCB0A0051C63D /* HSPConfiguration.plist in Resources */,
 				D741D9EF19DBCB0A0051C63D /* HSPPaymentLocalizable.strings in Resources */,
 				A71A478017D59D34004B9F01 /* Icon@2x.png in Resources */,
 				D7DD859E18E003BF008003D4 /* pixelation.fsh in Resources */,
-				D721EB2619E533400008EE63 /* Info.plist in Resources */,
 				A71A516017D6E96C004B9F01 /* res_img in Resources */,
 				D741D9E519DBCB0A0051C63D /* login_img_etc_welcome_logo@2x.png in Resources */,
 				A71A516117D6E96C004B9F01 /* res_sound in Resources */,
 				D741D9E419DBCB0A0051C63D /* login_bg_bridge_login@2x.png in Resources */,
 				A71A516317D6EBD0004B9F01 /* Icon-72.png in Resources */,
-				D79EF66D19D80CF700979D79 /* cscope.files in Resources */,
 				D741D9EC19DBCB0A0051C63D /* LoginOAuthViewController.xib in Resources */,
 				D70B567D1814BE8E001FC90A /* json_internalarray.inl in Resources */,
 				D70B567E1814BE8E001FC90A /* json_internalmap.inl in Resources */,
