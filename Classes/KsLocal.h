@@ -1109,6 +1109,7 @@ enum class LK
 	
 	kStory_20_1,
 	kStory_20_2,
+	kFriendSelfNickname
 };
 class KsLocal
 {

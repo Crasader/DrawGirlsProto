@@ -24,6 +24,7 @@
 #import "HSPPayment.h"
 #import "HSPUiLauncher.h"
 #import "HSPItemDelivery.h"
+#import "KakaoLinkCenter.h"
 //#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
@@ -1406,8 +1407,29 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
-																							 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&appname=땅따먹기&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
+	if (![KakaoLinkCenter canOpenKakaoLink]) {
+		return false;
+	}
+	
+	NSMutableArray *metaInfoArray = [NSMutableArray array];
+	NSDictionary *metaInfoIOS = [NSDictionary dictionaryWithObjectsAndKeys:
+															 @"ios", @"os",
+															 @"phone", @"devicetype",
+															 @"http://itunes.apple.com/app/id362057947?mt=8", @"installurl",
+															 @"example://example", @"executeurl",
+															 nil];
+	
+//	[metaInfoArray addObject:metaInfoAndroid];
+	[metaInfoArray addObject:metaInfoIOS];
+	
+	return [KakaoLinkCenter openKakaoAppLinkWithMessage:@"돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브"
+																					 URL:@"http://link.kakao.com/?test-ios-app"
+																	 appBundleID:[[NSBundle mainBundle] bundleIdentifier]
+																		appVersion:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+																			 appName:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"]
+																 metaInfoArray:metaInfoArray];
+//	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+//																							 @"kakaolink://sendurl?msg=&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&appname=땅따먹기}"]];
 #endif
 }
 
