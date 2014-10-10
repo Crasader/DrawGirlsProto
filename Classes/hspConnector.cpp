@@ -1153,6 +1153,8 @@ void hspConnector::openHSPUrl(const std::string& url)
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	HSPUri* uriMyProfile = [HSPUri uriWithString:[NSString stringWithFormat:@"%s",url.c_str()]];
+	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
 //	HSPUri* uriMyProfile = [HSPUri uriWithString:@"HSPUI://webview"];
 //	[HSPUiFactory]
 //	
@@ -1161,7 +1163,7 @@ void hspConnector::openHSPUrl(const std::string& url)
 //	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
 
 	
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
 
@@ -1405,7 +1407,7 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
-																							 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
+																							 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&appname=땅따먹기&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
 #endif
 }
 
