@@ -80,7 +80,7 @@ bool BugTestScene1::init()
 	CCSprite* load_file_char = (CCSprite*)t_reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi").c_str(), this);
 	load_file_char->setPosition(ccp(110,230));
 	addChild(load_file_char);
-	
+	t_reader->release();
 	
 	unsigned long size = 0;
     unsigned char * pBytes = CCFileUtils::sharedFileUtils()->getFileData((mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi").c_str(), "rb", &size);
@@ -94,7 +94,7 @@ bool BugTestScene1::init()
     load_data_char->setPosition(ccp(110,280));
 	addChild(load_data_char);
     data->release();
-	
+	t_reader2->release();
 	
 	
 //	std::string ccbiName = "boss_bee";

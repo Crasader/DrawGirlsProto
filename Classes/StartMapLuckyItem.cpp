@@ -111,6 +111,7 @@ void StartMapLuckyItem::speedUpAction ()
 	addChild(fx_lucky, kStartMapLuckyItem_Z_fx);
 	
 	KS::setBlendFunc(fx_lucky, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	reader->release();
 	
 //	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 //	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapLuckyItem::createParticle));
@@ -212,6 +213,7 @@ void StartMapLuckyItem::myInit (IntPoint t_point)
 	main_img->setPosition(my_point.convertToCCP());
 	main_img->setScale(0.f);
 	addChild(main_img, kStartMapLuckyItem_Z_img);
+	reader->release();
 	
 	setPosition(CCPointZero);
 	startMyAction();

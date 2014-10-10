@@ -1836,6 +1836,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		//			jackImg = CCSprite::create("jack_die.png");
 		//			jackImg->setScale(0.2f);
 		addChild(die_particle, kJackZ_main);
+		reader->release();
 		
 		KS::setBlendFunc(die_particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
@@ -2850,6 +2851,7 @@ void Jack::startLightSprite( CCNode* target_node )
 	lighter->setPosition(ccp(0,0));
 	target_node->addChild(lighter);
 	KS::setBlendFunc(lighter, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	reader->release();
 }
 
 void Jack::startOutterParticle( CCNode* target_node )

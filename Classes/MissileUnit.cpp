@@ -1758,6 +1758,7 @@ void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool 
 	//		baseNode = CCSprite::create("threeCushion_main.png");
 	baseNode->setPosition(t_sp);
 	addChild(baseNode);
+	reader->release();
 	
 	//		colorControl = CCSprite::create("threeCushion_color.png");
 	//		colorControl->setPosition(ccp(12,12));

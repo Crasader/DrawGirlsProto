@@ -350,6 +350,12 @@ public:
 	void buttonSetVisible(bool t_b);
 	void joystickSetVisible(bool t_b);
 	
+	virtual ~TutoControler()
+	{
+		if(button_ani)
+			button_ani->release();
+	}
+	
 private:
 	
 	function<TutoMapType(IntPoint)> getMapData;
@@ -383,7 +389,7 @@ private:
 	
 	bool isButtonAction;
 	
-	CCBAnimationManager* button_ani;
+	CCBReader* button_ani;
 	
 	bool isEnableIrregularDirection;
 	bool isControlJoystickNotFixed;

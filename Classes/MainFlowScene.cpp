@@ -1313,7 +1313,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		
-		addChild(KSTimer::create(rand()%10*0.2f, [=](){
+		cell->addChild(KSTimer::create(rand()%10*0.2f, [=](){
 			CCSprite* mainTwinkle = KS::loadCCBI<CCSprite*>(this, "main_twinkle.ccbi").first;
 			mainTwinkle->setAnchorPoint(ccp(0,0));
 			mainTwinkle->setPosition(ccp(mainTwinkle->getContentSize().width/2,mainTwinkle->getContentSize().height/2));
