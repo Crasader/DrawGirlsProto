@@ -2933,7 +2933,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			string lang = KS::getLocalCode();
 			string cc = myHSP->getCountryCode();
 			string tz = myHSP->getTimeZone();
-			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+			myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
 //			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 			
 //			is_menu_enable = true; // 임시
