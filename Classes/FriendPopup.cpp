@@ -1495,8 +1495,7 @@ void FriendPopup::setVoteFriendMenu()
 		d_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
 		d_ing_img->addChild(d_ing_label);
-		d_ing_img->setVisible(mySGD->getIosMenuVisible() ||
-													graphdog->getAppVersionString() != mySGD->getIosHideVer());
+		d_ing_img->setVisible(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
 		// 추천 두번 째 팝업
 		m_voteFriendButtonCallbackSecond = [=](CCObject*){
 			TRACE();
