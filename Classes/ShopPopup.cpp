@@ -1197,7 +1197,9 @@ void ShopPopup::cellAction(CCObject* sender)
 
 CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

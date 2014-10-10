@@ -246,7 +246,7 @@ private:
 	
 	bool keep_is_draw_button_tutorial_on;
 	
-	CCBAnimationManager* button_ani;
+	CCBReader* button_ani;
 	
 	bool isEnableIrregularDirection;
 	bool isControlJoystickNotFixed;

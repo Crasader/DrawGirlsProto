@@ -1003,6 +1003,9 @@ public:
 	void setDiaryDownUrl(string t_str);
 	string getDiaryDownUrl();
 	
+	void setIosHideVer(string t_str);
+	string getIosHideVer();
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1197,6 +1200,7 @@ private:
 	KSProtectVar<int> introduce_stage;
 	
 	string diaryDownUrl;
+	string iosHideVer;
 	
 	string app_type;
 	int app_version;

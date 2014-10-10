@@ -910,6 +910,10 @@ ControlJoystickButton::~ControlJoystickButton()
         game_pad_direction = directionStop;
         game_pad_draw_keycode = -1;
     }
+	if(button_ani)
+	{
+		button_ani->release();
+	}
 }
 
 CCPoint ControlJoystickButton::directionToTouchPoint(IntDirection t_direction)
@@ -1844,7 +1848,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
-		button_ani = reader->getAnimationManager();
+		button_ani = reader;
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)
 		{
@@ -1869,8 +1873,6 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 		click_label->setPosition(ccp(draw_button->getContentSize().width/2.f, draw_button->getContentSize().height/2.f));
 		click_label->setVisible(false);
 		draw_button->addChild(click_label);
-		
-		reader->release();
 	}
 	else
 	{
@@ -1887,7 +1889,7 @@ void ControlJoystickButton::onButton(CCPoint t_location)
 	{
 //		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		button_ani->runAnimationsForSequenceNamed("cast1start");
+		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
@@ -1902,7 +1904,7 @@ void ControlJoystickButton::offButton()
 	{
 //		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		button_ani->runAnimationsForSequenceNamed("cast1stop");
+		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);

@@ -934,7 +934,10 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 	{
 		return rewardTableCellAtIndex(table, idx);
 	}
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	return cell;
