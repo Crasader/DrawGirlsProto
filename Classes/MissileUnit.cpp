@@ -2067,7 +2067,7 @@ void BlindDrop::completedAnimationSequenceNamed (char const * name)
 	string t_name = name;
 	if(t_name == "tornado_stop")
 	{
-		reader->release();
+//		reader->release();
 		oilImg->removeFromParentAndCleanup(true);
 		removeFromParentAndCleanup(true);
 	}
@@ -2104,7 +2104,7 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	reader = new CCBReader(nodeLoader);
 	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
 	reader->getAnimationManager()->setDelegate(this);
-	reader->release();
+//	reader->release();
 //	KS::setBlendFunc(oilImg, ccBlendFunc{GL_ONE_MINUS_DST_COLOR, GL_ONE});
 	addChild(oilImg);
 	oilImg->setScale(m_scale);
