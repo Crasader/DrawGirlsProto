@@ -1294,6 +1294,21 @@ void FriendPopup::setAddMenu()
 						
 						return;
 					}
+					else if( editbox->getText() == std::string(myDSH->getStringForKey(kDSH_Key_nick)))
+					{
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																										getLocal(LK::kFriendSelfNickname), [=](){
+							if(input_text1)
+							{
+								input_text1->setVisible(true);
+							}
+							
+						});
+						popup->getDimmedSprite()->setVisible(false);
+						addChild(popup);
+						
+						return;
+					}
 					param["nick"] = editbox->getText();
 					param["isPublic"] = true;
 					LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
@@ -1317,6 +1332,10 @@ void FriendPopup::setAddMenu()
 							popup->getDimmedSprite()->setVisible(false);
 							addChild(popup);
 							return;
+						}
+						if(input_text1)
+						{
+							input_text1->setVisible(true);
 						}
 						m_votedFriendList = Json::Value(Json::arrayValue);
 						Json::Value temp;
@@ -1495,8 +1514,6 @@ void FriendPopup::setVoteFriendMenu()
 		d_ing_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		d_ing_label->setPosition(ccpFromSize(d_ing_img->getContentSize()/2.f) + ccp(0,2));
 		d_ing_img->addChild(d_ing_label);
-		d_ing_img->setVisible(mySGD->getIosMenuVisible() ||
-													graphdog->getAppVersionString() != mySGD->getIosHideVer());
 		// 추천 두번 째 팝업
 		m_voteFriendButtonCallbackSecond = [=](CCObject*){
 			TRACE();
@@ -1889,6 +1906,7 @@ void FriendPopup::setVoteFriendMenu()
 		vote_friend_menu->setPosition(ccp(244 + 75*2,256.5f));
 		TRACE();
 		tab_menu->addChild(vote_friend_menu);
+		vote_friend_menu->setVisible(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
 		TRACE();
 		/////////////////////////////// 탭버튼 추가 끝
 		

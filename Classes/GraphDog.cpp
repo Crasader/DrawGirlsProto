@@ -84,6 +84,10 @@ string GraphDog::getSocialID(){
 	return socialID.getV();
 }
 
+string GraphDog::getAppID(){
+	return aID;
+}
+
 void GraphDog::setup(string secretKey,string _appVersion){
   
 	
