@@ -816,7 +816,9 @@ void MailPopup::removeMail (CCObject * _obj)
 }
 CCTableViewCell * MailPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
-	CCTableViewCell* realCell = new CCTableViewCell();
+	CCTableViewCell* realCell = table->dequeueCell();
+	
+	realCell = new CCTableViewCell();
 	realCell->init();
 	realCell->autorelease();
 	auto createCCNodeFromIdx = [=](int idx)->CCNode*

@@ -262,7 +262,10 @@ CCTableViewCell* InviteEventPopup::tableCellAtIndex( CCTableView *table, unsigne
 	CCLabelTTF* rank;
 	Json::Value* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 

@@ -358,7 +358,9 @@ string BeautyStoneSettingPopup::convertToTypeName(int type_code)
 
 CCTableViewCell* BeautyStoneSettingPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

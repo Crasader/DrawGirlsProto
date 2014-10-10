@@ -233,7 +233,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	CCLabelTTF* score;
 	FriendData* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	
