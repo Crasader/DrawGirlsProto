@@ -62,12 +62,17 @@ public:
 		}
 	}
 	
+	virtual ~ControlTutorialContent()
+	{
+		ani_manager->release();
+	}
+	
 private:
 	int touch_priority;
 	CCMenuLambda* close_menu;
 	CCMenu* touch_menu;
 	
-	CCBAnimationManager* ani_manager;
+	CCBReader* ani_manager;
 	CCSprite* click_animaition;
 	
 	function<void(CCObject*)> end_selector;
@@ -98,8 +103,8 @@ private:
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		CCSprite* control_tutorial = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial.ccbi",this));
-		ani_manager = reader->getAnimationManager();
-		ani_manager->setDelegate(this);
+		ani_manager = reader;
+		ani_manager->getAnimationManager()->setDelegate(this);
 //		control_tutorial->setScale(0.65f);
 		control_tutorial->setPosition(ccp(0,0));
 //		clipper->addChild(control_tutorial);
@@ -126,8 +131,6 @@ private:
 		addChild(click_animaition);
 		click_animaition->setVisible(false);
 		
-		reader->release();
-		
 		CCSprite* n_touch = CCSprite::create("whitePaper.png");
 		n_touch->setOpacity(0);
 		CCSprite* s_touch = CCSprite::create("whitePaper.png");
@@ -148,19 +151,19 @@ private:
 		{
 			click_animaition->setVisible(false);
 			state_number = 2;
-			ani_manager->runAnimationsForSequenceNamed("tutorial2");
+			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial2");
 		}
 		else if(state_number == 3)
 		{
 			click_animaition->setVisible(false);
 			state_number = 4;
-			ani_manager->runAnimationsForSequenceNamed("tutorial3");
+			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial3");
 		}
 		else if(state_number == 5)
 		{
 			click_animaition->setVisible(false);
 			state_number = 6;
-			ani_manager->runAnimationsForSequenceNamed("tutorial4");
+			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial4");
 		}
 		else if(state_number == 7)
 		{

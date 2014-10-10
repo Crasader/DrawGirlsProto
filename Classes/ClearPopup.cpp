@@ -2787,7 +2787,9 @@ CCTableViewCell* ClearPopup::tableCellAtIndex( CCTableView *table, unsigned int 
 //	CCLabelTTF* nickname_label;
 //	CCLabelTTF* score_label;
 //	RankFriendInfo* member = &friend_list[idx];
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 

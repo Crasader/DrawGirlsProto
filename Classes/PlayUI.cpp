@@ -1254,10 +1254,18 @@ PlayUI * PlayUI::create ()
 }
 PlayUI::~ PlayUI ()
 {
-	jack_array->removeAllObjects();
-	jack_array->release();
-	exchange_dic->removeAllObjects();
-	exchange_dic->release();
+	if(jack_array)
+	{
+		jack_array->removeAllObjects();
+		jack_array->release();
+		jack_array = NULL;
+	}
+	if(exchange_dic)
+	{
+		exchange_dic->removeAllObjects();
+		exchange_dic->release();
+		exchange_dic = NULL;
+	}
 }
 void PlayUI::addScore (int t_score)
 {
@@ -3644,6 +3652,9 @@ void PlayUI::myInit ()
 	is_on_clear_time_event = false;
 	
 	result_sprite = NULL;
+	
+	jack_array = NULL;
+	exchange_dic = NULL;
 	
 	bomb_img = NULL;
 	ing_bomb_value = 0;

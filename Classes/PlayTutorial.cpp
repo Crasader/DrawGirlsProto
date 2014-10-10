@@ -1668,12 +1668,11 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 		CCBReader* reader = new CCBReader(nodeLoader);
 		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
-		button_ani = reader->getAnimationManager();
+		button_ani = reader;
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
 		else								draw_button->setPosition(ccp(TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
 		addChild(draw_button);
-		reader->release();
 		
 		click_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_controlClick), mySGD->getFont().c_str(), 18);
 		click_label->enableOuterStroke(ccBLACK, 0.5f);
@@ -1687,7 +1686,7 @@ void TutoControler::onButton()
 {
 	if(button_ani)
 	{
-		button_ani->runAnimationsForSequenceNamed("cast1start");
+		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
@@ -1698,7 +1697,7 @@ void TutoControler::offButton()
 {
 	if(button_ani)
 	{
-		button_ani->runAnimationsForSequenceNamed("cast1stop");
+		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);
@@ -1766,6 +1765,8 @@ void BackImg::myInit()
 {
 	initWithFile("play_tutorial_real.png");
 	setPosition(ccp(240,myDSH->ui_center_y));
+	
+	drawRects = NULL;
 	
 	silhouette = CCSprite::create("play_tutorial_sil.png");
 	silhouette->setPosition(ccp(getContentSize().width/2.f,getContentSize().height/2.f));

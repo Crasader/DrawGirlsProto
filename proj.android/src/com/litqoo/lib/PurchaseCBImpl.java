@@ -45,7 +45,12 @@ public class PurchaseCBImpl implements PurchaseCB {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
+        	m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
+        		public void run() {
+        			hspConnector.SendResult(this.delekey,this.totalSource);
+        		}
+        	});
+//        	HSPItemDelivery.requestItemDelivery(new RequestItemDeliveryCallbackImpl(m_key, m_glView));
         } else {
         	Log.i("litqoo.sumran","it's fail");
         	// ���� ����

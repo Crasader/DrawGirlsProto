@@ -193,6 +193,7 @@ private:
 					addChild(next_img);
 					KS::setBlendFunc(next_img, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				}
+				reader->release();
 				break;
 			}
 		}

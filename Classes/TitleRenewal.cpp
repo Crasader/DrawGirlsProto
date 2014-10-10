@@ -372,6 +372,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				myDSH->removeCache();
 				mySDS->removeCache();
 				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+                GraphDog::get()->removeTarget(this);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
 			}
@@ -1174,6 +1175,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setDiaryDownUrl(result_data["appDownUrls"]["diary"].asString());
 		mySGD->setIosMenuVisible(result_data["iosMenuVisible"].asInt());
+		mySGD->setIosHideVer(result_data["iosHideVer"].asString());
 	}
 	else
 	{
@@ -3019,6 +3021,7 @@ void TitleRenewalScene::changeScene()
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
+    GraphDog::get()->removeTarget(this);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
@@ -4311,6 +4314,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		tag -= kTitleRenewal_MT_puzzleBase;
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
+        GraphDog::get()->removeTarget(this);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 }

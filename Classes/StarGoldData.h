@@ -31,6 +31,13 @@ using namespace std;
 protected: KSProtectVar<varType> varName;\
 public: virtual varType get##funcName(void){return varName.getV(); }\
 public: virtual void set##funcName(varType var){ varName = var; }
+
+#define COMMON_VAR_STR(varName, funcName)\
+protected: KSProtectStr varName;\
+public: virtual std::string get##funcName(void){return varName.getV(); }\
+public: virtual void set##funcName(const std::string& var){ varName = var; }
+
+
 typedef enum tImgType{
 	kImgType_Empty = 0,
 	kImgType_specialMap, // 각 챕터마다 5, 10스테이지는 특별 스테이지로 특별한 이미지가 나옵니다.
@@ -1003,6 +1010,9 @@ public:
 	void setDiaryDownUrl(string t_str);
 	string getDiaryDownUrl();
 	
+	void setIosHideVer(string t_str);
+	string getIosHideVer();
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1197,6 +1207,7 @@ private:
 	KSProtectVar<int> introduce_stage;
 	
 	string diaryDownUrl;
+	string iosHideVer;
 	
 	string app_type;
 	int app_version;
@@ -1211,6 +1222,8 @@ private:
 	
 	COMMON_VAR(int, addGemReward, AddGemReward);
 	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
+	
+	COMMON_VAR_STR(iosMenu, IosMenu);
 };
 
 #endif

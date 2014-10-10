@@ -485,7 +485,9 @@ void BeautyStoneStrengthPopup::alignOfferingList(BeautyStoneStrengthAlign t_alig
 
 CCTableViewCell* BeautyStoneStrengthPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

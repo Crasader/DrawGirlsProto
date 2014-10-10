@@ -293,6 +293,7 @@ enum class LK
 	kMyLocalKey_titleLoading48,
 	kMyLocalKey_titleLoading49,
 	kMyLocalKey_titleLoading50,
+	kMyLocalKey_titleLoading51,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
 	kMyLocalKey_battleStart,
@@ -1108,6 +1109,7 @@ enum class LK
 	
 	kStory_20_1,
 	kStory_20_2,
+	kFriendSelfNickname
 };
 class KsLocal
 {

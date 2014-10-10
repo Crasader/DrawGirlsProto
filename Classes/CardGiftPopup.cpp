@@ -175,8 +175,9 @@ void CardGiftPopup::myInit(int t_touch_priority, int t_gift_card, function<void(
 
 CCTableViewCell* CardGiftPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

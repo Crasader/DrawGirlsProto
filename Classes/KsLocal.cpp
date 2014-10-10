@@ -277,7 +277,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_hourAfterReset] = "%d시간후 리셋";
 	obj[LK::kMyLocalKey_secondAfterReset] = "%d분후 리셋";
 	obj[LK::kMyLocalKey_giftbox] = "우편함";
-	obj[LK::kMyLocalKey_giftboxContent] = "<font color=#FFAA14 size=15>%s</font><br><font color=#CCCCCC size=10s>%s</font>";
+	obj[LK::kMyLocalKey_giftboxContent] = "<font color=#FFAA14 size=12>%s</font><br><font color=#CCCCCC size=10s>%s</font>";
 	obj[LK::kMyLocalKey_allAccept] = "모든선물 받기";
 	obj[LK::kMyLocalKey_ticketBox] = "티켓함";
 	obj[LK::kMyLocalKey_helpBox] = "도움함";
@@ -354,6 +354,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading50] = "성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "게임시작";
 	obj[LK::kMyLocalKey_battleStart] = "대전 시작";
@@ -1149,6 +1150,7 @@ void KsLocal::ko()
 	obj[LK::kFriendEvent]="친구초대이벤트";
 	obj[LK::kRequestFriend]="게임친구맺기";
 	
+	obj[LK::kFriendSelfNickname] = "자기 자신은 친구로 등록할 수 없습니다.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	
 		// add friend !

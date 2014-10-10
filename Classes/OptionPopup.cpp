@@ -328,7 +328,7 @@ bool OptionPopup::init()
 	tab_menu->addChild(coupon_item);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	coupon_item->setVisible(mySGD->getIosMenuVisible());
+	coupon_item->setVisible(mySGD->getIosMenuVisible() && (mySGD->getIosHideVer() != graphdog->getAppVersionString()));
 #endif
 	
 	CCSprite* n_community_img = CCSprite::create("tabbutton_up.png");
@@ -387,7 +387,7 @@ bool OptionPopup::init()
 	tab_menu->addChild(tip_item);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	tip_item->setVisible(mySGD->getIosMenuVisible());
+	tip_item->setVisible(mySGD->getIosMenuVisible() && (mySGD->getIosHideVer() != graphdog->getAppVersionString()));
 #endif
 	
 	CCSprite* n_kakao_img = CCSprite::create("option_kakao.png");

@@ -514,7 +514,9 @@ void SumranMailPopup::removeMail (CCObject * _obj)
 }
 CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsigned int idx)
 {
-	CCTableViewCell* realCell = new CCTableViewCell();
+	CCTableViewCell* realCell = table->dequeueCell();
+	
+	realCell = new CCTableViewCell();
 	realCell->init();
 	realCell->autorelease();
 	auto createCCNodeFromIdx = [=](int idx)->CCNode*
@@ -731,7 +733,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																			itemlist->addChild(label);
 																			
 																			from = CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_giftboxContent),
-																																				"",
+																																				"     ",
 																																				GraphDogLib::dateFormat("m/d H:i",mail.get("regDate","Unkown Date").asString().c_str()).c_str()
 																																				)->getCString();
 																			
