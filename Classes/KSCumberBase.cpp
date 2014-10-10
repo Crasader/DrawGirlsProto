@@ -2449,16 +2449,19 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	int vCount = mySGD->getUserdataAutoLevel();
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
-	ostringstream oss;
-	oss << mySD->getSilType();
-	std::string playcountKey = std::string("playcount_") + oss.str();
-	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
-	
+    int playCount = 0;
+    
 	if(mySGD->is_endless_mode){
+        playCount = 0;
 		vCount = mySGD->endless_my_victory.getV()*3+5;
 		CCLOG("it's PVP mode!! now victory is %d",vCount);
-	}
+    }else{
+       ostringstream oss;
+       oss << mySD->getSilType();
+       std::string playcountKey = std::string("playcount_") + oss.str();
+       playCount = myDSH->getUserIntForStr(playcountKey, 0);
+    }
 	
 	
 

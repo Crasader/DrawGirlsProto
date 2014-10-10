@@ -78,11 +78,11 @@ public:
 		}
 		else
 		{
-			DeleSel _t;
-			//_t.target = 0;
-			//_t.selector = 0;
-			_t.func=NULL;
-			return &_t;
+//			DeleSel _t;
+//			//_t.target = 0;
+//			//_t.selector = 0;
+//			_t.func=NULL;
+			return nullptr;
 		}
 	}
 	
