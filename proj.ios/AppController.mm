@@ -199,8 +199,8 @@ static AppDelegate s_sharedApplication;
 - (void)reportAppOpen
 {
 	tracker = [[AdXTracking alloc] init];
-	[tracker setURLScheme:@"ADXnnnn"];
-	[tracker setClientId:@"CLIENTID"];
+	[tracker setURLScheme:@"ADX41051"];
+	[tracker setClientId:@"nhntrt809531jdr"];
 	[tracker setAppleId:@"APPLEID"];
 	[tracker setBundleID:@"com.nhnent.SKSUMRAN"];
 	[tracker reportAppOpen];

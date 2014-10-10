@@ -277,7 +277,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_hourAfterReset] = "%d시간후 리셋";
 	obj[LK::kMyLocalKey_secondAfterReset] = "%d분후 리셋";
 	obj[LK::kMyLocalKey_giftbox] = "우편함";
-	obj[LK::kMyLocalKey_giftboxContent] = "<font color=#FFAA14 size=15>%s</font><br><font color=#CCCCCC size=10s>%s</font>";
+	obj[LK::kMyLocalKey_giftboxContent] = "<font color=#FFAA14 size=12>%s</font><br><font color=#CCCCCC size=10s>%s</font>";
 	obj[LK::kMyLocalKey_allAccept] = "모든선물 받기";
 	obj[LK::kMyLocalKey_ticketBox] = "티켓함";
 	obj[LK::kMyLocalKey_helpBox] = "도움함";
