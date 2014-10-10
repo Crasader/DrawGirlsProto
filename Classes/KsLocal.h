@@ -293,6 +293,7 @@ enum class LK
 	kMyLocalKey_titleLoading48,
 	kMyLocalKey_titleLoading49,
 	kMyLocalKey_titleLoading50,
+	kMyLocalKey_titleLoading51,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
 	kMyLocalKey_battleStart,
