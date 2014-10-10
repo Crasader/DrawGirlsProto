@@ -321,7 +321,9 @@ void EndlessSettingPopup::addRankingTable(CCNode* node)
 
 CCTableViewCell* EndlessSettingPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	cell->setPosition(ccp(-5, 0));

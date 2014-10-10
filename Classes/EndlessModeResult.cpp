@@ -411,7 +411,9 @@ void EndlessModeResult::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_fin
 
 CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

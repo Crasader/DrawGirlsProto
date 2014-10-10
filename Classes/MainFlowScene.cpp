@@ -1238,7 +1238,9 @@ void MainFlowScene::puzzleHeartRefresh(Json::Value result_data)
 
 CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

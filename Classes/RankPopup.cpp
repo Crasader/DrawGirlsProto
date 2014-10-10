@@ -674,7 +674,10 @@ CCTableViewCell * RankPopup::tableCellAtIndex (CCTableView * table, unsigned int
 	CCPoint sendBtnPosition = ccp(245, 20);
 	Json::Value* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	std::string cellBackFile;
