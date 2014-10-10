@@ -307,6 +307,7 @@ void GameItemAddTime::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -360,6 +361,7 @@ void GameItemSpeedUp::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -425,6 +427,7 @@ void GameItemFast::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -501,6 +504,7 @@ void GameItemAttack::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -554,7 +558,7 @@ void GameItemSubOneDie::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -621,7 +625,7 @@ void GameItemSilence::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -738,6 +742,7 @@ void GameItemFire::myInit(bool is_near)
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
+	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	

@@ -195,7 +195,7 @@ bool HellModeResult::init()
 			t_card->setScale(0.2f);
 			
 			t_clipping->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
-			t_clipping->setScale(1.f/0.2f*0.15f);
+			t_clipping->setScale(1.f/0.2f*0.1f);
 			star_back->addChild(t_clipping);
 			
 			CCSprite* t_frame = CCSprite::create("hell_frame.png");

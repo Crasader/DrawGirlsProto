@@ -327,6 +327,9 @@ bool OptionPopup::init()
 	coupon_item->setPosition(ccp(394,256.5f));
 	tab_menu->addChild(coupon_item);
 	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	coupon_item->setVisible(mySGD->getIosMenuVisible() && (mySGD->getIosHideVer() != graphdog->getAppVersionString()));
+#endif
 	
 	CCSprite* n_community_img = CCSprite::create("tabbutton_up.png");
 	KSLabelTTF* n_community_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_community), mySGD->getFont().c_str(), 12.5f);
@@ -383,7 +386,9 @@ bool OptionPopup::init()
 	tip_item->setPosition(ccp(244,256.5f));
 	tab_menu->addChild(tip_item);
 	
-	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	tip_item->setVisible(mySGD->getIosMenuVisible() && (mySGD->getIosHideVer() != graphdog->getAppVersionString()));
+#endif
 	
 	CCSprite* n_kakao_img = CCSprite::create("option_kakao.png");
 //	KSLabelTTF* n_kakao_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_accountLink), mySGD->getFont().c_str(), 12.5f);

@@ -93,7 +93,7 @@ bool EndlessSettingPopup::init()
 //	main_case->addChild(right_back);
 	
 	
-	KSLabelTTF* lblMyInfo = KSLabelTTF::create("내정보", mySGD->getFont().c_str(), 18.f);
+	KSLabelTTF* lblMyInfo = KSLabelTTF::create(getLocal(LK::kMyInfo), mySGD->getFont().c_str(), 18.f);
 	lblMyInfo->setColor(ccc3(255, 170, 0));
 	lblMyInfo->setPosition(ccp(110, 215));
 	inner_left->addChild(lblMyInfo);
@@ -108,7 +108,7 @@ bool EndlessSettingPopup::init()
 													 });
 	main_case->addChild(back_button);
 	
-	CommonButton* readyButton = CommonButton::create("준비하기", CCScale9Sprite::create("endless_ready.png"));
+	CommonButton* readyButton = CommonButton::create(getLocal(LK::kMyLocalKey_ready), CCScale9Sprite::create("endless_ready.png"));
 	readyButton->setTitleColor(ccc3(50, 30, 6));
 	readyButton->setTitleSize(22.f);
 	inner_right->addChild(readyButton, 2);
@@ -321,7 +321,9 @@ void EndlessSettingPopup::addRankingTable(CCNode* node)
 
 CCTableViewCell* EndlessSettingPopup::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	cell->setPosition(ccp(-5, 0));

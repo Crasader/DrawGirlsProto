@@ -242,7 +242,7 @@ public:
 	void openUrl(const std::string& url);
 	void openHSPUrl(const std::string& url);
 	void openCSCenter(const std::string& url);
-	void mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func);
+	void mappingToAccount(int mt, bool force, jsonSelType func);
 	void getIsUsimKorean(jsonSelType func); // value["korean"] 이 1이면 약관 페이지 띄워야 함.
 	
 	string getUniqId();

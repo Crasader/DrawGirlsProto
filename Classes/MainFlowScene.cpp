@@ -1238,7 +1238,9 @@ void MainFlowScene::puzzleHeartRefresh(Json::Value result_data)
 
 CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	
@@ -1311,7 +1313,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 //	if(puzzle_number == 1 || 9999+1 >= puzzle_number)
 	{
 		
-		addChild(KSTimer::create(rand()%10*0.2f, [=](){
+		cell->addChild(KSTimer::create(rand()%10*0.2f, [=](){
 			CCSprite* mainTwinkle = KS::loadCCBI<CCSprite*>(this, "main_twinkle.ccbi").first;
 			mainTwinkle->setAnchorPoint(ccp(0,0));
 			mainTwinkle->setPosition(ccp(mainTwinkle->getContentSize().width/2,mainTwinkle->getContentSize().height/2));
@@ -2931,7 +2933,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			string lang = KS::getLocalCode();
 			string cc = myHSP->getCountryCode();
 			string tz = myHSP->getTimeZone();
-			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+			myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
 //			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 			
 //			is_menu_enable = true; // 임시
@@ -3324,271 +3326,6 @@ void MainFlowScene::setBottom()
 	bottom_list.push_back(friend_menu);
 	
 	mission_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-
-	
-	Json::Value v = mySGD->cgp_data;
-//	Json::Reader r;
-//	r.parse(R"( {"buttonurl":"http://images.hangame.co.kr/mobile/cgp/2012.10/cgp_icon_wooproo.png","eventurl":"","typecode":1,"promotionstate":"CGP_PROMOTION_EXISTS","bubbletext":""} )",
-//					v);
-	std::string pState = v["promotionstate"].asString();
-	
-	// 아무것도 하지마!!
-	if(pState == "CGP_NONE")
-	{
-		/* 출력값
-		 {
-		 "callback" : null,
-		 "param" : null,
-		 "promotionstate" : "CGP_NONE"
-		 }
-		 
-		 */
-	}
-	// 홍보해야 될 것이 존재
-	else if(pState == "CGP_PROMOTION_EXISTS")
-	{
-		/* 출력값
-		 {
-		 "bubbletext" : "",
-		 "buttonurl" : "http://images.hangame.co.kr/mobile/cgp/10150_wara/wara_cgp.png",
-		 "callback" : null,
-		 "eventurl" : "",
-		 "param" : null,
-		 "promotionstate" : "CGP_PROMOTION_EXISTS",
-		 "typecode" : 1
-		 }
-		 
-		 */
-		
-		CCSprite* n_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
-		KSLabelTTF* n_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-		n_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		n_cgp_label->setPosition(ccp(n_cgp->getContentSize().width/2.f, 15));
-		n_cgp->addChild(n_cgp_label);
-		
-		CCSprite* s_cgp = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
-		s_cgp->setColor(ccGRAY);
-		KSLabelTTF* s_cgp_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-		s_cgp_label->enableOuterStroke(ccBLACK, 1.f);
-		s_cgp_label->setPosition(ccp(s_cgp->getContentSize().width/2.f, 15));
-		s_cgp->addChild(s_cgp_label);
-		
-		CCMenuLambda* cgp_menu = CCMenuLambda::create();
-		cgp_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(32-240+55*4.f, n_cgp->getContentSize().height/2.f+6));
-		//		etc_frame->addChild(cgp_menu);
-		addChild(cgp_menu, kMainFlowZorder_uiButton);
-		bottom_list.push_back(cgp_menu);
-		
-		cgp_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-		
-		CCMenuItemLambda* cgp_item = CCMenuItemSpriteLambda::create(n_cgp, s_cgp, [=](CCObject* sender){
-			if(cgp_item->isEnabled() == false)
-				return;
-			cgp_item->setEnabled(false);
-			hspConnector::get()->launchPromotion();
-			
-			auto iter = find(bottom_list.begin(), bottom_list.end(), cgp_menu);
-			if(iter != bottom_list.end())
-			{
-				bottom_list.erase(iter);
-			}
-			
-			cgp_menu->removeFromParent();
-//			CCSprite* n_etc_img = CCSprite::create("mainflow_etc_event.png");
-//			KSLabelTTF* n_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-//			n_etc_label->enableOuterStroke(ccBLACK, 1.f);
-//			n_etc_label->setPosition(ccp(n_etc_img->getContentSize().width/2.f, 7));
-//			n_etc_img->addChild(n_etc_label);
-//			
-//			//			KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
-//			auto tt = mySGD->getEventString().c_str();
-//			
-//			KSLabelTTF* n_event_ment = KSLabelTTF::create(tt, mySGD->getFont().c_str(), 12);
-//			n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(0,15));
-//			n_etc_img->addChild(n_event_ment);
-//			
-//			CCSprite* s_etc_img = CCSprite::create("mainflow_etc_event.png");
-//			s_etc_img->setColor(ccGRAY);
-//			KSLabelTTF* s_etc_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_event), mySGD->getFont().c_str(), 12);
-//			s_etc_label->enableOuterStroke(ccBLACK, 1.f);
-//			s_etc_label->setPosition(ccp(s_etc_img->getContentSize().width/2.f, 7));
-//			s_etc_img->addChild(s_etc_label);
-//			KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 12);
-//			s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(0,15));
-//			s_etc_img->addChild(s_event_ment);
-//			
-//			CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
-//				if(!is_menu_enable)
-//					return;
-//				
-//				is_menu_enable = false;
-//				
-//				int puzzle_number = mySGD->getSpecialEventPuzzleNumber();
-//				myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-//				
-//				StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-//															 {
-//																 mySGD->is_before_stage_img_download = true;
-//																 topOuting();
-//																 bottomPuzzleMode();
-//																 tableDownloading(t_func);
-//															 }, [=](){puzzleLoadSuccess();});
-//				addChild(t_sld, kMainFlowZorder_popup);
-//			});
-//			
-//			cgp_menu->addChild(etc_item);
-//			CCArray* t_menu_array = cgp_menu->getChildren();
-//			int array_cnt = cgp_menu->getChildrenCount();
-//			bool is_removed = false;
-//			for(int i=0;!is_removed && i<array_cnt;i++)
-//			{
-//				CCMenuItemLambda* t_lambda_item = ((CCMenuItemLambda*)t_menu_array->objectAtIndex(i));
-//				if(t_lambda_item == etc_item)
-//					continue;
-//				else
-//				{
-//					is_removed = true;
-//					t_lambda_item->removeFromParent();
-//					break;
-//				}
-//			}
-		});
-		
-		cgp_menu->addChild(cgp_item);
-	}
-	// 일반 보상
-	else if(pState == "CGP_REWARD_REQUIRED")
-	{
-		/* 출력값
-		 {
-		 "callback" : null,
-		 "param" : null,
-		 "promotionstate" : "CGP_REWARD_REQUIRED",
-		 "rewards" :
-		 [
-		 {
-		 "promotiontype" : 2,
-		 "rewardcode" : "10289_test",
-		 "rewardvalue" : 1
-		 }
-		 ]
-		 }
-		 */
-		
-		ASPopupView* t_popup = ASPopupView::create(-999);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		float height_value = 320.f;
-		if(myDSH->screen_convert_rate < 1.f)
-			height_value = 320.f/myDSH->screen_convert_rate;
-		
-		if(height_value < myDSH->ui_top)
-			height_value = myDSH->ui_top;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, 160));
-		
-		CCNode* t_container = CCNode::create();
-		t_popup->setContainerNode(t_container);
-		addChild(t_popup, kMainFlowZorder_popup);
-		
-		t_popup->setBasePosition(ccp(240, 160));
-		
-		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-		back_case->setContentSize(CCSizeMake(350,280));
-		back_case->setPosition(ccp(0,0));
-		t_container->addChild(back_case);
-		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalTitle), mySGD->getFont().c_str(), 16);;
-		title_label->setPosition(ccp(0,100));
-		t_container->addChild(title_label);
-		
-		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
-		ment_label->setPosition(ccp(0,0));
-		t_container->addChild(ment_label);
-		
-		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
-		take_label->setPosition(ccp(0,0));
-		t_label->addChild(take_label);
-		
-		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-		
-		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
-		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpReward), CCControlEventTouchUpInside);
-		take_button->setPreferredSize(CCSizeMake(150,65));
-		take_button->setPosition(ccp(0,-85));
-		t_container->addChild(take_button);
-		
-		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
-		
-		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
-			
-		}, [=](){
-		});
-	}
-	// 전체 팝업보상
-	else if(pState == "CGP_PROMOTION_REWARD_EXISTS")
-	{
-		ASPopupView* t_popup = ASPopupView::create(-999);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		float height_value = 320.f;
-		if(myDSH->screen_convert_rate < 1.f)
-			height_value = 320.f/myDSH->screen_convert_rate;
-		
-		if(height_value < myDSH->ui_top)
-			height_value = myDSH->ui_top;
-		
-		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-		t_popup->setDimmedPosition(ccp(240, 160));
-		
-		CCNode* t_container = CCNode::create();
-		t_popup->setContainerNode(t_container);
-		addChild(t_popup, kMainFlowZorder_popup);
-		
-		t_popup->setBasePosition(ccp(240, 160));
-		
-		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
-		back_case->setContentSize(CCSizeMake(350,280));
-		back_case->setPosition(ccp(0,0));
-		t_container->addChild(back_case);
-		
-		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpAllPopupTitle), mySGD->getFont().c_str(), 16);;
-		title_label->setPosition(ccp(0,100));
-		t_container->addChild(title_label);
-		
-		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
-		ment_label->setPosition(ccp(0,0));
-		t_container->addChild(ment_label);
-		
-		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
-		take_label->setPosition(ccp(0,0));
-		t_label->addChild(take_label);
-		
-		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
-		
-		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
-		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpAllReward), CCControlEventTouchUpInside);
-		take_button->setPreferredSize(CCSizeMake(150,65));
-		take_button->setPosition(ccp(0,-85));
-		t_container->addChild(take_button);
-		
-		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
-		
-		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
-			
-		}, [=](){
-		});
-	}
-	
 	
 //	CCSprite* t_bar = CCSprite::create("mainflow_bottom_case_bar.png");
 //	t_bar->setPosition(ccp(43-240+214.f/8.f*7.f, n_rank->getContentSize().height/2.f-4));
@@ -3849,6 +3586,194 @@ void MainFlowScene::setBottom()
 		hell_menu->addChild(hell_item);
 		
 		hell_item->setEnabled(is_hell_open);
+	}
+	
+	Json::Value v = mySGD->cgp_data;
+	//	Json::Reader r;
+	//	r.parse(R"( {"buttonurl":"http://images.hangame.co.kr/mobile/cgp/2012.10/cgp_icon_wooproo.png","eventurl":"","typecode":1,"promotionstate":"CGP_PROMOTION_EXISTS","bubbletext":""} )",
+	//					v);
+	std::string pState = v["promotionstate"].asString();
+	
+	// 아무것도 하지마!!
+	if(pState == "CGP_NONE")
+	{
+		/* 출력값
+		 {
+		 "callback" : null,
+		 "param" : null,
+		 "promotionstate" : "CGP_NONE"
+		 }
+		 
+		 */
+	}
+	// 홍보해야 될 것이 존재
+	else if(pState == "CGP_PROMOTION_EXISTS")
+	{
+		/* 출력값
+		 {
+		 "bubbletext" : "",
+		 "buttonurl" : "http://images.hangame.co.kr/mobile/cgp/10150_wara/wara_cgp.png",
+		 "callback" : null,
+		 "eventurl" : "",
+		 "param" : null,
+		 "promotionstate" : "CGP_PROMOTION_EXISTS",
+		 "typecode" : 1
+		 }
+		 
+		 */
+		
+		CCSprite* t_button_img = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
+		CommonButton* cgp_button = CommonButton::create(t_button_img, kCCMenuHandlerPriority-1);
+		cgp_button->setPosition(etc_menu->getPosition() + ccp(0,t_button_img->getContentSize().height/2.f+15));
+		cgp_button->setFunction([=](CCObject* sender)
+								{
+									if(cgp_button->isEnabled() == false)
+										return;
+									cgp_button->setEnabled(false);
+									hspConnector::get()->launchPromotion();
+									
+									auto iter = find(bottom_list.begin(), bottom_list.end(), cgp_button);
+									if(iter != bottom_list.end())
+									{
+										bottom_list.erase(iter);
+									}
+									
+									cgp_button->removeFromParent();
+								});
+		addChild(cgp_button, kMainFlowZorder_uiButton);
+		bottom_list.push_back(cgp_button);
+	}
+	// 일반 보상
+	else if(pState == "CGP_REWARD_REQUIRED")
+	{
+		/* 출력값
+		 {
+		 "callback" : null,
+		 "param" : null,
+		 "promotionstate" : "CGP_REWARD_REQUIRED",
+		 "rewards" :
+		 [
+		 {
+		 "promotiontype" : 2,
+		 "rewardcode" : "10289_test",
+		 "rewardvalue" : 1
+		 }
+		 ]
+		 }
+		 */
+		
+		ASPopupView* t_popup = ASPopupView::create(-999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		back_case->setContentSize(CCSizeMake(350,280));
+		back_case->setPosition(ccp(0,0));
+		t_container->addChild(back_case);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalTitle), mySGD->getFont().c_str(), 16);;
+		title_label->setPosition(ccp(0,100));
+		t_container->addChild(title_label);
+		
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
+		ment_label->setPosition(ccp(0,0));
+		t_container->addChild(ment_label);
+		
+		CCLabelTTF* t_label = CCLabelTTF::create();
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
+		take_label->setPosition(ccp(0,0));
+		t_label->addChild(take_label);
+		
+		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+		
+		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
+		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpReward), CCControlEventTouchUpInside);
+		take_button->setPreferredSize(CCSizeMake(150,65));
+		take_button->setPosition(ccp(0,-85));
+		t_container->addChild(take_button);
+		
+		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
+		
+		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+			
+		}, [=](){
+		});
+	}
+	// 전체 팝업보상
+	else if(pState == "CGP_PROMOTION_REWARD_EXISTS")
+	{
+		ASPopupView* t_popup = ASPopupView::create(-999);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		float height_value = 320.f;
+		if(myDSH->screen_convert_rate < 1.f)
+			height_value = 320.f/myDSH->screen_convert_rate;
+		
+		if(height_value < myDSH->ui_top)
+			height_value = myDSH->ui_top;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, 160));
+		
+		CCNode* t_container = CCNode::create();
+		t_popup->setContainerNode(t_container);
+		addChild(t_popup, kMainFlowZorder_popup);
+		
+		t_popup->setBasePosition(ccp(240, 160));
+		
+		CCScale9Sprite* back_case = CCScale9Sprite::create("subpop_back.png", CCRectMake(0,0,100,100), CCRectMake(49,49,2,2));
+		back_case->setContentSize(CCSizeMake(350,280));
+		back_case->setPosition(ccp(0,0));
+		t_container->addChild(back_case);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpAllPopupTitle), mySGD->getFont().c_str(), 16);;
+		title_label->setPosition(ccp(0,100));
+		t_container->addChild(title_label);
+		
+		KSLabelTTF* ment_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cgpNormalContent), mySGD->getFont().c_str(), 12);
+		ment_label->setPosition(ccp(0,0));
+		t_container->addChild(ment_label);
+		
+		CCLabelTTF* t_label = CCLabelTTF::create();
+		KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_getReward), mySGD->getFont().c_str(), 13);
+		take_label->setPosition(ccp(0,0));
+		t_label->addChild(take_label);
+		
+		CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_red.png", CCRectMake(0,0,34,34), CCRectMake(16, 16, 2, 2));
+		
+		CCControlButton* take_button = CCControlButton::create(t_label, take_back);
+		take_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::cgpAllReward), CCControlEventTouchUpInside);
+		take_button->setPreferredSize(CCSizeMake(150,65));
+		take_button->setPosition(ccp(0,-85));
+		t_container->addChild(take_button);
+		
+		take_button->setTouchPriority(t_popup->getTouchPriority()-5);
+		
+		CommonAnimation::openPopup(this, t_container, nullptr, [=](){
+			
+		}, [=](){
+		});
 	}
 }
 

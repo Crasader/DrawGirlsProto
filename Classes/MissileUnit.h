@@ -358,6 +358,11 @@ public:
 	static BlindDrop * create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc);
 	void startAction ();
 	virtual void completedAnimationSequenceNamed (char const * name);
+	virtual ~BlindDrop()
+	{
+		if(reader)
+			reader->release();
+	}
 private:
 	float m_scale;
 	CCPoint subPosition;

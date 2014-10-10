@@ -36,14 +36,8 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 				e.printStackTrace();
 			}
 			if (itemInfoList.size() > 0) {
-				Log.d("promo", "���� ������ ����.");
-				// ���� �������� ����                
-				// ������ ����1: Game Server�� ������ ���� ������ ������ ��� ��û (Game Server�� Item ������ receipt�� �̿��ؼ� ������ �ؾ���)
-				// ������ ����2: Standalone �� ������ ����Ŭ���̾�Ʈ ��ü������ ������ ��� (ItemInfo�� itemSequence�� ��ü������ �ߺ�ó���� �ؾ���)
-
-				//                                                    applyItems(itemInfoList); //���ӿ��� ��ü ������
-				// ������ ��� �Ϸ��� finishItemDelivery ȣ��
-//				ArrayList<Long> itemSeq = new ArrayList<Long>();
+				Log.d("promo", "占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙.");
+				
 				JSONArray jsonItemSeq = new JSONArray();
 				
 				for(HSPItemInfo i : itemInfoList)
@@ -58,10 +52,10 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-//				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq); // finishItemDelivery �� C++ ���� �ñ�. 
+//				HSPItemDelivery.finishItemDelivery(transactionId, itemSeq); // finishItemDelivery 占쏙옙 C++ 占쏙옙占쏙옙 占시깍옙. 
 			}
 			else {
-				// ����� ��ǰ�� ����
+				// 占쏙옙占쏙옙占� 占쏙옙품占쏙옙 占쏙옙占쏙옙
 				try {
 					r.put("issuccess", 0);
 				} catch (JSONException e) {
@@ -77,7 +71,7 @@ public class RequestItemDeliveryCallbackImpl implements RequestItemDeliveryCallb
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			// ��û ����
+			// 占쏙옙청 占쏙옙占쏙옙
 		}
 		m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
 			@Override

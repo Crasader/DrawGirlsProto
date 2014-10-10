@@ -265,6 +265,35 @@ public:
 	virtual void draw();
 	void setRectToVertex();
 	
+	virtual ~VisibleSprite()
+	{
+		if(m_vertices)
+		{
+			delete [] m_vertices;
+			m_vertices = nullptr;
+		}
+		if(m_textCoords)
+		{
+			delete [] m_textCoords;
+			m_textCoords = nullptr;
+		}
+		if(light_vertices)
+		{
+			delete [] light_vertices;
+			light_vertices = nullptr;
+		}
+		if(safety_vertices)
+		{
+			delete [] safety_vertices;
+			safety_vertices = nullptr;
+		}
+		if(m_colors)
+		{
+			delete [] m_colors;
+			m_colors = nullptr;
+		}
+	}
+	
 private:
 	std::vector<IntRectSTL>* drawRects;
 	

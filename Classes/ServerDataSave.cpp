@@ -750,6 +750,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_hellMode_int1_title_s)				rv = "hl%dtitle";
 	else if(t_key == kSDS_GI_hellMode_int1_content_s)			rv = "hl%dcontent";
 	else if(t_key == kSDS_GI_realTimeMessageVersion_i)			rv = "rtmv";
+	else if(t_key == kSDS_GI_card_version_i)					rv = "cardVersion";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
@@ -833,6 +834,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
 	else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
 	else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "%d_haveAdult";
+	else if(t_key == kSDS_CI_int1_version_i)					rv = "%d_version";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
 	

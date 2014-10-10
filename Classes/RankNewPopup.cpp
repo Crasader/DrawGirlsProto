@@ -512,7 +512,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			list_cell_case->setPosition(ccp(231.0, 150.5f));
 			rankBack->addChild(list_cell_case, kZ_CP_img);
 			
-			CCPoint rank_position = ccp(28,18 - 2.f);
+			CCPoint rank_position = ccp(20,18 - 2.f);
 			
 			int i = rank_data.get("myrank", 999).asInt()-1;
 			
@@ -538,7 +538,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			{
 				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
 				rank_label->enableOuterStroke(ccBLACK, 1);
-				rank_label->setPosition(ccp(45.75f,rank_position.y+8));
+				rank_label->setPosition(ccp(37.75f,rank_position.y+7.5f));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -546,23 +546,38 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
 			selectedFlagSpr->setScale(0.8f);
 			if(i >= 3)
-				selectedFlagSpr->setPosition(ccp(45.75f,19 - 2.f-5));
+				selectedFlagSpr->setPosition(ccp(37.75f,11.5f));
 			else
-				selectedFlagSpr->setPosition(ccp(50 + 13.5,19 - 2.f));
+				selectedFlagSpr->setPosition(ccp(50,16));
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			
-			KSLabelTTF* nick_label = KSLabelTTF::create(mynick.c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
-			nick_label->setAnchorPoint(ccp(0,0.5f));
-			nick_label->enableOuterStroke(ccc3(50, 25, 0), 1);
-			nick_label->setPosition(ccp(79 + 2,19 - 2.f));
-			list_cell_case->addChild(nick_label);
+			CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+			if(t_nick_size->getContentSize().width > 80)
+			{
+				LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 80, 15, "");
+				nick_marquee->setSpace(30);
+				nick_marquee->addText(("<font color=#352990 strokesize=0.3 strokecolor=#321900 strokeopacity=50>"+mynick+"</font>").c_str());
+				nick_marquee->startMarquee();
+				nick_marquee->setFontSize(12.f);
+				nick_marquee->setAnchorPoint(ccp(0,0.5f));
+				nick_marquee->setPosition(ccp(70-3.5f,15));
+				list_cell_case->addChild(nick_marquee);
+			}
+			else
+			{
+				KSLabelTTF* nick_label = KSLabelTTF::create(mynick.c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+				nick_label->setAnchorPoint(ccp(0,0.5f));
+				nick_label->enableOuterStroke(ccc3(50, 25, 0), 0.3f, 50, true);
+				nick_label->setPosition(ccp(70-3.5f,15));
+				list_cell_case->addChild(nick_label);
+			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 14);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(39, 6, 132));
 			score_label->setAnchorPoint(ccp(1,0.5f));
 			score_label->disableOuterStroke();
-			score_label->setPosition(ccp(215 + 20.f + 15, 18 - 1.f));
+			score_label->setPosition(ccp(215 + 20.f + 15, 15));
 			list_cell_case->addChild(score_label);
 			
 			if(rankBack->getTag()!=1){
@@ -688,7 +703,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	list_cell_case->setPosition(ccp(10,0));
 	cell->addChild(list_cell_case, kZ_CP_img);
 	
-	CCPoint rank_position = ccp(28, 15);
+	CCPoint rank_position = ccp(20, 15);
 	if(i == 0)
 	{
 		CCSprite* gold_medal = CCSprite::create("rank_gold.png");
@@ -712,7 +727,7 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	}
 	else
 	{
-		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 15);
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 14);
 		rank_label->enableOuterStroke(ccBLACK, 1);
 		rank_label->setPosition(rank_position);//ccp(45.75f,rank_position.y+8));
 		list_cell_case->addChild(rank_label);
@@ -728,21 +743,38 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 //	if(i >= 3)
 //		selectedFlagSpr->setPosition(ccp(45.75f, 19 - 2.f-5));
 //	else
-		selectedFlagSpr->setPosition(ccp(50 + 13.5, 19 - 2.f));
+		selectedFlagSpr->setPosition(ccp(50, 16));
 	selectedFlagSpr->setScale(0.8f);
 	list_cell_case->addChild(selectedFlagSpr);
 	setFormSetter(selectedFlagSpr);
-	KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5); // user_list[i]["nick"].asString().c_str()
-	nick_label->setAnchorPoint(ccp(0,0.5f));
-	nick_label->enableOuterStroke(ccc3(50, 25, 0), 0.3f, 50, true);
-	nick_label->setPosition(ccp(79 + 2,19 - 2.f));
-	list_cell_case->addChild(nick_label);
-	setFormSetter(nick_label);
-	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 15);
+	
+	CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+	if(t_nick_size->getContentSize().width > 80)
+	{
+		LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 80, 15, "");
+		nick_marquee->setSpace(30);
+		nick_marquee->addText(("<font color=#352990 strokesize=0.3 strokecolor=#321900 strokeopacity=50>"+user_list[i].get("nick", Json::Value()).asString()+"</font>").c_str());
+		nick_marquee->startMarquee();
+		nick_marquee->setFontSize(12.f);
+		nick_marquee->setAnchorPoint(ccp(0,0.5f));
+		nick_marquee->setPosition(ccp(70-3.5f,15));
+		list_cell_case->addChild(nick_marquee);
+	}
+	else
+	{
+		KSLabelTTF* nick_label = KSLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12); // user_list[i]["nick"].asString().c_str()
+		nick_label->setAnchorPoint(ccp(0,0.5f));
+		nick_label->enableOuterStroke(ccc3(50, 25, 0), 0.3f, 50, true);
+		nick_label->setPosition(ccp(70-3.5f,15));
+		list_cell_case->addChild(nick_label);
+		setFormSetter(nick_label);
+	}
+	
+	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",user_list[i]["score"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 	score_label->setColor(ccc3(39, 6, 132));
 	score_label->setAnchorPoint(ccp(1,0.5f));
 	score_label->disableOuterStroke();
-	score_label->setPosition(ccp(215 + 35,18 - 1.f));
+	score_label->setPosition(ccp(215 + 35,15));
 	list_cell_case->addChild(score_label);
 	
 	if(rankBack->getTag()!=1){
@@ -902,7 +934,10 @@ CCTableViewCell* RankNewPopup::tableCellAtIndex(CCTableView *table, unsigned int
 	{
 		return rewardTableCellAtIndex(table, idx);
 	}
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	return cell;

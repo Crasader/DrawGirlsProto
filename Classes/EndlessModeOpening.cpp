@@ -1000,6 +1000,7 @@ void EndlessModeOpening::saveStageInfo(Json::Value result_data)
 		Json::Value t_card = cards[i];
 		NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 		NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
+		NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 		NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 		NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 //		NSDS_SI(kSDS_CI_int1_durability_i, t_card["no"].asInt(), t_card["durability"].asInt(), false);
@@ -1762,40 +1763,40 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		list_cell_case->addChild(selectedFlagSpr);
 		
 		
-		CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
-		if(t_nick_size->getContentSize().width > 85)
-		{
-			LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
-			nick_marquee->setSpace(30);
-			nick_marquee->addText(("<font color=#352990>"+myDSH->getStringForKey(kDSH_Key_nick)+"</font>").c_str());
-			nick_marquee->startMarquee();
-			nick_marquee->setFontSize(12.f);
-			nick_marquee->setAnchorPoint(ccp(0,0.5f));
-			nick_marquee->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
-			list_cell_case->addChild(nick_marquee);
-		}
-		else
-		{
+//		CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12);
+//		if(t_nick_size->getContentSize().width > 85)
+//		{
+//			LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
+//			nick_marquee->setSpace(30);
+//			nick_marquee->addText(("<font color=#352990>"+myDSH->getStringForKey(kDSH_Key_nick)+"</font>").c_str());
+//			nick_marquee->startMarquee();
+//			nick_marquee->setFontSize(12.f);
+//			nick_marquee->setAnchorPoint(ccp(0,0.5f));
+//			nick_marquee->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
+//			list_cell_case->addChild(nick_marquee);
+//		}
+//		else
+//		{
 			KSLabelTTF* nick_label = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
 //			nick_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 			nick_label->setColor(ccc3(53, 41, 144));
 			nick_label->setAnchorPoint(ccp(0,0.5f));
 			nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
 			list_cell_case->addChild(nick_label);
-		}
+//		}
 		
-		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d", myscore.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 9);
 		score_label->setColor(ccc3(53, 41, 144));
 		score_label->setAnchorPoint(ccp(1,0.5f));
 		score_label->disableOuterStroke();
-		score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f));
+		score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f-7));
 		list_cell_case->addChild(score_label);
 		
 		StyledLabelTTF* victory_label =
 				StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), victory.getV()),
 															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 		victory_label->setAnchorPoint(ccp(1,0.5f));
-		victory_label->setPosition(ccp(185, list_cell_case->getContentSize().height/2.f));
+		victory_label->setPosition(ccp(list_cell_case->getContentSize().width-10, list_cell_case->getContentSize().height/2.f+4));
 		list_cell_case->addChild(victory_label);
 		///////////////////////////////////
 		
@@ -1832,7 +1833,9 @@ unsigned int EndlessModeOpening::numberOfCellsInTableView(CCTableView *table)
 }
 CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	
@@ -1878,7 +1881,7 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	}
 	else
 	{
-		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", idx+1)->getCString(), mySGD->getFont().c_str(), 14);
 		rank_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 		rank_label->setPosition(rank_position);//ccp(35,rank_position.y+8));
 		list_cell_case->addChild(rank_label);
@@ -1894,40 +1897,40 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 	selectedFlagSpr->setScale(0.8);
 	list_cell_case->addChild(selectedFlagSpr);
 	
-	CCLabelTTF* t_nick_size = CCLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);
-	if(t_nick_size->getContentSize().width > 85)
-	{
-		LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
-		nick_marquee->setSpace(30);
-		nick_marquee->addText(("<font color=#352990>"+rank_list[idx].nick.getV()+"</font>").c_str());
-		nick_marquee->startMarquee();
-		nick_marquee->setFontSize(12.f);
-		nick_marquee->setAnchorPoint(ccp(0,0.5f));
-		nick_marquee->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
-		list_cell_case->addChild(nick_marquee);
-	}
-	else
-	{
+//	CCLabelTTF* t_nick_size = CCLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);
+//	if(t_nick_size->getContentSize().width > 85)
+//	{
+//		LabelTTFMarquee* nick_marquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 85, 15, "");
+//		nick_marquee->setSpace(30);
+//		nick_marquee->addText(("<font color=#352990>"+rank_list[idx].nick.getV()+"</font>").c_str());
+//		nick_marquee->startMarquee();
+//		nick_marquee->setFontSize(12.f);
+//		nick_marquee->setAnchorPoint(ccp(0,0.5f));
+//		nick_marquee->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
+//		list_cell_case->addChild(nick_marquee);
+//	}
+//	else
+//	{
 		KSLabelTTF* nick_label = KSLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12, CCSizeMake(85, 15), CCTextAlignment::kCCTextAlignmentLeft);
 		nick_label->setColor(ccc3(53, 41, 144));
 		nick_label->setAnchorPoint(ccp(0,0.5f));
 		nick_label->disableOuterStroke();
 		nick_label->setPosition(ccp(70 - 3.5,list_cell_case->getContentSize().height/2.f));
 		list_cell_case->addChild(nick_label);
-	}
+//	}
 	
-	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_list[idx].score.getV())->getCString()).c_str(), mySGD->getFont().c_str(), 9);
 	score_label->setColor(ccc3(53, 41, 144));
 	score_label->disableOuterStroke();
 	score_label->setAnchorPoint(ccp(1,0.5f));
-	score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f));
+	score_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f-7));
 	list_cell_case->addChild(score_label);
 	
 	StyledLabelTTF* victory_label =
 	StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraightValue1), rank_list[idx].victory.getV()),
 												 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kRightAlignment);
 	victory_label->setAnchorPoint(ccp(1,0.5f));
-	victory_label->setPosition(ccp(185,list_cell_case->getContentSize().height/2.f));
+	victory_label->setPosition(ccp(list_cell_case->getContentSize().width-10,list_cell_case->getContentSize().height/2.f+4));
 	list_cell_case->addChild(victory_label);
 	
 	if(idx == currentSelectedIdx)

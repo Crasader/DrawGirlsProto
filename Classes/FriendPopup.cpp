@@ -381,7 +381,9 @@ void FriendPopup::setFriendTable()
 
 CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int idx )
 {
-	CCTableViewCell* cell = new CCTableViewCell();
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	
@@ -1292,6 +1294,21 @@ void FriendPopup::setAddMenu()
 						
 						return;
 					}
+					else if( editbox->getText() == std::string(myDSH->getStringForKey(kDSH_Key_nick)))
+					{
+						auto popup = ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
+																										getLocal(LK::kFriendSelfNickname), [=](){
+							if(input_text1)
+							{
+								input_text1->setVisible(true);
+							}
+							
+						});
+						popup->getDimmedSprite()->setVisible(false);
+						addChild(popup);
+						
+						return;
+					}
 					param["nick"] = editbox->getText();
 					param["isPublic"] = true;
 					LoadingLayer* ll = LoadingLayer::create(m_touchPriority - 100);
@@ -1315,6 +1332,10 @@ void FriendPopup::setAddMenu()
 							popup->getDimmedSprite()->setVisible(false);
 							addChild(popup);
 							return;
+						}
+						if(input_text1)
+						{
+							input_text1->setVisible(true);
 						}
 						m_votedFriendList = Json::Value(Json::arrayValue);
 						Json::Value temp;
@@ -1885,6 +1906,7 @@ void FriendPopup::setVoteFriendMenu()
 		vote_friend_menu->setPosition(ccp(244 + 75*2,256.5f));
 		TRACE();
 		tab_menu->addChild(vote_friend_menu);
+		vote_friend_menu->setVisible(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
 		TRACE();
 		/////////////////////////////// 탭버튼 추가 끝
 		

@@ -15,11 +15,23 @@
 #import "HSPMyProfile.h"
 #import "HSPMemberDataStorage.h"
 #import "HSPRanking.h"
+#import "HSPServiceProperties.h"
+#import "HSPCgp.h"
+#import "HSPUtil.h"
+#import "AdXTracking.h"
+#import "HSPMessage.h"
+#import "AppController.h"
+#import "HSPPayment.h"
+#import "HSPUiLauncher.h"
+#import "HSPItemDelivery.h"
+#import "KakaoLinkCenter.h"
+//#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
 #endif
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import "AppController.h"
 #import <sys/types.h>
 #import <sys/sysctl.h>
 //#import "KALocalUser.h"
@@ -180,7 +192,7 @@ extern "C"{
 
 long long int hspConnector::getMemberID(){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return [HSPCore sharedHSPCore].memberNo;
+	return [[HSPCore sharedHSPCore] memberNo];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getHSPMemberNo", "()J")) {
@@ -360,7 +372,7 @@ void callFuncMainQueue(Json::Value param,Json::Value callbackParam,CCObject *tar
 }
 
 
-void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType func,void*resultDict){
+void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,int _dkey,void*resultDict){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	NSData *_jdata= [NSJSONSerialization dataWithJSONObject:(NSDictionary *)resultDict options:NSJSONWritingPrettyPrinted error:nil];
 	NSString *jsonString = [[NSString alloc] initWithData:_jdata encoding:NSUTF8StringEncoding];
@@ -368,13 +380,15 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,jsonSelType 
 	Json::Value resultObj;
 
 	reader.parse([jsonString cStringUsingEncoding:NSUTF8StringEncoding], resultObj);
-
+	
+	jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_dkey);
 
 	if(!param.isNull())resultObj["param"] = param;
 	if(!callbackParam.isNull())resultObj["callback"] = callbackParam;
 	dispatch_async(dispatch_get_main_queue(),
 								 ^{
-									 if(func != NULL)func(resultObj);
+									 if(delesel->func != NULL)delesel->func(resultObj);
+									 jsonDelegator::get()->remove(_dkey);
 								 }
 								);
 #endif
@@ -396,19 +410,20 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:
 	 ^(HSPError *error)
 	 {
+		 CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(0,0,func,resultDict);
+		 callFuncMainQueue2(0,0,dkey,resultDict);
 	 }
 	 ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "mappingToAccount", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
-		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, dkey);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #endif
@@ -478,14 +493,13 @@ string hspConnector::getTimeZone(){
 
 
 string hspConnector::getServerAddress(){
-	string r;
+	string serverAddr;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	r = "http://182.162.201.147:10010";
+	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
+	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
+	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
+	serverAddr = "http://182.162.201.147:10010";
 	
-	//r = "http://182.162.196.182:10080";
-	//NSLocale *currentLocale = [NSLocale currentLocale];  // get the current locale.
-	//NSString *countryCode = [currentLocale objectForKey:NSLocaleCountryCode];
-	//string r = [countryCode cStringUsingEncoding:NSUTF8StringEncoding];
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
@@ -494,37 +508,37 @@ string hspConnector::getServerAddress(){
 		
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
-		r = revStr;
+		serverAddr = revStr;
 		
 		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
-	r = "http://"+r;
-	r = "http://182.162.201.147:10010";
+//	r = "http://"+r;
+	serverAddr = "http://182.162.201.147:10010";
 #endif
 	
 	
-	return r.c_str();
+	return serverAddr.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
 	
 	//return r;
 }
 void hspConnector::withdrawAccount(jsonSelType func)
 {
+		int _key =  jsonDelegator::get()->add(func,0,0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] withdrawAccountWithCompletionHandler:
 	 ^(HSPError *error)
 	 {
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(0,0,func,resultDict);
+		 callFuncMainQueue2(0,0,_key,resultDict);
 	 }
 	 ];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "withdrawAccount", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -532,19 +546,19 @@ void hspConnector::withdrawAccount(jsonSelType func)
 }
 
 void hspConnector::logout(jsonSelType func){
+		int _key =  jsonDelegator::get()->add(func,0,0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	[[HSPCore sharedHSPCore] logoutWithCompletionHandler:
 		^(HSPError *error)
 		{
 			NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 			addErrorInResult(resultDict, error);
-			callFuncMainQueue2(0,0,func,resultDict);
+			callFuncMainQueue2(0,0,_key,resultDict);
 		}
 	];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "logout", "(I)V")) {
-		int _key =  jsonDelegator::get()->add(func,0,0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key);
 		t.env->DeleteLocalRef(t.classID);
 	}
@@ -558,9 +572,10 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	
 
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
-
+	TRACE();
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
-
+		TRACE();
+		KS::KSLog("aaaa %", obj);
 		int delekey = dkey;
 		
 		if(obj["error"]["isSuccess"].asBool()){
@@ -580,7 +595,8 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		};
 
 
-	
+	TRACE();
+	int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST	
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
@@ -589,13 +605,15 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GAMECENTER completionHandler:
 #endif
 	 ^(BOOL playable, HSPError* error) {
+		 TRACE();
+		 KS::KSLog("----------------------------------%", myHSP->getMemberID());
 		// 로그인 응답 처리
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
-		 
+		 TRACE();
 		 addErrorInResult(resultDict, error);
-		 callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
-
+		 callFuncMainQueue2(param,callbackParam, _key,resultDict);
+		 TRACE();
 	}];
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	bool ManualLogin =true;
@@ -607,7 +625,6 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
-		int _key =  jsonDelegator::get()->add(nextFunc,param,callbackParam);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
 		t.env->DeleteLocalRef(t.classID);
 }
@@ -760,31 +777,84 @@ double hspConnector::getScreenRealHeight()
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
-	
+	int _key =  jsonDelegator::get()->add(func, param, callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-		
-	};
+//	int dkey = jsonDelegator::get()->add(func, 0, 0);
+//	jsonSelType nextFunc = [=](Json::Value obj){
+//		int delekey = dkey;
+//		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+//		if(delsel->func){
+//			delsel->func(obj);
+//		}
+//		jsonDelegator::get()->remove(delekey);
+//		
+//	};
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkCGP", "(I)Z")) {
-		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+		
 		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-// not implementation
-	Json::Value dummy;
-	dummy["promotionstate"] = "CGP_NONE";
-	func(dummy);
+	[HSPCGP checkPromotionWithCompletionHandler:^(PromotionState promotionState,  HSPError* error)
+	 {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 
+		 if ([error isSuccess])
+		 {
+			 switch (promotionState)
+			 {
+				 case CGP_NONE:
+				 {
+					 [resultDict setObject:@"CGP_NONE" forKey:@"promotionstate"];
+					 // 프로모션 없음
+					 break;
+				 }
+				 case CGP_PROMOTION_EXISTS:
+				 {
+					 [resultDict setObject:@"CGP_PROMOTION_EXISTS" forKey:@"promotionstate"];
+					 PromotionInfo *promoInfo = [HSPCGP getPromotionInfo];
+					 switch(promoInfo->typeCode)
+					 {
+						 case 1:
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->eventUrl] forKey:@"eventurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->buttonUrl] forKey:@"buttonurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bubbleText] forKey:@"bubbletext"];
+							 
+							 break;
+						 case 2:
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bannerLandUrl] forKey:@"bannerlandurl"];
+							 [resultDict setObject:[NSString stringWithUTF8String:promoInfo->bannerPortUrl] forKey:@"bannerporturl"];
+							 break;
+					 }
+					 
+					 // 노출해야 할 프로모션 있음
+					 break;
+				 }
+				 case CGP_REWARD_REQUIRED:
+				 {
+					 [resultDict setObject:@"CGP_REWARD_REQUIRED" forKey:@"promotionstate"];
+					 PromotionInfo *promoInfo = [HSPCGP getPromotionInfo];
+					 // 이용자에게 보상해야할 정보가 있음
+					 
+					 NSMutableArray* rewardArray = [NSMutableArray array];
+					 NSMutableDictionary* rewardDict = [NSMutableDictionary dictionary];
+					 [rewardDict setObject:[NSNumber numberWithInt:promoInfo->rewardValue] forKey:@"rewardvalue"];
+					 [rewardDict setObject:[NSString stringWithUTF8String:promoInfo->rewardCode] forKey:@"rewardcode"];
+					 [rewardDict setObject:[NSNumber numberWithInt:promoInfo->promotionId] forKey:@"promotiontype"];
+					 
+					 [rewardArray addObject:rewardDict];
+					 [resultDict setObject:rewardArray forKey:@"rewards"];
+					 break;
+				 }
+			 }
+		 }
+		 addErrorInResult(resultDict, error);
+		 callFuncMainQueue2(0,0,_key,resultDict);
+	 }];
 #endif
 }
+
 
 void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
 {
@@ -932,30 +1002,48 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam, CCObjec
  */
 void hspConnector::requestProductInfos(jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
 	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "requestProductInfos", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	Json::Value dummy;
-	dummy["issuccess"] = 1;
-//	dummy["korean"] = 0;
-	func(dummy);
+	[HSPPayment requestProductInfosWithCompletionHandler:^(NSArray* productInfos, HSPError* error) {
+		
+		NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		
+		NSMutableArray* jArray = [NSMutableArray array];
+		[resultDict setObject:[NSNumber numberWithInteger:[error isSuccess]] forKey:@"issuccess"];
+		if ( [error isSuccess] == YES )
+		{
+			for ( HSPPaymentProductInfo* productInfo in productInfos )
+			{
+				NSMutableDictionary *arrayElement = [NSMutableDictionary dictionary];
+				/*
+				 arrayElement.put("productid", productInfo.getProductID());
+				 arrayElement.put("productname", productInfo.getProductName());
+				 arrayElement.put("currency", productInfo.getCurrency());
+				 arrayElement.put("price", productInfo.getPrice());
+				 jArray.put(arrayElement)
+				 */
+				[arrayElement setObject:[productInfo productID] forKey:@"productid"];
+				[arrayElement setObject:[productInfo productName] forKey:@"productname"];
+				[arrayElement setObject:[productInfo currency] forKey:@"currency"];
+				[arrayElement setObject:[productInfo price] forKey:@"price"];
+				[jArray addObject:arrayElement];
+			}
+			[resultDict setObject:jArray forKey:@"info"];
+		}
+		else
+		{
+			NSLog(@"Failed to load productInfo : %@", error);
+		}
+		callFuncMainQueue2(0,0,_key,resultDict);
+	}];
 #endif
 }
 void hspConnector::requestProductInfos(CCObject* target, jsonSelType func)
@@ -980,7 +1068,10 @@ void hspConnector::completePromotion()
 		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPCGP completePromotion];
 #endif
+	
 }
 void hspConnector::completeInstallPromotion()
 {
@@ -990,24 +1081,17 @@ void hspConnector::completeInstallPromotion()
 		t.env->CallStaticVoidMethod(t.classID, t.methodID);
 		t.env->DeleteLocalRef(t.classID);
 	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPCGP completePromotionByInstall];
 #endif
 }
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,jsonSelType func)
 {
 	
+	int _key =  jsonDelegator::get()->add(func, param, callbackParam);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "purchaseProduct", "(ILjava/lang/String;)Z")) {
-		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
 		jstring param1 = t.env->NewStringUTF(param.get("productid", "").asString().c_str());
 		
 		t.env->CallStaticObjectMethod(t.classID, t.methodID, _key, param1);
@@ -1015,10 +1099,21 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-// not implementation
-	Json::Value dummy;
-	dummy["issuccess"] = 1;
-	func(dummy);
+	[HSPPayment purchaseWithProductId:[NSString stringWithUTF8String:param.get("productid", "").asString().c_str()]
+									completionHandler:^(HSPError* error)
+	 {
+		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		 [resultDict setObject:[NSNumber numberWithBool:[error isSuccess]] forKey:@"issuccess"];
+		 NSLog(@"HSPPayment purchase result : %@", error);
+		 if ([error isSuccess] == YES)
+		 {
+			 callFuncMainQueue2(0,0,_key,resultDict);
+		 }
+		 else
+		 {
+			 callFuncMainQueue2(0,0,_key,resultDict);
+		 }
+	 }];
 #endif
 }
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
@@ -1043,7 +1138,6 @@ void hspConnector::openUrl(const std::string& url)
 		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
 	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
@@ -1060,8 +1154,17 @@ void hspConnector::openHSPUrl(const std::string& url)
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+	HSPUri* uriMyProfile = [HSPUri uriWithString:[NSString stringWithFormat:@"%s",url.c_str()]];
+	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
+//	HSPUri* uriMyProfile = [HSPUri uriWithString:@"HSPUI://webview"];
+//	[HSPUiFactory]
+//	
+//	
+//	// 게임 위에 해당 HSPUri 인스턴스에 해당하는 HSP화면을 출력한다.
+//	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
+
+	
+//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 }
 
@@ -1077,64 +1180,92 @@ void hspConnector::openCSCenter(const std::string& url)
 		t.env->DeleteLocalRef(param1);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	// 내 정보 URI(HSPUI_URI_PROFILE_MYPROFILE)으로 HSPUri 인스턴스를 생성한다.
+	HSPUri* uriMyProfile = [HSPUri uriWithString:HSP_COMMON_URI_SUPPORT_CSCENTER];
+	
+	// 게임 위에 해당 HSPUri 인스턴스에 해당하는 HSP화면을 출력한다.
+	[[HSPUiLauncher sharedLauncher] launchWithUri:uriMyProfile delegate:nil animated:YES];
 	// not implementation
 	//[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
 
 }
-void hspConnector::mappingToAccount(enum HSPMapping mt, bool force, jsonSelType func)
+void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
-	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "hspMappingToAccount", "(IIZ)V")) {
-		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key, (int)mt, force);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	Json::Value test;
-	test["error"]["code"] = 0x0014006D;
-	func(test);
+//		^(BOOL playable, HSPError* error) {
+//			// 로그인 응답 처리
+//			NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+//			[resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
+//			
+//			addErrorInResult(resultDict, error);
+//			callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
+//			
+//		}
+	 
+	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	[[HSPCore sharedHSPCore] requestMappingToAccountWithMappingType:(HSPMappingType)mt overwrite:force
+			completionHandler:^(HSPError *error, int64_t memberNo) {
+				CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				
+				Json::Value obj;
+				NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+				
+				addErrorInResult(resultDict, error);
+				callFuncMainQueue2(0,0,_key,resultDict);
+			}];
+	
+	
+//	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:^(HSPError* error) {
+//		if ( [error isSuccess] == YES )
+//		{
+//			NSLog(@"계정 연동에 성공했습니다.");
+//		}
+//		else
+//		{
+//			NSLog(@"계정 연동 실패 (%@)", error);
+//		}
+//	}];
+	
+//	// not implementation
+//	Json::Value test;
+//	test["error"]["code"] = 0x0014006D;
+//	func(test);
 #endif
 }
 void hspConnector::getIsUsimKorean(jsonSelType func)
 {
+	int _key = jsonDelegator::get()->add(func, 0, 0);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	int dkey = jsonDelegator::get()->add(func, 0, 0);
-	jsonSelType nextFunc = [=](Json::Value obj){
-		int delekey = dkey;
-		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
-		if(delsel->func){
-			delsel->func(obj);
-		}
-		jsonDelegator::get()->remove(delekey);
-	};
-	
 	JniMethodInfo t;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getIsUsimKorean", "(I)V")) {
 		//		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
-		int _key = jsonDelegator::get()->add(nextFunc, 0, 0);
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, _key);
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPUtil alertViewWithToastTermsWithCompletionHandler:^(BOOL agreed) {
+		NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+		
+//		addErrorInResult(resultDict, error);
+		[resultDict setObject:[NSNumber numberWithInt:1] forKey:@"isSuccess"];
+		[resultDict setObject:[NSNumber numberWithBool:!agreed] forKey:@"korean"];
+		callFuncMainQueue2(0,0,_key,resultDict);
+//		CCLOG("agreed : %d", agreed);
+//		Json::Value dummy;
+//		dummy["isSuccess"] = 1;
+//		dummy["korean"] = !agreed;
+//		func(dummy);
+	}];
 	// not implementation
-	Json::Value dummy;
-	dummy["isSuccess"] = 1;
-	dummy["korean"] = 0;
-	func(dummy);
+	
 #endif
 	
 }
@@ -1177,7 +1308,7 @@ int hspConnector::getLoginType()
 	}
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	return [[HSPCore sharedHSPCore] loginType];
 	// not implementation
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
@@ -1199,7 +1330,7 @@ int hspConnector::getIsEnablePushNotification()
 	}
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	return 1;
+	return [HSPMessage isEnablePushNotification];
 	// not implementation
     //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 #endif
@@ -1218,6 +1349,10 @@ void hspConnector::setIsEnablePushNotification(int p)
 	}
 //	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[HSPMessage setPushNotification:p completionHandler:^(HSPError *error) {
+		
+		
+	}];
 //	return 1;
 	// not implementation
     //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
@@ -1246,11 +1381,12 @@ int hspConnector::openKakaoMsg()
 
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+						 @"kakaolink://sendurl?msg=돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&type=&appname=땅따먹기&apiver=&metainfo={os:\"ios\",executeurl:\"주소입니다.\"}"]];
 	// not implementation
 //	CCLog(url.c_str());
 //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
 
-	return 0;
 #endif
 }
 
@@ -1271,11 +1407,29 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 	
 	return r;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	// not implementation
-	//	CCLog(url.c_str());
-	//	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+	if (![KakaoLinkCenter canOpenKakaoLink]) {
+		return false;
+	}
 	
-	return 0;
+	NSMutableArray *metaInfoArray = [NSMutableArray array];
+	NSDictionary *metaInfoIOS = [NSDictionary dictionaryWithObjectsAndKeys:
+															 @"ios", @"os",
+															 @"phone", @"devicetype",
+															 @"http://itunes.apple.com/app/id362057947?mt=8", @"installurl",
+															 @"example://example", @"executeurl",
+															 nil];
+	//	[metaInfoArray addObject:metaInfoAndroid];
+	[metaInfoArray addObject:metaInfoIOS];
+	
+	string totalMsg = title + msg;
+	return [KakaoLinkCenter openKakaoAppLinkWithMessage:[NSString stringWithUTF8String:totalMsg.c_str()]
+																					 URL:@"http://link.kakao.com/?test-ios-app"
+																	 appBundleID:[[NSBundle mainBundle] bundleIdentifier]
+																		appVersion:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
+																			 appName:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleName"]
+																 metaInfoArray:metaInfoArray];
+//	return [[UIApplication sharedApplication] openURL: [NSURL URLWithString:
+//																							 @"kakaolink://sendurl?msg=&url=http://hgurl.me/am7&appid=com.nhnent.SKSUMRAN&appver=1.0&appname=땅따먹기}"]];
 #endif
 }
 
@@ -1298,6 +1452,10 @@ void hspConnector::getAdXConnectEventInstance(string event, string data, string 
 	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+						withData:[NSString stringWithUTF8String:data.c_str()]
+				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+	
 #endif
 }
 int hspConnector::registerGamePadCallback(jsonSelType func)
@@ -1358,6 +1516,7 @@ void hspConnector::launchPromotion()
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	// not implementation
 	
+	[HSPCGP launchPromotion];
 #endif
 }
 //

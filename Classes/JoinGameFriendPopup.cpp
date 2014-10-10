@@ -276,7 +276,10 @@ CCTableViewCell* JoinGameFriendPopup::tableCellAtIndex( CCTableView *table, unsi
 	CCLabelTTF* score;
 	Json::Value& member = m_randomList[idx];
 	KS::KSLog("%", member);
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

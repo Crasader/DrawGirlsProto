@@ -6,6 +6,8 @@
 #include "UnknownFriends.h"
 #include "KnownFriend.h"
 #include "KHAlertView.h"
+#include "KSLocal.h"
+
 CCSize cellSize3 = CCSizeMake(238, 38);
 
 
@@ -70,7 +72,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //	
 //	_menu->addChild(inviteEventBtn);
 
-	CommonButton* inviteEventBtn = CommonButton::create("친구초대이벤트", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	CommonButton* inviteEventBtn = CommonButton::create(getLocal(LK::kFriendEvent), 12, CCSizeMake(100,37), CommonButtonGray, -200);
 	inviteEventBtn->setBackgroundTypeForDisabled(CommonButtonYellow);
 	inviteEventBtn->setTitleColor(ccc3(200, 200, 200));
 	inviteEventBtn->setTitleColorForDisable(ccc3(20, 0, 0));
@@ -97,7 +99,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //	friendList->setOpacity(255);
 //	_menu->addChild(friendList);
 	
-	CommonButton* friendList = CommonButton::create("친구 목록", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	CommonButton* friendList = CommonButton::create(getLocal(LK::kFriendListTitle), 12, CCSizeMake(100,37), CommonButtonGray, -200);
 	friendList->setBackgroundTypeForDisabled(CommonButtonYellow);
 	friendList->setTitleColor(ccc3(200, 200, 200));
 	friendList->setTitleColorForDisable(ccc3(20, 0, 0));
@@ -125,7 +127,7 @@ void FriendListPopup::myInit(CCObject* t_close, SEL_CallFunc d_close)
 //	_menu->addChild(joinGameFriend);
 
 	
-	CommonButton* joinGameFriend = CommonButton::create("게임친구맺기", 12, CCSizeMake(100,37), CommonButtonGray, -200);
+	CommonButton* joinGameFriend = CommonButton::create(getLocal(LK::kRequestFriend), 12, CCSizeMake(100,37), CommonButtonGray, -200);
 	joinGameFriend->setBackgroundTypeForDisabled(CommonButtonYellow);
 	joinGameFriend->setTitleColor(ccc3(200, 200, 200));
 	joinGameFriend->setTitleColorForDisable(ccc3(20, 0, 0));
@@ -231,7 +233,10 @@ CCTableViewCell* FriendListPopup::tableCellAtIndex( CCTableView *table, unsigned
 	CCLabelTTF* score;
 	FriendData* member = &m_scoreList[idx];
 	KS::KSLog("%", *member);
-	CCTableViewCell* cell = new CCTableViewCell();
+	
+	CCTableViewCell* cell = table->dequeueCell();
+	
+	cell = new CCTableViewCell();
 	cell->init();
 	cell->autorelease();
 	

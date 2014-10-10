@@ -10,6 +10,7 @@
 #include "GDWebSprite.h"
 #include "StarGoldData.h"
 #include "DataStorageHub.h"
+#include "KsLocal.h"
 
 void NoticeContent::menuAction(CCObject* sender)
 {
@@ -132,7 +133,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	//	case_back->setContentSize(CCSizeMake(notice_list[ing_close_cnt]["imgInfo"]["w"].asInt() + 17, notice_list[ing_close_cnt]["imgInfo"]["h"].asInt() + 66)); // 333 + 17 , 199 + 66
 	
 	
-	closeBtn = CommonButton::create("닫기", 12, CCSizeMake(80, 40), CommonButtonLightPupple, touch_priority-2);
+	closeBtn = CommonButton::create(getLocal(LK::kMyLocalKey_close), 12, CCSizeMake(80, 40), CommonButtonLightPupple, touch_priority-2);
 	addChild(closeBtn,100);
 	closeBtn->setFunction(json_selector(this, NoticeContent::menuAction));
 	closeBtn->setAnchorPoint(ccp(1,0.5));
@@ -141,7 +142,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	
 	
 	
-	day3Btn = CommonButton::create("오늘 하루 그만 보기", 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
+	day3Btn = CommonButton::create(getLocal(LK::kMyLocalKey_doNotOpenTodoay), 12, CCSizeMake(120,40), CommonButtonGray, touch_priority-2);
 	addChild(day3Btn,100);
 	day3Btn->setTag(kNoticeContentMenuTag_check);
 	day3Btn->setAnchorPoint(ccp(0,0.5));

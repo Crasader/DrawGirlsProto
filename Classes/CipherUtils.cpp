@@ -1,5 +1,5 @@
 #include "CipherUtils.h"
-
+#include "cocos2d.h"
 
 using std::string;
 CipherUtils::CipherUtils(void)
@@ -57,7 +57,7 @@ std::string CipherUtils::encrypt(const char *keyString, const char* plain)
 	}
 	catch( CryptoPP::Exception& e )
 	{
-		printf("%s", e.what()); 
+		CCLOG("%s", e.what());
 		//cerr << "Caught Exception..." << endl;
 		//cerr << e.what() << endl;
 		//cerr << endl;
@@ -97,7 +97,7 @@ std::string CipherUtils::decrypt(const char *keyString, const char* cipher)
 	}
 	catch( CryptoPP::Exception& e )
 	{
-		printf("%s", e.what());
+		CCLOG("%s", e.what());
 	}
 	return decrypted;
 }
@@ -251,7 +251,7 @@ std::string CipherUtils::encryptAESBASE64(const char *keyString, const char* pla
 {
 	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
 	byte key[ AES::DEFAULT_KEYLENGTH ];
-	
+	memset( key, 0x00, CryptoPP::AES::DEFAULT_KEYLENGTH );
 	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
 	std::string cipher;
 	try
@@ -288,8 +288,10 @@ std::string CipherUtils::decryptAESBASE64(const char *keyString, const char* cip
 {
 	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
 	byte key[ AES::DEFAULT_KEYLENGTH ];
-	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
-	
+	memset( key, 0x00, CryptoPP::AES::DEFAULT_KEYLENGTH );
+	memcpy(key, keyString, AES::DEFAULT_KEYLENGTH);
+//	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
+	CCLOG("key 0 %c", key[0]);
 	std::string decrypted;	
 	try
 	{
@@ -297,6 +299,11 @@ std::string CipherUtils::decryptAESBASE64(const char *keyString, const char* cip
 		StringSource s1( cipher, true,
 										new Base64Decoder( new StringSink( base64 ) ) );
 		ECB_Mode< AES >::Decryption d;
+		
+		string hexStr;
+		CryptoPP::StringSource s3(base64, true,
+															new CryptoPP::HexEncoder( new CryptoPP::StringSink( hexStr )));
+		CCLOG("base64 data %s", hexStr.c_str());
 		// ECB Mode does not use an IV
 		d.SetKey( key, sizeof(key) );
 		
@@ -309,7 +316,7 @@ std::string CipherUtils::decryptAESBASE64(const char *keyString, const char* cip
 	}
 	catch( CryptoPP::Exception& e )
 	{
-		printf("%s", e.what());
+		CCLOG("%s", e.what());
 	}
 	return decrypted;	
 }

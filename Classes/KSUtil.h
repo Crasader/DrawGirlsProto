@@ -55,11 +55,16 @@ using namespace std;
 
 #include <zlib.h>
 
-#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
-#define TRACE()       do {} while (0)
-#elif COCOS2D_DEBUG == 1
 #define TRACE() CCLOG("%s %d", __FILE__, __LINE__);
-#endif
+//#if !defined(COCOS2D_DEBUG) || COCOS2D_DEBUG == 0
+//#define TRACE()       do {} while (0)
+//#elif COCOS2D_DEBUG == 1
+//#endif
+
+//#if !defined(LQTEST)
+//#define TRACE() NSLog(@"%s %d", __FILE__, __LINE__);
+//#endif
+
 
 namespace KS
 {
