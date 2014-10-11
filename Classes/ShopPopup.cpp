@@ -780,7 +780,10 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									{
                                         Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopStartPack_pID_s));
                                         if(!t_info.empty())
+										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										}
 										requestItemDeliveryStartPack();
 									}
 									else
@@ -1059,7 +1062,10 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
                                         Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopEventPack_pID_s));
                                         if(!t_info.empty())
+										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										}
 										requestItemDeliveryEventPack();
 									}
 									else
@@ -2104,7 +2110,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
                                             Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
                                             if(!t_info.empty())
+											{
                                                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+												fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											}
 											requestItemDelivery();
 										}
 										else

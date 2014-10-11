@@ -3015,7 +3015,8 @@ void TitleRenewalScene::changeScene()
 {
 //	setBackKeyEnabled(false);
 	
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	
 	TRACE();

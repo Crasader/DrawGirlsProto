@@ -1879,7 +1879,8 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 void LoadingTipScene::readyLoading()
 {
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 	
 	sil_load_list.clear();
 	default_load_list.clear();

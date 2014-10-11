@@ -22,6 +22,7 @@
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
 #include "LabelTTFMarquee.h"
+#include "FiveRocksCpp.h"
 
 enum EventShopProductCode
 {
@@ -272,7 +273,10 @@ void EventShopPopup::menuAction(CCObject* sender)
 								{
                                     Json::Value t_info = mySGD->getProductInfo(mySGD->getEventInappProduct(t_index));
                                     if(!t_info.empty())
+									{
                                         myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+										fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+									}
 									requestItemDelivery();
 								}
 								else

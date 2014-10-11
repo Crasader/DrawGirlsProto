@@ -89,7 +89,8 @@ bool PuzzleScene::init()
 	setKeypadEnabled(true);
 	
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
 	
 	call_rank_stage_number = -1;
 	
