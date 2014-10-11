@@ -288,6 +288,7 @@ private:
 	CCSprite* jackImg;
 	CCBAnimationManager* jack_ccb_manager;
 	CCSprite* die_particle;
+	CCBAnimationManager* die_manager;
 //	CCSprite* jack_drawing;
 //	CCSprite* jack_barrier;
 	IntDirection jack_img_direction;

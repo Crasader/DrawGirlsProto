@@ -2097,6 +2097,7 @@ void GameItemManager::showTakeItemEffect(CCPoint t_p)
 	take_effect->setScale(1.f/myGD->game_scale);
 	addChild(take_effect);
 	reader->getAnimationManager()->setDelegate(this);
+	effect_animation_manager.push_back(reader->getAnimationManager());
 	reader->autorelease();
 	
 	effect_que.push_back(take_effect);
@@ -2110,6 +2111,9 @@ void GameItemManager::completedAnimationSequenceNamed (char const * name)
 	{
 		CCSprite* remove_target = effect_que.front();
 		effect_que.pop_front();
+		CCBAnimationManager* remove_animation = effect_animation_manager.front();
+		effect_animation_manager.pop_front();
+		remove_animation->setDelegate(NULL);
 		removeChild(remove_target);
 	}
 }

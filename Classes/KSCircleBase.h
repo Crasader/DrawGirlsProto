@@ -70,6 +70,8 @@ public:
 	virtual ~KSCircleBase(){
 		CCLOG("~KSCircle");
 	}
+	
+	void ccbDelegateNull();
 	virtual void checkConfine(float dt);
 	virtual void onStartMoving();
 	virtual void onStopMoving();

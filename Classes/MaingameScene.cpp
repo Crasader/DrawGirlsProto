@@ -60,7 +60,15 @@ CCScene* Maingame::scene()
 
 Maingame::~Maingame()
 {
+	CCLOG("~Maingame");
 	mySGD->is_on_maingame = false;
+	
+	if(myCP)
+	{
+		myCP->cumberCcbDelegateNull();
+	}
+	
+	myGD->ccbDelegateNull();
 	
 	if(replay_boss)
 	{
@@ -97,6 +105,8 @@ bool Maingame::init()
     
         return false;
     }
+	
+	myCP = NULL;
 	
 	replay_boss = NULL;
 	replay_sub = NULL;
