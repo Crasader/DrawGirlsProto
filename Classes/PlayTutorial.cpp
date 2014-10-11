@@ -1766,6 +1766,8 @@ void BackImg::myInit()
 	initWithFile("play_tutorial_real.png");
 	setPosition(ccp(240,myDSH->ui_center_y));
 	
+	drawRects = NULL;
+	
 	silhouette = CCSprite::create("play_tutorial_sil.png");
 	silhouette->setPosition(ccp(getContentSize().width/2.f,getContentSize().height/2.f));
 	addChild(silhouette, -1);

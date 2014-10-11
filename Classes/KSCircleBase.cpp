@@ -13,6 +13,11 @@
 #include "CumberEmotion.h"
 #include "StarGoldData.h"
 
+void KSCircleBase::ccbDelegateNull()
+{
+	mAnimationManager->setDelegate(NULL);
+}
+
 bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();

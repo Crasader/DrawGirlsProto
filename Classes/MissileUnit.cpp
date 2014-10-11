@@ -2062,12 +2062,17 @@ void BlindDrop::startAction ()
 	ingFrame = 0;
 	schedule(schedule_selector(BlindDrop::myAction));
 }
+void BlindDrop::ccbManagerDelegateNull()
+{
+	reader->getAnimationManager()->setDelegate(NULL);
+	reader->release();
+}
 void BlindDrop::completedAnimationSequenceNamed (char const * name)
 {
 	string t_name = name;
 	if(t_name == "tornado_stop")
 	{
-//		reader->release();
+//		ccbManagerDelegateNull();
 		oilImg->removeFromParentAndCleanup(true);
 		removeFromParentAndCleanup(true);
 	}

@@ -1418,11 +1418,11 @@ int hspConnector::sendKakaoMsg(string title,string msg,string url){
 															 @"http://itunes.apple.com/app/id362057947?mt=8", @"installurl",
 															 @"example://example", @"executeurl",
 															 nil];
-	
-//	[metaInfoArray addObject:metaInfoAndroid];
+	//	[metaInfoArray addObject:metaInfoAndroid];
 	[metaInfoArray addObject:metaInfoIOS];
 	
-	return [KakaoLinkCenter openKakaoAppLinkWithMessage:@"돌아온 오락실의 제왕!!\n땅따먹기 리턴즈 with 섬란카구라 뉴웨이브"
+	string totalMsg = title + msg;
+	return [KakaoLinkCenter openKakaoAppLinkWithMessage:[NSString stringWithUTF8String:totalMsg.c_str()]
 																					 URL:@"http://link.kakao.com/?test-ios-app"
 																	 appBundleID:[[NSBundle mainBundle] bundleIdentifier]
 																		appVersion:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]

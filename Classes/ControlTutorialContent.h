@@ -169,6 +169,7 @@ private:
 		{
 			click_animaition->setVisible(false);
 			touch_menu->setVisible(false);
+			ani_manager->getAnimationManager()->setDelegate(NULL);
 			end_selector(NULL);
 		}
 	}

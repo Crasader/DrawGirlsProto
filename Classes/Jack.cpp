@@ -1833,6 +1833,7 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		CCBReader* reader = new CCBReader(nodeLoader);
 		die_particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
 		reader->getAnimationManager()->setDelegate(this);
+		die_manager = reader->getAnimationManager();
 		//			jackImg = CCSprite::create("jack_die.png");
 		//			jackImg->setScale(0.2f);
 		addChild(die_particle, kJackZ_main);
@@ -1850,6 +1851,7 @@ void Jack::completedAnimationSequenceNamed (char const * name)
 	if(t_name == "end_die_animation")
 	{
 		die_particle->removeFromParent();
+		die_manager->setDelegate(NULL);
 	}
 }
 

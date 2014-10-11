@@ -548,7 +548,7 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 			if(i >= 3)
 				selectedFlagSpr->setPosition(ccp(37.75f,11.5f));
 			else
-				selectedFlagSpr->setPosition(ccp(50 + 5.5,16));
+				selectedFlagSpr->setPosition(ccp(50,16));
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			

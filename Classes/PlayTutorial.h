@@ -435,6 +435,16 @@ public:
 	void startSilhouette();
 	void stopSilhouette();
 	
+	virtual ~BackImg()
+	{
+		if(drawRects)
+		{
+			drawRects->removeAllObjects();
+			drawRects->release();
+			drawRects = NULL;
+		}
+	}
+	
 private:
 	CCArray* drawRects;
 	CCSize screen_size;

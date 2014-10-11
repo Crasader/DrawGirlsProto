@@ -374,6 +374,7 @@ private:
 //	CCSpriteBatchNode* take_item_effects;
 	FloatingCoinParent* floating_coin_parent;
 	deque<CCSprite*> effect_que;
+	deque<CCBAnimationManager*> effect_animation_manager;
 	
 	bool is_on_addTime;
 	

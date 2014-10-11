@@ -60,9 +60,41 @@ CCScene* Maingame::scene()
 
 Maingame::~Maingame()
 {
+	CCLOG("~Maingame");
 	mySGD->is_on_maingame = false;
+	
+	if(myCP)
+	{
+		myCP->cumberCcbDelegateNull();
+	}
+	
+	myGD->ccbDelegateNull();
+	
+	if(replay_boss)
+	{
+		replay_boss->removeAllObjects();
+		replay_boss->release();
+		replay_boss = NULL;
+	}
+	if(replay_sub)
+	{
+		replay_sub->removeAllObjects();
+		replay_sub->release();
+		replay_sub = NULL;
+	}
+	
+	if(boss_thumbs)
+	{
+		boss_thumbs->removeAllObjects();
+		boss_thumbs->release();
+		boss_thumbs = NULL;
+	}
 	if(sub_thumbs)
+	{
+		sub_thumbs->removeAllObjects();
 		sub_thumbs->release();
+		sub_thumbs = NULL;
+	}
 	AudioEngine::sharedInstance()->stopAllEffects();
 }
 
@@ -73,6 +105,13 @@ bool Maingame::init()
     
         return false;
     }
+	
+	myCP = NULL;
+	
+	replay_boss = NULL;
+	replay_sub = NULL;
+	boss_thumbs = NULL;
+	sub_thumbs = NULL;
 	
 	mySGD->is_on_maingame = false;
 	mySGD->is_paused = false;

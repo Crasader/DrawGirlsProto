@@ -40,6 +40,15 @@ public:
 	virtual ~CumberParent()
 	{
 		CCLOG("~CumberParent");
+		
+		for(int i=0;i<mainCumbers.size();i++)
+		{
+			CCLOG("boss %d retain count : %d", i, mainCumbers[i]->retainCount());
+			while(mainCumbers[i]->retainCount() > 1)
+			{
+				mainCumbers[i]->release();
+			}
+		}
 	}
 	
 	void setMainCumberState(int t_cs); // no used
@@ -82,6 +91,9 @@ public:
 //		else
 //			return 0.f;
 //	}
+	
+	void cumberCcbDelegateNull();
+	
 private:
 	
 	bool is_die_animationing;
@@ -91,6 +103,8 @@ private:
 	
 	MissileParent* myMP;
 	MapFragmentParent* myMFP;
+	
+	std::vector<std::function<void()>> cumber_ccb_delegate_null_list;
 	
 //	MainCumber* mainCumber;
 	std::vector<KSCumberBase*> mainCumbers;
