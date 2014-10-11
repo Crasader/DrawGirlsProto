@@ -3621,10 +3621,11 @@ void MainFlowScene::setBottom()
 		 }
 		 
 		 */
+
 		
 		CCSprite* t_button_img = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		CommonButton* cgp_button = CommonButton::create(t_button_img, kCCMenuHandlerPriority-1);
-		cgp_button->setPosition(etc_menu->getPosition() + ccp(0,t_button_img->getContentSize().height/2.f+15));
+		cgp_button->setPosition(etc_menu->getPosition() + ccp(30,50));
 		cgp_button->setFunction([=](CCObject* sender)
 								{
 									if(cgp_button->isEnabled() == false)
@@ -3641,6 +3642,7 @@ void MainFlowScene::setBottom()
 									cgp_button->removeFromParent();
 								});
 		addChild(cgp_button, kMainFlowZorder_uiButton);
+		cgp_button->runAction(CCRepeatForever::create(CCBlink::create(1, 2)));
 		bottom_list.push_back(cgp_button);
 	}
 	// 일반 보상

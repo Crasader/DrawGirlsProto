@@ -82,7 +82,7 @@ public:
     CCArray* webImages;
     bool isDownloding;
     int downloadIndex;
-    std::queue<pair<GDWebSpriteMemoryStruct, int> > chunks;
+    std::map<int,GDWebSpriteMemoryStruct> chunks;
 };
 
 
