@@ -72,6 +72,7 @@ extern "C"{
 	{
 		CCLOG("sendresultnative1 %d", _key);
 		jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_key);
+        if(delesel==nullptr)return;
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
 		string throwData = revStr;
@@ -123,6 +124,7 @@ extern "C"{
 	void Java_com_litqoo_lib_hspConnector_SendReactionNative(JNIEnv *env, jobject thiz,int _key, jstring datas, bool isFinish)
 	{
 		jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_key);
+        if(delesel==nullptr)return;
 		jboolean isCopy = JNI_FALSE;
 		const char* revStr = env->GetStringUTFChars(datas, &isCopy);
 		string throwData = revStr;
@@ -382,7 +384,7 @@ void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,int _dkey,vo
 	reader.parse([jsonString cStringUsingEncoding:NSUTF8StringEncoding], resultObj);
 	
 	jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_dkey);
-
+    if(delesel==nullptr)return;
 	if(!param.isNull())resultObj["param"] = param;
 	if(!callbackParam.isNull())resultObj["callback"] = callbackParam;
 	dispatch_async(dispatch_get_main_queue(),
@@ -514,7 +516,7 @@ string hspConnector::getServerAddress(){
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
-//	r = "http://"+r;
+	serverAddr = "http://"+serverAddr;
 	serverAddr = "http://182.162.201.147:10010";
 #endif
 	
@@ -587,6 +589,7 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		}
 		
 		jsonDelegator::DeleSel *delsel = jsonDelegator::get()->load(delekey);
+        if(delsel==nullptr)return;
 		if(delsel->func)delsel->func(obj);
 		jsonDelegator::get()->remove(delekey);
 
