@@ -1906,7 +1906,10 @@ void FriendPopup::setVoteFriendMenu()
 		vote_friend_menu->setPosition(ccp(244 + 75*2,256.5f));
 		TRACE();
 		tab_menu->addChild(vote_friend_menu);
+		
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 		vote_friend_menu->setVisible(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
+#endif
 		TRACE();
 		/////////////////////////////// 탭버튼 추가 끝
 		
