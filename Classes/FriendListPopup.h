@@ -96,7 +96,7 @@ public:
 	int after_loading_card_number;
 	int last_selected_card_number;
 	vector<DownloadFile> df_list;
-	vector<CopyFile> cf_list;
+//	vector<CopyFile> cf_list;
 	
 	
 	

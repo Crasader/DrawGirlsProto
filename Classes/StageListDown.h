@@ -82,7 +82,7 @@ private:
 	vector<DownloadFile> df_list;
 	vector<DownloadFile> cut_list;
 	vector<DownloadFile> sf_list;
-	vector<CopyFile> cf_list;
+//	vector<CopyFile> cf_list;
 	
 	vector<DownloadImgInfo> download_set;
 	

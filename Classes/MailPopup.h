@@ -113,7 +113,7 @@ class MailPopup : public DimmedPopup, public CCTableViewDataSource, public CCTab
 		CCNode* addCardImg(int t_card_number, int t_card_level, string t_passive);
 		void resultLoadedCardInfo (Json::Value result_data);
 		vector <DownloadFile> df_list;
-		vector <CopyFile> cf_list;
+//		vector <CopyFile> cf_list;
 
 		int ing_download_cnt;
 		void successAction ();

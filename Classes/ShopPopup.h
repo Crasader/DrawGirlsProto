@@ -155,7 +155,7 @@ private:
 	int gacha_card_number;
 	
 	vector<DownloadFile> df_list;
-	vector<CopyFile> cf_list;
+//	vector<CopyFile> cf_list;
 	
 	string card_gacha_type;
 	void startCardGacha();

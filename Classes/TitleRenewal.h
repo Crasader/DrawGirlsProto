@@ -170,7 +170,7 @@ private:
 	
 	void resultLoadedCardData(Json::Value result_data);
 	vector<DownloadFile> card_download_list;
-	vector<CopyFile> card_reduction_list;
+//	vector<CopyFile> card_reduction_list;
 	
 //	void resultGetKnownFriendList(Json::Value result_data);
 //	void startGetKnownFriendUserData();

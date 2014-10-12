@@ -273,7 +273,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					
 					Json::Value t_imgInfo = t_card["imgInfo"];
 					
-					bool is_add_cf = false;
+//					bool is_add_cf = false;
 					
 					if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 					{
@@ -289,12 +289,12 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 							sf_list.push_back(t_sf);
 						// ================================
 						
-						CopyFile t_cf;
-						t_cf.from_filename = t_sf.filename.c_str();
-						t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-						cf_list.push_back(t_cf);
-						
-						is_add_cf = true;
+//						CopyFile t_cf;
+//						t_cf.from_filename = t_sf.filename.c_str();
+//						t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//						cf_list.push_back(t_cf);
+//						
+//						is_add_cf = true;
 					}
 					
 					Json::Value t_aniInfo = t_card["aniInfo"];
@@ -329,20 +329,20 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 							// ================================
 						}
 						
-						if(is_add_cf)
-						{
-							CopyFile t_cf = cf_list.back();
-							cf_list.pop_back();
-							t_cf.is_ani = true;
-							t_cf.cut_width = t_detail["cutWidth"].asInt();
-							t_cf.cut_height = t_detail["cutHeight"].asInt();
-							t_cf.position_x = t_detail["positionX"].asInt();
-							t_cf.position_y = t_detail["positionY"].asInt();
-							
-							t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-							
-							cf_list.push_back(t_cf);
-						}
+//						if(is_add_cf)
+//						{
+//							CopyFile t_cf = cf_list.back();
+//							cf_list.pop_back();
+//							t_cf.is_ani = true;
+//							t_cf.cut_width = t_detail["cutWidth"].asInt();
+//							t_cf.cut_height = t_detail["cutHeight"].asInt();
+//							t_cf.position_x = t_detail["positionX"].asInt();
+//							t_cf.position_y = t_detail["positionY"].asInt();
+//							
+//							t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//							
+//							cf_list.push_back(t_cf);
+//						}
 					}
 					
 					NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
@@ -412,22 +412,22 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 						t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
 						sf_list.push_back(t_df3);
 						
-						if(!is_add_cf)
-						{
-							CopyFile t_cf;
-							t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-							t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-							cf_list.push_back(t_cf);
-							
-							is_add_cf = true;
-						}
-						
-						CopyFile t_cf = cf_list.back();
-						cf_list.pop_back();
-						t_cf.is_ccb = true;
-						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-						
-						cf_list.push_back(t_cf);
+//						if(!is_add_cf)
+//						{
+//							CopyFile t_cf;
+//							t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//							t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//							cf_list.push_back(t_cf);
+//							
+//							is_add_cf = true;
+//						}
+//						
+//						CopyFile t_cf = cf_list.back();
+//						cf_list.pop_back();
+//						t_cf.is_ccb = true;
+//						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+//						
+//						cf_list.push_back(t_cf);
 					}
 				}
 				
@@ -495,7 +495,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
-			bool is_add_cf = false;
+//			bool is_add_cf = false;
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 			{
@@ -511,12 +511,12 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					sf_list.push_back(t_sf);
 				// ================================
 				
-				CopyFile t_cf;
-				t_cf.from_filename = t_sf.filename.c_str();
-				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-				cf_list.push_back(t_cf);
-				
-				is_add_cf = true;
+//				CopyFile t_cf;
+//				t_cf.from_filename = t_sf.filename.c_str();
+//				t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//				cf_list.push_back(t_cf);
+//				
+//				is_add_cf = true;
 			}
 			
 			Json::Value t_aniInfo = t_card["aniInfo"];
@@ -551,20 +551,20 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// ================================
 				}
 				
-				if(is_add_cf)
-				{
-					CopyFile t_cf = cf_list.back();
-					cf_list.pop_back();
-					t_cf.is_ani = true;
-					t_cf.cut_width = t_detail["cutWidth"].asInt();
-					t_cf.cut_height = t_detail["cutHeight"].asInt();
-					t_cf.position_x = t_detail["positionX"].asInt();
-					t_cf.position_y = t_detail["positionY"].asInt();
-					
-					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-					
-					cf_list.push_back(t_cf);
-				}
+//				if(is_add_cf)
+//				{
+//					CopyFile t_cf = cf_list.back();
+//					cf_list.pop_back();
+//					t_cf.is_ani = true;
+//					t_cf.cut_width = t_detail["cutWidth"].asInt();
+//					t_cf.cut_height = t_detail["cutHeight"].asInt();
+//					t_cf.position_x = t_detail["positionX"].asInt();
+//					t_cf.position_y = t_detail["positionY"].asInt();
+//					
+//					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//					
+//					cf_list.push_back(t_cf);
+//				}
 			}
 			
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
@@ -633,22 +633,22 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
 				sf_list.push_back(t_df3);
 				
-				if(!is_add_cf)
-				{
-					CopyFile t_cf;
-					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					cf_list.push_back(t_cf);
-					
-					is_add_cf = true;
-				}
-				
-				CopyFile t_cf = cf_list.back();
-				cf_list.pop_back();
-				t_cf.is_ccb = true;
-				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				
-				cf_list.push_back(t_cf);
+//				if(!is_add_cf)
+//				{
+//					CopyFile t_cf;
+//					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					cf_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
+//				}
+//				
+//				CopyFile t_cf = cf_list.back();
+//				cf_list.pop_back();
+//				t_cf.is_ccb = true;
+//				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+//				
+//				cf_list.push_back(t_cf);
 			}
 			
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
@@ -709,7 +709,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
-			bool is_add_cf = false;
+//			bool is_add_cf = false;
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 			{
@@ -726,12 +726,12 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					sf_list.push_back(t_sf);
 					// ================================
 					
-					CopyFile t_cf;
-					t_cf.from_filename = t_sf.filename.c_str();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					cf_list.push_back(t_cf);
-					
-					is_add_cf = true;
+//					CopyFile t_cf;
+//					t_cf.from_filename = t_sf.filename.c_str();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					cf_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
 				}
 			}
 			
@@ -767,20 +767,20 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					// ================================
 				}
 				
-				if(is_add_cf)
-				{
-					CopyFile t_cf = cf_list.back();
-					cf_list.pop_back();
-					t_cf.is_ani = true;
-					t_cf.cut_width = t_detail["cutWidth"].asInt();
-					t_cf.cut_height = t_detail["cutHeight"].asInt();
-					t_cf.position_x = t_detail["positionX"].asInt();
-					t_cf.position_y = t_detail["positionY"].asInt();
-					
-					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-					
-					cf_list.push_back(t_cf);
-				}
+//				if(is_add_cf)
+//				{
+//					CopyFile t_cf = cf_list.back();
+//					cf_list.pop_back();
+//					t_cf.is_ani = true;
+//					t_cf.cut_width = t_detail["cutWidth"].asInt();
+//					t_cf.cut_height = t_detail["cutHeight"].asInt();
+//					t_cf.position_x = t_detail["positionX"].asInt();
+//					t_cf.position_y = t_detail["positionY"].asInt();
+//					
+//					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//					
+//					cf_list.push_back(t_cf);
+//				}
 			}
 			
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
@@ -848,22 +848,22 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
 				sf_list.push_back(t_df3);
 				
-				if(!is_add_cf)
-				{
-					CopyFile t_cf;
-					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					cf_list.push_back(t_cf);
-					
-					is_add_cf = true;
-				}
-				
-				CopyFile t_cf = cf_list.back();
-				cf_list.pop_back();
-				t_cf.is_ccb = true;
-				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				
-				cf_list.push_back(t_cf);
+//				if(!is_add_cf)
+//				{
+//					CopyFile t_cf;
+//					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					cf_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
+//				}
+//				
+//				CopyFile t_cf = cf_list.back();
+//				cf_list.pop_back();
+//				t_cf.is_ccb = true;
+//				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+//				
+//				cf_list.push_back(t_cf);
 			}
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
@@ -1424,49 +1424,49 @@ void StageListDown::successAction()
 	{
 		SDS_SS(kSDF_cardInfo, sf_list[ing_download_cnt-df_list.size()-1].key, sf_list[ing_download_cnt-df_list.size()-1].img, false);
 		
-		for(int i=0;i<cf_list.size();i++)
-		{
-			mySIL->removeTextureCache(cf_list[i].from_filename);
-			mySIL->removeTextureCache(cf_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-//			if(cf_list[i].is_ani)
-//			{
-//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-//				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-//				target_img->addChild(ani_img);
-//			}
+//		for(int i=0;i<cf_list.size();i++)
+//		{
+//			mySIL->removeTextureCache(cf_list[i].from_filename);
+//			mySIL->removeTextureCache(cf_list[i].to_filename);
 //			
-//			if(cf_list[i].is_ccb)
+//			CCSprite* target_img = new CCSprite();
+//			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+//			target_img->setAnchorPoint(ccp(0,0));
+//			
+////			if(cf_list[i].is_ani)
+////			{
+////				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+////				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+////				target_img->addChild(ani_img);
+////			}
+////			
+////			if(cf_list[i].is_ccb)
+////			{
+////				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
+////				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+////				target_img->addChild(face_img);
+////			}
+//			
+//			target_img->setScale(0.4f);
+//			
+//			CCRenderTexture* t_texture = new CCRenderTexture();
+//			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//			t_texture->setSprite(target_img);
+//			t_texture->beginWithClear(0, 0, 0, 0);
+//			t_texture->getSprite()->visit();
+//			t_texture->end();
+//			
+//			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
+//			
+//			t_texture->release();
+//			target_img->release();
+//			
+//			if(i % 3 == 0)
 //			{
-//				CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
-//				face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-//				target_img->addChild(face_img);
+//				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->beginWithClear(0, 0, 0, 0);
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
+//		}
 		
 		
 		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
@@ -2147,13 +2147,13 @@ void StageListDown::startDownloadSet()
 			img->release();
 		}
 		
-		if(cf_list.size() > 0)
-		{
-			reduce_frame = 0;
-			schedule(schedule_selector(StageListDown::reduceAction));
-		}
-		else
-		{
+//		if(cf_list.size() > 0)
+//		{
+//			reduce_frame = 0;
+//			schedule(schedule_selector(StageListDown::reduceAction));
+//		}
+//		else
+//		{
 			if(!df_list.empty())
 			{
 				for(int i=0;i<df_list.size();i++)
@@ -2187,7 +2187,7 @@ void StageListDown::startDownloadSet()
 										 else
 											 outOpenning();
 									 }));
-		}
+//		}
 		
 //		// reduce
 //		for(int i=0;i<cf_list.size();i++)
@@ -2273,96 +2273,96 @@ void StageListDown::startDownloadSet()
 
 void StageListDown::reduceAction()
 {
-    float download_percent = 100.f*reduce_frame/cf_list.size();
-	if(download_percent > 100.f)
-		download_percent = 100.f;
-	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
-    
-	loading_progress->setPercentage(download_percent);
-    
-    int i = reduce_frame;
-    
-    mySIL->removeTextureCache(cf_list[i].from_filename);
-    mySIL->removeTextureCache(cf_list[i].to_filename);
-    
-    CCSprite* target_img = new CCSprite();
-    target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
-    target_img->setAnchorPoint(ccp(0,0));
-    
-//    if(cf_list[i].is_ani)
+//    float download_percent = 100.f*reduce_frame/cf_list.size();
+//	if(download_percent > 100.f)
+//		download_percent = 100.f;
+//	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+//    
+//	loading_progress->setPercentage(download_percent);
+//    
+//    int i = reduce_frame;
+//    
+//    mySIL->removeTextureCache(cf_list[i].from_filename);
+//    mySIL->removeTextureCache(cf_list[i].to_filename);
+//    
+//    CCSprite* target_img = new CCSprite();
+//    target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+//    target_img->setAnchorPoint(ccp(0,0));
+//    
+////    if(cf_list[i].is_ani)
+////    {
+////        CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+////        ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+////        target_img->addChild(ani_img);
+////    }
+////    
+////    if(cf_list[i].is_ccb)
+////    {
+////        CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
+////        face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+////        target_img->addChild(face_img);
+////    }
+//    
+//    target_img->setScale(0.4f);
+//    
+//    CCRenderTexture* t_texture = new CCRenderTexture();
+//    t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//    t_texture->setSprite(target_img);
+//    t_texture->beginWithClear(0, 0, 0, 0);
+//    t_texture->getSprite()->visit();
+//    t_texture->end();
+//    
+//    if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//        CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
+//    
+//    t_texture->release();
+//    target_img->release();
+//    
+//    if(i % 3 == 0)
 //    {
-//        CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-//        ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-//        target_img->addChild(ani_img);
+//        CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //    }
 //    
-//    if(cf_list[i].is_ccb)
+//    reduce_frame++;
+//    
+//    if(reduce_frame >= cf_list.size())
 //    {
-//        CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + cf_list[i].ccb_filename.c_str()).first;
-//        face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-//        target_img->addChild(face_img);
+//        unschedule(schedule_selector(StageListDown::reduceAction));
+//        
+//        if(!df_list.empty())
+//		{
+//			for(int i=0;i<df_list.size();i++)
+//			{
+//				SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
+//			}
+//		}
+//		
+//		if(!sf_list.empty())
+//		{
+//			for(int i=0;i<sf_list.size();i++)
+//			{
+//				SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
+//			}
+//			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+//		}
+//		
+//		for(int i=0;i<save_version_list.size();i++)
+//		{
+//			NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
+//			mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
+//		}
+//		
+//		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
+//		mySDS->fFlush(puzzle_number, kSDS_PZ_base);
+//		
+//		addChild(KSTimer::create(0.3f, [=]()
+//								 {
+//									 if(success_func == nullptr)
+//										 (target_success->*delegate_success)();
+//									 else
+//										 outOpenning();
+//								 }));
 //    }
-    
-    target_img->setScale(0.4f);
-    
-    CCRenderTexture* t_texture = new CCRenderTexture();
-    t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-    t_texture->setSprite(target_img);
-    t_texture->beginWithClear(0, 0, 0, 0);
-    t_texture->getSprite()->visit();
-    t_texture->end();
-    
-    if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-        CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
-    
-    t_texture->release();
-    target_img->release();
-    
-    if(i % 3 == 0)
-    {
-        CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-    }
-    
-    reduce_frame++;
-    
-    if(reduce_frame >= cf_list.size())
-    {
-        unschedule(schedule_selector(StageListDown::reduceAction));
-        
-        if(!df_list.empty())
-		{
-			for(int i=0;i<df_list.size();i++)
-			{
-				SDS_SS(kSDF_puzzleInfo, puzzle_number, df_list[i].key, df_list[i].img, false);
-			}
-		}
-		
-		if(!sf_list.empty())
-		{
-			for(int i=0;i<sf_list.size();i++)
-			{
-				SDS_SS(kSDF_cardInfo, sf_list[i].key, sf_list[i].img, false);
-			}
-			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
-		}
-		
-		for(int i=0;i<save_version_list.size();i++)
-		{
-			NSDS_SI(save_version_list[i].x, kSDS_SI_version_i, save_version_list[i].y);
-			mySDS->fFlush(save_version_list[i].x, kSDS_SI_autoBalanceTry_i);
-		}
-		
-		NSDS_SI(puzzle_number, kSDS_PZ_version_i, download_version, false);
-		mySDS->fFlush(puzzle_number, kSDS_PZ_base);
-		
-		addChild(KSTimer::create(0.3f, [=]()
-								 {
-									 if(success_func == nullptr)
-										 (target_success->*delegate_success)();
-									 else
-										 outOpenning();
-								 }));
-    }
 }
 
 void StageListDown::checkDownloading()

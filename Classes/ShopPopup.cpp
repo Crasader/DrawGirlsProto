@@ -3425,42 +3425,42 @@ void ShopPopup::successAction()
 	}
 	else
 	{
-		for(int i=0;i<cf_list.size();i++)
-		{
-			mySIL->removeTextureCache(cf_list[i].from_filename);
-			mySIL->removeTextureCache(cf_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-//			if(cf_list[i].is_ani)
+//		for(int i=0;i<cf_list.size();i++)
+//		{
+//			mySIL->removeTextureCache(cf_list[i].from_filename);
+//			mySIL->removeTextureCache(cf_list[i].to_filename);
+//			
+//			CCSprite* target_img = new CCSprite();
+//			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+//			target_img->setAnchorPoint(ccp(0,0));
+//			
+////			if(cf_list[i].is_ani)
+////			{
+////				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+////				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+////				target_img->addChild(ani_img);
+////			}
+//			
+//			target_img->setScale(0.4f);
+//			
+//			CCRenderTexture* t_texture = new CCRenderTexture();
+//			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//			t_texture->setSprite(target_img);
+//			t_texture->begin();
+//			t_texture->getSprite()->visit();
+//			t_texture->end();
+//			
+//			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
+//			
+//			t_texture->release();
+//			target_img->release();
+//			
+//			if(i % 3 == 0)
 //			{
-//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-//				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-//				target_img->addChild(ani_img);
+//				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->begin();
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
+//		}
 		
 		// 완료
 		loading_layer->removeFromParent();

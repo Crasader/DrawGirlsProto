@@ -88,7 +88,7 @@ bool MainFlowScene::init()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
-	myDSH->unregiAllCcbAnimationManagers();
+//	myDSH->unregiAllCcbAnimationManagers();
 	
 	setKeypadEnabled(true);
 	

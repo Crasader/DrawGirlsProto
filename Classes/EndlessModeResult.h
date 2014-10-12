@@ -22,7 +22,7 @@ class TouchSuctionLayer;
 class KSLabelTTF;
 class LoadingLayer;
 class DownloadFile;
-class CopyFile;
+//class CopyFile;
 class CCMenuLambda;
 class EndlessModeResult : public CCLayer, public CCTableViewDataSource, public CCScrollViewDelegate
 {
@@ -132,7 +132,7 @@ private:
 	void flipRight(string t_top_title, int t_top_content, string t_center_title, int t_center_content, string t_bottom_title, int t_bottom_content, function<void()> t_end_func);
 	
 	vector<DownloadFile> df_list;
-	vector<CopyFile> cf_list;
+//	vector<CopyFile> cf_list;
 	
 	void setMain();
 	

@@ -37,7 +37,7 @@ public:
 class KSLabelTTF;
 class LoadingLayer;
 class DownloadFile;
-class CopyFile;
+//class CopyFile;
 class CommonButton;
 class StyledLabelTTF;
 class CCMenuLambda;
@@ -119,7 +119,7 @@ private:
 	LoadingLayer* ready_loading;
 	
 	vector<DownloadFile> df_list;
-	vector<CopyFile> cf_list;
+//	vector<CopyFile> cf_list;
 	CCScale9Sprite* currentSelectedCell;
 	int currentSelectedIdx;
 	CommonButton* mySelection;
