@@ -883,8 +883,40 @@ void TitleRenewalScene::checkReceive()
 		{
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
 			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
-			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
-			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
+            
+            int highPieceGroup = mySGD->getUserdataHighPiece();
+            if(highPieceGroup!=0)highPieceGroup-1;
+            highPieceGroup=highPieceGroup/5;
+            fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("[스테이지 %d~%d]",highPieceGroup*5+1,highPieceGroup*5+5));
+            int gottenCardGroup = mySGD->getHasGottenCardsSize()/10;
+            fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("[카드보유 %d~%d]",gottenCardGroup*10,gottenCardGroup*10+9));
+            int vipGroup =  mySGD->getGoodsValue(kGoodsType_money);
+            
+            string vipGroupString;
+            
+            if(vipGroup==0){
+                vipGroupString="[결제01-0]";
+            }else if(vipGroup<=1000){
+                vipGroupString="[결제02-1~1,000]";
+            }else if(vipGroup<=10000){
+                vipGroupString="[결제03-1,001~10,000]";
+            }else if(vipGroup<=30000){
+                vipGroupString="[결제04-10,001~30,000]";
+            }else if(vipGroup<=50000){
+                vipGroupString="[결제05-30,001~50,000]";
+            }else if(vipGroup<=100000){
+                vipGroupString="[결제06-50,001~100,000]";
+            }else if(vipGroup<=300000){
+                vipGroupString="[결제07-100,001~300,000]";
+            }else if(vipGroup<=500000){
+                vipGroupString="[결제08-300,001~500,000]";
+            }else if(vipGroup<=1000000){
+                vipGroupString="[결제09-500,001~1,000,000]";
+            }else{
+                vipGroupString="[결제10-1,000,000~]";
+            }
+            
+            fiverocks::FiveRocksBridge::setUserCohortVariable(3, vipGroupString.c_str());
 			
 			mySGD->network_check_cnt = 0;
 			

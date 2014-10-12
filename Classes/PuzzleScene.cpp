@@ -655,7 +655,8 @@ bool PuzzleScene::init()
 																}
 															}
 															
-															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
+                                                            int gottenCardGroup = mySGD->getHasGottenCardsSize()/10;
+                                                            fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("[카드보유 %d~%d]",gottenCardGroup*10,gottenCardGroup*10+9));
 														}
 												  }));
 		

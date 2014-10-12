@@ -578,7 +578,10 @@ void ClearPopup::tryTransaction(CCNode* t_loading)
 									  {
 										  TRACE();
 										  CCLOG("ClearPopup transaction success");
-										  fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
+                                          int highPieceGroup = mySGD->getUserdataHighPiece();
+                                          if(highPieceGroup!=0)highPieceGroup-1;
+                                          highPieceGroup=highPieceGroup/5;
+                                          fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("[스테이지 %d~%d]",highPieceGroup*5+1,highPieceGroup*5+5));
 										  
 										  mySGD->network_check_cnt = 0;
 										  
