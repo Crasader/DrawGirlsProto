@@ -27,6 +27,7 @@
 #include "CCMenuLambda.h"
 #include "TypingBox.h"
 #include "ASPopupView.h"
+#include "AsyncImage.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -1162,10 +1163,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				n_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																											  card_number)->getCString()));
+				AsyncImage* n_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//				GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																											  card_number)->getCString()));
 				n_clipping->addChild(n_card);
-				n_card->setScale(0.5f);
+//				n_card->setScale(0.5f);
+				n_card->setScale(0.2f);
 				
 				CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 				n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f) + add_position);
@@ -1182,9 +1185,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 				s_clipping->setAlphaThreshold(0.1f);
 				
-				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																											  card_number)->getCString()));
-				s_card->setScale(0.5f);
+				AsyncImage* s_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//				GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																											  card_number)->getCString()));
+//				s_card->setScale(0.5f);
+				s_card->setScale(0.2f);
 				s_card->setColor(ccGRAY);
 				s_clipping->addChild(s_card);
 				
@@ -1274,9 +1279,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			n_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																											   card_number)->getCString()));
-			n_card->setScale(0.5f);
+			AsyncImage* n_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																											   card_number)->getCString()));
+//			n_card->setScale(0.5f);
+			n_card->setScale(0.2f);
 			n_clipping->addChild(n_card);
 			
 			CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
@@ -1295,9 +1302,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			s_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																											   card_number)->getCString()));
-			s_card->setScale(0.5f);
+			AsyncImage* s_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																											   card_number)->getCString()));
+//			s_card->setScale(0.5f);
+			s_card->setScale(0.2f);
 			s_card->setColor(ccGRAY);
 			s_clipping->addChild(s_card);
 			
@@ -1356,9 +1365,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* n_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			n_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																										  card_number)->getCString()));
-			n_card->setScale(0.5f);
+			AsyncImage* n_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//			GraySprite* n_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																										  card_number)->getCString()));
+//			n_card->setScale(0.5f);
+			n_card->setScale(0.2f);
 			n_clipping->addChild(n_card);
 			
 			CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
@@ -1377,9 +1388,11 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			CCClippingNode* s_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			s_clipping->setAlphaThreshold(0.1f);
 			
-			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
-																										  card_number)->getCString()));
-			s_card->setScale(0.5f);
+			AsyncImage* s_card = AsyncImage::create(mySIL->getDocumentPath() + ccsf("card%d_visible.png", card_number), "loading_card.png");
+//			GraySprite* s_card = GraySprite::createWithTexture(mySIL->addNakedImage(CCString::createWithFormat("card%d_thumbnail.png",
+//																										  card_number)->getCString()));
+//			s_card->setScale(0.5f);
+			s_card->setScale(0.2f);
 			s_card->setColor(ccGRAY);
 			s_clipping->addChild(s_card);
 			
@@ -1419,12 +1432,12 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 		}
 	}
 	
-	table_update_cnt++;
-	if(table_update_cnt > 3)
-	{
-		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-		table_update_cnt = 0;
-	}
+//	table_update_cnt++;
+//	if(table_update_cnt > 3)
+//	{
+//		CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+//		table_update_cnt = 0;
+//	}
 	
 	return cell;
 }
