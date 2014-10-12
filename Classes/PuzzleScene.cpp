@@ -91,6 +91,7 @@ bool PuzzleScene::init()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
 	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+	myDSH->unregiAllCcbAnimationManagers();
 	
 	call_rank_stage_number = -1;
 	

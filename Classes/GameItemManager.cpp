@@ -2090,15 +2090,18 @@ void GameItemManager::showTakeItemEffect(CCPoint t_p)
 //	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_call, NULL);
 //	t_effect->runAction(t_seq);
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
+	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
+	
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+	CCSprite* take_effect = t_ccb.first;//dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
 	take_effect->setPosition(t_p);
 	take_effect->setScale(1.f/myGD->game_scale);
 	addChild(take_effect);
-	reader->getAnimationManager()->setDelegate(this);
-	effect_animation_manager.push_back(reader->getAnimationManager());
-	reader->autorelease();
+	t_ccb.second->setDelegate(this);
+//	reader->getAnimationManager()->setDelegate(this);
+	effect_animation_manager.push_back(t_ccb.second);
+//	reader->release();
 	
 	effect_que.push_back(take_effect);
 }

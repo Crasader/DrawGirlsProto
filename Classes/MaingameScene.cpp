@@ -1259,11 +1259,12 @@ void Maingame::checkFriendCard()
 
 void Maingame::startCounting()
 {
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	condition_spr = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
+	condition_spr = KS::loadCCBI<CCSprite*>(this, "ui_ready.ccbi").first;
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	condition_spr = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ui_ready.ccbi",this));
 	addChild(condition_spr, conditionLabelZorder);
-	reader->release();
+//	reader->release();
 	
 	
 	condition_spr->setPosition(ccp(240,myDSH->ui_center_y));
@@ -4114,12 +4115,13 @@ void Maingame::showThumbWarning(CCPoint t_point)
 
 void Maingame::showScoreMissileEffect(CCPoint t_position)
 {
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
+	CCSprite* take_effect = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi").first;
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* take_effect = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
 	take_effect->setPosition(t_position);
 	addChild(take_effect, myUIZorder);
-	reader->autorelease();
+//	reader->autorelease();
 	
 	addChild(KSTimer::create(22.f/30.f, [=](){take_effect->removeFromParent();}));
 }

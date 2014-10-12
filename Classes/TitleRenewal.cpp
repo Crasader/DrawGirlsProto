@@ -3015,10 +3015,6 @@ void TitleRenewalScene::changeScene()
 {
 //	setBackKeyEnabled(false);
 	
-//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);

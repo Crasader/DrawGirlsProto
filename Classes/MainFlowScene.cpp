@@ -85,6 +85,11 @@ bool MainFlowScene::init()
 //	});
 //	setBackKeyEnabled(true);
 	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+	myDSH->unregiAllCcbAnimationManagers();
+	
 	setKeypadEnabled(true);
 	
 	kind_tutorial_pvp = nullptr;

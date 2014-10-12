@@ -613,6 +613,9 @@ void DataStorageHub::removeCache()
 
 void DataStorageHub::myInit ()
 {
+	ccb_animation_manager_count = 0;
+	manager_list.clear();
+	check_manager_list.clear();
 	removeCache();
 	myDefault = SaveData::sharedObject();
 	is_cheat_key_enabled = false;
@@ -794,4 +797,58 @@ void DataStorageHub::initReturnPair()
 	
 	return_value[kDSH_Key_savedStartPackFirstTime] = "sspft";
 }
+
+void DataStorageHub::changedCcbAnimationManager()
+{
+	CCLOG("CCB Animation Manager count : %d", ccb_animation_manager_count);
+}
+
+void DataStorageHub::regiCcbAnimationManager(CCBAnimationManager* t_manager)
+{
+	auto t_iter = find(manager_list.begin(), manager_list.end(), t_manager);
+	if(t_iter == manager_list.end())
+	{
+		manager_list.push_back(t_manager);
+	}
+}
+void DataStorageHub::unregiCcbAnimationManager(CCBAnimationManager* t_manager)
+{
+	auto t_iter = find(manager_list.begin(), manager_list.end(), t_manager);
+	if(t_iter != manager_list.end())
+	{
+		manager_list.erase(t_iter);
+	}
+}
+void DataStorageHub::unregiAllCcbAnimationManagers()
+{
+	vector<CCBAnimationManager*> remove_list;
+	remove_list.clear();
+	for(int i=0;i<manager_list.size();i++)
+	{
+		CCBAnimationManager* t_manager = manager_list[i];
+		auto t_iter = find(check_manager_list.begin(), check_manager_list.end(), t_manager);
+		if(t_iter != check_manager_list.end())
+		{
+			check_manager_list.erase(t_iter);
+			while(t_manager->retainCount() > 1)
+			{
+				t_manager->release();
+			}
+			remove_list.push_back(t_manager);
+			t_manager->release();
+		}
+		else
+		{
+			check_manager_list.push_back(t_manager);
+		}
+	}
+	
+	for(int i=0;i<remove_list.size();i++)
+	{
+		auto t_iter = find(manager_list.begin(), manager_list.end(), remove_list[i]);
+		if(t_iter != manager_list.end())
+			manager_list.erase(t_iter);
+	}
+}
+
 #undef LZZ_INLINE
