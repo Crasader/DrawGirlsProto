@@ -849,10 +849,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessOpeningMarquee2] = "<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>";
 	obj[LK::kMyLocalKey_endlessOpeningMarquee3] = "<font size=12 strokesize=0.5 strokeopacity=150>PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>";
 	obj[LK::kMyLocalKey_endlessOpeningMarquee4] = "<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>";
-	obj[LK::kMyLocalKey_endlessOpeningMarquee5] = "<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>";
+	obj[LK::kMyLocalKey_endlessOpeningMarquee5] = "<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 05시에 초기화 됩니다.</font>";
 	obj[LK::kMyLocalKey_rankNewMarquee1] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>";
 	obj[LK::kMyLocalKey_rankNewMarquee2] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>";
-	obj[LK::kMyLocalKey_rankNewMarquee3] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>월드주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>";
+	obj[LK::kMyLocalKey_rankNewMarquee3] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>월드주간랭킹은 매주 월요일 05시에 초기화 됩니다.</font>";
 	
 	
 	obj[LK::kStory_1_1] = "오래전부터 영주를 모시며 첩보,파괴,암살등을 생업으로 삼은 자들이 있었다.\n오랜기간 그 명맥을 유지하며 현대시대에도 보통사람들의 눈을 피해 활동하고있는 자들.\n그들을 우리는 닌자라 부른다.";
