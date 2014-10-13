@@ -272,7 +272,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_left] = "왼쪽";
 	obj[LK::kMyLocalKey_fix] = "고정";
 	obj[LK::kMyLocalKey_move] = "이동";
-	obj[LK::kMyLocalKey_weeklyranking] = "주간랭킹";
+	obj[LK::kMyLocalKey_weeklyranking] = "월드주간랭킹";
 	obj[LK::kMyLocalKey_dayAfterReset] = "%d일후 리셋";
 	obj[LK::kMyLocalKey_hourAfterReset] = "%d시간후 리셋";
 	obj[LK::kMyLocalKey_secondAfterReset] = "%d분후 리셋";
@@ -312,7 +312,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading7] = "Clear 등급에 따라 획득되는 별의 개수가 다릅니다. 별이 모이면 다음 액자를 열 수 있어요.";
 	obj[LK::kMyLocalKey_titleLoading8] = "'업적' 창에서 달성한 업적을 보상받으세요. 달성한 정도에 따라 젬을 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading9] = "오늘의 임무에 도전해 보세요. 오늘의 임무를 달성하시면 다양한 선물을 드립니다.";
-	obj[LK::kMyLocalKey_titleLoading10] = "주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다.";
+	obj[LK::kMyLocalKey_titleLoading10] = "월드주간랭킹에 도전해 보세요. 매주 새로운 선물을 푸짐하게 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading11] = "change 글자를 모아서 특별한 이미지를 확인하세요.";
 	obj[LK::kMyLocalKey_titleLoading12] = "미사일을 업그레이드 하면 강력한 공격력으로 높은 등급 카드 획득이 가능합니다.";
 	obj[LK::kMyLocalKey_titleLoading13] = "아이템뽑기에서는 '부활', '침묵', '시간추가' 등 레어 아이템을 뽑을 수 있어요.";
@@ -849,10 +849,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessOpeningMarquee2] = "<font size=12 strokesize=0.5 strokeopacity=150>연승수가 같은 경우 누적점수로 랭킹이 결정됩니다.</font>";
 	obj[LK::kMyLocalKey_endlessOpeningMarquee3] = "<font size=12 strokesize=0.5 strokeopacity=150>PvP점수는 주간점수 랭킹에 추가되지 않습니다.</font>";
 	obj[LK::kMyLocalKey_endlessOpeningMarquee4] = "<font size=12 strokesize=0.5 strokeopacity=150>한 주간의 기록 중 가장 높은 연승기록으로 랭킹이 결정됩니다.</font>";
-	obj[LK::kMyLocalKey_endlessOpeningMarquee5] = "<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 5시에 초기화 됩니다.</font>";
+	obj[LK::kMyLocalKey_endlessOpeningMarquee5] = "<font size=12 strokesize=0.5 strokeopacity=150>랭킹은 매주 월요일 05시에 초기화 됩니다.</font>";
 	obj[LK::kMyLocalKey_rankNewMarquee1] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>이번주 플레이 누적 점수입니다.</font>";
 	obj[LK::kMyLocalKey_rankNewMarquee2] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>PvP점수는 합산되지 않습니다.</font>";
-	obj[LK::kMyLocalKey_rankNewMarquee3] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>주간랭킹은 매주 월요일 5시에 초기화 됩니다.</font>";
+	obj[LK::kMyLocalKey_rankNewMarquee3] = "<font size=13 strokesize=0.5 strokeopacity=150 strokecolor=#000000>월드주간랭킹은 매주 월요일 05시에 초기화 됩니다.</font>";
 	
 	
 	obj[LK::kStory_1_1] = "오래전부터 영주를 모시며 첩보,파괴,암살등을 생업으로 삼은 자들이 있었다.\n오랜기간 그 명맥을 유지하며 현대시대에도 보통사람들의 눈을 피해 활동하고있는 자들.\n그들을 우리는 닌자라 부른다.";
@@ -1021,7 +1021,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial3] = "하하! 또 만나네요.\n내카드에서는 스테이지에서 획득한 카드를\n확인할 수 있어요.";
 	obj[LK::kMyLocalKey_kindTutorial4] = "내가 획득한 카드나 다이어리 보기 버튼을\n터치하면 카드의 상세 내용을 확인할 수\n있는 다이어리로 이동합니다.";
 	obj[LK::kMyLocalKey_kindTutorial5] = "상단의 정렬버튼을 눌러 여러가지 옵션으로\n정렬기능을 이용할 수도 있습니다.";
-	obj[LK::kMyLocalKey_kindTutorial6] = "어머! 여기서 또 만나네요?\n이번엔 랭킹에 대해 설명해 드릴께요.\n \n주간랭킹은 일주일 동안 획득한 스테이지\n점수를 합산하여 랭킹이 산정됩니다.";
+	obj[LK::kMyLocalKey_kindTutorial6] = "어머! 여기서 또 만나네요?\n이번엔 랭킹에 대해 설명해 드릴께요.\n \n월드주간랭킹은 일주일 동안 획득한 스테이지\n점수를 합산하여 랭킹이 산정됩니다.";
 	obj[LK::kMyLocalKey_kindTutorial7] = "순위마다 보상 내용이 다르니\n잘 확인해 주세요.";
 	obj[LK::kMyLocalKey_kindTutorial8] = "드디어 뽑기상자가 등장했네요.";
 	obj[LK::kMyLocalKey_kindTutorial9] = "이건 뭐죠? 아이템인가요?";
