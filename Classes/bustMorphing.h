@@ -283,6 +283,8 @@ public:
 	///////////////////
 	virtual ~MyNode()
 	{
+		CCLOG("~MyNode");
+		
 		if(m_textCoords)
 		{
 			delete [] m_textCoords;

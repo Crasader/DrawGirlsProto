@@ -31,7 +31,6 @@ CCScene* ZoomScript::scene()
     CCScene *scene = CCScene::create();
     ZoomScript *layer = ZoomScript::create();
     scene->addChild(layer);
-	
     return scene;
 }
 
@@ -45,6 +44,28 @@ enum ZS_Zorder{
 	kZS_Z_showtime_back,
 	kZS_Z_whitePaper
 };
+
+void ZoomScript::completedAnimationSequenceNamed(const char *name)
+{
+	int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
+	if(grade == 2 || grade == 4)
+	{
+		(this->*delegate_typing_after)();
+		CCTouch* t_touch = new CCTouch();
+		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
+		t_touch->autorelease();
+		target_node->ccTouchEnded(t_touch, NULL);
+		is_ccb_end = true;
+		next_button->setVisible(is_next_on && is_ccb_end);
+	}
+	else
+	{
+		is_ccb_end = true;
+		next_button->setVisible(is_next_on && is_ccb_end);
+	}
+	
+	t_manager->setDelegate(NULL);
+}
 
 bool ZoomScript::init()
 {
@@ -61,8 +82,12 @@ bool ZoomScript::init()
 	
 	setKeypadEnabled(true);
 	
+	first_img = NULL;
+	second_img = NULL;
+	third_img = NULL;
     safety_img = NULL;
-    
+	target_code = 0;
+	
 	AudioEngine::sharedInstance()->playSound("bgm_normalshow.mp3", true);
 	
 	typing_sound_number = 1;
@@ -140,7 +165,7 @@ bool ZoomScript::init()
 	}
 	
 	first_img = MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()), card_number);
-
+	
 	if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 		first_img->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
 
@@ -171,7 +196,6 @@ bool ZoomScript::init()
 		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 	}
 	
-	
 	if(mySGD->is_safety_mode)
 	{
 		safety_img = EffectSprite::createWithTexture(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()));
@@ -199,6 +223,7 @@ bool ZoomScript::init()
 	game_node->addChild(right_case, kZS_Z_script_case);
 	
 	target_node = first_img;
+	target_code = 1;
 	
 //	zoom_img = CCSprite::create("ending_expand.png");
 //	zoom_img->setPosition(ccp(445,myDSH->ui_top-35));
@@ -220,7 +245,6 @@ bool ZoomScript::init()
 	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
 	showtime_morphing_label->setVisible(false);
 	script_case->addChild(showtime_morphing_label);
-	
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
@@ -325,15 +349,8 @@ void ZoomScript::typingAnimation()
 				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 				addChild(zoom_img, kZS_Z_script_case);
 				
-				tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-					(this->*delegate_typing_after)();
-					CCTouch* t_touch = new CCTouch();
-					t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
-					t_touch->autorelease();
-					target_node->ccTouchEnded(t_touch, NULL);
-					is_ccb_end = true;
-					next_button->setVisible(is_next_on && is_ccb_end);
-				});
+				tuto.second->setDelegate(this);
+				t_manager = tuto.second;
 			}
 			else
 			{
@@ -347,10 +364,8 @@ void ZoomScript::typingAnimation()
 				addChild(zoom_img, kZS_Z_script_case);
 				(this->*delegate_typing_after)();
 				
-				tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-					is_ccb_end = true;
-					next_button->setVisible(is_next_on && is_ccb_end);
-				});
+				tuto.second->setDelegate(this);
+				t_manager = tuto.second;
 			}
 		}
 	}
@@ -640,10 +655,20 @@ void ZoomScript::menuAction(CCObject *sender)
                                                                    is_morphing = (after_value == 2 || after_value == 4);
 																   
 																   target_node->removeFromParent();
+																   target_node = NULL;
+																   
+																   if(target_code == 1)
+																		first_img = NULL;
+																   else if(target_code == 2)
+																	   second_img = NULL;
+																   else if(target_code == 3)
+																	   third_img = NULL;
+																   target_code = 0;
 																   
 //																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
 //																   
 																   target_node = t_node;//MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+																   target_code = -1;
 																   t_node->setVisible(true);
 //																   
 //																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
@@ -874,10 +899,20 @@ void ZoomScript::menuAction(CCObject *sender)
 																   }
 															   }, [=](){
 																   target_node->removeFromParent();
+																   target_node = NULL;
+																   
+																   if(target_code == 1)
+																	   first_img = NULL;
+																   else if(target_code == 2)
+																	   second_img = NULL;
+																   else if(target_code == 3)
+																	   third_img = NULL;
+																   target_code = 0;
 																   
 //																   int card_number = NSDS_GI(silType, kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
 //																   
 																   target_node = t_node;//MyNode::create(mySIL->addImage(CCString::createWithFormat("card%d_visible.png", card_number)->getCString()));
+																   target_code = -1;
 //
 //																   if(mySIL->addImage(CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()))
 //																	   target_node->loadRGB(mySIL->getDocumentPath() + CCString::createWithFormat("card%d_invisible.png", card_number)->getCString()); // 실루엣 z 정보 넣는 곳.
@@ -994,6 +1029,48 @@ void ZoomScript::nextScene()
 {
 //	setBackKeyEnabled(false);
 	
+	if(first_img)
+	{
+		first_img->removeFromParent();
+		first_img = NULL;
+		
+		if(target_code == 1)
+		{
+			target_code = 0;
+			target_node = NULL;
+		}
+	}
+	
+	if(second_img)
+	{
+		second_img->removeFromParent();
+		second_img = NULL;
+		
+		if(target_code == 2)
+		{
+			target_code = 0;
+			target_node = NULL;
+		}
+	}
+	
+	if(third_img)
+	{
+		third_img->removeFromParent();
+		third_img = NULL;
+		
+		if(target_code == 3)
+		{
+			target_code = 0;
+			target_node = NULL;
+		}
+	}
+	
+	if(target_code == -1 && target_node)
+	{
+		target_node->removeFromParent();
+		target_node = NULL;
+	}
+	
 	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
@@ -1002,6 +1079,7 @@ void ZoomScript::nextScene()
 	{
 		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_clear);
 		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+//		CCDirector::sharedDirector()->replaceScene(ZoomScript::scene());
 	}
 }
 
@@ -1058,6 +1136,7 @@ void ZoomScript::showtimeFirstAction()
 	}
 	
 	target_node = second_img;
+	target_code = 2;
 	
 	game_node->setRotation(0);
 	card_back->setRotation(0);
@@ -1147,6 +1226,7 @@ void ZoomScript::showtimeFifthAction()
 	}
 	
 	target_node = third_img;
+	target_code = 3;
 	
 	game_node->setScale(1.5f);
 	game_node->setPosition(ccp(240,myDSH->ui_center_y));//ccp(0,-430*game_node->getScale()+480*screen_size.height/screen_size.width));
@@ -1155,9 +1235,15 @@ void ZoomScript::showtimeFifthAction()
 	card_back->setRotation(0);
 	
 	if(second_img)
+	{
 		second_img->removeFromParent();
+		second_img = NULL;
+	}
 	else
+	{
 		first_img->removeFromParentAndCleanup(true);
+		first_img = NULL;
+	}
 	
 //	int third_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
 //	

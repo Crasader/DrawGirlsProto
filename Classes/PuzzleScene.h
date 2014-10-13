@@ -61,6 +61,7 @@ public:
 	
 	virtual ~PuzzleScene()
 	{
+		CCLOG("~PuzzleScene");
 		hspConnector::get()->removeTarget(this);
 	}
     
