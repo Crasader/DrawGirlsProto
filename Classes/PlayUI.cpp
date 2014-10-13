@@ -4054,6 +4054,7 @@ void PlayUI::myInit ()
 			CCNode* p = reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+_ccbiName).c_str(), this);
 			
 			CCSprite* m_juniorSprite = dynamic_cast<CCSprite*>(p);
+			m_juniorSprite->addChild(reader->getAnimationManager());
 //			m_juniorAnimation = reader->getAnimationManager();
 //			m_juniorAnimation->setDelegate(this);
 			reader->release();

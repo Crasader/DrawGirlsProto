@@ -1192,8 +1192,6 @@ void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc, KSCumberBase* cb )
 	BlindDrop* t_bd = BlindDrop::create(t_sp, jackPosition, 20, totalFrame, scale);
 	addChild(t_bd);
 	t_bd->startAction();
-	
-//	myGD->ccb_delegate_null_list.push_back(t_bd);
 
 	startSelfRemoveSchedule();
 }

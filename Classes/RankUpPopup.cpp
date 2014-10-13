@@ -149,7 +149,6 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 								success_func();
 							else
 								fail_func();
-							question_manager->setDelegate(NULL);
 							removeFromParent();
 						}));
 					}));
@@ -468,7 +467,6 @@ void RankUpPopup::giveupAction(CCObject* sender, CCControlEvent t_event)
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
 	}, [=](){
-		question_manager->setDelegate(NULL);
 		end_func(); removeFromParent();
 	});
 }

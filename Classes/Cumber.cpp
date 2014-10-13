@@ -514,8 +514,6 @@ void CumberParent::myInit()
 	
 	total_damage_to_gold = 0;
 	
-	cumber_ccb_delegate_null_list.clear();
-	
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
@@ -539,10 +537,6 @@ void CumberParent::myInit()
 		if(bossShape == "circle")
 		{
 			mainCumber = KSCircleBase::create(bossType);
-			cumber_ccb_delegate_null_list.push_back([=]()
-													{
-														((KSCircleBase*)mainCumber)->ccbDelegateNull();
-													});
 		}
 		else if(bossShape == "snake")
 		{
@@ -637,14 +631,6 @@ void CumberParent::myInit()
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);
-}
-
-void CumberParent::cumberCcbDelegateNull()
-{
-	for(int i=0;i<cumber_ccb_delegate_null_list.size();i++)
-	{
-		cumber_ccb_delegate_null_list[i]();
-	}
 }
 
 void CumberParent::mappingFunctor()
