@@ -9,6 +9,12 @@
 #include "AsyncImageManager.h"
 #include "AsyncImage.h"
 #include <algorithm>
+#include "KSUtil.h"
+
+AsyncImageInfo::~AsyncImageInfo()
+{
+    CCLOG("~AsyncImageInfo : %s", load_filename.c_str());
+}
 
 AsyncImageManager* AsyncImageManager::sharedInstance()
 {
@@ -29,6 +35,7 @@ void AsyncImageManager::regiAsyncImage(AsyncImage* t_ai)
 		t_info->load_filename = t_ai->m_filename;
 		t_info->m_ai_list.push_back(t_ai);
 		ready_ai_list.push_back(t_info);
+        CCLOG("push : %s", t_info->load_filename.c_str());
 		t_ai->is_loading = true;
 		t_info->is_loading = true;
 		CCTextureCache::sharedTextureCache()->addImageAsync(t_info->load_filename.c_str(), this, callfuncO_selector(AsyncImageManager::asyncedImage), false, "", true);
@@ -48,6 +55,7 @@ void AsyncImageManager::regiAsyncImage(AsyncImage* t_ai)
 			t_info->load_filename = t_ai->m_filename;
 			t_info->m_ai_list.push_back(t_ai);
 			ready_ai_list.push_back(t_info);
+            CCLOG("push2 : %s", t_info->load_filename.c_str());
 		}
 		else
 		{
@@ -59,6 +67,8 @@ void AsyncImageManager::regiAsyncImage(AsyncImage* t_ai)
 
 void AsyncImageManager::unregiAsyncImage(AsyncImage* t_ai)
 {
+    CCLOG("unregiAsyncImage : %s", t_ai->m_filename.c_str());
+    
 	vector<AsyncImageInfo*>::iterator t_iter;
 	for(t_iter=ready_ai_list.begin();t_iter!=ready_ai_list.end();++t_iter)
 	{
@@ -72,9 +82,10 @@ void AsyncImageManager::unregiAsyncImage(AsyncImage* t_ai)
 		if(t_iter2 != (*t_iter)->m_ai_list.end())
 		{
 			(*t_iter)->m_ai_list.erase(t_iter2);
-			if((*t_iter)->m_ai_list.empty())
+			if(!(*t_iter)->is_loading && (*t_iter)->m_ai_list.empty())
 			{
-				(*t_iter)->release();
+                CCLOG("unregi erase : %s", (*t_iter)->load_filename.c_str());
+                (*t_iter)->release();
 				ready_ai_list.erase(t_iter);
 			}
 		}
@@ -89,6 +100,7 @@ void AsyncImageManager::asyncedImage(CCObject* t_obj)
 	bool is_removeUnusedTexture = false;
 	if(myAIM->loaded_cnt >= 6)
 	{
+        myAIM->loaded_cnt = 0;
 		is_removeUnusedTexture = true;
 	}
 	
@@ -102,6 +114,8 @@ void AsyncImageManager::asyncedImage(CCObject* t_obj)
 				AsyncImage* t_ai = ready_ai_list[i]->m_ai_list[j];
 				t_ai->is_loading = false;
 				t_ai->loadedImage((CCTexture2D*)t_obj, is_removeUnusedTexture);
+                if(is_removeUnusedTexture)
+                    is_removeUnusedTexture = false;
 			}
 			
 			vector<AsyncImageInfo*>::iterator t_iter;
@@ -113,22 +127,25 @@ void AsyncImageManager::asyncedImage(CCObject* t_obj)
 			
 			if(t_iter != ready_ai_list.end())
 			{
+                CCLOG("erase : %s", (*t_iter)->load_filename.c_str());
+                (*t_iter)->release();
                 ready_ai_list.erase(t_iter);
-				(*t_iter)->release();
 			}
 			break;
 		}
 	}
 	
-	if(!ready_ai_list.empty())
-	{
-		AsyncImageInfo* t_info = ready_ai_list.front();
-		t_info->is_loading = true;
-		for(int i=0;i<t_info->m_ai_list.size();i++)
-		{
-			t_info->m_ai_list[i]->is_loading = true;
-		}
-		CCTextureCache::sharedTextureCache()->addImageAsync(t_info->load_filename.c_str(), this, callfuncO_selector(AsyncImageManager::asyncedImage), false, "", true);
-	}
+    if(!ready_ai_list.empty())
+    {
+        AsyncImageInfo* t_info = ready_ai_list.front();
+        CCLOG("next filename : %s", t_info->load_filename.c_str());
+        t_info->is_loading = true;
+        for(int i=0;i<t_info->m_ai_list.size();i++)
+        {
+            t_info->m_ai_list[i]->is_loading = true;
+        }
+        CCLOG("next addImageAsync : %s", t_info->load_filename.c_str());
+        CCTextureCache::sharedTextureCache()->addImageAsync(t_info->load_filename.c_str(), this, callfuncO_selector(AsyncImageManager::asyncedImage), false, "", true);
+    }
 }
 
