@@ -252,20 +252,20 @@ bool OptionPopup::init()
 //									t_p.x = rand()%101-50 + 240;
 //									t_p.y = rand()%71-35 + 160;
 //									
-//									auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_cha_die1.ccbi");//KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
+//									auto t_ccb = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");//KS::loadCCBI<CCSprite*>(this, "ingame_item_bonustime.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_cha_die1.ccbi");//KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
 //									
 //									CCSprite* take_effect = t_ccb.first;
 //									take_effect->setPosition(t_p);
 ////									take_effect->setScale(1.f/myGD->game_scale);
 //									addChild(take_effect, 99999);
 //									
-////									addChild(KSTimer::create(1.f, [=](){take_effect->removeFromParent();}));
+//									addChild(KSTimer::create(0.5f, [=](){take_effect->removeFromParent();}));
 //									
-//									t_ccb.second->setDelegate(this);
-////									t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
-//									effect_animation_manager.push_back(t_ccb.second);
-//									
-//									effect_que.push_back(take_effect);
+////									t_ccb.second->setDelegate(this);
+//////									t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
+////									effect_animation_manager.push_back(t_ccb.second);
+////									
+////									effect_que.push_back(take_effect);
 //									
 //									return true;
 //								}));

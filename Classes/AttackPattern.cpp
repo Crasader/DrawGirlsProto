@@ -1193,7 +1193,7 @@ void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc, KSCumberBase* cb )
 	addChild(t_bd);
 	t_bd->startAction();
 	
-	myGD->ccb_delegate_null_list.push_back([=](){t_bd->ccbManagerDelegateNull();});
+//	myGD->ccb_delegate_null_list.push_back([=](){t_bd->ccbManagerDelegateNull();});
 
 	startSelfRemoveSchedule();
 }
