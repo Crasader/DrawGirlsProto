@@ -1915,13 +1915,13 @@ CommandParam StarGoldData::getUpdatePuzzleHistoryParam(PuzzleHistory t_history, 
 	bool is_found = false;
 	for(int i=0;i<puzzle_historys.size() && !is_found;i++)
 	{
-		if(puzzle_historys[i].puzzle_number == t_history.puzzle_number)
+		if(puzzle_historys[i].puzzle_number.getV() == t_history.puzzle_number.getV())
 		{
 			is_found = true;
-			puzzle_historys[i].is_open = t_history.is_open;
-			puzzle_historys[i].is_clear = t_history.is_clear;
-			puzzle_historys[i].is_perfect = t_history.is_perfect;
-			puzzle_historys[i].open_type = t_history.open_type;
+			puzzle_historys[i].is_open = t_history.is_open.getV();
+			puzzle_historys[i].is_clear = t_history.is_clear.getV();
+			puzzle_historys[i].is_perfect = t_history.is_perfect.getV();
+			puzzle_historys[i].open_type = t_history.open_type.getV();
 		}
 	}
 	
@@ -1958,13 +1958,13 @@ void StarGoldData::setPuzzleHistoryForNotSave(PuzzleHistory t_history)
 	bool is_found = false;
 	for(int i=0;i<puzzle_historys.size() && !is_found;i++)
 	{
-		if(puzzle_historys[i].puzzle_number == t_history.puzzle_number)
+		if(puzzle_historys[i].puzzle_number.getV() == t_history.puzzle_number.getV())
 		{
 			is_found = true;
-			puzzle_historys[i].is_open = t_history.is_open;
-			puzzle_historys[i].is_clear = t_history.is_clear;
-			puzzle_historys[i].is_perfect = t_history.is_perfect;
-			puzzle_historys[i].open_type = t_history.open_type;
+			puzzle_historys[i].is_open = t_history.is_open.getV();
+			puzzle_historys[i].is_clear = t_history.is_clear.getV();
+			puzzle_historys[i].is_perfect = t_history.is_perfect.getV();
+			puzzle_historys[i].open_type = t_history.open_type.getV();
 		}
 	}
 	
@@ -2008,7 +2008,7 @@ void StarGoldData::initPuzzleHistory(Json::Value history_list)
 bool StarGoldData::isClearPiece(int stage_number)
 {
 	for(int i=0;i<piece_historys.size();i++)
-		if(piece_historys[i].stage_number == stage_number)
+		if(piece_historys[i].stage_number.getV() == stage_number)
 			return piece_historys[i].is_clear[0].getV() || piece_historys[i].is_clear[1].getV() || piece_historys[i].is_clear[2].getV() || piece_historys[i].is_clear[3].getV();
 	
 	return false;
@@ -2028,7 +2028,7 @@ PieceHistory StarGoldData::getPieceHistory(int stage_number)
 {
 	for(int i=0;i<piece_historys.size();i++)
 	{
-		if(piece_historys[i].stage_number == stage_number)
+		if(piece_historys[i].stage_number.getV() == stage_number)
 			return piece_historys[i];
 	}
 	
@@ -2069,20 +2069,20 @@ void StarGoldData::setPieceHistoryForNotSave(PieceHistory t_history)
 	bool is_found = false;
 	for(int i=0;i<piece_historys.size() && !is_found;i++)
 	{
-		if(piece_historys[i].stage_number == t_history.stage_number)
+		if(piece_historys[i].stage_number.getV() == t_history.stage_number.getV())
 		{
 			is_found = true;
-			piece_historys[i].stage_number = t_history.stage_number;
-			piece_historys[i].is_open = t_history.is_open;
+			piece_historys[i].stage_number = t_history.stage_number.getV();
+			piece_historys[i].is_open = t_history.is_open.getV();
 			
 			for(int j=0;j<4;j++)
 			{
-				piece_historys[i].is_clear[j] = t_history.is_clear[j];
+				piece_historys[i].is_clear[j] = t_history.is_clear[j].getV();
 			}
 			
-			piece_historys[i].try_count = t_history.try_count;
-			piece_historys[i].clear_count = t_history.clear_count;
-			piece_historys[i].open_type = t_history.open_type;
+			piece_historys[i].try_count = t_history.try_count.getV();
+			piece_historys[i].clear_count = t_history.clear_count.getV();
+			piece_historys[i].open_type = t_history.open_type.getV();
 		}
 	}
 	
@@ -3347,10 +3347,13 @@ void StarGoldData::initTodayMission(Json::Value t_info)
 
 void StarGoldData::initAttendance(Json::Value result_data)
 {
+//	GraphDogLib::JsonToLog("attendance data", result_data);
+	
+	attendance_data.clear();
+	attendance_data = result_data;
 	if(result_data["sendGift"].asBool())
 	{
 		is_on_attendance = true;
-		attendance_data = result_data;
 	}
 	else
 	{
@@ -3361,7 +3364,7 @@ void StarGoldData::initAttendance(Json::Value result_data)
 void StarGoldData::resetAttendance()
 {
 	is_on_attendance = false;
-	attendance_data.clear();
+//	attendance_data.clear();
 }
 
 Json::Value StarGoldData::getProductInfo(string t_id)

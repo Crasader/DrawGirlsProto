@@ -361,6 +361,7 @@ public:
 	void ccbManagerDelegateNull();
 	virtual ~BlindDrop()
 	{
+		CCLOG("~BlindDrop");
 //		reader->setDelegate(NULL);
 	}
 private:

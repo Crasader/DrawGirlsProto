@@ -2101,6 +2101,7 @@ void BlindDrop::stopAction ()
 }
 void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc)
 {
+	CCLOG("BlindDrop!");
 	//		subPosition = ccpSub(t_fp, t_sp);
 	//		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 	movingFrame = t_movingFrame;

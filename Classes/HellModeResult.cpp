@@ -146,7 +146,7 @@ bool HellModeResult::init()
 			if(!mySGD->isClearPiece(mySD->getSilType()))
 			{
 				t_history.is_clear[0] = true;
-				t_history.clear_count = t_history.try_count;
+				t_history.clear_count = t_history.try_count.getV();
 				
 				is_change_history = true;
 			}

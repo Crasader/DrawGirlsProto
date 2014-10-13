@@ -47,6 +47,7 @@
 #include "JoystickSizeQuestionPopup.h"
 #include "IntroducerPopup.h"
 #include "GDWebSprite.h"
+#include "AttendancePopup.h"
 
 USING_NS_CC_EXT;
 
@@ -85,7 +86,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_community,
 	kOP_MT_recommender,
 	kOP_MT_tip,
-	kOP_MT_kakao
+	kOP_MT_kakao,
+	kOP_MT_attendance
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -452,6 +454,34 @@ bool OptionPopup::init()
 //	kakao_item->setTag(kOP_MT_kakao);
 //	kakao_item->setPosition(ccp(169,256.5f));
 //	tab_menu->addChild(kakao_item);
+	
+	CCSprite* n_attendance_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* n_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	n_attendance_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_attendance_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
+	n_attendance_img->addChild(n_attendance_label);
+	
+	CCSprite* s_attendance_img = CCSprite::create("tabbutton_up.png");
+	s_attendance_img->setColor(ccGRAY);
+	KSLabelTTF* s_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	s_attendance_label->disableOuterStroke();
+	s_attendance_label->setColor(ccGRAY);
+	s_attendance_label->setPosition(ccpFromSize(s_attendance_img->getContentSize()/2.f) + ccp(0,2));
+	s_attendance_img->addChild(s_attendance_label);
+	
+	CCSprite* d_attendance_img = CCSprite::create("tabbutton_down.png");
+	d_attendance_img->setColor(ccGRAY);
+	KSLabelTTF* d_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	d_attendance_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	d_attendance_label->setPosition(ccpFromSize(d_attendance_img->getContentSize()/2.f) + ccp(0,2));
+	d_attendance_img->addChild(d_attendance_label);
+	
+	
+	CCMenuItem* attendance_item = CCMenuItemSprite::create(n_attendance_img, s_attendance_img, d_attendance_img, this, menu_selector(OptionPopup::menuAction));
+	attendance_item->setTag(kOP_MT_attendance);
+	attendance_item->setPosition(ccp(169,256.5f));
+	tab_menu->addChild(attendance_item);
+	
 	
 	
 	
@@ -1128,6 +1158,14 @@ void OptionPopup::menuAction(CCObject* pSender)
 		myHSP->openCSCenter("");
 //		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenContent)), 999);
 		is_menu_enable = true;
+	}
+	else if(tag == kOP_MT_attendance)
+	{
+		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
+														   {
+															   is_menu_enable = true;
+														   });
+		addChild(t_popup, kOP_Z_popup);
 	}
 	else if(tag == kOP_MT_recommender)
 	{
