@@ -2452,11 +2452,14 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	
     int playCount = 0;
     
-	if(mySGD->is_endless_mode){
-        playCount = 0;
-		vCount = mySGD->endless_my_victory.getV()*3+5;
-		CCLOG("it's PVP mode!! now victory is %d",vCount);
-    }else{
+		if(mySGD->is_endless_mode){
+			playCount = 0;
+			vCount = mySGD->endless_my_victory.getV()*3+5;
+			CCLOG("it's PVP mode!! now victory is %d",vCount);
+    }else if(mySGD->is_hell_mode){
+			playCount = 0;
+			vCount=0;
+		}else{
        ostringstream oss;
        oss << mySD->getSilType();
        std::string playcountKey = std::string("playcount_") + oss.str();
@@ -2546,7 +2549,8 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
 			if( (*iter)["atype"].asString() == "crash" ){
-				(*iter)["percent"]=1;
+				if(playCount<2)(*iter)["percent"]=1;
+				else (*iter)["percent"]=0;
 			}
 		}
 	}
