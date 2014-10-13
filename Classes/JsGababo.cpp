@@ -423,12 +423,12 @@ void JsGababo::loadImage(int step)
 	m_stepSprite->setPosition(m_stepFrame->getPosition());
 	m_back->addChild(m_stepSprite, 1);
 	
-	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(cardNo, kSDS_SI_level_int1_card_i, step)))
-	{
-		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(cardNo, kSDS_SI_level_int1_card_i, step))).first;
-		ccb_img->setPosition(ccp(160,215));
-		m_stepSprite->addChild(ccb_img);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(cardNo, kSDS_SI_level_int1_card_i, step)))
+//	{
+//		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(cardNo, kSDS_SI_level_int1_card_i, step))).first;
+//		ccb_img->setPosition(ccp(160,215));
+//		m_stepSprite->addChild(ccb_img);
+//	}
 	
 	setFormSetter(m_stepSprite);
 }

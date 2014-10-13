@@ -41,7 +41,11 @@ bool AccountManagerPopup::init(int touchP)
 	CCLayer::init();
 
 	std::map<HSPLoginTypeX, std::string> descMapper = {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 		{HSPLoginTypeGOOGLE, "Google ID"},
+#else
+		{HSPLoginTypeGOOGLE, "GameCenter ID"},
+#endif
 		{HSPLoginTypeGUEST, "Guest ID"},
 		{HSPLoginTypeFACEBOOK, "Facebook ID"},
 	};
@@ -352,7 +356,12 @@ bool AccountManagerPopup::init(int touchP)
 						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+#else
+						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
+#endif
+						
 	
 					}
 					else
@@ -369,7 +378,11 @@ bool AccountManagerPopup::init(int touchP)
 						StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+#else
+						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
+#endif
 //						loadFunction();
 					}
 				});
@@ -388,7 +401,13 @@ bool AccountManagerPopup::init(int touchP)
 					StyledLabelTTF* ment = StyledLabelTTF::create(mentString.c_str(),
 																												mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 					ment->setAnchorPoint(ccp(0.5f, 0.5f));
-					this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, [=]()
+					this->showWarning("",
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+														HSPMapping::kGOOGLE,
+#else
+														HSPMapping::kGAMECENTER,
+#endif
+														HSPLogin::GOOGLE, ment, [=]()
 														{
 															CCLog("-----------------------------------------------------------------------");
 															TRACE();
@@ -399,7 +418,7 @@ bool AccountManagerPopup::init(int touchP)
 															hspConnector::get()->mappingToAccount(mm, true, [=](Json::Value t){
 																TRACE();
 																ll->removeFromParent();
-																KS::KSLog("force %", t);
+																KS::KSLog("keepLoad %", t);
 																if(t["error"]["isSuccess"].asInt())
 																{
 																	
@@ -570,19 +589,20 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
 	{
 		facebookLogin->setFunction([=](CCObject*){
-#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			tryLogin((int)HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
-#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-			tryLogin(HSPMappingType::HSP_MAPPINGTYPE_FACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
-#endif
-			
 		});
 	}
 	
 	if(loginType != HSPLoginTypeGOOGLE) // 구글로그인이 안되어있는 경우에만...
 	{
 		googleLogin->setFunction([=](CCObject*){
-			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::FACEBOOK);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+			tryLogin((int)HSPMapping::kGAMECENTER, "GameCenter ID", HSPLogin::FACEBOOK);
+#endif
+
+//			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 		});
 
 	}

@@ -23,7 +23,7 @@ class MyNode;
 //class EffectSprite;
 class GraySprite;
 class CCMenuLambda;
-class CardViewScene : public CCLayer
+class CardViewScene : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
 	virtual bool init();
@@ -34,8 +34,12 @@ public:
 	
 	function<void()> temp_end_func;
 	
+	virtual void completedAnimationSequenceNamed(const char *name);
+	
 private:
 	CCNode* game_node;
+	
+	CCBAnimationManager* t_manager;
 	
 	int ing_animation_frame;
 	
