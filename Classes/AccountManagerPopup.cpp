@@ -597,9 +597,9 @@ bool AccountManagerPopup::init(int touchP)
 	{
 		googleLogin->setFunction([=](CCObject*){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::FACEBOOK);
+			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-			tryLogin((int)HSPMapping::kGAMECENTER, "GameCenter ID", HSPLogin::FACEBOOK);
+			tryLogin((int)HSPMapping::kGAMECENTER, "GameCenter ID", HSPLogin::GAMECENTER);
 #endif
 
 //			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
