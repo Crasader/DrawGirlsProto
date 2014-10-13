@@ -349,12 +349,12 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	CCSprite* r_card_img = mySIL->getLoadedImg(CCString::createWithFormat("card%d_visible.png", card_number)->getCString());
 	r_card_img->setScale(1.5f/myDSH->screen_convert_rate);
 	
-	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
-	{
-		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number)).first;
-		ccb_img->setPosition(ccp(160,215));
-		r_card_img->addChild(ccb_img);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+//	{
+//		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number)).first;
+//		ccb_img->setPosition(ccp(160,215));
+//		r_card_img->addChild(ccb_img);
+//	}
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	
