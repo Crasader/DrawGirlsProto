@@ -333,12 +333,13 @@ bool FailPopup::init()
 	replay_menu->setTouchPriority(-190);
 	
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_img->setPosition(ccp(347,130));
 	main_case->addChild(loading_img, kZ_FP_img);
-	reader->release();
+//	reader->release();
 	
 	is_end_take_diary = false;
 	is_end_network = false;

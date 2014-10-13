@@ -1253,12 +1253,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 cancel_button->setVisible(false);
 														 ok_button->setVisible(false);
 														 
-														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-														 CCBReader* reader = new CCBReader(nodeLoader);
-														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//														 CCBReader* reader = new CCBReader(nodeLoader);
+//														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 														 loading_progress_img->setPosition(ccp(0,-75));
 														 t_container->addChild(loading_progress_img);
-														 reader->release();
+//														 reader->release();
 														 
 														 
 														 hspConnector::get()->logout([=](Json::Value result_data)
@@ -1375,12 +1376,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 close_button->setVisible(false);
 														 ok_button->setVisible(false);
 														 
-														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-														 CCBReader* reader = new CCBReader(nodeLoader);
-														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//														 CCBReader* reader = new CCBReader(nodeLoader);
+//														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 														 loading_progress_img->setPosition(ccp(0,-53));
 														 t_container->addChild(loading_progress_img);
-														 reader->release();
+//														 reader->release();
 														 
 														 Json::Value param;
 														 TRACE();

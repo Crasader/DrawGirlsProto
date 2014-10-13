@@ -2737,12 +2737,13 @@ void PuzzleScene::setRight()
 			TRACE();
 			if(!loading_progress_img)
 			{
-				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-				CCBReader* reader = new CCBReader(nodeLoader);
-				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//				CCBReader* reader = new CCBReader(nodeLoader);
+//				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 				loading_progress_img->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 				right_body->addChild(loading_progress_img);
-				reader->release();
+//				reader->release();
 			}
 			TRACE();
 			Json::Value param;

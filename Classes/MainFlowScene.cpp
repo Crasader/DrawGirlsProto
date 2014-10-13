@@ -1055,12 +1055,13 @@ void MainFlowScene::cellAction(CCObject* sender)
 			CCNode* cell_node = ((CCNode*)sender)->getParent()->getParent();
 			cell_node->addChild(black_img);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//			CCBReader* reader = new CCBReader(nodeLoader);
+//			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+			CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 			loading_progress_img->setPosition(ccp(0,30));
 			cell_node->addChild(loading_progress_img);
-			reader->release();
+//			reader->release();
 			
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
