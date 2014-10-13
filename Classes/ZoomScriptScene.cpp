@@ -63,8 +63,6 @@ void ZoomScript::completedAnimationSequenceNamed(const char *name)
 		is_ccb_end = true;
 		next_button->setVisible(is_next_on && is_ccb_end);
 	}
-	
-	t_manager->setDelegate(NULL);
 }
 
 bool ZoomScript::init()

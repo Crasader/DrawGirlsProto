@@ -2123,7 +2123,6 @@ void GameItemManager::completedAnimationSequenceNamed (char const * name)
 		effect_que.pop_front();
 		CCBAnimationManager* remove_animation = effect_animation_manager.front();
 		effect_animation_manager.pop_front();
-		remove_animation->setDelegate(NULL);
 		removeChild(remove_target);
 	}
 }

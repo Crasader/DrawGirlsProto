@@ -43,6 +43,7 @@ bool KSJuniorBase::init(const string& ccbiName)
 	
 	
 	mAnimationManager = reader->getAnimationManager();
+	m_headImg->addChild(mAnimationManager);
 	reader->release();
 	if(m_headImg != NULL) {
 		this->addChild(m_headImg);

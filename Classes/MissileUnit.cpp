@@ -2067,16 +2067,11 @@ void BlindDrop::startAction ()
 	ingFrame = 0;
 	schedule(schedule_selector(BlindDrop::myAction));
 }
-void BlindDrop::ccbManagerDelegateNull()
-{
-	reader->setDelegate(NULL);
-}
 void BlindDrop::completedAnimationSequenceNamed (char const * name)
 {
 	string t_name = name;
 	if(t_name == "tornado_stop")
 	{
-//		ccbManagerDelegateNull();
 		oilImg->removeFromParentAndCleanup(true);
 		removeFromParentAndCleanup(true);
 	}
@@ -2109,6 +2104,8 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	m_scale = sc;
 	//		dropImg = CCSprite::create("blind_drop.png");
 	//		addChild(dropImg);
+	
+	reader = NULL;
 	
 	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_tornado1.ccbi");
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();

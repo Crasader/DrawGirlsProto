@@ -1853,7 +1853,6 @@ void Jack::completedAnimationSequenceNamed (char const * name)
 	if(t_name == "end_die_animation")
 	{
 		die_particle->removeFromParent();
-		die_manager->setDelegate(NULL);
 	}
 }
 

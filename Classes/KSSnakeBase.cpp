@@ -60,6 +60,7 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 //		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 		m_headImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 		m_headAnimationManager = reader->getAnimationManager();
+		m_headImg->addChild(m_headAnimationManager);
 		this->addChild(m_headImg, 10);
 		reader->release();
 	}
@@ -74,6 +75,7 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 //			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 			CCSprite* body = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 			m_bodyAnimationManagers.push_back(reader->getAnimationManager());
+			body->addChild(reader->getAnimationManager());
 			addChild(body, 9 - i);
 			lastZ = 9 - i;
 			m_Bodies.push_back(body);
@@ -89,6 +91,7 @@ bool KSSnakeBase::init(const string& ccbiFile, bool isNotShowWindow)
 //		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(fileName.c_str(),this));
 		m_tailImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFileForFullPath((mySIL->getDocumentPath()+fileName).c_str(), this));
 		m_tailAnimationManager = reader->getAnimationManager();
+		m_tailImg->addChild(m_tailAnimationManager);
 		this->addChild(m_tailImg, lastZ - 1);
 		reader->release();
 	}

@@ -13,11 +13,6 @@
 #include "CumberEmotion.h"
 #include "StarGoldData.h"
 
-void KSCircleBase::ccbDelegateNull()
-{
-	mAnimationManager->setDelegate(NULL);
-}
-
 bool KSCircleBase::init(const string& ccbiName)
 {
 	KSCumberBase::init();
@@ -41,6 +36,7 @@ bool KSCircleBase::init(const string& ccbiName)
 	KS::setPositionType(m_headImg, kCCPositionTypeGrouped);
 	mAnimationManager = reader->getAnimationManager();
 	mAnimationManager->setDelegate(this);
+	m_headImg->addChild(mAnimationManager);
 	reader->release();
 	
 	

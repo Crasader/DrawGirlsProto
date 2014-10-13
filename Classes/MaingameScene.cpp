@@ -63,13 +63,6 @@ Maingame::~Maingame()
 	CCLOG("~Maingame");
 	mySGD->is_on_maingame = false;
 	
-	if(myCP)
-	{
-		myCP->cumberCcbDelegateNull();
-	}
-	
-	myGD->ccbDelegateNull();
-	
 	if(replay_boss)
 	{
 		replay_boss->removeAllObjects();

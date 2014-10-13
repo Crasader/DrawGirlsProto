@@ -11,6 +11,7 @@
 #include "DataStorageHub.h"
 #include "ks19937.h"
 #include "StarGoldData.h"
+#include "MissileUnit.h"
 float deg2Rad(float x) { return x * M_PI / 180.f;}
 float rad2Deg(float x) { return x * 180.f / M_PI;}
 
@@ -477,17 +478,8 @@ bool GameData::getEmptyRandomPoint(IntPoint* point, float radius)
 	
 	return isGoodPointed;
 }
-void GameData::ccbDelegateNull()
-{
-	for(int i=0;i<ccb_delegate_null_list.size();i++)
-	{
-		ccb_delegate_null_list[i]();
-	}
-	ccb_delegate_null_list.clear();
-}
 void GameData::myInit()
 {
-	ccb_delegate_null_list.clear();
 	boarder_value = 7.f;
 	setUItype( GAMESCREEN_TYPE( myDSH->getIntegerForKey(kDSH_Key_uiType) ) );
 

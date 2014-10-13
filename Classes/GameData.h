@@ -133,8 +133,6 @@ public:
 	std::function<void(void)> removeAllPattern;
 	std::function<CumberParent*(void)> getCumberParent;
 	std::function<MissileParent*(void)> getMissileParent;
-	std::vector<std::function<void()>> ccb_delegate_null_list;
-	void ccbDelegateNull();
 	vector<CCNode*> getMainCumberCCNodeVector()
 	{
 		vector<KSCumberBase*> t_vector = getMainCumberVector();
