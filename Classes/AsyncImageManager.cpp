@@ -8,6 +8,7 @@
 
 #include "AsyncImageManager.h"
 #include "AsyncImage.h"
+#include <algorithm>
 
 AsyncImageManager* AsyncImageManager::sharedInstance()
 {
@@ -67,7 +68,7 @@ void AsyncImageManager::unregiAsyncImage(AsyncImage* t_ai)
 	
 	if(t_iter != ready_ai_list.end())
 	{
-		auto t_iter2 = find((*t_iter)->m_ai_list.begin(), (*t_iter)->m_ai_list.end(), t_ai);
+        vector<AsyncImage*>::iterator t_iter2 = find((*t_iter)->m_ai_list.begin(), (*t_iter)->m_ai_list.end(), t_ai);
 		if(t_iter2 != (*t_iter)->m_ai_list.end())
 		{
 			(*t_iter)->m_ai_list.erase(t_iter2);
@@ -112,8 +113,8 @@ void AsyncImageManager::asyncedImage(CCObject* t_obj)
 			
 			if(t_iter != ready_ai_list.end())
 			{
+                ready_ai_list.erase(t_iter);
 				(*t_iter)->release();
-				ready_ai_list.erase(t_iter);
 			}
 			break;
 		}

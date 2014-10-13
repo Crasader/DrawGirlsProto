@@ -362,7 +362,6 @@ public:
 	virtual ~BlindDrop()
 	{
 		CCLOG("~BlindDrop");
-//		reader->setDelegate(NULL);
 	}
 private:
 	float m_scale;

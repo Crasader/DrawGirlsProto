@@ -5775,6 +5775,7 @@ void MainFlowScene::tableRefresh()
 
 MainFlowScene::~MainFlowScene()
 {
+	CCLOG("~MainFlowScene");
 	hspConnector::get()->removeTarget(this);
 }
 

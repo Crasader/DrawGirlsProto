@@ -41,6 +41,17 @@ enum CV_Zorder{
 	kCV_Z_next_button
 };
 
+void CardViewScene::completedAnimationSequenceNamed(const char *name)
+{
+	CCTouch* t_touch = new CCTouch();
+	t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
+	t_touch->autorelease();
+	
+	first_img->ccTouchEnded(t_touch, NULL);
+	
+	t_manager->setDelegate(NULL);
+}
+
 bool CardViewScene::init()
 {
     if ( !CCLayer::init() )
@@ -276,15 +287,9 @@ bool CardViewScene::init()
 		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
 		
 		zoom_img = tuto.first;
+		tuto.second->setDelegate(this);
+		t_manager = tuto.second;
 		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-		
-		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
-			t_touch->autorelease();
-		
-			first_img->ccTouchEnded(t_touch, NULL);
-		});
 		
 		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 		addChild(zoom_img, kCV_Z_next_button);
@@ -363,13 +368,8 @@ bool CardViewScene::init()
 		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
 		addChild(zoom_img, kCV_Z_next_button);
 		
-		tuto.second->setAnimationCompletedCallbackLambda(this, [=](const char* seqName){
-//			(this->*delegate_typing_after)();
-			CCTouch* t_touch = new CCTouch();
-			t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
-			t_touch->autorelease();
-			first_img->ccTouchEnded(t_touch, NULL);
-		});
+		tuto.second->setDelegate(this);
+		t_manager = tuto.second;
 	}
 	
 	

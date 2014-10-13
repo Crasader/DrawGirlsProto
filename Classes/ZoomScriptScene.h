@@ -10,19 +10,21 @@
 #define __DGproto__ZoomScriptScene__
 
 #include "cocos2d.h"
+#include "cocos-ext.h"
 #include "DataStorageHub.h"
 #include "SilhouetteData.h"
 #include <map>
 #include "BackKeyBase.h"
 
 USING_NS_CC;
+USING_NS_CC_EXT;
 using namespace std;
 
 class CommonButton;
 class MyNode;
 class EffectSprite;
 class KSLabelTTF;
-class ZoomScript : public CCLayer//, public BackKeyBase
+class ZoomScript : public CCLayer, public CCBAnimationManagerDelegate//, public BackKeyBase
 {
 public:
 	virtual bool init();
@@ -31,7 +33,16 @@ public:
 	
 	virtual void onEnterTransitionDidFinish();
 	
+	virtual ~ZoomScript()
+	{
+		CCLOG("~ZoomScript");
+	}
+	
+	virtual void completedAnimationSequenceNamed(const char *name);
+	
 private:
+	CCBAnimationManager* t_manager;
+	
 	CCNode* game_node;
 	int silType;
 	bool is_showtime;
@@ -67,6 +78,7 @@ private:
 	MyNode* third_img;
 	
 	EffectSprite* safety_img;
+	int target_code;
 	MyNode* target_node;
 	CCSprite* white_paper;
 	
