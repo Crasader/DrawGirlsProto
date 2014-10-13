@@ -48,6 +48,12 @@ bool CardSettingPopup::init()
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	table_update_cnt = 0;
 	
+	CCSprite* t_caching = CCSprite::create("loading_card.png");
+	t_caching->setScale(0.2f);
+	t_caching->setPosition(ccp(-500,-500));
+	t_caching->setVisible(false);
+	addChild(t_caching);
+	
 	recent_sort_type = myDSH->getIntegerForKey(kDSH_Key_cardSortType);
 	
 	is_take_reverse = recent_sort_type == kCST_takeReverse;

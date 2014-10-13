@@ -94,6 +94,22 @@ void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 	delegate_final = d_final;
 }
 
+//void OptionPopup::completedAnimationSequenceNamed (char const * name)
+//{
+//	string t_name = name;
+//	
+//	if(t_name == "Default Timeline" || t_name == "end_die_animation")
+//	{
+//		CCSprite* remove_target = effect_que.front();
+//		effect_que.pop_front();
+//		CCBAnimationManager* remove_animation = effect_animation_manager.front();
+//		effect_animation_manager.pop_front();
+//		remove_animation->setDelegate(NULL);
+////		CC_SAFE_RELEASE(dynamic_cast<CCObject*>(remove_animation->getDelegate()));
+//		removeChild(remove_target);
+//	}
+//}
+
 bool OptionPopup::init()
 {
 	//////////////////////////////
@@ -230,6 +246,29 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
+//	addChild(KSSchedule::create([=](float t)
+//								{
+//									CCPoint t_p;
+//									t_p.x = rand()%101-50 + 240;
+//									t_p.y = rand()%71-35 + 160;
+//									
+//									auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_cha_die1.ccbi");//KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
+//									
+//									CCSprite* take_effect = t_ccb.first;
+//									take_effect->setPosition(t_p);
+////									take_effect->setScale(1.f/myGD->game_scale);
+//									addChild(take_effect, 99999);
+//									
+////									addChild(KSTimer::create(1.f, [=](){take_effect->removeFromParent();}));
+//									
+//									t_ccb.second->setDelegate(this);
+////									t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
+//									effect_animation_manager.push_back(t_ccb.second);
+//									
+//									effect_que.push_back(take_effect);
+//									
+//									return true;
+//								}));
 	
 //	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //		
