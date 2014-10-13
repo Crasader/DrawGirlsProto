@@ -34,6 +34,15 @@
 #import "HSPCore.h"
 
 #include "DataStorageHub.h"
+#import "HSPSDKPackageInfo.h"
+#import "HSPCore.h"
+#import "HSPUiLauncher.h"
+#ifdef HSPSDK_SUPPORTS_UI
+#import "HSPUiReference.h"
+#endif // HSPSDK_SUPPORTS_UI
+#import "HSPMyProfile.h"
+#import "HSPMessage.h"
+
 //#define FIVEROCKS_APP_ID @"YOUR_APP_ID"
 //#define FIVEROCKS_APP_KEY @"YOUR_APP_KEY"
 AdXTracking *tracker;
@@ -41,26 +50,122 @@ AdXTracking *tracker;
 
 //@synthesize window;
 @synthesize viewController;
-
+@synthesize window = _window;
 #pragma mark -
 #pragma mark Application lifecycle
 
 // cocos2d application instance
 static AppDelegate s_sharedApplication;
 
+- (void)onBeforeSessionExpire
+{
+	/* A method to be called when logging out or initializing account */
+	[self.viewController log:@"onBeforeSessionExpire – session will be expired."];
+	
+	/* Preparing for user change since session will be soon expired. Personal information used in game should be stored. */
+	[self.viewController log:@"save user data because session will be expired."];
+}
+
+-(void) didReceivedMessage:(NSNotification*)notification
+{
+	[self.viewController log:[NSString stringWithFormat:@"Received new message. %@", notification.object]];
+}
+
+-(void) didReceivedPacket:(NSNotification*)notification
+{
+	[self.viewController log:[NSString stringWithFormat:@"Received binary data. %@", notification.object]];
+}
+
+-(void) didChangedProfile:(NSNotification*)notification
+{
+	[self.viewController log:[NSString stringWithFormat:@"User information has chaned. %@", notification.object]];
+}
+
+- (void)onSessionExpireComplete:(NSNotification*)notification
+{
+	/* It will be logged out or account will be initialized. */
+	[self.viewController log:@"Session has expired."];
+	
+	/* User information that has been used is initialized and the page is moved to first screen. */
+	[self.viewController log:@"User information has initialized"];
+}
+
+-(void) onSessionExpiredByExternalFactors:(NSNotification*)notification
+{
+	/* Authentication session has expired caused from outside source. */
+	[self.viewController log:@"Session has expired by outside source."];
+	
+	/* Storing an existing user information and initializing game. */
+	[self.viewController log:@"User information has initialized"];
+}
+
+- (void)registerHSPEventObserver
+{
+	/* Registering the method to be called in HSPCore before authentication session expiration. */
+	[[HSPCore sharedHSPCore] addBeforeLogoutListener:^{
+		[self onBeforeSessionExpire];
+	}];
+	
+	[[HSPCore sharedHSPCore] addBeforeResetAccountListener:^{
+		[self onBeforeSessionExpire];
+	}];
+	
+	/* Registering Notification to obtain authentication session expired event of HSPCore.*/
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(onSessionExpireComplete:)
+																							 name:HSPDidLogoutNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(onSessionExpireComplete:)
+																							 name:HSPDidResetAccountNotificationName
+																						 object:nil];
+	
+	/* Registering Notification to obtain authentication session expired event caused from outside source. */
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(onSessionExpiredByExternalFactors:)
+																							 name:HSPSessionExpiredNotificationName
+																						 object:nil];
+	// Handling event occurred in HSP
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didReceivedMessage:)
+																							 name:HSPDidReceiveMessageNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didReceivedPacket:)
+																							 name:HSPDidReceivePacketNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didChangedProfile:)
+																							 name:HSPMyProfileAllPropertiesDidChangeNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didChangedProfile:)
+																							 name:HSPMyProfileNicknameDidChangeNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didChangedProfile:)
+																							 name:HSPMyProfileTodayWordsDidChangeNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didChangedProfile:)
+																							 name:HSPMyProfileImageDidChangeNotificationName
+																						 object:nil];
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					 selector:@selector(didChangedProfile:)
+																							 name:HSPMyProfilePhoneNoDidChangeNotificationName
+																						 object:nil];
+}
+
+- (void)unregisterHSPEventObserver
+{
+	[[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	
 	// Override point for customization after application launch.
 	[self reportAppOpen];
-	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
-	{
-		
-		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-		CCLOG("AUTO LOGIN TYPE == %d", lType);
-		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
-			//
-		}];
-	}
+	
 	
 	hspConnector::get()->setupHSPonIOS(10331, "SKSUMRAN", "1.0.0", launchOptions);
 	
@@ -102,6 +207,16 @@ static AppDelegate s_sharedApplication;
 	[[UIApplication sharedApplication] setStatusBarHidden: YES];
 	[UIApplication sharedApplication].idleTimerDisabled = YES; // screen out disable
 	
+	////////////////////////////////////////////
+	/* HSP로부터 발생하는 이벤트를 처리하기 위한 핸들러를 등록한다. "HSP에서 발생하는 이벤트" 참조 */
+	[self registerHSPEventObserver];
+	/*************************************************************************/
+ 
+	/*************************************************************************/
+	/* HSPUiLauncher에 게임 윈도우와 게임 뷰를 등록한다. */
+	[HSPUiLauncher sharedLauncher].gameWindow = self.window;
+	[HSPUiLauncher sharedLauncher].gameView = self.viewController.view;
+	/////////////////////////////////////////////
 	cocos2d::CCApplication::sharedApplication()->run();
 	return YES;
 }
@@ -122,7 +237,16 @@ static AppDelegate s_sharedApplication;
 	 Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	 */
 	[FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];
-	
+	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
+	{
+		
+		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		CCLOG("AUTO LOGIN TYPE == %d", lType);
+		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
+			//
+		}];
+	}
+
 	cocos2d::CCDirector::sharedDirector()->startAnimation();
 	//	if(!StarGoldData::sharedInstance()->is_paused)
 	cocos2d::CCDirector::sharedDirector()->resume();
@@ -133,6 +257,7 @@ static AppDelegate s_sharedApplication;
 	 Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
 	 If your application supports background execution, called instead of applicationWillTerminate: when the user quits.
 	 */
+	
 	cocos2d::CCApplication::sharedApplication()->applicationDidEnterBackground();
 }
 
@@ -142,7 +267,8 @@ static AppDelegate s_sharedApplication;
 	 */
 	
 	[self reportAppOpen];
-	cocos2d::CCApplication::sharedApplication()->applicationWillEnterForeground();
+	
+		cocos2d::CCApplication::sharedApplication()->applicationWillEnterForeground();
 	
 	
 }
@@ -193,6 +319,10 @@ static AppDelegate s_sharedApplication;
 
 
 - (void)dealloc {
+	[self unregisterHSPEventObserver];
+	
+	[_window release];
+	[viewController release];
 	[super dealloc];
 }
 
@@ -201,7 +331,7 @@ static AppDelegate s_sharedApplication;
 	tracker = [[AdXTracking alloc] init];
 	[tracker setURLScheme:@"ADX41051"];
 	[tracker setClientId:@"nhntrt809531jdr"];
-	[tracker setAppleId:@"APPLEID"];
+	[tracker setAppleId:@"924830126"];
 	[tracker setBundleID:@"com.nhnent.SKSUMRAN"];
 	[tracker reportAppOpen];
 }
