@@ -189,7 +189,7 @@ bool MainFlowScene::init()
 				string t_type = t_condition["type"].asString();
 				if(t_type == "p")
 				{
-					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear.getV())
 					{
 						and_open = false;
 						t_info.is_base_condition_success = false;
@@ -1055,12 +1055,13 @@ void MainFlowScene::cellAction(CCObject* sender)
 			CCNode* cell_node = ((CCNode*)sender)->getParent()->getParent();
 			cell_node->addChild(black_img);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//			CCBReader* reader = new CCBReader(nodeLoader);
+//			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+			CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 			loading_progress_img->setPosition(ccp(0,30));
 			cell_node->addChild(loading_progress_img);
-			reader->release();
+//			reader->release();
 			
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
@@ -2477,7 +2478,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																																 string t_type = t_condition["type"].asString();
 																																																 if(t_type == "p")
 																																																 {
-																																																	 if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+																																																	 if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear.getV())
 																																																	 {
 																																																		 and_open = false;
 																																																		 t_info.is_base_condition_success = false;

@@ -177,7 +177,7 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			check_img->setPosition(ccpFromSize(t_back->getContentSize()/2.f));
 			t_back->addChild(check_img);
 			
-			if(i == dayCount-1)
+			if(mySGD->is_on_attendance && i == dayCount-1)
 			{
 				check_img->setOpacity(0);
 				animation_stemp_list.push_back(check_img);
@@ -267,8 +267,11 @@ void AttendancePopup::myInit(int t_touch_priority, function<void()> t_end_func)
 			check_img->setPosition(ccpFromSize(t_back->getContentSize()/2.f));
 			t_back->addChild(check_img);
 			
-			check_img->setOpacity(0);
-			animation_stemp_list.push_back(check_img);
+			if(mySGD->is_on_attendance)
+			{
+				check_img->setOpacity(0);
+				animation_stemp_list.push_back(check_img);
+			}
 		}
 	}
 	

@@ -887,12 +887,13 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				
 				gray->removeFromParent();
 				
-				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-				CCBReader* reader = new CCBReader(nodeLoader);
-				CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//				CCBReader* reader = new CCBReader(nodeLoader);
+//				CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 				loading_progress_img->setPosition(ccp(240,38));
 				addChild(loading_progress_img, kSLD_Z_content);
-				reader->release();
+//				reader->release();
 				
 				download_version = result_data["version"].asInt();
 				state_ment->setPosition(ccp(240,80));

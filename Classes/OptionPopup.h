@@ -19,7 +19,7 @@ USING_NS_CC_EXT;
 using namespace std;
 
 class KSLabelTTF;
-class OptionPopup : public CCLayer
+class OptionPopup : public CCLayer//, public CCBAnimationManagerDelegate
 {
 public:
     // Method 'init' in cocos2d-x returns bool, instead of 'id' in cocos2d-iphone (an object pointer)
@@ -34,7 +34,12 @@ public:
 	
 	function<void()> open_message_popup_func;
 	
+//	virtual void completedAnimationSequenceNamed (char const * name);
+	
 private:
+	
+//	deque<CCSprite*> effect_que;
+//	deque<CCBAnimationManager*> effect_animation_manager;
 	
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;

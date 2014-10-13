@@ -504,16 +504,16 @@ bool PuzzleScene::init()
 		clear_is_empty_piece = true;
 		int played_stage_number = mySD->getSilType();
 		int stage_card_count = 4;//NSDS_GI(played_stage_number, kSDS_SI_cardCount_i);
-		for(int i=1;i<=stage_card_count;i++)
+		for(int i=1;i<=4;i++)
 		{
-			if(mySGD->isHasGottenCards(played_stage_number, i) > 0)
+			if(mySGD->getPieceHistory(played_stage_number).is_clear[i-1].getV())
 			{
 				clear_is_empty_piece = false;
 				is_not_empty_card[i-1] = true;
 			}
 		}
 		
-		if(mySGD->isHasGottenCards(mySD->getSilType(), take_level) == 0)
+		if(!mySGD->getPieceHistory(played_stage_number).is_clear[before_take_level-1].getV())
 		{
 //			mySGD->setClearRewardGold(NSDS_GI(kSDS_CI_int1_reward_i, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level)));
 			clear_is_perfect_piece = true;
@@ -527,13 +527,9 @@ bool PuzzleScene::init()
 		
 		keep_card_number = 0;
 		
-		for(int i=1;i<=stage_card_count;i++)
+		for(int i=1;i<=4;i++)
 		{
-			if(mySGD->isHasGottenCards(played_stage_number, i) > 0)
-			{
-				
-			}
-			else
+			if(i != before_take_level && !mySGD->getPieceHistory(played_stage_number).is_clear[i-1].getV())
 			{
 				clear_is_perfect_piece = false;
 			}
@@ -668,11 +664,11 @@ bool PuzzleScene::init()
 		if(!mySGD->isClearPiece(mySD->getSilType()))
 		{
 			t_history.is_clear[before_take_level-1] = true;
-			t_history.clear_count = t_history.try_count;
+			t_history.clear_count = t_history.try_count.getV();
 			
 			is_change_history = true;
 		}
-		else if(!t_history.is_clear[before_take_level-1])
+		else if(!t_history.is_clear[before_take_level-1].getV())
 		{
 			t_history.is_clear[before_take_level-1] = true;
 			
@@ -697,8 +693,8 @@ bool PuzzleScene::init()
 		
 		PuzzleHistory pz_history = mySGD->getPuzzleHistory(t_puzzle_number);
 		
-		clear_is_first_perfect = !pz_history.is_perfect;
-		clear_is_first_puzzle_success = !pz_history.is_clear;
+		clear_is_first_perfect = !pz_history.is_perfect.getV();
+		clear_is_first_puzzle_success = !pz_history.is_clear.getV();
 		
 		int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
 		int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
@@ -715,7 +711,7 @@ bool PuzzleScene::init()
 				
 				if(mySGD->isClearPiece(t_stage_number))
 				{
-					if(!t_history.is_clear[0] || !t_history.is_clear[1] || !t_history.is_clear[2] || !t_history.is_clear[3])
+					if(!t_history.is_clear[0].getV() || !t_history.is_clear[1].getV() || !t_history.is_clear[2].getV() || !t_history.is_clear[3].getV())
 					{
 						clear_is_first_perfect = false;
 					}
@@ -2737,12 +2733,13 @@ void PuzzleScene::setRight()
 			TRACE();
 			if(!loading_progress_img)
 			{
-				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-				CCBReader* reader = new CCBReader(nodeLoader);
-				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//				CCBReader* reader = new CCBReader(nodeLoader);
+//				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 				loading_progress_img->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 				right_body->addChild(loading_progress_img);
-				reader->release();
+//				reader->release();
 			}
 			TRACE();
 			Json::Value param;

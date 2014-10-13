@@ -389,12 +389,13 @@ bool ClearPopup::init()
 	replay_menu->setTouchPriority(-200);
 	
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_img->setPosition(ccp(347,130));
 	main_case->addChild(loading_img, kZ_CP_img);
-	reader->release();
+//	reader->release();
 	
 	Json::Value param2;
 	param2["myScore"]=int(mySGD->getScore());
@@ -675,7 +676,7 @@ void ClearPopup::resultGetTime(Json::Value result_data)
 					string t_type = t_condition["type"].asString();
 					if(t_type == "p")
 					{
-						if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+						if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear.getV())
 						{
 							and_open = false;
 							is_base_condition_success = false;

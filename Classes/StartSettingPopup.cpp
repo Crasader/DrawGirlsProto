@@ -127,7 +127,7 @@ bool StartSettingPopup::init()
 	addChild(t_suction);
 	
 	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-	if(!t_history.is_open)
+	if(!t_history.is_open.getV())
 	{
 		t_history.is_open = true;
 		mySGD->setPieceHistory(t_history, nullptr);
@@ -2936,7 +2936,7 @@ void StartSettingPopup::callStart()
 				string t_type = t_condition["type"].asString();
 				if(t_type == "p")
 				{
-					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear)
+					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear.getV())
 					{
 						and_open = false;
 						is_base_condition_success = false;
@@ -3090,7 +3090,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 	t_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
 	
 	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-	t_history.try_count++;
+	t_history.try_count = t_history.try_count.getV()+1;
 	
 	mySGD->setPieceHistoryForNotSave(t_history);
 	

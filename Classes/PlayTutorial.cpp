@@ -1665,10 +1665,12 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	
 	if(!isDisableDrawButton)
 	{
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
-		button_ani = reader;
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
+		auto t_ccb = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString());
+		draw_button = t_ccb.first;
+		button_ani = t_ccb.second;
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)		draw_button->setPosition(ccp(480-TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
 		else								draw_button->setPosition(ccp(TUTO_BUTTON_IN_DISTANCE,TUTO_BUTTON_IN_DISTANCE));
@@ -1686,7 +1688,7 @@ void TutoControler::onButton()
 {
 	if(button_ani)
 	{
-		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1start");
+		button_ani->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
@@ -1697,7 +1699,7 @@ void TutoControler::offButton()
 {
 	if(button_ani)
 	{
-		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
+		button_ani->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);

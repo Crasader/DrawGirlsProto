@@ -92,7 +92,7 @@ bool NewMainFlowScene::init()
 		
 		have_card_count_for_puzzle_index.push_back(have_card_cnt);
 		
-		bool is_perfect_puzzle = !mySGD->getPuzzleHistory(t_puzzle_number).is_perfect;
+		bool is_perfect_puzzle = !mySGD->getPuzzleHistory(t_puzzle_number).is_perfect.getV();
 		
 		vector<PuzzlePiecePath> puzzle_path_info;
 		for(int j = start_stage;j<start_stage + stage_count;j++)
@@ -149,7 +149,7 @@ bool NewMainFlowScene::init()
 		puzzle_piece_mode.push_back((int)kNewPuzzlePieceMode_default);
 		
 		
-		if(!mySGD->getPuzzleHistory(t_puzzle_number).is_clear)
+		if(!mySGD->getPuzzleHistory(t_puzzle_number).is_clear.getV())
 		{
 			bool is_all_clear_stage = true;
 			for(int j=start_stage;j<start_stage+stage_count && is_all_clear_stage;j++)

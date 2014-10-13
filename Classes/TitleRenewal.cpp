@@ -29,7 +29,9 @@
 #include <algorithm>
 #include "FiveRocksCpp.h"
 #include "TypingBox.h"
-
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#import "HSPCore.h"
+#endif
 CCScene* TitleRenewalScene::scene()
 {
 	// 'scene' is an autorelease object
@@ -333,7 +335,13 @@ void TitleRenewalScene::realInit()
 	TRACE();
 	Json::Value param;
 	param["ManualLogin"] = true;
+#ifdef LQTEST
 	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+	
+#else
+	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+	
+#endif
 	TRACE();
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 }

@@ -248,12 +248,13 @@ bool RankNewPopup::init()
 	setFormSetter(close_menu);
 	main_case->addChild(close_menu, 5);
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_img->setPosition(ccp(main_inner_right->getContentSize().width/2.f,main_inner_right->getContentSize().height*0.4f));
 	main_inner_right->addChild(loading_img);
-	reader->release();
+//	reader->release();
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();

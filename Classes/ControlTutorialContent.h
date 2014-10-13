@@ -64,7 +64,8 @@ public:
 	
 	virtual ~ControlTutorialContent()
 	{
-		ani_manager->release();
+		ani_manager->setDelegate(NULL);
+//		ani_manager->release();
 	}
 	
 private:
@@ -72,7 +73,7 @@ private:
 	CCMenuLambda* close_menu;
 	CCMenu* touch_menu;
 	
-	CCBReader* ani_manager;
+	CCBAnimationManager* ani_manager;
 	CCSprite* click_animaition;
 	
 	function<void(CCObject*)> end_selector;
@@ -100,11 +101,13 @@ private:
 //		clipper->setAlphaThreshold(0.1f);
 //		addChild(clipper);
 		
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		CCSprite* control_tutorial = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial.ccbi",this));
-		ani_manager = reader;
-		ani_manager->getAnimationManager()->setDelegate(this);
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		CCSprite* control_tutorial = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("tutorial.ccbi",this));
+		auto t_ccb = KS::loadCCBI<CCSprite*>(this, "tutorial.ccbi");
+		CCSprite* control_tutorial = t_ccb.first;
+		ani_manager = t_ccb.second;
+		ani_manager->setDelegate(this);
 //		control_tutorial->setScale(0.65f);
 		control_tutorial->setPosition(ccp(0,0));
 //		clipper->addChild(control_tutorial);
@@ -151,25 +154,25 @@ private:
 		{
 			click_animaition->setVisible(false);
 			state_number = 2;
-			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial2");
+			ani_manager->runAnimationsForSequenceNamed("tutorial2");
 		}
 		else if(state_number == 3)
 		{
 			click_animaition->setVisible(false);
 			state_number = 4;
-			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial3");
+			ani_manager->runAnimationsForSequenceNamed("tutorial3");
 		}
 		else if(state_number == 5)
 		{
 			click_animaition->setVisible(false);
 			state_number = 6;
-			ani_manager->getAnimationManager()->runAnimationsForSequenceNamed("tutorial4");
+			ani_manager->runAnimationsForSequenceNamed("tutorial4");
 		}
 		else if(state_number == 7)
 		{
 			click_animaition->setVisible(false);
 			touch_menu->setVisible(false);
-			ani_manager->getAnimationManager()->setDelegate(NULL);
+			ani_manager->setDelegate(NULL);
 			end_selector(NULL);
 		}
 	}

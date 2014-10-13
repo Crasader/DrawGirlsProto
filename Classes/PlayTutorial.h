@@ -353,7 +353,7 @@ public:
 	virtual ~TutoControler()
 	{
 		if(button_ani)
-			button_ani->release();
+			button_ani->setDelegate(NULL);
 	}
 	
 private:
@@ -389,7 +389,7 @@ private:
 	
 	bool isButtonAction;
 	
-	CCBReader* button_ani;
+	CCBAnimationManager* button_ani;
 	
 	bool isEnableIrregularDirection;
 	bool isControlJoystickNotFixed;

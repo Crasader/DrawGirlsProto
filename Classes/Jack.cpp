@@ -1829,15 +1829,17 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 		
 //		jackImg->removeFromParentAndCleanup(true);
 
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		die_particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
-		reader->getAnimationManager()->setDelegate(this);
-		die_manager = reader->getAnimationManager();
+		auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_cha_die1.ccbi");
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+		die_particle = t_ccb.first;// dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_die1.ccbi",this));
+//		reader->getAnimationManager()->setDelegate(this);
+		t_ccb.second->setDelegate(this);
+		die_manager = t_ccb.second;//reader->getAnimationManager();
 		//			jackImg = CCSprite::create("jack_die.png");
 		//			jackImg->setScale(0.2f);
 		addChild(die_particle, kJackZ_main);
-		reader->release();
+//		reader->release();
 		
 		KS::setBlendFunc(die_particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 		
@@ -2847,13 +2849,14 @@ void Jack::startInnerParticle( CCNode* target_node )
 
 void Jack::startLightSprite( CCNode* target_node )
 {
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* lighter = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_new.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* lighter = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_cha_new.ccbi",this));
+	CCSprite* lighter = KS::loadCCBI<CCSprite*>(this, "fx_cha_new.ccbi").first;
 	lighter->setPosition(ccp(0,0));
 	target_node->addChild(lighter);
 	KS::setBlendFunc(lighter, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	reader->release();
+//	reader->release();
 }
 
 void Jack::startOutterParticle( CCNode* target_node )

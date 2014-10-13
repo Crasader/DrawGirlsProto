@@ -47,6 +47,7 @@
 #include "JoystickSizeQuestionPopup.h"
 #include "IntroducerPopup.h"
 #include "GDWebSprite.h"
+#include "AttendancePopup.h"
 
 USING_NS_CC_EXT;
 
@@ -85,7 +86,8 @@ enum OptionPopupMenuTag{
 	kOP_MT_community,
 	kOP_MT_recommender,
 	kOP_MT_tip,
-	kOP_MT_kakao
+	kOP_MT_kakao,
+	kOP_MT_attendance
 };
 
 void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
@@ -93,6 +95,22 @@ void OptionPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)
 	target_final = t_final;
 	delegate_final = d_final;
 }
+
+//void OptionPopup::completedAnimationSequenceNamed (char const * name)
+//{
+//	string t_name = name;
+//	
+//	if(t_name == "Default Timeline" || t_name == "end_die_animation")
+//	{
+//		CCSprite* remove_target = effect_que.front();
+//		effect_que.pop_front();
+//		CCBAnimationManager* remove_animation = effect_animation_manager.front();
+//		effect_animation_manager.pop_front();
+//		remove_animation->setDelegate(NULL);
+////		CC_SAFE_RELEASE(dynamic_cast<CCObject*>(remove_animation->getDelegate()));
+//		removeChild(remove_target);
+//	}
+//}
 
 bool OptionPopup::init()
 {
@@ -230,6 +248,29 @@ bool OptionPopup::init()
 	
 	setTouchEnabled(true);
 	
+//	addChild(KSSchedule::create([=](float t)
+//								{
+//									CCPoint t_p;
+//									t_p.x = rand()%101-50 + 240;
+//									t_p.y = rand()%71-35 + 160;
+//									
+//									auto t_ccb = KS::loadCCBI<CCSprite*>(this, "bossbomb2.ccbi");//KS::loadCCBI<CCSprite*>(this, "ingame_item_bonustime.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_cha_die1.ccbi");//KS::loadCCBI<CCSprite*>(this, "startsetting_question.ccbi");//KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
+//									
+//									CCSprite* take_effect = t_ccb.first;
+//									take_effect->setPosition(t_p);
+////									take_effect->setScale(1.f/myGD->game_scale);
+//									addChild(take_effect, 99999);
+//									
+//									addChild(KSTimer::create(0.5f, [=](){take_effect->removeFromParent();}));
+//									
+////									t_ccb.second->setDelegate(this);
+//////									t_ccb.second->runAnimationsForSequenceNamed("Default Timeline");
+////									effect_animation_manager.push_back(t_ccb.second);
+////									
+////									effect_que.push_back(take_effect);
+//									
+//									return true;
+//								}));
 	
 //	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 //		
@@ -413,6 +454,34 @@ bool OptionPopup::init()
 //	kakao_item->setTag(kOP_MT_kakao);
 //	kakao_item->setPosition(ccp(169,256.5f));
 //	tab_menu->addChild(kakao_item);
+	
+	CCSprite* n_attendance_img = CCSprite::create("tabbutton_up.png");
+	KSLabelTTF* n_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	n_attendance_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_attendance_label->setPosition(ccpFromSize(n_tip_img->getContentSize()/2.f) + ccp(0,2));
+	n_attendance_img->addChild(n_attendance_label);
+	
+	CCSprite* s_attendance_img = CCSprite::create("tabbutton_up.png");
+	s_attendance_img->setColor(ccGRAY);
+	KSLabelTTF* s_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	s_attendance_label->disableOuterStroke();
+	s_attendance_label->setColor(ccGRAY);
+	s_attendance_label->setPosition(ccpFromSize(s_attendance_img->getContentSize()/2.f) + ccp(0,2));
+	s_attendance_img->addChild(s_attendance_label);
+	
+	CCSprite* d_attendance_img = CCSprite::create("tabbutton_down.png");
+	d_attendance_img->setColor(ccGRAY);
+	KSLabelTTF* d_attendance_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kAttendanceCheck), mySGD->getFont().c_str(), 12.5f);
+	d_attendance_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	d_attendance_label->setPosition(ccpFromSize(d_attendance_img->getContentSize()/2.f) + ccp(0,2));
+	d_attendance_img->addChild(d_attendance_label);
+	
+	
+	CCMenuItem* attendance_item = CCMenuItemSprite::create(n_attendance_img, s_attendance_img, d_attendance_img, this, menu_selector(OptionPopup::menuAction));
+	attendance_item->setTag(kOP_MT_attendance);
+	attendance_item->setPosition(ccp(169,256.5f));
+	tab_menu->addChild(attendance_item);
+	
 	
 	
 	
@@ -1090,6 +1159,14 @@ void OptionPopup::menuAction(CCObject* pSender)
 //		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenTitle), myLoc->getLocalForKey(LK::kMyLocalKey_communityNotOpenContent)), 999);
 		is_menu_enable = true;
 	}
+	else if(tag == kOP_MT_attendance)
+	{
+		AttendancePopup* t_popup = AttendancePopup::create(-300, [=]()
+														   {
+															   is_menu_enable = true;
+														   });
+		addChild(t_popup, kOP_Z_popup);
+	}
 	else if(tag == kOP_MT_recommender)
 	{
 		if(mySGD->getIntroducerID() == 0)
@@ -1214,12 +1291,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 cancel_button->setVisible(false);
 														 ok_button->setVisible(false);
 														 
-														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-														 CCBReader* reader = new CCBReader(nodeLoader);
-														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//														 CCBReader* reader = new CCBReader(nodeLoader);
+//														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 														 loading_progress_img->setPosition(ccp(0,-75));
 														 t_container->addChild(loading_progress_img);
-														 reader->release();
+//														 reader->release();
 														 
 														 
 														 hspConnector::get()->logout([=](Json::Value result_data)
@@ -1336,12 +1414,13 @@ void OptionPopup::menuAction(CCObject* pSender)
 														 close_button->setVisible(false);
 														 ok_button->setVisible(false);
 														 
-														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-														 CCBReader* reader = new CCBReader(nodeLoader);
-														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//														 CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//														 CCBReader* reader = new CCBReader(nodeLoader);
+//														 CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+														 CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 														 loading_progress_img->setPosition(ccp(0,-53));
 														 t_container->addChild(loading_progress_img);
-														 reader->release();
+//														 reader->release();
 														 
 														 Json::Value param;
 														 TRACE();

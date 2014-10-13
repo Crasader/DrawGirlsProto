@@ -300,14 +300,15 @@ void GameItemAddTime::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_bonustime.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_bonustime.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_bonustime.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -354,14 +355,15 @@ void GameItemSpeedUp::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_speed.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_speed.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_speed.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -420,14 +422,15 @@ void GameItemFast::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_dash.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_dash.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_dash.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -497,14 +500,15 @@ void GameItemAttack::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_attack.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_attack.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_attack.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -551,14 +555,15 @@ void GameItemSubOneDie::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_onekill.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_onekill.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_onekill.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -618,14 +623,15 @@ void GameItemSilence::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_silence.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_silence.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_silence.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	
@@ -735,14 +741,15 @@ void GameItemFire::myInit(bool is_near)
 		return;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_bomb.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	item_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_bomb.ccbi",this));
+	item_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_bomb.ccbi").first;
 	item_img->setScale(0.f);
 	CCPoint item_point = ccp((myPoint.x-1)*pixelSize + 1, (myPoint.y-1)*pixelSize + 1);
 	item_img->setPosition(item_point);
 	addChild(item_img);
-	reader->release();
+//	reader->release();
 	
 	starting_side_cnt = getSideCount();
 	

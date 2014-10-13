@@ -936,11 +936,12 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 	pair<CCSprite*, CCBAnimationManager*> alreadyWarning, alreadyWarning2;
 	if(type == 11) // 하나 짜리 던지기.
 	{
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
 		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		reader->release();
+//		reader->release();
+		objImg = KS::loadCCBI<CCSprite*>(this, "pattern_saw1.ccbi").first;
 		objects->addChild(objImg);
 		objImg->setVisible(false);
 
@@ -956,11 +957,12 @@ void ThrowObject::myInit (CCPoint t_sp, int t_type, float t_speed, float t_angle
 	}
 	else if(type == 14) // 여러개 던지기.
 	{
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
-		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		reader->release();
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw4.ccbi",this));
+//		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//		reader->release();
+		objImg = KS::loadCCBI<CCSprite*>(this, "pattern_saw4.ccbi").first;
 		objects->addChild(objImg);
 		objImg->setVisible(false);
 
@@ -1143,10 +1145,11 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	fSize = t_fSize;
 	rotateValue = t_fAngle - t_sAngle;
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_6_1.ccbi",this));//"pattern_meteor1_targeting.ccbi",this));
-	reader->release();
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_6_1.ccbi",this));//"pattern_meteor1_targeting.ccbi",this));
+//	reader->release();
+	targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1.ccbi").first;
 	targetingImg->setPosition(t_sp);
 	
 	targetingImg->setScale(1.f);
@@ -1354,12 +1357,13 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 	////		fall_dv = (fall_dv / ccpLength(fall_dv)) * 10.f;
 	//		fall_dv = ccpMult(fall_dv, 1.f/fallFrame);
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	meteor = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	meteor = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_meteor3.ccbi",this));
+	meteor = KS::loadCCBI<CCSprite*>(this, "pattern_meteor3.ccbi").first;
 	meteor->setRotation(90 + 45);
 	//meteor->setScale(2.5f);
-	reader->release();
+//	reader->release();
 	
 	
 	//		 = CCSprite::create(("meteor_stone_test" + imgFilename).c_str(), CCRectMake(0, 0, imgFrameSize.width, imgFrameSize.height));
@@ -1751,14 +1755,14 @@ void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool 
 		angle = rand()%360 - 180;
 	}
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	baseNode = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_bumbball.ccbi",this));
-	
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	baseNode = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_bumbball.ccbi",this));
+	baseNode = KS::loadCCBI<CCSprite*>(this, "pattern_bumbball.ccbi").first;
 	//		baseNode = CCSprite::create("threeCushion_main.png");
 	baseNode->setPosition(t_sp);
 	addChild(baseNode);
-	reader->release();
+//	reader->release();
 	
 	//		colorControl = CCSprite::create("threeCushion_color.png");
 	//		colorControl->setPosition(ccp(12,12));
@@ -1774,11 +1778,12 @@ void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool 
 }
 void ThreeCushion::initParticle ()
 {
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_8.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* particle = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_8.ccbi",this));
+	CCSprite* particle = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi").first;
 	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	reader->release();
+//	reader->release();
 	particle->setPosition(baseNode->getPosition());
 	particle->setRotation(rand()%360);
 	addChild(particle);
@@ -2064,8 +2069,7 @@ void BlindDrop::startAction ()
 }
 void BlindDrop::ccbManagerDelegateNull()
 {
-	reader->getAnimationManager()->setDelegate(NULL);
-	reader->release();
+	reader->setDelegate(NULL);
 }
 void BlindDrop::completedAnimationSequenceNamed (char const * name)
 {
@@ -2093,10 +2097,11 @@ void BlindDrop::myAction ()
 void BlindDrop::stopAction ()
 {
 	unschedule(schedule_selector(BlindDrop::myAction));
-	reader->getAnimationManager()->runAnimationsForSequenceNamed("tornado_stop");
+	reader->runAnimationsForSequenceNamed("tornado_stop");
 }
 void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc)
 {
+	CCLOG("BlindDrop!");
 	//		subPosition = ccpSub(t_fp, t_sp);
 	//		subPosition = ccpMult(subPosition, 1.f/t_movingFrame);
 	movingFrame = t_movingFrame;
@@ -2105,10 +2110,13 @@ void BlindDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_bli
 	//		dropImg = CCSprite::create("blind_drop.png");
 	//		addChild(dropImg);
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	reader = new CCBReader(nodeLoader);
-	oilImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
-	reader->getAnimationManager()->setDelegate(this);
+	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_tornado1.ccbi");
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	reader = new CCBReader(nodeLoader);
+	oilImg = t_ccb.first;// dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_tornado1.ccbi", this));
+	t_ccb.second->setDelegate(this);
+	reader = t_ccb.second;
+//	reader->getAnimationManager()->setDelegate(this);
 //	reader->release();
 //	KS::setBlendFunc(oilImg, ccBlendFunc{GL_ONE_MINUS_DST_COLOR, GL_ONE});
 	addChild(oilImg);
@@ -4494,13 +4502,14 @@ void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_m
 	pair<CCSprite*, CCBAnimationManager*> alreadyWarning, alreadyWarning2;
 
 	{
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		m_objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		m_objImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("pattern_saw1.ccbi",this));
+		m_objImg = KS::loadCCBI<CCSprite*>(this, "pattern_saw1.ccbi").first;
 		m_objImg->setPosition(t_sp);
 		m_lastSawPosition = m_objImg->getPosition();
 		//KS::setBlendFunc(objImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		reader->release();
+//		reader->release();
 		addChild(m_objImg);
 		m_objImg->setVisible(false);
 

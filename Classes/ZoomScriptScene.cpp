@@ -531,8 +531,8 @@ void ZoomScript::menuAction(CCObject *sender)
 					after_value = 4;
 				
 				bool is_chance = false;
-				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-				if(!t_history.is_clear[after_value-1])
+//				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+				if(!mySGD->isHasGottenCards(mySD->getSilType(), after_value))// !t_history.is_clear[after_value-1].getV())
 				{
 					is_chance = true;
 				}
@@ -633,7 +633,7 @@ void ZoomScript::menuAction(CCObject *sender)
 //																   }
 																   
 																   mySGD->setStageGrade(after_value);
-                                                                   is_morphing = (mySGD->getStageGrade() == 2 || mySGD->getStageGrade() == 4);
+                                                                   is_morphing = (after_value == 2 || after_value == 4);
 																   
 																   target_node->removeFromParent();
 																   
@@ -813,7 +813,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				
 				bool is_rank_up_chance = false;
 				PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-				if(t_history.try_count >= mySGD->getRankUpConditionCount() && ((take_grade == 2 && !t_history.is_clear[2]) || (take_grade == 3 && !t_history.is_clear[3])))
+				if(t_history.try_count.getV() >= mySGD->getRankUpConditionCount() && ((take_grade == 2 && !mySGD->isHasGottenCards(mySD->getSilType(), 3)/* !t_history.is_clear[2].getV()*/) || (take_grade == 3 && !mySGD->isHasGottenCards(mySD->getSilType(), 4)/* !t_history.is_clear[3].getV()*/)))
 				{
 					is_rank_up_chance = true;
 				}

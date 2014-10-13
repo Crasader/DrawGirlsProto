@@ -1193,7 +1193,7 @@ void TornadoWrapper::myInit( CCPoint t_sp, int tf, int sc, KSCumberBase* cb )
 	addChild(t_bd);
 	t_bd->startAction();
 	
-	myGD->ccb_delegate_null_list.push_back([=](){t_bd->ccbManagerDelegateNull();});
+//	myGD->ccb_delegate_null_list.push_back([=](){t_bd->ccbManagerDelegateNull();});
 
 	startSelfRemoveSchedule();
 }
@@ -3818,11 +3818,12 @@ void CobWeb::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patternD
 	decreaseSpeed = pattern.get("decrease", 0.5f).asFloat();
 	decreaseSpeed = 1.f;
 
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader1 = new CCBReader(nodeLoader);
-	cobwebImg = dynamic_cast<CCSprite*>(reader1->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
-	//KS::setBlendFunc(cobwebImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	reader1->release();
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader1 = new CCBReader(nodeLoader);
+//	cobwebImg = dynamic_cast<CCSprite*>(reader1->readNodeGraphFromFile("pattern_slowzone.ccbi",this));
+//	//KS::setBlendFunc(cobwebImg, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+//	reader1->release();
+	cobwebImg = KS::loadCCBI<CCSprite*>(this, "pattern_slowzone.ccbi").first;
 
 	cobwebImg->setPosition(m_cumber->getPosition());
 	cobwebImg->setScale(0.f);
