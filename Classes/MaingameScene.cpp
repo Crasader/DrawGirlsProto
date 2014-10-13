@@ -317,12 +317,12 @@ void Maingame::onEnterTransitionDidFinish()
 			blur_img->setAnchorPoint(ccp(0,0));
 			blur_img->setPosition(ccp(0,0));
 			
-			if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1)))
-			{
-				CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))).first;
-				ccb_img->setPosition(ccp(160,215));
-				blur_img->addChild(ccb_img);
-			}
+//			if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1)))
+//			{
+//				CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1))).first;
+//				ccb_img->setPosition(ccp(160,215));
+//				blur_img->addChild(ccb_img);
+//			}
 			
 			CCRenderTexture* intro_texture = CCRenderTexture::create(320, 430);
 			intro_texture->beginWithClear(0, 0, 0, 0);

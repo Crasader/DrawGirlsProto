@@ -463,12 +463,12 @@ void OnePercentGame::gameUISetting(bool hide)
 		cNode->addChild(girl);
 		girl->setScale(0.4f);
 		
-		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade)))
-		{
-			CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))).first;
-			ccb_img->setPosition(ccp(160,215));
-			girl->addChild(ccb_img);
-		}
+//		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade)))
+//		{
+//			CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, t_grade))).first;
+//			ccb_img->setPosition(ccp(160,215));
+//			girl->addChild(ccb_img);
+//		}
 		
 		//		setFormSetter(girl);
 		cNode->setAlphaThreshold(0.1f);

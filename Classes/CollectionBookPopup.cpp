@@ -476,12 +476,12 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 		r_card_img->addChild(t_ca);
 	}
 	
-	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
-	{
-		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number)).first;
-		ccb_img->setPosition(ccp(160,215));
-		r_card_img->addChild(ccb_img);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+//	{
+//		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number)).first;
+//		ccb_img->setPosition(ccp(160,215));
+//		r_card_img->addChild(ccb_img);
+//	}
 	
 	CCSprite* left_top_paper = CCSprite::create("diary_paper.png");
 	left_top_paper->setPosition(ccp(44,276));

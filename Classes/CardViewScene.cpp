@@ -125,7 +125,7 @@ bool CardViewScene::init()
 	
 	ccb_manager = NULL;
 	
-	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	if(is_morphing && NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
 	{
 		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
 		t_ccb_img = t_ccb.first;
@@ -208,7 +208,21 @@ bool CardViewScene::init()
 		is_morphing = true;
 		
 		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+		{
+			auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
+			t_ccb_img = t_ccb.first;
+			t_ccb_img->setPosition(ccp(160, 215));
+			first_img->addChild(t_ccb_img);
+			
+			ccb_manager = t_ccb.second;
+			
+			first_img->touch_ccb_func = [=]()
+			{
+				ccb_manager->runAnimationsForSequenceNamed("touch1");
+			};
+			
 			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
+		}
 		
 		refresh_morphing_sound();
 		

@@ -2363,12 +2363,12 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<In
 //	setColor(ccGRAY);
 	setPosition(ccp(160,215));
 
-	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
-	{
-		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
-		ccb_img->setPosition(ccp(160,215));
-		addChild(ccb_img);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number))
+//	{
+//		CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number)).first;
+//		ccb_img->setPosition(ccp(160,215));
+//		addChild(ccb_img);
+//	}
 	
 	
 	is_set_scene_node = false;

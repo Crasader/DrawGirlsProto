@@ -2622,12 +2622,12 @@ void PuzzleScene::setRight()
 				
 				t_inner->setPositionY(rand()%120-60);
 				
-				if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, step_card_number))
-				{
-					CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, step_card_number)).first;
-					ccb_img->setPosition(ccp(160,215));
-					t_inner->addChild(ccb_img);
-				}
+//				if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, step_card_number))
+//				{
+//					CCSprite* ccb_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, step_card_number)).first;
+//					ccb_img->setPosition(ccp(160,215));
+//					t_inner->addChild(ccb_img);
+//				}
 				
 				t_clipping->addChild(t_inner);
 				
@@ -2709,12 +2709,25 @@ void PuzzleScene::setRight()
 				condition_label->setPosition(step_position + ccp(8-64,15-23.5f));
 				right_body->addChild(condition_label);
 				
-				int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
-				for(int j=0;j<card_rank;j++)
+				if(mySGD->getPieceHistory(selected_stage_number).is_clear[i-1].getV())
 				{
-					CCSprite* t_star = CCSprite::create("star_off.png");
-					t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
-					right_body->addChild(t_star);
+					int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+					for(int j=0;j<card_rank;j++)
+					{
+						CCSprite* t_star = CCSprite::create("star_on.png");
+						t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
+						right_body->addChild(t_star);
+					}
+				}
+				else
+				{
+					int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
+					for(int j=0;j<card_rank;j++)
+					{
+						CCSprite* t_star = CCSprite::create("star_off.png");
+						t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
+						right_body->addChild(t_star);
+					}
 				}
 				
 				if(NSDS_GB(myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber), kSDS_PZ_isEvent_b))
