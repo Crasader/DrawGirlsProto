@@ -1494,39 +1494,55 @@ public:
 		rewardBack2->addChild(reward2Lbl);
 		
 		int rubyCount = m_rewardData[idx]["reward"][0]["count"].asInt();
+		std::string rType = m_rewardData[idx]["reward"][0]["type"].asString();
+		std::string rCnt =ccsf("x %d", rubyCount);
 		std::string rubyImgFileName;
-		if(rubyCount >= 300)
-		{
-			rubyImgFileName = "shop_ruby6.png";
-		}
-		else if(rubyCount >= 200)
-		{
-			rubyImgFileName = "shop_ruby5.png";
-		}
-		else if(rubyCount >= 100)
-		{
-			rubyImgFileName = "shop_ruby4.png";
-		}
-		else if(rubyCount >= 30)
-		{
-			rubyImgFileName = "shop_ruby3.png";
-		}
-		else if(rubyCount >= 5)
-		{
-			rubyImgFileName = "shop_ruby2.png";
-		}
-		else
-		{
-			rubyImgFileName = "shop_ruby1.png";
+		float rScale= 1.f;
+		if(rType=="r" || rType=="fr" || rType=="pr"){
+			rScale= 0.5f;
+			if(rubyCount >= 300)rubyImgFileName = "shop_ruby6.png";
+			else if(rubyCount >= 200)rubyImgFileName = "shop_ruby5.png";
+			else if(rubyCount >= 100)rubyImgFileName = "shop_ruby4.png";
+			else if(rubyCount >= 30)rubyImgFileName = "shop_ruby3.png";
+			else if(rubyCount >= 5)rubyImgFileName = "shop_ruby2.png";
+			else if(rubyCount >= 1)rubyImgFileName = "shop_ruby1.png";
+		}else if(rType=="g"){
+			rScale= 0.5f;
+			if(rubyCount >= 10000)rubyImgFileName = "shop_gold6.png";
+			else if(rubyCount >= 5000)rubyImgFileName = "shop_gold5.png";
+			else if(rubyCount >= 1000)rubyImgFileName = "shop_gold4.png";
+			else if(rubyCount >= 500)rubyImgFileName = "shop_gold3.png";
+			else if(rubyCount >= 200)rubyImgFileName = "shop_gold2.png";
+			else if(rubyCount >= 1)rubyImgFileName = "shop_gold1.png";
+		}else if(rType=="p1"){
+			rScale= 0.5f;
+			if(rubyCount >= 100)rubyImgFileName = "shop_p1_6.png";
+			else if(rubyCount >= 50)rubyImgFileName = "shop_p1_5.png";
+			else if(rubyCount >= 30)rubyImgFileName = "shop_p1_4.png";
+			else if(rubyCount >= 10)rubyImgFileName = "shop_p1_3.png";
+			else if(rubyCount >= 5)rubyImgFileName = "shop_p1_2.png";
+			else if(rubyCount >= 1)rubyImgFileName = "shop_p1_1.png";
+		}else if(rType=="h"){
+			rScale= 0.5f;
+			if(rubyCount >= 300)rubyImgFileName = "shop_coin6.png";
+			else if(rubyCount >= 200)rubyImgFileName = "shop_coin5.png";
+			else if(rubyCount >= 100)rubyImgFileName = "shop_coin4.png";
+			else if(rubyCount >= 30)rubyImgFileName = "shop_coin3.png";
+			else if(rubyCount >= 5)rubyImgFileName = "shop_coin2.png";
+			else if(rubyCount >= 1)rubyImgFileName = "shop_coin1.png";
+		}else{
+			if(rType=="cd")rCnt=ccsf("No.%d", rubyCount);
+			rScale= 1.f;
+			rubyImgFileName = CCString::createWithFormat("icon_%s.png",rType.c_str())->getCString();
 		}
 		
 		CCSprite* reward2Img = CCSprite::create(rubyImgFileName.c_str());
-		reward2Img->setScale(0.5f);
+		reward2Img->setScale(rScale);
 		B = reward2Lbl;
 		rewardBack2->addChild(reward2Img);
 		KSLabelTTF* reward2Detail = KSLabelTTF::create(ccsf("x %d", rubyCount), mySGD->getFont().c_str(),
 																									 10.f);
-		reward2Detail->setScale(2.f);
+		reward2Detail->setScale(1/rScale);
 		reward2Detail->setPosition(ccpFromSize(reward2Img->getContentSize()) / 2.f + ccp(0, -20 + 6));
 		C = reward2Img;
 		reward2Detail->setColor(ccc3(255, 255, 255));
