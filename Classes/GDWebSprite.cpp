@@ -123,6 +123,12 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 			CCSprite* spr = mySIL->getUnsafeLoadedImg(filename);
 			if(size.height!=0)spr->setContentSize(size);
 			CCLOG("GDWebSprite find %s -> %s",info["url"].asString().c_str(),info["filename"].asString().c_str());
+			
+			if(t_final && d_final)
+			{
+				(t_final->*d_final)();
+			}
+			
 			if(spr)return spr;
 		}
 	}
@@ -141,6 +147,11 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 			CCSprite *n =  CCSprite::createWithTexture(texture);
 			img->release();
 			texture->release();
+			
+			if(t_final && d_final)
+			{
+				(t_final->*d_final)();
+			}
 			return n;
 		
 		}
