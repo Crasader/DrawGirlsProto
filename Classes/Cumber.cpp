@@ -146,7 +146,7 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 	float rate;
 	float d_damage;
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 		rate = 0.01f;
 	else
 		rate = ((mySGD->getUserdataHighPiece()+10)/(mySD->getSilType()+10)*9.f+1.f)/100.f; // 0.01f ~ 0.1f
