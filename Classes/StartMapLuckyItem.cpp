@@ -103,15 +103,16 @@ void StartMapLuckyItem::speedUpAction ()
 {
 //	main_img->stopAllActions();
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* fx_lucky = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_lucky.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* fx_lucky = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_lucky.ccbi",this));
+	CCSprite* fx_lucky = KS::loadCCBI<CCSprite*>(this, "fx_lucky.ccbi").first;
 	fx_lucky->setPosition(my_point.convertToCCP());
 	fx_lucky->setScale(0.7);
 	addChild(fx_lucky, kStartMapLuckyItem_Z_fx);
 	
 	KS::setBlendFunc(fx_lucky, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	reader->release();
+//	reader->release();
 	
 //	CCDelayTime* t_delay = CCDelayTime::create(0.7f);
 //	CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(StartMapLuckyItem::createParticle));
@@ -206,14 +207,15 @@ void StartMapLuckyItem::myInit (IntPoint t_point)
 	my_point = IntPoint(t_point.x, t_point.y);
 	
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-
-	main_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_lucky.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//
+//	main_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_item_lucky.ccbi",this));
+	main_img = KS::loadCCBI<CCSprite*>(this, "ingame_item_lucky.ccbi").first;
 	main_img->setPosition(my_point.convertToCCP());
 	main_img->setScale(0.f);
 	addChild(main_img, kStartMapLuckyItem_Z_img);
-	reader->release();
+//	reader->release();
 	
 	setPosition(CCPointZero);
 	startMyAction();

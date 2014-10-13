@@ -180,8 +180,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_downImgFail] = "이미지 받아오기 실패";
 	obj[LK::kMyLocalKey_sameNick] = "이미 사용중인 닉네임 입니다.";
 	obj[LK::kMyLocalKey_invalidNick] = "사용할 수 없는 닉네임 입니다.";
-	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.\n닉네임은 3~8글자로 생성 가능합니다.";
-	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.\n닉네임은 3~8글자로 생성 가능합니다.";
+	obj[LK::kMyLocalKey_longNick] = "닉네임이 너무 깁니다.\n닉네임은 2~8글자로 생성 가능합니다.";
+	obj[LK::kMyLocalKey_shortNick] = "닉네임이 너무 짧습니다.\n닉네임은 2~8글자로 생성 가능합니다.";
 	obj[LK::kMyLocalKey_openRightNow] = "지금 열기";
 	obj[LK::kMyLocalKey_openRubyValue] = "RUBY %d 로 오픈";
 	obj[LK::kMyLocalKey_cgpNormalTitle] = "CGP 일반 보상";

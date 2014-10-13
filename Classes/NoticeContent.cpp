@@ -89,8 +89,10 @@ void NoticeContent::loadNotice(){
 		//그림모드
 		is_menu_enable=false;
 		CCSprite* default_node = CCSprite::create("whitePaper.png");
+		GDWebSprite::removeCache();
 		show_content=GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
-		show_content->setPosition(ccpMult(show_content->getContentSize(), -0.5));
+		show_content->setAnchorPoint(ccp(0.5,0.5));
+		show_content->setPosition(ccp(0,0));
 		addChild(show_content,1);
 		if(show_content)show_content->setVisible(true);
 		
@@ -101,7 +103,7 @@ void NoticeContent::loadNotice(){
 		is_menu_enable=false;
 		CCSprite* default_node = CCSprite::create("whitePaper.png");
 		show_content=GDWebSprite::create(notice_list[ing_close_cnt]["imgInfo"]["img"].asString(), default_node, this, callfunc_selector(NoticeContent::loadedAction));
-		show_content->setPosition(ccpMult(show_content->getContentSize(), -0.5));
+		show_content->setPosition(ccp(0,0));
 		addChild(show_content,1);
 		if(show_content)show_content->setVisible(true);
 		

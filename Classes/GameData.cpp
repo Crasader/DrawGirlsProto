@@ -477,8 +477,17 @@ bool GameData::getEmptyRandomPoint(IntPoint* point, float radius)
 	
 	return isGoodPointed;
 }
+void GameData::ccbDelegateNull()
+{
+	for(int i=0;i<ccb_delegate_null_list.size();i++)
+	{
+		ccb_delegate_null_list[i]();
+	}
+	ccb_delegate_null_list.clear();
+}
 void GameData::myInit()
 {
+	ccb_delegate_null_list.clear();
 	boarder_value = 7.f;
 	setUItype( GAMESCREEN_TYPE( myDSH->getIntegerForKey(kDSH_Key_uiType) ) );
 

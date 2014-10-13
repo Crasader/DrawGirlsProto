@@ -277,7 +277,17 @@ public:
 	void fFlush ();
 	void removeCache();
 	void initReturnPair();
+	
+//	void changedCcbAnimationManager();
+//	int ccb_animation_manager_count;
+//	void regiCcbAnimationManager(CCBAnimationManager* t_manager);
+//	void unregiCcbAnimationManager(CCBAnimationManager* t_manager);
+//	void unregiAllCcbAnimationManagers();
 private:
+	
+//	vector<CCBAnimationManager*> manager_list;
+//	vector<CCBAnimationManager*> check_manager_list;
+	
 	map<string, KSProtectVar<bool>> dsh_cache_bool;
 	map<string, KSProtectVar<bool>>::iterator iter_bool;
 	map<string, KSProtectVar<int>> dsh_cache_int;

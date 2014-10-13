@@ -353,7 +353,7 @@ public:
 	virtual ~TutoControler()
 	{
 		if(button_ani)
-			button_ani->release();
+			button_ani->setDelegate(NULL);
 	}
 	
 private:
@@ -389,7 +389,7 @@ private:
 	
 	bool isButtonAction;
 	
-	CCBReader* button_ani;
+	CCBAnimationManager* button_ani;
 	
 	bool isEnableIrregularDirection;
 	bool isControlJoystickNotFixed;
@@ -434,6 +434,16 @@ public:
 	
 	void startSilhouette();
 	void stopSilhouette();
+	
+	virtual ~BackImg()
+	{
+		if(drawRects)
+		{
+			drawRects->removeAllObjects();
+			drawRects->release();
+			drawRects = NULL;
+		}
+	}
 	
 private:
 	CCArray* drawRects;

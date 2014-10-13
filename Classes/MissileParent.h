@@ -69,7 +69,12 @@ public:
 	virtual ~MissileParent()
 	{
 		//chargeArray->release();
-		tickingArray->release();
+		if(tickingArray)
+		{
+			tickingArray->removeAllObjects();
+			tickingArray->release();
+			tickingArray = NULL;
+		}
 	}
 	void shootPetMissile(int jm_type, int cmCnt, float damage_per, CCPoint s_p);
 	enum PATTERN_RET_CODE{INVALID=0, VALID=1, NOCAST=2};

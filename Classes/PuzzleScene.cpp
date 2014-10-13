@@ -89,7 +89,9 @@ bool PuzzleScene::init()
 	setKeypadEnabled(true);
 	
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+//	myDSH->unregiAllCcbAnimationManagers();
 	
 	call_rank_stage_number = -1;
 	
@@ -653,7 +655,8 @@ bool PuzzleScene::init()
 																}
 															}
 															
-															fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
+                                                            int gottenCardGroup = mySGD->getHasGottenCardsSize()/10;
+                                                            fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("[카드보유 %d~%d]",gottenCardGroup*10,gottenCardGroup*10+9));
 														}
 												  }));
 		
@@ -2734,12 +2737,13 @@ void PuzzleScene::setRight()
 			TRACE();
 			if(!loading_progress_img)
 			{
-				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-				CCBReader* reader = new CCBReader(nodeLoader);
-				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//				CCBReader* reader = new CCBReader(nodeLoader);
+//				loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+				loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 				loading_progress_img->setPosition(ccp(right_body->getContentSize().width/2.f, right_body->getContentSize().height-58-70));
 				right_body->addChild(loading_progress_img);
-				reader->release();
+//				reader->release();
 			}
 			TRACE();
 			Json::Value param;

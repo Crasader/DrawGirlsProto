@@ -46,7 +46,8 @@ bool CommonButton::init(CCSprite* backSprite, int touchPriority){
 	m_btn->setPosition(m_btn->getContentSize().width/2, m_btn->getContentSize().height/2);
 	if(touchPriority!=0)m_btn->setTouchPriority(touchPriority);
 	addChild(m_btn,2);
-	backSprite->setAnchorPoint(ccp(0,0));
+	backSprite->setAnchorPoint(ccp(0.5,0.5));
+	backSprite->setPosition(ccp(backSprite->getContentSize().width/2.f,backSprite->getContentSize().height/2.f));
 	backSprite->setTag(112);
 	addChild(backSprite,1);
 	

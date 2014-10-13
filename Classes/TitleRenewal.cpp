@@ -380,6 +380,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				myDSH->removeCache();
 				mySDS->removeCache();
 				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+                GraphDog::get()->removeTarget(this);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
 			}
@@ -890,8 +891,40 @@ void TitleRenewalScene::checkReceive()
 		{
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
 			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
-			fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("%d", mySGD->getUserdataHighPiece()));
-			fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("%d", mySGD->getHasGottenCardsSize()));
+            
+            int highPieceGroup = mySGD->getUserdataHighPiece();
+            if(highPieceGroup!=0)highPieceGroup-1;
+            highPieceGroup=highPieceGroup/5;
+            fiverocks::FiveRocksBridge::setUserCohortVariable(1, ccsf("[스테이지 %d~%d]",highPieceGroup*5+1,highPieceGroup*5+5));
+            int gottenCardGroup = mySGD->getHasGottenCardsSize()/10;
+            fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("[카드보유 %d~%d]",gottenCardGroup*10,gottenCardGroup*10+9));
+            int vipGroup =  mySGD->getGoodsValue(kGoodsType_money);
+            
+            string vipGroupString;
+            
+            if(vipGroup==0){
+                vipGroupString="[결제01-0]";
+            }else if(vipGroup<=1000){
+                vipGroupString="[결제02-1~1,000]";
+            }else if(vipGroup<=10000){
+                vipGroupString="[결제03-1,001~10,000]";
+            }else if(vipGroup<=30000){
+                vipGroupString="[결제04-10,001~30,000]";
+            }else if(vipGroup<=50000){
+                vipGroupString="[결제05-30,001~50,000]";
+            }else if(vipGroup<=100000){
+                vipGroupString="[결제06-50,001~100,000]";
+            }else if(vipGroup<=300000){
+                vipGroupString="[결제07-100,001~300,000]";
+            }else if(vipGroup<=500000){
+                vipGroupString="[결제08-300,001~500,000]";
+            }else if(vipGroup<=1000000){
+                vipGroupString="[결제09-500,001~1,000,000]";
+            }else{
+                vipGroupString="[결제10-1,000,000~]";
+            }
+            
+            fiverocks::FiveRocksBridge::setUserCohortVariable(3, vipGroupString.c_str());
 			
 			mySGD->network_check_cnt = 0;
 			
@@ -1365,7 +1398,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					
 					Json::Value t_imgInfo = t_card["imgInfo"];
 					
-					bool is_add_cf = false;
+//					bool is_add_cf = false;
 					
 					if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 					{
@@ -1381,12 +1414,12 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 							card_download_list.push_back(t_sf);
 						// ================================
 						
-						CopyFile t_cf;
-						t_cf.from_filename = t_sf.filename.c_str();
-						t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-						card_reduction_list.push_back(t_cf);
-						
-						is_add_cf = true;
+//						CopyFile t_cf;
+//						t_cf.from_filename = t_sf.filename.c_str();
+//						t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//						card_reduction_list.push_back(t_cf);
+//						
+//						is_add_cf = true;
 					}
 					
 					Json::Value t_aniInfo = t_card["aniInfo"];
@@ -1421,20 +1454,20 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 							// ================================
 						}
 						
-						if(is_add_cf)
-						{
-							CopyFile t_cf = card_reduction_list.back();
-							card_reduction_list.pop_back();
-							t_cf.is_ani = true;
-							t_cf.cut_width = t_detail["cutWidth"].asInt();
-							t_cf.cut_height = t_detail["cutHeight"].asInt();
-							t_cf.position_x = t_detail["positionX"].asInt();
-							t_cf.position_y = t_detail["positionY"].asInt();
-							
-							t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-							
-							card_reduction_list.push_back(t_cf);
-						}
+//						if(is_add_cf)
+//						{
+//							CopyFile t_cf = card_reduction_list.back();
+//							card_reduction_list.pop_back();
+//							t_cf.is_ani = true;
+//							t_cf.cut_width = t_detail["cutWidth"].asInt();
+//							t_cf.cut_height = t_detail["cutHeight"].asInt();
+//							t_cf.position_x = t_detail["positionX"].asInt();
+//							t_cf.position_y = t_detail["positionY"].asInt();
+//							
+//							t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//							
+//							card_reduction_list.push_back(t_cf);
+//						}
 					}
 					
 					NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
@@ -1504,22 +1537,22 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 						t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
 						card_download_list.push_back(t_df3);
 						
-						if(!is_add_cf)
-						{
-							CopyFile t_cf;
-							t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-							t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-							card_reduction_list.push_back(t_cf);
-							
-							is_add_cf = true;
-						}
-						
-						CopyFile t_cf = card_reduction_list.back();
-						card_reduction_list.pop_back();
-						t_cf.is_ccb = true;
-						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-						
-						card_reduction_list.push_back(t_cf);
+//						if(!is_add_cf)
+//						{
+//							CopyFile t_cf;
+//							t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//							t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//							card_reduction_list.push_back(t_cf);
+//							
+//							is_add_cf = true;
+//						}
+//						
+//						CopyFile t_cf = card_reduction_list.back();
+//						card_reduction_list.pop_back();
+//						t_cf.is_ccb = true;
+//						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+//						
+//						card_reduction_list.push_back(t_cf);
 					}
 				}
 				
@@ -2561,7 +2594,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
-			bool is_add_cf = false;
+//			bool is_add_cf = false;
 			
 			if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
 			{
@@ -2578,12 +2611,12 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					card_download_list.push_back(t_df);
 					// ================================
 					
-					CopyFile t_cf;
-					t_cf.from_filename = t_df.filename.c_str();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					card_reduction_list.push_back(t_cf);
-					
-					is_add_cf = true;
+//					CopyFile t_cf;
+//					t_cf.from_filename = t_df.filename.c_str();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					card_reduction_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
 				}
 			}
 			
@@ -2619,18 +2652,18 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 					// ================================
 				}
 				
-				if(is_add_cf)
-				{
-					CopyFile t_cf = card_reduction_list.back();
-					card_reduction_list.pop_back();
-					t_cf.is_ani = true;
-					t_cf.cut_width = t_detail["cutWidth"].asInt();
-					t_cf.cut_height = t_detail["cutHeight"].asInt();
-					t_cf.position_x = t_detail["positionX"].asInt();
-					t_cf.position_y = t_detail["positionY"].asInt();
-					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
-					card_reduction_list.push_back(t_cf);
-				}
+//				if(is_add_cf)
+//				{
+//					CopyFile t_cf = card_reduction_list.back();
+//					card_reduction_list.pop_back();
+//					t_cf.is_ani = true;
+//					t_cf.cut_width = t_detail["cutWidth"].asInt();
+//					t_cf.cut_height = t_detail["cutHeight"].asInt();
+//					t_cf.position_x = t_detail["positionX"].asInt();
+//					t_cf.position_y = t_detail["positionY"].asInt();
+//					t_cf.ani_filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+//					card_reduction_list.push_back(t_cf);
+//				}
 			}
 			
 			NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
@@ -2699,22 +2732,22 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
 				card_download_list.push_back(t_df3);
 				
-				if(!is_add_cf)
-				{
-					CopyFile t_cf;
-					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
-					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
-					card_reduction_list.push_back(t_cf);
-					
-					is_add_cf = true;
-				}
-				
-				CopyFile t_cf = card_reduction_list.back();
-				card_reduction_list.pop_back();
-				t_cf.is_ccb = true;
-				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				
-				card_reduction_list.push_back(t_cf);
+//				if(!is_add_cf)
+//				{
+//					CopyFile t_cf;
+//					t_cf.from_filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+//					t_cf.to_filename = CCSTR_CWF("card%d_thumbnail.png", t_card["no"].asInt())->getCString();
+//					card_reduction_list.push_back(t_cf);
+//					
+//					is_add_cf = true;
+//				}
+//				
+//				CopyFile t_cf = card_reduction_list.back();
+//				card_reduction_list.pop_back();
+//				t_cf.is_ccb = true;
+//				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+//				
+//				card_reduction_list.push_back(t_cf);
 			}
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}
@@ -3022,12 +3055,10 @@ void TitleRenewalScene::changeScene()
 {
 //	setBackKeyEnabled(false);
 	
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
+    GraphDog::get()->removeTarget(this);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
@@ -3264,14 +3295,14 @@ void TitleRenewalScene::startFileDownloadSet()
 			img->release();
 		}
 		
-        if(card_reduction_list.size() > 0)
-        {
-            reduce_frame = 0;
-            
-            schedule(schedule_selector(TitleRenewalScene::reduceAction));
-        }
-        else
-        {
+//        if(card_reduction_list.size() > 0)
+//        {
+//            reduce_frame = 0;
+//            
+//            schedule(schedule_selector(TitleRenewalScene::reduceAction));
+//        }
+//        else
+//        {
             if(character_download_list.size() > 0)
             {
                 for(int i=0;i<character_download_list.size();i++)
@@ -3314,7 +3345,7 @@ void TitleRenewalScene::startFileDownloadSet()
             
             endingCheck();
             
-        }
+//        }
         
 //		// reduce
 //		for(int i=0;i<card_reduction_list.size();i++)
@@ -3408,106 +3439,106 @@ void TitleRenewalScene::startFileDownloadSet()
 
 void TitleRenewalScene::reduceAction()
 {
-    float download_percent = 100.f*reduce_frame/card_reduction_list.size();
-	if(download_percent > 100.f)
-		download_percent = 100.f;
-    
-	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
-	progress_timer->setPercentage(download_percent);
-    
-    int i = reduce_frame;
-    
-    mySIL->removeTextureCache(card_reduction_list[i].from_filename);
-    mySIL->removeTextureCache(card_reduction_list[i].to_filename);
-    
-    CCSprite* target_img = new CCSprite();
-    target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
-    target_img->setAnchorPoint(ccp(0,0));
-    
-//    if(card_reduction_list[i].is_ani)
+//    float download_percent = 100.f*reduce_frame/card_reduction_list.size();
+//	if(download_percent > 100.f)
+//		download_percent = 100.f;
+//    
+//	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
+//	progress_timer->setPercentage(download_percent);
+//    
+//    int i = reduce_frame;
+//    
+//    mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+//    mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+//    
+//    CCSprite* target_img = new CCSprite();
+//    target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+//    target_img->setAnchorPoint(ccp(0,0));
+//    
+////    if(card_reduction_list[i].is_ani)
+////    {
+////        CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+////                                                        CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+////        ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+////        target_img->addChild(ani_img);
+////    }
+////    
+////    if(card_reduction_list[i].is_ccb)
+////    {
+////        CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
+////        face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
+////        target_img->addChild(face_img);
+////    }
+//    
+//    target_img->setScale(0.4f);
+//    
+//    CCRenderTexture* t_texture = new CCRenderTexture();
+//    t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//    t_texture->setSprite(target_img);
+//    t_texture->beginWithClear(0, 0, 0, 0);
+//    t_texture->getSprite()->visit();
+//    t_texture->end();
+//    
+//    if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//        CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
+//    
+//    t_texture->release();
+//    target_img->release();
+//    
+//    if(i % 3 == 0)
 //    {
-//        CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
-//                                                        CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
-//        ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
-//        target_img->addChild(ani_img);
+//        CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //    }
 //    
-//    if(card_reduction_list[i].is_ccb)
+//    reduce_frame++;
+//    
+//    
+//    if(reduce_frame >= card_reduction_list.size())
 //    {
-//        CCSprite* face_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + card_reduction_list[i].ccb_filename.c_str()).first;
-//        face_img->setPosition(ccpFromSize(target_img->getContentSize()/2.f));
-//        target_img->addChild(face_img);
+//        unschedule(schedule_selector(TitleRenewalScene::reduceAction));
+//        
+//        if(character_download_list.size() > 0)
+//		{
+//			for(int i=0;i<character_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, character_download_list[i].key, character_download_list[i].img, false);
+//			}
+//			NSDS_SI(kSDS_GI_characterVersion_i, character_download_version, false);
+//			mySDS->fFlush(kSDS_GI_characterCount_i);
+//		}
+//		
+//		if(monster_download_list.size() > 0)
+//		{
+//			for(int i=0;i<monster_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, monster_download_list[i].key, monster_download_list[i].img, false);
+//			}
+//			NSDS_SI(kSDS_GI_monsterVersion_i, monster_download_version, false);
+//			mySDS->fFlush(kSDS_GI_monsterCount_i);
+//		}
+//		
+//		if(card_download_list.size() > 0)
+//		{
+//			for(int i=0;i<card_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_cardInfo, card_download_list[i].key,
+//					   card_download_list[i].img, false);
+//			}
+//			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+//		}
+//		
+//		if(puzzle_download_list.size() > 0)
+//		{
+//			for(int i=0;i<puzzle_download_list.size();i++)
+//			{
+//				SDS_SS(kSDF_gameInfo, puzzle_download_list[i].key,
+//					   puzzle_download_list[i].img, false);
+//			}
+//			mySDS->fFlush(kSDS_GI_base);
+//		}
+//        
+//		endingCheck();
 //    }
-    
-    target_img->setScale(0.4f);
-    
-    CCRenderTexture* t_texture = new CCRenderTexture();
-    t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-    t_texture->setSprite(target_img);
-    t_texture->beginWithClear(0, 0, 0, 0);
-    t_texture->getSprite()->visit();
-    t_texture->end();
-    
-    if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-        CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
-    
-    t_texture->release();
-    target_img->release();
-    
-    if(i % 3 == 0)
-    {
-        CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-    }
-    
-    reduce_frame++;
-    
-    
-    if(reduce_frame >= card_reduction_list.size())
-    {
-        unschedule(schedule_selector(TitleRenewalScene::reduceAction));
-        
-        if(character_download_list.size() > 0)
-		{
-			for(int i=0;i<character_download_list.size();i++)
-			{
-				SDS_SS(kSDF_gameInfo, character_download_list[i].key, character_download_list[i].img, false);
-			}
-			NSDS_SI(kSDS_GI_characterVersion_i, character_download_version, false);
-			mySDS->fFlush(kSDS_GI_characterCount_i);
-		}
-		
-		if(monster_download_list.size() > 0)
-		{
-			for(int i=0;i<monster_download_list.size();i++)
-			{
-				SDS_SS(kSDF_gameInfo, monster_download_list[i].key, monster_download_list[i].img, false);
-			}
-			NSDS_SI(kSDS_GI_monsterVersion_i, monster_download_version, false);
-			mySDS->fFlush(kSDS_GI_monsterCount_i);
-		}
-		
-		if(card_download_list.size() > 0)
-		{
-			for(int i=0;i<card_download_list.size();i++)
-			{
-				SDS_SS(kSDF_cardInfo, card_download_list[i].key,
-					   card_download_list[i].img, false);
-			}
-			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
-		}
-		
-		if(puzzle_download_list.size() > 0)
-		{
-			for(int i=0;i<puzzle_download_list.size();i++)
-			{
-				SDS_SS(kSDF_gameInfo, puzzle_download_list[i].key,
-					   puzzle_download_list[i].img, false);
-			}
-			mySDS->fFlush(kSDS_GI_base);
-		}
-        
-		endingCheck();
-    }
 }
 
 void TitleRenewalScene::checkDownloading()
@@ -3952,43 +3983,43 @@ void TitleRenewalScene::successDownloadAction()
 	{
 		SDS_SS(kSDF_cardInfo, card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].key,
 			   card_download_list[ing_download_cnt-character_download_list.size()-monster_download_list.size()-1].img, false);
-		for(int i=0;i<card_reduction_list.size();i++)
-		{
-			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
-			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-//			if(card_reduction_list[i].is_ani)
+//		for(int i=0;i<card_reduction_list.size();i++)
+//		{
+//			mySIL->removeTextureCache(card_reduction_list[i].from_filename);
+//			mySIL->removeTextureCache(card_reduction_list[i].to_filename);
+//			
+//			CCSprite* target_img = new CCSprite();
+//			target_img->initWithTexture(mySIL->addImage(card_reduction_list[i].from_filename.c_str()));
+//			target_img->setAnchorPoint(ccp(0,0));
+//			
+////			if(card_reduction_list[i].is_ani)
+////			{
+////				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
+////																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
+////				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
+////				target_img->addChild(ani_img);
+////			}
+//			
+//			target_img->setScale(0.4f);
+//			
+//			CCRenderTexture* t_texture = new CCRenderTexture();
+//			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//			t_texture->setSprite(target_img);
+//			t_texture->begin();
+//			t_texture->getSprite()->visit();
+//			t_texture->end();
+//			
+//			if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//                CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
+//			
+//			t_texture->release();
+//			target_img->release();
+//			
+//			if(i % 3 == 0)
 //			{
-//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(card_reduction_list[i].ani_filename.c_str()),
-//																CCRectMake(0, 0, card_reduction_list[i].cut_width, card_reduction_list[i].cut_height));
-//				ani_img->setPosition(ccp(card_reduction_list[i].position_x, card_reduction_list[i].position_y));
-//				target_img->addChild(ani_img);
+//				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->begin();
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			if(!(t_texture->saveToFileNoAlpha(card_reduction_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-                CCLOG("failed!!! card reduce : %s", card_reduction_list[i].to_filename.c_str());
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
+//		}
 		
 		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
 		
@@ -4320,6 +4351,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		tag -= kTitleRenewal_MT_puzzleBase;
 		
 		myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, tag);
+        GraphDog::get()->removeTarget(this);
 		CCDirector::sharedDirector()->replaceScene(PuzzleMapScene::scene());
 	}
 }

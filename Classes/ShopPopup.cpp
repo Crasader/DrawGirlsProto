@@ -780,7 +780,10 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									{
                                         Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopStartPack_pID_s));
                                         if(!t_info.empty())
+										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										}
 										requestItemDeliveryStartPack();
 									}
 									else
@@ -1059,7 +1062,10 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
                                         Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopEventPack_pID_s));
                                         if(!t_info.empty())
+										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										}
 										requestItemDeliveryEventPack();
 									}
 									else
@@ -2104,7 +2110,10 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
                                             Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
                                             if(!t_info.empty())
+											{
                                                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+												fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											}
 											requestItemDelivery();
 										}
 										else
@@ -3416,42 +3425,42 @@ void ShopPopup::successAction()
 	}
 	else
 	{
-		for(int i=0;i<cf_list.size();i++)
-		{
-			mySIL->removeTextureCache(cf_list[i].from_filename);
-			mySIL->removeTextureCache(cf_list[i].to_filename);
-			
-			CCSprite* target_img = new CCSprite();
-			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
-			target_img->setAnchorPoint(ccp(0,0));
-			
-//			if(cf_list[i].is_ani)
+//		for(int i=0;i<cf_list.size();i++)
+//		{
+//			mySIL->removeTextureCache(cf_list[i].from_filename);
+//			mySIL->removeTextureCache(cf_list[i].to_filename);
+//			
+//			CCSprite* target_img = new CCSprite();
+//			target_img->initWithTexture(mySIL->addImage(cf_list[i].from_filename.c_str()));
+//			target_img->setAnchorPoint(ccp(0,0));
+//			
+////			if(cf_list[i].is_ani)
+////			{
+////				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
+////				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
+////				target_img->addChild(ani_img);
+////			}
+//			
+//			target_img->setScale(0.4f);
+//			
+//			CCRenderTexture* t_texture = new CCRenderTexture();
+//			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
+//			t_texture->setSprite(target_img);
+//			t_texture->begin();
+//			t_texture->getSprite()->visit();
+//			t_texture->end();
+//			
+//			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
+//                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
+//			
+//			t_texture->release();
+//			target_img->release();
+//			
+//			if(i % 3 == 0)
 //			{
-//				CCSprite* ani_img = CCSprite::createWithTexture(mySIL->addImage(cf_list[i].ani_filename.c_str()), CCRectMake(0, 0, cf_list[i].cut_width, cf_list[i].cut_height));
-//				ani_img->setPosition(ccp(cf_list[i].position_x, cf_list[i].position_y));
-//				target_img->addChild(ani_img);
+//				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 //			}
-			
-			target_img->setScale(0.4f);
-			
-			CCRenderTexture* t_texture = new CCRenderTexture();
-			t_texture->initWithWidthAndHeight(320.f*target_img->getScaleX(), 430.f*target_img->getScaleY(), kCCTexture2DPixelFormat_RGBA8888, 0);
-			t_texture->setSprite(target_img);
-			t_texture->begin();
-			t_texture->getSprite()->visit();
-			t_texture->end();
-			
-			if(!(t_texture->saveToFileNoAlpha(cf_list[i].to_filename.c_str(), kCCImageFormatPNG)))
-                CCLOG("failed!!! card reduce : %s", cf_list[i].to_filename.c_str());
-			
-			t_texture->release();
-			target_img->release();
-			
-			if(i % 3 == 0)
-			{
-				CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-			}
-		}
+//		}
 		
 		// 완료
 		loading_layer->removeFromParent();

@@ -82,11 +82,12 @@ void* GDWebSprite::t_function(void * _caller)
 			
         if(curl_easy_perform(curl_handle) == CURLE_OK){
             //CCLOG("finish downloadIndex : %d", GDWebSpriteManager::get()->downloadIndex);
-            GDWebSpriteManager::get()->chunks.push(pair<GDWebSpriteMemoryStruct, int>(chunk, downI));
+            GDWebSpriteManager::get()->chunks[downI]=chunk;
             CCDirector::sharedDirector()->getScheduler()->scheduleSelector(schedule_selector(GDWebSprite::finishDownload), (GDWebSprite *)(GDWebSpriteManager::get()->webImages->objectAtIndex(GDWebSpriteManager::get()->downloadIndex)), 0, false, 0, 0);
             GDWebSpriteManager::get()->downloadIndex++;
         }else{
-             free(chunk.memory);
+					chunk.url="";
+					free(chunk.memory);
             if(reDownCnt>3){
                 reDownCnt=0;
                 GDWebSpriteManager::get()->downloadIndex++;
@@ -122,37 +123,75 @@ CCSprite* GDWebSprite::create(string imgUrl, CCNode *defaultNode, string imageNa
 			CCSprite* spr = mySIL->getUnsafeLoadedImg(filename);
 			if(size.height!=0)spr->setContentSize(size);
 			CCLOG("GDWebSprite find %s -> %s",info["url"].asString().c_str(),info["filename"].asString().c_str());
+			
+			if(t_final && d_final)
+			{
+				(t_final->*d_final)();
+			}
+			
 			if(spr)return spr;
 		}
 	}
 	
 	CCLOG("dont find");
+
 	
+	for(auto iter = GDWebSpriteManager::get()->chunks.begin();iter!=GDWebSpriteManager::get()->chunks.end();iter++){
+		if(iter->second.url==imgUrl){
+			
+			CCImage* img = new CCImage;
+			
+			CCTexture2D* texture = new CCTexture2D();
+			img->initWithImageData(iter->second.memory, (long)iter->second.size, CCImage::kFmtPng);
+			texture->initWithImage(img);
+			CCSprite *n =  CCSprite::createWithTexture(texture);
+			img->release();
+			texture->release();
+			
+			if(t_final && d_final)
+			{
+				(t_final->*d_final)();
+			}
+			return n;
+		
+		}
+	}
+	
+	
+	
+//
+//    //1. webImages 검사해서 값있으면 그냥 리턴
+//    for(int i=0;i<GDWebSpriteManager::get()->webImages->count();i++){
+//        GDWebSprite* image = (GDWebSprite*)GDWebSpriteManager::get()->webImages->objectAtIndex(i);
+//        if(image->imageUrl==imgUrl || (image->imageName==imageName && imageName!="")){
+//            if(image->webSprite!=NULL){
+//  //              CCNode *newimg = CCNode::create();
+//							auto chunk_index = GDWebSpriteManager::get()->chunks.begin();
+//							for(auto iter = GDWebSpriteManager::get()->chunks.begin();iter!=GDWebSpriteManager::get()->chunks.end();iter++){
+//								if(iter->second.url==imgUrl){
+//									chunk_index = iter;
+//								}
+//							}
+//							
+//                CCSprite* ret = CCSprite::createWithTexture(image->webSprite->getTexture(),image->webSprite->getTextureRect());
+//                
+////                //ret->setScaleX(image->xScale/2.f);
+////                ret->setScaleY(image->yScale/2.f);
+////                
+////                newimg->addChild(ret);
+////                ret->setAnchorPoint(CCPointZero);
+////                ret->setPosition(CCPointZero);
+////                ret->setContentSize(CCSizeMake(ret->getContentSize().width*image->xScale/2.f,ret->getContentSize().height*image->yScale/2.f));
+////                newimg->setContentSize(ret->getContentSize());
+////								if(t_final && d_final){
+////									(t_final->*d_final)();
+////								}
+//								//newimg->setScale(0.5);
+//                return ret;
+//            }
+//        }
+//    }
   
-    //1. webImages 검사해서 값있으면 그냥 리턴
-    for(int i=0;i<GDWebSpriteManager::get()->webImages->count();i++){
-        GDWebSprite* image = (GDWebSprite*)GDWebSpriteManager::get()->webImages->objectAtIndex(i);
-        if(image->imageUrl==imgUrl || (image->imageName==imageName && imageName!="")){
-            if(image->webSprite!=NULL){
-                CCNode *newimg = CCNode::create();
-                CCSprite* ret = CCSprite::createWithTexture(image->webSprite->getTexture(),image->webSprite->getTextureRect());
-                
-                ret->setScaleX(image->xScale);
-                ret->setScaleY(image->yScale);
-                
-                newimg->addChild(ret);
-                ret->setAnchorPoint(CCPointZero);
-                ret->setPosition(CCPointZero);
-                ret->setContentSize(CCSizeMake(ret->getContentSize().width*image->xScale,ret->getContentSize().height*image->yScale));
-                newimg->setContentSize(ret->getContentSize());
-								if(t_final && d_final){
-									(t_final->*d_final)();
-								}
-                return (CCSprite *)newimg;
-            }
-        }
-    }
-    
     
     //2. 새로운 이미지이면 webImages에 값넣고 스프라잇
     GDWebSprite* _ws = new GDWebSprite;
@@ -246,24 +285,33 @@ void GDWebSprite::finishDownload(){
         CCImage* img = new CCImage;
         
         CCTexture2D* texture = new CCTexture2D();
-        auto chunk_index = GDWebSpriteManager::get()->chunks.front();
-        GDWebSpriteManager::get()->chunks.pop();
+			
+			auto chunk_index = GDWebSpriteManager::get()->chunks.begin();
+      
+			for(auto iter = GDWebSpriteManager::get()->chunks.begin();iter!=GDWebSpriteManager::get()->chunks.end();iter++){
+				if(iter->second.url==this->imageUrl){
+					chunk_index = iter;
+				}
+			}
+			
+			//GDWebSpriteManager::get()->chunks.pop();
       
         
         try {
             
-            if(img->initWithImageData(chunk_index.first.memory, (long)chunk_index.first.size, CCImage::kFmtPng) == false)
+            if(img->initWithImageData(chunk_index->second.memory, (long)chunk_index->second.size, CCImage::kFmtPng) == false)
                 throw "..";
           
 						string filename = "gdw"+GraphDogLib::random_string(10)+".png";
 						string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
 						Json::Value list = filecache;
 						Json::Value newfile;
-						newfile["url"]=chunk_index.first.url;
+						newfile["url"]=chunk_index->second.url;
 						newfile["filename"]=filename;
-						list.append(newfile);
-						if(img->saveToFile((mySIL->getDocumentPath().c_str()+filename).c_str()), false){
-
+						
+						if(img->saveToFile((mySIL->getDocumentPath().c_str()+filename).c_str(),false)){
+							
+							list.append(newfile);
 							CCLOG("GDWebSprite : save ok %s, %s",newfile["url"].asString().c_str(),(mySIL->getDocumentPath().c_str()+filename).c_str());
 
 							if(list.size()>30){
@@ -290,7 +338,6 @@ void GDWebSprite::finishDownload(){
 								CCUserDefault::sharedUserDefault()->setStringForKey("gdwebspritelist",list.asString().c_str());
 							}
 							
-							
 							CCUserDefault::sharedUserDefault()->flush();
 						}else{
 							CCLOG("GDWebSprite : save fail %s, %s",newfile["url"].asString().c_str(),newfile["filename"].asString().c_str());
@@ -302,19 +349,19 @@ void GDWebSprite::finishDownload(){
             
             //CCLOG("showing downimage %d",chunk_index.second);
             
-            GDWebSprite *_sprite = (GDWebSprite *)GDWebSpriteManager::get()->webImages->objectAtIndex(chunk_index.second);
+            GDWebSprite *_sprite = (GDWebSprite *)GDWebSpriteManager::get()->webImages->objectAtIndex(chunk_index->first);
             
             _sprite->changeWebSprite(texture);
             
-            if(chunk_index.first.memory)
-                free(chunk_index.first.memory);
+            //if(chunk_indexfirst.memory)
+              //  free(chunk_index.first.memory);
             
             
             texture->release();
             delete img;// in cocos2d-x 1.x
         } catch (...) {
-            if(chunk_index.first.memory)
-                free(chunk_index.first.memory);
+            //if(chunk_index.first.memory)
+            //    free(chunk_index.first.memory);
             
             texture->release();
             delete img;// in cocos2d-x 1.x
@@ -329,20 +376,35 @@ void GDWebSprite::finishDownload(){
 
 void GDWebSprite::changeWebSprite(CCTexture2D *pTexture){
     if(this->isDown)return;
-		this->webSprite=CCSprite::createWithTexture(pTexture);
 		CCSize s = getContentSize();
-		this->webSprite->setPosition(s);
-    this->xScale = s.width/this->webSprite->getContentSize().width*this->getScaleX();
-		this->yScale = s.height/this->webSprite->getContentSize().height*this->getScaleY();
-    this->webSprite->setAnchorPoint(ccp(0.5,0.5));
-    this->webSprite->setPosition(ccp(s.width / 2, s.height / 2));
-		//this->webSprite->setScaleX(xScale);
-    //this->webSprite->setScaleY(yScale);
-    this->addChild(this->webSprite,2);
-    this->isDown=true;
+
+//		this->webSprite->setPosition(s);
+//    this->xScale = s.width/this->webSprite->getContentSize().width*this->getScaleX();
+//		this->yScale = s.height/this->webSprite->getContentSize().height*this->getScaleY();
   
-	this->removeChild(this->defaultSprite);
-    this->defaultSprite=NULL;
+	
+	
+		CCSprite *n=CCSprite::createWithTexture(pTexture);
+		n->setAnchorPoint(this->getAnchorPoint());
+    n->setPosition(this->getPosition());
+		this->getParent()->addChild(n,this->getZOrder());
+	this->removeFromParent();
+		//GDWebSpriteManager::get()->webImages->removeObject(this);
+//	this->setVisible(false);//(false);
+//		this->release();
+//		this->setContentSize(CCSizeMake(this->webSprite->getContentSize().width/2.f,this->webSprite->getContentSize().height/2.f));
+//		this->setScaleY(this->webSprite->getScaleY());
+//		this->setScaleX(this->webSprite->getScaleX());
+//	
+//	//this->webSprite->setScale(2);
+//		//this->webSprite->setScaleX(xScale);
+//    //this->webSprite->setScaleY(yScale);
+//		
+//		this->addChild(this->webSprite,2);
+//    this->isDown=true;
+//  
+//	this->removeChild(this->defaultSprite);
+//    this->defaultSprite=NULL;
 }
 
 void GDWebSprite::printCache(){
@@ -354,6 +416,7 @@ void GDWebSprite::printCache(){
 
 void GDWebSprite::removeCache(){
 	GDWebSpriteManager::get()->webImages->removeAllObjects();
+	GDWebSpriteManager::get()->chunks.clear();
 	GDWebSpriteManager::get()->downloadIndex=0;
 	string filecache = CCUserDefault::sharedUserDefault()->getStringForKey("gdwebspritelist", "[]");
 	Json::Value list = filecache;

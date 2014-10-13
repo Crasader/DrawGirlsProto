@@ -149,6 +149,7 @@ void RankUpPopup::completedAnimationSequenceNamed (char const * name)
 								success_func();
 							else
 								fail_func();
+							question_manager->setDelegate(NULL);
 							removeFromParent();
 						}));
 					}));
@@ -289,9 +290,9 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	if(t_card_type == "")
 		t_card_type = "normal";
 	
-	CCSprite* recent_take_card = mySIL->getUnsafeLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",
-																				t_card_number)->getCString());
-	recent_take_card->setScale(0.8f*0.5f);
+	CCSprite* recent_take_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", t_card_number));/* mySIL->getUnsafeLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",
+																				t_card_number)->getCString());*/
+	recent_take_card->setScale(0.8f*0.4f*0.5f);
 	CCSprite* card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	card_case->setPosition(ccp(recent_take_card->getContentSize().width/2.f, recent_take_card->getContentSize().height/2.f));
 	card_case->setScale(2.f);
@@ -467,6 +468,7 @@ void RankUpPopup::giveupAction(CCObject* sender, CCControlEvent t_event)
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
 	}, [=](){
+		question_manager->setDelegate(NULL);
 		end_func(); removeFromParent();
 	});
 }

@@ -31,24 +31,42 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 	/**
 	 * On check promotion.
 	 *
-	 * @param hspResult Ã³¸® °á°ú result
+	 * @param hspResult Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ result
 	 * @param context Caller Context
-	 * @param promotionState ÇÁ·Î¸ð¼Ç »óÅÂ°ª
+	 * @param promotionState ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ï¿½Â°ï¿½
 	 */
 	@Override
 	public void onCheckPromotion(
 			HSPResult hspResult, Object context,
 			HashMap<ShapeType, PromotionState> promotionStateMap)       {
 		if (!hspResult.isSuccess()) {
-			// checkPromotion ¿äÃ» ½ÇÆÐ, ¿À·ù ÄÚµå È®ÀÎ °¡´É
+			
+			Log.i("litqoo.sumran","cgp error");
+			
+			JSONObject r = new JSONObject();
+			try {
+				r.put("promotionstate","CGP_NONE");
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			m_glView.queueEvent(new KRunnable(m_key, r.toString()) {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+
+					hspConnector.SendResult(this.delekey, this.totalSource);
+				}
+			});
 			return;
 		}
 
 
-		ShapeType shpeTp = ShapeType.NORMAL; // ÀÏ¹Ý : ¹öÆ°, ¹è³Ê, ÆË¾÷
+		ShapeType shpeTp = ShapeType.NORMAL; // ï¿½Ï¹ï¿½ : ï¿½ï¿½Æ°, ï¿½ï¿½ï¿½, ï¿½Ë¾ï¿½
 
-//		ShapeType shpeTp = ShapeType.ENDING;    // ¿£µù
-		//ShapeType shpeTp = ShapeType.FREECHARGE;          // ¹«·áÃæÀü
+//		ShapeType shpeTp = ShapeType.ENDING;    // ï¿½ï¿½ï¿½ï¿½
+		//ShapeType shpeTp = ShapeType.FREECHARGE;          // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 
 //		PromotionState ps1 = promotionStateMap.get(ShapeType.FREECHARGE);
 //		PromotionState ps2 = promotionStateMap.get(ShapeType.NORMAL);
@@ -63,36 +81,36 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 		}
 		switch (promotionStateMap.get(shpeTp)) {
 		case CGP_NONE: {
-			// ÇÁ·Î¸ð¼Ç µ¥ÀÌÅÍ°¡ ¾øÀ½, Ãß°¡ÀûÀÎ ±â´É Ã³¸® ¾øÀ½
+			// ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½, ï¿½ß°ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
 			Log.d("promo", "none");
 			break;
 		}
 		case CGP_PROMOTION_EXISTS: {
-			// ÇÁ·Î¸ð¼Ç Á¤º¸ Á¸Àç           
+			// ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½           
 			List<PromotionItem> promoList = HSPCGP.getPromotionInfo(shpeTp);
 			if(promoList != null && promoList.size() !=0 ){
 				PromotionItem promoItem = promoList.get(0);
-				// ÇÁ·Î¸ð¼ÇÁ¤º¸´Â ÇÏ³ªÀÌ±â ¶§¹®¿¡ Ã¹¹øÂ°ÀÇ °ÍÀ» ¾ò´Â´Ù.
+				// ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½Ì±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã¹ï¿½ï¿½Â°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Â´ï¿½.
 				hspConnector.setmPromoItem(promoItem);
 				try {
 					r.put("typecode", promoItem.getTypeCode());
 					switch(promoItem.getTypeCode())
 					{
-					case 1: // ¹öÆ°.
+					case 1: // ï¿½ï¿½Æ°.
 						r.put("eventurl", promoItem.getEventUrl());
 						r.put("buttonurl", promoItem.getButtonUrl());
 						r.put("bubbletext", promoItem.getBubbleText());
 						//					r.put("buttonImg", promoItem.getButtonImg());
 						break;
-					case 2: // ¹è³Ê.
+					case 2: // ï¿½ï¿½ï¿½.
 						r.put("bannerlandurl", promoItem.getPromotionBannerLandUrl());
 						r.put("bannerporturl", promoItem.getPromotionBannerPortUrl());
 						break;
-					case 3: // ÆË¾÷.
+					case 3: // ï¿½Ë¾ï¿½.
 						break;
-					case 4: // ¿£µù.
+					case 4: // ï¿½ï¿½ï¿½ï¿½.
 						break;
-					case 5: // ¹«·á ÃæÀü.
+					case 5: // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 						break;
 
 					}
@@ -107,7 +125,7 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 			break;
 		
 		case CGP_REWARD_REQUIRED: {
-			// º¸»ó Á¤º¸ Á¸Àç            
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½            
 			List<PromotionItem> promoList = HSPCGP.getPromotionInfo(shpeTp);
 
 			JSONArray jsonArray = new JSONArray();
@@ -116,9 +134,9 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 				PromotionItem onePromo = promoList.get(0);
 				JSONObject temp = new JSONObject();
 				try {
-					temp.put("rewardvalue", onePromo.getRewardValue()); // º¸»ó °ª.
-					temp.put("rewardcode", onePromo.getRewardCode()); // º¸»ó ÄÚµå.
-					temp.put("promotiontype", onePromo.getPromotionType());  //ÇÁ·Î¸ð¼Ç ÇüÅÂ 1:ÇÁ·Î¸ð¼Ç, 2: ÀÏ¹Ýº¸»ó(¼³Ä¡ÇÁ·Î¸ð¼Ç,¹Ì¼ÇÇÁ·Î¸ð¼Ç), 3:¼³Ä¡º¸»ó(1+1ÇÁ·Î¸ð¼Ç¿¡¼­ ¼³Ä¡º¸»ó)
+					temp.put("rewardvalue", onePromo.getRewardValue()); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
+					temp.put("rewardcode", onePromo.getRewardCode()); // ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½.
+					temp.put("promotiontype", onePromo.getPromotionType());  //ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1:ï¿½ï¿½ï¿½Î¸ï¿½ï¿½, 2: ï¿½Ï¹Ýºï¿½ï¿½ï¿½(ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½Î¸ï¿½ï¿½,ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½Î¸ï¿½ï¿½), 3:ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½(1+1ï¿½ï¿½ï¿½Î¸ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½)
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -134,8 +152,8 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 			break;
 		}
 		case CGP_PROMOTION_REWARD_EXISTS: {
-			// º¸»ó Á¤º¸ Á¸Àç            
-			// º¸»ó Á¤º¸ Á¸Àç            
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½            
+			// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½            
 			
 			List<PromotionItem> promoList = HSPCGP.getPromotionInfo(shpeTp);
 
@@ -145,9 +163,9 @@ public class CheckPromotionMapCBImpl implements CheckPromotionMapCB {
 				PromotionItem onePromo = promoList.get(0);
 				JSONObject temp = new JSONObject();
 				try {
-					temp.put("rewardvalue", onePromo.getRewardValue()); // º¸»ó °ª.
-					temp.put("rewardcode", onePromo.getRewardCode()); // º¸»ó ÄÚµå.
-					temp.put("promotiontype", onePromo.getPromotionType());  //ÇÁ·Î¸ð¼Ç ÇüÅÂ 1:ÇÁ·Î¸ð¼Ç, 2: ÀÏ¹Ýº¸»ó(¼³Ä¡ÇÁ·Î¸ð¼Ç,¹Ì¼ÇÇÁ·Î¸ð¼Ç), 3:¼³Ä¡º¸»ó(1+1ÇÁ·Î¸ð¼Ç¿¡¼­ ¼³Ä¡º¸»ó)
+					temp.put("rewardvalue", onePromo.getRewardValue()); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½.
+					temp.put("rewardcode", onePromo.getRewardCode()); // ï¿½ï¿½ï¿½ï¿½ ï¿½Úµï¿½.
+					temp.put("promotiontype", onePromo.getPromotionType());  //ï¿½ï¿½ï¿½Î¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ 1:ï¿½ï¿½ï¿½Î¸ï¿½ï¿½, 2: ï¿½Ï¹Ýºï¿½ï¿½ï¿½(ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½Î¸ï¿½ï¿½,ï¿½Ì¼ï¿½ï¿½ï¿½ï¿½Î¸ï¿½ï¿½), 3:ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½(1+1ï¿½ï¿½ï¿½Î¸ï¿½Ç¿ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ï¿½ï¿½)
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();

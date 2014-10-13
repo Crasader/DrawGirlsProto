@@ -1879,17 +1879,20 @@ CCSprite* LoadingTipScene::getLoadingTipImage()
 void LoadingTipScene::readyLoading()
 {
 	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
-	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+//	myDSH->unregiAllCcbAnimationManagers();
 	
 	sil_load_list.clear();
 	default_load_list.clear();
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_progress_img->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-45));
 	content_node->getChildByTag(1)->addChild(loading_progress_img, 1);
-	reader->release();
+//	reader->release();
 	
 	if(next_scene_name == "maingame")
 	{

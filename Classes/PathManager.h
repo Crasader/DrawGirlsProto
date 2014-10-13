@@ -176,11 +176,12 @@ private:
 				
 				pre_it = next_it = i;
 				
-				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-				auto reader = new CCBReader(nodeLoader);
+//				CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//				auto reader = new CCBReader(nodeLoader);
 				if(i > 0)
 				{
-					pre_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi",this));
+//					pre_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi",this));
+					pre_img = KS::loadCCBI<CCSprite*>(this, "fx_pollution3.ccbi").first;
 					pre_img->setPosition(t_p.convertToCCP());
 					addChild(pre_img);
 					KS::setBlendFunc(pre_img, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
@@ -188,12 +189,13 @@ private:
 				
 				if(i < plinked_list->size()-1)
 				{
-					next_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi", this));
+//					next_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_pollution3.ccbi", this));
+					next_img = KS::loadCCBI<CCSprite*>(this, "fx_pollution3.ccbi").first;
 					next_img->setPosition(t_p.convertToCCP());
 					addChild(next_img);
 					KS::setBlendFunc(next_img, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
 				}
-				reader->release();
+//				reader->release();
 				break;
 			}
 		}

@@ -64,6 +64,7 @@ void ControlTipContent::menuAction(CCObject* sender)
 		
 	}, [=](){
 		end_selector(NULL);
+		ccb_manager->setDelegate(NULL);
 		getParent()->removeFromParent();
 	});
 }

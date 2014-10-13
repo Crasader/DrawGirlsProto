@@ -358,10 +358,10 @@ public:
 	static BlindDrop * create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc);
 	void startAction ();
 	virtual void completedAnimationSequenceNamed (char const * name);
+	void ccbManagerDelegateNull();
 	virtual ~BlindDrop()
 	{
-		if(reader)
-			reader->release();
+//		reader->setDelegate(NULL);
 	}
 private:
 	float m_scale;
@@ -370,7 +370,7 @@ private:
 	int blindFrame;
 	int ingFrame;
 	CCSprite * oilImg;
-	CCBReader * reader;
+	CCBAnimationManager* reader;
 	void myAction ();
 	void stopAction ();
 	void myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int t_blindFrame, float sc);

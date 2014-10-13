@@ -143,12 +143,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// initialize director
 	CCDirector *pDirector = CCDirector::sharedDirector();
 	pDirector->setOpenGLView(CCEGLView::sharedOpenGLView());
-	pDirector->setProjection(kCCDirectorProjection2D); // 바스트 모핑 측면을 보려면 주석 처리 필요함.
+    pDirector->setProjection(kCCDirectorProjection2D); // 바스트 모핑 측면을 보려면 주석 처리 필요함.
 	
 	CCEGLView* pEGLView = CCEGLView::sharedOpenGLView();
 	//	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionShowAll);
 	pEGLView->setDesignResolutionSize(designResolutionSize.width, designResolutionSize.height, kResolutionFixedWidth);// kResolutionNoBorder);
-	//	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
+    //	CCFileUtils::sharedFileUtils()->setResourceDirectory(sharedResourceDirectory);
+    CCTexture2D::setDefaultAlphaPixelFormat(kCCTexture2DPixelFormat_RGBA8888);
 	
 	CCSize screen_size = pEGLView->getFrameSize();
 	myDSH->ui_top = 480.f*screen_size.height/screen_size.width;
@@ -195,7 +196,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	CCPoint ui_touch_convert = ccp(0,screen_size.height*(designResolutionSize.width/screen_size.width) - designResolutionSize.height);
 	myDSH->ui_touch_convert = ui_touch_convert;
-	
+    
 	
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img");
 	CCFileUtils::sharedFileUtils()->addSearchPath("res_img/img_ccb");

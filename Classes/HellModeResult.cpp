@@ -363,12 +363,13 @@ bool HellModeResult::init()
 	replay_menu->setTouchPriority(-400);
 	
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+//	loading_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+	loading_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_img->setPosition(ccp(347,150));
 	main_case->addChild(loading_img, kZ_HMR_img);
-	reader->release();
+//	reader->release();
 	
 
 	Json::Value param2;

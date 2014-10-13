@@ -912,7 +912,7 @@ ControlJoystickButton::~ControlJoystickButton()
     }
 	if(button_ani)
 	{
-		button_ani->release();
+		button_ani->setDelegate(NULL);
 	}
 }
 
@@ -1845,10 +1845,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 
 	if(!isDisableDrawButton)
 	{
-		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-		CCBReader* reader = new CCBReader(nodeLoader);
-		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
-		button_ani = reader;
+//		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//		CCBReader* reader = new CCBReader(nodeLoader);
+//		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
+		auto t_ccb = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString());
+		draw_button = t_ccb.first;
+		button_ani = t_ccb.second;
 		//		draw_button = CCSprite::create("ui_draw.png");
 		if(controlJoystickDirection == kControlJoystickDirection_left)
 		{
@@ -1889,7 +1891,7 @@ void ControlJoystickButton::onButton(CCPoint t_location)
 	{
 //		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1start");
+		button_ani->runAnimationsForSequenceNamed("cast1start");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 50);
 		click_label->runAction(t_fade);
@@ -1904,7 +1906,7 @@ void ControlJoystickButton::offButton()
 	{
 //		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		
-		button_ani->getAnimationManager()->runAnimationsForSequenceNamed("cast1stop");
+		button_ani->runAnimationsForSequenceNamed("cast1stop");
 		click_label->stopAllActions();
 		CCFadeTo* t_fade = CCFadeTo::create(0.3f, 255);
 		click_label->runAction(t_fade);
@@ -1932,12 +1934,12 @@ void ControlJoystickButton::showDrawButtonTutorial()
 	CommonAnimation::openPopup(this, draw_button_tutorial_img, NULL);
 	
 	
-	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-	CCBReader* reader = new CCBReader(nodeLoader);
-	draw_button_tutorial_ccb = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_tutorial_button.ccbi",this));
+//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//	CCBReader* reader = new CCBReader(nodeLoader);
+	draw_button_tutorial_ccb = KS::loadCCBI<CCSprite*>(this, "ingame_tutorial_button.ccbi").first;// dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("ingame_tutorial_button.ccbi",this));
 	draw_button_tutorial_ccb->setPosition(draw_button->getPosition());
 	addChild(draw_button_tutorial_ccb);
-	reader->release();
+//	reader->release();
 }
 
 void ControlJoystickButton::hideDrawButtonTutorial()

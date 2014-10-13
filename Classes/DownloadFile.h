@@ -30,34 +30,34 @@ public:
 	}
 };
 
-class CopyFile
-{
-public:
-	string from_filename;
-	string to_filename;
-	bool is_ani;
-	
-	int cut_width;
-	int cut_height;
-	int position_x;
-	int position_y;
-	
-	string ani_filename;
-	bool is_ccb;
-	string ccb_filename;
-	
-	CopyFile() :
-	is_ani(false),
-	cut_width(0),
-	cut_height(0),
-	position_x(0),
-	position_y(0),
-	ani_filename(""),
-	is_ccb(false),
-	ccb_filename("")
-	{
-		
-	}
-};
+//class CopyFile
+//{
+//public:
+//	string from_filename;
+//	string to_filename;
+//	bool is_ani;
+//	
+//	int cut_width;
+//	int cut_height;
+//	int position_x;
+//	int position_y;
+//	
+//	string ani_filename;
+//	bool is_ccb;
+//	string ccb_filename;
+//	
+//	CopyFile() :
+//	is_ani(false),
+//	cut_width(0),
+//	cut_height(0),
+//	position_x(0),
+//	position_y(0),
+//	ani_filename(""),
+//	is_ccb(false),
+//	ccb_filename("")
+//	{
+//		
+//	}
+//};
 
 #endif /* defined(__DGproto__DownloadFile__) */

@@ -21,6 +21,7 @@
 #include "FormSetter.h"
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
+#include "FiveRocksCpp.h"
 
 FirstPurchasePopup* FirstPurchasePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
 {
@@ -294,7 +295,10 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
             
             Json::Value t_info = mySGD->getProductInfo(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_pID_s, kPurchaseGuideType_firstPurchase-1));
             if(!t_info.empty())
+			{
                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+				fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+			}
             
 			requestItemDelivery();
 		}

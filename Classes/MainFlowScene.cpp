@@ -85,6 +85,11 @@ bool MainFlowScene::init()
 //	});
 //	setBackKeyEnabled(true);
 	
+	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+	//	CCSpriteFrameCache::sharedSpriteFrameCache()->removeUnusedSpriteFrames();
+	CCSpriteFrameCache::sharedSpriteFrameCache()->removeSpriteFrames();
+//	myDSH->unregiAllCcbAnimationManagers();
+	
 	setKeypadEnabled(true);
 	
 	kind_tutorial_pvp = nullptr;
@@ -1050,12 +1055,13 @@ void MainFlowScene::cellAction(CCObject* sender)
 			CCNode* cell_node = ((CCNode*)sender)->getParent()->getParent();
 			cell_node->addChild(black_img);
 			
-			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-			CCBReader* reader = new CCBReader(nodeLoader);
-			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+//			CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
+//			CCBReader* reader = new CCBReader(nodeLoader);
+//			CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
+			CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 			loading_progress_img->setPosition(ccp(0,30));
 			cell_node->addChild(loading_progress_img);
-			reader->release();
+//			reader->release();
 			
 			
 			int puzzle_number = tag - kMainFlowTableCellTag_openBase;
@@ -3621,10 +3627,11 @@ void MainFlowScene::setBottom()
 		 }
 		 
 		 */
+
 		
 		CCSprite* t_button_img = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		CommonButton* cgp_button = CommonButton::create(t_button_img, kCCMenuHandlerPriority-1);
-		cgp_button->setPosition(etc_menu->getPosition() + ccp(0,t_button_img->getContentSize().height/2.f+15));
+		cgp_button->setPosition(etc_menu->getPosition() + ccp(30,50));
 		cgp_button->setFunction([=](CCObject* sender)
 								{
 									if(cgp_button->isEnabled() == false)
@@ -3641,6 +3648,7 @@ void MainFlowScene::setBottom()
 									cgp_button->removeFromParent();
 								});
 		addChild(cgp_button, kMainFlowZorder_uiButton);
+		cgp_button->runAction(CCRepeatForever::create(CCBlink::create(1, 2)));
 		bottom_list.push_back(cgp_button);
 	}
 	// 일반 보상

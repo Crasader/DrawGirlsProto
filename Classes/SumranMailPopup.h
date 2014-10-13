@@ -67,7 +67,7 @@ enum class SumranMailFilter
 	kUnknownFriendRequest
 };
 class DownloadFile;
-class CopyFile;
+//class CopyFile;
 class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 	public:
@@ -80,7 +80,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 	KSProtectVar<int> download_card_no;
 	std::function<void(bool)> end_func_download_card;
 	vector<DownloadFile> card_download_list;
-	vector<CopyFile> card_reduction_list;
+//	vector<CopyFile> card_reduction_list;
 	int ing_card_download;
 	void startCardDownload();
 	void successCardDownload();
@@ -138,7 +138,7 @@ class SumranMailPopup : public CCLayer, public CCTableViewDataSource, public CCT
 		CCNode* addCardImg(int t_card_number, int t_card_level, string t_passive);
 		void resultLoadedCardInfo (Json::Value result_data);
 		vector <DownloadFile> df_list;
-		vector <CopyFile> cf_list;
+//		vector <CopyFile> cf_list;
 		CCSprite* loading_circle;
 
 		int ing_download_cnt;

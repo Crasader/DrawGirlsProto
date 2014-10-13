@@ -117,8 +117,8 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	back_case->addChild(close_button);
 	
 	
-	CCSprite* card_img = mySIL->getUnsafeLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
-	card_img->setScale(0.5f);
+	CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", new_card_number));// mySIL->getUnsafeLoadedImg(ccsf("card%d_thumbnail.png", new_card_number));
+	card_img->setScale(0.4f*0.5f);
 	
 	string t_card_type = NSDS_GS(kSDS_CI_int1_category_s, new_card_number);
 	if(t_card_type == "")

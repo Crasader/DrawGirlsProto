@@ -1677,6 +1677,9 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, floa
 void MissileParent::myInit( CCNode* boss_eye )
 {
 	//chargeArray = new CCArray(1);
+	
+	tickingArray = NULL;
+	
 	myGD->getMissileParent = [=]()->MissileParent*{
 		return this;
 	};
