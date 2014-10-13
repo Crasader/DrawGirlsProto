@@ -48,7 +48,7 @@ using namespace std;
 USING_NS_CC;
 
 #include "DataStorageHub.h"
-
+#include "StarGoldData.h"
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 extern "C"{
 	void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,int hspGameNo, jstring hspGameID, jstring hspGameVersion)
@@ -593,7 +593,6 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 		if(delsel->func)delsel->func(obj);
 		jsonDelegator::get()->remove(delekey);
 
-		//		}); 
 
 		};
 
@@ -605,11 +604,14 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
 #endif
 #ifndef LQTEST
-	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GAMECENTER completionHandler:
+	 int LoginType = (int)HSPLogin::GAMECENTER;
+	 HSPOAuthProvider loginT = (HSPOAuthProvider)param.get("LoginType", LoginType).asInt();
+	 CCLOG("loginWithOAuthProvider with (login type) : %d", (int)loginT);
+	[[HSPCore sharedHSPCore] loginWithOAuthProvider:loginT completionHandler:
 #endif
 	 ^(BOOL playable, HSPError* error) {
 		 TRACE();
-		 KS::KSLog("----------------------------------%", myHSP->getMemberID());
+		 KS::KSLog("loginWithOAuthProvider callback, member id = %", myHSP->getMemberID());
 		// 로그인 응답 처리
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
@@ -630,8 +632,9 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "login", "(IZI)V")) {
 		t.env->CallStaticVoidMethod(t.classID, t.methodID,_key,ManualLogin, LoginType);
 		t.env->DeleteLocalRef(t.classID);
-}
+	}
 #endif
+	 TRACE();
 }
 
 double hspConnector::getScreenRealWidth()
@@ -799,6 +802,8 @@ void hspConnector::checkCGP(Json::Value param,Json::Value callbackParam,jsonSelT
 		t.env->DeleteLocalRef(t.classID);
 	}
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	if(mySGD->getIosMenuVisible() && (mySGD->getIosHideVer() != graphdog->getAppVersionString()) == false)
+		return;
 	[HSPCGP checkPromotionWithCompletionHandler:^(PromotionState promotionState,  HSPError* error)
 	 {
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
@@ -1214,13 +1219,15 @@ void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 //		}
 	 
 	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithMappingType:(HSPMappingType)mt overwrite:force
 			completionHandler:^(HSPError *error, int64_t memberNo) {
 				CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+				KS::KSLog("memberNo!!!!!!!!!!!!!!!!!!!!!!!!!!!! %", memberNo);
 				
 				Json::Value obj;
 				NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-				
+				[resultDict setObject:[NSNumber numberWithLongLong:memberNo] forKey:@"prevMemberNo"];
 				addErrorInResult(resultDict, error);
 				callFuncMainQueue2(0,0,_key,resultDict);
 			}];
