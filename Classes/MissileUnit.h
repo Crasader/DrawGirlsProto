@@ -361,7 +361,7 @@ public:
 	void ccbManagerDelegateNull();
 	virtual ~BlindDrop()
 	{
-		reader->setDelegate(NULL);
+//		reader->setDelegate(NULL);
 	}
 private:
 	float m_scale;
