@@ -323,11 +323,11 @@ void FirstPurchasePopup::requestItemDelivery()
 	
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getMemberID();
-	command_list.push_back(CommandParam("starttransaction", transaction_param, json_selector(this, FirstPurchasePopup::resultSaveUserData)));
+	command_list.push_back(CommandParam("starttransaction", transaction_param, nullptr));
 	
 	Json::Value request_param;
 	request_param["memberID"] = hspConnector::get()->getSocialID();
-	command_list.push_back(CommandParam("requestItemDelivery", request_param, nullptr));
+	command_list.push_back(CommandParam("requestItemDelivery", request_param, json_selector(this, FirstPurchasePopup::resultSaveUserData)));
 	if(mySGD->isChangedGoods())
 	{
 		vector<CommandParam> t_list = mySGD->getChangeGoodsParam(json_selector(mySGD, StarGoldData::saveChangeGoodsTransaction));
