@@ -363,7 +363,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
 	
-	myHSP->getAdXConnectEventInstance("Launch", "", "");
+	
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	FormSetter::get()->setEnabledRemocon(true);
