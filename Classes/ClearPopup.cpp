@@ -2595,7 +2595,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 				total_star->setPosition(ccp(-2,0));
 				t_star_node->addChild(total_star);
 				
-				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
 				star_count->enableOuterStroke(ccBLACK, 0.8f);
 				star_count->setPosition(ccp(-2,0));
 				t_star_node->addChild(star_count);
@@ -2675,7 +2675,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 											}, [=](float t){
 												t_star_ani->setScale(1.3f);
 												t_star_ani->setOpacity(0);
-												star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+												star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade()+i+1)->getCString());
 											}));
 										}
 									}));
@@ -2726,7 +2726,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 												}, [=](float t){
 													t_star_ani->setScale(1.3f);
 													t_star_ani->setOpacity(0);
-													star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getStageGrade()+i+1)->getCString());
+													star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade()+i+1)->getCString());
 												}));
 											}
 										}));
