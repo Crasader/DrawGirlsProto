@@ -56,47 +56,55 @@ AdXTracking *tracker;
 
 // cocos2d application instance
 static AppDelegate s_sharedApplication;
-
+- (void)log:(NSString*)log
+{
+	NSLog(@"%@",log);
+	
+//	self.currentLog.text = [self.currentLog.text stringByAppendingString:[log stringByAppendingString:@"\n"]];
+//	
+//	if ( self.currentLog.contentSize.height > self.currentLog.frame.size.height )
+//		[self.currentLog setContentOffset:CGPointMake(0, self.currentLog.contentSize.height - self.currentLog.frame.size.height ) animated:YES];
+}
 - (void)onBeforeSessionExpire
 {
 	/* A method to be called when logging out or initializing account */
-	[self.viewController log:@"onBeforeSessionExpire – session will be expired."];
-	
-	/* Preparing for user change since session will be soon expired. Personal information used in game should be stored. */
-	[self.viewController log:@"save user data because session will be expired."];
+//	[self.viewController log:@"onBeforeSessionExpire – session will be expired."];
+//	
+//	/* Preparing for user change since session will be soon expired. Personal information used in game should be stored. */
+//	[self.viewController log:@"save user data because session will be expired."];
 }
 
 -(void) didReceivedMessage:(NSNotification*)notification
 {
-	[self.viewController log:[NSString stringWithFormat:@"Received new message. %@", notification.object]];
+//	[self.viewController log:[NSString stringWithFormat:@"Received new message. %@", notification.object]];
 }
 
 -(void) didReceivedPacket:(NSNotification*)notification
 {
-	[self.viewController log:[NSString stringWithFormat:@"Received binary data. %@", notification.object]];
+//	[self.viewController log:[NSString stringWithFormat:@"Received binary data. %@", notification.object]];
 }
 
 -(void) didChangedProfile:(NSNotification*)notification
 {
-	[self.viewController log:[NSString stringWithFormat:@"User information has chaned. %@", notification.object]];
+//	[self.viewController log:[NSString stringWithFormat:@"User information has chaned. %@", notification.object]];
 }
 
 - (void)onSessionExpireComplete:(NSNotification*)notification
 {
-	/* It will be logged out or account will be initialized. */
-	[self.viewController log:@"Session has expired."];
-	
-	/* User information that has been used is initialized and the page is moved to first screen. */
-	[self.viewController log:@"User information has initialized"];
+//	/* It will be logged out or account will be initialized. */
+//	[self.viewController log:@"Session has expired."];
+//	
+//	/* User information that has been used is initialized and the page is moved to first screen. */
+//	[self.viewController log:@"User information has initialized"];
 }
 
 -(void) onSessionExpiredByExternalFactors:(NSNotification*)notification
 {
-	/* Authentication session has expired caused from outside source. */
-	[self.viewController log:@"Session has expired by outside source."];
-	
-	/* Storing an existing user information and initializing game. */
-	[self.viewController log:@"User information has initialized"];
+//	/* Authentication session has expired caused from outside source. */
+//	[self.viewController log:@"Session has expired by outside source."];
+//	
+//	/* Storing an existing user information and initializing game. */
+//	[self.viewController log:@"User information has initialized"];
 }
 
 - (void)registerHSPEventObserver
@@ -237,15 +245,7 @@ static AppDelegate s_sharedApplication;
 	 Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 	 */
 	[FiveRocks startSession:@"53c4918600821d86a400000e" withAppKey:@"bSYyKMPM-oSSEMEvOPMW"];
-	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
-	{
-		
-		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-		CCLOG("AUTO LOGIN TYPE == %d", lType);
-		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
-			//
-		}];
-	}
+	
 
 	cocos2d::CCDirector::sharedDirector()->startAnimation();
 	//	if(!StarGoldData::sharedInstance()->is_paused)
@@ -267,7 +267,15 @@ static AppDelegate s_sharedApplication;
 	 */
 	
 	[self reportAppOpen];
-	
+	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
+	{
+		
+		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		CCLOG("AUTO LOGIN TYPE == %d", lType);
+		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
+			//
+		}];
+	}
 		cocos2d::CCApplication::sharedApplication()->applicationWillEnterForeground();
 	
 	

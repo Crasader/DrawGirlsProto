@@ -3,6 +3,7 @@
 
 #include "cocos2d.h"
 #include "HSPEnums.h"
+#include "jsoncpp/json.h"
 USING_NS_CC;
 
 class StyledLabelTTF;
@@ -26,6 +27,9 @@ public:
 																							StyledLabelTTF* announce,
 																							std::function<void(void)> loginProcess);
 	//virtual void registerWithTouchDispatcher();
+	std::function<void(Json::Value)> m_logoutRepeater1;
+	std::function<void(Json::Value)> m_logoutRepeater2;
+	std::function<void(Json::Value)> m_logoutRepeater3;
 protected:
 	int m_touchP;
 	ASPopupView* m_managerPopup;

@@ -414,14 +414,35 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			{
 				Json::Value param;
 				param["ManualLogin"] = true;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#ifdef LQTEST
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+#else
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+#endif
+    
+#else
 				param["LoginType"] = (int)HSPLogin::GUEST;
+#endif
+//				param["LoginType"] = (int)HSPLogin::GUEST;
 				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 			}
 			else
 			{
 				Json::Value param;
 				param["ManualLogin"] = true;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#ifdef LQTEST
 				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+#else
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+#endif
+    
+#else
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+#endif
+				
+				
 				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 			}
 		};
