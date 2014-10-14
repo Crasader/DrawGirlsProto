@@ -423,10 +423,29 @@ bool AccountManagerPopup::init(int touchP)
 																KS::KSLog("keepLoad %", t);
 																if(t["error"]["isSuccess"].asInt())
 																{
-																	
+																	m_logoutRepeater1 = [=](Json::Value result_data){
+																		TRACE();
+																		//																		ll->removeFromParent();
+																		CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																		if(result_data["error"]["isSuccess"].asBool())
+																		{
+																			mySGD->resetLabels();
+																			myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+																			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																		}
+																		else
+																		{
+																			hspConnector::get()->logout(m_logoutRepeater1);
+																		}
+																	};
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+																	hspConnector::get()->logout(m_logoutRepeater1);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 																	mySGD->resetLabels();
 																	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 																	CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+#endif
+																	
 																}
 																else
 																{
@@ -471,7 +490,25 @@ bool AccountManagerPopup::init(int touchP)
 																														 [=]()
 																														 {
 																															 CCLOG("ttTT");
+																															 TRACE();
+																															 m_logoutRepeater2 = [=](Json::Value result_data){
+																																 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																																 if(result_data["error"]["isSuccess"].asBool())
+																																 {
+																																	 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																																 }
+																																 else
+																																 {
+																																	 hspConnector::get()->logout(m_logoutRepeater2);
+																																 }
+																															 };
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+																															 hspConnector::get()->logout(m_logoutRepeater2);
+																															 
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 																															 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+#endif
+																															 
 																														 });
 						addChild(alert);
 
@@ -554,7 +591,23 @@ bool AccountManagerPopup::init(int touchP)
 																												 [=]()
 																												 {
 																													 CCLOG("ttTT");
+																													 m_logoutRepeater3 = [=](Json::Value result_data){
+																														 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																														 if(result_data["error"]["isSuccess"].asBool())
+																														 {
+																															 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																														 }
+																														 else
+																														 {
+																															 hspConnector::get()->logout(m_logoutRepeater3);
+																														 }
+																														};
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+																													 hspConnector::get()->logout(m_logoutRepeater3);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+#endif
+																													 
 																												 });
 				addChild(alert);
 				
