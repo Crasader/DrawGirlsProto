@@ -326,6 +326,8 @@ bool AccountManagerPopup::init(int touchP)
 									mySDS->removeCache();
 									
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
+									TRACE();
+									CCLOG("save accountType %d", mm2);
 									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
@@ -597,9 +599,9 @@ bool AccountManagerPopup::init(int touchP)
 	{
 		googleLogin->setFunction([=](CCObject*){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::FACEBOOK);
+			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-			tryLogin((int)HSPMapping::kGAMECENTER, "GameCenter ID", HSPLogin::FACEBOOK);
+			tryLogin((int)HSPMapping::kGAMECENTER, "GameCenter ID", HSPLogin::GAMECENTER);
 #endif
 
 //			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
