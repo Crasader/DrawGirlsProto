@@ -294,7 +294,7 @@ void RankUpPopup::myInit(int t_touch_priority, function<void()> t_end_func, func
 	recent_take_card->setScale(0.8f*0.4f*0.5f);
 	CCSprite* card_case = CCSprite::create(CCString::createWithFormat("cardsetting_minicase_%s.png", t_card_type.c_str())->getCString());
 	card_case->setPosition(ccp(recent_take_card->getContentSize().width/2.f, recent_take_card->getContentSize().height/2.f));
-	card_case->setScale(2.f);
+	card_case->setScale(2.f/0.4f);
 	recent_take_card->addChild(card_case);
 	recent_take_card->setPosition(ccp(-55,10));
 	m_container->addChild(recent_take_card);
