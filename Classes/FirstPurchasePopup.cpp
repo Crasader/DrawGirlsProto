@@ -306,7 +306,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 		{
 			CCLOG("FirstPurchase purchaseProduct fail");
 			inapp_loading->removeFromParent();
-			mySGD->clearChangeUserdata();
+//			mySGD->clearChangeUserdata();
 			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
@@ -323,22 +323,7 @@ void FirstPurchasePopup::requestItemDelivery()
 	
 	Json::Value transaction_param;
 	transaction_param["memberID"] = hspConnector::get()->getMemberID();
-	command_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
-										{
-											if(result_data["result"]["code"].asInt() == GDSUCCESS)
-											{
-												CCLOG("FirstPurchase requestItemDelivery success");
-												inapp_loading->removeFromParent();
-												
-												is_menu_enable = true;
-												giveupAction(NULL, CCControlEventTouchUpInside);
-											}
-											else
-											{
-												CCLOG("FirstPurchase requestItemDelivery fail");
-												addChild(KSTimer::create(3.f, [=](){requestItemDelivery();}));
-											}
-										}));
+	command_list.push_back(CommandParam("starttransaction", transaction_param, json_selector(this, FirstPurchasePopup::resultSaveUserData)));
 	
 	Json::Value request_param;
 	request_param["memberID"] = hspConnector::get()->getSocialID();
@@ -361,22 +346,38 @@ void FirstPurchasePopup::resultSaveUserData(Json::Value result_data)
 	CCLOG("resultSaveUserData : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLOG("save userdata success!!");
+		CCLOG("FirstPurchase requestItemDelivery success");
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 		
-//		rankup_button->setVisible(false);
-//		giveup_button->setVisible(false);
-//		
-//		question_manager->runAnimationsForSequenceNamed("Default Timeline");
+		mySGD->network_check_cnt = 0;
+		
+		mySGD->initProperties(result_data["list"]);
+		
+		is_menu_enable = true;
+		giveupAction(NULL, CCControlEventTouchUpInside);
+		inapp_loading->removeFromParent();
 	}
 	else
 	{
-		CCLOG("missile upgrade fail!!");
+		mySGD->network_check_cnt++;
 		
-		mySGD->clearChangeGoods();
-		addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
-		
-		is_menu_enable = true;
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+				requestItemDelivery();
+			}, 1);
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 requestItemDelivery();
+									 }));
+		}
 	}
 }
