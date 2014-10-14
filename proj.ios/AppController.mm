@@ -270,7 +270,7 @@ static AppDelegate s_sharedApplication;
 	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
 	{
 		
-		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
 		CCLOG("AUTO LOGIN TYPE == %d", lType);
 		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
 			//
