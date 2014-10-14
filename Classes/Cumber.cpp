@@ -146,7 +146,7 @@ bool CumberParent::startDamageReaction(CCObject* cb, float damage, float angle, 
 	float rate;
 	float d_damage;
 	
-	if(mySGD->is_endless_mode)
+	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 		rate = 0.01f;
 	else
 		rate = ((mySGD->getUserdataHighPiece()+10)/(mySD->getSilType()+10)*9.f+1.f)/100.f; // 0.01f ~ 0.1f
@@ -514,8 +514,6 @@ void CumberParent::myInit()
 	
 	total_damage_to_gold = 0;
 	
-	cumber_ccb_delegate_null_list.clear();
-	
 	Json::Reader reader;
 	Json::Value root;
 	reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
@@ -539,10 +537,6 @@ void CumberParent::myInit()
 		if(bossShape == "circle")
 		{
 			mainCumber = KSCircleBase::create(bossType);
-			cumber_ccb_delegate_null_list.push_back([=]()
-													{
-														((KSCircleBase*)mainCumber)->ccbDelegateNull();
-													});
 		}
 		else if(bossShape == "snake")
 		{
@@ -637,14 +631,6 @@ void CumberParent::myInit()
 	
 //	myEP = EmotionParent::create(mainCumber, callfuncI_selector(KSCumberBase::showEmotion));
 //	addChild(myEP);
-}
-
-void CumberParent::cumberCcbDelegateNull()
-{
-	for(int i=0;i<cumber_ccb_delegate_null_list.size();i++)
-	{
-		cumber_ccb_delegate_null_list[i]();
-	}
 }
 
 void CumberParent::mappingFunctor()

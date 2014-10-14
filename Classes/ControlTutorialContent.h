@@ -64,8 +64,7 @@ public:
 	
 	virtual ~ControlTutorialContent()
 	{
-		ani_manager->setDelegate(NULL);
-//		ani_manager->release();
+		
 	}
 	
 private:
@@ -172,7 +171,6 @@ private:
 		{
 			click_animaition->setVisible(false);
 			touch_menu->setVisible(false);
-			ani_manager->setDelegate(NULL);
 			end_selector(NULL);
 		}
 	}

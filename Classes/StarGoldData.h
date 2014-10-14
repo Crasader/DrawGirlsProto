@@ -1224,6 +1224,7 @@ private:
 	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
+	COMMON_VAR_STR(goldBalance, GoldBalance);
 };
 
 #endif

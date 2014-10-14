@@ -32,6 +32,8 @@ public:
 	{
 		m_ai_list.clear();
 	}
+    
+    virtual ~AsyncImageInfo();
 };
 
 class AsyncImageManager : public CCObject

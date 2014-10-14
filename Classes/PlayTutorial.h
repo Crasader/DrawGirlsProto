@@ -352,8 +352,7 @@ public:
 	
 	virtual ~TutoControler()
 	{
-		if(button_ani)
-			button_ani->setDelegate(NULL);
+		
 	}
 	
 private:

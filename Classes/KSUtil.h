@@ -198,6 +198,7 @@ namespace KS
 		pair<NodeT, CCBAnimationManager*> retValue;
 		retValue.first = dynamic_cast<NodeT>(p);
 		retValue.second = reader->getAnimationManager();
+		retValue.first->addChild(retValue.second);
 		reader->release();
 		return retValue;
 	}

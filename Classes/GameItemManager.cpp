@@ -1539,13 +1539,16 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	moving_direction = rand()%360 - 180;
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
+	Json::Value goldBalance = mySGD->getGoldBalance();
+	
 	int random_value = rand()%100;
-    if(mySGD->getStageGold() >= 500)
+    if(mySGD->getStageGold() >= goldBalance.get("maxGold",500).asInt())
         random_value = 99;
-    
-	if(random_value < 2)
+  
+	
+	if(random_value < goldBalance["goldPercent"][0].asInt())
 	{
-		m_gold = t_gold*100*2;
+		m_gold = t_gold*goldBalance["goldWeight"][0].asInt();
 		
 		int start_cut = rand()%6;
 		
@@ -1607,9 +1610,9 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 //		coin_img->setPosition(CCPointZero);
 //		addChild(coin_img);
 	}
-	else if(random_value < 22)
+	else if(random_value < goldBalance["goldPercent"][1].asInt()+goldBalance["goldPercent"][0].asInt())
 	{
-		m_gold = t_gold*10*2;
+		m_gold = t_gold*goldBalance["goldWeight"][1].asInt();
 		
 		int start_cut = rand()%6;
 		
@@ -1637,7 +1640,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	}
 	else
 	{
-		m_gold = t_gold*2;
+		m_gold = t_gold*goldBalance["goldWeight"][2].asInt();
 		
 		int start_cut = rand()%6;
 		
@@ -2123,7 +2126,6 @@ void GameItemManager::completedAnimationSequenceNamed (char const * name)
 		effect_que.pop_front();
 		CCBAnimationManager* remove_animation = effect_animation_manager.front();
 		effect_animation_manager.pop_front();
-		remove_animation->setDelegate(NULL);
 		removeChild(remove_target);
 	}
 }

@@ -45,7 +45,7 @@ bool CardSettingPopup::init()
         return false;
     }
 	
-	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
+//	CCTextureCache::sharedTextureCache()->removeUnusedTextures();
 	table_update_cnt = 0;
 	
 	CCSprite* t_caching = CCSprite::create("loading_card.png");

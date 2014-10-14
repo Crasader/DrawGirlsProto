@@ -912,7 +912,7 @@ ControlJoystickButton::~ControlJoystickButton()
     }
 	if(button_ani)
 	{
-		button_ani->setDelegate(NULL);
+		
 	}
 }
 

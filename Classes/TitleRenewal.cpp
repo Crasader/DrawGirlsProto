@@ -335,13 +335,22 @@ void TitleRenewalScene::realInit()
 	TRACE();
 	Json::Value param;
 	param["ManualLogin"] = true;
-#ifdef LQTEST
 	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 	
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+    #ifdef LQTEST
+        param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+    #else
+        param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+    #endif
+    
 #else
-	param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
-	
+    param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #endif
+	
+	
+//#endif
 	TRACE();
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
 }
@@ -1216,6 +1225,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setDiaryDownUrl(result_data["appDownUrls"]["diary"].asString());
 		mySGD->setIosMenuVisible(result_data["iosMenuVisible"].asInt());
 		mySGD->setIosHideVer(result_data["iosHideVer"].asString());
+		mySGD->setGoldBalance(result_data["goldBalance"].asString());
 	}
 	else
 	{

@@ -50,6 +50,7 @@ bool CumberShowWindow::init()
 		m_circleAnimation = reader->getAnimationManager();// ret.second;
 		m_circleAnimation->runAnimationsForSequenceNamed("Default Timeline");
 //		m_circleAnimation->setDelegate(this);
+		m_circleSprite->addChild(m_circleAnimation);
 		reader->release();
 		
 		if(m_circleSprite != NULL)
@@ -128,6 +129,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 		m_circleSprite = dynamic_cast<CircleBossCCB*>(p);//ret.first;
 		m_circleAnimation = reader->getAnimationManager();// ret.second;
 		m_circleAnimation->runAnimationsForSequenceNamed("Default Timeline");
+		m_circleSprite->addChild(m_circleAnimation);
 //		m_circleAnimation->setDelegate(this);
 		reader->release();
 		
@@ -260,6 +262,7 @@ bool CumberShowWindow::init(int ss, CumberShowWindowSceneCode t_code)
 			
 			m_juniorSprite = dynamic_cast<CCSprite*>(p);
 			m_juniorAnimation = reader->getAnimationManager();
+			m_juniorSprite->addChild(m_juniorAnimation);
 //			m_juniorAnimation->setDelegate(this);
 			reader->release();
 			
