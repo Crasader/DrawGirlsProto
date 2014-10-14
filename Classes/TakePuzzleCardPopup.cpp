@@ -126,11 +126,11 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	CCSprite* card_case = CCSprite::create(ccsf("cardsetting_minicase_%s.png", t_card_type.c_str()));
 	card_case->setPosition(ccpFromSize(card_img->getContentSize()/2.f));
-	card_case->setScale(2.f);
+	card_case->setScale(2.f/0.4f);
 	card_img->addChild(card_case);
 	
 	CCSprite* light_img = CCSprite::create("newitem_back.png");
-	light_img->setScale(2.f);
+	light_img->setScale(2.f/0.4f);
 	light_img->setPosition(card_case->getPosition());
 	card_img->addChild(light_img, -1);
 	
