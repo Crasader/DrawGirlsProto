@@ -90,11 +90,11 @@ void KsLocal::ko()
 	obj[LK::kBonusGameStart] = "게임 시작";
 	obj[LK::kBonusGameDesc] = "게임 설명";
 	obj[LK::kBonusGameGababo] = "가위! 바위! 보!";
-	obj[LK::kGababoDesc1] = "<font color=#FFFFFF size=11 newline=20>캐릭터와 눈치를 보며</font><font color=#FFFFFF size=11>가위바위보를 해보세요!</font>";
+	obj[LK::kGababoDesc1] = "<font color=#FFFFFF size=11 newline=20>묵찌빠마왕을 </font><font color=#FFFFFF size=11>가위바위보로 이기세요!</font>";
 	obj[LK::kBonusGameTouch] = "터치! 터치!";
 	obj[LK::kTouchDesc1] = "<font color=#FFFFFF size=11 newline=20>최대한 많이 터치를 하세요.</font><font color=#FFFFFF size=11>돈이 쏟아져요!</font>";
 	
-	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font><font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>";
+	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font><font color=#FFFFFF>그럼 피스 퍼펙트 클리어 후 다시 만나요!</font>";
 	obj[LK::kAccountConf] = "계정 설정";
 	obj[LK::kLinkingGoogle] = "구글과 연결되어 있습니다.";
 	obj[LK::kLinkingGameCenter] = "게임센터와 연결되어 있습니다.";
