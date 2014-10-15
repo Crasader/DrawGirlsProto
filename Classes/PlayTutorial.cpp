@@ -2207,6 +2207,8 @@ void PlayTutorial::nextStep()
 												  }
 											  }
 											  
+											  myHSP->IgawAdbrixFirstTimeExperience("TutorialComplete");
+											  
 											  
 											  CCNode* scenario_node = CCNode::create();
 											  addChild(scenario_node, 101);
