@@ -1730,7 +1730,7 @@ FloatingCoinParent* FloatingCoinParent::create(function<void(CCPoint)> t_take_fu
 }
 void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 {
-	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
+	float t_d = 2.f/100.f;
 	
 	int t_coin_count;
 	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
@@ -1762,7 +1762,7 @@ void FloatingCoinParent::hideAllFloatingCoin()
 
 void FloatingCoinParent::startClearFloatCoin(float t_percent)
 {
-	float t_d = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f;
+	float t_d = 2.f/100.f;
 	
 	int t_coin_count;
 	float clear_reward = 10.f;
