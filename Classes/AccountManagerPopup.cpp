@@ -270,10 +270,20 @@ bool AccountManagerPopup::init(int touchP)
 				back->addChild(titleLbl);
 				titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 
+				auto nickName = t["nick"].asString();
+				if(nickName == "")
+				{
+					nickName = "옛날유저";
+				}
+				auto highPiece = t["highPiece"].asInt();
+				if(highPiece == 0)
+				{
+					highPiece = 1;
+				}
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
 																			 tryName.c_str(),
 //																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
-																			 t["nick"].asString().c_str(), t["highPiece"].asInt(),
+																			 nickName.c_str(), highPiece,
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
 																												 guidanceMsg.c_str() ,
@@ -324,7 +334,7 @@ bool AccountManagerPopup::init(int touchP)
 									mySGD->resetLabels();
 									SaveData::sharedObject()->resetAllData();
 									myDSH->removeCache();
-									mySDS->removeCache();									
+									mySDS->removeCache();
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 									TRACE();
 									CCLOG("save accountType %d", mm2);
