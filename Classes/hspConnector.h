@@ -255,6 +255,7 @@ public:
 	int sendKakaoMsg(string title,string msg,string url);
 	void getAdXConnectEventInstance(string event, string data, string currency);
 	void IgawAdbrixBuy(string productName);
+	void IgawAdbrixFirstTimeExperience(string msg);
 	int registerGamePadCallback(jsonSelType func);
 protected:
 	void registerGamePadCallback(CCObject* target, jsonSelType func);

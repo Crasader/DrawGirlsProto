@@ -595,6 +595,12 @@ public class hspConnector {
 //		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
 	}
 	
+	public static void IgawAdbrixFirstTimeExperience(String msg)
+	{
+		IgawAdbrix.firstTimeExperience(msg);
+		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
+//		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+	}
 	public static void registerGamePadCallback(final int _key)
 	{ 
 		mGLView.setCallbackKey(_key);
