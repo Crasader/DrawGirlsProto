@@ -1474,29 +1474,39 @@ void Maingame::backTracking()
 		myJack->backTrackingAtAfterMoving(afterJackPoint);
 	}
 	
-	afterJackPoint = myPM->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
+	if(mySGD->rewind_cnt_per_frame >= 2)
 	{
-		stopBackTracking();
-		return;
+		afterJackPoint = myPM->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			stopBackTracking();
+			return;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
 	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
-	}
-	
-	afterJackPoint = myPM->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
-	{
-		stopBackTracking();
 		return;
+	
+	if(mySGD->rewind_cnt_per_frame >= 3)
+	{
+		afterJackPoint = myPM->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			stopBackTracking();
+			return;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
 	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
-	}
+		return;
 }
 
 void Maingame::onEnter()
@@ -2230,21 +2240,47 @@ void Maingame::stunBacking()
 		myJack->backTrackingAtAfterMoving(afterJackPoint);
 	}
 
-	afterJackPoint = myPM->pathBackTracking();
-
-	if(afterJackPoint.isNull())
+	if(mySGD->rewind_cnt_per_frame >= 2)
 	{
-		myGD->communication("SW_stopAllSW");
+		afterJackPoint = myPM->pathBackTracking();
 		
-		unschedule(schedule_selector(Maingame::stunBacking));
-		myJack->endBackTracking();
-		myJack->willBackTracking = false;
-		isCheckingBacking = false;
+		if(afterJackPoint.isNull())
+		{
+			myGD->communication("SW_stopAllSW");
+			
+			unschedule(schedule_selector(Maingame::stunBacking));
+			myJack->endBackTracking();
+			myJack->willBackTracking = false;
+			isCheckingBacking = false;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
 	else
+		return;
+	
+	if(mySGD->rewind_cnt_per_frame >= 3)
 	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
+		afterJackPoint = myPM->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			myGD->communication("SW_stopAllSW");
+			
+			unschedule(schedule_selector(Maingame::stunBacking));
+			myJack->endBackTracking();
+			myJack->willBackTracking = false;
+			isCheckingBacking = false;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
+	else
+		return;
 }
 
 void Maingame::readyBackTracking()

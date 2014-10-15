@@ -2361,29 +2361,39 @@ void PlayTutorial::backTracking()
 		character->setCharacterPoint(afterJackPoint);
 	}
 	
-	afterJackPoint = path_manager->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
+	if(mySGD->rewind_cnt_per_frame >= 2)
 	{
-		stopBackTracking();
-		return;
+		afterJackPoint = path_manager->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			stopBackTracking();
+			return;
+		}
+		else
+		{
+			character->setCharacterPoint(afterJackPoint);
+		}
 	}
 	else
-	{
-		character->setCharacterPoint(afterJackPoint);
-	}
-	
-	afterJackPoint = path_manager->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
-	{
-		stopBackTracking();
 		return;
+	
+	if(mySGD->rewind_cnt_per_frame >= 3)
+	{
+		afterJackPoint = path_manager->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			stopBackTracking();
+			return;
+		}
+		else
+		{
+			character->setCharacterPoint(afterJackPoint);
+		}
 	}
 	else
-	{
-		character->setCharacterPoint(afterJackPoint);
-	}
+		return;
 }
 void PlayTutorial::stopBackTracking()
 {
