@@ -14,19 +14,21 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
+        <meta-data android:name="igaworks_app_key" android:value="58229468"/>
+		<meta-data android:name="igaworks_hash_key" android:value="03c0b0579dd4470b"/>
+		<meta-data android:name="igaworks_market_info" android:value="google" />
+        
         <meta-data
             android:name="io.fiverocks.android.appstore"
             android:value="Google" />
+        <!-- <meta-data android:name="USEQASERVER" android:value="ON" /> 
         <meta-data
             android:name="APP_NAME"
-            android:value="com.nhnent.SKSUMRAN" /> <!-- 패키지네임과 일치시켜주세요. -->
+            android:value="com.nhnent.SKSUMRAN" /> 
         <meta-data
             android:name="ADX_CLIENT_ID"
-            android:value="nhntrt809531jdr" /> <!-- "nhntrt809531jdr"로 고정입니다. -->
-<!--         <meta-data
-            android:name="USEQASERVER"
-            android:value="ON" /> 테스트 환경 -->
-        <!-- <meta-data android:name="com.facebook.sdk.ApplicationId" android:value="@string/app_id"/> -->
+            android:value="nhntrt809531jdr" /> -->
+
         <receiver
             android:name="io.fiverocks.android.GCMReceiver"
             android:permission="com.google.android.c2dm.permission.SEND" >
@@ -43,29 +45,51 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-
-            <meta-data
-                android:name="forward1"
-                android:value="com.AdX.tag.AdXAppTracker" />
+            </intent-filter> 
         </receiver>
         <receiver android:name="io.fiverocks.android.FiveRocksReceiver" />
+		<receiver
+		    android:name="com.igaworks.IgawReceiver"
+		    android:exported="true" >
+		    <intent-filter>
+		        <action android:name="com.android.vending.INSTALL_REFERRER" />
+		    </intent-filter>
 
-       <!--  <meta-data
-            android:name="igaworks_app_key"
-            android:value="58229468" />
-        <meta-data
-            android:name="igaworks_hash_key"
-            android:value="03c0b0579dd4470b" />
-        <meta-data
-            android:name="igaworks_market_info"
-            android:value="google" />
-        <meta-data
-            android:name="adbrix_app_key"
-            android:value="58229468" />
-        <meta-data
-            android:name="adbrix_hash_key"
-            android:value="03c0b0579dd4470b" /> -->
+		    <meta-data
+		        android:name="forward"
+		        android:value="com.hangame.hsp.referrer.InstallReceiver" />
+		</receiver>
+		<receiver android:name="com.hangame.hsp.push.NPushBroadcastReceiver" >
+            <intent-filter>
+
+                <!-- Push Message 를 받기 위한 Intent-Filter. -->
+                <action android:name="com.nhn.nni.intent.RECEIVE" />
+                <!-- Target ID (=Registration ID) 를 받기 위한 Intent-Filter. -->
+                <action android:name="com.nhn.nni.intent.REGISTRATION" />
+                <action android:name="com.nhn.nni.intent.EVENT" />
+
+                <!-- TODO: fill package name -->
+                <category android:name="com.nhnent.SKSUMRAN" />
+`
+            </intent-filter>
+            <intent-filter>
+
+                <!--
+                    nPush 가 강제종료 당했을 때 살리기 위해서 여러 BroadCast 를 등록해놓고 alive 를 체크한다. 
+					- 폰이 부팅되었을 때
+					- Google Talk 이 연결되었을 때
+					- AC 혹은 USB 케이블을 연결했을 때
+					- AC 혹은 USB 케이블을 연결 해제했을 때
+					- 네트워크 상태가 변경되었을 때 (on/off 혹은 망 전환)
+                -->
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.GTALK_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+            </intent-filter>
+        </receiver>
+
+       
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -159,47 +183,9 @@
         </activity>
         <!-- HSP Activity End -->
 
-<!--         <receiver
-            android:name="com.igaworks.adbrixtracersdk.cores.ADBrixReceiver"
-            android:exported="true" >
-            <intent-filter>
-                <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-        </receiver> -->
 
-<!--         <meta-data
-            android:name="adbrix_market_info"
-            android:value="Google" /> -->
         <!-- [HSP SDK] NPush Global begin -->
-        <receiver android:name="com.hangame.hsp.push.NPushBroadcastReceiver" >
-            <intent-filter>
-
-                <!-- Push Message 를 받기 위한 Intent-Filter. -->
-                <action android:name="com.nhn.nni.intent.RECEIVE" />
-                <!-- Target ID (=Registration ID) 를 받기 위한 Intent-Filter. -->
-                <action android:name="com.nhn.nni.intent.REGISTRATION" />
-                <action android:name="com.nhn.nni.intent.EVENT" />
-
-                <!-- TODO: fill package name -->
-                <category android:name="com.nhnent.SKSUMRAN" />
-`
-            </intent-filter>
-            <intent-filter>
-
-                <!--
-                    nPush 가 강제종료 당했을 때 살리기 위해서 여러 BroadCast 를 등록해놓고 alive 를 체크한다. 
-					- 폰이 부팅되었을 때
-					- Google Talk 이 연결되었을 때
-					- AC 혹은 USB 케이블을 연결했을 때
-					- AC 혹은 USB 케이블을 연결 해제했을 때
-					- 네트워크 상태가 변경되었을 때 (on/off 혹은 망 전환)
-                -->
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.GTALK_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
-                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
-            </intent-filter>
-        </receiver>
+        
 
         <!-- NNI 클라이언트에서 사용하는 서비스 -->
         <service
