@@ -41,18 +41,16 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Log;
-import android.view.InputDevice;
-import android.view.InputEvent;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.WindowManager;
 
-import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
+import com.igaworks.IgawCommon;
 //import com.igaworks.IgawCommon;
 //import com.kamcord.android.Kamcord;
 //import com.kamcord.android.Kamcord;
@@ -125,11 +123,11 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		//IgawCommon.startApplication(DGproto.this);
 
 		// 'isupdate'는 아래 2.4 부분을 참고해주세요. 'loglevel' 디버그를 위한 로그 레벨을 세팅하는 필드입니다. 출시할때는 이 필드를 '0(숫자 영)'으로 세팅하십시요.
-		AdXConnect.getAdXConnectInstance(getApplicationContext(), false, 1);
+//		AdXConnect.getAdXConnectInstance(getApplicationContext(), false, 1);
+//
+//		AdXConnect.getAdXConnectEventInstance(getApplicationContext(),"Launch","","");
 
-		AdXConnect.getAdXConnectEventInstance(getApplicationContext(),"Launch","","");
-
-
+		IgawCommon.startApplication(DGproto.this);
 	}
 	void hideSystemUI()
 	{
@@ -214,6 +212,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	{
 		super.onResume();     
 		hideSystemUI();
+		IgawCommon.startSession(DGproto.this);
 		//IgawCommon.startSession(DGproto.this);
 		//         ADBrixManager.startSession(this);
 		HSPCore core = HSPCore.getInstance();
@@ -284,7 +283,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onPause()
 	{
 		super.onPause();
-		//IgawCommon.endSession();
+		IgawCommon.endSession();
 		suspend();
 	}
 	@Override

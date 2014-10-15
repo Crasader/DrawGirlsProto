@@ -83,6 +83,7 @@ bool AccountManagerPopup::init(int touchP)
 	CommonButton* closeButton = CommonButton::createCloseButton(touchP - 1);
 	closeButton->setFunction([=](CCObject*)
 													 {
+														 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 														 CommonAnimation::closePopup(this, back, managerPopup->getDimmedSprite(), nullptr,
 																												 [=]()
 																												 {
@@ -269,10 +270,20 @@ bool AccountManagerPopup::init(int touchP)
 				back->addChild(titleLbl);
 				titleLbl->setPosition(ccpFromSize(back->getContentSize()/2.f) + ccp(-85, back->getContentSize().height/2.f-35));
 
+				auto nickName = t["nick"].asString();
+				if(nickName == "")
+				{
+					nickName = "옛날유저";
+				}
+				auto highPiece = t["highPiece"].asInt();
+				if(highPiece == 0)
+				{
+					highPiece = 1;
+				}
 				std::string guidanceMsg = ccsf( getLocal(LK::kAnotherHistory),
 																			 tryName.c_str(),
 //																			 descMapper.at((HSPLoginTypeX)myHSP->getLoginType()).c_str(),
-																			 t["nick"].asString().c_str(), t["highPiece"].asInt(),
+																			 nickName.c_str(), highPiece,
 																			 myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getUserdataHighPiece());
 				StyledLabelTTF* content = StyledLabelTTF::create(
 																												 guidanceMsg.c_str() ,
@@ -324,7 +335,6 @@ bool AccountManagerPopup::init(int touchP)
 									SaveData::sharedObject()->resetAllData();
 									myDSH->removeCache();
 									mySDS->removeCache();
-									
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 									TRACE();
 									CCLOG("save accountType %d", mm2);
@@ -332,6 +342,24 @@ bool AccountManagerPopup::init(int touchP)
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+
+#if 0             ///////////////////// 아래 코드는 동작안함
+									// 게스트인 경우 드롭아웃시키고 완료됐다고 띄우고
+									// 게스트가 아닌 경우 바로 매핑 완료 시킴.
+									if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
+									{
+										Json::Value param;
+										param["memberID"] = hspConnector::get()->getMemberID();
+										// 성공하든 실패하든 걍 무조건 일단 날림. 트랜잭션이 안되기 때문에 어쩔 수 없음.
+										myHSP->command("dropoutuser", param, [=](Json::Value v)
+																	 {
+																		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																	 });
+									}
+									else
+									{
+									}
+#endif
 								}
 								else
 								{
@@ -363,8 +391,6 @@ bool AccountManagerPopup::init(int touchP)
 #else
 						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
 #endif
-						
-	
 					}
 					else
 					{
@@ -491,6 +517,7 @@ bool AccountManagerPopup::init(int touchP)
 																														 {
 																															 CCLOG("ttTT");
 																															 TRACE();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 																															 m_logoutRepeater2 = [=](Json::Value result_data){
 																																 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 																																 if(result_data["error"]["isSuccess"].asBool())
@@ -502,9 +529,7 @@ bool AccountManagerPopup::init(int touchP)
 																																	 hspConnector::get()->logout(m_logoutRepeater2);
 																																 }
 																															 };
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 																															 hspConnector::get()->logout(m_logoutRepeater2);
-																															 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 																															 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 #endif
@@ -644,6 +669,7 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
 	{
 		facebookLogin->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			tryLogin((int)HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
 		});
 	}
@@ -651,6 +677,7 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeGOOGLE) // 구글로그인이 안되어있는 경우에만...
 	{
 		googleLogin->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS

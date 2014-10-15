@@ -476,6 +476,8 @@ private:
 	TutoMapType getMapData(int x, int y);
 	void setMapData(int x, int y, TutoMapType value);
 	
+	double back_tracking_cnt;
+	int ing_back_tracking_cnt;
 	void startBackTracking();
 	void backTracking();
 	void stopBackTracking();

@@ -977,12 +977,16 @@ void FriendPopup::setListMenu()
 		d_all_img->addChild(d_all_label);
 		
 		
-		m_listButtonCallback = [=](CCObject*)
+		m_listButtonCallback = [=](CCObject* sound)
 		{
 			m_friendListContainer->removeAllChildren();
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			if(sound)
+			{
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+			}
 			if(friend_table)
 			{
 				friend_table->removeFromParent();
@@ -1133,6 +1137,7 @@ void FriendPopup::setAddMenu()
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			if(friend_table)
 			{
 				friend_table->removeFromParent();
@@ -1401,7 +1406,7 @@ void FriendPopup::setManageMenu()
 		
 		m_manageButtonCallback = [=](CCObject*){
 			
-
+			
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(false);
@@ -1410,6 +1415,7 @@ void FriendPopup::setManageMenu()
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			if(friend_table)
 			{
 				friend_table->removeFromParent();
@@ -1525,6 +1531,7 @@ void FriendPopup::setVoteFriendMenu()
 			m_friendAddContainer->removeAllChildren();
 			m_friendManageContainer->removeAllChildren();
 			m_friendVoteContainer->removeAllChildren();
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			TRACE();
 			if(input_text1)
 			{
@@ -1683,6 +1690,7 @@ void FriendPopup::setVoteFriendMenu()
 		m_voteFriendButtonCallback = [=](CCObject*){
 			
 
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			add_menu->setEnabled(true);
 			list_menu->setEnabled(true);
 			manage_menu->setEnabled(true);

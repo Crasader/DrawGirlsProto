@@ -32,7 +32,7 @@
 #import "hspConnector.h"
 #import "FiveRocks.h"
 #import "HSPCore.h"
-
+#import <IgaworksAD/IgaworksAD.h>
 #include "DataStorageHub.h"
 #import "HSPSDKPackageInfo.h"
 #import "HSPCore.h"
@@ -172,6 +172,10 @@ static AppDelegate s_sharedApplication;
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	
 	// Override point for customization after application launch.
+
+	[IgaworksAD igaworksADWithAppKey:@"58229468"
+												andHashKey:@"03c0b0579dd4470b"
+			andIsUseIgaworksRewardServer:NO];
 	[self reportAppOpen];
 	
 	
@@ -270,7 +274,7 @@ static AppDelegate s_sharedApplication;
 	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
 	{
 		
-		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
 		CCLOG("AUTO LOGIN TYPE == %d", lType);
 		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
 			//

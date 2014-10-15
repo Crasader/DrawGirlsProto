@@ -1,0 +1,163 @@
+/*
+ Localizable.strings
+ AdPOPcornSDKRevision
+ 
+ Created by wonje,song on 13. 2. 5..
+ Copyright (c) 2013년 wonje,song. All rights reserved.
+ */
+
+/* Chinese zh-hant */
+
+/* Title used for offer wall top bar */
+"offerWallTopBarTitle" = "事件";
+
+/* Title used for offer wall table cell */
+"max" = "最大的";
+
+/* Title used for alert view title */
+"alertViewTitle" = "廣告爆米花";
+
+/* Message used for alert view message for general error */
+"alertViewGeneralErrorMessage" = "廣告請求並不順利。\n在幾分鐘後，再次詢問。";
+
+/* Message used for alert view message for no campaign error */
+"alertViewNoCampaignErrorMessage" = "沒有可用的活動。";
+
+/* Message used for alert view message for already participated campaign error */
+"alertViewAlreadyParticipatedCampaignErrorMessage" = "已經參加這項運動。";
+
+/* Message used for alert view message for mediakeys were incorrect error */
+"alertViewMediaKeyIncorrectErrorMessage" = "他的媒體鍵是不正確的。";
+
+/* Title used for alert view confirm button */
+"confirm" = "確認";
+
+/* Title used for landing view close button */
+"close" = "關閉";
+
+/* Message used for bridge view of popup view */
+"moving" = " 移動。";
+
+/* Title used for bridgr view of back button */
+"back" = "背面";
+
+"alerViewAlreadyInstalledAppMessage" = "已安裝應用程序。那麼不能參加。要求確認。";
+
+"alerViewNotYetInstalledMessage" = "未安裝的應用程序呢。你想要去的設定畫面？";
+"alerViewNotOpenToInstallAppURLMessage" = "App Store中無法移動。請聯繫客戶服務。";
+
+"checkParticipate" = "確認參與";
+"participating" = "參與..";
+"checkingScheme" = "檢查模式..";
+"checkingIsFavorite" = "像檢查..";
+
+"alreadyfavorited" = "你是一個球迷了！不幸的是，風扇的身份已經是可能參與該事件。";
+
+"rewardComplete" = "此產品已成功付款要求。付款須支付網絡項目可能需要長達5分鐘。";
+
+"notYetisFavoriteComplete" = "還是喜歡是不完整的。要求確認。";
+
+"participate" = "參與";
+"viewDetail" = "了解更多";
+
+"rewardConditionMessageCPIIns" = "賺取條件\ n在安裝前，請確認安裝。";
+"wrongURLAddress" = "無效的URL地址。請聯繫客戶服務。";
+
+"checkInstall" = "驗證安裝";
+"checkParticipate" = "確認參與";
+
+"copyRecommendCode" = "推薦代碼被複製。";
+
+"rewardWaiting" = "待付款";
+"rewardCompleted" = "完成付款";
+
+
+"participateListTableHeaderText" = "完整的補償支付的廣告由參與完成狀態，由於網絡，它可能需要長達2個小時。";
+
+"csGuideText" = "如果您有任何疑問，請離開這裡。在回答，讓我快。";
+
+"csNotiText" = "*所收集的個人信息（電子郵件地址）被用於CS處理和解決問題的能力，並在一段存儲後會被刪除。";
+
+
+"inquiry" = "查詢";
+"receiveAReplyEmail" = "收到回复電子郵件";
+"pleaseEnterYourEmail"= "請輸入您的電子郵件地址。";
+
+
+"alertNoEmailMessage" = "請輸入您的電子郵件地址來接收回复。";
+"alertNoAskMessage" = "請輸入您的聯繫方式。";
+
+"alertCSAddedMessage" = "聯繫信息已經收到。";
+
+"alertSendMailFailMessage" = "郵件傳遞失敗。";
+
+"cancel" = "取消";
+"select" = "選擇";
+
+"wrongEmailFormatMessage" = "電子郵件格式不正確。請檢查並重新輸入。";
+
+"csTypeEmailSubject" = "[聯繫AdPopcorn]%@";
+
+"csTypeEmailMessageBody" = "收到回复的電子郵件地址 : %@\n查詢 : %@";
+
+"couponCopyGuide" = "按住優惠券代碼將被複製。";
+
+"noCouponListMessage" = "優惠券不存在。";
+
+"couponCopiedMessage" = "%@ 優惠券代碼被複製。";
+
+"noPopiconFunctionNotiMessage" = "不支持Popicon功能了。請使用offwall功能。";
+
+"notSupportThisFunctionMessage" = "不支持此功能了。";
+
+
+"pleaseSelectTheEventYouWantToContactTitle" = "請選擇您想要聯繫的事件。";
+
+"couponList" = "優惠券列表";
+
+"customerService" = "顧客服務";
+
+"send" = "發送";
+
+"adParticiateButtonText" = "廣告參與";
+"particiateHistoryButtonText" = "參與歷史";
+"promotingButtonText" = "邀請朋友";
+
+"promotingLinkType" = "鏈接類型";
+"promotingCouponType" = "優惠券類型";
+
+"promotingItemQuantity" = "每邀請\n%@";
+
+"invitedCount" = "邀請成功 : %@ 例";
+"earnedReward" = "得到總共 %@ %@";
+
+"copy" = "複製";
+"viewRanking" = "查看排名";
+
+"promotingPartipateMethod1" = "1. 在各種不同的方式來介紹朋友來的應用程序。介紹可以編輯直接使用。";
+"promotingPartipateMethod2" = "2. 通過引進安裝鏈接的朋友來安裝應用程序，運行\n3. 朋友參與購買的物品數量。";
+
+"promotingCautionMessage" = "注意！邀請朋友給你介紹的應用程序，所以我已經安裝了應用程序服務獎勵將被排除在收購。";
+
+"textCopied" = "複製";
+
+"inviteCompensation" = "邀請補償";
+"rankCompensation" = "等級補償";
+
+"isOverseaOfferMessage" = "廣告選擇海外廣告。如果您已經下載了應用程序，以獎勵過去的歷史沒有支付。獎勵費的規定到網絡，它可能需要長達2個小時。你要繼續嗎？";
+
+"yes" = "是的";
+"no" = "無";
+
+"howToParticipate" = "如何參與";
+
+"description" = "描述";
+
+"canNotParticipateInThisCampaignMessage" = "不能參加本次活動。";
+
+// adbrix
+"alertViewTitleForAdBrix" = "AdBrix";
+"install" = "安裝";
+"acquisition" = "獲得";
+"alerViewCantParticipateEventMessage" = "不能參加活動。";
+"alerViewCompletedParticipateEventMessage" = "參與事件完成。";

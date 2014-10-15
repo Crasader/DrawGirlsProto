@@ -2207,6 +2207,9 @@ void PlayTutorial::nextStep()
 												  }
 											  }
 											  
+											  myHSP->IgawAdbrixFirstTimeExperience("TutorialComplete");
+											  myHSP->IgawAdbrixRetention("TutorialComplete");
+											  
 											  
 											  CCNode* scenario_node = CCNode::create();
 											  addChild(scenario_node, 101);
@@ -2345,25 +2348,17 @@ void PlayTutorial::startBackTracking()
 	CCLOG("start backtracking");
 	
 	controler->isBacking = true;
+	back_tracking_cnt = 0;
+	ing_back_tracking_cnt = 0;
 	schedule(schedule_selector(PlayTutorial::backTracking));
 }
 void PlayTutorial::backTracking()
 {
-	IntPoint afterJackPoint = path_manager->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
-		stopBackTracking();
-		return;
-	}
-	else
-	{
-		character->setCharacterPoint(afterJackPoint);
-	}
-	
-	if(mySGD->rewind_cnt_per_frame >= 2)
-	{
-		afterJackPoint = path_manager->pathBackTracking();
+		++ing_back_tracking_cnt;
+		IntPoint afterJackPoint = path_manager->pathBackTracking();
 		
 		if(afterJackPoint.isNull())
 		{
@@ -2375,25 +2370,40 @@ void PlayTutorial::backTracking()
 			character->setCharacterPoint(afterJackPoint);
 		}
 	}
-	else
-		return;
 	
-	if(mySGD->rewind_cnt_per_frame >= 3)
-	{
-		afterJackPoint = path_manager->pathBackTracking();
-		
-		if(afterJackPoint.isNull())
-		{
-			stopBackTracking();
-			return;
-		}
-		else
-		{
-			character->setCharacterPoint(afterJackPoint);
-		}
-	}
-	else
-		return;
+//	if(mySGD->rewind_cnt_per_frame >= 2)
+//	{
+//		afterJackPoint = path_manager->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			stopBackTracking();
+//			return;
+//		}
+//		else
+//		{
+//			character->setCharacterPoint(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
+//	
+//	if(mySGD->rewind_cnt_per_frame >= 3)
+//	{
+//		afterJackPoint = path_manager->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			stopBackTracking();
+//			return;
+//		}
+//		else
+//		{
+//			character->setCharacterPoint(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
 }
 void PlayTutorial::stopBackTracking()
 {

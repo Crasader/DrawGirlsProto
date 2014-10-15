@@ -26,7 +26,7 @@ import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.AdX.tag.AdXConnect;
+//import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPCore.HSPLoginType;
 import com.hangame.hsp.HSPCore.HSPWithdrawAccountCB;
@@ -50,6 +50,7 @@ import com.hangame.hsp.ui.HSPUiLauncher;
 import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
+import com.igaworks.adbrix.IgawAdbrix;
 import com.nhnent.SKSUMRAN.LuaGLSurfaceView;
 
 //import com.kakao.api.Kakao;
@@ -580,12 +581,28 @@ public class hspConnector {
 	}
 	public static void AdxLogin()
 	{ 
-		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), "Signup", "", "");
+//		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), "Signup", "", "");
 	}
 	public static void getAdXConnectEventInstance(String event, String data, String currency)
 	{
+//		 AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
+//		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+	}
+	public static void IgawAdbrixBuy(String productName)
+	{
+		IgawAdbrix.buy(productName);
 		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
-		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+//		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
+	}
+	public static void IgawAdbrixRetention(String msg)
+	{
+		IgawAdbrix.retention(msg);
+	}	
+	public static void IgawAdbrixFirstTimeExperience(String msg)
+	{
+		IgawAdbrix.firstTimeExperience(msg);
+		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
+//		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
 	}
 	public static void registerGamePadCallback(final int _key)
 	{ 

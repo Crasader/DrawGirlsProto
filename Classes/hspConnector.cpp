@@ -25,6 +25,7 @@
 #import "HSPUiLauncher.h"
 #import "HSPItemDelivery.h"
 #import "KakaoLinkCenter.h"
+#import  <IgaworksAD/AdBrix.h>
 //#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
@@ -1468,6 +1469,71 @@ void hspConnector::getAdXConnectEventInstance(string event, string data, string 
 	
 #endif
 }
+void hspConnector::IgawAdbrixBuy(string productName)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixBuy",
+																		 "(Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(productName.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[AdBrix buy:[NSString stringWithUTF8String:productName.c_str()]];
+//	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+//						withData:[NSString stringWithUTF8String:data.c_str()]
+//				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+	
+#endif
+}
+ 
+ 
+void hspConnector::IgawAdbrixFirstTimeExperience(string msg)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixFirstTimeExperience",
+																		 "(Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(msg.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	//	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+	//						withData:[NSString stringWithUTF8String:data.c_str()]
+	//				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+	[AdBrix firstTimeExperience:[NSString stringWithUTF8String:msg.c_str()]];
+#endif
+ 
+}
+	 void hspConnector::IgawAdbrixRetention(string msg)
+	 {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+		 JniMethodInfo t;
+		 int r = 0;
+		 if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixRetention",
+																			 "(Ljava/lang/String;)V")) {
+			 jstring param1 = t.env->NewStringUTF(msg.c_str());
+			 t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
+			 t.env->DeleteLocalRef(param1);
+			 t.env->DeleteLocalRef(t.classID);
+		 }
+		 
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+		 //	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+		 //						withData:[NSString stringWithUTF8String:data.c_str()]
+		 //				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+		 [AdBrix retention:[NSString stringWithUTF8String:msg.c_str()]];
+#endif
+		 
+	 }
 int hspConnector::registerGamePadCallback(jsonSelType func)
 {
 	int registeredKey = -1;

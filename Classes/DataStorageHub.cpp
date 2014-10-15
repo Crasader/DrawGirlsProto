@@ -141,7 +141,7 @@ int DataStorageHub::getIntegerForKeyDefault (DSH_Key t_key, int def)
 		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(kSDF_myDSH, c_key, def);
-	dsh_cache_int[c_key] = return_value;
+//	dsh_cache_int[c_key] = return_value;
 	return return_value;
 }
 int DataStorageHub::getIntegerForKey (DSH_Key t_key, int key_val1)

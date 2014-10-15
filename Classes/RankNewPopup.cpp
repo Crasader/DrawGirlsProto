@@ -70,7 +70,7 @@ bool RankNewPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 14);
+	KSLabelTTF* title_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_weeklyranking), mySGD->getFont().c_str(), 12);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);

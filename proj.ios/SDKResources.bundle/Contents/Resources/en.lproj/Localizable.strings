@@ -1,0 +1,159 @@
+/*
+ Localizable.strings
+ AdPOPcornSDKRevision
+ 
+ Created by wonje,song on 13. 2. 5..
+ Copyright (c) 2013년 wonje,song. All rights reserved.
+ */
+
+/* Title used for offer wall top bar */
+"offerWallTopBarTitle" = "Event";
+
+/* Title used for offer wall table cell */
+"max" = "Max";
+
+/* Title used for alert view title */
+"alertViewTitle" = "adPOPcorn";
+
+/* Message used for alert view message for general error */
+"alertViewGeneralErrorMessage" = "Ad request is not smooth. \nAsk again in a few minutes.";
+
+/* Message used for alert view message for no campaign error */
+"alertViewNoCampaignErrorMessage" = "There is no available campaign.";
+
+/* Message used for alert view message for already participated campaign error */
+"alertViewAlreadyParticipatedCampaignErrorMessage" = "Already Participated this Campaign.";
+
+/* Message used for alert view message for mediakeys were incorrect error */
+"alertViewMediaKeyIncorrectErrorMessage" = "The media keys were incorrect.";
+
+/* Title used for alert view confirm button */
+"confirm" = "Confirm";
+
+/* Title used for landing view close button */
+"close" = "Close";
+
+/* Message used for bridge view of popup view */
+"moving" = "moving.";
+
+/* Title used for bridgr view of back button */
+"back" = "Back";
+
+
+"alerViewAlreadyInstalledAppMessage" = "Already installed App. Then can not participate. Ask for confirmation.";
+
+"alerViewNotYetInstalledMessage" = "App is not installed yet. Do you want to go to the setup screen?";
+"alerViewNotOpenToInstallAppURLMessage" = "App Store can not be moved. Please contact Customer Service.";
+
+"checkParticipate" = "Confirm participation";
+"participating" = "Participating in..";
+"checkingScheme" = "Checking schema..";
+"checkingIsFavorite" = "Checking like..";
+
+"alreadyfavorited" = "You're a fan already! Unfortunately, the identity of the fan is already possible to participate in the event.";
+
+"rewardComplete" = "This item has been successfully payment request. Payments are subject to network items may take up to 5 minutes.";
+
+"notYetisFavoriteComplete" = "Still like is not complete. Ask for confirmation.";
+
+"participate" = "Participate";
+"viewDetail" = "Learn more";
+
+"rewardConditionMessageCPIIns" = "Earn conditions\nAfter the installation, please verify the installation.";
+"wrongURLAddress" = "Invalid URL address. Please contact Customer Service.";
+
+"checkInstall" = "Verifying the Installation";
+"checkParticipate" = "Confirm participation";
+
+"copyRecommendCode" = "Recommended code was copied.";
+
+"rewardWaiting" = "Pending payment";
+"rewardCompleted" = "Complete payment";
+
+
+"participateListTableHeaderText" = "Complete compensation paid advertising by participation in the completion status, due to the network, it may take up to 2 hours.";
+"csGuideText" = "If you have any questions, please leave here. In answer, let me quickly.";
+"csNotiText" = "*The collected personal information (email address) is used for CS processing and problem solving, and will be deleted after a period of storage.";
+
+
+"inquiry" = "Inquiry";
+"receiveAReplyEmail" = "Receive A Reply Email";
+"pleaseEnterYourEmail"= "Please Enter Your Email.";
+
+"alertNoEmailMessage" = "Please enter your email address to receive replies.";
+"alertNoAskMessage" = "Please enter your contact details.";
+
+"alertCSAddedMessage" = "Contact information has been received.";
+
+"alertSendMailFailMessage" = "Mail delivery failed.";
+
+"cancel" = "Cancel";
+"select" = "Select";
+
+"wrongEmailFormatMessage" = "Email format is not correct. Please check and re-enter.";
+
+"csTypeEmailSubject" = "[Contact AdPopcorn]%@";
+
+"csTypeEmailMessageBody" = "Receive a reply email address : %@\nInquiry : %@";
+
+"couponCopyGuide" = "Press and hold the coupon code will be copied.";
+
+"noCouponListMessage" = "Coupon does not exist.";
+
+"couponCopiedMessage" = "%@ coupon code was copied.";
+
+"noPopiconFunctionNotiMessage" = "Popicon feature is not supported anymore. Please use offwall function.";
+
+"notSupportThisFunctionMessage" = "This feature is not supported anymore.";
+
+
+"pleaseSelectTheEventYouWantToContactTitle" = "Please select the event you want to contact.";
+
+"couponList" = "Coupon List";
+
+"customerService" = "Customer Service";
+
+"send" = "Send";
+
+"adParticiateButtonText" = "Ads participation";
+"particiateHistoryButtonText" = "History of participation";
+"promotingButtonText" = "Invite a friend";
+
+"promotingLinkType" = "Link Type";
+"promotingCouponType" = "Coupon Type";
+
+"promotingItemQuantity" = "%@\nper invite";
+
+"invitedCount" = "Invite Success : %@ patients";
+"earnedReward" = "Obtain a total of %@ %@";
+
+"copy" = "Copy";
+"viewRanking" = "View rank";
+
+"promotingPartipateMethod1" = "1. In a variety of ways to introduce friends to the app. Introduction can be edited directly used.";
+"promotingPartipateMethod2" = "2. Friends through the introduction of the Install link to install the app, run the\n3. Number of friends to participate in the purchased item.";
+
+"promotingCautionMessage" = "Attention! Invite a friend to introduce you to the app, so I have installed the app service Rewards will be excluded from acquisition.";
+
+"textCopied" = "Copied";
+
+"inviteCompensation" = "Invite compensation";
+"rankCompensation" = "Rank compensation";
+
+"isOverseaOfferMessage" = "Advertising choice overseas advertising. If you have downloaded the app to the past history of reward is not paid. Reward payments are subject to the network, it may take up to 2 hours. Do you want to continue?";
+
+"yes" = "yes";
+"no" = "no";
+
+"howToParticipate" = "How to participate";
+
+"description" = "description";
+
+"canNotParticipateInThisCampaignMessage" = "Can not participate in this campaign.";
+
+// adbrix
+"alertViewTitleForAdBrix" = "AdBrix";
+"install" = "install";
+"acquisition" = "acquisition";
+"alerViewCantParticipateEventMessage" = "Can not participate in events.";
+"alerViewCompletedParticipateEventMessage" = "Participation in the event is completed.";

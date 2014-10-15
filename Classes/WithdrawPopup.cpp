@@ -99,7 +99,7 @@ void WithdrawPopup::menuAction (CCObject * sender)
 	else if(tag == kWP_MT_withdraw)
 	{
 		Json::Value param;
-		param["memberID"] = hspConnector::get()->myKakaoInfo["user_id"].asString();
+		param["memberID"] = hspConnector::get()->getMemberID();
 		hspConnector::get()->command("dropoutuser", param, json_selector(this, WithdrawPopup::resultDropoutuser));
 		touched_number = -1;
 	}
