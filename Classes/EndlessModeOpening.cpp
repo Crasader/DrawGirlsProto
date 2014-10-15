@@ -47,6 +47,7 @@ bool EndlessModeOpening::init()
 //	FormSetter::get()->start();
 	
 	refresh_ing_win_func = nullptr;
+	CCLog("null kind_tutorial_pvp");
 	kind_tutorial_pvp = nullptr;
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
@@ -382,7 +383,9 @@ void EndlessModeOpening::setMain()
 								  
 								  if(kind_tutorial_pvp != nullptr)
 									{
+										CCLog("before kind_tutorial_pvp()");
 										kind_tutorial_pvp();
+										CCLog("after_kind_tutorial_pvp()");
 									}
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
@@ -471,6 +474,7 @@ void EndlessModeOpening::setMain()
 																			 
 																			 is_menu_enable = true;
 																			 
+																			 CCLog("init tutorial_success_func");
 																			 this->tutorial_success_func = [=]()
 																			 {
 																				 CCNode* scenario_node = CCNode::create();
@@ -503,6 +507,7 @@ void EndlessModeOpening::setMain()
 																				 typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent56), end_func3);
 																			 };
 																			 
+																			 CCLog("init tutorial_fail_func");
 																			 this->tutorial_fail_func = [=]()
 																			 {
 																				 
@@ -510,7 +515,7 @@ void EndlessModeOpening::setMain()
 																			 
 																			 addChild(KSTimer::create(0.1f, [=]()
 																									  {
-																										  scenario_node->removeFromParent();
+																											scenario_node->removeFromParent();
 																									  }));
 																		 });
 			skip_menu->addChild(skip_item);
@@ -547,6 +552,7 @@ void EndlessModeOpening::setMain()
 				
 				is_menu_enable = true;
 				
+				CCLog("init tutorial_success_func");
 				this->tutorial_success_func = [=]()
 				{
 					CCNode* scenario_node = CCNode::create();
@@ -578,17 +584,19 @@ void EndlessModeOpening::setMain()
 					
 					typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent56), end_func3);
 				};
-				
+			
+				CCLog("init tutorial_fail_func");
 				this->tutorial_fail_func = [=]()
 				{
 					
 				};
 
-				
+				CCLog("init kind_tutorial_pvp");
 				kind_tutorial_pvp = [=]()
 				{
 					skip_menu->setEnabled(false);
 					scenario_node->removeFromParent();
+					CCLog("inner null kind_tutorial_pvp");
 					kind_tutorial_pvp = nullptr;
 				};
 				
@@ -881,7 +889,9 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 		{
+			CCLog("before tutorial_fail_func()");
 			tutorial_fail_func();
+			CCLog("after tutorial_fail_func()");
 		}
 	}
 }
@@ -1315,7 +1325,9 @@ void EndlessModeOpening::successGetStageInfo()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 	{
+		CCLog("before tutorial_success_func()");
 		tutorial_success_func();
+		CCLog("after tutorial_success_func()");
 	}
 	
 	RivalSelectPopup* t_popup = RivalSelectPopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=]()
