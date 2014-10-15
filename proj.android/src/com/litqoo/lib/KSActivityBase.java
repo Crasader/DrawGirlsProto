@@ -23,6 +23,7 @@ import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 import com.hangame.hsp.payment.HSPPayment;
+import com.igaworks.IgawCommon;
 //import com.litqoo.DGproto.R;
 
 
@@ -403,6 +404,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 	
 	public void addDoubleDialog(final String t_title, final String t_message, final String t_leftButtonText, final String t_rightButtonText, final int t_tag)
 	{
+		IgawCommon.endSession();
 //		ADBrixManager.endSession();
 		handler.post(new Runnable() {
 			public void run() {
@@ -431,6 +433,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 							mGLView.queueEvent(new Runnable() {
 				                public void run() {
 				                	alertAction(dialogValue, 1);
+				                	IgawCommon.startSession(KSActivityBase.this);
 //				                	ADBrixManager.startSession(KSActivityBase.this); // getApplicationContext()에서 activity를 넣어주는 것으로 변경 되었습니다. - 2013-11-13
 //				                	DBrixManager.startSession(this);
 				                }
