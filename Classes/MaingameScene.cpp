@@ -1462,41 +1462,57 @@ void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 
 void Maingame::backTracking()
 {
-	IntPoint afterJackPoint = myPM->pathBackTracking();
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
 	
-	if(afterJackPoint.isNull())
+	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
-		stopBackTracking();
-		return;
-	}
-	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
-	}
-	
-	afterJackPoint = myPM->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
-	{
-		stopBackTracking();
-		return;
-	}
-	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
+		++ing_back_tracking_cnt;
+		IntPoint afterJackPoint = myPM->pathBackTracking();
+		
+		if(afterJackPoint.isNull())
+		{
+			stopBackTracking();
+			return;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
 	
-	afterJackPoint = myPM->pathBackTracking();
-	
-	if(afterJackPoint.isNull())
-	{
-		stopBackTracking();
-		return;
-	}
-	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
-	}
+//	if(mySGD->rewind_cnt_per_frame >= 2)
+//	{
+//		afterJackPoint = myPM->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			stopBackTracking();
+//			return;
+//		}
+//		else
+//		{
+//			myJack->backTrackingAtAfterMoving(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
+//	
+//	if(mySGD->rewind_cnt_per_frame >= 3)
+//	{
+//		afterJackPoint = myPM->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			stopBackTracking();
+//			return;
+//		}
+//		else
+//		{
+//			myJack->backTrackingAtAfterMoving(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
 }
 
 void Maingame::onEnter()
@@ -2186,6 +2202,8 @@ void Maingame::stunBackTracking()
 		isCheckingBacking = true;
 		AudioEngine::sharedInstance()->playEffect("se_drawcancel.mp3", false);
 //		AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
+		back_tracking_cnt = 0;
+		ing_back_tracking_cnt = 0;
 		schedule(schedule_selector(Maingame::stunBacking));
 	}
 }
@@ -2213,38 +2231,70 @@ void Maingame::stopBackingCheck()
 
 void Maingame::stunBacking()
 {
-	IntPoint afterJackPoint = myPM->pathBackTracking();
-
-	if(afterJackPoint.isNull())
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	
+	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
-		myGD->communication("SW_stopAllSW");
+		++ing_back_tracking_cnt;
+		IntPoint afterJackPoint = myPM->pathBackTracking();
 		
-		unschedule(schedule_selector(Maingame::stunBacking));
-		myJack->endBackTracking();
-		myJack->willBackTracking = false;
-		isCheckingBacking = false;
-		return;
-	}
-	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
+		if(afterJackPoint.isNull())
+		{
+			myGD->communication("SW_stopAllSW");
+			
+			unschedule(schedule_selector(Maingame::stunBacking));
+			myJack->endBackTracking();
+			myJack->willBackTracking = false;
+			isCheckingBacking = false;
+			return;
+		}
+		else
+		{
+			myJack->backTrackingAtAfterMoving(afterJackPoint);
+		}
 	}
 
-	afterJackPoint = myPM->pathBackTracking();
-
-	if(afterJackPoint.isNull())
-	{
-		myGD->communication("SW_stopAllSW");
-		
-		unschedule(schedule_selector(Maingame::stunBacking));
-		myJack->endBackTracking();
-		myJack->willBackTracking = false;
-		isCheckingBacking = false;
-	}
-	else
-	{
-		myJack->backTrackingAtAfterMoving(afterJackPoint);
-	}
+//	if(mySGD->rewind_cnt_per_frame >= 2)
+//	{
+//		afterJackPoint = myPM->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			myGD->communication("SW_stopAllSW");
+//			
+//			unschedule(schedule_selector(Maingame::stunBacking));
+//			myJack->endBackTracking();
+//			myJack->willBackTracking = false;
+//			isCheckingBacking = false;
+//		}
+//		else
+//		{
+//			myJack->backTrackingAtAfterMoving(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
+//	
+//	if(mySGD->rewind_cnt_per_frame >= 3)
+//	{
+//		afterJackPoint = myPM->pathBackTracking();
+//		
+//		if(afterJackPoint.isNull())
+//		{
+//			myGD->communication("SW_stopAllSW");
+//			
+//			unschedule(schedule_selector(Maingame::stunBacking));
+//			myJack->endBackTracking();
+//			myJack->willBackTracking = false;
+//			isCheckingBacking = false;
+//		}
+//		else
+//		{
+//			myJack->backTrackingAtAfterMoving(afterJackPoint);
+//		}
+//	}
+//	else
+//		return;
 }
 
 void Maingame::readyBackTracking()
@@ -2261,6 +2311,8 @@ void Maingame::startBackTracking()
 	AudioEngine::sharedInstance()->playEffect("se_drawcancel.mp3", false);
 //	AudioEngine::sharedInstance()->playEffect("sound_returntojack.mp3", false);
 	((ControlJoystickButton*)mControl)->isBacking = true;
+	back_tracking_cnt = 0;
+	ing_back_tracking_cnt = 0;
 	schedule(schedule_selector(Maingame::backTracking));
 }
 

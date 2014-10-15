@@ -276,6 +276,7 @@ void EventShopPopup::menuAction(CCObject* sender)
 									{
                                         myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
 									}
 									requestItemDelivery();
 								}

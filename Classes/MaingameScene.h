@@ -150,6 +150,9 @@ private:
 	
 	void checkingBacking();
 	
+	double back_tracking_cnt;
+	int ing_back_tracking_cnt;
+	
 	void stunBackTracking();
 	void stunBacking();
 	

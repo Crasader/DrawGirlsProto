@@ -83,6 +83,7 @@ bool AccountManagerPopup::init(int touchP)
 	CommonButton* closeButton = CommonButton::createCloseButton(touchP - 1);
 	closeButton->setFunction([=](CCObject*)
 													 {
+														 AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 														 CommonAnimation::closePopup(this, back, managerPopup->getDimmedSprite(), nullptr,
 																												 [=]()
 																												 {
@@ -644,6 +645,7 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeFACEBOOK) // 페이스북이 아닌 경우에만~
 	{
 		facebookLogin->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			tryLogin((int)HSPMapping::kFACEBOOK, "Facebook ID", HSPLogin::FACEBOOK);
 		});
 	}
@@ -651,6 +653,7 @@ bool AccountManagerPopup::init(int touchP)
 	if(loginType != HSPLoginTypeGOOGLE) // 구글로그인이 안되어있는 경우에만...
 	{
 		googleLogin->setFunction([=](CCObject*){
+			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			tryLogin((int)HSPMapping::kGOOGLE, "Google ID", HSPLogin::GOOGLE);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS

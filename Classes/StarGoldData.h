@@ -1013,6 +1013,8 @@ public:
 	void setIosHideVer(string t_str);
 	string getIosHideVer();
 	
+	double rewind_cnt_per_frame;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
