@@ -1416,6 +1416,20 @@
 		D7AF3849189239EA00A3AD05 /* JackMissileShow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */; };
 		D7AF384A189239EA00A3AD05 /* PuzzleListShadow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */; };
 		D7B2BE8D1914F14E00010C7F /* TodayMissionPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */; };
+		D7B3A2DC19E7CD9A00DC8938 /* KakaoLinkCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2DA19E7CD9A00DC8938 /* KakaoLinkCenter.m */; };
+		D7B3A2DD19E7CD9A00DC8938 /* KakaoLinkCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2DA19E7CD9A00DC8938 /* KakaoLinkCenter.m */; };
+		D7B3A2EA19EBC61B00DC8938 /* AsyncImageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2E719EBC61B00DC8938 /* AsyncImageManager.cpp */; };
+		D7B3A2EB19EBC61B00DC8938 /* AsyncImageManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2E719EBC61B00DC8938 /* AsyncImageManager.cpp */; };
+		D7B3A2EC19EBC61B00DC8938 /* AsyncImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2E919EBC61B00DC8938 /* AsyncImage.cpp */; };
+		D7B3A2ED19EBC61B00DC8938 /* AsyncImage.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B3A2E919EBC61B00DC8938 /* AsyncImage.cpp */; };
+		D7B3A2F019EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */; };
+		D7B3A2F119EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */; };
+		D7B3A2F319EE14FF00DC8938 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F219EE14FF00DC8938 /* CoreData.framework */; };
+		D7B3A2F419EE150900DC8938 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F219EE14FF00DC8938 /* CoreData.framework */; };
+		D7B3A2F619EE153200DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
+		D7B3A2F719EE153A00DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
+		D7B3A2F919EE155100DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
+		D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
 		D7B6353019D9665C00BA4785 /* CharacterSelectPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */; };
 		D7B6353119D9665C00BA4785 /* HellModeOpening.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */; };
 		D7B6353219D9665C00BA4785 /* HellModeResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352E19D9665C00BA4785 /* HellModeResult.cpp */; };
@@ -2903,6 +2917,16 @@
 		D7AF3848189239EA00A3AD05 /* PuzzleListShadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PuzzleListShadow.h; sourceTree = "<group>"; };
 		D7B2BE8B1914F14E00010C7F /* TodayMissionPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TodayMissionPopup.h; sourceTree = "<group>"; };
 		D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TodayMissionPopup.cpp; sourceTree = "<group>"; };
+		D7B3A2DA19E7CD9A00DC8938 /* KakaoLinkCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KakaoLinkCenter.m; sourceTree = "<group>"; };
+		D7B3A2DB19E7CD9A00DC8938 /* KakaoLinkCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KakaoLinkCenter.h; sourceTree = "<group>"; };
+		D7B3A2E619EBC61B00DC8938 /* AsyncImageManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImageManager.h; sourceTree = "<group>"; };
+		D7B3A2E719EBC61B00DC8938 /* AsyncImageManager.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AsyncImageManager.cpp; sourceTree = "<group>"; };
+		D7B3A2E819EBC61B00DC8938 /* AsyncImage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AsyncImage.h; sourceTree = "<group>"; };
+		D7B3A2E919EBC61B00DC8938 /* AsyncImage.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AsyncImage.cpp; sourceTree = "<group>"; };
+		D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = IgaworksAD.framework; sourceTree = "<group>"; };
+		D7B3A2F219EE14FF00DC8938 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
+		D7B3A2F519EE153200DC8938 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
+		D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
 		D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterSelectPopup.cpp; sourceTree = "<group>"; };
 		D7B6352B19D9665C00BA4785 /* CharacterSelectPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSelectPopup.h; sourceTree = "<group>"; };
 		D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HellModeOpening.cpp; sourceTree = "<group>"; };
@@ -3075,6 +3099,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */,
+				D7B3A2F619EE153200DC8938 /* libxml2.dylib in Frameworks */,
+				D7A8A3BF19DD0B6000158A61 /* CoreGraphics.framework in Frameworks */,
+				D7B3A2F419EE150900DC8938 /* CoreData.framework in Frameworks */,
 				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
 				D721EB1E19E528B30008EE63 /* iAd.framework in Frameworks */,
 				D7A8A39819DD0B6000158A61 /* SystemConfiguration.framework in Frameworks */,
@@ -3091,6 +3119,7 @@
 				D7A8A39C19DD0B6000158A61 /* CoreTelephony.framework in Frameworks */,
 				D7A8A39D19DD0B6000158A61 /* libcocos2dx.a in Frameworks */,
 				D7A8A39E19DD0B6000158A61 /* libXInNetworkStatic_x86.a in Frameworks */,
+				D7B3A2F119EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */,
 				D7A8A39F19DD0B6000158A61 /* FacebookSDK.framework in Frameworks */,
 				D7A8A3A019DD0B6000158A61 /* libHSPCgp.a in Frameworks */,
 				D7A8A3A119DD0B6000158A61 /* libstdc++.6.0.9.dylib in Frameworks */,
@@ -3122,7 +3151,6 @@
 				D7A8A3BC19DD0B6000158A61 /* libJSONKit.a in Frameworks */,
 				D7A8A3BD19DD0B6000158A61 /* Foundation.framework in Frameworks */,
 				D7A8A3BE19DD0B6000158A61 /* libssl.a in Frameworks */,
-				D7A8A3BF19DD0B6000158A61 /* CoreGraphics.framework in Frameworks */,
 				D7A8A3C019DD0B6000158A61 /* libluajit.a in Frameworks */,
 				D7A8A3C119DD0B6000158A61 /* libwebsockets.a in Frameworks */,
 				D7A8A3C219DD0B6000158A61 /* libFiveRocks.a in Frameworks */,
@@ -3133,6 +3161,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B3A2F919EE155100DC8938 /* MobileCoreServices.framework in Frameworks */,
+				D7B3A2F719EE153A00DC8938 /* libxml2.dylib in Frameworks */,
+				D7B3A2F319EE14FF00DC8938 /* CoreData.framework in Frameworks */,
 				D721EB1F19E528C60008EE63 /* iAd.framework in Frameworks */,
 				A71A441917D583ED004B9F01 /* AdSupport.framework in Frameworks */,
 				A71A441F17D583ED004B9F01 /* SystemConfiguration.framework in Frameworks */,
@@ -3149,6 +3180,7 @@
 				D70B54351814BC25001FC90A /* CoreText.framework in Frameworks */,
 				D70B54341814BC25001FC90A /* CoreTelephony.framework in Frameworks */,
 				D79EF70D19D8DBEA00979D79 /* libcocos2dx.a in Frameworks */,
+				D7B3A2F019EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */,
 				D741D9CD19DBCB0A0051C63D /* libXInNetworkStatic_x86.a in Frameworks */,
 				D741D9C119DBCB090051C63D /* FacebookSDK.framework in Frameworks */,
 				D741D9D119DBCB0A0051C63D /* libHSPCgp.a in Frameworks */,
@@ -3652,6 +3684,10 @@
 		D70B551A1814BE8D001FC90A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D7B3A2E619EBC61B00DC8938 /* AsyncImageManager.h */,
+				D7B3A2E719EBC61B00DC8938 /* AsyncImageManager.cpp */,
+				D7B3A2E819EBC61B00DC8938 /* AsyncImage.h */,
+				D7B3A2E919EBC61B00DC8938 /* AsyncImage.cpp */,
 				D721EB2019E529570008EE63 /* adx */,
 				D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */,
 				D7B6352B19D9665C00BA4785 /* CharacterSelectPopup.h */,
@@ -4220,6 +4256,8 @@
 				D76F5AA919C42D7F00CB5DAB /* IntroducerPopup.h */,
 				D741D92F19DBA51B0051C63D /* Semaphore.cpp */,
 				D741D93019DBA51B0051C63D /* Semaphore.h */,
+				D7B3A2DA19E7CD9A00DC8938 /* KakaoLinkCenter.m */,
+				D7B3A2DB19E7CD9A00DC8938 /* KakaoLinkCenter.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -5603,6 +5641,7 @@
 		F293B3BD15EB7BE500256477 = {
 			isa = PBXGroup;
 			children = (
+				D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */,
 				D741D93219DBCB090051C63D /* HSPSDKIOS */,
 				D79EF70519D8DBC200979D79 /* cocos2dx.xcodeproj */,
 				D79EF45719D80CF600979D79 /* extensions */,
@@ -5648,6 +5687,9 @@
 		F293B3CB15EB7BE500256477 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */,
+				D7B3A2F519EE153200DC8938 /* libxml2.dylib */,
+				D7B3A2F219EE14FF00DC8938 /* CoreData.framework */,
 				D721EB1D19E528B30008EE63 /* iAd.framework */,
 				D741D9F319DBD1ED0051C63D /* GameKit.framework */,
 				D741D9F119DBD0960051C63D /* Twitter.framework */,
@@ -6014,6 +6056,7 @@
 				D7A8A16919DD0B6000158A61 /* TypingBox.cpp in Sources */,
 				D7A8A16A19DD0B6000158A61 /* PuzzleOpenPopup.cpp in Sources */,
 				D7A8A16B19DD0B6000158A61 /* CCBone.cpp in Sources */,
+				D7B3A2DD19E7CD9A00DC8938 /* KakaoLinkCenter.m in Sources */,
 				D7A8A16C19DD0B6000158A61 /* CocoLoader.cpp in Sources */,
 				D7A8A16D19DD0B6000158A61 /* cbcmac.cpp in Sources */,
 				D7A8A16E19DD0B6000158A61 /* cpDampedSpring.c in Sources */,
@@ -6192,6 +6235,7 @@
 				D7A8A21B19DD0B6000158A61 /* CCPhysicsSprite.cpp in Sources */,
 				D7A8A21C19DD0B6000158A61 /* b2DistanceJoint.cpp in Sources */,
 				D7A8A21D19DD0B6000158A61 /* GDWebSprite.cpp in Sources */,
+				D7B3A2EB19EBC61B00DC8938 /* AsyncImageManager.cpp in Sources */,
 				D7A8A21E19DD0B6000158A61 /* lua_cocos2dx_cocostudio_manual.cpp in Sources */,
 				D7A8A21F19DD0B6000158A61 /* SearchEye.cpp in Sources */,
 				D7A8A22019DD0B6000158A61 /* KSJuniorBase.cpp in Sources */,
@@ -6234,6 +6278,7 @@
 				D7A8A24419DD0B6000158A61 /* b2WheelJoint.cpp in Sources */,
 				D7A8A24519DD0B6000158A61 /* pubkey.cpp in Sources */,
 				D7A8A24619DD0B6000158A61 /* CCDataReaderHelper.cpp in Sources */,
+				D7B3A2ED19EBC61B00DC8938 /* AsyncImage.cpp in Sources */,
 				D7A8A24719DD0B6000158A61 /* CCDisplayFactory.cpp in Sources */,
 				D7A8A24819DD0B6000158A61 /* CCControlSlider.cpp in Sources */,
 				D7A8A24919DD0B6000158A61 /* AsyncCell.cpp in Sources */,
@@ -6664,6 +6709,7 @@
 				B2C5369D19949A9300516F99 /* TypingBox.cpp in Sources */,
 				D76F5AB319CD3D7B00CB5DAB /* PuzzleOpenPopup.cpp in Sources */,
 				D79EF62F19D80CF700979D79 /* CCBone.cpp in Sources */,
+				D7B3A2DC19E7CD9A00DC8938 /* KakaoLinkCenter.m in Sources */,
 				D79EF65719D80CF700979D79 /* CocoLoader.cpp in Sources */,
 				D769737A18EBFFB900E3FD55 /* cbcmac.cpp in Sources */,
 				15C1548D1683116B00D239F2 /* cpDampedSpring.c in Sources */,
@@ -6842,6 +6888,7 @@
 				D79EF68D19D80CF700979D79 /* CCPhysicsSprite.cpp in Sources */,
 				15C155401683118600D239F2 /* b2DistanceJoint.cpp in Sources */,
 				D7EEDDB2183520CA0099C408 /* GDWebSprite.cpp in Sources */,
+				D7B3A2EA19EBC61B00DC8938 /* AsyncImageManager.cpp in Sources */,
 				D79EF45619D80C8100979D79 /* lua_cocos2dx_cocostudio_manual.cpp in Sources */,
 				D7EEDDAA1833B4750099C408 /* SearchEye.cpp in Sources */,
 				D7899CFC1822840D00852D30 /* KSJuniorBase.cpp in Sources */,
@@ -6884,6 +6931,7 @@
 				15C1554A1683118600D239F2 /* b2WheelJoint.cpp in Sources */,
 				D76973B818EBFFB900E3FD55 /* pubkey.cpp in Sources */,
 				D79EF63919D80CF700979D79 /* CCDataReaderHelper.cpp in Sources */,
+				D7B3A2EC19EBC61B00DC8938 /* AsyncImage.cpp in Sources */,
 				D79EF63319D80CF700979D79 /* CCDisplayFactory.cpp in Sources */,
 				D79EF67419D80CF700979D79 /* CCControlSlider.cpp in Sources */,
 				D7BE739219515369009BFE67 /* AsyncCell.cpp in Sources */,
@@ -7297,6 +7345,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7357,6 +7406,7 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
+					"-all_load",
 				);
 				PRODUCT_NAME = "DGproto copy";
 				PROVISIONING_PROFILE = "612d56d5-77da-4b9d-bcb8-fabd2f3f052e";
@@ -7381,6 +7431,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
+					"$(PROJECT_DIR)",
 				);
 				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7441,6 +7492,7 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
+					"-all_load",
 				);
 				PRODUCT_NAME = "DGproto copy";
 				PROVISIONING_PROFILE = "612d56d5-77da-4b9d-bcb8-fabd2f3f052e";
@@ -7533,6 +7585,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
+					"$(PROJECT_DIR)",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -7595,6 +7648,7 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
+					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";
@@ -7619,6 +7673,7 @@
 					"$(inherited)",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Facebook",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
+					"$(PROJECT_DIR)",
 				);
 				GCC_OPTIMIZATION_LEVEL = 1;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
@@ -7679,6 +7734,7 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
+					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";

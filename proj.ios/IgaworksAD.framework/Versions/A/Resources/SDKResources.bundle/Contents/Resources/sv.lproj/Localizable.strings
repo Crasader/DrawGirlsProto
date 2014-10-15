@@ -1,0 +1,162 @@
+/*
+ Localizable.strings
+ AdPOPcornSDKRevision
+ 
+ Created by wonje,song on 13. 2. 5..
+ Copyright (c) 2013년 wonje,song. All rights reserved.
+ */
+
+/* Title used for offer wall top bar */
+"offerWallTopBarTitle" = "händelse";
+
+/* Title used for offer wall table cell */
+"max" = "Max";
+
+/* Title used for alert view title */
+"alertViewTitle" = "adPOPcorn";
+
+/* Message used for alert view message for general error */
+"alertViewGeneralErrorMessage" = "Ad begäran inte jämn. \nFråga igen om några minuter.";
+
+/* Message used for alert view message for no campaign error */
+"alertViewNoCampaignErrorMessage" = "Det finns ingen tillgänglig kampanj.";
+
+/* Message used for alert view message for already participated campaign error */
+"alertViewAlreadyParticipatedCampaignErrorMessage" = "Redan deltagit denna kampanj.";
+
+/* Message used for alert view message for mediakeys were incorrect error */
+"alertViewMediaKeyIncorrectErrorMessage" = "Medieknapparna var felaktiga.";
+
+/* Title used for alert view confirm button */
+"confirm" = "Bekräfta";
+
+/* Title used for landing view close button */
+"close" = "Avslutning";
+
+/* Message used for bridge view of popup view */
+"moving" = " rörelse.";
+
+/* Title used for bridgr view of back button */
+"back" = "Tillbaka";
+
+"alerViewAlreadyInstalledAppMessage" = "Redan installerat App. Då inte kan delta. Be om bekräftelse.";
+
+"alerViewNotYetInstalledMessage" = "App är inte installerat ännu. Vill du gå till inställningsskärmen?";
+"alerViewNotOpenToInstallAppURLMessage" = "App Store kan inte flyttas. Vänligen kontakta kundtjänst.";
+
+"checkParticipate" = "Bekräfta deltagande";
+"participating" = "Att delta i..";
+"checkingScheme" = "kontroll-schemat..";
+"checkingIsFavorite" = "Kontrollerat liknande..";
+
+"alreadyfavorited" = "Du är ett fan redan! Olyckligtvis är identiteten för fläkten redan möjligt att delta i händelsen.";
+
+"rewardComplete" = "Denna post har framgångsrikt begäran om betalning. Betalningar är föremål för nätverks objekt kan ta upp till 5 minuter.";
+
+"notYetisFavoriteComplete" = "Fortfarande tycker är inte komplett. Be om bekräftelse.";
+
+"participate" = "Delta";
+"viewDetail" = "Läs mer";
+
+"rewardConditionMessageCPIIns" = "Tjäna villkor \ nNär den installation, vänligen verifiera installationen.";
+"wrongURLAddress" = "Ogiltig URL-adress. Vänligen kontakta kundtjänst.";
+
+"checkInstall" = "Verifiera installationen";
+"checkParticipate" = "Bekräfta deltagande";
+
+"copyRecommendCode" = "Rekommenderad kod kopierades.";
+
+"rewardWaiting" = "I väntan på betalning";
+"rewardCompleted" = "komplett betalning";
+
+
+"participateListTableHeaderText" = "Komplett ersättning reklam genom deltagande i färdigstatus, på grund av nätverket, kan det ta upp till 2 timmar.";
+
+"csGuideText" = "Om du har några frågor, vänligen lämna här. Som svar, låt mig snabbt.";
+
+"csNotiText" = "* De insamlade personuppgifter (e-postadress) används för CS bearbetning och problemlösning, och kommer att tas bort efter en tids lagring.";
+
+"inquiry" = "Förfrågan";
+"receiveAReplyEmail" = "Få svar E";
+"pleaseEnterYourEmail"= "Ange din e.";
+
+
+"alertNoEmailMessage" = "Ange din e-postadress för att få svar.";
+"alertNoAskMessage" = "Ange dina kontaktuppgifter.";
+
+"alertCSAddedMessage" = "Kontakt har tagits emot.";
+
+"alertSendMailFailMessage" = "Postutdelning misslyckades.";
+
+"cancel" = "Avbryt";
+"select" = "Välj";
+
+"wrongEmailFormatMessage" = "E-formatet är inte korrekt. Kontrollera och återinträda.";
+
+"csTypeEmailSubject" = "[Kontakta AdPopcorn]%@";
+
+"csTypeEmailMessageBody" = "Ta emot ett svar e-postadress : %@\nFörfrågan : %@";
+
+"couponCopyGuide" = "Håll in kupong koden kommer att kopieras.";
+
+"noCouponListMessage" = "Kupong finns inte.";
+
+"couponCopiedMessage" = "%@ kupongkod kopierades.";
+
+"noPopiconFunctionNotiMessage" = "Popicon stöds inte längre. Vänligen använd offwall funktion.";
+
+"notSupportThisFunctionMessage" = "Den här funktionen stöds inte längre.";
+
+
+"pleaseSelectTheEventYouWantToContactTitle" = "Välj den händelse som du vill kontakta.";
+
+"couponList" = "kupong lista";
+
+"customerService" = "Kundtjänst";
+
+"send" = "Skicka";
+
+
+"adParticiateButtonText" = "Ads deltagande";
+"particiateHistoryButtonText" = "Historien om deltagande";
+"promotingButtonText" = "Bjud in en vän";
+
+"promotingLinkType" = "Länk Typ";
+"promotingCouponType" = "Kupong Typ";
+
+"promotingItemQuantity" = "%@\nper inbjudningskort";
+
+"invitedCount" = "inviterar Framgång : %@ patienter";
+"earnedReward" = "Skaffa totalt of %@ %@";
+
+"copy" = "Kopiera";
+"viewRanking" = "Se rang";
+
+"promotingPartipateMethod1" = "1. I en mängd olika sätt att introducera vänner till appen. Introduktion kan redigeras direkt användas.";
+"promotingPartipateMethod2" = "2. Vänner genom införandet av Install länken för att installera programmet genom att köra \n3. Antal vänner att delta i det köpta objektet.";
+
+"promotingCautionMessage" = "OBS! Bjud in en vän att introducera dig till programmet, så jag har installerat appen tjänster belöningar kommer att uteslutas från förvärvet.";
+
+"textCopied" = "Copied";
+
+"inviteCompensation" = "inviterar kompensation";
+"rankCompensation" = "Placering kompensation";
+
+"isOverseaOfferMessage" = "Reklam val utomlands reklam. Om du har laddat ner appen till tidigare historia av belöning betalas inte. Belöning betalningar omfattas av nätverket, kan det ta upp till 2 timmar. Vill du fortsätta?";
+
+"yes" = "ja";
+"no" = "nej";
+
+"howToParticipate" = "Hur man deltar";
+
+"description" = "beskrivning";
+
+"canNotParticipateInThisCampaignMessage" = "Kan inte delta i denna kampanj.";
+
+
+// adbrix
+"alertViewTitleForAdBrix" = "AdBrix";
+"install" = "installera";
+"acquisition" = "förvärv";
+"alerViewCantParticipateEventMessage" = "Kan inte delta i evenemang.";
+"alerViewCompletedParticipateEventMessage" = "Deltagande i händelsen är avslutad.";

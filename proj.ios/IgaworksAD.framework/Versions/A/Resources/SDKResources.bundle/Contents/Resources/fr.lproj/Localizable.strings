@@ -1,0 +1,159 @@
+/*
+ Localizable.strings
+ AdPOPcornSDKRevision
+ 
+ Created by wonje,song on 13. 2. 5..
+ Copyright (c) 2013년 wonje,song. All rights reserved.
+ */
+
+/* Title used for offer wall top bar */
+"offerWallTopBarTitle" = "événement";
+
+/* Title used for offer wall table cell */
+"max" = "Max";
+
+/* Title used for alert view title */
+"alertViewTitle" = "adPOPcorn";
+
+/* Message used for alert view message for general error */
+"alertViewGeneralErrorMessage" = "Demande d'annonce n'est pas lisse. \nDemandez à nouveau dans quelques minutes.";
+
+/* Message used for alert view message for no campaign error */
+"alertViewNoCampaignErrorMessage" = "Il n'ya pas de campagne disponibles.";
+
+/* Message used for alert view message for already participated campaign error */
+"alertViewAlreadyParticipatedCampaignErrorMessage" = "Déjà participé cette campagne.";
+
+/* Message used for alert view message for mediakeys were incorrect error */
+"alertViewMediaKeyIncorrectErrorMessage" = "Les touches multimédia étaient incorrects.";
+
+/* Title used for alert view confirm button */
+"confirm" = "Confirmer";
+
+/* Title used for landing view close button */
+"close" = "Fin";
+
+/* Message used for bridge view of popup view */
+"moving" = " mouvement.";
+
+/* Title used for bridgr view of back button */
+"back" = "Arrière";
+
+"alerViewAlreadyInstalledAppMessage" = "Déjà installé App. Alors ne peuvent pas participer. Demandez confirmation.";
+
+"alerViewNotYetInstalledMessage" = "App n'est pas encore installé. Voulez-vous aller à l'écran de configuration?";
+"alerViewNotOpenToInstallAppURLMessage" = "App Store ne peut pas être déplacé. S'il vous plaît contacter le Service Client.";
+
+"checkParticipate" = "Confirmer la participation";
+"participating" = "Participer à..";
+"checkingScheme" = "Vérification de schéma..";
+"checkingIsFavorite" = "Vérification comme..";
+
+"alreadyfavorited" = "Vous êtes un fan déjà! Malheureusement, l'identité du ventilateur est déjà possible de participer à l'événement.";
+
+"rewardComplete" = "Cet article a bien été demande de paiement. Les paiements sont soumis à des éléments de réseau peut prendre jusqu'à 5 minutes.";
+
+"notYetisFavoriteComplete" = "Certainement encore n'est pas complète. Demandez confirmation.";
+
+"participate" = "Participer";
+"viewDetail" = "En savoir plus";
+
+"rewardConditionMessageCPIIns" = "Gagnez des conditions \ nUne le montage, s'il vous plaît vérifier l'installation.";
+"wrongURLAddress" = "Adresse URL valide. S'il vous plaît contacter le Service Client.";
+
+"checkInstall" = "Vérification de l'installation";
+"checkParticipate" = "Confirmer la participation";
+
+"copyRecommendCode" = "Code recommandée a été copié.";
+
+"rewardWaiting" = "en attendant le paiement";
+"rewardCompleted" = "Le paiement complet";
+
+
+"participateListTableHeaderText" = "Compensation complète la publicité payée par la participation à l'état d'achèvement, en raison de réseau, il peut prendre jusqu'à deux heures.";
+"csGuideText" = "Si vous avez des questions, s'il vous plaît laissez ici. En réponse, laissez-moi rapidement.";
+"csNotiText" = "*Les renseignements personnels recueillis (adresse e-mail) est utilisé pour le traitement CS et la résolution de problèmes, et sera supprimé après une période de stockage.";
+
+"inquiry" = "enquête";
+"receiveAReplyEmail" = "Recevoir une réponse e-mail";
+"pleaseEnterYourEmail"= "S'il vous plaît Entrez votre e-mail.";
+
+
+"alertNoEmailMessage" = "S'il vous plaît, entrez votre adresse e-mail pour recevoir des réponses.";
+"alertNoAskMessage" = "S'il vous plaît entrer vos coordonnées.";
+
+"alertCSAddedMessage" = "Les coordonnées ont été reçues.";
+
+"alertSendMailFailMessage" = "La distribution du courrier a échoué.";
+
+"cancel" = "Annuler";
+"select" = "Sélectionner";
+
+"wrongEmailFormatMessage" = "Format de courrier électronique n'est pas correct. S'il vous plaît vérifier et re-saisir.";
+
+"csTypeEmailSubject" = "[Contacter AdPopcorn]%@";
+
+"csTypeEmailMessageBody" = "Recevoir une adresse e-mail de réponse : %@\nEnquête : %@";
+
+"couponCopyGuide" = "Appuyez et maintenez le code promo seront copiés.";
+
+"noCouponListMessage" = "N'existe pas bon.";
+
+"couponCopiedMessage" = "%@ code promo a été copié.";
+
+"noPopiconFunctionNotiMessage" = "Fonction de Popicon n'est plus supporté. S'il vous plaît utiliser offwall fonction.";
+
+"notSupportThisFunctionMessage" = "Cette fonctionnalité n'est plus supporté.";
+
+
+"pleaseSelectTheEventYouWantToContactTitle" = "S'il vous plaît sélectionnez l'événement que vous souhaitez contacter.";
+
+"couponList" = "Liste Coupon";
+
+"customerService" = "Service à la clientèle";
+
+"send" = "Envoyer";
+
+"adParticiateButtonText" = "annonces participation";
+"particiateHistoryButtonText" = "Histoire de participation";
+"promotingButtonText" = "Invitez un ami";
+
+"promotingLinkType" = "type de lien";
+"promotingCouponType" = "Type de coupon";
+
+"promotingItemQuantity" = "%@\npar invitation";
+
+"invitedCount" = "Invitez succès : %@ patients";
+"earnedReward" = "Obtenir un total de %@ %@";
+
+"copy" = "copie";
+"viewRanking" = "Voir classement";
+
+"promotingPartipateMethod1" = "1. Dans une variété de façons d'introduire des amis à l'application. Introduction peut être modifié directement utilisé.";
+"promotingPartipateMethod2" = "2. Amis à travers la mise en place de la liaison Installer pour installer l'application, exécutez la\n3. Nombre d'amis pour participer à l'article acheté.";
+
+"promotingCautionMessage" = "Attention! Inviter un ami à vous présenter à l'application, j'ai donc installé les récompenses de service de l'application seront exclus de l'acquisition.";
+
+"textCopied" = "copié";
+
+"inviteCompensation" = "Invitez compensation";
+"rankCompensation" = "Compensation de Rang";
+
+"isOverseaOfferMessage" = "Choix de la publicité la publicité à l'étranger. Si vous avez téléchargé l'application à l'histoire passée de la récompense n'est pas payé. Paiements de récompense sont soumises au réseau, il peut prendre jusqu'à deux heures. Voulez-vous continuer?";
+
+"yes" = "oui";
+"no" = "aucun";
+
+"howToParticipate" = "Comment participer";
+
+"description" = "description";
+
+"canNotParticipateInThisCampaignMessage" = "Vous ne pouvez pas participer à cette campagne.";
+
+
+// adbrix
+"alertViewTitleForAdBrix" = "AdBrix";
+"install" = "installer";
+"acquisition" = "acquisition";
+"alerViewCantParticipateEventMessage" = "Vous ne pouvez pas participer à des événements.";
+"alerViewCompletedParticipateEventMessage" = "Participation à l'événement est terminé.";

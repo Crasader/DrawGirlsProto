@@ -25,6 +25,7 @@
 #import "HSPUiLauncher.h"
 #import "HSPItemDelivery.h"
 #import "KakaoLinkCenter.h"
+#import  <IgaworksAD/AdBrix.h>
 //#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
@@ -1482,6 +1483,7 @@ void hspConnector::IgawAdbrixBuy(string productName)
 	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[AdBrix buy:[NSString stringWithUTF8String:productName.c_str()]];
 //	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
 //						withData:[NSString stringWithUTF8String:data.c_str()]
 //				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
@@ -1507,7 +1509,7 @@ void hspConnector::IgawAdbrixFirstTimeExperience(string msg)
 	//	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
 	//						withData:[NSString stringWithUTF8String:data.c_str()]
 	//				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
-	
+	[AdBrix firstTimeExperience:[NSString stringWithUTF8String:msg.c_str()]];
 #endif
  
 }
