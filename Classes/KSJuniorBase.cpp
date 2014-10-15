@@ -164,8 +164,8 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 			auto emotion = KS::loadCCBI<CCSprite*>(this, "emoticon_stun.ccbi");
 			m_deadState = true;
 			m_headImg->addChild(emotion.first, 10);
-			emotion.first->setPositionY(emotion.first->getPositionY() + 20);
-			emotion.first->setPositionX(10);
+			emotion.first->setPositionY(emotion.first->getPositionY() + 28);
+			emotion.first->setPositionX(15);
 			emotion.first->setScale(1.5f);
 			addChild(KSTimer::create(7.f, [=](){
 				setCumberState(m_cumberState | kCumberStateMoving);
