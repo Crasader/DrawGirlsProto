@@ -783,6 +783,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											myHSP->IgawAdbrixBuy("ShopPurchaseStartPack");
 										}
 										requestItemDeliveryStartPack();
 									}
@@ -1065,6 +1066,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											myHSP->IgawAdbrixBuy("ShopPurchaseEventPack");
 										}
 										requestItemDeliveryEventPack();
 									}
@@ -2113,6 +2115,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 											{
                                                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 												fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+												myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1));
 											}
 											requestItemDelivery();
 										}

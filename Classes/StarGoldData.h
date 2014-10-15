@@ -1013,7 +1013,7 @@ public:
 	void setIosHideVer(string t_str);
 	string getIosHideVer();
 	
-	int rewind_cnt_per_frame;
+	double rewind_cnt_per_frame;
 	
 private:
 	
