@@ -12,6 +12,7 @@
 #include "PlayUI.h"
 #include <chrono>
 #include "CumberEmotion.h"
+#include <boost/lexical_cast.hpp>
 
 class KSJuniorBase;
 template <class _Tp>
@@ -2460,9 +2461,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
         playCount = 0;
         vCount=0;
     }else{
-       ostringstream oss;
-       oss << mySD->getSilType();
-       std::string playcountKey = std::string("playcount_") + oss.str();
+       std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
        playCount = myDSH->getUserIntForStr(playcountKey, 0);
     }
 	
@@ -2687,9 +2686,8 @@ void KSCumberBase::settingAI( int ai )
 	int balanceN = 10;
 	float downLimit = 0.5f;
 	//
-	ostringstream oss;
-	oss << mySD->getSilType();
-	std::string playcountKey = std::string("playcount_") + oss.str();
+	
+	std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
 	int playCount = myDSH->getUserIntForStr(playcountKey, 0);
 	
 	if(autobalanceTry < playCount)

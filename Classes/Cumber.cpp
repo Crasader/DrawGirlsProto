@@ -527,12 +527,6 @@ void CumberParent::myInit()
 		std::string bossType = boss["type"].asString();
 
 
-		ostringstream oss;
-		oss << mySD->getSilType();
-		std::string playcountKey = std::string("playcount_") + oss.str();
-		myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
-
-
 		KSCumberBase* mainCumber;
 		if(bossShape == "circle")
 		{

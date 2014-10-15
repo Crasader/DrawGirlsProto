@@ -151,9 +151,6 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 												t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 												addChild(t_popup, 9999);
 												
-                                                int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
-                                                if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
-                                                mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
                                                 
 												mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
                                                 
@@ -441,10 +438,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-                
-                int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
-                if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
-                mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
+        
                 
                 
                 

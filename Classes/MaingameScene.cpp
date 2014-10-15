@@ -47,6 +47,7 @@
 #include "TypingBox.h"
 #include "FiveRocksCpp.h"
 
+#include <boost/lexical_cast.hpp>
 //#include "ScreenSide.h"
 
 CCScene* Maingame::scene()
@@ -5184,6 +5185,15 @@ void Maingame::continueAction()
 
 void Maingame::changeMonsterAutoLevel()
 {
+	
+		int seq_no_fail_cnt = mySGD->getUserdataAutoLevel()-1;
+		if(seq_no_fail_cnt<0)seq_no_fail_cnt=0;
+		mySGD->setUserdataAutoLevel(seq_no_fail_cnt);
+	
+		std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
+		int playCount = myDSH->getUserIntForStr(playcountKey, 0);
+		myDSH->setUserIntForStr(playcountKey,playCount+1);
+	
     // ######################## hs code bbu woo~ re autobalance ##############################
     std::vector<KSCumberBase*> maincumbers = myCP->getMainCumbers();
     for(int i=0;i<maincumbers.size();i++){
