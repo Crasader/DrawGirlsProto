@@ -1426,10 +1426,10 @@
 		D7B3A2F119EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */; };
 		D7B3A2F319EE14FF00DC8938 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F219EE14FF00DC8938 /* CoreData.framework */; };
 		D7B3A2F419EE150900DC8938 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F219EE14FF00DC8938 /* CoreData.framework */; };
-		D7B3A2F619EE153200DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
 		D7B3A2F719EE153A00DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
 		D7B3A2F919EE155100DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
 		D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
+		D7B3A2FB19EE236800DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
 		D7B6353019D9665C00BA4785 /* CharacterSelectPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */; };
 		D7B6353119D9665C00BA4785 /* HellModeOpening.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */; };
 		D7B6353219D9665C00BA4785 /* HellModeResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352E19D9665C00BA4785 /* HellModeResult.cpp */; };
@@ -3099,8 +3099,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7B3A2FB19EE236800DC8938 /* libxml2.dylib in Frameworks */,
 				D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */,
-				D7B3A2F619EE153200DC8938 /* libxml2.dylib in Frameworks */,
 				D7A8A3BF19DD0B6000158A61 /* CoreGraphics.framework in Frameworks */,
 				D7B3A2F419EE150900DC8938 /* CoreData.framework in Frameworks */,
 				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
@@ -7406,7 +7406,6 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
-					"-all_load",
 				);
 				PRODUCT_NAME = "DGproto copy";
 				PROVISIONING_PROFILE = "612d56d5-77da-4b9d-bcb8-fabd2f3f052e";
@@ -7492,7 +7491,6 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
-					"-all_load",
 				);
 				PRODUCT_NAME = "DGproto copy";
 				PROVISIONING_PROFILE = "612d56d5-77da-4b9d-bcb8-fabd2f3f052e";
@@ -7648,7 +7646,6 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
-					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";
@@ -7734,7 +7731,6 @@
 					"-lz",
 					"-ObjC",
 					"-lstdc++",
-					"-all_load",
 				);
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "07D27FB0-F99C-46FE-965B-856132F42C57";

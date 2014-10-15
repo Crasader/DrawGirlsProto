@@ -594,7 +594,10 @@ public class hspConnector {
 		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
 //		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
 	}
-	
+	public static void IgawAdbrixRetention(String msg)
+	{
+		IgawAdbrix.retention(msg);
+	}	
 	public static void IgawAdbrixFirstTimeExperience(String msg)
 	{
 		IgawAdbrix.firstTimeExperience(msg);

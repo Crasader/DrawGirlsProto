@@ -2208,6 +2208,7 @@ void PlayTutorial::nextStep()
 											  }
 											  
 											  myHSP->IgawAdbrixFirstTimeExperience("TutorialComplete");
+											  myHSP->IgawAdbrixRetention("TutorialComplete");
 											  
 											  
 											  CCNode* scenario_node = CCNode::create();
