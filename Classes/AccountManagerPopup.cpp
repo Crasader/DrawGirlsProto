@@ -344,7 +344,13 @@ bool AccountManagerPopup::init(int touchP)
 									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 									
 									Json::Value param;
-									param["loginType"] = -1*myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);;
+									
+									
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+100;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+200;
+#endif
 									
 									myHSP->command("updateuserdata", param, nullptr);
 #if 0             ///////////////////// 아래 코드는 동작안함
