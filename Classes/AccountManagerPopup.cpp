@@ -273,7 +273,7 @@ bool AccountManagerPopup::init(int touchP)
 				auto nickName = t["nick"].asString();
 				if(nickName == "")
 				{
-					nickName = "옛날유저";
+					nickName = "OldUser";
 				}
 				auto highPiece = t["highPiece"].asInt();
 				if(highPiece == 0)
@@ -342,7 +342,17 @@ bool AccountManagerPopup::init(int touchP)
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-
+									
+									Json::Value param;
+									
+									
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+100;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+200;
+#endif
+									
+									myHSP->command("updateuserdata", param, nullptr);
 #if 0             ///////////////////// 아래 코드는 동작안함
 									// 게스트인 경우 드롭아웃시키고 완료됐다고 띄우고
 									// 게스트가 아닌 경우 바로 매핑 완료 시킴.

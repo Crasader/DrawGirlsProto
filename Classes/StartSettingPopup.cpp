@@ -48,6 +48,7 @@
 #include "TypingBox.h"
 #include "FiveRocksCpp.h"
 #include "CharacterSelectPopup.h"
+#include <boost/lexical_cast.hpp>
 
 bool StartSettingPopup::init()
 {
@@ -3296,6 +3297,13 @@ void StartSettingPopup::goToGame()
 	}
 	else
 	{
+		
+		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
+
+			std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
+			
+			myDSH->setUserIntForStr(playcountKey, myDSH->getUserIntForStr(playcountKey, 0) + 1);
+		}
 		mySGD->setNextSceneName("maingame");
 		
 		addChild(KSTimer::create(0.3f, [=]()

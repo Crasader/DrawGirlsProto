@@ -90,11 +90,11 @@ void KsLocal::ko()
 	obj[LK::kBonusGameStart] = "게임 시작";
 	obj[LK::kBonusGameDesc] = "게임 설명";
 	obj[LK::kBonusGameGababo] = "가위! 바위! 보!";
-	obj[LK::kGababoDesc1] = "<font color=#FFFFFF size=11 newline=20>캐릭터와 눈치를 보며</font><font color=#FFFFFF size=11>가위바위보를 해보세요!</font>";
+	obj[LK::kGababoDesc1] = "<font color=#FFFFFF size=11 newline=20>묵찌빠마왕을 </font><font color=#FFFFFF size=11>가위바위보로 이기세요!</font>";
 	obj[LK::kBonusGameTouch] = "터치! 터치!";
 	obj[LK::kTouchDesc1] = "<font color=#FFFFFF size=11 newline=20>최대한 많이 터치를 하세요.</font><font color=#FFFFFF size=11>돈이 쏟아져요!</font>";
 	
-	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font><font color=#FFFFFF>그럼 퍼펙트 클리어 후 다시 만나요!</font>";
+	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font><font color=#FFFFFF>그럼 피스 퍼펙트 클리어 후 다시 만나요!</font>";
 	obj[LK::kAccountConf] = "계정 설정";
 	obj[LK::kLinkingGoogle] = "구글과 연결되어 있습니다.";
 	obj[LK::kLinkingGameCenter] = "게임센터와 연결되어 있습니다.";
@@ -791,7 +791,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_gababoContent12] = "<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font><font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font><font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>";
 	obj[LK::kMyLocalKey_gababoContent13] = "<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font><font color=#FFFFFF size=12>너무 상심마세요!</font><font color=#FFAA14 size=12 newline=14>보너스게임은</font><font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font><font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent14] = "루우비~!";
-	obj[LK::kMyLocalKey_gababoContent15] = "<font color=#FFFFFF size=12 newline=14>보너스 게임에</font><font color=#FFFFFF size=12 newline=14>오신 것을 환영합니다.</font><font color=#FFFFFF size=12 newline=14>전 히바리라고 해요.</font><font color=#FFFFFF size=12 newline=14>벌써 퍼즐을 퍼펙트 클리어</font><font color=#FFFFFF size=12 newline=28>하시다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>게임 설명은 최초 1회만</font><font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>";
+	obj[LK::kMyLocalKey_gababoContent15] = "<font color=#FFFFFF size=12 newline=14>보너스 게임에</font><font color=#FFFFFF size=12 newline=14>오신 것을 환영합니다.</font><font color=#FFFFFF size=12 newline=14>전 히바리라고 해요.</font><font color=#FFFFFF size=12 newline=14>하나의 피스를 퍼펙트 클리어</font><font color=#FFFFFF size=12 newline=28>하시다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>게임 설명은 최초 1회만</font><font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent16] = "다 음";
 	obj[LK::kMyLocalKey_gababoContent17] = "<font color=#FFFFFF size=12 newline=43>게임은 가위바위보 입니다!</font><font color=#FFAA14 size=12 newline=14>버튼 3개중 하나를 선택하여</font><font color=#FFAA14 size=12 newline=14>저에게 이기시면 됩니다.</font><font color=#FFAA14 size=12 newline=14>연승 횟수에 따라</font><font color=#FFAA14 size=12 newline=14>더 큰 보상이 있어요!</font><font color=#FFFFFF size=12 newline=14>그럼 행운을 빌어요!</font>";
 	obj[LK::kMyLocalKey_gababoReward] = "+%d";
