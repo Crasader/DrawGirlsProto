@@ -1468,6 +1468,29 @@ void hspConnector::getAdXConnectEventInstance(string event, string data, string 
 	
 #endif
 }
+void hspConnector::IgawAdbrixBuy(string productName)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixBuy",
+																		 "(Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(event.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+//	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+//						withData:[NSString stringWithUTF8String:data.c_str()]
+//				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+	
+#endif
+}
+ 
+ 
+
 int hspConnector::registerGamePadCallback(jsonSelType func)
 {
 	int registeredKey = -1;
