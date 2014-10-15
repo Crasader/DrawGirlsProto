@@ -985,7 +985,7 @@ void FriendPopup::setListMenu()
 			m_friendVoteContainer->removeAllChildren();
 			if(sound)
 			{
-				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false); 
+				AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			}
 			if(friend_table)
 			{

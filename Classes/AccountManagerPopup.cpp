@@ -341,6 +341,9 @@ bool AccountManagerPopup::init(int touchP)
 									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+
+#if 0             ///////////////////// 아래 코드는 동작안함
 									// 게스트인 경우 드롭아웃시키고 완료됐다고 띄우고
 									// 게스트가 아닌 경우 바로 매핑 완료 시킴.
 									if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
@@ -355,8 +358,8 @@ bool AccountManagerPopup::init(int touchP)
 									}
 									else
 									{
-										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 									}
+#endif
 								}
 								else
 								{

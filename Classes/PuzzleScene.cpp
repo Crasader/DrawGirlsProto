@@ -2684,6 +2684,7 @@ void PuzzleScene::setRight()
 					
 					is_menu_enable = false;
 					
+					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 					CardLockedPopup* t_popup = CardLockedPopup::create(-999, [=](){is_menu_enable = true;}, i);
 					addChild(t_popup, kPuzzleZorder_popup);
 				});
