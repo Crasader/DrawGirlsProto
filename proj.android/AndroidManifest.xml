@@ -40,13 +40,13 @@
                 <category android:name="com.nhnent.SKSUMRAN" />
             </intent-filter>
         </receiver>
-        <receiver
+        <!-- <receiver
             android:name="com.hangame.hsp.referrer.InstallReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
             </intent-filter> 
-        </receiver>
+        </receiver> -->
         <receiver android:name="io.fiverocks.android.FiveRocksReceiver" />
 		<receiver
 		    android:name="com.igaworks.IgawReceiver"
