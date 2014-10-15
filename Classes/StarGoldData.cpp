@@ -3533,7 +3533,7 @@ void StarGoldData::myInit()
 	goods_data.clear();
 	
 	app_type = "light1";
-	app_version = 2;
+	app_version = 3;
 	
 	client_version = 5;
 	
