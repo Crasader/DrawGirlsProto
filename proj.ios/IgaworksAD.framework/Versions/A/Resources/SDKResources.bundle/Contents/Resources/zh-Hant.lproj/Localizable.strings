@@ -126,7 +126,10 @@
 "promotingLinkType" = "鏈接類型";
 "promotingCouponType" = "優惠券類型";
 
-"promotingItemQuantity" = "每邀請\n%@";
+"commonPromotingItemQuantity" = "每次朋友訪問的時候 %@";
+"CPIPromotingItemQuantity" = "朋友運行的話 %@";
+"LoginPromotingItemQuantity" = "朋友登錄的話 %@";
+"CPAPromotingItemQuantity" = "朋友加入會員的話 %@";
 
 "invitedCount" = "邀請成功 : %@ 例";
 "earnedReward" = "得到總共 %@ %@";
@@ -134,8 +137,14 @@
 "copy" = "複製";
 "viewRanking" = "查看排名";
 
-"promotingPartipateMethod1" = "1. 在各種不同的方式來介紹朋友來的應用程序。介紹可以編輯直接使用。";
-"promotingPartipateMethod2" = "2. 通過引進安裝鏈接的朋友來安裝應用程序，運行\n3. 朋友參與購買的物品數量。";
+"promotingPartipateMethod1" = "1. 通過FACEBOOK，KAKAO TALK等多樣化方法給朋友%@介紹看看（可以自己編輯介紹文）";
+"promotingPartipateMethod2LinkType" = "2. 點擊介紹裡的設置鏈接後，朋友%@進入%@的話，按照朋友數量的多少立即可以獲得收入";
+"promotingPartipateMethod2CouponType" = "2. 點擊介紹裡的設置連接後，朋友%@進入%@後輸入優惠券號碼的話，按照朋友數量多少可以立即獲得收入";
+
+"install&connect" = "設置與訪問";
+"install&execute" = "設置與運行";
+"install&login" = "設置與登錄";
+"install&reg" = "者置與加入會員";
 
 "promotingCautionMessage" = "注意！邀請朋友給你介紹的應用程序，所以我已經安裝了應用程序服務獎勵將被排除在收購。";
 
@@ -155,9 +164,34 @@
 
 "canNotParticipateInThisCampaignMessage" = "不能參加本次活動。";
 
+"deviceNotConfiguredToSendSMSMessage" = "設備未配置為發送短信。";
+
+"shareNotiMessage" = "消息被複製。分享在%@和要求。";
+
+"contactUs" = "聯繫我們";
+"privacyPolicy" = "隱私政策";
+"pleaseCheckInTheMailSettings" = "請在郵件設置。";
+
+"linkCopy" = "複製鏈接";
+
+"remainQuantity" = "[剩餘數量:%@]";
+
+"notice" = "通知";
+
+"viralPromotionNoticeMessage" = "邀請好友時，通過散佈虛假信息來獲利的情況，不法收益金額將被沒收並進行處罰。";
+
+"agree" = "同意";
+"deny" = "否認";
+
+"contactUsMailMessage" = "adPOPcorn期待所有有能力的企業加盟\n<加盟諮詢>\n*公司名 : \n*負責人 : \n*聯繫方式 : \n*郵件 : \n*內容 : ";
+
+"contactUsAlertMessage" = "這個菜單是專門夥伴關係。請接受參與由客戶聯絡中心相關的廣告。你想不想去聯繫我們的菜單嗎？";
+
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
 "install" = "安裝";
 "acquisition" = "獲得";
 "alerViewCantParticipateEventMessage" = "不能參加活動。";
 "alerViewCompletedParticipateEventMessage" = "參與事件完成。";
+
+"getPromotingCPITrackingURLFailMessage" = "分享鏈接地址是無效的。請聯繫客戶服務。";

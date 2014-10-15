@@ -124,7 +124,11 @@
 "promotingLinkType" = "Länk Typ";
 "promotingCouponType" = "Kupong Typ";
 
-"promotingItemQuantity" = "%@\nper inbjudningskort";
+
+"commonPromotingItemQuantity" = "%@\nper lansering";
+"CPIPromotingItemQuantity" = "%@\nper lansering";
+"LoginPromotingItemQuantity" = "%@\nper inloggning";
+"CPAPromotingItemQuantity" = "%@\nper register";
 
 "invitedCount" = "inviterar Framgång : %@ patienter";
 "earnedReward" = "Skaffa totalt of %@ %@";
@@ -132,8 +136,14 @@
 "copy" = "Kopiera";
 "viewRanking" = "Se rang";
 
-"promotingPartipateMethod1" = "1. I en mängd olika sätt att introducera vänner till appen. Introduktion kan redigeras direkt användas.";
-"promotingPartipateMethod2" = "2. Vänner genom införandet av Install länken för att installera programmet genom att köra \n3. Antal vänner att delta i det köpta objektet.";
+"promotingPartipateMethod1" = "1. Presentera %@ till dina vänner via Facebook, Kakaotalk, och så vidare. (Du kan introducera appen till dina vänner med ditt egna meddelande)";
+"promotingPartipateMethod2LinkType" = "2. När dina vänner klicka på länken och slutför %@ för %@ du kommer att belönas per komplett.";
+"promotingPartipateMethod2CouponType" = "2 När dina vänner klicka på länken och slutför %@ för %@, och går in kupongnummer, kommer du att belönas per komplett.";
+
+"install&connect" = "Installera och Launch";
+"install&execute" = "Installera och Launch";
+"install&login" = "Installera & Login";
+"install&reg" = "Installera och Registrera";
 
 "promotingCautionMessage" = "OBS! Bjud in en vän att introducera dig till programmet, så jag har installerat appen tjänster belöningar kommer att uteslutas från förvärvet.";
 
@@ -153,6 +163,29 @@
 
 "canNotParticipateInThisCampaignMessage" = "Kan inte delta i denna kampanj.";
 
+"deviceNotConfiguredToSendSMSMessage" = "Enheten är inte konfigurerad för att skicka SMS.";
+
+"shareNotiMessage" = "Meddelandet kopieras. Dela med dig på %@ och fråga.";
+
+"contactUs" = "Kontakta oss";
+"privacyPolicy" = "Integritetspolicy";
+"pleaseCheckInTheMailSettings" = "Kontrollera i postinställningarna.";
+
+"linkCopy" = "kopiera";
+
+"remainQuantity" = "[resterande kvantitet:%@]";
+
+"notice" = "Meddelande";
+
+"viralPromotionNoticeMessage" = "Om du får belöningen genom att sprida falsk information, kommer din belöning återvinnas och kontot kommer att stängas.";
+
+"agree" = "enas";
+"deny" = "neka";
+
+"contactUsMailMessage" = "Vänta på deltagande företag och vara behörig med adPOPcorn.\n<Partnerskap>\n*Företag : \n*Kontaktperson : \n*Kontaktuppgifter : \n*E-post : \n*Innehåll : ";
+
+"contactUsAlertMessage" = "Den här menyn är dedikerad Partnership. Vänligen acceptera deltagande av kundtjänstrelaterade annonser. Vill du gå till Kontakta oss menyn?";
+
 
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
@@ -160,3 +193,5 @@
 "acquisition" = "förvärv";
 "alerViewCantParticipateEventMessage" = "Kan inte delta i evenemang.";
 "alerViewCompletedParticipateEventMessage" = "Deltagande i händelsen är avslutad.";
+
+"getPromotingCPITrackingURLFailMessage" = "Dela länkadressen är ogiltig. Vänligen kontakta kundtjänst.";

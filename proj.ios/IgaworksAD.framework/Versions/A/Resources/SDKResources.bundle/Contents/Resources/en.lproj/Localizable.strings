@@ -122,7 +122,11 @@
 "promotingLinkType" = "Link Type";
 "promotingCouponType" = "Coupon Type";
 
-"promotingItemQuantity" = "%@\nper invite";
+
+"commonPromotingItemQuantity" = "%@\nper launch";
+"CPIPromotingItemQuantity" = "%@\nper launch";
+"LoginPromotingItemQuantity" = "%@\nper login";
+"CPAPromotingItemQuantity" = "%@\nper register";
 
 "invitedCount" = "Invite Success : %@ patients";
 "earnedReward" = "Obtain a total of %@ %@";
@@ -130,8 +134,15 @@
 "copy" = "Copy";
 "viewRanking" = "View rank";
 
-"promotingPartipateMethod1" = "1. In a variety of ways to introduce friends to the app. Introduction can be edited directly used.";
-"promotingPartipateMethod2" = "2. Friends through the introduction of the Install link to install the app, run the\n3. Number of friends to participate in the purchased item.";
+"promotingPartipateMethod1" = "1. Introduce %@ to your friends through Facebook, KakaoTalk, and so forth. (You can introduce the app to your friends with your own message)";
+"promotingPartipateMethod2LinkType" = "2. Once your friends click the link and completes the %@ for %@ you will be rewarded per complete.";
+"promotingPartipateMethod2CouponType" = "2. Once your friends click the link and completes the %@ for %@, and enters the coupon numbers, you will be rewarded per complete.";
+
+"install&connect" = "Install&Launch";
+"install&execute" = "Install&Launch";
+"install&login" = "Install&Login";
+"install&reg" = "Install&Register";
+
 
 "promotingCautionMessage" = "Attention! Invite a friend to introduce you to the app, so I have installed the app service Rewards will be excluded from acquisition.";
 
@@ -151,9 +162,34 @@
 
 "canNotParticipateInThisCampaignMessage" = "Can not participate in this campaign.";
 
+"deviceNotConfiguredToSendSMSMessage" = "Device not configured to send SMS.";
+
+"shareNotiMessage" = "Message is copied. Share on %@ and ask.";
+
+"contactUs" = "Contact us";
+"privacyPolicy" = "Privacy policy";
+"pleaseCheckInTheMailSettings" = "Please check in the mail settings.";
+
+"linkCopy" = "Link copy";
+
+"remainQuantity" = "[remaining quantity:%@]";
+
+"notice" = "Notice";
+
+"viralPromotionNoticeMessage" = "If you get the reward by spreading false information, your reward will be reclaimed and the account will be suspended.";
+
+"agree" = "agree";
+"deny" = "deny";
+
+"contactUsMailMessage" = "adPOPcorn is awating you to be with you!\n<Partnership Inquiry>\n*Company Name : \n*Contacting Person : \n*Contact No. : \n*Email : \n*Content : ";
+
+"contactUsAlertMessage" = "This menu is for those who wants to be our partner. If you have a question about partnership, click 'No' button. Otherwise click 'Yes' button to go to customer service center to ask about your reward issue.";
+
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
 "install" = "install";
 "acquisition" = "acquisition";
 "alerViewCantParticipateEventMessage" = "Can not participate in events.";
 "alerViewCompletedParticipateEventMessage" = "Participation in the event is completed.";
+
+"getPromotingCPITrackingURLFailMessage" = "Share link address is invalid. Please contact Customer Service.";

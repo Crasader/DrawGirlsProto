@@ -123,7 +123,10 @@
 "promotingLinkType" = "Tipo de enlace";
 "promotingCouponType" = "Tipo Cupón";
 
-"promotingItemQuantity" = "%@\npor invitación";
+"commonPromotingItemQuantity" = "%@\npor lanzamiento";
+"CPIPromotingItemQuantity" = "%@\npor lanzamiento";
+"LoginPromotingItemQuantity" = "%@\npor login";
+"CPAPromotingItemQuantity" = "%@\npor registro";
 
 "invitedCount" = "Invite éxito : %@ pacientes";
 "earnedReward" = "Obtener un total de %@ %@";
@@ -131,8 +134,14 @@
 "copy" = "copia";
 "viewRanking" = "Ver rango";
 
-"promotingPartipateMethod1" = "1. En una variedad de maneras de introducir amigos a la aplicación. Introducción se puede editar utilizar directamente.";
-"promotingPartipateMethod2" = "2. Amigos a través de la introducción del enlace de instalación para instalar la aplicación, ejecute el\n3. Numero de amigos para que participen en el artículo comprado.";
+"promotingPartipateMethod1" = "1. Presente %@ a tus amigos a través de Facebook, KakaoTalk, y así sucesivamente. (Puede introducir la aplicación a sus amigos con su propio mensaje)";
+"promotingPartipateMethod2LinkType" = "2. Una vez que sus amigos, haga clic en el enlace y completa el %@ %@ para usted será recompensado por completo.";
+"promotingPartipateMethod2CouponType" = "2.Una vez que tus amigos hacen clic en el enlace y completa el %@ para %@, y entra el número de cupón, usted será recompensado por completo.";
+
+"install&connect" = "Instalación y lanzamiento";
+"install&execute" = "Instalación y lanzamiento";
+"install&login" = "Instalar y Acceder";
+"install&reg" = "Instalación y Registro";
 
 "promotingCautionMessage" = "¡Atención! Invite a un amigo para presentarle a la aplicación, por lo que he instalado las recompensas de servicios de aplicaciones serán excluidos de la adquisición.";
 
@@ -152,6 +161,28 @@
 
 "canNotParticipateInThisCampaignMessage" = "No se puede participar en esta campaña.";
 
+"deviceNotConfiguredToSendSMSMessage" = "El dispositivo no configurado para enviar SMS.";
+
+"shareNotiMessage" = "Mensaje se copia. Comparte en %@ y preguntar.";
+
+"contactUs" = "contáctenos";
+"privacyPolicy" = "política de privacidad";
+"pleaseCheckInTheMailSettings" = "Por favor verifique en los ajustes de correo.";
+
+"linkCopy" = "copiar el vínculo";
+
+"remainQuantity" = "[cantidad restante:%@]";
+
+"notice" = "aviso";
+
+"viralPromotionNoticeMessage" = "Si obtiene la recompensa por difundir información falsa, tu recompensa será reclamado y la cuenta será suspendida.";
+
+"agree" = "acordar";
+"deny" = "negar";
+
+"contactUsMailMessage" = "Espere a que la participación de las empresas y ser competente con adPOPcorn.\n<Alianza>\n*Nombre de empresa : \n*Persona de contacto : \n*Contactos : \n*E-mail : \n*Contenido : ";
+
+"contactUsAlertMessage" = "Este menú es Asociación dedicada. Por favor, acepte la participación de los anuncios de los centros relacionados con el contacto con el cliente. ¿Quieres ir al menú Contacte con nosotros?";
 
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
@@ -159,3 +190,5 @@
 "acquisition" = "adquisición";
 "alerViewCantParticipateEventMessage" = "No se puede participar en los eventos.";
 "alerViewCompletedParticipateEventMessage" = "Se completa participación en el evento.";
+
+"getPromotingCPITrackingURLFailMessage" = "Compartir dirección del enlace no es válido. Por favor, póngase en contacto con Servicio al Cliente.";

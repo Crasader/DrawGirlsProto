@@ -123,16 +123,26 @@
 "promotingLinkType" = "링크형";
 "promotingCouponType" = "쿠폰형";
 
-"promotingItemQuantity" = "초대 건당\n%@";
+"commonPromotingItemQuantity" = "친구가 접속 시 마다\n%@";
+"CPIPromotingItemQuantity" = "친구가 실행하면\n%@";
+"LoginPromotingItemQuantity" = "친구가 로그인하면\n%@";
+"CPAPromotingItemQuantity" = "친구가 회원가입하면\n%@";
 
 "invitedCount" = "초대성공 : %@명";
 "earnedReward" = "총 %@ %@ 획득";
 
-"copy" = "복사하기";
+"copy" = "복사";
 "viewRanking" = "순위보기";
 
-"promotingPartipateMethod1" = "1. 다양한 방법으로 친구들에게 앱을 소개합니다. 소개 글은 직접 편집에서 사용하실 수 있습니다.";
-"promotingPartipateMethod2" = "2. 소개글의 설치 링크를 통해 친구가 앱을 설치, 실행하면\n3. 참여한 친구 수만큼 아이템을 획득하게됩니다.";
+//"promotingPartipateMethod1" = "1. 다양한 방법으로 친구들에게 앱을 소개합니다. 소개 글은 직접 편집에서 사용하실 수 있습니다.";
+"promotingPartipateMethod1" = "1. 페이스북, 카카오톡등 다양한 방법으로 친구들에게 %@를(을) 소개해보세요(소개글은 본인이 직접 편집할 수 있습니다.) ";
+"promotingPartipateMethod2LinkType" = "2. 소개글의 설치 링크를 클릭하여 친구가 %@를(을) %@하면, 친구 수 만큼 보상이 즉시 지급됩니다.";
+"promotingPartipateMethod2CouponType" = "2. 소개글의 설치 링크를 클릭하여 친구가 %@를(을), %@ 후 쿠폰번호를 입력하면, 친구 수 만큼 보상이 즉시 지급됩니다.";
+
+"install&connect" = "설치&접속";
+"install&execute" = "설치&실행";
+"install&login" = "설치&로그인";
+"install&reg" = "설치&회원가입";
 
 "promotingCautionMessage" = "주의! 친구초대는 앱을 소개하기 위한 서비스이므로 본인이 설치한 앱은 리워드 획득에서 제외됩니다.";
 
@@ -151,6 +161,29 @@
 "description" = "설명";
 
 "canNotParticipateInThisCampaignMessage" = "참여가능한 캠페인이 없습니다.";
+"deviceNotConfiguredToSendSMSMessage" = "SMS을 보낼 수 있는 설정이 안되어 있습니다.";
+
+"shareNotiMessage" = "메시지가 복사되었습니다. %@에 공유 부탁드립니다.";
+
+"contactUs" = "제휴문의";
+"privacyPolicy" = "개인정보 취급방침";
+
+"pleaseCheckInTheMailSettings" = "메일 설정 확인 부탁합니다.";
+
+"linkCopy" = "링크복사";
+
+"remainQuantity" = "[남은수량:%@건]";
+
+"notice" = "알림";
+
+"viralPromotionNoticeMessage" = "친구초대 시 허위사실을 유포하여 이득을 취할 경우 부당이득 전량 회수 및 계정 제재 처리를 받게 됩니다.";
+
+"agree" = "동의";
+"deny" = "동의안함";
+
+"contactUsMailMessage" = "adPOPcorn과 함께할 역량 있는 기업의 참여를 기다립니다.\n<제휴문의>\n*회사명 : \n*담당자 : \n*연락처 : \n*이메일 : \n*내용 : ";
+
+"contactUsAlertMessage" = "본 메뉴는 제휴문의 전용입니다. 광고참여 관련 문의는 고객센터를 통해 접수하여 주시기 바랍니다. 고객센터 메뉴로 이동하시겠습니까?";
 
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
@@ -158,3 +191,5 @@
 "acquisition" = "획득";
 "alerViewCantParticipateEventMessage" = "참여할 수 없는 이벤트입니다.";
 "alerViewCompletedParticipateEventMessage" = "참여 완료된 이벤트입니다.";
+
+"getPromotingCPITrackingURLFailMessage" = "공유 링크 주소가 잘못되었습니다. 고객센터로 문의바랍니다.";

@@ -122,7 +122,10 @@
 "promotingLinkType" = "Link-Typ";
 "promotingCouponType" = "Kupon-Typ";
 
-"promotingItemQuantity" = "%@\npro Einladung";
+"commonPromotingItemQuantity" = "%@\npro Start";
+"CPIPromotingItemQuantity" = "%@\npro Start";
+"LoginPromotingItemQuantity" = "%@\npro Login";
+"CPAPromotingItemQuantity" = "%@\npro Register";
 
 "invitedCount" = "Einladen Erfolg : %@ Patienten";
 "earnedReward" = "Besorgen Sie sich eine insgesamt %@ %@";
@@ -130,8 +133,14 @@
 "copy" = "Kopie";
 "viewRanking" = "Ansicht Rang";
 
-"promotingPartipateMethod1" = "1. In einer Vielzahl von Möglichkeiten, um Freunde, um die App vorstellen. Einführung bearbeitet direkt verwendet werden.";
-"promotingPartipateMethod2" = "2. Freunde durch die Einführung des Install Link, um die Anwendung zu installieren, führen Sie den\n3. Anzahl der Freunde in der Kaufsache zu beteiligen.";
+"promotingPartipateMethod1" = "1. Führen %@ zu Ihren Freunden über Facebook, Kakaotalk, und so weiter. (Sie können die App, um Ihre Freunde mit Ihrer eigenen Mitteilung vorstellen)";
+"promotingPartipateMethod2LinkType" = "2. Nachdem Sie Ihre Freunde auf den Link klicken und vervollständigt die %@ %@ für Sie pro komplette belohnt werden.";
+"promotingPartipateMethod2CouponType" = "2. Sobald Sie Ihre Freunde auf den Link klicken und vervollständigt die %@ %@ für und tritt in die Coupon-Nummern, werden Sie pro Komplett belohnt werden.";
+
+"install&connect" = "Installieren und Starten";
+"install&execute" = "Installieren und Starten";
+"install&login" = "Installieren und Anmelden";
+"install&reg" = "Installieren und Registrieren";
 
 "promotingCautionMessage" = "Achtung! Laden Sie einen Freund, Sie auf der App vorstellen, so habe ich die App installiert Belohnungen Service wird von der Erfassung ausgeschlossen werden.";
 
@@ -151,6 +160,29 @@
 
 "canNotParticipateInThisCampaignMessage" = "Kann nicht in dieser Kampagne zu beteiligen.";
 
+"deviceNotConfiguredToSendSMSMessage" = "Gerät nicht konfiguriert, um SMS zu senden.";
+
+"shareNotiMessage" = "Nachricht wird kopiert. Teilen auf %@ und fragen.";
+
+"contactUs" = "Kontaktieren Sie uns";
+"privacyPolicy" = "Datenschutz";
+"pleaseCheckInTheMailSettings" = "Bitte überprüfen Sie in den Mail-Einstellungen";
+
+"linkCopy" = "Link kopieren";
+
+"remainQuantity" = "[verbleibende menge:%@]";
+
+"notice" = "Bekanntmachung";
+
+"viralPromotionNoticeMessage" = "Wenn Sie die Belohnung durch die Verbreitung falscher Informationen, wird Ihr Lohn zurückgefordert werden und das Konto wird gesperrt.";
+
+"agree" = "zustimmen";
+"deny" = "leugnen";
+
+"contactUsMailMessage" = "Warten für die Beteiligung von Unternehmen und zuständig mit adPOPcorn.\n<Partnerschaft>\n*Name der Firma : \n*Kontakt : \n*Kontakt : \n*E-Mail : \n*Inhalt : ";
+
+"contactUsAlertMessage" = "Dieses Menü ist engagierte Partnerschaft. Bitte akzeptieren Sie die Teilnahme der Customer Contact Center-bezogene Anzeigen. Wollen Sie an den Kontakt-Menü gehen?";
+
 
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
@@ -158,3 +190,5 @@
 "acquisition" = "Erwerb";
 "alerViewCantParticipateEventMessage" = "Kann nicht an Veranstaltungen teilzunehmen.";
 "alerViewCompletedParticipateEventMessage" = "Die Teilnahme an der Veranstaltung ist abgeschlossen.";
+
+"getPromotingCPITrackingURLFailMessage" = "Teilen Link-Adresse ist ungültig. Bitte kontaktieren Sie Kundenservice.";

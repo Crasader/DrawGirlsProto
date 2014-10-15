@@ -127,7 +127,11 @@
 "promotingLinkType" = "链接类型";
 "promotingCouponType" = "优惠券类型";
 
-"promotingItemQuantity" = "每邀请\n%@";
+
+"commonPromotingItemQuantity" = "每次朋友访问的时候 %@";
+"CPIPromotingItemQuantity" = "朋友运行的话 %@";
+"LoginPromotingItemQuantity" = "朋友登录的话 %@";
+"CPAPromotingItemQuantity" = "朋友加入会员的话 %@";
 
 "invitedCount" = "邀请成功 : %@ 例";
 "earnedReward" = "得到总共 %@ %@";
@@ -135,8 +139,14 @@
 "copy" = "复制";
 "viewRanking" = "查看排名";
 
-"promotingPartipateMethod1" = "1. 在各种不同的方式来介绍朋友来的应用程序。介绍可以编辑直接使用。";
-"promotingPartipateMethod2" = "2. 通过引进安装链接的朋友来安装应用程序，运行\n3. 朋友参与购买的物品数量。";
+"promotingPartipateMethod1" = "1. 通过FACEBOOK，KAKAO TALK等多样化方法给朋友%@介绍看看（可以自己编辑介绍文）";
+"promotingPartipateMethod2LinkType" = "2. 点击介绍里的设置链接后，朋友%@进入 %@的话，按照朋友数量的多少立即可以获得收入";
+"promotingPartipateMethod2CouponType" = "2. 点击介绍里的设置连接后，朋友%@进入 %@后输入优惠券号码的话，按照朋友数量多少可以立即获得收入";
+
+"install&connect" = "设置与访问";
+"install&execute" = "设置与运行";
+"install&login" = "设置与登录";
+"install&reg" = "者置与加入会员";
 
 "promotingCautionMessage" = "注意！邀请朋友给你介绍的应用程序，所以我已经安装了应用程序服务奖励将被排除在收购。";
 
@@ -156,7 +166,28 @@
 
 "canNotParticipateInThisCampaignMessage" = "不能参加本次活动。";
 
+"deviceNotConfiguredToSendSMSMessage" = "设备未配置为发送短信。";
 
+"shareNotiMessage" = "消息被复制。分享在%@和要求。";
+
+"contactUs" = "联系我们";
+"privacyPolicy" = "隐私政策";
+"pleaseCheckInTheMailSettings" = "请在邮件设置。";
+
+"linkCopy" = "复制链接";
+
+"remainQuantity" = "[剩余数量:%@]";
+
+"notice" = "通知";
+
+"viralPromotionNoticeMessage" = "邀请好友时，通过散布虚假信息来获利的情况，不法收益金额将被没收并进行处罚。";
+
+"agree" = "同意";
+"deny" = "否认";
+
+"contactUsMailMessage" = "adPOPcorn期待所有有能力的企业加盟\n<加盟咨询>\n*公司名 : \n*负责人 : \n*联系方式 : \n*邮件 : \n*内容 : ";
+
+"contactUsAlertMessage" = "这个菜单是专门伙伴关系。请接受参与由客户联络中心相关的广告。你想不想去联系我们的菜单吗？";
 
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
@@ -164,3 +195,5 @@
 "acquisition" = "获得";
 "alerViewCantParticipateEventMessage" = "不能参加活动。";
 "alerViewCompletedParticipateEventMessage" = "参与事件完成。";
+
+"getPromotingCPITrackingURLFailMessage" = "分享链接地址是无效的。请联系客户服务。";

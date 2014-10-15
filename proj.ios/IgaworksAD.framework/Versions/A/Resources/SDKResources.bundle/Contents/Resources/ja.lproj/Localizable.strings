@@ -120,7 +120,10 @@
 "promotingLinkType" = "リンク型";
 "promotingCouponType" = "クーポン型";
 
-"promotingItemQuantity" = "招待につき\n%@";
+"commonPromotingItemQuantity" = "招待者がアクセスする度 %@";
+"CPIPromotingItemQuantity" = "招待者がアプリ実行すると %@";
+"LoginPromotingItemQuantity" = "招待者がログインすると %@";
+"CPAPromotingItemQuantity" = "招待者が会員登録すると %@";
 
 "invitedCount" = "招待成功：%@名";
 "earnedReward" = "総 %@ %@ 獲得";
@@ -128,8 +131,16 @@
 "copy" = "コピー";
 "viewRanking" = "ランクをみる";
 
-"promotingPartipateMethod1" = "１．多様な方法で友達をアプリを招待します。招待コメントをご自由に編集して使用できます。";
-"promotingPartipateMethod2" = "２．招待コメントのインストールリンクを通じて友達がアプリをインストールすると\n3.参加した友達の数によっていアイテム獲得することができます。";
+"promotingPartipateMethod1" = "１．Facebook、カカオトーク等を多様な方法で友達に%@を紹介して下さい。(紹介文は本人が直接編集出来ます。)";
+"promotingPartipateMethod2LinkType" = "２．紹介文のインストールリンクをクリックして友達が%@を %@したら参加した回数にあわせて直ぐリワード頂けます。";
+"promotingPartipateMethod2CouponType" = "２．紹介文のインストールリンクをクリックして友達が%@を %@した後クーポン番号を入力したら参加した回数にあわせて直ぐリワード頂けます。";
+
+
+"install&connect" = "インストール及びアクセス";
+"install&execute" = "インストール及びアプリ実行";
+"install&login" = "インストール及びログイン";
+"install&reg" = "インストール及び会員登録";
+
 
 "promotingCautionMessage" = "ご注意！友達招待はアプリを紹介するためのサービスになりますので本人のインストールは対象外になります。";
 
@@ -149,9 +160,34 @@
 
 "canNotParticipateInThisCampaignMessage" = "参加できるキャンペーンがありません。";
 
+"deviceNotConfiguredToSendSMSMessage" = "デバイスは、SMSを送信するように構成されていません。";
+
+"shareNotiMessage" = "メッセージがコピーされます。 %@上で共有してお願い致します。";
+
+"contactUs" = "お問い合わせ";
+"privacyPolicy" = "個人情報保護";
+"pleaseCheckInTheMailSettings" = "メールの設定をご確認下さい。";
+
+"linkCopy" = "リンクのコピー";
+
+"remainQuantity" = "[残り数量:%@]";
+
+"notice" = "予告";
+
+"viralPromotionNoticeMessage" = "友達招待の時、偽の事実を流布して利を得る場合、不当利得の全量回収及びアカウントを制裁することになります。";
+
+"agree" = "同意する";
+"deny" = "否定する";
+
+"contactUsMailMessage" = "adPOPcornと一緒にする力量のある企業の参加をお待ちます。\n<連携に関してのお問い合わせ>\n*会社名 : \n*担当者 : \n*連絡先 : \n*メールアドレス : \n*内容: ";
+
+"contactUsAlertMessage" = "このメニューは、提携のお問い合わせ専用です。広告参加に関するお問い合わせは、お客様センターを介して受信してください。お客様センターのメニューに移動しますか？";
+
 // adbrix
 "alertViewTitleForAdBrix" = "AdBrix";
 "install" = "インストール";
 "acquisition" = "獲得";
 "alerViewCantParticipateEventMessage" = "このキャンペーンに参加することはできません。";
 "alerViewCompletedParticipateEventMessage" = "既に参加完了したキャンペーンです。";
+
+"getPromotingCPITrackingURLFailMessage" = "共有リンクアドレスが無効です。カスタマーサービスまでご連絡ください。";
