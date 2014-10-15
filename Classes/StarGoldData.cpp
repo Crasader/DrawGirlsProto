@@ -3533,9 +3533,9 @@ void StarGoldData::myInit()
 	goods_data.clear();
 	
 	app_type = "light1";
-	app_version = 3;
+	app_version = 4; // 커몬세팅값과 비교해서 앱 종료시키는 버전.
 	
-	client_version = 5;
+	client_version = 5; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
 	
 	is_ingame_gold = false;
 	total_card_cnt = 0;
