@@ -1475,7 +1475,7 @@ void hspConnector::IgawAdbrixBuy(string productName)
 	int r = 0;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixBuy",
 																		 "(Ljava/lang/String;)V")) {
-		jstring param1 = t.env->NewStringUTF(event.c_str());
+		jstring param1 = t.env->NewStringUTF(productName.c_str());
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(param1);
 		t.env->DeleteLocalRef(t.classID);
@@ -1497,7 +1497,7 @@ void hspConnector::IgawAdbrixFirstTimeExperience(string msg)
 	int r = 0;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixFirstTimeExperience",
 																		 "(Ljava/lang/String;)V")) {
-		jstring param1 = t.env->NewStringUTF(event.c_str());
+		jstring param1 = t.env->NewStringUTF(msg.c_str());
 		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
 		t.env->DeleteLocalRef(param1);
 		t.env->DeleteLocalRef(t.classID);
