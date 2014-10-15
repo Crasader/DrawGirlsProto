@@ -273,7 +273,7 @@ bool AccountManagerPopup::init(int touchP)
 				auto nickName = t["nick"].asString();
 				if(nickName == "")
 				{
-					nickName = "옛날유저";
+					nickName = "OldUser";
 				}
 				auto highPiece = t["highPiece"].asInt();
 				if(highPiece == 0)
