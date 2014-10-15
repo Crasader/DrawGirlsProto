@@ -1430,6 +1430,8 @@
 		D7B3A2F919EE155100DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
 		D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */; };
 		D7B3A2FB19EE236800DC8938 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = D7B3A2F519EE153200DC8938 /* libxml2.dylib */; };
+		D7B3A2FD19EE4B3100DC8938 /* SDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D7B3A2FC19EE4B3100DC8938 /* SDKResources.bundle */; };
+		D7B3A2FE19EE4B3100DC8938 /* SDKResources.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D7B3A2FC19EE4B3100DC8938 /* SDKResources.bundle */; };
 		D7B6353019D9665C00BA4785 /* CharacterSelectPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */; };
 		D7B6353119D9665C00BA4785 /* HellModeOpening.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */; };
 		D7B6353219D9665C00BA4785 /* HellModeResult.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B6352E19D9665C00BA4785 /* HellModeResult.cpp */; };
@@ -2927,6 +2929,7 @@
 		D7B3A2F219EE14FF00DC8938 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		D7B3A2F519EE153200DC8938 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
 		D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		D7B3A2FC19EE4B3100DC8938 /* SDKResources.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = SDKResources.bundle; sourceTree = "<group>"; };
 		D7B6352A19D9665C00BA4785 /* CharacterSelectPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterSelectPopup.cpp; sourceTree = "<group>"; };
 		D7B6352B19D9665C00BA4785 /* CharacterSelectPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterSelectPopup.h; sourceTree = "<group>"; };
 		D7B6352C19D9665C00BA4785 /* HellModeOpening.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HellModeOpening.cpp; sourceTree = "<group>"; };
@@ -5641,6 +5644,7 @@
 		F293B3BD15EB7BE500256477 = {
 			isa = PBXGroup;
 			children = (
+				D7B3A2FC19EE4B3100DC8938 /* SDKResources.bundle */,
 				D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */,
 				D741D93219DBCB090051C63D /* HSPSDKIOS */,
 				D79EF70519D8DBC200979D79 /* cocos2dx.xcodeproj */,
@@ -5875,6 +5879,7 @@
 				D7A8A3E119DD0B6000158A61 /* hspuibase_btn_navi_close.png in Resources */,
 				D7A8A3E219DD0B6000158A61 /* Icon.png in Resources */,
 				D7A8A3E319DD0B6000158A61 /* HSPConfiguration.plist in Resources */,
+				D7B3A2FE19EE4B3100DC8938 /* SDKResources.bundle in Resources */,
 				D7A8A3E419DD0B6000158A61 /* HSPPaymentLocalizable.strings in Resources */,
 				D7A8A3E519DD0B6000158A61 /* Icon@2x.png in Resources */,
 				D7A8A3E619DD0B6000158A61 /* pixelation.fsh in Resources */,
@@ -5933,6 +5938,7 @@
 				D741D9E019DBCB0A0051C63D /* hspuibase_btn_navi_close.png in Resources */,
 				A71A477F17D59D34004B9F01 /* Icon.png in Resources */,
 				D741D9D919DBCB0A0051C63D /* HSPConfiguration.plist in Resources */,
+				D7B3A2FD19EE4B3100DC8938 /* SDKResources.bundle in Resources */,
 				D741D9EF19DBCB0A0051C63D /* HSPPaymentLocalizable.strings in Resources */,
 				A71A478017D59D34004B9F01 /* Icon@2x.png in Resources */,
 				D7DD859E18E003BF008003D4 /* pixelation.fsh in Resources */,
