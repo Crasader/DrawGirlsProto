@@ -3652,7 +3652,7 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 	}
 	
-	rewind_cnt_per_frame = 3;
+	rewind_cnt_per_frame = 2;
 }
 
 long long StarGoldData::getIntroducerID()
