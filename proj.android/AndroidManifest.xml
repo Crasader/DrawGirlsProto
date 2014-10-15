@@ -45,19 +45,7 @@
             android:exported="true" >
             <intent-filter>
                 <action android:name="com.android.vending.INSTALL_REFERRER" />
-            </intent-filter>
-            <meta-data
-                android:name="forward1"
-                android:value="io.fiverocks.android.FiveRocksReceiver" />
-            <meta-data
-                android:name="forward2"
-                android:value="com.igaworks.IgawReceiver" />
-            <meta-data
-                android:name="forward3"
-                android:value="com.hangame.hsp.push.NPushBroadcastReceiver" />
-            <meta-data
-                android:name="forward4"
-                android:value="io.fiverocks.android.GCMReceiver" />
+            </intent-filter> 
         </receiver>
         <receiver android:name="io.fiverocks.android.FiveRocksReceiver" />
 		<receiver
