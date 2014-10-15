@@ -540,6 +540,7 @@ void CumberParent::myInit()
 		mainCumber->assignBossData(root[i]);
 		mainCumber->applyPassiveData(mySD->getPassiveData());
 		mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
+		mainCumber->settingPattern(boss["pattern"]);
 		mainCumber->applyAutoBalance();
 		//	mainCumber->settingPattern(boss["pattern"]);
 		//	mainCumber->settingPattern("{\"test\":123");
@@ -555,7 +556,6 @@ void CumberParent::myInit()
 		//										{"pattern":"105", "atype":"special", "percent":1}]           )", temp_root);
 
 		//	temp_reader.parse(boss["pattern"])
-		mainCumber->settingPattern(boss["pattern"]);
 
 		//	);
 		IntPoint mapPoint;
