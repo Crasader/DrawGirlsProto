@@ -626,6 +626,7 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 //								  t_popup->setBackKeyEnabled(false);
 								  
 								  t_popup->is_menu_enable = false;
+									AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 									CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
 										
 									}, [=](){
@@ -644,8 +645,8 @@ ASPopupView* ASPopupView::getNotEnoughtGoodsGoShopPopup(int t_touch_priority, Go
 		
 		t_popup->is_menu_enable = false;
 		
+		AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 		CommonAnimation::closePopup(t_popup, t_container, gray, [=](){
-			AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 			
 		}, [=](){
 			goshop_func(); t_popup->removeFromParent();
