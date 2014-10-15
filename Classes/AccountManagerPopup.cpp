@@ -324,15 +324,29 @@ bool AccountManagerPopup::init(int touchP)
 									mySGD->resetLabels();
 									SaveData::sharedObject()->resetAllData();
 									myDSH->removeCache();
-									mySDS->removeCache();
-									
+									mySDS->removeCache();									
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 									TRACE();
 									CCLOG("save accountType %d", mm2);
 									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
-									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+									// 게스트인 경우 드롭아웃시키고 완료됐다고 띄우고
+									// 게스트가 아닌 경우 바로 매핑 완료 시킴.
+									if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
+									{
+										Json::Value param;
+										param["memberID"] = hspConnector::get()->getMemberID();
+										// 성공하든 실패하든 걍 무조건 일단 날림. 트랜잭션이 안되기 때문에 어쩔 수 없음.
+										myHSP->command("dropoutuser", param, [=](Json::Value v)
+																	 {
+																		CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																	 });
+									}
+									else
+									{
+										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+									}
 								}
 								else
 								{
@@ -364,8 +378,6 @@ bool AccountManagerPopup::init(int touchP)
 #else
 						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
 #endif
-						
-	
 					}
 					else
 					{
@@ -472,95 +484,50 @@ bool AccountManagerPopup::init(int touchP)
 					{
 						mySGD->resetLabels();
 						myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+						std::string msg;
 						
-						// 팝업이 완료됐다는 임시함수를 만듬!
-						auto mappingCompletePopupShow = [=]()
+						if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
 						{
-							std::string msg;
-							
-							if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
-							{
-								msg = ccsf(getLocal(LK::kUnlinkAccount1),
-													 descMapper.at(loginType).c_str());
-							}
-							msg += ccsf(getLocal(LK::kLinkAccount1),
-													tryName.c_str()
-													);
-							auto content = StyledLabelTTF::create(msg.c_str(),
-																										mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-							content->setAnchorPoint(ccp(0.5f, 0.5f));
-							
-							ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
-																															 content,
-																															 [=]()
-																															 {
-																																 CCLOG("ttTT");
-																																 TRACE();
+							msg = ccsf(getLocal(LK::kUnlinkAccount1),
+												 descMapper.at(loginType).c_str());
+						}
+						msg += ccsf(getLocal(LK::kLinkAccount1),
+												tryName.c_str()
+												);
+						auto content = StyledLabelTTF::create(msg.c_str(),
+																									mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						content->setAnchorPoint(ccp(0.5f, 0.5f));
+						
+						ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																														 content,
+																														 [=]()
+																														 {
+																															 CCLOG("ttTT");
+																															 TRACE();
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-																																 m_logoutRepeater2 = [=](Json::Value result_data){
-																																	 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
-																																	 if(result_data["error"]["isSuccess"].asBool())
-																																	 {
-																																		 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-																																	 }
-																																	 else
-																																	 {
-																																		 hspConnector::get()->logout(m_logoutRepeater2);
-																																	 }
-																																 };
-																																 hspConnector::get()->logout(m_logoutRepeater2);
+																															 m_logoutRepeater2 = [=](Json::Value result_data){
+																																 CCLOG("resultLogout data : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																																 if(result_data["error"]["isSuccess"].asBool())
+																																 {
+																																	 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																																 }
+																																 else
+																																 {
+																																	 hspConnector::get()->logout(m_logoutRepeater2);
+																																 }
+																															 };
+																															 hspConnector::get()->logout(m_logoutRepeater2);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-																																 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+																															 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 #endif
-																																 
-																															 });
-							addChild(alert);
-						};
-						
-						// 게스트인 경우 드롭아웃시키고 완료됐다고 띄우고
-						// 게스트가 아닌 경우 바로 매핑 완료 시킴.
-						if(loginType == HSPLoginTypeX::HSPLoginTypeGUEST)
-						{
-							Json::Value param;
-							param["memberID"] = hspConnector::get()->getMemberID();
-							myHSP->command("dropoutuser", param, [=](Json::Value v)
-														 {
-															 if(v["result"]["code"].asInt() == GDSUCCESS)
-															 {
-																 mappingCompletePopupShow();
-															 }
-															 else
-															 {
-																 auto content = StyledLabelTTF::create(getLocal(LK::kNetworkError),
-																																			 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																 content->setAnchorPoint(ccp(0.5f, 0.5f));
-																 ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kFriendNoti),
-																																									content, [=](){
-																																									});
-																 addChild(alert);
-															 }
-														 });
-							
-						}
-						else
-						{
-							mappingCompletePopupShow();
-						}
-						
-						
+																															 
+																														 });
+						addChild(alert);
 
 					}
 					else
 					{
-						auto content = StyledLabelTTF::create(getLocal(LK::kNetworkError),
-																									mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-						content->setAnchorPoint(ccp(0.5f, 0.5f));
 						
-						ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kFriendNoti),
-																														 content, [=](){
-																															 
-																														 });
-						addChild(alert);
 					}
 				});
 				
