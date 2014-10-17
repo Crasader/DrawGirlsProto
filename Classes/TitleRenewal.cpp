@@ -413,8 +413,6 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #endif
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
-	
-	
 	}
 	else
 	{
@@ -435,7 +433,8 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 #endif
     
 #else
-				param["LoginType"] = (int)HSPLogin::GUEST;
+				TRACE();
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #endif
 //				param["LoginType"] = (int)HSPLogin::GUEST;
 				hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
@@ -475,7 +474,6 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				addChild(KSTimer::create(3, tryLogin));
 			}
 			else{
-				
 				loginCnt=0;
 				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert2),
 																												tryLogin);

@@ -250,7 +250,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_giftboxAlert] = "*받은 메세지는 30일 이후에 삭제됩니다.";
 	obj[LK::kMyLocalKey_reConnect] = "재접속";
 	obj[LK::kMyLocalKey_reConnectAlert1] = "다른 기기로 연결되었습니다.\n다시 로그인합니다.";
-	obj[LK::kMyLocalKey_reConnectAlert2] = "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.";
+	obj[LK::kMyLocalKey_reConnectAlert2] = "서버와의 접속에 오류가 발생하였습니다.\n다시 로그인합니다.\n지속적 문제 발생시 제거후 설치해주세요.";
 	obj[LK::kMyLocalKey_reConnectAlert3] = "세션이 종료되었습니다.\n다시 로그인합니다.";
 	obj[LK::kMyLocalKey_reConnectAlert4] = "서버연결에 실패하였습니다.\n다시 시도합니다.";
 	obj[LK::kMyLocalKey_blocked] = "BLOCKED";
