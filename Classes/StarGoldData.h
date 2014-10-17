@@ -1015,7 +1015,6 @@ public:
 	
 	double rewind_cnt_per_frame;
 	
-	int keep_scenario_value;
 	bool is_option_tutorial;
 	
 private:
