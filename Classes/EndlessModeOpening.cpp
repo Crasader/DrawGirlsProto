@@ -1722,12 +1722,16 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			if(currentSelectedCell)
 			{
 				currentSelectedCell->removeFromParent();
-				currentSelectedCell = nullptr;
+//				currentSelectedCell = nullptr;
 				currentSelectedIdx = -1;
 			}
-			currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+			currentSelectedCell = CellScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
 			currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
 			currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7, 7));
+			currentSelectedCell->destroy_func = [=]()
+			{
+				currentSelectedCell = NULL;
+			};
 			list_cell_case->addChild(currentSelectedCell);
 			
 			right_info_node->setVisible(true);
@@ -1830,10 +1834,15 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 		param["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
 
 		putInformation(param);
-		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+		currentSelectedCell = CellScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
 		currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
 		currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7, 7));
+		currentSelectedCell->destroy_func = [=]()
+		{
+			currentSelectedCell = NULL;
+		};
 		list_cell_case->addChild(currentSelectedCell);
+		currentSelectedIdx = -1;
 	}
 	else
 	{
@@ -1847,6 +1856,7 @@ unsigned int EndlessModeOpening::numberOfCellsInTableView(CCTableView *table)
 {
 	return rank_list.size();
 }
+
 CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsigned int idx)
 {
 	CCTableViewCell* cell = table->dequeueCell();
@@ -1955,9 +1965,13 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 		{
 			currentSelectedCell->removeFromParent();
 		}
-		currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+		currentSelectedCell = CellScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
 		currentSelectedCell->setPosition(ccpFromSize(list_cell_case->getContentSize()/2.f));
 		currentSelectedCell->setContentSize(list_cell_case->getContentSize() + CCSizeMake(7,7));
+		currentSelectedCell->destroy_func = [=]()
+		{
+			currentSelectedCell = NULL;
+		};
 		cell->addChild(currentSelectedCell);
 	}
 	return cell;
@@ -1990,9 +2004,13 @@ void EndlessModeOpening::tableCellTouched(CCTableView* table, CCTableViewCell* c
 	{
 		currentSelectedCell->removeFromParent();
 	}
-	currentSelectedCell = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+	currentSelectedCell = CellScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
 	currentSelectedCell->setPosition(ccpFromSize(CCSizeMake(259, 31)/2.f));
 	currentSelectedCell->setContentSize(CCSizeMake(259, 31) + CCSizeMake(7,7)); 			// dt (6.0,9.5)
+	currentSelectedCell->destroy_func = [=]()
+	{
+		currentSelectedCell = NULL;
+	};
 //	list_cell_case->setPosition(ccp(10+list_cell_case->getContentSize().width/2.f,180));//list_cell_case->getContentSize().height/2.f+5));
 	cell->addChild(currentSelectedCell);
 	

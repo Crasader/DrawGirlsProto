@@ -668,9 +668,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_rivalIngWin] = "%d 연승 중";
 	obj[LK::kMyLocalKey_rivalSelect] = "대전상대를 선택해주세요.";
 	obj[LK::kMyLocalKey_achieveSuccess2] = "업적완료";
-	obj[LK::kMyLocalKey_titleTempScript1] = "소녀들의 위치를 파악하고 있습니다.";
-	obj[LK::kMyLocalKey_titleTempScript2] = "소녀들의 의상을 점검하고 있습니다.";
-	obj[LK::kMyLocalKey_titleTempScript3] = "소녀들을 불러모으고 있습니다.";
+	obj[LK::kMyLocalKey_titleTempScript1] = "계정을 확인중입니다.";//"소녀들의 위치를 파악하고 있습니다.";
+	obj[LK::kMyLocalKey_titleTempScript2] = "저장된 데이터를 확인중입니다.";//"소녀들의 의상을 점검하고 있습니다.";
+	obj[LK::kMyLocalKey_titleTempScript3] = "서버 데이터를 확인중입니다.";//"소녀들을 불러모으고 있습니다.";
 	obj[LK::kMyLocalKey_heartFree] = "하트 공짜";
 	obj[LK::kMyLocalKey_rankRewardTitle] = "지난주 랭킹 결과";
 	obj[LK::kMyLocalKey_rankRewardContent] = "보상선물들은 우편함에서 확인하세요.";

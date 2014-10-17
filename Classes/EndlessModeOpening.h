@@ -42,6 +42,29 @@ class CommonButton;
 class StyledLabelTTF;
 class CCMenuLambda;
 class CCMenuItemLambda;
+
+class CellScale9Sprite : public CCScale9Sprite
+{
+public:
+	function<void()> destroy_func;
+	static CellScale9Sprite* create(const char* file, CCRect rect,  CCRect capInsets)
+	{
+		CellScale9Sprite* pReturn = new CellScale9Sprite();
+		if ( pReturn && pReturn->initWithFile(file, rect, capInsets) )
+		{
+			pReturn->autorelease();
+			return pReturn;
+		}
+		CC_SAFE_DELETE(pReturn);
+		return NULL;
+	}
+	
+	virtual ~CellScale9Sprite()
+	{
+		destroy_func();
+	}
+};
+
 class EndlessModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -120,7 +143,7 @@ private:
 	
 	vector<DownloadFile> df_list;
 //	vector<CopyFile> cf_list;
-	CCScale9Sprite* currentSelectedCell;
+	CellScale9Sprite* currentSelectedCell;
 	int currentSelectedIdx;
 	CommonButton* mySelection;
 	CCSprite* right_flag;

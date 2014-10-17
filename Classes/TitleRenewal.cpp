@@ -985,7 +985,7 @@ void TitleRenewalScene::checkReceive()
 					state_label->setPosition(ccp(240,30));//130
 					
 					title_img->removeFromParent();
-					title_img = CCSprite::create(ccsf("loading_%d.png", rand()%5+1));
+					title_img = CCSprite::create(ccsf("loading_%d.png", rand()%4+1));
 					title_img->setPosition(ccp(240,160));
 					addChild(title_img);
 					
