@@ -297,7 +297,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
             if(!t_info.empty())
 			{
                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
-				fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+				fiverocks::FiveRocksBridge::trackPurchase("ShopPurchaseFirstGem", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
 				myHSP->IgawAdbrixBuy("ShopPurchaseFirstGem");
 			}
             

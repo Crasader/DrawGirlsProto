@@ -885,7 +885,7 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading->removeFromParent();
 		ready_loading = NULL;
 		
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 		{

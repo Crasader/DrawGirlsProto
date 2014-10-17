@@ -1958,7 +1958,7 @@ void Jack::takeSpeedUpItem()
 {
 	if(myGD->jack_base_speed + speed_up_value >= 2.f)
 	{
-		myGD->communication("Main_takeSpeedUpEffect",  int(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f));
+		myGD->communication("Main_takeSpeedUpEffect",  int( round(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f)) );
 
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 		
@@ -1984,7 +1984,7 @@ void Jack::takeSpeedUpItem()
 		speed_up_value += 0.1f;
 		changeSpeed(myGD->jack_base_speed + speed_up_value + alpha_speed_value);
 		
-		myGD->communication("Main_takeSpeedUpEffect", int(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f));
+		myGD->communication("Main_takeSpeedUpEffect", int( round(((2.f-1.1f) - (2.f-(myGD->jack_base_speed + speed_up_value)))/0.1f) ));
 	}
 }
 

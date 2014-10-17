@@ -588,7 +588,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessHighStraight] = "최고연승";
 	obj[LK::kMyLocalKey_endlessHighStraightValue1] = "<font size=13 color=#FFFFFF>%d</font><font size=9 color=#FFFFFF>연승</font>";
 	obj[LK::kMyLocalKey_endlessHighStraightValue2] = "%d연승";
-	obj[LK::kMyLocalKey_endlessServerError] = "뭔가 문제가 발생하였습니다.\n다시 시도해주세요.";
+	obj[LK::kMyLocalKey_endlessServerError] = "서버와의 통신 중에\n문제가 발생하였습니다.\n다시 시도해주세요.";
 	obj[LK::kMyLocalKey_endlessDownloadFail] = "스테이지 이미지를 다운로드 하는데 실패하였습니다.\n다시 시도합니다.";
 	obj[LK::kMyLocalKey_attendanceSpecialTitle] = "스페셜데이";
 	obj[LK::kMyLocalKey_attendanceSeqTitle] = "매일 매일 출석 하자!!";
