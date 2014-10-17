@@ -353,8 +353,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading50] = "성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
+//	obj[LK::kMyLocalKey_titleLoading50] = "성인 이라면 S다이어리 앱이 필수! 성인버전의 카드를 볼 수 있습니다.";
+//	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "게임시작";
 	obj[LK::kMyLocalKey_battleStart] = "대전 시작";
