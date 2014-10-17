@@ -1506,7 +1506,8 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(10000000 + idx*10000 + t_info.need_ruby_value);
+					detail_button->setTag(10000000 + idx);
+					detail_button->setStringData(ccsf("%d", t_info.need_ruby_value));
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
 					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
@@ -2384,9 +2385,8 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 	}
 	else
 	{
-		int t_index = (tag-10000000)/10000;
-		int t_need_ruby = tag%10000;
-		
+		int t_index = (tag-10000000);
+		int t_need_ruby = atoi(sender->getStringData().c_str());
 		PuzzleOpenPopup* t_popup = PuzzleOpenPopup::create(-999, [=](){is_menu_enable = true;}, [=]()
 																											 {
 																												 LoadingLayer* t_loading = LoadingLayer::create(-9999);

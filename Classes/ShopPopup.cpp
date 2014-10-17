@@ -782,7 +782,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
                                         if(!t_info.empty())
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
-											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											fiverocks::FiveRocksBridge::trackPurchase("ShopPurchaseStartPack", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
 											myHSP->IgawAdbrixBuy("ShopPurchaseStartPack");
 										}
 										requestItemDeliveryStartPack();
@@ -1065,7 +1065,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
                                         if(!t_info.empty())
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
-											fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											fiverocks::FiveRocksBridge::trackPurchase("ShopPurchaseEventPack", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
 											myHSP->IgawAdbrixBuy("ShopPurchaseEventPack");
 										}
 										requestItemDeliveryEventPack();
@@ -2114,7 +2114,7 @@ void ShopPopup::menuAction(CCObject* pSender)
                                             if(!t_info.empty())
 											{
                                                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
-												fiverocks::FiveRocksBridge::trackPurchase("Sale", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+												fiverocks::FiveRocksBridge::trackPurchase(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1), t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
 												myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1));
 											}
 											requestItemDelivery();
