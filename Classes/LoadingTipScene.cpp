@@ -23,6 +23,7 @@
 #include "PlayTutorial.h"
 #include "StyledLabelTTF.h"
 #include "TypingBox.h"
+#include "MainFlowScene.h"
 
 CCScene* LoadingTipScene::scene()
 {
@@ -72,7 +73,7 @@ bool LoadingTipScene::init()
 	
 	if(!is_mission_tip)
 	{
-		if(next_scene_name == "maingame" || next_scene_name == "playtutorial")
+		if(next_scene_name == "maingame" || next_scene_name == "playtutorial" || next_scene_name == "mainflow")
 		{
 			CCNode* tip_img = getCurtainTipImage();
 			tip_img->setPosition(ccp(240,160));
@@ -1686,8 +1687,8 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		black_img->runAction(black_seq);
 		
 		
-		if(back_number != 5)
-		{
+//		if(back_number != 5)
+//		{
 			CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
 			content_back->setContentSize(CCSizeMake(400, 80));
 			content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
@@ -1702,7 +1703,7 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 			content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 			loading_tip_back->addChild(content_label);
-		}
+//		}
 
 		
 //		string tip_filename = "loading_tip_";
@@ -1747,7 +1748,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	}
 	else
 	{
-		rand_value = rand()%5+1;
+		rand_value = rand()%4+1;
 		mySGD->loading_tip_back_number = rand_value;
 		
 		back_img_filename = ccsf("loading_%d.png", rand_value);
@@ -1803,8 +1804,8 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 	
 	mySGD->before_curtain_tip_type = selected_loading_tip;
 	
-	if(rand_value != 5)
-	{
+//	if(rand_value != 5)
+//	{
 		CCScale9Sprite* content_back = CCScale9Sprite::create("loading_tipbox.png", CCRectMake(0, 0, 55, 55), CCRectMake(27, 27, 1, 1));
 		content_back->setContentSize(CCSizeMake(400, 80));
 		content_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
@@ -1820,7 +1821,7 @@ CCNode* LoadingTipScene::getCurtainTipImage()
 		KSLabelTTF* content_label = KSLabelTTF::create(myLoc->getLocalForKey(LK(selected_loading_tip+int(LK::kMyLocalKey_titleLoadingBegin)+1)), mySGD->getFont().c_str(), 13, CCSizeMake(350, 100), CCTextAlignment::kCCTextAlignmentCenter, CCVerticalTextAlignment::kCCVerticalTextAlignmentCenter);
 		content_label->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, 65));
 		loading_tip_back->addChild(content_label);
-	}
+//	}
 	
 //	string tip_filename = "loading_tip_";
 //	if(selected_loading_tip == 0)
@@ -2040,6 +2041,8 @@ void LoadingTipScene::endLoadingTip()
 		CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 	else if(next_scene_name == "playtutorial")
 		CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
+	else if(next_scene_name == "mainflow")
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
 
 void LoadingTipScene::alertAction(int t1, int t2)

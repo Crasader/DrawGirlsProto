@@ -1305,6 +1305,24 @@ string hspConnector::getUniqId()
 	
 	return r;
 }
+int hspConnector::getVersionCode()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+ jint ret = -1;
+ JniMethodInfo t;
+ if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getVersionCode", "()I")) {
+	 //		int _key =  jsonDelegator::get()->add(nextFunc, param, callbackParam);
+	 ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
+	 CCLog("ret = %d ", ret);
+	 t.env->DeleteLocalRef(t.classID);
+ }
+ return (int)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+ return 0;
+ // not implementation
+ //	[[UIApplication sharedApplication] openURL:[NSURL URLWithString:[NSString stringWithFormat:@"%s",url.c_str()]]];
+#endif
+}
 int hspConnector::getLoginType()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
