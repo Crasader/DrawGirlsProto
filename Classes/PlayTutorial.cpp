@@ -1807,7 +1807,8 @@ bool PlayTutorial::init()
 		return false;
 	}
 	
-	myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4);
+	if(!mySGD->is_option_tutorial)
+		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 4);
 	
 	map_data.clear();
 	height_value = int(myDSH->ui_top/2);
@@ -2244,26 +2245,51 @@ void PlayTutorial::nextStep()
 											  
 											  function<void()> end_func1 = [=]()
 											  {
-												  myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5);
-												  mySGD->setNextSceneName("maingame");
-												  
-												  AudioEngine::sharedInstance()->stopSound();
-												  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
-												  
-												  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-												  CCNode* t_main_node = loading_tip->getChildByTag(9999);
-												  if(t_main_node)
+												  if(mySGD->is_option_tutorial)
 												  {
-													  t_main_node->setScale(myDSH->screen_convert_rate);
-													  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+													  mySGD->setNextSceneName("mainflow");
+													  
+													  AudioEngine::sharedInstance()->stopSound();
+													  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+													  
+													  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+													  CCNode* t_main_node = loading_tip->getChildByTag(9999);
+													  if(t_main_node)
+													  {
+														  t_main_node->setScale(myDSH->screen_convert_rate);
+														  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+													  }
+													  
+													  addChild(loading_tip, 999);
+													  
+													  addChild(KSTimer::create(0.1f, [=]()
+																			   {
+																				   scenario_node->removeFromParent();
+																			   }));
 												  }
-												  
-												  addChild(loading_tip, 999);
-												  
-												  addChild(KSTimer::create(0.1f, [=]()
-																		   {
-																			   scenario_node->removeFromParent();
-																		   }));
+												  else
+												  {
+													  myDSH->setIntegerForKey(kDSH_Key_showedScenario, 5);
+													  mySGD->setNextSceneName("maingame");
+													  
+													  AudioEngine::sharedInstance()->stopSound();
+													  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+													  
+													  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+													  CCNode* t_main_node = loading_tip->getChildByTag(9999);
+													  if(t_main_node)
+													  {
+														  t_main_node->setScale(myDSH->screen_convert_rate);
+														  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+													  }
+													  
+													  addChild(loading_tip, 999);
+													  
+													  addChild(KSTimer::create(0.1f, [=]()
+																			   {
+																				   scenario_node->removeFromParent();
+																			   }));
+													}
 											  };
 											  
 											  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent21), end_func1);

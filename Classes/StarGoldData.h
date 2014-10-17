@@ -1015,6 +1015,9 @@ public:
 	
 	double rewind_cnt_per_frame;
 	
+	int keep_scenario_value;
+	bool is_option_tutorial;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

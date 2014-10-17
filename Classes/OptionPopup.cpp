@@ -49,6 +49,8 @@
 #include "GDWebSprite.h"
 #include "AttendancePopup.h"
 
+#include "LoadingTipScene.h"
+
 USING_NS_CC_EXT;
 
 enum OptionPopupZorder{
@@ -820,32 +822,61 @@ bool OptionPopup::init()
 	resetPushMenu();
 	
 	
-	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 11.5f);
-	message_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
-	message_label->setAnchorPoint(ccp(0,0.5f));
-	message_label->disableOuterStroke();
-	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-100,0)));
-	main_case->addChild(message_label, kOP_Z_back);
 	
-	CCSprite* message_scroll = CCSprite::create("option_scroll.png");
-	message_scroll->setPosition(getContentPosition(kOP_MT_message));
-	main_case->addChild(message_scroll, kOP_Z_back);
+	CCSprite* n_tutorial_img = CCSprite::create("subbutton_purple3.png");
+	KSLabelTTF* n_tutorial_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kTutorialReplay), mySGD->getFont().c_str(), 12.5f);
+	n_tutorial_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_tutorial_label->setPosition(ccpFromSize(n_tutorial_img->getContentSize()/2.f) + ccp(0,0));
+	n_tutorial_img->addChild(n_tutorial_label);
 	
-	CCSprite* n_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
-	n_message->setOpacity(0);
-	CCSprite* s_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
-	s_message->setOpacity(0);
+	CCSprite* s_tutorial_img = CCSprite::create("subbutton_purple3.png");
+	s_tutorial_img->setColor(ccGRAY);
+	KSLabelTTF* s_tutorial_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kTutorialReplay), mySGD->getFont().c_str(), 12.5f);
+	s_tutorial_label->setColor(ccGRAY);
+	s_tutorial_label->disableOuterStroke();
+	s_tutorial_label->setPosition(ccpFromSize(s_tutorial_img->getContentSize()/2.f) + ccp(0,0));
+	s_tutorial_img->addChild(s_tutorial_label);
 	
-	CCMenuItem* message_item = CCMenuItemSprite::create(n_message, s_message, this, menu_selector(OptionPopup::menuAction));
-	message_item->setTag(kOP_MT_message);
+	CCSprite* d_tutorial_img = CCSprite::create("subbutton_purple3.png");
+	d_tutorial_img->setColor(ccGRAY);
+	KSLabelTTF* d_tutorial_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kTutorialReplay), mySGD->getFont().c_str(), 12.5f);
+	d_tutorial_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	d_tutorial_label->setPosition(ccpFromSize(d_tutorial_img->getContentSize()/2.f) + ccp(0,0));
+	d_tutorial_img->addChild(d_tutorial_label);
 	
-	message_menu = CCMenu::createWithItem(message_item);
-	message_menu->setPosition(getContentPosition(kOP_MT_message));
-	main_case->addChild(message_menu, kOP_Z_content);
-	message_menu->setTouchPriority(-171);
 	
-	message_img = NULL;
-	resetMessageMenu();
+	CCMenuItem* tutorial_item = CCMenuItemSprite::create(n_tutorial_img, s_tutorial_img, d_tutorial_img, this, menu_selector(OptionPopup::menuAction));
+	tutorial_item->setTag(kOP_MT_tutorial);
+	tutorial_item->setPosition(getContentPosition(kOP_MT_message) + ccp(-50, 0));
+	tab_menu->addChild(tutorial_item);
+
+	
+//	KSLabelTTF* message_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_messageNoti), mySGD->getFont().c_str(), 11.5f);
+//	message_label->setHorizontalAlignment(CCTextAlignment::kCCTextAlignmentLeft);
+//	message_label->setAnchorPoint(ccp(0,0.5f));
+//	message_label->disableOuterStroke();
+//	message_label->setPosition(ccpAdd(getContentPosition(kOP_MT_message), ccp(-100,0)));
+//	main_case->addChild(message_label, kOP_Z_back);
+//	
+//	CCSprite* message_scroll = CCSprite::create("option_scroll.png");
+//	message_scroll->setPosition(getContentPosition(kOP_MT_message));
+//	main_case->addChild(message_scroll, kOP_Z_back);
+//	
+//	CCSprite* n_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+//	n_message->setOpacity(0);
+//	CCSprite* s_message = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 115, 30));
+//	s_message->setOpacity(0);
+//	
+//	CCMenuItem* message_item = CCMenuItemSprite::create(n_message, s_message, this, menu_selector(OptionPopup::menuAction));
+//	message_item->setTag(kOP_MT_message);
+//	
+//	message_menu = CCMenu::createWithItem(message_item);
+//	message_menu->setPosition(getContentPosition(kOP_MT_message));
+//	main_case->addChild(message_menu, kOP_Z_content);
+//	message_menu->setTouchPriority(-171);
+//	
+//	message_img = NULL;
+//	resetMessageMenu();
 	
 	
 	CCScale9Sprite* info_back = CCScale9Sprite::create("option_info_back.png", CCRectMake(0, 0, 35, 35), CCRectMake(17, 17, 1, 1));
@@ -1517,7 +1548,23 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_tutorial)
 	{
-		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
+		mySGD->is_option_tutorial = true;
+		mySGD->resetLabels();
+		
+		AudioEngine::sharedInstance()->stopSound();
+		
+		mySGD->setNextSceneName("playtutorial");
+		
+		AudioEngine::sharedInstance()->preloadEffectScene("playtutorial");
+		
+		addChild(KSTimer::create(0.3f, [=]()
+								 {
+									 LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+									 addChild(loading_tip, kOP_Z_popup);
+								 }));
+		
+//		CCDirector::sharedDirector()->replaceScene(TutorialScene::scene());
 	}
 	else if(tag == kOP_MT_safety)
 	{

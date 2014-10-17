@@ -15,6 +15,7 @@
 
 void StarGoldData::withdraw()
 {
+	is_option_tutorial = false;
 	total_card_cnt = 0;
 	
 	loading_tip_back_number = 1;
@@ -3529,6 +3530,8 @@ int StarGoldData::getAppVersion()
 void StarGoldData::myInit()
 {
 	is_hell_mode_enabled = false;
+	
+	is_option_tutorial = false;
 	
 	goods_data.clear();
 	

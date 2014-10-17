@@ -347,6 +347,7 @@ bool AccountManagerPopup::init(int touchP)
 									SaveData::sharedObject()->resetAllData();
 									myDSH->removeCache();
 									mySDS->removeCache();
+									mySGD->withdraw();
 									
 									myDSH->setBoolForKey(kDSH_Key_bgmOff, is_bgm_off, false);
 									myDSH->setBoolForKey(kDSH_Key_effectOff, is_effect_off, false);

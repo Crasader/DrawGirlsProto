@@ -1152,6 +1152,7 @@ void KsLocal::ko()
 	
 	obj[LK::kFriendSelfNickname] = "자기 자신은 친구로 등록할 수 없습니다.";
 	obj[LK::kAttendanceCheck] = "출석확인";
+	obj[LK::kTutorialReplay] = "튜토리얼";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	
 		// add friend !

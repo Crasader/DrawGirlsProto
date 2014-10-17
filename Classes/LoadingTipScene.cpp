@@ -23,6 +23,7 @@
 #include "PlayTutorial.h"
 #include "StyledLabelTTF.h"
 #include "TypingBox.h"
+#include "MainFlowScene.h"
 
 CCScene* LoadingTipScene::scene()
 {
@@ -72,7 +73,7 @@ bool LoadingTipScene::init()
 	
 	if(!is_mission_tip)
 	{
-		if(next_scene_name == "maingame" || next_scene_name == "playtutorial")
+		if(next_scene_name == "maingame" || next_scene_name == "playtutorial" || next_scene_name == "mainflow")
 		{
 			CCNode* tip_img = getCurtainTipImage();
 			tip_img->setPosition(ccp(240,160));
@@ -2040,6 +2041,8 @@ void LoadingTipScene::endLoadingTip()
 		CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 	else if(next_scene_name == "playtutorial")
 		CCDirector::sharedDirector()->replaceScene(PlayTutorial::scene());
+	else if(next_scene_name == "mainflow")
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 }
 
 void LoadingTipScene::alertAction(int t1, int t2)
