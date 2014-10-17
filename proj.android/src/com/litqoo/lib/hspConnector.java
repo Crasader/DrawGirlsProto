@@ -1,5 +1,6 @@
 package com.litqoo.lib;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -16,15 +17,21 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.AssetManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.telephony.TelephonyManager;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 
 //import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
@@ -744,6 +751,9 @@ public class hspConnector {
 	}
 
 	public static void getIsUsimKorean(final int _key){
+		
+		
+		
 		HSPUtil.alertViewWithToastTerms((Activity)hspConnector.sContext, new HSPAlertViewWithToastTermsCB() {
 
 			@Override
@@ -1084,6 +1094,18 @@ public class hspConnector {
 		UUID deviceUuid = new UUID(androidId.hashCode(),
 				((long) tmDevice.hashCode() << 32) | tmSerial.hashCode());
 		uniqId = deviceUuid.toString();
+	}
+	
+	public static int getVersionCode()
+	{
+		PackageInfo pi;
+		try {
+			pi = AppContext.getPackageManager().getPackageInfo(AppContext.getPackageName(), 0);
+		} catch (NameNotFoundException e) {
+			return -1;
+		}
+		
+		return pi.versionCode; 
 	}
 
 	public static AssetManager getAssetManager() {
