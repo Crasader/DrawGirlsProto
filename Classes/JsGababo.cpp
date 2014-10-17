@@ -164,7 +164,7 @@ bool JsGababo::init(int touchPriority, const std::vector<BonusGameReward>& rewar
 	realFront->addChild(nameBar2);
 	nameBar2->setPosition(ccp(234.5, 96.0));
 	
-	KSLabelTTF* nick2 = KSLabelTTF::create("묵지빠마왕", mySGD->getFont().c_str(), 11.f);
+	KSLabelTTF* nick2 = KSLabelTTF::create("묵찌빠마왕", mySGD->getFont().c_str(), 11.f);
 	nameBar2->addChild(nick2);
 	nick2->setPosition(ccpFromSize(nameBar2->getContentSize()) / 2.f);
 	

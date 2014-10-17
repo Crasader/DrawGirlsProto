@@ -59,6 +59,7 @@
 #include "HellModeOpening.h"
 #include "HellModeResult.h"
 #include "StartSettingPopup.h"
+#include "LoadingTipScene.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -299,6 +300,14 @@ bool MainFlowScene::init()
 	
     TRACE();
 	bool is_openning = false;
+	
+	if(mySGD->is_option_tutorial)
+	{
+		mySGD->is_option_tutorial = false;
+		CCNode* curtain_node = LoadingTipScene::getOpenCurtainNode(true);
+		curtain_node->setPosition(ccp(240,160));
+		addChild(curtain_node, kMainFlowZorder_popup+999999999);
+	}
 	
 	if(mySGD->is_endless_mode && myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init)
 	{
