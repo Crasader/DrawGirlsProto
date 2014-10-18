@@ -208,6 +208,7 @@ var getFieldInfo = function(obj){
 		result["defaultData"]=s2j(result["table"].attr("defaultData"));
 		if(!result["dbWhere"])result["dbWhere"]={};
 		result["dbLimit"] = result["table"].attr("dbLimit");
+		if(!result["dbLimit"])result["dbLimit"]=30;
 		result["dbLoadParam"] =j2s({"name":result["tableName"],"where":s2j(result["dbWhere"]),"limit":s2j(result["dbLimit"]),"sort":s2j(result["dbSort"])});
 		dbFunc = s2j(result["table"].attr("dbFunc"));
 
@@ -467,8 +468,14 @@ var viewerFunc_json = function(value,option){
 var viewerFunc_datetime = function(value,option){
 	if(typeof(value)=="object")value = j2s(value);
 	if(typeof(option)=="string")option=s2j(option["option"]);
-
+	if(!option["format"])option["format"]="Y/m/d h:i:s";
 	return datetimeFormat(value,option["format"]);
+}
+
+var viewerFunc_timestamp = function(value,option){
+	var timestamp = value;
+  	var date = new Date(timestamp * 1000);
+  	return date.getFullYear()+"/"+(date.getMonth()+1)+"/"+date.getDate()+" "+(date.getHours()<10?"0"+date.getHours():date.getHours())+":"+(date.getMinutes()<10?"0"+date.getMinutes():date.getMinutes())+":"+(date.getSeconds()<10?"0"+date.getSeconds():date.getSeconds());
 }
 
 function zeroFill( number, width )
@@ -973,6 +980,7 @@ var viewerSelector = function(viewer,value){
 		case "image": viewValue = viewerFunc_image(value,viewer); break;
 		case "text": viewValue = viewerFunc_text(value,viewer); break;
 		case "datetime": viewValue = viewerFunc_datetime(value,viewer); break;
+		case "timestamp": viewValue = viewerFunc_timestamp(value,viewer); break;
 		case "time": viewValue = viewerFunc_time(value,viewer); break;
 		case "format": viewValue = viewerFunc_format(value,viewer); break;
 		case "select": viewValue = viewerFunc_select(value,viewer); break;
@@ -1020,7 +1028,13 @@ var editorSelector = function(editor,value){
 		case "custom": pushEditor = eval(editor["func"]+"(value,editor);");break;
 		case "textarea": pushEditor = editorFunc_textarea(value,editor);break;
 		case "dataSelector":pushEditor=editorFunc_dataSelector(value,editor);break;
-		case "text":pushEditor=editorFunc_text(value,editor);break;
+		case "text":
+			if(typeof(value)=="string" && value.indexOf("\n")> -1){
+				pushEditor=editorFunc_textarea(value,editor);
+			}else{
+				pushEditor=editorFunc_text(value,editor);
+			}
+		break;
 		case "select":pushEditor=editorFunc_select(value,editor);break;
 		case "bool":pushEditor=editorFunc_bool(value,editor);break;
 		case "table":pushEditor=editorFunc_table(value,editor);break;

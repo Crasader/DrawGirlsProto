@@ -1,11 +1,11 @@
 <?php
 include "header.php";
 ?>
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Pattern" dbWhere='{}' dbLimit="30" name="datatable" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Pattern" dbWhere='{}' dbLimit="50" name="datatable" border=1 align=center>
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
-		<th field='category' viewer='{"type":"text"}' editor='{"type":"select","element":["missile","crash","special"]}' >category</th>
+		<th field='category' viewer='{"type":"text"}' editor='{"type":"select","element":["missile","crash","critical","special"]}' >category</th>
 		<th field='isUse' viewer='{"type":"text"}' editor='{"type":"bool"}' >isUse</th>
 		<th field='type' viewer='{"type":"text"}' editor='{"type":"text"}' >type</th>
 		<th field='name' viewer='{"type":"text"}' editor='{"type":"text"}' >name</th>

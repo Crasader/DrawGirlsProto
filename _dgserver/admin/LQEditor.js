@@ -2,6 +2,7 @@
 function ExchangeEditor(value,option){
 	this.exchangeID = value;
 	this.option = s2j(option);
+	this.mode = option["mode"];
 	this.editor = $("<div>").addClass("LQEditor");
 	this.editTable = $("<table>").addClass("table table-boarded");
 	this.editor.on("saveCallBack",{"obj":this},function(event){
@@ -32,7 +33,7 @@ function ExchangeEditor(value,option){
 		//ajax로 생성
 		$.ajax({
 	    url : "dataManager2.php", 
-	    data : {"gid":gid,"dbMode":"custom","dbFunc":"saveExchangeID","dbClass":"Exchange","param":j2s({"id":this.exchangeID,"list":dataRow})},
+	    data : {"gid":gid,"dbMode":"custom","dbFunc":"saveExchangeID","dbClass":"Exchange","param":j2s({"id":this.exchangeID,"list":dataRow,"mode":this.mode})},
 	    dataType : "json", 
 	    type : "post",
 	    success : function(data){
@@ -684,11 +685,13 @@ var autoEditor = function(value,option){
 		$("<option>").append("추가할 타입 선택").appendTo(select);
 		$("<option>").append("Text").appendTo(select);
 		$("<option>").append("Number").appendTo(select);
+		$("<option>").append("Textarea").appendTo(select);
 		$("<option>").append("Array").appendTo(select);
 		$("<option>").append("Dictionary").appendTo(select);
 		select.on("change",function(){
 			switch($(this).val()){
 				case "Text": $(this).parent().html("").append(editorSelector('{"type":"text"}'));break;
+				case "Textarea": $(this).parent().html("").append(editorSelector('{"type":"textarea"}'));break;
 				case "Number": $(this).parent().html("").append(editorSelector('{"type":"text","datatype":"int"}'));break;
 				case "Array":$(this).parent().html("").append(editorSelector('{"type":"array","element":{"type":"autoEditor"}}'));break;
 				case "Dictionary":$(this).parent().html("").append(editorSelector('{"type":"dictionary"}'));break;
@@ -782,7 +785,7 @@ var koreanViewer = function(value,option){
 	// }
 	// pushData+="</table>";
 
-	return nl2br(value["ko"]);
+	return nl2br(value["kr"]);
 }
 
 ///////////////////////

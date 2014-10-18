@@ -44,22 +44,30 @@ while($data = mysql_fetch_assoc($result)){
 	$mission = json_decode($data["mission"],true);
 	$ps="";
 	$pc="";
+	$pm="";
 	foreach ($boss[0]["pattern"] as $key => $value) {
 		$pattern = new Pattern($boss[0]["pattern"][$key]["pattern"]);
 		if($boss[0]["pattern"][$key]["atype"]=="special")$ps.=$pattern->name.",";
 		if($boss[0]["pattern"][$key]["atype"]=="crash")$pc.=$pattern->name.",";
+		if($boss[0]["pattern"][$key]["atype"]=="normal")$pm="O";
 	}
 	$bgcolor="ffffff";
 	if($data[no]%2)$bgcolor="eeeeee";
 	if($data[no]%5==0)$bgcolor="eeffff";
+	
 
+	$missionName = "";
+	if($mission[type]){
+		$missionInfo = new Mission($mission[type]);
+		if($missionInfo->isLoaded())$missionName=$missionInfo->name;
+	}
 	$ap =$boss[0][attackpercent];
 	$sPer =(1-pow((1 - $ap/100),(60 * 5)))*100;
 	echo"
 	<tr bgcolor=$bgcolor>
 		<td>".$data[no]."</td>
 		<td>".$data[level]."</td>
-		<td>".$mission[type]."</td>
+		<td>".$missionName."(".json_encode($mission[option]).")</td>
 		<td>".$data[autoBalanceTry]."</td>
 		<td>".$boss[0][type]."</td>
 		<td>".round($boss[0][ai])."</td>
@@ -69,7 +77,7 @@ while($data = mysql_fetch_assoc($result)){
 		<td>".round($boss[0][agi])."</td>
 		<td>".round($boss[0][speed][start],2)."</td>
 		<td>".round(320/($boss[0][speed][start]*60),1)."</td>
-		<td>O</td>
+		<td>".$pm."</td>
 		<td>O</td>
 		<td>".$ps."</td>
 		<td>".$pc."</td>

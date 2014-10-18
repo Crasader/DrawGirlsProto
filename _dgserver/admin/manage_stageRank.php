@@ -81,10 +81,12 @@ var clearList = function(value,option){
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
 		<th field='stageNo' viewer='{"type":"text"}' editor='{"type":"text"}' >stageNo</th>
 		<th field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >memberID</th>
+		<th field='nick' viewer='{"type":"text"}' editor='{"type":"text"}' >nick</th>
+		<th field='flag' viewer='{"type":"text"}' editor='{"type":"text"}' >flag</th>
 		<th field='score' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >score</th>
-		<th field='regDate' viewer='{"type":"text"}' editor='{"type":"datetime"}' >regDate</th>
-		<th field='data' viewer='{"type":"text"}' editor='{"type":"textarea"}' >data</th>
+		<th field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >regDate</th>
 		<th field='regTime' viewer='{"type":"text"}' editor='{"type":"text"}' >regTime</th>
+		<th field='data' viewer='{"type":"autoViewer"}' editor='{"type":"textarea"}' >data</th>
 		<th manage='delete update insert' ></th>
 		</tr> 
 	</thead>

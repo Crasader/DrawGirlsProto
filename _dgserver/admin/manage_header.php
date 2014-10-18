@@ -112,7 +112,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>보유캐릭터</a></li>
 								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>보유카드</a></li>
 								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>업적진행상황</a></li>
-								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>선물함</a></li>
+								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>우편함</a></li>
 								<li><a href=manage_userStorage.php?gid=<?=$gid?>>재화보관함</a></li>
 								<li><a href=manage_cuponHistory.php?gid=<?=$gid?>>쿠폰사용내역</a></li>
 								<li><a href=manage_userLog.php?gid=<?=$gid?>>유저로그</a></li>
@@ -171,10 +171,12 @@ $left_menu[]=array("title"=>"","url"=>"");
 							<ul class="nav">
 								<li><a href=manage_sendItem.php?gid=<?=$gid?>>재화/아이템 선물하기</a></li>
 								<li><a href=manage_notice.php?gid=<?=$gid?>>공지사항</a></li>
+								<li><a href=manage_realTimeMsg.php?gid=<?=$gid?>>실시간메세지</a></li>
 								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>로그인이벤트</a></li>
 								<li><a href=manage_puzzleEvent.php?gid=<?=$gid?>>퍼즐이벤트</a></li>
 								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>할인이벤트</a></li>
 								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>타임이벤트</a></li>
+								<li><a href=manage_missionEvent.php?gid=<?=$gid?>>미션이벤트</a></li>
 								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>출석이벤트</a></li>
 								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>출석이벤트보상</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>쿠폰관리</a></li>

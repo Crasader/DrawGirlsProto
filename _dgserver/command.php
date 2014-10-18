@@ -20,6 +20,8 @@ $allResult=array();
 $allResult["cmdNoError"]=false;
 $allResult["checkDeviceError"]=false;
 $allResult["longTimeError"]=false;
+$allResult["restart"]=false;
+
 $version=1;
 
 function webLog($log){
@@ -43,10 +45,10 @@ if($mode){
     //LogManager::addLog("original:".$_POST["command"]);
     $param = json_decode(trim($paramoriginal),true);
     CurrentUserInfo::$os = $param["os"];
-    CurrentUserInfo::$language = $param["lang"];
+    CurrentUserInfo::$language = "ko"; //$param["lang"];
     CurrentUserInfo::$memberID = $param["memberID"];
     CurrentUserInfo::$socialID = $param["socialID"];
-    CurrentUserInfo::$country = $param["country"];
+    CurrentUserInfo::$country = "kr";//$param["country"];
     if($param["timezone"])CurrentUserInfo::$timezone = $param["timezone"];
     if($param["log"])LogManager::$m_isLocked=false;
     // if(!is_array($param)){
@@ -74,8 +76,10 @@ if(CurrentUserInfo::$memberID){
         $error = false;
         if($userData->deviceID!=$param["deviceID"]){
             $error = "checkDeviceError";
+            LogManager::addLog("server deviceID is ".$userData->deviceID." , client deviceID is".$param["deviceID"]);
         }else if($userData->lastCmdNo>=$param["cmdNo"]){
             $error = "cmdNoError";
+            LogManager::addLog("server CmdNo is ".$userData->lastCmdNo." , client cmdNo is".$param["cmdNo"]);
         }else if((TimeManager::getTime()-$userData->lastTime)>60*60*24){
             $error = "longTimeError";
         }else{
@@ -94,11 +98,13 @@ if(CurrentUserInfo::$memberID){
 
     }else{
         //LogManager::addLog("userLogFailed : dont find.uu ".CurrentUserInfo::$memberID);
-        $error="cmdNoError";
+        $error="restart";
+         LogManager::addLog("filed to save user data");
     }
 }else{
     //LogManager::addLog("userLogFailed : id is none uu");
-    $error="cmdNoError";
+    $error="restart";
+    LogManager::addLog("memberID dont find");
 }
 
 if($param["dontcheck"]){
@@ -154,6 +160,7 @@ if($error!=""){
 
 
             $startTime = TimeManager::getMicroTime();
+            CommitManager::$m_passFunc=false;
             $r = CommandClass::$a($p);
             $endTime = TimeManager::getMicroTime();
             
@@ -169,9 +176,10 @@ if($error!=""){
                 }
             }
 
-            if($commitMemberID && !ResultState::successCheck($r["result"])){
-                CommitManager::setSuccess($commitMemberID,false);
+            if(!CommitManager::$m_passFunc && $commitMemberID && !ResultState::successCheck($r["result"])){
+                 CommitManager::setSuccess($commitMemberID,false);
             }
+            CommitManager::$m_passFunc=false;
 
             
             $p2 = array();
@@ -185,7 +193,7 @@ if($error!=""){
             $p2["output"]=$r;
             $p2["output"]["log"]=$logs;
             $p2["execTime"]=$endTime-$startTime;
-            if($a!="writelog")CommandClass::writelog($p2);
+            if($a!="writelog" && $commitMemberID && !CommitManager::isSuccess($commitMemberID))CommandClass::writelog($p2);
             
             
             $r["log"]=LogManager::getLogAndClear();
@@ -223,13 +231,17 @@ if($error!=""){
             $cr["list"] = $allResult;
             $allResult[$commitCmdName]=$cr;
         }else{
-            $cr["result"] = ResultState::toArray(3001,"transaction fail");
+            $cr["result"] = ResultState::toArray(ResultState::GDFAILTRANSACTION,"transaction fail");
             $allResult[$commitCmdName]=$cr;
         }
 
         for($c=0;$c<count($param);$c++){
             $cmd = (string)$c;
-            $allResult[$cmd]["transaction"]=$commitsuccess;
+            $cmd = (string)str_pad($cmd, 3,"0",STR_PAD_LEFT);
+            if($allResult[$cmd]){
+                $allResult[$cmd]["transaction"]=$commitsuccess;
+                if(!$commitsuccess)$allResult[$cmd]["result"]=ResultState::toArray(ResultState::GDFAILTRANSACTION);
+            }
         }
 
         $p2["category"]="starttransaction";

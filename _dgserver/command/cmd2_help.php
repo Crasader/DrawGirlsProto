@@ -73,6 +73,7 @@ public static function help_getnoticelist(){
 	$r["description"] = "공지사항목록을 가져옵니다.";
 	//$r["param"]
 	
+	$r["param"][] = array("name"=>"buildNo","type"=>"int","description"=>"빌드번호");
 	//$r["return"]
 	
 	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
@@ -84,6 +85,40 @@ public static function help_getnoticelist(){
 	return $r;
 }
 
+
+public static function help_getrealtimemessage(){
+
+	$r["description"] = "실시간 메세지를 가져옵니다.";
+	//$r["param"]
+	
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+	//$r["return"]
+	
+	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
+	$r["result"][]=ResultState::toArray(1001,"db쿼리실패");
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	//$r["example"]
+	
+	return $r;
+}
+
+public static function help_getnoticelistfordiary(){
+
+	$r["description"] = "다이어리용 공지사항목록을 가져옵니다.";
+	//$r["param"]
+	
+	$r["param"][] = array("name"=>"buildNo","type"=>"int","description"=>"빌드번호");
+	//$r["return"]
+	
+	$r["result"][]=ResultState::toArray(1002,"메인디비접속실패");
+	$r["result"][]=ResultState::toArray(1001,"db쿼리실패");
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	//$r["example"]
+	
+	return $r;
+}
 
 
 
@@ -222,6 +257,23 @@ public static function help_getcardlistbylist(){
 	return $r;
 }
 
+
+public static function help_getadultcardlist(){
+
+	$r["description"] = "성인용 카드 시리얼번호 리스트를 불러옵니다.";
+	
+	$r["param"][] = array("name"=>"version","type"=>"int","description"=>"버전");
+	
+	//$r["return"]
+	
+	$r["result"][]=ResultState::toArray(1002,"fail to get mainConnection");
+	$r["result"][]=ResultState::toArray(2001,"버전이 같을경우 아무런 값도 리턴하지 않습니다.");
+	$r["result"][]=ResultState::toArray(1,"success");
+	
+	return $r;
+}
+
+
 public static function help_getpuzzlelist(){
 
 	$r["description"] = "퍼즐 정보 목록을 가져옵니다.";
@@ -280,7 +332,7 @@ public static function help_login(){
 }
 
 
-public static function help_saveIntroducer(){
+public static function help_saveintroducer(){
 
 	$r["description"] = "추천인저장 및 보상받기";
 	
@@ -297,12 +349,11 @@ public static function help_saveIntroducer(){
 }
 
 
-public static function help_completeIntroducer(){
+public static function help_completeintroducer(){
 
 	$r["description"] = "추천인에게 보상주기";
 	
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"memberID");
-	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"추천인에게 갈 선물메세지 내용");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(ResultState::GDPARAMETER,"추천인이 저장되어 있지 않음");
@@ -322,6 +373,8 @@ public static function help_sendmessage(){
 	$r["param"][] = array("name"=>"content","type"=>"string","description"=>"내용");
 	$r["param"][] = array("name"=>"data","type"=>"string or dict","description"=>"data");
 	$r["param"][] = array("name"=>"exchangeID","type"=>"string or dict","description"=>"exchangeID");
+	$r["param"][] = array("name"=>"template","type"=>"string","description"=>"템플릿으로 사용할 commonsetting key");
+	$r["param"][] = array("name"=>"custom","type"=>"array(string)","description"=>"템플릿 커스텀");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -430,6 +483,7 @@ public static function help_updateuserdata(){
 	$r["param"][] = array("name"=>"aSeqAtd","type"=>"int","description"=>"업적수치(연속출석횟수)");
 	$r["param"][] = array("name"=>"aItByCnt","type"=>"int","description"=>"아이템구매횟수");
 	$r["param"][] = array("name"=>"archiveData","type"=>"dict","description"=>"업적데이터배열");
+	$r["param"][] = array("name"=>"loginType","type"=>"dict","description"=>"로그인타입");
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID 안넣음");
 	$r["result"][]=ResultState::toArray(2006,"정보저장실패");
@@ -530,6 +584,8 @@ public static function help_addweeklyscore(){
 
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
 	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"닉네임");
+	$r["param"][] = array("name"=>"flag","type"=>"string","description"=>"국기");
 	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
@@ -932,6 +988,8 @@ public static function help_setstagescore(){
 
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"멤버아이디");
 	$r["param"][] = array("name"=>"stageNo","type"=>"int","description"=>"스테이지번호");
+	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"nick");
+	$r["param"][] = array("name"=>"flag","type"=>"string","description"=>"flag");
 	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
 	$r["param"][] = array("name"=>"score","type"=>"int","description"=>"점수");
 	
@@ -1317,6 +1375,8 @@ public static function help_sendgiftboxhistory(){
 	$r["param"][] = array("name"=>"data","type"=>"string","description"=>"데이터");
 	$r["param"][] = array("name"=>"exchangeID","type"=>"string","description"=>"exchangeID");
 	$r["param"][] = array("name"=>"exchangeList","type"=>"string","description"=>"exchangeList (exchnage custom)");
+	$r["param"][] = array("name"=>"template","type"=>"string","description"=>"템플릿으로 사용할 commonsetting key");
+	$r["param"][] = array("name"=>"custom","type"=>"array(string)","description"=>"템플릿 커스텀");
 
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID");
@@ -1559,6 +1619,7 @@ public static function help_finishendlessplay(){
 	$r["param"][] = array("name"=>"nick","type"=>"string","description"=>"nick");
 	$r["param"][] = array("name"=>"flag","type"=>"string","description"=>"flag");
 	$r["param"][] = array("name"=>"victory","type"=>"bool","description"=>"승리시 true, 패배시 false");
+	$r["param"][] = array("name"=>"data","type"=>"array or string","description"=>"data");
 
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(1001,"저장오류");
@@ -1681,6 +1742,21 @@ public static function help_gettimeevent(){
 
 	return $r;
 }
+
+
+public static function help_checkmissionevent(){
+
+	$r["description"] = "미션이벤트를 체크합니다.";
+
+	//$r["param"][] = array("name"=>"language","type"=>"text","description"=>"language");
+	//$r["param"][] = array("name"=>"os","type"=>"text","description"=>"os");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTSAVE,"저장오류");
+
+	return $r;
+}
+
 public static function help_getheart(){
 
 	$r["description"] = "현재생명갯수 정보를 가져옵니다";

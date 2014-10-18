@@ -38,17 +38,18 @@ $(document).ready(function(){
 </div>
 <br><br>
 
-<h2 id="tables-contextual-classes">|수신함정보</h2>
+<h2 id="tables-contextual-classes">|우편함정보</h2>
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="GiftBoxHistory" autoLoad="false" dbWhere='{}' dbLimit="50" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
 		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
 		<th title='회원번호' field='memberID' viewer='{"type":"text"}' >회원번호</th>
-		<th title='받은일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >받은일시</th>
-		<th title='확인일시' field='confirmDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >확인일시</th>
-		<th title='보낸사람' field='sender' viewer='{"type":"text"}' >보낸사람</th>
-		<th title='내용' field='content' viewer='{"type":"text"}' >내용</th>
-		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' >교환ID</th>
+		<th title='받은일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"text"}' >받은일시</th>
+		<th title='확인일시' field='confirmDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'  editor='{"type":"text"}' >확인일시</th>
+		<th title='보낸사람' field='sender' viewer='{"type":"text"}'  editor='{"type":"text"}' >보낸사람</th>
+		<th title='내용' field='content' viewer='{"type":"text"}'  editor='{"type":"text"}' >내용</th>
+		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}'>교환ID</th>
+		<th title='교환ID' field='exchangeList' viewer='{"type":"autoViewer"}' >교환커스텀</th>
 		<th manage='delete update' ></th>
 		</tr> 
 	</thead>

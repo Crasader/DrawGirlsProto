@@ -85,6 +85,7 @@ if(!$gid){
 <td><a href=admin_pushMessage.php?gid=<?=$gid?>>pushMessage<br><font color=red>푸쉬메세지</font></a></td>
 <td><a href=admin_usingfilelist.php?gid=<?=$gid?>>usingfilelist<br><font color=red>사용파일목록</font></a></td>
 <td><a href=admin_autoLeveling.php?gid=<?=$gid?>>autoLeveling<br><font color=red>레벨링</font></a></td>
+<td><a href=admin_updateQueryMaker.php?gid=<?=$gid?>>updateQueryMaker<br><font color=red>업데이트쿼리생성</font></a></td>
 </tr>
 </table>
 

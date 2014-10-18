@@ -23,13 +23,17 @@ var viewer_image = function(value,option){
 		<th title='종료일시' field='endDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >종료일시</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
 		<th title='국가' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelector"}' >국가</th>
-		<th title='팝업표시여부' field='isPopup' viewer='{"type":"text"}' editor='{"type":"bool"}' >팝업표시여부</th>
+		<th title='팝업표시여부' field='isPopup' viewer='{"type":"bool"}' editor='{"type":"bool"}' >팝업표시여부</th>
 		<th title='이미지' field='imgInfo' viewer='{"type":"viewer_image"}' editor='{"type":"dictionary","element":[{"field":"img","type":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}' >이미지</th>
 		<th title='연결URL' field='linkURL' viewer='{"type":"text"}' editor='null' >연결URL</th>
 		<th title='클라이언트내용' field='content' viewer='{"type":"text"}' editor='{"type":"textarea"}' >클라이언트내용</th>
-		<th title='목록표시여부' field='isList' viewer='{"type":"text"}' editor='{"type":"bool"}' >목록표시여부</th>
+		<th title='목록표시여부' field='isList' viewer='{"type":"bool"}' editor='{"type":"bool"}' >목록표시여부</th>
 		<th title='목록표시내용' field='webContent' viewer='{"type":"text"}' editor='{"type":"textarea"}' >목록표시내용</th>
 		<th title='목록배너' field='banner' viewer='{"type":"viewer_image"}' editor='{"type":"dictionary","element":[{"field":"img","type":"imageSelector"},{"field":"size","type":"text","datatype":"int"}]}' >목록배너</th>
+		<th title='앱정지여부' field='isBreak' viewer='{"type":"bool"}' editor='{"type":"bool"}' >앱정지여부</th>
+		<th title='보조앱용공지' field='isForDiary' viewer='{"type":"bool"}' editor='{"type":"bool"}' >보조앱용공지</th>		
+		<th title='최하빌드넘버' field='minBuildNo' viewer='{"type":"text"}' editor='{"type":"text"}' >최하빌드넘버</th>
+		<th title='최고빌드넘버' field='maxBuildNo' viewer='{"type":"text"}' editor='{"type":"text"}' >최고빌드넘버</th>
 		<th manage='update delete insert' ></th>
 		</tr> 
 	</thead>
