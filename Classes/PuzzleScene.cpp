@@ -703,27 +703,28 @@ bool PuzzleScene::init()
 		{
 			int t_stage_number = i;
 			
-			if(t_stage_number == 1 || mySGD->getPieceHistory(t_stage_number).is_open.getV() ||
-			   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number) == 0 &&
-				(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number))))) // 입장 가능인가
+			if(NSDS_GS(t_stage_number, kSDS_SI_type_s) == "normal") // normal 이 아닌 타입의 스테이지는 퍼즐 완성이나 퍼펙트에 영향을 주지 않음
 			{
-				PieceHistory t_history = mySGD->getPieceHistory(t_stage_number);
-				
-				if(mySGD->isClearPiece(t_stage_number))
+				if(t_stage_number == 1 || mySGD->getPieceHistory(t_stage_number).is_open.getV() ||
+				   (NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_gold_i, t_stage_number) == 0 &&
+					(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number) == 0 || mySGD->isClearPiece(NSDS_GI(t_puzzle_number, kSDS_PZ_stage_int1_condition_stage_i, t_stage_number))))) // 입장 가능인가
 				{
-					if(!t_history.is_clear[0].getV() || !t_history.is_clear[1].getV() || !t_history.is_clear[2].getV() || !t_history.is_clear[3].getV())
+					PieceHistory t_history = mySGD->getPieceHistory(t_stage_number);
+					
+					if(mySGD->isClearPiece(t_stage_number))
 					{
+						if(!t_history.is_clear[0].getV() || !t_history.is_clear[1].getV() || !t_history.is_clear[2].getV() || !t_history.is_clear[3].getV())
+						{
+							clear_is_first_perfect = false;
+						}
+					}
+					else // empty
+					{
+						clear_is_first_puzzle_success = false;
 						clear_is_first_perfect = false;
 					}
 				}
-				else // empty
-				{
-					clear_is_first_puzzle_success = false;
-				}
-			}
-			else
-			{
-				if(NSDS_GS(t_stage_number, kSDS_SI_type_s) == "normal")
+				else
 				{
 					clear_is_first_puzzle_success = false;
 					clear_is_first_perfect = false;
