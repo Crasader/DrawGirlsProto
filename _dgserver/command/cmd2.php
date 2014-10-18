@@ -2074,7 +2074,7 @@ public static function getcardhistory($p){
 		$dataList[]=$rData;
     }
 
-    $q = Card::getQueryResultWithShardKey("select max(`serial`) from ".Card::getDBTable(),1);
+    $q = Card::getQueryResultWithShardKey("select max(`serial`) from ".Card::getDBTable()." where `category`='normal' or `category`='nPuzzle'",1);
     $d = mysql_fetch_array($q);
     $r["lastCardNo"]=$d[0];
 
