@@ -129,9 +129,11 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_stageRank.php?gid=<?=$gid?>>스테이지</a></li>
 								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>PVP</a></li>
 								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>주간누적랭킹</a></li>
+								<li><a href=manage_inappRank.php?gid=<?=$gid?>>결제랭킹</a></li>
 								<li><a href=manage_goldRank.php?gid=<?=$gid?>>골드랭킹</a></li>
 								<li><a href=manage_freeRubyRank.php?gid=<?=$gid?>>무료루비랭킹</a></li>
 								<li><a href=manage_purchaseRubyRank.php?gid=<?=$gid?>>유료루비랭킹</a></li>
+								<li><a href=manage_introduceRank.php?gid=<?=$gid?>>추천인랭킹</a></li>
 							</ul>
 		            	</li>
 						

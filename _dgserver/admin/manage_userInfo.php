@@ -87,7 +87,7 @@ $(document).ready(function(){
 		<tr>
 			<td>케릭터레벨</td><td field="characterLevel" viewer='{"type":"text"}'></td>
 			<td>추천받은수</td><td field="introduceCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-			<td>추천인</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>추천인ID</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 		<tr>
 			<td>게임시작일시</td><td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
@@ -112,7 +112,7 @@ $(document).ready(function(){
 		<tr>
 			<td>다이어리가입</td><td field="diaryJoinDate" viewer='{"type":"datetime"}' editor='{"type":"text"}'></td>
 			<td>미션이벤트</td><td field="missionEvent" viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}'></td>
-			<td></td><td></td>
+			<td>플레이판수</td><td field="playCnt" viewer='{"type":"autoViewer"}'></td>
 		</tr>
 		<tr>
 		</tr>
