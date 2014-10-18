@@ -738,6 +738,7 @@ void TitleRenewalScene::successLogin()
 	command_list.push_back(CommandParam("getmonsterlist", monster_param, json_selector(this, TitleRenewalScene::resultGetMonsterList)));
 	
 	Json::Value notice_param;
+	notice_param["buildNo"] = myHSP->getVersionCode();
 	command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
 	Json::Value timeevent_param;
@@ -2022,7 +2023,9 @@ void TitleRenewalScene::resultGetNoticeList(Json::Value result_data)
 	else
 	{
 		is_receive_fail = true;
-		command_list.push_back(CommandParam("getnoticelist", Json::Value(), json_selector(this, TitleRenewalScene::resultGetNoticeList)));
+		Json::Value notice_param;
+		notice_param["buildNo"] = myHSP->getVersionCode();
+		command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	}
 	
 	receive_cnt--;
