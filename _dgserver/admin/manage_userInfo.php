@@ -69,7 +69,7 @@ $(document).ready(function(){
 			<td field="gender" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="age" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="phoneNo" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
-			<td field="loginType" viewer='{"type":"select","element":["TWITTER","MIXI","FACEBOOK","YAHOO","GOOGLE","HANGAME","NAVER","LINE","KAKAO","GREE","HANGAME_EX","POKETROKET","HANGAMEJP","HANGAMEJP_EMAIL","EMAIL","NEID","PAYCO","GUEST","GSQUARE","BAND"],"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]}'></td>
+			<td field="loginType" viewer='{"type":"select","element":["TWITTER(0)","MIXI(1)","FACEBOOK(2)","YAHOO(3)","GOOGLE(4)","HANGAME(5)","NAVER(6)","LINE(7)","KAKAO(8)","GREE(9)","HANGAME_EX(10)","POKETROKET(11)","HANGAMEJP(12)","HANGAMEJP_EMAIL(13)","EMAIL(14)","NEID(15)","PAYCO(16)","GUEST(17)","GSQUARE(18)","BAND(19)"],"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]}'></td>
 			<td field="lastDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 			<td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 			<td field="userShardOrder"></td>

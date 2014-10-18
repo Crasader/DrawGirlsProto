@@ -145,7 +145,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 		            	<li>통계
 							<ul class="nav">
 								<li><a href=manage_dbcheck.php?gid=<?=$gid?>>DB서버상태</a></li>
-								<li><a href=manage_userStats.php?gid=<?=$gid?>>NRU/DAU</a></li>
+								<li><a href=manage_userStats.php?gid=<?=$gid?>>NRU/DAU/기본정보</a></li>
 								<li><a href=manage_goldStats.php?gid=<?=$gid?>>스테이지별 획득 골드</a></li>
 								<li><a href=manage_itemPurchasStats.php?gid=<?=$gid?>>아이템 사용 통계</a></li>
 								<li><a href=manage_morphingStats.php?gid=<?=$gid?>>카드별 생명의돌 사용량1</a></li>

@@ -16,6 +16,46 @@ $allData = userStats($sDate,$eDate);
 <script src="./flot/jquery.js" charset="UTF-8"></script>
 <script src="./flot/jquery.flot.js" charset="UTF-8"></script>
 		
+<h2 id="tables-contextual-classes">총 추천인 입력자</h2>
+<?php
+$alluser=0;
+	while($result = UserData::getQueryResult("select count(*) from ".UserData::getDBTable()." where introducerID>0")){
+		$data = mysql_fetch_array($result);
+		$alluser+=$data[0];
+	}
+
+	echo $alluser."명";
+?>	
+
+<h2 id="tables-contextual-classes">총 다이어리 연동자</h2>
+<?php
+$alluser=0;
+	while($result = UserData::getQueryResult("select count(*) from ".UserData::getDBTable()." where diaryJoinDate>0")){
+		$data = mysql_fetch_array($result);
+		$alluser+=$data[0];
+	}
+
+	echo $alluser."명";
+?>	
+
+<h2 id="tables-contextual-classes">평균 플레이판수</h2>
+<?php
+$alluser=0;
+	while($result = UserData::getQueryResult("select count(*) from ".UserData::getDBTable())){
+		$data = mysql_fetch_array($result);
+		$alluser+=$data[0];
+	}
+
+$allPlayCnt=0;
+	while($result = PieceHistory::getQueryResult("select sum(tryCount) from ".PieceHistory::getDBTable())){
+		$data = mysql_fetch_array($result);
+		$allPlayCnt+=$data[0];
+	}
+
+	echo $alluser."명 / 총".$allPlayCnt."판/ 평균 ".($allPlayCnt/$alluser)."판";
+?>	
+
+
 
 <h2 id="tables-contextual-classes">|NRU/DAU</h2>
 <br>

@@ -621,7 +621,6 @@ class UserData extends DBTable2{
 		$tmLevel =& $user->getRef("TMLevel");
 		
 		$cntResult=PieceHistory::getQueryResultWithShardKey("select sum(tryCount) from ".PieceHistory::getDBTable()." where memberID=".$user->memberID,$user->memberID);
-		LogManager::addLog("select sum(tryCount) from ".PieceHistory::getDBTable()." where memberID=".$user->memberID);
 		if($cntResult)$playCnt = mysql_fetch_array($cntResult);
 		else $playCnt[0]=0;
 
