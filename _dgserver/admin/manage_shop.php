@@ -21,7 +21,7 @@ include "manage_header.php";
 		<th title='할인표시' field='sale' viewer='{"type":"text"}' editor='{"type":"text"}' >할인표시</th>
 		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"상점","statsID":"shop","statsValueField":"no"}' >교환ID</th>
 		<th title='스토어결제ID' field='pID' viewer='{"type":"text"}' editor='{"type":"text"}' >스토어결제ID</th>
-		<th title='데이터' field='data' viewer='{"type":"text"}' editor='{"type":"dictionary"}' >데이터</th>
+		<th title='데이터' field='data' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}' >데이터</th>
 		<th manage='update delete insert' ></th>
 		</tr> 
 	</thead>

@@ -2,10 +2,14 @@
 include "manage_header.php";
 
 	$listViewer=array("type"=>"select");
-	while($pData = Archivement::getRowByQuery("",null,"title,id")){
+	$listViewer2=array("type"=>"select");
+	while($pData = Archivement::getRowByQuery("",null,"title,id,goal")){
 		$lang = json_decode($pData["title"],true);
 		$listViewer["element"][] = $pData["id"]."-".$lang["ko"];
 		$listViewer["value"][]=$pData["id"];
+
+		$listViewer2["element"][] = $pData["goal"];
+		$listViewer2["value"][]=$pData["id"];
 	}
 
 ?>
@@ -54,7 +58,7 @@ $(document).ready(function(){
 		<th title='회원번호' field='memberID' viewer='{"type":"text"}' >회원번호</th>
 		<th title='업적' field='archiveID' viewer='<?=json_encode($listViewer)?>' >업적</th>
 		<th title='값' field='count' viewer='{"type":"text"}' editor='{"type":"text"}' >값</th>
-		<th title='목표' field='goal' viewer='{"type":"text"}' >목표</th>
+		<th title='목표' field='goal' viewer='<?=json_encode($listViewer2)?>' virtual>목표</th>
 		<th title='완료일시' field='clearDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >완료일시</th>
 		<th title='보상일시' field='rewardDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >보상일시</th>
 		<th virtual title='보상' field='reward' viewer='{"type":"rewardViewer"}' >보상</th>

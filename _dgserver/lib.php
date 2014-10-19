@@ -2,8 +2,8 @@
 session_cache_expire(60*60*24);
 session_start();
 
-error_reporting( E_ALL ^ E_NOTICE );
-ini_set( 'display_errors',  E_ALL ^ E_NOTICE );
+//error_reporting( E_ALL ^ E_NOTICE );
+//ini_set( 'display_errors',  E_ALL ^ E_NOTICE );
 
 srand((float)microtime() * 10000000);
 
@@ -29,13 +29,13 @@ $AES_KEY = "qrqhyrlgprghedvh";
 
 function decryptByAESWithBase64($text,$key=null){
 
-	$st = mcrypt_decrypt(
-		MCRYPT_RIJNDAEL_128, 
-		'123456789abcdef', 
-		$tmp_st, 
-		MCRYPT_MODE_ECB, 
-		mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND)
-		);
+	// $st = mcrypt_decrypt(
+	// 	MCRYPT_RIJNDAEL_128, 
+	// 	'123456789abcdef', 
+	// 	$tmp_st, 
+	// 	MCRYPT_MODE_ECB, 
+	// 	mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND)
+	// 	);
 
 
 	global $AES_KEY;
@@ -46,6 +46,13 @@ function decryptByAESWithBase64($text,$key=null){
     return  $plaintext_dec;
 }
 
+function pkcs5_pad ($text) { 
+	 $block = mcrypt_get_block_size('rijndael_128', 'ecb');
+    $pad = $block - (strlen($str) % $block);
+    $text .= str_repeat(chr($pad), $pad); 
+    return $text;
+} 
+
 function encryptByAESWithBase64($text,$key=null){
 	global $AES_KEY;
 	if(!$key)$key=$AES_KEY;
@@ -53,7 +60,7 @@ function encryptByAESWithBase64($text,$key=null){
     $iv = mcrypt_create_iv(mcrypt_get_iv_size(MCRYPT_RIJNDAEL_128, MCRYPT_MODE_ECB), MCRYPT_RAND); //mcrypt_create_iv($iv_size, MCRYPT_RAND);
     $ciphertext = mcrypt_encrypt(MCRYPT_RIJNDAEL_128, $key,
                                  $text, MCRYPT_MODE_ECB, $iv);
-
+    $ciphertext = pkcs5_pad($ciphertext);
     return base64_encode($ciphertext);
 }
 

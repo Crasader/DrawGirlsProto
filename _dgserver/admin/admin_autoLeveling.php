@@ -1,6 +1,8 @@
 <?php
 include "header.php";
 
+
+exit;
 ?>
 
 
@@ -55,7 +57,9 @@ if($_GET["passwd"]=="1234"){
 		//$pInfo["level"]=$level;
 		if($pattern->category=="missile")$pInfo["percent"]=3;
 		if($pattern->category=="special")$pInfo["percent"]=3;
+		if($pattern->category=="critical")$pInfo["percent"]=3;
 		if($pattern->category=="crash")$pInfo["percent"]=2;
+
 		$pInfo["category"]=$pattern->category;
 		$pInfo["level"]=$level;
 		$pInfo["pattern"]=$pattern->type;
@@ -64,10 +68,37 @@ if($_GET["passwd"]=="1234"){
 	
 	function getBoss($monster,$level){
 
-		$patternCate= array("missile"=>2,"special"=>1,"crash"=>1);
+		$patternCate= array("missile"=>2,"special"=>1,"critical"=>1,"crash"=>1);
+		
+		if($level==2){
+			$patternCate["missile"]=1;
+			$patternCate["special"]=0;
+			$patternCate["critical"]=0;
+			$patternCate["crash"]=0;
+		}else if($level<=2){
+			$patternCate["missile"]=0;
+			$patternCate["special"]=0;
+			$patternCate["critical"]=0;
+			$patternCate["crash"]=0;
+		}else if($level<=3){
+			$patternCate["missile"]=1;
+			$patternCate["special"]=0;
+			$patternCate["critical"]=0;
+			$patternCate["crash"]=0;
+		}else if($level<=4){
+			$patternCate["missile"]=1;
+			$patternCate["special"]=1;
+			$patternCate["critical"]=0;
+			$patternCate["crash"]=0;
+		}
 
-		if($level<3)$patternCate["crash"]=0;
-		if($level>7)$patternCate["special"]=2;
+
+
+		if($level<5){
+			$patternCate["critical"]=0;
+			$patternCate["crash"]=0;
+		}
+
 		if($level>10)$patternCate["crash"]=2;
 
 		$monsterInfo = array();
@@ -123,6 +154,14 @@ if($_GET["passwd"]=="1234"){
 			}
 		}
 
+		//크리티컬채우기
+		if($patternCate["critical"]>0){
+			for($i=1;$i<=$patternCate["critical"];$i++){
+				$monsterInfo["pattern"][]=makePattern($monsterInfo["pattern"],$level,"critical");
+			}
+		}
+
+
 		//부수기채우기
 		if($patternCate["crash"]>0){
 			for($i=1;$i<=$patternCate["crash"];$i++){
@@ -154,11 +193,15 @@ if($_GET["passwd"]=="1234"){
 		return $jrInfo;
 	}
 
-	function getMission($level){
+	function getMission($level,$pieceNo){
 
 		$level--;
 
-		if(rand(1,4)==1 || $level<3)return array("type"=>0);
+		if($level<3)return array("type"=>0);
+		if($pieceNo%5==1)return array("type"=>0);
+		else if($level<10){
+			if(rand(1,4)==1)return array("type"=>0);
+		}
 
 		$level-=3;
 		if($level<0)$level=0;
@@ -204,13 +247,14 @@ if($_GET["passwd"]=="1234"){
 			$boss=array();
 			$boss[0]=getBoss($monster,(int)($apLevel));
 			$pLevel+=0.6;
-			$piece->mission = getMission($apLevel);
+			$piece->mission = getMission($apLevel,$piece->no);
 			$piece->level = $apLevel;
 			$jr=&$piece->getRef("junior");
 			$jr=array();
-			if($apLevel>1){
-				$jrCnt = (int)($apLevel/(float)1.5);
-				if($jrCnt>8)$jrCnt=8;
+			if($apLevel>2){
+				$jrCnt = (int)($apLevel/(float)1.7);
+				if($jrCnt>12)$jrCnt=12;
+				if($apLevel>=3 && $jrCnt<4)$jrCnt=4;
 				$startCnt = (int)($jrCnt/2);
 				if($startCnt<1)$startCnt=1;
 				for($i=0;$i<$startCnt;$i++){
@@ -220,7 +264,7 @@ if($_GET["passwd"]=="1234"){
 			$piece->junior = $jr;
 
 			
-			if($apLevel>1){	
+			if($apLevel>2){	
 				//부하몹리젠
 				$defaultPattern1 = json_decode('{"atype":"special","childs":2,"maxchilds":6,"percent":1,"pattern":1020}',true);
 				$defaultPattern1["maxchilds"]=(int)$jrCnt;

@@ -55,6 +55,7 @@ $(document).ready(function(){
 			<th>성별</th>
 			<th>생년월일</th>
 			<th>전화번호</th>
+			<th>로그인타입</th>
 			<th>최근로그인</th>
 			<th>회원가입일시</th>
 			<th>정보서버</th>
@@ -62,11 +63,13 @@ $(document).ready(function(){
 		</tr>
 		</thead>
 		<tr>
+
 			<td field="memberID" primary></td>
 			<td field="nick" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="gender" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="age" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
 			<td field="phoneNo" editorx='{"type":"text","datatype":"int"}' viewer='{"type":"text"}'></td>
+			<td field="loginType" viewer='{"type":"select","element":["TWITTER(0)","MIXI(1)","FACEBOOK(2)","YAHOO(3)","GOOGLE(4)","HANGAME(5)","NAVER(6)","LINE(7)","KAKAO(8)","GREE(9)","HANGAME_EX(10)","POKETROKET(11)","HANGAMEJP(12)","HANGAMEJP_EMAIL(13)","EMAIL(14)","NEID(15)","PAYCO(16)","GUEST(17)","GSQUARE(18)","BAND(19)"],"value":[0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]}'></td>
 			<td field="lastDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 			<td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
 			<td field="userShardOrder"></td>
@@ -83,8 +86,8 @@ $(document).ready(function(){
 		</tr>
 		<tr>
 			<td>케릭터레벨</td><td field="characterLevel" viewer='{"type":"text"}'></td>
-			<td>출석상태</td><td field="eventAtdCount" viewer='{"type":"text"}'></td>
-			<td>추천인</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>추천받은수</td><td field="introduceCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>추천인ID</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 		<tr>
 			<td>게임시작일시</td><td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
@@ -102,9 +105,16 @@ $(document).ready(function(){
 			<td>마지막접속<br>주간번호</td><td field="eventCheckWeek" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 		</tr>
 		<tr>
-			<td>연속출석일수</td><td field="eventAtdCount" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>출석이벤트</td><td field="eventAtdNo" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>출석일수</td><td field="eventAtdCount" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>출석일자</td><td field="eventCheckDate" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
-			<td>추천인수</td><td field="introduceCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+		</tr>
+		<tr>
+			<td>다이어리가입</td><td field="diaryJoinDate" viewer='{"type":"datetime"}' editor='{"type":"text"}'></td>
+			<td>미션이벤트</td><td field="missionEvent" viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}'></td>
+			<td>플레이판수</td><td field="playCnt" viewer='{"type":"autoViewer"}'></td>
+		</tr>
+		<tr>
 		</tr>
 	</table>
 	<br>

@@ -52,6 +52,7 @@ class TimeManager{
 	static public $m_timeOffset=32400;
 	// private static $m_instance=NULL;
 	static public $m_nowDate = NULL;
+	static public $m_manageTimezone = "Asia/Seoul";
 	//싱글턴 얻어오기
 	// public static function get()
 	// {
@@ -72,7 +73,7 @@ class TimeManager{
 	}
 
 	static public function construct(){
-		if(!CurrentUserInfo::$timezone)CurrentUserInfo::$timezone="Asia/Seoul";
+		if(!CurrentUserInfo::$timezone)CurrentUserInfo::$timezone=TimeManager::$m_manageTimezone;
 		TimeManager::$m_nowDate = new DateTime("now",new DateTimeZone(CurrentUserInfo::$timezone));
 	}
 
@@ -136,7 +137,7 @@ class TimeManager{
 	static public function getRemainTimeForTodayMission(){
 
 		$nextday = new DateTime("tomorrow",TimeManager::$m_nowDate->getTimezone());
-		$nextday->setTime(5,0,0);
+		$nextday->setTime(0,0,0);
 		$subDay = $nextday->diff(TimeManager::$m_nowDate);
 
 		
@@ -151,6 +152,12 @@ class TimeManager{
 		return date("YmdHis",$timestamp);
 	}
 	
+	
+	static public function getCurrentDateTimeForKorea(){
+		$_date = new DateTime("now",new DateTimeZone(TimeManager::$m_manageTimezone));
+		return $_date->format("YmdHis");
+	}
+
 	static public function getCurrentDateTime(){
 		return self::$m_nowDate->format("YmdHis");
 	}

@@ -1,4 +1,6 @@
 <?php
+
+    
 	include "lib.php";
 
 	CurrentUserInfo::$os = $_GET["os"];
@@ -6,7 +8,12 @@
     CurrentUserInfo::$country = $_GET["country"];
     CurrentUserInfo::$timezone = $_GET["timezone"];
 
+    if(!CurrentUserInfo::$os)CurrentUserInfo::$os = "android";
+    if(!CurrentUserInfo::$language) CurrentUserInfo::$language = "ko";
+    if(!CurrentUserInfo::$country) CurrentUserInfo::$language = "kr";
+    if(!CurrentUserInfo::$timezone) CurrentUserInfo::$language = "asia/seoul";
 
+    
 ?>
 <html>
 <head>
@@ -23,15 +30,21 @@
 <table border=0 width=100%>
 <?php
 
-	$nowDate = TimeManager::
-	getCurrentDateTime();
+	$nowDate = TimeManager::getCurrentDateTime();
 
-	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os IN ('all','".CurrentUserInfo::$os."') and `cc` IN ('all','".CurrentUserInfo::$country."') and isList=1 order by `order` asc")){
-
+	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
+	$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
+	$noticeCnt=0;
+	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os&".$osBit.">0 and cc&".$ccBit.">0 and isList>0 order by `order` asc")){
+		$noticeCnt++;
 		$imgInfo = json_decode($obj->banner,true); 
-		$url = "event.php?no=".$obj->no;
+		$url = "event.php?gid=".$gid."&no=".$obj->no;
 		if($obj->linkURL)$url = $obj->linkURL;
 		echo"<tr><td align=center><a href='".$url."'><img src='".$imgInfo["img"]."' border=0></a></td></tr>";
+	}
+
+	if(!$noticeCnt){
+		echo "<br><br><center><font color=white>진행중인 이벤트가 없습니다.</font></center>";
 	}
 ?>
 </table>

@@ -81,8 +81,10 @@ var clearList = function(value,option){
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
 		<th field='regWeek' viewer='{"type":"text"}' editor='{"type":"text"}' always>regWeek</th>
 		<th field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >memberID</th>
+		<th field='nick' viewer='{"type":"text"}' editor='{"type":"text"}' >nick</th>
+		<th field='flag' viewer='{"type":"text"}' editor='{"type":"text"}' >flag</th>
 		<th field='score' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >score</th>
-		<th field='regDate' viewer='{"type":"text"}' editor='{"type":"datetime"}' >regDate</th>
+		<th field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >regDate</th>
 		<th field='data' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}' >data</th>
 		<th manage='delete update insert' ></th>
 		</tr> 

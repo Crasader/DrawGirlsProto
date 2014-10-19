@@ -112,7 +112,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>보유캐릭터</a></li>
 								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>보유카드</a></li>
 								<li><a href=manage_archivementHistory.php?gid=<?=$gid?>>업적진행상황</a></li>
-								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>선물함</a></li>
+								<li><a href=manage_giftBoxHistory.php?gid=<?=$gid?>>우편함</a></li>
 								<li><a href=manage_userStorage.php?gid=<?=$gid?>>재화보관함</a></li>
 								<li><a href=manage_cuponHistory.php?gid=<?=$gid?>>쿠폰사용내역</a></li>
 								<li><a href=manage_userLog.php?gid=<?=$gid?>>유저로그</a></li>
@@ -129,9 +129,11 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_stageRank.php?gid=<?=$gid?>>스테이지</a></li>
 								<li><a href=manage_pvpRank.php?gid=<?=$gid?>>PVP</a></li>
 								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>주간누적랭킹</a></li>
+								<li><a href=manage_inappRank.php?gid=<?=$gid?>>결제랭킹</a></li>
 								<li><a href=manage_goldRank.php?gid=<?=$gid?>>골드랭킹</a></li>
 								<li><a href=manage_freeRubyRank.php?gid=<?=$gid?>>무료루비랭킹</a></li>
 								<li><a href=manage_purchaseRubyRank.php?gid=<?=$gid?>>유료루비랭킹</a></li>
+								<li><a href=manage_introduceRank.php?gid=<?=$gid?>>추천인랭킹</a></li>
 							</ul>
 		            	</li>
 						
@@ -143,7 +145,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 		            	<li>통계
 							<ul class="nav">
 								<li><a href=manage_dbcheck.php?gid=<?=$gid?>>DB서버상태</a></li>
-								<li><a href=manage_userStats.php?gid=<?=$gid?>>NRU/DAU</a></li>
+								<li><a href=manage_userStats.php?gid=<?=$gid?>>NRU/DAU/기본정보</a></li>
 								<li><a href=manage_goldStats.php?gid=<?=$gid?>>스테이지별 획득 골드</a></li>
 								<li><a href=manage_itemPurchasStats.php?gid=<?=$gid?>>아이템 사용 통계</a></li>
 								<li><a href=manage_morphingStats.php?gid=<?=$gid?>>카드별 생명의돌 사용량1</a></li>
@@ -171,10 +173,12 @@ $left_menu[]=array("title"=>"","url"=>"");
 							<ul class="nav">
 								<li><a href=manage_sendItem.php?gid=<?=$gid?>>재화/아이템 선물하기</a></li>
 								<li><a href=manage_notice.php?gid=<?=$gid?>>공지사항</a></li>
+								<li><a href=manage_realTimeMsg.php?gid=<?=$gid?>>실시간메세지</a></li>
 								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>로그인이벤트</a></li>
 								<li><a href=manage_puzzleEvent.php?gid=<?=$gid?>>퍼즐이벤트</a></li>
 								<li><a href=manage_shopEvent.php?gid=<?=$gid?>>할인이벤트</a></li>
 								<li><a href=manage_timeEvent.php?gid=<?=$gid?>>타임이벤트</a></li>
+								<li><a href=manage_missionEvent.php?gid=<?=$gid?>>미션이벤트</a></li>
 								<li><a href=manage_attendenceEvent.php?gid=<?=$gid?>>출석이벤트</a></li>
 								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>출석이벤트보상</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>쿠폰관리</a></li>

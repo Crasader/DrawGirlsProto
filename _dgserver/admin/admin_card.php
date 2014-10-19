@@ -30,6 +30,7 @@ var showCardImg = function(value,option){
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' editor='{"type":"text"}' >no</th>
+		<th field='serial' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >serial</th>
 		<th field='rank' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >rank</th>
 		<th field='grade' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >grade</th>
 		<th field='name' viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}' >name</th>

@@ -1,6 +1,12 @@
 <?php
 include "header.php";
-
+/*
+리소스만들기
+./cdn 들어가서 새로운버전파일 압축
+tar cfvz ./tarfiles/20140110_1.tar.gz ./drawgirls_tstore/2/
+실행
+만들어진 파일 다운로드ㅣ
+*/
 if($_POST["dec"]){
 	$enc = decryptByAESWithBase64($_POST["dec"]);
 }else{
@@ -22,8 +28,14 @@ function checkPatch($url){
 }
 
 function filecopy($srcfile,$dstfile){
+
 	@mkdir(dirname($dstfile), 0777, true);
-	return @copy($srcfile, $dstfile);
+	if(!@copy($srcfile, $dstfile)){
+		if(!@copy(urlencode($srcfile),$dstfile)){
+			return @copy(urldecode($srcfile),$dstfile);
+		}
+	}
+	return true;
 }
 
 function patchResource($dir,$refKey,$imgKey,$cls,$func =null){
@@ -37,14 +49,34 @@ function patchResource($dir,$refKey,$imgKey,$cls,$func =null){
 		$func = function($refKey,$imgKey,$dir,$obj){
 			global $_GET;
 			global $gid;
-			$imgInfo = $obj->getRef($refKey);
+			$imgInfo =& $obj->getRef($refKey);
+			
+			if(!$imgInfo) return false;
+			
+			$pointArray = explode(".",$imgInfo[$imgKey]);
+			$lcnt = count($pointArray)-1;
+			$lename = $pointArray[$lcnt];
+			$lastPoint = $pointArray[$lcnt];
 			$exfile = explode("/",$imgInfo[$imgKey]);
 			for($i=3;$i<count($exfile);$i++){
 				$ofile = $ofile."/".$exfile[$i];	
 			}
 			$ofile = "..".$ofile;
 			
-			$nfile = "cdn/".$gid."/".$_GET[version]."/".$dir."/".$exfile[count($exfile)-1];
+			$newName = CuponCode::getRandomString(20);
+			if($lename=="ccz"){
+				$lexe = "pvr.ccz";
+			}else if($lename=="plist"){
+				$lexe = "plist";
+			}else{
+				$lexe = $lename;
+			}
+			$nfile = "cdn/".$gid."/".$_GET[version]."/".$dir."/".$newName.".".$lexe;
+			
+			while(is_file("../".$nfile)){
+				$newName = CuponCode::getRandomString(20);
+				$nfile = "cdn/".$gid."/".$_GET[version]."/".$dir."/".$newName.".".$lexe;
+			}
 
 			$imgInfo[$imgKey]="http://182.162.201.147:10010/".$nfile;
 
@@ -60,10 +92,12 @@ function patchResource($dir,$refKey,$imgKey,$cls,$func =null){
 	echo "--- $dir --- <br>";
 	while($obj = $cls::getObjectbyQuery()){
 		$imgInfo =& $obj->getRef($refKey);
-		echo $imgInfo[$imgKey];
+		echo "obj[".$imgKey."]->".$imgInfo[$imgKey];
 		if($_GET["mode"]=="patch" && $_GET["version"]){
 			if(checkPatch($imgInfo[$imgKey])){
 				 $fInfo = $func($refKey,$imgKey,$dir,$obj);
+				 if(!$fInfo)continue;
+
 				 $ofile = $fInfo["ofile"];
 				 $nfile = $fInfo["nfile"];
 				 $newurl = $fInfo["newurl"];
@@ -78,7 +112,7 @@ function patchResource($dir,$refKey,$imgKey,$cls,$func =null){
 					 		echo " <font color=red>info save fail</font>";
 					 	}
 					 }else{
-					 	echo "<font color=red>fail</font>";
+					 	echo "<font color=red>fail (".$ofile.",".$nfile.")</font>";
 					 }
 				}else{
 					$imgInfo[$imgKey] = $newurl[0];
@@ -124,6 +158,17 @@ patchResource("c_o","imgInfo","img","Card");
 
 patchResource("c_s","silImgInfo","img","Card");
 
+patchResource("c_f","faceInfo","ccbi","Card");
+
+patchResource("c_f","faceInfo","plist","Card");
+
+patchResource("c_f","faceInfo","pvrccz","Card");
+
+
+patchResource("ac_o","adultImgInfo","img","Card");
+
+patchResource("ac_s","audltSilImgInfo","img","Card");
+
 
 patchResource("p_c","center","image","Puzzle");
 
@@ -150,7 +195,7 @@ patchResource("mon","resourceInfo","plist","Monster");
 patchResource("mon","resourceInfo","ccbi","Monster",function($refKey,$imgKey,$dir,$obj){
 			global $_GET;
 			global $gid;
-			$imgInfo = $obj->getRef($refKey);
+			$imgInfo =& $obj->getRef($refKey);
 			$exfile = explode("/",$imgInfo[$imgKey]);
 			$ofile="";
 			$nfile="";

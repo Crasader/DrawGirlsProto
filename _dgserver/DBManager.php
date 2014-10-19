@@ -9,6 +9,7 @@ class CommitManager{
 	static public $m_userIndex=null;
 	static public $m_isSuccess=null;
 	static public $m_releaseCount=null;
+	static public $m_passFunc=false;
 
 	static public function construct($memberID=null){
 		self::$m_userIndex=array();
@@ -78,7 +79,8 @@ class CommitManager{
 	}
 
 	static public function setSuccess($memberID,$success){
-
+		if(!$success)LogManager::addLog("fuck the success fail ".mysql_error());
+		
 		if(self::$m_isSuccess[$memberID]==false)return;
 
 		self::$m_isSuccess[$memberID]=$success;
@@ -582,9 +584,11 @@ class UserData extends DBTable2{
 	}
 
 	public function setArchiveData($key,$value){
-		if(!is_array($this->archiveData))$this->archiveData = array();
+		$archiveData =& $this->getRef("archiveData");
 
-		$this->archiveData = array_merge($this->archiveData,array($key=>$value));
+		if(!is_array($archiveData))$archiveData = array();
+
+		$archiveData = array_merge($archiveData,array($key=>$value));
 
 	}
 
@@ -607,8 +611,6 @@ class UserData extends DBTable2{
 		
 		$p["api"]="GetProfileDetail2";
 		$p["memberNo"]=$user->memberID;
-		$p["introducerID"]=$user->introducerID;
-		$p["introduceCnt"]=$user->introduceCnt;
 		
 		$hgr = commandClass::httpgateway($p);
 		
@@ -617,6 +619,12 @@ class UserData extends DBTable2{
 		
 		$tm =& $user->getRef("TMInfo");
 		$tmLevel =& $user->getRef("TMLevel");
+		
+		$cntResult=PieceHistory::getQueryResultWithShardKey("select sum(tryCount) from ".PieceHistory::getDBTable()." where memberID=".$user->memberID,$user->memberID);
+		if($cntResult)$playCnt = mysql_fetch_array($cntResult);
+		else $playCnt[0]=0;
+
+		$r["playCnt"]=$playCnt[0];
 
 		$r["tm_type"]=$tm["type"];
 		$r["tm_goal"]=$tm["goal"];
@@ -657,12 +665,32 @@ class UserData extends DBTable2{
 			self::updateWithLQTable($param);
 		}
 
+		if(array_key_exists("eventAtdNo",$param["data"])){
+			self::updateWithLQTable($param);
+
+		}
+
 		if(array_key_exists("eventCheckWeek",$param["data"])){
 			self::updateWithLQTable($param);
 
 		}
 
+		if(array_key_exists("diaryJoinDate",$param["data"])){
+			self::updateWithLQTable($param);
+
+		}
+
+
+		if(array_key_exists("missionEvent",$param["data"])){
+			self::updateWithLQTable($param);
+		}
+
 		if(array_key_exists("highScore",$param["data"])){
+			self::updateWithLQTable($param);
+
+		}
+
+		if(array_key_exists("highPiece",$param["data"])){
 			self::updateWithLQTable($param);
 
 		}
@@ -680,8 +708,8 @@ class UserData extends DBTable2{
 
 		if(array_key_exists("introduceCnt",$param["data"])){
 			self::updateWithLQTable($param);
-
 		}
+
 
 		if(array_key_exists("tm_date",$param["data"])){
 			$user = UserData::create($param["primaryValue"]);
@@ -949,9 +977,13 @@ class Piece extends DBTable2{
 		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
-			kvManager::increase("puzzleListVer");
-			$puzzle->version=kvManager::get("puzzleListVer",1);
-			CommitManager::setSuccess("main",$puzzle->save());
+			if($puzzle->isLoaded()){
+				kvManager::increase("puzzleListVer");
+				$puzzle->version=kvManager::get("puzzleListVer",1);
+				CommitManager::setSuccess("main",$puzzle->save());
+			}else{
+				kvManager::increase("hellModeListVer");
+			}
 		}
 
 		kvManager::increase("pieceListVer");
@@ -970,9 +1002,13 @@ class Piece extends DBTable2{
 		CommitManager::begin("main");
 		if($p["data"]["puzzle"]){
 			$puzzle = new Puzzle($p["data"]["puzzle"]);
-			kvManager::increase("puzzleListVer");
-			$puzzle->version=kvManager::get("puzzleListVer",1);
-			CommitManager::setSuccess("main",$puzzle->save());
+			if($puzzle->isLoaded()){
+				kvManager::increase("puzzleListVer");
+				$puzzle->version=kvManager::get("puzzleListVer",1);
+				CommitManager::setSuccess("main",$puzzle->save());
+			}else{
+				kvManager::increase("hellModeListVer");
+			}
 		}
 
 		kvManager::increase("pieceListVer");
@@ -1108,9 +1144,15 @@ class Card extends DBTable2{
 
 			if($piece->puzzle){
 				$puzzle = new Puzzle($piece->puzzle);
-				kvManager::increase("puzzleListVer");
-				$puzzle->version=kvManager::get("puzzleListVer",1);
-				CommitManager::setSuccess("main",$puzzle->save());
+				if($puzzle->isLoaded()){
+					kvManager::increase("puzzleListVer");
+					$puzzle->version=kvManager::get("puzzleListVer",1);
+					CommitManager::setSuccess("main",$puzzle->save());
+				}else{
+
+					kvManager::increase("hellModeListVer");
+
+				}
 			}
 		}
 		
@@ -1140,9 +1182,13 @@ class Card extends DBTable2{
 
 			if($piece->puzzle){
 				$puzzle = new Puzzle($piece->puzzle);
-				kvManager::increase("puzzleListVer");
-				$puzzle->version=kvManager::get("puzzleListVer",1);
-				CommitManager::setSuccess("main",$puzzle->save());
+				if($puzzle->isLoaded()){
+					kvManager::increase("puzzleListVer");
+					$puzzle->version=kvManager::get("puzzleListVer",1);
+					CommitManager::setSuccess("main",$puzzle->save());
+				}else{
+					kvManager::increase("hellModeListVer");
+				}
 			}
 		}
 
@@ -1356,11 +1402,6 @@ class Archivement extends DBTable2{
 	}
 
 	public static function updateWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-
 		$r = parent::updateWithLQTable($p);
 
 		kvManager::increase("arcListVer");
@@ -1368,10 +1409,6 @@ class Archivement extends DBTable2{
 		return $r;
 	}
 	public static function insertWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
 
 		$r = parent::insertWithLQTable($p);
 
@@ -1411,9 +1448,11 @@ class ArchivementHistory extends DBTable2{
 		});
 
 		self::setLQTableSelectCustomFunction(function($rData){
+			$archive = new Archivement($rData["archiveID"]);
+			$exchange = new Exchange($archive->exchangeID);
+			$rData["goal"]=$rData["archiveID"];
 			if($rData["rewardDate"]>0){
-				$archive = new Archivement($rData["archiveID"]);
-				$rData["reward"]=$archive->reward;
+				$rData["reward"]=$exchange->list;
 			}
 			return $rData;
 		});
@@ -1462,10 +1501,6 @@ class GiftBoxHistory extends DBTable2{
 
 		self::setLQTableSelectCustomFunction(function ($rData){
 			if($rData["reward"])$rData["reward"] = json_decode($rData["reward"],true);
-			// if($rData["exchangeID"]){
-			// 	$exchange = new Exchange($rData["exchangeID"]);
-			// 	$rData["exchangeList"]=$exchange->list;				
-			// }
 			return $rData;
 		});
 
@@ -1699,7 +1734,7 @@ class LoginEvent extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -1717,29 +1752,18 @@ class LoginEvent extends DBTable2{
 	}
 	static public function getRewardDays(){
 		$data=array();
-		while($rData = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and endTime=235959 and endDate-startDate=235959 limit 3")){
-			$rData["reward"]=json_decode($rData["reward"],true);
+		$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
+		$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
+		$result = LoginEvent::getQueryResult("select ".LoginEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".LoginEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".LoginEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id  where ".LoginEvent::getDBTable().".endDate>".TimeManager::getCurrentDateTime()." and ".LoginEvent::getDBTable().".endTime=235959 and ".LoginEvent::getDBTable().".startTime=0  and ".LoginEvent::getDBTable().".os&".$osBit.">0 and ".LoginEvent::getDBTable().".cc&".$ccBit.">0 limit 3");
+		LogManager::addLog("error?".mysql_error());
+		// = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and endTime=235959 and endDate-startDate=235959 limit 3")
+		if(!$result)return $data;
+		while($rData = mysql_fetch_assoc($result)){
 			$data[]=$rData;
 		}
 		return $data;
 	}
 
-	static public function insertWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::insertWithLQTable($p);
-	}
-
-
-	static public function updateWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::updateWithLQTable($p);
-	}
 	
 }
 
@@ -1760,7 +1784,7 @@ class AttendenceEvent extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -1778,8 +1802,8 @@ class AttendenceEvent extends DBTable2{
 			$query = "startDate<=".$today." and endDate>=".$today." and os&".$osBit.">0 and cc&".$ccBit.">0 order by `order` asc limit 1";
 		}
 		if(parent::load($query)){
-			$this->jsonToObj("rewardList");
-			$this->jsonToObj("exchangeIDList");
+			//$this->jsonToObj("rewardList");
+			//$this->jsonToObj("exchangeIDList");
 		}
 		
 	}
@@ -1814,51 +1838,34 @@ class AttendenceEventDay extends DBTable2{
 		}
 
 		if($query && parent::load($query)){
-			$this->jsonToObj("rewardList");
-			$this->jsonToObj("exchangeIDList");
+			//$this->jsonToObj("exchangeIDList");
 		}
 		
 	}
 
 
-	static public function insertWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::insertWithLQTable($p);
-	}
-
-
-	static public function updateWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::updateWithLQTable($p);
-	}
 
 }
 ////////////////////////////////////////////////////////////////////////////////////////
 //	미션이벤트
 ////////////////////////////////////////////////////////////////////////////////////////
-class MissionEvent extends DBTable2{
-	static public function construct(){
-		self::setPrimarykey("no",true);
-		self::setDBGroup("main");
-		self::setDBTable("aMissionEventTable");
-	}
-	public function __construct($memberID=null,$fNo=null){
+// class MissionEvent extends DBTable2{
+// 	static public function construct(){
+// 		self::setPrimarykey("no",true);
+// 		self::setDBGroup("main");
+// 		self::setDBTable("aMissionEventTable");
+// 	}
+// 	public function __construct($memberID=null,$fNo=null){
 		
-		parent::__construct();
+// 		parent::__construct();
 		
 
-		if($memberID && $fNo){
-			parent::load("memberID=".$memberID." and no=".$fNo);
-		}
-	}
+// 		if($memberID && $fNo){
+// 			parent::load("memberID=".$memberID." and no=".$fNo);
+// 		}
+// 	}
 
-}
+// }
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	쿠폰메니저
@@ -1884,7 +1891,7 @@ class CuponManager extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -1920,22 +1927,6 @@ class CuponManager extends DBTable2{
 	}
 
 	
-	static public function insertWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::insertWithLQTable($p);
-	}
-
-
-	static public function updateWithLQTable($p){
-		if($p["data"]["exchangeID"]){
-			$exchange = new Exchange($p["data"]["exchangeID"]);
-			if($exchange->isLoaded())$p["data"]["reward"]=$exchange->list;
-		}
-		return parent::updateWithLQTable($p);
-	}
 
 }
 
@@ -2217,8 +2208,8 @@ class WeeklyScore extends DBTable2{
 		});
 
 		self::setLQTableSelectCustomFunction(function($data){
-			$data["data"] = json_decode($data["data"],true);
-			$data["nick"] = $data["data"]["nick"];
+			//$data["data"] = json_decode($data["data"],true);
+			//$data["nick"] = $data["data"]["nick"];
 			return $data;
 		});
 	}
@@ -2262,6 +2253,8 @@ class WeeklyScore extends DBTable2{
 			  `score` int(11) NOT NULL,
 			  `regDate` bigint(20) NOT NULL,
 			  `regWeek` int(11) NOT NULL,
+			  `nick` varchar(100) NOT NULL,
+			  `flag` varchar(45) NOT NULL,
 			  `data` text NOT NULL,
 			  `count` int(11) NOT NULL DEFAULT '0',
 			  `regTime` bigint(20) NOT NULL,
@@ -2602,7 +2595,7 @@ class Notice extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -2619,53 +2612,33 @@ class Notice extends DBTable2{
 		}
 	}
 
-	public static function updateWithLQTable($p){
+}
+
+
+////////////// 실시간 공지 ///////////////////////
+
+
+class RealtimeMsg extends DBTable2{
+	
+	static public function construct(){
+		self::setPrimarykey("no",true);
+		self::setDBGroup("main");
+		self::setDBTable("aRealtimeMsgTable");
+	}
+
+	public function __construct($no=null){
+
+		parent::__construct();
 		
-		$r = parent::updateWithLQTable($p);
-
-		if(array_key_exists("reason",$p)){
-			$mh = new ModifyHistory($r["data"]["memberID"]);
-			unset($p["data"][self::getPrimarykey()]);
-			$mh->oldData=$p["oldData"];
-			$mh->newData=$p["data"];
-			$mh->reason=$p["reason"];
-			$mh->category=get_called_class();
-			$mh->save();
+		if($no){
+			$q_where = "no=".$no;
+			if(parent::load($q_where)){
+	
+			}
 		}
-		return $r;
-	}
-
-	public static function deleteWithLQTable($p){
-		$r = parent::deleteWithLQTable($p);
-		if(array_key_exists("reason",$p)){
-			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][self::getPrimarykey()]);
-			$mh->oldData=$p["data"];
-			$mh->newData="삭제";
-			$mh->reason=$p["reason"];
-			$mh->category=get_called_class();
-			$mh->save();
-		}
-		return $r;
-	}
-
-	public static function insertWithLQTable($p){
-		$r = parent::insertWithLQTable($p);
-
-		if(array_key_exists("reason",$p)){
-			$mh = new ModifyHistory($p["data"]["memberID"]);
-			unset($p["data"][self::getPrimarykey()]);
-			$mh->oldData="추가";
-			$mh->newData=$p["data"];
-			$mh->reason=$p["reason"];
-			$mh->category=get_called_class();
-			$mh->save();
-		}
-		return $r;
 	}
 
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //	샵
@@ -2739,7 +2712,7 @@ class ShopEvent extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -3242,11 +3215,11 @@ class EndlessRank extends DBTable2{
 			  `memberID` bigint(20) NOT NULL,
 			  `regWeek` int(11) NOT NULL,
 			  `score` int(11) NOT NULL,
-			  `nick` varchar(45) NOT NULL,
-			  `level` int(11) NOT NULL,
+			  `nick` varchar(100) NOT NULL,
 			  `flag` varchar(45) NOT NULL,
 			  `victory` int(11) NOT NULL,
 			  `regDate` bigint(20) NOT NULL,
+			  `data` text NOT NULL,
 			  PRIMARY KEY (`no`),
 			  KEY `memberID` (`memberID`),
 			  KEY `rank` (`regWeek`,`victory`,`score`)
@@ -3398,7 +3371,7 @@ class EndlessPlayList extends DBTable2{
 			CREATE TABLE `".self::getDBTable()."` (
 			  `no` int(11) NOT NULL AUTO_INCREMENT,
 			  `memberID` bigint(20) NOT NULL,
-			  `nick` varchar(255) NOT NULL,
+			  `nick` varchar(100) NOT NULL,
 			  `flag` varchar(45) NOT NULL,
 			  `victory` int(11) NOT NULL,
 			  `autoLevel` int(11) NOT NULL,
@@ -3450,15 +3423,19 @@ class EndlessPlayList extends DBTable2{
 		while(count($result)<$limit){
 			$lvl--;
 
-			$query = EndlessPlayList::getQueryResult("select ".$fieldlist." from `".EndlessPlayList::getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".EndlessPlayList::getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
+			$query = EndlessPlayList::getQueryResult("select ".$fieldlist." from `".EndlessPlayList::getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".EndlessPlayList::getDBTable()."`) and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 			if($query){
 				while($rData = mysql_fetch_assoc($query)){
 					if($check)unset($rData["playData"]);
 					$result[]=$rData;
+					$check=true;
 				}
 			}
 			$i++;
-			if($i>50)break;
+			if($i>50){
+				LogManager::addLog("fuck dont find user play");
+				break;
+			}
 		}
 
 		self::setDBTable("EndlessPlayList_".TimeManager::getYesterDate());
@@ -3605,7 +3582,7 @@ class TimeEvent extends DBTable2{
 			$now = TimeManager::getCurrentDateTime();
 			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
 				$rData["state"]="진행중";	
-			}else if($r["startDate"]>=$now){
+			}else if($rData["startDate"]>=$now){
 				$rData["state"]="대기";
 			}else{
 				$rData["state"]="종료";
@@ -3625,53 +3602,65 @@ class TimeEvent extends DBTable2{
 		}
 	}
 
+}
 
-	// public static function updateWithLQTable($p){
+/////////////////////////////////////
+
+
+class MissionEvent extends DBTable2{
+
+	static public function construct(){
+		self::setPrimarykey("no",true);
+		self::setDBGroup("main");
+		self::setDBTable("aMissionEventTable");
+	}
+
+
+	public function __construct($no=null,$type=null,$value=null,$value2=null){
+
+		parent::__construct();
 		
-	// 	$r = parent::updateWithLQTable($p);
+		self::setLQTableSelectCustomFunction(function($rData){
 
-	// 	if(array_key_exists("reason",$p)){
-	// 		$mh = new ModifyHistory($r["data"]["memberID"]);
-	// 		unset($p["data"][self::getPrimarykey()]);
-	// 		$mh->oldData=$p["oldData"];
-	// 		$mh->newData=$p["data"];
-	// 		$mh->reason=$p["reason"];
-	// 		$mh->category=get_called_class();
-	// 		$mh->save();
-	// 	}
-	// 	return $r;
-	// }
+			//LogManager::addLog("in custom function");
 
-	// public static function deleteWithLQTable($p){
-	// 	$r = parent::deleteWithLQTable($p);
-	// 	if(array_key_exists("reason",$p)){
-	// 		$mh = new ModifyHistory($p["data"]["memberID"]);
-	// 		unset($p["data"][self::getPrimarykey()]);
-	// 		$mh->oldData=$p["data"];
-	// 		$mh->newData="삭제";
-	// 		$mh->reason=$p["reason"];
-	// 		$mh->category=get_called_class();
-	// 		$mh->save();
-	// 	}
-	// 	return $r;
-	// }
+			$now = TimeManager::getCurrentDateTime();
+			if($rData["startDate"]<=$now && $rData["endDate"]>=$now){
+				$rData["state"]="진행중";	
+			}else if($rData["startDate"]>=$now){
+				$rData["state"]="대기";
+			}else{
+				$rData["state"]="종료";
+			}
 
-	// public static function insertWithLQTable($p){
-	// 	$r = parent::insertWithLQTable($p);
 
-	// 	if(array_key_exists("reason",$p)){
-	// 		$mh = new ModifyHistory($p["data"]["memberID"]);
-	// 		unset($p["data"][self::getPrimarykey()]);
-	// 		$mh->oldData="추가";
-	// 		$mh->newData=$p["data"];
-	// 		$mh->reason=$p["reason"];
-	// 		$mh->category=get_called_class();
-	// 		$mh->save();
-	// 	}
-	// 	return $r;
-	// }
+			
+			return $rData;
+		});
+
+
+		$this->no = $no;
+		if($no){
+			$q_where = "`no`='".$no."'";
+			parent::load($q_where);
+		}else if($type || $value){
+			$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
+			$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
+			$today = TimeManager::getCurrentDateTime();
+			$sign = "=";
+			if($type=="pvpScore")$sign="<";
+			if($type=="pieceScore")$sign="<";
+			$value2Sql = "";
+			if($value2)$value2Sql = " and value2 = ".$value2;
+			$q_where = "startDate<=".$today." and endDate>=".$today." and os&".$osBit.">0 and cc&".$ccBit.">0 and type='".$type."' and value ".$sign.$value.$value2Sql." order by `order` asc limit 1";
+			LogManager::addLog("missionEvent query -> ".$q_where);
+			parent::load($q_where);
+		}
+	}
 
 }
+
+
 
 /////////////////////////////////////
 /////////////////////////////////////
@@ -3885,12 +3874,14 @@ class Mission extends DBTable2{
 		self::setDBTable("aMissionTable");
 	}
 
-	public function __construct(){
+	public function __construct($no=null){
 
 		parent::__construct();
 
-		if(parent::load("isUse=1 order by rand() limit 1")){
-
+		if($no){
+			parent::load("`type`=".$no);
+		}else{
+			parent::load("isUse=1 order by rand() limit 1");
 		}
 	}
 

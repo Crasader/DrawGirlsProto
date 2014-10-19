@@ -477,6 +477,8 @@ class DBTable2{
 				$isInsert=true;
 			}
 			
+			LogManager::addLog("make query ".$query);
+				
 			if(mysql_query($query,$writeConn)){
 				if($isInsert && static::$m__autoIncreaseKey){
 					$this->{static::$m__autoIncreaseKey}=mysql_insert_id($writeConn);
@@ -798,7 +800,7 @@ class DBTable2{
 		$orders = array();
 		if($param["sort"]){
 			$orderInfo = $param["sort"];
-			//LogManager::addLog("sort info".$param["sort"]);
+			LogManager::addLog("sort info".json_encode($orderInfo));
 			if($orderInfo){
 				$orderStr=" order by";
 				$cc=1;
@@ -819,6 +821,8 @@ class DBTable2{
 				}
 			}
 		}
+		LogManager::addLog("sort info".$orderStr);
+		LogManager::addLog("sort info".json_encode($orders));
 		$query.=$orderStr;
 
 		//limit 쿼리붙이기
@@ -856,11 +860,11 @@ class DBTable2{
 		
 		function isBig($value1,$value2,$dir){
 			if($dir=="desc"){
-				if($value1>$value2){
+				if($value1>=$value2){
 					return true;
 				}
 			}else{
-				if($value1<$value2){
+				if($value1<=$value2){
 					return true;
 				}
 			}
@@ -1115,7 +1119,7 @@ class DBTable2{
 			//LogManager::addLog("foreach $key -".json_encode($value,true));
 		}
 		
-		//LogManager::addLog("updatewithinsert loadquery is ".$loadQuery);
+		LogManager::addLog("updatewithinsert loadquery is ".$loadQuery);
 		$obj->load($loadQuery);
 
 
