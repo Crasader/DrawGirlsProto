@@ -2635,16 +2635,19 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 	retryChangeGoods();
 }
 
-void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
+void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback, bool is_end_game)
 {
-	if(ingame_gold.getV() > 0)
+	if(is_end_game)
 	{
-		is_ingame_gold = true;
-		int t_ingame_gold = ingame_gold.getV();
-		if(isTimeEvent(kTimeEventType_gold))
-			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
-		
-		addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+		if(ingame_gold.getV() > 0)
+		{
+			is_ingame_gold = true;
+			int t_ingame_gold = ingame_gold.getV();
+			if(isTimeEvent(kTimeEventType_gold))
+				t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			
+			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+		}
 	}
 	
 	vector<CommandParam> transaction_list;
@@ -2715,6 +2718,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			
 			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV());
 			is_ingame_gold = false;
+			ingame_gold = 0;
 		}
 		
 		change_goods_list.clear();
@@ -2780,8 +2784,6 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				linkChangeHistory(result_list[i]);
 			}
 		}
-		
-		ingame_gold = 0;
 	}
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{

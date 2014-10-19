@@ -894,7 +894,7 @@ public:
 //	void updateChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void clearChangeGoods();
 	void changeGoods(jsonSelType t_callback);
-	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback);
+	void changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback, bool is_end_game = true);
 	void refreshGoodsData(string t_key, int t_count);
 	vector<CommandParam> getChangeGoodsParam(jsonSelType t_callback);
 	void saveChangeGoodsTransaction(Json::Value result_data);
