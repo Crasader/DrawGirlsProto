@@ -2155,6 +2155,7 @@ void StarGoldData::initPieceHistory(Json::Value history_list)
 void StarGoldData::initCharacterHistory(Json::Value history_list)
 {
 	character_historys.clear();
+	int character_cnt = NSDS_GI(kSDS_GI_characterCount_i);
 	for(int i=0;i<history_list.size();i++)
 	{
 		Json::Value t_data = history_list[i];
@@ -2166,6 +2167,13 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		t_history.nextPower = t_data["nextPower"].asInt();
 		t_history.prevPower = t_data["prevPower"].asInt();
 		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
+		
+		bool is_found = false;
+		for(int j=0;!is_found && j<character_cnt;j++)
+		{
+			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+				t_history.characterIndex = j+1;
+		}
 		
 		character_historys.push_back(t_history);
 	}

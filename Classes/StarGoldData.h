@@ -273,6 +273,7 @@ public:
 	KSProtectVar<int> nextPower;
 	KSProtectVar<int> prevPower;
 	KSProtectVar<bool> isMaxLevel;
+	KSProtectVar<int> characterIndex;
 };
 
 class TodayMission
