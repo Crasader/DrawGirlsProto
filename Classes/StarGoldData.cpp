@@ -1856,7 +1856,7 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		if(t_info.count.getV() > 0)
 			has_gotten_cards.push_back(t_info);
 		
-		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
+//		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
 			card_data_load_list.push_back(card_number);
 	}
 }
