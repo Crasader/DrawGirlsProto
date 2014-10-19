@@ -3374,7 +3374,9 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
-		if(mySGD->is_endless_mode)
+		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+		
+		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 			((MainFlowScene*)getParent())->heart_time->backHeart();
 		else
 			((PuzzleScene*)getParent())->heart_time->backHeart();
