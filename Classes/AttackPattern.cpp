@@ -605,7 +605,7 @@ void ThunderBoltWrapper::myAction()
 {
 	ingFrame++;
 
-	targetingImg->setRotation(targetingImg->getRotation() + 2);
+//	targetingImg->setRotation(targetingImg->getRotation() + 2);
 	if(ingFrame <= targetingFrame)
 	{
 		targetingImg->setScale(targetingImg->getScale() - 2.f/targetingFrame);
