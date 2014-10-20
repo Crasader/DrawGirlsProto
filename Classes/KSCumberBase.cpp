@@ -2466,7 +2466,6 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
     }
 	
 	
-
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 
 	CCLOG("#################### autobalance ############################");
@@ -2492,7 +2491,6 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+speedBalance);
 	}
 	
-	
 	if(m_attackPercent<=0)vCount*=0.5f;
 
 	//체인지시 오토벨런싱 다시
@@ -2504,6 +2502,9 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
+		if(playCount>0){
+			m_attackPercent =m_attackPercent - m_attackPercent*playCount*0.03;
+		}
 		
 		m_aiValue *=2;
 		if(m_aiValue<50)m_aiValue=50;
@@ -2544,20 +2545,38 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
+		if(playCount>0){
+			m_attackPercent =m_attackPercent - m_attackPercent*playCount*0.03;
+		
+		}
+		
+		if(m_attackPercent>0.3)m_attackPercent=0.3;
+		if(m_attackPercent<0.1)m_attackPercent=0.1;
+		if(m_maxSpeed>0.7f){m_maxSpeed=0.7f; m_minSpeed=m_maxSpeed/2.f;}
+		if(m_aiValue>80)m_aiValue=80;
+		
 		//부수기 공격 확률 낮추기
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
-			if( (*iter)["atype"].asString() == "crash" ){
+			if((*iter)["atype"].asString() == "crash"){
                 if(playCount<2)(*iter)["percent"]=1;
                 else (*iter)["percent"]=0;
 			}
+			
+			if((*iter)["atype"].asString() == "special"){
+				if(playCount<3)(*iter)["percent"]=1;
+				else (*iter)["percent"]=0;
+			}
 		}
+		
+		
+		
 	}
 	
-	if(m_attackPercent<=0 && m_maxSpeed>0.7f)m_maxSpeed=0.7f;
-	if(m_maxSpeed>1.f)m_maxSpeed=1.f;
+	if(m_attackPercent<=0 && m_maxSpeed>0.6f){m_maxSpeed=0.6f; m_minSpeed=m_maxSpeed/2.f;}
+	if(m_maxSpeed>0.8f){m_maxSpeed=0.8f; m_minSpeed=m_maxSpeed/2.f;}
+
 	settingFuryRule();
-	
 	CCLOG("#################### Change Balnace1 ############################");
 	CCLOG("AI : %d, attackPercent : %f, speed : %f~%f, hp : %f",m_aiValue,m_attackPercent,m_minSpeed,m_maxSpeed,m_remainHp);
 
