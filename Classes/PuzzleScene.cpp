@@ -3481,15 +3481,9 @@ void PuzzleScene::countingMessage()
 											{
 												NSDS_SI(kSDS_GI_realTimeMessageVersion_i, result_data["version"].asInt());
 												
-												float height_value = 320.f;
-												if(myDSH->screen_convert_rate < 1.f)
-													height_value = 320.f/myDSH->screen_convert_rate;
+												float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 												
-												TRACE();
-												if(height_value < myDSH->ui_top)
-													height_value = myDSH->ui_top;
-												
-												RealTimeMessage* t_message = RealTimeMessage::create(result_data["message"].asString().c_str(), ccp(240,160+height_value/2.f));
+												RealTimeMessage* t_message = RealTimeMessage::create(result_data["message"].asString().c_str(), ccp(240,160+160*screen_scale_y));
 												addChild(t_message, 99999999);
 												
 //												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
