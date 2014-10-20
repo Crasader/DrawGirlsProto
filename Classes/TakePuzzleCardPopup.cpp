@@ -73,10 +73,6 @@ void TakePuzzleCardPopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	
 	int new_card_number = mySGD->new_puzzle_card_info["cardNo"].asInt();
 	
-	mySGD->addHasGottenCardNumber(new_card_number);
-	if(mySGD->new_puzzle_card_info["isMorphing"].asBool())
-		mySGD->onCardMorphing(mySGD->new_puzzle_card_info["cardNo"].asInt());
-	
 	string title_str, content_str;
 	if(is_perfect)
 	{

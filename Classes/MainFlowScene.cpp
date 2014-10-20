@@ -2329,10 +2329,21 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 																												  title_label->setPosition(ccp(-85,back_case->getContentSize().height/2.f-35));
 																												  t_container->addChild(title_label);
 																												  
-																												  StyledLabelTTF* sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-																												  sub_label->setAnchorPoint(ccp(0.5f,0.5f));
-																												  sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f)); 			// dt (0.0,-13.5)
-																												  back_in->addChild(sub_label);
+																												  StyledLabelTTF* sub_label;
+																												  if(t_info.need_star_count >= t_info.need_card_count)
+																												  {
+																													  sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																													  sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+																													  sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f)); 			// dt (0.0,-13.5)
+																													  back_in->addChild(sub_label);
+																												  }
+																												  else
+																												  {
+																													  sub_label = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_notOpenPuzzleNotEnoughtCardContent), t_info.need_card_count)->getCString(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																													  sub_label->setAnchorPoint(ccp(0.5f,0.5f));
+																													  sub_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f)); 			// dt (0.0,-13.5)
+																													  back_in->addChild(sub_label);
+																												  }
 																												  
 																												  
 																												  

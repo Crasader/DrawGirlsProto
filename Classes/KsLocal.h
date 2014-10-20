@@ -1115,7 +1115,8 @@ enum class LK
 	kMyLocalKey_frameOpenConditionContentCard,
 	kMyLocalKey_frameOpenConditionContentCardGold,
 	kMyLocalKey_detailConditionPopupTitleCard,
-	kMyLocalKey_detailConditionPopupContentCard
+	kMyLocalKey_detailConditionPopupContentCard,
+	kMyLocalKey_notOpenPuzzleNotEnoughtCardContent
 };
 class KsLocal
 {

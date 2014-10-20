@@ -638,7 +638,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_couponDontfind] = "쿠폰을 찾을 수 없습니다.";
 	obj[LK::kMyLocalKey_couponOtherError] = "통신이 원활하지 않습니다.\n잠시후 다시 시도해주세요.";
 	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarTitle] = "액자 오픈 조건";
-	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarContent] = "<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개 모아주세요.";
+	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtStarContent] = "<font newline=16>별이 부족해요.<font newline=16>더 높은 등급으로 클리어해서<font color=961 newline=16>별 %d개를 모아주세요.";
 	obj[LK::kMyLocalKey_endlessStartSettingTitle] = "대전 준비";
 	obj[LK::kMyLocalKey_endlessCalcTitleAreaScore] = "영역점수";
 	obj[LK::kMyLocalKey_endlessCalcTitleDamageScore] = "공격점수";
@@ -1154,11 +1154,13 @@ void KsLocal::ko()
 	obj[LK::kAttendanceCheck] = "출석확인";
 	obj[LK::kTutorialReplay] = "튜토리얼";
 	
-	obj[LK::kMyLocalKey_frameOpenConditionContentCard] = "이전액자클리어\n+카드%d개이상";
-	obj[LK::kMyLocalKey_frameOpenConditionContentCardGold] = "이전액자클리어\n+카드%d개이상\n+%s골드";
+	obj[LK::kMyLocalKey_frameOpenConditionContentCard] = "이전액자클리어\n+카드%d종류이상";
+	obj[LK::kMyLocalKey_frameOpenConditionContentCardGold] = "이전액자클리어\n+카드%d종류이상\n+%s골드";
 	
 	obj[LK::kMyLocalKey_detailConditionPopupTitleCard] = "카드 획득 방법";
-	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드 갯수는 총 4개<font newline=14>입니다.";
+	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드는 총 4종류<font newline=14>입니다.";
+	
+	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtCardContent] = "<font newline=16>카드가 부족해요.<font newline=16>다른 등급으로 클리어해서<font color=961 newline=16>카드 %d종류를 모아주세요.";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	

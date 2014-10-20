@@ -755,6 +755,12 @@ bool PuzzleScene::init()
 																						TRACE();
 																						mySGD->new_puzzle_card_info = result_data["giftData"];
 																						mySGD->is_new_puzzle_card = true;
+																						
+																						int new_card_number = mySGD->new_puzzle_card_info["cardNo"].asInt();
+																						
+																						mySGD->addHasGottenCardNumber(new_card_number);
+																						if(mySGD->new_puzzle_card_info["isMorphing"].asBool())
+																							mySGD->onCardMorphing(mySGD->new_puzzle_card_info["cardNo"].asInt());
 																					}
 																				}
 																				TRACE();
