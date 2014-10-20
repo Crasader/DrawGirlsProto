@@ -3118,7 +3118,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 													  ((PuzzleScene*)getParent())->heart_time->refreshHeartTime();
 												  }
 											  }
-											  else if(result_data["isMinus"].asBool())
+											  else if(result_data.get("isMinus", false).asBool())
 											  {
 												  mySGD->heartRefreshSuccess(result_data);
 												  if(mySGD->is_endless_mode || mySGD->is_hell_mode)
@@ -3148,6 +3148,10 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 																										  is_menu_enable = true;
 																									  }), 9999);
 
+											  }
+											  else
+											  {
+												  addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
 											  }
 										  }));
 	
@@ -3374,8 +3378,6 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
-		
 		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 			((MainFlowScene*)getParent())->heart_time->backHeart();
 		else

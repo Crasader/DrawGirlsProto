@@ -47,6 +47,7 @@
 #include "TypingBox.h"
 #include "LabelTTFMarquee.h"
 #include "FiveRocksCpp.h"
+#include "RealTimeMessage.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -3480,21 +3481,32 @@ void PuzzleScene::countingMessage()
 											{
 												NSDS_SI(kSDS_GI_realTimeMessageVersion_i, result_data["version"].asInt());
 												
-												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
-												real_message->setColor(ccc3(255, 100, 100));
-												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
-												real_message->setPosition(ccp(240,160));
-												addChild(real_message, 99999999);
+												float height_value = 320.f;
+												if(myDSH->screen_convert_rate < 1.f)
+													height_value = 320.f/myDSH->screen_convert_rate;
 												
-												addChild(KSTimer::create(3.f, [=](){
-													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																						   {
-																							   real_message->setOpacity(255*t);
-																						   }, [=](float t)
-																						   {
-																							   real_message->setOpacity(255*t);
-																							   real_message->removeFromParent();
-																						   }));}));
+												TRACE();
+												if(height_value < myDSH->ui_top)
+													height_value = myDSH->ui_top;
+												
+												RealTimeMessage* t_message = RealTimeMessage::create(result_data["message"].asString().c_str(), ccp(240,160+height_value/2.f));
+												addChild(t_message, 99999999);
+												
+//												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
+//												real_message->setColor(ccc3(255, 100, 100));
+//												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
+//												real_message->setPosition(ccp(240,160));
+//												addChild(real_message, 99999999);
+//												
+//												addChild(KSTimer::create(3.f, [=](){
+//													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+//																						   {
+//																							   real_message->setOpacity(255*t);
+//																						   }, [=](float t)
+//																						   {
+//																							   real_message->setOpacity(255*t);
+//																							   real_message->removeFromParent();
+//																						   }));}));
 											}
 										}));
 	

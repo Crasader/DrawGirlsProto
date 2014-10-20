@@ -44,6 +44,7 @@ public:
 	int need_star_count;
 	int before_locked_puzzle_count;
 	int puzzle_number;
+	int need_card_count;
 	
 	PuzzleOpenInfo()
 	{
@@ -58,6 +59,7 @@ public:
 		is_have_ruby_condition = false;
 		need_ruby_value = 0;
 		need_star_count = 0;
+		need_card_count = 0;
 		before_locked_puzzle_count = 0;
 	}
 };
