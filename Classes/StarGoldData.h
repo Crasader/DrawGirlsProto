@@ -806,6 +806,13 @@ public:
 	void pushAchieveNotiQueue(AchievementCode t_code);
 	void popAchieveNotiQueue();
 	AchievementCode frontAchieveNotiQueue();
+	
+	deque<string> real_time_message_que;
+	bool isEmptyRealTimeMessageQueue();
+	void pushRealTimeMessageQueue(string t_message);
+	void popRealTimeMessageQueue();
+	string frontRealTimeMessageQueue();
+	
 	void setNextSceneName(string scene_name);
 	string getNextSceneName();
 	

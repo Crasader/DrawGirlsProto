@@ -15,6 +15,8 @@
 
 void StarGoldData::withdraw()
 {
+	real_time_message_que.clear();
+	
 	is_option_tutorial = false;
 	total_card_cnt = 0;
 	
@@ -2398,6 +2400,26 @@ AchievementCode StarGoldData::frontAchieveNotiQueue()
 	return achieve_noti_que.front();
 }
 
+bool StarGoldData::isEmptyRealTimeMessageQueue()
+{
+	return real_time_message_que.empty();
+}
+
+void StarGoldData::pushRealTimeMessageQueue(string t_message)
+{
+	real_time_message_que.push_back(t_message);
+}
+
+void StarGoldData::popRealTimeMessageQueue()
+{
+	real_time_message_que.pop_front();
+}
+
+string StarGoldData::frontRealTimeMessageQueue()
+{
+	return real_time_message_que.front();
+}
+
 void StarGoldData::setNextSceneName(string scene_name)
 {
 	next_scene_name = scene_name;
@@ -3559,6 +3581,7 @@ void StarGoldData::myInit()
 	network_check_cnt = 0;
 	
 	time_event_list.clear();
+	real_time_message_que.clear();
 	
 	heart_time = NULL;
 	

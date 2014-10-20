@@ -60,6 +60,7 @@
 #include "HellModeResult.h"
 #include "StartSettingPopup.h"
 #include "LoadingTipScene.h"
+#include "RealTimeMessage.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -176,6 +177,7 @@ bool MainFlowScene::init()
 		t_info.is_have_date_condition = false;
 		t_info.is_have_ruby_condition = false;
 		t_info.need_star_count = 0;
+		t_info.need_card_count = 0;
 		
 		for(int i=0;!t_info.is_open && i<condition_list.size();i++)
 		{
@@ -200,6 +202,15 @@ bool MainFlowScene::init()
 				{
 					t_info.need_star_count = t_condition["value"].asInt();
 					if(mySGD->getClearStarCount() < t_info.need_star_count)
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "c")
+				{
+					t_info.need_card_count = t_condition["value"].asInt();
+					if(mySGD->getHasGottenCardsSize() < t_info.need_card_count)
 					{
 						and_open = false;
 						t_info.is_base_condition_success = false;
@@ -1521,23 +1532,24 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
 				}
-				else
-				{
-					CCLabelTTF* c_label = CCLabelTTF::create();
-					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
-					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-					detail_label->setPosition(ccp(0,0));
-					c_label->addChild(detail_label);
-				
-					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
-					
-					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
-					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(0);
-					detail_button->setPreferredSize(CCSizeMake(90, 43));
-					detail_button->setPosition(ccp(67.5f,65.5f));
-					not_clear_img->addChild(detail_button);
-				}
+				// 날짜 및 시간에 관련한 자세히보기가 필요할때 주석 풀고, detailCondition 함수 안에 수정할 수 있도록
+//				else
+//				{
+//					CCLabelTTF* c_label = CCLabelTTF::create();
+//					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
+//					detail_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+//					detail_label->setPosition(ccp(0,0));
+//					c_label->addChild(detail_label);
+//				
+//					CCScale9Sprite* detail_back = CCScale9Sprite::create("mainflow_detail.png", CCRectMake(0, 0, 90, 43), CCRectMake(44, 21, 2, 1));
+//					
+//					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
+//					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
+//					detail_button->setTag(0);
+//					detail_button->setPreferredSize(CCSizeMake(90, 43));
+//					detail_button->setPosition(ccp(67.5f,65.5f));
+//					not_clear_img->addChild(detail_button);
+//				}
 			}
 			else
 			{
@@ -1570,10 +1582,23 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 				{
 					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
-					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 100.f));
-					not_clear_img->addChild(condition_content);
+					int t_tag = 0;
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+						t_tag = 0;
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCardGold), t_info.need_card_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+						t_tag = 1;
+					}
 					
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
@@ -1585,17 +1610,30 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(0);
+					detail_button->setTag(t_tag);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
 					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
 				}
 				else
 				{
-					KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
-					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 102.5f));
-					not_clear_img->addChild(condition_content);
+					int t_tag = 0;
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+						t_tag = 0;
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCard), t_info.need_card_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+						t_tag = 1;
+					}
 					
 					CCLabelTTF* c_label = CCLabelTTF::create();
 					KSLabelTTF* detail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailView), mySGD->getFont().c_str(), 11.5f);
@@ -1607,7 +1645,7 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					
 					CCControlButton* detail_button = CCControlButton::create(c_label, detail_back);
 					detail_button->addTargetWithActionForControlEvents(this, cccontrol_selector(MainFlowScene::detailCondition), CCControlEventTouchUpInside);
-					detail_button->setTag(0);
+					detail_button->setTag(t_tag);
 					detail_button->setPreferredSize(CCSizeMake(90, 43));
 					detail_button->setPosition(ccp(67.5f,65.5f));
 					not_clear_img->addChild(detail_button);
@@ -2388,6 +2426,19 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																											myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupTitle),
 																											(CCNode*)content_label, [=](){is_menu_enable = true;},
 																											12.f, CCPointZero,true);
+		
+		//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
+		addChild(t_popup, kMainFlowZorder_popup);
+	}
+	else if(tag == 1)
+	{
+		StyledLabelTTF* content_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupContentCard), mySGD->getFont().c_str(), 12,999,StyledAlignment::kCenterAlignment);
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
+		
+		ASPopupView* t_popup = ASPopupView::getCommonNoti(-800,
+														  myLoc->getLocalForKey(LK::kMyLocalKey_detailConditionPopupTitleCard),
+														  (CCNode*)content_label, [=](){is_menu_enable = true;},
+														  12.f, CCPointZero,true);
 		
 		//	DetailConditionPopup* t_popup = DetailConditionPopup::create(-800, [=](){is_menu_enable = true;});
 		addChild(t_popup, kMainFlowZorder_popup);
@@ -5605,21 +5656,31 @@ void MainFlowScene::countingMessage()
 											{
 												NSDS_SI(kSDS_GI_realTimeMessageVersion_i, result_data["version"].asInt());
 												
-												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
-												real_message->setColor(ccc3(255, 100, 100));
-												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
-												real_message->setPosition(ccp(240,160));
-												addChild(real_message, 99999999);
+												float height_value = 320.f;
+												if(myDSH->screen_convert_rate < 1.f)
+													height_value = 320.f/myDSH->screen_convert_rate;
 												
-												addChild(KSTimer::create(3.f, [=](){
-													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
-																										 {
-																											 real_message->setOpacity(255*t);
-																										 }, [=](float t)
-																										 {
-																											 real_message->setOpacity(255*t);
-																											 real_message->removeFromParent();
-																										 }));}));
+												TRACE();
+												if(height_value < myDSH->ui_top)
+													height_value = myDSH->ui_top;
+												
+												RealTimeMessage* t_message = RealTimeMessage::create(result_data["message"].asString().c_str(), ccp(240,160+height_value/2.f));
+												addChild(t_message, 99999999);
+//												KSLabelTTF* real_message = KSLabelTTF::create(result_data["message"].asString().c_str(), mySGD->getFont().c_str(), 25);
+//												real_message->setColor(ccc3(255, 100, 100));
+//												real_message->enableOuterStroke(ccBLACK, 2.5f, 255, true);
+//												real_message->setPosition(ccp(240,160));
+//												addChild(real_message, 99999999);
+//												
+//												addChild(KSTimer::create(3.f, [=](){
+//													addChild(KSGradualValue<float>::create(1.f, 0.f, 1.f, [=](float t)
+//																										 {
+//																											 real_message->setOpacity(255*t);
+//																										 }, [=](float t)
+//																										 {
+//																											 real_message->setOpacity(255*t);
+//																											 real_message->removeFromParent();
+//																										 }));}));
 											}
 										}));
 	

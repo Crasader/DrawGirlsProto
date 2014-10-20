@@ -1111,7 +1111,11 @@ enum class LK
 	kStory_20_2,
 	kFriendSelfNickname,
 	kAttendanceCheck,
-	kTutorialReplay
+	kTutorialReplay,
+	kMyLocalKey_frameOpenConditionContentCard,
+	kMyLocalKey_frameOpenConditionContentCardGold,
+	kMyLocalKey_detailConditionPopupTitleCard,
+	kMyLocalKey_detailConditionPopupContentCard
 };
 class KsLocal
 {

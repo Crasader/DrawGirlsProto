@@ -1153,6 +1153,13 @@ void KsLocal::ko()
 	obj[LK::kFriendSelfNickname] = "자기 자신은 친구로 등록할 수 없습니다.";
 	obj[LK::kAttendanceCheck] = "출석확인";
 	obj[LK::kTutorialReplay] = "튜토리얼";
+	
+	obj[LK::kMyLocalKey_frameOpenConditionContentCard] = "이전액자클리어\n+카드%d개이상";
+	obj[LK::kMyLocalKey_frameOpenConditionContentCardGold] = "이전액자클리어\n+카드%d개이상\n+%s골드";
+	
+	obj[LK::kMyLocalKey_detailConditionPopupTitleCard] = "카드 획득 방법";
+	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드 갯수는 총 4개<font newline=14>입니다.";
+	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	
 		// add friend !
