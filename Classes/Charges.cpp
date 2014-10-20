@@ -463,6 +463,7 @@ void CrashChargeNodeLambda::charging()
 		if(cb)
 		{
 			cb->m_lastCastTime = cb->m_cumberTimer;
+			cb->m_crashAttackTime = cb->m_cumberTimer;
 			cb->m_castFrameCount = 0;
 			cb->m_stopFrameCount = 0;
 			cb->resetCastingCancelCount();

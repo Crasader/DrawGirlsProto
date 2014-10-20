@@ -144,7 +144,8 @@ public:
 	m_chaosAttack(nullptr), m_sightOutAttack(nullptr),
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
-	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false)
+	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false),
+	m_crashAttackTime(0)
 	{
 		
 	}
@@ -416,6 +417,8 @@ public:
 	{
 		return m_charges;
 	}
+	// 부수기 공격을 했을 때의 시간
+	float m_crashAttackTime;
 	float m_lastCastTime;
 	float m_cumberTimer;
 	struct FuryMode
@@ -435,6 +438,7 @@ public:
 		bool firstMoving; // 처음 분노를 시작했다면 true
 	}m_furyMode;
 protected:
+	
 	
 	//선그을때 공격하는걸 제한하는 카운터
 	int m_adderCnt;

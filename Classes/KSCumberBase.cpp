@@ -1334,7 +1334,7 @@ void KSCumberBase::cumberAttack(float dt)
 	}
 	bool crashAttack = false;
 	bool distanceFury = false; // 거리로 인한 분노인가.
-	
+	float crashReattackTerm = 10.f;
 	//분노카운터,재공격카운터 계속 증가
 	m_reAttackCnt++;
 //	m_reAttackCnt += 10000;
@@ -1350,8 +1350,10 @@ void KSCumberBase::cumberAttack(float dt)
 		
 		if((m_furyRule.gainPercent < gainPercent && distance > m_furyRule.userDistance))
 		{
+			bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
+  			m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
-			if(w == 0)
+			if(w == 0 && attackCondition)
 			{
 				crashAttack = true;
 				distanceFury = true;
@@ -1392,11 +1394,18 @@ void KSCumberBase::cumberAttack(float dt)
 			}
 			else
 			{
-				crashAttack = true;
-				distanceFury = true;
-				//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
-				m_furyCnt = -300;
-				outlineCountRatio.clear();
+				bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
+				m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
+
+				if(attackCondition)
+				{
+					crashAttack = true;
+					distanceFury = true;
+					//분노카운터초기화, 앞으로 600프레임간은 거리분노룰 적용 안함.
+					m_furyCnt = -300;
+					outlineCountRatio.clear();
+					
+				}
 			}
 		}
 	}
@@ -1405,9 +1414,8 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
-		bool attackCondition = m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f; // 공격할 조건.
-		if(attackCondition == false)
-			return; // 부수기는 특정 조건하에서는 공격 하지 않음.
+		
+//		m_crashAttackTime = m_cumberTimer;
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
 			if( (*iter)["atype"].asString() == "crash" )
@@ -1431,12 +1439,14 @@ void KSCumberBase::cumberAttack(float dt)
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
 			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-				 currentSecond <= m_lastPattern.exeTime + 3000)
+				 currentSecond <= m_lastPattern.exeTime + 3000 ||
+				 (*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer)
 			{
 				
 			}
 			else // 넣어져야할 조건
 			{
+//				if((*iter)["atype"].asString() == "crash" &&)
 				selectedAttacks.push_back(*iter);
 			}
 		}
