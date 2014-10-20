@@ -585,8 +585,22 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+#ifdef LQTEST
 		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
+#else
+		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+#endif
+		
+#else
+		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+#endif
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+		
+//		Json::Value param;
+//		param["memberID"] = hspConnector::get()->getSocialID();
+//		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+//		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultLogin));
 	}
 }
 
