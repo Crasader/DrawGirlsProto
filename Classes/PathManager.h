@@ -464,7 +464,7 @@ private:
 			}
 		}
 		
-		int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterNo.getV());
+		int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
 		if(path_color_code == 1)
 			path_color = "life";
 		else if(path_color_code == 2)

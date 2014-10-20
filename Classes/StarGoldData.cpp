@@ -1856,7 +1856,7 @@ void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_dat
 		if(t_info.count.getV() > 0)
 			has_gotten_cards.push_back(t_info);
 		
-		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
+//		if(NSDS_GS(kSDS_CI_int1_imgInfo_s, card_number) == "")
 			card_data_load_list.push_back(card_number);
 	}
 }
@@ -2155,6 +2155,7 @@ void StarGoldData::initPieceHistory(Json::Value history_list)
 void StarGoldData::initCharacterHistory(Json::Value history_list)
 {
 	character_historys.clear();
+	int character_cnt = NSDS_GI(kSDS_GI_characterCount_i);
 	for(int i=0;i<history_list.size();i++)
 	{
 		Json::Value t_data = history_list[i];
@@ -2166,6 +2167,13 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		t_history.nextPower = t_data["nextPower"].asInt();
 		t_history.prevPower = t_data["prevPower"].asInt();
 		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
+		
+		bool is_found = false;
+		for(int j=0;!is_found && j<character_cnt;j++)
+		{
+			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+				t_history.characterIndex = j+1;
+		}
 		
 		character_historys.push_back(t_history);
 	}
@@ -2635,16 +2643,19 @@ void StarGoldData::changeGoods(jsonSelType t_callback)
 	retryChangeGoods();
 }
 
-void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback)
+void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jsonSelType t_callback, bool is_end_game)
 {
-	if(ingame_gold.getV() > 0)
+	if(is_end_game)
 	{
-		is_ingame_gold = true;
-		int t_ingame_gold = ingame_gold.getV();
-		if(isTimeEvent(kTimeEventType_gold))
-			t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
-		
-		addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+		if(ingame_gold.getV() > 0)
+		{
+			is_ingame_gold = true;
+			int t_ingame_gold = ingame_gold.getV();
+			if(isTimeEvent(kTimeEventType_gold))
+				t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			
+			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+		}
 	}
 	
 	vector<CommandParam> transaction_list;
@@ -2715,6 +2726,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 			
 			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV());
 			is_ingame_gold = false;
+			ingame_gold = 0;
 		}
 		
 		change_goods_list.clear();
@@ -2780,8 +2792,6 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				linkChangeHistory(result_list[i]);
 			}
 		}
-		
-		ingame_gold = 0;
 	}
 	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
 	{

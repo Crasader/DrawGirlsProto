@@ -688,7 +688,7 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	KSLabelTTF* speed_label;
 	KSLabelTTF* shadow;
 	
-	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterNo.getV()) + t_step*0.1f >= 2.f)
+	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + t_step*0.1f >= 2.f)
 	{
 		int i = kAchievementCode_hidden_speedMania;
 		
@@ -1418,12 +1418,12 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			my_fp->addFeverGage(up_count);
 		}
 		
-		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f)
+		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f)
 		{
 			if(!is_five_percent)
 				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
-			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterNo.getV())/100.f);
+			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f);
 			
 			int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
 			int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
@@ -3875,7 +3875,7 @@ void PlayUI::myInit ()
 	
 	jack_array = new CCArray(1);
 	jack_life_hide_count = 0;
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterNo.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterIndex.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
 	is_used_heartUpItem = false;
 	is_used_longTimeItem = false;
@@ -4536,7 +4536,7 @@ void PlayUI::continueAction ()
 		countingCnt = 0;
 //	}
 	
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterNo.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterIndex.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
 	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
 	

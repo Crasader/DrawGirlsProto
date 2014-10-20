@@ -198,7 +198,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
                                                                                       
                                                                                       is_menu_enable = true;
                                                                                   }
-                                                                              });
+                                                                              }, false);
                                                 
 //												mySGD->changeGoods([=](Json::Value result_data)
 //																   {
@@ -499,7 +499,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
                                                       
                                                       is_menu_enable = true;
                                                   }
-                                              });
+											  }, false);
                 
 //				mySGD->changeGoods([=](Json::Value result_data)
 //								   {

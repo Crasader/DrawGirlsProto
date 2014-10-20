@@ -67,6 +67,8 @@ bool TitleRenewalScene::init()
 	TRACE();
 	is_preloaded_effect = false;
 	
+	card_data_version = -1;
+	
 	is_downloading = false;
 	
 	loginCnt=0;
@@ -2578,6 +2580,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		card_data_version = result_data["version"].asInt();
+		
 		Json::Value cards = result_data["list"];
 		for(int i=0;i<cards.size();i++)
 		{
@@ -4285,6 +4289,9 @@ void TitleRenewalScene::successDownloadAction()
 
 void TitleRenewalScene::endingCheck()
 {
+	if(card_data_version != -1)
+		NSDS_SI(kSDS_GI_card_version_i, card_data_version);
+	
 	if(puzzle_download_list.size() > 0)
 		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);
 	

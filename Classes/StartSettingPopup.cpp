@@ -991,7 +991,7 @@ void StartSettingPopup::setMain()
 		//	t_cumber->setPosition(ccp(83,158));
 		cumber_node->addChild(t_cumber);
 		
-		int character_no = mySGD->getSelectedCharacterHistory().characterNo.getV();
+		int character_no = mySGD->getSelectedCharacterHistory().characterIndex.getV();
 		
 		auto t_char = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_no) + ".ccbi");
 		character_img = t_char.first;
@@ -1664,7 +1664,7 @@ void StartSettingPopup::characterClose()
 		character_img = NULL;
 	}
 	
-	int character_no = mySGD->getSelectedCharacterHistory().characterNo.getV();
+	int character_no = mySGD->getSelectedCharacterHistory().characterIndex.getV();
 	
 	auto t_char = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_no) + ".ccbi");
 	character_img = t_char.first;
@@ -1997,7 +1997,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				missile_img = NULL;
 			}
 			
-			StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
+			StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterIndex.getV()-1);
 			missile_type_code = kStoneType_guided;
 			
 			if(missile_type_code == kStoneType_guided)

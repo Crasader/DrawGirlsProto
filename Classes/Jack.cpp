@@ -2545,7 +2545,7 @@ void Jack::myInit()
 	afterState = jackStateNormal;
 
 	string path_color;
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterNo.getV());
+	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
 	if(path_color_code == 1)
 		path_color = "life";
 	else if(path_color_code == 2)
@@ -2567,7 +2567,7 @@ void Jack::myInit()
 	addChild(line_edge, kJackZ_line);
 	
 	
-	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterNo.getV()) + ".ccbi");
+	auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + ".ccbi");
 	
 	jackImg = t_pair.first;
 	jack_ccb_manager = t_pair.second;
