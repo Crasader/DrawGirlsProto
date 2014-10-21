@@ -259,8 +259,42 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, i
 																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
 																									ao, selfRotation
 																									);
+				
 				gm->beautifier(grade, level);
 				jack_missile_node->addChild(gm);
+				
+//				auto diff = nearCumber->getPosition() - myGD->getJackPoint().convertToCCP();
+//				StraightMissile* sm = StraightMissile::create(myGD->getJackPoint().convertToCCP(), "stone_1.ccbi",
+//																											atan2f(diff.y, diff.x),
+//																											1.4f+random_float + grade / 10.f, power, ao);
+//				jack_missile_node->addChild(sm);
+				
+//				SpreadMissile* spm = SpreadMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(), "stone_1.ccbi",
+//																									 1.4f+random_float + grade / 10.f, power, 8, ao);
+//				jack_missile_node->addChild(spm);
+				
+				// ccbi 가 없음 me_timebomb.ccbi
+//				MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), myGD->getJackPoint().convertToCCP(), 8,
+//																						power, ao);
+//				jack_missile_node->addChild(ma);
+				
+//				SpiritAttack* sa = SpiritAttack::create(myGD->getJackPoint().convertToCCP(), nearCumber->getPosition(), "stone_1.ccbi",
+//																								8, power, 1.4f+random_float + grade / 10.f, 180, ao);
+//				jack_missile_node->addChild(sa);
+				
+				// me_scope.ccbi 없음
+//				RangeAttack* ra = RangeAttack::create(myGD->getJackPoint().convertToCCP(), 30.f, 180, power, 3, ao);
+//				jack_missile_node->addChild(ra);
+				
+				// me_allattack_arrow.ccbi 없음
+//				RandomBomb* rb = RandomBomb::create(30.f, power, ao);
+//				jack_missile_node->addChild(rb);
+//
+				// me_laser_head.ccbi me_laser_body.ccbi 없음
+//				LaserWrapper* lw = LaserWrapper::create(2 + MIN((grade-1), 3), 60*2 + missileNumbers * 60,
+//																								power / 3.f, ao);
+//				jack_missile_node->addChild(lw);
+				
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
 				creator();
