@@ -100,6 +100,8 @@ enum SDS_KEY
 	kSDS_GI_characterInfo_int1_statInfo_monsterWave_d,
 	kSDS_GI_characterInfo_int1_statInfo_missileWave_d,
 	kSDS_GI_characterInfo_int1_statInfo_magnetic_d,
+	kSDS_GI_characterInfo_int1_patternInfo_s,
+	kSDS_GI_characterInfo_int1_missionInfo_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_imageID_s,

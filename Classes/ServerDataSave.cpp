@@ -656,6 +656,8 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_monsterWave_d)	rv = "ci%d_si_monsterWave";
 	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_missileWave_d)	rv = "ci%d_si_missileWave";
 	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_magnetic_d)	rv = "ci%d_si_magnetic";
+	else if(t_key == kSDS_GI_characterInfo_int1_patternInfo_s)			rv = "ci%d_pi";
+	else if(t_key == kSDS_GI_characterInfo_int1_missionInfo_s)			rv = "ci%d_mi";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s)	rv = "ci%d_ri_ccbiID";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s)	rv = "ci%d_ri_ccbi";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_imageID_s)	rv = "ci%d_ri_imageID";
