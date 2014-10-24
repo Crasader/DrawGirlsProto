@@ -2180,6 +2180,8 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		}
 		
 		character_historys.push_back(t_history);
+		
+//		CCLog("characterNo : %d | level : %d | nextPrice : %d | power : %d | nextPower : %d | prevPower : %d | isMaxLevel : %d", t_history.characterNo.getV(), t_history.level.getV(), t_history.nextPrice.getV(), t_history.power.getV(), t_history.nextPower.getV(), t_history.prevPower.getV(), t_history.isMaxLevel.getV());
 	}
 }
 void StarGoldData::initSelectedCharacterNo(int t_i)
@@ -2191,12 +2193,17 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 		{
 			selected_character_index = i;
 			is_found = true;
+			
+//			CCLog("selected characterNo : %d | index : %d", character_historys[i].characterNo.getV(), i);
 		}
 	}
 	if(!is_found)
 	{
 		selected_character_index = 0;
 	}
+	
+	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_rewindSpd_d, getSelectedCharacterHistory().characterIndex.getV());
+	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_magnetic_d, getSelectedCharacterHistory().characterIndex.getV());
 }
 void StarGoldData::initCharacterLevel(int t_i)
 {
@@ -2217,6 +2224,8 @@ void StarGoldData::initCharacterPower(int t_i)
 	for(int i=0;i<character_historys.size();i++)
 	{
 		character_historys[i].power = t_i;
+		
+//		CCLog("character power : %d | no : %d", character_historys[i].power.getV(), character_historys[i].characterNo.getV());
 	}
 }
 void StarGoldData::initCharacterNextPower(int t_i)
@@ -3780,7 +3789,8 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 	}
 	
-	rewind_cnt_per_frame = 2;
+	rewind_cnt_per_frame = 2.0;
+	character_magnetic = 0.0;
 }
 
 long long StarGoldData::getIntroducerID()

@@ -22,7 +22,7 @@
 
 GameItemBase::GameItemBase()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }
@@ -1261,7 +1261,7 @@ void FeverCoinParent::myInit()
 
 FloatingCoin::FloatingCoin()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }

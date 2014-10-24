@@ -34,10 +34,10 @@ public:
 	CCSprite* pathImg;
 	int pathScale;
 	
-	static PathNode* create(IntPointVector t_pv, string line_color)
+	static PathNode* create(IntPointVector t_pv, string line_color, int color_value)
 	{
 		PathNode* t_pn = new PathNode();
-		t_pn->myInit(t_pv, line_color);
+		t_pn->myInit(t_pv, line_color, color_value);
 		t_pn->autorelease();
 		return t_pn;
 	}
@@ -64,11 +64,17 @@ public:
 private:
 	CCSprite* pathEdge;
 	
-	void myInit(IntPointVector t_pv, string line_color)
+	void myInit(IntPointVector t_pv, string line_color, int color_value)
 	{
 		myPointVector = t_pv;
 		
+		ccColor3B t_color;
+		t_color.r = color_value/256/256;
+		t_color.g = (color_value/256)%256;
+		t_color.b = color_value%256;
+		
 		pathImg = CCSprite::create(("path_" + line_color + ".png").c_str());
+		pathImg->setColor(t_color);
 		pathImg->setAnchorPoint(ccp(0.0, 0.5));
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;
@@ -117,15 +123,19 @@ private:
 	
 	bool is_acting;
 	
+	double dis_value;
+	double total_dis;
+	
 	void tracing()
 	{
 		bool is_end = false;
 		
-		int loop_value = 1;
 		if(myGD->getCommunicationBool("UI_isExchanged"))
-			loop_value++;
+			total_dis += dis_value*2.0;
+		else
+			total_dis += dis_value;
 		
-		for(int i=0;!is_end && i<loop_value;i++)//2배속
+		while(!is_end && total_dis >= 1.0)
 		{
 			if(pre_img)
 			{
@@ -155,11 +165,16 @@ private:
 					return;
 				}
 			}
+			
+			total_dis -= 1.0;
 		}
 	}
 	
 	void myInit(IntPoint t_start, vector<IntPoint>* t_linked_list)
 	{
+		total_dis = 0.0;
+		dis_value = 1.0 - NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_missileWave_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.0;
+		
 		plinked_list = t_linked_list;
 		
 		pre_img = NULL;
@@ -398,7 +413,7 @@ private:
 			myList.back()->changeScaleDirect(before_scale);
 		}
 		
-		PathNode* t_pn = PathNode::create(t_pv, path_color);
+		PathNode* t_pn = PathNode::create(t_pv, path_color, path_color_value);
 		t_pn->setTag(childTagInPathParentPathNode);
 		addChild(t_pn, 1);
 		
@@ -454,6 +469,7 @@ private:
 		return true;
 	}
 	
+	int path_color_value;
 	void myInit()
 	{
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
@@ -464,20 +480,20 @@ private:
 			}
 		}
 		
-		int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
-		if(path_color_code == 1)
-			path_color = "life";
-		else if(path_color_code == 2)
-			path_color = "fire";
-		else if(path_color_code == 3)
-			path_color = "water";
-		else if(path_color_code == 4)
-			path_color = "wind";
-		else if(path_color_code == 5)
-			path_color = "lightning";
-		else if(path_color_code == 6)
-			path_color = "plasma";
-		else
+		path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+//		if(path_color_code == 1)
+//			path_color = "life";
+//		else if(path_color_code == 2)
+//			path_color = "fire";
+//		else if(path_color_code == 3)
+//			path_color = "water";
+//		else if(path_color_code == 4)
+//			path_color = "wind";
+//		else if(path_color_code == 5)
+//			path_color = "lightning";
+//		else if(path_color_code == 6)
+//			path_color = "plasma";
+//		else
 			path_color = "empty";
 		
 		myGD->V_Ipv["PM_addPath"] = std::bind(&PathManager::addPath, this, _1);

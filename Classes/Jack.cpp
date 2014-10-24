@@ -2544,22 +2544,22 @@ void Jack::myInit()
 	myState = jackStateNormal;
 	afterState = jackStateNormal;
 
-	string path_color;
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
-	if(path_color_code == 1)
-		path_color = "life";
-	else if(path_color_code == 2)
-		path_color = "fire";
-	else if(path_color_code == 3)
-		path_color = "water";
-	else if(path_color_code == 4)
-		path_color = "wind";
-	else if(path_color_code == 5)
-		path_color = "lightning";
-	else if(path_color_code == 6)
-		path_color = "plasma";
-	else
-		path_color = "empty";
+//	string path_color;
+//	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+//	if(path_color_code == 1)
+//		path_color = "life";
+//	else if(path_color_code == 2)
+//		path_color = "fire";
+//	else if(path_color_code == 3)
+//		path_color = "water";
+//	else if(path_color_code == 4)
+//		path_color = "wind";
+//	else if(path_color_code == 5)
+//		path_color = "lightning";
+//	else if(path_color_code == 6)
+//		path_color = "plasma";
+//	else
+//		path_color = "empty";
 	
 	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
 	line_edge->setVisible(false);

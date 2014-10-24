@@ -2069,6 +2069,10 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, i, character_list[i-1]["statInfo"]["color"].asInt(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i, character_list[i-1]["statInfo"]["slot"].asInt(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_rewindSpd_d, i, character_list[i-1]["statInfo"]["rewindSpd"].asDouble(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_monsterWave_d, i, character_list[i-1]["statInfo"]["monsterWave"].asDouble(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_missileWave_d, i, character_list[i-1]["statInfo"]["missileWave"].asDouble(), false);
+			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_magnetic_d, i, character_list[i-1]["statInfo"]["magnetic"].asDouble(), false);
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
 			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
