@@ -1481,7 +1481,7 @@ void KSCumberBase::cumberAttack(float dt)
 			m_adderCnt = 0;
 		}
 		// 사냥꾼 미션 & 현재 쫄자가 0 마리 이하라면
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
+		if(clear_condition == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
 		{
 			attackProb = 0.4f; // 엄청난 공격확률
 		}
@@ -1987,6 +1987,9 @@ void KSCumberBase::onJackDrawLine()
 bool KSCumberBase::init()
 {
 	CCNode::init();
+	
+	clear_condition = NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i);
+	
 	//		mEmotion = NULL;
 	schedule(schedule_selector(ThisClassType::speedAdjustment));
 	

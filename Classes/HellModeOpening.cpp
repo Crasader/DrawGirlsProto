@@ -632,6 +632,51 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 	}
 	else
 	{
+		CCSprite* n_back_img = mySIL->getLoadedImg(ccsf("hell_cell%d_img.png", idx+1));
+		n_back_img->setPosition(ccpFromSize(n_back_img->getContentSize()/2.f));
+		cell->addChild(n_back_img);
+		
+		KSLabelTTF* character_name = KSLabelTTF::create(hell_list[idx].character_name.c_str(), mySGD->getFont().c_str(), 12);
+		character_name->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		character_name->setPosition(ccp(30,12));
+		cell->addChild(character_name);
+		
+		KSLabelTTF* title_label = KSLabelTTF::create(hell_list[idx].title.c_str(), mySGD->getFont().c_str(), 18);
+		title_label->setAnchorPoint(ccp(0,0.5f));
+		title_label->setPosition(ccp(55,33));
+		title_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		title_label->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
+		cell->addChild(title_label);
+		
+		KSLabelTTF* content_label = KSLabelTTF::create(hell_list[idx].content.c_str(), mySGD->getFont().c_str(), 12);
+		content_label->setAnchorPoint(ccp(0,0.5f));
+		content_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		content_label->setPosition(ccp(55,15));
+		cell->addChild(content_label);
+		
+		if(clicked_stage == hell_list[idx].stage_number)
+		{
+			CCScale9Sprite* clicked_img = CCScale9Sprite::create("common_select.png", CCRectMake(0, 0, 34, 34), CCRectMake(16, 16, 2, 2));
+			clicked_img->setContentSize(CCSizeMake(268, 59));
+			clicked_img->setPosition(ccpFromSize(n_back_img->getContentSize()/2.f));
+			cell->addChild(clicked_img);
+		}
+		
+		if(mySGD->isHasGottenCards(NSDS_GI(hell_list[idx].stage_number, kSDS_SI_level_int1_card_i, 1)))
+		{
+			CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			take_back->setContentSize(CCSizeMake(50, 25));
+			take_back->setPosition(ccp(30,27));
+			take_back->setRotation(-20);
+			cell->addChild(take_back);
+			
+			KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTakeCharacter), mySGD->getFont().c_str(), 12);
+			take_label->setColor(ccc3(255, 255, 30));
+			take_label->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+			take_label->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+			take_back->addChild(take_label);
+		}
+		
 		CCSprite* back_img = CCSprite::create("hell_lock.png");
 		back_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f));
 		cell->addChild(back_img);

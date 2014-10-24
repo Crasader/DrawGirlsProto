@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "IntSeries.h"
 #include "SelectorDefine.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -458,6 +459,7 @@ private:
 	void myInit();
 };
 
+class LoadingLayer;
 class PlayTutorial : public CCLayer
 {
 public:
@@ -501,6 +503,11 @@ private:
 	
 	int getRecentStep();
 	void nextStep();
+	
+	LoadingLayer* t_loading;
+	CCNode* t_scenario_node;
+	
+	void resultAchieve(Json::Value result_data);
 	
 	void startCatching();
 	void catchingAction();

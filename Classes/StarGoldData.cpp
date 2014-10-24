@@ -368,6 +368,8 @@ void StarGoldData::resetIngameDetailScore()
 
 void StarGoldData::setGameStart()
 {
+	myGD->is_changed_map = false;
+	myGD->is_need_resetRects = false;
 	gacha_item = kIC_emptyEnd;
 	
 	catch_cumber_count = 0;
@@ -2196,6 +2198,27 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 		selected_character_index = 0;
 	}
 }
+void StarGoldData::initCharacterLevel(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].level = t_i;
+	}
+}
+void StarGoldData::initCharacterNextPrice(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].nextPrice = t_i;
+	}
+}
+void StarGoldData::initCharacterIsMaxLevel(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].isMaxLevel = t_i;
+	}
+}
 CharacterHistory StarGoldData::getSelectedCharacterHistory()
 {
 	return character_historys[selected_character_index.getV()];
@@ -2244,12 +2267,12 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		{
 			if(character_historys[i].characterNo.getV() == characterNo)
 			{
-				character_historys[i].level = result_data["level"].asInt();
-				character_historys[i].nextPrice = result_data["nextPrice"].asInt();
+				character_historys[i].level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
+				character_historys[i].nextPrice = mySGD->getUserdataCharNextPrice();//result_data["nextPrice"].asInt();
 				character_historys[i].power = result_data["power"].asInt();
 				character_historys[i].nextPower = result_data["nextPower"].asInt();
 				character_historys[i].prevPower = result_data["prevPower"].asInt();
-				character_historys[i].isMaxLevel = result_data["isMaxLevel"].asBool();
+				character_historys[i].isMaxLevel = mySGD->getUserdataCharIsMaxLevel();//result_data["isMaxLevel"].asBool();
 				is_found = true;
 			}
 		}
@@ -2258,12 +2281,12 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		{
 			CharacterHistory t_history;
 			t_history.characterNo = characterNo;
-			t_history.level = result_data["level"].asInt();
-			t_history.nextPrice = result_data["nextPrice"].asInt();
+			t_history.level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
+			t_history.nextPrice = mySGD->getUserdataCharNextPrice();//result_data["nextPrice"].asInt();
 			t_history.power = result_data["power"].asInt();
 			t_history.nextPower = result_data["nextPower"].asInt();
 			t_history.prevPower = result_data["prevPower"].asInt();
-			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+			t_history.isMaxLevel = mySGD->getUserdataCharIsMaxLevel();//result_data["isMaxLevel"].asBool();
 			
 			character_historys.push_back(t_history);
 		}
@@ -3189,6 +3212,12 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "highPiece";
 	else if(t_type == kUserdataType_onlyOneBuyPack)
 		return_value = "onlyOneBuyPack";
+	else if(t_type == kUserdataType_characterLevel)
+		return_value = "charLevel";
+	else if(t_type == kUserdataType_characterNextPrice)
+		return_value = "nextPrice";
+	else if(t_type == kUserdataType_characterIsMaxLevel)
+		return_value = "isMaxLevel";
 	
 	else if(t_type == kUserdataType_endlessData_ingWin)
 		return_value = "ing_win";
@@ -3299,6 +3328,12 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		
 		if(i == kUserdataType_selectedCharNO)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
+//		else if(i == kUserdataType_characterLevel)
+//			initCharacterLevel(userdata_storage[(UserdataType)i].getV());
+//		else if(i == kUserdataType_characterNextPrice)
+//			initCharacterNextPrice(userdata_storage[(UserdataType)i].getV());
+//		else if(i == kUserdataType_characterIsMaxLevel)
+//			initCharacterIsMaxLevel(userdata_storage[(UserdataType)i].getV());
 	}
 	
 	setIntroducerID(result_data.get("introducerID", 0).asInt64());
@@ -3561,7 +3596,7 @@ int StarGoldData::getAppVersion()
 
 void StarGoldData::myInit()
 {
-	is_hell_mode_enabled = false;
+	is_hell_mode_enabled = true;
 	
 	is_option_tutorial = false;
 	
@@ -3997,6 +4032,44 @@ void StarGoldData::setUserdataSelectedCharNO(int t_i)
 	}
 }
 int StarGoldData::getUserdataSelectedCharNO(){	return userdata_storage[kUserdataType_selectedCharNO].getV();	}
+
+void StarGoldData::setUserdataCharLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_characterLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_characterLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataCharLevel(){	return userdata_storage[kUserdataType_characterLevel].getV();	}
+
+void StarGoldData::setUserdataCharNextPrice(int t_i)
+{
+	if(userdata_storage[kUserdataType_characterNextPrice].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_characterNextPrice;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataCharNextPrice(){	return userdata_storage[kUserdataType_characterNextPrice].getV();	}
+void StarGoldData::setUserdataCharIsMaxLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_characterIsMaxLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_characterIsMaxLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataCharIsMaxLevel(){	return userdata_storage[kUserdataType_characterIsMaxLevel].getV();	}
 
 void StarGoldData::setUserdataEndlessIngWin(int t_i)
 {

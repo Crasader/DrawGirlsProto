@@ -22,6 +22,7 @@
 #include "AchieveNoti.h"
 #include "TypingBox.h"
 #include "JoystickPositionSelectPopup.h"
+#include "ASPopupView.h"
 
 void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, function<void(IntPoint, TutoMapType)> t_setMapData, int t_height)
 {
@@ -2196,12 +2197,14 @@ void PlayTutorial::nextStep()
 //											  }));
 											  
 											  
+											  bool is_achieve = false;
 											  AchievementCode i = kAchievementCode_tutorial;
 											  
 											  if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
 											  {
 												  if(!myAchieve->isNoti(AchievementCode(i)))
 												  {
+													  is_achieve = true;
 													  myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 													  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
 													  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
@@ -2247,25 +2250,35 @@ void PlayTutorial::nextStep()
 											  {
 												  if(mySGD->is_option_tutorial)
 												  {
-													  mySGD->setNextSceneName("mainflow");
-													  
-													  AudioEngine::sharedInstance()->stopSound();
-													  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
-													  
-													  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
-													  CCNode* t_main_node = loading_tip->getChildByTag(9999);
-													  if(t_main_node)
+													  if(is_achieve)
 													  {
-														  t_main_node->setScale(myDSH->screen_convert_rate);
-														  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+														  t_loading = LoadingLayer::create(-9999, true);
+														  addChild(t_loading, 9999);
+														  t_scenario_node = scenario_node;
+														  myAchieve->updateAchieve(json_selector(this, PlayTutorial::resultAchieve));
 													  }
-													  
-													  addChild(loading_tip, 999);
-													  
-													  addChild(KSTimer::create(0.1f, [=]()
-																			   {
-																				   scenario_node->removeFromParent();
-																			   }));
+													  else
+													  {
+														  mySGD->setNextSceneName("mainflow");
+														  
+														  AudioEngine::sharedInstance()->stopSound();
+														  AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+														  
+														  LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+														  CCNode* t_main_node = loading_tip->getChildByTag(9999);
+														  if(t_main_node)
+														  {
+															  t_main_node->setScale(myDSH->screen_convert_rate);
+															  t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+														  }
+														  
+														  addChild(loading_tip, 999);
+														  
+														  addChild(KSTimer::create(0.1f, [=]()
+																				   {
+																					   scenario_node->removeFromParent();
+																				   }));
+													  }
 												  }
 												  else
 												  {
@@ -2328,6 +2341,62 @@ void PlayTutorial::nextStep()
 							  }));
 						  }));
 					  }, CCSizeMake(350,100), ccp(0,-110), 12, true);
+	}
+}
+
+void PlayTutorial::resultAchieve(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->network_check_cnt = 0;
+		
+		t_loading->removeFromParent();
+		
+		mySGD->setNextSceneName("mainflow");
+		
+		AudioEngine::sharedInstance()->stopSound();
+		AudioEngine::sharedInstance()->unloadEffectScene("playtutorial");
+		
+		LoadingTipScene* loading_tip = LoadingTipScene::getLoadingTipSceneLayer();
+		CCNode* t_main_node = loading_tip->getChildByTag(9999);
+		if(t_main_node)
+		{
+			t_main_node->setScale(myDSH->screen_convert_rate);
+			t_main_node->setPositionY(t_main_node->getPositionY()-160+myDSH->ui_center_y);
+		}
+		
+		addChild(loading_tip, 999);
+		
+		addChild(KSTimer::create(0.1f, [=]()
+								 {
+									 t_scenario_node->removeFromParent();
+								 }));
+	}
+	else
+	{
+		mySGD->network_check_cnt++;
+		
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView* alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4), [=](){
+				myAchieve->updateAchieve(json_selector(this, PlayTutorial::resultAchieve));
+			}, 1);
+			
+			//											  ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+			//												  tryTransaction(t_loading);
+			//											  });
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 myAchieve->updateAchieve(json_selector(this, PlayTutorial::resultAchieve));
+									 }));
+		}
 	}
 }
 

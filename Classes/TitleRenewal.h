@@ -189,6 +189,7 @@ private:
 	int splash_ing_cnt;
 	
 	int card_data_version;
+	int hell_data_version;
 	
 	void loadCounting(CCObject* sender);
 	

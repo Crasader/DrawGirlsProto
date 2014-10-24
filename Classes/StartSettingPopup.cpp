@@ -800,7 +800,7 @@ void StartSettingPopup::setMain()
 		gacha_item->addChild(gacha_label);
 	}
 	
-	if(mySGD->getItemGachaOpenStage() > mySD->getSilType())
+	if(mySGD->is_hell_mode || mySGD->getItemGachaOpenStage() > mySD->getSilType())
 	{
 		item_gacha_menu->setEnabled(false);
 		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
@@ -2279,6 +2279,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=]()
 		{
+			selected_gacha_item = (ITEM_CODE)gacha_item_type;
+			mySGD->gacha_item = selected_gacha_item;
+			
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 				buy_button->setPrice(PriceTypePass4, 0);
 			else
@@ -3280,6 +3283,9 @@ void StartSettingPopup::goToGame()
 	
 	mySGD->resetLabels();
 	myGD->resetGameData();
+	
+	if(!mySGD->is_hell_mode) // 헬모드가 아닐땐 사용해서 초기화가 됨
+		mySGD->gacha_item = kIC_emptyBegin;
 	
 	mySGD->setGameStart();
 	

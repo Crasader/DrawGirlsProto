@@ -83,6 +83,7 @@ public:
 	void removeAllPattern();
 private:
 	
+	int clear_condition;
 	SW_Parent* mySW;
 	
 	CCPoint startFirePosition;

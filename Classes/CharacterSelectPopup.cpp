@@ -145,22 +145,46 @@ bool CharacterSelectPopup::init()
 	for(int i=0;i<hell_list_cnt;i++)
 	{
 		int stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
-		
 		int card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1);
-		if(mySGD->isHasGottenCards(card_number))
+		int character_number = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
+		
+		bool is_found = false;
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int j=0;!is_found && j<history_size;j++)
 		{
-			int character_number = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
-			
-			for(int j=0;j<list_cnt;j++)
+			CharacterHistory t_history = mySGD->getCharacterHistory(j);
+			if(t_history.characterNo.getV() == character_number)
 			{
-				if(history_list[j].m_number == character_number)
+				if(t_history.level.getV() > 0)
 				{
-					history_list[j].is_have = true;
-					history_list[j].m_card = card_number;
-					break;
+					for(int j=0;j<list_cnt;j++)
+					{
+						if(history_list[j].m_number == character_number)
+						{
+							history_list[j].is_have = true;
+							history_list[j].m_card = card_number;
+							break;
+						}
+					}
 				}
 			}
 		}
+		
+		
+//		if(mySGD->isHasGottenCards(card_number))
+//		{
+//			int character_number = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
+//			
+//			for(int j=0;j<list_cnt;j++)
+//			{
+//				if(history_list[j].m_number == character_number)
+//				{
+//					history_list[j].is_have = true;
+//					history_list[j].m_card = card_number;
+//					break;
+//				}
+//			}
+//		}
 	}
 	
 	selected_character_number = mySGD->getSelectedCharacterHistory().characterNo.getV();
@@ -286,24 +310,24 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		
 		if(history_list[idx].m_card != -1)
 		{
-			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
-			t_clipping->setAlphaThreshold(0.1f);
-			
-			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
-			t_clipping->addChild(t_card);
-			t_card->setScale(0.2f);
-			
-			t_clipping->setPosition(ccp(25,27));
-			t_clipping->setScale(0.5f);
-			inner_back->addChild(t_clipping);
-			
-			CCSprite* t_frame = CCSprite::create("hell_frame.png");
-			t_frame->setPosition(ccp(25,27));
-			inner_back->addChild(t_frame);
+//			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+//			t_clipping->setAlphaThreshold(0.1f);
+//			
+//			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
+//			t_clipping->addChild(t_card);
+//			t_card->setScale(0.2f);
+//			
+//			t_clipping->setPosition(ccp(25,27));
+//			t_clipping->setScale(0.5f);
+//			inner_back->addChild(t_clipping);
+//			
+//			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+//			t_frame->setPosition(ccp(25,27));
+//			inner_back->addChild(t_frame);
 			
 			StyledLabelTTF* comment_label = StyledLabelTTF::create(history_list[idx].m_comment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-			comment_label->setAnchorPoint(ccp(0,0.5f));
-			comment_label->setPosition(ccp(45,27));
+			comment_label->setAnchorPoint(ccp(0.5f,0.5f));
+			comment_label->setPosition(ccp(inner_back->getContentSize().width/2.f,27));
 			inner_back->addChild(comment_label);
 		}
 		

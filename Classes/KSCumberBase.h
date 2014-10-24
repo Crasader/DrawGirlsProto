@@ -156,6 +156,8 @@ public:
 	virtual void checkConfine(float dt) = 0;
 	virtual bool init();
 	
+	int clear_condition;
+	
 	void startMoving();
 	void stopMoving();
 	void crashMapForIntPoint(IntPoint t_p);

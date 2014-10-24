@@ -265,6 +265,9 @@ public:
 	bool is_setted_jack;
 	bool getEmptyRandomPoint(IntPoint* point, float radius);
 	
+	bool is_changed_map;
+	bool is_need_resetRects;
+	
 private:
 	
 	SetMapType recent_map_type;

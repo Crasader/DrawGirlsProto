@@ -597,7 +597,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		return invalid;
 	}
 	Json::Value patternData;
-	bool forceSubCreateCondition = mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0;
+	bool forceSubCreateCondition = clear_condition == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0;
 	// Attack Queue 가 있으면 patternD 무시하고 Attack Queue 에서 하나하나 빼서 씀.
 	if(cb->getAttackQueue().empty() == false && cb->getAttackQueue().size()>0)
 	{
@@ -1677,6 +1677,8 @@ void MissileParent::initParticle( CCPoint startPosition, ccColor4F t_color, floa
 void MissileParent::myInit( CCNode* boss_eye )
 {
 	//chargeArray = new CCArray(1);
+	
+	clear_condition = NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i);
 	
 	tickingArray = NULL;
 	
