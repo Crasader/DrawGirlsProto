@@ -4438,11 +4438,20 @@ void Maingame::refreshThumb()
 {
 	if(!myMS->isVisible())
 		return;
-	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
-	thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
-	t_vs->visitForThumb();
-	thumb_texture->end();
 	
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//    start = std::chrono::system_clock::now();
+	
+	if(myGD->is_changed_map)
+	{
+		VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
+		thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
+		t_vs->visitForThumb();
+		thumb_texture->end();
+		
+		t_vs->visit();
+		myGD->is_changed_map = false;
+	}
 	
 	vector<KSCumberBase*> boss_array = myGD->getMainCumberVector();
 	while(boss_thumbs->count() > boss_array.size())
@@ -4494,7 +4503,9 @@ void Maingame::refreshThumb()
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	
-	t_vs->visit();
+//	end = std::chrono::system_clock::now();
+//	std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLog("refreshThumb time : %f", elapsed_seconds.count());
 }
 
 void Maingame::refreshReplayThumb(int temp_time)
@@ -4506,12 +4517,19 @@ void Maingame::refreshReplayThumb(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() <= play_index || mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)][play_index].asInt() > temp_time)
 		return;
 	
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//	start = std::chrono::system_clock::now();
+	
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
 	replay_thumb_texture->beginWithClear(0, 0.f, 0, 0.f);
 	t_vs->replayVisitForThumb(temp_time);
 	replay_thumb_texture->end();
 	
 	t_vs->visit();
+	
+//	end = std::chrono::system_clock::now();
+//	std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLog("refreshReplayThumb time : %f", elapsed_seconds.count());
 }
 
 void Maingame::refreshReplayScore(int temp_time)

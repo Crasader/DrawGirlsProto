@@ -556,6 +556,13 @@ std::vector<IntRectSTL> MapScanner::getGainRects(mapType (*gainMap)[217])
 }
 void MapScanner::resetRects(bool is_after_scanmap)
 {
+	if(!is_after_scanmap)
+	{
+		myGD->is_need_resetRects = true;
+		return;
+	}
+	myGD->is_changed_map = true;
+	
 	chrono::time_point<chrono::system_clock> start, end;
 	chrono::duration<double> elapsed_seconds;
 	start = chrono::system_clock::now();
@@ -1788,63 +1795,8 @@ InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
 
 void InvisibleSprite::myInit( const char* filename, bool isPattern )
 {
-//	CCSpriteBatchNode* pattern_node = CCSpriteBatchNode::create("ingame_side_pattern.png");
-//	pattern_node->setPosition(ccp(0,0));
-//	addChild(pattern_node);
-//	
-//	CCTexture2D* pattern_texture = pattern_node->getTexture();
-//	CCSize pattern_size = pattern_texture->getContentSize();
-//	
-//	for(int j=0;j<14;j++)
-//	{
-//		for(int i=0;i<6;i++)
-//		{
-//			CCSprite* t_pattern = CCSprite::createWithTexture(pattern_texture);
-//			t_pattern->setAnchorPoint(ccp(0,0));
-//			t_pattern->setPosition(ccp(i*pattern_size.width, j*pattern_size.height));
-//			pattern_node->addChild(t_pattern);
-//		}
-//		
-//		CCSprite* t_pattern = CCSprite::createWithTexture(pattern_texture, CCRectMake(0, 0, 320-6*pattern_size.width, pattern_size.height));
-//		t_pattern->setAnchorPoint(ccp(0,0));
-//		t_pattern->setPosition(ccp(6*pattern_size.width, j*pattern_size.height));
-//		pattern_node->addChild(t_pattern);
-//	}
-//	
-//	for(int i=0;i<6;i++)
-//	{
-//		CCSprite* t_pattern = CCSprite::createWithTexture(pattern_texture, CCRectMake(0, 0, pattern_size.width, 430-14*pattern_size.height));
-//		t_pattern->setAnchorPoint(ccp(0,0));
-//		t_pattern->setPosition(ccp(i*pattern_size.width, 14*pattern_size.height));
-//		pattern_node->addChild(t_pattern);
-//	}
-//	
-//	CCSprite* t_pattern = CCSprite::createWithTexture(pattern_texture, CCRectMake(0, 0, 320-6*pattern_size.width, 430-14*pattern_size.height));
-//	t_pattern->setAnchorPoint(ccp(0,0));
-//	t_pattern->setPosition(ccp(6*pattern_size.width, 14*pattern_size.height));
-//	pattern_node->addChild(t_pattern);
-	
-	CCSprite *sten = CCSprite::createWithTexture(mySIL->addImage(filename));
-	CCSprite *sil = CCSprite::create("whitePaper.png");
-	sil->setScaleY(1.5);
-	sil->setScaleX(0.75);
-	
-	CCClippingNode *clip = CCClippingNode::create();
-	clip->setAlphaThreshold(0.1f);
-	sten->setOpacityModifyRGB(true);
-	clip->setPosition(ccp(160,215));
-	clip->setStencil(sten);
-	clip->setTag(8706);
-	this->addChild(clip);
-	clip->addChild(sil);
-	sil->setTag(8706);
-	sil->getTexture()->setAntiAliasTexParameters();
-	sten->getTexture()->setAntiAliasTexParameters();
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	sil->setColor(ccc3(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d)));
-	clip->setVisible(false);
-	//clip->getTexture()->setAntiAliasTexParameters();
-	//
+	
 	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
 	t_spr->setPosition(ccp(160,215));
 	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
@@ -1854,19 +1806,6 @@ void InvisibleSprite::myInit( const char* filename, bool isPattern )
 	// ######################## hs code bbu woo~ ##############################
 	
 	addChild(t_spr);
-	
-//	myTR->addAliveNode(t_spr, [=]()
-//					   {
-//						   t_spr->setNonEffect();
-//						   t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
-//					   });
-	
-//	CCRenderTexture* t_render = CCRenderTexture::create(320, 430);
-//	t_render->setPosition(ccp(160,215));
-//	t_render->beginWithClear(0, 0, 0, 0);
-//	t_spr->visit();
-//	t_render->end();
-//	addChild(t_render);
 }
 
 VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number )
@@ -1898,6 +1837,12 @@ void VisibleSprite::visit()
 //	std::chrono::time_point<std::chrono::system_clock> start, end;
 //	start = std::chrono::system_clock::now();
 
+	if(myGD->is_need_resetRects)
+	{
+		myGD->communication("MS_resetRects", true);
+		myGD->is_need_resetRects = false;
+	}
+	
 	light_img->draw();
 	
 	draw();
@@ -1906,7 +1851,7 @@ void VisibleSprite::visit()
 	
 //	end = std::chrono::system_clock::now();
 //	std::chrono::duration<double> elapsed_seconds = end-start;
-//	CCLOG("visit time : %f", elapsed_seconds.count());
+//	CCLog("visit time : %f", elapsed_seconds.count());
 	
 //	unsigned int loopCnt = drawRects->count();
 //	float game_node_scale = myGD->Fcommunication("Main_getGameNodeScale");
@@ -2063,8 +2008,9 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 		return;
 		
 	
+	memset(replay_draw_array, 0, sizeof(replay_draw_array));
 	
-	int draw_array[162][217] = {mapEmpty,};
+//	replay_draw_array[162][217] = {mapEmpty,};
 	Json::Value map_data = mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapData)][play_index];
 	for(int y=0;y<map_data.size();y++) // y
 	{
@@ -2077,17 +2023,16 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 			if(is_draw)
 				for(int i=mapWidthInnerBegin+x*5;i<mapWidthInnerBegin+(x+1)*5;++i)
 					for(int j=mapHeightInnerBegin+y*5;j<mapHeightInnerBegin+(y+1)*5;j++)
-						draw_array[i][j] = mapOldline;
+						replay_draw_array[i][j] = mapOldline;
 		}
 	}
 	
-	
-	std::vector<IntRectSTL> rects;
+	rects.clear();
 	for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 	{
 		for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 		{
-			if(draw_array[i][j] == mapOldline)
+			if(replay_draw_array[i][j] == mapOldline)
 			{
 				IntPoint origin = IntPoint(i, j);
 				IntSize size = IntSize(0, 0);
@@ -2121,14 +2066,14 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 						if(t_ms.direction == directionRight && !isRighter)
 							continue;
 						
-						if(draw_array[t_ms.origin.x][t_ms.origin.y] == mapOldline)			draw_array[t_ms.origin.x][t_ms.origin.y] = mapScaningCheckLine;
+						if(replay_draw_array[t_ms.origin.x][t_ms.origin.y] == mapOldline)			replay_draw_array[t_ms.origin.x][t_ms.origin.y] = mapScaningCheckLine;
 						
 						if(t_ms.direction == directionUp)
 						{
 							if(isUpper)
 							{
 								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-								if(n_msUp.origin.isInnerMap() && draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
+								if(n_msUp.origin.isInnerMap() && replay_draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
 									nextLoopArray.push(n_msUp);
 								else		upable = false;
 							}
@@ -2138,7 +2083,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 							if(isRighter)
 							{
 								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-								if(n_msRight.origin.isInnerMap() && draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
+								if(n_msRight.origin.isInnerMap() && replay_draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
 									nextLoopArray.push(n_msRight);
 								else		rightable = false;
 							}
@@ -2148,7 +2093,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 							if(isUpper)
 							{
 								IntMoveState n_msUp = IntMoveState(t_ms.origin.x, t_ms.origin.y+1, directionUp);
-								if(n_msUp.origin.isInnerMap() && draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
+								if(n_msUp.origin.isInnerMap() && replay_draw_array[n_msUp.origin.x][n_msUp.origin.y] == mapOldline)
 									nextLoopArray.push(n_msUp);
 								else		upable = false;
 							}
@@ -2156,7 +2101,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 							if(isRighter)
 							{
 								IntMoveState n_msRight = IntMoveState(t_ms.origin.x+1, t_ms.origin.y, directionRight);
-								if(n_msRight.origin.isInnerMap() && draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
+								if(n_msRight.origin.isInnerMap() && replay_draw_array[n_msRight.origin.x][n_msRight.origin.y] == mapOldline)
 									nextLoopArray.push(n_msRight);
 								else		rightable = false;
 							}
@@ -2164,7 +2109,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 							if(upable && rightable)
 							{
 								IntMoveState n_msRightUp = IntMoveState(t_ms.origin.x+1, t_ms.origin.y+1, directionRightUp);
-								if(n_msRightUp.origin.isInnerMap() && draw_array[n_msRightUp.origin.x][n_msRightUp.origin.y] == mapOldline)
+								if(n_msRightUp.origin.isInnerMap() && replay_draw_array[n_msRightUp.origin.x][n_msRightUp.origin.y] == mapOldline)
 									nextLoopArray.push(n_msRightUp);
 								else		rightable = false;
 							}
@@ -2198,7 +2143,7 @@ void VisibleSprite::replayVisitForThumb(int temp_time)
 			safety_img->draw();
 
 	
-	visit();
+//	visit();
 	
 	mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_playIndex)] = play_index+1;
 	

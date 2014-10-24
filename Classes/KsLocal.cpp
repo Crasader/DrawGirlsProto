@@ -1137,13 +1137,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 마스터피스를 획득하시면 됩니다.";
 	obj[LK::kMyLocalKey_characterSelected] = "선택중";
 	obj[LK::kMyLocalKey_characterSelect] = "선  택";
-	obj[LK::kMyLocalKey_takeCharacterCard] = "캐릭터 카드 획득!";
-	obj[LK::kMyLocalKey_haveCharacterCard] = "<font newline=16>이미 획득한 카드 입니다.</font><font newline=16>헬모드에서는 다양한 캐릭터 카드를</font><font>획득할 수 있어요.</font>";
+	obj[LK::kMyLocalKey_takeCharacterCard] = "캐릭터 획득!";
+	obj[LK::kMyLocalKey_haveCharacterCard] = "<font newline=16>이미 획득한 캐릭터입니다.</font><font newline=16>헬모드에서는 다양한 캐릭터를</font><font>획득할 수 있어요.</font>";
 	obj[LK::kMyLocalKey_hellTitleGold] = "골드";
 	obj[LK::kMyLocalKey_hellTitleTime] = "타임";
 	obj[LK::kMyLocalKey_hellContentTime] = "%s sec";
 	obj[LK::kMyLocalKey_hellTakeCharacter] = "획득!";
-	obj[LK::kMyLocalKey_failHellMode] = "<font newline=16>이런.. 조금 더 힘내요!</font><font color=961>클리어시 캐릭터카드</font><font newline=16>를</font><font>획득할 수 있어요!</font>";
+	obj[LK::kMyLocalKey_failHellMode] = "<font newline=16>이런.. 조금 더 힘내요!</font><font color=961>클리어시 캐릭터</font><font newline=16>를</font><font>획득할 수 있어요!</font>";
 	obj[LK::kMyLocalKey_needHaveCharacterCard] = "<font strokecolor=000 strokesize=0.5 strokeopacity=60 newline=15>캐릭터카드를</font><font strokecolor=000 strokesize=0.5 strokeopacity=60>획득하세요!</font>";
 	obj[LK::kMyLocalKey_doNotOpenTodoay] = "오늘 하루 그만 보기";
 	obj[LK::kMyInfo]="내정보";

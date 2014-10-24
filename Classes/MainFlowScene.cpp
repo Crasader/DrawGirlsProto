@@ -3634,8 +3634,7 @@ void MainFlowScene::setBottom()
 		for(int i=0;!is_hell_open && i<hell_count;i++)
 		{
 			int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
-			PieceHistory t_history = mySGD->getPieceHistory(open_piece_number);
-			if(t_history.is_clear[0].getV() || t_history.is_clear[1].getV() || t_history.is_clear[2].getV() || t_history.is_clear[3].getV())
+			if(mySGD->isClearPiece(open_piece_number))
 				is_hell_open = true;
 		}
 		

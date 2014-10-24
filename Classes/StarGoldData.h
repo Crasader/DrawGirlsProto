@@ -228,6 +228,9 @@ enum UserdataType
 	kUserdataType_highScore,
 	kUserdataType_highPiece,
 	kUserdataType_onlyOneBuyPack,
+	kUserdataType_characterLevel,
+	kUserdataType_characterNextPrice,
+	kUserdataType_characterIsMaxLevel,
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
@@ -543,6 +546,9 @@ public:
 	void initPieceHistory(Json::Value history_list);
 	
 	void initSelectedCharacterNo(int t_i);
+	void initCharacterLevel(int t_i);
+	void initCharacterNextPrice(int t_i);
+	void initCharacterIsMaxLevel(int t_i);
 	CharacterHistory getSelectedCharacterHistory();
 	int getCharacterHistorySize();
 	CharacterHistory getCharacterHistory(int t_index);
@@ -713,6 +719,12 @@ public:
 	int getUserdataOnlyOneBuyPack();
 	void setUserdataSelectedCharNO(int t_i);
 	int getUserdataSelectedCharNO();
+	void setUserdataCharLevel(int t_i);
+	int getUserdataCharLevel();
+	void setUserdataCharNextPrice(int t_i);
+	int getUserdataCharNextPrice();
+	void setUserdataCharIsMaxLevel(int t_i);
+	int getUserdataCharIsMaxLevel();
 	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();

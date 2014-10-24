@@ -68,6 +68,7 @@ bool TitleRenewalScene::init()
 	is_preloaded_effect = false;
 	
 	card_data_version = -1;
+	hell_data_version = -1;
 	
 	is_downloading = false;
 	
@@ -1290,7 +1291,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		NSDS_SI(kSDS_GI_hellMode_version_i, result_data["version"].asInt(), false);
+		hell_data_version = result_data["version"].asInt();
 		
 		Json::Value list_data = result_data["list"];
 		int list_count = list_data.size();
@@ -4304,7 +4305,10 @@ void TitleRenewalScene::successDownloadAction()
 void TitleRenewalScene::endingCheck()
 {
 	if(card_data_version != -1)
-		NSDS_SI(kSDS_GI_card_version_i, card_data_version);
+		NSDS_SI(kSDS_GI_card_version_i, card_data_version, false);
+	
+	if(hell_data_version != -1)
+		NSDS_SI(kSDS_GI_hellMode_version_i, hell_data_version, false);
 	
 	if(puzzle_download_list.size() > 0)
 		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);

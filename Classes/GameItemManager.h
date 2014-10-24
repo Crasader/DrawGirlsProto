@@ -248,7 +248,7 @@ private:
 	void myInit();
 };
 
-class FloatingCoin : public CCNode
+class FloatingCoin : public CCSprite
 {
 public:
 	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
@@ -275,7 +275,7 @@ private:
 	
 	int keeping_count;
 	
-	CCSprite* coin_img;
+//	CCSprite* coin_img;
 	
 	float start_speed;
 	
@@ -297,6 +297,8 @@ private:
 	void startTing();
 	void ting();
 	
+	float ting_y;
+	
 	function<void(CCPoint)> take_func;
 	void takeIt();
 	
@@ -306,7 +308,7 @@ private:
 class FloatingCoinCreator : public CCNode
 {
 public:
-	static FloatingCoinCreator* create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
+	static FloatingCoinCreator* create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 private:
 	int m_frame;
@@ -321,7 +323,7 @@ private:
 	
 	void startCreate();
 	void creating();
-	void myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take);
+	void myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take);
 };
 
 class FloatingCoinParent : public CCNode
@@ -335,12 +337,30 @@ public:
 	void startClearFloatCoin(float t_percent);
 	
 private:
-	CCNode* coin_node;
+	CCSpriteBatchNode* coin_node;
 	CCNode* creator_node;
 	
 	function<void(CCPoint)> take_func;
 	
 	void myInit(function<void(CCPoint)> t_take_func);
+};
+
+class TakeEffectManager : public CCNode
+{
+public:
+	static TakeEffectManager* create();
+	CCSprite* t_4_1;
+	CCSprite* t_4_2;
+	CCSprite* t_1_1;
+	CCSprite* t_2;
+	CCSprite* t_5;
+	CCSprite* t_1_2;
+	CCSprite* t_3;
+	CCSprite* t_7;
+	
+	void removeMyAction();
+	void startAnimation();
+private:
 };
 
 class GameItemManager : public CCNode, public CCBAnimationManagerDelegate
@@ -364,6 +384,7 @@ public:
 	void showTakeItemEffect(CCPoint t_p);
 	
 private:
+	CCSpriteBatchNode* take_effect_node;
 	
 	int counting_value;
 	int create_counting_value;

@@ -297,6 +297,9 @@ public:
 private:
 	std::vector<IntRectSTL>* drawRects;
 	
+	std::vector<IntRectSTL> rects;
+	int replay_draw_array[162][217];
+	
 	Vertex3D* m_vertices;
 //	Vertex3D* m_textCoords;
 	ccTex2F* m_textCoords;
