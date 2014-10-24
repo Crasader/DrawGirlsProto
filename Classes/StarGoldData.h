@@ -229,8 +229,6 @@ enum UserdataType
 	kUserdataType_highPiece,
 	kUserdataType_onlyOneBuyPack,
 	kUserdataType_characterLevel,
-	kUserdataType_characterNextPrice,
-	kUserdataType_characterIsMaxLevel,
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
@@ -244,6 +242,12 @@ enum UserdataType
 	kUserdataType_achieve_perfect,
 	kUserdataType_achieve_itemBuyCount,
 	kUserdataType_achieve_seqAttendance,
+	
+	kUserdataType_missileInfo_nextPrice,
+	kUserdataType_missileInfo_power,
+	kUserdataType_missileInfo_nextPower,
+	kUserdataType_missileInfo_prevPower,
+	kUserdataType_missileInfo_isMaxLevel,
 	
 	kUserdataType_end
 };
@@ -548,6 +552,9 @@ public:
 	void initSelectedCharacterNo(int t_i);
 	void initCharacterLevel(int t_i);
 	void initCharacterNextPrice(int t_i);
+	void initCharacterPower(int t_i);
+	void initCharacterNextPower(int t_i);
+	void initCharacterPrevPower(int t_i);
 	void initCharacterIsMaxLevel(int t_i);
 	CharacterHistory getSelectedCharacterHistory();
 	int getCharacterHistorySize();
@@ -721,10 +728,6 @@ public:
 	int getUserdataSelectedCharNO();
 	void setUserdataCharLevel(int t_i);
 	int getUserdataCharLevel();
-	void setUserdataCharNextPrice(int t_i);
-	int getUserdataCharNextPrice();
-	void setUserdataCharIsMaxLevel(int t_i);
-	int getUserdataCharIsMaxLevel();
 	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();
@@ -748,6 +751,17 @@ public:
 	int getUserdataAchieveSeqAttendance();
 	void setUserdataAchieveItemBuyCount(int t_i);
 	int getUserdataAchieveItemBuyCount();
+	
+	void setUserdataMissileInfoNextPrice(int t_i);
+	int getUserdataMissileInfoNextPrice();
+	void setUserdataMissileInfoPower(int t_i);
+	int getUserdataMissileInfoPower();
+	void setUserdataMissileInfoNextPower(int t_i);
+	int getUserdataMissileInfoNextPower();
+	void setUserdataMissileInfoPrevPower(int t_i);
+	int getUserdataMissileInfoPrevPower();
+	void setUserdataMissileInfoIsMaxLevel(int t_i);
+	int getUserdataMissileInfoIsMaxLevel();
 	
 	string getInappProduct(int t_index);
 	string getEventInappProduct(int t_index);
@@ -933,6 +947,7 @@ public:
 	CommandParam getChangeUserdataParam(jsonSelType t_callback);
 	void initUserdata(Json::Value result_data);
 	void clearChangeUserdata();
+	void refreshUserdata(UserdataType t_type, int t_i);
 	
 	bool isPossibleShowPurchasePopup(PurchaseGuideType t_type);
 	void showPurchasePopup(PurchaseGuideType t_type);

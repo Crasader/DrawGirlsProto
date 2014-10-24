@@ -58,6 +58,7 @@ private:
 	int before_damage;
 	
 	void upgradeAction(CCObject* sender, CCControlEvent t_event);
+	void resultLevelUp(Json::Value result_data);
 	void resultSaveUserData(Json::Value result_data);
 	void setAfterUpgrade();
 };

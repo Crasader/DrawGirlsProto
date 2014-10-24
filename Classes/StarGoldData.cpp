@@ -2212,6 +2212,27 @@ void StarGoldData::initCharacterNextPrice(int t_i)
 		character_historys[i].nextPrice = t_i;
 	}
 }
+void StarGoldData::initCharacterPower(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].power = t_i;
+	}
+}
+void StarGoldData::initCharacterNextPower(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].nextPower = t_i;
+	}
+}
+void StarGoldData::initCharacterPrevPower(int t_i)
+{
+	for(int i=0;i<character_historys.size();i++)
+	{
+		character_historys[i].prevPower = t_i;
+	}
+}
 void StarGoldData::initCharacterIsMaxLevel(int t_i)
 {
 	for(int i=0;i<character_historys.size();i++)
@@ -2268,11 +2289,11 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			if(character_historys[i].characterNo.getV() == characterNo)
 			{
 				character_historys[i].level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
-				character_historys[i].nextPrice = mySGD->getUserdataCharNextPrice();//result_data["nextPrice"].asInt();
-				character_historys[i].power = result_data["power"].asInt();
-				character_historys[i].nextPower = result_data["nextPower"].asInt();
-				character_historys[i].prevPower = result_data["prevPower"].asInt();
-				character_historys[i].isMaxLevel = mySGD->getUserdataCharIsMaxLevel();//result_data["isMaxLevel"].asBool();
+				character_historys[i].nextPrice = mySGD->getUserdataMissileInfoNextPrice();//result_data["nextPrice"].asInt();
+				character_historys[i].power = mySGD->getUserdataMissileInfoPower();
+				character_historys[i].nextPower = mySGD->getUserdataMissileInfoNextPower();
+				character_historys[i].prevPower = mySGD->getUserdataMissileInfoPrevPower();
+				character_historys[i].isMaxLevel = mySGD->getUserdataMissileInfoIsMaxLevel();//result_data["isMaxLevel"].asBool();
 				is_found = true;
 			}
 		}
@@ -2282,11 +2303,11 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			CharacterHistory t_history;
 			t_history.characterNo = characterNo;
 			t_history.level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
-			t_history.nextPrice = mySGD->getUserdataCharNextPrice();//result_data["nextPrice"].asInt();
-			t_history.power = result_data["power"].asInt();
-			t_history.nextPower = result_data["nextPower"].asInt();
-			t_history.prevPower = result_data["prevPower"].asInt();
-			t_history.isMaxLevel = mySGD->getUserdataCharIsMaxLevel();//result_data["isMaxLevel"].asBool();
+			t_history.nextPrice = mySGD->getUserdataMissileInfoNextPrice();//result_data["nextPrice"].asInt();
+			t_history.power = mySGD->getUserdataMissileInfoPower();
+			t_history.nextPower = mySGD->getUserdataMissileInfoNextPower();
+			t_history.prevPower = mySGD->getUserdataMissileInfoPrevPower();
+			t_history.isMaxLevel = mySGD->getUserdataMissileInfoIsMaxLevel();//result_data["isMaxLevel"].asBool();
 			
 			character_historys.push_back(t_history);
 		}
@@ -3213,11 +3234,7 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 	else if(t_type == kUserdataType_onlyOneBuyPack)
 		return_value = "onlyOneBuyPack";
 	else if(t_type == kUserdataType_characterLevel)
-		return_value = "charLevel";
-	else if(t_type == kUserdataType_characterNextPrice)
-		return_value = "nextPrice";
-	else if(t_type == kUserdataType_characterIsMaxLevel)
-		return_value = "isMaxLevel";
+		return_value = "level";
 	
 	else if(t_type == kUserdataType_endlessData_ingWin)
 		return_value = "ing_win";
@@ -3242,6 +3259,17 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "aItByCnt";
 	else if(t_type == kUserdataType_achieve_seqAttendance) // last
 		return_value = "aSeqAtd";
+	
+	else if(t_type == kUserdataType_missileInfo_nextPrice)
+		return_value = "nextPrice";
+	else if(t_type == kUserdataType_missileInfo_power)
+		return_value = "power";
+	else if(t_type == kUserdataType_missileInfo_nextPower)
+		return_value = "nextPower";
+	else if(t_type == kUserdataType_missileInfo_prevPower)
+		return_value = "prevPower";
+	else if(t_type == kUserdataType_missileInfo_isMaxLevel) // last
+		return_value = "isMaxLevel";
 	
 	return return_value;
 }
@@ -3321,6 +3349,20 @@ void StarGoldData::initUserdata(Json::Value result_data)
 				endless_my_victory = userdata_storage[(UserdataType)i].getV();
 			}
 		}
+		else if(i >= kUserdataType_missileInfo_nextPrice && i <= kUserdataType_missileInfo_isMaxLevel)
+		{
+			userdata_storage[(UserdataType)i] = result_data["missileInfo"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
+			if(i == kUserdataType_missileInfo_nextPrice)
+				initCharacterNextPrice(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_power)
+				initCharacterPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_nextPower)
+				initCharacterNextPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_prevPower)
+				initCharacterPrevPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_isMaxLevel)
+				initCharacterIsMaxLevel(userdata_storage[(UserdataType)i].getV());
+		}
 		else
 		{
 			userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
@@ -3328,15 +3370,30 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		
 		if(i == kUserdataType_selectedCharNO)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
-//		else if(i == kUserdataType_characterLevel)
-//			initCharacterLevel(userdata_storage[(UserdataType)i].getV());
-//		else if(i == kUserdataType_characterNextPrice)
-//			initCharacterNextPrice(userdata_storage[(UserdataType)i].getV());
-//		else if(i == kUserdataType_characterIsMaxLevel)
-//			initCharacterIsMaxLevel(userdata_storage[(UserdataType)i].getV());
+		else if(i == kUserdataType_characterLevel)
+			initCharacterLevel(userdata_storage[(UserdataType)i].getV());
 	}
 	
 	setIntroducerID(result_data.get("introducerID", 0).asInt64());
+}
+
+void StarGoldData::refreshUserdata(UserdataType t_type, int t_i)
+{
+	userdata_storage[t_type] = t_i;
+	if(t_type == kUserdataType_selectedCharNO)
+		initSelectedCharacterNo(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_characterLevel)
+		initCharacterLevel(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_nextPrice)
+		initCharacterNextPrice(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_power)
+		initCharacterPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_nextPower)
+		initCharacterNextPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_prevPower)
+		initCharacterPrevPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_isMaxLevel)
+		initCharacterIsMaxLevel(userdata_storage[t_type].getV());
 }
 
 bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
@@ -4046,31 +4103,6 @@ void StarGoldData::setUserdataCharLevel(int t_i)
 }
 int StarGoldData::getUserdataCharLevel(){	return userdata_storage[kUserdataType_characterLevel].getV();	}
 
-void StarGoldData::setUserdataCharNextPrice(int t_i)
-{
-	if(userdata_storage[kUserdataType_characterNextPrice].getV() != t_i)
-	{
-		is_changed_userdata = true;
-		ChangeUserdataValue t_change;
-		t_change.m_type = kUserdataType_characterNextPrice;
-		t_change.m_value = t_i;
-		changed_userdata_list.push_back(t_change);
-	}
-}
-int StarGoldData::getUserdataCharNextPrice(){	return userdata_storage[kUserdataType_characterNextPrice].getV();	}
-void StarGoldData::setUserdataCharIsMaxLevel(int t_i)
-{
-	if(userdata_storage[kUserdataType_characterIsMaxLevel].getV() != t_i)
-	{
-		is_changed_userdata = true;
-		ChangeUserdataValue t_change;
-		t_change.m_type = kUserdataType_characterIsMaxLevel;
-		t_change.m_value = t_i;
-		changed_userdata_list.push_back(t_change);
-	}
-}
-int StarGoldData::getUserdataCharIsMaxLevel(){	return userdata_storage[kUserdataType_characterIsMaxLevel].getV();	}
-
 void StarGoldData::setUserdataEndlessIngWin(int t_i)
 {
 	userdata_storage[kUserdataType_endlessData_ingWin] = t_i;
@@ -4197,6 +4229,66 @@ void StarGoldData::setUserdataAchieveItemBuyCount(int t_i)
 }
 int StarGoldData::getUserdataAchieveItemBuyCount(){	return userdata_storage[kUserdataType_achieve_itemBuyCount].getV();	}
 
+void StarGoldData::setUserdataMissileInfoNextPrice(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_nextPrice].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_nextPrice;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoNextPrice(){	return userdata_storage[kUserdataType_missileInfo_nextPrice].getV();	}
+void StarGoldData::setUserdataMissileInfoPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_power].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_power;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoPower(){	return userdata_storage[kUserdataType_missileInfo_power].getV();	}
+void StarGoldData::setUserdataMissileInfoNextPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_nextPower].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_nextPower;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoNextPower(){	return userdata_storage[kUserdataType_missileInfo_nextPower].getV();	}
+void StarGoldData::setUserdataMissileInfoPrevPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_prevPower].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_prevPower;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoPrevPower(){	return userdata_storage[kUserdataType_missileInfo_prevPower].getV();	}
+void StarGoldData::setUserdataMissileInfoIsMaxLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_isMaxLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_isMaxLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoIsMaxLevel(){	return userdata_storage[kUserdataType_missileInfo_isMaxLevel].getV();	}
 
 
 void StarGoldData::setDiaryDownUrl(string t_str){	diaryDownUrl = t_str.c_str();	}
