@@ -18,7 +18,7 @@
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "Jack.h"
-
+#include "EffectSprite.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -337,35 +337,26 @@ void MissileUnit3::move ()
 	if(afterRect.origin.y + afterRect.size.height / 2.f - jackPosition.y < 200 && shownWarning == false)
 	{
 		shownWarning = true;
-		CCSprite* vertical = CCSprite::create("lazer_sub.png");
-		vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		vertical->setColor(ccc3(255, 0, 0));
-		vertical->setScaleX(2.f);
-		vertical->setScaleY(0.25f);
-		vertical->setAnchorPoint(ccp(0.5f, 0.5f));
-		vertical->setRotation(90.f);
-		vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
 		
-		addChild(vertical);
-		CCSprite* feelMark = CCSprite::create("stone_warning.png");
-		feelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
-		addChild(feelMark);
-		addChild(KSTimer::create(1.f, [=]()
-														 {
-															 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
-																																			{
-																																				vertical->setOpacity(t);
-																																				feelMark->setOpacity(t);
-																																			}, [=](float t)
-																																			{
-																																				//																						 vertical->removeFromParent();
-																																				//																						 feelMark
-																																			}));
-														 }));
+		
 		
 		ProbSelector ps = {enableProb, 1.f - enableProb};
 		if(ps.getResult() == 1) // disable 확률 되면
 		{
+			
+			
+			EffectSprite* vertical = EffectSprite::create("lazer_sub.png");
+			vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			vertical->setColor(ccc3(255, 0, 0));
+			vertical->setScaleX(2.f);
+			vertical->setScaleY(0.25f);
+			vertical->setAnchorPoint(ccp(0.5f, 0.5f));
+			vertical->setRotation(90.f);
+			vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
+			vertical->setGray();
+			
+			addChild(vertical);
+			
 			CCSprite* cancelMark = CCSprite::create("stone_warning_cancel.png");
 			cancelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
 			addChild(cancelMark);
@@ -384,6 +375,36 @@ void MissileUnit3::move ()
 			unschedule(schedule_selector(MissileUnit3::move));
 			
 			
+		}
+		else
+		{
+			CCSprite* vertical = CCSprite::create("lazer_sub.png");
+			vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			vertical->setColor(ccc3(255, 0, 0));
+			vertical->setScaleX(2.f);
+			vertical->setScaleY(0.25f);
+			vertical->setAnchorPoint(ccp(0.5f, 0.5f));
+			vertical->setRotation(90.f);
+			vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
+			
+			addChild(vertical);
+			
+			
+			CCSprite* feelMark = CCSprite::create("stone_warning.png");
+			feelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
+			addChild(feelMark);
+			addChild(KSTimer::create(1.f, [=]()
+															 {
+																 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+																																				{
+																																					vertical->setOpacity(t);
+																																					feelMark->setOpacity(t);
+																																				}, [=](float t)
+																																				{
+																																					//																						 vertical->removeFromParent();
+																																					//																						 feelMark
+																																				}));
+															 }));
 		}
 //		CCLOG("warning!!");
 	}
@@ -1177,10 +1198,18 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	if(enable)
 	{
 		targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1.ccbi").first;
+		CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4.ccbi").first;
+		guideLine->setPosition(t_sp);
+		guideLine->setRotation(-inDegree);
+		addChild(guideLine);
 	}
 	else
 	{
 		targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1_2.ccbi").first;
+		CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4_1.ccbi").first;
+		guideLine->setPosition(t_sp);
+		guideLine->setRotation(-inDegree);
+		addChild(guideLine);
 	}
 	targetingImg->setPosition(t_sp);
 	
@@ -1189,10 +1218,6 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	addChild(targetingImg);
 
-	CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4.ccbi").first;
-	guideLine->setPosition(t_sp);
-	guideLine->setRotation(-inDegree);
-	addChild(guideLine);
 	
 	AudioEngine::sharedInstance()->playEffect("se_meteo_1.mp3");
 }
