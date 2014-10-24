@@ -70,13 +70,11 @@ void KSCumberBase::randomMoving(float dt)
 	
 	if(isMovable())
 	{
-		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
-		if(changeDirection == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.05)
 		{
 			m_directionAngleDegree += m_well512.GetValue(-4, +4);
 		}
-		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
-		if(sela == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.005)
 		{
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 		}
@@ -225,8 +223,7 @@ void KSCumberBase::straightMoving(float dt)
 	// 낮은 확률로 방향 전환...	
 	if(isMovable())
 	{
-		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
-		if(changeDirection == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.001)
 		{
 			m_directionAngleDegree += m_well512.GetValue(0, 360);
 		}
@@ -620,7 +617,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	if(isMovable())
 	{
 		int changeDirection = m_well512.GetValue(3);
-		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.05)
 		{
 			switch (changeDirection) {
 				case 0:
@@ -809,7 +806,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	if(isMovable())
 	{
-		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.003)
 		{
 			// m_snake 변수를 재지정 ...
 			
@@ -974,7 +971,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	if(isMovable())
 	{
-		if(ProbSelector::sel(0.002, 1.0 - 0.002, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.002)
 		{
 			// m_snake 변수를 재지정 ...
 			
@@ -2702,7 +2699,10 @@ void KSCumberBase::applyDisableOfCharacter()
 	Json::Value disableInfo = R"(
 	[{"target":"1010", "prop":"speedratio", "oper":"=", "value":0.7},
 	 {"target":"112", "prop":"area", "oper":"*", "value":0.8},
-	 {"target":"1012", "prop":"enableratio", "oper":"=", "value":0.8}
+	 {"target":"1012", "prop":"enableratio", "oper":"=", "value":0.5},
+	 {"target":"1014", "prop":"enableprob", "oper":"=", "value":0.5},
+	 {"target":"1013", "prop":"enableprob", "oper":"=", "value":0.5},
+	 {"target":"9", "prop":"enableprob", "oper":"=", "value":0.5}
 	 ]
 	)";
 	
