@@ -60,12 +60,13 @@ private:
 class MissileUnit3 : public CCNode
 {
 public:
-	static MissileUnit3 * create (int t_type, float t_distance, CCSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	static MissileUnit3 * create (int t_type, float t_distance, CCSize t_mSize, float enableP, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 private:
 	CCSprite* stoneSprite;
 	int myType;
 	float distance;
 	bool shownWarning;
+	float enableProb;
 	CCSize mSize;
 	CCObject * target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
@@ -74,7 +75,7 @@ private:
 	void removeEffect ();
 	void selfRemove ();
 	void move ();
-	void myInit (int t_type, float t_distance, CCSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	void myInit (int t_type, float t_distance, CCSize t_mSize, float enablePercent, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 };
 class Targeting : public CCSprite
 {
@@ -214,7 +215,8 @@ private:
 class FM_Targeting : public CCNode
 {
 public:
-	static FM_Targeting * create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree);
+	static FM_Targeting * create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize,
+																float t_sAngle, float t_fAngle, float inDegree, bool enable);
 	virtual ~FM_Targeting()
 	{
 		CCLOG("FM_Targeting destroy");
@@ -225,13 +227,14 @@ private:
 	float duration;
 	float fSize;
 	float rotateValue;
-	void myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree);
+	void myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize,
+							 float t_sAngle, float t_fAngle, float inDegree, bool enable);
 };
 class FallMeteor : public CrashMapObject
 {
 public:
 	static FallMeteor * create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame,
-															IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
+															IntSize t_mSize, float enableP, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
 															std::function<void(int)> accum);
 	virtual ~FallMeteor()
 	{
@@ -248,11 +251,13 @@ private:
 	int fallFrame;
 	int explosionFrame;
 	int ingFrame;
+	bool enable;
 	IntSize mSize;
 	CCPoint fall_dv;
 	CCObject * target_removeEffect;
 	SEL_CallFunc delegate_removeEffect;
 	FM_Targeting* m_targetSprite;
+	float enableProb;
 	std::function<void(int)> accumer;
 	int crashCount;
 	void jackDie ();
@@ -263,7 +268,7 @@ private:
 	void selfRemove ();
 	void initParticle ();
 	void myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp,
-							 CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize,
+							 CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize, float enableP,
 							 CCObject * t_removeEffect, SEL_CallFunc d_removeEffect, std::function<void(int)> accum);
 };
 class Lazer_Ring : public CCNode
@@ -284,9 +289,10 @@ private:
 class ThreeCushion : public CrashMapObject
 {
 public:
-	static ThreeCushion * create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	static ThreeCushion * create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, float enableProb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 	void removeEffect ();
 private:
+	float enableProb;
 	float speed;
 	int angle;
 	int crashArea;
@@ -305,7 +311,7 @@ private:
 	void crashMap ();
 	CCPoint getAfterPosition (CCPoint b_p, int t_angle);
 	CCPoint judgeAnglePoint (CCPoint b_p);
-	void myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
+	void myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, float enableProb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect);
 	void initParticle ();
 };
 class TickingTimeBomb : public CrashMapObject
@@ -619,25 +625,27 @@ private:
 class PoisonLine : public CCNode
 {
 public:
-	static PoisonLine * create (IntPoint t_sp, int frame);
+	static PoisonLine * create (IntPoint t_sp, int frame, bool deco);
 	void startMyAction ();
 private:
 	CCParticleSystemQuad* line;
 	IntPoint mapPoint;
 	int ingFrame;
 	int totalFrame;
+	bool decoration;
 	void myAction ();
 	void stopMyAction ();
-	void myInit (IntPoint t_sp, int frame);
+	void myInit (IntPoint t_sp, int frame, bool deco);
 };
 class PoisonDrop : public CCNode
 {
 public:
-	static PoisonDrop * create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe);
+	static PoisonDrop * create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe, float enableRatio);
 	void startAction ();
 private:
 	int m_area;
 	int m_totalFrame;
+	float m_enableRatio;
 	CCPoint subPosition;
 	int movingFrame;
 	int ingFrame;
@@ -648,7 +656,7 @@ private:
 	void initParticle ();
 	void stopAction ();
 	void selfRemove ();
-	void myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe);
+	void myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe, float enableRatio);
 };
 class ReflectionLazer : public CCSprite
 {

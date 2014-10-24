@@ -200,8 +200,9 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 	}
 }
 
-void MissileParent::createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition, int missile_damage)
+void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, float missileNumbers, CCPoint initPosition, int missile_damage)
 {
+	int grade = ceilf((float)level / 5.f);
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
@@ -709,7 +710,20 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		{
 		}
 	}
+//	Json::Value patternDisableArray = R"( [{"type":"pattern","target":"112", "oper":"*","crasharea":0.8},
+//	{"type":"pattern","target":"1014","prop":"불발확률","value":0.3}])";
 	
+//	Json::Value patternDisableValue = Json::objectValue;
+//	
+//	for(int i=0; i<patternDisableArray.size(); i++)
+//	{
+//		if(patternDisableArray[i].get("target", "").asString() == pattern)
+//		{
+//			patternDisableValue = patternDisableArray[i];
+//			break;
+//		}
+//	}
+
 	std::string patternD = patternData.asString();
 //	CCLOG(".. %s", patternDParam.c_str());
 //	CCLOG("%s", boost::str(boost::format("%||") % patternData).c_str());
@@ -776,6 +790,8 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	
 	if(cb->m_cumberTimer - 1.f >= cb->m_lastCastTime)
 	{
+		
+		
 		if(pattern == "1")
 		{
 			if(exe)
@@ -1340,7 +1356,9 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					
 					IntPoint mainCumberPoint = myGD->getMainCumberPoint((CCNode*)cb);
 					CCPoint mainCumberPosition = ccp((mainCumberPoint.x-1)*pixelSize+1,(mainCumberPoint.y-1)*pixelSize+1);
-					ThunderBoltWrapper* t_m12 = ThunderBoltWrapper::create(mainCumberPosition, (KSCumberBase*)cb, random_value, targetingFrame, shootFrame);
+					ThunderBoltWrapper* t_m12 = ThunderBoltWrapper::create(mainCumberPosition, (KSCumberBase*)cb, random_value,
+																																 targetingFrame, shootFrame,
+																																 patternData.get("speedratio", 1.f).asFloat());
 					pattern_container->addChild(t_m12);
 					
 					//				myGD->communication("CP_onPatternEndOf", cb);
@@ -1387,6 +1405,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					int number = patternData.get("number", 3).asInt();
 					
 					MeteorWrapper* t_m16 = MeteorWrapper::create(mType, number, 60, patternData.get("area", 50).asInt(),
+																											 patternData.get("enableprob", 1.f).asFloat(),
 																											 dynamic_cast<KSCumberBase*>(cb));
 					pattern_container->addChild(t_m16);
 					
@@ -1408,7 +1427,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					int totalframe = patternData.get("totalframe", 300).asInt();
 					int shootframe = patternData.get("shootframe", 30).asInt();
 					float speed = patternData.get("speed", 250.f).asDouble() / 100.f;
-					FallingStoneWrapper* t_m9 = FallingStoneWrapper::create(totalframe, (KSCumberBase*)cb, shootframe, speed, CCSizeMake(25, 25), 1);
+					FallingStoneWrapper* t_m9 = FallingStoneWrapper::create((KSCumberBase*)cb, patternData, CCSizeMake(25, 25), 1);
 					pattern_container->addChild(t_m9);
 					KSCumberBase* cumber = (KSCumberBase*)cb;
 				};
@@ -1771,7 +1790,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
 	myGD->createJackMissileWithStoneFunctor = std::bind(&MissileParent::createJackMissileWithStone, this,
-																											_1, _2, _3, _4, _5, _6);
+																											_1, 2, _3, _4, _5);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);

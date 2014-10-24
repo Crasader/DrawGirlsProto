@@ -542,6 +542,7 @@ void CumberParent::myInit()
 		mainCumber->settingAttackPercent(boss["attackpercent"].asDouble());
 		mainCumber->settingPattern(boss["pattern"]);
 		mainCumber->applyAutoBalance();
+		mainCumber->applyDisableOfCharacter();
 		//	mainCumber->settingPattern(boss["pattern"]);
 		//	mainCumber->settingPattern("{\"test\":123");
 		Json::Reader temp_reader;

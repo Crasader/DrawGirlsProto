@@ -466,7 +466,7 @@ void GameItemAttack::acting()
 	
 	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f*((rand()%21-10+100)/100.f);
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));

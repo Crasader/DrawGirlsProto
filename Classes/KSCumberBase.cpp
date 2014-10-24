@@ -13,37 +13,13 @@
 #include <chrono>
 #include "CumberEmotion.h"
 #include <boost/lexical_cast.hpp>
+#include "PassiveOp.h"
+
 
 class KSJuniorBase;
-template <class _Tp>
-struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
-};
-
-template <class _Tp>
-struct DecreaseOp : public PassiveOp<_Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a*(1 - b);
-	}
-};
 
 
 
-
-
-template <class _Tp>
-struct SubtractOp : public PassiveOp<_Tp>
-{
-	virtual ~SubtractOp(){
-	}
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a - b;
-	}
-};
 
 
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
@@ -1327,7 +1303,6 @@ n<m 인 부수기 공격은 m초 안에는 안함.
  * */
 void KSCumberBase::cumberAttack(float dt)
 {
-	
 	if(m_slience || (m_cumberState != kCumberStateMoving) || m_cumberTimer < 3.f) // 공격 못하는 조건이라면 패스.
 	{
 		return;
@@ -1352,6 +1327,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
   			m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
+			TRACE();
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 			if(w == 0 && attackCondition)
 			{
@@ -1367,6 +1343,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(bossIsClosed() && gainPercent <= 80.f)
 		{
+			TRACE();
 			ProbSelector teleportProb = {1,1};	//보스가 빠져나올 확률. AI 0 일떄 0, 100일때 1초안에 50%
 			if(teleportProb.getResult() == 0) // 50%확률로 순간이동 OR 부수기
 			{
@@ -1414,7 +1391,6 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
-		
 //		m_crashAttackTime = m_cumberTimer;
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
@@ -1490,10 +1466,18 @@ void KSCumberBase::cumberAttack(float dt)
 //		{
 //			attackProb += aiProbAdder();
 //		}
-		
-		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
-		
-		exeProb = ps.getResult();
+		double _01 = ks19937::getDoubleValue(0, 1.0);
+		if(_01 <= attackProb)
+		{
+			exeProb = 0;
+		}
+		else
+		{
+			exeProb = 1;
+		}
+//		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
+//		
+//		exeProb = ps.getResult();
 	}
 	
 	{
@@ -1560,10 +1544,10 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(!selectedAttacks.empty())
 		{
+			TRACE();
 			ProbSelector teleportProb = {1,2};
 			if(teleportProb.getResult() == 0 && distanceFury)
 			{
-				
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
@@ -1590,6 +1574,7 @@ void KSCumberBase::cumberAttack(float dt)
 				
 				// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
 				
+				TRACE();
 				ProbSelector probSel;
 				
 				// 바깥쪽으로 얼마나 먹었는지를...
@@ -2566,18 +2551,18 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(m_aiValue>80)m_aiValue=80;
 		
 		//부수기 공격 확률 낮추기
-		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
-		{
-			if((*iter)["atype"].asString() == "crash"){
-                if(playCount<2)(*iter)["percent"]=1;
-                else (*iter)["percent"]=0;
-			}
-			
-			if((*iter)["atype"].asString() == "special"){
-				if(playCount<3)(*iter)["percent"]=1;
-				else (*iter)["percent"]=0;
-			}
-		}
+//		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+//		{
+//			if((*iter)["atype"].asString() == "crash"){
+//                if(playCount<2)(*iter)["percent"]=1;
+//                else (*iter)["percent"]=0;
+//			}
+//			
+//			if((*iter)["atype"].asString() == "special"){
+//				if(playCount<3)(*iter)["percent"]=1;
+//				else (*iter)["percent"]=0;
+//			}
+//		}
 		
 		
 		
@@ -2708,6 +2693,62 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 //		
 //		CCLOG("#################### autobalance ############################");
 //	}
+}
+void KSCumberBase::applyDisableOfCharacter()
+{
+	Json::Value disableInfo = R"(
+	[{"target":"1010", "prop":"speedratio", "oper":"=", "value":0.7},
+	 {"target":"112", "prop":"area", "oper":"*", "value":0.8},
+	 {"target":"1012", "prop":"enableratio", "oper":"=", "value":0.8}
+	 ]
+	)";
+	
+	// disableInfo 돌면서 m_attacks 돔.
+	
+	KS::KSLog("before attacks");
+	for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+	{
+		KS::KSLog("%", m_attacks[attackIndex]);
+	}
+	for(int disableInfoIndex=0; disableInfoIndex<disableInfo.size(); disableInfoIndex++)
+	{
+		bool found = false;
+		Json::Value disable = disableInfo[disableInfoIndex];
+		for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+		{
+			if(m_attacks[attackIndex]["pattern"].asString() == disable["target"].asString())
+			{
+				std::string prop = disable["prop"].asString();
+				std::string oper = disable["oper"].asString();
+				float value = disable["value"].asFloat();
+				
+				shared_ptr<PassiveOp<float>> cardOperator;
+				if(oper == "=")
+				{
+					m_attacks[attackIndex][prop] = value;
+				}
+				else
+				{
+					if(oper == "-")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
+					}
+					else if(oper == "+")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new AddOp<float>());
+					}
+					else if(oper == "*")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new MultOp<float>());
+					}
+					m_attacks[attackIndex][prop] = (*cardOperator)(m_attacks[attackIndex][prop].asFloat(), value);
+				}
+			}
+		}
+			
+		
+	}
+	CCLOG("=======================================================");
 }
 void KSCumberBase::settingAI( int ai )
 {
