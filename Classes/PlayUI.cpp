@@ -1432,7 +1432,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			weapon_level = (weapon_level-1)%5 + 1;
 			
 			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, cmCnt * 2, myGD->getJackPoint().convertToCCP(),
-																							int(mySGD->getSelectedCharacterHistory().power.getV()*((rand()%21-10+100)/100.f)));
+																							int(mySGD->getSelectedCharacterHistory().power.getV()));
 		}
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage.getV())

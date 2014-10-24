@@ -464,7 +464,7 @@ void GameItemAttack::acting()
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f*((rand()%21-10+100)/100.f);
+	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f;
 	
 	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
 	
