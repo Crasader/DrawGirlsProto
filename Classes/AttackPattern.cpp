@@ -409,10 +409,10 @@ void SelfSpinMissile::myInit( CCPoint t_sp, CCPoint t_dv, int t_mCnt, float t_r,
 }
 
 
-FallingStoneWrapper* FallingStoneWrapper::create( int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type )
+FallingStoneWrapper* FallingStoneWrapper::create( KSCumberBase* cb, Json::Value pattern, CCSize mSize, int t_type )
 {
 	FallingStoneWrapper* t_m9 = new FallingStoneWrapper();
-	t_m9->myInit(t_keepFrame, cb, t_shootFrame, t_distance, mSize, t_type);
+	t_m9->myInit(cb, pattern, mSize, t_type);
 	t_m9->autorelease();
 	return t_m9;
 }
@@ -466,7 +466,7 @@ void FallingStoneWrapper::myAction()
 
 	if(ingFrame%shootFrame == 0)
 	{
-		MissileUnit3* t_mu = MissileUnit3::create(type, distance, mSize, this, callfunc_selector(FallingStoneWrapper::removeEffect));
+		MissileUnit3* t_mu = MissileUnit3::create(type, distance, mSize, patternData.get("enableprob", 1.f).asFloat(), this, callfunc_selector(FallingStoneWrapper::removeEffect));
 		addChild(t_mu);
 	}
 
@@ -476,15 +476,17 @@ void FallingStoneWrapper::myAction()
 	}
 }
 
-void FallingStoneWrapper::myInit( int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type )
+void FallingStoneWrapper::myInit( KSCumberBase* cb, Json::Value pattern, CCSize t_mSize, int t_type )
 {
 	m_cumber = cb;
 	m_earlyRelease = true;
 	setStartingWithEarly();
+	
+	patternData = pattern;
 
-	keepFrame = t_keepFrame;
-	shootFrame = t_shootFrame;
-	distance = t_distance;
+	keepFrame = patternData.get("totalframe", 300).asInt();
+	shootFrame = patternData.get("shootframe", 30).asInt();
+	distance = patternData.get("speed", 250.f).asDouble() / 100.f;
 	type = t_type;
 	mSize = t_mSize;
 
@@ -537,10 +539,10 @@ void Saw::myInit( CCPoint t_sp, int t_type, float t_speed, IntSize t_mSize )
 	stopMyAction();
 }
 
-ThunderBoltWrapper* ThunderBoltWrapper::create( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame )
+ThunderBoltWrapper* ThunderBoltWrapper::create( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame, float speedr )
 {
 	ThunderBoltWrapper* t_m12 = new ThunderBoltWrapper();
-	t_m12->myInit(t_sp, cb, t_type, t_targetingFrame, t_shootFrame);
+	t_m12->myInit(t_sp, cb, t_type, t_targetingFrame, t_shootFrame, speedr);
 	t_m12->autorelease();
 	return t_m12;
 }
@@ -635,10 +637,13 @@ void ThunderBoltWrapper::myAction()
 	}
 	else if(ingFrame <= targetingFrame+shootFrame)
 	{
-		if(pJackArray.empty() == false)
+		/////////////////// index 참조 방식.
+		int adjIndex = ceilf(curIndex);
+		curIndex += speedRatio;
+		if(pJackArray.size() - 1 >= adjIndex)
 		{
-			CCPoint t_p = pJackArray.front();
-			pJackArray.pop_front();
+			CCPoint t_p = pJackArray[adjIndex];
+//			pJackArray.pop_front();
 
 			targetingImg->setPosition(t_p);
 			myBeam->beamSetPosition(t_p);
@@ -670,31 +675,38 @@ void ThunderBoltWrapper::myAction()
 	}
 	else
 	{
-		if(pJackArray.empty())
+		int adjIndex = ceilf(curIndex);
+		curIndex += speedRatio;
+		if(pJackArray.size() - 1 >= adjIndex)
+		{
+			
+			CCPoint t_p = pJackArray[adjIndex];
+			//			pJackArray.pop_front();
+			
+			targetingImg->setPosition(t_p);
+			myBeam->beamSetPosition(t_p);
+	
+		}
+		else
 		{
 			targetingImg->removeFromParentAndCleanup(true);
 			targetingImg = NULL;
 			myBeam->removeFromParentAndCleanup(true);
 			myBeam = NULL;
 			stopMyAction();
-		}
-		else
-		{
-			CCPoint t_p = pJackArray.front();
-			pJackArray.pop_front();
-
-			targetingImg->setPosition(t_p);
-			myBeam->beamSetPosition(t_p);
+			
 		}
 	}
 }
 
-void ThunderBoltWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame )
+void ThunderBoltWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame, float speedr )
 {
 	m_cumber = cb;
+	speedRatio = speedr;
 	m_earlyRelease = false;
 	setStartingWithEarly();
 
+	curIndex = 0;
 	type = t_type;
 	targetingFrame = t_targetingFrame;
 	shootFrame = t_shootFrame;
@@ -1029,10 +1041,10 @@ void FlameWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, int t_tmCnt, int t_bu
 	startMyAction();
 }
 
-MeteorWrapper* MeteorWrapper::create( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb)
+MeteorWrapper* MeteorWrapper::create( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, float enableP, KSCumberBase* cb)
 {
 	MeteorWrapper* t_m16 = new MeteorWrapper();
-	t_m16->myInit(t_type, t_tmCnt, t_totalFrame, t_crashArea, cb);
+	t_m16->myInit(t_type, t_tmCnt, t_totalFrame, t_crashArea, enableP, cb);
 	t_m16->autorelease();
 	return t_m16;
 }
@@ -1125,7 +1137,7 @@ void MeteorWrapper::myAction()
 		random_sp.y = random_fp.y + 500;
 
 		FallMeteor* t_fm = FallMeteor::create(imgFilename, 1, CCSizeMake(crashArea, crashArea), random_sp, random_fp,
-																					220, 20, IntSize(12, 12),
+																					220, 20, IntSize(12, 12), enableProb,
 																					this, callfunc_selector(MeteorWrapper::stopMyAction),
 																					bind(&MeteorWrapper::accumCrashCount, this, std::placeholders::_1)); // imgSize, crashSize
 		addChild(t_fm);
@@ -1137,10 +1149,10 @@ void MeteorWrapper::myAction()
 	}
 }
 
-void MeteorWrapper::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb)
+void MeteorWrapper::myInit( int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, float enableP, KSCumberBase* cb)
 {
 	m_cumber = cb;
-	
+	enableProb = enableP;
 	m_earlyRelease = true;
 	setStartingWithEarly();
 	
@@ -2078,7 +2090,6 @@ void CaromWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& pa
 	//		CCPoint t_sp = cb->getPosition();
 
 	Json::Reader reader;
-	Json::Value pattern;
 	reader.parse(patternData, pattern);
 
 	this->t_sp = t_sp;
@@ -2098,6 +2109,7 @@ void CaromWrapper::update( float dt )
 	{
 		// create
 		ThreeCushion* t_tc = ThreeCushion::create(t_sp, t_move_speed, t_cushion_cnt, t_is_big_bomb, m_crashArea,
+																							pattern.get("enableprob", 1.f).asFloat(),
 			this, callfunc_selector(ThisClassType::removeEffect));
 		addChild(t_tc);
 	}
@@ -3414,6 +3426,7 @@ void RadioactivityWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::st
 	m_position = t_sp;
 	m_cumber = cb;
 	m_earlyRelease = false;
+	enableRatio = pattern.get("enableratio", 1.f).asFloat();
 	setStartingWithEarly();
 
 	scheduleUpdate();
@@ -3433,7 +3446,7 @@ void RadioactivityWrapper::update( float dt )
 	IntPoint jackPoint = myGD->getJackPoint();
 	CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1, (jackPoint.y-1)*pixelSize+1);
 
-	PoisonDrop* t_pd = PoisonDrop::create(m_position, jackPosition, movingFrame, area, totalFrame);
+	PoisonDrop* t_pd = PoisonDrop::create(m_position, jackPosition, movingFrame, area, totalFrame, enableRatio);
 	addChild(t_pd);
 	t_pd->startAction();
 
