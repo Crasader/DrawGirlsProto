@@ -255,14 +255,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					selfRotation = true;
 				random_float = 0.f;
 				
-//				GuidedMissile* gm = GuidedMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
-//																									fileName,
-//																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
-//																									ao, selfRotation
-//																									);
-//				
-//				gm->beautifier(grade, level);
-//				jack_missile_node->addChild(gm);
+				GuidedMissile* gm = GuidedMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
+																									fileName,
+																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
+																									ao, selfRotation
+																									);
+				
+				gm->beautifier(grade, level);
+				jack_missile_node->addChild(gm);
 				
 //				auto diff = nearCumber->getPosition() - myGD->getJackPoint().convertToCCP();
 //				StraightMissile* sm = StraightMissile::create(myGD->getJackPoint().convertToCCP(), "stone_1.ccbi",
@@ -292,9 +292,9 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 //				jack_missile_node->addChild(rb);
 //
 				// me_laser_head.ccbi me_laser_body.ccbi 없음
-				LaserWrapper* lw = LaserWrapper::create(2 + MIN((grade-1), 3), 60*2 + missileNumbers * 60,
-																								power / 3.f, ao);
-				jack_missile_node->addChild(lw);
+//				LaserWrapper* lw = LaserWrapper::create(2 + MIN((grade-1), 3), 60*2 + missileNumbers * 60,
+//																								power / 3.f, ao);
+//				jack_missile_node->addChild(lw);
 				
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
@@ -1305,6 +1305,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					TeleportWrapper* t_m32 = TeleportWrapper::create(cumber);
 					pattern_container->addChild(t_m32);
 					cumber->setAttackPattern(nullptr);
+					myGD->communication("CP_onPatternEndOf", cb);
 				};
 				castBranch(atype, func, warningFileName);
 			}
