@@ -416,8 +416,8 @@ public:
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 	CUMBER_STATE m_cumberState;
-	vector<ChargeParent*> m_charges;
-	vector<ChargeParent*>& getCharges()
+	vector<ChargeBase*> m_charges;
+	vector<ChargeBase*>& getCharges()
 	{
 		return m_charges;
 	}

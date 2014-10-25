@@ -878,6 +878,7 @@ void KSSnakeBase::attackBehavior( Json::Value _pattern )
 	}
 	else if( pattern == "1007")
 	{
+		startAnimationDirection();
 //		setCumberState(0);
 	}
 	else
@@ -889,6 +890,10 @@ void KSSnakeBase::attackBehavior( Json::Value _pattern )
 			startAnimationDirection();
 		else if(target == "no") // 타게팅이 아니면 돌아라
 			startAnimationNoDirection();
+		else
+		{
+			startAnimationNoDirection();
+		} 
 	}
 }
 

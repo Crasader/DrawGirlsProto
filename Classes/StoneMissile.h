@@ -406,6 +406,17 @@ public:
 		// 화면 번쩍 번쩍
 		myGD->communication("VS_setLight");
 
+		
+		
+		for(auto iter = cumber->getCharges().begin(); iter != cumber->getCharges().end(); ++iter)
+		{
+			if((*iter)->getDelayCount() < 10)
+			{
+				(*iter)->setChargeFrame((*iter)->getChargeFrame() + 6);
+				(*iter)->setDelayCount((*iter)->getDelayCount() + 1);
+			}
+		}
+		
 		// 캐스팅 캔슬.
 		
 		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage);
