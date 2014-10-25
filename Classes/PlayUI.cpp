@@ -4079,7 +4079,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		CCNode* junior_node = CCNode::create();
 		junior_node->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-18.5f,0));
@@ -4134,7 +4134,7 @@ void PlayUI::myInit ()
 		t_condition_label->setAnchorPoint(ccp(0,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,0));
 		addChild(t_condition_label, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
 		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
@@ -4142,7 +4142,7 @@ void PlayUI::myInit ()
 		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
 		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
 		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+		clr_cdt_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(clr_cdt_label);
 		
 		if(clr_cdt_cnt.getV() <= ing_cdt_cnt.getV())
@@ -4216,7 +4216,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		CCSprite* item_img = CCSprite::create("mission_item.png");
 		item_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(-21,0));
@@ -4227,7 +4227,7 @@ void PlayUI::myInit ()
 		t_condition_label->setAnchorPoint(ccp(0,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(10,-1));
 		addChild(t_condition_label, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
 		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", ing_cdt_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
@@ -4235,7 +4235,7 @@ void PlayUI::myInit ()
 		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
 		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(10,0));
 		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+		clr_cdt_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(clr_cdt_label);
 		
 		
@@ -4344,7 +4344,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		int t_score_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i);
 		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
@@ -4365,7 +4365,7 @@ void PlayUI::myInit ()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
 		if(t_score_value <= 0)
@@ -4380,7 +4380,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		int t_combo_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i);
 		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
@@ -4401,7 +4401,7 @@ void PlayUI::myInit ()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
 		if(t_combo_value <= 0)
@@ -4416,7 +4416,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		int t_gold_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i);
 		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
@@ -4437,7 +4437,7 @@ void PlayUI::myInit ()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
 		addChild(t_condition_label, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
 		if(t_gold_value <= 0)
@@ -4452,7 +4452,7 @@ void PlayUI::myInit ()
 		mission_back = CCSprite::create("ui_mission_button_open.png");
 		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
 		addChild(mission_back, 2);
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
 		
 		int t_turns_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i);
 		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
@@ -4477,10 +4477,10 @@ void PlayUI::myInit ()
 		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
 		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
 		
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(t_condition_label);
 		
-		addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+		clr_cdt_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
 	else if(clr_cdt_type == kCLEAR_default)
