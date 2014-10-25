@@ -14,7 +14,7 @@
 #include "CumberEmotion.h"
 #include <boost/lexical_cast.hpp>
 #include "PassiveOp.h"
-
+#include "ServerDataSave.h"
 
 class KSJuniorBase;
 
@@ -2696,18 +2696,13 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 }
 void KSCumberBase::applyDisableOfCharacter()
 {
-	Json::Value disableInfo = R"(
-	[{"target":"1010", "prop":"speedratio", "oper":"=", "value":0.7},
-	 {"target":"112", "prop":"area", "oper":"*", "value":0.8},
-	 {"target":"1012", "prop":"enableratio", "oper":"=", "value":0.5},
-	 {"target":"1014", "prop":"enableprob", "oper":"=", "value":0.5},
-	 {"target":"1013", "prop":"enableprob", "oper":"=", "value":0.5},
-	 {"target":"9", "prop":"enableprob", "oper":"=", "value":0.5}
-	 ]
-	)";
+	Json::Value disableInfo = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
 	
+	std::string tt = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CCLOG("TT = %s", tt.c_str());
 	// disableInfo 돌면서 m_attacks 돔.
 	
+	KS::KSLog("disableInfo = %", disableInfo);
 	KS::KSLog("before attacks");
 	for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
 	{
@@ -2748,8 +2743,11 @@ void KSCumberBase::applyDisableOfCharacter()
 				}
 			}
 		}
-			
-		
+	}
+	KS::KSLog("after attacks");
+	for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+	{
+		KS::KSLog("%", m_attacks[attackIndex]);
 	}
 	CCLOG("=======================================================");
 }

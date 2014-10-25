@@ -111,6 +111,10 @@ void ChargeParent::cancelCharge()
 
 }
 
+void ChargeBase::cancelCharge()
+{
+	
+}
 NoChargeNodeLambda* NoChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
 {
 	NoChargeNodeLambda* n_charge = new NoChargeNodeLambda();
@@ -253,6 +257,7 @@ void ChargeNodeLambda::removeSelf()
 
 void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
@@ -374,6 +379,7 @@ void SpecialChargeNodeLambda::removeSelf()
 void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
 	TRACE();
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
@@ -509,6 +515,7 @@ void CrashChargeNodeLambda::removeSelf()
 
 void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
