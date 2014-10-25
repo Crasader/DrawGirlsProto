@@ -658,6 +658,7 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 	else if( pattern == "1007")
 	{
 		CCLOG("%s %d kCumberStateStop", __FILE__, __LINE__);
+		startAnimationDirection();
 	}
 	else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 	{
@@ -686,6 +687,10 @@ void KSCircleBase::attackBehavior( Json::Value _pattern )
 			startAnimationDirection();
 		else if(target == "no") // 타게팅이 아니면 돌아라
 			startAnimationNoDirection();
+		else
+		{
+			startAnimationNoDirection();
+		}
 	}
 }
 
