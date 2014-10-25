@@ -1048,7 +1048,8 @@ public:
 	void setIosHideVer(string t_str);
 	string getIosHideVer();
 	
-	double rewind_cnt_per_frame;
+	KSProtectVar<double> rewind_cnt_per_frame;
+	KSProtectVar<double> character_magnetic;
 	
 	bool is_option_tutorial;
 	

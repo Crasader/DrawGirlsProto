@@ -31,6 +31,16 @@ USING_NS_CC;
 #define MY_GRAVITY	-0.5
 #define t_tta 0xD9
 #define LZZ_INLINE inline
+
+class MissionOper
+{
+public:
+	int m_type;
+	string prop;
+	string oper;
+	double value;
+};
+
 class KSLabelTTF;
 class ComboView : public CCNode
 {
@@ -390,6 +400,8 @@ private:
 	int draw_button_tutorial_show;
 	CCSprite* bomb_img;
 	int ing_bomb_value;
+	
+	map<int, MissionOper> mission_oper_list;
 };
 #undef LZZ_INLINE
 #endif

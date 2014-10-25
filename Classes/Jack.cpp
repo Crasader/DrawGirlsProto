@@ -1968,7 +1968,7 @@ void Jack::takeSpeedUpItem()
 		int weapon_rank = (weapon_level-1)/5 + 1;
 		weapon_level = (weapon_level-1)%5 + 1;
 		
-		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, 1, getPosition(), int(mySGD->getSelectedCharacterHistory().power.getV()*((rand()%21-10+100)/100.f)));
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, 1, getPosition(), int(mySGD->getSelectedCharacterHistory().power.getV()));
 		
 //		string missile_code;
 //		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -2544,22 +2544,22 @@ void Jack::myInit()
 	myState = jackStateNormal;
 	afterState = jackStateNormal;
 
-	string path_color;
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
-	if(path_color_code == 1)
-		path_color = "life";
-	else if(path_color_code == 2)
-		path_color = "fire";
-	else if(path_color_code == 3)
-		path_color = "water";
-	else if(path_color_code == 4)
-		path_color = "wind";
-	else if(path_color_code == 5)
-		path_color = "lightning";
-	else if(path_color_code == 6)
-		path_color = "plasma";
-	else
-		path_color = "empty";
+//	string path_color;
+//	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+//	if(path_color_code == 1)
+//		path_color = "life";
+//	else if(path_color_code == 2)
+//		path_color = "fire";
+//	else if(path_color_code == 3)
+//		path_color = "water";
+//	else if(path_color_code == 4)
+//		path_color = "wind";
+//	else if(path_color_code == 5)
+//		path_color = "lightning";
+//	else if(path_color_code == 6)
+//		path_color = "plasma";
+//	else
+//		path_color = "empty";
 	
 	line_edge = CCSprite::create("jack_drawing_point.png");//("path_edge_" + path_color + ".png").c_str());
 	line_edge->setVisible(false);

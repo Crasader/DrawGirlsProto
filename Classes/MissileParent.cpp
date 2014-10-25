@@ -257,7 +257,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				
 				GuidedMissile* gm = GuidedMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
 																									fileName,
-																									1.4f+random_float + grade / 10.f, power, 10 + 15 * grade,
+																									1.4f+random_float + grade / 10.f, int(power*((rand()%21-10+100)/100.f)), 10 + 15 * grade,
 																									ao, selfRotation
 																									);
 				
@@ -1305,7 +1305,6 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					TeleportWrapper* t_m32 = TeleportWrapper::create(cumber);
 					pattern_container->addChild(t_m32);
 					cumber->setAttackPattern(nullptr);
-					myGD->communication("CP_onPatternEndOf", cb);
 				};
 				castBranch(atype, func, warningFileName);
 			}

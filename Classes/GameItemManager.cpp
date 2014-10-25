@@ -22,7 +22,7 @@
 
 GameItemBase::GameItemBase()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }
@@ -464,7 +464,7 @@ void GameItemAttack::acting()
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f*((rand()%21-10+100)/100.f);
+	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f;
 	
 	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
 	
@@ -1261,7 +1261,7 @@ void FeverCoinParent::myInit()
 
 FloatingCoin::FloatingCoin()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }

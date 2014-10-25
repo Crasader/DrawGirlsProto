@@ -1463,7 +1463,7 @@ void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 
 void Maingame::backTracking()
 {
-	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame.getV();
 	
 	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
@@ -2232,7 +2232,7 @@ void Maingame::stopBackingCheck()
 
 void Maingame::stunBacking()
 {
-	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame.getV();
 	
 	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
@@ -3300,21 +3300,21 @@ void Maingame::endCloseShutter()
 	}
 	else if(mySGD->is_hell_mode)
 	{
-		if(mySGD->getIsCleared())
-		{
-			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-			
-			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
-			CCDirector::sharedDirector()->replaceScene(t_trans);
-		}
-		else
-		{
+//		if(mySGD->getIsCleared())
+//		{
+//			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+//			
+//			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+//			CCDirector::sharedDirector()->replaceScene(t_trans);
+//		}
+//		else
+//		{
 			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 			
 			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 			//			mySGD->setNextSceneName("newmainflow");
 			//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
-		}
+//		}
 	}
 	else
 	{

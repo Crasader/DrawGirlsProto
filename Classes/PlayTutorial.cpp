@@ -41,20 +41,20 @@ void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, funct
 		}
 	}
 	
-	int path_color_code = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
-	if(path_color_code == 1)
-		path_color = "life";
-	else if(path_color_code == 2)
-		path_color = "fire";
-	else if(path_color_code == 3)
-		path_color = "water";
-	else if(path_color_code == 4)
-		path_color = "wind";
-	else if(path_color_code == 5)
-		path_color = "lightning";
-	else if(path_color_code == 6)
-		path_color = "plasma";
-	else
+	path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+//	if(path_color_code == 1)
+//		path_color = "life";
+//	else if(path_color_code == 2)
+//		path_color = "fire";
+//	else if(path_color_code == 3)
+//		path_color = "water";
+//	else if(path_color_code == 4)
+//		path_color = "wind";
+//	else if(path_color_code == 5)
+//		path_color = "lightning";
+//	else if(path_color_code == 6)
+//		path_color = "plasma";
+//	else
 		path_color = "empty";
 }
 
@@ -2449,7 +2449,7 @@ void PlayTutorial::startBackTracking()
 }
 void PlayTutorial::backTracking()
 {
-	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame.getV();
 	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
 		++ing_back_tracking_cnt;
