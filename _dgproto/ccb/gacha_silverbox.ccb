@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>0</integer>
+	<integer>3</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -4358,7 +4358,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 							</dict>
@@ -5440,7 +5440,7 @@
 												<key>type</key>
 												<string>Byte</string>
 												<key>value</key>
-												<integer>255</integer>
+												<integer>0</integer>
 											</dict>
 										</array>
 										<key>seqExpanded</key>
@@ -6683,7 +6683,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>73.599998474121094</real>
+											<real>73.611106872558594</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -7065,7 +7065,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 							</dict>
@@ -7186,7 +7186,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>0.0</real>
+							<real>106.24999237060547</real>
 							<real>57.638885498046875</real>
 							<integer>0</integer>
 						</array>
@@ -7501,8 +7501,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.0</real>
+							<real>0.0</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -9333,7 +9333,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
+									<real>0.0</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -10260,8 +10260,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>-176.21784973144531</real>
-							<real>-14.999999046325684</real>
+							<real>-395.07034301757812</real>
+							<real>-153</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -10302,7 +10302,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>0.0</real>
+						<real>-27.052268981933594</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -10526,13 +10526,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>2</real>
+			<real>0.36666667461395264</real>
 			<key>name</key>
 			<string>roll_end</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.96666663885116577</real>
+			<real>0.36666667461395264</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>

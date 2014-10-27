@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>4</integer>
+	<integer>3</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -2852,8 +2852,8 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>2.5</real>
-											<real>2.5</real>
+											<real>1</real>
+											<real>1</real>
 											<false/>
 											<integer>0</integer>
 										</array>
@@ -2866,7 +2866,7 @@
 										<key>type</key>
 										<string>Degrees</string>
 										<key>value</key>
-										<real>120</real>
+										<real>0.0</real>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -3803,8 +3803,8 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>3</real>
-											<real>3</real>
+											<real>1</real>
+											<real>1</real>
 											<true/>
 											<integer>0</integer>
 										</array>
@@ -3817,7 +3817,7 @@
 										<key>type</key>
 										<string>Degrees</string>
 										<key>value</key>
-										<real>-70</real>
+										<real>0.0</real>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -6421,8 +6421,8 @@
 												<string>ScaleLock</string>
 												<key>value</key>
 												<array>
-													<real>1.2999999523162842</real>
-													<real>1.1000000238418579</real>
+													<real>1</real>
+													<real>1</real>
 													<false/>
 													<integer>0</integer>
 												</array>
@@ -6493,7 +6493,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>227.78385925292969</real>
+											<real>73.611106872558594</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -6521,7 +6521,7 @@
 										<key>value</key>
 										<array>
 											<real>1</real>
-											<real>0.5</real>
+											<real>1</real>
 											<false/>
 											<integer>0</integer>
 										</array>
@@ -6901,7 +6901,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>-584.0521240234375</real>
+									<real>-236.11109924316406</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -6992,8 +6992,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>46</real>
-							<real>32.175922393798828</real>
+							<real>106.24999237060547</real>
+							<real>57.638885498046875</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -7020,8 +7020,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>1</real>
-							<real>1</real>
+							<real>0.5</real>
+							<real>0.5</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -7034,7 +7034,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>-131.60459899902344</real>
+						<real>0.0</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -9139,7 +9139,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
+									<real>0.0</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -9983,7 +9983,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>372.77841186523438</real>
+									<real>20</real>
 									<real>0.0</real>
 									<integer>0</integer>
 								</array>
@@ -10066,8 +10066,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>-176.21784973144531</real>
-							<real>-14.999999046325684</real>
+							<real>-395.07034301757812</real>
+							<real>-153</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -10108,7 +10108,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>0.0</real>
+						<real>-27.052268981933594</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -10332,13 +10332,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>2</real>
+			<real>0.36666667461395264</real>
 			<key>name</key>
 			<string>roll_end</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>1.1333333253860474</real>
+			<real>0.36666667461395264</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
