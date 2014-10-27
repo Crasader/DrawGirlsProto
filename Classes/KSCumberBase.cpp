@@ -2551,18 +2551,20 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(m_aiValue>80)m_aiValue=80;
 		
 		//부수기 공격 확률 낮추기
-//		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
-//		{
-//			if((*iter)["atype"].asString() == "crash"){
-//                if(playCount<2)(*iter)["percent"]=1;
-//                else (*iter)["percent"]=0;
-//			}
-//			
-//			if((*iter)["atype"].asString() == "special"){
-//				if(playCount<3)(*iter)["percent"]=1;
-//				else (*iter)["percent"]=0;
-//			}
-//		}
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if((*iter)["atype"].asString() == "crash"){
+                if(playCount<2)(*iter)["percent"]=1;
+                else (*iter)["percent"]=0;
+			}
+			
+			if((*iter)["atype"].asString() == "special"){
+				if((*iter)["pattern"].asString()!="1007" && (*iter)["pattern"].asString()!="1020"){
+					if(playCount<3)(*iter)["percent"]=1;
+					else (*iter)["percent"]=0;
+				}
+			}
+		}
 		
 		
 		
