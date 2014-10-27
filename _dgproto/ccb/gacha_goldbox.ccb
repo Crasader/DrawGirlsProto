@@ -13,7 +13,20 @@
 	<key>fileVersion</key>
 	<integer>4</integer>
 	<key>guides</key>
-	<array/>
+	<array>
+		<dict>
+			<key>orientation</key>
+			<integer>0</integer>
+			<key>position</key>
+			<real>0.0</real>
+		</dict>
+		<dict>
+			<key>orientation</key>
+			<integer>1</integer>
+			<key>position</key>
+			<real>0.0</real>
+		</dict>
+	</array>
 	<key>jsControlled</key>
 	<false/>
 	<key>nodeGraph</key>
@@ -45,7 +58,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>106.24999237060547</real>
+										<real>0.0</real>
 										<real>57.638885498046875</real>
 									</array>
 								</dict>
@@ -104,7 +117,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>106.24999237060547</real>
+										<real>0.0</real>
 										<real>57.638885498046875</real>
 									</array>
 								</dict>
@@ -122,7 +135,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>152.66201782226562</real>
+										<real>46</real>
 										<real>32.175922393798828</real>
 									</array>
 								</dict>
@@ -375,7 +388,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>106.24999237060547</real>
+										<real>0.0</real>
 										<real>57.638885498046875</real>
 									</array>
 								</dict>
@@ -393,7 +406,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>152.66201782226562</real>
+										<real>46</real>
 										<real>32.175922393798828</real>
 									</array>
 								</dict>
@@ -528,7 +541,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>106.24999237060547</real>
+										<real>0.0</real>
 										<real>57.638885498046875</real>
 									</array>
 								</dict>
@@ -546,7 +559,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>152.66201782226562</real>
+										<real>46</real>
 										<real>32.175922393798828</real>
 									</array>
 								</dict>
@@ -681,7 +694,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>106.24999237060547</real>
+										<real>0.0</real>
 										<real>57.638885498046875</real>
 									</array>
 								</dict>
@@ -699,7 +712,7 @@
 									<integer>3</integer>
 									<key>value</key>
 									<array>
-										<real>152.66201782226562</real>
+										<real>46</real>
 										<real>32.175922393798828</real>
 									</array>
 								</dict>
@@ -5028,8 +5041,6 @@
 												<integer>0</integer>
 											</dict>
 										</array>
-										<key>seqExpanded</key>
-										<true/>
 									</dict>
 									<dict>
 										<key>animatedProperties</key>
@@ -6767,7 +6778,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>152.66201782226562</real>
+							<real>46</real>
 							<real>32.175922393798828</real>
 							<integer>0</integer>
 						</array>
@@ -6840,6 +6851,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 			<dict>
 				<key>animatedProperties</key>
@@ -7054,7 +7067,7 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>106.48147583007812</real>
+							<real>0.0</real>
 							<real>-6.5231485366821289</real>
 							<integer>0</integer>
 						</array>
@@ -9914,6 +9927,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -10113,7 +10128,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.36666667461395264</real>
+			<real>2</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -10147,7 +10162,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>2.6666667461395264</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
