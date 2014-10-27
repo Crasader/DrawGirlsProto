@@ -213,6 +213,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																{
 																	return false; // stop
 																}));
+		CCLOG("char no = %d", mySGD->getUserdataSelectedCharNO());
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
@@ -251,8 +252,22 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				int random_value = rand()%7 - 3;
 				float random_float = random_value/10.f;
 				bool selfRotation = false;
-				if(grade == 1 || grade == 4)
-					selfRotation = true;
+				switch(mySGD->getUserdataSelectedCharNO())
+				{
+					case 2:
+					case 4:
+					case 7:
+						selfRotation = true;
+						break;
+					case 3:
+					case 5:
+						selfRotation = false;
+						break;
+					default:
+						selfRotation = true;
+				}
+//				if(grade == 1 || grade == 4)
+//					selfRotation = true;
 				random_float = 0.f;
 				
 				GuidedMissile* gm = GuidedMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
@@ -1524,6 +1539,21 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				
 			}
 		}
+		else if(pattern == "1021")
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+				
+			}
+		}
+			
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 		{
 			CircleCCBPieceBase* ccbPiece = dynamic_cast<CircleCCBPieceBase*>(cb);
