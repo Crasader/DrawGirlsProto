@@ -2176,7 +2176,10 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		for(int j=0;!is_found && j<character_cnt;j++)
 		{
 			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+			{
+				is_found = true;
 				t_history.characterIndex = j+1;
+			}
 		}
 		
 		character_historys.push_back(t_history);
@@ -2184,6 +2187,53 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 //		CCLog("characterNo : %d | level : %d | nextPrice : %d | power : %d | nextPower : %d | prevPower : %d | isMaxLevel : %d", t_history.characterNo.getV(), t_history.level.getV(), t_history.nextPrice.getV(), t_history.power.getV(), t_history.nextPower.getV(), t_history.prevPower.getV(), t_history.isMaxLevel.getV());
 	}
 }
+
+void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
+{
+	bool is_found = false;
+	int characterNo = result_data["characterNo"].asInt();
+	for(int i=0;!is_found && i<character_historys.size();i++)
+	{
+		CharacterHistory t_history = character_historys[i];
+		if(t_history.characterNo.getV() == characterNo)
+		{
+			is_found = true;
+			
+			t_history.level = result_data["level"].asInt();
+			t_history.nextPrice = result_data["nextPrice"].asInt();
+			t_history.power = result_data["power"].asInt();
+			t_history.nextPower = result_data["nextPower"].asInt();
+			t_history.prevPower = result_data["prevPower"].asInt();
+			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+		}
+	}
+	
+	if(!is_found)
+	{
+		CharacterHistory t_history;
+		t_history.characterNo = result_data["characterNo"].asInt();
+		t_history.level = result_data["level"].asInt();
+		t_history.nextPrice = result_data["nextPrice"].asInt();
+		t_history.power = result_data["power"].asInt();
+		t_history.nextPower = result_data["nextPower"].asInt();
+		t_history.prevPower = result_data["prevPower"].asInt();
+		t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+		
+		bool is_found2 = false;
+		int character_cnt = NSDS_GI(kSDS_GI_characterCount_i);
+		for(int j=0;!is_found2 && j<character_cnt;j++)
+		{
+			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+			{
+				is_found2 = true;
+				t_history.characterIndex = j+1;
+			}
+		}
+		
+		character_historys.push_back(t_history);
+	}
+}
+
 void StarGoldData::initSelectedCharacterNo(int t_i)
 {
 	bool is_found = false;

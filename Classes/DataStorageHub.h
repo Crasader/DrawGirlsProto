@@ -180,7 +180,10 @@ typedef enum t_DSH_Key{
 	kDSH_Key_cardSettingTableOffsetGradeReverse,
 	kDSH_Key_cardSettingTableOffsetEvent,
 	
-	kDSH_Key_savedStartPackFirstTime
+	kDSH_Key_savedStartPackFirstTime,
+	
+	kDSH_Key_normalGachaList,
+	kDSH_Key_premiumGachaList
 	
 }DSH_Key;
 

@@ -131,10 +131,34 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < mySGD->client_version)
 	{
+		bool is_check_terms = myDSH->getBoolForKey(kDSH_Key_isCheckTerms);
+		bool is_bgm_off = myDSH->getBoolForKey(kDSH_Key_bgmOff);
+		bool is_effect_off = myDSH->getBoolForKey(kDSH_Key_effectOff);
+		int control_joystick_direction = myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection);
+		bool is_joystick_center_not_fixed = myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed);
+		int joystick_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize);
+		bool is_off_joystick_vib = myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib);
+		bool is_enable_irregular_direction = myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection);
+		bool is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+		bool is_push_off = myDSH->getBoolForKey(kDSH_Key_isPushOff);
+		bool is_message_off = myDSH->getBoolForKey(kDSH_Key_isMessageOff);
+		
 		SaveData::sharedObject()->resetAllData();
 		myDSH->removeCache();
 		mySDS->removeCache();
 		myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+		
+		myDSH->setBoolForKey(kDSH_Key_bgmOff, is_bgm_off, false);
+		myDSH->setBoolForKey(kDSH_Key_effectOff, is_effect_off, false);
+		myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, control_joystick_direction, false);
+		myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, is_joystick_center_not_fixed, false);
+		myDSH->setIntegerForKey(kDSH_Key_joystickSize, joystick_size, false);
+		myDSH->setBoolForKey(kDSH_Key_isOffJoystickVib, is_off_joystick_vib, false);
+		myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, is_enable_irregular_direction, false);
+		myDSH->setBoolForKey(kDSH_Key_isSafetyMode, is_safety_mode, false);
+		myDSH->setBoolForKey(kDSH_Key_isPushOff, is_push_off, false);
+		myDSH->setBoolForKey(kDSH_Key_isMessageOff, is_message_off, false);
+		myDSH->setBoolForKey(kDSH_Key_isCheckTerms, is_check_terms);
 	}
 	
 	

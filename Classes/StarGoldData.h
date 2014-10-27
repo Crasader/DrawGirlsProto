@@ -1053,6 +1053,8 @@ public:
 	
 	bool is_option_tutorial;
 	
+	void addCharacterHistoryForGacha(Json::Value result_data);
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
