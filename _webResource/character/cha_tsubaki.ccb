@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>16</integer>
+	<integer>28</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -3752,7 +3752,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>48</real>
+									<real>47.099998474121094</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -5658,7 +5658,7 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>11.046981811523438</real>
+									<real>0.0</real>
 									<real>0.0</real>
 									<integer>0</integer>
 								</array>
@@ -8732,8 +8732,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>5.375</real>
-									<real>44.5</real>
+									<real>15</real>
+									<real>24</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -8760,7 +8760,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
+									<real>-1</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -11033,8 +11033,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-20</real>
-									<real>29</real>
+									<real>-14.959999084472656</real>
+									<real>24</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -13450,7 +13450,7 @@
 										<key>type</key>
 										<string>Degrees</string>
 										<key>value</key>
-										<real>10</real>
+										<real>0.0</real>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -13523,7 +13523,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>52.185001373291016</real>
+									<real>49.125</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -13564,7 +13564,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-10</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -13620,7 +13620,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>-1</real>
+							<real>0.0</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -14190,7 +14190,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>26</integer>
 			<key>length</key>
 			<real>0.80000001192092896</real>
 			<key>name</key>

@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>17</integer>
+	<integer>30</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -5894,7 +5894,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>29</real>
+											<real>33.625007629394531</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -5921,7 +5921,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>1</real>
+											<real>-1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -10720,7 +10720,7 @@
 												<key>value</key>
 												<array>
 													<real>0.0</real>
-													<real>25.702011108398438</real>
+													<real>10.150001525878906</real>
 													<integer>0</integer>
 												</array>
 											</dict>
@@ -10834,7 +10834,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>19.392599105834961</real>
+											<real>31.575006484985352</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -12617,7 +12617,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>37.044002532958984</real>
+											<real>28.944002151489258</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -12644,7 +12644,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>1</real>
+											<real>-1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -13368,7 +13368,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>26</integer>
 			<key>length</key>
 			<real>0.80000001192092896</real>
 			<key>name</key>
