@@ -134,6 +134,7 @@ bool CharacterSelectPopup::init()
 			{
 				t_info.m_damage = t_history.power.getV();
 				t_info.m_level = t_history.level.getV();
+				t_info.is_have = true;
 				is_found = true;
 			}
 		}

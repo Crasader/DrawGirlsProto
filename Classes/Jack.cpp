@@ -15,6 +15,7 @@
 #include "MyLocalization.h"
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
+#include "AttackPattern.h"
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
 	queue<IntMoveState> bfsArray;

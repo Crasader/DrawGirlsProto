@@ -1169,4 +1169,30 @@ protected:
 
 
 
+class GodOfDeath : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(GodOfDeath);
+	virtual ~GodOfDeath()
+	{
+		CCLOG("~GodOfDeath");
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	void update(float dt);
+	virtual void stopMyAction();
+protected:
+	//float speed;
+	//float crashSize;
+	float m_followFrames;
+	float m_followSpeed;
+	bool m_isFollow;
+	int m_frameCount;
+	float m_alpha;
+	
+	CCSprite* m_godOfDeathSprite;
+	Well512 m_well512;
+	Json::Value m_pattern;
+};
+
+
 #endif
