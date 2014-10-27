@@ -577,7 +577,6 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																	 if(enable_gacha_list.empty())
 																		{
 																		 myDSH->setStringForKey(kDSH_Key_normalGachaList, "");
-																			setOpening();
 																		}
 																	 else
 																		{
