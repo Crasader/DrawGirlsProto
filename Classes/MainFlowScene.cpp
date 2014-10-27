@@ -61,6 +61,7 @@
 #include "StartSettingPopup.h"
 #include "LoadingTipScene.h"
 #include "RealTimeMessage.h"
+#include "ManyGachaPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -2887,12 +2888,13 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_rank)
 		{
-			RankNewPopup* t_popup = RankNewPopup::create();
+			ManyGachaPopup* t_popup = ManyGachaPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 			
-//			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-//			addChild(t_rp, kMainFlowZorder_popup);
+//			RankNewPopup* t_popup = RankNewPopup::create();
+//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{

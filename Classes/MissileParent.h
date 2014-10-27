@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include <queue>
-#include "AttackPattern.h"
+//#include "AttackPattern.h"
 #include "JackMissile.h"
 #include "RandomSelector.h"
 #include "AudioEngine.h"

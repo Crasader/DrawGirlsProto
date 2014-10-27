@@ -1116,7 +1116,15 @@ enum class LK
 	kMyLocalKey_frameOpenConditionContentCardGold,
 	kMyLocalKey_detailConditionPopupTitleCard,
 	kMyLocalKey_detailConditionPopupContentCard,
-	kMyLocalKey_notOpenPuzzleNotEnoughtCardContent
+	kMyLocalKey_notOpenPuzzleNotEnoughtCardContent,
+	kMyLocalKey_gachaListAt4HourTimeAutoRefresh,
+	kMyLocalKey_goodLuckAyameaFighting,
+	kMyLocalKey_brotherJustOne,
+	kMyLocalKey_goodsTouchDetailScript,
+	kMyLocalKey_listRefreshRestTime,
+	kMyLocalKey_nowRefresh,
+	kMyLocalKey_normalGacha,
+	kMyLocalKey_premiumGacha
 };
 class KsLocal
 {

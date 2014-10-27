@@ -1161,6 +1161,14 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드는 총 4종류<font newline=14>입니다.";
 	
 	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtCardContent] = "<font newline=16>카드가 부족해요.<font newline=16>다른 등급으로 클리어해서<font color=961 newline=16>카드 %d종류를 모아주세요.";
+	obj[LK::kMyLocalKey_gachaListAt4HourTimeAutoRefresh] = "상품목록은 4시간 단위로 자동갱신됩니다.";
+	obj[LK::kMyLocalKey_goodLuckAyameaFighting] = "행운을 빌어요!\n아야매가 응원할께요!";
+	obj[LK::kMyLocalKey_brotherJustOne] = "오빠..\n이거 하나만..!";
+	obj[LK::kMyLocalKey_goodsTouchDetailScript] = "상품을 누르면 자세한 설명을 볼 수 있어요.";
+	obj[LK::kMyLocalKey_listRefreshRestTime] = "목록갱신 남은시간";
+	obj[LK::kMyLocalKey_nowRefresh] = "바로갱신";
+	obj[LK::kMyLocalKey_normalGacha] = "일반뽑기";
+	obj[LK::kMyLocalKey_premiumGacha] = "고급뽑기";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	

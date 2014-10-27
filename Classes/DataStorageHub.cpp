@@ -796,6 +796,9 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_cardSettingTableOffsetEvent] = "cstoe";
 	
 	return_value[kDSH_Key_savedStartPackFirstTime] = "sspft";
+	
+	return_value[kDSH_Key_normalGachaList] = "nglst";
+	return_value[kDSH_Key_premiumGachaList] = "pglst";
 }
 
 //void DataStorageHub::changedCcbAnimationManager()
