@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>24</integer>
+	<integer>28</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -3195,8 +3195,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>5.581632137298584</real>
-									<real>55.816326141357422</real>
+									<real>-9.5352897644042969</real>
+									<real>46.978740692138672</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -3223,8 +3223,8 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>-1.0117646455764771</real>
-									<real>1.0235294103622437</real>
+									<real>1</real>
+									<real>1</real>
 									<false/>
 									<integer>0</integer>
 								</array>
@@ -3237,7 +3237,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-16.013418197631836</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>baseValue</key>
@@ -3251,8 +3251,8 @@
 								<string>FloatXY</string>
 								<key>value</key>
 								<array>
-									<real>0.70588231086730957</real>
-									<real>0.70588231086730957</real>
+									<real>0.0</real>
+									<real>0.0</real>
 								</array>
 							</dict>
 							<dict>
@@ -4418,7 +4418,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-75</real>
+								<real>90</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -7878,7 +7878,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>29.768707275390625</real>
+									<real>35.582908630371094</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -7914,7 +7914,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-1.1428570747375488</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -9329,8 +9329,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>8.8375844955444336</real>
-									<real>37.908588409423828</real>
+									<real>21.163690567016602</real>
+									<real>59.304847717285156</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -9371,7 +9371,7 @@
 								<key>type</key>
 								<string>Degrees</string>
 								<key>value</key>
-								<real>-2.5</real>
+								<real>0.0</real>
 							</dict>
 							<dict>
 								<key>baseValue</key>
@@ -9421,7 +9421,7 @@
 								<key>type</key>
 								<string>Byte</string>
 								<key>value</key>
-								<integer>255</integer>
+								<integer>0</integer>
 							</dict>
 							<dict>
 								<key>name</key>
@@ -10581,7 +10581,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>75</real>
+									<real>76.514884948730469</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -12776,8 +12776,8 @@
 										<string>Position</string>
 										<key>value</key>
 										<array>
-											<real>13.954081535339355</real>
-											<real>6.7444729804992676</real>
+											<real>0.0</real>
+											<real>0.0</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -12875,8 +12875,8 @@
 								<string>Position</string>
 								<key>value</key>
 								<array>
-									<real>-13.954081535339355</real>
-									<real>53.255527496337891</real>
+									<real>0.0</real>
+									<real>60</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -12990,7 +12990,7 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>-0.30000001192092896</real>
+							<real>0.30000001192092896</real>
 							<real>0.30000001192092896</real>
 							<false/>
 							<integer>0</integer>
@@ -13533,7 +13533,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>-1</integer>
+			<integer>26</integer>
 			<key>length</key>
 			<real>0.80000001192092896</real>
 			<key>name</key>
