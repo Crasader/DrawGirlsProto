@@ -644,9 +644,27 @@ void ThunderBoltWrapper::myAction()
 		{
 			CCPoint t_p = pJackArray[adjIndex];
 //			pJackArray.pop_front();
-
+			int emptyCnt = 0;
+			auto mapPoint = ccp2ip(t_p);
+			if(myGD->mapState[mapPoint.x-1][mapPoint.y] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x+1][mapPoint.y] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x][mapPoint.y-1] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x][mapPoint.y+1] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x+1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x+1][mapPoint.y-1] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x-1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
+			if(myGD->mapState[mapPoint.x-1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
+			
+			if(emptyCnt == 0)
+			{
+				//		unschedule(schedule_selector(PoisonLine::myAction));
+				stopMyAction();
+				return;
+			}
 			targetingImg->setPosition(t_p);
 			myBeam->beamSetPosition(t_p);
+			
+
 		}
 
 		IntPoint jackPoint = myGD->getJackPoint();
@@ -3982,3 +4000,70 @@ void RunDownSawWrapper::stopMyAction()
 
 
 
+void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData)
+{
+	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
+	Json::Reader reader;
+	reader.parse(patternData, m_pattern);
+	scheduleUpdate();
+	
+	
+	m_followFrames = 60;
+	m_followSpeed = 1.5f;
+	m_alpha = 5;
+	m_isFollow = false;
+	m_frameCount = 0;
+	m_godOfDeathSprite = CCSprite::create("ba.png");
+	m_godOfDeathSprite->setPosition(m_cumber->getPosition());
+	addChild(m_godOfDeathSprite);
+}
+
+void GodOfDeath::update(float dt)
+{
+	
+	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
+	
+	if(ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition()) <= 5
+							 && myGD->getCommunicationBool("Jack_isDie") == false)
+	{
+		myGD->communication("CP_jackCrashDie");
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		stopMyAction();
+	}
+	m_frameCount++;
+	if(m_isFollow)
+	{
+		if(m_frameCount >= m_followFrames + m_alpha)
+		{
+			m_isFollow = false;
+			m_frameCount = 0;
+		}
+		
+		auto deather = m_godOfDeathSprite->getPosition();
+		auto jackPosition = myGD->getJackPoint().convertToCCP();
+		float angle = atan2f(jackPosition.y - deather.y, jackPosition.x - deather.x);
+		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(m_followSpeed * cosf(angle), m_followSpeed * sinf(angle)));
+	}
+	else
+	{
+		if(m_frameCount >= m_followFrames * 4 - m_alpha)
+		{
+			m_frameCount = 0;
+			m_alpha += 5;
+			m_isFollow = true;
+		}
+		
+	}
+}
+
+void GodOfDeath::stopMyAction()
+{
+	unscheduleUpdate();
+	
+	setEndingWithEarly();
+	
+	startSelfRemoveSchedule();
+}
