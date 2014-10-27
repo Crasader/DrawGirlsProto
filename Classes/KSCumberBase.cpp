@@ -1411,15 +1411,17 @@ void KSCumberBase::cumberAttack(float dt)
 			// 안넣어져야할 조건
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
-			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-				 currentSecond <= m_lastPattern.exeTime + 3000 ||
-				 (*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer)
+			bool falseCondition = (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
+			currentSecond <= m_lastPattern.exeTime + 3000 ||
+			(*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer;
+			
+			// 미사일이면 무조건 후보에 오름
+			if((*iter)["pattern"].asString() == "108")
 			{
-				
+				selectedAttacks.push_back(*iter);
 			}
-			else // 넣어져야할 조건
+			else if( !falseCondition )
 			{
-//				if((*iter)["atype"].asString() == "crash" &&)
 				selectedAttacks.push_back(*iter);
 			}
 		}
@@ -2799,7 +2801,7 @@ void KSCumberBase::settingPattern( Json::Value pattern )
 	
 	for(auto i : m_attacks)
 	{
-//		KS::KSLog("%", i);
+		KS::KSLog("%", i);
 	}
 }
 
