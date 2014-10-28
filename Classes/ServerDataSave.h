@@ -198,6 +198,7 @@ enum SDS_KEY
 	kSDS_GI_hellMode_int1_pieceNo_i,
 	kSDS_GI_hellMode_int1_title_s,
 	kSDS_GI_hellMode_int1_content_s,
+	kSDS_GI_hellMode_int1_characterNo_i,
 	kSDS_GI_realTimeMessageVersion_i,
 	kSDS_GI_card_version_i,
 	kSDS_GI_end = 1999,

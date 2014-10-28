@@ -160,7 +160,7 @@ void HellModeOpening::setMain()
 		int piece_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
 		int card_number = NSDS_GI(piece_number, kSDS_SI_level_int1_card_i, 1);
 		
-		int character_no = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
+		int character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
 		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 		for(int j=1;j<=character_count;j++)
 		{

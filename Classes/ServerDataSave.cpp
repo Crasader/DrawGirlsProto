@@ -756,6 +756,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_hellMode_int1_pieceNo_i)			rv = "hl%dpcNo";
 	else if(t_key == kSDS_GI_hellMode_int1_title_s)				rv = "hl%dtitle";
 	else if(t_key == kSDS_GI_hellMode_int1_content_s)			rv = "hl%dcontent";
+	else if(t_key == kSDS_GI_hellMode_int1_characterNo_i)		rv = "hl%dcharacterNo";
 	else if(t_key == kSDS_GI_realTimeMessageVersion_i)			rv = "rtmv";
 	else if(t_key == kSDS_GI_card_version_i)					rv = "cardVersion";
 	
