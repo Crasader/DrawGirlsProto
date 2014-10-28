@@ -2226,8 +2226,16 @@ void GameItemManager::completedAnimationSequenceNamed (char const * name)
 	}
 }
 
+void GameItemManager::gameover()
+{
+	is_on_game = false;
+	unschedule(schedule_selector(GameItemManager::counting));
+}
+
 void GameItemManager::myInit()
 {
+	is_on_game = true;
+	
 	clr_cdt_type = mySD->getClearCondition();
 	
 	coin_parent = CCNode::create();

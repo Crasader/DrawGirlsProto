@@ -11,13 +11,15 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
-#include "jsoncpp/json.h"
+#include "hspConnector.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
 class LoadingLayer;
+class KSLabelTTF;
+class DownloadFile;
 class ManyGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
@@ -61,14 +63,16 @@ private:
 	
 	bool loading_type_is_normal;
 	
-	vector<CCSprite*> reward_list;
+	vector<CCNode*> reward_list;
 	vector<int> enable_gacha_list;
 	Json::Value json_list;
 	
 	CCControlButton* gacha_button;
+	KSLabelTTF* gacha_label;
 	pair<CCSprite*, CCBAnimationManager*> normal_ccb;
 	pair<CCSprite*, CCBAnimationManager*> premium_ccb;
 	
+	int keep_value;
 	int selected_index;
 	
 	function<void()> success_func;
@@ -77,6 +81,20 @@ private:
 	void resultNormalExchange(Json::Value result_data);
 	void premiumAction(CCObject* sender, CCControlEvent t_event);
 	void resultPremiumExchange(Json::Value result_data);
+	
+	KSLabelTTF* refresh_time_label;
+	
+	void refreshTimeChecking();
+	void normalRefresh(CCObject* sender, CCControlEvent t_event);
+	void premiumRefresh(CCObject* sender, CCControlEvent t_event);
+	
+	vector<DownloadFile> card_download_list;
+	function<void()> card_downloaded_func;
+	int ing_card_download;
+	void startCardDownload();
+	void successCardDownload();
+	void failCardDownload();
+	int keep_card_number;
 };
 
 #endif /* defined(__DGproto__ManyGachaPopup__) */

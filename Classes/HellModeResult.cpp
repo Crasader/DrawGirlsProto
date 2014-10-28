@@ -163,7 +163,16 @@ bool HellModeResult::init()
 			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,25));
 			star_back->addChild(take_character_card);
 			
-			int character_no = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
+			int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+			int character_no = -1;
+			for(int i=0;character_no == -1 && i<hell_count;i++)
+			{
+				if(NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1) == mySD->getSilType())
+					character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+			}
+			if(character_no == -1)
+				character_no = 1;
+			
 			int character_index = -1;
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 			for(int i=0;character_index == -1 && i<character_count;i++)

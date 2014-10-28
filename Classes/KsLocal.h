@@ -1124,7 +1124,42 @@ enum class LK
 	kMyLocalKey_listRefreshRestTime,
 	kMyLocalKey_nowRefresh,
 	kMyLocalKey_normalGacha,
-	kMyLocalKey_premiumGacha
+	kMyLocalKey_premiumGacha,
+	kMyLocalKey_congratulation,
+	kMyLocalKey_characterName,
+	
+	kMyLocalKey_gemTake,
+	kMyLocalKey_goldTake,
+	kMyLocalKey_heartTake,
+	kMyLocalKey_doubleItemTake,
+	kMyLocalKey_baseSpeedUpItemTake,
+	kMyLocalKey_magneticItemTake,
+	kMyLocalKey_p1Take,
+	kMyLocalKey_p2Take,
+	kMyLocalKey_p3Take,
+	kMyLocalKey_p4Take,
+	kMyLocalKey_p5Take,
+	kMyLocalKey_p6Take,
+	
+	kMyLocalKey_gemCount,
+	kMyLocalKey_goldCount,
+	kMyLocalKey_propertyCount,
+	kMyLocalKey_nGradeCard,
+	kMyLocalKey_cardTake,
+	kMyLocalKey_goodsScript,
+	
+	kMyLocalKey_gem,
+	kMyLocalKey_gold,
+	kMyLocalKey_heart,
+	kMyLocalKey_doubleItem,
+	kMyLocalKey_baseSpeedUpItem,
+	kMyLocalKey_magneticItem,
+	kMyLocalKey_p1,
+	kMyLocalKey_p2,
+	kMyLocalKey_p3,
+	kMyLocalKey_p4,
+	kMyLocalKey_p5,
+	kMyLocalKey_p6
 };
 class KsLocal
 {

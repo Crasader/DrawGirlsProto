@@ -147,7 +147,7 @@ bool CharacterSelectPopup::init()
 	{
 		int stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
 		int card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1);
-		int character_number = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
+		int character_number = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
 		
 		bool is_found = false;
 		int history_size = mySGD->getCharacterHistorySize();
@@ -170,22 +170,6 @@ bool CharacterSelectPopup::init()
 				}
 			}
 		}
-		
-		
-//		if(mySGD->isHasGottenCards(card_number))
-//		{
-//			int character_number = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
-//			
-//			for(int j=0;j<list_cnt;j++)
-//			{
-//				if(history_list[j].m_number == character_number)
-//				{
-//					history_list[j].is_have = true;
-//					history_list[j].m_card = card_number;
-//					break;
-//				}
-//			}
-//		}
 	}
 	
 	selected_character_number = mySGD->getSelectedCharacterHistory().characterNo.getV();

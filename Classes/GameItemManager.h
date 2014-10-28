@@ -383,7 +383,10 @@ public:
 	
 	void showTakeItemEffect(CCPoint t_p);
 	
+	void gameover();
+	
 private:
+	bool is_on_game;
 	CCSpriteBatchNode* take_effect_node;
 	
 	int counting_value;

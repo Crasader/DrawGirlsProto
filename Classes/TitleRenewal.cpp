@@ -1302,6 +1302,10 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setIosMenuVisible(result_data["iosMenuVisible"].asInt());
 		mySGD->setIosHideVer(result_data["iosHideVer"].asString());
 		mySGD->setGoldBalance(result_data["goldBalance"].asString());
+		
+		mySGD->setNmlGc(result_data["nmlGc"].asInt());
+		mySGD->setPrmGc(result_data["prmGc"].asInt());
+		mySGD->setGachaRefreshTime(result_data["gachaRefreshTime"].asInt());
 	}
 	else
 	{
@@ -1329,6 +1333,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 			NSDS_SI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1, t_data["openPieceNo"].asInt(), false);
 			NSDS_SS(kSDS_GI_hellMode_int1_title_s, i+1, t_data["title"].asString(), false);
 			NSDS_SS(kSDS_GI_hellMode_int1_content_s, i+1, t_data["content"].asString(), false);
+			NSDS_SI(kSDS_GI_hellMode_int1_characterNo_i, i+1, t_data["characterNo"].asInt(), false);
 			
 			string img_url = t_data["cellImgInfo"].asString();
 			if(NSDS_GS(kSDS_GI_hellMode_int1_cellImgInfo_s, i+1) != img_url)

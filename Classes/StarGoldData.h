@@ -1265,6 +1265,10 @@ private:
 	COMMON_VAR(int, addGemReward, AddGemReward);
 	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
 	
+	COMMON_VAR(int, nmlGc, NmlGc);
+	COMMON_VAR(int, prmGc, PrmGc);
+	COMMON_VAR(int, gachaRefreshTime, GachaRefreshTime);
+	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
 };
