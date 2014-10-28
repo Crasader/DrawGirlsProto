@@ -63,6 +63,9 @@ bool StartSettingPopup::init()
 	option_label = NULL;
 	//	card_img = NULL;
 	buy_button = NULL;
+	
+	missile_img = NULL;
+	
 	selected_gacha_item = (ITEM_CODE)mySGD->gacha_item.getV();
 	
 	is_first_gacha = false;
@@ -1714,8 +1717,17 @@ void StartSettingPopup::characterClose()
 	
 	repeat_character_action();
 	
-	CCPoint keep_position = missile_img->getPosition();
-	missile_img->removeFromParent();
+	CCPoint keep_position;
+	if(missile_img)
+	{
+		keep_position = missile_img->getPosition();
+		missile_img->removeFromParent();
+		missile_img = NULL;
+	}
+	else
+	{
+		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+	}
 	
 	StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
 	missile_type_code = kStoneType_guided; // 임시
@@ -1895,8 +1907,17 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
 			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
 			
-			CCPoint keep_position = missile_img->getPosition();
-			missile_img->removeFromParent();
+			CCPoint keep_position;
+			if(missile_img)
+			{
+				keep_position = missile_img->getPosition();
+				missile_img->removeFromParent();
+				missile_img = NULL;
+			}
+			else
+			{
+				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+			}
 			
 			StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
 			missile_type_code = kStoneType_guided; // 임시
@@ -1995,6 +2016,10 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				missile_position = missile_img->getPosition();
 				missile_img->removeFromParent();
 				missile_img = NULL;
+			}
+			else
+			{
+				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 			}
 			
 			StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterIndex.getV()-1);

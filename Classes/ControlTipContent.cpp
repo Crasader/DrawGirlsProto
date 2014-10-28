@@ -163,6 +163,8 @@ string ControlTipContent::getCCBfilenameForTipNumber(int t_code)
 		return_value = "tutorial_tip2";
 	else if(t_code == kSpecialTutorialCode_slimLine)
 		return_value = "tutorial_tip1";
+	else if(t_code == kSpecialTutorialCode_100percent)
+		return_value = "tutorial_tip3";
     
     if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
         return_value += "_left.ccbi";
@@ -179,6 +181,8 @@ int ControlTipContent::getTitleLocalKeyForTipNumber(int t_code)
 		return_value = int(LK::kMyLocalKey_controlTip_lineTangle_title);
 	else if(t_code == kSpecialTutorialCode_slimLine)
 		return_value = int(LK::kMyLocalKey_controlTip_slimLine_title);
+	else if(t_code == kSpecialTutorialCode_100percent)
+		return_value = int(LK::kMyLocalKey_controlTip_100percent_title);
 	
 	return return_value;
 }
@@ -190,6 +194,8 @@ int ControlTipContent::getContentLocalKeyForTipNumber(int t_code)
 		return_value = int(LK::kMyLocalKey_controlTip_lineTangle_content);
 	else if(t_code == kSpecialTutorialCode_slimLine)
 		return_value = int(LK::kMyLocalKey_controlTip_slimLine_content);
+	else if(t_code == kSpecialTutorialCode_100percent)
+		return_value = int(LK::kMyLocalKey_controlTip_100percent_content);
 	
 	return return_value;
 }

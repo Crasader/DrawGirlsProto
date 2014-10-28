@@ -191,7 +191,8 @@ typedef enum t_DSH_Key{
 enum SpecialTutorialCode{
 	kSpecialTutorialCode_control = 100000,
 	kSpecialTutorialCode_lineTangle,
-	kSpecialTutorialCode_slimLine
+	kSpecialTutorialCode_slimLine,
+	kSpecialTutorialCode_100percent
 };
 
 enum ControlJoystickDirection{
