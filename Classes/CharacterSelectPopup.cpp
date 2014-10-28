@@ -249,16 +249,34 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		inner_back->addChild(character_img);
 		
 		StoneType missile_type_code = StoneType(history_list[idx].m_number-1);
-		missile_type_code = kStoneType_guided;
+		
+		
+		
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, history_list[idx].m_index + 1);
+		KS::KSLog("%", mInfo);
+		missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 		
 		if(missile_type_code == kStoneType_guided)
 		{
 			int grade = (history_list[idx].m_level-1)/5+1;
 			bool rotation = false;
-			if(grade == 1 || grade == 4)
-				rotation = true;
+			switch(mInfo.get("subType", 1).asInt())
+			{
+				case 2:
+				case 4:
+				case 7:
+					rotation = true;
+					break;
+				case 3:
+				case 5:
+					rotation = false;
+					break;
+				default:
+					rotation = true;
+					
+			}
 			
-			GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", history_list[idx].m_number, history_list[idx].m_level)->getCString(),
+			GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mInfo.get("subType", 1).asInt(), history_list[idx].m_level)->getCString(),
 																									 rotation);
 			t_gm->beautifier((history_list[idx].m_level-1)/5+1, (history_list[idx].m_level-1)%5);
 			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());

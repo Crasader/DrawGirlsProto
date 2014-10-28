@@ -371,7 +371,8 @@ enum StoneType
 	kStoneType_mine,
 	kStoneType_spirit,
 	kStoneType_range,
-	kStoneType_global
+	kStoneType_global = 6,
+	kStoneType_protector
 };
 
 enum class Curtain

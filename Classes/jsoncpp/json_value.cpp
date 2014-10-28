@@ -1260,7 +1260,14 @@ Value::operator[]( const char *key ) const
 	if(type_ == stringValue){
 		Json::Reader r;
 		Json::Value other;
-		if(r.parse(value_.string_, other))return other[key];
+		if(r.parse(value_.string_, other))
+		{
+			const Value* value = &(other[key]);
+			if(*value == nullValue)
+				return null;
+			else
+				return *value;
+		}
 	}
     if(type_>objectValue){
         return null;
