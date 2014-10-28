@@ -1424,8 +1424,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
 			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f);
-			
-			int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+			int weapon_type = mInfo.get("type", 0).asInt();
 			int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
 			
 			int weapon_rank = (weapon_level-1)/5 + 1;

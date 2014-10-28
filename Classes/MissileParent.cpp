@@ -206,7 +206,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
-	stoneType = StoneType::kStoneType_guided;
+//	stoneType = StoneType::kStoneType_guided;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
 		addChild(KSSchedule::create([=](float dt)
@@ -214,10 +214,13 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																	return false; // stop
 																}));
 		CCLOG("char no = %d", mySGD->getUserdataSelectedCharNO());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = ccsf("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -252,7 +255,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				int random_value = rand()%7 - 3;
 				float random_float = random_value/10.f;
 				bool selfRotation = false;
-				switch(mySGD->getUserdataSelectedCharNO())
+
+				switch(subType)
 				{
 					case 2:
 					case 4:
@@ -403,16 +407,88 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			
 		}));
 	}
-
-
-	
-	
-
-	
+	else if(stoneType == StoneType::kStoneType_protector)
+	{
+		// 프로텍터 미사일 형식
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		for(int i=0; i<missileNumbersInt; i++)
+		{
+			auto creator = [=](){
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
+				KSCumberBase* target = nullptr;
+				std::vector<KSCumberBase*> targets;
+				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+				target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+				
+				CCPoint minDis = ccp(99999, 99999);
+				KSCumberBase* nearCumber = myGD->getMainCumberVector()[0];
+				for(int i = 0; i<myGD->getMainCumberCount();i++){
+					KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+					if(ccpLength(nowDis)<ccpLength(minDis))
+					{
+						nearCumber=cumber;
+						minDis = nowDis;
+					}
+				}
+				
+				for(int i = 0; i<myGD->getSubCumberCount();i++){
+					KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+					if(cumber->getDeadState() == false)
+					{
+						if(ccpLength(nowDis)<ccpLength(minDis))
+						{
+							nearCumber=cumber;
+							minDis = nowDis;
+						}
+					}
+				}
+				
+				int random_value = rand()%7 - 3;
+				float random_float = random_value/10.f;
+				bool selfRotation = false;
+				
+				switch(subType)
+				{
+					case 2:
+					case 4:
+					case 7:
+						selfRotation = true;
+						break;
+					case 3:
+					case 5:
+						selfRotation = false;
+						break;
+					default:
+						selfRotation = true;
+				}
+				//				if(grade == 1 || grade == 4)
+				//					selfRotation = true;
+				random_float = 0.f;
+				
+				ProtectorMissile* gm = ProtectorMissile::create(nearCumber, myGD->getJackPoint().convertToCCP(),
+																												fileName,
+																												1.4f+random_float + grade / 10.f,
+																												int(power*((rand()%21-10+100)/100.f)), 10 + 15 * grade,
+																												30.f,
+																												ao, selfRotation
+																												);
+				
+				gm->beautifier(grade, level);
+				jack_missile_node->addChild(gm);
+			};
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+				creator();
+			}));
+		}
+	}
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
-{
-	
+{ 
 	if(st == StoneType::kStoneType_guided)
 	{
 		return AttackOption::kStiffen;

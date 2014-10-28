@@ -19,7 +19,8 @@
 #include "jsoncpp/json.h"
 #include <queue>
 #include "Charges.h"
-
+#include "ServerDataSave.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 class CumberEmotion;
@@ -516,7 +517,8 @@ protected:
 			if(stiffenSecond - timer < stiffenDuration || timer < stiffenSecond)
 			{
 				timer = 0;
-				stiffenSecond = stiffenDuration;
+				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+				stiffenSecond = stiffenDuration * mInfo.get("stiffenbonus", 1.f).asFloat();
 				return true;
 			}
 			else
