@@ -1188,6 +1188,22 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_gemCount] = "%d 젬";
 	obj[LK::kMyLocalKey_goldCount] = "%d 골드";
 	obj[LK::kMyLocalKey_propertyCount] = "%d 개";
+	obj[LK::kMyLocalKey_nGradeCard] = "%d단계카드";
+	obj[LK::kMyLocalKey_cardTake] = "카드 획득!";
+	obj[LK::kMyLocalKey_goodsScript] = "상품설명";
+	
+	obj[LK::kMyLocalKey_gem] = "젬";
+	obj[LK::kMyLocalKey_gold] = "골드";
+	obj[LK::kMyLocalKey_heart] = "하트";
+	obj[LK::kMyLocalKey_doubleItem] = "더블 아이템";
+	obj[LK::kMyLocalKey_baseSpeedUpItem] = "신발 아이템";
+	obj[LK::kMyLocalKey_magneticItem] = "자석 아이템";
+	obj[LK::kMyLocalKey_p1] = "부활석";
+	obj[LK::kMyLocalKey_p2] = "맵뽑기권";
+	obj[LK::kMyLocalKey_p3] = "업그레이드권";
+	obj[LK::kMyLocalKey_p4] = "아이템뽑기권";
+	obj[LK::kMyLocalKey_p5] = "99프로뽑기권";
+	obj[LK::kMyLocalKey_p6] = "생명의돌";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	

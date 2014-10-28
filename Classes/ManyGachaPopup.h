@@ -19,6 +19,7 @@ using namespace std;
 
 class LoadingLayer;
 class KSLabelTTF;
+class DownloadFile;
 class ManyGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
@@ -62,7 +63,7 @@ private:
 	
 	bool loading_type_is_normal;
 	
-	vector<CCSprite*> reward_list;
+	vector<CCNode*> reward_list;
 	vector<int> enable_gacha_list;
 	Json::Value json_list;
 	
@@ -86,6 +87,14 @@ private:
 	void refreshTimeChecking();
 	void normalRefresh(CCObject* sender, CCControlEvent t_event);
 	void premiumRefresh(CCObject* sender, CCControlEvent t_event);
+	
+	vector<DownloadFile> card_download_list;
+	function<void()> card_downloaded_func;
+	int ing_card_download;
+	void startCardDownload();
+	void successCardDownload();
+	void failCardDownload();
+	int keep_card_number;
 };
 
 #endif /* defined(__DGproto__ManyGachaPopup__) */

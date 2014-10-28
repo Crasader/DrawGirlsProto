@@ -1143,7 +1143,23 @@ enum class LK
 	
 	kMyLocalKey_gemCount,
 	kMyLocalKey_goldCount,
-	kMyLocalKey_propertyCount
+	kMyLocalKey_propertyCount,
+	kMyLocalKey_nGradeCard,
+	kMyLocalKey_cardTake,
+	kMyLocalKey_goodsScript,
+	
+	kMyLocalKey_gem,
+	kMyLocalKey_gold,
+	kMyLocalKey_heart,
+	kMyLocalKey_doubleItem,
+	kMyLocalKey_baseSpeedUpItem,
+	kMyLocalKey_magneticItem,
+	kMyLocalKey_p1,
+	kMyLocalKey_p2,
+	kMyLocalKey_p3,
+	kMyLocalKey_p4,
+	kMyLocalKey_p5,
+	kMyLocalKey_p6
 };
 class KsLocal
 {
