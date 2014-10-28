@@ -1161,7 +1161,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드는 총 4종류<font newline=14>입니다.";
 	
 	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtCardContent] = "<font newline=16>카드가 부족해요.<font newline=16>다른 등급으로 클리어해서<font color=961 newline=16>카드 %d종류를 모아주세요.";
-	obj[LK::kMyLocalKey_gachaListAt4HourTimeAutoRefresh] = "상품목록은 4시간 단위로 자동갱신됩니다.";
+	obj[LK::kMyLocalKey_gachaListAt4HourTimeAutoRefresh] = "상품목록은 %d시간 단위로 자동갱신됩니다.";
 	obj[LK::kMyLocalKey_goodLuckAyameaFighting] = "행운을 빌어요!\n아야매가 응원할께요!";
 	obj[LK::kMyLocalKey_brotherJustOne] = "오빠..\n이거 하나만..!";
 	obj[LK::kMyLocalKey_goodsTouchDetailScript] = "상품을 누르면 자세한 설명을 볼 수 있어요.";
@@ -1169,6 +1169,25 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_nowRefresh] = "바로갱신";
 	obj[LK::kMyLocalKey_normalGacha] = "일반뽑기";
 	obj[LK::kMyLocalKey_premiumGacha] = "고급뽑기";
+	obj[LK::kMyLocalKey_congratulation] = "축하합니다!";
+	obj[LK::kMyLocalKey_characterName] = "캐릭터명";
+	
+	obj[LK::kMyLocalKey_gemTake] = "젬 획득!";
+	obj[LK::kMyLocalKey_goldTake] = "골드 획득!";
+	obj[LK::kMyLocalKey_heartTake] = "하트 획득!";
+	obj[LK::kMyLocalKey_doubleItemTake] = "더블 아이템 획득!";
+	obj[LK::kMyLocalKey_baseSpeedUpItemTake] = "신발 아이템 획득!";
+	obj[LK::kMyLocalKey_magneticItemTake] = "자석 아이템 획득!";
+	obj[LK::kMyLocalKey_p1Take] = "부활석 획득!";
+	obj[LK::kMyLocalKey_p2Take] = "맵뽑기권 획득!";
+	obj[LK::kMyLocalKey_p3Take] = "업그레이드권 획득!";
+	obj[LK::kMyLocalKey_p4Take] = "아이템뽑기권 획득!";
+	obj[LK::kMyLocalKey_p5Take] = "99프로뽑기권 획득!";
+	obj[LK::kMyLocalKey_p6Take] = "생명의돌 획득!";
+	
+	obj[LK::kMyLocalKey_gemCount] = "%d 젬";
+	obj[LK::kMyLocalKey_goldCount] = "%d 골드";
+	obj[LK::kMyLocalKey_propertyCount] = "%d 개";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	

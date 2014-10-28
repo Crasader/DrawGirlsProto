@@ -183,8 +183,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_savedStartPackFirstTime,
 	
 	kDSH_Key_normalGachaList,
-	kDSH_Key_premiumGachaList
-	
+	kDSH_Key_premiumGachaList,
+	kDSH_Key_normalGachaDataTime,
+	kDSH_Key_premiumGachaDataTime
 }DSH_Key;
 
 enum SpecialTutorialCode{
