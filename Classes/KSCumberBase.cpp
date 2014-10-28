@@ -1411,15 +1411,17 @@ void KSCumberBase::cumberAttack(float dt)
 			// 안넣어져야할 조건
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
-			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-				 currentSecond <= m_lastPattern.exeTime + 3000 ||
-				 (*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer)
+			bool falseCondition = (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
+			currentSecond <= m_lastPattern.exeTime + 3000 ||
+			(*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer;
+			
+			// 미사일이면 무조건 후보에 오름
+			if((*iter)["pattern"].asString() == "108")
 			{
-				
+				selectedAttacks.push_back(*iter);
 			}
-			else // 넣어져야할 조건
+			else if( !falseCondition )
 			{
-//				if((*iter)["atype"].asString() == "crash" &&)
 				selectedAttacks.push_back(*iter);
 			}
 		}
@@ -2551,18 +2553,20 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		if(m_aiValue>80)m_aiValue=80;
 		
 		//부수기 공격 확률 낮추기
-//		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
-//		{
-//			if((*iter)["atype"].asString() == "crash"){
-//                if(playCount<2)(*iter)["percent"]=1;
-//                else (*iter)["percent"]=0;
-//			}
-//			
-//			if((*iter)["atype"].asString() == "special"){
-//				if(playCount<3)(*iter)["percent"]=1;
-//				else (*iter)["percent"]=0;
-//			}
-//		}
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+		{
+			if((*iter)["atype"].asString() == "crash"){
+                if(playCount<2)(*iter)["percent"]=1;
+                else (*iter)["percent"]=0;
+			}
+			
+			if((*iter)["atype"].asString() == "special"){
+				if((*iter)["pattern"].asString()!="1007" && (*iter)["pattern"].asString()!="1020"){
+					if(playCount<3)(*iter)["percent"]=1;
+					else (*iter)["percent"]=0;
+				}
+			}
+		}
 		
 		
 		
@@ -2799,7 +2803,7 @@ void KSCumberBase::settingPattern( Json::Value pattern )
 	
 	for(auto i : m_attacks)
 	{
-//		KS::KSLog("%", i);
+		KS::KSLog("%", i);
 	}
 }
 
