@@ -1047,8 +1047,9 @@ void StartSettingPopup::setMain()
 		setFormSetter(level_case);
 		level_case->setPosition(ccp(left_back->getPositionX(),75));
 		main_case->addChild(level_case);
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, mySGD->getSelectedCharacterHistory().characterIndex.getV(),
-																mySGD->getUserdataCharLevel());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																t_history.characterLevel.getV());
 
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
@@ -1293,8 +1294,9 @@ void StartSettingPopup::setMain()
 		setFormSetter(level_case);
 		level_case->setPosition(ccp(left_back->getPositionX(),95));
 		main_case->addChild(level_case);
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, mySGD->getSelectedCharacterHistory().characterIndex.getV(),
-																mySGD->getUserdataCharLevel());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																t_history.characterLevel.getV());
 	
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 
@@ -1732,8 +1734,9 @@ void StartSettingPopup::characterClose()
 	{
 		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 	}
-	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, mySGD->getSelectedCharacterHistory().characterIndex.getV(),
-															mySGD->getUserdataCharLevel());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+															t_history.characterLevel.getV());
 	
 	StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
@@ -1923,8 +1926,9 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			{
 				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 			}
-			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, mySGD->getSelectedCharacterHistory().characterIndex.getV(),
-																	mySGD->getUserdataCharLevel());
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																	t_history.characterLevel.getV());
 	
 			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 
@@ -2028,8 +2032,9 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			{
 				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 			}
-			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, mySGD->getSelectedCharacterHistory().characterIndex.getV(),
-																	mySGD->getUserdataCharLevel());
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																	t_history.characterLevel.getV());
 
 			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	

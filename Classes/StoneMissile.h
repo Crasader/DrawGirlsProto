@@ -90,7 +90,7 @@ public:
 			// 화면 번쩍 번쩍
 			myGD->communication("VS_setLight");
 			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
+			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, m_subPower);
 
 			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 			//combo_cnt++;
@@ -1207,7 +1207,7 @@ public:
 		m_streak = NULL;
 		m_start_node = NULL;
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_option = ao;
 		m_power = power;
@@ -1433,7 +1433,7 @@ public:
 
 		// 몬스터가 맞는 조건
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		if(distance <= 12 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
@@ -2262,7 +2262,7 @@ public:
 		StoneAttack::init();
 
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	
 		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
@@ -2352,7 +2352,7 @@ public:
 		StoneAttack::init();
 
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_power = power;
 		m_subPower = subPower;
@@ -2444,7 +2444,7 @@ public:
 		m_subPower = subPower;
 		m_option = ao;
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	
 		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
 		
@@ -2642,7 +2642,7 @@ public:
 		m_lifeFrames = lifeFrames;
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_option = ao;
 		m_power = power;
