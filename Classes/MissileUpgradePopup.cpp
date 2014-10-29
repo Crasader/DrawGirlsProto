@@ -333,7 +333,7 @@ void MissileUpgradePopup::resultLevelUp(Json::Value result_data)
 		}
 		
 		mySGD->refreshUserdata(UserdataType::kUserdataType_characterLevel, result_data["level"].asInt());
-		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_nextPrice, result_data["nextPrice"].asInt());
+		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_nextPrice, result_data["currentPrice"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_power, result_data["power"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_nextPower, result_data["nextPower"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_prevPower, result_data["prevPower"].asInt());

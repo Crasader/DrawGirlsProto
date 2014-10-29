@@ -530,7 +530,7 @@ void StartSettingScene::setMain()
 	missile_data_level->setPosition(ccp(30,95));
 	main_case->addChild(missile_data_level);
 	
-	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", mySGD->getSelectedCharacterHistory().power.getV())->getCString(), mySGD->getFont().c_str(), 12);
+	missile_data_power = CCLabelTTF::create(CCString::createWithFormat("파워 %d", /*mySGD->getSelectedCharacterHistory().power.getV()*/1)->getCString(), mySGD->getFont().c_str(), 12);
 	missile_data_power->setAnchorPoint(ccp(0,0.5f));
 	missile_data_power->setPosition(ccp(84,95));
 	main_case->addChild(missile_data_power);
@@ -722,7 +722,7 @@ void StartSettingScene::upgradeAction(CCObject *sender)
 				
 							   missile_level++;
 							   missile_data_level->setString(CCString::createWithFormat("레벨 %d", missile_level)->getCString());
-							   missile_data_power->setString(CCString::createWithFormat("파워 %d", mySGD->getSelectedCharacterHistory().power.getV())->getCString());
+							   missile_data_power->setString(CCString::createWithFormat("파워 %d", /*mySGD->getSelectedCharacterHistory().power.getV()*/1)->getCString());
 							   
 							   CCPoint missile_position;
 							   if(missile_img)

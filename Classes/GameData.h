@@ -97,6 +97,7 @@ public:
 	std::map<std::string, std::function<void(CCPoint, ccColor4F, float)>> V_CCPCOLORF;
 	std::map<std::string, std::function<int(CCPoint, std::string&, KSCumberBase*, bool)>> I_CCPStrCumberBaseB;
 	std::map<std::string, std::function<void(CCPoint, int)>> V_CCPI;
+	std::map<std::string, std::function<void(CCPoint, int, int)>> V_CCPII;
 	
 	std::map<std::string, std::function<void(CCPoint, bool)>> V_CCPB;
 	std::map<std::string, std::function<void(int, int, float)>> V_IIF;
@@ -225,6 +226,7 @@ public:
 	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2, bool b1, bool b2);
 	void communication(string funcName);
 	void communication(string funcName, CCPoint t_p, int t_i);
+	void communication(string funcName, CCPoint t_p, int t_i1, int t_i2);
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p);
 	void communication(string funcName, bool t_b);
 	void communication(string funcName, CCObject* t_obj);

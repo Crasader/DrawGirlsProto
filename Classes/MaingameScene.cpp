@@ -165,7 +165,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_startMoveToCCPoint"] = std::bind(&Maingame::startMoveToCCPoint, this, _1);
 	myGD->V_I["Main_takeSpeedUpEffect"] = std::bind(&Maingame::takeSpeedUpEffect, this, _1);
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
-	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
+	myGD->V_CCPII["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2, _3);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
 	myGD->V_V["Main_hideThumb"] = std::bind(&Maingame::hideThumb, this);
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
@@ -2553,6 +2553,11 @@ void Maingame::clearScenario()
 	}
 	else
 	{
+		if(mySGD->is_hell_mode)
+		{
+			mySGD->is_clear_diary = true;
+		}
+		
 		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 		intro_boss->setScale(1.8f);
@@ -3617,7 +3622,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 													   }));
 }
 
-void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
+void Maingame::showDamageMissile( CCPoint t_position, int t_damage, int t_sub_dmg )
 {
 	CCNode* container = CCNode::create();
 	container->setScale(1.f/myGD->game_scale);
@@ -3634,6 +3639,23 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 	CCCallFunc* t_call = CCCallFunc::create(container, callfunc_selector(CCNode::removeFromParent));
 	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call, NULL);
 	damage_label->runAction(t_seq);
+	
+	if(t_sub_dmg > 0)
+	{
+		KSLabelTTF* sub_dmg_label = KSLabelTTF::create(ccsf("+%d", t_sub_dmg), mySGD->getFont().c_str(), 12);
+		sub_dmg_label->setAnchorPoint(ccp(0.f,0.5f));
+		sub_dmg_label->setColor(ccBLUE);
+		sub_dmg_label->enableOuterStroke(ccBLACK, 0.5f, 100, true);
+		sub_dmg_label->setPosition(ccp(-3,0));
+		sub_dmg_label->setScale(0);
+		container->addChild(sub_dmg_label);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.4f, 0);
+		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_scale1, t_fade2, NULL);
+		sub_dmg_label->runAction(t_seq2);
+	}
 	
 //	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
 //	damage_label->setScale(1.f/1.5f);

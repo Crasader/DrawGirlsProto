@@ -3296,7 +3296,7 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "aSeqAtd";
 	
 	else if(t_type == kUserdataType_missileInfo_nextPrice)
-		return_value = "nextPrice";
+		return_value = "currentPrice";
 	else if(t_type == kUserdataType_missileInfo_power)
 		return_value = "power";
 	else if(t_type == kUserdataType_missileInfo_nextPower)
