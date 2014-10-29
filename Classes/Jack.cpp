@@ -2529,6 +2529,7 @@ void Jack::myInit()
 	myGD->B_V["Jack_isDie"] = std::bind(&Jack::isDieJack, this);
 	myGD->CCN_V["Jack_getJack"] = std::bind(&Jack::getJack, this);
 	myGD->I_V["Jack_getContinueOnCount"] = std::bind(&Jack::getContinueOnCount, this);
+	myGD->getJackPointCCP = std::bind(&Jack::getPosition, this);
 
 
 	isMoving = false;
@@ -2620,6 +2621,11 @@ void Jack::myInit()
 //	jack_barrier->runAction(t_repeat);
 	
 	setScale(1/myGD->game_scale);//NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d)
+}
+
+const CCPoint& Jack::getPosition()
+{
+	return CCNode::getPosition();
 }
 
 void Jack::setStartPosition()

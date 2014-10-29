@@ -200,6 +200,9 @@ public:
 	void setJackPoint(IntPoint t_jp);
 	IntPoint getJackPoint();
 	
+	std::function<CCPoint()> getJackPointCCP;
+//	CCPoint getJackPointCCP();
+	
 	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
 	IntPoint getMainCumberPoint(CCNode* cb)
 	{

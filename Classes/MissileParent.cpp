@@ -230,7 +230,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 							
 				CCPoint minDis = ccp(99999, 99999);
 				KSCumberBase* nearCumber = myGD->getMainCumberVector()[0];
-				for(int i = 0; i<myGD->getMainCumberCount();i++){
+				for(int i = 0; i<myGD->getMainCumberCount();i++)
+				{
 					KSCumberBase* cumber = myGD->getMainCumberVector()[i];
 					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
 					if(ccpLength(nowDis)<ccpLength(minDis))
