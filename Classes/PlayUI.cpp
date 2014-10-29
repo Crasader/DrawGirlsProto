@@ -395,9 +395,10 @@ void GoldLabel::startIncreasing ()
 	int stageGold = mySGD->getStageGold();
 	myGD->communication("UI_checkStageGoldMission", stageGold);
 	
-	keep_gold_string = CCString::createWithFormat("%d", stageGold)->getCString();
+	int stageBaseGold = mySGD->getStageBaseGold();
+	keep_gold_string = CCString::createWithFormat("%d", stageBaseGold)->getCString();
 	base_gold = atof(getString()); // 원래 가지고 있던 골드
-	keep_gold = stageGold - base_gold; // 이번에 얻은 골드
+	keep_gold = stageBaseGold - base_gold; // 이번에 얻은 골드
 	decrease_gold = keep_gold;
 	increase_gold = 0.f;
 	schedule(schedule_selector(GoldLabel::increasing));
@@ -438,7 +439,7 @@ void GoldLabel::stopIncreasing ()
 void GoldLabel::myInit ()
 {
 	is_incresing = false;
-	CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageGold())->getCString(), "goldfont.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
+	CCLabelBMFont::initWithString(CCString::createWithFormat("%d", mySGD->getStageBaseGold())->getCString(), "goldfont.fnt", kCCLabelAutomaticWidth, kCCTextAlignmentRight, CCPointZero);
 	stopIncreasing();
 	setAnchorPoint(ccp(1.f,0.5));
 	
@@ -453,8 +454,6 @@ void GoldLabel::myInit ()
 //	if(myGD->gamescreen_type == kGT_leftUI)			setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+50+myGD->boarder_value,myDSH->ui_top-15));
 //	else if(myGD->gamescreen_type == kGT_rightUI)	setPosition(ccp((480-50-myGD->boarder_value*2)*1.1f/4.f+myGD->boarder_value,myDSH->ui_top-15));
 //	else											setPosition(ccp((480-myGD->boarder_value*2)*1.1f/4.f,myDSH->ui_top-15));
-	
-	mySGD->setIngameGoldLabel(this);
 }
 MyGold * MyGold::create ()
 {
@@ -591,7 +590,7 @@ void GetGold::myInit (CCPoint t_sp, int t_duration_frame)
 {
 	AudioEngine::sharedInstance()->playEffect("sound_get_coin.mp3", false);
 	duration_frame = t_duration_frame;
-	mySGD->addChangeGoodsIngameGold(duration_frame);
+	mySGD->addChangeGoodsIngameGold(duration_frame, 0);
 	
 	create_frame = duration_frame/60 + 1;
 	
@@ -3735,6 +3734,15 @@ void PlayUI::myInit ()
 	
 	gold_label = GoldLabel::create();
 	addChild(gold_label);
+	
+	KSLabelTTF* t_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 7);
+	t_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	t_label->enableOuterStroke(ccc3(60, 20, 0), 0.5f, 255, true);
+	t_label->setAnchorPoint(ccp(1,0.5f));
+	t_label->setPosition(gold_label->getPosition() + ccp(0,-8));
+	addChild(t_label);
+	
+	mySGD->setIngameGoldLabel(gold_label, t_label);
 	
 	myGD->V_I["UI_checkStageGoldMission"] = std::bind(&PlayUI::checkStageGoldMission, this, _1);
 	

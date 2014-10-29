@@ -381,7 +381,7 @@ class HeartTime;
 
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
-
+class KSLabelTTF;
 class StarGoldData : public CCObject
 {
 public:
@@ -393,7 +393,7 @@ public:
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);
-	void setIngameGoldLabel( CCLabelBMFont* t_label );
+	void setIngameGoldLabel( CCLabelBMFont* t_label, KSLabelTTF* t_label2 );
 //	int getStar();
 //	void setStar(int t_star);
 	
@@ -428,6 +428,7 @@ public:
 	int getBeforeRankUpStageGrade();
 	
 	int getStageGold();
+	int getStageBaseGold();
 	
 	bool getIsAfterSceneChapter();
 	
@@ -920,7 +921,7 @@ public:
 	string getGoodsTypeToKey(GoodsType t_type);
 	GoodsType getGoodsKeyToType(string t_key);
 	GoodsType getItemCodeToGoodsType(ITEM_CODE t_code);
-	void addChangeGoodsIngameGold(int t_value);
+	void addChangeGoodsIngameGold(int t_value, float t_value2);
 	void addChangeGoods(string t_exchangeID, GoodsType t_type = kGoodsType_begin, int t_value = 0, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void addChangeGoods(string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list);
 //	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
@@ -1061,6 +1062,7 @@ private:
 	vector<CollectionCardInfo> special_cards;
 	
 	bool is_ingame_gold;
+	bool is_ingame_sub_gold;
 	
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -1076,6 +1078,7 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
 	CCLabelBMFont* ingame_gold_label;
+	KSLabelTTF* ingame_sub_gold_label;
 	HeartTime* heart_time;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
@@ -1094,6 +1097,7 @@ private:
 	KSProtectVar<int> game_time;
 	KSProtectVar<int> game_use_time;
 	KSProtectVar<int> ingame_gold;
+	KSProtectVar<float> ingame_sub_gold;
 	
 	int start_map_gacha_cnt;
 		   

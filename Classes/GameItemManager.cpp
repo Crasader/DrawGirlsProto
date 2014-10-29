@@ -1240,7 +1240,7 @@ void FeverCoinParent::removing()
 	remove_target->startRemove();
 	remove_target_list.pop_front();
 	
-	mySGD->addChangeGoodsIngameGold(int(10.f*weight_value));
+	mySGD->addChangeGoodsIngameGold(int(10.f*weight_value), 0);
 //	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + int(10.f*weight_value), false);
 	
 	if(remove_target_list.empty())
@@ -1273,7 +1273,7 @@ FloatingCoin::FloatingCoin()
 		m_absorb_distance += MAGNET_DISTANCE;
 }
 
-FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
+FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoin* t_fc = new FloatingCoin();
 	t_fc->myInit(t_take_func, t_gold, t_start_point, t_auto_take);
@@ -1341,7 +1341,7 @@ void FloatingCoin::traceCharacter()
 	{
 		stopTraceCharacter();
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold);
+		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
 		
 		take_func(getPosition());
 		
@@ -1364,7 +1364,7 @@ void FloatingCoin::takeIt()
 	if(auto_take)
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold);
+		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
 		
 		take_func(getPosition());
 		
@@ -1515,18 +1515,21 @@ void FloatingCoin::startTing()
 {
 	ting_y = 0.f;
 	start_speed = 2.f+(rand()%20)/10.f;
+	keep_start_speed = start_speed;
 	schedule(schedule_selector(FloatingCoin::ting));
 }
 void FloatingCoin::ting()
 {
 	float after_y = /*coin_img->getPositionY()*/ting_y + start_speed;
-	float before_y = getPositionY();
+	float before_y = getPositionY() - ting_y;
 //	coin_img->setPositionY(MAX(coin_img->getPositionY() + start_speed, 0.f));
-	setPositionY(before_y + MAX(ting_y + start_speed, 0.f));
+	setPositionY(getPositionY() + start_speed);
 	
+	ting_y = ting_y + start_speed;
 	if(after_y < 0)
 	{
-		start_speed = -start_speed*0.7f;
+		start_speed = keep_start_speed*0.7f;
+		keep_start_speed = start_speed;
 		if(fabsf(start_speed) < 0.3f)
 		{
 //			coin_img->setPositionY(0);
@@ -1534,11 +1537,12 @@ void FloatingCoin::ting()
 			unschedule(schedule_selector(FloatingCoin::ting));
 			return;
 		}
+		return;
 	}
 	
 	start_speed -= 0.3f;
 }
-void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
+void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	is_locked = false;
@@ -1559,6 +1563,9 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	if(random_value < goldBalance["goldPercent"][0].asInt())
 	{
 		m_gold = t_gold*goldBalance["goldWeight"][0].asInt();
+		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][0].asInt();
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
@@ -1622,6 +1629,9 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	else if(random_value < goldBalance["goldPercent"][1].asInt()+goldBalance["goldPercent"][0].asInt())
 	{
 		m_gold = t_gold*goldBalance["goldWeight"][1].asInt();
+		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][1].asInt();
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
@@ -1649,6 +1659,9 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	else
 	{
 		m_gold = t_gold*goldBalance["goldWeight"][2].asInt();
+		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][2].asInt();
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
@@ -1681,7 +1694,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	startFloating();
 }
 
-FloatingCoinCreator* FloatingCoinCreator::create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
+FloatingCoinCreator* FloatingCoinCreator::create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoinCreator* t_fcc = new FloatingCoinCreator();
 	t_fcc->myInit(t_add_parent, t_take_func, t_frame, t_count, t_gold, t_start_point, t_auto_take);
@@ -1720,7 +1733,7 @@ void FloatingCoinCreator::creating()
 		}
 	}
 }
-void FloatingCoinCreator::myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
+void FloatingCoinCreator::myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	add_parent = t_add_parent;
@@ -1752,7 +1765,7 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 	if(t_coin_count > 0)
 	{
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), myGD->getJackPoint().convertToCCP()));
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), myGD->getJackPoint().convertToCCP()));
 	}
 }
 void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
@@ -1760,7 +1773,7 @@ void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_co
 	if(t_coin_count > 0)
 	{
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), t_target_point));
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), t_target_point));
 	}
 }
 void FloatingCoinParent::hideAllFloatingCoin()
@@ -1798,7 +1811,7 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 	if(t_coin_count <= 0)
 		t_coin_count = 1;
 	
-	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), ccp(0,0), true));
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), ccp(0,0), true));
 }
 
 void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
@@ -1831,6 +1844,9 @@ bool GameItemManager::getIsFevering()
 
 void GameItemManager::startItemSetting()
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	for(int i=0;i<2;i++)
 	{
 		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
@@ -1887,6 +1903,9 @@ void GameItemManager::startItemSetting()
 
 void GameItemManager::startCounting()
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	create_counting_value = rand()%5 +  10-selected_item_cnt-double_item_cnt;
 	counting_value = 0;
 	schedule(schedule_selector(GameItemManager::counting), 1.f);
