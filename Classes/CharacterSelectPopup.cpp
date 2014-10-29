@@ -247,7 +247,7 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		
 		StoneType missile_type_code = StoneType(history_list[idx].m_number-1);
 		
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, history_list[idx].m_index + 1, mySGD->getUserdataCharLevel());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, history_list[idx].m_index + 1, history_list[idx].m_level);
 		KS::KSLog("%", mInfo);
 		missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 		

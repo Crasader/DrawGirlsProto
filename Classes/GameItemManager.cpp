@@ -460,12 +460,12 @@ void GameItemAttack::acting()
 	
 	int weapon_level = mySGD->getUserdataCharLevel()+3;
 	if(weapon_level>30)weapon_level=30;
-	int weapon_rank = (weapon_level-1)/5 + 1;
-	weapon_level = (weapon_level-1)%5 + 1;
+//	int weapon_rank = (weapon_level-1)/5 + 1;
+//	weapon_level = (weapon_level-1)%5 + 1;
 	
 	int t_damage = mySGD->getUserdataMissileInfoPower()*1.3f;
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int weapon_type = mInfo.get("type", 0).asInt();
 	
 	double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
