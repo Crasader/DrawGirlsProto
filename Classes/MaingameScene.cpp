@@ -3287,7 +3287,7 @@ void Maingame::clearScenario3()
 void Maingame::failScenario()
 {
 	myGIM->gameover();
-	myMS->setVisible(false);
+	
 	if(mySGD->is_endless_mode)
 	{
 		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
