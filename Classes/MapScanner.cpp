@@ -508,10 +508,16 @@ void MapScanner::scanMap()
 	float take_area_rate = newInsideCnt*100.f/(160*215);
 	
 	int addScore = (take_area_rate*1000 + sqrtf(take_area_rate/20*1000*4))*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	if(score_rate < 1.0)
+		score_rate = 1.0;
+	score_rate -= 1.0;
+	int sub_score = addScore*score_rate;
 	
-	mySGD->area_score = mySGD->area_score.getV() + addScore;
+	mySGD->area_score = mySGD->area_score.getV() + addScore + sub_score;
 	
-	dgPointer->communication("UI_addScore", addScore);
+	dgPointer->communication("UI_addScore", addScore, sub_score);
 	
 	resetRects(true);
 	end = chrono::system_clock::now();

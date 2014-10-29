@@ -1269,11 +1269,14 @@ PlayUI::~ PlayUI ()
 		exchange_dic = NULL;
 	}
 }
-void PlayUI::addScore (int t_score)
+void PlayUI::addScore (int t_score, int t_sub_score)
 {
 	score_value = score_value.getV() + t_score;
+	sub_score_value = sub_score_value.getV() + t_sub_score;
 //	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
+	if(sub_score_value.getV() > 0)
+		sub_score_label->setString(ccsf("+%d", sub_score_value.getV()));
 	
 	if(clr_cdt_type == kCLEAR_score && !is_cleared_cdt)
 	{
@@ -1328,7 +1331,7 @@ void PlayUI::decreasePercentage ()
 }
 float PlayUI::getScore ()
 {
-	return score_value.getV();
+	return score_value.getV() + sub_score_value.getV();
 }
 float PlayUI::getPercentage ()
 {
@@ -3444,7 +3447,7 @@ void PlayUI::removeParticle (CCObject * sender)
 	
 	mySGD->replay_write_info[mySGD->getReplayKey(kReplayKey_lifeBonusCnt)] = mySGD->replay_write_info.get(mySGD->getReplayKey(kReplayKey_lifeBonusCnt), Json::Value()).asInt() + 1;
 	
-	addScore(30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d));
+	addScore(30000*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d), 0);
 	lifeBonus();
 }
 void PlayUI::createBonusScore ()
@@ -3705,6 +3708,7 @@ void PlayUI::myInit ()
 	ing_bomb_value = 0;
 	
 	score_value = 0;
+	sub_score_value = 0;
 	damaged_score = 0;
 	
 	percentage_decrease_cnt = 0;
@@ -3802,6 +3806,13 @@ void PlayUI::myInit ()
 			me_bomb_clipping->addChild(bomb_img);
 		}));
 		thumb_node->addChild(score_label);
+		
+		sub_score_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 8);
+		sub_score_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		sub_score_label->enableOuterStroke(ccc3(60, 20, 0), 0.5f, 255, true);
+		sub_score_label->setAnchorPoint(ccp(0,0.5f));
+		sub_score_label->setPosition(ccp(40,myDSH->ui_center_y-10) + ccp(0,-215.f*0.17f+10) + ccp(-3,-7));
+		thumb_node->addChild(sub_score_label);
 	}
 	else
 	{
@@ -3813,6 +3824,13 @@ void PlayUI::myInit ()
 		
 		addChild(KSGradualValue<float>::create(myDSH->ui_top-14+UI_OUT_DISTANCE, myDSH->ui_top-14, UI_IN_TIME, [=](float t){score_label->setPositionY(t);}, [=](float t){score_label->setPositionY(myDSH->ui_top-14);}));
 		addChild(score_label);
+		
+		sub_score_label = KSLabelTTF::create("", mySGD->getFont().c_str(), 10);
+		sub_score_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		sub_score_label->enableOuterStroke(ccc3(60, 20, 0), 0.7f, 255, true);
+		sub_score_label->setAnchorPoint(ccp(1,0.5f));
+		sub_score_label->setPosition(ccp(480-8,myDSH->ui_top-14) + ccp(3,-17));
+		addChild(sub_score_label);
 	}
 	
 	top_center_node = CCNode::create();
@@ -4589,7 +4607,7 @@ void PlayUI::myInit ()
 	}
 	
 	
-	myGD->V_I["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1);
+	myGD->V_II["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1, _2);
 	myGD->V_FB["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1, _2);
 	myGD->V_F["UI_subBossLife"] = std::bind(&PlayUI::subBossLife, this, _1);
 	myGD->V_V["UI_decreasePercentage"] = std::bind(&PlayUI::decreasePercentage, this);

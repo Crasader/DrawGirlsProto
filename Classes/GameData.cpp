@@ -212,6 +212,13 @@ void GameData::communication(string funcName, int t_int)
 	return;
 }
 
+void GameData::communication(string funcName, int t_int1, int t_int2)
+{
+	CCAssert(V_II.find(funcName) != V_II.end(), funcName.c_str());
+	V_II[funcName](t_int1, t_int2);
+	return;
+}
+
 void GameData::communication(string funcName, int t_int1, int t_int2, float t_float)
 {
 	CCAssert(V_IIF.find(funcName) != V_IIF.end(), funcName.c_str());
