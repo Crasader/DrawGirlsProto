@@ -273,7 +273,10 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 			
 			GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mInfo.get("subType", 1).asInt(), history_list[idx].m_level)->getCString(),
 																									 rotation);
-			t_gm->beautifier((history_list[idx].m_level-1)/5+1, (history_list[idx].m_level-1)%5);
+//			t_gm->beautifier((history_list[idx].m_level-1)/5+1, (history_list[idx].m_level-1)%5);
+			
+
+			t_gm->beautifier(mySGD->getUserdataCharLevel());
 			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 			t_gm->setPosition(character_img->getPosition());
 			//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);

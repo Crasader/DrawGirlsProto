@@ -223,7 +223,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -423,7 +423,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -484,7 +484,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																												int(power*(randomAdj)),
 																												missile_sub_damage * randomAdj,
 																												10 + 15 * grade,
-																												30.f,
+																												30.f, 180,
 																												ao, selfRotation
 																												);
 				

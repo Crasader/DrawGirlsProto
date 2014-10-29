@@ -993,47 +993,65 @@ public:
 				m_streak->setPosition(m_missileSprite->getPosition());
 		}
 	}
-	void beautifier(int grade, int level)
+	void beautifier(int level)
 	{
-		if(grade >= 3)
-			addStreak();
-
-		if(grade == 2)
+		if(level <= 5)
 		{
-			if(level <= 2)
+			
+		}
+		else if(level <= 10)
+		{
+			if(level <= 12)
 				addParticle(0);
-			else if(level <= 4)
+			else if(level <= 14)
 				addParticle(2);
 			else
 				addParticle(3);
+			
+
 		}
-		else if(grade == 3)
+		else if(level <= 15)
 		{
-			if(level <= 2)
+			if(level <= 17)
 				addParticle(8);
-			else if(level <= 4)
+			else if(level <= 19)
 				addParticle(10);
 			else
 				addParticle(11);
+			
 		}
-		else if(grade == 4)
+		else if(level <= 20)
 		{
-			if(level <= 2)
+			if(level <= 22)
 				addParticle(12);
-			else if(level <= 4)
+			else if(level <= 24)
 				addParticle(14);
 			else
 				addParticle(15);
+			
 		}
-		else if(grade == 5)
+		else if(level <= 25)
 		{
-			if(level <= 2)
+			if(level <= 27)
 				addParticle(16);
-			else if(level <= 4)
+			else if(level <= 29)
 				addParticle(18);
 			else
 				addParticle(19);
 		}
+		else if(level <= 30)
+		{
+			
+		}
+		else
+		{
+			
+		}
+		
+		if(level >= 11)
+			addStreak();
+
+		
 	}	
 	void addStreak()
 	{
@@ -2585,10 +2603,10 @@ class ProtectorMissile : public StoneAttack
 {
 public:
 	static ProtectorMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName,
-																	float initSpeed, int power, int subPower, int range, float finalRadius, AttackOption ao, bool selfRotation)
+																	float initSpeed, int power, int subPower, int range, float finalRadius, int lifeFrames, AttackOption ao, bool selfRotation)
 	{
 		ProtectorMissile* object = new ProtectorMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, range, finalRadius, ao, selfRotation);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, range, finalRadius, lifeFrames, ao, selfRotation);
 		
 		object->autorelease();
 		
@@ -2610,16 +2628,18 @@ public:
 		return object;
 	}
 	
-	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int range, float finalRadius, AttackOption ao, bool selfRotation)
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int range,
+						float finalRadius, int lifeFrames, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
-		
+		m_hiding = false;
 		m_missileStep = 1;
 		m_finalRadius = finalRadius;
 		m_currentRadius = 0;
 		m_particle = NULL;
 		m_streak = NULL;
 		m_start_node = NULL;
+		m_lifeFrames = lifeFrames;
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
@@ -2824,8 +2844,22 @@ public:
 	{
 		if(m_missileStep == 1)
 		{
-			m_currentRadius += 0.2f;
-			m_currentRad += M_PI / 180.f * 2.f;
+			m_lifeFrames--;
+			if(m_lifeFrames <= 0 && m_hiding == false)
+			{
+				m_hiding = true;
+				addChild(KSGradualValue<float>::create(255, 0, 1.f, [=](float t)
+																							 {
+																								 m_missileSprite->setOpacity(t);
+																								 
+																							 }, [=](float t)
+																							 {
+																								 m_missileSprite->removeFromParent();
+																								 
+																							 }));
+			}
+			m_currentRadius += 0.4f;
+			m_currentRad += M_PI / 180.f * 4.f;
 			
 			CCPoint xy = myGD->getJackPointCCP() +
 					ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
@@ -2834,71 +2868,60 @@ public:
 			if(m_currentRadius >= m_finalRadius)
 			{
 				m_currentRadius = m_finalRadius;
-				m_missileStep = 2;
 			}
 			
-			
-		}
-		else if(m_missileStep == 2)
-		{
-			m_currentRadius += 0.2f;
-			m_currentRad += M_PI / 180.f * 2.f;
-			
-			CCPoint xy = myGD->getJackPointCCP() +
-			ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
-			m_missileSprite->setPosition(xy);
-			
-			if(m_currentRadius >= m_finalRadius)
+			if(m_hiding == false)
 			{
-				m_currentRadius = m_finalRadius;
-			}
-			
-			std::vector<KSCumberBase*> targets;
-			KSCumberBase* target = nullptr;
-			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
-			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-			//			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
-			
-			CCPoint minDis = ccp(m_finalRadius, m_finalRadius);
-			KSCumberBase* nearCumber = nullptr;
-			for(int i = 0; i<myGD->getMainCumberCount();i++)
-			{
-				KSCumberBase* cumber = myGD->getMainCumberVector()[i];
-				CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
-				if(ccpLength(nowDis)<ccpLength(minDis))
+				std::vector<KSCumberBase*> targets;
+				KSCumberBase* target = nullptr;
+				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+				//			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+				
+				CCPoint minDis = ccp(m_currentRadius, m_currentRadius);
+				KSCumberBase* nearCumber = nullptr;
+				for(int i = 0; i<myGD->getMainCumberCount();i++)
 				{
-					nearCumber=cumber;
-					minDis = nowDis;
-				}
-			}
-			
-			for(int i = 0; i<myGD->getSubCumberCount();i++){
-				KSCumberBase* cumber = myGD->getSubCumberVector()[i];
-				CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
-				if(cumber->getDeadState() == false)
-				{
+					KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition() - m_missileSprite->getPosition();
 					if(ccpLength(nowDis)<ccpLength(minDis))
 					{
 						nearCumber=cumber;
 						minDis = nowDis;
 					}
 				}
-			}
-			
-			if(nearCumber)
-			{
-				m_missileStep = 3;
 				
-				m_targetNode = nearCumber;
-				CCPoint diff = m_targetNode->getPosition() - m_missileSprite->getPosition();
+				for(int i = 0; i<myGD->getSubCumberCount();i++){
+					KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+					CCPoint nowDis = cumber->getPosition() - m_missileSprite->getPosition();
+					if(cumber->getDeadState() == false)
+					{
+						if(ccpLength(nowDis)<ccpLength(minDis))
+						{
+							nearCumber=cumber;
+							minDis = nowDis;
+						}
+					}
+				}
 				
-				int random_value = rand()%21 - 10; // -10~10
-				float random_float = 1.f + random_value/100.f;
-				random_float = 1.f;
-				m_initRad = atan2f(diff.y, diff.x) * random_float;
-				m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
+				if(nearCumber)
+				{
+					m_missileStep = 3;
+					
+					m_targetNode = nearCumber;
+					CCPoint diff = m_targetNode->getPosition() - m_missileSprite->getPosition();
+					
+					int random_value = rand()%21 - 10; // -10~10
+					float random_float = 1.f + random_value/100.f;
+					random_float = 1.f;
+					m_initRad = atan2f(diff.y, diff.x) * random_float;
+					m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
+				}
 			}
-			
+		}
+		else if(m_missileStep == 2)
+		{
+						
 		}
 		else if(m_missileStep == 3)
 		{
@@ -2906,7 +2929,7 @@ public:
 			CCPoint targetPosition = m_targetNode->getPosition();
 			CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
 			float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
-			CCLOG("distance : %f", distance);
+//			CCLOG("distance : %f", distance);
 			
 			// 몬스터가 맞는 조건
 			if(distance <= 6)
@@ -3127,7 +3150,9 @@ protected:
 	float m_currentRad; // 현재 각도.
 	float m_finalRadius; // 최종 반지름
 	float m_currentRadius; // 반지름이 커지는 도중의 변수
+	int m_lifeFrames;
 	
+	bool m_hiding; // 사라지고 있다.
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
 	bool m_selfRotation; // 스스로 도는지 여부.
