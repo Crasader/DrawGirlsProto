@@ -392,8 +392,6 @@ bool HellModeResult::init()
 	p2_data["highstage"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
 	
-	CCLog("send getstagerankbyalluser param : %s", GraphDogLib::JsonObjectToString(param2).c_str());
-	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, HellModeResult::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, HellModeResult::resultGetTime)));
