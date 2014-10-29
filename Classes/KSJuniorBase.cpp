@@ -238,7 +238,7 @@ void KSJuniorBase::checkConfine(float dt)
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 		int weapon_type = mInfo.get("type", 0).asInt();
 	
-		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower());
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower(), 0);
 		
 //		string missile_code;
 //		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
