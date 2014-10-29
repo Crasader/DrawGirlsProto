@@ -223,7 +223,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -423,7 +423,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		for(int i=0; i<missileNumbersInt; i++)
 		{
 			auto creator = [=](){
-				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, ((grade - 1) * 5 + level));
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 				KSCumberBase* target = nullptr;
 				std::vector<KSCumberBase*> targets;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -484,7 +484,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																												int(power*(randomAdj)),
 																												missile_sub_damage * randomAdj,
 																												10 + 15 * grade,
-																												30.f,
+																												30.f, 180,
 																												ao, selfRotation
 																												);
 				
@@ -1908,7 +1908,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_IIFCCP["MP_createJackMissile"] = std::bind(&MissileParent::createJackMissile, this, _1, _2, _3, _4);
 	myGD->V_CCO["MP_bombCumber"] = std::bind(&MissileParent::bombCumber, this, _1);
 	myGD->createJackMissileWithStoneFunctor = std::bind(&MissileParent::createJackMissileWithStone, this,
-																											_1, 2, _3, _4, _5, _6);
+																											_1, _2, _3, _4, _5, _6);
 	myGD->V_CCPCOLORF["MP_explosion"] = std::bind(&MissileParent::explosion, this, _1, _2, _3);
 	myGD->V_IIFCCP["MP_shootPetMissile"] = std::bind(&MissileParent::shootPetMissile, this, _1, _2, _3, _4);
 	myGD->V_V["MP_resetTickingTimeBomb"] = std::bind(&MissileParent::resetTickingTimeBomb, this);
