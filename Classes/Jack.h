@@ -186,6 +186,7 @@ public:
 	
 	void createFog();
 	
+	const CCPoint& getPosition();
 	void createSleep();
 	
 	void createChaos();
