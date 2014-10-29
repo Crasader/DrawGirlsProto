@@ -688,7 +688,9 @@ void TakeSpeedUp::myInit (int t_step, std::function<void()> t_end_func)
 	KSLabelTTF* speed_label;
 	KSLabelTTF* shadow;
 	
-	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + t_step*0.1f >= 2.f)
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	
+	if(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_speed_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()) + t_step*0.1f >= 2.f)
 	{
 		int i = kAchievementCode_hidden_speedMania;
 		
@@ -1418,21 +1420,21 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			my_fp->addFeverGage(up_count);
 		}
 		
-		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f)
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_percent_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f)
 		{
 			if(!is_five_percent)
 				AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 			
-			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_percent_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f);
-			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+			float cmCnt = (t_p - t_beforePercentage)/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_percent_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f);
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 			int weapon_type = mInfo.get("type", 0).asInt();
-			int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
+			int weapon_level = mySGD->getUserdataCharLevel();
 			
 			int weapon_rank = (weapon_level-1)/5 + 1;
 			weapon_level = (weapon_level-1)%5 + 1;
 			
-			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, cmCnt * 2, myGD->getJackPoint().convertToCCP(),
-																							int(mySGD->getSelectedCharacterHistory().power.getV()));
+			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, cmCnt * 2, myGD->getJackPoint().convertToCCP(), mySGD->getUserdataMissileInfoPower());
 		}
 		
 		if(!is_exchanged && !is_show_exchange_coin && !isGameover && t_p < clearPercentage.getV())
@@ -3669,7 +3671,8 @@ void PlayUI::myInit ()
 {
 	mission_oper_list.clear();
 	
-	string t_missionInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missionInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	string t_missionInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	Json::Value t_json;
 	Json::Reader t_reader;
 	t_reader.parse(t_missionInfo, t_json);
@@ -3925,7 +3928,8 @@ void PlayUI::myInit ()
 	
 	jack_array = new CCArray(1);
 	jack_life_hide_count = 0;
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterIndex.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_int2_life_i, t_history.characterIndex.getV(), t_history.characterLevel.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
 	is_used_heartUpItem = false;
 	is_used_longTimeItem = false;
@@ -4650,7 +4654,8 @@ void PlayUI::continueAction ()
 		countingCnt = 0;
 //	}
 	
-	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, mySGD->getSelectedCharacterHistory().characterIndex.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	jack_life = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_int2_life_i, t_history.characterIndex.getV(), t_history.characterLevel.getV())-1;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_life_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1)-1;
 	
 	CCPoint life_base_position = ccpMult(ccp(-50,0), (jack_life-1)/2.f);
 	

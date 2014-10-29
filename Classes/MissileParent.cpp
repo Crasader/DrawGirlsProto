@@ -214,7 +214,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																	return false; // stop
 																}));
 		CCLOG("char no = %d", mySGD->getUserdataSelectedCharNO());
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 
 		for(int i=0; i<missileNumbersInt; i++)
@@ -410,7 +411,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	else if(stoneType == StoneType::kStoneType_protector)
 	{
 		// 프로텍터 미사일 형식
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
 		for(int i=0; i<missileNumbersInt; i++)
@@ -700,7 +702,7 @@ void MissileParent::subOneDie()
 	else
 	{
 		
-		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)myGD->getMainCumberVector()[0], 80+kMyElementalLife, mySGD->getSelectedCharacterHistory().power.getV()*5.f);
+		JackMissile* t_jm = JM_BasicMissile::create((CCNode*)myGD->getMainCumberVector()[0], 80+kMyElementalLife, mySGD->getUserdataMissileInfoPower()*5.f);
 		addChild(t_jm);
 		t_jm->startMoving();
 	}

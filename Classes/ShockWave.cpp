@@ -60,7 +60,8 @@ void ShockWave::ingSW ()
 		t_sw->setScale(0);
 		addChild(t_sw);
 	}
-	float spread_speed_value = 0.03f - 0.03f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_monsterWave_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.f;
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	float spread_speed_value = 0.03f - 0.03f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f;
 	
 	if(myGD->getCommunicationBool("UI_isExchanged"))
 		spread_speed_value *= 2.f;

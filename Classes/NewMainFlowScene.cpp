@@ -2574,7 +2574,7 @@ void NewMainFlowScene::setBeautystoneMenu()
 	
 	int character_number = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
 	
-	int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, character_number+1);
+	int slot_cnt = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, character_number+1);
 	
 	bool is_id = false;
 	vector<int> stone_id_vector;

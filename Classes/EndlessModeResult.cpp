@@ -153,7 +153,7 @@ bool EndlessModeResult::init()
 		}
 		else
 		{
-			fiverocks::FiveRocksBridge::trackEvent("Game", "PvPResult", ccsf("win %03d", mySGD->endless_my_victory.getV()), ccsf("Lv%03d", mySGD->getSelectedCharacterHistory().level.getV()));
+			fiverocks::FiveRocksBridge::trackEvent("Game", "PvPResult", ccsf("win %03d", mySGD->endless_my_victory.getV()), ccsf("Lv%03d", mySGD->getUserdataCharLevel()));
 			
 			if(mySGD->pvp_continue_cnt >= 1)
 			{

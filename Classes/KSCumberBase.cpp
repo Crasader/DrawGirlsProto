@@ -2700,9 +2700,10 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 }
 void KSCumberBase::applyDisableOfCharacter()
 {
-	Json::Value disableInfo = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value disableInfo = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	
-	std::string tt = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	std::string tt = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	CCLOG("TT = %s", tt.c_str());
 	// disableInfo 돌면서 m_attacks 돔.
 	

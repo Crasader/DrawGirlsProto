@@ -41,7 +41,8 @@ void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, funct
 		}
 	}
 	
-	path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 //	if(path_color_code == 1)
 //		path_color = "life";
 //	else if(path_color_code == 2)

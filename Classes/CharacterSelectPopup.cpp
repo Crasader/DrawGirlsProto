@@ -132,8 +132,8 @@ bool CharacterSelectPopup::init()
 			CharacterHistory t_history = mySGD->getCharacterHistory(j);
 			if(t_history.characterNo.getV() == t_info.m_number)
 			{
-				t_info.m_damage = t_history.power.getV();
-				t_info.m_level = t_history.level.getV();
+				t_info.m_damage = mySGD->getUserdataMissileInfoPower();
+				t_info.m_level = t_history.characterLevel.getV();
 				t_info.is_have = true;
 				is_found = true;
 			}
@@ -156,16 +156,13 @@ bool CharacterSelectPopup::init()
 			CharacterHistory t_history = mySGD->getCharacterHistory(j);
 			if(t_history.characterNo.getV() == character_number)
 			{
-				if(t_history.level.getV() > 0)
+				for(int j=0;j<list_cnt;j++)
 				{
-					for(int j=0;j<list_cnt;j++)
+					if(history_list[j].m_number == character_number)
 					{
-						if(history_list[j].m_number == character_number)
-						{
-							history_list[j].is_have = true;
-							history_list[j].m_card = card_number;
-							break;
-						}
+//						history_list[j].is_have = true;
+						history_list[j].m_card = card_number;
+						break;
 					}
 				}
 			}
@@ -250,9 +247,7 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 		
 		StoneType missile_type_code = StoneType(history_list[idx].m_number-1);
 		
-		
-		
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, history_list[idx].m_index + 1);
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, history_list[idx].m_index + 1, history_list[idx].m_level);
 		KS::KSLog("%", mInfo);
 		missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 		

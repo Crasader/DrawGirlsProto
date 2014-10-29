@@ -184,12 +184,6 @@ bool HellModeResult::init()
 			
 			CharacterHistory tt_history;
 			tt_history.characterNo = character_no;
-			tt_history.level = mySGD->getUserdataCharLevel();
-			tt_history.nextPrice = mySGD->getUserdataMissileInfoNextPrice();
-			tt_history.power = mySGD->getUserdataMissileInfoPower();
-			tt_history.nextPower = mySGD->getUserdataMissileInfoNextPower();
-			tt_history.prevPower = mySGD->getUserdataMissileInfoPrevPower();
-			tt_history.isMaxLevel = mySGD->getUserdataMissileInfoIsMaxLevel();
 			
 			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(tt_history, nullptr));
 			

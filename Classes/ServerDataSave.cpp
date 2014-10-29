@@ -352,6 +352,23 @@ double ServerDataSave::gdfk (SDS_KEY fr_key, int key_val1)
 	SDS_SET key_set = getKeySet(fr_key);
 	return getDoubleForKey(key_set.f_key, key_set.r_key, key_val1);
 }
+double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
+{
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+	iter_double = sds_cache_double.find(c_key);
+	if(iter_double != sds_cache_double.end())
+		return iter_double->second.getV();
+	
+	double return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0.0);
+	sds_cache_double[c_key] = return_value;
+	return return_value;
+}
+double ServerDataSave::gdfk (SDS_KEY fr_key, int key_val1, int key_val2)
+{
+	SDS_SET key_set = getKeySet(fr_key);
+	return getDoubleForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
+}
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key)
 {
 	string c_key = myDefault->getSyncKey(f_key, i1) + r_key;
@@ -409,6 +426,18 @@ void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, double val1, bool diskW
 {
 	SDS_SET key_set = getKeySet(fr_key);
 	setDoubleForKey(key_set.f_key, key_set.r_key, key_val1, val1, diskWrite);
+}
+void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, double val1, bool diskWrite)
+{
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+	
+	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	sds_cache_double[c_key] = val1;
+}
+void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, int key_val2, double val1, bool diskWrite)
+{
+	SDS_SET key_set = getKeySet(fr_key);
+	setDoubleForKey(key_set.f_key, key_set.r_key, key_val1, key_val2, val1, diskWrite);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, int i1, string r_key, double val1, bool diskWrite)
 {
@@ -645,20 +674,21 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_characterInfo_int1_name_s)		rv = "ci%d_name";
 	else if(t_key == kSDS_GI_characterInfo_int1_purchaseInfo_type_s)	rv = "ci%d_pi_type";
 	else if(t_key == kSDS_GI_characterInfo_int1_purchaseInfo_value_i)	rv = "ci%d_pi_value";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_gold_d)		rv = "ci%d_si_gold";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_percent_d)		rv = "ci%d_si_percent";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_feverTime_i)	rv = "ci%d_si_feverTime";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_speed_d)		rv = "ci%d_si_speed";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_life_i)		rv = "ci%d_si_life";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_lineColor_i)	rv = "ci%d_si_lineColor";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_slotCnt_i)		rv = "ci%d_si_slotCnt";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_rewindSpd_d)	rv = "ci%d_si_rewindSpd";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_monsterWave_d)	rv = "ci%d_si_monsterWave";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_missileWave_d)	rv = "ci%d_si_missileWave";
-	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_magnetic_d)	rv = "ci%d_si_magnetic";
-	else if(t_key == kSDS_GI_characterInfo_int1_patternInfo_s)			rv = "ci%d_pi";
-	else if(t_key == kSDS_GI_characterInfo_int1_missionInfo_s)			rv = "ci%d_mi";
-	else if(t_key == kSDS_GI_characterInfo_int1_missileInfo_s)			rv = "ci%d_mslI";
+	else if(t_key == kSDS_GI_characterInfo_int1_maxLevel_i)				rv = "ci%d_mxlv";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_gold_d)			rv = "ci%d_si%d_gold";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_percent_d)		rv = "ci%d_si%d_percent";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_speed_d)			rv = "ci%d_si%d_speed";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_life_i)			rv = "ci%d_si%d_life";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i)		rv = "ci%d_si%d_lineColor";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d)		rv = "ci%d_si%d_rewindSpd";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d)	rv = "ci%d_si%d_monsterWave";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d)	rv = "ci%d_si%d_missileWave";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d)		rv = "ci%d_si%d_magnetic";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_power_d)			rv = "ci%d_si%d_power";
+	else if(t_key == kSDS_GI_characterInfo_int1_statInfo_int2_score_d)			rv = "ci%d_si%d_score";
+	else if(t_key == kSDS_GI_characterInfo_int1_patternInfo_int2_s)			rv = "ci%d_pI%d";
+	else if(t_key == kSDS_GI_characterInfo_int1_missionInfo_int2_s)			rv = "ci%d_mI%d";
+	else if(t_key == kSDS_GI_characterInfo_int1_missileInfo_int2_s)			rv = "ci%d_mslI%d";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s)	rv = "ci%d_ri_ccbiID";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s)	rv = "ci%d_ri_ccbi";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_imageID_s)	rv = "ci%d_ri_imageID";
