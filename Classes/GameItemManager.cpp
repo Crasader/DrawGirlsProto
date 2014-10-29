@@ -468,7 +468,11 @@ void GameItemAttack::acting()
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 	int weapon_type = mInfo.get("type", 0).asInt();
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage, 0);
+	double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	if(power_rate < 1.0)
+		power_rate = 1.0;
+	
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage, int((power_rate-1.0)*t_damage));
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
