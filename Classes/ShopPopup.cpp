@@ -2766,7 +2766,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									{
 										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 										{
-											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											int slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
 											for(int j=1;j<=slot_count;j++)
 												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
 										}
@@ -2867,7 +2867,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									{
 										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 										{
-											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											int slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
 											for(int j=1;j<=slot_count;j++)
 												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
 										}

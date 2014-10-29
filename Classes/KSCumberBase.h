@@ -517,7 +517,8 @@ protected:
 			if(stiffenSecond - timer < stiffenDuration || timer < stiffenSecond)
 			{
 				timer = 0;
-				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+				CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 				stiffenSecond = stiffenDuration * mInfo.get("stiffenbonus", 1.f).asFloat();
 				return true;
 			}

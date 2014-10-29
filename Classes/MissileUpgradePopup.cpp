@@ -119,7 +119,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	missile_type_code = kStoneType_guided;
 	
-	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+	int missile_level = mySGD->getUserdataCharLevel();
 	
 	missile_img = NULL;
 	
@@ -149,7 +149,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	missile_data_level->setPosition(ccp(level_case->getContentSize().width/2.f-30.f,level_case->getContentSize().height/2.f));
 	level_case->addChild(missile_data_level);
 	
-	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 11);
+	missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 11);
 //	missile_data_power->setColor(ccc3(255, 222, 0));
 	missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	missile_data_power->setAnchorPoint(ccp(0.5f,0.5f));
@@ -198,7 +198,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 		price_back->addChild(price_type);
 		price_label = KSLabelTTF::create(
 					 KS::insert_separator( CCString::createWithFormat("%d",
-												mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString()).c_str(),
+												mySGD->getUserdataMissileInfoNextPrice())->getCString()).c_str(),
 																mySGD->getFont().c_str(), 15);
 		price_label->disableOuterStroke();
 		price_label->setPosition(ccp(price_back->getContentSize().width/2.f+10,price_back->getContentSize().height/2.f));
@@ -244,10 +244,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int missile_level = mySGD->getUserdataCharLevel();
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
-		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
+		before_damage = mySGD->getUserdataMissileInfoPower();
 		
 		Json::Value param;
 		param["memberID"] = myHSP->getMemberID();
@@ -260,7 +260,7 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	}
 	else
 	{
-		int upgrade_price = mySGD->getSelectedCharacterHistory().nextPrice.getV();
+		int upgrade_price = mySGD->getUserdataMissileInfoNextPrice();
 		
 		if(mySGD->getGoodsValue(kGoodsType_gold) < upgrade_price)// + use_item_price_gold.getV())
 		{
@@ -280,10 +280,10 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 		loading_layer = LoadingLayer::create(touch_priority-100);
 		addChild(loading_layer);
 		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int missile_level = mySGD->getUserdataCharLevel();
 		before_gold = mySGD->getGoodsValue(kGoodsType_gold);
 		before_level = missile_level;
-		before_damage = mySGD->getSelectedCharacterHistory().power.getV();
+		before_damage = mySGD->getUserdataMissileInfoPower();
 		
 		Json::Value param;
 		param["memberID"] = myHSP->getMemberID();
@@ -339,9 +339,9 @@ void MissileUpgradePopup::resultLevelUp(Json::Value result_data)
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_prevPower, result_data["prevPower"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_isMaxLevel, result_data["isMaxLevel"].asInt());
 		
-		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
 		if(use_gold_value > 0)
-			fiverocks::FiveRocksBridge::trackEvent("UseGold", "LvUp", ccsf("Lv%02d", mySGD->getSelectedCharacterHistory().level.getV()), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "LvUp", ccsf("Lv%02d", mySGD->getUserdataCharLevel()), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
 		use_gold_value = 0;
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
@@ -450,9 +450,9 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 	{
 		CCLOG("missile upgrade success!!");
 		
-		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+		fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
 		if(use_gold_value > 0)
-			fiverocks::FiveRocksBridge::trackEvent("UseGold", "LvUp", ccsf("Lv%02d", mySGD->getSelectedCharacterHistory().level.getV()), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "LvUp", ccsf("Lv%02d", mySGD->getUserdataCharLevel()), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)), use_gold_value);
 		use_gold_value = 0;
 		
 		AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
@@ -556,9 +556,9 @@ void MissileUpgradePopup::resultSaveUserData(Json::Value result_data)
 
 void MissileUpgradePopup::setAfterUpgrade()
 {
-	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+	int missile_level = mySGD->getUserdataCharLevel();
 	
-	int after_damage = mySGD->getSelectedCharacterHistory().power.getV();
+	int after_damage = mySGD->getUserdataMissileInfoPower();
 	
 	missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
 	missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(after_damage).c_str())->getCString());
@@ -596,7 +596,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 	}
 	
 	
-	if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+	if(mySGD->getUserdataMissileInfoIsMaxLevel())
 	{
 		upgrade_button->setEnabled(false);
 		upgrade_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString());
@@ -644,7 +644,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 			price_type->setPosition(t_position);
 			parent_node->addChild(price_type);
 			
-			price_label->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())->getCString()).c_str());
+			price_label->setString(KS::insert_separator(CCString::createWithFormat("%d", mySGD->getUserdataMissileInfoNextPrice())->getCString()).c_str());
 		}
 	}
 	

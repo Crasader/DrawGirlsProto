@@ -975,7 +975,7 @@ void TitleRenewalScene::checkReceive()
 		if(command_list.empty())
 		{
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
-			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
             
             int highPieceGroup = mySGD->getUserdataHighPiece();
             if(highPieceGroup!=0)highPieceGroup-1;
@@ -2093,20 +2093,29 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
 			NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, i, character_list[i-1]["statInfo"]["color"].asInt(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i, character_list[i-1]["statInfo"]["slot"].asInt(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_rewindSpd_d, i, character_list[i-1]["statInfo"]["rewindSpd"].asDouble(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_monsterWave_d, i, character_list[i-1]["statInfo"]["monsterWave"].asDouble(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_missileWave_d, i, character_list[i-1]["statInfo"]["missileWave"].asDouble(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_magnetic_d, i, character_list[i-1]["statInfo"]["magnetic"].asDouble(), false);
-			NSDS_SS(kSDS_GI_characterInfo_int1_patternInfo_s, i, character_list[i-1]["patternInfo"].asString(), false);
-			NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_s, i, character_list[i-1]["missionInfo"].asString(), false);
-			NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_s, i, character_list[i-1]["missileInfo"].asString(), false);
+			Json::Value stat_info = character_list[i-1]["statInfo"];
+			Json::Value pattern_info = character_list[i-1]["patternInfo"];
+			Json::Value mission_info = character_list[i-1]["missionInfo"];
+			Json::Value missile_info = character_list[i-1]["missileInfo"];
+			int max_level = stat_info.size();
+			NSDS_SI(kSDS_GI_characterInfo_int1_maxLevel_i, i, max_level, false);
+			for(int j=0;j<max_level;j++)
+			{
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, i, j+1, stat_info[j]["gold"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_percent_d, i, j+1, stat_info[j]["percent"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_speed_d, i, j+1, stat_info[j]["speed"].asDouble(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_int2_life_i, i, j+1, stat_info[j]["life"].asInt(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i, i, j+1, stat_info[j]["color"].asInt(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, i, j+1, stat_info[j]["rewindSpd"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, i, j+1, stat_info[j]["monsterWave"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d, i, j+1, stat_info[j]["missileWave"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, i, j+1, stat_info[j]["magnetic"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, i, j+1, stat_info[j]["power"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, i, j+1, stat_info[j]["score"].asDouble(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, i, j+1, pattern_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, i, mission_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, i, missile_info[j].asString(), false);
+			}
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
 			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())

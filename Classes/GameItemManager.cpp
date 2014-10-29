@@ -458,13 +458,14 @@ void GameItemAttack::acting()
 	
 	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 	
-	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV()+3;
+	int weapon_level = mySGD->getUserdataCharLevel()+3;
 	if(weapon_level>30)weapon_level=30;
 	int weapon_rank = (weapon_level-1)/5 + 1;
 	weapon_level = (weapon_level-1)%5 + 1;
 	
-	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f;
-	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	int t_damage = mySGD->getUserdataMissileInfoPower()*1.3f;
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int weapon_type = mInfo.get("type", 0).asInt();
 	
 	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
@@ -1257,7 +1258,8 @@ void FeverCoinParent::myInit()
 	initWithFile("fever_coin_bronze.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
 //	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 }
 
 FloatingCoin::FloatingCoin()
@@ -1744,12 +1746,18 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 	else
 		t_coin_count = roundf(t_percent/t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10));
 	if(t_coin_count > 0)
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), myGD->getJackPoint().convertToCCP()));
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), myGD->getJackPoint().convertToCCP()));
+	}
 }
 void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
 {
 	if(t_coin_count > 0)
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), t_target_point));
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), t_target_point));
+	}
 }
 void FloatingCoinParent::hideAllFloatingCoin()
 {
@@ -1781,11 +1789,12 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 		clear_reward *= (mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10);
 	}
 	
-	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())));
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())));
 	if(t_coin_count <= 0)
 		t_coin_count = 1;
 	
-	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), ccp(0,0), true));
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())), ccp(0,0), true));
 }
 
 void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)

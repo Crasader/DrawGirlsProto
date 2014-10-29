@@ -274,12 +274,11 @@ class CharacterHistory
 {
 public:
 	KSProtectVar<int> characterNo;
-	KSProtectVar<int> level;
-	KSProtectVar<int> nextPrice;
-	KSProtectVar<int> power;
-	KSProtectVar<int> nextPower;
-	KSProtectVar<int> prevPower;
-	KSProtectVar<bool> isMaxLevel;
+	KSProtectVar<int> characterLevel;
+	KSProtectVar<int> characterExp;
+	KSProtectVar<int> characterCurrentLevelExp; // 현재 레벨의 min 값
+	KSProtectVar<int> characterNextLevelExp; // 현재 레벨의 max 값, 다음 레벨의 min 값
+	KSProtectVar<int> characterNextLevelUpExp; // 다음 레벨의 max 값
 	KSProtectVar<int> characterIndex;
 };
 

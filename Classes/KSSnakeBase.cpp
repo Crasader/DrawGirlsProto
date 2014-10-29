@@ -658,14 +658,15 @@ void KSSnakeBase::checkConfine(float dt)
 		
 		int rmCnt = 5;
 		
-		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int weapon_level = mySGD->getUserdataCharLevel();
 		
 		int weapon_rank = (weapon_level-1)/5 + 1;
 		weapon_level = (weapon_level-1)%5 + 1;
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int weapon_type = mInfo.get("type", 0).asInt();
 	
-		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getSelectedCharacterHistory().power.getV());
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower());
 		
 		//		string missile_code;
 		//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));

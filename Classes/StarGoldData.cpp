@@ -2165,12 +2165,12 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		Json::Value t_data = history_list[i];
 		CharacterHistory t_history;
 		t_history.characterNo = t_data["characterNo"].asInt();
-		t_history.level = t_data["level"].asInt();
-		t_history.nextPrice = t_data["nextPrice"].asInt();
-		t_history.power = t_data["power"].asInt();
-		t_history.nextPower = t_data["nextPower"].asInt();
-		t_history.prevPower = t_data["prevPower"].asInt();
-		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
+		Json::Value t_levelInfo = t_data["levelInfo"];
+		t_history.characterLevel = t_levelInfo["level"].asInt();
+		t_history.characterExp = t_levelInfo["exp"].asInt();
+		t_history.characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+		t_history.characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+		t_history.characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
 		
 		bool is_found = false;
 		for(int j=0;!is_found && j<character_cnt;j++)
@@ -2198,13 +2198,7 @@ void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 		if(t_history.characterNo.getV() == characterNo)
 		{
 			is_found = true;
-			
-			t_history.level = result_data["level"].asInt();
-			t_history.nextPrice = result_data["nextPrice"].asInt();
-			t_history.power = result_data["power"].asInt();
-			t_history.nextPower = result_data["nextPower"].asInt();
-			t_history.prevPower = result_data["prevPower"].asInt();
-			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+			// 경험치 올림
 		}
 	}
 	
@@ -2212,12 +2206,12 @@ void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 	{
 		CharacterHistory t_history;
 		t_history.characterNo = result_data["characterNo"].asInt();
-		t_history.level = result_data["level"].asInt();
-		t_history.nextPrice = result_data["nextPrice"].asInt();
-		t_history.power = result_data["power"].asInt();
-		t_history.nextPower = result_data["nextPower"].asInt();
-		t_history.prevPower = result_data["prevPower"].asInt();
-		t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+		Json::Value t_levelInfo = result_data["levelInfo"];
+		t_history.characterLevel = t_levelInfo["level"].asInt();
+		t_history.characterExp = t_levelInfo["exp"].asInt();
+		t_history.characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+		t_history.characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+		t_history.characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
 		
 		bool is_found2 = false;
 		int character_cnt = NSDS_GI(kSDS_GI_characterCount_i);
@@ -2252,52 +2246,34 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 		selected_character_index = 0;
 	}
 	
-	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_rewindSpd_d, getSelectedCharacterHistory().characterIndex.getV());
-	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_magnetic_d, getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = getSelectedCharacterHistory();
+	
+	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 }
 void StarGoldData::initCharacterLevel(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].level = t_i;
-	}
+	
 }
 void StarGoldData::initCharacterNextPrice(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].nextPrice = t_i;
-	}
+	
 }
 void StarGoldData::initCharacterPower(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].power = t_i;
-		
-//		CCLog("character power : %d | no : %d", character_historys[i].power.getV(), character_historys[i].characterNo.getV());
-	}
+	
 }
 void StarGoldData::initCharacterNextPower(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].nextPower = t_i;
-	}
+	
 }
 void StarGoldData::initCharacterPrevPower(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].prevPower = t_i;
-	}
+	
 }
 void StarGoldData::initCharacterIsMaxLevel(int t_i)
 {
-	for(int i=0;i<character_historys.size();i++)
-	{
-		character_historys[i].isMaxLevel = t_i;
-	}
+	
 }
 CharacterHistory StarGoldData::getSelectedCharacterHistory()
 {
@@ -2319,7 +2295,7 @@ CommandParam StarGoldData::getUpdateCharacterHistoryParam(CharacterHistory t_his
 	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	param["characterNo"] = t_history.characterNo.getV();
-	param["level"] = t_history.level.getV();
+	param["exp"] = t_history.characterExp.getV();
 	
 	return CommandParam("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
 	
@@ -2332,7 +2308,7 @@ void StarGoldData::setCharacterHistory(CharacterHistory t_history, jsonSelType c
 	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	param["characterNo"] = t_history.characterNo.getV();
-	param["level"] = t_history.level.getV();
+	param["exp"] = t_history.characterExp.getV();
 	
 	hspConnector::get()->command("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
 }
@@ -2342,18 +2318,19 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 	if(result_data["result"]["code"] == GDSUCCESS)
 	{
 		int characterNo = result_data["characterNo"].asInt();
+		Json::Value levelInfo = result_data["levelInfo"];
 		bool is_found = false;
 		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
 		{
 			if(character_historys[i].characterNo.getV() == characterNo)
 			{
-				character_historys[i].level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
-				character_historys[i].nextPrice = mySGD->getUserdataMissileInfoNextPrice();//result_data["nextPrice"].asInt();
-				character_historys[i].power = mySGD->getUserdataMissileInfoPower();
-				character_historys[i].nextPower = mySGD->getUserdataMissileInfoNextPower();
-				character_historys[i].prevPower = mySGD->getUserdataMissileInfoPrevPower();
-				character_historys[i].isMaxLevel = mySGD->getUserdataMissileInfoIsMaxLevel();//result_data["isMaxLevel"].asBool();
 				is_found = true;
+				
+				character_historys[i].characterLevel = levelInfo["level"].asInt();
+				character_historys[i].characterExp = levelInfo["exp"].asInt();
+				character_historys[i].characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+				character_historys[i].characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+				character_historys[i].characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
 			}
 		}
 		
@@ -2361,12 +2338,11 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		{
 			CharacterHistory t_history;
 			t_history.characterNo = characterNo;
-			t_history.level = mySGD->getUserdataCharLevel();//result_data["level"].asInt();
-			t_history.nextPrice = mySGD->getUserdataMissileInfoNextPrice();//result_data["nextPrice"].asInt();
-			t_history.power = mySGD->getUserdataMissileInfoPower();
-			t_history.nextPower = mySGD->getUserdataMissileInfoNextPower();
-			t_history.prevPower = mySGD->getUserdataMissileInfoPrevPower();
-			t_history.isMaxLevel = mySGD->getUserdataMissileInfoIsMaxLevel();//result_data["isMaxLevel"].asBool();
+			t_history.characterLevel = levelInfo["level"].asInt();
+			t_history.characterExp = levelInfo["exp"].asInt();
+			t_history.characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+			t_history.characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+			t_history.characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
 			
 			character_historys.push_back(t_history);
 		}
@@ -2831,7 +2807,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	{
 		if(is_ingame_gold)
 		{
-			int t_missile_level = getSelectedCharacterHistory().level.getV();
+			int t_missile_level = getUserdataCharLevel();
 			string fiverocks_param2;
 			if(t_missile_level <= 5)
 				fiverocks_param2 = "UserLv01~Lv05";
@@ -3721,7 +3697,7 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 4; // 커몬세팅값과 비교해서 앱 종료시키는 버전.
 	
-	client_version = 8; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
+	client_version = 9; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
 	
 	is_ingame_gold = false;
 	total_card_cnt = 0;

@@ -173,7 +173,8 @@ private:
 	void myInit(IntPoint t_start, vector<IntPoint>* t_linked_list)
 	{
 		total_dis = 0.0;
-		dis_value = 1.0 - NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_missileWave_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())/100.0;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		dis_value = 1.0 - NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.0;
 		
 		plinked_list = t_linked_list;
 		
@@ -480,7 +481,8 @@ private:
 			}
 		}
 		
-		path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		path_color_value = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 //		if(path_color_code == 1)
 //			path_color = "life";
 //		else if(path_color_code == 2)

@@ -1051,7 +1051,7 @@ void StartSettingPopup::setMain()
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
 		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int missile_level = mySGD->getUserdataCharLevel();
 		
 		if(missile_type_code == kStoneType_guided)
 		{
@@ -1082,13 +1082,13 @@ void StartSettingPopup::setMain()
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,75));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,75));
 		main_case->addChild(missile_data_power);
 		
-		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+		if(mySGD->getUserdataMissileInfoIsMaxLevel())
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			//		setFormSetter(n_upgrade);
@@ -1296,7 +1296,7 @@ void StartSettingPopup::setMain()
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 
 		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int missile_level = mySGD->getUserdataCharLevel();
 		
 		if(missile_type_code == kStoneType_guided)
 		{
@@ -1327,13 +1327,13 @@ void StartSettingPopup::setMain()
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,95));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,95));
 		main_case->addChild(missile_data_power);
 		
-		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+		if(mySGD->getUserdataMissileInfoIsMaxLevel())
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			setFormSetter(n_upgrade);
@@ -1452,7 +1452,7 @@ void StartSettingPopup::setMain()
 				n_price_type->setPosition(ccp(25,20));
 				n_upgrade->addChild(n_price_type);
 				KSLabelTTF* n_price_label = KSLabelTTF::create(KS::insert_separator(
-																					ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																					ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 				n_price_label->disableOuterStroke();
 				n_price_label->setPosition(ccp(78,20));
 				n_upgrade->addChild(n_price_label);
@@ -1461,7 +1461,7 @@ void StartSettingPopup::setMain()
 				s_price_type->setPosition(ccp(25,20));
 				s_upgrade->addChild(s_price_type);
 				KSLabelTTF* s_price_label = KSLabelTTF::create(KS::insert_separator(
-																					ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																					ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 				s_price_label->disableOuterStroke();
 				s_price_label->setPosition(ccp(78,20));
 				s_upgrade->addChild(s_price_label);
@@ -1619,7 +1619,7 @@ void StartSettingPopup::setMain()
 												   }));
 		}
 		else if(!is_tutorial && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() &&
-				mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+				mySGD->getUserdataCharLevel() <= mySGD->getLevelupGuideConditionLevel())
 		{
 			is_menu_enable = false;
 			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -1733,7 +1733,7 @@ void StartSettingPopup::characterClose()
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
 	StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
-	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+	int missile_level = mySGD->getUserdataCharLevel();
 	
 	if(missile_type_code == kStoneType_guided)
 	{
@@ -1903,10 +1903,10 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	if(mySGD->is_hell_mode_enabled)
 	{
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
-			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+			int missile_level = mySGD->getUserdataCharLevel();
 			
 			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString());
 			
 			CCPoint keep_position;
 			if(missile_img)
@@ -1952,7 +1952,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCPoint upgrade_position = upgrade_menu->getPosition();
 			upgrade_menu->removeFromParent();
 			
-			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+			if(mySGD->getUserdataMissileInfoIsMaxLevel())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
@@ -2007,10 +2007,10 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	else
 	{
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
-			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+			int missile_level = mySGD->getUserdataCharLevel();
 			
 			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString());
 			
 			CCPoint missile_position;
 			if(missile_img)
@@ -2057,7 +2057,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCPoint upgrade_position = upgrade_menu->getPosition();
 			upgrade_menu->removeFromParent();
 			
-			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+			if(mySGD->getUserdataMissileInfoIsMaxLevel())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
@@ -2154,7 +2154,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					n_price_type->setPosition(ccp(25,20));
 					n_upgrade->addChild(n_price_type);
 					KSLabelTTF* n_price_label = KSLabelTTF::create(KS::insert_separator(
-																						ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																						ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 					n_price_label->setPosition(ccp(78,20));
 					n_upgrade->addChild(n_price_label);
 					
@@ -2162,7 +2162,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					s_price_type->setPosition(ccp(25,20));
 					s_upgrade->addChild(s_price_type);
 					KSLabelTTF* s_price_label = KSLabelTTF::create(KS::insert_separator(
-																						ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																						ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 					s_price_label->setPosition(ccp(78,20));
 					s_upgrade->addChild(s_price_label);
 				}
