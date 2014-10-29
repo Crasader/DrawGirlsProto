@@ -235,7 +235,7 @@ void KSJuniorBase::checkConfine(float dt)
 		int weapon_rank = (weapon_level-1)/5 + 1;
 		weapon_level = (weapon_level-1)%5 + 1;
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 		int weapon_type = mInfo.get("type", 0).asInt();
 	
 		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower());

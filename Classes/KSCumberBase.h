@@ -518,7 +518,7 @@ protected:
 			{
 				timer = 0;
 				CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 				stiffenSecond = stiffenDuration * mInfo.get("stiffenbonus", 1.f).asFloat();
 				return true;
 			}

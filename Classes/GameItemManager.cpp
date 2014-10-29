@@ -465,7 +465,7 @@ void GameItemAttack::acting()
 	
 	int t_damage = mySGD->getUserdataMissileInfoPower()*1.3f;
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 	int weapon_type = mInfo.get("type", 0).asInt();
 	
 	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
