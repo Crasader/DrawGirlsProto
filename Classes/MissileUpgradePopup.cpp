@@ -131,7 +131,7 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 			rotation = true;
 		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
 																														 rotation);
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5);
+		t_gm->beautifier(missile_level);
 		t_gm->setPosition(ccp(0,0));
 
 		upgrade_action_node->addChild(t_gm);
@@ -238,7 +238,6 @@ void MissileUpgradePopup::upgradeAction(CCObject* sender, CCControlEvent t_event
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-	
 	if(mySGD->getGoodsValue(kGoodsType_pass3) > 0)
 	{
 		loading_layer = LoadingLayer::create(touch_priority-100);
@@ -583,7 +582,7 @@ void MissileUpgradePopup::setAfterUpgrade()
 
 		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
 																															rotation);
-		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5);
+		t_gm->beautifier(missile_level);
 //		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 		t_gm->setPosition(missile_position);
 //		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
