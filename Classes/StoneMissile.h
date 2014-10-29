@@ -27,7 +27,9 @@ enum AttackOption
 	kPlusScore = 1 << 7	
 };
 inline AttackOption operator|(AttackOption a, AttackOption b)
-{return static_cast<AttackOption>(static_cast<int>(a) | static_cast<int>(b));}
+{
+	return static_cast<AttackOption>(static_cast<int>(a) | static_cast<int>(b));
+}
 
 //inline AttackOption operator&(AttackOption a, AttackOption b)
 //{return static_cast<AttackOption>(static_cast<int>(a) & static_cast<int>(b));}
@@ -2791,22 +2793,148 @@ public:
 			m_currentRadius += 0.2f;
 			m_currentRad += M_PI / 180.f * 2.f;
 			
-			CCPoint xy = myGD->getJackPoint().convertToCCP() +
+			CCPoint xy = myGD->getJackPointCCP() +
 					ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
 			m_missileSprite->setPosition(xy);
 			
 			if(m_currentRadius >= m_finalRadius)
 			{
 				m_currentRadius = m_finalRadius;
+				m_missileStep = 2;
 			}
+			
+			
 		}
 		else if(m_missileStep == 2)
 		{
+			m_currentRadius += 0.2f;
+			m_currentRad += M_PI / 180.f * 2.f;
+			
+			CCPoint xy = myGD->getJackPointCCP() +
+			ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
+			m_missileSprite->setPosition(xy);
+			
+			if(m_currentRadius >= m_finalRadius)
+			{
+				m_currentRadius = m_finalRadius;
+			}
+			
+			std::vector<KSCumberBase*> targets;
+			KSCumberBase* target = nullptr;
+			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+			//			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+			
+			CCPoint minDis = ccp(m_finalRadius, m_finalRadius);
+			KSCumberBase* nearCumber = nullptr;
+			for(int i = 0; i<myGD->getMainCumberCount();i++)
+			{
+				KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+				CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+				if(ccpLength(nowDis)<ccpLength(minDis))
+				{
+					nearCumber=cumber;
+					minDis = nowDis;
+				}
+			}
+			
+			for(int i = 0; i<myGD->getSubCumberCount();i++){
+				KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+				CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
+				if(cumber->getDeadState() == false)
+				{
+					if(ccpLength(nowDis)<ccpLength(minDis))
+					{
+						nearCumber=cumber;
+						minDis = nowDis;
+					}
+				}
+			}
+			
+			if(nearCumber)
+			{
+				m_missileStep = 3;
+				
+				m_targetNode = nearCumber;
+			}
 			
 		}
 		else if(m_missileStep == 3)
 		{
+			// 공격나가는 도중임...
+			CCPoint targetPosition = m_targetNode->getPosition();
+			CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
+			float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
 			
+			// 몬스터가 맞는 조건
+			if(distance <= 6)
+			{
+				AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
+				
+				CCPoint effectPosition = m_missileSprite->getPosition();
+				effectPosition.x += rand()%21 - 10;
+				effectPosition.y += rand()%21 - 10;
+				
+				float damage = m_power;
+				executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+				
+				removeFromParentAndCleanup(true);
+			}
+			else  // 거리가 멀면 몬스터 쪽으로 유도함.
+			{
+				CCPoint missilePosition = m_missileSprite->getPosition();
+				CCPoint cumberPosition;
+				cumberPosition = m_targetNode->getPosition();
+				CCPoint diffPosition = cumberPosition - missilePosition;
+				
+				bool isNearMonster = false;
+				for(auto bosses : myGD->getMainCumberVector())
+				{
+					if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
+					{
+						isNearMonster = true;
+						break;
+					}
+				}
+				for(auto mob : myGD->getSubCumberVector())
+				{
+					if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
+					{
+						isNearMonster = true;
+						break;
+					}
+				}
+				
+				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
+				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+				//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
+				
+				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				float tempTt = tt - m_currentRad;
+				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				float missileSpeed = m_initSpeed * 1.3f;
+				if(isNearMonster)
+				{
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.f), deg2Rad(2.f));
+				}
+				else
+				{
+					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+				}
+				//				m_currentRad = m_currentRad + tt - m_currentRad;
+				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
+																																					sin(m_currentRad) * missileSpeed));
+				
+				if(m_selfRotation)
+				{
+					m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
+				}
+				else
+				{
+					m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+				}
+					//				m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+		 	}
 		}
 	}
 	void beautifier(int grade, int level, ASMotionStreak** motionStreak = nullptr, CCParticleSystemQuad** particleQuad = nullptr)

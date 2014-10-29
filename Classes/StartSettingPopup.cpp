@@ -1047,9 +1047,9 @@ void StartSettingPopup::setMain()
 		setFormSetter(level_case);
 		level_case->setPosition(ccp(left_back->getPositionX(),75));
 		main_case->addChild(level_case);
-		
-		StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-		missile_type_code = kStoneType_guided; // 임시
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+	
 		
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
@@ -1292,8 +1292,9 @@ void StartSettingPopup::setMain()
 		level_case->setPosition(ccp(left_back->getPositionX(),95));
 		main_case->addChild(level_case);
 		
-		StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
-		missile_type_code = kStoneType_guided; // 임시
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+
 		
 		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 		
@@ -1729,8 +1730,8 @@ void StartSettingPopup::characterClose()
 		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 	}
 	
-	StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-	missile_type_code = kStoneType_guided; // 임시
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
 	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
 	
@@ -1919,8 +1920,9 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 			}
 			
-			StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-			missile_type_code = kStoneType_guided; // 임시
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+
 			
 			if(missile_type_code == kStoneType_guided)
 			{
@@ -2021,9 +2023,9 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			{
 				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
 			}
-			
-			StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterIndex.getV()-1);
-			missile_type_code = kStoneType_guided;
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+	
 			
 			if(missile_type_code == kStoneType_guided)
 			{
