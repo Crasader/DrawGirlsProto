@@ -2094,9 +2094,11 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
 			Json::Value stat_info = character_list[i-1]["statInfo"];
-			Json::Value pattern_info = character_list[i-1]["patternInfo"];
-			Json::Value mission_info = character_list[i-1]["missionInfo"];
-			Json::Value missile_info = character_list[i-1]["missileInfo"];
+			Json::Value pattern_info, mission_info, missile_info;
+			Json::Reader t_reader;
+			t_reader.parse(character_list[i-1]["patternInfo"].asString(), pattern_info);
+			t_reader.parse(character_list[i-1]["missionInfo"].asString(), mission_info);
+			t_reader.parse(character_list[i-1]["missileInfo"].asString(), missile_info);
 			int max_level = stat_info.size();
 			NSDS_SI(kSDS_GI_characterInfo_int1_maxLevel_i, i, max_level, false);
 			for(int j=0;j<max_level;j++)

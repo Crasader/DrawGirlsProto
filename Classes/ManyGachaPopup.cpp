@@ -784,7 +784,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	selected_index = rand()%int(enable_gacha_list.size());
 	int selected_value = enable_gacha_list[selected_index];
 	
-	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
+//	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
 	mySGD->addChangeGoods("nml_gc");
 	
@@ -803,7 +803,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 
 void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 {
-	CCLog("resultNormalExchange : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//	CCLog("resultNormalExchange : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
@@ -1129,7 +1129,7 @@ void ManyGachaPopup::startCardDownload()
 	mySGD->network_check_cnt = 0;
 	if(card_download_list.size() > 0 && ing_card_download <= card_download_list.size())
 	{
-		CCLOG("%d : %s", ing_card_download, card_download_list[ing_card_download-1].filename.c_str());
+//		CCLOG("%d : %s", ing_card_download, card_download_list[ing_card_download-1].filename.c_str());
 		mySIL->downloadImg(card_download_list[ing_card_download-1].img,
 						   card_download_list[ing_card_download-1].size,
 						   card_download_list[ing_card_download-1].filename,
@@ -1457,7 +1457,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	selected_index = rand()%int(enable_gacha_list.size());
 	int selected_value = enable_gacha_list[selected_index];
 	
-	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
+//	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
 	mySGD->addChangeGoods("prm_gc");
 	
@@ -1476,7 +1476,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 
 void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 {
-	CCLog("resultPremiumExchange : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//	CCLog("resultPremiumExchange : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
