@@ -2115,8 +2115,8 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, i, j+1, stat_info[j]["power"].asDouble(), false);
 				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, i, j+1, stat_info[j]["score"].asDouble(), false);
 				NSDS_SS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, i, j+1, pattern_info[j].asString(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, i, mission_info[j].asString(), false);
-				NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, i, missile_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, i, j+1, mission_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, i, j+1, missile_info[j].asString(), false);
 			}
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
