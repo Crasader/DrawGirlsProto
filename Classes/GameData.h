@@ -126,7 +126,8 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	std::function<void(const std::string& fileName, const std::string& type)> showDetailMessage;
-	std::function<void(StoneType, int level, float percent, CCPoint initPosition, int missile_damage)> createJackMissileWithStoneFunctor;
+	std::function<void(StoneType, int level, float percent, CCPoint initPosition, int missile_damage,
+										 int missile_sub_damage)> createJackMissileWithStoneFunctor;
 	std::function<void(void)> hideBosses;
 	std::function<void(void)> toFun;
 	std::function<void(void)> toScratch;

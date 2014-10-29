@@ -39,17 +39,18 @@ inline AttackOption operator|(AttackOption a, AttackOption b)
 class PoisonedNiddle : public CCNode
 {
 public:
-	static PoisonedNiddle* create(KSCumberBase* target, int durationFrame, int power)
+	static PoisonedNiddle* create(KSCumberBase* target, int durationFrame, int power, int subPower)
 	{
 		PoisonedNiddle* obj = new PoisonedNiddle();
-		obj->init(target, durationFrame, power);
+		obj->init(target, durationFrame, power, subPower);
 		obj->autorelease();
 		return obj;
 	}
-	bool init(KSCumberBase* target, int durationFrame, int power)
+	bool init(KSCumberBase* target, int durationFrame, int power, int subPower)
 	{
 		m_durationFrame = durationFrame;
 		m_power = power;
+		m_subPower = subPower;
 		m_initJiggleInterval = 30;
 		m_jiggleInterval = 0;
 		m_target = target;
@@ -106,6 +107,7 @@ protected:
 	KSCumberBase* m_target;
 	float m_durationFrame;
 	int m_power;
+	int m_subPower;
 	int m_jiggleInterval;
 	int m_initJiggleInterval;		
 };
@@ -113,19 +115,20 @@ protected:
 class MonsterSpeedDownZone : public CCNode
 {
 public:
-	static MonsterSpeedDownZone* create(CCPoint initPosition, float radius, int durationFrame, int power)
+	static MonsterSpeedDownZone* create(CCPoint initPosition, float radius, int durationFrame, int power, int subPower)
 	{
 		MonsterSpeedDownZone* obj = new MonsterSpeedDownZone();
-		obj->init(initPosition, radius, durationFrame, power);
+		obj->init(initPosition, radius, durationFrame, power, subPower);
 		obj->autorelease();
 		return obj;
 	}
-	bool init(CCPoint initPosition, float radius, int durationFrame, int power)
+	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int subPower)
 	{
 
 		m_radius = radius;
 		m_durationFrame = durationFrame;
 		m_power = power;
+		m_subPower = subPower;
 		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
 		spr->setPosition(initPosition);
 		spr->setScale(radius / 100.f);
@@ -210,6 +213,7 @@ protected:
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
+	int m_subPower;
 	map<CCNode*, bool> m_applied; // 몬스터가 적용이 됐는지.
 	CCSprite* m_rangeSprite;
 };
@@ -218,19 +222,20 @@ protected:
 class JackSpeedUpZone : public CCNode
 {
 public:
-	static JackSpeedUpZone* create(CCPoint initPosition, float radius, int durationFrame, int power)
+	static JackSpeedUpZone* create(CCPoint initPosition, float radius, int durationFrame, int power, int subPower)
 	{
 		JackSpeedUpZone* obj = new JackSpeedUpZone();
-		obj->init(initPosition, radius, durationFrame, power);
+		obj->init(initPosition, radius, durationFrame, power, subPower);
 		obj->autorelease();
 		return obj;
 	}
-	bool init(CCPoint initPosition, float radius, int durationFrame, int power)
+	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int subPower)
 	{
 
 		m_radius = radius;
 		m_durationFrame = durationFrame;
 		m_power = power;
+		m_subPower = subPower;
 		m_applied = false;
 		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_speedzone.ccbi").first; // width : 100
 		spr->setPosition(initPosition);
@@ -282,6 +287,7 @@ protected:
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
+	int m_subPower;
 	bool m_applied;
 	CCSprite* m_rangeSprite;
 };
@@ -353,6 +359,7 @@ protected:
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
+	int m_subPower;
 	bool m_applied;	
 	CCSprite* m_rangeSprite;
 };
@@ -368,7 +375,7 @@ public:
 		if(m_option & AttackOption::kJackSpeedUp)
 		{
 			// 영역 생성하여 그 안에서는 잭의 속도가 빠름.
-			getParent()->addChild(JackSpeedUpZone::create(ip2ccp(myGD->getJackPoint()), 100, 500, 5));
+			getParent()->addChild(JackSpeedUpZone::create(ip2ccp(myGD->getJackPoint()), 100, 500, 5, 0));
 		}
 		if(m_option & AttackOption::kUnbeatable)
 		{
@@ -378,7 +385,7 @@ public:
 		return true;
 	}
 
-	void executeOption(KSCumberBase* cumber, float damage, float direction, CCPoint damagePosition)
+	void executeOption(KSCumberBase* cumber, float damage, float subdamage, float direction, CCPoint damagePosition)
 	{
 		// 옵션에 대해서 수행함.
 		
@@ -386,7 +393,7 @@ public:
 		CCPoint cumberPosition = cumber->getPosition();
 		if(m_option & AttackOption::kPoisonedNiddle)
 		{
-			getParent()->addChild(PoisonedNiddle::create(cumber, 500, 20));
+			getParent()->addChild(PoisonedNiddle::create(cumber, 500, 20, subdamage));
 			// 특정 간격으로 데미지를 깎는다. 부가 기능은  ㄴ ㄴ해.
 		}
 		if((m_option & AttackOption::kGold))
@@ -400,7 +407,7 @@ public:
 		if(m_option & AttackOption::kMonsterSpeedDown)
 		{
 			// 몬스터 속도 하락시킴. n 초간 p% 감소하는 형태.
-			getParent()->addChild(MonsterSpeedDownZone::create(cumberPosition, 100, 500, 5));
+			getParent()->addChild(MonsterSpeedDownZone::create(cumberPosition, 100, 500, 5, subdamage));
 		}
 		// directionAngle : Degree 단위.
 		// 피격에니메이션.
@@ -421,7 +428,7 @@ public:
 		
 		// 캐스팅 캔슬.
 		
-		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage);
+		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage + subdamage);
 		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f) // 전체 피통의 10% 가 깎이면 캐스팅 취소함.
 		{
 			m_option = m_option | AttackOption::kCancelCasting; // 캐스팅 속성 추가.
@@ -433,15 +440,15 @@ public:
 		}
 
 		// 몬스터 리액션하라고.
-		myGD->communication("CP_startDamageReaction", cumber, damage, direction, m_option & AttackOption::kCancelCasting,
+		myGD->communication("CP_startDamageReaction", cumber, damage + subdamage, direction, m_option & AttackOption::kCancelCasting,
 												m_option & AttackOption::kStiffen); // damage : 555
 		// 데미지 표시해주는 것. 데미지 숫자 뜸.
-		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
+		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, (int)subdamage);
 
 		int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 		combo_cnt++;
 
-		int damage_score = (damage/10*5+100)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);//(100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+		int damage_score = ((damage + subdamage)/10*5+100)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);//(100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 		int combo_score = (combo_cnt*10)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d); //damage_score*(combo_cnt-1);
 		
 		mySGD->damage_score = mySGD->damage_score.getV() + damage_score;
@@ -809,10 +816,10 @@ class GuidedMissileForUpgradeWindow : public StoneAttack
 {
 public:
 	static GuidedMissileForUpgradeWindow* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
-															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+															 float initSpeed, int power, int subPower, int range, AttackOption ao, bool selfRotation)
 	{
 		GuidedMissileForUpgradeWindow* object = new GuidedMissileForUpgradeWindow();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, range, ao, selfRotation);
 
 		object->autorelease();
 		
@@ -827,7 +834,7 @@ public:
 		return object;
 	}
 	
-	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int range, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
 		
@@ -837,6 +844,7 @@ public:
 		m_initSpeed = initSpeed;
 		m_option = ao;
 		m_power = power;
+		m_subPower = subPower;
 		m_targetNode = targetNode;	
 		m_guided = false;
 		m_range = range;
@@ -918,7 +926,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
 			
 			removeFromParentAndCleanup(true);
 		}
@@ -1141,15 +1149,16 @@ protected:
 	}m_showWindow;
 	
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+	int m_subPower;
 };
 class GuidedMissile : public StoneAttack
 {
 public:
 	static GuidedMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, 
-															 float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+															 float initSpeed, int power, int subpower, int range, AttackOption ao, bool selfRotation)
 	{
 		GuidedMissile* object = new GuidedMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, range, ao, selfRotation);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subpower, range, ao, selfRotation);
 
 		object->autorelease();
 		
@@ -1171,7 +1180,8 @@ public:
 		return object;
 	}
 	
-	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, AttackOption ao, bool selfRotation)
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower,
+						int range, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
 		
@@ -1183,6 +1193,7 @@ public:
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_option = ao;
 		m_power = power;
+		m_subPower = subPower;
 		m_targetNode = targetNode;	
 		m_guided = false;
 		m_range = range;
@@ -1415,7 +1426,7 @@ public:
 			
 			float damage = m_power;
 			TRACE();
-			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
 			
 			removeFromParentAndCleanup(true);
 		}
@@ -1666,8 +1677,9 @@ protected:
 		CCClippingNode* clippingNode;
 		CCSpriteBatchNode* explosionNode;
 	}m_showWindow;
-	
+	int m_subPower;
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+	
 };
 
 
@@ -1675,21 +1687,22 @@ protected:
 class StraightMissile : public StoneAttack
 {
 public:
-	static StraightMissile* create(CCPoint initPosition, const string& fileName, float rad, float initSpeed, int power, AttackOption ao)
+	static StraightMissile* create(CCPoint initPosition, const string& fileName, float rad, float initSpeed, int power, int subPower, AttackOption ao)
 	{
 		StraightMissile* object = new StraightMissile();
-		object->init(initPosition, fileName, rad, initSpeed, power, ao);
+		object->init(initPosition, fileName, rad, initSpeed, power, subPower, ao);
 
 		object->autorelease();
 		
 
 		return object;
 	}
-	bool init(CCPoint initPosition, const string& fileName, float rad, float initSpeed, int power, AttackOption ao)
+	bool init(CCPoint initPosition, const string& fileName, float rad, float initSpeed, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 		m_initSpeed = initSpeed;
 		m_power = power;
+		m_subPower = subPower;
 		m_option = ao;
 		m_missileSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
 		addChild(m_missileSprite);
@@ -1760,7 +1773,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
+			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
 			removeFromParentAndCleanup(true);
 		}
 		else  // 거리가 멀면 진행 시킴.
@@ -1774,6 +1787,7 @@ protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
+	int m_subPower;
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
 
@@ -1783,10 +1797,10 @@ protected:
 class SpreadMissile : public StoneAttack
 {
 public:
-	static SpreadMissile* create(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int directions, AttackOption ao)
+	static SpreadMissile* create(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions, AttackOption ao)
 	{
 		SpreadMissile* object = new SpreadMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, directions, ao);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, directions, ao);
 
 		object->autorelease();
 		
@@ -1797,18 +1811,20 @@ public:
 	{
 		CCLOG("Spread ~");
 	}
-	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int directions, AttackOption ao)
+	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions, AttackOption ao)
 	{
 		StoneAttack::init();
 		m_initSpeed = initSpeed;
 		m_power = power;
+		m_subPower = subPower;
 		m_targetNode = targetNode;
 		m_option = ao;	
 		CCPoint diff = targetNode->getPosition() - initPosition;
 		float rad = atan2f(diff.y, diff.x);
 		for(int i=0; i<directions; i++)
 		{
-			StraightMissile* sm = StraightMissile::create(initPosition, fileName, rad + i * deg2Rad(360 / directions), initSpeed, power, ao);
+			StraightMissile* sm = StraightMissile::create(initPosition, fileName, rad + i * deg2Rad(360 / directions), initSpeed,
+																										power, subPower, ao);
 			addChild(sm);
 		}
 		
@@ -1825,6 +1841,7 @@ public:
 protected:
 	float m_initSpeed; // 초기 속도.
 	int m_power; // 파워.
+	int m_subPower;
 	int m_directions; // 몇 방향인지...
 	bool m_cancelCasting;
 	bool m_stiffen;
@@ -1834,15 +1851,15 @@ protected:
 class MineAttack : public StoneAttack
 {
 public:
-	static MineAttack* create(CCPoint initPosition, CCPoint goalPosition, float tickCount, int power, AttackOption ao)
+	static MineAttack* create(CCPoint initPosition, CCPoint goalPosition, float tickCount, int power, int subPower, AttackOption ao)
 	{
 		MineAttack* ma = new MineAttack();
-		ma->init(initPosition, goalPosition, tickCount, power, ao);
+		ma->init(initPosition, goalPosition, tickCount, power, subPower, ao);
 		ma->autorelease();
 		return ma;
 	}	
 
-	bool init(CCPoint initPosition, CCPoint goalPosition, int tickCount, int power, AttackOption ao)
+	bool init(CCPoint initPosition, CCPoint goalPosition, int tickCount, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 		m_initPosition = initPosition;
@@ -1850,6 +1867,7 @@ public:
 		m_tickCount = tickCount;
 		m_initTickCount = tickCount;
 		m_power = power;
+		m_subPower = subPower;
 		m_option = ao;	
 		m_mine = KS::loadCCBI<CCSprite*>(this, "me_timebomb.ccbi").first;
 		addChild(m_mine);
@@ -1893,7 +1911,7 @@ public:
 			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5.f);
 			if(found)
 			{
-				MineAttack* ma = MineAttack::create(m_mine->getPosition(), ip2ccp(mapPoint), m_initTickCount, m_power, m_option);
+				MineAttack* ma = MineAttack::create(m_mine->getPosition(), ip2ccp(mapPoint), m_initTickCount, m_power, m_subPower, m_option);
 				parentNode->addChild(ma);
 			}
 
@@ -1940,7 +1958,7 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
+			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
 
 			removeFromParentAndCleanup(true);
 		}
@@ -1951,6 +1969,7 @@ protected:
 	float m_tickCount;
 	float m_initTickCount;
 	int m_power;
+	int m_subPower;
 	CCSprite* m_mine;
 };
 
@@ -1959,15 +1978,16 @@ protected:
 class SpiritAttack : public StoneAttack
 {
 public:
-	static SpiritAttack* create(CCPoint initPosition, CCPoint goalPosition, const string& fileName, float tickCount, int power, float speed, int coolFrame, AttackOption ao)
+	static SpiritAttack* create(CCPoint initPosition, CCPoint goalPosition, const string& fileName, float tickCount, int power, int subPower,
+															float speed, int coolFrame, AttackOption ao)
 	{
 		SpiritAttack* ma = new SpiritAttack();
-		ma->init(initPosition, goalPosition, fileName, tickCount, power, speed, coolFrame, ao);
+		ma->init(initPosition, goalPosition, fileName, tickCount, power, subPower, speed, coolFrame, ao);
 		ma->autorelease();
 		return ma;
 	}	
 
-	bool init(CCPoint initPosition, CCPoint goalPosition, const string& fileName, int tickCount, int power, float speed, int coolFrame, AttackOption ao)
+	bool init(CCPoint initPosition, CCPoint goalPosition, const string& fileName, int tickCount, int power, int subPower, float speed, int coolFrame, AttackOption ao)
 	{
 		StoneAttack::init();
 		m_fileName = fileName;
@@ -1976,6 +1996,7 @@ public:
 		m_tickCount = tickCount;
 		m_initTickCount = tickCount;
 		m_power = power;
+		m_subPower = subPower;
 		m_speed = speed;	
 		m_initCoolFrame = coolFrame;
 		m_coolFrame = 0; 
@@ -2036,7 +2057,7 @@ public:
 			if(found)
 			{
 				SpiritAttack* ma = SpiritAttack::create(m_mine->getPosition(), ip2ccp(mapPoint), m_fileName,
-																								m_initTickCount, m_power, m_speed, m_coolFrame, m_option);
+																								m_initTickCount, m_power, m_subPower, m_speed, m_coolFrame, m_option);
 				parentNode->addChild(ma);
 			}
 
@@ -2088,7 +2109,7 @@ public:
 				effectPosition.y += rand()%21 - 10;
 
 				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, 0.f, effectPosition);
+				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
 
 				//removeFromParentAndCleanup(true);
 			}
@@ -2192,6 +2213,7 @@ protected:
 	float m_tickCount;
 	float m_initTickCount;
 	int m_power;
+	int m_subPower;
 	CCSprite* m_mine;
 	CCParticleSystemQuad* m_particle;
 	float m_directionRad;
@@ -2206,10 +2228,10 @@ protected:
 class RangeAttack : public StoneAttack
 {
 public:
-	static RangeAttack* create(CCPoint initPosition, float radius, int durationFrame, int power, int jiggleInterval, AttackOption ao)
+	static RangeAttack* create(CCPoint initPosition, float radius, int durationFrame, int power, int subPower, int jiggleInterval, AttackOption ao)
 	{
 		RangeAttack* obj = new RangeAttack();
-		obj->init(initPosition, radius, durationFrame, power, jiggleInterval, ao);
+		obj->init(initPosition, radius, durationFrame, power, subPower, jiggleInterval, ao);
 		obj->autorelease();
 		return obj;
 	}
@@ -2217,7 +2239,7 @@ public:
 	{
 		CCLOG("~RangeAttack");
 	}
-	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int jiggleInterval, AttackOption ao)
+	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int subPower, int jiggleInterval, AttackOption ao)
 	{
 		StoneAttack::init();
 
@@ -2227,6 +2249,7 @@ public:
 		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
 		m_power = power;
+		m_subPower = subPower;
 		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
 		m_jiggleInterval = 0;
 		m_option = ao;
@@ -2280,7 +2303,7 @@ public:
 				effectPosition.y += rand()%21 - 10;
 
 				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
+				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
 				//removeFromParentAndCleanup(true);
 			}
 		}
@@ -2289,6 +2312,7 @@ protected:
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
+	int m_subPower;
 	int m_jiggleInterval;
 	int m_initJiggleInterval;		
 	CCSprite* m_rangeSprite;
@@ -2298,14 +2322,14 @@ protected:
 class RandomBomb : public StoneAttack
 {
 public:
-	static RandomBomb* create(float radius, int power, AttackOption ao)
+	static RandomBomb* create(float radius, int power, int subPower, AttackOption ao)
 	{
 		RandomBomb* obj = new RandomBomb();
-		obj->init(radius, power, ao);
+		obj->init(radius, power, subPower, ao);
 		obj->autorelease();
 		return obj;
 	}
-	bool init(float radius, int power, AttackOption ao)
+	bool init(float radius, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 
@@ -2313,6 +2337,7 @@ public:
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
 		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_power = power;
+		m_subPower = subPower;
 		m_option = ao;
 		CCPoint randomPosition = ip2ccp(IntPoint(ks19937::getIntValue(mapLoopRange::mapWidthInnerBegin, mapLoopRange::mapWidthInnerEnd - 1),
 																						 ks19937::getIntValue(mapLoopRange::mapHeightInnerBegin, mapLoopRange::mapHeightInnerEnd - 1)));
@@ -2355,7 +2380,7 @@ public:
 																								 effectPosition.y += rand()%21 - 10;
 
 																								 float damage = m_power;
-																								 executeOption(dynamic_cast<KSCumberBase*>(iter), damage, 0.f, effectPosition);
+																								 executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
 																								 //removeFromParentAndCleanup(true);
 																							 }
 																							 addChild(KSTimer::create(1.f, [=]() {
@@ -2371,6 +2396,7 @@ public:
 protected:
 	float m_radius;
 	int m_power;
+	int m_subPower;
 	CCSprite* m_rangeSprite;
 };
 
@@ -2378,10 +2404,10 @@ protected:
 class LaserAttack : public StoneAttack
 {
 public:
-	static LaserAttack* create(float rad, int durationFrame, int power, AttackOption ao)
+	static LaserAttack* create(float rad, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		LaserAttack* obj = new LaserAttack();
-		obj->init(rad, durationFrame, power, ao);
+		obj->init(rad, durationFrame, power, subPower, ao);
 		obj->autorelease();
 		return obj;
 	}
@@ -2389,7 +2415,7 @@ public:
 	{
 		CCLOG("~LaserAttack");
 	}
-	bool init(float rad, int durationFrame, int power, AttackOption ao)
+	bool init(float rad, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 
@@ -2397,6 +2423,7 @@ public:
 																						 ks19937::getIntValue(mapLoopRange::mapHeightInnerBegin, mapLoopRange::mapHeightInnerEnd - 1)));
 		m_rad = rad;
 		m_power = power;
+		m_subPower = subPower;
 		m_option = ao;
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), mySGD->getUserdataCharLevel());
@@ -2492,13 +2519,14 @@ public:
 				effectPosition.y += rand()%21 - 10;
 
 				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(monsters), damage, 0.f, effectPosition);
+				executeOption(dynamic_cast<KSCumberBase*>(monsters), damage, m_subPower, 0.f, effectPosition);
 			}
 		}
 	}
 protected:
 	float m_rad;
 	int m_power;
+	int m_subPower;
 	int m_durationFrame;
 	int m_radius;
 	CCPoint m_startPosition;
@@ -2511,14 +2539,14 @@ protected:
 class LaserWrapper : public StoneAttack
 {
 public:
-	static LaserWrapper* create(int numbers, int durationFrame, int power, AttackOption ao)
+	static LaserWrapper* create(int numbers, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		LaserWrapper* obj = new LaserWrapper();
-		obj->init(numbers, durationFrame, power, ao);
+		obj->init(numbers, durationFrame, power, subPower, ao);
 		obj->autorelease();
 		return obj;
 	}
-	bool init(int numbers, int durationFrame, int power, AttackOption ao)
+	bool init(int numbers, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
@@ -2526,7 +2554,7 @@ public:
 		{
 			float rad = deg2Rad(360.f / numbers * r);
 			rad += addRad;
-			addChild(LaserAttack::create(rad, durationFrame, power, ao));
+			addChild(LaserAttack::create(rad, durationFrame, power, subPower, ao));
 		}	
 		scheduleUpdate();
 		return true;	
@@ -2541,6 +2569,7 @@ public:
 protected:
 	int m_numbers;
 	int m_power;
+	int m_subPower;
 	int m_durationFrame;
 };
 
@@ -2556,10 +2585,10 @@ class ProtectorMissile : public StoneAttack
 {
 public:
 	static ProtectorMissile* create(CCNode* targetNode, CCPoint initPosition, const string& fileName,
-																	float initSpeed, int power, int range, float finalRadius, AttackOption ao, bool selfRotation)
+																	float initSpeed, int power, int subPower, int range, float finalRadius, AttackOption ao, bool selfRotation)
 	{
 		ProtectorMissile* object = new ProtectorMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, range, finalRadius, ao, selfRotation);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, range, finalRadius, ao, selfRotation);
 		
 		object->autorelease();
 		
@@ -2581,7 +2610,7 @@ public:
 		return object;
 	}
 	
-	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int range, float finalRadius, AttackOption ao, bool selfRotation)
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int range, float finalRadius, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
 		
@@ -2597,6 +2626,7 @@ public:
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_option = ao;
 		m_power = power;
+		m_subPower = subPower;
 		m_targetNode = targetNode;
 		m_guided = false;
 		m_range = range;
@@ -2860,6 +2890,13 @@ public:
 				m_missileStep = 3;
 				
 				m_targetNode = nearCumber;
+				CCPoint diff = m_targetNode->getPosition() - m_missileSprite->getPosition();
+				
+				int random_value = rand()%21 - 10; // -10~10
+				float random_float = 1.f + random_value/100.f;
+				random_float = 1.f;
+				m_initRad = atan2f(diff.y, diff.x) * random_float;
+				m_currentRad = m_initRad; // + ks19937::getFloatValue(deg2Rad(-45), deg2Rad(45));
 			}
 			
 		}
@@ -2869,6 +2906,7 @@ public:
 			CCPoint targetPosition = m_targetNode->getPosition();
 			CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
 			float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
+			CCLOG("distance : %f", distance);
 			
 			// 몬스터가 맞는 조건
 			if(distance <= 6)
@@ -2880,7 +2918,7 @@ public:
 				effectPosition.y += rand()%21 - 10;
 				
 				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, 0.f, effectPosition);
+				executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
 				
 				removeFromParentAndCleanup(true);
 			}
@@ -3128,6 +3166,6 @@ protected:
 		CCClippingNode* clippingNode;
 		CCSpriteBatchNode* explosionNode;
 	}m_showWindow;
-	
+	int m_subPower;
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
 };
