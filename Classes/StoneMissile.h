@@ -89,7 +89,7 @@ public:
 			// 화면 번쩍 번쩍
 			myGD->communication("VS_setLight");
 			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
+			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, 0);
 
 			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 			//combo_cnt++;
@@ -436,7 +436,7 @@ public:
 		myGD->communication("CP_startDamageReaction", cumber, damage, direction, m_option & AttackOption::kCancelCasting,
 												m_option & AttackOption::kStiffen); // damage : 555
 		// 데미지 표시해주는 것. 데미지 숫자 뜸.
-		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage);
+		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, 0);
 
 		int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 		combo_cnt++;
