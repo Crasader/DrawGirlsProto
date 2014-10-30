@@ -26,6 +26,7 @@
 #include "CCMenuLambda.h"
 #include "TypingBox.h"
 #include "ScrollMenu.h"
+#include "StoryLayer.h"
 
 enum HellModeOpeningZorder
 {
@@ -66,6 +67,12 @@ bool HellModeOpening::init()
 	is_menu_enable = false;
 	
 	setMain();
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode))
+	{
+		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode, true);
+		StoryLayer::startStory(this, "menu_hellmode");
+	}
 	
 	return true;
 }

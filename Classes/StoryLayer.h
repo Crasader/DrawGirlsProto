@@ -152,8 +152,11 @@ public:
 		kScriptTypeImage = 4
 	};
 	
-	static void startStory(CCLayer* obj,string _storyID,function<void(void)> _endFunc){
+	static void startStory(CCLayer* obj,string _storyID,function<void(void)> _endFunc=nullptr){
 		
+		if(!obj){
+			obj=(CCLayer *)(CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0));
+		}
 		StoryLayer *sl  = StoryLayer::create(_storyID);
         TRACE();
         sl->callbackFunc = _endFunc;
@@ -417,6 +420,88 @@ public:
 		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial31),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial32),kCCTextAlignmentRight,kObjTypeText);
+		
+		
+		//랭킹팝업 튜토리얼
+		beginScene("menu_rank");
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentLeft,kObjTypeText);
+		
+		//상점
+		//beginScene("menu_shop");
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentRight,kObjTypeText);
+
+		//뽑기
+		//beginScene("menu_gacha");
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentRight,kObjTypeText);
+
+		//내카드
+		beginScene("menu_mycard");
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial3),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial4),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial5),kCCTextAlignmentLeft,kObjTypeText);
+
+		//오늘의임무
+		//beginScene("menu_todaymission");
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentRight,kObjTypeText);
+
+		//친구
+		beginScene("menu_friend");
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial38),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial39),kCCTextAlignmentLeft,kObjTypeText);
+		
+		//선물함
+		//beginScene("menu_msgbox");
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentRight,kObjTypeText);
+
+		//업적
+		beginScene("menu_archivement");
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial1),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial2),kCCTextAlignmentLeft,kObjTypeText);
+
+		//pvp
+		//beginScene("menu_pvp");
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial6),kCCTextAlignmentLeft,kObjTypeText);
+		//addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial7),kCCTextAlignmentRight,kObjTypeText);
+
+		//헬모드
+		beginScene("menu_hellmode");
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial35),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial36),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial37),kCCTextAlignmentRight,kObjTypeText);
+		
+		//신발아이템
+		beginScene("item_9");
+		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial17),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial18),kCCTextAlignmentRight,kObjTypeText);
+
+		
+		//더블아이템
+		beginScene("item_6");
+		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial19),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial20),kCCTextAlignmentRight,kObjTypeText);
+		
+		
+		//자석아이템
+		beginScene("item_11");
+		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial21),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial22),kCCTextAlignmentRight,kObjTypeText);
+		
+		//랜덤아이템
+		beginScene("item_random");
+		addSpot("item_random","rect",1.f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial8),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial9),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial10),kCCTextAlignmentRight,kObjTypeText);
+		
+
 	}
 	
 	void beginScene(string _storyID){
@@ -466,7 +551,7 @@ public:
 		}
 	}
 	
-	void addImage(string image,CCTextAlignment,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
+	void addImage(string image,CCTextAlignment align,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
 		if(isAdd){
 			Json::Value scriptInfo;
 			scriptInfo["type"]=kScriptTypeImage;
