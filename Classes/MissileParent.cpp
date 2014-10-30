@@ -496,6 +496,38 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			}));
 		}
 	}
+	else if(stoneType == StoneType::kStoneType_slow)
+	{
+		// 프로텍터 미사일 형식
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		for(int i=0; i<missileNumbersInt; i++)
+		{
+			auto creator = [=](){
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+				
+				
+				float randomAdj = (rand()%21-10+100)/100.f;
+				SlowAttack* gm = SlowAttack::create(nullptr, myGD->getJackPoint().convertToCCP(),
+																												fileName,
+																												1.4f + grade / 10.f,
+																												M_PI / 180.f * 90.f ,
+																												int(power*(randomAdj)),
+																												missile_sub_damage * randomAdj,
+																												ao
+																												);
+				
+//				gm->beautifier(grade, level);
+				jack_missile_node->addChild(gm);
+			};
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+				creator();
+			}));
+		}
+	}
+
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 { 

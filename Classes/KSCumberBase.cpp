@@ -2205,6 +2205,17 @@ void KSCumberBase::followProcess(float dt)
 		//m_drawMovement = m_normalMovement;
 	}
 }
+void KSCumberBase::slowStone(float dt)
+{
+	if(m_slowDurationFrame >= -10)
+	{
+		m_slowDurationFrame--;
+	}
+	if(m_slowDurationFrame == 0)
+	{
+		setSpeedRatioForStone(nullptr, 1.f); // 원래대로...
+	}
+}
 void KSCumberBase::cumberFrame( float dt )
 {
 	m_frameCount++; // 쿰버의 프레임수를 젬.
@@ -2216,6 +2227,7 @@ void KSCumberBase::onStartGame()
 	schedule(schedule_selector(ThisClassType::cumberAttack));
 	schedule(schedule_selector(ThisClassType::observeStopBoss));
 	schedule(schedule_selector(ThisClassType::timeMeasure));
+	schedule(schedule_selector(ThisClassType::slowStone));
 }
 
 void KSCumberBase::startSwell(float scale, int totalFrame)

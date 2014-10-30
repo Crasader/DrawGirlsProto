@@ -2855,7 +2855,8 @@ public:
 																							 }, [=](float t)
 																							 {
 																								 m_missileSprite->removeFromParent();
-																								 
+																								 m_missileSprite = nullptr;
+																								
 																							 }));
 			}
 			m_currentRadius += 0.4f;
@@ -2863,7 +2864,10 @@ public:
 			
 			CCPoint xy = myGD->getJackPointCCP() +
 					ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
-			m_missileSprite->setPosition(xy);
+			if(m_missileSprite)
+			{
+				m_missileSprite->setPosition(xy);
+			}
 			
 			if(m_currentRadius >= m_finalRadius)
 			{
@@ -3156,6 +3160,353 @@ protected:
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
 	bool m_selfRotation; // 스스로 도는지 여부.
+	CCNode* m_targetNode;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	struct ShowWindow
+	{
+		ShowWindow()
+		{
+			lastCreationTime = 0.f;
+			currentTime = 0.f;
+		}
+		struct MissileSprite
+		{
+			MissileSprite()
+			{
+				streak = nullptr;
+				particleQuad = nullptr;
+			}
+			
+			CCSprite* missileSprite;
+			ASMotionStreak* streak;
+			CCParticleSystemQuad* particleQuad;
+			float missileRad;
+			float missileSpeed;
+		};
+		std::vector<MissileSprite> missileSprites;
+		float lastCreationTime;
+		float currentTime;
+		std::string fileName;
+		int grade, level;
+		CCSprite* whiteBoard;
+		CCClippingNode* clippingNode;
+		CCSpriteBatchNode* explosionNode;
+	}m_showWindow;
+	int m_subPower;
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+
+class SlowAttack : public StoneAttack
+{
+public:
+	static SlowAttack* create(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, float initRad, int power, int subPower,
+														AttackOption ao)
+	{
+		SlowAttack* object = new SlowAttack();
+		object->init(targetNode, initPosition, fileName, initSpeed, initRad, power, subPower, ao);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	static SlowAttack* createForShowWindow(const string& fileName, bool selfRotation, int grade, int level)
+	{
+		SlowAttack* object = new SlowAttack();
+		object->initForShowWindow(fileName, selfRotation, grade, level);
+		object->autorelease();
+		return object;
+	}
+	static SlowAttack* createForShowStartSettingPopup(CCNode* start_node, const string& filename, bool selfRotation, int grade, int level)
+	{
+		SlowAttack* object = new SlowAttack();
+		object->initForShowStartSettingPopup(start_node, filename, selfRotation, grade, level);
+		object->autorelease();
+		return object;
+	}
+	
+	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, float initRad, int power, int subPower,
+						AttackOption ao)
+	{
+		StoneAttack::init();
+		m_missileStep = 1;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		m_option = ao;
+		m_power = power;
+		m_subPower = subPower;
+		m_targetNode = targetNode;
+		m_initRad = initRad;
+		
+		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+		
+		scheduleUpdate();
+//		if(targetNode)
+//		{
+//			CCPoint diff = m_targetNode->getPosition() - initPosition;
+//			
+//			int random_value = rand()%21 - 10; // -10~10
+//			float random_float = 1.f + random_value/100.f;
+//			random_float = 1.f;
+//			m_initRad = atan2f(diff.y, diff.x) * random_float;
+//			scheduleUpdate();
+//		}
+		return true;
+	}
+	
+	bool initForShowStartSettingPopup(CCNode* start_node, const string& fileName, bool selfRotation, int grade, int level)
+	{
+		StoneAttack::init();
+		m_start_node = start_node;
+		m_showWindow.fileName = fileName;
+//		m_selfRotation = selfRotation;
+		m_showWindow.grade = grade;
+		m_showWindow.level = level;
+		schedule(schedule_selector(GuidedMissile::showWindow));
+		
+		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 150));
+		//m_back->setOpacity(color.a);
+		
+		//addChild(m_showWindow.whiteBoard);
+		m_showWindow.clippingNode = CCClippingNode::create();
+		CCClippingNode* cNode = m_showWindow.clippingNode;
+		//cNode->setContentSize(CCSizeMake(100, 100));
+		//cNode->setAnchorPoint(ccp(0.5,0.f));
+		cNode->setPosition(ccp(0,0));
+		cNode->setStencil(m_showWindow.whiteBoard);
+		cNode->setInverted(false);
+		this->addChild(cNode,1);
+		m_showWindow.explosionNode = CCSpriteBatchNode::create("fx_monster_hit.png");
+		
+		cNode->addChild(m_showWindow.explosionNode);
+		
+		return true;
+	}
+	
+	bool initForShowWindow(const string& fileName, bool selfRotation, int grade, int level )
+	{
+		StoneAttack::init();
+		m_start_node = NULL;
+		m_showWindow.fileName = fileName;
+		m_showWindow.grade = grade;
+		m_showWindow.level = level;
+		schedule(schedule_selector(GuidedMissile::showWindow));
+		
+		m_showWindow.whiteBoard = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 120, 90));
+		//m_back->setOpacity(color.a);
+		
+		//addChild(m_showWindow.whiteBoard);
+		m_showWindow.clippingNode = CCClippingNode::create();
+		CCClippingNode* cNode = m_showWindow.clippingNode;
+		//cNode->setContentSize(CCSizeMake(100, 100));
+		//cNode->setAnchorPoint(ccp(0.5,0.f));
+		cNode->setPosition(ccp(0,0));
+		cNode->setStencil(m_showWindow.whiteBoard);
+		cNode->setInverted(false);
+		this->addChild(cNode,1);
+		m_showWindow.explosionNode = CCSpriteBatchNode::create("fx_monster_hit.png");
+		
+		cNode->addChild(m_showWindow.explosionNode);
+		
+		return true;
+	}
+	
+	function<void(void)> m_func;
+	void setFunctionForCrash(function<void(void)> func){
+		this->m_func = func;
+	}
+	void showWindow(float dt)
+	{
+		//float r = m_showWindow.rotationRadius;
+		//m_missileSprite->setPosition(m_showWindow.initPosition + ccp(cos(m_showWindow.rotationRad) * r, sin(m_showWindow.rotationRad) * r));
+		//if(m_selfRotation)
+		//{
+		//m_missileSprite->setRotation(m_missileSprite->getRotation() + 15);
+		//}
+		//else
+		//{
+		//m_missileSprite->setRotation(-rad2Deg(m_showWindow.rotationRad) + 180);
+		//}
+		
+		//if(m_particle)
+		//m_particle->setPosition(m_missileSprite->getPosition());
+		
+		//if(m_streak)
+		//m_streak->setPosition(m_missileSprite->getPosition());
+		
+		m_showWindow.currentTime += 1 / 60.f;
+		
+		if(m_showWindow.currentTime > m_showWindow.lastCreationTime + 1.0f)
+		{
+			m_showWindow.lastCreationTime = m_showWindow.currentTime;
+			float creationRad = ks19937::getFloatValue(0, 2 * M_PI);
+			ShowWindow::MissileSprite missile;
+			missile.missileSprite = CCSprite::create(m_showWindow.fileName.c_str());
+			
+			m_showWindow.clippingNode->addChild(missile.missileSprite);
+			if(m_start_node)
+				missile.missileSprite->setPosition(m_start_node->getPosition() - getPosition());
+			else
+				missile.missileSprite->setPosition(ccp(100 * cosf(creationRad), 100 * sinf(creationRad)));
+			
+			if(missile.streak)
+				missile.streak->setPosition(missile.missileSprite->getPosition());
+			if(missile.particleQuad)
+				missile.particleQuad->setPosition(missile.missileSprite->getPosition());
+			
+			if(m_start_node)
+				missile.missileRad = (m_start_node->getPosition() - getPosition()).getAngle();// creationRad;
+			else
+				missile.missileRad = creationRad;
+			
+			int random_value = rand()%7 - 3;
+			float random_float = random_value/10.f;
+			float speed = 1.4f+random_float + m_showWindow.grade / 10.f;
+			missile.missileSpeed = speed;
+			m_showWindow.missileSprites.push_back(missile);
+		}
+		
+		for(auto iter = m_showWindow.missileSprites.begin(); iter != m_showWindow.missileSprites.end();)
+		{
+			ShowWindow::MissileSprite i = *iter;
+			i.missileSprite->setPosition(i.missileSprite->getPosition() -
+																	 ccp(i.missileSpeed * cosf(i.missileRad), i.missileSpeed * sinf(i.missileRad)));
+			if(i.streak)
+				i.streak->setPosition(i.missileSprite->getPosition());
+			if(i.particleQuad)
+				i.particleQuad->setPosition(i.missileSprite->getPosition());
+//			if(m_selfRotation)
+//			{
+//				i.missileSprite->setRotation(i.missileSprite->getRotation() + 15);
+//			}
+//			else
+//			{
+//				i.missileSprite->setRotation(-rad2Deg(i.missileRad) + 90);
+//			}
+			
+			if(ccpLength(i.missileSprite->getPosition() - CCPointZero) <= 2.f)
+			{
+				//AudioEngine::sharedInstance()->playEffect("sound_jack_missile_bomb.mp3",false);
+				i.missileSprite->removeFromParent();
+				if(i.streak)
+					i.streak->removeFromParent();
+				if(i.particleQuad)
+					i.particleQuad->removeFromParent();
+				iter = m_showWindow.missileSprites.erase(iter);
+				CCSprite* t_explosion = CCSprite::createWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(0, 0, 167, 191));
+				t_explosion->setScale(0.65f);
+				t_explosion->setRotation(-rad2Deg(i.missileRad)-90 + 180.f);
+				m_showWindow.explosionNode->addChild(t_explosion);
+				
+				CCAnimation* t_animation = CCAnimation::create();
+				t_animation->setDelayPerUnit(0.1f);
+				t_animation->addSpriteFrameWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(0, 0, 167, 191));
+				for(int i=0;i<2;i++)
+					for(int j=0;j<3;j++)
+						t_animation->addSpriteFrameWithTexture(m_showWindow.explosionNode->getTexture(), CCRectMake(j*167, i*191, 167, 191));
+				
+				this->m_func();
+				CCAnimate* t_animate = CCAnimate::create(t_animation);
+				CCFadeOut* t_fade = CCFadeOut::create(0.2f);
+				CCRemoveSelf* t_remove = CCRemoveSelf::create();
+				CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_remove, NULL);
+				t_explosion->runAction(t_seq);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+	}
+	void update(float dt)
+	{
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_initRad), sin(m_initRad)));
+		
+		CCPoint minDis = ccp(60, 60);
+		KSCumberBase* nearCumber = nullptr;
+		bool found = false;
+		for(int i = 0; i<myGD->getMainCumberCount();i++)
+		{
+			KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+			CCPoint nowDis = cumber->getPosition() - m_missileSprite->getPosition();
+			if(ccpLength(nowDis)<ccpLength(minDis))
+			{
+				nearCumber=cumber;
+				minDis = nowDis;
+				found = true;
+				break;
+			}
+		}
+		
+		if(found == false)
+		{
+			for(int i = 0; i<myGD->getSubCumberCount();i++){
+				KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+				CCPoint nowDis = cumber->getPosition() - m_missileSprite->getPosition();
+				if(cumber->getDeadState() == false)
+				{
+					if(ccpLength(nowDis)<ccpLength(minDis))
+					{
+						nearCumber=cumber;
+						minDis = nowDis;
+						found = true;
+						break;
+					}
+				}
+			}
+		}
+		
+		if(nearCumber)
+		{
+			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
+			
+			CCPoint effectPosition = m_missileSprite->getPosition();
+			effectPosition.x += rand()%21 - 10;
+			effectPosition.y += rand()%21 - 10;
+			
+			float damage = m_power;
+			executeOption(dynamic_cast<KSCumberBase*>(nearCumber), damage, m_subPower, 0.f, effectPosition);
+			nearCumber->setSpeedRatioForStone(this, 0.3f);
+			nearCumber->setSlowDurationFrame(60 * 3);
+//			addChild(KSTimer::create(2.f, ))
+			
+			
+			removeFromParentAndCleanup(true);
+			
+		}
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
+	float m_initSpeed; // 초기 속도.
+	float m_initRad; // 처음에 날아가는 각도.
+	
+	
 	CCNode* m_targetNode;
 	CCSprite* m_missileSprite; // 미사일 객체.
 	CCParticleSystemQuad* m_particle;
