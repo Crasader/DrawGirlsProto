@@ -7,7 +7,7 @@
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{502,4},{2,2}}</string>
+                <string>{{500,4},{2,2}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,111 +20,111 @@
             <key>asuka_back_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{396,56},{100,48}}</string>
+                <string>{{394,56},{98,46}}</string>
                 <key>offset</key>
-                <string>{-1.5,-1}</string>
+                <string>{-2,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{0,2},{100,48}}</string>
+                <string>{{4,2},{98,46}}</string>
                 <key>sourceSize</key>
-                <string>{103,50}</string>
+                <string>{110,50}</string>
             </dict>
             <key>asuka_back_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,4},{196,166}}</string>
+                <string>{{4,4},{196,164}}</string>
                 <key>offset</key>
-                <string>{2,-1}</string>
+                <string>{-2,9}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,2},{196,166}}</string>
+                <string>{{0,12},{196,164}}</string>
                 <key>sourceSize</key>
-                <string>{200,168}</string>
+                <string>{200,206}</string>
             </dict>
             <key>asuka_back_leg.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{392,322},{78,56}}</string>
+                <string>{{4,398},{66,56}}</string>
                 <key>offset</key>
-                <string>{-2,-5.5}</string>
+                <string>{0,0}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,10},{78,56}}</string>
+                <string>{{4,0},{66,56}}</string>
                 <key>sourceSize</key>
-                <string>{82,65}</string>
+                <string>{74,56}</string>
             </dict>
             <key>asuka_front_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{476,176},{28,30}}</string>
+                <string>{{476,174},{26,30}}</string>
                 <key>offset</key>
-                <string>{-3,0}</string>
+                <string>{-3,1}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{2,4},{28,30}}</string>
+                <string>{{2,4},{26,30}}</string>
                 <key>sourceSize</key>
-                <string>{38,38}</string>
+                <string>{36,40}</string>
             </dict>
             <key>asuka_front_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{396,108},{94,64}}</string>
+                <string>{{394,106},{94,64}}</string>
                 <key>offset</key>
-                <string>{11,0.5}</string>
+                <string>{12,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{22,0},{94,64}}</string>
+                <string>{{24,2},{94,64}}</string>
                 <key>sourceSize</key>
-                <string>{116,65}</string>
+                <string>{118,68}</string>
             </dict>
             <key>asuka_front_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{476,208},{78,28}}</string>
+                <string>{{472,276},{74,24}}</string>
                 <key>offset</key>
-                <string>{-1,-1}</string>
+                <string>{-1,-5}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{60,6},{78,28}}</string>
+                <string>{{34,16},{74,24}}</string>
                 <key>sourceSize</key>
-                <string>{200,38}</string>
+                <string>{144,46}</string>
             </dict>
             <key>asuka_front_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,4},{188,162}}</string>
+                <string>{{204,4},{186,156}}</string>
                 <key>offset</key>
-                <string>{-4,0}</string>
+                <string>{-5,15}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,0},{188,162}}</string>
+                <string>{{2,10},{186,156}}</string>
                 <key>sourceSize</key>
-                <string>{200,162}</string>
+                <string>{200,206}</string>
             </dict>
             <key>asuka_front_leg.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{392,252},{78,66}}</string>
+                <string>{{392,250},{76,66}}</string>
                 <key>offset</key>
-                <string>{2,-0.5}</string>
+                <string>{3,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,0},{78,66}}</string>
+                <string>{{6,0},{76,66}}</string>
                 <key>sourceSize</key>
-                <string>{82,65}</string>
+                <string>{82,66}</string>
             </dict>
             <key>asuka_side_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{474,356},{20,40}}</string>
+                <string>{{470,354},{20,40}}</string>
                 <key>offset</key>
                 <string>{-20,0}</string>
                 <key>rotated</key>
@@ -137,7 +137,7 @@
             <key>asuka_side_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{396,4},{102,48}}</string>
+                <string>{{394,4},{102,48}}</string>
                 <key>offset</key>
                 <string>{-3,0}</string>
                 <key>rotated</key>
@@ -150,33 +150,33 @@
             <key>asuka_side_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{474,290},{62,28}}</string>
+                <string>{{476,204},{68,26}}</string>
                 <key>offset</key>
-                <string>{-33,1}</string>
+                <string>{-30,4}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{36,4},{62,28}}</string>
+                <string>{{8,6},{68,26}}</string>
                 <key>sourceSize</key>
-                <string>{200,38}</string>
+                <string>{144,46}</string>
             </dict>
             <key>asuka_side_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{204,170},{184,168}}</string>
+                <string>{{204,164},{184,176}}</string>
                 <key>offset</key>
-                <string>{0,12}</string>
+                <string>{0,13}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{8,4},{184,168}}</string>
+                <string>{{8,2},{184,176}}</string>
                 <key>sourceSize</key>
-                <string>{200,200}</string>
+                <string>{200,206}</string>
             </dict>
             <key>asuka_slde_bottom1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{392,176},{72,80}}</string>
+                <string>{{392,174},{72,80}}</string>
                 <key>offset</key>
                 <string>{-16,-2}</string>
                 <key>rotated</key>
@@ -189,11 +189,11 @@
             <key>asuka_slde_bottom2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,400},{72,74}}</string>
+                <string>{{392,320},{72,74}}</string>
                 <key>offset</key>
                 <string>{-16,1}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{10,4},{72,74}}</string>
                 <key>sourceSize</key>
@@ -209,7 +209,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:f486958f56a3e85f9e8d5c2e58587675:0ac027f995685dbe61c71f512360d701:58324c4c4873b31241f32a056deb0b00$</string>
+            <string>$TexturePacker:SmartUpdate:b352c62be6a90bc5b2b20b0f652ebc43:e2d8ba290e5287d8899b7d73e851b7f6:58324c4c4873b31241f32a056deb0b00$</string>
             <key>textureFileName</key>
             <string>cha_asuka.pvr.ccz</string>
         </dict>

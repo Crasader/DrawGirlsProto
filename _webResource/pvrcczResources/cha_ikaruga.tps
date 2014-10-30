@@ -208,6 +208,7 @@
             <filename>cha_ikaruga/ikaruga_side_eye.png</filename>
             <filename>cha_ikaruga/ikaruga_side_head1.png</filename>
             <filename>cha_ikaruga/ikaruga_side_head2.png</filename>
+            <filename>cha_ikaruga/ikaruga_back_leg.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

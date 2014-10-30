@@ -7,7 +7,7 @@
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{500,4},{2,2}}</string>
+                <string>{{244,4},{2,2}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,182 +20,169 @@
             <key>hibari_back_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{88,210},{34,34}}</string>
+                <string>{{174,420},{48,48}}</string>
                 <key>offset</key>
-                <string>{-1,-5}</string>
+                <string>{-1,-4}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{12,18},{34,34}}</string>
+                <string>{{8,12},{48,48}}</string>
                 <key>sourceSize</key>
-                <string>{60,60}</string>
+                <string>{66,64}</string>
             </dict>
             <key>hibari_back_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{122,430},{52,46}}</string>
+                <string>{{128,420},{50,42}}</string>
                 <key>offset</key>
-                <string>{0,-32}</string>
+                <string>{-1,-29}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{58,64},{52,46}}</string>
+                <string>{{58,58},{50,42}}</string>
                 <key>sourceSize</key>
-                <string>{168,110}</string>
+                <string>{168,100}</string>
             </dict>
             <key>hibari_back_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{196,4},{188,148}}</string>
+                <string>{{4,4},{160,140}}</string>
                 <key>offset</key>
-                <string>{4,24}</string>
+                <string>{0,22}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{10,2},{188,148}}</string>
+                <string>{{20,8},{160,140}}</string>
                 <key>sourceSize</key>
                 <string>{200,200}</string>
             </dict>
             <key>hibari_back_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,156},{92,42}}</string>
+                <string>{{168,60},{68,70}}</string>
                 <key>offset</key>
-                <string>{-10,-10}</string>
+                <string>{1,-1}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{0,24},{92,42}}</string>
+                <string>{{4,4},{68,70}}</string>
                 <key>sourceSize</key>
-                <string>{112,70}</string>
+                <string>{74,76}</string>
+            </dict>
+            <key>hibari_front_arm.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{168,254},{58,38}}</string>
+                <key>offset</key>
+                <string>{-2,5}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{2,8},{58,38}}</string>
+                <key>sourceSize</key>
+                <string>{66,64}</string>
             </dict>
             <key>hibari_front_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{88,156},{48,50}}</string>
+                <string>{{168,4},{52,72}}</string>
                 <key>offset</key>
-                <string>{2,-30}</string>
+                <string>{2,-14}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{62,60},{48,50}}</string>
+                <string>{{60,28},{52,72}}</string>
                 <key>sourceSize</key>
-                <string>{168,110}</string>
+                <string>{168,100}</string>
             </dict>
             <key>hibari_front_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{50,156},{82,34}}</string>
+                <string>{{168,188},{64,30}}</string>
                 <key>offset</key>
-                <string>{-3,-1}</string>
+                <string>{0,3}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{16,8},{82,34}}</string>
+                <string>{{18,4},{64,30}}</string>
                 <key>sourceSize</key>
-                <string>{120,48}</string>
+                <string>{100,44}</string>
             </dict>
             <key>hibari_front_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,4},{188,148}}</string>
+                <string>{{4,148},{160,130}}</string>
                 <key>offset</key>
-                <string>{-4,24}</string>
+                <string>{0,29}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{2,2},{188,148}}</string>
+                <string>{{20,6},{160,130}}</string>
                 <key>sourceSize</key>
                 <string>{200,200}</string>
             </dict>
             <key>hibari_front_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{72,430},{56,46}}</string>
+                <string>{{168,132},{64,52}}</string>
                 <key>offset</key>
-                <string>{2,1}</string>
+                <string>{3,-4}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,0},{56,46}}</string>
+                <string>{{8,16},{64,52}}</string>
                 <key>sourceSize</key>
-                <string>{60,48}</string>
-            </dict>
-            <key>hibari_side_arm1.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{126,210},{26,44}}</string>
-                <key>offset</key>
-                <string>{-11,-2}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{6,10},{26,44}}</string>
-                <key>sourceSize</key>
-                <string>{60,60}</string>
-            </dict>
-            <key>hibari_side_arm2.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{46,430},{70,22}}</string>
-                <key>offset</key>
-                <string>{-1,-1}</string>
-                <key>rotated</key>
-                <true/>
-                <key>sourceColorRect</key>
-                <string>{{14,20},{70,22}}</string>
-                <key>sourceSize</key>
-                <string>{100,60}</string>
+                <string>{74,76}</string>
             </dict>
             <key>hibari_side_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{388,130},{122,106}}</string>
+                <string>{{4,404},{120,96}}</string>
                 <key>offset</key>
-                <string>{23,2}</string>
+                <string>{20,-2}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{46,0},{122,106}}</string>
+                <string>{{44,4},{120,96}}</string>
                 <key>sourceSize</key>
-                <string>{168,110}</string>
+                <string>{168,100}</string>
             </dict>
             <key>hibari_side_body2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{388,4},{122,108}}</string>
+                <string>{{152,296},{120,96}}</string>
                 <key>offset</key>
-                <string>{23,1}</string>
+                <string>{20,-2}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{46,0},{122,108}}</string>
+                <string>{{44,4},{120,96}}</string>
                 <key>sourceSize</key>
-                <string>{168,110}</string>
+                <string>{168,100}</string>
             </dict>
             <key>hibari_side_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,430},{78,38}}</string>
+                <string>{{168,222},{60,28}}</string>
                 <key>offset</key>
-                <string>{-13,5}</string>
+                <string>{-16,8}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{8,0},{78,38}}</string>
+                <string>{{4,0},{60,28}}</string>
                 <key>sourceSize</key>
-                <string>{120,48}</string>
+                <string>{100,44}</string>
             </dict>
             <key>hibari_side_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,256},{170,150}}</string>
+                <string>{{4,282},{144,118}}</string>
                 <key>offset</key>
-                <string>{3,21}</string>
+                <string>{-6,35}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{18,4},{170,150}}</string>
+                <string>{{22,6},{144,118}}</string>
                 <key>sourceSize</key>
                 <string>{200,200}</string>
             </dict>
@@ -207,9 +194,9 @@
             <key>realTextureFileName</key>
             <string>cha_hibari.pvr.ccz</string>
             <key>size</key>
-            <string>{512,512}</string>
+            <string>{256,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:cf3e1399ebf80fbc5087fbf077449d88:9e13f4c66264137b63ef130cb1df1857:a270d707d87af3722f1c494ef50b8ba5$</string>
+            <string>$TexturePacker:SmartUpdate:c431db48854f10f500df6c38bb118011:31055f281606428b1859e016bdfe4cb2:a270d707d87af3722f1c494ef50b8ba5$</string>
             <key>textureFileName</key>
             <string>cha_hibari.pvr.ccz</string>
         </dict>
