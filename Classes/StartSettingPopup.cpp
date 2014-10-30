@@ -815,7 +815,7 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
-		if(true || !myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha)) && !mySGD->is_endless_mode)
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha)) && !mySGD->is_endless_mode)
 		{
 			is_tutorial = true;
 			myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha), true);
