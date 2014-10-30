@@ -31,6 +31,7 @@
 #include "StyledLabelTTF.h"
 #include "TypingBox.h"
 #include "FiveRocksCpp.h"
+#include "CharacterExpUp.h"
 
 enum EndlessModeResultZorder
 {
@@ -303,6 +304,22 @@ bool EndlessModeResult::init()
 														 TRACE();
 													 }
 												 }));
+		
+		if(mySGD->getStageGrade() > 0)
+		{
+			CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			t_history.characterExp = ((left_total_score.getV() > right_total_score.getV()) ? mySGD->getPvpWinExp() : mySGD->getPvpLoseExp());
+			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, [=](Json::Value result_data)
+																			  {
+																				  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																				  {
+																					  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																					  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getSelectedCharacterHistory(), ccp(240,160+160*screen_scale_y));
+																					  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
+																				  }
+																			  }));
+		}
 	}
 	
 	bool is_send_pvp_play_data = false;
@@ -339,6 +356,11 @@ bool EndlessModeResult::init()
 		param2["pieceNo"] = mySGD->temp_replay_data[mySGD->getReplayKey(kReplayKey_stageNo)].asInt();
 		
 		send_command_list.push_back(CommandParam("saveendlessplaydata", param2, nullptr));
+	}
+	
+	if(mySGD->recent_week_no.getV() > mySGD->getUserdataEndlessIngWeek())
+	{
+		mySGD->setUserdataEndlessIngWeek(mySGD->recent_week_no.getV());
 	}
 	
 	if(mySGD->is_changed_userdata)

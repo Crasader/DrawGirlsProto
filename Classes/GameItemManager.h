@@ -386,6 +386,12 @@ public:
 	void showTakeItemEffect(CCPoint t_p);
 	
 	void gameover();
+	int getMaxGold();
+	int getGoldPercent0();
+	int getGoldPercent1();
+	int getGoldWeight0();
+	int getGoldWeight1();
+	int getGoldWeight2();
 	
 private:
 	bool is_on_game;
@@ -412,6 +418,13 @@ private:
 	
 	int double_item_cnt;
 	int child_base_cnt;
+	
+	int max_gold;
+	int gold_percent0;
+	int gold_percent1;
+	int gold_weight0;
+	int gold_weight1;
+	int gold_weight2;
 	
 	void counting();
 	void addItem();

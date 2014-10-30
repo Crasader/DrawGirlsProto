@@ -1272,6 +1272,10 @@ private:
 	COMMON_VAR(int, prmGc, PrmGc);
 	COMMON_VAR(int, gachaRefreshTime, GachaRefreshTime);
 	
+	COMMON_VAR(int, pvpWinExp, PvpWinExp);
+	COMMON_VAR(int, pvpLoseExp, PvpLoseExp);
+	COMMON_VAR(int, gachaCharExp, GachaCharExp);
+	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
 };

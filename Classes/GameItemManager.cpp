@@ -1553,17 +1553,15 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CC
 	moving_direction = rand()%360 - 180;
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
-	Json::Value goldBalance = mySGD->getGoldBalance();
-	
 	int random_value = rand()%100;
-    if(mySGD->getStageGold() >= goldBalance.get("maxGold",500).asInt())
+    if(mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
         random_value = 99;
   
 	
-	if(random_value < goldBalance["goldPercent"][0].asInt())
+	if(random_value < myGD->getCommunication("GIM_getGoldPercent0"))
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][0].asInt();
-		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][0].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight0");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight0");
 		if(sub_gold < 0)
 			sub_gold = 0;
 		
@@ -1626,10 +1624,10 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CC
 //		t_particle->setPosition(ccp(0, 0));
 //		addChild(t_particle);
 	}
-	else if(random_value < goldBalance["goldPercent"][1].asInt()+goldBalance["goldPercent"][0].asInt())
+	else if(random_value < myGD->getCommunication("GIM_getGoldPercent0")+myGD->getCommunication("GIM_getGoldPercent1"))
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][1].asInt();
-		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][1].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight1");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight1");
 		if(sub_gold < 0)
 			sub_gold = 0;
 		
@@ -1658,8 +1656,8 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CC
 	}
 	else
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][2].asInt();
-		sub_gold = m_gold - 1.0*goldBalance["goldWeight"][2].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight2");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight2");
 		if(sub_gold < 0)
 			sub_gold = 0;
 		
@@ -2264,6 +2262,31 @@ void GameItemManager::gameover()
 	unschedule(schedule_selector(GameItemManager::counting));
 }
 
+int GameItemManager::getMaxGold()
+{
+	return max_gold;
+}
+int GameItemManager::getGoldPercent0()
+{
+	return gold_percent0;
+}
+int GameItemManager::getGoldPercent1()
+{
+	return gold_percent1;
+}
+int GameItemManager::getGoldWeight0()
+{
+	return gold_weight0;
+}
+int GameItemManager::getGoldWeight1()
+{
+	return gold_weight1;
+}
+int GameItemManager::getGoldWeight2()
+{
+	return gold_weight2;
+}
+
 void GameItemManager::myInit()
 {
 	is_on_game = true;
@@ -2322,6 +2345,22 @@ void GameItemManager::myInit()
 	myGD->V_V["GIM_hideAllFloatingCoin"] = std::bind(&FloatingCoinParent::hideAllFloatingCoin, floating_coin_parent);
 	myGD->V_F["GIM_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
 	myGD->V_V["GIM_stopCounting"] = std::bind(&GameItemManager::stopCounting, this);
+	
+	Json::Value goldBalance = mySGD->getGoldBalance();
+	
+	max_gold = goldBalance.get("maxGold",500).asInt();
+	gold_percent0 = goldBalance["goldPercent"][0].asInt();
+	gold_percent1 = goldBalance["goldPercent"][1].asInt();
+	gold_weight0 = goldBalance["goldWeight"][0].asInt();
+	gold_weight1 = goldBalance["goldWeight"][1].asInt();
+	gold_weight2 = goldBalance["goldWeight"][2].asInt();
+	
+	myGD->I_V["GIM_getMaxGold"] = std::bind(&GameItemManager::getMaxGold, this);
+	myGD->I_V["GIM_getGoldPercent0"] = std::bind(&GameItemManager::getGoldPercent0, this);
+	myGD->I_V["GIM_getGoldPercent1"] = std::bind(&GameItemManager::getGoldPercent1, this);
+	myGD->I_V["GIM_getGoldWeight0"] = std::bind(&GameItemManager::getGoldWeight0, this);
+	myGD->I_V["GIM_getGoldWeight1"] = std::bind(&GameItemManager::getGoldWeight1, this);
+	myGD->I_V["GIM_getGoldWeight2"] = std::bind(&GameItemManager::getGoldWeight2, this);
 	
 	take_effect_node = CCSpriteBatchNode::create("fx_item2_total.png");
 	take_effect_node->setPosition(CCPointZero);

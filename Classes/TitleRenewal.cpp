@@ -1306,6 +1306,10 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setNmlGc(result_data["nmlGc"].asInt());
 		mySGD->setPrmGc(result_data["prmGc"].asInt());
 		mySGD->setGachaRefreshTime(result_data["gachaRefreshTime"].asInt());
+		
+		mySGD->setPvpWinExp(result_data["pvpWinExp"].asInt());
+		mySGD->setPvpLoseExp(result_data["pvpLoseExp"].asInt());
+		mySGD->setGachaCharExp(result_data["gachaCharExp"].asInt());
 	}
 	else
 	{
