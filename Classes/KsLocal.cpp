@@ -1048,9 +1048,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial30] = "물론! 골드는 많으면 많을수록 좋지!";
 	obj[LK::kMyLocalKey_kindTutorial31] = "영역 획득 횟수를 제한한다니...\n정말 어렵겠어요.";
 	obj[LK::kMyLocalKey_kindTutorial32] = "나에겐 문제없다구!";
-	obj[LK::kMyLocalKey_kindTutorial33] = "몬스터가 날뛰고 있어!! 이래선 영역획득은 불가능이겠는데요?";
+	obj[LK::kMyLocalKey_kindTutorial33] = "몬스터가 폭주하고있어!! 이래선 영역획득은 불가능이겠는데요?";
 	obj[LK::kMyLocalKey_kindTutorial34] = "괜찮아. 어떻게든 시간만 벌면 되는 미션이야. 버텨보자구";
-	
+	obj[LK::kMyLocalKey_kindTutorial35] = "헬모드라니 이름부터 무시무시한 곳이군.";
+	obj[LK::kMyLocalKey_kindTutorial36] = "어려운만큼 보상도 큰곳입니다. 잘만하면 보상으로 캐릭터를 얻을수있어요.";
+	obj[LK::kMyLocalKey_kindTutorial37] = "캐릭터는 속도나 파워가 좋을수도있고 몬스터의 공격패턴을 무력화시킬수있는 특수능력도 있으니 반드시 획득해야해요!";
+	obj[LK::kMyLocalKey_kindTutorial38] = "이곳은 게임친구를 만들수있는 공간입니다.";
+	obj[LK::kMyLocalKey_kindTutorial39] = "친구추천 기능을 이용해보세요. 추천인을 입력하면 보상을 받을수있고, 다른 사람들이 나를 추천인으로 입력하면 더큰 보상을 받을수있습니다.";
 	obj[LK::kMyLocalKey_maxSpeed] = "최고스피드!";
 	obj[LK::kMyLocalKey_showtime] = "쇼타임!";
 	obj[LK::kMyLocalKey_miss] = "미스";

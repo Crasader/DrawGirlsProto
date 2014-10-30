@@ -31,7 +31,9 @@ enum KindTutorialType
 	kNewMission_score,
 	kNewMission_combo,
 	kNewMission_gold,
-	kNewMission_turn
+	kNewMission_turn,
+	kUI_hellmode,
+	kUI_friend
 };
 
 class TouchSuctionLayer;
