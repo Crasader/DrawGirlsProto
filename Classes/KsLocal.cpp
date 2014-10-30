@@ -1048,6 +1048,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial30] = "물론! 골드는 많으면 많을수록 좋지!";
 	obj[LK::kMyLocalKey_kindTutorial31] = "영역 획득 횟수를 제한한다니...\n정말 어렵겠어요.";
 	obj[LK::kMyLocalKey_kindTutorial32] = "나에겐 문제없다구!";
+	obj[LK::kMyLocalKey_kindTutorial33] = "몬스터가 날뛰고 있어!! 이래선 영역획득은 불가능이겠는데요?";
+	obj[LK::kMyLocalKey_kindTutorial34] = "괜찮아. 어떻게든 시간만 벌면 되는 미션이야. 버텨보자구";
+	
 	obj[LK::kMyLocalKey_maxSpeed] = "최고스피드!";
 	obj[LK::kMyLocalKey_showtime] = "쇼타임!";
 	obj[LK::kMyLocalKey_miss] = "미스";
@@ -1128,13 +1131,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missionFailContextSubCumberCatch] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. 부하 </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d마리</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextTurns] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d턴</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이 지나버렸어요!</font>";
 	obj[LK::kMyLocalKey_hellMode] = "헬모드";
-	obj[LK::kMyLocalKey_hellMarquee] = "마스터카드를 획득하면 캐릭터를 장착할 수 있어요.";
+	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 보상으로 캐릭터를 받을 수 있어요.";
 	obj[LK::kMyLocalKey_hellNotOpen] = "<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>";
 	obj[LK::kMyLocalKey_mycharacter] = "내캐릭터";
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
 	obj[LK::kMyLocalKey_changeCharacter] = "캐릭터변경";
 	obj[LK::kMyLocalKey_selectCharacter] = "캐릭터선택";
-	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 마스터피스를 획득하시면 됩니다.";
+	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 헬모드에서 획득할수있어요!";
 	obj[LK::kMyLocalKey_characterSelected] = "선택중";
 	obj[LK::kMyLocalKey_characterSelect] = "선  택";
 	obj[LK::kMyLocalKey_takeCharacterCard] = "캐릭터 획득!";
