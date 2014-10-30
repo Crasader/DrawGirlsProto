@@ -29,7 +29,8 @@ enum ManyGachaPopupMenu
 {
 	kClose = 0,
 	kNormal,
-	kPremium
+	kPremium,
+	kShop
 };
 
 void ManyGachaPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -213,6 +214,26 @@ void ManyGachaPopup::setOpening()
 	premium_item->setTag(ManyGachaPopupMenu::kPremium);
 	premium_item->setPosition(ccp(main_inner->getContentSize().width/2.f+55, 110));
 	gacha_menu->addChild(premium_item);
+	
+	
+	CCSprite* n_shop_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
+	n_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_shop_label->setPosition(ccpFromSize(n_shop_img->getContentSize()/2.f) + ccp(0,-1));
+	n_shop_img->addChild(n_shop_label);
+	
+	CCSprite* s_shop_img = CCSprite::create("subbutton_pink.png");
+	s_shop_img->setColor(ccGRAY);
+	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
+	s_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_shop_label->setPosition(ccpFromSize(s_shop_img->getContentSize()/2.f) + ccp(0,-1));
+	s_shop_img->addChild(s_shop_label);
+	
+	
+	CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
+	shop_menu->setTag(ManyGachaPopupMenu::kShop);
+	shop_menu->setPosition(ccp(380,10));
+	gacha_menu->addChild(shop_menu);
 }
 
 void ManyGachaPopup::refreshTimeChecking()
@@ -824,6 +845,8 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 		{
+			target_final = NULL;
+			delegate_final = NULL;
 			hidePopup();
 			((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
 		}, [=]()
@@ -915,6 +938,8 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 																							 {
+																								 target_final = NULL;
+																								 delegate_final = NULL;
 																								 hidePopup();
 																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
 																							 }, [=]()
@@ -1618,6 +1643,8 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 															{
+																target_final = NULL;
+																delegate_final = NULL;
 																hidePopup();
 																((MainFlowScene*)getParent())->showShopPopup(kSC_ruby);
 															}, [=]()
@@ -1710,6 +1737,8 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 																							 {
+																								 target_final = NULL;
+																								 delegate_final = NULL;
 																								 hidePopup();
 																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_ruby);
 																							 }, [=]()
@@ -2024,6 +2053,69 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 		{
 			setPremiumGacha();
 			is_menu_enable = true;
+		}
+	}
+	else if(t_tag == ManyGachaPopupMenu::kShop)
+	{
+		target_final = NULL;
+		delegate_final = NULL;
+		hidePopup();
+		
+		chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+		std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+		///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+		time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+		
+		int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+		
+		bool is_on_time_startPack = sub_time <= expireSec;
+		bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+		///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+		bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+		bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+		bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+		bool is_on_time_eventPack = false;
+		
+		tm* now_tm = localtime(&now_time_t);
+		string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+		string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+		
+		int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+		int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+		
+		if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+		   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+		   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+		   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+		{
+			is_on_time_eventPack = true;
+		}
+		
+		bool is_useable_eventPack = true;
+		if(is_have_eventPack && is_on_time_eventPack)
+		{
+			if(is_just_one)
+			{
+				if(!is_buyed_eventPack)
+					is_useable_eventPack = true;
+				else
+					is_useable_eventPack = false;
+			}
+			else
+				is_useable_eventPack = true;
+		}
+		else
+		{
+			is_useable_eventPack = false;
+		}
+		
+		if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
+		{
+			((MainFlowScene*)getParent())->showShopPopup(kSC_eventPack);
+		}
+		else
+		{
+			((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
 		}
 	}
 }

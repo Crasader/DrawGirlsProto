@@ -2732,6 +2732,14 @@ void MainFlowScene::showShopPopup(int t_code)
     addChild(t_shop, kMainFlowZorder_popup+100);
 }
 
+void MainFlowScene::showGachaPopup()
+{
+	is_menu_enable = false;
+	ManyGachaPopup* t_popup = ManyGachaPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)

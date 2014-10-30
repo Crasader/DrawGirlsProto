@@ -60,6 +60,7 @@ public:
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	void targetHeartTime(HeartTime* t_heartTime);
 	void setShopBeforeCode(ShopBeforeCode t_code);
+	void addGachaButton();
 	
 	void addGray();
 	
@@ -74,6 +75,8 @@ private:
 	function<void(void)> close_func;
 	
 	CCSprite* gray;
+	
+	CCMenu* tab_menu;
 	
 	ShopBeforeCode before_code;
 	ShopCode recent_shop_code;
