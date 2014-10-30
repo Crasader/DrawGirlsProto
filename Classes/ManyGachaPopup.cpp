@@ -278,9 +278,12 @@ void ManyGachaPopup::setNormalGacha()
 	schedule(schedule_selector(ManyGachaPopup::refreshTimeChecking), 1.f);
 	
 	CCLabelTTF* t_refresh_label_node = CCLabelTTF::create();
+	CCSprite* t_refresh_icon = CCSprite::create("gacha_refresh.png");
 	KSLabelTTF* t_refresh_label_ttf = KSLabelTTF::create(getLocal(LK::kMyLocalKey_nowRefresh), mySGD->getFont().c_str(), 12);
-	t_refresh_label_ttf->setPosition(ccp(0,0));
+	t_refresh_label_ttf->setPosition(ccp(t_refresh_icon->getContentSize().width/2.f,0));
 	t_refresh_label_node->addChild(t_refresh_label_ttf);
+	t_refresh_icon->setPosition(ccp(-t_refresh_label_ttf->getContentSize().width/2.f,0));
+	t_refresh_label_node->addChild(t_refresh_icon);
 	
 	CCControlButton* now_refresh_button = CCControlButton::create(t_refresh_label_node, CCScale9Sprite::create("endless_bt_up.png", CCRectMake(0, 0, 75, 30), CCRectMake(37, 14, 1, 2)));
 	now_refresh_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::normalRefresh), CCControlEventTouchUpInside);
@@ -457,14 +460,29 @@ void ManyGachaPopup::setNormalGacha()
 	t_gacha_label->addChild(normal_gacha_label);
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	CCSprite* price_icon = CCSprite::create("icon_g.png");
-	KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
-	price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
-	price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
-	price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
-	price_back->addChild(price_icon);
-	price_back->addChild(price_label);
-	t_gacha_label->addChild(price_back);
+	
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7) > 0)
+	{
+		CCSprite* price_icon = CCSprite::create("icon_p7.png");
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+		price_back->addChild(price_icon);
+		price_back->addChild(price_label);
+		t_gacha_label->addChild(price_back);
+	}
+	else
+	{
+		CCSprite* price_icon = CCSprite::create("icon_g.png");
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+		price_back->addChild(price_icon);
+		price_back->addChild(price_label);
+		t_gacha_label->addChild(price_back);
+	}
 	
 	normal_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
 	price_back->setPosition(ccp(normal_gacha_label->getContentSize().width/2.f+3, 0));
@@ -480,12 +498,12 @@ void ManyGachaPopup::setNormalGacha()
 	normal_ccb = KS::loadCCBI<CCSprite*>(this, "gacha_silverbox.ccbi");
 	CCSprite* normal_img = normal_ccb.first;
 	normal_img->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 135));
-	inner_node->addChild(normal_img);
+	inner_node->addChild(normal_img,2);
 	
 	gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 20);
 	gacha_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	gacha_label->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 60));
-	inner_node->addChild(gacha_label);
+	inner_node->addChild(gacha_label,3);
 }
 
 void ManyGachaPopup::setPremiumGacha()
@@ -530,9 +548,12 @@ void ManyGachaPopup::setPremiumGacha()
 	schedule(schedule_selector(ManyGachaPopup::refreshTimeChecking), 1.f);
 	
 	CCLabelTTF* t_refresh_label_node = CCLabelTTF::create();
+	CCSprite* t_refresh_icon = CCSprite::create("gacha_refresh.png");
 	KSLabelTTF* t_refresh_label_ttf = KSLabelTTF::create(getLocal(LK::kMyLocalKey_nowRefresh), mySGD->getFont().c_str(), 12);
-	t_refresh_label_ttf->setPosition(ccp(0,0));
+	t_refresh_label_ttf->setPosition(ccp(t_refresh_icon->getContentSize().width/2.f,0));
 	t_refresh_label_node->addChild(t_refresh_label_ttf);
+	t_refresh_icon->setPosition(ccp(-t_refresh_label_ttf->getContentSize().width/2.f,0));
+	t_refresh_label_node->addChild(t_refresh_icon);
 	
 	CCControlButton* now_refresh_button = CCControlButton::create(t_refresh_label_node, CCScale9Sprite::create("endless_bt_up.png", CCRectMake(0, 0, 75, 30), CCRectMake(37, 14, 1, 2)));
 	now_refresh_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::premiumRefresh), CCControlEventTouchUpInside);
@@ -709,14 +730,29 @@ void ManyGachaPopup::setPremiumGacha()
 	t_gacha_label->addChild(premium_gacha_label);
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	CCSprite* price_icon = CCSprite::create("icon_r.png");
-	KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
-	price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
-	price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
-	price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
-	price_back->addChild(price_icon);
-	price_back->addChild(price_label);
-	t_gacha_label->addChild(price_back);
+	
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8) > 0)
+	{
+		CCSprite* price_icon = CCSprite::create("icon_p8.png");
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+		price_back->addChild(price_icon);
+		price_back->addChild(price_label);
+		t_gacha_label->addChild(price_back);
+	}
+	else
+	{
+		CCSprite* price_icon = CCSprite::create("icon_r.png");
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+		price_back->addChild(price_icon);
+		price_back->addChild(price_label);
+		t_gacha_label->addChild(price_back);
+	}
 	
 	premium_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
 	price_back->setPosition(ccp(premium_gacha_label->getContentSize().width/2.f+3, 0));
@@ -732,12 +768,12 @@ void ManyGachaPopup::setPremiumGacha()
 	premium_ccb = KS::loadCCBI<CCSprite*>(this, "gacha_goldbox.ccbi");
 	CCSprite* premium_img = premium_ccb.first;
 	premium_img->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 135));
-	inner_node->addChild(premium_img);
+	inner_node->addChild(premium_img,2);
 	
 	gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_premiumGacha), mySGD->getFont().c_str(), 20);
 	gacha_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	gacha_label->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 60));
-	inner_node->addChild(gacha_label);
+	inner_node->addChild(gacha_label,3);
 }
 
 void ManyGachaPopup::normalRefresh(CCObject* sender, CCControlEvent t_event)
@@ -784,7 +820,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	if(mySGD->getNmlGc() > mySGD->getGoodsValue(kGoodsType_gold))
+	if(mySGD->getGoodsValue(kGoodsType_pass7) <= 0 && mySGD->getNmlGc() > mySGD->getGoodsValue(kGoodsType_gold))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 		{
@@ -806,7 +842,10 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	
 //	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
-	mySGD->addChangeGoods("nml_gc");
+	if(mySGD->getGoodsValue(kGoodsType_pass7) > 0)
+		mySGD->addChangeGoods("nml_gc_p7");
+	else
+		mySGD->addChangeGoods("nml_gc");
 	
 	string exchange_id = json_list[selected_value]["exchangeID"].asString();
 	
@@ -818,7 +857,123 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	send_commend_list.clear();
 	send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-	mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+	mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultNormalProperties));
+}
+
+void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() != GDSUCCESS)
+	{
+		Json::Value ex1_result = result_data["list"][1];
+		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
+		{
+			mySGD->clearChangeGoods();
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 loading_layer->removeFromParent();
+										 
+										 gacha_button->removeFromParent();
+										 CCLabelTTF* t_gacha_label = CCLabelTTF::create();
+										 KSLabelTTF* normal_gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 12);
+										 t_gacha_label->addChild(normal_gacha_label);
+										 
+										 CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+										 
+										 if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7) > 0)
+										 {
+											 CCSprite* price_icon = CCSprite::create("icon_p7.png");
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+											 price_back->addChild(price_icon);
+											 price_back->addChild(price_label);
+											 t_gacha_label->addChild(price_back);
+										 }
+										 else
+										 {
+											 CCSprite* price_icon = CCSprite::create("icon_g.png");
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+											 price_back->addChild(price_icon);
+											 price_back->addChild(price_label);
+											 t_gacha_label->addChild(price_back);
+										 }
+										 
+										 normal_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
+										 price_back->setPosition(ccp(normal_gacha_label->getContentSize().width/2.f+3, 0));
+										 
+										 gacha_button = CCControlButton::create(t_gacha_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+										 gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::normalAction), CCControlEventTouchUpInside);
+										 gacha_button->setPreferredSize(CCSizeMake(15+normal_gacha_label->getContentSize().width+10+price_back->getContentSize().width+15,55));
+										 gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
+										 inner_node->addChild(gacha_button);
+										 
+										 gacha_button->setTouchPriority(-181);
+										 
+										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
+																							 {
+																								 hidePopup();
+																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
+																							 }, [=]()
+																							 {
+																								 is_menu_enable = true;
+																							 }), 999);
+									 }));
+		}
+		else
+		{
+			mySGD->network_check_cnt++;
+			
+			if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+			{
+				mySGD->network_check_cnt = 0;
+				
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+					int selected_value = enable_gacha_list[selected_index];
+					
+					string exchange_id = json_list[selected_value]["exchangeID"].asString();
+					
+					Json::Value param;
+					param["memberID"] = hspConnector::get()->getSocialID();
+					param["exchangeID"] = exchange_id;
+					
+					vector<CommandParam> send_commend_list;
+					send_commend_list.clear();
+					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
+					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
+					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+				}, 1);
+				if(alert)
+					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+			else
+			{
+				addChild(KSTimer::create(0.5f, [=]()
+										 {
+											 int selected_value = enable_gacha_list[selected_index];
+											 
+											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
+											 
+											 Json::Value param;
+											 param["memberID"] = hspConnector::get()->getSocialID();
+											 param["exchangeID"] = exchange_id;
+											 
+											 vector<CommandParam> send_commend_list;
+											 send_commend_list.clear();
+											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
+											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
+											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+										 }));
+			}
+		}
+	}
+	else
+	{
+		mySGD->network_check_cnt = 0;
+	}
 }
 
 void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
@@ -827,8 +982,6 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
-		
-		mySGD->network_check_cnt = 0;
 		
 		int selected_value = enable_gacha_list[selected_index];
 		string ani_name;
@@ -901,7 +1054,47 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																	 else
 																		{
 																		 myDSH->setStringForKey(kDSH_Key_normalGachaList, GraphDogLib::JsonObjectToString(json_list));
-																			gacha_button->setVisible(true);
+																			gacha_button->removeFromParent();
+																			CCLabelTTF* t_gacha_label = CCLabelTTF::create();
+																			KSLabelTTF* normal_gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 12);
+																			t_gacha_label->addChild(normal_gacha_label);
+																			
+																			CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+																			
+																			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7) > 0)
+																			{
+																				CCSprite* price_icon = CCSprite::create("icon_p7.png");
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+																				price_back->addChild(price_icon);
+																				price_back->addChild(price_label);
+																				t_gacha_label->addChild(price_back);
+																			}
+																			else
+																			{
+																				CCSprite* price_icon = CCSprite::create("icon_g.png");
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+																				price_back->addChild(price_icon);
+																				price_back->addChild(price_label);
+																				t_gacha_label->addChild(price_back);
+																			}
+																			
+																			normal_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
+																			price_back->setPosition(ccp(normal_gacha_label->getContentSize().width/2.f+3, 0));
+																			
+																			gacha_button = CCControlButton::create(t_gacha_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+																			gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::normalAction), CCControlEventTouchUpInside);
+																			gacha_button->setPreferredSize(CCSizeMake(15+normal_gacha_label->getContentSize().width+10+price_back->getContentSize().width+15,55));
+																			gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
+																			inner_node->addChild(gacha_button);
+																			
+																			gacha_button->setTouchPriority(-181);
+																			
 																			gacha_label->setVisible(true);
 																		}
 																	 is_menu_enable = true;
@@ -1094,52 +1287,6 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																		   normal_ccb.second->setDelegate(this);
 																		   normal_ccb.second->runAnimationsForSequenceNamed(ani_name.c_str());
 																	   }));
-		}
-	}
-	else
-	{
-		mySGD->network_check_cnt++;
-		
-		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
-		{
-			mySGD->network_check_cnt = 0;
-			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
-				int selected_value = enable_gacha_list[selected_index];
-				
-				string exchange_id = json_list[selected_value]["exchangeID"].asString();
-				
-				Json::Value param;
-				param["memberID"] = hspConnector::get()->getSocialID();
-				param["exchangeID"] = exchange_id;
-				
-				vector<CommandParam> send_commend_list;
-				send_commend_list.clear();
-				send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
-				//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-				mySGD->changeGoodsTransaction(send_commend_list, nullptr);
-			}, 1);
-			if(alert)
-				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
-		}
-		else
-		{
-			addChild(KSTimer::create(0.5f, [=]()
-									 {
-										 int selected_value = enable_gacha_list[selected_index];
-										 
-										 string exchange_id = json_list[selected_value]["exchangeID"].asString();
-										 
-										 Json::Value param;
-										 param["memberID"] = hspConnector::get()->getSocialID();
-										 param["exchangeID"] = exchange_id;
-										 
-										 vector<CommandParam> send_commend_list;
-										 send_commend_list.clear();
-										 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
-										 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-										 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
-									 }));
 		}
 	}
 }
@@ -1383,6 +1530,16 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 				sub_string = getLocal(LK::kMyLocalKey_p6Take);
 				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
 			}
+			else if(t_type == "p7")
+			{
+				sub_string = getLocal(LK::kMyLocalKey_p7Take);
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+			}
+			else if(t_type == "p8")
+			{
+				sub_string = getLocal(LK::kMyLocalKey_p8Take);
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+			}
 			
 			KSLabelTTF* sub_title = KSLabelTTF::create(sub_string.c_str(), mySGD->getFont().c_str(), 18);
 			sub_title->enableOuterStroke(ccBLACK, 2.f, int(255*0.7f), true);
@@ -1457,7 +1614,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	if(mySGD->getPrmGc() > mySGD->getGoodsValue(kGoodsType_ruby))
+	if(mySGD->getGoodsValue(kGoodsType_pass8) <= 0 && mySGD->getPrmGc() > mySGD->getGoodsValue(kGoodsType_ruby))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 															{
@@ -1479,7 +1636,10 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	
 //	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
-	mySGD->addChangeGoods("prm_gc");
+	if(mySGD->getGoodsValue(kGoodsType_pass8) > 0)
+		mySGD->addChangeGoods("prm_gc_p8");
+	else
+		mySGD->addChangeGoods("prm_gc");
 	
 	string exchange_id = json_list[selected_value]["exchangeID"].asString();
 	
@@ -1491,7 +1651,124 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	send_commend_list.clear();
 	send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-	mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+	mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultPremiumProperties));
+}
+
+void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() != GDSUCCESS)
+	{
+		Json::Value ex1_result = result_data["list"][1];
+		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
+		{
+			mySGD->clearChangeGoods();
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 loading_layer->removeFromParent();
+										 
+										 gacha_button->removeFromParent();
+										 
+										 CCLabelTTF* t_gacha_label = CCLabelTTF::create();
+										 KSLabelTTF* premium_gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_premiumGacha), mySGD->getFont().c_str(), 12);
+										 t_gacha_label->addChild(premium_gacha_label);
+										 
+										 CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+										 
+										 if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8) > 0)
+										 {
+											 CCSprite* price_icon = CCSprite::create("icon_p8.png");
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+											 price_back->addChild(price_icon);
+											 price_back->addChild(price_label);
+											 t_gacha_label->addChild(price_back);
+										 }
+										 else
+										 {
+											 CCSprite* price_icon = CCSprite::create("icon_r.png");
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+											 price_back->addChild(price_icon);
+											 price_back->addChild(price_label);
+											 t_gacha_label->addChild(price_back);
+										 }
+										 
+										 premium_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
+										 price_back->setPosition(ccp(premium_gacha_label->getContentSize().width/2.f+3, 0));
+										 
+										 gacha_button = CCControlButton::create(t_gacha_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+										 gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::premiumAction), CCControlEventTouchUpInside);
+										 gacha_button->setPreferredSize(CCSizeMake(15+premium_gacha_label->getContentSize().width+10+price_back->getContentSize().width+15,55));
+										 gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
+										 inner_node->addChild(gacha_button);
+										 
+										 gacha_button->setTouchPriority(-181);
+										 
+										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
+																							 {
+																								 hidePopup();
+																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_ruby);
+																							 }, [=]()
+																							 {
+																								 is_menu_enable = true;
+																							 }), 999);
+									 }));
+		}
+		else
+		{
+			mySGD->network_check_cnt++;
+			
+			if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+			{
+				mySGD->network_check_cnt = 0;
+				
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+					int selected_value = enable_gacha_list[selected_index];
+					
+					string exchange_id = json_list[selected_value]["exchangeID"].asString();
+					
+					Json::Value param;
+					param["memberID"] = hspConnector::get()->getSocialID();
+					param["exchangeID"] = exchange_id;
+					
+					vector<CommandParam> send_commend_list;
+					send_commend_list.clear();
+					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
+					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
+					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+				}, 1);
+				if(alert)
+					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+			else
+			{
+				addChild(KSTimer::create(0.5f, [=]()
+										 {
+											 int selected_value = enable_gacha_list[selected_index];
+											 
+											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
+											 
+											 Json::Value param;
+											 param["memberID"] = hspConnector::get()->getSocialID();
+											 param["exchangeID"] = exchange_id;
+											 
+											 vector<CommandParam> send_commend_list;
+											 send_commend_list.clear();
+											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
+											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
+											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+										 }));
+			}
+		}
+	}
+	else
+	{
+		mySGD->network_check_cnt = 0;
+	}
 }
 
 void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
@@ -1500,8 +1777,6 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
-		
-		mySGD->network_check_cnt = 0;
 		
 		int selected_value = enable_gacha_list[selected_index];
 		string ani_name;
@@ -1571,7 +1846,48 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																	 else
 																		{
 																		 myDSH->setStringForKey(kDSH_Key_premiumGachaList, GraphDogLib::JsonObjectToString(json_list));
-																			gacha_button->setVisible(true);
+																			gacha_button->removeFromParent();
+																			
+																			CCLabelTTF* t_gacha_label = CCLabelTTF::create();
+																			KSLabelTTF* premium_gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_premiumGacha), mySGD->getFont().c_str(), 12);
+																			t_gacha_label->addChild(premium_gacha_label);
+																			
+																			CCScale9Sprite* price_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+																			
+																			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8) > 0)
+																			{
+																				CCSprite* price_icon = CCSprite::create("icon_p8.png");
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+																				price_back->addChild(price_icon);
+																				price_back->addChild(price_label);
+																				t_gacha_label->addChild(price_back);
+																			}
+																			else
+																			{
+																				CCSprite* price_icon = CCSprite::create("icon_r.png");
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 26));
+																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
+																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
+																				price_back->addChild(price_icon);
+																				price_back->addChild(price_label);
+																				t_gacha_label->addChild(price_back);
+																			}
+																			
+																			premium_gacha_label->setPosition(ccp(-price_back->getContentSize().width/2.f-3, 0));
+																			price_back->setPosition(ccp(premium_gacha_label->getContentSize().width/2.f+3, 0));
+																			
+																			gacha_button = CCControlButton::create(t_gacha_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+																			gacha_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::premiumAction), CCControlEventTouchUpInside);
+																			gacha_button->setPreferredSize(CCSizeMake(15+premium_gacha_label->getContentSize().width+10+price_back->getContentSize().width+15,55));
+																			gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
+																			inner_node->addChild(gacha_button);
+																			
+																			gacha_button->setTouchPriority(-181);
+																			
 																			gacha_label->setVisible(true);
 																		}
 																	 is_menu_enable = true;
@@ -1593,52 +1909,6 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																	   premium_ccb.second->setDelegate(this);
 																	   premium_ccb.second->runAnimationsForSequenceNamed(ani_name.c_str());
 																   }));
-	}
-	else
-	{
-		mySGD->network_check_cnt++;
-		
-		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
-		{
-			mySGD->network_check_cnt = 0;
-			
-			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
-				int selected_value = enable_gacha_list[selected_index];
-				
-				string exchange_id = json_list[selected_value]["exchangeID"].asString();
-				
-				Json::Value param;
-				param["memberID"] = hspConnector::get()->getSocialID();
-				param["exchangeID"] = exchange_id;
-				
-				vector<CommandParam> send_commend_list;
-				send_commend_list.clear();
-				send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
-				//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-				mySGD->changeGoodsTransaction(send_commend_list, nullptr);
-			}, 1);
-			if(alert)
-				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
-		}
-		else
-		{
-			addChild(KSTimer::create(0.5f, [=]()
-									 {
-										 int selected_value = enable_gacha_list[selected_index];
-										 
-										 string exchange_id = json_list[selected_value]["exchangeID"].asString();
-										 
-										 Json::Value param;
-										 param["memberID"] = hspConnector::get()->getSocialID();
-										 param["exchangeID"] = exchange_id;
-										 
-										 vector<CommandParam> send_commend_list;
-										 send_commend_list.clear();
-										 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
-										 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-										 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
-									 }));
-		}
 	}
 }
 

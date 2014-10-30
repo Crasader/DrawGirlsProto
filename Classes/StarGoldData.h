@@ -183,6 +183,8 @@ enum GoodsType
 	kGoodsType_pass4,
 	kGoodsType_pass5,
 	kGoodsType_pass6,
+	kGoodsType_pass7,
+	kGoodsType_pass8,
 	kGoodsType_heart,
 	kGoodsType_end,
 	kGoodsType_pz,

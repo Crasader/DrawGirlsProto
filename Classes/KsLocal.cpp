@@ -616,6 +616,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass4] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass5] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass6] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass7] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass8] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypeMany] = "선물상자";
 	obj[LK::kMyLocalKey_attendanceTitle] = "출석체크";
 	obj[LK::kMyLocalKey_attendanceContent] = "지급된 보상은 수신함에서 확인 가능합니다.";
@@ -699,6 +701,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass4] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass5] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass6] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass7] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass8] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypeMany] = "선물상자";
 	obj[LK::kMyLocalKey_rankUpEventTitle] = "카드 승급 이벤트!";
 	obj[LK::kMyLocalKey_rankUpEventContent] = "승급 비용 공짜! 승급 확률 100%!!";
@@ -735,6 +739,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass4] = "<font newline=15>아이템뽑기 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass5] = "<font newline=15>1프로찬스 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass6] = "<font newline=15>생명의 돌을 %d개를 드립니다.<font newline=15>생명의 돌은 내카드 다이어리에서 사용하세요.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass7] = "<font newline=15>일반뽑기권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass8] = "<font newline=15>고급뽑기권을 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeMany] = "<font newline=15>선물상자를 드립니다.";
 	obj[LK::kMyLocalKey_cardSettingMyCardContent] = "퍼즐에서 획득한 카드입니다.";
 	obj[LK::kMyLocalKey_cardSettingMyCardToSpecial] = "스페셜 카드 보기";
@@ -1187,6 +1193,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p4Take] = "아이템뽑기권 획득!";
 	obj[LK::kMyLocalKey_p5Take] = "99프로뽑기권 획득!";
 	obj[LK::kMyLocalKey_p6Take] = "생명의돌 획득!";
+	obj[LK::kMyLocalKey_p7Take] = "일반뽑기권 획득!";
+	obj[LK::kMyLocalKey_p8Take] = "고급뽑기권 획득!";
 	
 	obj[LK::kMyLocalKey_gemCount] = "%d 젬";
 	obj[LK::kMyLocalKey_goldCount] = "%d 골드";
@@ -1207,6 +1215,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p4] = "아이템뽑기권";
 	obj[LK::kMyLocalKey_p5] = "99프로뽑기권";
 	obj[LK::kMyLocalKey_p6] = "생명의돌";
+	obj[LK::kMyLocalKey_p7] = "일반뽑기권";
+	obj[LK::kMyLocalKey_p8] = "고급뽑기권";
 	
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";

@@ -2594,6 +2594,10 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p5";
 	else if(t_type == kGoodsType_pass6)
 		return_value = "p6";
+	else if(t_type == kGoodsType_pass7)
+		return_value = "p7";
+	else if(t_type == kGoodsType_pass8)
+		return_value = "p8";
 	else if(t_type == kGoodsType_heart)
 		return_value = "h";
 	else if(t_type == kGoodsType_pz)

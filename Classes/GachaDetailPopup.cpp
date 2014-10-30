@@ -210,6 +210,16 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 			sub_string = getLocal(LK::kMyLocalKey_p6);
 			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
 		}
+		else if(t_type == "p7")
+		{
+			sub_string = getLocal(LK::kMyLocalKey_p7);
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+		}
+		else if(t_type == "p8")
+		{
+			sub_string = getLocal(LK::kMyLocalKey_p8);
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+		}
 		
 		KSLabelTTF* sub_title = KSLabelTTF::create(sub_string.c_str(), mySGD->getFont().c_str(), 18);
 		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
