@@ -240,6 +240,33 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	}
 }
 
+float Jack::getLastDirection()
+{
+	float return_value;
+	
+	if(lastDirection == directionLeft)
+	{
+		return_value = deg2Rad(180.f);
+	}
+	else if(lastDirection == directionUp)
+	{
+		return_value = deg2Rad(90.f);
+	}
+	else if(lastDirection == directionRight)
+	{
+		return_value = deg2Rad(0.f);
+	}
+	else if(lastDirection == directionDown)
+	{
+		return_value = deg2Rad(-90.f);
+	}
+	else
+	{
+		return_value = deg2Rad(90.f);
+	}
+	return return_value;
+}
+
 //////////////////////////////////////////////////////////////////////////////// move test /////////////////////////////////////////////////////////
 
 void Jack::moveTest()
@@ -400,7 +427,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
@@ -469,7 +497,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -530,7 +559,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_s_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
@@ -608,7 +638,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -679,7 +710,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = dv.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -753,7 +785,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = s_dv.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -822,7 +855,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = s_dv_reverse.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -2516,6 +2550,8 @@ void Jack::myInit()
 	isDie = false;
 	is_double_moving = false;
 
+	lastDirection = directionUp;
+	
 	myGD->V_F["Jack_changeSpeed"] = std::bind(&Jack::changeSpeed, this, _1);
 	myGD->V_I["Jack_startDieEffect"] = std::bind(&Jack::startDieEffect, this, _1);
 	myGD->V_V["Jack_createHammer"] = std::bind(&Jack::createHammer, this);
@@ -2534,7 +2570,7 @@ void Jack::myInit()
 	myGD->CCN_V["Jack_getJack"] = std::bind(&Jack::getJack, this);
 	myGD->I_V["Jack_getContinueOnCount"] = std::bind(&Jack::getContinueOnCount, this);
 	myGD->getJackPointCCP = std::bind(&Jack::getPosition, this);
-
+	myGD->F_V["Jack_getLastDirection"] = std::bind(&Jack::getLastDirection, this);
 
 	isMoving = false;
 	willBackTracking = false;

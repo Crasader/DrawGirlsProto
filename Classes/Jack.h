@@ -240,6 +240,7 @@ public:
 	CCNode* getJack();
 	
 	int getContinueOnCount();
+	float getLastDirection();
 	
 private:
 	
@@ -263,6 +264,8 @@ private:
 	IntDirection direction;
 	IntDirection afterDirection;
 	IntDirection secondDirection;
+	
+	IntDirection lastDirection;
 	
 	IntDirection no_draw_direction;
 	IntDirection no_draw_secondDirection;
