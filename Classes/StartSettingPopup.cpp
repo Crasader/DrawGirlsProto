@@ -641,12 +641,12 @@ void StartSettingPopup::setMain()
 		
 		CCPoint item_position = ccp(213.f + i*65.f, 185);
 		
-		bool is_unlocked = true;
-		if(!mySGD->is_hell_mode && t_ic == kIC_baseSpeedUp && (mySGD->getItem9OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem9OpenStage())))
+		bool is_unlocked = !mySGD->is_hell_mode;
+		if(t_ic == kIC_baseSpeedUp && (mySGD->getItem9OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem9OpenStage())))
 			is_unlocked = false;
-		else if(!mySGD->is_hell_mode && t_ic == kIC_doubleItem && (mySGD->getItem6OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem6OpenStage())))
+		else if(t_ic == kIC_doubleItem && (mySGD->getItem6OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem6OpenStage())))
 			is_unlocked = false;
-		else if(!mySGD->is_hell_mode && t_ic == kIC_magnet && (mySGD->getItem11OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem11OpenStage())))
+		else if(t_ic == kIC_magnet && (mySGD->getItem11OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem11OpenStage())))
 			is_unlocked = false;
 		
 		deque<int>::iterator iter = find(card_options.begin(), card_options.end(), t_ic);
