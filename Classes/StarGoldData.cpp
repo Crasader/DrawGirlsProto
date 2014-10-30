@@ -13,6 +13,7 @@
 #include "HeartTime.h"
 #include "FiveRocksCpp.h"
 #include "KSLabelTTF.h"
+#include "CharacterExpUp.h"
 
 void StarGoldData::withdraw()
 {
@@ -2199,6 +2200,8 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 
 void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 {
+//	CCLog("addCharacterHistoryForGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
 	bool is_found = false;
 	int characterNo = result_data["characterNo"].asInt();
 	for(int i=0;!is_found && i<character_historys.size();i++)
@@ -2208,6 +2211,18 @@ void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 		{
 			is_found = true;
 			// 경험치 올림
+			Json::Value t_levelInfo = result_data["levelInfo"];
+			character_historys[i].characterLevel = t_levelInfo["level"].asInt();
+			character_historys[i].characterExp = t_levelInfo["exp"].asInt();
+			character_historys[i].characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+			character_historys[i].characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+			character_historys[i].characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
+			
+			CharacterHistory a_history = character_historys[i];
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			CharacterExpUp* t_exp_up = CharacterExpUp::create(t_history, a_history, ccp(240,160+160*screen_scale_y));
+			CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
 		}
 	}
 	

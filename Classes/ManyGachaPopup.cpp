@@ -372,6 +372,16 @@ void ManyGachaPopup::setNormalGacha()
 					if(reward_count == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, k+1))
 					{
 						is_found = true;
+						
+						CCNode* char_node = CCNode::create();
+						char_node->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,0));
+						char_node->setScale(0.4f);
+						auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, k+1) + ".ccbi");
+						CCSprite* char_img = t_pair.first;
+						char_img->setPosition(ccp(0,0));
+						char_node->addChild(char_img);
+						t_button_node->addChild(char_node);
+						
 						KSLabelTTF* t_count_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_name_s, k+1).c_str(), mySGD->getFont().c_str(), 10);
 						t_count_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 						t_count_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-15));
@@ -614,6 +624,16 @@ void ManyGachaPopup::setPremiumGacha()
 					if(reward_count == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, k+1))
 					{
 						is_found = true;
+						
+						CCNode* char_node = CCNode::create();
+						char_node->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,0));
+						char_node->setScale(0.4f);
+						auto t_pair = KS::loadCCBIForFullPath<CCSprite*>(this, StageImgLoader::sharedInstance()->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, k+1) + ".ccbi");
+						CCSprite* char_img = t_pair.first;
+						char_img->setPosition(ccp(0,0));
+						char_node->addChild(char_img);
+						t_button_node->addChild(char_node);
+						
 						KSLabelTTF* t_count_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_name_s, k+1).c_str(), mySGD->getFont().c_str(), 10);
 						t_count_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 						t_count_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-15));

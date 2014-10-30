@@ -1169,7 +1169,10 @@ enum class LK
 	kMyLocalKey_p6,
 	
 	kMyLocalKey_controlTip_100percent_title,
-	kMyLocalKey_controlTip_100percent_content
+	kMyLocalKey_controlTip_100percent_content,
+	
+	kMyLocalKey_expTake,
+	kMyLocalKey_expN_M
 };
 class KsLocal
 {

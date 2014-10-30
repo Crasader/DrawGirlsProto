@@ -1215,6 +1215,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
 	
+	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
+	obj[LK::kMyLocalKey_expN_M] = "EXP %s / %s";
+	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	
 		// add friend !
