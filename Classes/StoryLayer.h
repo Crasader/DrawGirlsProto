@@ -141,13 +141,15 @@ public:
 		kObjTypeText=0x08,
 		kObjTypeTitle=0x10,
 		kObjTypeSpot=0x20,
+		kObjTypeImage=0x40,
 		kObjTypeAll=0xff
 	};
 	
 	enum scriptType{
 		kScriptTypeTalk = 1,
 		kScriptTypeTitle = 2,
-		kScriptTypeSpot = 3
+		kScriptTypeSpot = 3,
+		kScriptTypeImage = 4
 	};
 	
 	static void startStory(CCLayer* obj,string _storyID,function<void(void)> _endFunc){
@@ -175,7 +177,7 @@ public:
 		
         CCLOG("load story");
 		
-		beginScene("ko","puzzle1");
+		beginScene("puzzle1");
 		addScript("",getLocal(LK::kStory_1_1),kCCTextAlignmentCenter,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_1_2),kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_1_3),kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
@@ -186,7 +188,7 @@ public:
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle2");
+		beginScene("puzzle2");
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_2_1),kCCTextAlignmentLeft,kObjTypeText|kObjTypeActorRight);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_2_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_2_3),kCCTextAlignmentLeft,kObjTypeText);
@@ -199,7 +201,7 @@ public:
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle3");
+		beginScene("puzzle3");
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_3_1),kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
 		addScript("kt_cha_yagyu_1.png",getLocal(LK::kStory_3_2),kCCTextAlignmentRight,kObjTypeText,kBoxBig);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_3_3),kCCTextAlignmentLeft,kObjTypeText,kBoxBig);
@@ -213,7 +215,7 @@ public:
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_3_11),kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle4");
+		beginScene("puzzle4");
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_4_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_4_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_4_3),kCCTextAlignmentRight,kObjTypeText);
@@ -221,7 +223,7 @@ public:
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_4_5),kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle5");
+		beginScene("puzzle5");
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_5_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_5_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_5_3),kCCTextAlignmentRight,kObjTypeActorLeft|kObjTypeText);
@@ -234,7 +236,7 @@ public:
 		
 		////////////////////////////////////////
 		
-		beginScene("ko","puzzle6");
+		beginScene("puzzle6");
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_6_1),kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("",getLocal(LK::kStory_6_2),kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_6_3),kCCTextAlignmentRight,kObjTypeText);
@@ -244,7 +246,7 @@ public:
 		
 		/////////////////////////////////////////
 		
-		beginScene("ko","puzzle7");
+		beginScene("puzzle7");
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_7_1),kCCTextAlignmentRight,kObjTypeAll);
 		addScript("",getLocal(LK::kStory_7_2),kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kStory_7_3),kCCTextAlignmentRight,kObjTypeText);
@@ -253,7 +255,7 @@ public:
 		
 		/////////////////////////////////////////
 		
-		beginScene("ko","puzzle8");
+		beginScene("puzzle8");
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_8_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_yagyu_1.png",getLocal(LK::kStory_8_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_8_3),kCCTextAlignmentLeft,kObjTypeAll);
@@ -265,7 +267,7 @@ public:
 		
 		//////////////////////////////////////////
 		
-		beginScene("ko","puzzle9");
+		beginScene("puzzle9");
 		addScript("kt_cha_yagyu_1.png",getLocal(LK::kStory_9_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_9_2),kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("",getLocal(LK::kStory_9_3),kCCTextAlignmentCenter,kObjTypeText);
@@ -276,7 +278,7 @@ public:
 		
 		/////////////////////////////////////////////
 		
-		beginScene("ko","puzzle10");
+		beginScene("puzzle10");
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_10_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_10_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_10_3),kCCTextAlignmentLeft,kObjTypeText);
@@ -284,13 +286,13 @@ public:
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_10_5),kCCTextAlignmentRight,kObjTypeAll);
 		
 		//////////////////////////////////////////
-		beginScene("ko","puzzle11");
+		beginScene("puzzle11");
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_11_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_11_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_11_3),kCCTextAlignmentRight,kObjTypeAll);
 
 		////////////////////////////////////
-		beginScene("ko","puzzle12");
+		beginScene("puzzle12");
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_12_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kStory_12_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_12_3),kCCTextAlignmentRight,kObjTypeText);
@@ -299,7 +301,7 @@ public:
 		
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle13");
+		beginScene("puzzle13");
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_13_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_13_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_13_3),kCCTextAlignmentRight,kObjTypeText);
@@ -308,14 +310,14 @@ public:
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_13_6),kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle14");
+		beginScene("puzzle14");
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_14_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_14_2),kCCTextAlignmentLeft,kObjTypeAll);
 		addScript("",getLocal(LK::kStory_14_3),kCCTextAlignmentCenter,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_14_4),kCCTextAlignmentLeft,kObjTypeText);
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle15");
+		beginScene("puzzle15");
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_15_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_homura_1.png",getLocal(LK::kStory_15_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_15_3),kCCTextAlignmentLeft,kObjTypeText);
@@ -324,14 +326,14 @@ public:
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle16");
+		beginScene("puzzle16");
 		addScript("kt_cha_homura_1.png",getLocal(LK::kStory_16_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_16_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_homura_1.png",getLocal(LK::kStory_16_3),kCCTextAlignmentRight,kObjTypeAll);
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle17");
+		beginScene("puzzle17");
 		addScript("kt_cha_homura_1.png",getLocal(LK::kStory_17_1),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_17_2),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_homura_1.png",getLocal(LK::kStory_17_3),kCCTextAlignmentRight,kObjTypeText);
@@ -339,7 +341,7 @@ public:
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle18");
+		beginScene("puzzle18");
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_18_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kStory_18_2),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_yomi_1.png",getLocal(LK::kStory_18_3),kCCTextAlignmentLeft,kObjTypeText);
@@ -348,20 +350,76 @@ public:
 		
 		////////////////////////////////////
 		
-		beginScene("ko","puzzle19");
+		beginScene("puzzle19");
 
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_19_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_yomi_1.png",getLocal(LK::kStory_19_2),kCCTextAlignmentLeft,kObjTypeAll);
 		
 		////////////////////////////////////
-		beginScene("ko","puzzle20");
+		beginScene("puzzle20");
 		
 		addScript("kt_cha_yomi_1.png",getLocal(LK::kStory_20_1),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kStory_20_2),kCCTextAlignmentLeft,kObjTypeAll);
 		
+		
+		
+		
+		//2부하몹잡기
+		beginScene("mission2");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial11),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial12),kCCTextAlignmentRight,kObjTypeText);
+		
+		//4수집가
+		beginScene("mission4");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial13),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial14),kCCTextAlignmentRight,kObjTypeText);
+		
+		//7비지니스맨
+		beginScene("mission7");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial15),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial16),kCCTextAlignmentRight,kObjTypeText);
+		
+		//8헬모드
+		beginScene("mission8");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial33),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial34),kCCTextAlignmentRight,kObjTypeText);
+		
+		//9퍼센트
+		beginScene("mission9");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial23),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial24),kCCTextAlignmentRight,kObjTypeText);
+		
+		//10점수
+		beginScene("mission10");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial25),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial26),kCCTextAlignmentRight,kObjTypeText);
+		
+		//11콤보
+		beginScene("mission11");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial27),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial28),kCCTextAlignmentRight,kObjTypeText);
+		
+		//12골드
+		beginScene("mission12");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial29),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial30),kCCTextAlignmentRight,kObjTypeText);
+		
+		//13턴수
+		beginScene("mission13");
+		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial31),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial32),kCCTextAlignmentRight,kObjTypeText);
 	}
 	
-	void beginScene(string _lang,string _storyID){
+	void beginScene(string _storyID){
 		//string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
 		//CCLOG("Scene %s,",this->storyID.c_str());
 		if(this->storyID == _storyID){
@@ -381,12 +439,14 @@ public:
 		}
 	}
 	
-	void addSpot(string stringdata,ObjType isClear=kObjTypeAll){
+	void addSpot(string stringdata,string rectType,float delay=0.5f,ObjType isClear=kObjTypeAll){
 		if(isAdd){
 			Json::Value scriptInfo;
 			scriptInfo["type"]=kScriptTypeSpot;
 			scriptInfo["stringdata"]=stringdata;
 			scriptInfo["clear"]=(int)isClear;
+			scriptInfo["spotType"]=rectType;
+			scriptInfo["delay"]=delay;
 			storyData.append(scriptInfo);
 		}
 	}
@@ -398,6 +458,19 @@ public:
 			scriptInfo["type"]=kScriptTypeTalk;
 			scriptInfo["image"]=image;
 			scriptInfo["script"]=script;
+			scriptInfo["align"]=(int)align;
+			
+			scriptInfo["box"]=(int)bt;
+			scriptInfo["clear"]=(int)isClear;
+			storyData.append(scriptInfo);
+		}
+	}
+	
+	void addImage(string image,CCTextAlignment,int isClear=kObjTypeNone,BoxType bt=kBoxBig){
+		if(isAdd){
+			Json::Value scriptInfo;
+			scriptInfo["type"]=kScriptTypeImage;
+			scriptInfo["image"]=image;
 			scriptInfo["align"]=(int)align;
 			
 			scriptInfo["box"]=(int)bt;
@@ -553,21 +626,83 @@ public:
 	void scriptTypeSpot(Json::Value script){
 		CCNode* obj =StoryLayer::findObject(CCDirector::sharedDirector()->getRunningScene(),script["stringdata"].asString());
 		CCPoint pos =  obj->getParent()->convertToWorldSpace(obj->getPosition());
-		if(obj)obj->runAction(CCBlink::create(0.5f, 2));
+		CCSprite* spotObj;
 		
-		CCDrawNode * dot = CCDrawNode::create();
-		dot->drawDot(pos,obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
-		back->addChild(dot);
-		dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
-		dot->setAnchorPoint(ccp(0.5f,0.5f));
-		dot->setTag(kObjTypeSpot);
+		if(script.get("spotType","circle").asString()=="circle"){
+			CCDrawNode* dot = CCDrawNode::create();
+			dot->drawDot(pos,obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
+			back->addChild(dot);
+			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
+			dot->setAnchorPoint(ccp(0.5f,0.5f));
+			dot->setTag(kObjTypeSpot);
+			
+			spotObj = (CCSprite*)dot;
+		}else if(script.get("spotType","circle").asString()=="rect"){
+			//CCDrawNode * dot = CCDrawNode::create();
+			//dot->draw // drawDot(pos,obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
+			
+			
+			CCSprite* dot = CCSprite::create("whitePaper.png", CCRectMake(0, 0, obj->getContentSize().width, obj->getContentSize().height));
+			dot->setPosition(pos);
+			back->addChild(dot);
+			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
+			dot->setAnchorPoint(ccp(0.5f,0.5f));
+			dot->setTag(kObjTypeSpot);
+			
+			spotObj = (CCSprite*)dot;
+		}
 		
-		addChild(KSTimer::create(0.3,[this](){
-			this->clearScript();
-			this->playScript();
+		spotObj->setScale(0.1);
+		spotObj->setOpacity(0);
+		float delay = script.get("delay",0.5).asFloat();
+		addChild(KSGradualValue<float>::create(0.1, 1, 0.3, [this,spotObj](float a){
+			spotObj->setScale(a);
+			spotObj->setOpacity(a*255);
+		},[this,delay](float a){
+			addChild(KSTimer::create(delay,[this](){
+				this->clearScript();
+				this->playScript();
+			}));
 		}));
-	}
+		
 
+	}
+	
+	void scriptTypeImage(Json::Value script){
+		
+		
+		CCSprite* img = CCSprite::create(script["image"].asString().c_str());
+		img->setTag(kObjTypeImage);
+		img->setScale(0.1);
+		img->setOpacity(0);
+		
+		
+		float xPo=240;
+		if(script["align"].asInt()==kCCTextAlignmentLeft){
+			xPo=120;
+		}else if(script["align"].asInt()==kCCTextAlignmentLeft){
+			xPo=360;
+		}
+		img->setPosition(ccp(xPo,myDSH->ui_top/2.f));
+		back->addChild(img);
+		
+		
+		addChild(KSGradualValue<float>::create(0.1, 1, 0.3, [this,img](float a){
+			img->setScale(a);
+			img->setOpacity(a*255);
+		},[this,img](float a){
+			addChild(KSTimer::create(0.5,[this](){
+				this->clearScript();
+				this->playScript();
+			}));
+		}));
+		
+
+		
+	}
+	
+
+	
 	
 	int m_sss;
 	void playScript(){
@@ -613,6 +748,8 @@ public:
 			scriptTypeTitle(script);
 		}else if(script["type"].asInt()==kScriptTypeSpot){
 			scriptTypeSpot(script);
+		}else if(script["type"].asInt()==kScriptTypeImage){
+			scriptTypeImage(script);
 		}
 	}
 	
@@ -676,8 +813,13 @@ public:
                 CCLOG("test4-8 %d",nowSeq);
                 CCLOG("remove spot");
 				obj->removeFromParent();
+			}else if(obj->getTag()==kObjTypeImage && script["clear"].asInt()&kObjTypeImage){
+				
+				CCLOG("test4-8 %d",nowSeq);
+				CCLOG("remove spot");
+				obj->removeFromParent();
 			}
-            
+			
             TRACE();
 			
 		}

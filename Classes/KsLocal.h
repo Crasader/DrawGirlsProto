@@ -879,6 +879,8 @@ enum class LK
 	kMyLocalKey_kindTutorial30,
 	kMyLocalKey_kindTutorial31,
 	kMyLocalKey_kindTutorial32,
+	kMyLocalKey_kindTutorial33,
+	kMyLocalKey_kindTutorial34,
 	kMyLocalKey_maxSpeed,
 	kMyLocalKey_showtime,
 	kMyLocalKey_miss,
