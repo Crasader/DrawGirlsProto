@@ -595,10 +595,14 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 		
 		back_menu->setTouchPriority(touch_priority-1);
 		
+		KSLabelTTF* reward_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_reward), mySGD->getFont().c_str(), 12);
+		reward_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		reward_label->setPosition(ccp(28,40));
+		cell->addChild(reward_label);
 		
 		KSLabelTTF* character_name = KSLabelTTF::create(hell_list[idx].character_name.c_str(), mySGD->getFont().c_str(), 12);
 		character_name->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-		character_name->setPosition(ccp(30,12));
+		character_name->setPosition(ccp(28,12));
 		cell->addChild(character_name);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(hell_list[idx].title.c_str(), mySGD->getFont().c_str(), 18);
@@ -643,9 +647,14 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 		n_back_img->setPosition(ccpFromSize(n_back_img->getContentSize()/2.f));
 		cell->addChild(n_back_img);
 		
+		KSLabelTTF* reward_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_reward), mySGD->getFont().c_str(), 12);
+		reward_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		reward_label->setPosition(ccp(28,40));
+		cell->addChild(reward_label);
+		
 		KSLabelTTF* character_name = KSLabelTTF::create(hell_list[idx].character_name.c_str(), mySGD->getFont().c_str(), 12);
 		character_name->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-		character_name->setPosition(ccp(30,12));
+		character_name->setPosition(ccp(28,12));
 		cell->addChild(character_name);
 		
 		KSLabelTTF* title_label = KSLabelTTF::create(hell_list[idx].title.c_str(), mySGD->getFont().c_str(), 18);
