@@ -34,6 +34,7 @@ public:
 	string title;
 	string content;
 	string character_name;
+	bool is_take;
 };
 class HellModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {

@@ -38,6 +38,8 @@ public:
 	
 private:
 	
+	CCSprite* loading_progress_img;
+	
 	string next_scene_name;
 	KSLabelTTF* progress_label;
 	int total_load_img;

@@ -754,8 +754,121 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
 		
-		
-		StoryLayer::startStory(this, "mission8",nullptr);
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_hell))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_hell, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			
+			//			CCNode* scenario_node = CCNode::create();
+			//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+			//			loading_tip_back->addChild(scenario_node, 2);
+			//
+			//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+			//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+			//			if(screen_scale_x < 1.f)
+			//				screen_scale_x = 1.f;
+			//
+			//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			//
+			//
+			//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+			//			ikaruga->setAnchorPoint(ccp(0,0));
+			//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+			//			scenario_node->addChild(ikaruga, 1);
+			//
+			//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+			//			katsuragi->setAnchorPoint(ccp(1,0));
+			//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+			//			katsuragi->setVisible(false);
+			//			scenario_node->addChild(katsuragi, 1);
+			//
+			//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+			//			typing_box->setHide();
+			//			scenario_node->addChild(typing_box, 2);
+			//
+			//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+			//			scenario_node->addChild(typing_box2, 2);
+			//
+			//			typing_box2->setTouchOffScrollAndButton();
+			//			typing_box2->setVisible(false);
+			//			typing_box2->setTouchSuction(false);
+			//
+			//			typing_box->showAnimation(0.3f);
+			//
+			//			function<void()> end_func2 = [=]()
+			//			{
+			//				addChild(KSTimer::create(0.1f, [=]()
+			//										 {
+			//											 scenario_node->removeFromParent();
+			//										 }));
+			//			};
+			//
+			//			function<void()> end_func1 = [=]()
+			//			{
+			//				ikaruga->setVisible(false);
+			//				katsuragi->setVisible(true);
+			//
+			//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+			//																	  {
+			//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+			//																	  }, [=](float t)
+			//																	  {
+			//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+			//
+			//																		  typing_box2->setVisible(true);
+			//																		  typing_box2->setTouchSuction(true);
+			//
+			//																		  typing_box->setTouchSuction(false);
+			//
+			//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial16), end_func2);
+			//																	  }));
+			//				typing_box->setTouchOffScrollAndButton();
+			//				typing_box->setVisible(false);
+			//			};
+			//
+			//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+			//																  {
+			//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+			//																  }, [=](float t)
+			//																  {
+			//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+			//
+			//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial15), end_func1);
+			//																  }));
+			
+			
+			StoryLayer::startStory(this, "mission8",nullptr);
+		}
 	}
 	else if(mission_type == kCLEAR_percentage)
 	{
@@ -1921,7 +2034,7 @@ void LoadingTipScene::readyLoading()
 //	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 //	CCBReader* reader = new CCBReader(nodeLoader);
 //	CCSprite* loading_progress_img = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("loading.ccbi",this));
-	CCSprite* loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
+	loading_progress_img = KS::loadCCBI<CCSprite*>(this, "loading.ccbi").first;
 	loading_progress_img->setPosition(ccpFromSize(content_node->getChildByTag(1)->getContentSize()/2.f) + ccp(0,-45));
 	content_node->getChildByTag(1)->addChild(loading_progress_img, 1);
 //	reader->release();
@@ -2051,11 +2164,15 @@ void LoadingTipScene::countingFunc(CCObject *sender)
 {
 	ing_load_img++;
 	progress_label->setString(CCString::createWithFormat("%.0f%%", (100.f*ing_load_img)/total_load_img)->getCString());
-	
-	if(ing_load_img == total_load_img && is_minimum_time)
+	if(ing_load_img == total_load_img)
 	{
-		is_minimum_time = false;
-		endLoadingTip();
+		progress_label->removeFromParent();
+		loading_progress_img->removeFromParent();
+		if(is_minimum_time)
+		{
+			is_minimum_time = false;
+			endLoadingTip();
+		}
 	}
 }
 
