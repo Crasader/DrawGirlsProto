@@ -2264,27 +2264,27 @@ void GameItemManager::gameover()
 
 int GameItemManager::getMaxGold()
 {
-	return max_gold;
+	return max_gold.getV();
 }
 int GameItemManager::getGoldPercent0()
 {
-	return gold_percent0;
+	return gold_percent0.getV();
 }
 int GameItemManager::getGoldPercent1()
 {
-	return gold_percent1;
+	return gold_percent1.getV();
 }
 int GameItemManager::getGoldWeight0()
 {
-	return gold_weight0;
+	return gold_weight0.getV();
 }
 int GameItemManager::getGoldWeight1()
 {
-	return gold_weight1;
+	return gold_weight1.getV();
 }
 int GameItemManager::getGoldWeight2()
 {
-	return gold_weight2;
+	return gold_weight2.getV();
 }
 
 void GameItemManager::myInit()

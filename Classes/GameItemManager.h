@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include <deque>
 #include "SelectorDefine.h"
+#include "KSProtect.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -419,12 +420,12 @@ private:
 	int double_item_cnt;
 	int child_base_cnt;
 	
-	int max_gold;
-	int gold_percent0;
-	int gold_percent1;
-	int gold_weight0;
-	int gold_weight1;
-	int gold_weight2;
+	KSProtectVar<int> max_gold;
+	KSProtectVar<int> gold_percent0;
+	KSProtectVar<int> gold_percent1;
+	KSProtectVar<int> gold_weight0;
+	KSProtectVar<int> gold_weight1;
+	KSProtectVar<int> gold_weight2;
 	
 	void counting();
 	void addItem();

@@ -25,6 +25,7 @@
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
 #include "StoneMissile.h"
+#include "CharacterDetailPopup.h"
 
 enum CharacterSelectPopup_Zorder{
 	kCSP_Z_gray = 0,
@@ -65,10 +66,10 @@ bool CharacterSelectPopup::init()
 	
 	CommonAnimation::applyShadow(title_label);
 	
-	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	main_inner->setContentSize(CCSizeMake(424, 204));
-	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
-	main_case->addChild(main_inner);
+//	CCScale9Sprite* main_inner = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//	main_inner->setContentSize(CCSizeMake(424, 204));
+//	main_inner->setPosition(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f);
+//	main_case->addChild(main_inner);
 	
 	CCScale9Sprite* tip_marquee_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	tip_marquee_back->setContentSize(CCSizeMake(278, 26));
@@ -118,12 +119,12 @@ bool CharacterSelectPopup::init()
 	{
 		CharacterInfo t_info;
 		t_info.m_number = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1);
-		t_info.m_index = i;
+		t_info.m_index = i+1;
 		t_info.m_name = NSDS_GS(kSDS_GI_characterInfo_int1_name_s, i+1);
-		t_info.m_comment = NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, i+1);
 		t_info.m_character = NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i+1);
-		t_info.is_have = (i == 0);
+		t_info.is_have = false;
 		t_info.m_card = -1;
+		t_info.m_level = 1;
 		
 		bool is_found = false;
 		int history_size = mySGD->getCharacterHistorySize();
@@ -138,6 +139,8 @@ bool CharacterSelectPopup::init()
 				is_found = true;
 			}
 		}
+		
+		t_info.m_comment = NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, i+1, t_info.m_level);
 		
 		history_list.push_back(t_info);
 	}
@@ -171,19 +174,25 @@ bool CharacterSelectPopup::init()
 	
 	selected_character_number = mySGD->getSelectedCharacterHistory().characterNo.getV();
 	
-	CCRect table_rect = CCRectMake(1, 3, 422, 198);
+	CCRect table_rect = CCRectMake(0, 0, 422, 214);
 	
 //	CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width, table_rect.size.height));
 //	table_back->setOpacity(100);
 //	table_back->setAnchorPoint(ccp(0,0));
-//	table_back->setPosition(table_rect.origin);
-//	main_inner->addChild(table_back);
+//	table_back->setPosition(ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f+2) - ccpFromSize(table_rect.size/2.f));
+//	main_case->addChild(table_back);
+	
+	CCSprite* table_back = CCSprite::create("whitePaper.png", CCRectMake(0, 0, table_rect.size.width+2, table_rect.size.height+2));
+	table_back->setColor(ccc3(48,76,91));
+	table_back->setPosition(ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f+2));
+	main_case->addChild(table_back);
+	
 	
 	character_table = CCTableView::create(this, table_rect.size);
-	character_table->setDirection(CCScrollViewDirection::kCCScrollViewDirectionHorizontal);
+	character_table->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
 	character_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	character_table->setPosition(table_rect.origin);
-	main_inner->addChild(character_table);
+	character_table->setPosition(ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f+2) - ccpFromSize(table_rect.size/2.f));
+	main_case->addChild(character_table);
 	character_table->setTouchPriority(touch_priority);
 	character_table->setDelegate(this);
 	
@@ -212,190 +221,210 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	cell->init();
 	cell->autorelease();
 	
+	CCSprite* cell_back = CCSprite::create("cha_case.png");
+	cell_back->setPosition(ccpFromSize(cellSizeForTable(table)/2.f));
+	cell->addChild(cell_back);
 	
-	if(idx < list_cnt && history_list[idx].is_have.getV())
+	for(int i=0;i<5;i++)
 	{
-		CCScale9Sprite* back_img;
+		int real_idx = idx*5 + i;
 		
-		if(history_list[idx].m_number == selected_character_number)
+		float dis_width = cellSizeForTable(table).width/5.f;
+		CCPoint character_position = ccp(dis_width/2.f + dis_width*i , cellSizeForTable(table).height/2.f);
+		
+		if(real_idx < list_cnt)
 		{
-			back_img = CCScale9Sprite::create("cha_select.png", CCRectMake(0, 0, 60, 60), CCRectMake(29, 29, 2, 2));
-			back_img->setContentSize(CCSizeMake(150, 198));
-			back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-			cell->addChild(back_img);
-		}
-		else
-		{
-			back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-			back_img->setContentSize(CCSizeMake(142, 190));
-			back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-			cell->addChild(back_img);
-		}
-		
-		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-		inner_back->setContentSize(CCSizeMake(131, 120));
-		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
-		back_img->addChild(inner_back);
-		
-		CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
-		light_back->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
-		inner_back->addChild(light_back);
-		
-		CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[idx].m_character + ".ccbi").first;
-		character_img->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
-		inner_back->addChild(character_img);
-		
-		StoneType missile_type_code = StoneType(history_list[idx].m_number-1);
-		
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, history_list[idx].m_index + 1, history_list[idx].m_level);
-		KS::KSLog("%", mInfo);
-		missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
-		
-		if(missile_type_code == kStoneType_guided)
-		{
-			int grade = (history_list[idx].m_level-1)/5+1;
-			bool rotation = false;
-			switch(mInfo.get("subType", 1).asInt())
+			if(history_list[real_idx].is_have.getV())
 			{
-				case 2:
-				case 4:
-				case 7:
-					rotation = true;
-					break;
-				case 3:
-				case 5:
-					rotation = false;
-					break;
-				default:
-					rotation = true;
+				CCSprite* name_back;
+				
+				bool is_max_level = history_list[real_idx].m_level >= NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, history_list[real_idx].m_index);
+				bool is_selected = history_list[real_idx].m_number == selected_character_number;
+				string back_file;
+				
+				if(is_max_level)
+				{
+					name_back = CCSprite::create("cha_tag_gold.png");
+					name_back->setPosition(character_position);
+					cell_back->addChild(name_back);
 					
+					back_file = "cha_full_back.png";
+				}
+				else
+				{
+					name_back = CCSprite::create("cha_tag_silver.png");
+					name_back->setPosition(character_position);
+					cell_back->addChild(name_back);
+					
+					back_file = "cha_on.png";
+				}
+				
+				CCSprite* n_back = CCSprite::create(back_file.c_str());
+				CCSprite* s_back = CCSprite::create(back_file.c_str());
+				s_back->setColor(ccGRAY);
+				
+				CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(CharacterSelectPopup::detailAction));
+				back_item->setTag(history_list[real_idx].m_index);
+				
+				ScrollMenu* back_menu = ScrollMenu::create(back_item, NULL);
+				back_menu->setPosition(character_position);
+				cell_back->addChild(back_menu);
+				back_menu->setTouchPriority(touch_priority-1);
+				
+				CCNode* character_node = CCNode::create();
+				character_node->setPosition(character_position + ccp(0,-25));
+				character_node->setScale(0.8f);
+				cell_back->addChild(character_node);
+				
+				CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[real_idx].m_character + ".ccbi").first;
+				character_img->setPosition(ccp(0,0));
+				character_node->addChild(character_img);
+				
+				KSLabelTTF* name_label = KSLabelTTF::create(history_list[real_idx].m_name.c_str(), mySGD->getFont().c_str(), 10);
+				name_label->enableOuterStroke(ccBLACK, 0.7f, 255, true);
+				name_label->setPosition(ccp(name_back->getContentSize().width/2.f, name_back->getContentSize().height - 15));
+				name_back->addChild(name_label);
+				
+				KSLabelTTF* level_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_levelValue), history_list[real_idx].m_level), mySGD->getFont().c_str(), 9);
+				level_label->enableOuterStroke(ccBLACK, 0.6f, 255, true);
+				level_label->setPosition(ccp(name_back->getContentSize().width/2.f, name_back->getContentSize().height - 27));
+				name_back->addChild(level_label);
+				
+				if(is_max_level)
+				{
+					CCSprite* full_cover = CCSprite::create("cha_full_front.png");
+					full_cover->setPosition(character_position);
+					cell_back->addChild(full_cover);
+				}
+				
+				if(is_selected)
+				{
+					CCSprite* selected_img = CCSprite::create("cha_select.png");
+					selected_img->setPosition(character_position);
+					cell_back->addChild(selected_img);
+				}
 			}
-			
-			GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mInfo.get("subType", 1).asInt(), history_list[idx].m_level)->getCString(),
-																									 rotation);
-//			t_gm->beautifier((history_list[idx].m_level-1)/5+1, (history_list[idx].m_level-1)%5);
-			
-
-			t_gm->beautifier(mySGD->getUserdataCharLevel());
-			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-			t_gm->setPosition(character_img->getPosition());
-			//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
-			t_gm->setScale(0.6f);
-			inner_back->addChild(t_gm);
-			
-			
-			t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-		}
-		
-		CCSprite* missile_back = CCSprite::create("cha_level.png");
-		missile_back->setPosition(ccp(31, 101));
-		inner_back->addChild(missile_back);
-		
-		KSLabelTTF* level_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), history_list[idx].m_level), mySGD->getFont().c_str(), 11);
-		level_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		level_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,7));
-		missile_back->addChild(level_label);
-		
-		KSLabelTTF* damage_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(history_list[idx].m_damage).c_str()), mySGD->getFont().c_str(), 11);
-		damage_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		damage_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,-9));
-		missile_back->addChild(damage_label);
-		
-		CCSprite* name_back = CCSprite::create("cha_tab.png");
-		name_back->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f) + ccp(0, 86));
-		cell->addChild(name_back);
-		
-		KSLabelTTF* name_label = KSLabelTTF::create(history_list[idx].m_name.c_str(), mySGD->getFont().c_str(), 14);
-		name_label->setPosition(ccpFromSize(name_back->getContentSize()/2.f) + ccp(0,0));
-		name_back->addChild(name_label);
-		
-		if(history_list[idx].m_card != -1)
-		{
-//			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
-//			t_clipping->setAlphaThreshold(0.1f);
+			else
+			{
+				CCSprite* character_back = CCSprite::create("cha_off.png");
+				character_back->setPosition(character_position);
+				cell_back->addChild(character_back);
+			}
+//			CCScale9Sprite* back_img;
 //			
-//			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", history_list[idx].m_card));
-//			t_clipping->addChild(t_card);
-//			t_card->setScale(0.2f);
+//			if(history_list[real_idx].m_number == selected_character_number)
+//			{
+//				back_img = CCScale9Sprite::create("cha_select.png", CCRectMake(0, 0, 60, 60), CCRectMake(29, 29, 2, 2));
+//				back_img->setContentSize(CCSizeMake(150, 198));
+//				back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+//				cell->addChild(back_img);
+//			}
+//			else
+//			{
+//				back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+//				back_img->setContentSize(CCSizeMake(142, 190));
+//				back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+//				cell->addChild(back_img);
+//			}
 //			
-//			t_clipping->setPosition(ccp(25,27));
-//			t_clipping->setScale(0.5f);
-//			inner_back->addChild(t_clipping);
+//			CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+//			inner_back->setContentSize(CCSizeMake(131, 120));
+//			inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
+//			back_img->addChild(inner_back);
 //			
-//			CCSprite* t_frame = CCSprite::create("hell_frame.png");
-//			t_frame->setPosition(ccp(25,27));
-//			inner_back->addChild(t_frame);
-			
-			StyledLabelTTF* comment_label = StyledLabelTTF::create(history_list[idx].m_comment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
-			comment_label->setAnchorPoint(ccp(0.5f,0.5f));
-			comment_label->setPosition(ccp(inner_back->getContentSize().width/2.f,27));
-			inner_back->addChild(comment_label);
-		}
-		
-		if(history_list[idx].m_number == selected_character_number)
-		{
-			CCSprite* button_img = CCSprite::create("subbutton_purple3.png");
-			button_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,-71));
-			back_img->addChild(button_img);
-			
-			KSLabelTTF* button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelected), mySGD->getFont().c_str(), 14);
-			button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
-			button_label->setPosition(ccpFromSize(button_img->getContentSize()/2.f));
-			button_img->addChild(button_label);
+//			CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
+//			light_back->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
+//			inner_back->addChild(light_back);
+//			
+//			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[real_idx].m_character + ".ccbi").first;
+//			character_img->setPosition(ccpFromSize(inner_back->getContentSize()/2.f) + ccp(0,5));
+//			inner_back->addChild(character_img);
+//
+//			CCSprite* missile_back = CCSprite::create("cha_level.png");
+//			missile_back->setPosition(ccp(31, 101));
+//			inner_back->addChild(missile_back);
+//			
+//			KSLabelTTF* level_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), history_list[real_idx].m_level), mySGD->getFont().c_str(), 11);
+//			level_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+//			level_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,7));
+//			missile_back->addChild(level_label);
+//			
+//			KSLabelTTF* damage_label = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(history_list[real_idx].m_damage).c_str()), mySGD->getFont().c_str(), 11);
+//			damage_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+//			damage_label->setPosition(ccpFromSize(missile_back->getContentSize()/2.f) + ccp(0,-9));
+//			missile_back->addChild(damage_label);
+//			
+//			CCSprite* name_back = CCSprite::create("cha_tab.png");
+//			name_back->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f) + ccp(0, 86));
+//			cell->addChild(name_back);
+//			
+//			KSLabelTTF* name_label = KSLabelTTF::create(history_list[real_idx].m_name.c_str(), mySGD->getFont().c_str(), 14);
+//			name_label->setPosition(ccpFromSize(name_back->getContentSize()/2.f) + ccp(0,0));
+//			name_back->addChild(name_label);
+//			
+//			if(history_list[real_idx].m_card != -1)
+//			{
+//				StyledLabelTTF* comment_label = StyledLabelTTF::create(history_list[idx].m_comment.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+//				comment_label->setAnchorPoint(ccp(0.5f,0.5f));
+//				comment_label->setPosition(ccp(inner_back->getContentSize().width/2.f,27));
+//				inner_back->addChild(comment_label);
+//			}
+//			
+//			if(history_list[real_idx].m_number == selected_character_number)
+//			{
+//				CCSprite* button_img = CCSprite::create("subbutton_purple3.png");
+//				button_img->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,-71));
+//				back_img->addChild(button_img);
+//				
+//				KSLabelTTF* button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelected), mySGD->getFont().c_str(), 14);
+//				button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
+//				button_label->setPosition(ccpFromSize(button_img->getContentSize()/2.f));
+//				button_img->addChild(button_label);
+//			}
+//			else
+//			{
+//				CCSprite* n_button_img = CCSprite::create("subbutton_purple3.png");
+//				KSLabelTTF* n_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
+//				n_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
+//				n_button_label->setPosition(ccpFromSize(n_button_img->getContentSize()/2.f));
+//				n_button_img->addChild(n_button_label);
+//				
+//				CCSprite* s_button_img = CCSprite::create("subbutton_purple3.png");
+//				s_button_img->setColor(ccGRAY);
+//				KSLabelTTF* s_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
+//				s_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
+//				s_button_label->setPosition(ccpFromSize(s_button_img->getContentSize()/2.f));
+//				s_button_img->addChild(s_button_label);
+//				
+//				CCMenuItem* button_item = CCMenuItemSprite::create(n_button_img, s_button_img, this, menu_selector(CharacterSelectPopup::characterChangeAction));
+//				button_item->setTag(history_list[real_idx].m_number);
+//				
+//				ScrollMenu* button_menu = ScrollMenu::create(button_item, NULL);
+//				button_menu->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,-71));
+//				back_img->addChild(button_menu);
+//				button_menu->setTouchPriority(touch_priority-1);
+//			}
 		}
 		else
 		{
-			CCSprite* n_button_img = CCSprite::create("subbutton_purple3.png");
-			KSLabelTTF* n_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
-			n_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
-			n_button_label->setPosition(ccpFromSize(n_button_img->getContentSize()/2.f));
-			n_button_img->addChild(n_button_label);
+			CCSprite* character_back = CCSprite::create("cha_off.png");
+			character_back->setPosition(character_position);
+			cell_back->addChild(character_back);
 			
-			CCSprite* s_button_img = CCSprite::create("subbutton_purple3.png");
-			s_button_img->setColor(ccGRAY);
-			KSLabelTTF* s_button_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_characterSelect), mySGD->getFont().c_str(), 14);
-			s_button_label->enableOuterStroke(ccBLACK, 0.5f, 50, true);
-			s_button_label->setPosition(ccpFromSize(s_button_img->getContentSize()/2.f));
-			s_button_img->addChild(s_button_label);
-			
-			CCMenuItem* button_item = CCMenuItemSprite::create(n_button_img, s_button_img, this, menu_selector(CharacterSelectPopup::characterChangeAction));
-			button_item->setTag(history_list[idx].m_number);
-			
-			ScrollMenu* button_menu = ScrollMenu::create(button_item, NULL);
-			button_menu->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,-71));
-			back_img->addChild(button_menu);
-			button_menu->setTouchPriority(touch_priority-1);
+//			CCSprite* not_have_img = CCSprite::create("cha_lock.png");
+//			not_have_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
+//			cell->addChild(not_have_img);
+//			
+//			StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_needHaveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+//			ment_label->setPosition(ccpFromSize(not_have_img->getContentSize()/2.f) + ccp(0,-5));
+//			not_have_img->addChild(ment_label);
 		}
-	}
-	else
-	{
-		CCSprite* not_have_img = CCSprite::create("cha_lock.png");
-		not_have_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-		cell->addChild(not_have_img);
-		
-		StyledLabelTTF* ment_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_needHaveCharacterCard), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-		ment_label->setPosition(ccpFromSize(not_have_img->getContentSize()/2.f) + ccp(0,-5));
-		not_have_img->addChild(ment_label);
-		
-//		back_img = CCScale9Sprite::create("cha_unselect.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
-//		back_img->setContentSize(CCSizeMake(142, 190));
-//		back_img->setPosition(ccpFromSize(CCSizeMake(150, 198)/2.f));
-//		cell->addChild(back_img);
-//		
-//		CCScale9Sprite* inner_back = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-//		inner_back->setContentSize(CCSizeMake(131, 120));
-//		inner_back->setPosition(ccpFromSize(back_img->getContentSize()/2.f) + ccp(0,10));
-//		back_img->addChild(inner_back);
-//		
-//		KSLabelTTF* question_label = KSLabelTTF::create("?", mySGD->getFont().c_str(), 50);
-//		question_label->setPosition(ccpFromSize(inner_back->getContentSize()/2.f));
-//		inner_back->addChild(question_label);
 	}
 	
 	return cell;
 }
 
-void CharacterSelectPopup::characterChangeAction(CCObject* sender)
+void CharacterSelectPopup::detailAction(CCObject *sender)
 {
 	if(!is_menu_enable)
 		return;
@@ -403,6 +432,26 @@ void CharacterSelectPopup::characterChangeAction(CCObject* sender)
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	int t_tag = ((CCNode*)sender)->getTag();
+	
+	CharacterDetailPopup* t_popup = CharacterDetailPopup::create(touch_priority-10, t_tag, [=](){is_menu_enable = true;}, [=]()
+																 {
+																	 CCNode* t_node = CCNode::create();
+																	 t_node->setTag(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, t_tag));
+																	 characterChangeAction(t_node);
+																 });
+	addChild(t_popup, kCSP_Z_popup);
+}
+
+void CharacterSelectPopup::characterChangeAction(CCObject* sender)
+{
+//	if(!is_menu_enable)
+//		return;
+	
+	is_menu_enable = false;
+	
+//	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	change_loading = LoadingLayer::create(touch_priority-100);
 	addChild(change_loading);
@@ -415,14 +464,6 @@ void CharacterSelectPopup::characterChangeAction(CCObject* sender)
 	mySGD->setUserdataSelectedCharNO(send_character_number);
 	
 	mySGD->changeUserdata(json_selector(this, CharacterSelectPopup::resultUpdateCharacterHistory));
-	
-//	mySGD->keep_character_history_callback = nullptr;
-//	
-//	Json::Value param;
-//	param["memberID"] = hspConnector::get()->getSocialID();
-//	param["characterNo"] = send_character_number;
-//	
-//	myHSP->command("updatecharacterhistory", param, json_selector(this, CharacterSelectPopup::resultUpdateCharacterHistory));
 }
 
 void CharacterSelectPopup::resultUpdateCharacterHistory(Json::Value result_data)
@@ -430,8 +471,6 @@ void CharacterSelectPopup::resultUpdateCharacterHistory(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->network_check_cnt = 0;
-		
-//		mySGD->resultUpdateCharacterHistory(result_data);
 		
 		selected_character_number = mySGD->getSelectedCharacterHistory().characterNo.getV();
 		
@@ -482,9 +521,9 @@ void CharacterSelectPopup::tableCellTouched(CCTableView* table, CCTableViewCell*
 }
 CCSize CharacterSelectPopup::cellSizeForTable(CCTableView *table)
 {
-	return CCSizeMake(150, 198);
+	return CCSizeMake(422, 108);
 }
 unsigned int CharacterSelectPopup::numberOfCellsInTableView(CCTableView *table)
 {
-	return list_cnt+5;
+	return (list_cnt+5 - 1)/5 + 1;
 }

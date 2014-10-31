@@ -1230,9 +1230,9 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	cell->addChild(character_img, kCharacterCellZorder_content);
 	character_pair.second->runAnimationsForSequenceNamed("shop");
 	
-	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 11);
-	comment_label->setPosition(ccp(62,58));
-	cell->addChild(comment_label, kCharacterCellZorder_content);
+//	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 11);
+//	comment_label->setPosition(ccp(62,58));
+//	cell->addChild(comment_label, kCharacterCellZorder_content);
 	
 	CCSprite* t_tab = CCSprite::create("shop_tab.png");
 	t_tab->setPosition(ccp(94,192));

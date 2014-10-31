@@ -2097,12 +2097,14 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
 			NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_scriptInfo_s, i, character_list[i-1]["scriptInfo"].asString(), false);
 			Json::Value stat_info = character_list[i-1]["statInfo"];
-			Json::Value pattern_info, mission_info, missile_info;
+			Json::Value pattern_info, mission_info, missile_info, comment_info;
 			Json::Reader t_reader;
 			t_reader.parse(character_list[i-1]["patternInfo"].asString(), pattern_info);
 			t_reader.parse(character_list[i-1]["missionInfo"].asString(), mission_info);
 			t_reader.parse(character_list[i-1]["missileInfo"].asString(), missile_info);
+			t_reader.parse(character_list[i-1]["comment"].asString(), comment_info);
 			int max_level = stat_info.size();
 			NSDS_SI(kSDS_GI_characterInfo_int1_maxLevel_i, i, max_level, false);
 			for(int j=0;j<max_level;j++)
@@ -2121,6 +2123,7 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 				NSDS_SS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, i, j+1, pattern_info[j].asString(), false);
 				NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, i, j+1, mission_info[j].asString(), false);
 				NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, i, j+1, missile_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_comment_int2_s, i, j+1, comment_info[j].asString(), false);
 			}
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
@@ -2173,7 +2176,6 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			}
 			
 			NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt(), false);
-			NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString(), false);
 		}
 		
 		if(character_download_list.size() > 0)

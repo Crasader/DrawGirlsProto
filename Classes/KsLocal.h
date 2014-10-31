@@ -1182,7 +1182,16 @@ enum class LK
 	kMyLocalKey_controlTip_100percent_content,
 	
 	kMyLocalKey_expTake,
-	kMyLocalKey_expN_M
+	kMyLocalKey_expN_M,
+	kMyLocalKey_equip,
+	
+	kMyLocalKey_magnetEffect,
+	kMyLocalKey_missileCreateValue,
+	kMyLocalKey_cancelSpeed,
+	kMyLocalKey_goldBonus,
+	kMyLocalKey_scoreBonus,
+	kMyLocalKey_shockRegi,
+	kMyLocalKey_missileFireRegi
 };
 class KsLocal
 {

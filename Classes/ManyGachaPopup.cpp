@@ -1458,12 +1458,25 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			detail_back->addChild(light_back);
 			
 			int found_index = -1;
+			int found_level = 1;
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 			int character_no = json_list[selected_value]["reward"][0]["count"].asInt();
 			for(int i=0;found_index == -1 && i<character_count;i++)
 			{
 				if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_no)
+				{
 					found_index = i+1;
+					int history_size = mySGD->getCharacterHistorySize();
+					for(int j=0;j<history_size;j++)
+					{
+						CharacterHistory t_history = mySGD->getCharacterHistory(j);
+						if(t_history.characterNo.getV() == character_no)
+						{
+							found_level = t_history.characterLevel.getV();
+							break;
+						}
+					}
+				}
 			}
 			
 			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi").first;
@@ -1483,7 +1496,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			char_name_label->setPosition(character_name_back->getPosition() + ccp(32, 0));
 			detail_back->addChild(char_name_label);
 			
-			StyledLabelTTF* comment_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, found_index).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+			StyledLabelTTF* comment_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, found_index, found_level).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 			comment_label->setAnchorPoint(ccp(0.5f,0.5f));
 			comment_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,47));
 			detail_back->addChild(comment_label);

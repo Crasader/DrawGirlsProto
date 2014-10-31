@@ -1218,6 +1218,15 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
 	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
 	obj[LK::kMyLocalKey_expN_M] = "EXP %s / %s";
+	obj[LK::kMyLocalKey_equip] = "장착";
+	
+	obj[LK::kMyLocalKey_magnetEffect] = "자석효과";
+	obj[LK::kMyLocalKey_missileCreateValue] = "미사일 생성량";
+	obj[LK::kMyLocalKey_cancelSpeed] = "취소속도";
+	obj[LK::kMyLocalKey_goldBonus] = "골드보너스";
+	obj[LK::kMyLocalKey_scoreBonus] = "점수보너스";
+	obj[LK::kMyLocalKey_shockRegi] = "충격파 저항";
+	obj[LK::kMyLocalKey_missileFireRegi] = "미사일불꽃 저항";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
