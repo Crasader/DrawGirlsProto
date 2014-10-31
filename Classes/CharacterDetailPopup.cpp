@@ -244,7 +244,7 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	special_back->setPosition(ccp(back_in->getContentSize().width/2.f, 23));
 	back_in->addChild(special_back);
 	
-	StyledLabelTTF* special_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, cha_idx, cha_level).c_str(), mySGD->getFont().c_str(), 8, 999, StyledAlignment::kLeftAlignment);
+	StyledLabelTTF* special_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, cha_idx, cha_level).c_str(), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kLeftAlignment);
 	special_label->setAnchorPoint(ccp(0.5f,0.5f));
 	
 	CCScrollView* special_scroll = CCScrollView::create(CCSizeMake(special_back->getContentSize().width-6, special_back->getContentSize().height-4));
