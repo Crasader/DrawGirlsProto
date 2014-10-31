@@ -712,10 +712,12 @@ public:
 		CCNode* obj =StoryLayer::findObject(CCDirector::sharedDirector()->getRunningScene(),script["stringdata"].asString());
 		CCPoint pos =  obj->getParent()->convertToWorldSpace(obj->getPosition());
 		CCSprite* spotObj;
-		
+		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+		float uitop = myDSH->ui_top;
 		if(script.get("spotType","circle").asString()=="circle"){
 			CCDrawNode* dot = CCDrawNode::create();
-			dot->drawDot(pos,obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
+			
+			dot->drawDot(ccp(pos.x,pos.y*(320.f/uitop)),obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
 			back->addChild(dot);
 			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
 			dot->setAnchorPoint(ccp(0.5f,0.5f));
@@ -728,21 +730,21 @@ public:
 			
 			
 			CCSprite* dot = CCSprite::create("whitePaper.png", CCRectMake(0, 0, obj->getContentSize().width, obj->getContentSize().height));
-			dot->setPosition(pos);
+			dot->setPosition(ccp(pos.x,pos.y*(320.f/uitop)));
 			back->addChild(dot);
 			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
 			dot->setAnchorPoint(ccp(0.5f,0.5f));
 			dot->setTag(kObjTypeSpot);
 			
 			spotObj = (CCSprite*)dot;
+			//spotObj->setOpacity(0);
 		}
 		
 		spotObj->setScale(0.1);
-		spotObj->setOpacity(0);
 		float delay = script.get("delay",0.5).asFloat();
 		addChild(KSGradualValue<float>::create(0.1, 1, 0.3, [this,spotObj](float a){
 			spotObj->setScale(a);
-			spotObj->setOpacity(a*255);
+			//spotObj->setOpacity(a*255);
 		},[this,delay](float a){
 			addChild(KSTimer::create(delay,[this](){
 				this->clearScript();
