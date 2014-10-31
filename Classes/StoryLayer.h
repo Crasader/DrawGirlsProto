@@ -714,10 +714,17 @@ public:
 		CCSprite* spotObj;
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		float uitop = myDSH->ui_top;
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+
+		
+		
 		if(script.get("spotType","circle").asString()=="circle"){
 			CCDrawNode* dot = CCDrawNode::create();
 			
-			dot->drawDot(ccp(pos.x,pos.y*(320.f/uitop)),obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
+			dot->drawDot(ccp(pos.x+screen_scale_x/2.f,pos.y*(320.f/uitop)),obj->getContentSize().width/2.f, ccc4f (1, 1, 1, 1));
 			back->addChild(dot);
 			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
 			dot->setAnchorPoint(ccp(0.5f,0.5f));
@@ -730,7 +737,7 @@ public:
 			
 			
 			CCSprite* dot = CCSprite::create("whitePaper.png", CCRectMake(0, 0, obj->getContentSize().width, obj->getContentSize().height));
-			dot->setPosition(ccp(pos.x,pos.y*(320.f/uitop)));
+			dot->setPosition(ccp(pos.x/screen_scale_x + (screen_size.width-960.f)/2.f,pos.y*(320.f/uitop)));
 			back->addChild(dot);
 			dot->setBlendFunc(ccBlendFunc{GL_DST_COLOR, GL_ONE});
 			dot->setAnchorPoint(ccp(0.5f,0.5f));
