@@ -390,6 +390,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	
 	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
 	//TRACE();
+	CCLOG("before thread");
 	thr_id = pthread_create(&p_thread, NULL, t_function, (void*)insertIndex);
 	CCLOG("make thread! %d", thr_id);
 	//TRACE();
