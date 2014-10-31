@@ -116,31 +116,21 @@ void MissileUpgradePopup::myInit(int t_touch_priority, function<void()> t_end_fu
 	level_case->setPosition(ccp(-back_case->getContentSize().width/2.f+30,45));
 	upgrade_action_node->addChild(level_case);
 	
-	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
-	missile_type_code = kStoneType_guided;
+	
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int subType = mInfo.get("subType", 1).asInt();
+	int mType = mInfo.get("type", 1).asInt();
+	
+	StoneType missile_type_code = (StoneType)mType;
+//	missile_type_code = kStoneType_guided;
 	
 	int missile_level = mySGD->getUserdataCharLevel();
 	
 	missile_img = NULL;
-	
-	if(missile_type_code == kStoneType_guided)
-	{
-		int grade = (missile_level-1)/5+1;
-		bool rotation = false;
-		if(grade == 1 || grade == 4)
-			rotation = true;
-		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																														 rotation);
-		t_gm->beautifier(missile_level);
-		t_gm->setPosition(ccp(0,0));
+	missile_type_code = kStoneType_guided;
+	attachUpgradePopup(CCPointZero, missile_type_code, subType, missile_level);
 
-		upgrade_action_node->addChild(t_gm);
-		
-		
-		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-		
-		missile_img = t_gm;
-	}
 	
 	missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 //	missile_data_level->setColor(ccc3(255, 222, 0));
@@ -568,31 +558,15 @@ void MissileUpgradePopup::setAfterUpgrade()
 		missile_position = missile_img->getPosition();
 		missile_img->removeFromParent();
 	}
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int subType = mInfo.get("subType", 1).asInt();
+	int mType = mInfo.get("type", 1).asInt();
+	StoneType missile_type_code = StoneType(mType);
+//	missile_type_code = kStoneType_guided;
 	
-	StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
 	missile_type_code = kStoneType_guided;
-	
-	if(missile_type_code == kStoneType_guided)
-	{
-
-		int grade = (missile_level-1)/5+1;
-		bool rotation = false;
-		if(grade == 1 || grade == 4)
-			rotation = true;
-
-		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																															rotation);
-		t_gm->beautifier(missile_level);
-//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->setPosition(missile_position);
-//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
-		upgrade_action_node->addChild(t_gm);
-		
-		
-		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-		
-		missile_img = t_gm;
-	}
+	attachUpgradePopup(missile_position, missile_type_code, subType, missile_level);
 	
 	
 	if(mySGD->getUserdataMissileInfoIsMaxLevel())
@@ -689,4 +663,45 @@ void MissileUpgradePopup::setAfterUpgrade()
 			is_menu_enable = true;
 		}));
 	}));
+}
+void MissileUpgradePopup::attachUpgradePopup(CCPoint keepPosition, StoneType stoneType, int subType, int level)
+{
+	if(stoneType == kStoneType_guided)
+	{
+		bool selfRotation = false;
+		switch(subType)
+		{
+			case 1:
+				if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+					selfRotation = true;
+				else
+					selfRotation = false;
+				break;
+			case 2:
+			case 4:
+			case 7:
+				selfRotation = true;
+				break;
+			case 3:
+			case 5:
+				selfRotation = false;
+				break;
+			default:
+				selfRotation = true;
+		}
+		
+		GuidedMissileForUpgradeWindow* t_gm = GuidedMissileForUpgradeWindow::createForShowWindow(CCString::createWithFormat("jack_missile_%02d_%02d.png",
+																																		subType, level)->getCString(),
+																																														 selfRotation);
+		t_gm->beautifier(level); // 이건 정상...
+		//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
+		t_gm->setPosition(keepPosition);
+		//		t_gm->beautifier((missile_level-1)/5+1, (missile_level-1)%5+1);
+		upgrade_action_node->addChild(t_gm);
+		
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (2-1)*6));
+		
+		missile_img = t_gm;
+	}
 }

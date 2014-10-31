@@ -207,6 +207,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
 	int missileNumbersInt = floor(missileNumbers);
+	CCLOG("char no = %d", mySGD->getUserdataSelectedCharNO());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int subType = mInfo.get("subType", 1).asInt();
 //	stoneType = StoneType::kStoneType_guided;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
@@ -214,10 +218,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																{
 																	return false; // stop
 																}));
-		CCLOG("char no = %d", mySGD->getUserdataSelectedCharNO());
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		int subType = mInfo.get("subType", 1).asInt();
+		
 
 		
 		for(int i=0; i<missileNumbersInt; i++)
@@ -262,6 +263,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 
 				switch(subType)
 				{
+					case 1:
+						if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+							selfRotation = true;
+						else
+							selfRotation = false;
+						break;
 					case 2:
 					case 4:
 					case 7:
@@ -286,7 +293,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																									ao, selfRotation
 																									);
 				
-				gm->beautifier(grade, level);
+				gm->beautifier(level);
 				jack_missile_node->addChild(gm);
 				
 //				auto diff = nearCumber->getPosition() - myGD->getJackPoint().convertToCCP();
@@ -329,15 +336,24 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	}
 	else if(stoneType == StoneType::kStoneType_mine)
 	{
+		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		for(int i=0; i<missileNumbersInt; i++)
 		{
-			IntPoint mapPoint;
-			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
-			if(found == true)
-			{
-				MineAttack* ma = MineAttack::create(initPosition, ip2ccp(mapPoint), 10 + 3 * grade, power, missile_sub_damage, ao);
-				jack_missile_node->addChild(ma);	
-			}
+			auto creator = [=](){
+				IntPoint mapPoint;
+				bool found = myGD->getEmptyRandomPoint(&mapPoint, 5);
+				if(found == true)
+				{
+					
+					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 10 + 3 * grade, power, missile_sub_damage, ao);
+					ma->beautifier(level);
+					jack_missile_node->addChild(ma);
+				}
+			};
+			
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+				creator();
+			}));
 		}
 	}
 	else if(stoneType == StoneType::kStoneType_laser)
@@ -365,18 +381,29 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	}
 	else if(stoneType == StoneType::kStoneType_spirit)
 	{
+		
+			
 		for(int i=0; i<missileNumbersInt; i++)
 		{
-			IntPoint mapPoint2;
-			bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
-			if(found2 == true)
-			{
-				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
-				SpiritAttack* sa = SpiritAttack::create(initPosition, ip2ccp(mapPoint2), fileName, 
-																								3 + grade * 1, power / 2.f, missile_sub_damage / 2.f, 1.2f, 30, ao);
-				jack_missile_node->addChild(sa);	
-			}
+			auto creator = [=](){
+				IntPoint mapPoint2;
+				bool found2 = myGD->getEmptyRandomPoint(&mapPoint2, 5);
+				if(found2 == true)
+				{
+					string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+					//				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
+					SpiritAttack* sa = SpiritAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint2), fileName,
+																									3 + grade * 1, power / 2.f, missile_sub_damage / 2.f, 1.2f, 30, ao);
+					sa->beautifier(level);
+					jack_missile_node->addChild(sa);
+				}
+			};
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+				creator();
+			}));
 		}
+		
+	
 	}
 	else if(stoneType == StoneType::kStoneType_spread)
 	{
@@ -488,7 +515,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																												ao, selfRotation
 																												);
 				
-				gm->beautifier(grade, level);
+				gm->beautifier(level);
 				jack_missile_node->addChild(gm);
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
@@ -496,6 +523,38 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			}));
 		}
 	}
+	else if(stoneType == StoneType::kStoneType_slow)
+	{
+		// 프로텍터 미사일 형식
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		for(int i=0; i<missileNumbersInt; i++)
+		{
+			auto creator = [=](){
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+				
+				
+				float randomAdj = (rand()%21-10+100)/100.f;
+				SlowAttack* gm = SlowAttack::create(nullptr, myGD->getJackPoint().convertToCCP(),
+																												fileName,
+																												1.4f + grade / 10.f,
+																												M_PI / 180.f * 90.f ,
+																												int(power*(randomAdj)),
+																												missile_sub_damage * randomAdj,
+																												ao
+																												);
+				
+				gm->beautifier(level);
+				jack_missile_node->addChild(gm);
+			};
+			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+				creator();
+			}));
+		}
+	}
+
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 { 

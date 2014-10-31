@@ -139,6 +139,7 @@ private:
 	
 	string convertToItemCodeToItemName(ITEM_CODE t_code);
 	
+	void attachMissilePreview(CCPoint keepPosition, StoneType stoneType, int level);
 	bool is_go_to_mainflow;
 };
 
