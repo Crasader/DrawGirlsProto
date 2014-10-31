@@ -1020,15 +1020,8 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  character_img->setPositionX(t);
-																	  //										  if(character_no == 1)
-																	  //											{
-																	  //												character_manager->runAnimationsForSequenceNamed("move");
-																	  //												character_img->setScaleX(-1.f);
-																	  //											}
-																	  //										  else if(character_no == 2)
-																	  //											{
+																		
 																	  character_manager->runAnimationsForSequenceNamed("move_left");
-																	  //											}
 																	  character_img->addChild(KSGradualValue<float>::create(left_back->getPositionX()+60, left_back->getPositionX()-60, 0.8f, [=](float t)
 																															{
 																																character_img->setPositionX(t);
@@ -1054,30 +1047,11 @@ void StartSettingPopup::setMain()
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 	
 		
+		// 처음에 미사일 만들어지는 부분.
 		int missile_level = mySGD->getUserdataCharLevel();
 		
-		if(missile_type_code == kStoneType_guided)
-		{
-			int grade = (missile_level-1)/5+1;
-			bool rotation = false;
-			if(grade == 1 || grade == 4)
-				rotation = true;
-			GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																				rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-			t_gm->setFunctionForCrash([=](){
-				cumber_node->stopAllActions();
-				cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-			});
-			t_gm->setPosition(ccp(left_back->getPositionX(),158));
-			main_case->addChild(t_gm);
-			
-			
-			
-			t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-			
-			missile_img = t_gm;
-		}
+		attachMissilePreview(ccp(left_back->getPositionX(), 158), missile_type_code, missile_level);
+		
 		
 		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_level);
@@ -1280,6 +1254,7 @@ void StartSettingPopup::setMain()
 	}
 	else
 	{
+#if 0
 		cumber_node = CCNode::create();
 		setFormSetter(cumber_node);
 		cumber_node->setPosition(ccp(left_back->getPositionX(),158));
@@ -1300,6 +1275,7 @@ void StartSettingPopup::setMain()
 	
 		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 
+		// 여기는 손대지 않기로 함.
 		
 		int missile_level = mySGD->getUserdataCharLevel();
 		
@@ -1310,7 +1286,7 @@ void StartSettingPopup::setMain()
 			if(grade == 1 || grade == 4)
 				rotation = true;
 			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																	 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
+																	 rotation, (missile_level-1)/5+1, missile_level);
 			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 			t_gm->setFunctionForCrash([=](){
 				cumber_node->stopAllActions();
@@ -1481,6 +1457,7 @@ void StartSettingPopup::setMain()
 			
 			upgrade_menu->setTouchPriority(touch_priority);
 		}
+#endif
 	}
 	
 	
@@ -1723,6 +1700,7 @@ void StartSettingPopup::characterClose()
 	
 	repeat_character_action();
 	
+	// 원래 선택되어진 캐릭터 선택이 변경될 때.
 	CCPoint keep_position;
 	if(missile_img)
 	{
@@ -1742,28 +1720,8 @@ void StartSettingPopup::characterClose()
 	
 	int missile_level = mySGD->getUserdataCharLevel();
 	
-	if(missile_type_code == kStoneType_guided)
-	{
-		int grade = (missile_level-1)/5+1;
-		bool rotation = false;
-		if(grade == 1 || grade == 4)
-			rotation = true;
-		GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																			rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-		//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->setFunctionForCrash([=](){
-			cumber_node->stopAllActions();
-			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-		});
-		t_gm->setPosition(keep_position);
-		main_case->addChild(t_gm);
-		
-		
-		
-		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-		
-		missile_img = t_gm;
-	}
+	// 캐릭터 선택 닫을 때
+	attachMissilePreview(keep_position, missile_type_code, missile_level);
 	
 	main_case->setScaleY(0.f);
 	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
@@ -1933,29 +1891,9 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
 
 			
-			if(missile_type_code == kStoneType_guided)
-			{
-				int grade = (missile_level-1)/5+1;
-				bool rotation = false;
-				if(grade == 1 || grade == 4)
-					rotation = true;
-				GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																					rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-				//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-				t_gm->setFunctionForCrash([=](){
-					cumber_node->stopAllActions();
-					cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-				});
-				t_gm->setPosition(keep_position);
-				main_case->addChild(t_gm);
-				
-				
-				
-				t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-				
-				missile_img = t_gm;
-			}
 			
+			// 업그레이드 할 때
+			attachMissilePreview(keep_position, missile_type_code, missile_level);
 			
 			
 			CCPoint upgrade_position = upgrade_menu->getPosition();
@@ -2015,6 +1953,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	}
 	else
 	{
+#if 0
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 			int missile_level = mySGD->getUserdataCharLevel();
 			
@@ -2046,7 +1985,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				if(grade == 1 || grade == 4)
 					rotation = true;
 				GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																		 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
+																		 rotation, (missile_level-1)/5+1, missile_level);
 				//			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 				
 				t_gm->setFunctionForCrash([=](){
@@ -2188,6 +2127,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			}
 		});
 		addChild(t_popup, kStartSettingPopupZorder_popup);
+#endif
 	}
 	
 }
@@ -3573,4 +3513,103 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item10title);
 	
 	return return_value.c_str();
+}
+
+void StartSettingPopup::attachMissilePreview(CCPoint keepPosition, StoneType stoneType, int level)
+{
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int subType = mInfo.get("subType", 1).asInt();
+	int mType = mInfo.get("type", 1).asInt();
+	
+	stoneType = kStoneType_guided;
+	if(stoneType == kStoneType_guided)
+	{
+		int grade = (level-1)/5+1;
+		bool selfRotation = false;
+		switch(subType)
+		{
+			case 1:
+				if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+					selfRotation = true;
+				else
+					selfRotation = false;
+				break;
+			case 2:
+			case 4:
+			case 7:
+				selfRotation = true;
+				break;
+			case 3:
+			case 5:
+				selfRotation = false;
+				break;
+			default:
+				selfRotation = true;
+		}
+		GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img,
+																CCString::createWithFormat("jack_missile_%02d_%02d.png", subType, level)->getCString(),
+																																				selfRotation, (level-1)/5+1, level);
+		//				t_gm->beautifier(missile_level);
+		t_gm->setFunctionForCrash([=](){
+			cumber_node->stopAllActions();
+			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+		});
+		t_gm->setPosition(keepPosition);
+		main_case->addChild(t_gm);
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		missile_img = t_gm;
+	}
+	else if(stoneType == kStoneType_protector)
+	{
+		int grade = (level-1)/5+1;
+		bool selfRotation = false;
+		switch(subType)
+		{
+			case 1:
+				if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+					selfRotation = true;
+				else
+					selfRotation = false;
+				break;
+			case 2:
+			case 4:
+			case 7:
+				selfRotation = true;
+				break;
+			case 3:
+			case 5:
+				selfRotation = false;
+				break;
+			default:
+				selfRotation = true;
+		}
+		ProtectorMissile* t_gm = ProtectorMissile::createForShowStartSettingPopup(character_img,
+																																				ccsf("jack_missile_%02d_%02d.png",
+																																																	 subType, level),
+																																				selfRotation, (level-1)/5+1, level);
+		//				t_gm->beautifier(missile_level);
+		t_gm->setFunctionForCrash([=](){
+			cumber_node->stopAllActions();
+			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+		});
+		t_gm->setPosition(keepPosition);
+		t_gm->m_missileSprite->setPosition(character_img->getPosition() - t_gm->getPosition() );
+
+//		t_gm->setPosition(CCPointZero);
+		main_case->addChild(t_gm);
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		missile_img = t_gm;
+	
+	}
+	else if(stoneType == kStoneType_slow)
+	{
+		
+	}
+	else if(stoneType == kStoneType_laser)
+	{
+		
+	}
 }
