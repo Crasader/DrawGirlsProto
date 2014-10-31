@@ -110,7 +110,8 @@ enum SDS_KEY
 	kSDS_GI_characterInfo_int1_resourceInfo_plist_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_size_i,
-	kSDS_GI_characterInfo_int1_comment_s,
+	kSDS_GI_characterInfo_int1_comment_int2_s,
+	kSDS_GI_characterInfo_int1_scriptInfo_s,
 	kSDS_GI_monsterVersion_i,
 	kSDS_GI_monsterCount_i, // 1 ~ count
 	kSDS_GI_monsterInfo_int1_no_i,

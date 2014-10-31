@@ -695,7 +695,8 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_plist_s)	rv = "ci%d_ri_plist";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s)	rv = "ci%d_ri_pvrccz";
 	else if(t_key == kSDS_GI_characterInfo_int1_resourceInfo_size_i)	rv = "ci%d_ri_size";
-	else if(t_key == kSDS_GI_characterInfo_int1_comment_s)				rv = "ci%d_comment";
+	else if(t_key == kSDS_GI_characterInfo_int1_comment_int2_s)			rv = "ci%d_comment%d";
+	else if(t_key == kSDS_GI_characterInfo_int1_scriptInfo_s)			rv = "ci%d_scrIf";
 	
 	else if(t_key == kSDS_GI_monsterVersion_i)			rv = "monsterVersion";
 	else if(t_key == kSDS_GI_monsterCount_i)			rv = "monsterCount";

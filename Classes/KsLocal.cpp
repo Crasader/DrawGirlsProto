@@ -1227,6 +1227,7 @@ void KsLocal::ko()
 	
 	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
 	obj[LK::kMyLocalKey_expN_M] = "EXP %s / %s";
+	obj[LK::kMyLocalKey_equip] = "장착";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
 	

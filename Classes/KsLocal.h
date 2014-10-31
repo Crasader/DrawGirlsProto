@@ -1182,7 +1182,8 @@ enum class LK
 	kMyLocalKey_controlTip_100percent_content,
 	
 	kMyLocalKey_expTake,
-	kMyLocalKey_expN_M
+	kMyLocalKey_expN_M,
+	kMyLocalKey_equip
 };
 class KsLocal
 {
