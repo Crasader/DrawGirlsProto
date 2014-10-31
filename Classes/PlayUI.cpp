@@ -2345,6 +2345,8 @@ void PlayUI::setClearPercentage (float t_p)
 			else if(t_iter->second.oper == "*")
 				dis_value *= t_iter->second.value;
 			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+			
 			if(dis_value < 0)
 				dis_value = 0;
 		}
@@ -3898,6 +3900,8 @@ void PlayUI::myInit ()
 			else if(t_iter->second.oper == "*")
 				time_limit_value *= t_iter->second.value;
 			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+			
 			if(time_limit_value < 0)
 				time_limit_value = 0;
 		}
@@ -4101,6 +4105,8 @@ void PlayUI::myInit ()
 			else if(t_iter->second.oper == "*")
 				catch_sub_cumber_value *= t_iter->second.value;
 			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+			
 			if(catch_sub_cumber_value < 0)
 				catch_sub_cumber_value = 0;
 		}
@@ -4236,6 +4242,8 @@ void PlayUI::myInit ()
 				item_collect_value -= t_iter->second.value;
 			else if(t_iter->second.oper == "*")
 				item_collect_value *= t_iter->second.value;
+			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
 			
 			if(item_collect_value < 0)
 				item_collect_value = 0;
@@ -4390,6 +4398,8 @@ void PlayUI::myInit ()
 			else if(t_iter->second.oper == "*")
 				t_score_value *= t_iter->second.value;
 			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+			
 			if(t_score_value < 0)
 				t_score_value = 0;
 		}
@@ -4425,6 +4435,8 @@ void PlayUI::myInit ()
 				t_combo_value -= t_iter->second.value;
 			else if(t_iter->second.oper == "*")
 				t_combo_value *= t_iter->second.value;
+			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
 			
 			if(t_combo_value < 0)
 				t_combo_value = 0;
@@ -4462,6 +4474,8 @@ void PlayUI::myInit ()
 			else if(t_iter->second.oper == "*")
 				t_gold_value *= t_iter->second.value;
 			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+			
 			if(t_gold_value < 0)
 				t_gold_value = 0;
 		}
@@ -4497,6 +4511,8 @@ void PlayUI::myInit ()
 				t_turns_value += t_iter->second.value;
 			else if(t_iter->second.oper == "*")
 				t_turns_value *= t_iter->second.value;
+			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
 		}
 		
 		clr_cdt_cnt = t_turns_value;

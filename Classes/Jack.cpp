@@ -2534,8 +2534,95 @@ int Jack::getContinueOnCount()
 	return continue_on_count.getV();
 }
 
+void Jack::showMissionEffect(int t_i)
+{
+	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
+	talk_box->setAnchorPoint(ccp(0.5f,0));
+	talk_box->setPosition(ccp(0,15));
+	addChild(talk_box);
+	
+	string script_data = script_json.get(ccsf("m%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
+	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	script_label->setPosition(ccpFromSize(talk_box->getContentSize()/2.f) + ccp(0,2));
+	talk_box->addChild(script_label);
+	
+	KS::setOpacity(talk_box, 0);
+	
+	talk_box->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+												   }, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+													   
+													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+																						  {
+																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																			 }, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																				 talk_box->removeFromParent();
+																																			 }));
+																						  }));
+												   }));
+}
+
+void Jack::showPatternEffect(int t_i)
+{
+	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
+	talk_box->setAnchorPoint(ccp(0.5f,0));
+	talk_box->setPosition(ccp(0,15));
+	addChild(talk_box);
+	
+	string script_data = script_json.get(ccsf("p%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
+	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	script_label->setPosition(ccpFromSize(talk_box->getContentSize()/2.f) + ccp(0,2));
+	talk_box->addChild(script_label);
+	
+	KS::setOpacity(talk_box, 0);
+	
+	talk_box->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+												   }, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+													   
+													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+																						  {
+																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																			 }, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																				 talk_box->removeFromParent();
+																																			 }));
+																						  }));
+												   }));
+}
+
 void Jack::myInit()
 {
+	string script_str = NSDS_GS(kSDS_GI_characterInfo_int1_scriptInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	Json::Reader json_reader;
+	json_reader.parse(script_str, script_json);
+	
+	
 	continue_on_count = 0;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
@@ -2571,6 +2658,8 @@ void Jack::myInit()
 	myGD->I_V["Jack_getContinueOnCount"] = std::bind(&Jack::getContinueOnCount, this);
 	myGD->getJackPointCCP = std::bind(&Jack::getPosition, this);
 	myGD->F_V["Jack_getLastDirection"] = std::bind(&Jack::getLastDirection, this);
+	myGD->V_I["Jack_showMissionEffect"] = std::bind(&Jack::showMissionEffect, this, _1);
+	myGD->V_I["Jack_showPatternEffect"] = std::bind(&Jack::showPatternEffect, this, _1);
 
 	isMoving = false;
 	willBackTracking = false;
