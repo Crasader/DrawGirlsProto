@@ -157,11 +157,6 @@ bool HellModeResult::init()
 //			}
 			
 			// 캐릭터 획득 이미지
-			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
-			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
-			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,25));
-			star_back->addChild(take_character_card);
 			
 			int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
 			int character_no = -1;
@@ -187,13 +182,24 @@ bool HellModeResult::init()
 			
 			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(tt_history, nullptr));
 			
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.7f);
+			character_node->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,-17));
+			star_back->addChild(character_node);
+			
 			CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
-			light_back->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,-15));
-			star_back->addChild(light_back);
+			light_back->setPosition(ccp(0,0));
+			character_node->addChild(light_back);
 			
 			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_index) + ".ccbi").first;
-			character_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,-15));
-			star_back->addChild(character_img);
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
+			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
+			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,25));
+			star_back->addChild(take_character_card);
 			
 			
 //			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));

@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include <deque>
 #include "SelectorDefine.h"
+#include "KSProtect.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -251,7 +252,7 @@ private:
 class FloatingCoin : public CCSprite
 {
 public:
-	static FloatingCoin* create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
+	static FloatingCoin* create(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 	void hideAction();
 	
@@ -262,6 +263,7 @@ private:
 	float m_absorb_distance;
 	
 	int m_gold;
+	float sub_gold;
 	float moving_direction; // -180 <= ~ < 180
 	float moving_speed; // 2 <= ~ < 5
 	
@@ -298,22 +300,23 @@ private:
 	void ting();
 	
 	float ting_y;
+	float keep_start_speed;
 	
 	function<void(CCPoint)> take_func;
 	void takeIt();
 	
-	void myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take);
+	void myInit(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take);
 };
 
 class FloatingCoinCreator : public CCNode
 {
 public:
-	static FloatingCoinCreator* create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take = false);
+	static FloatingCoinCreator* create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take = false);
 	
 private:
 	int m_frame;
 	int m_count;
-	int m_gold;
+	double m_gold;
 	CCPoint start_point;
 	int ing_frame;
 	int ing_count;
@@ -323,7 +326,7 @@ private:
 	
 	void startCreate();
 	void creating();
-	void myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take);
+	void myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take);
 };
 
 class FloatingCoinParent : public CCNode
@@ -384,6 +387,12 @@ public:
 	void showTakeItemEffect(CCPoint t_p);
 	
 	void gameover();
+	int getMaxGold();
+	int getGoldPercent0();
+	int getGoldPercent1();
+	int getGoldWeight0();
+	int getGoldWeight1();
+	int getGoldWeight2();
 	
 private:
 	bool is_on_game;
@@ -410,6 +419,13 @@ private:
 	
 	int double_item_cnt;
 	int child_base_cnt;
+	
+	KSProtectVar<int> max_gold;
+	KSProtectVar<int> gold_percent0;
+	KSProtectVar<int> gold_percent1;
+	KSProtectVar<int> gold_weight0;
+	KSProtectVar<int> gold_weight1;
+	KSProtectVar<int> gold_weight2;
 	
 	void counting();
 	void addItem();

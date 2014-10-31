@@ -96,7 +96,14 @@ public:
 			//combo_cnt++;
 
 			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			myGD->communication("UI_addScore", addScore);
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			if(score_rate < 1.0)
+				score_rate = 1.0;
+			score_rate -= 1.0;
+			int sub_score = addScore*score_rate;
+			
+			myGD->communication("UI_addScore", addScore, sub_score);
 			//myGD->communication("UI_setComboCnt", combo_cnt);
 			//myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
 
@@ -402,7 +409,7 @@ public:
 			CCLOG("%x getParent", this);
 			getParent()->addChild(t_fc, 5);
 			t_fc->startRemove();
-			mySGD->addChangeGoodsIngameGold(1);
+			mySGD->addChangeGoodsIngameGold(1, 0);
 		}
 		if(m_option & AttackOption::kMonsterSpeedDown)
 		{
@@ -451,15 +458,23 @@ public:
 		int damage_score = ((damage + subdamage)/10*5+100)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);//(100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
 		int combo_score = (combo_cnt*10)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d); //damage_score*(combo_cnt-1);
 		
-		mySGD->damage_score = mySGD->damage_score.getV() + damage_score;
-		mySGD->combo_score = mySGD->combo_score.getV() + combo_score;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		if(score_rate < 1.0)
+			score_rate = 1.0;
+		score_rate -= 1.0;
+		int sub_damage_score = damage_score*score_rate;
+		int sub_combo_score = combo_score*score_rate;
+		
+		mySGD->damage_score = mySGD->damage_score.getV() + damage_score + sub_damage_score;
+		mySGD->combo_score = mySGD->combo_score.getV() + combo_score + sub_combo_score;
 		
 		int addScore = damage_score + combo_score;
 		if(m_option & AttackOption::kPlusScore)
 		{
 			addScore *= 1.1f;
 		}
-		myGD->communication("UI_addScore", addScore);
+		myGD->communication("UI_addScore", addScore, sub_damage_score + sub_combo_score);
 		myGD->communication("UI_setComboCnt", combo_cnt);
 		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
 		myGD->communication("Main_startShake", ks19937::getFloatValue(0, 360)); // 일단은 완전 랜덤으로.

@@ -2732,6 +2732,14 @@ void MainFlowScene::showShopPopup(int t_code)
     addChild(t_shop, kMainFlowZorder_popup+100);
 }
 
+void MainFlowScene::showGachaPopup()
+{
+	is_menu_enable = false;
+	ManyGachaPopup* t_popup = ManyGachaPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -2888,13 +2896,9 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_rank)
 		{
-			ManyGachaPopup* t_popup = ManyGachaPopup::create();
+			RankNewPopup* t_popup = RankNewPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
-			
-//			RankNewPopup* t_popup = RankNewPopup::create();
-//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-//			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
@@ -2951,20 +2955,31 @@ void MainFlowScene::menuAction(CCObject* sender)
             if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
             {
                 t_code = kSC_eventPack;
+				
+				ShopPopup* t_shop = ShopPopup::create();
+				t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				t_shop->targetHeartTime(heart_time);
+				t_shop->setShopCode(t_code);
+				t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+				t_shop->addGray();
+				addChild(t_shop, kMainFlowZorder_popup);
             }
             else
             {
-                t_code = kSC_gold;
+//                t_code = kSC_gold;
+				ManyGachaPopup* t_popup = ManyGachaPopup::create();
+				t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				addChild(t_popup, kMainFlowZorder_popup);
             }
             
             
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(t_code);
-			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-			t_shop->addGray();
-			addChild(t_shop, kMainFlowZorder_popup);
+//			ShopPopup* t_shop = ShopPopup::create();
+//			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//			t_shop->targetHeartTime(heart_time);
+//			t_shop->setShopCode(t_code);
+//			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//			t_shop->addGray();
+//			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)
 		{
@@ -3211,78 +3226,96 @@ void MainFlowScene::setBottom()
 //	}
 	
 	
-	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
-	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
-	n_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
-	n_shop->addChild(n_shop_label);
-	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
-	s_shop->setColor(ccGRAY);
-	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
-	s_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
-	s_shop->addChild(s_shop_label);
-	
-	
 	chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-    std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
-    ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
-    time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
-    
-    int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
-    
-    bool is_on_time_startPack = sub_time <= expireSec;
-    bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-    ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
-    bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
-    bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
-    bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-    bool is_on_time_eventPack = false;
-    
-    tm* now_tm = localtime(&now_time_t);
-    string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
-    string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
-    
-    int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
-    int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
-    
-    if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
-       atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
-       NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
-       NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
-    {
-        is_on_time_eventPack = true;
-    }
-    
-    bool is_useable_eventPack = true;
-    if(is_have_eventPack && is_on_time_eventPack)
-    {
-        if(is_just_one)
-        {
-            if(!is_buyed_eventPack)
-                is_useable_eventPack = true;
-            else
-                is_useable_eventPack = false;
-        }
-        else
-            is_useable_eventPack = true;
-    }
-    else
-    {
-        is_useable_eventPack = false;
-    }
+	std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+	///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+	time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
 	
+	int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
 	
-	if(NSDS_GB(kSDS_GI_shop_isEvent_b) || ((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack))
+	bool is_on_time_startPack = sub_time <= expireSec;
+	bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+	bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+	bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+	bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	bool is_on_time_eventPack = false;
+	
+	tm* now_tm = localtime(&now_time_t);
+	string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+	string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+	
+	int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+	int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+	
+	if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+	   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+	   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+	   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
 	{
-		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
-		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
-		n_shop->addChild(n_shop_event);
+		is_on_time_eventPack = true;
+	}
+	
+	bool is_useable_eventPack = true;
+	if(is_have_eventPack && is_on_time_eventPack)
+	{
+		if(is_just_one)
+		{
+			if(!is_buyed_eventPack)
+				is_useable_eventPack = true;
+			else
+				is_useable_eventPack = false;
+		}
+		else
+			is_useable_eventPack = true;
+	}
+	else
+	{
+		is_useable_eventPack = false;
+	}
+	
+	CCSprite* n_shop;
+	CCSprite* s_shop;
+	
+	if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
+	{
+		n_shop = CCSprite::create("mainflow_shop.png");
+		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+		n_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
+		n_shop->addChild(n_shop_label);
+		s_shop = CCSprite::create("mainflow_shop.png");
+		s_shop->setColor(ccGRAY);
+		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+		s_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
+		s_shop->addChild(s_shop_label);
 		
-		CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
-		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+2));
-		s_shop->addChild(s_shop_event);
-		s_shop_event->setColor(ccGRAY);
+		if(NSDS_GB(kSDS_GI_shop_isEvent_b) || ((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack))
+		{
+			CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
+			n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
+			n_shop->addChild(n_shop_event);
+			
+			CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
+			s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+2));
+			s_shop->addChild(s_shop_event);
+			s_shop_event->setColor(ccGRAY);
+		}
+	}
+	else
+	{
+		n_shop = CCSprite::create("mainflow_shop.png");
+		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
+		n_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
+		n_shop->addChild(n_shop_label);
+		s_shop = CCSprite::create("mainflow_shop.png");
+		s_shop->setColor(ccGRAY);
+		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
+		s_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
+		s_shop->addChild(s_shop_label);
 	}
 	
 	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));

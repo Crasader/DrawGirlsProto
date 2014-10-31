@@ -78,8 +78,10 @@ private:
 	function<void()> success_func;
 	
 	void normalAction(CCObject* sender, CCControlEvent t_event);
+	void resultNormalProperties(Json::Value result_data);
 	void resultNormalExchange(Json::Value result_data);
 	void premiumAction(CCObject* sender, CCControlEvent t_event);
+	void resultPremiumProperties(Json::Value result_data);
 	void resultPremiumExchange(Json::Value result_data);
 	
 	KSLabelTTF* refresh_time_label;

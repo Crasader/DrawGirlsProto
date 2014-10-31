@@ -240,6 +240,33 @@ void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 	}
 }
 
+float Jack::getLastDirection()
+{
+	float return_value;
+	
+	if(lastDirection == directionLeft)
+	{
+		return_value = deg2Rad(180.f);
+	}
+	else if(lastDirection == directionUp)
+	{
+		return_value = deg2Rad(90.f);
+	}
+	else if(lastDirection == directionRight)
+	{
+		return_value = deg2Rad(0.f);
+	}
+	else if(lastDirection == directionDown)
+	{
+		return_value = deg2Rad(-90.f);
+	}
+	else
+	{
+		return_value = deg2Rad(90.f);
+	}
+	return return_value;
+}
+
 //////////////////////////////////////////////////////////////////////////////// move test /////////////////////////////////////////////////////////
 
 void Jack::moveTest()
@@ -400,7 +427,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
@@ -469,7 +497,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -530,7 +559,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = c_s_dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("move_left"))
@@ -608,7 +638,8 @@ void Jack::moveTest()
 //			if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //			{
 				IntDirection t_direction = dv.getDirection();
-				
+			if(t_direction != directionStop)
+				lastDirection = t_direction;
 				if(t_direction == directionLeft)
 				{
 					if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -679,7 +710,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = dv.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -753,7 +785,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = s_dv.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -822,7 +855,8 @@ void Jack::moveTest()
 //				if(mySGD->getSelectedCharacterHistory().characterNo.getV() == 2)
 //				{
 					IntDirection t_direction = s_dv_reverse.getDirection();
-					
+				if(t_direction != directionStop)
+					lastDirection = t_direction;
 					if(t_direction == directionLeft)
 					{
 						if(jack_ccb_manager->getRunningSequenceName() == NULL || jack_ccb_manager->getRunningSequenceName() != string("draw_left"))
@@ -2500,8 +2534,95 @@ int Jack::getContinueOnCount()
 	return continue_on_count.getV();
 }
 
+void Jack::showMissionEffect(int t_i)
+{
+	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
+	talk_box->setAnchorPoint(ccp(0.5f,0));
+	talk_box->setPosition(ccp(0,15));
+	addChild(talk_box);
+	
+	string script_data = script_json.get(ccsf("m%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
+	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	script_label->setPosition(ccpFromSize(talk_box->getContentSize()/2.f) + ccp(0,2));
+	talk_box->addChild(script_label);
+	
+	KS::setOpacity(talk_box, 0);
+	
+	talk_box->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+												   }, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+													   
+													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+																						  {
+																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																			 }, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																				 talk_box->removeFromParent();
+																																			 }));
+																						  }));
+												   }));
+}
+
+void Jack::showPatternEffect(int t_i)
+{
+	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
+	talk_box->setAnchorPoint(ccp(0.5f,0));
+	talk_box->setPosition(ccp(0,15));
+	addChild(talk_box);
+	
+	string script_data = script_json.get(ccsf("p%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
+	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	script_label->setPosition(ccpFromSize(talk_box->getContentSize()/2.f) + ccp(0,2));
+	talk_box->addChild(script_label);
+	
+	KS::setOpacity(talk_box, 0);
+	
+	talk_box->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+												   }, [=](int t_i)
+												   {
+													   KS::setOpacity(talk_box, t_i);
+													   
+													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+																						  {
+																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																			 }, [=](int t_i)
+																																			 {
+																																				 KS::setOpacity(talk_box, t_i);
+																																				 talk_box->removeFromParent();
+																																			 }));
+																						  }));
+												   }));
+}
+
 void Jack::myInit()
 {
+	string script_str = NSDS_GS(kSDS_GI_characterInfo_int1_scriptInfo_s, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	Json::Reader json_reader;
+	json_reader.parse(script_str, script_json);
+	
+	
 	continue_on_count = 0;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
@@ -2516,6 +2637,8 @@ void Jack::myInit()
 	isDie = false;
 	is_double_moving = false;
 
+	lastDirection = directionUp;
+	
 	myGD->V_F["Jack_changeSpeed"] = std::bind(&Jack::changeSpeed, this, _1);
 	myGD->V_I["Jack_startDieEffect"] = std::bind(&Jack::startDieEffect, this, _1);
 	myGD->V_V["Jack_createHammer"] = std::bind(&Jack::createHammer, this);
@@ -2534,7 +2657,9 @@ void Jack::myInit()
 	myGD->CCN_V["Jack_getJack"] = std::bind(&Jack::getJack, this);
 	myGD->I_V["Jack_getContinueOnCount"] = std::bind(&Jack::getContinueOnCount, this);
 	myGD->getJackPointCCP = std::bind(&Jack::getPosition, this);
-
+	myGD->F_V["Jack_getLastDirection"] = std::bind(&Jack::getLastDirection, this);
+	myGD->V_I["Jack_showMissionEffect"] = std::bind(&Jack::showMissionEffect, this, _1);
+	myGD->V_I["Jack_showPatternEffect"] = std::bind(&Jack::showPatternEffect, this, _1);
 
 	isMoving = false;
 	willBackTracking = false;

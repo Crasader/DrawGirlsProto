@@ -90,6 +90,7 @@ public:
 	void showHellOpening();
 	
     void showShopPopup(int t_code);
+	void showGachaPopup();
     
     virtual void onEnterTransitionDidFinish();
 	

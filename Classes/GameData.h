@@ -87,6 +87,7 @@ public:
 	
 	std::map<std::string, std::function<void(bool)>> V_B;
 	std::map<std::string, std::function<void(int)>> V_I;
+	std::map<std::string, std::function<void(int, int)>> V_II;
 	std::map<std::string, std::function<void(float)>> V_F;
 	std::map<std::string, std::function<void(float, bool)>> V_FB;
 //	std::map<std::string, std::function<bool(KSCumberBase*, float, float)>> B_CumberBaseFF;
@@ -239,6 +240,7 @@ public:
 	void communication(string funcName, CCPoint t_startFire, ccColor4F t_color, float t_angle);
 	void communication(string funcName, CCPoint t_startFire, bool t_b);
 	void communication(string funcName, int t_int);
+	void communication(string funcName, int t_int1, int t_int2);
 	void communication(string funcName, int t_int1, int t_int2, float t_float);
 	void communication(string funcName, int t_int1, int t_int2, float t_float, CCPoint t_p);
 	void communication(string funcName, float t_float);

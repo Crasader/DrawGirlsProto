@@ -198,7 +198,7 @@ void JM_UpgradeMissile::moving ()
 				
 				myGD->communication("Main_startShake", -shootImg->getRotation());
 				
-				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_addScore", addScore, 0);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 				
 				myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
@@ -671,7 +671,7 @@ void JM_BasicMissile::moving ()
 				combo_cnt++;
 				
 				int addScore = (100.f+400.f)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_addScore", addScore, 0);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 				myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
 				
@@ -714,7 +714,7 @@ void JM_BasicMissile::moving ()
 					combo_cnt++;
 					
 					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-					myGD->communication("UI_addScore", addScore);
+					myGD->communication("UI_addScore", addScore, 0);
 					myGD->communication("UI_setComboCnt", combo_cnt);
 					myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
 					

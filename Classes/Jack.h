@@ -18,6 +18,7 @@
 #include "Well512.h"
 #include "LogData.h"
 #include "cocos-ext.h"
+#include "jsoncpp/json.h"
 
 using namespace cocos2d;
 USING_NS_CC_EXT;
@@ -240,9 +241,14 @@ public:
 	CCNode* getJack();
 	
 	int getContinueOnCount();
+	float getLastDirection();
+	
+	void showMissionEffect(int t_i);
+	void showPatternEffect(int t_i);
 	
 private:
 	
+	Json::Value script_json;
 	KSProtectVar<int> continue_on_count;
 	
 	CCSprite* touchPointSpr_byJoystick;
@@ -263,6 +269,8 @@ private:
 	IntDirection direction;
 	IntDirection afterDirection;
 	IntDirection secondDirection;
+	
+	IntDirection lastDirection;
 	
 	IntDirection no_draw_direction;
 	IntDirection no_draw_secondDirection;

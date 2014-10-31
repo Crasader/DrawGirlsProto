@@ -25,6 +25,7 @@
 #include "TypingBox.h"
 #include "MainFlowScene.h"
 
+#include "StoryLayer.h"
 CCScene* LoadingTipScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -150,6 +151,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	
 	
 	CCScale9Sprite* mission_back = CCScale9Sprite::create("common_mission.png", CCRectMake(0, 0, 50, 50), CCRectMake(24, 24, 2, 2));
+	mission_back->setStringData("missionPannel");
 	mission_back->setContentSize(CCSizeMake(256, 103));
 	mission_back->setPosition(ccp(loading_tip_back->getContentSize().width/2.f, loading_tip_back->getContentSize().height/2.f+40));
 	loading_tip_back->addChild(mission_back,3);
@@ -310,86 +312,92 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			
-			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
-			yagyu->setAnchorPoint(ccp(0,0));
-			yagyu->setPosition(ccp(240-240*screen_scale_x-yagyu->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(yagyu, 1);
-			
-			CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
-			hibari->setAnchorPoint(ccp(1,0));
-			hibari->setPosition(ccp(240+240*screen_scale_x+hibari->getContentSize().width, 160-160*screen_scale_y));
-			hibari->setVisible(false);
-			scenario_node->addChild(hibari, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				yagyu->setVisible(false);
-				hibari->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial12), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial11), end_func1);
-																  }));
+//			
+//			
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* yagyu = CCSprite::create("kt_cha_yagyu_1.png");
+//			yagyu->setAnchorPoint(ccp(0,0));
+//			yagyu->setPosition(ccp(240-240*screen_scale_x-yagyu->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(yagyu, 1);
+//			
+//			CCSprite* hibari = CCSprite::create("kt_cha_hibari_1.png");
+//			hibari->setAnchorPoint(ccp(1,0));
+//			hibari->setPosition(ccp(240+240*screen_scale_x+hibari->getContentSize().width, 160-160*screen_scale_y));
+//			hibari->setVisible(false);
+//			scenario_node->addChild(hibari, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//																 {
+//																	 scenario_node->removeFromParent();
+//																 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				yagyu->setVisible(false);
+//				hibari->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																															{
+//																																hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+//																															}, [=](float t)
+//																															{
+//																																hibari->setPositionX(240+240*screen_scale_x+hibari->getContentSize().width - hibari->getContentSize().width*2.f/3.f*t);
+//																																
+//																																typing_box2->setVisible(true);
+//																																typing_box2->setTouchSuction(true);
+//																																
+//																																typing_box->setTouchSuction(false);
+//																																
+//																																typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial12), end_func2);
+//																															}));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																														{
+//																															yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
+//																														}, [=](float t)
+//																														{
+//																															yagyu->setPositionX(240-240*screen_scale_x-yagyu->getContentSize().width + yagyu->getContentSize().width*2.f/3.f*t);
+//																															
+//																															typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial11), end_func1);
+//																														}));
+		
+		
+			StoryLayer::startStory(this, "mission2",nullptr);
+		
 		}
 		
+			
+			
 //		no_review->setFunction([=](CCObject* sender)
 //							   {
 //								   myDSH->setBoolForKey(kDSH_Key_mission_willNeverWatch_subCumberCatch, true);
@@ -468,82 +476,85 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+//			asuka->setAnchorPoint(ccp(0,0));
+//			asuka->setPosition(ccp(240-240*screen_scale_x-asuka->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(asuka, 1);
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(1,0));
+//			ikaruga->setPosition(ccp(240+240*screen_scale_x+ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			ikaruga->setVisible(false);
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				asuka->setVisible(false);
+//				ikaruga->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial14), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial13), end_func1);
+//																  }));
+
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
-			asuka->setAnchorPoint(ccp(0,0));
-			asuka->setPosition(ccp(240-240*screen_scale_x-asuka->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(asuka, 1);
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(1,0));
-			ikaruga->setPosition(ccp(240+240*screen_scale_x+ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			ikaruga->setVisible(false);
-			scenario_node->addChild(ikaruga, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				asuka->setVisible(false);
-				ikaruga->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  ikaruga->setPositionX(240+240*screen_scale_x+ikaruga->getContentSize().width - ikaruga->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial14), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  asuka->setPositionX(240-240*screen_scale_x-asuka->getContentSize().width + asuka->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial13), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission4",nullptr);
 		}
 		
 //		no_review->setFunction([=](CCObject* sender)
@@ -634,83 +645,85 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial16), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial15), end_func1);
+//																  }));
+
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial16), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial15), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission7",nullptr);
 		}
 		
 //		no_review->setFunction([=](CCObject* sender)
@@ -740,6 +753,9 @@ CCNode* LoadingTipScene::getMissionTipImage()
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
+		
+		
+		StoryLayer::startStory(this, "mission8",nullptr);
 	}
 	else if(mission_type == kCLEAR_percentage)
 	{
@@ -786,82 +802,85 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial24), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial23), end_func1);
+//																  }));
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
 			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial24), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial23), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission9",nullptr);
 		}
 	}
 	else if(mission_type == kCLEAR_score)
@@ -909,82 +928,85 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial26), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial25), end_func1);
+//																  }));
+
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial26), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial25), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission10",nullptr);
 		}
 	}
 	else if(mission_type == kCLEAR_combo)
@@ -1031,83 +1053,86 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
+//			
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial28), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial27), end_func1);
+//																  }));
+
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial28), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial27), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission11",nullptr);
 		}
 	}
 	else if(mission_type == kCLEAR_gold)
@@ -1155,82 +1180,85 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial30), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial29), end_func1);
+//																  }));
+
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial30), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial29), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission12",nullptr);
 		}
 	}
 	else if(mission_type == kCLEAR_turns)
@@ -1278,82 +1306,84 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			
 			
 			
-			CCNode* scenario_node = CCNode::create();
-			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
-			loading_tip_back->addChild(scenario_node, 2);
+//			CCNode* scenario_node = CCNode::create();
+//			scenario_node->setPosition(ccpFromSize(loading_tip_back->getContentSize()/2.f) - ccp(240,160));
+//			loading_tip_back->addChild(scenario_node, 2);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
+//			katsuragi->setAnchorPoint(ccp(1,0));
+//			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
+//			katsuragi->setVisible(false);
+//			scenario_node->addChild(katsuragi, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				katsuragi->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial32), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial31), end_func1);
+//																  }));
 			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			CCSprite* katsuragi = CCSprite::create("kt_cha_katsuragi_1.png");
-			katsuragi->setAnchorPoint(ccp(1,0));
-			katsuragi->setPosition(ccp(240+240*screen_scale_x+katsuragi->getContentSize().width, 160-160*screen_scale_y));
-			katsuragi->setVisible(false);
-			scenario_node->addChild(katsuragi, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 80), ccp(225, 90));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 80), ccp(255, 90));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func2 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				katsuragi->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  katsuragi->setPositionX(240+240*screen_scale_x+katsuragi->getContentSize().width - katsuragi->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial32), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial31), end_func1);
-																  }));
+			StoryLayer::startStory(this, "mission13",nullptr);
 		}
 	}
 	

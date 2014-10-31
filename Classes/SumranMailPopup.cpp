@@ -689,6 +689,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				else if(rewardType=="p4")rewardName->setString("아이템뽑기권");
 																				else if(rewardType=="p5")rewardName->setString("99프로뽑기권");
 																				else if(rewardType=="p6")rewardName->setString("생명의돌");
+																				else if(rewardType=="p7")rewardName->setString("일반뽑기권");
+																				else if(rewardType=="p8")rewardName->setString("고급뽑기권");
 																				else if(rewardType=="cd")rewardName->setString("");
 																				else rewardName->setString("??");
 																				

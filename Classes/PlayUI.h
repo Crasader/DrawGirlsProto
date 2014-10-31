@@ -236,7 +236,7 @@ class PlayUI : public CCNode
 public:
 	static PlayUI * create ();
 	virtual ~ PlayUI ();
-	void addScore (int t_score);
+	void addScore (int t_score, int t_sub_score);
 	void decreasePercentage ();
 	void decreasePercentages(int t_cnt);
 	float getScore ();
@@ -280,6 +280,7 @@ private:
 	bool is_on_clear_time_event;
 	KSProtectVar<int> score_attack_damage;
 	KSProtectVar<float> score_value;
+	KSProtectVar<int> sub_score_value;
 	KSProtectVar<int> damaged_score;
 	int percentage_decrease_cnt;
 //	CCObject * target_main;
@@ -304,6 +305,7 @@ private:
 	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;
+	KSLabelTTF* sub_score_label;
 	CCLabelBMFont * percentageLabel;
 	CCLabelBMFont * countingLabel;
 	CCSprite * result_sprite;

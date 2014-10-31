@@ -12,6 +12,8 @@
 #include "AchieveNoti.h"
 #include "HeartTime.h"
 #include "FiveRocksCpp.h"
+#include "KSLabelTTF.h"
+#include "CharacterExpUp.h"
 
 void StarGoldData::withdraw()
 {
@@ -256,6 +258,7 @@ void StarGoldData::resetLabels()
 	gold_label = NULL;
 	friend_point_label = NULL;
 	ingame_gold_label = NULL;
+	ingame_sub_gold_label = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -263,9 +266,10 @@ void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
 	star_label = t_label;
 }
 
-void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label )
+void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label, KSLabelTTF* t_label2 )
 {
 	ingame_gold_label = t_label;
+	ingame_sub_gold_label = t_label2;
 }
 
 //int StarGoldData::getStar()
@@ -383,6 +387,7 @@ void StarGoldData::setGameStart()
 	stage_attack_count = 0;
 	
 	ingame_gold = 0;
+	ingame_sub_gold = 0;
 	
 //	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 //		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
@@ -613,6 +618,11 @@ int StarGoldData::getBeforeRankUpStageGrade()
 }
 
 int StarGoldData::getStageGold()
+{
+	return ingame_gold.getV() + ingame_sub_gold.getV();
+}
+
+int StarGoldData::getStageBaseGold()
 {
 	return ingame_gold.getV();
 }
@@ -2190,6 +2200,8 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 
 void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 {
+//	CCLog("addCharacterHistoryForGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
 	bool is_found = false;
 	int characterNo = result_data["characterNo"].asInt();
 	for(int i=0;!is_found && i<character_historys.size();i++)
@@ -2199,6 +2211,18 @@ void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
 		{
 			is_found = true;
 			// 경험치 올림
+			Json::Value t_levelInfo = result_data["levelInfo"];
+			character_historys[i].characterLevel = t_levelInfo["level"].asInt();
+			character_historys[i].characterExp = t_levelInfo["exp"].asInt();
+			character_historys[i].characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+			character_historys[i].characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+			character_historys[i].characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
+			
+			CharacterHistory a_history = character_historys[i];
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			CharacterExpUp* t_exp_up = CharacterExpUp::create(t_history, a_history, ccp(240,160+160*screen_scale_y));
+			CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
 		}
 	}
 	
@@ -2570,6 +2594,10 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p5";
 	else if(t_type == kGoodsType_pass6)
 		return_value = "p6";
+	else if(t_type == kGoodsType_pass7)
+		return_value = "p7";
+	else if(t_type == kGoodsType_pass8)
+		return_value = "p8";
 	else if(t_type == kGoodsType_heart)
 		return_value = "h";
 	else if(t_type == kGoodsType_pz)
@@ -2637,12 +2665,18 @@ int StarGoldData::getGoodsValue(GoodsType t_type)
 		return iter->second.getV();
 }
 
-void StarGoldData::addChangeGoodsIngameGold(int t_value)
+void StarGoldData::addChangeGoodsIngameGold(int t_value, float t_value2)
 {
 	ingame_gold = ingame_gold.getV() + t_value;
+	ingame_sub_gold = ingame_sub_gold.getV() + t_value2;
 	
 	if(ingame_gold_label)
 		ingame_gold_label->setString(CCString::createWithFormat("%d", ingame_gold.getV())->getCString());
+	if(ingame_sub_gold_label)
+	{
+		if(ingame_sub_gold.getV() > 0)
+			ingame_sub_gold_label->setString(ccsf("+%.0f", ingame_sub_gold.getV()));
+	}
 }
 
 void StarGoldData::addChangeGoods(string t_exchangeID, GoodsType t_type/* = kGoodsType_begin*/, int t_value/* = 0*/, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
@@ -2748,14 +2782,26 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 {
 	if(is_end_game)
 	{
-		if(ingame_gold.getV() > 0)
+		if(ingame_gold.getV() > 0 || ingame_sub_gold.getV() > 0)
 		{
-			is_ingame_gold = true;
-			int t_ingame_gold = ingame_gold.getV();
-			if(isTimeEvent(kTimeEventType_gold))
-				t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			int t_ingame_gold = 0;
+			int t_ingame_sub_gold = 0;
+			if(ingame_gold.getV() > 0)
+			{
+				is_ingame_gold = true;
+				t_ingame_gold = ingame_gold.getV();
+				if(isTimeEvent(kTimeEventType_gold))
+					t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			}
+			if(ingame_sub_gold.getV() > 0)
+			{
+				is_ingame_sub_gold = true;
+				t_ingame_sub_gold = ingame_sub_gold.getV();
+				if(isTimeEvent(kTimeEventType_gold))
+					t_ingame_sub_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			}
 			
-			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold+t_ingame_sub_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
 		}
 	}
 	
@@ -2805,7 +2851,7 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		if(is_ingame_gold)
+		if(is_ingame_gold || is_ingame_sub_gold)
 		{
 			int t_missile_level = getUserdataCharLevel();
 			string fiverocks_param2;
@@ -2825,9 +2871,11 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				fiverocks_param2 = "UserLv31~";
 			
 			
-			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV());
+			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV() + ingame_sub_gold.getV());
 			is_ingame_gold = false;
+			is_ingame_sub_gold = false;
 			ingame_gold = 0;
+			ingame_sub_gold = 0;
 		}
 		
 		change_goods_list.clear();
@@ -3697,9 +3745,10 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 4; // 커몬세팅값과 비교해서 앱 종료시키는 버전.
 	
-	client_version = 13; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
+	client_version = 15; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
 	
 	is_ingame_gold = false;
+	is_ingame_sub_gold = false;
 	total_card_cnt = 0;
 	
 	loading_tip_back_number = 1;

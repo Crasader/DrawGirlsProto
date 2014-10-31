@@ -43,7 +43,7 @@ private:
 	
 	string kt_string1, kt_string2;
 	
-	function<void()> addKindTutorial;
+	function<void(CCNode* obj)> addKindTutorial;
 	
 	
 	void menuAction(CCObject* sender);

@@ -616,6 +616,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass4] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass5] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass6] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass7] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass8] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypeMany] = "선물상자";
 	obj[LK::kMyLocalKey_attendanceTitle] = "출석체크";
 	obj[LK::kMyLocalKey_attendanceContent] = "지급된 보상은 수신함에서 확인 가능합니다.";
@@ -699,6 +701,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass4] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass5] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass6] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass7] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass8] = "티켓";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypeMany] = "선물상자";
 	obj[LK::kMyLocalKey_rankUpEventTitle] = "카드 승급 이벤트!";
 	obj[LK::kMyLocalKey_rankUpEventContent] = "승급 비용 공짜! 승급 확률 100%!!";
@@ -735,6 +739,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass4] = "<font newline=15>아이템뽑기 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass5] = "<font newline=15>1프로찬스 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass6] = "<font newline=15>생명의 돌을 %d개를 드립니다.<font newline=15>생명의 돌은 내카드 다이어리에서 사용하세요.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass7] = "<font newline=15>일반뽑기권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass8] = "<font newline=15>고급뽑기권을 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeMany] = "<font newline=15>선물상자를 드립니다.";
 	obj[LK::kMyLocalKey_cardSettingMyCardContent] = "퍼즐에서 획득한 카드입니다.";
 	obj[LK::kMyLocalKey_cardSettingMyCardToSpecial] = "스페셜 카드 보기";
@@ -1048,6 +1054,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial30] = "물론! 골드는 많으면 많을수록 좋지!";
 	obj[LK::kMyLocalKey_kindTutorial31] = "영역 획득 횟수를 제한한다니...\n정말 어렵겠어요.";
 	obj[LK::kMyLocalKey_kindTutorial32] = "나에겐 문제없다구!";
+	obj[LK::kMyLocalKey_kindTutorial33] = "몬스터가 폭주하고있어!! 이래선 영역획득은 불가능이겠는데요?";
+	obj[LK::kMyLocalKey_kindTutorial34] = "괜찮아. 어떻게든 시간만 벌면 되는 미션이야. 버텨보자구";
+	obj[LK::kMyLocalKey_kindTutorial35] = "헬모드라니 이름부터 무시무시한 곳이군.";
+	obj[LK::kMyLocalKey_kindTutorial36] = "어려운만큼 보상도 큰곳입니다. 잘만하면 보상으로 캐릭터를 얻을수있어요.";
+	obj[LK::kMyLocalKey_kindTutorial37] = "캐릭터는 속도나 파워가 좋을수도있고 몬스터의 공격패턴을 무력화시킬수있는 특수능력도 있으니 반드시 획득해야해요!";
+	obj[LK::kMyLocalKey_kindTutorial38] = "이곳은 게임친구를 만들수있는 공간입니다.";
+	obj[LK::kMyLocalKey_kindTutorial39] = "친구추천 기능을 이용해보세요. 추천인을 입력하면 보상을 받을수있고, 다른 사람들이 나를 추천인으로 입력하면 더큰 보상을 받을수있습니다.";
 	obj[LK::kMyLocalKey_maxSpeed] = "최고스피드!";
 	obj[LK::kMyLocalKey_showtime] = "쇼타임!";
 	obj[LK::kMyLocalKey_miss] = "미스";
@@ -1128,13 +1141,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missionFailContextSubCumberCatch] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. 부하 </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d마리</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextTurns] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d턴</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이 지나버렸어요!</font>";
 	obj[LK::kMyLocalKey_hellMode] = "헬모드";
-	obj[LK::kMyLocalKey_hellMarquee] = "마스터카드를 획득하면 캐릭터를 장착할 수 있어요.";
+	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 보상으로 캐릭터를 받을 수 있어요.";
 	obj[LK::kMyLocalKey_hellNotOpen] = "<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>";
 	obj[LK::kMyLocalKey_mycharacter] = "내캐릭터";
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
 	obj[LK::kMyLocalKey_changeCharacter] = "캐릭터변경";
 	obj[LK::kMyLocalKey_selectCharacter] = "캐릭터선택";
-	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 마스터피스를 획득하시면 됩니다.";
+	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 헬모드에서 획득할수있어요!";
 	obj[LK::kMyLocalKey_characterSelected] = "선택중";
 	obj[LK::kMyLocalKey_characterSelect] = "선  택";
 	obj[LK::kMyLocalKey_takeCharacterCard] = "캐릭터 획득!";
@@ -1149,17 +1162,13 @@ void KsLocal::ko()
 	obj[LK::kMyInfo]="내정보";
 	obj[LK::kFriendEvent]="친구초대이벤트";
 	obj[LK::kRequestFriend]="게임친구맺기";
-	
 	obj[LK::kFriendSelfNickname] = "자기 자신은 친구로 등록할 수 없습니다.";
 	obj[LK::kAttendanceCheck] = "출석확인";
 	obj[LK::kTutorialReplay] = "튜토리얼";
-	
 	obj[LK::kMyLocalKey_frameOpenConditionContentCard] = "이전액자클리어\n+카드%d종류이상";
 	obj[LK::kMyLocalKey_frameOpenConditionContentCardGold] = "이전액자클리어\n+카드%d종류이상\n+%s골드";
-	
 	obj[LK::kMyLocalKey_detailConditionPopupTitleCard] = "카드 획득 방법";
 	obj[LK::kMyLocalKey_detailConditionPopupContentCard] = "<font newline=14 strokecolor=000>스테이지를 클리어 할 때마다<font newline=30>클리어 단계에 해당하는 카드를 획득합니다.<font color=961>한 스테이지<font newline=14>에서 획득할 수 있는<font color=961>카드는 총 4종류<font newline=14>입니다.";
-	
 	obj[LK::kMyLocalKey_notOpenPuzzleNotEnoughtCardContent] = "<font newline=16>카드가 부족해요.<font newline=16>다른 등급으로 클리어해서<font color=961 newline=16>카드 %d종류를 모아주세요.";
 	obj[LK::kMyLocalKey_gachaListAt4HourTimeAutoRefresh] = "상품목록은 %d시간 단위로 자동갱신됩니다.";
 	obj[LK::kMyLocalKey_goodLuckAyameaFighting] = "행운을 빌어요!\n아야매가 응원할께요!";
@@ -1171,7 +1180,6 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_premiumGacha] = "고급뽑기";
 	obj[LK::kMyLocalKey_congratulation] = "축하합니다!";
 	obj[LK::kMyLocalKey_characterName] = "캐릭터명";
-	
 	obj[LK::kMyLocalKey_gemTake] = "젬 획득!";
 	obj[LK::kMyLocalKey_goldTake] = "골드 획득!";
 	obj[LK::kMyLocalKey_heartTake] = "하트 획득!";
@@ -1184,14 +1192,14 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p4Take] = "아이템뽑기권 획득!";
 	obj[LK::kMyLocalKey_p5Take] = "99프로뽑기권 획득!";
 	obj[LK::kMyLocalKey_p6Take] = "생명의돌 획득!";
-	
+	obj[LK::kMyLocalKey_p7Take] = "일반뽑기권 획득!";
+	obj[LK::kMyLocalKey_p8Take] = "고급뽑기권 획득!";
 	obj[LK::kMyLocalKey_gemCount] = "%d 젬";
 	obj[LK::kMyLocalKey_goldCount] = "%d 골드";
 	obj[LK::kMyLocalKey_propertyCount] = "%d 개";
 	obj[LK::kMyLocalKey_nGradeCard] = "%d단계카드";
 	obj[LK::kMyLocalKey_cardTake] = "카드 획득!";
 	obj[LK::kMyLocalKey_goodsScript] = "상품설명";
-	
 	obj[LK::kMyLocalKey_gem] = "젬";
 	obj[LK::kMyLocalKey_gold] = "골드";
 	obj[LK::kMyLocalKey_heart] = "하트";
@@ -1204,11 +1212,23 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p4] = "아이템뽑기권";
 	obj[LK::kMyLocalKey_p5] = "99프로뽑기권";
 	obj[LK::kMyLocalKey_p6] = "생명의돌";
-	
+	obj[LK::kMyLocalKey_p7] = "일반뽑기권";
+	obj[LK::kMyLocalKey_p8] = "고급뽑기권";
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
+	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
+	obj[LK::kMyLocalKey_expN_M] = "EXP %s / %s";
+	obj[LK::kMyLocalKey_equip] = "장착";
 	
-	//obj\[LK::(.*)\] = \"(.*)\";  -> \1\t\2
+	obj[LK::kMyLocalKey_magnetEffect] = "자석효과";
+	obj[LK::kMyLocalKey_missileCreateValue] = "미사일 생성량";
+	obj[LK::kMyLocalKey_cancelSpeed] = "취소속도";
+	obj[LK::kMyLocalKey_goldBonus] = "골드보너스";
+	obj[LK::kMyLocalKey_scoreBonus] = "점수보너스";
+	obj[LK::kMyLocalKey_shockRegi] = "충격파 저항";
+	obj[LK::kMyLocalKey_missileFireRegi] = "미사일불꽃 저항";
+	
+	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
 	m_mapper[__FUNCTION__] = obj;

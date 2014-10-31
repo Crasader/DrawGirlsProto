@@ -495,7 +495,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	
 	
-	pthread_mutex_lock(&command.caller->t_functionMutex);
+	pthread_mutex_lock(&graphdog->t_functionMutex);
 	Json::Value costr = command.commandStr;
     
     
@@ -646,7 +646,7 @@ void* GraphDog::t_function(void *_insertIndex)
 		b=j+b;
 	}
 	CCLOG("check11 %s",resultStr.c_str());
-	pthread_mutex_unlock(&command.caller->t_functionMutex);
+	pthread_mutex_unlock(&graphdog->t_functionMutex);
 	
 	CCLOG("check12");
 	return NULL;

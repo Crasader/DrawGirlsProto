@@ -202,12 +202,11 @@
             <filename>cha_hibari/hibari_front_eye.png</filename>
             <filename>cha_hibari/hibari_front_head.png</filename>
             <filename>cha_hibari/hibari_front_top.png</filename>
-            <filename>cha_hibari/hibari_side_arm1.png</filename>
-            <filename>cha_hibari/hibari_side_arm2.png</filename>
             <filename>cha_hibari/hibari_side_body.png</filename>
             <filename>cha_hibari/hibari_side_body2.png</filename>
             <filename>cha_hibari/hibari_side_eye.png</filename>
             <filename>cha_hibari/hibari_side_head.png</filename>
+            <filename>cha_hibari/hibari_front_arm.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>
