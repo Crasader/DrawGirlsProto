@@ -2553,11 +2553,6 @@ void Maingame::clearScenario()
 	}
 	else
 	{
-		if(mySGD->is_hell_mode)
-		{
-			mySGD->is_clear_diary = true;
-		}
-		
 		intro_boss = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
 		intro_boss->setPosition(ccp(240,myDSH->ui_center_y+400));
 		intro_boss->setScale(1.8f);

@@ -163,6 +163,7 @@ void HellModeOpening::setMain()
 		HellInfo t_info;
 		t_info.title = NSDS_GS(kSDS_GI_hellMode_int1_title_s, i+1);
 		t_info.content = NSDS_GS(kSDS_GI_hellMode_int1_content_s, i+1);
+		t_info.is_take = false;
 		
 		int piece_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
 		int card_number = NSDS_GI(piece_number, kSDS_SI_level_int1_card_i, 1);
@@ -176,6 +177,14 @@ void HellModeOpening::setMain()
 				t_info.character_name = NSDS_GS(kSDS_GI_characterInfo_int1_name_s, j);
 				break;
 			}
+		}
+		
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int j=0;!t_info.is_take && j<history_size;j++)
+		{
+			CharacterHistory t_history = mySGD->getCharacterHistory(j);
+			if(t_history.characterNo.getV() == character_no)
+				t_info.is_take = true;
 		}
 		
 		int condition_stage = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
@@ -199,7 +208,7 @@ void HellModeOpening::setMain()
 		
 		if(t_info.is_open && not_take_stage == -1)
 		{
-			if(!mySGD->isHasGottenCards(card_number))
+			if(!t_info.is_take)
 			{
 				not_take_stage = piece_number;
 			}
@@ -626,7 +635,7 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 			cell->addChild(clicked_img);
 		}
 		
-		if(mySGD->isHasGottenCards(NSDS_GI(hell_list[idx].stage_number, kSDS_SI_level_int1_card_i, 1)))
+		if(hell_list[idx].is_take)
 		{
 			CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 			take_back->setContentSize(CCSizeMake(50, 25));
@@ -678,7 +687,7 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 			cell->addChild(clicked_img);
 		}
 		
-		if(mySGD->isHasGottenCards(NSDS_GI(hell_list[idx].stage_number, kSDS_SI_level_int1_card_i, 1)))
+		if(hell_list[idx].is_take)
 		{
 			CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 			take_back->setContentSize(CCSizeMake(50, 25));

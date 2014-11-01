@@ -3466,9 +3466,9 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	if(mySGD->is_hell_mode_enabled)
-		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
-	else
+//	if(mySGD->is_hell_mode_enabled)
+//		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
+//	else
 		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton2);
@@ -3592,77 +3592,77 @@ void MainFlowScene::setBottom()
 	
 	
 
-	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
-	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
+//	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
+//	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
+//	
+//	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
+//	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
+//	n_etc_img->addChild(n_event_ment_case);
+//	
+//	if(puzzle_number)
+//	{
+//		KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//		n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f);
+//		n_event_ment_case->addChild(n_event_ment);
+//	}
+//	
+//	
+//	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
+//	if(puzzle_number)
+//		s_etc_img->setColor(ccGRAY);
+//	else
+//		((GraySprite*)s_etc_img)->setDeepGray(!puzzle_number);
+//	
+//	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
+//	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
+//	s_etc_img->addChild(s_event_ment_case);
+//	
+//	if(puzzle_number)
+//	{
+//		KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//		s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f);
+//		s_event_ment_case->addChild(s_event_ment);
+//	}
+//	
+//	
+//	CCMenuLambda* etc_menu = CCMenuLambda::create();
+//	if(mySGD->is_hell_mode_enabled)
+//		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
+//	else
+//		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
+//	//		etc_frame->addChild(etc_menu);
+//	addChild(etc_menu, kMainFlowZorder_uiButton);
+//	bottom_list.push_back(etc_menu);
+//	
+//	etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+//	
+//	CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
+//		if(!is_menu_enable)
+//			return;
+//		
+//		is_menu_enable = false;
+//		
+////		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		
+//		
+//			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+//
+//			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+//														 {
+//															 mySGD->is_before_stage_img_download = true;
+//															 topOuting();
+//															 bottomPuzzleMode();
+//															 tableDownloading(t_func);
+//														 }, [=](){puzzleLoadSuccess();});
+//			addChild(t_sld, kMainFlowZorder_popup);
+//	});
+//	
+//	etc_menu->addChild(etc_item);
+//	
+//	etc_item->setEnabled(puzzle_number);
 	
-	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
-	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
-	n_etc_img->addChild(n_event_ment_case);
-	
-	if(puzzle_number)
-	{
-		KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-		n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f);
-		n_event_ment_case->addChild(n_event_ment);
-	}
-	
-	
-	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
-	if(puzzle_number)
-		s_etc_img->setColor(ccGRAY);
-	else
-		((GraySprite*)s_etc_img)->setDeepGray(!puzzle_number);
-	
-	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
-	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
-	s_etc_img->addChild(s_event_ment_case);
-	
-	if(puzzle_number)
-	{
-		KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-		s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f);
-		s_event_ment_case->addChild(s_event_ment);
-	}
-	
-	
-	CCMenuLambda* etc_menu = CCMenuLambda::create();
-	if(mySGD->is_hell_mode_enabled)
-		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
-	else
-		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
-	//		etc_frame->addChild(etc_menu);
-	addChild(etc_menu, kMainFlowZorder_uiButton);
-	bottom_list.push_back(etc_menu);
-	
-	etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-	
-	CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
-		if(!is_menu_enable)
-			return;
-		
-		is_menu_enable = false;
-		
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
-		
-		
-			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-														 {
-															 mySGD->is_before_stage_img_download = true;
-															 topOuting();
-															 bottomPuzzleMode();
-															 tableDownloading(t_func);
-														 }, [=](){puzzleLoadSuccess();});
-			addChild(t_sld, kMainFlowZorder_popup);
-	});
-	
-	etc_menu->addChild(etc_item);
-	
-	etc_item->setEnabled(puzzle_number);
-	
-	if(mySGD->is_hell_mode_enabled)
-	{
+//	if(mySGD->is_hell_mode_enabled)
+//	{
 		bool is_hell_open = false;
 		
 		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
@@ -3683,7 +3683,8 @@ void MainFlowScene::setBottom()
 			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
 		
 		CCMenuLambda* hell_menu = CCMenuLambda::create();
-		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
+		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_hell_img->getContentSize().height/2.f+3));
+//		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
 		//		etc_frame->addChild(etc_menu);
 		addChild(hell_menu, kMainFlowZorder_uiButton);
 		bottom_list.push_back(hell_menu);
@@ -3697,7 +3698,7 @@ void MainFlowScene::setBottom()
 		hell_menu->addChild(hell_item);
 		
 		hell_item->setEnabled(is_hell_open);
-	}
+//	}
 	
 	Json::Value v = mySGD->cgp_data;
 	//	Json::Reader r;
@@ -3736,7 +3737,7 @@ void MainFlowScene::setBottom()
 		
 		CCSprite* t_button_img = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		CommonButton* cgp_button = CommonButton::create(t_button_img, kCCMenuHandlerPriority-1);
-		cgp_button->setPosition(etc_menu->getPosition() + ccp(30,50));
+		cgp_button->setPosition(hell_menu->getPosition() + ccp(30,50));
 		cgp_button->setFunction([=](CCObject* sender)
 								{
 									if(cgp_button->isEnabled() == false)

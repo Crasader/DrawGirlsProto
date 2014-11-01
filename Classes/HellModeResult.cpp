@@ -109,7 +109,28 @@ bool HellModeResult::init()
 			mySGD->addChangeGoods("clearHeartUp", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getGameUseTime()), "클리어하트충전");
 		}
 		
-		if(mySGD->is_clear_diary)
+		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		int character_no = -1;
+		for(int i=0;character_no == -1 && i<hell_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1) == mySD->getSilType())
+				character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+		}
+		if(character_no == -1)
+			character_no = 1;
+		
+		bool is_found = false;
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int i=0;!is_found && i<history_size;i++)
+		{
+			CharacterHistory t_history = mySGD->getCharacterHistory(i);
+			if(t_history.characterNo.getV() == character_no)
+			{
+				is_found = true;
+			}
+		}
+		
+		if(!is_found)
 		{
 			// 카드 획득 통신
 			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1);
@@ -157,16 +178,6 @@ bool HellModeResult::init()
 //			}
 			
 			// 캐릭터 획득 이미지
-			
-			int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
-			int character_no = -1;
-			for(int i=0;character_no == -1 && i<hell_count;i++)
-			{
-				if(NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1) == mySD->getSilType())
-					character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
-			}
-			if(character_no == -1)
-				character_no = 1;
 			
 			int character_index = -1;
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
@@ -491,7 +502,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		CCLog("resultGetRank : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+//		CCLog("resultGetRank : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		TRACE();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
