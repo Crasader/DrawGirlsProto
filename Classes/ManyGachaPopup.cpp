@@ -148,7 +148,7 @@ void ManyGachaPopup::setOpening()
 	inner_node->addChild(normal_img);
 	
 	KSLabelTTF* normal_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 25);
-	normal_label->setGradientColor(ccc4(255, 255, 255, 255), ccc4(216, 216, 216, 255), ccp(0,-1));
+	normal_label->setGradientColor(ccc4(255, 255, 255, 255), ccc4(230, 230, 230, 255), ccp(0,-1));
 	normal_label->setPosition(ccp(main_inner->getContentSize().width/2.f-53, 40));
 	inner_node->addChild(normal_label);
 	
@@ -164,7 +164,7 @@ void ManyGachaPopup::setOpening()
 	inner_node->addChild(premium_img);
 	
 	KSLabelTTF* premium_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_premiumGacha), mySGD->getFont().c_str(), 25);
-	premium_label->setGradientColor(ccc4(255, 255, 235, 255), ccc4(255, 180, 95, 255), ccp(0,-1));
+	premium_label->setGradientColor(ccc4(255, 255, 235, 255), ccc4(255, 205, 70, 255), ccp(0,-1));
 	premium_label->setPosition(ccp(main_inner->getContentSize().width/2.f+63, 40));
 	inner_node->addChild(premium_label);
 	
@@ -533,7 +533,7 @@ void ManyGachaPopup::setNormalGacha()
 	inner_node->addChild(normal_img,2);
 	
 	gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 25);
-	gacha_label->setGradientColor(ccc4(255, 255, 255, 255), ccc4(216, 216, 216, 255), ccp(0,-1));
+	gacha_label->setGradientColor(ccc4(255, 255, 255, 255), ccc4(230, 230, 230, 255), ccp(0,-1));
 	gacha_label->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 64));
 	inner_node->addChild(gacha_label,3);
 	
@@ -808,7 +808,7 @@ void ManyGachaPopup::setPremiumGacha()
 	inner_node->addChild(premium_img,2);
 	
 	gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_premiumGacha), mySGD->getFont().c_str(), 25);
-	gacha_label->setGradientColor(ccc4(255, 255, 235, 255), ccc4(255, 180, 95, 255), ccp(0,-1));
+	gacha_label->setGradientColor(ccc4(255, 255, 235, 255), ccc4(255, 205, 70, 255), ccp(0,-1));
 	gacha_label->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 64));
 	inner_node->addChild(gacha_label,3);
 	
