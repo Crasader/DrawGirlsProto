@@ -208,6 +208,7 @@ void ChargeNodeLambda::charging()
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		actionFunction(real_target);
 		
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		
@@ -331,6 +332,7 @@ void SpecialChargeNodeLambda::charging()
 	{
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		actionFunction(real_target);
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		
@@ -462,6 +464,7 @@ void CrashChargeNodeLambda::charging()
 		AudioEngine::sharedInstance()->stopAllEffects();
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		CCLOG("removeSelf call");
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
