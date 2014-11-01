@@ -42,6 +42,7 @@ private:
 	void myInit(int t_touch_priority, function<void()> t_end_func);
 	
 	void menuAction(CCObject* sender);
+	void controlAction(CCObject* sender, CCControlEvent t_event);
 	void createCheckBuyPopup(function<void()> buy_action);
 	void requestItemDelivery();
 	
