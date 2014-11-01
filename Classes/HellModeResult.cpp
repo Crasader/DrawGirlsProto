@@ -302,7 +302,7 @@ bool HellModeResult::init()
 	time_title->setPosition(ccp(8, gold_time_back->getContentSize().height/2.f-12));
 	gold_time_back->addChild(time_title);
 	
-	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 18);
 	time_content->setAnchorPoint(ccp(1,0.5f));
 	time_content->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	time_content->setPosition(ccp(gold_time_back->getContentSize().width-8, gold_time_back->getContentSize().height/2.f-12));
@@ -359,7 +359,7 @@ bool HellModeResult::init()
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
-	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	ok_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -375,7 +375,7 @@ bool HellModeResult::init()
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
 	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
-	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	replay_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	t_replay_node->addChild(replay_label);
 	
 	replay_menu = CCControlButton::create(t_replay_node, CCScale9Sprite::create("mainbutton_green.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));

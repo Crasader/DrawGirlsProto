@@ -89,13 +89,13 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	m_container->addChild(close_button);
 	
 	CCSprite* ruby_img = CCSprite::create("shop_ruby6.png");
-	ruby_img->setPosition(ccp(0,18));
+	ruby_img->setPosition(ccp(-20,18));
 	m_container->addChild(ruby_img);
 	
 	KSLabelTTF* ruby100_img = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_countName_s, kPurchaseGuideType_firstPurchase-1).c_str(), mySGD->getFont().c_str(), 20);
 	ruby100_img->setColor(ccc3(40, 215, 255));
 	ruby100_img->enableOuterStroke(ccBLACK, 1);
-	ruby100_img->setPosition(ccp(45,43));
+	ruby100_img->setPosition(ccp(45-20,43));
 	m_container->addChild(ruby100_img);
 	
 	
@@ -106,19 +106,20 @@ void FirstPurchasePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	KSLabelTTF* before_price = KSLabelTTF::create(KS::insert_separator(before_data["beforeDiscount"].asString()).c_str(), mySGD->getFont().c_str(), 14);
 	before_price->enableOuterStroke(ccBLACK, 0.5f);
-	before_price->setPosition(ccp(0,18));
+	before_price->setPosition(ccp(-20,18));
 	m_container->addChild(before_price);
 	
 	
 	CCSprite* sale_arrow = CCSprite::create("sale_arrow.png");
-	sale_arrow->setPosition(ccp(0,18));
+	sale_arrow->setPosition(ccp(-20,18));
 	m_container->addChild(sale_arrow);
 	
 	
 	KSLabelTTF* after_price = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, kPurchaseGuideType_firstPurchase-1).c_str(), mySGD->getFont().c_str(), 20);
 	after_price->setColor(ccYELLOW);
 	after_price->enableOuterStroke(ccBLACK, 0.5f);
-	after_price->setPosition(ccp(65,18));
+	after_price->setAnchorPoint(ccp(0,0.5f));
+	after_price->setPosition(ccp(25,18));
 	m_container->addChild(after_price);
 	
 	
