@@ -1704,9 +1704,10 @@ public:
 		m_power = power;
 		m_subPower = subPower;
 		m_option = ao;
-		m_missileSprite = KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create(fileName.c_str());
 		addChild(m_missileSprite);
 		m_missileSprite->setPosition(initPosition);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
 		m_initRad = rad;
 		scheduleUpdate();
 
@@ -1755,7 +1756,7 @@ public:
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(distance < 10)
+				if(iter->getDeadState() == false && distance < 10)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
@@ -1780,14 +1781,124 @@ public:
 		{
 			m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_initRad) * m_initSpeed,
 																																				sin(m_initRad) * m_initSpeed));
-			m_missileSprite->setRotation(-rad2Deg(m_initRad));
+			if(m_particle)
+			{
+				m_particle->setPosition(m_missileSprite->getPosition());
+			}
+			if(m_streak)
+			{
+				m_streak->setPosition(m_missileSprite->getPosition());
+			}
+
+			m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
 		}
 	}
+	void beautifier(int level)
+	{
+		ASMotionStreak* a = nullptr;
+		CCParticleSystemQuad* b = nullptr;
+		beautifier(level, a, b);
+	}
+	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
+	{
+//		m_level = level;
+		if(motionStreak == nullptr && particleQuad == nullptr)
+		{
+			if(level <= 5)
+			{
+				
+			}
+			else if(level <= 10)
+			{
+				particleQuad = addParticle(1);
+			}
+			else if(level <= 15)
+			{
+				particleQuad = addParticle(2);
+				motionStreak = addStreak(1);
+				
+				
+			}
+			else if(level <= 20)
+			{
+				particleQuad = addParticle(3);
+				motionStreak = addStreak(1);
+				
+			}
+			else if(level <= 25)
+			{
+				particleQuad = addParticle(4);
+				motionStreak = addStreak(2);
+				
+			}
+			else if(level <= 30)
+			{
+				particleQuad = addParticle(5);
+				motionStreak = addStreak(2);
+			}
+			else
+			{
+				
+			}
+			
+			if(particleQuad)
+			{
+				
+				addChild(particleQuad, -1);
+				m_particle = particleQuad;
+				
+			}
+			if(motionStreak)
+			{
+				
+				addChild(motionStreak, -2);
+				m_streak = motionStreak;
+			}
+		}
+		
+		else
+		{
+			
+			addChild(particleQuad, -1);
+			addChild(motionStreak, -2);
+		}
+		//////////////////////////
+		
+		
+	}
+	CCParticleSystemQuad* addParticle(int particleNo)
+	{
+		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
+		
+		//		addChild(quad);
+		
+		return quad;
+	}
+	ASMotionStreak* addStreak(int n)
+	{
+		if(n == 1)
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+		else
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+	}
+
 protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
 	int m_subPower;
+	CCParticleSystem* m_particle;
+	ASMotionStreak* m_streak;
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
 
@@ -1797,10 +1908,10 @@ protected:
 class SpreadMissile : public StoneAttack
 {
 public:
-	static SpreadMissile* create(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions, AttackOption ao)
+	static SpreadMissile* create(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions, int level, AttackOption ao)
 	{
 		SpreadMissile* object = new SpreadMissile();
-		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, directions, ao);
+		object->init(targetNode, initPosition, fileName, initSpeed, power, subPower, directions, level, ao);
 
 		object->autorelease();
 		
@@ -1811,21 +1922,29 @@ public:
 	{
 		CCLOG("Spread ~");
 	}
-	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions, AttackOption ao)
+	bool init(KSCumberBase* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, int power, int subPower, int directions,
+						int level,
+						AttackOption ao)
 	{
 		StoneAttack::init();
-		m_initSpeed = initSpeed;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_power = power;
 		m_subPower = subPower;
 		m_targetNode = targetNode;
 		m_option = ao;	
 		CCPoint diff = targetNode->getPosition() - initPosition;
 		float rad = atan2f(diff.y, diff.x);
-		for(int i=0; i<directions; i++)
+		int numbers = directions * mInfo.get("dirsbonus", 1.f).asFloat();
+		for(int i=0; i<numbers; i++)
 		{
 			StraightMissile* sm = StraightMissile::create(initPosition, fileName, rad + i * deg2Rad(360 / directions), initSpeed,
 																										power, subPower, ao);
+			
 			addChild(sm);
+			sm->beautifier(level);
 		}
 		
 		scheduleUpdate();
@@ -1862,10 +1981,12 @@ public:
 	bool init(CCPoint initPosition, CCPoint goalPosition, const string& fileName, int tickCount, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_initPosition = initPosition;
 		m_goalPosition = goalPosition;
-		m_tickCount = tickCount;
-		m_initTickCount = tickCount;
+		m_tickCount = tickCount * mInfo.get("tickbonus", 1.f).asFloat();
+		m_initTickCount = tickCount * mInfo.get("tickbonus", 1.f).asFloat();
 		m_power = power;
 		m_subPower = subPower;
 		m_fileName = fileName;
@@ -1874,6 +1995,8 @@ public:
 		m_streak = nullptr;
 		m_currentRad = 0.f;
 		m_mine = CCSprite::create(fileName.c_str());
+		m_mine->setScale(1.f/myGD->game_scale);
+		m_mine->setRotation(180);
 		addChild(m_mine);
 		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
 																				 [=](CCPoint t){
@@ -2136,19 +2259,21 @@ public:
 	{
 		StoneAttack::init();
 		m_fileName = fileName;
-		m_initPosition = initPosition;
-		m_goalPosition = goalPosition;
-		m_tickCount = tickCount;
-		m_initTickCount = tickCount;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		m_initPosition = initPosition ;
+		m_goalPosition = goalPosition ;
+		m_tickCount = tickCount* mInfo.get("tickbonus", 1.f).asFloat();
+		m_initTickCount = tickCount* mInfo.get("tickbonus", 1.f).asFloat();
 		m_power = power;
 		m_subPower = subPower;
 		m_speed = speed;	
-		m_initCoolFrame = coolFrame;
+		m_initCoolFrame = coolFrame * mInfo.get("intervalbonus", 1.f).asFloat();
 		m_coolFrame = 0;
 		m_mine = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 //		m_mine->setScale(1.f/myGD->game_scale);
 //		m_mine->setPosition(initPosition);
-
+		m_mine->setScale(1.f/myGD->game_scale);
 		m_particle = NULL;
 		m_streak = NULL;
 		
@@ -2504,10 +2629,21 @@ protected:
 class RangeAttack : public StoneAttack
 {
 public:
-	static RangeAttack* create(CCPoint initPosition, float radius, int durationFrame, int power, int subPower, int jiggleInterval, AttackOption ao)
+	struct Missile
+	{
+		CCSprite* missileSprite;
+		CCParticleSystem* particle;
+		ASMotionStreak* streak;
+		float radius;
+		Missile() : missileSprite(nullptr), particle(nullptr), streak(nullptr)
+		{
+			
+		}
+	};
+	static RangeAttack* create(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		RangeAttack* obj = new RangeAttack();
-		obj->init(initPosition, radius, durationFrame, power, subPower, jiggleInterval, ao);
+		obj->init(initPosition, fileName, radius, durationFrame, power, subPower, ao);
 		obj->autorelease();
 		return obj;
 	}
@@ -2515,7 +2651,7 @@ public:
 	{
 		CCLOG("~RangeAttack");
 	}
-	bool init(CCPoint initPosition, float radius, int durationFrame, int power, int subPower, int jiggleInterval, AttackOption ao)
+	bool init(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
 
@@ -2526,52 +2662,89 @@ public:
 		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
 		m_power = power;
 		m_subPower = subPower;
-		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
-		m_jiggleInterval = 0;
+		m_currentRad = 0;
+		m_initPosition = initPosition;
+		m_particle = nullptr;
+		m_streak = nullptr;
+//		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
+//		m_jiggleInterval = 0;
 		m_option = ao;
-		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
-		spr->setPosition(initPosition);
-		spr->setScale(radius / 100.f);
-		spr->setOpacity(100);
-		addChild(spr);
-		m_rangeSprite = spr;
+		for(float r = 15; r<=m_radius; r+=15)
+		{
+			Missile m;
+			m.radius = r;
+			m.missileSprite = CCSprite::create(fileName.c_str());
+			m.particle = nullptr;
+			m.streak = nullptr;
+			addChild(m.missileSprite);
+			m.missileSprite->setScale(1 / myGD->game_scale);
+			m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
+			m_sprites.push_back(m);
+		}
+//		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
+//		spr->setPosition(initPosition);
+//		spr->setScale(radius / 100.f);
+//		spr->setOpacity(100);
+//		addChild(spr);
+//		m_rangeSprite = spr;
 		scheduleUpdate();
 		return true;	
 	}
 	void update(float dt)
 	{
-		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
+//		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
 		m_durationFrame--;
 		if(m_durationFrame <= 0)
 		{
 			removeFromParent();
 			return;
 		}
-		
-		if(m_jiggleInterval == 0)
+		m_currentRad += M_PI / 180.f * 3.f;
+		for(auto& m : m_sprites)
 		{
-			m_jiggleInterval = m_initJiggleInterval;
-			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
+			m.missileSprite->setPosition(m_initPosition + ccp(m.radius * cosf(m_currentRad), m.radius * sinf(m_currentRad)));
+//			if(m_particle)
+//			{
+//				m_particle->setPosition(m.missileSprite->getPosition());
+//			}
+		}
+		
 			std::vector<KSCumberBase*> nearMonsters;
 			for(auto iter : myGD->getMainCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
-				float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
-				if(distance < m_radius)
+				float diffRad = atan2f(targetPosition.y - m_initPosition.y, targetPosition.x - m_initPosition.x);
+				if(diffRad < 0)
+					diffRad += 2 * M_PI;
+				else
+				{
+					diffRad = diffRad - (int)(diffRad / (2 * M_PI)) * 2 * M_PI;
+				}
+				m_currentRad = m_currentRad - (int)(m_currentRad / (2 * M_PI)) * 2 * M_PI;
+				float distance = ccpLength(m_initPosition - iter->getPosition());
+				if(fabsf( m_currentRad - diffRad ) <= M_PI / 180.f * 5.f && distance <= m_radius * 1.2f)
 				{
 					nearMonsters.push_back(iter);
 				}
-			}	
+			}
 			for(auto iter : myGD->getSubCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
-				float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
-				if(distance < m_radius)
+				float diffRad = atan2f(targetPosition.y - m_initPosition.y, targetPosition.x - m_initPosition.x);
+				if(diffRad < 0)
+					diffRad += 2 * M_PI;
+				else
+				{
+					diffRad = diffRad - (int)(diffRad / (2 * M_PI)) * 2 * M_PI;
+				}
+				m_currentRad = m_currentRad - (int)(m_currentRad / (2 * M_PI)) * 2 * M_PI;
+				float distance = ccpLength(m_initPosition - iter->getPosition());
+				if(fabsf( m_currentRad - diffRad ) <= M_PI / 180.f * 5.f && distance <= m_radius * 1.2f)
 				{
 					nearMonsters.push_back(iter);
 				}
-			}	
-			
+			}
+		
 			for(auto iter : nearMonsters)
 			{
 				CCPoint effectPosition = iter->getPosition();
@@ -2580,18 +2753,156 @@ public:
 
 				float damage = m_power;
 				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
-				//removeFromParentAndCleanup(true);
+			}
+
+//		if(m_jiggleInterval == 0)
+//		{
+//			m_jiggleInterval = m_initJiggleInterval;
+//			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
+//			std::vector<KSCumberBase*> nearMonsters;
+//			for(auto iter : myGD->getMainCumberVector())
+//			{
+//				CCPoint targetPosition = iter->getPosition();
+//				float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
+//				if(distance < m_radius)
+//				{
+//					nearMonsters.push_back(iter);
+//				}
+//			}	
+//			for(auto iter : myGD->getSubCumberVector())
+//			{
+//				CCPoint targetPosition = iter->getPosition();
+//				float distance = ccpLength(targetPosition - m_rangeSprite->getPosition());
+//				if(distance < m_radius)
+//				{
+//					nearMonsters.push_back(iter);
+//				}
+//			}	
+//			
+//			for(auto iter : nearMonsters)
+//			{
+//				CCPoint effectPosition = iter->getPosition();
+//				effectPosition.x += rand()%21 - 10;
+//				effectPosition.y += rand()%21 - 10;
+//
+//				float damage = m_power;
+//				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+//			}
+//		}
+	}
+	
+	void beautifier(int level)
+	{
+		ASMotionStreak* a = nullptr;
+		CCParticleSystemQuad* b = nullptr;
+		beautifier(level, a, b);
+	}
+	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
+	{
+//		m_level = level;
+		if(motionStreak == nullptr && particleQuad == nullptr)
+		{
+			if(level <= 5)
+			{
+				
+			}
+			else if(level <= 10)
+			{
+				particleQuad = addParticle(1);
+			}
+			else if(level <= 15)
+			{
+				particleQuad = addParticle(2);
+				motionStreak = addStreak(1);
+				
+				
+			}
+			else if(level <= 20)
+			{
+				particleQuad = addParticle(3);
+				motionStreak = addStreak(1);
+				
+			}
+			else if(level <= 25)
+			{
+				particleQuad = addParticle(4);
+				motionStreak = addStreak(2);
+				
+			}
+			else if(level <= 30)
+			{
+				particleQuad = addParticle(5);
+				motionStreak = addStreak(2);
+			}
+			else
+			{
+				
+			}
+			
+			if(particleQuad)
+			{
+				
+				addChild(particleQuad, -1);
+				m_particle = particleQuad;
+				
+			}
+			if(motionStreak)
+			{
+				
+				addChild(motionStreak, -2);
+				m_streak = motionStreak;
 			}
 		}
+		
+		else
+		{
+			
+			addChild(particleQuad, -1);
+			addChild(motionStreak, -2);
+		}
+		//////////////////////////
+		
+		
 	}
+	CCParticleSystemQuad* addParticle(int particleNo)
+	{
+		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
+		
+		//		addChild(quad);
+		
+		return quad;
+	}
+	ASMotionStreak* addStreak(int n)
+	{
+		if(n == 1)
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+		else
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+	}
+
 protected:
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
 	int m_subPower;
-	int m_jiggleInterval;
-	int m_initJiggleInterval;		
+	float m_currentRad;
+	CCPoint m_initPosition;
+	std::vector<Missile> m_sprites;
+//	int m_jiggleInterval;
+//	int m_initJiggleInterval;		
 	CCSprite* m_rangeSprite;
+	CCParticleSystem* m_particle;
+	ASMotionStreak* m_streak;
 };
 
 
@@ -2842,11 +3153,112 @@ public:
 			removeFromParent();
 		}
 	}
+	void beautifier(int level)
+	{
+		ASMotionStreak* a = nullptr;
+		CCParticleSystemQuad* b = nullptr;
+		beautifier(level, a, b);
+	}
+	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
+	{
+		if(motionStreak == nullptr && particleQuad == nullptr)
+		{
+			if(level <= 5)
+			{
+				
+			}
+			else if(level <= 10)
+			{
+				particleQuad = addParticle(1);
+			}
+			else if(level <= 15)
+			{
+				particleQuad = addParticle(2);
+				motionStreak = addStreak(1);
+				
+				
+			}
+			else if(level <= 20)
+			{
+				particleQuad = addParticle(3);
+				motionStreak = addStreak(1);
+				
+			}
+			else if(level <= 25)
+			{
+				particleQuad = addParticle(4);
+				motionStreak = addStreak(2);
+				
+			}
+			else if(level <= 30)
+			{
+				particleQuad = addParticle(5);
+				motionStreak = addStreak(2);
+			}
+			else
+			{
+				
+			}
+			
+			if(particleQuad)
+			{
+				
+				addChild(particleQuad, -1);
+				m_particle = particleQuad;
+				
+			}
+			if(motionStreak)
+			{
+				
+				addChild(motionStreak, -2);
+				m_streak = motionStreak;
+			}
+		}
+		
+		else
+		{
+			
+			addChild(particleQuad, -1);
+			addChild(motionStreak, -2);
+		}
+		//////////////////////////
+		
+		
+	}
+	CCParticleSystemQuad* addParticle(int particleNo)
+	{
+		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
+		
+		//		addChild(quad);
+		
+		return quad;
+	}
+	ASMotionStreak* addStreak(int n)
+	{
+		if(n == 1)
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+		else
+		{
+			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
+			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			return streak;
+		}
+	}
+	
+
 protected:
 	int m_numbers;
 	int m_power;
 	int m_subPower;
 	int m_durationFrame;
+	CCParticleSystem* m_particle;
+	ASMotionStreak* m_streak;
 };
 
 
@@ -2890,17 +3302,17 @@ public:
 						float finalRadius, int lifeFrames, AttackOption ao, bool selfRotation)
 	{
 		StoneAttack::init();
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_hiding = false;
 		m_missileStep = 1;
-		m_finalRadius = finalRadius;
+		m_finalRadius = finalRadius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_currentRadius = 0;
 		m_particle = NULL;
 		m_streak = NULL;
 		m_start_node = NULL;
-		m_lifeFrames = lifeFrames;
+		m_lifeFrames = lifeFrames * mInfo.get("lifebonus", 1.f).asFloat();
 		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
 		m_option = ao;
 		m_power = power;
@@ -3138,6 +3550,27 @@ public:
 	}
 	void update(float dt)
 	{
+		bool isEnable = true;
+		bool emptyMonster = !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
+		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
+		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+												 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+		
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+		
+		
 		if(m_missileStep == 1)
 		{
 			m_lifeFrames--;
@@ -3241,6 +3674,7 @@ public:
 		}
 		else if(m_missileStep == 3)
 		{
+			
 			// 공격나가는 도중임...
 			CCPoint targetPosition = m_targetNode->getPosition();
 			CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
@@ -3527,6 +3961,7 @@ public:
 		m_initRad = initRad;
 		
 		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
 		//m_missileSprite->setRotationY(t);
 		//m_missileSprite->setRotationX(t);
