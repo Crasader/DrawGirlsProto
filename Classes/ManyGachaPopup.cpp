@@ -329,10 +329,31 @@ void ManyGachaPopup::setNormalGacha()
 	CCPoint base_position = ccp(29, 20 + 48*3);
 	
 	string list_data = myDSH->getStringForKey(kDSH_Key_normalGachaList);
+	gacha_data_list.clear();
 	
-	json_list.clear();
+	Json::Value t_json_list;
+	t_json_list.clear();
 	Json::Reader t_reader;
-	t_reader.parse(list_data, json_list);
+	t_reader.parse(list_data, t_json_list);
+	
+	for(int i=0;i<t_json_list.size();i++)
+	{
+		Json::Value t_json_data = t_json_list[i];
+		GachaData t_data;
+		t_data.exchangeID = t_json_data["exchangeID"].asString();
+		t_data.level = t_json_data["level"].asInt();
+		t_data.percent = t_json_data["percent"].asInt();
+		t_data.is_take = t_json_data.get("isTake", false).asBool();
+		for(int j=0;j<t_json_data["reward"].size();j++)
+		{
+			Json::Value t_json_reward = t_json_data["reward"][j];
+			GachaRewardData t_grd;
+			t_grd.type = t_json_reward["type"].asString();
+			t_grd.count = t_json_reward["count"].asInt();
+			t_data.reward_list.push_back(t_grd);
+		}
+		gacha_data_list.push_back(t_data);
+	}
 	
 	reward_list.clear();
 	enable_gacha_list.clear();
@@ -347,9 +368,10 @@ void ManyGachaPopup::setNormalGacha()
 	{
 		for(int j=0;j<4;j++)
 		{
-			Json::Value t_data = json_list[j + i*4];
+//			Json::Value t_data = json_list[j + i*4];
+			GachaData* t_data = &gacha_data_list[j+i*4];
 			string back_type;
-			int back_type_value = t_data["level"].asInt();
+			int back_type_value = t_data->level.getV();//t_data["level"].asInt();
 			if(back_type_value == 1)
 				back_type = "gacha_cell_silver.png";
 			else if(back_type_value == 2)
@@ -392,15 +414,15 @@ void ManyGachaPopup::setNormalGacha()
 			
 			string reward_type;
 			int reward_count;
-			if(t_data["reward"].size() > 1)
+			if(t_data->reward_list.size() > 1)
 			{
 				reward_type = "many";
-				reward_count = t_data["reward"].size();
+				reward_count = t_data->reward_list.size();
 			}
 			else
 			{
-				reward_type = t_data["reward"][0]["type"].asString();
-				reward_count = t_data["reward"][0]["count"].asInt();
+				reward_type = t_data->reward_list[0].type.getV();
+				reward_count = t_data->reward_list[0].count.getV();
 			}
 			
 			if(reward_type == "cp")
@@ -474,7 +496,7 @@ void ManyGachaPopup::setNormalGacha()
 				t_button_node->addChild(t_count_label);
 			}
 			
-			if(t_data.get("isTake", false).asBool())
+			if(t_data->is_take.getV())
 			{
 				CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
 				t_take_back->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f));
@@ -483,7 +505,7 @@ void ManyGachaPopup::setNormalGacha()
 			else
 			{
 				reward_list.push_back(t_button_node);
-				IntPoint t_ip = IntPoint(j+i*4, t_data["percent"].asInt());
+				IntPoint t_ip = IntPoint(j+i*4, t_data->percent.getV());
 				enable_gacha_list.push_back(t_ip);
 			}
 		}
@@ -606,9 +628,35 @@ void ManyGachaPopup::setPremiumGacha()
 	
 	string list_data = myDSH->getStringForKey(kDSH_Key_premiumGachaList);
 	
-	json_list.clear();
+	gacha_data_list.clear();
+	
+	Json::Value t_json_list;
+	t_json_list.clear();
 	Json::Reader t_reader;
-	t_reader.parse(list_data, json_list);
+	t_reader.parse(list_data, t_json_list);
+	
+	for(int i=0;i<t_json_list.size();i++)
+	{
+		Json::Value t_json_data = t_json_list[i];
+		GachaData t_data;
+		t_data.exchangeID = t_json_data["exchangeID"].asString();
+		t_data.level = t_json_data["level"].asInt();
+		t_data.percent = t_json_data["percent"].asInt();
+		t_data.is_take = t_json_data.get("isTake", false).asBool();
+		for(int j=0;j<t_json_data["reward"].size();j++)
+		{
+			Json::Value t_json_reward = t_json_data["reward"][j];
+			GachaRewardData t_grd;
+			t_grd.type = t_json_reward["type"].asString();
+			t_grd.count = t_json_reward["count"].asInt();
+			t_data.reward_list.push_back(t_grd);
+		}
+		gacha_data_list.push_back(t_data);
+	}
+	
+//	json_list.clear();
+//	Json::Reader t_reader;
+//	t_reader.parse(list_data, json_list);
 	
 	reward_list.clear();
 	enable_gacha_list.clear();
@@ -623,9 +671,9 @@ void ManyGachaPopup::setPremiumGacha()
 	{
 		for(int j=0;j<4;j++)
 		{
-			Json::Value t_data = json_list[j + i*4];
+			GachaData* t_data = &gacha_data_list[j+i*4];
 			string back_type;
-			int back_type_value = t_data["level"].asInt();
+			int back_type_value = t_data->level.getV();
 			if(back_type_value == 1)
 				back_type = "gacha_cell_silver.png";
 			else if(back_type_value == 2)
@@ -668,15 +716,15 @@ void ManyGachaPopup::setPremiumGacha()
 			
 			string reward_type;
 			int reward_count;
-			if(t_data["reward"].size() > 1)
+			if(t_data->reward_list.size() > 1)
 			{
 				reward_type = "many";
-				reward_count = t_data["reward"].size();
+				reward_count = t_data->reward_list.size();
 			}
 			else
 			{
-				reward_type = t_data["reward"][0]["type"].asString();
-				reward_count = t_data["reward"][0]["count"].asInt();
+				reward_type = t_data->reward_list[0].type.getV();
+				reward_count = t_data->reward_list[0].count.getV();
 			}
 			
 			if(reward_type == "cp")
@@ -750,7 +798,7 @@ void ManyGachaPopup::setPremiumGacha()
 				t_button_node->addChild(t_count_label);
 			}
 			
-			if(t_data.get("isTake", false).asBool())
+			if(t_data->is_take.getV())
 			{
 				CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
 				t_take_back->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f));
@@ -759,7 +807,7 @@ void ManyGachaPopup::setPremiumGacha()
 			else
 			{
 				reward_list.push_back(t_button_node);
-				IntPoint t_ip = IntPoint(j+i*4, t_data["percent"].asInt());
+				IntPoint t_ip = IntPoint(j+i*4, t_data->percent.getV());
 				enable_gacha_list.push_back(t_ip);
 			}
 		}
@@ -979,7 +1027,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	else
 		mySGD->addChangeGoods("nml_gc");
 	
-	string exchange_id = json_list[selected_value]["exchangeID"].asString();
+	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
@@ -1072,7 +1120,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 					int selected_value = enable_gacha_list[selected_index].x;
 					
-					string exchange_id = json_list[selected_value]["exchangeID"].asString();
+					string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 					
 					Json::Value param;
 					param["memberID"] = hspConnector::get()->getSocialID();
@@ -1093,7 +1141,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 										 {
 											 int selected_value = enable_gacha_list[selected_index].x;
 											 
-											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
+											 string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 											 
 											 Json::Value param;
 											 param["memberID"] = hspConnector::get()->getSocialID();
@@ -1179,7 +1227,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 		
 		int selected_value = enable_gacha_list[selected_index].x;
 		string ani_name;
-		int selected_level = json_list[selected_value]["level"].asInt();
+		int selected_level = gacha_data_list[selected_value].level.getV();
 		if(selected_level == 1)
 			ani_name = "bar_silver";
 		else if(selected_level == 2)
@@ -1189,9 +1237,9 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 		else if(selected_level == 4)
 			ani_name = "bar_gold";
 		
-		for(int i=0;i<json_list.size();i++)
+		for(int i=0;i<gacha_data_list.size();i++)
 		{
-			if(!json_list[i].get("isTake", false).asBool() && json_list[i]["level"].asInt() == selected_level)
+			if(!gacha_data_list[i].is_take.getV() && gacha_data_list[i].level.getV() == selected_level)
 			{
 				for(int j=0;j<enable_gacha_list.size();j++)
 				{
@@ -1215,7 +1263,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			}
 		}
 		
-		json_list[selected_value]["isTake"] = true;
+		gacha_data_list[selected_value].is_take = true;
 		keep_value = selected_value;
 		
 		CCNode* t_button = reward_list[selected_index];
@@ -1260,7 +1308,24 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																		}
 																	 else
 																		{
-																		 myDSH->setStringForKey(kDSH_Key_normalGachaList, GraphDogLib::JsonObjectToString(json_list));
+																			Json::Value t_json_list;
+																			t_json_list.clear();
+																			
+																			for(int i=0;i<gacha_data_list.size();i++)
+																			{
+																				t_json_list[i]["exchangeID"] = gacha_data_list[i].exchangeID.getV();
+																				t_json_list[i]["level"] = gacha_data_list[i].level.getV();
+																				t_json_list[i]["percent"] = gacha_data_list[i].percent.getV();
+																				t_json_list[i]["isTake"] = gacha_data_list[i].is_take.getV();
+																				for(int j=0;j<gacha_data_list[i].reward_list.size();j++)
+																				{
+																					t_json_list[i]["reward"][j]["type"] = gacha_data_list[i].reward_list[j].type.getV();
+																					t_json_list[i]["reward"][j]["count"] = gacha_data_list[i].reward_list[j].count.getV();
+																				}
+																			}
+																			
+																			Json::FastWriter t_writer;
+																		 myDSH->setStringForKey(kDSH_Key_normalGachaList, t_writer.write(t_json_list));
 																			gacha_button->removeFromParent();
 																			CCLabelTTF* t_gacha_label = CCLabelTTF::create();
 																			KSLabelTTF* normal_gacha_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_normalGacha), mySGD->getFont().c_str(), 12);
@@ -1307,7 +1372,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 															  }));
 		};
 		
-		if(json_list[selected_value]["reward"][0]["type"].asString() == "gncd")
+		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
 		{
 			Json::Value t_card;
 			
@@ -1584,7 +1649,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 		detail_back->setOpacity(0);
 		t_node->addChild(detail_back);
 		
-		if(json_list[selected_value]["reward"].size() > 1)
+		if(gacha_data_list[selected_value].reward_list.size() > 1)
 		{
 			// many
 			title_label->setPosition(ccp(240,220));
@@ -1599,13 +1664,13 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			box_img->setPosition(ccpFromSize(detail_back->getContentSize()/2.f));
 			detail_back->addChild(box_img);
 			
-			StyledLabelTTF* count_label = StyledLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_attendanceSpecialGoodsTypeMany), int(json_list[selected_value]["reward"].size())), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+			StyledLabelTTF* count_label = StyledLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_attendanceSpecialGoodsTypeMany), int(gacha_data_list[selected_value].reward_list.size())), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 			count_label->setAnchorPoint(ccp(0.5f,0.5f));
 			count_label->setPosition(ccp(detail_back->getContentSize().width/2.f, 20));
 			detail_back->addChild(count_label);
 			
 		}
-		else if(json_list[selected_value]["reward"][0]["type"].asString() == "gncd")
+		else if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
 		{
 			title_label->setPosition(ccp(240,240));
 			
@@ -1629,7 +1694,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			count_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-10));
 			detail_back->addChild(count_label);
 		}
-		else if(json_list[selected_value]["reward"][0]["type"].asString() == "cp")
+		else if(gacha_data_list[selected_value].reward_list[0].type.getV() == "cp")
 		{
 			// character
 			title_label->setPosition(ccp(240,240));
@@ -1647,7 +1712,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			int found_index = -1;
 			int found_level = 1;
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
-			int character_no = json_list[selected_value]["reward"][0]["count"].asInt();
+			int character_no = gacha_data_list[selected_value].reward_list[0].count.getV();
 			for(int i=0;found_index == -1 && i<character_count;i++)
 			{
 				if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_no)
@@ -1692,78 +1757,78 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 		{
 			title_label->setPosition(ccp(240,220));
 			
-			string t_type = json_list[selected_value]["reward"][0]["type"].asString();
+			string t_type = gacha_data_list[selected_value].reward_list[0].type.getV();
 			string sub_string, count_string;
 			
 			if(t_type == "r")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_gemTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "g")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_goldTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_goldCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_goldCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "h")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_heartTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "i6")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_doubleItemTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "i9")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_baseSpeedUpItemTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "i11")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_magneticItemTake);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p1")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p1Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p2")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p2Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p3")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p3Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p4")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p4Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p5")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p5Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p6")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p6Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p7")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p7Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			else if(t_type == "p8")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_p8Take);
-				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), json_list[selected_value]["reward"][0]["count"].asInt());
+				count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), gacha_data_list[selected_value].reward_list[0].count.getV());
 			}
 			
 			KSLabelTTF* sub_title = KSLabelTTF::create(sub_string.c_str(), mySGD->getFont().c_str(), 18);
@@ -1776,7 +1841,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			box_img->setPosition(ccpFromSize(detail_back->getContentSize()/2.f));
 			detail_back->addChild(box_img);
 			
-			KSLabelTTF* count_label = KSLabelTTF::create(ccsf(count_string.c_str(), int(json_list[selected_value]["reward"].size())), mySGD->getFont().c_str(), 16);
+			KSLabelTTF* count_label = KSLabelTTF::create(ccsf(count_string.c_str(), int(gacha_data_list[selected_value].reward_list.size())), mySGD->getFont().c_str(), 16);
 			count_label->setPosition(ccp(detail_back->getContentSize().width/2.f, 20));
 			detail_back->addChild(count_label);
 		}
@@ -1891,7 +1956,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	else
 		mySGD->addChangeGoods("prm_gc");
 	
-	string exchange_id = json_list[selected_value]["exchangeID"].asString();
+	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	
 	Json::Value param;
 	param["memberID"] = hspConnector::get()->getSocialID();
@@ -1984,7 +2049,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 					int selected_value = enable_gacha_list[selected_index].x;
 					
-					string exchange_id = json_list[selected_value]["exchangeID"].asString();
+					string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 					
 					Json::Value param;
 					param["memberID"] = hspConnector::get()->getSocialID();
@@ -2005,7 +2070,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 										 {
 											 int selected_value = enable_gacha_list[selected_index].x;
 											 
-											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
+											 string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 											 
 											 Json::Value param;
 											 param["memberID"] = hspConnector::get()->getSocialID();
@@ -2035,7 +2100,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 		
 		int selected_value = enable_gacha_list[selected_index].x;
 		string ani_name;
-		int selected_level = json_list[selected_value]["level"].asInt();
+		int selected_level = gacha_data_list[selected_value].level.getV();
 		if(selected_level == 1)
 			ani_name = "bar_silver";
 		else if(selected_level == 2)
@@ -2045,9 +2110,9 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 		else if(selected_level == 4)
 			ani_name = "bar_gold";
 		
-		for(int i=0;i<json_list.size();i++)
+		for(int i=0;i<gacha_data_list.size();i++)
 		{
-			if(!json_list[i].get("isTake", false).asBool() && json_list[i]["level"].asInt() == selected_level)
+			if(!gacha_data_list[i].is_take.getV() && gacha_data_list[i].level.getV() == selected_level)
 			{
 				for(int j=0;j<enable_gacha_list.size();j++)
 				{
@@ -2071,7 +2136,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			}
 		}
 		
-		json_list[selected_value]["isTake"] = true;
+		gacha_data_list[selected_value].is_take = true;
 		keep_value = selected_value;
 		
 		CCNode* t_button = reward_list[selected_index];
@@ -2115,7 +2180,25 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																		}
 																	 else
 																		{
-																		 myDSH->setStringForKey(kDSH_Key_premiumGachaList, GraphDogLib::JsonObjectToString(json_list));
+																			Json::Value t_json_list;
+																			t_json_list.clear();
+																			
+																			for(int i=0;i<gacha_data_list.size();i++)
+																			{
+																				t_json_list[i]["exchangeID"] = gacha_data_list[i].exchangeID.getV();
+																				t_json_list[i]["level"] = gacha_data_list[i].level.getV();
+																				t_json_list[i]["percent"] = gacha_data_list[i].percent.getV();
+																				t_json_list[i]["isTake"] = gacha_data_list[i].is_take.getV();
+																				for(int j=0;j<gacha_data_list[i].reward_list.size();j++)
+																				{
+																					t_json_list[i]["reward"][j]["type"] = gacha_data_list[i].reward_list[j].type.getV();
+																					t_json_list[i]["reward"][j]["count"] = gacha_data_list[i].reward_list[j].count.getV();
+																				}
+																			}
+																			
+																			Json::FastWriter t_writer;
+																		 myDSH->setStringForKey(kDSH_Key_premiumGachaList, t_writer.write(t_json_list));
+																			
 																			gacha_button->removeFromParent();
 																			
 																			CCLabelTTF* t_gacha_label = CCLabelTTF::create();
@@ -2163,7 +2246,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 															  }));
 		};
 		
-		if(json_list[selected_value]["reward"][0]["type"].asString() == "gncd")
+		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
 		{
 			Json::Value t_card;
 			

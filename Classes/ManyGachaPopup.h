@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "hspConnector.h"
 #include "IntSeries.h"
+#include "GachaData.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -84,7 +85,7 @@ private:
 	
 	vector<CCNode*> reward_list;
 	vector<IntPoint> enable_gacha_list;
-	Json::Value json_list;
+	vector<GachaData> gacha_data_list;// Json::Value json_list;
 	
 	CCControlButton* gacha_button;
 	KSLabelTTF* gacha_label;
