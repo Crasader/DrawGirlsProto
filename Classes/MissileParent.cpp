@@ -362,7 +362,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		//LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
 		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
-		addChild(KSIntervalCall::create(10, missileNumbers * 3, [=](int seq){
+		addChild(KSIntervalCall::create(30, missileNumbers * 3, [=](int seq){
 			int dirs = 2 + MIN((grade-1), 3);
 			for(int r=0; r<dirs; r++)
 			{
@@ -398,10 +398,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				adderForGrade = 8;
 			}
 			else if(grade == 4){
-				adderForGrade = 12;
+				adderForGrade = 10;
 			}
-			else if(grade == 5){
-				adderForGrade = 16;
+			else if(grade >= 5){
+				adderForGrade = 12;
 			}
 			else{
 				adderForGrade = 0;
@@ -429,7 +429,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 
 		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 60 * 3 + 60 * grade,
-																				 	power / 3.f, missile_sub_damage / 3.f, ao);
+																					power / 3.f, missile_sub_damage / 3.f, ao);
+		ra->beautifier(level);
 		addChild(ra);
 	}
 
@@ -537,7 +538,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																												int(power*(randomAdj)),
 																												missile_sub_damage * randomAdj,
 																												10 + 15 * grade,
-																												30.f, 180,
+																												30.f, 300,
 																												ao, selfRotation
 																												);
 				
