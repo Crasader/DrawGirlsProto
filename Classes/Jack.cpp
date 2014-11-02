@@ -2536,17 +2536,20 @@ int Jack::getContinueOnCount()
 
 void Jack::showMissionEffect(int t_i)
 {
+	string script_data = script_json.get(ccsf("m%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		return;
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	
 	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
 	talk_box->setAnchorPoint(ccp(0.5f,0));
 	talk_box->setPosition(ccp(0,15));
 	addChild(talk_box);
 	
-	string script_data = script_json.get(ccsf("m%d", t_i), "").asString();
-	if(script_data == "")
-	{
-		script_data = script_json.get("default", "").asString();
-	}
-	
+
 	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
 	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	script_label->setPosition(ccpFromSize(talk_box->getContentSize()/2.f) + ccp(0,2));
@@ -2577,16 +2580,21 @@ void Jack::showMissionEffect(int t_i)
 
 void Jack::showPatternEffect(int t_i)
 {
+	
+	string script_data = script_json.get(ccsf("p%d", t_i), "").asString();
+	if(script_data == "")
+	{
+		return;
+		script_data = script_json.get("default", "").asString();
+	}
+	
+	
 	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
 	talk_box->setAnchorPoint(ccp(0.5f,0));
 	talk_box->setPosition(ccp(0,15));
 	addChild(talk_box);
 	
-	string script_data = script_json.get(ccsf("p%d", t_i), "").asString();
-	if(script_data == "")
-	{
-		script_data = script_json.get("default", "").asString();
-	}
+
 	
 	KSLabelTTF* script_label = KSLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 10);
 	script_label->enableOuterStroke(ccBLACK, 1.f, 255, true);

@@ -1192,7 +1192,8 @@ enum class LK
 	kMyLocalKey_scoreBonus,
 	kMyLocalKey_shockRegi,
 	kMyLocalKey_missileFireRegi,
-	kMyLocalKey_nowRefreshNeedGem
+	kMyLocalKey_nowRefreshNeedGem,
+	kMyLocalKey_character
 };
 class KsLocal
 {

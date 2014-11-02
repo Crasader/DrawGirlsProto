@@ -430,7 +430,6 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 
 		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 60 * 3 + 60 * grade,
 																					power / 3.f, missile_sub_damage / 3.f, ao);
-		ra->beautifier(level);
 		addChild(ra);
 	}
 

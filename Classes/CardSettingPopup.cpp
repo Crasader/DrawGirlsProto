@@ -243,14 +243,14 @@ bool CardSettingPopup::init()
 	
 	
 	CCSprite* n_char_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_character), mySGD->getFont().c_str(), 12.5f);
 	n_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_char_label->setPosition(ccpFromSize(n_char_img->getContentSize()/2.f) + ccp(0,-1));
 	n_char_img->addChild(n_char_label);
 	
 	CCSprite* s_char_img = CCSprite::create("subbutton_pink.png");
 	s_char_img->setColor(ccGRAY);
-	KSLabelTTF* s_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_character), mySGD->getFont().c_str(), 12.5f);
 	s_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_char_label->setPosition(ccpFromSize(s_char_img->getContentSize()/2.f) + ccp(0,-1));
 	s_char_img->addChild(s_char_label);

@@ -370,6 +370,9 @@ protected:
 	bool m_applied;	
 	CCSprite* m_rangeSprite;
 };
+
+
+static std::map<string,CCDictionary*> jm_particleList;
 class StoneAttack : public CCNode
 {
 public:
@@ -480,10 +483,37 @@ public:
 		myGD->communication("Main_startShake", ks19937::getFloatValue(0, 360)); // 일단은 완전 랜덤으로.
 	}
 	
+	
+	
+//	virtual CCDictionary* getDictForParticle(string plistFile);
+	
 	virtual CCParticleSystemQuad* addParticle(int particleNo)
 	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		
+		string plistFile = ccsf("jm_particle_%02d.plist", particleNo);
+		
+
+//		CCDictionary* dict = getDictForParticle(plistFile);
+//		
+
+		map<string,CCDictionary*>::iterator it;
+		it=jm_particleList.find(plistFile);
+		CCDictionary *dict;
+		if (it == jm_particleList.end()) {
+			string m_sPlistFile = CCFileUtils::sharedFileUtils()->fullPathForFilename(plistFile.c_str());
+			dict = CCDictionary::createWithContentsOfFileThreadSafe(m_sPlistFile.c_str());
+			dict->retain();
+			jm_particleList[plistFile]=dict;
+		}else{
+			dict=jm_particleList[plistFile];
+			dict->retain();
+		}
+		
+		auto quad = new CCParticleSystemQuad();
+		quad->initWithDictionary(dict);
+		quad->autorelease();
+		
+	//	auto quad = CCParticleSystemQuad::create(plistFile.c_str());
 		quad->setPositionType(kCCPositionTypeRelative);
 		
 		//		addChild(quad);
@@ -539,6 +569,27 @@ public:
 protected:
 	AttackOption m_option;
 };
+
+//
+
+//
+//CCDictionary* StoneAttack::getDictForParticle(string plistFile){
+//	map<string,CCDictionary*>::iterator it;
+//	it=jm_particleList.find(plistFile);
+//	CCDictionary *dict;
+//	if (it == jm_particleList.end()) {
+//		string m_sPlistFile = CCFileUtils::sharedFileUtils()->fullPathForFilename(plistFile.c_str());
+//		dict = CCDictionary::createWithContentsOfFileThreadSafe(m_sPlistFile.c_str());
+//		dict->retain();
+//		jm_particleList[plistFile]=dict;
+//	}else{
+//		dict=jm_particleList[plistFile];
+//		dict->retain();
+//	}
+//	
+//	return dict;
+//}
+
 
 // 옛날 GuidedMissile
 
@@ -883,6 +934,8 @@ protected:
 #endif
  
  */
+
+
 
 class GuidedMissileForUpgradeWindow : public StoneAttack
 {

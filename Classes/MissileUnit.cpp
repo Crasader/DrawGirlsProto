@@ -3952,7 +3952,7 @@ void PoisonDrop::myAction ()
 				for(int j=-m_area;j<=m_area;j++)
 				{
 					IntPoint checkPoint = IntPoint(basePoint.x+i,basePoint.y+j);
-					float maxDistance = sqrtf(m_area * m_area + m_area * m_area);
+					float maxDistance = m_area;
 					float curDistance = sqrtf(i * i + j * j);
 					if(maxDistance * m_enableRatio >= curDistance)
 					{

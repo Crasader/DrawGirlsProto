@@ -338,6 +338,9 @@ void StartSettingPopup::setMain()
 							 });
 	main_case->addChild(back_button);
 	
+	if(mySGD->is_endless_mode){
+		back_button->setVisible(false);
+	}
 	
 	item_list = mySD->getStageItemList(stage_number);
 	
