@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
+#include "IntSeries.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -82,7 +83,7 @@ private:
 	bool loading_type_is_normal;
 	
 	vector<CCNode*> reward_list;
-	vector<int> enable_gacha_list;
+	vector<IntPoint> enable_gacha_list;
 	Json::Value json_list;
 	
 	CCControlButton* gacha_button;

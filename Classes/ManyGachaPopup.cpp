@@ -483,7 +483,8 @@ void ManyGachaPopup::setNormalGacha()
 			else
 			{
 				reward_list.push_back(t_button_node);
-				enable_gacha_list.push_back(j+i*4);
+				IntPoint t_ip = IntPoint(j+i*4, t_data["percent"].asInt());
+				enable_gacha_list.push_back(t_ip);
 			}
 		}
 	}
@@ -758,7 +759,8 @@ void ManyGachaPopup::setPremiumGacha()
 			else
 			{
 				reward_list.push_back(t_button_node);
-				enable_gacha_list.push_back(j+i*4);
+				IntPoint t_ip = IntPoint(j+i*4, t_data["percent"].asInt());
+				enable_gacha_list.push_back(t_ip);
 			}
 		}
 	}
@@ -947,8 +949,28 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	addChild(loading_layer, 999);
 	loading_layer->startLoading();
 	
-	selected_index = rand()%int(enable_gacha_list.size());
-	int selected_value = enable_gacha_list[selected_index];
+	int total_percent = 0;
+	for(int i=0;i<enable_gacha_list.size();i++)
+	{
+		total_percent += enable_gacha_list[i].y;
+	}
+	
+	int rand_value = rand()%total_percent;
+	int ing_percent_sum = 0;
+	selected_index = -1;
+	for(int i=0;selected_index == -1 && i<enable_gacha_list.size();i++)
+	{
+		ing_percent_sum += enable_gacha_list[i].y;
+		if(ing_percent_sum > rand_value)
+		{
+			selected_index = i;
+		}
+	}
+	
+	if(selected_index == -1)
+		selected_index = 0;
+	
+	int selected_value = enable_gacha_list[selected_index].x;
 	
 //	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
@@ -1048,7 +1070,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 				mySGD->network_check_cnt = 0;
 				
 				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
-					int selected_value = enable_gacha_list[selected_index];
+					int selected_value = enable_gacha_list[selected_index].x;
 					
 					string exchange_id = json_list[selected_value]["exchangeID"].asString();
 					
@@ -1069,7 +1091,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 			{
 				addChild(KSTimer::create(0.5f, [=]()
 										 {
-											 int selected_value = enable_gacha_list[selected_index];
+											 int selected_value = enable_gacha_list[selected_index].x;
 											 
 											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
 											 
@@ -1094,10 +1116,10 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 
 void ManyGachaPopup::resultNormalRefreshExchange(Json::Value result_data)
 {
+	CCLog("resultNormalRefreshExchange : \n%s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
-		Json::Value ex1_result = result_data["list"][1];
-		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
+		if(result_data["result"]["code"].asInt() == GDFAILTRANSACTION && result_data["command"]["result"]["code"].asInt() == GDPROPERTYISMINUS)
 		{
 			mySGD->clearChangeGoods();
 			addChild(KSTimer::create(0.1f, [=]()
@@ -1155,7 +1177,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
-		int selected_value = enable_gacha_list[selected_index];
+		int selected_value = enable_gacha_list[selected_index].x;
 		string ani_name;
 		int selected_level = json_list[selected_value]["level"].asInt();
 		if(selected_level == 1)
@@ -1173,7 +1195,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			{
 				for(int j=0;j<enable_gacha_list.size();j++)
 				{
-					if(i == enable_gacha_list[j])
+					if(i == enable_gacha_list[j].x)
 					{
 						CCNode* t_button = reward_list[j];
 						
@@ -1839,8 +1861,28 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	addChild(loading_layer, 999);
 	loading_layer->startLoading();
 	
-	selected_index = rand()%int(enable_gacha_list.size());
-	int selected_value = enable_gacha_list[selected_index];
+	int total_percent = 0;
+	for(int i=0;i<enable_gacha_list.size();i++)
+	{
+		total_percent += enable_gacha_list[i].y;
+	}
+	
+	int rand_value = rand()%total_percent;
+	int ing_percent_sum = 0;
+	selected_index = -1;
+	for(int i=0;selected_index == -1 && i<enable_gacha_list.size();i++)
+	{
+		ing_percent_sum += enable_gacha_list[i].y;
+		if(ing_percent_sum > rand_value)
+		{
+			selected_index = i;
+		}
+	}
+	
+	if(selected_index == -1)
+		selected_index = 0;
+	
+	int selected_value = enable_gacha_list[selected_index].x;
 	
 //	CCLog("gacha type : %s", json_list[selected_value]["reward"][0]["type"].asString().c_str());
 	
@@ -1940,7 +1982,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 				mySGD->network_check_cnt = 0;
 				
 				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
-					int selected_value = enable_gacha_list[selected_index];
+					int selected_value = enable_gacha_list[selected_index].x;
 					
 					string exchange_id = json_list[selected_value]["exchangeID"].asString();
 					
@@ -1961,7 +2003,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 			{
 				addChild(KSTimer::create(0.5f, [=]()
 										 {
-											 int selected_value = enable_gacha_list[selected_index];
+											 int selected_value = enable_gacha_list[selected_index].x;
 											 
 											 string exchange_id = json_list[selected_value]["exchangeID"].asString();
 											 
@@ -1991,7 +2033,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
-		int selected_value = enable_gacha_list[selected_index];
+		int selected_value = enable_gacha_list[selected_index].x;
 		string ani_name;
 		int selected_level = json_list[selected_value]["level"].asInt();
 		if(selected_level == 1)
@@ -2009,7 +2051,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			{
 				for(int j=0;j<enable_gacha_list.size();j++)
 				{
-					if(i == enable_gacha_list[j])
+					if(i == enable_gacha_list[j].x)
 					{
 						CCNode* t_button = reward_list[j];
 						

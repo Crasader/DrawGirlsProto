@@ -372,6 +372,11 @@ void StarGoldData::resetIngameDetailScore()
 
 void StarGoldData::setGameStart()
 {
+	CharacterHistory t_history = getSelectedCharacterHistory();
+	
+	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	
 	myGD->is_changed_map = false;
 	myGD->is_need_resetRects = false;
 	gacha_item = kIC_emptyEnd;
@@ -2288,11 +2293,6 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 	{
 		selected_character_index = 0;
 	}
-	
-	CharacterHistory t_history = getSelectedCharacterHistory();
-	
-	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 }
 void StarGoldData::initCharacterLevel(int t_i)
 {
@@ -2319,6 +2319,19 @@ void StarGoldData::initCharacterIsMaxLevel(int t_i)
 	
 }
 CharacterHistory StarGoldData::getSelectedCharacterHistory()
+{
+	if(is_hell_mode)
+	{
+		for(int i=0;i<character_historys.size();i++)
+		{
+			character_historys[i].characterNo == 1;
+			return character_historys[i];
+		}
+	}
+	
+	return character_historys[selected_character_index.getV()];
+}
+CharacterHistory StarGoldData::getSelectedCharacterHistoryOriginal()
 {
 	return character_historys[selected_character_index.getV()];
 }

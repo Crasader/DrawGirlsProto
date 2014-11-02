@@ -565,6 +565,7 @@ public:
 	void initCharacterPrevPower(int t_i);
 	void initCharacterIsMaxLevel(int t_i);
 	CharacterHistory getSelectedCharacterHistory();
+	CharacterHistory getSelectedCharacterHistoryOriginal();
 	int getCharacterHistorySize();
 	CharacterHistory getCharacterHistory(int t_index);
 	jsonSelType keep_character_history_callback;

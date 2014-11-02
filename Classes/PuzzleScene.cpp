@@ -485,7 +485,7 @@ bool PuzzleScene::init()
 	{
 		int take_level, before_take_level;
 		take_level = mySGD->getStageGrade();
-		before_take_level = mySGD->getBeforeRankUpStageGrade();
+		before_take_level = mySGD->getStageGrade();//mySGD->getBeforeRankUpStageGrade();
 		
 //		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
 //		else if(mySGD->is_showtime)							take_level = 3;
