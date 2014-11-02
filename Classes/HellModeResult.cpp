@@ -332,12 +332,12 @@ bool HellModeResult::init()
 	
 	is_saved_user_data = false;
 	
-	if(mySGD->is_clear_diary)
-	{
-		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1), [=](){endTakeCard();});
-		addChild(t_take_card_popup, kZ_HMR_popup+5);
-	}
-	else
+//	if(mySGD->is_clear_diary)
+//	{
+//		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1), [=](){endTakeCard();});
+//		addChild(t_take_card_popup, kZ_HMR_popup+5);
+//	}
+//	else
 		endTakeCard();
 	
 //	CCScale9Sprite* left_total_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));

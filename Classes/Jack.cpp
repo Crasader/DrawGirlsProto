@@ -2561,7 +2561,7 @@ void Jack::showMissionEffect(int t_i)
 												   {
 													   KS::setOpacity(talk_box, t_i);
 													   
-													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+													   talk_box->addChild(KSTimer::create(3.f, [=]()
 																						  {
 																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
 																																			 {
@@ -2602,7 +2602,7 @@ void Jack::showPatternEffect(int t_i)
 												   {
 													   KS::setOpacity(talk_box, t_i);
 													   
-													   talk_box->addChild(KSTimer::create(0.4f, [=]()
+													   talk_box->addChild(KSTimer::create(3.f, [=]()
 																						  {
 																							  talk_box->addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
 																																			 {

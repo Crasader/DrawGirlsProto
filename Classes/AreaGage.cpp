@@ -8,6 +8,8 @@
 
 #include "AreaGage.h"
 #include "DataStorageHub.h"
+#include "GraySprite.h"
+#include "StarGoldData.h"
 
 void AreaGage::setPosition( CCPoint t_p )
 {
@@ -84,7 +86,8 @@ void AreaGage::onChange()
 	CCPoint d_position = ccp(9,0);
 	for(int i=0;i<3;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_on.png");
+		GraySprite* star_img = GraySprite::create("star_on.png");
+		star_img->setGray(mySGD->is_cleared_grade[2] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star1->addChild(star_img);
 	}
@@ -93,7 +96,8 @@ void AreaGage::onChange()
 	d_position = ccp(9,0);
 	for(int i=0;i<4;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_on.png");
+		GraySprite* star_img = GraySprite::create("star_on.png");
+		star_img->setGray(mySGD->is_cleared_grade[3] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}
@@ -224,7 +228,8 @@ void AreaGage::myInit(float t_clear_percent)
 	addChild(star1, 3);
 	
 	{
-		CCSprite* star_img = CCSprite::create("star_on.png");
+		GraySprite* star_img = GraySprite::create("star_on.png");
+		star_img->setGray(mySGD->is_cleared_grade[0] == 1);
 		star_img->setPosition(ccp(0,0));
 		star1->addChild(star_img);
 	}
@@ -237,7 +242,8 @@ void AreaGage::myInit(float t_clear_percent)
 	CCPoint d_position = ccp(9,0);
 	for(int i=0;i<2;i++)
 	{
-		CCSprite* star_img = CCSprite::create("star_on.png");
+		GraySprite* star_img = GraySprite::create("star_on.png");
+		star_img->setGray(mySGD->is_cleared_grade[1] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}

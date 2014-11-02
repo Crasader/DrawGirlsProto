@@ -23,10 +23,24 @@ class DownloadFile;
 class ManyGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
-	virtual bool init();
+	bool init(int t_touch_priority);
 	void menuAction(CCObject* sender);
 	
-	CREATE_FUNC(ManyGachaPopup);
+	static ManyGachaPopup* create(int t_touch_priority = -180)
+	{
+		ManyGachaPopup *pRet = new ManyGachaPopup();
+		if (pRet && pRet->init(t_touch_priority))
+		{
+			pRet->autorelease();
+			return pRet;
+		}
+		else
+		{
+			delete pRet;
+			pRet = NULL;
+			return NULL;
+		}
+	}
 	
 	void setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final);
 	
@@ -35,6 +49,7 @@ public:
 	virtual void completedAnimationSequenceNamed(const char *name);
 	
 private:
+	int touch_priority;
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;
 	
@@ -60,6 +75,9 @@ private:
 	LoadingLayer* loading_layer;
 	
 	void resultGetGachaList(Json::Value result_data);
+	void resultGetGachaListNow(Json::Value result_data);
+	
+	vector<CommandParam> send_command_list;
 	
 	bool loading_type_is_normal;
 	
@@ -80,6 +98,7 @@ private:
 	void normalAction(CCObject* sender, CCControlEvent t_event);
 	void resultNormalProperties(Json::Value result_data);
 	void resultNormalExchange(Json::Value result_data);
+	void resultNormalRefreshExchange(Json::Value result_data);
 	void premiumAction(CCObject* sender, CCControlEvent t_event);
 	void resultPremiumProperties(Json::Value result_data);
 	void resultPremiumExchange(Json::Value result_data);
@@ -88,7 +107,11 @@ private:
 	
 	void refreshTimeChecking();
 	void normalRefresh(CCObject* sender, CCControlEvent t_event);
+	void normalRefreshAction();
+	void normalNowRefreshAction();
 	void premiumRefresh(CCObject* sender, CCControlEvent t_event);
+	void premiumRefreshAction();
+	void premiumNowRefreshAction();
 	
 	vector<DownloadFile> card_download_list;
 	function<void()> card_downloaded_func;

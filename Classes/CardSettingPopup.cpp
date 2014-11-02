@@ -29,6 +29,8 @@
 #include "ASPopupView.h"
 #include "AsyncImage.h"
 #include "StoryLayer.h"
+#include "CharacterSelectPopup.h"
+
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
 	target_final = t_final;
@@ -238,6 +240,26 @@ bool CardSettingPopup::init()
 	tab_menu->addChild(diary_menu);
 	
 	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
+	
+	
+	CCSprite* n_char_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12.5f);
+	n_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_char_label->setPosition(ccpFromSize(n_char_img->getContentSize()/2.f) + ccp(0,-1));
+	n_char_img->addChild(n_char_label);
+	
+	CCSprite* s_char_img = CCSprite::create("subbutton_pink.png");
+	s_char_img->setColor(ccGRAY);
+	KSLabelTTF* s_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12.5f);
+	s_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_char_label->setPosition(ccpFromSize(s_char_img->getContentSize()/2.f) + ccp(0,-1));
+	s_char_img->addChild(s_char_label);
+	
+	
+	CCMenuItem* char_menu = CCMenuItemSprite::create(n_char_img, s_char_img, this, menu_selector(CardSettingPopup::menuAction));
+	char_menu->setTag(kCSS_MT_character);
+	char_menu->setPosition(ccp(290,16));
+	tab_menu->addChild(char_menu);
 	
 	/*
 	CCSprite* n_strength_img = GraySprite::create("subbutton_pink.png");
@@ -857,6 +879,25 @@ CCPoint CardSettingPopup::getContentPosition(int t_tag)
 	return return_value;
 }
 
+void CardSettingPopup::characterClose()
+{
+	main_case->setScaleY(0.f);
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
+		main_case->setScaleY(t);
+	}, [=](float t){ // finish
+		main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){
+			main_case->setScaleY(t);
+		}, [=](float t){ // finish
+			main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){ // finish
+				main_case->setScaleY(1.f);
+				is_menu_enable = true;
+			}));}));}));
+}
+
 void CardSettingPopup::menuAction(CCObject* pSender)
 {
 	if(!is_menu_enable)
@@ -1028,6 +1069,22 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			target_final = NULL;
 			hidePopup();
+		}
+		else if(tag == kCSS_MT_character)
+		{
+			addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){
+				main_case->setScaleY(1.2f);
+				addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+					main_case->setScaleY(t);
+				}, [=](float t){
+					main_case->setScaleY(0.f);
+					CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+					t_popup->setHideFinalAction(this, callfunc_selector(CardSettingPopup::characterClose));
+					addChild(t_popup, kCSS_Z_popup);
+				}));
+			}));
 		}
 		else if(tag == kCSS_MT_event)
 		{

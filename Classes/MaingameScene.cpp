@@ -100,6 +100,8 @@ bool Maingame::init()
         return false;
     }
 	
+	mySGD->ui_scene_code = kUISceneCode_empty;
+	
 	myCP = NULL;
 	
 	replay_boss = NULL;

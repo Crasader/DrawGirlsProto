@@ -83,6 +83,8 @@ bool MainFlowScene::init()
         return false;
     }
 	
+	mySGD->ui_scene_code = kUISceneCode_mainFlow;
+	
 //	setBackKeyFunc([=](){
 //		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
 //	});

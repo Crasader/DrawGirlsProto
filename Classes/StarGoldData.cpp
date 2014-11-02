@@ -412,6 +412,25 @@ void StarGoldData::setGameStart()
 	
 	
 //	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
+	is_cleared_grade.clear();
+	for(int i=0;i<4;i++)
+	{
+		is_cleared_grade.push_back(-1);
+	}
+	for(int i=0;i<piece_historys.size();i++)
+	{
+		if(piece_historys[i].stage_number.getV() == mySD->getSilType())
+		{
+			for(int j=0;j<4;j++)
+			{
+				if(piece_historys[i].is_clear[j].getV())
+				{
+					is_cleared_grade[j] = 1;
+				}
+			}
+		}
+	}
+	
 	is_not_cleared_stage = !mySGD->isClearPiece(mySD->getSilType());
 	
 	mySD->startSetting();

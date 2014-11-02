@@ -26,6 +26,8 @@
 #include "ASPopupView.h"
 #include "StoneMissile.h"
 #include "CharacterDetailPopup.h"
+#include "CCMenuLambda.h"
+#include "ManyGachaPopup.h"
 
 enum CharacterSelectPopup_Zorder{
 	kCSP_Z_gray = 0,
@@ -197,6 +199,51 @@ bool CharacterSelectPopup::init()
 	character_table->setDelegate(this);
 	
 	
+	CCSprite* n_gacha_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+	n_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_gacha_label->setPosition(ccpFromSize(n_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	n_gacha_img->addChild(n_gacha_label);
+	
+	CCSprite* s_gacha_img = CCSprite::create("subbutton_pink.png");
+	s_gacha_img->setColor(ccGRAY);
+	KSLabelTTF* s_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+	s_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_gacha_label->setPosition(ccpFromSize(s_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	s_gacha_img->addChild(s_gacha_label);
+	
+	
+	CCMenuItemSpriteLambda* gacha_menu = CCMenuItemSpriteLambda::create(n_gacha_img, s_gacha_img, [=](CCObject* sender)
+																	   {
+																		   if(!is_menu_enable)
+																			   return;
+																		   
+																		   is_menu_enable = false;
+																		   
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   
+																		   addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+																			   main_case->setScaleY(t);
+																		   }, [=](float t){
+																			   main_case->setScaleY(1.2f);
+																			   addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+																				   main_case->setScaleY(t);
+																			   }, [=](float t){
+																				   main_case->setScaleY(0.f);
+																				   ManyGachaPopup* t_popup = ManyGachaPopup::create(touch_priority-100);
+																				   t_popup->setHideFinalAction(this, callfunc_selector(CharacterSelectPopup::gachaClose));
+																				   addChild(t_popup, kCSP_Z_popup);
+																			   }));
+																		   }));
+																	   });
+	gacha_menu->setPosition(ccp(395,16));
+	
+	CCMenuLambda* tab_menu = CCMenuLambda::create();
+	tab_menu->setPosition(ccp(0,0));
+	main_case->addChild(tab_menu);
+	tab_menu->addChild(gacha_menu);
+	tab_menu->setTouchPriority(touch_priority-1);
+	
 	CommonAnimation::openPopup(this, main_case, NULL, [=](){
 		
 	}, [=]()
@@ -205,6 +252,26 @@ bool CharacterSelectPopup::init()
 							   });
 	
 	return true;
+}
+
+void CharacterSelectPopup::gachaClose()
+{
+	main_case->setScaleY(0.f);
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
+		main_case->setScaleY(t);
+	}, [=](float t){ // finish
+		main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){
+			main_case->setScaleY(t);
+		}, [=](float t){ // finish
+			main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){ // finish
+				main_case->setScaleY(1.f);
+				is_menu_enable = true;
+			}));}));}));
+
 }
 
 void CharacterSelectPopup::setHideFinalAction(CCObject* t_final, SEL_CallFunc d_final)

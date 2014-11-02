@@ -1217,7 +1217,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
 	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
-	obj[LK::kMyLocalKey_expN_M] = "EXP %s / %s";
+	obj[LK::kMyLocalKey_expN_M] = "EXP %.0f%%";
 	obj[LK::kMyLocalKey_equip] = "장착";
 	
 	obj[LK::kMyLocalKey_magnetEffect] = "자석효과";
@@ -1227,6 +1227,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scoreBonus] = "점수보너스";
 	obj[LK::kMyLocalKey_shockRegi] = "충격파 저항";
 	obj[LK::kMyLocalKey_missileFireRegi] = "미사일불꽃 저항";
+	obj[LK::kMyLocalKey_nowRefreshNeedGem] = "즉시 목록을 갱신하려면 %d젬이 필요합니다.";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

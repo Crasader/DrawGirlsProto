@@ -82,6 +82,8 @@ bool PuzzleScene::init()
         return false;
     }
 	
+	mySGD->ui_scene_code = kUISceneCode_puzzle;
+	
 //	setBackKeyFunc([=](){
 //		startBacking();
 //	});
@@ -500,7 +502,6 @@ bool PuzzleScene::init()
 		bool is_not_empty_card[4] = {false,};
 		
 		clear_star_take_level = before_take_level;
-		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
 		clear_is_empty_piece = true;
 		int played_stage_number = mySD->getSilType();
@@ -513,6 +514,8 @@ bool PuzzleScene::init()
 				is_not_empty_card[i-1] = true;
 			}
 		}
+		
+		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
 		if(!mySGD->getPieceHistory(played_stage_number).is_clear[before_take_level-1].getV())
 		{

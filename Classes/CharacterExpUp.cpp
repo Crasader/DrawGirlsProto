@@ -92,7 +92,7 @@ void CharacterExpUp::myInit(CharacterHistory t_before_history, CharacterHistory 
 	
 	before_exp = exp_value;
 	
-	exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(exp_value).c_str(), KS::insert_separator(after_max_exp_value).c_str()), mySGD->getFont().c_str(), 12);
+	exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), before_percentage/*KS::insert_separator(exp_value).c_str(), KS::insert_separator(after_max_exp_value).c_str()*/), mySGD->getFont().c_str(), 12);
 	exp_label->enableOuterStroke(ccBLACK, 0.5f, 100, true);
 	exp_label->setPosition(ccp(127,15));
 	back_img->addChild(exp_label);
@@ -126,12 +126,12 @@ void CharacterExpUp::startUpAnimation()
 										  progress_timer->setPercentage(t_f);
 									  }));
 		
-		addChild(KSGradualValue<float>::create(before_exp, after_exp_value, 0.3f, [=](float t_f)
+		addChild(KSGradualValue<float>::create(/*before_exp, after_exp_value*/before_percentage, after_percentage, 0.3f, [=](float t_f)
 											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()));
+												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
 											 }, [=](float t_f)
 											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()));
+												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
 												 end_func();
 											 }));
 	}
@@ -146,13 +146,13 @@ void CharacterExpUp::startUpAnimation()
 												   before_percentage = 0.f;
 											   }));
 		
-		addChild(KSGradualValue<float>::create(before_exp, before_exp + exp_per_time*dis_time, dis_time, [=](float t_f)
+		addChild(KSGradualValue<float>::create(/*before_exp, before_exp + exp_per_time*dis_time*/before_percentage, 100.f, dis_time, [=](float t_f)
 											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()));
+												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
 											 }, [=](float t_f)
 											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()));
-												 before_exp = t_f;
+												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
+//												 before_exp = t_f;
 												 ++level;
 												 char_level->setString(ccsf(getLocal(LK::kMyLocalKey_levelValue), level));
 												 startUpAnimation();

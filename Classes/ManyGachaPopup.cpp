@@ -24,6 +24,7 @@
 #include "DownloadFile.h"
 #include "GachaDetailPopup.h"
 #include "CCMenuLambda.h"
+#include "PuzzleScene.h"
 
 enum ManyGachaPopupMenu
 {
@@ -39,20 +40,20 @@ void ManyGachaPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 	delegate_final = d_final;
 }
 
-bool ManyGachaPopup::init()
+bool ManyGachaPopup::init(int t_touch_priority)
 {
 	if(!CCLayer::init())
 	{
 		return false;
 	}
-	
+	touch_priority = t_touch_priority;
 	is_menu_enable = false;
 	
 	is_opening = false;
 	
 	loading_type_is_normal = false;
 	
-	TouchSuctionLayer* suction = TouchSuctionLayer::create(-180);
+	TouchSuctionLayer* suction = TouchSuctionLayer::create(touch_priority);
 	addChild(suction);
 	suction->setTouchEnabled(true);
 	
@@ -105,7 +106,7 @@ bool ManyGachaPopup::init()
 	tipLbl->setPosition(ccpFromSize(tipBack->getContentSize()) / 2.f + ccp(0,1));
 	tipBack->addChild(tipLbl);
 	
-	CommonButton* close_menu = CommonButton::createCloseButton(-185);
+	CommonButton* close_menu = CommonButton::createCloseButton(touch_priority-5);
 	close_menu->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_menu->setFunction([=](CCObject* sender)
 							{
@@ -207,7 +208,7 @@ void ManyGachaPopup::setOpening()
 	CCMenu* gacha_menu = CCMenu::create();
 	gacha_menu->setPosition(ccp(0,0));
 	inner_node->addChild(gacha_menu);
-	gacha_menu->setTouchPriority(-181);
+	gacha_menu->setTouchPriority(touch_priority-1);
 	
 	CCSprite* n_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
 	CCSprite* s_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
@@ -244,7 +245,7 @@ void ManyGachaPopup::setOpening()
 	
 	CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
 	shop_menu->setTag(ManyGachaPopupMenu::kShop);
-	shop_menu->setPosition(ccp(380,10));
+	shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(415,24));
 	gacha_menu->addChild(shop_menu);
 }
 
@@ -322,7 +323,7 @@ void ManyGachaPopup::setNormalGacha()
 	now_refresh_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::normalRefresh), CCControlEventTouchUpInside);
 	now_refresh_button->setPreferredSize(CCSizeMake(95, 30));
 	now_refresh_button->setPosition(ccp(150, rest_time_back->getContentSize().height/2.f+1));
-	now_refresh_button->setTouchPriority(-181);
+	now_refresh_button->setTouchPriority(touch_priority-1);
 	rest_time_back->addChild(now_refresh_button);
 	
 	CCPoint base_position = ccp(29, 20 + 48*3);
@@ -340,7 +341,7 @@ void ManyGachaPopup::setNormalGacha()
 	buttons_menu->setPosition(ccp(0,0));
 	left_back->addChild(buttons_menu);
 	
-	buttons_menu->setTouchPriority(-181);
+	buttons_menu->setTouchPriority(touch_priority-1);
 	
 	for(int i=0;i<3;i++)
 	{
@@ -381,7 +382,7 @@ void ManyGachaPopup::setNormalGacha()
 																					 t_cover->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f));
 																					 t_button_node->addChild(t_cover, 9);
 																					 
-																					 GachaDetailPopup* t_popup = GachaDetailPopup::create(-200, t_data, [=](){
+																					 GachaDetailPopup* t_popup = GachaDetailPopup::create(touch_priority-20, t_data, [=](){
 																						 t_cover->removeFromParent();
 																						 is_menu_enable = true;});
 																					 addChild(t_popup, 999);
@@ -525,7 +526,7 @@ void ManyGachaPopup::setNormalGacha()
 	gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 	inner_node->addChild(gacha_button);
 	
-	gacha_button->setTouchPriority(-181);
+	gacha_button->setTouchPriority(touch_priority-1);
 	
 	normal_ccb = KS::loadCCBI<CCSprite*>(this, "gacha_silverbox.ccbi");
 	CCSprite* normal_img = normal_ccb.first;
@@ -597,7 +598,7 @@ void ManyGachaPopup::setPremiumGacha()
 	now_refresh_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ManyGachaPopup::premiumRefresh), CCControlEventTouchUpInside);
 	now_refresh_button->setPreferredSize(CCSizeMake(95, 30));
 	now_refresh_button->setPosition(ccp(150, rest_time_back->getContentSize().height/2.f+1));
-	now_refresh_button->setTouchPriority(-181);
+	now_refresh_button->setTouchPriority(touch_priority-1);
 	rest_time_back->addChild(now_refresh_button);
 	
 	CCPoint base_position = ccp(29, 20 + 48*3);
@@ -615,7 +616,7 @@ void ManyGachaPopup::setPremiumGacha()
 	buttons_menu->setPosition(ccp(0,0));
 	left_back->addChild(buttons_menu);
 	
-	buttons_menu->setTouchPriority(-181);
+	buttons_menu->setTouchPriority(touch_priority-1);
 	
 	for(int i=0;i<3;i++)
 	{
@@ -656,7 +657,7 @@ void ManyGachaPopup::setPremiumGacha()
 																					 t_cover->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f));
 																					 t_button_node->addChild(t_cover, 9);
 																					 
-																					 GachaDetailPopup* t_popup = GachaDetailPopup::create(-200, t_data, [=](){
+																					 GachaDetailPopup* t_popup = GachaDetailPopup::create(touch_priority-20, t_data, [=](){
 																						 t_cover->removeFromParent();
 																						 is_menu_enable = true;});
 																					 addChild(t_popup, 999);
@@ -800,7 +801,7 @@ void ManyGachaPopup::setPremiumGacha()
 	gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 	inner_node->addChild(gacha_button);
 	
-	gacha_button->setTouchPriority(-181);
+	gacha_button->setTouchPriority(touch_priority-1);
 	
 	premium_ccb = KS::loadCCBI<CCSprite*>(this, "gacha_goldbox.ccbi");
 	CCSprite* premium_img = premium_ccb.first;
@@ -828,7 +829,20 @@ void ManyGachaPopup::normalRefresh(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	loading_layer = LoadingLayer::create(-182);
+	addChild(ASPopupView::getCommonNoti(touch_priority-10, getLocal(LK::kMyLocalKey_noti), ccsf(getLocal(LK::kMyLocalKey_nowRefreshNeedGem), mySGD->getGachaRefreshGem()),
+										[=]()
+	{
+		normalNowRefreshAction();
+	},
+										12, ccp(0,0), true, true,[=]()
+										{
+											is_menu_enable = true;
+										}), 9999);
+}
+
+void ManyGachaPopup::normalRefreshAction()
+{
+	loading_layer = LoadingLayer::create(touch_priority-2);
 	addChild(loading_layer, 999);
 	
 	Json::Value param;
@@ -836,6 +850,24 @@ void ManyGachaPopup::normalRefresh(CCObject* sender, CCControlEvent t_event)
 	
 	myHSP->command("getgachalist", param, json_selector(this, ManyGachaPopup::resultGetGachaList));
 }
+
+void ManyGachaPopup::normalNowRefreshAction()
+{
+	loading_layer = LoadingLayer::create(touch_priority-2);
+	addChild(loading_layer, 999);
+	
+	send_command_list.clear();
+	
+	mySGD->addChangeGoods("gc_rfs");
+	
+	Json::Value param;
+	param["isPremium"] = false;
+	
+	send_command_list.push_back(CommandParam("getgachalist", param, json_selector(this, ManyGachaPopup::resultGetGachaListNow)));
+	
+	mySGD->changeGoodsTransaction(send_command_list, json_selector(this, ManyGachaPopup::resultNormalRefreshExchange));
+}
+
 void ManyGachaPopup::premiumRefresh(CCObject* sender, CCControlEvent t_event)
 {
 	if(!is_menu_enable)
@@ -845,13 +877,43 @@ void ManyGachaPopup::premiumRefresh(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	loading_layer = LoadingLayer::create(-182);
+	addChild(ASPopupView::getCommonNoti(touch_priority-10, getLocal(LK::kMyLocalKey_noti), ccsf(getLocal(LK::kMyLocalKey_nowRefreshNeedGem), mySGD->getGachaRefreshGem()),
+										[=]()
+										{
+											premiumNowRefreshAction();
+										},
+										12, ccp(0,0), true, true,[=]()
+										{
+											is_menu_enable = true;
+										}), 9999);
+}
+
+void ManyGachaPopup::premiumRefreshAction()
+{
+	loading_layer = LoadingLayer::create(touch_priority-2);
 	addChild(loading_layer, 999);
 	
 	Json::Value param;
 	param["isPremium"] = true;
 	
 	myHSP->command("getgachalist", param, json_selector(this, ManyGachaPopup::resultGetGachaList));
+}
+
+void ManyGachaPopup::premiumNowRefreshAction()
+{
+	loading_layer = LoadingLayer::create(touch_priority-2);
+	addChild(loading_layer, 999);
+	
+	send_command_list.clear();
+	
+	mySGD->addChangeGoods("gc_rfs");
+	
+	Json::Value param;
+	param["isPremium"] = true;
+	
+	send_command_list.push_back(CommandParam("getgachalist", param, json_selector(this, ManyGachaPopup::resultGetGachaListNow)));
+	
+	mySGD->changeGoodsTransaction(send_command_list, json_selector(this, ManyGachaPopup::resultNormalRefreshExchange));
 }
 
 void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
@@ -870,7 +932,10 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 			target_final = NULL;
 			delegate_final = NULL;
 			hidePopup();
-			((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
+			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 		}, [=]()
 															{
 																is_menu_enable = true;
@@ -878,7 +943,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	}
 	
-	loading_layer = LoadingLayer::create(-182);
+	loading_layer = LoadingLayer::create(touch_priority-2);
 	addChild(loading_layer, 999);
 	loading_layer->startLoading();
 	
@@ -957,14 +1022,17 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 										 gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 										 inner_node->addChild(gacha_button);
 										 
-										 gacha_button->setTouchPriority(-181);
+										 gacha_button->setTouchPriority(touch_priority-1);
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 																							 {
 																								 target_final = NULL;
 																								 delegate_final = NULL;
 																								 hidePopup();
-																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 																							 }, [=]()
 																							 {
 																								 is_menu_enable = true;
@@ -1014,6 +1082,62 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
 											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+										 }));
+			}
+		}
+	}
+	else
+	{
+		mySGD->network_check_cnt = 0;
+	}
+}
+
+void ManyGachaPopup::resultNormalRefreshExchange(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() != GDSUCCESS)
+	{
+		Json::Value ex1_result = result_data["list"][1];
+		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
+		{
+			mySGD->clearChangeGoods();
+			addChild(KSTimer::create(0.1f, [=]()
+									 {
+										 loading_layer->removeFromParent();
+										 
+										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
+																							 {
+																								 target_final = NULL;
+																								 delegate_final = NULL;
+																								 hidePopup();
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
+																							 }, [=]()
+																							 {
+																								 is_menu_enable = true;
+																							 }), 999);
+									 }));
+		}
+		else
+		{
+			mySGD->network_check_cnt++;
+			
+			if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+			{
+				mySGD->network_check_cnt = 0;
+				
+				ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+					mySGD->changeGoodsTransaction(send_command_list, json_selector(this, ManyGachaPopup::resultNormalRefreshExchange));
+				}, 1);
+				if(alert)
+					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			}
+			else
+			{
+				addChild(KSTimer::create(0.5f, [=]()
+										 {
+											 mySGD->changeGoodsTransaction(send_command_list, json_selector(this, ManyGachaPopup::resultNormalRefreshExchange));
 										 }));
 			}
 		}
@@ -1106,9 +1230,11 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 															  {
 																  t_take_back->setOpacity(t_i);
 																  
+																  is_menu_enable = true;
 																  if(enable_gacha_list.empty())
 																		{
 																		 myDSH->setStringForKey(kDSH_Key_normalGachaList, "");
+																			normalRefreshAction();
 																		}
 																	 else
 																		{
@@ -1152,11 +1278,10 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																			gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 																			inner_node->addChild(gacha_button);
 																			
-																			gacha_button->setTouchPriority(-181);
+																			gacha_button->setTouchPriority(touch_priority-1);
 																			
 																			gacha_label->setVisible(true);
 																		}
-																	 is_menu_enable = true;
 															  }));
 		};
 		
@@ -1641,7 +1766,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 														  {
 															  KS::setOpacity(t_node, t_i);
 															  
-															  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(-182);
+															  TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority-2);
 															  t_suction->setTouchEnabled(true);
 															  addChild(t_suction);
 															  
@@ -1699,7 +1824,10 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 																target_final = NULL;
 																delegate_final = NULL;
 																hidePopup();
-																((MainFlowScene*)getParent())->showShopPopup(kSC_ruby);
+																if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																	((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
+																else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																	((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 															}, [=]()
 															{
 																is_menu_enable = true;
@@ -1707,7 +1835,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 		return;
 	}
 	
-	loading_layer = LoadingLayer::create(-182);
+	loading_layer = LoadingLayer::create(touch_priority-2);
 	addChild(loading_layer, 999);
 	loading_layer->startLoading();
 	
@@ -1786,14 +1914,17 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 										 gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 										 inner_node->addChild(gacha_button);
 										 
-										 gacha_button->setTouchPriority(-181);
+										 gacha_button->setTouchPriority(touch_priority-1);
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 																							 {
 																								 target_final = NULL;
 																								 delegate_final = NULL;
 																								 hidePopup();
-																								 ((MainFlowScene*)getParent())->showShopPopup(kSC_ruby);
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 																							 }, [=]()
 																							 {
 																								 is_menu_enable = true;
@@ -1934,9 +2065,11 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 															  {
 																  t_take_back->setOpacity(t_i);
 																  
+																  is_menu_enable = true;
 																  if(enable_gacha_list.empty())
 																		{
 																		 myDSH->setStringForKey(kDSH_Key_premiumGachaList, "");
+																			premiumRefreshAction();
 																		}
 																	 else
 																		{
@@ -1981,11 +2114,10 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																			gacha_button->setPosition(ccp(main_inner->getContentSize().width/2.f+110, 27));
 																			inner_node->addChild(gacha_button);
 																			
-																			gacha_button->setTouchPriority(-181);
+																			gacha_button->setTouchPriority(touch_priority-1);
 																			
 																			gacha_label->setVisible(true);
 																		}
-																	 is_menu_enable = true;
 															  }));
 		};
 		
@@ -2280,7 +2412,7 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 		{
 			loading_type_is_normal = false;
 			
-			loading_layer = LoadingLayer::create(-182);
+			loading_layer = LoadingLayer::create(touch_priority-2);
 			addChild(loading_layer, 999);
 			
 			Json::Value param;
@@ -2350,11 +2482,17 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 		
 		if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
 		{
-			((MainFlowScene*)getParent())->showShopPopup(kSC_eventPack);
+			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
+			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
 		}
 		else
 		{
-			((MainFlowScene*)getParent())->showShopPopup(kSC_gold);
+			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 		}
 	}
 }
@@ -2410,6 +2548,32 @@ void ManyGachaPopup::resultGetGachaList(Json::Value result_data)
 										 
 										 myHSP->command("getgachalist", param, json_selector(this, ManyGachaPopup::resultGetGachaList));
 									 }));
+		}
+	}
+}
+
+void ManyGachaPopup::resultGetGachaListNow(Json::Value result_data)
+{
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		loading_layer->removeFromParent();
+		
+		chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+		std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+		
+		if(loading_type_is_normal)
+		{
+			myDSH->setIntegerForKey(kDSH_Key_normalGachaDataTime, now_time_t);
+			myDSH->setStringForKey(kDSH_Key_normalGachaList, GraphDogLib::JsonObjectToString(result_data["list"]));
+			setNormalGacha();
+			is_menu_enable = true;
+		}
+		else
+		{
+			myDSH->setIntegerForKey(kDSH_Key_premiumGachaDataTime, now_time_t);
+			myDSH->setStringForKey(kDSH_Key_premiumGachaList, GraphDogLib::JsonObjectToString(result_data["list"]));
+			setPremiumGacha();
+			is_menu_enable = true;
 		}
 	}
 }

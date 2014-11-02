@@ -62,6 +62,12 @@ typedef enum tSceneCode{
 	kSceneCode_StageSetting
 }SceneCode;
 
+enum UISceneCode{
+	kUISceneCode_empty = 0,
+	kUISceneCode_mainFlow,
+	kUISceneCode_puzzle
+};
+
 enum CardStrengthBefore{
 	kCardStrengthBefore_cardSetting = 0,
 	kCardStrengthBefore_diary,
@@ -1057,6 +1063,10 @@ public:
 	
 	void addCharacterHistoryForGacha(Json::Value result_data);
 	
+	vector<int> is_cleared_grade;
+	
+	UISceneCode ui_scene_code;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1277,6 +1287,7 @@ private:
 	COMMON_VAR(int, pvpWinExp, PvpWinExp);
 	COMMON_VAR(int, pvpLoseExp, PvpLoseExp);
 	COMMON_VAR(int, gachaCharExp, GachaCharExp);
+	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);

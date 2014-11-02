@@ -138,7 +138,7 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	int sub_value = cha_history.characterExp.getV() - cha_history.characterCurrentLevelExp.getV();
 	exp_graph->setPercentage(100.f*sub_value/sub_base_value);
 	
-	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), 100.f*sub_value/sub_base_value/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
 	exp_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
 	exp_label->setPosition(ccp(70,52));
 	back_in->addChild(exp_label);

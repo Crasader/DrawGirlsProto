@@ -64,6 +64,8 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	mySGD->ui_scene_code = kUISceneCode_empty;
+	
 	TRACE();
 	is_preloaded_effect = false;
 	
@@ -1310,6 +1312,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setPvpWinExp(result_data["pvpWinExp"].asInt());
 		mySGD->setPvpLoseExp(result_data["pvpLoseExp"].asInt());
 		mySGD->setGachaCharExp(result_data["gachaCharExp"].asInt());
+		mySGD->setGachaRefreshGem(result_data["gachaRefreshGem"].asInt());
 	}
 	else
 	{
