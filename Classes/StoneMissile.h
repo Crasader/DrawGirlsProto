@@ -479,6 +479,63 @@ public:
 		myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
 		myGD->communication("Main_startShake", ks19937::getFloatValue(0, 360)); // 일단은 완전 랜덤으로.
 	}
+	
+	virtual CCParticleSystemQuad* addParticle(int particleNo)
+	{
+		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
+		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
+		quad->setPositionType(kCCPositionTypeRelative);
+		
+		//		addChild(quad);
+		
+		return quad;
+	}
+	virtual ASMotionStreak* addStreak(int lev)
+	{
+		float len = 0.03*lev;
+		if(len>1)len=1;
+		auto streak = ASMotionStreak::create(len, 2, 6, ccWHITE, "streak_temp.png");
+		streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		return streak;
+	}
+	void makeBeautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
+	{
+		
+		
+			motionStreak = addStreak(level);
+		
+			if(level <= 5)
+			{
+				
+			}
+			else if(level <= 10)
+			{
+				particleQuad = addParticle(1);
+			}
+			else if(level <= 15)
+			{
+				particleQuad = addParticle(2);
+			}
+			else if(level <= 20)
+			{
+				particleQuad = addParticle(3);
+				
+			}
+			else if(level <= 25)
+			{
+				particleQuad = addParticle(4);
+				
+			}
+			else if(level <= 30)
+			{
+				particleQuad = addParticle(5);
+			}
+			else
+			{
+				
+			}
+		
+	}
 protected:
 	AttackOption m_option;
 };
@@ -1010,113 +1067,11 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				//				if(m_particle)
-				//				{
-				//					m_particle->removeFromParent();
-				//					m_particle = nullptr;
-				//				}
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				//				if(m_streak)
-				//				{
-				//					m_streak->removeFromParent();
-				//				}
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			//			if(m_particle)
-			//			{
-			//				m_particle->removeFromParent();
-			//			}
-			//			if(m_streak)
-			//			{
-			//				m_streak->removeFromParent();
-			//			}
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
+	
 
 	
 	void showWindow(float dt)
@@ -1162,7 +1117,7 @@ protected:
 	CCNode* m_targetNode;
 	CCSprite* m_missileSprite; // 미사일 객체.
 	CCParticleSystemQuad* m_particle;
-	CCMotionStreak* m_streak;
+	ASMotionStreak* m_streak;
 	struct ShowWindow
 	{
 		ShowWindow()
@@ -1341,8 +1296,10 @@ public:
 			auto stree = m_showWindow.fileName;
 			auto ttt = CCSprite::create(stree.c_str());
 			missile.missileSprite = ttt;
-			beautifier(m_showWindow.level, missile.streak, missile.particleQuad);
-
+			makeBeautifier(m_showWindow.level, missile.streak, missile.particleQuad);
+			if(missile.streak)addChild(missile.streak, -1);
+			if(missile.particleQuad)addChild(missile.particleQuad, -2);
+			
 			m_showWindow.clippingNode->addChild(missile.missileSprite);
 			if(m_start_node)
 				missile.missileSprite->setPosition(m_start_node->getPosition() - getPosition());
@@ -1526,101 +1483,68 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-	
-			}
-			if(motionStreak)
-			{
-
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-//		addChild(quad);
-
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
+//	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
+//	{
+//		if(motionStreak == nullptr && particleQuad == nullptr)
+//		{
+//			motionStreak = addStreak(level);
+//			
+//			if(level <= 5)
+//			{
+//				
+//			}
+//			else if(level <= 10)
+//			{
+//				particleQuad = addParticle(1);
+//			}
+//			else if(level <= 15)
+//			{
+//				particleQuad = addParticle(2);
+//			}
+//			else if(level <= 20)
+//			{
+//				particleQuad = addParticle(3);
+//				
+//			}
+//			else if(level <= 25)
+//			{
+//				particleQuad = addParticle(4);
+//				
+//			}
+//			else if(level <= 30)
+//			{
+//				particleQuad = addParticle(5);
+//			}
+//			
+//			if(particleQuad)
+//			{
+//
+//				addChild(particleQuad, -1);
+//				m_particle = particleQuad;
+//	
+//			}
+//			if(motionStreak)
+//			{
+//
+//				addChild(motionStreak, -2);
+//				m_streak = motionStreak;
+//			}
+//		}
+//		
+//		else
+//		{
+//
+//			addChild(particleQuad, -1);
+//			addChild(motionStreak, -2);
+//		}
+//		//////////////////////////
+//		
+//
+//	}
 	
 
 	
@@ -1637,7 +1561,7 @@ public:
 protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
-	float m_currentRad; // 범위내 들어왔을 때 현재 각도.
+	float m_currentRad; // 범위내 들어왔을 때 현재 각도. 
 
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
@@ -1795,109 +1719,18 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-//		m_level = level;
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
-
+	
+	
 protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
 	int m_subPower;
-	CCParticleSystem* m_particle;
+	CCParticleSystemQuad* m_particle;
 	ASMotionStreak* m_streak;
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
@@ -2046,6 +1879,7 @@ public:
 		CCPoint rotation = ccp(10 * cosf(m_currentRad), 10 * sinf(m_currentRad));
 		m_currentRad += M_PI / 180 * 4.f;
 		m_mine->setPosition(m_mineCenterPosition + rotation);
+		m_mine->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
 		if(m_particle)
 		{
 			m_particle->setPosition(m_mineCenterPosition + rotation);
@@ -2128,102 +1962,11 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		m_level = level;
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
 		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
 
 protected:
 	CCPoint m_initPosition;
@@ -2234,7 +1977,7 @@ protected:
 	int m_subPower;
 	int m_level;
 	CCSprite* m_mine;
-	CCParticleSystem* m_particle;
+	CCParticleSystemQuad* m_particle;
 	std::string m_fileName;
 	ASMotionStreak* m_streak;
 	CCPoint m_mineCenterPosition;
@@ -2507,103 +2250,11 @@ public:
 	
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		m_level = level;
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
-
+	
 	
 protected:
 	CCPoint m_initPosition;
@@ -2632,7 +2283,7 @@ public:
 	struct Missile
 	{
 		CCSprite* missileSprite;
-		CCParticleSystem* particle;
+		CCParticleSystemQuad* particle;
 		ASMotionStreak* streak;
 		float radius;
 		Missile() : missileSprite(nullptr), particle(nullptr), streak(nullptr)
@@ -2676,7 +2327,10 @@ public:
 			m.missileSprite = CCSprite::create(fileName.c_str());
 			m.particle = nullptr;
 			m.streak = nullptr;
+			makeBeautifier(25, m.streak,m.particle);
 			addChild(m.missileSprite);
+			if(m.particle)addChild(m.particle,-1);
+			if(m.streak)addChild(m.streak,-2);
 			m.missileSprite->setScale(1 / myGD->game_scale);
 			m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
 			m_sprites.push_back(m);
@@ -2703,10 +2357,15 @@ public:
 		for(auto& m : m_sprites)
 		{
 			m.missileSprite->setPosition(m_initPosition + ccp(m.radius * cosf(m_currentRad), m.radius * sinf(m_currentRad)));
-//			if(m_particle)
-//			{
-//				m_particle->setPosition(m.missileSprite->getPosition());
-//			}
+			m.missileSprite->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+90);
+			if(m.particle)
+			{
+				m.particle->setPosition(m.missileSprite->getPosition());
+			}
+			if(m.streak)
+			{
+				m.streak->setPosition(m.missileSprite->getPosition());
+			}
 		}
 		
 			std::vector<KSCumberBase*> nearMonsters;
@@ -2793,102 +2452,11 @@ public:
 	
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-//		m_level = level;
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
+	
 
 protected:
 	float m_radius;
@@ -2901,7 +2469,7 @@ protected:
 //	int m_jiggleInterval;
 //	int m_initJiggleInterval;		
 	CCSprite* m_rangeSprite;
-	CCParticleSystem* m_particle;
+	CCParticleSystemQuad* m_particle;
 	ASMotionStreak* m_streak;
 };
 
@@ -3155,100 +2723,9 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
-	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
 	
 
@@ -3257,7 +2734,7 @@ protected:
 	int m_power;
 	int m_subPower;
 	int m_durationFrame;
-	CCParticleSystem* m_particle;
+	CCParticleSystemQuad* m_particle;
 	ASMotionStreak* m_streak;
 };
 
@@ -3607,6 +3084,8 @@ public:
 			if(m_missileSprite)
 			{
 				m_missileSprite->setPosition(xy);
+				m_missileSprite->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
+				
 				if(m_particle)
 					m_particle->setPosition(m_missileSprite->getPosition());
 				
@@ -3754,100 +3233,9 @@ public:
 	}
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
-	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
 	
 	// 반지름 설정
@@ -4233,102 +3621,10 @@ public:
 	
 	void beautifier(int level)
 	{
-		ASMotionStreak* a = nullptr;
-		CCParticleSystemQuad* b = nullptr;
-		beautifier(level, a, b);
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
 	}
-	void beautifier(int level, ASMotionStreak*& motionStreak, CCParticleSystemQuad*& particleQuad)
-	{
-		if(motionStreak == nullptr && particleQuad == nullptr)
-		{
-			if(level <= 5)
-			{
-				
-			}
-			else if(level <= 10)
-			{
-				particleQuad = addParticle(1);
-			}
-			else if(level <= 15)
-			{
-				particleQuad = addParticle(2);
-				motionStreak = addStreak(1);
-				
-				
-			}
-			else if(level <= 20)
-			{
-				particleQuad = addParticle(3);
-				motionStreak = addStreak(1);
-				
-			}
-			else if(level <= 25)
-			{
-				particleQuad = addParticle(4);
-				motionStreak = addStreak(2);
-				
-			}
-			else if(level <= 30)
-			{
-				particleQuad = addParticle(5);
-				motionStreak = addStreak(2);
-			}
-			else
-			{
-				
-			}
-			
-			if(particleQuad)
-			{
-				
-				addChild(particleQuad, -1);
-				m_particle = particleQuad;
-				
-			}
-			if(motionStreak)
-			{
-				
-				addChild(motionStreak, -2);
-				m_streak = motionStreak;
-			}
-		}
-		
-		else
-		{
-			
-			addChild(particleQuad, -1);
-			addChild(motionStreak, -2);
-		}
-		//////////////////////////
-		
-		
-	}
-	CCParticleSystemQuad* addParticle(int particleNo)
-	{
-		string plist_name = ccsf("jm_particle_%02d.plist", particleNo);
-		auto quad = CCParticleSystemQuad::create(plist_name.c_str());
-		quad->setPositionType(kCCPositionTypeRelative);
-		
-		//		addChild(quad);
-		
-		return quad;
-	}
-	ASMotionStreak* addStreak(int n)
-	{
-		if(n == 1)
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-		else
-		{
-			auto streak = ASMotionStreak::create(0.4f, 2, 12, ccWHITE, "streak_temp2.png");
-			streak->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-			return streak;
-		}
-	}
-
 	
 	// 반지름 설정
 	void setShowWindowRotationRadius(float r)
