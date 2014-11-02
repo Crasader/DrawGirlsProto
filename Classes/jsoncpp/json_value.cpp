@@ -1217,6 +1217,11 @@ Value::resolveReference( const char *key,
         type_ = nullValue;
     }
 	
+	if(!(type_ == nullValue  ||  type_ == objectValue)){
+		Value value = null;
+		return value;
+	}
+	
    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
    if ( type_ == nullValue )
       *this = Value( objectValue );
@@ -1241,6 +1246,23 @@ Value
 Value::get( ArrayIndex index, 
             const Value &defaultValue ) const
 {
+	
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		if(r.parse(value_.string_, other))
+		{
+			const Value* value = &(other[index]);
+			
+			
+			if(*value == nullValue)
+				return defaultValue;
+			else
+				return *value;
+		}
+	}
+	
+	
    const Value *value = &((*this)[index]);
    return value == &null ? defaultValue : *value;
 }
@@ -1257,25 +1279,14 @@ Value::isValidIndex( ArrayIndex index ) const
 const Value &
 Value::operator[]( const char *key ) const
 {
-	if(type_ == stringValue){
-		Json::Reader r;
-		Json::Value other;
-		if(r.parse(value_.string_, other))
-		{
-			const Value* value = &(other[key]);
-			if(*value == nullValue)
-				return null;
-			else
-				return *value;
-		}
+	
+	if(type_>objectValue){
+			return null;
 	}
-    if(type_>objectValue){
-        return null;
-    }
-    if(!(type_ == nullValue  ||  type_ == objectValue)){
-        return null;
-    }
-    JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
+	if(!(type_ == nullValue  ||  type_ == objectValue)){
+			return null;
+	}
+	JSON_ASSERT( type_ == nullValue  ||  type_ == objectValue );
 	
 	if ( type_ == nullValue )
 		return null;
@@ -1340,6 +1351,23 @@ Value
 Value::get( const char *key, 
             const Value &defaultValue ) const
 {
+	
+	if(type_ == stringValue){
+		Json::Reader r;
+		Json::Value other;
+		if(r.parse(value_.string_, other))
+		{
+			const Value* value = &(other[key]);
+			
+			
+			if(*value == nullValue)
+				return defaultValue;
+			else
+				return *value;
+		}
+	}
+	
+	
    const Value *value = &((*this)[key]);
    return value == &null ? defaultValue : *value;
 }
@@ -1349,6 +1377,7 @@ Value
 Value::get( const std::string &key,
             const Value &defaultValue ) const
 {
+	
    return get( key.c_str(), defaultValue );
 }
 
