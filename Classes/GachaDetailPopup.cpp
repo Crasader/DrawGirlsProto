@@ -18,8 +18,9 @@
 #include "CommonButton.h"
 #include "CommonAnimation.h"
 #include "StageImgLoader.h"
+#include "GachaData.h"
 
-GachaDetailPopup* GachaDetailPopup::create(int t_touch_priority, Json::Value t_goods_info, function<void()> t_end_func)
+GachaDetailPopup* GachaDetailPopup::create(int t_touch_priority, GachaData* t_goods_info, function<void()> t_end_func)
 {
 	GachaDetailPopup* t_mup = new GachaDetailPopup();
 	t_mup->myInit(t_touch_priority, t_goods_info, t_end_func);
@@ -27,7 +28,7 @@ GachaDetailPopup* GachaDetailPopup::create(int t_touch_priority, Json::Value t_g
 	return t_mup;
 }
 
-void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, function<void()> t_end_func)
+void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, function<void()> t_end_func)
 {
 	is_menu_enable = false;
 	
@@ -73,7 +74,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 	m_container->addChild(title_label);
 	
 	
-	if(goods_info["reward"].size() > 1)
+	if(goods_info->reward_list.size() > 1)
 	{
 		// many
 		KSLabelTTF* sub_title = KSLabelTTF::create(getLocal(LK::kMyLocalKey_attendanceGoodsTypeMany), mySGD->getFont().c_str(), 18);
@@ -86,13 +87,13 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 		box_img->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 		back_in->addChild(box_img);
 		
-		StyledLabelTTF* count_label = StyledLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_attendanceSpecialGoodsTypeMany), int(goods_info["reward"].size())), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* count_label = StyledLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_attendanceSpecialGoodsTypeMany), int(goods_info->reward_list.size())), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
 		count_label->setAnchorPoint(ccp(0.5f,0.5f));
 		count_label->setPosition(ccp(back_in->getContentSize().width/2.f, 20));
 		back_in->addChild(count_label);
 		
 	}
-	else if(goods_info["reward"][0]["type"].asString() == "gncd")
+	else if(goods_info->reward_list[0].type.getV() == "gncd")
 	{
 		KSLabelTTF* sub_title = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardTake), mySGD->getFont().c_str(), 18);
 		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
@@ -108,7 +109,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 //		count_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-10));
 //		detail_back->addChild(count_label);
 	}
-	else if(goods_info["reward"][0]["type"].asString() == "cp")
+	else if(goods_info->reward_list[0].type.getV() == "cp")
 	{
 		CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
 		light_back->setPosition(ccp(65, back_in->getContentSize().height/2.f-15));
@@ -117,7 +118,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 		int found_index = -1;
 		int found_level = 1;
 		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
-		int character_no = goods_info["reward"][0]["count"].asInt();
+		int character_no = goods_info->reward_list[0].count.getV();
 		for(int i=0;found_index == -1 && i<character_count;i++)
 		{
 			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_no)
@@ -160,78 +161,78 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 	}
 	else
 	{
-		string t_type = goods_info["reward"][0]["type"].asString();
+		string t_type = goods_info->reward_list[0].type.getV();
 		string sub_string, count_string;
 		
 		if(t_type == "r")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_gem);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "g")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_gold);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_goldCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_goldCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "h")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_heart);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "i6")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_doubleItem);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "i9")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_baseSpeedUpItem);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "i11")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_magneticItem);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p1")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p1);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p2")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p2);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p3")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p3);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p4")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p4);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p5")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p5);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p6")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p6);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p7")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p7);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		else if(t_type == "p8")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_p8);
-			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info["reward"][0]["count"].asInt());
+			count_string = ccsf(getLocal(LK::kMyLocalKey_propertyCount), goods_info->reward_list[0].count.getV());
 		}
 		
 		KSLabelTTF* sub_title = KSLabelTTF::create(sub_string.c_str(), mySGD->getFont().c_str(), 18);
@@ -244,7 +245,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, Json::Value t_goods_info, fu
 		box_img->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 		back_in->addChild(box_img);
 		
-		KSLabelTTF* count_label = KSLabelTTF::create(ccsf(count_string.c_str(), int(goods_info["reward"].size())), mySGD->getFont().c_str(), 16);
+		KSLabelTTF* count_label = KSLabelTTF::create(ccsf(count_string.c_str(), int(goods_info->reward_list.size())), mySGD->getFont().c_str(), 16);
 		count_label->setPosition(ccp(back_in->getContentSize().width/2.f, 17));
 		back_in->addChild(count_label);
 	}

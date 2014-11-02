@@ -18,10 +18,11 @@ USING_NS_CC_EXT;
 using namespace std;
 
 class TouchSuctionLayer;
+class GachaData;
 class GachaDetailPopup : public CCLayer
 {
 public:
-	static GachaDetailPopup* create(int t_touch_priority, Json::Value t_goods_info, function<void()> t_end_func);
+	static GachaDetailPopup* create(int t_touch_priority, GachaData* t_goods_info, function<void()> t_end_func);
 	
 private:
 	int touch_priority;
@@ -36,9 +37,9 @@ private:
 	CCNode* m_container;
 	CCSprite* back_case;
 	
-	Json::Value goods_info;
+	GachaData* goods_info;
 	
-	void myInit(int t_touch_priority, Json::Value t_goods_info, function<void()> t_end_func);
+	void myInit(int t_touch_priority, GachaData* t_goods_info, function<void()> t_end_func);
 };
 
 #endif /* defined(__DGproto__GachaDetailPopup__) */
