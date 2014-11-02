@@ -2519,6 +2519,7 @@ void PlayUI::takeSilenceItem()
 void PlayUI::takeAddTimeItem ()
 {
 	int change_time = NSDS_GI(mySD->getSilType(), kSDS_SI_itemOptionAddTimeSec_i);
+	mySGD->add_time_value = mySGD->add_time_value.getV() + change_time;
 	countingCnt -= change_time;
 	total_time += change_time;
 	

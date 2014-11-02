@@ -1313,6 +1313,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setPvpLoseExp(result_data["pvpLoseExp"].asInt());
 		mySGD->setGachaCharExp(result_data["gachaCharExp"].asInt());
 		mySGD->setGachaRefreshGem(result_data["gachaRefreshGem"].asInt());
+		mySGD->setAddTimeItemLimit(result_data["addTimeItemLimit"].asInt());
 	}
 	else
 	{

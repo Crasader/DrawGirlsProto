@@ -1067,6 +1067,7 @@ public:
 	vector<int> is_cleared_grade;
 	
 	UISceneCode ui_scene_code;
+	KSProtectVar<int> add_time_value;
 	
 private:
 	
@@ -1289,6 +1290,7 @@ private:
 	COMMON_VAR(int, pvpLoseExp, PvpLoseExp);
 	COMMON_VAR(int, gachaCharExp, GachaCharExp);
 	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
+	COMMON_VAR(int, addTimeItemLimit, AddTimeItemLimit);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);

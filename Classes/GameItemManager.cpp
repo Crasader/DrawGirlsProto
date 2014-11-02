@@ -284,6 +284,12 @@ void GameItemAddTime::acting()
 
 void GameItemAddTime::myInit(bool is_near)
 {
+	if(mySGD->add_time_value.getV() > mySGD->getAddTimeItemLimit())
+	{
+		addChild(KSTimer::create(0.1f, [=](){removeFromParent();}));
+		return;
+	}
+	
 	holding_time = rand()%10 + 20;
 	holding_time *= 60;
 	
@@ -2289,6 +2295,7 @@ int GameItemManager::getGoldWeight2()
 
 void GameItemManager::myInit()
 {
+	mySGD->add_time_value = 0;
 	is_on_game = true;
 	
 	clr_cdt_type = mySD->getClearCondition();
