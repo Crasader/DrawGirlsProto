@@ -436,7 +436,12 @@ bool MainFlowScene::init()
 		if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_init)
 			showHellResult();
 		else if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_hellReplay)
-			showHellOpening();
+		{
+			StartSettingPopup* t_popup = StartSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showHellOpening));
+			addChild(t_popup, kMainFlowZorder_popup);
+			myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_init);
+		}
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
@@ -734,6 +739,7 @@ void MainFlowScene::tableOpenning()
 void MainFlowScene::showHellOpening()
 {
 	is_menu_enable = false;
+	puzzle_table->setTouchEnabled(false);
 	
 	HellModeOpening* t_popup = HellModeOpening::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
@@ -5818,6 +5824,7 @@ void MainFlowScene::countingAchievement()
 void MainFlowScene::popupClose()
 {
 	is_menu_enable = true;
+	puzzle_table->setTouchEnabled(true);
 }
 
 void MainFlowScene::achievePopupClose()
