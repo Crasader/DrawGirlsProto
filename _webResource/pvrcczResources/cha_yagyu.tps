@@ -195,6 +195,31 @@
             <filename>cha_asuka/_block.png</filename>
             <filename>cha_imu/_block.png</filename>
             <filename>cha_mirai/_block.png</filename>
+            <filename>cha_yagyu/_block.png</filename>
+            <filename>cha_yagyu/yagyu_back_arm1.png</filename>
+            <filename>cha_yagyu/yagyu_back_arm2.png</filename>
+            <filename>cha_yagyu/yagyu_back_coat1.png</filename>
+            <filename>cha_yagyu/yagyu_back_head1.png</filename>
+            <filename>cha_yagyu/yagyu_back_head2.png</filename>
+            <filename>cha_yagyu/yagyu_back_leg.png</filename>
+            <filename>cha_yagyu/yagyu_front_arm1.png</filename>
+            <filename>cha_yagyu/yagyu_front_arm2.png</filename>
+            <filename>cha_yagyu/yagyu_front_body.png</filename>
+            <filename>cha_yagyu/yagyu_front_coat.png</filename>
+            <filename>cha_yagyu/yagyu_front_eye.png</filename>
+            <filename>cha_yagyu/yagyu_front_head.png</filename>
+            <filename>cha_yagyu/yagyu_front_head2.png</filename>
+            <filename>cha_yagyu/yagyu_front_leg.png</filename>
+            <filename>cha_yagyu/yagyu_side_arm1.png</filename>
+            <filename>cha_yagyu/yagyu_side_arm2.png</filename>
+            <filename>cha_yagyu/yagyu_side_coat.png</filename>
+            <filename>cha_yagyu/yagyu_side_eye.png</filename>
+            <filename>cha_yagyu/yagyu_side_hair1.png</filename>
+            <filename>cha_yagyu/yagyu_side_hair2.png</filename>
+            <filename>cha_yagyu/yagyu_side_head.png</filename>
+            <filename>cha_yagyu/yagyu_side_leg1.png</filename>
+            <filename>cha_yagyu/yagyu_side_leg2.png</filename>
+            <filename>cha_yagyu/yagyu_side_top.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

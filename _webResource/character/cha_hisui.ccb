@@ -4456,8 +4456,6 @@
 								</array>
 							</dict>
 						</array>
-						<key>seqExpanded</key>
-						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -12938,6 +12936,8 @@
 								<true/>
 							</dict>
 						</array>
+						<key>selected</key>
+						<true/>
 					</dict>
 				</array>
 				<key>customClass</key>

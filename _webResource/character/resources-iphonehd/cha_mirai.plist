@@ -4,49 +4,10 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>1.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{4,208},{200,200}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,200}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>2.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{208,4},{200,200}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,200}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
-            <key>3.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{4,4},{200,200}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{200,200}}</string>
-                <key>sourceSize</key>
-                <string>{200,200}</string>
-            </dict>
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{502,4},{2,2}}</string>
+                <string>{{148,162},{2,2}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,11 +20,11 @@
             <key>mirai_back_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,498},{140,146}}</string>
+                <string>{{158,162},{140,146}}</string>
                 <key>offset</key>
                 <string>{0,21}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{30,6},{140,146}}</string>
                 <key>sourceSize</key>
@@ -72,7 +33,7 @@
             <key>mirai_back_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{412,4},{154,86}}</string>
+                <string>{{148,4},{154,86}}</string>
                 <key>offset</key>
                 <string>{-11,-57}</string>
                 <key>rotated</key>
@@ -85,11 +46,11 @@
             <key>mirai_back_leg.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{376,208},{46,28}}</string>
+                <string>{{238,128},{46,28}}</string>
                 <key>offset</key>
                 <string>{3,-31}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{56,62},{46,28}}</string>
                 <key>sourceSize</key>
@@ -98,7 +59,7 @@
             <key>mirai_back_ribron.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{406,314},{100,64}}</string>
+                <string>{{398,128},{100,64}}</string>
                 <key>offset</key>
                 <string>{2,-7}</string>
                 <key>rotated</key>
@@ -111,11 +72,11 @@
             <key>mirai_front_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{376,258},{106,26}}</string>
+                <string>{{288,128},{106,26}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{0,0},{106,26}}</string>
                 <key>sourceSize</key>
@@ -124,7 +85,7 @@
             <key>mirai_front_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,406},{26,24}}</string>
+                <string>{{380,196},{26,24}}</string>
                 <key>offset</key>
                 <string>{-17,-3}</string>
                 <key>rotated</key>
@@ -137,11 +98,11 @@
             <key>mirai_front_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{208,208},{140,164}}</string>
+                <string>{{4,4},{140,164}}</string>
                 <key>offset</key>
                 <string>{4,16}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{34,2},{140,164}}</string>
                 <key>sourceSize</key>
@@ -150,7 +111,7 @@
             <key>mirai_front_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{412,162},{148,86}}</string>
+                <string>{{4,338},{148,86}}</string>
                 <key>offset</key>
                 <string>{10,-43}</string>
                 <key>rotated</key>
@@ -163,7 +124,7 @@
             <key>mirai_front_leg.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{404,382},{98,72}}</string>
+                <string>{{410,4},{98,72}}</string>
                 <key>offset</key>
                 <string>{1,-9}</string>
                 <key>rotated</key>
@@ -176,11 +137,11 @@
             <key>mirai_front_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{156,490},{60,36}}</string>
+                <string>{{410,80},{60,36}}</string>
                 <key>offset</key>
                 <string>{0,5}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{46,22},{60,36}}</string>
                 <key>sourceSize</key>
@@ -189,11 +150,11 @@
             <key>mirai_side_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,368},{34,26}}</string>
+                <string>{{474,80},{34,26}}</string>
                 <key>offset</key>
                 <string>{7,-7}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{16,20},{34,26}}</string>
                 <key>sourceSize</key>
@@ -202,11 +163,11 @@
             <key>mirai_side_body1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{196,506},{120,82}}</string>
+                <string>{{324,4},{120,82}}</string>
                 <key>offset</key>
                 <string>{14,-4}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{30,8},{120,82}}</string>
                 <key>sourceSize</key>
@@ -215,11 +176,11 @@
             <key>mirai_side_body2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,458},{120,82}}</string>
+                <string>{{238,4},{120,82}}</string>
                 <key>offset</key>
                 <string>{14,-4}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{30,8},{120,82}}</string>
                 <key>sourceSize</key>
@@ -228,7 +189,7 @@
             <key>mirai_side_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{374,434},{18,26}}</string>
+                <string>{{4,490},{18,26}}</string>
                 <key>offset</key>
                 <string>{-33,0}</string>
                 <key>rotated</key>
@@ -241,11 +202,11 @@
             <key>mirai_side_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{208,352},{150,162}}</string>
+                <string>{{4,172},{150,162}}</string>
                 <key>offset</key>
                 <string>{-3,17}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{22,2},{150,162}}</string>
                 <key>sourceSize</key>
@@ -254,11 +215,11 @@
             <key>mirai_side_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,412},{148,82}}</string>
+                <string>{{94,338},{148,82}}</string>
                 <key>offset</key>
                 <string>{4,-51}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{30,110},{148,82}}</string>
                 <key>sourceSize</key>
@@ -267,11 +228,11 @@
             <key>mirai_tail.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{156,412},{48,74}}</string>
+                <string>{{302,158},{48,74}}</string>
                 <key>offset</key>
                 <string>{0,-1}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{6,4},{48,74}}</string>
                 <key>sourceSize</key>
@@ -285,9 +246,9 @@
             <key>realTextureFileName</key>
             <string>cha_mirai.pvr.ccz</string>
             <key>size</key>
-            <string>{512,1024}</string>
+            <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:78fb86617841000825f700b3126d9157:d59ac93fe6953dbf6efac643be4c7120:89c952983f9ba36e709b66d519b8f54b$</string>
+            <string>$TexturePacker:SmartUpdate:dc840cf3037fbaadbcde413e4801615e:be4f8416e298ef400654108784201743:89c952983f9ba36e709b66d519b8f54b$</string>
             <key>textureFileName</key>
             <string>cha_mirai.pvr.ccz</string>
         </dict>
