@@ -4051,11 +4051,11 @@ void GodOfDeath::update(float dt)
 		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(m_followSpeed * cosf(angle), m_followSpeed * sinf(angle)));
 		if(cosf(angle) < 0)
 		{
-			m_godOfDeathSprite->setRotation(0);
+			m_godOfDeathSprite->setFlipX(false);
 		}
 		else
 		{
-			m_godOfDeathSprite->setRotation(180);
+			m_godOfDeathSprite->setFlipX(true);
 		}
 	}
 	else
