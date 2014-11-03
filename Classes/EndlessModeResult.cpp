@@ -1620,11 +1620,12 @@ void EndlessModeResult::startCalcAnimation()
 																					
 																					function<void()> end_func3 = [=]()
 																					{
+                                                                                        myDSH->setIntegerForKey(kDSH_Key_isShowEndlessModeTutorial, -1);
 																						ikaruga->setVisible(true);
 																						
 																						typing_box->setVisible(true);
 																						typing_box->setTouchSuction(true);
-																						typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent62), end_func4);
+																						typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent62), end_func5);
 																					};
 																					
 																					function<void()> end_func2 = [=]()

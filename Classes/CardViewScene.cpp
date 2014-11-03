@@ -47,7 +47,7 @@ void CardViewScene::completedAnimationSequenceNamed(const char *name)
 	t_touch->setTouchInfo(0, 240, myDSH->ui_center_y);
 	t_touch->autorelease();
 	
-	first_img->ccTouchEnded(t_touch, NULL);
+//	first_img->ccTouchEnded(t_touch, NULL);
 	
 	t_manager->setDelegate(NULL);
 }
@@ -136,7 +136,7 @@ bool CardViewScene::init()
 	
 	ccb_manager = NULL;
 	
-	if(is_morphing && NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
+	if(/*is_morphing && */NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
 	{
 		auto t_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_CI_int1_faceInfo_s, card_number));
 		t_ccb_img = t_ccb.first;
@@ -213,6 +213,9 @@ bool CardViewScene::init()
 		}
 	};
 	
+    t_manager = NULL;
+    morphing_img = NULL;
+    
 	string morphing_filename = "";
 	auto liveGirl = [=](){
 		is_actioned = false;
@@ -257,6 +260,7 @@ bool CardViewScene::init()
 																			}
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
+        sound_menu->setEnabled(false);
 		sound_menu->setPosition(sound_position);
 		addChild(sound_menu, kCV_Z_next_button);
 		
@@ -277,55 +281,55 @@ bool CardViewScene::init()
 		
 		if(buy_morphing)
 			buy_morphing->removeFromParent();
-		
-		morphing_img->removeFromParent();
+		if(morphing_img)
+            morphing_img->removeFromParent();
 //		morphing_img = KS::loadCCBI<CCSprite*>(this, "morphing_heart_on.ccbi").first;
 //		morphing_img->setPosition(morphing_position);
 //		addChild(morphing_img, kCV_Z_next_button);
 		
 		
-		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
-		
-		zoom_img = tuto.first;
-		tuto.second->setDelegate(this);
-		t_manager = tuto.second;
-		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-		
-		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-		addChild(zoom_img, kCV_Z_next_button);
+//		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+//		
+//		zoom_img = tuto.first;
+//		tuto.second->setDelegate(this);
+//		t_manager = tuto.second;
+//		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+//		
+//		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+//		addChild(zoom_img, kCV_Z_next_button);
 	};
+    
+    auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+    
+    zoom_img = tuto.first;
+    tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+    
+    
+    zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+    addChild(zoom_img, kCV_Z_next_button);
+    
 	if(!is_morphing)
 	{
-		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+//		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CCScale9Sprite::create("whitepaper2.png", CCRectMake(0, 0, 63, 63), CCRectMake(31, 31, 1, 1)), -160);
+//		buy_morphing->setPosition(morphing_position);
+//		buy_morphing->setFunction([=](CCObject* sender)
+//								  {
+//									  if(!is_actioned)
+//									  {
+//										  is_actioned = true;
+//										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+//										  
+//										  CCLOG("11111111");
+//										  
+//										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
+//											  is_actioned = false;
+//										  }, liveGirl);
+//										  addChild(t_popup, 999);
+//									  }
+//								  });
+//		addChild(buy_morphing, kCV_Z_next_button);
 		
-		zoom_img = tuto.first;
-		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-		
-		
-		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-		addChild(zoom_img, kCV_Z_next_button);
-
-		
-		buy_morphing = CommonButton::create("", 10, CCSizeMake(63, 63), CCScale9Sprite::create("whitepaper2.png", CCRectMake(0, 0, 63, 63), CCRectMake(31, 31, 1, 1)), -160);
-		buy_morphing->setPosition(morphing_position);
-		buy_morphing->setFunction([=](CCObject* sender)
-								  {
-									  if(!is_actioned)
-									  {
-										  is_actioned = true;
-										  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-										  
-										  CCLOG("11111111");
-										  
-										  BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){
-											  is_actioned = false;
-										  }, liveGirl);
-										  addChild(t_popup, 999);
-									  }
-								  });
-		addChild(buy_morphing, kCV_Z_next_button);
-		
-		morphing_filename = "morphing_heart_off.ccbi";
+//		morphing_filename = "morphing_heart_off.ccbi";
 	}
 	else
 	{
@@ -357,19 +361,20 @@ bool CardViewScene::init()
 																	  });
 		CCMenuLambda* sound_menu = CCMenuLambda::createWithItem(sound_item);
 		sound_menu->setPosition(sound_position);
+        sound_menu->setEnabled(false);
 		addChild(sound_menu, kCV_Z_next_button);
 		
-		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
-		
-		zoom_img = tuto.first;
-		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-		
-		
-		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-		addChild(zoom_img, kCV_Z_next_button);
-		
-		tuto.second->setDelegate(this);
-		t_manager = tuto.second;
+//		auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+//		
+//		zoom_img = tuto.first;
+//		tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+//		
+//		
+//		zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+//		addChild(zoom_img, kCV_Z_next_button);
+//		
+//		tuto.second->setDelegate(this);
+//		t_manager = tuto.second;
 	}
 	
 	
@@ -380,13 +385,13 @@ bool CardViewScene::init()
 		addChild(morphing_img, kCV_Z_next_button);
 	}
 	
-	if(!is_morphing && mySGD->is_morphing_noti)
-	{
-		mySGD->is_morphing_noti = false;
-		
-		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);
-		addChild(t_popup, 999);
-	}
+//	if(!is_morphing && mySGD->is_morphing_noti)
+//	{
+//		mySGD->is_morphing_noti = false;
+//		
+//		BuyMorphingPopup* t_popup = BuyMorphingPopup::create(-200, [=](){is_actioned = false;}, liveGirl);
+//		addChild(t_popup, 999);
+//	}
 	
 	
 	next_button = CommonButton::createCloseButton(-160);
@@ -409,60 +414,60 @@ bool CardViewScene::init()
 	mode_button->setVisible(false);
 	addChild(mode_button, kCV_Z_next_button);
 	
-	if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-	{
-		CCSprite* n_19 = CCSprite::create("diary_19.png");
-		CCSprite* s_19 = CCSprite::create("diary_19.png");
-		s_19->setColor(ccGRAY);
-		
-		CCMenuItemLambda* to_diary_19_item = CCMenuItemSpriteLambda::create(n_19, s_19, [=](CCObject* sender)
-																			{
-																				if(!is_actioned)
-																				{
-																					is_actioned = true;
-																					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-																					
-																					if(graphdog->isExistApp())
-																					{
-																						// 다이어리 앱 설치되어 있음
-																						
-																						LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
-																						addChild(t_loading, 9999);
-																						t_loading->startLoading();
-																						
-																						Json::Value t_param;
-																						t_param["memberID"] = myHSP->getMemberID();
-																						
-																						myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
-																									   {
-																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																										   {
-																											   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
-																										   }
-																										   else
-																										   {
-																											   CCLOG("failed makediarycode");
-																										   }
-																										   
-																										   t_loading->removeFromParent();
-																										   is_actioned = false;
-																									   });
-																					}
-																					else
-																					{
-																						Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
-																																	 {
-																																		 is_actioned = false;
-																																	 });
-																						addChild(t_popup, 999);
-																					}
-																				}
-																			});
-		
-		CCMenuLambda* to_diary_19_menu = CCMenuLambda::createWithItem(to_diary_19_item);
-		to_diary_19_menu->setPosition(ccp(40,64));
-		addChild(to_diary_19_menu, kCV_Z_next_button);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//	{
+//		CCSprite* n_19 = CCSprite::create("diary_19.png");
+//		CCSprite* s_19 = CCSprite::create("diary_19.png");
+//		s_19->setColor(ccGRAY);
+//		
+//		CCMenuItemLambda* to_diary_19_item = CCMenuItemSpriteLambda::create(n_19, s_19, [=](CCObject* sender)
+//																			{
+//																				if(!is_actioned)
+//																				{
+//																					is_actioned = true;
+//																					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+//																					
+//																					if(graphdog->isExistApp())
+//																					{
+//																						// 다이어리 앱 설치되어 있음
+//																						
+//																						LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+//																						addChild(t_loading, 9999);
+//																						t_loading->startLoading();
+//																						
+//																						Json::Value t_param;
+//																						t_param["memberID"] = myHSP->getMemberID();
+//																						
+//																						myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
+//																									   {
+//																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//																										   {
+//																											   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+//																										   }
+//																										   else
+//																										   {
+//																											   CCLOG("failed makediarycode");
+//																										   }
+//																										   
+//																										   t_loading->removeFromParent();
+//																										   is_actioned = false;
+//																									   });
+//																					}
+//																					else
+//																					{
+//																						Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
+//																																	 {
+//																																		 is_actioned = false;
+//																																	 });
+//																						addChild(t_popup, 999);
+//																					}
+//																				}
+//																			});
+//		
+//		CCMenuLambda* to_diary_19_menu = CCMenuLambda::createWithItem(to_diary_19_item);
+//		to_diary_19_menu->setPosition(ccp(40,64));
+//		addChild(to_diary_19_menu, kCV_Z_next_button);
+//	}
 	
 	//	is_touched_menu = false;
 	is_actioned = true;
@@ -515,15 +520,15 @@ void CardViewScene::moveChecking()
 	
 	if(is_scrolling)
 	{
-		if(is_morphing)
-			first_img->movingDistance(ccpSub(after_position, save_position));
+//		if(is_morphing)
+//			first_img->movingDistance(ccpSub(after_position, save_position));
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
-		if(is_morphing)
-			first_img->movingDistance(CCPointZero);
+//		if(is_morphing)
+//			first_img->movingDistance(CCPointZero);
 	}
 	save_position = after_position;
 }
@@ -695,7 +700,7 @@ void CardViewScene::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_touch_p = (int)touch;
 			first_touch_point = location;
 			is_scrolling = true;
-			first_img->ccTouchBegan(touch,pEvent);
+//			first_img->ccTouchBegan(touch,pEvent);
 			//			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 			//			{
 			//				is_touched_menu = true;
@@ -764,7 +769,7 @@ void CardViewScene::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			{
 				
 				touch_p = location;
-				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
+//				if(is_morphing)first_img->ccTouchMoved(touch,pEvent);
 			}else if(multiTouchData.size() == 1){
 				
 				this->moveListXY(ccpSub(touch_p, location));
@@ -869,15 +874,15 @@ void CardViewScene::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				
 				if((int)touch == first_touch_p && (((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - first_touch_time) < 200000)
 				{
-					if(is_morphing && touch_mode!=2)
-						first_img->ccTouchEnded(touch, pEvent);
+//					if(is_morphing && touch_mode!=2)
+//						first_img->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
 					
-					if(is_morphing && touch_mode!=2)
-						first_img->morphing(touch, pEvent);
-					return;
+//					if(is_morphing && touch_mode!=2)
+//						first_img->morphing(touch, pEvent);
+//					return;
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);
 					

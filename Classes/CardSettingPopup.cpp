@@ -1152,16 +1152,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				int c_count = t_info.count.getV();
 				if(c_count == 1)
 				{
-					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-						case_filename = "cardsetting_on19.png";
-					else
+//					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//						case_filename = "cardsetting_on19.png";
+//					else
 						case_filename = "cardsetting_on.png";
 				}
 				else
 				{
-					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-						case_filename = "cardsetting_on_many19.png";
-					else
+//					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//						case_filename = "cardsetting_on_many19.png";
+//					else
 						case_filename = "cardsetting_on_many.png";
 					add_position = ccp(-2,3);
 				}
@@ -1222,9 +1222,9 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			else
 			{
 				string empty_back_filename;
-				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-					empty_back_filename = "cardsetting_off19.png";
-				else
+//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//					empty_back_filename = "cardsetting_off19.png";
+//				else
 					empty_back_filename = "cardsetting_off.png";
 				
 				CCSprite* empty_back = CCSprite::create(empty_back_filename.c_str());
@@ -1268,16 +1268,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int c_count = t_info.count.getV();
 			if(c_count == 1)
 			{
-				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-					case_filename = "cardsetting_on19.png";
-				else
+//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//					case_filename = "cardsetting_on19.png";
+//				else
 					case_filename = "cardsetting_on.png";
 			}
 			else
 			{
-				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-					case_filename = "cardsetting_on_many19.png";
-				else
+//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//					case_filename = "cardsetting_on_many19.png";
+//				else
 					case_filename = "cardsetting_on_many.png";
 				add_position = ccp(-2,3);
 			}
@@ -1354,16 +1354,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int c_count = t_info.count.getV();
 			if(c_count == 1)
 			{
-				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-					case_filename = "cardsetting_on19.png";
-				else
+//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//					case_filename = "cardsetting_on19.png";
+//				else
 					case_filename = "cardsetting_on.png";
 			}
 			else
 			{
-				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-					case_filename = "cardsetting_on_many19.png";
-				else
+//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//					case_filename = "cardsetting_on_many19.png";
+//				else
 					case_filename = "cardsetting_on_many.png";
 				add_position = ccp(-2,3);
 			}

@@ -71,7 +71,7 @@ private:
 	int touch_mode;
 	KSLabelTTF* showtime_back;
 	MyNode* second_img;
-	KSLabelTTF* showtime_morphing_label;
+//	KSLabelTTF* showtime_morphing_label;
 	
 	int typing_sound_number;
 	
