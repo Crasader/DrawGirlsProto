@@ -189,7 +189,7 @@ void JM_UpgradeMissile::moving ()
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 				myGD->communication("CP_startDamageReaction", targetNode, damage, -shootImg->getRotation(), true, true);
 				
-				myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+				myGD->communication("Main_showDamageMissile", particlePosition, int(damage), 0);
 				
 				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 				combo_cnt++;
@@ -198,7 +198,7 @@ void JM_UpgradeMissile::moving ()
 				
 				myGD->communication("Main_startShake", -shootImg->getRotation());
 				
-				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_addScore", addScore, 0);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 				
 				myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
@@ -665,13 +665,13 @@ void JM_BasicMissile::moving ()
 				myGD->communication("MP_bombCumber", (CCObject*)targetNode); // with startMoving
 				myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle, true, true);
 				
-				myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+				myGD->communication("Main_showDamageMissile", particlePosition, int(damage), 0);
 				
 				int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 				combo_cnt++;
 				
 				int addScore = (100.f+400.f)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-				myGD->communication("UI_addScore", addScore);
+				myGD->communication("UI_addScore", addScore, 0);
 				myGD->communication("UI_setComboCnt", combo_cnt);
 				myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
 				
@@ -708,13 +708,13 @@ void JM_BasicMissile::moving ()
 					myGD->communication("CP_startDamageReaction", targetNode, damage, directionAngle, true, true);
 				
 					// 데미지 표시해주는 것. 데미지 숫자 뜸.
-					myGD->communication("Main_showDamageMissile", particlePosition, int(damage));
+					myGD->communication("Main_showDamageMissile", particlePosition, int(damage), 0);
 					
 					int combo_cnt = myGD->getCommunication("UI_getComboCnt");
 					combo_cnt++;
 					
 					int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-					myGD->communication("UI_addScore", addScore);
+					myGD->communication("UI_addScore", addScore, 0);
 					myGD->communication("UI_setComboCnt", combo_cnt);
 					myGD->communication("Main_showComboImage", particlePosition, combo_cnt);
 					

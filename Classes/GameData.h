@@ -87,6 +87,7 @@ public:
 	
 	std::map<std::string, std::function<void(bool)>> V_B;
 	std::map<std::string, std::function<void(int)>> V_I;
+	std::map<std::string, std::function<void(int, int)>> V_II;
 	std::map<std::string, std::function<void(float)>> V_F;
 	std::map<std::string, std::function<void(float, bool)>> V_FB;
 //	std::map<std::string, std::function<bool(KSCumberBase*, float, float)>> B_CumberBaseFF;
@@ -97,6 +98,7 @@ public:
 	std::map<std::string, std::function<void(CCPoint, ccColor4F, float)>> V_CCPCOLORF;
 	std::map<std::string, std::function<int(CCPoint, std::string&, KSCumberBase*, bool)>> I_CCPStrCumberBaseB;
 	std::map<std::string, std::function<void(CCPoint, int)>> V_CCPI;
+	std::map<std::string, std::function<void(CCPoint, int, int)>> V_CCPII;
 	
 	std::map<std::string, std::function<void(CCPoint, bool)>> V_CCPB;
 	std::map<std::string, std::function<void(int, int, float)>> V_IIF;
@@ -126,7 +128,8 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	std::function<void(const std::string& fileName, const std::string& type)> showDetailMessage;
-	std::function<void(StoneType, int grade, int level, float percent, CCPoint initPosition, int missile_damage)> createJackMissileWithStoneFunctor;
+	std::function<void(StoneType, int level, float percent, CCPoint initPosition, int missile_damage,
+										 int missile_sub_damage)> createJackMissileWithStoneFunctor;
 	std::function<void(void)> hideBosses;
 	std::function<void(void)> toFun;
 	std::function<void(void)> toScratch;
@@ -200,6 +203,9 @@ public:
 	void setJackPoint(IntPoint t_jp);
 	IntPoint getJackPoint();
 	
+	std::function<CCPoint()> getJackPointCCP;
+//	CCPoint getJackPointCCP();
+	
 	void setMainCumberPoint(KSCumberBase* cb, IntPoint t_mcbp);
 	IntPoint getMainCumberPoint(CCNode* cb)
 	{
@@ -221,6 +227,7 @@ public:
 	bool communication(string funcName, CCObject* t_obj, float f_val, float f_val2, bool b1, bool b2);
 	void communication(string funcName);
 	void communication(string funcName, CCPoint t_p, int t_i);
+	void communication(string funcName, CCPoint t_p, int t_i1, int t_i2);
 	void communication(string funcName, float t_f, bool t_b, CCPoint t_p);
 	void communication(string funcName, bool t_b);
 	void communication(string funcName, CCObject* t_obj);
@@ -233,6 +240,7 @@ public:
 	void communication(string funcName, CCPoint t_startFire, ccColor4F t_color, float t_angle);
 	void communication(string funcName, CCPoint t_startFire, bool t_b);
 	void communication(string funcName, int t_int);
+	void communication(string funcName, int t_int1, int t_int2);
 	void communication(string funcName, int t_int1, int t_int2, float t_float);
 	void communication(string funcName, int t_int1, int t_int2, float t_float, CCPoint t_p);
 	void communication(string funcName, float t_float);
@@ -264,6 +272,9 @@ public:
 	int limited_step_bottom;
 	bool is_setted_jack;
 	bool getEmptyRandomPoint(IntPoint* point, float radius);
+	
+	bool is_changed_map;
+	bool is_need_resetRects;
 	
 private:
 	

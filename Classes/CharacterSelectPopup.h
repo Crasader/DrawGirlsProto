@@ -72,8 +72,10 @@ private:
 	CCSize cellSizeForTable(CCTableView *table);
 	unsigned int numberOfCellsInTableView(CCTableView *table);
 	
+	void detailAction(CCObject* sender);
 	void characterChangeAction(CCObject* sender);
 	void resultUpdateCharacterHistory(Json::Value result_data);
+	void gachaClose();
 };
 
 #endif /* defined(__DGproto__CharacterSelectPopup__) */

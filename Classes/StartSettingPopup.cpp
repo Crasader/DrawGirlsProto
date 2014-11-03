@@ -49,6 +49,7 @@
 #include "FiveRocksCpp.h"
 #include "CharacterSelectPopup.h"
 #include <boost/lexical_cast.hpp>
+#include "StoryLayer.h"
 
 bool StartSettingPopup::init()
 {
@@ -63,6 +64,9 @@ bool StartSettingPopup::init()
 	option_label = NULL;
 	//	card_img = NULL;
 	buy_button = NULL;
+	
+	missile_img = NULL;
+	
 	selected_gacha_item = (ITEM_CODE)mySGD->gacha_item.getV();
 	
 	is_first_gacha = false;
@@ -334,34 +338,40 @@ void StartSettingPopup::setMain()
 							 });
 	main_case->addChild(back_button);
 	
+	if(mySGD->is_endless_mode){
+		back_button->setVisible(false);
+	}
 	
 	item_list = mySD->getStageItemList(stage_number);
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) != 2)
 	{
-		for(int i=0;i<item_list.size();i++)
+		if(!mySGD->is_hell_mode)
 		{
-			ITEM_CODE t_code = item_list[i];
-			if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, int(t_code)))
+			for(int i=0;i<item_list.size();i++)
 			{
-				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
-				
-//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
-			}
-			else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
-			{
-				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
-				
-//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
-			}
-			else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
-			{
-				show_item_popup.push_back(t_code);
-				myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
-				
-//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+				ITEM_CODE t_code = item_list[i];
+				if(t_code == kIC_baseSpeedUp && mySGD->getItem9OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem9OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, int(t_code)))
+				{
+					show_item_popup.push_back(t_code);
+					myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
+					
+					//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+				}
+				else if(t_code == kIC_doubleItem && mySGD->getItem6OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem6OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+				{
+					show_item_popup.push_back(t_code);
+					myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
+					
+					//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+				}
+				else if(t_code == kIC_magnet && mySGD->getItem11OpenStage() <= mySGD->getUserdataHighPiece() && mySGD->isClearPiece(mySGD->getItem11OpenStage()) && !myDSH->getBoolForKey(kDSH_Key_isShowItem_int1, t_code))
+				{
+					show_item_popup.push_back(t_code);
+					myDSH->setBoolForKey(kDSH_Key_isShowItem_int1, int(t_code), true);
+					
+					//				mySGD->addChangeGoods(CCString::createWithFormat("b_i_%d", t_code)->getCString());
+				}
 			}
 		}
 //		mySGD->changeGoods([=](Json::Value result_data)
@@ -634,7 +644,7 @@ void StartSettingPopup::setMain()
 		
 		CCPoint item_position = ccp(213.f + i*65.f, 185);
 		
-		bool is_unlocked = true;
+		bool is_unlocked = !mySGD->is_hell_mode;
 		if(t_ic == kIC_baseSpeedUp && (mySGD->getItem9OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem9OpenStage())))
 			is_unlocked = false;
 		else if(t_ic == kIC_doubleItem && (mySGD->getItem6OpenStage() > mySGD->getUserdataHighPiece() || !mySGD->isClearPiece(mySGD->getItem6OpenStage())))
@@ -800,7 +810,7 @@ void StartSettingPopup::setMain()
 		gacha_item->addChild(gacha_label);
 	}
 	
-	if(mySGD->getItemGachaOpenStage() > mySD->getSilType())
+	if(mySGD->is_hell_mode || mySGD->getItemGachaOpenStage() > mySD->getSilType())
 	{
 		item_gacha_menu->setEnabled(false);
 		CCSprite* locked_img = CCSprite::create("startsetting_item_locked.png");
@@ -816,123 +826,124 @@ void StartSettingPopup::setMain()
 			is_tutorial = true;
 			myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, int(KindTutorialType::kNewItem_gacha), true);
 			
-			CCNode* scenario_node = CCNode::create();
-			addChild(scenario_node, 9999);
-			
-			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-			if(screen_scale_x < 1.f)
-				screen_scale_x = 1.f;
-			
-			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-			
-			
-			CCNode* t_stencil_node = CCNode::create();
-			
-			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
-			t_stencil1->setContentSize(CCSizeMake(64, 64));
-			t_stencil1->setPosition(ccp(410, 191));
-			t_stencil_node->addChild(t_stencil1);
-			
-			CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
-			t_clipping->setAlphaThreshold(0.1f);
-			
-			float change_scale = 1.f;
-			CCPoint change_origin = ccp(0,0);
-			if(screen_scale_x > 1.f)
-			{
-				change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
-				change_scale = screen_scale_x;
-			}
-			if(screen_scale_y > 1.f)
-				change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
-			CCSize win_size = CCDirector::sharedDirector()->getWinSize();
-			t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
-			
-			
-			CCSprite* t_gray = CCSprite::create("back_gray.png");
-			t_gray->setScaleX(screen_scale_x);
-			t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
-			t_gray->setOpacity(0);
-			t_gray->setPosition(ccp(240,160));
-			t_clipping->addChild(t_gray);
-			
-			t_clipping->setInverted(true);
-			scenario_node->addChild(t_clipping, 0);
-			
-			
-			CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
-			asuka->setAnchorPoint(ccp(1,0));
-			asuka->setPosition(ccp(240+240*screen_scale_x+asuka->getContentSize().width, 160-160*screen_scale_y));
-			asuka->setVisible(false);
-			scenario_node->addChild(asuka, 1);
-			
-			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-			ikaruga->setAnchorPoint(ccp(0,0));
-			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-			scenario_node->addChild(ikaruga, 1);
-			
-			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
-			typing_box->setHide();
-			scenario_node->addChild(typing_box, 2);
-			
-			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
-			scenario_node->addChild(typing_box2, 2);
-			
-			typing_box2->setTouchOffScrollAndButton();
-			typing_box2->setVisible(false);
-			typing_box2->setTouchSuction(false);
-			
-			typing_box->showAnimation(0.3f);
-			
-			function<void()> end_func3 = [=]()
-			{
-				addChild(KSTimer::create(0.1f, [=]()
-										 {
-											 scenario_node->removeFromParent();
-										 }));
-			};
-			
-			function<void()> end_func2 = [=]()
-			{
-				TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
-				typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial10), end_func3);
-			};
-			
-			function<void()> end_func1 = [=]()
-			{
-				ikaruga->setVisible(false);
-				asuka->setVisible(true);
-				
-				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
-																	  {
-																		  asuka->setPositionX(240+240*screen_scale_x+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
-																	  }, [=](float t)
-																	  {
-																		  asuka->setPositionX(240+240*screen_scale_x+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
-																		  
-																		  typing_box2->setVisible(true);
-																		  typing_box2->setTouchSuction(true);
-																		  
-																		  typing_box->setTouchSuction(false);
-																		  
-																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial9), end_func2);
-																	  }));
-				typing_box->setTouchOffScrollAndButton();
-				typing_box->setVisible(false);
-			};
-			
-			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-																  {
-																	  t_gray->setOpacity(t*255);
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  }, [=](float t)
-																  {
-																	  t_gray->setOpacity(255);
-																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																	  
-																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial8), end_func1);
-																  }));
+//			CCNode* scenario_node = CCNode::create();
+//			addChild(scenario_node, 9999);
+//			
+//			CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//			float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//			if(screen_scale_x < 1.f)
+//				screen_scale_x = 1.f;
+//			
+//			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//			
+//			
+//			CCNode* t_stencil_node = CCNode::create();
+//			
+//			CCScale9Sprite* t_stencil1 = CCScale9Sprite::create("rank_normal1.png", CCRectMake(0, 0, 31, 31), CCRectMake(15, 15, 1, 1));
+//			t_stencil1->setContentSize(CCSizeMake(64, 64));
+//			t_stencil1->setPosition(ccp(410, 191));
+//			t_stencil_node->addChild(t_stencil1);
+//			
+//			CCClippingNode* t_clipping = CCClippingNode::create(t_stencil_node);
+//			t_clipping->setAlphaThreshold(0.1f);
+//			
+//			float change_scale = 1.f;
+//			CCPoint change_origin = ccp(0,0);
+//			if(screen_scale_x > 1.f)
+//			{
+//				change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+//				change_scale = screen_scale_x;
+//			}
+//			if(screen_scale_y > 1.f)
+//				change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+//			CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+//			t_clipping->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+//			
+//			
+//			CCSprite* t_gray = CCSprite::create("back_gray.png");
+//			t_gray->setScaleX(screen_scale_x);
+//			t_gray->setScaleY(myDSH->ui_top/myDSH->screen_convert_rate/320.f);
+//			t_gray->setOpacity(0);
+//			t_gray->setPosition(ccp(240,160));
+//			t_clipping->addChild(t_gray);
+//			
+//			t_clipping->setInverted(true);
+//			scenario_node->addChild(t_clipping, 0);
+//			
+//			
+//			CCSprite* asuka = CCSprite::create("kt_cha_asuka_1.png");
+//			asuka->setAnchorPoint(ccp(1,0));
+//			asuka->setPosition(ccp(240+240*screen_scale_x+asuka->getContentSize().width, 160-160*screen_scale_y));
+//			asuka->setVisible(false);
+//			scenario_node->addChild(asuka, 1);
+//			
+//			CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//			ikaruga->setAnchorPoint(ccp(0,0));
+//			ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//			scenario_node->addChild(ikaruga, 1);
+//			
+//			TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+//			typing_box->setHide();
+//			scenario_node->addChild(typing_box, 2);
+//			
+//			TypingBox* typing_box2 = TypingBox::create(-9999, "kt_talkbox_blue.png", CCRectMake(0, 0, 85, 115), CCRectMake(22, 76, 23, 14), CCRectMake(22, 26, 23, 64), CCSizeMake(210, 60), ccp(255, 60));
+//			scenario_node->addChild(typing_box2, 2);
+//			
+//			typing_box2->setTouchOffScrollAndButton();
+//			typing_box2->setVisible(false);
+//			typing_box2->setTouchSuction(false);
+//			
+//			typing_box->showAnimation(0.3f);
+//			
+//			function<void()> end_func3 = [=]()
+//			{
+//				addChild(KSTimer::create(0.1f, [=]()
+//										 {
+//											 scenario_node->removeFromParent();
+//										 }));
+//			};
+//			
+//			function<void()> end_func2 = [=]()
+//			{
+//				TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
+//				typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial10), end_func3);
+//			};
+//			
+//			function<void()> end_func1 = [=]()
+//			{
+//				ikaruga->setVisible(false);
+//				asuka->setVisible(true);
+//				
+//				scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3, [=](float t)
+//																	  {
+//																		  asuka->setPositionX(240+240*screen_scale_x+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+//																	  }, [=](float t)
+//																	  {
+//																		  asuka->setPositionX(240+240*screen_scale_x+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
+//																		  
+//																		  typing_box2->setVisible(true);
+//																		  typing_box2->setTouchSuction(true);
+//																		  
+//																		  typing_box->setTouchSuction(false);
+//																		  
+//																		  typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial9), end_func2);
+//																	  }));
+//				typing_box->setTouchOffScrollAndButton();
+//				typing_box->setVisible(false);
+//			};
+//			
+//			scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//																  {
+//																	  t_gray->setOpacity(t*255);
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  }, [=](float t)
+//																  {
+//																	  t_gray->setOpacity(255);
+//																	  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																	  
+//																	  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial8), end_func1);
+//																  }));
+			StoryLayer::startStory(this, "item_random");
 		}
 	}
 	
@@ -1017,15 +1028,8 @@ void StartSettingPopup::setMain()
 																  }, [=](float t)
 																  {
 																	  character_img->setPositionX(t);
-																	  //										  if(character_no == 1)
-																	  //											{
-																	  //												character_manager->runAnimationsForSequenceNamed("move");
-																	  //												character_img->setScaleX(-1.f);
-																	  //											}
-																	  //										  else if(character_no == 2)
-																	  //											{
+																		
 																	  character_manager->runAnimationsForSequenceNamed("move_left");
-																	  //											}
 																	  character_img->addChild(KSGradualValue<float>::create(left_back->getPositionX()+60, left_back->getPositionX()-60, 0.8f, [=](float t)
 																															{
 																																character_img->setPositionX(t);
@@ -1044,34 +1048,18 @@ void StartSettingPopup::setMain()
 		setFormSetter(level_case);
 		level_case->setPosition(ccp(left_back->getPositionX(),75));
 		main_case->addChild(level_case);
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																t_history.characterLevel.getV());
+
+		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+	
 		
-		StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-		missile_type_code = kStoneType_guided; // 임시
+		// 처음에 미사일 만들어지는 부분.
+		int missile_level = mySGD->getUserdataCharLevel();
 		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		attachMissilePreview(ccp(left_back->getPositionX(), 158), missile_type_code, missile_level);
 		
-		if(missile_type_code == kStoneType_guided)
-		{
-			int grade = (missile_level-1)/5+1;
-			bool rotation = false;
-			if(grade == 1 || grade == 4)
-				rotation = true;
-			GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																				rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-			t_gm->setFunctionForCrash([=](){
-				cumber_node->stopAllActions();
-				cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-			});
-			t_gm->setPosition(ccp(left_back->getPositionX(),158));
-			main_case->addChild(t_gm);
-			
-			
-			
-			t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-			
-			missile_img = t_gm;
-		}
 		
 		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_level);
@@ -1079,13 +1067,13 @@ void StartSettingPopup::setMain()
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,75));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,75));
 		main_case->addChild(missile_data_power);
 		
-		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+		if(mySGD->getUserdataMissileInfoIsMaxLevel())
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			//		setFormSetter(n_upgrade);
@@ -1249,31 +1237,39 @@ void StartSettingPopup::setMain()
 			upgrade_menu->setTouchPriority(touch_priority);
 		}
 		
-		CCSprite* n_changeCharacter = CCSprite::create("startsetting_upgrade.png");
-		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
-		n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
-		n_label->setPosition(ccpFromSize(n_changeCharacter->getContentSize()/2.f));
-		n_changeCharacter->addChild(n_label);
-		
-		
-		CCSprite* s_changeCharacter = CCSprite::create("startsetting_upgrade.png");
-		s_changeCharacter->setColor(ccGRAY);
-		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
-		s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
-		s_label->setPosition(ccpFromSize(s_changeCharacter->getContentSize()/2.f));
-		s_changeCharacter->addChild(s_label);
-		
-		
-		CCMenuItem* changeCharacter_item = CCMenuItemSprite::create(n_changeCharacter, s_changeCharacter, this, menu_selector(StartSettingPopup::changeCharacterAction));
-		
-		CCMenu* changeCharacter_menu = CCMenu::createWithItem(changeCharacter_item);
-		changeCharacter_menu->setPosition(ccp(left_back->getPositionX()-36,43));
-		main_case->addChild(changeCharacter_menu);
-		
-		changeCharacter_menu->setTouchPriority(touch_priority);
+		if(!mySGD->is_hell_mode)
+		{
+			CCSprite* n_changeCharacter = CCSprite::create("startsetting_upgrade.png");
+			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+			n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
+			n_label->setPosition(ccpFromSize(n_changeCharacter->getContentSize()/2.f));
+			n_changeCharacter->addChild(n_label);
+			
+			
+			CCSprite* s_changeCharacter = CCSprite::create("startsetting_upgrade.png");
+			s_changeCharacter->setColor(ccGRAY);
+			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+			s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
+			s_label->setPosition(ccpFromSize(s_changeCharacter->getContentSize()/2.f));
+			s_changeCharacter->addChild(s_label);
+			
+			
+			CCMenuItem* changeCharacter_item = CCMenuItemSprite::create(n_changeCharacter, s_changeCharacter, this, menu_selector(StartSettingPopup::changeCharacterAction));
+			
+			CCMenu* changeCharacter_menu = CCMenu::createWithItem(changeCharacter_item);
+			changeCharacter_menu->setPosition(ccp(left_back->getPositionX()-36,43));
+			main_case->addChild(changeCharacter_menu);
+			
+			changeCharacter_menu->setTouchPriority(touch_priority);
+		}
+		else
+		{
+			upgrade_menu->setPosition(ccp(left_back->getPositionX(),43));
+		}
 	}
 	else
 	{
+#if 0
 		cumber_node = CCNode::create();
 		setFormSetter(cumber_node);
 		cumber_node->setPosition(ccp(left_back->getPositionX(),158));
@@ -1288,11 +1284,15 @@ void StartSettingPopup::setMain()
 		setFormSetter(level_case);
 		level_case->setPosition(ccp(left_back->getPositionX(),95));
 		main_case->addChild(level_case);
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																t_history.characterLevel.getV());
+	
+		StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+
+		// 여기는 손대지 않기로 함.
 		
-		StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterNo.getV()-1);
-		missile_type_code = kStoneType_guided; // 임시
-		
-		int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int missile_level = mySGD->getUserdataCharLevel();
 		
 		if(missile_type_code == kStoneType_guided)
 		{
@@ -1301,7 +1301,7 @@ void StartSettingPopup::setMain()
 			if(grade == 1 || grade == 4)
 				rotation = true;
 			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																	 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
+																	 rotation, (missile_level-1)/5+1, missile_level);
 			//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 			t_gm->setFunctionForCrash([=](){
 				cumber_node->stopAllActions();
@@ -1323,13 +1323,13 @@ void StartSettingPopup::setMain()
 		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,95));
 		main_case->addChild(missile_data_level);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
+		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
 		setFormSetter(missile_data_power);
 		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,95));
 		main_case->addChild(missile_data_power);
 		
-		if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+		if(mySGD->getUserdataMissileInfoIsMaxLevel())
 		{
 			CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 			setFormSetter(n_upgrade);
@@ -1448,7 +1448,7 @@ void StartSettingPopup::setMain()
 				n_price_type->setPosition(ccp(25,20));
 				n_upgrade->addChild(n_price_type);
 				KSLabelTTF* n_price_label = KSLabelTTF::create(KS::insert_separator(
-																					ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																					ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 				n_price_label->disableOuterStroke();
 				n_price_label->setPosition(ccp(78,20));
 				n_upgrade->addChild(n_price_label);
@@ -1457,7 +1457,7 @@ void StartSettingPopup::setMain()
 				s_price_type->setPosition(ccp(25,20));
 				s_upgrade->addChild(s_price_type);
 				KSLabelTTF* s_price_label = KSLabelTTF::create(KS::insert_separator(
-																					ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																					ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 				s_price_label->disableOuterStroke();
 				s_price_label->setPosition(ccp(78,20));
 				s_upgrade->addChild(s_price_label);
@@ -1472,6 +1472,7 @@ void StartSettingPopup::setMain()
 			
 			upgrade_menu->setTouchPriority(touch_priority);
 		}
+#endif
 	}
 	
 	
@@ -1615,7 +1616,7 @@ void StartSettingPopup::setMain()
 												   }));
 		}
 		else if(!is_tutorial && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_levelupGuide) && mySGD->getUserdataTotalPlayCount() >= mySGD->getLevelupGuidePlayCount() &&
-				mySGD->getSelectedCharacterHistory().level.getV() <= mySGD->getLevelupGuideConditionLevel())
+				mySGD->getUserdataCharLevel() <= mySGD->getLevelupGuideConditionLevel())
 		{
 			is_menu_enable = false;
 			LevelupGuidePopup* t_popup = LevelupGuidePopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -1714,36 +1715,28 @@ void StartSettingPopup::characterClose()
 	
 	repeat_character_action();
 	
-	CCPoint keep_position = missile_img->getPosition();
-	missile_img->removeFromParent();
-	
-	StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-	missile_type_code = kStoneType_guided; // 임시
-	
-	int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
-	
-	if(missile_type_code == kStoneType_guided)
+	// 원래 선택되어진 캐릭터 선택이 변경될 때.
+	CCPoint keep_position;
+	if(missile_img)
 	{
-		int grade = (missile_level-1)/5+1;
-		bool rotation = false;
-		if(grade == 1 || grade == 4)
-			rotation = true;
-		GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																			rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-		//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-		t_gm->setFunctionForCrash([=](){
-			cumber_node->stopAllActions();
-			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-		});
-		t_gm->setPosition(keep_position);
-		main_case->addChild(t_gm);
-		
-		
-		
-		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-		
-		missile_img = t_gm;
+		keep_position = missile_img->getPosition();
+		missile_img->removeFromParent();
+		missile_img = NULL;
 	}
+	else
+	{
+		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+	}
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+															t_history.characterLevel.getV());
+	
+	StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+	
+	int missile_level = mySGD->getUserdataCharLevel();
+	
+	// 캐릭터 선택 닫을 때
+	attachMissilePreview(keep_position, missile_type_code, missile_level);
 	
 	main_case->setScaleY(0.f);
 	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
@@ -1768,6 +1761,7 @@ void StartSettingPopup::gachaMenuCreate()
 		item_gacha_menu->removeFromParent();
 	
 	CCSprite* n_gacha = CCSprite::create("startsetting_item_gacha.png");
+	
 	CCSprite* s_gacha = CCSprite::create("startsetting_item_gacha.png");
 	s_gacha->setColor(ccGRAY);
 	
@@ -1871,8 +1865,9 @@ void StartSettingPopup::gachaMenuCreate()
 																	   });
 	
 	item_gacha_menu = CCMenuLambda::createWithItem(gacha_item_item);
+	gacha_item_item->setStringData("item_random");
 	item_gacha_menu->setPosition(ccp(410,185));
-	setFormSetter(item_gacha_menu);
+	//setFormSetter(item_gacha_menu);
 	main_case->addChild(item_gacha_menu);
 	
 	item_gacha_menu->setTouchPriority(touch_priority);
@@ -1890,46 +1885,38 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	if(mySGD->is_hell_mode_enabled)
 	{
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
-			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+			int missile_level = mySGD->getUserdataCharLevel();
 			
 			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString());
 			
-			CCPoint keep_position = missile_img->getPosition();
-			missile_img->removeFromParent();
-			
-			StoneType missile_type_code = StoneType(mySGD->getUserdataSelectedCharNO()-1);
-			missile_type_code = kStoneType_guided; // 임시
-			
-			if(missile_type_code == kStoneType_guided)
+			CCPoint keep_position;
+			if(missile_img)
 			{
-				int grade = (missile_level-1)/5+1;
-				bool rotation = false;
-				if(grade == 1 || grade == 4)
-					rotation = true;
-				GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img, CCString::createWithFormat("jack_missile_%02d_%02d.png", mySGD->getUserdataSelectedCharNO(), missile_level)->getCString(),
-																					rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
-				//		GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
-				t_gm->setFunctionForCrash([=](){
-					cumber_node->stopAllActions();
-					cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
-				});
-				t_gm->setPosition(keep_position);
-				main_case->addChild(t_gm);
-				
-				
-				
-				t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
-				
-				missile_img = t_gm;
+				keep_position = missile_img->getPosition();
+				missile_img->removeFromParent();
+				missile_img = NULL;
 			}
+			else
+			{
+				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+			}
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																	t_history.characterLevel.getV());
+	
+			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+
 			
+			
+			// 업그레이드 할 때
+			attachMissilePreview(keep_position, missile_type_code, missile_level);
 			
 			
 			CCPoint upgrade_position = upgrade_menu->getPosition();
 			upgrade_menu->removeFromParent();
 			
-			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+			if(mySGD->getUserdataMissileInfoIsMaxLevel())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 				KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missileUpgrade2), mySGD->getFont().c_str(), 12);
@@ -1983,11 +1970,12 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 	}
 	else
 	{
+#if 0
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
-			int missile_level = mySGD->getSelectedCharacterHistory().level.getV();
+			int missile_level = mySGD->getUserdataCharLevel();
 			
 			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getSelectedCharacterHistory().power.getV()).c_str())->getCString());
+			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString());
 			
 			CCPoint missile_position;
 			if(missile_img)
@@ -1996,9 +1984,16 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				missile_img->removeFromParent();
 				missile_img = NULL;
 			}
-			
-			StoneType missile_type_code = StoneType(mySGD->getSelectedCharacterHistory().characterIndex.getV()-1);
-			missile_type_code = kStoneType_guided;
+			else
+			{
+				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+			}
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
+																	t_history.characterLevel.getV());
+
+			StoneType missile_type_code = (StoneType)mInfo.get("type", 0).asInt();
+	
 			
 			if(missile_type_code == kStoneType_guided)
 			{
@@ -2007,7 +2002,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 				if(grade == 1 || grade == 4)
 					rotation = true;
 				GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("jack_missile_%d.png", missile_level)->getCString(),
-																		 rotation, (missile_level-1)/5+1, (missile_level-1)%5+1);
+																		 rotation, (missile_level-1)/5+1, missile_level);
 				//			GuidedMissile* t_gm = GuidedMissile::createForShowWindow(CCString::createWithFormat("me_guide%d.ccbi", (missile_level-1)%5 + 1)->getCString());
 				
 				t_gm->setFunctionForCrash([=](){
@@ -2030,7 +2025,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			CCPoint upgrade_position = upgrade_menu->getPosition();
 			upgrade_menu->removeFromParent();
 			
-			if(mySGD->getSelectedCharacterHistory().isMaxLevel.getV())
+			if(mySGD->getUserdataMissileInfoIsMaxLevel())
 			{
 				CCSprite* n_upgrade = CCSprite::create("startsetting_upgrade.png");
 				KSLabelTTF* n_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_maxLevel), missile_level)->getCString(), mySGD->getFont().c_str(), 14);
@@ -2127,7 +2122,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					n_price_type->setPosition(ccp(25,20));
 					n_upgrade->addChild(n_price_type);
 					KSLabelTTF* n_price_label = KSLabelTTF::create(KS::insert_separator(
-																						ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																						ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 					n_price_label->setPosition(ccp(78,20));
 					n_upgrade->addChild(n_price_label);
 					
@@ -2135,7 +2130,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 					s_price_type->setPosition(ccp(25,20));
 					s_upgrade->addChild(s_price_type);
 					KSLabelTTF* s_price_label = KSLabelTTF::create(KS::insert_separator(
-																						ccsf("%d", mySGD->getSelectedCharacterHistory().nextPrice.getV())).c_str(), mySGD->getFont().c_str(), 17.5f);
+																						ccsf("%d", mySGD->getUserdataMissileInfoNextPrice())).c_str(), mySGD->getFont().c_str(), 17.5f);
 					s_price_label->setPosition(ccp(78,20));
 					s_upgrade->addChild(s_price_label);
 				}
@@ -2149,6 +2144,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			}
 		});
 		addChild(t_popup, kStartSettingPopupZorder_popup);
+#endif
 	}
 	
 }
@@ -2207,7 +2203,7 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		if(mySGD->is_endless_mode)
+																		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
 																		else
 																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
@@ -2231,7 +2227,7 @@ void StartSettingPopup::startItemGacha()
 																	{
 																		ShopPopup* t_shop = ShopPopup::create();
 																		t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																		if(mySGD->is_endless_mode)
+																		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
 																		else
 																			t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
@@ -2279,6 +2275,9 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 		
 		ItemGachaPopup* t_popup = ItemGachaPopup::create(touch_priority-100, [=]()
 		{
+			selected_gacha_item = (ITEM_CODE)gacha_item_type;
+			mySGD->gacha_item = selected_gacha_item;
+			
 			if(mySGD->getGoodsValue(kGoodsType_pass4) > 0)
 				buy_button->setPrice(PriceTypePass4, 0);
 			else
@@ -2708,7 +2707,7 @@ void StartSettingPopup::itemAction(CCObject *sender)
 																										{
 																											ShopPopup* t_shop = ShopPopup::create();
 																											t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																											if(mySGD->is_endless_mode)
+																											if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 																												t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
 																											else
 																												t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
@@ -3134,7 +3133,7 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 																									  {
 																										  ShopPopup* t_shop = ShopPopup::create();
 																										  t_shop->setHideFinalAction(this, callfunc_selector(StartSettingPopup::popupClose));
-																										  if(mySGD->is_endless_mode)
+																										  if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 																											  t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
 																										  else
 																											  t_shop->targetHeartTime(((PuzzleScene*)getParent())->heart_time);
@@ -3280,6 +3279,9 @@ void StartSettingPopup::goToGame()
 	
 	mySGD->resetLabels();
 	myGD->resetGameData();
+	
+	if(!mySGD->is_hell_mode) // 헬모드가 아닐땐 사용해서 초기화가 됨
+		mySGD->gacha_item = kIC_emptyBegin;
 	
 	mySGD->setGameStart();
 	
@@ -3528,4 +3530,103 @@ string StartSettingPopup::convertToItemCodeToItemName(ITEM_CODE t_code)
 	else if(t_code == kIC_heartUp)			return_value = myLoc->getLocalForKey(LK::kMyLocalKey_item10title);
 	
 	return return_value.c_str();
+}
+
+void StartSettingPopup::attachMissilePreview(CCPoint keepPosition, StoneType stoneType, int level)
+{
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int subType = mInfo.get("subType", 1).asInt();
+	int mType = mInfo.get("type", 1).asInt();
+	
+	stoneType = kStoneType_guided;
+	if(stoneType == kStoneType_guided)
+	{
+		int grade = (level-1)/5+1;
+		bool selfRotation = false;
+		switch(subType)
+		{
+			case 1:
+				if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+					selfRotation = true;
+				else
+					selfRotation = false;
+				break;
+			case 2:
+			case 4:
+			case 7:
+				selfRotation = true;
+				break;
+			case 3:
+			case 5:
+				selfRotation = false;
+				break;
+			default:
+				selfRotation = true;
+		}
+		GuidedMissile* t_gm = GuidedMissile::createForShowStartSettingPopup(character_img,
+																CCString::createWithFormat("jack_missile_%02d_%02d.png", subType, level)->getCString(),
+																																				selfRotation, (level-1)/5+1, level);
+		//				t_gm->beautifier(missile_level);
+		t_gm->setFunctionForCrash([=](){
+			cumber_node->stopAllActions();
+			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+		});
+		t_gm->setPosition(keepPosition);
+		main_case->addChild(t_gm);
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		missile_img = t_gm;
+	}
+	else if(stoneType == kStoneType_protector)
+	{
+		int grade = (level-1)/5+1;
+		bool selfRotation = false;
+		switch(subType)
+		{
+			case 1:
+				if(1 <= level && level <= 5 || 16 <= level && level <= 20)
+					selfRotation = true;
+				else
+					selfRotation = false;
+				break;
+			case 2:
+			case 4:
+			case 7:
+				selfRotation = true;
+				break;
+			case 3:
+			case 5:
+				selfRotation = false;
+				break;
+			default:
+				selfRotation = true;
+		}
+		ProtectorMissile* t_gm = ProtectorMissile::createForShowStartSettingPopup(character_img,
+																																				ccsf("jack_missile_%02d_%02d.png",
+																																																	 subType, level),
+																																				selfRotation, (level-1)/5+1, level);
+		//				t_gm->beautifier(missile_level);
+		t_gm->setFunctionForCrash([=](){
+			cumber_node->stopAllActions();
+			cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
+		});
+		t_gm->setPosition(keepPosition);
+		t_gm->m_missileSprite->setPosition(character_img->getPosition() - t_gm->getPosition() );
+
+//		t_gm->setPosition(CCPointZero);
+		main_case->addChild(t_gm);
+		
+		t_gm->setShowWindowVelocityRad(M_PI / (60.f - (grade-1)*6));
+		missile_img = t_gm;
+	
+	}
+	else if(stoneType == kStoneType_slow)
+	{
+		
+	}
+	else if(stoneType == kStoneType_laser)
+	{
+		
+	}
 }

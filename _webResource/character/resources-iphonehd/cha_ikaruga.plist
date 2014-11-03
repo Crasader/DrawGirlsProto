@@ -7,7 +7,7 @@
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{82,498},{2,2}}</string>
+                <string>{{172,200},{2,2}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -20,184 +20,197 @@
             <key>ikaruga_back_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,406},{100,74}}</string>
+                <string>{{4,408},{100,44}}</string>
                 <key>offset</key>
-                <string>{3,-6}</string>
+                <string>{3,6}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{18,14},{100,74}}</string>
+                <string>{{8,24},{100,44}}</string>
                 <key>sourceSize</key>
-                <string>{130,90}</string>
+                <string>{110,104}</string>
             </dict>
             <key>ikaruga_back_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{174,4},{128,182}}</string>
+                <string>{{232,404},{104,174}}</string>
                 <key>offset</key>
-                <string>{-18,-9}</string>
+                <string>{-8,-15}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{30,18},{128,182}}</string>
+                <string>{{40,30},{104,174}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
             </dict>
             <key>ikaruga_back_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,4},{166,198}}</string>
+                <string>{{4,4},{164,200}}</string>
                 <key>offset</key>
-                <string>{1,-1}</string>
+                <string>{4,-2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{30,2},{166,198}}</string>
+                <string>{{22,4},{164,200}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
+            </dict>
+            <key>ikaruga_back_leg.png</key>
+            <dict>
+                <key>frame</key>
+                <string>{{308,40},{64,48}}</string>
+                <key>offset</key>
+                <string>{-3,-24}</string>
+                <key>rotated</key>
+                <false/>
+                <key>sourceColorRect</key>
+                <string>{{20,52},{64,48}}</string>
+                <key>sourceSize</key>
+                <string>{110,104}</string>
             </dict>
             <key>ikaruga_front_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{476,4},{28,36}}</string>
+                <string>{{376,48},{30,38}}</string>
                 <key>offset</key>
-                <string>{-12,0}</string>
+                <string>{-12,2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,2},{28,36}}</string>
+                <string>{{6,0},{30,38}}</string>
                 <key>sourceSize</key>
-                <string>{60,40}</string>
+                <string>{66,42}</string>
             </dict>
             <key>ikaruga_front_body.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{298,250},{68,76}}</string>
+                <string>{{166,408},{62,86}}</string>
                 <key>offset</key>
-                <string>{-3,-1}</string>
+                <string>{0,-3}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{28,8},{68,76}}</string>
+                <string>{{24,12},{62,86}}</string>
                 <key>sourceSize</key>
-                <string>{130,90}</string>
+                <string>{110,104}</string>
             </dict>
             <key>ikaruga_front_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{196,492},{78,14}}</string>
+                <string>{{176,386},{78,14}}</string>
                 <key>offset</key>
-                <string>{0,1}</string>
+                <string>{0,9}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{14,4},{78,14}}</string>
+                <string>{{26,6},{78,14}}</string>
                 <key>sourceSize</key>
-                <string>{106,24}</string>
+                <string>{130,44}</string>
             </dict>
             <key>ikaruga_front_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{310,120},{130,126}}</string>
+                <string>{{172,4},{132,192}}</string>
                 <key>offset</key>
-                <string>{-1,33}</string>
+                <string>{-2,6}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{46,4},{130,126}}</string>
+                <string>{{32,0},{132,192}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
             </dict>
             <key>ikaruga_front_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{310,4},{162,112}}</string>
+                <string>{{304,200},{164,114}}</string>
                 <key>offset</key>
-                <string>{5,-44}</string>
+                <string>{4,-37}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{36,88},{162,112}}</string>
+                <string>{{22,82},{164,114}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
             </dict>
             <key>ikaruga_side_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{476,44},{18,48}}</string>
+                <string>{{384,4},{20,40}}</string>
                 <key>offset</key>
-                <string>{-47,0}</string>
+                <string>{-46,0}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,0},{18,48}}</string>
+                <string>{{4,2},{20,40}}</string>
                 <key>sourceSize</key>
-                <string>{120,48}</string>
+                <string>{120,44}</string>
             </dict>
             <key>ikaruga_side_body1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{196,402},{110,86}}</string>
+                <string>{{52,408},{110,90}}</string>
                 <key>offset</key>
-                <string>{10,0}</string>
+                <string>{11,-5}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{20,2},{110,86}}</string>
+                <string>{{26,12},{110,90}}</string>
                 <key>sourceSize</key>
-                <string>{130,90}</string>
+                <string>{140,104}</string>
             </dict>
             <key>ikaruga_side_body2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{82,406},{110,88}}</string>
+                <string>{{410,4},{104,78}}</string>
                 <key>offset</key>
-                <string>{10,-1}</string>
+                <string>{10,-5}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
-                <string>{{20,2},{110,88}}</string>
+                <string>{{28,18},{104,78}}</string>
                 <key>sourceSize</key>
-                <string>{130,90}</string>
+                <string>{140,104}</string>
             </dict>
             <key>ikaruga_side_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{444,120},{68,38}}</string>
+                <string>{{308,4},{72,32}}</string>
                 <key>offset</key>
-                <string>{-24,6}</string>
+                <string>{-23,2}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
-                <string>{{4,4},{68,38}}</string>
+                <string>{{6,4},{72,32}}</string>
                 <key>sourceSize</key>
-                <string>{124,58}</string>
+                <string>{130,44}</string>
             </dict>
             <key>ikaruga_side_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{4,206},{160,196}}</string>
+                <string>{{4,208},{168,196}}</string>
                 <key>offset</key>
-                <string>{-20,-2}</string>
+                <string>{-14,2}</string>
                 <key>rotated</key>
                 <false/>
                 <key>sourceColorRect</key>
-                <string>{{12,4},{160,196}}</string>
+                <string>{{2,2},{168,196}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
             </dict>
             <key>ikaruga_side_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{168,206},{192,126}}</string>
+                <string>{{176,206},{176,124}}</string>
                 <key>offset</key>
-                <string>{16,-21}</string>
+                <string>{12,-26}</string>
                 <key>rotated</key>
                 <true/>
                 <key>sourceColorRect</key>
-                <string>{{32,58},{192,126}}</string>
+                <string>{{24,66},{176,124}}</string>
                 <key>sourceSize</key>
-                <string>{224,200}</string>
+                <string>{200,204}</string>
             </dict>
         </dict>
         <key>metadata</key>
@@ -209,7 +222,7 @@
             <key>size</key>
             <string>{512,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:fd3ae7e69abe38eb7e16f517ae866e3e:8db6b10eec836b57d71fc01d441f7181:771047bb744926db86b744bb4b40f763$</string>
+            <string>$TexturePacker:SmartUpdate:1e56e335458e6de7c0cdb27f007f6341:e8f8db974c01b589c6823f6999af1008:771047bb744926db86b744bb4b40f763$</string>
             <key>textureFileName</key>
             <string>cha_ikaruga.pvr.ccz</string>
         </dict>

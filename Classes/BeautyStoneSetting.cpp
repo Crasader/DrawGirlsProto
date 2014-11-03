@@ -137,7 +137,7 @@ bool BeautyStoneSettingPopup::init()
 									 menuAction(t_node);
 								 });
 	
-	int selected_character_slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+	int selected_character_slot_cnt = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
 	
 	slot_vector.clear();
 	for(int i=0;i<3;i++)
@@ -667,7 +667,7 @@ void BeautyStoneSettingPopup::menuAction(CCObject* pSender)
 									  t_popup->removeFromParent();
 									  is_menu_enable = true;
 									  
-									  int slot_cnt = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
+									  int slot_cnt = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
 									  int found_idx = -1;
 									  bool is_setted = false;
 									  for(int i=0;i<slot_cnt && !is_setted;i++)

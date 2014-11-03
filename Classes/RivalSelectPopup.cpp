@@ -100,7 +100,7 @@ void RivalSelectPopup::myInit(int t_touch_priority, function<void()> t_cancel_fu
 							  });
 	back_case->addChild(close_button);
 	
-	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	//if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 		close_button->setVisible(false);
 	
 	left_case = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));

@@ -332,13 +332,13 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	{
 		if(mySGD->is_endless_mode)
 		{
-			if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless())
+			if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"))
 			{
 				LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-				mySGD->addChangeGoods("rp_g", kGoodsType_gold, 0, "", CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "이어하기(PvP)");
+				mySGD->addChangeGoods("rp_g", kGoodsType_gold, -mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"), "", CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "이어하기(PvP)");
 				mySGD->changeGoods([=](Json::Value result_data)
 								   {
 									   t_popup->removeFromParent();
@@ -758,7 +758,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		price_type = CCSprite::create("price_gold_img.png");
 		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
 		price_node->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless())->getCString(), mySGD->getFont().c_str(), 15);
+		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"))->getCString(), mySGD->getFont().c_str(), 15);
 		price_label->setAnchorPoint(ccp(0,0.5f));
 		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
 		price_node->addChild(price_label);

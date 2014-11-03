@@ -47,6 +47,7 @@ enum ShopPopup_MenuTag{
 	kSP_MT_card,
 	kSP_MT_p1,
 	kSP_MT_eventPack,
+	kSP_MT_gacha,
 	kSP_MT_content1,
 	kSP_MT_content2,
 	kSP_MT_content3,
@@ -209,6 +210,8 @@ void ShopPopup::targetHeartTime(HeartTime *t_heartTime)
 void ShopPopup::setShopBeforeCode(ShopBeforeCode t_code)
 {
 	before_code = t_code;
+	if(before_code == ShopBeforeCode::kShopBeforeCode_mainflow)
+		addGachaButton();
 }
 
 void ShopPopup::setShopCode(ShopCode t_code)
@@ -1227,9 +1230,9 @@ CCTableViewCell* ShopPopup::tableCellAtIndex(CCTableView *table, unsigned int id
 	cell->addChild(character_img, kCharacterCellZorder_content);
 	character_pair.second->runAnimationsForSequenceNamed("shop");
 	
-	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 11);
-	comment_label->setPosition(ccp(62,58));
-	cell->addChild(comment_label, kCharacterCellZorder_content);
+//	CCLabelTTF* comment_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_s, idx+1).c_str(), mySGD->getFont().c_str(), 11);
+//	comment_label->setPosition(ccp(62,58));
+//	cell->addChild(comment_label, kCharacterCellZorder_content);
 	
 	CCSprite* t_tab = CCSprite::create("shop_tab.png");
 	t_tab->setPosition(ccp(94,192));
@@ -1335,6 +1338,28 @@ void ShopPopup::setCloseFunc(function<void(void)> t_close_func)
 	close_func = t_close_func;
 }
 
+void ShopPopup::addGachaButton()
+{
+	CCSprite* n_gacha_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+	n_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_gacha_label->setPosition(ccpFromSize(n_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	n_gacha_img->addChild(n_gacha_label);
+	
+	CCSprite* s_gacha_img = CCSprite::create("subbutton_pink.png");
+	s_gacha_img->setColor(ccGRAY);
+	KSLabelTTF* s_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12.5f);
+	s_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_gacha_label->setPosition(ccpFromSize(s_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	s_gacha_img->addChild(s_gacha_label);
+	
+	
+	CCMenuItem* gacha_menu = CCMenuItemSprite::create(n_gacha_img, s_gacha_img, this, menu_selector(ShopPopup::menuAction));
+	gacha_menu->setTag(kSP_MT_gacha);
+	gacha_menu->setPosition(ccp(415,13));
+	tab_menu->addChild(gacha_menu);
+}
+
 // on "init" you need to initialize your instance
 bool ShopPopup::init()
 {
@@ -1426,7 +1451,7 @@ bool ShopPopup::init()
 	main_case->addChild(card_menu, kSP_Z_content);
 	card_menu->setVisible(false);
 	
-	CCMenu* tab_menu = CCMenu::create();
+	tab_menu = CCMenu::create();
 	tab_menu->setPosition(CCPointZero);
 	main_case->addChild(tab_menu, kSP_Z_content);
 	
@@ -1539,7 +1564,6 @@ bool ShopPopup::init()
 	p1_menu->setTag(kSP_MT_p1);
 	p1_menu->setPosition(getContentPosition(kSP_MT_p1));
 	tab_menu->addChild(p1_menu, kSP_Z_content);
-	
 	
 	time_label = NULL;
 	
@@ -2029,6 +2053,14 @@ void ShopPopup::menuAction(CCObject* pSender)
 	{
 		setShopCode(kSC_eventPack);
 		is_menu_enable = true;
+	}
+	else if(tag == kSP_MT_gacha)
+	{
+		target_final = NULL;
+		delegate_final = NULL;
+		hidePopup();
+		
+		((MainFlowScene*)getParent())->showGachaPopup();
 	}
 	else if(tag == kSP_MT_character)
 	{
@@ -2766,7 +2798,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									{
 										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 										{
-											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											int slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
 											for(int j=1;j<=slot_count;j++)
 												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
 										}
@@ -2867,7 +2899,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									{
 										for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++)
 										{
-											int slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
+											int slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i);
 											for(int j=1;j<=slot_count;j++)
 												data[myDSH->getKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2)][i-1][j] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i-1, j);
 										}

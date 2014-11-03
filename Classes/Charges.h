@@ -61,8 +61,14 @@ protected:
 	CCPoint create_position;
 };
 
-
-class ChargeNodeLambda : public ChargeParent
+class ChargeBase : public CCNode
+{
+public:
+	virtual void cancelCharge();
+	CC_SYNTHESIZE(int, charge_frame, ChargeFrame);
+	CC_SYNTHESIZE(int, delayCount, DelayCount);
+};
+class ChargeNodeLambda : public ChargeBase
 {
 public:
 	static ChargeNodeLambda* create(CCPoint t_position, int t_frame,
@@ -81,7 +87,6 @@ private:
 	Json::Value m_pattern;		
 	//std::string m_pattern;
 	CCPoint create_position;
-	int charge_frame;
 	std::function<void(CCObject*)> actionFunction;
 	CCObject* real_target;
 	
@@ -101,7 +106,7 @@ private:
 
 
 
-class SpecialChargeNodeLambda : public ChargeParent
+class SpecialChargeNodeLambda : public ChargeBase
 {
 public:
 	static SpecialChargeNodeLambda* create(CCPoint t_position, int t_frame,
@@ -130,7 +135,6 @@ public:
 private:
 	Json::Value m_pattern;
 	CCPoint create_position;
-	int charge_frame;
 	CCObject* real_target;
 	std::function<void(CCObject*)> actionFunction;
 	float ing_rps;
@@ -151,7 +155,7 @@ private:
 
 
 
-class CrashChargeNodeLambda : public ChargeParent
+class CrashChargeNodeLambda : public ChargeBase
 {
 public:
 	virtual ~CrashChargeNodeLambda()
@@ -174,7 +178,6 @@ private:
 	
 	Json::Value m_pattern;
 	CCPoint create_position;
-	int charge_frame;
 	CCObject* real_target;
 	std::function<void(CCObject*)> actionFunction;
 	

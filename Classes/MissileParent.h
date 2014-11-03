@@ -12,7 +12,7 @@
 #include "cocos2d.h"
 #include "GameData.h"
 #include <queue>
-#include "AttackPattern.h"
+//#include "AttackPattern.h"
 #include "JackMissile.h"
 #include "RandomSelector.h"
 #include "AudioEngine.h"
@@ -59,7 +59,8 @@ public:
 	void bombCumber(CCObject* target);
 	void createJackMissile(int jm_type, int cmCnt, float missile_speed, CCPoint missile_position);
 	// 초기위치, 획득영역, 레벨, 등급, 미사일 타입.
-	void createJackMissileWithStone(StoneType stoneType, int grade, int level, float missileNumbers, CCPoint initPosition, int missile_damage);
+	void createJackMissileWithStone(StoneType stoneType, int level, float missileNumbers, CCPoint initPosition, int missile_damage,
+																	int missile_sub_damage);
 	AttackOption getAttackOption(StoneType st, int grade);
 	void subOneDie();
 //	void endIngActionAP();
@@ -83,6 +84,7 @@ public:
 	void removeAllPattern();
 private:
 	
+	int clear_condition;
 	SW_Parent* mySW;
 	
 	CCPoint startFirePosition;

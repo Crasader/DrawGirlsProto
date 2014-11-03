@@ -12,6 +12,8 @@
 #include "AchieveNoti.h"
 #include "HeartTime.h"
 #include "FiveRocksCpp.h"
+#include "KSLabelTTF.h"
+#include "CharacterExpUp.h"
 
 void StarGoldData::withdraw()
 {
@@ -256,6 +258,7 @@ void StarGoldData::resetLabels()
 	gold_label = NULL;
 	friend_point_label = NULL;
 	ingame_gold_label = NULL;
+	ingame_sub_gold_label = NULL;
 }
 
 void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
@@ -263,9 +266,10 @@ void StarGoldData::setStarLabel( CCLabelBMFont* t_label )
 	star_label = t_label;
 }
 
-void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label )
+void StarGoldData::setIngameGoldLabel( CCLabelBMFont* t_label, KSLabelTTF* t_label2 )
 {
 	ingame_gold_label = t_label;
+	ingame_sub_gold_label = t_label2;
 }
 
 //int StarGoldData::getStar()
@@ -368,6 +372,13 @@ void StarGoldData::resetIngameDetailScore()
 
 void StarGoldData::setGameStart()
 {
+	CharacterHistory t_history = getSelectedCharacterHistory();
+	
+	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	character_magnetic = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	
+	myGD->is_changed_map = false;
+	myGD->is_need_resetRects = false;
 	gacha_item = kIC_emptyEnd;
 	
 	catch_cumber_count = 0;
@@ -381,6 +392,7 @@ void StarGoldData::setGameStart()
 	stage_attack_count = 0;
 	
 	ingame_gold = 0;
+	ingame_sub_gold = 0;
 	
 //	if(myDSH->getIntegerForKey(kDSH_Key_endPlayedStage) < mySD->getSilType())
 //		myDSH->setIntegerForKey(kDSH_Key_endPlayedStage, mySD->getSilType());
@@ -405,6 +417,25 @@ void StarGoldData::setGameStart()
 	
 	
 //	ingame_before_stage_rank = myDSH->getIntegerForKey(kDSH_Key_stageClearRank_int1, mySD->getSilType());
+	is_cleared_grade.clear();
+	for(int i=0;i<4;i++)
+	{
+		is_cleared_grade.push_back(-1);
+	}
+	for(int i=0;i<piece_historys.size();i++)
+	{
+		if(piece_historys[i].stage_number.getV() == mySD->getSilType())
+		{
+			for(int j=0;j<4;j++)
+			{
+				if(piece_historys[i].is_clear[j].getV())
+				{
+					is_cleared_grade[j] = 1;
+				}
+			}
+		}
+	}
+	
 	is_not_cleared_stage = !mySGD->isClearPiece(mySD->getSilType());
 	
 	mySD->startSetting();
@@ -611,6 +642,11 @@ int StarGoldData::getBeforeRankUpStageGrade()
 }
 
 int StarGoldData::getStageGold()
+{
+	return ingame_gold.getV() + ingame_sub_gold.getV();
+}
+
+int StarGoldData::getStageBaseGold()
 {
 	return ingame_gold.getV();
 }
@@ -2163,23 +2199,83 @@ void StarGoldData::initCharacterHistory(Json::Value history_list)
 		Json::Value t_data = history_list[i];
 		CharacterHistory t_history;
 		t_history.characterNo = t_data["characterNo"].asInt();
-		t_history.level = t_data["level"].asInt();
-		t_history.nextPrice = t_data["nextPrice"].asInt();
-		t_history.power = t_data["power"].asInt();
-		t_history.nextPower = t_data["nextPower"].asInt();
-		t_history.prevPower = t_data["prevPower"].asInt();
-		t_history.isMaxLevel = t_data["isMaxLevel"].asBool();
+		Json::Value t_levelInfo = t_data["levelInfo"];
+		t_history.characterLevel = t_levelInfo["level"].asInt();
+		t_history.characterExp = t_levelInfo["exp"].asInt();
+		t_history.characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+		t_history.characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+		t_history.characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
 		
 		bool is_found = false;
 		for(int j=0;!is_found && j<character_cnt;j++)
 		{
 			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+			{
+				is_found = true;
 				t_history.characterIndex = j+1;
+			}
+		}
+		
+		character_historys.push_back(t_history);
+		
+//		CCLog("characterNo : %d | level : %d | nextPrice : %d | power : %d | nextPower : %d | prevPower : %d | isMaxLevel : %d", t_history.characterNo.getV(), t_history.level.getV(), t_history.nextPrice.getV(), t_history.power.getV(), t_history.nextPower.getV(), t_history.prevPower.getV(), t_history.isMaxLevel.getV());
+	}
+}
+
+void StarGoldData::addCharacterHistoryForGacha(Json::Value result_data)
+{
+//	CCLog("addCharacterHistoryForGacha : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
+	
+	bool is_found = false;
+	int characterNo = result_data["characterNo"].asInt();
+	for(int i=0;!is_found && i<character_historys.size();i++)
+	{
+		CharacterHistory t_history = character_historys[i];
+		if(t_history.characterNo.getV() == characterNo)
+		{
+			is_found = true;
+			// 경험치 올림
+			Json::Value t_levelInfo = result_data["levelInfo"];
+			character_historys[i].characterLevel = t_levelInfo["level"].asInt();
+			character_historys[i].characterExp = t_levelInfo["exp"].asInt();
+			character_historys[i].characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+			character_historys[i].characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+			character_historys[i].characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
+			
+			CharacterHistory a_history = character_historys[i];
+			
+			float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+			CharacterExpUp* t_exp_up = CharacterExpUp::create(t_history, a_history, ccp(240,160+160*screen_scale_y));
+			CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
+		}
+	}
+	
+	if(!is_found)
+	{
+		CharacterHistory t_history;
+		t_history.characterNo = result_data["characterNo"].asInt();
+		Json::Value t_levelInfo = result_data["levelInfo"];
+		t_history.characterLevel = t_levelInfo["level"].asInt();
+		t_history.characterExp = t_levelInfo["exp"].asInt();
+		t_history.characterNextLevelExp = t_levelInfo["nextLevelExp"].asInt();
+		t_history.characterCurrentLevelExp = t_levelInfo["currentLevelExp"].asInt();
+		t_history.characterNextLevelUpExp = t_levelInfo["nextLevelUpExp"].asInt();
+		
+		bool is_found2 = false;
+		int character_cnt = NSDS_GI(kSDS_GI_characterCount_i);
+		for(int j=0;!is_found2 && j<character_cnt;j++)
+		{
+			if(t_history.characterNo.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, j+1))
+			{
+				is_found2 = true;
+				t_history.characterIndex = j+1;
+			}
 		}
 		
 		character_historys.push_back(t_history);
 	}
 }
+
 void StarGoldData::initSelectedCharacterNo(int t_i)
 {
 	bool is_found = false;
@@ -2189,6 +2285,8 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 		{
 			selected_character_index = i;
 			is_found = true;
+			
+//			CCLog("selected characterNo : %d | index : %d", character_historys[i].characterNo.getV(), i);
 		}
 	}
 	if(!is_found)
@@ -2196,7 +2294,44 @@ void StarGoldData::initSelectedCharacterNo(int t_i)
 		selected_character_index = 0;
 	}
 }
+void StarGoldData::initCharacterLevel(int t_i)
+{
+	
+}
+void StarGoldData::initCharacterNextPrice(int t_i)
+{
+	
+}
+void StarGoldData::initCharacterPower(int t_i)
+{
+	
+}
+void StarGoldData::initCharacterNextPower(int t_i)
+{
+	
+}
+void StarGoldData::initCharacterPrevPower(int t_i)
+{
+	
+}
+void StarGoldData::initCharacterIsMaxLevel(int t_i)
+{
+	
+}
 CharacterHistory StarGoldData::getSelectedCharacterHistory()
+{
+	if(is_hell_mode)
+	{
+		for(int i=0;i<character_historys.size();i++)
+		{
+			character_historys[i].characterNo == 1;
+			return character_historys[i];
+		}
+	}
+	
+	return character_historys[selected_character_index.getV()];
+}
+CharacterHistory StarGoldData::getSelectedCharacterHistoryOriginal()
 {
 	return character_historys[selected_character_index.getV()];
 }
@@ -2216,7 +2351,7 @@ CommandParam StarGoldData::getUpdateCharacterHistoryParam(CharacterHistory t_his
 	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	param["characterNo"] = t_history.characterNo.getV();
-	param["level"] = t_history.level.getV();
+	param["exp"] = t_history.characterExp.getV();
 	
 	return CommandParam("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
 	
@@ -2229,7 +2364,7 @@ void StarGoldData::setCharacterHistory(CharacterHistory t_history, jsonSelType c
 	param["memberID"] = hspConnector::get()->getSocialID();
 	
 	param["characterNo"] = t_history.characterNo.getV();
-	param["level"] = t_history.level.getV();
+	param["exp"] = t_history.characterExp.getV();
 	
 	hspConnector::get()->command("updatecharacterhistory", param, json_selector(this, StarGoldData::resultUpdateCharacterHistory));
 }
@@ -2239,18 +2374,19 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 	if(result_data["result"]["code"] == GDSUCCESS)
 	{
 		int characterNo = result_data["characterNo"].asInt();
+		Json::Value levelInfo = result_data["levelInfo"];
 		bool is_found = false;
 		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
 		{
 			if(character_historys[i].characterNo.getV() == characterNo)
 			{
-				character_historys[i].level = result_data["level"].asInt();
-				character_historys[i].nextPrice = result_data["nextPrice"].asInt();
-				character_historys[i].power = result_data["power"].asInt();
-				character_historys[i].nextPower = result_data["nextPower"].asInt();
-				character_historys[i].prevPower = result_data["prevPower"].asInt();
-				character_historys[i].isMaxLevel = result_data["isMaxLevel"].asBool();
 				is_found = true;
+				
+				character_historys[i].characterLevel = levelInfo["level"].asInt();
+				character_historys[i].characterExp = levelInfo["exp"].asInt();
+				character_historys[i].characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+				character_historys[i].characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+				character_historys[i].characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
 			}
 		}
 		
@@ -2258,12 +2394,11 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		{
 			CharacterHistory t_history;
 			t_history.characterNo = characterNo;
-			t_history.level = result_data["level"].asInt();
-			t_history.nextPrice = result_data["nextPrice"].asInt();
-			t_history.power = result_data["power"].asInt();
-			t_history.nextPower = result_data["nextPower"].asInt();
-			t_history.prevPower = result_data["prevPower"].asInt();
-			t_history.isMaxLevel = result_data["isMaxLevel"].asBool();
+			t_history.characterLevel = levelInfo["level"].asInt();
+			t_history.characterExp = levelInfo["exp"].asInt();
+			t_history.characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+			t_history.characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+			t_history.characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
 			
 			character_historys.push_back(t_history);
 		}
@@ -2491,6 +2626,10 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p5";
 	else if(t_type == kGoodsType_pass6)
 		return_value = "p6";
+	else if(t_type == kGoodsType_pass7)
+		return_value = "p7";
+	else if(t_type == kGoodsType_pass8)
+		return_value = "p8";
 	else if(t_type == kGoodsType_heart)
 		return_value = "h";
 	else if(t_type == kGoodsType_pz)
@@ -2558,12 +2697,18 @@ int StarGoldData::getGoodsValue(GoodsType t_type)
 		return iter->second.getV();
 }
 
-void StarGoldData::addChangeGoodsIngameGold(int t_value)
+void StarGoldData::addChangeGoodsIngameGold(int t_value, float t_value2)
 {
 	ingame_gold = ingame_gold.getV() + t_value;
+	ingame_sub_gold = ingame_sub_gold.getV() + t_value2;
 	
 	if(ingame_gold_label)
 		ingame_gold_label->setString(CCString::createWithFormat("%d", ingame_gold.getV())->getCString());
+	if(ingame_sub_gold_label)
+	{
+		if(ingame_sub_gold.getV() > 0)
+			ingame_sub_gold_label->setString(ccsf("+%.0f", ingame_sub_gold.getV()));
+	}
 }
 
 void StarGoldData::addChangeGoods(string t_exchangeID, GoodsType t_type/* = kGoodsType_begin*/, int t_value/* = 0*/, string t_statsID/* = ""*/, string t_statsValue/* = ""*/, string t_content/* = ""*/, bool t_isPurchase/* = false*/)
@@ -2669,14 +2814,26 @@ void StarGoldData::changeGoodsTransaction(vector<CommandParam> command_list, jso
 {
 	if(is_end_game)
 	{
-		if(ingame_gold.getV() > 0)
+		if(ingame_gold.getV() > 0 || ingame_sub_gold.getV() > 0)
 		{
-			is_ingame_gold = true;
-			int t_ingame_gold = ingame_gold.getV();
-			if(isTimeEvent(kTimeEventType_gold))
-				t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			int t_ingame_gold = 0;
+			int t_ingame_sub_gold = 0;
+			if(ingame_gold.getV() > 0)
+			{
+				is_ingame_gold = true;
+				t_ingame_gold = ingame_gold.getV();
+				if(isTimeEvent(kTimeEventType_gold))
+					t_ingame_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			}
+			if(ingame_sub_gold.getV() > 0)
+			{
+				is_ingame_sub_gold = true;
+				t_ingame_sub_gold = ingame_sub_gold.getV();
+				if(isTimeEvent(kTimeEventType_gold))
+					t_ingame_sub_gold *= getTimeEventFloatValue(kTimeEventType_gold);
+			}
 			
-			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
+			addChangeGoods("stageGold", kGoodsType_gold, t_ingame_gold+t_ingame_sub_gold, "stage", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "골드획득");
 		}
 	}
 	
@@ -2726,9 +2883,9 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		if(is_ingame_gold)
+		if(is_ingame_gold || is_ingame_sub_gold)
 		{
-			int t_missile_level = getSelectedCharacterHistory().level.getV();
+			int t_missile_level = getUserdataCharLevel();
 			string fiverocks_param2;
 			if(t_missile_level <= 5)
 				fiverocks_param2 = "UserLv01~Lv05";
@@ -2746,9 +2903,11 @@ void StarGoldData::saveChangeGoodsTransaction(Json::Value result_data)
 				fiverocks_param2 = "UserLv31~";
 			
 			
-			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV());
+			fiverocks::FiveRocksBridge::trackEvent("GetGold", "Get_Event", "Ingame", fiverocks_param2.c_str(), ingame_gold.getV() + ingame_sub_gold.getV());
 			is_ingame_gold = false;
+			is_ingame_sub_gold = false;
 			ingame_gold = 0;
+			ingame_sub_gold = 0;
 		}
 		
 		change_goods_list.clear();
@@ -3189,6 +3348,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "highPiece";
 	else if(t_type == kUserdataType_onlyOneBuyPack)
 		return_value = "onlyOneBuyPack";
+	else if(t_type == kUserdataType_characterLevel)
+		return_value = "level";
 	
 	else if(t_type == kUserdataType_endlessData_ingWin)
 		return_value = "ing_win";
@@ -3213,6 +3374,17 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "aItByCnt";
 	else if(t_type == kUserdataType_achieve_seqAttendance) // last
 		return_value = "aSeqAtd";
+	
+	else if(t_type == kUserdataType_missileInfo_nextPrice)
+		return_value = "currentPrice";
+	else if(t_type == kUserdataType_missileInfo_power)
+		return_value = "power";
+	else if(t_type == kUserdataType_missileInfo_nextPower)
+		return_value = "nextPower";
+	else if(t_type == kUserdataType_missileInfo_prevPower)
+		return_value = "prevPower";
+	else if(t_type == kUserdataType_missileInfo_isMaxLevel) // last
+		return_value = "isMaxLevel";
 	
 	return return_value;
 }
@@ -3292,6 +3464,20 @@ void StarGoldData::initUserdata(Json::Value result_data)
 				endless_my_victory = userdata_storage[(UserdataType)i].getV();
 			}
 		}
+		else if(i >= kUserdataType_missileInfo_nextPrice && i <= kUserdataType_missileInfo_isMaxLevel)
+		{
+			userdata_storage[(UserdataType)i] = result_data["missileInfo"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
+			if(i == kUserdataType_missileInfo_nextPrice)
+				initCharacterNextPrice(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_power)
+				initCharacterPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_nextPower)
+				initCharacterNextPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_prevPower)
+				initCharacterPrevPower(userdata_storage[(UserdataType)i].getV());
+			else if(i == kUserdataType_missileInfo_isMaxLevel)
+				initCharacterIsMaxLevel(userdata_storage[(UserdataType)i].getV());
+		}
 		else
 		{
 			userdata_storage[(UserdataType)i] = result_data[getUserdataTypeToKey((UserdataType)i)].asInt();
@@ -3299,9 +3485,30 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		
 		if(i == kUserdataType_selectedCharNO)
 			initSelectedCharacterNo(userdata_storage[(UserdataType)i].getV());
+		else if(i == kUserdataType_characterLevel)
+			initCharacterLevel(userdata_storage[(UserdataType)i].getV());
 	}
 	
 	setIntroducerID(result_data.get("introducerID", 0).asInt64());
+}
+
+void StarGoldData::refreshUserdata(UserdataType t_type, int t_i)
+{
+	userdata_storage[t_type] = t_i;
+	if(t_type == kUserdataType_selectedCharNO)
+		initSelectedCharacterNo(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_characterLevel)
+		initCharacterLevel(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_nextPrice)
+		initCharacterNextPrice(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_power)
+		initCharacterPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_nextPower)
+		initCharacterNextPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_prevPower)
+		initCharacterPrevPower(userdata_storage[t_type].getV());
+	else if(t_type == kUserdataType_missileInfo_isMaxLevel)
+		initCharacterIsMaxLevel(userdata_storage[t_type].getV());
 }
 
 bool StarGoldData::isPossibleShowPurchasePopup(PurchaseGuideType t_type)
@@ -3561,7 +3768,7 @@ int StarGoldData::getAppVersion()
 
 void StarGoldData::myInit()
 {
-	is_hell_mode_enabled = false;
+	is_hell_mode_enabled = true;
 	
 	is_option_tutorial = false;
 	
@@ -3570,9 +3777,10 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 4; // 커몬세팅값과 비교해서 앱 종료시키는 버전.
 	
-	client_version = 5; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
+	client_version = 15; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
 	
 	is_ingame_gold = false;
+	is_ingame_sub_gold = false;
 	total_card_cnt = 0;
 	
 	loading_tip_back_number = 1;
@@ -3688,7 +3896,8 @@ void StarGoldData::myInit()
 		AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
 	}
 	
-	rewind_cnt_per_frame = 2;
+	rewind_cnt_per_frame = 2.0;
+	character_magnetic = 0.0;
 }
 
 long long StarGoldData::getIntroducerID()
@@ -3998,6 +4207,19 @@ void StarGoldData::setUserdataSelectedCharNO(int t_i)
 }
 int StarGoldData::getUserdataSelectedCharNO(){	return userdata_storage[kUserdataType_selectedCharNO].getV();	}
 
+void StarGoldData::setUserdataCharLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_characterLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_characterLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataCharLevel(){	return userdata_storage[kUserdataType_characterLevel].getV();	}
+
 void StarGoldData::setUserdataEndlessIngWin(int t_i)
 {
 	userdata_storage[kUserdataType_endlessData_ingWin] = t_i;
@@ -4124,6 +4346,66 @@ void StarGoldData::setUserdataAchieveItemBuyCount(int t_i)
 }
 int StarGoldData::getUserdataAchieveItemBuyCount(){	return userdata_storage[kUserdataType_achieve_itemBuyCount].getV();	}
 
+void StarGoldData::setUserdataMissileInfoNextPrice(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_nextPrice].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_nextPrice;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoNextPrice(){	return userdata_storage[kUserdataType_missileInfo_nextPrice].getV();	}
+void StarGoldData::setUserdataMissileInfoPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_power].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_power;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoPower(){	return userdata_storage[kUserdataType_missileInfo_power].getV();	}
+void StarGoldData::setUserdataMissileInfoNextPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_nextPower].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_nextPower;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoNextPower(){	return userdata_storage[kUserdataType_missileInfo_nextPower].getV();	}
+void StarGoldData::setUserdataMissileInfoPrevPower(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_prevPower].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_prevPower;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoPrevPower(){	return userdata_storage[kUserdataType_missileInfo_prevPower].getV();	}
+void StarGoldData::setUserdataMissileInfoIsMaxLevel(int t_i)
+{
+	if(userdata_storage[kUserdataType_missileInfo_isMaxLevel].getV() != t_i)
+	{
+		is_changed_userdata = true;
+		ChangeUserdataValue t_change;
+		t_change.m_type = kUserdataType_missileInfo_isMaxLevel;
+		t_change.m_value = t_i;
+		changed_userdata_list.push_back(t_change);
+	}
+}
+int StarGoldData::getUserdataMissileInfoIsMaxLevel(){	return userdata_storage[kUserdataType_missileInfo_isMaxLevel].getV();	}
 
 
 void StarGoldData::setDiaryDownUrl(string t_str){	diaryDownUrl = t_str.c_str();	}

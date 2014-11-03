@@ -13,37 +13,13 @@
 #include <chrono>
 #include "CumberEmotion.h"
 #include <boost/lexical_cast.hpp>
+#include "PassiveOp.h"
+#include "ServerDataSave.h"
 
 class KSJuniorBase;
-template <class _Tp>
-struct PassiveOp : public std::binary_function<_Tp, _Tp, _Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const = 0;//(const _Tp& a, const _Tp& b) const
-};
-
-template <class _Tp>
-struct DecreaseOp : public PassiveOp<_Tp>
-{
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a*(1 - b);
-	}
-};
 
 
 
-
-
-template <class _Tp>
-struct SubtractOp : public PassiveOp<_Tp>
-{
-	virtual ~SubtractOp(){
-	}
-	virtual _Tp operator()(const _Tp& a, const _Tp& b) const
-	{
-		return a - b;
-	}
-};
 
 
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
@@ -94,13 +70,11 @@ void KSCumberBase::randomMoving(float dt)
 	
 	if(isMovable())
 	{
-		int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
-		if(changeDirection == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.05)
 		{
 			m_directionAngleDegree += m_well512.GetValue(-4, +4);
 		}
-		int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
-		if(sela == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.005)
 		{
 			m_directionAngleDegree += m_well512.GetValue(90, 270);
 		}
@@ -249,8 +223,7 @@ void KSCumberBase::straightMoving(float dt)
 	// 낮은 확률로 방향 전환...	
 	if(isMovable())
 	{
-		int changeDirection = ProbSelector::sel(0.001, 1.0 - 0.001, 0.0);
-		if(changeDirection == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.001)
 		{
 			m_directionAngleDegree += m_well512.GetValue(0, 360);
 		}
@@ -644,7 +617,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 	if(isMovable())
 	{
 		int changeDirection = m_well512.GetValue(3);
-		if(ProbSelector::sel(0.05, 1.0 - 0.05, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.05)
 		{
 			switch (changeDirection) {
 				case 0:
@@ -833,7 +806,7 @@ void KSCumberBase::circleMoving(float dt)
 	
 	if(isMovable())
 	{
-		if(ProbSelector::sel(0.003, 1.0 - 0.003, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.003)
 		{
 			// m_snake 변수를 재지정 ...
 			
@@ -998,7 +971,7 @@ void KSCumberBase::snakeMoving(float dt)
 	
 	if(isMovable())
 	{
-		if(ProbSelector::sel(0.002, 1.0 - 0.002, 0.0) == 0)
+		if(ks19937::getDoubleValue(0.0, 1.0) <= 0.002)
 		{
 			// m_snake 변수를 재지정 ...
 			
@@ -1327,7 +1300,6 @@ n<m 인 부수기 공격은 m초 안에는 안함.
  * */
 void KSCumberBase::cumberAttack(float dt)
 {
-	
 	if(m_slience || (m_cumberState != kCumberStateMoving) || m_cumberTimer < 3.f) // 공격 못하는 조건이라면 패스.
 	{
 		return;
@@ -1352,6 +1324,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
   			m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
+			TRACE();
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 			if(w == 0 && attackCondition)
 			{
@@ -1367,6 +1340,7 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(bossIsClosed() && gainPercent <= 80.f)
 		{
+			TRACE();
 			ProbSelector teleportProb = {1,1};	//보스가 빠져나올 확률. AI 0 일떄 0, 100일때 1초안에 50%
 			if(teleportProb.getResult() == 0) // 50%확률로 순간이동 OR 부수기
 			{
@@ -1414,7 +1388,6 @@ void KSCumberBase::cumberAttack(float dt)
 	float exeProb;
 	if(crashAttack)
 	{
-		
 //		m_crashAttackTime = m_cumberTimer;
 		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 		{
@@ -1438,15 +1411,17 @@ void KSCumberBase::cumberAttack(float dt)
 			// 안넣어져야할 조건
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
-			if( (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-				 currentSecond <= m_lastPattern.exeTime + 3000 ||
-				 (*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer)
+			bool falseCondition = (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
+			currentSecond <= m_lastPattern.exeTime + 3000 ||
+			(*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer;
+			
+			// 미사일이면 무조건 후보에 오름
+			if((*iter)["pattern"].asString() == "108")
 			{
-				
+				selectedAttacks.push_back(*iter);
 			}
-			else // 넣어져야할 조건
+			else if( !falseCondition )
 			{
-//				if((*iter)["atype"].asString() == "crash" &&)
 				selectedAttacks.push_back(*iter);
 			}
 		}
@@ -1481,7 +1456,7 @@ void KSCumberBase::cumberAttack(float dt)
 			m_adderCnt = 0;
 		}
 		// 사냥꾼 미션 & 현재 쫄자가 0 마리 이하라면
-		if(mySD->getClearCondition() == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
+		if(clear_condition == kCLEAR_subCumberCatch && myGD->getSubCumberCount() <= 0)
 		{
 			attackProb = 0.4f; // 엄청난 공격확률
 		}
@@ -1490,10 +1465,18 @@ void KSCumberBase::cumberAttack(float dt)
 //		{
 //			attackProb += aiProbAdder();
 //		}
-		
-		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
-		
-		exeProb = ps.getResult();
+		double _01 = ks19937::getDoubleValue(0, 1.0);
+		if(_01 <= attackProb)
+		{
+			exeProb = 0;
+		}
+		else
+		{
+			exeProb = 1;
+		}
+//		auto ps = ProbSelector({attackProb, 1.0 - attackProb});
+//		
+//		exeProb = ps.getResult();
 	}
 	
 	{
@@ -1560,10 +1543,10 @@ void KSCumberBase::cumberAttack(float dt)
 		}
 		else if(!selectedAttacks.empty())
 		{
+			TRACE();
 			ProbSelector teleportProb = {1,2};
 			if(teleportProb.getResult() == 0 && distanceFury)
 			{
-				
 				std::string patternData = R"({
 				"atype" : "special",
 				"pattern" : "1007",
@@ -1590,6 +1573,7 @@ void KSCumberBase::cumberAttack(float dt)
 				
 				// 갇힌것 판단하고 갇혔다고 판단되면 ai수치에 따라 부수기 확률을 증가시킴.
 				
+				TRACE();
 				ProbSelector probSel;
 				
 				// 바깥쪽으로 얼마나 먹었는지를...
@@ -1987,6 +1971,9 @@ void KSCumberBase::onJackDrawLine()
 bool KSCumberBase::init()
 {
 	CCNode::init();
+	
+	clear_condition = NSDS_GI(mySD->getSilType(), kSDS_SI_missionType_i);
+	
 	//		mEmotion = NULL;
 	schedule(schedule_selector(ThisClassType::speedAdjustment));
 	
@@ -2218,6 +2205,17 @@ void KSCumberBase::followProcess(float dt)
 		//m_drawMovement = m_normalMovement;
 	}
 }
+void KSCumberBase::slowStone(float dt)
+{
+	if(m_slowDurationFrame >= -10)
+	{
+		m_slowDurationFrame--;
+	}
+	if(m_slowDurationFrame == 0)
+	{
+		setSpeedRatioForStone(nullptr, 1.f); // 원래대로...
+	}
+}
 void KSCumberBase::cumberFrame( float dt )
 {
 	m_frameCount++; // 쿰버의 프레임수를 젬.
@@ -2229,6 +2227,7 @@ void KSCumberBase::onStartGame()
 	schedule(schedule_selector(ThisClassType::cumberAttack));
 	schedule(schedule_selector(ThisClassType::observeStopBoss));
 	schedule(schedule_selector(ThisClassType::timeMeasure));
+	schedule(schedule_selector(ThisClassType::slowStone));
 }
 
 void KSCumberBase::startSwell(float scale, int totalFrame)
@@ -2574,8 +2573,10 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 			}
 			
 			if((*iter)["atype"].asString() == "special"){
-				if(playCount<3)(*iter)["percent"]=1;
-				else (*iter)["percent"]=0;
+				if((*iter)["pattern"].asString()!="1007" && (*iter)["pattern"].asString()!="1020"){
+					if(playCount<3)(*iter)["percent"]=1;
+					else (*iter)["percent"]=0;
+				}
 			}
 		}
 		
@@ -2709,6 +2710,64 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 //		CCLOG("#################### autobalance ############################");
 //	}
 }
+void KSCumberBase::applyDisableOfCharacter()
+{
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value disableInfo = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	
+	std::string tt = NSDS_GS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	CCLOG("TT = %s", tt.c_str());
+	// disableInfo 돌면서 m_attacks 돔.
+	
+	KS::KSLog("disableInfo = %", disableInfo);
+	KS::KSLog("before attacks");
+	for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+	{
+		KS::KSLog("%", m_attacks[attackIndex]);
+	}
+	for(int disableInfoIndex=0; disableInfoIndex<disableInfo.size(); disableInfoIndex++)
+	{
+		bool found = false;
+		Json::Value disable = disableInfo[disableInfoIndex];
+		for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+		{
+			if(m_attacks[attackIndex]["pattern"].asString() == disable["target"].asString())
+			{
+				std::string prop = disable["prop"].asString();
+				std::string oper = disable["oper"].asString();
+				float value = disable["value"].asFloat();
+				
+				shared_ptr<PassiveOp<float>> cardOperator;
+				if(oper == "=")
+				{
+					m_attacks[attackIndex][prop] = value;
+				}
+				else
+				{
+					if(oper == "-")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new SubtractOp<float>());
+					}
+					else if(oper == "+")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new AddOp<float>());
+					}
+					else if(oper == "*")
+					{
+						cardOperator = shared_ptr<PassiveOp<float>>(new MultOp<float>());
+					}
+					m_attacks[attackIndex][prop] = (*cardOperator)(m_attacks[attackIndex][prop].asFloat(), value);
+				}
+			}
+		}
+	}
+	KS::KSLog("after attacks");
+	for(int attackIndex=0; attackIndex<m_attacks.size(); attackIndex++)
+	{
+		KS::KSLog("%", m_attacks[attackIndex]);
+	}
+	CCLOG("=======================================================");
+}
 void KSCumberBase::settingAI( int ai )
 {
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
@@ -2757,7 +2816,7 @@ void KSCumberBase::settingPattern( Json::Value pattern )
 	
 	for(auto i : m_attacks)
 	{
-//		KS::KSLog("%", i);
+		KS::KSLog("%", i);
 	}
 }
 

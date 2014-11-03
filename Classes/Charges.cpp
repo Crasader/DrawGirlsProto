@@ -111,6 +111,10 @@ void ChargeParent::cancelCharge()
 
 }
 
+void ChargeBase::cancelCharge()
+{
+	
+}
 NoChargeNodeLambda* NoChargeNodeLambda::create( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt )
 {
 	NoChargeNodeLambda* n_charge = new NoChargeNodeLambda();
@@ -204,6 +208,7 @@ void ChargeNodeLambda::charging()
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
 		actionFunction(real_target);
 		
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		
@@ -253,6 +258,7 @@ void ChargeNodeLambda::removeSelf()
 
 void ChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
@@ -326,6 +332,7 @@ void SpecialChargeNodeLambda::charging()
 	{
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
 		actionFunction(real_target);
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
 		
@@ -374,6 +381,7 @@ void SpecialChargeNodeLambda::removeSelf()
 void SpecialChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
 	TRACE();
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;
@@ -456,6 +464,7 @@ void CrashChargeNodeLambda::charging()
 		AudioEngine::sharedInstance()->stopAllEffects();
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
 		actionFunction(real_target);
+		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		CCLOG("removeSelf call");
 		removeSelf();
 		KSCumberBase* cb = dynamic_cast<KSCumberBase*>(real_target);
@@ -509,6 +518,7 @@ void CrashChargeNodeLambda::removeSelf()
 
 void CrashChargeNodeLambda::myInit( CCPoint t_position, int t_frame, std::function<void(CCObject*)> func, CCObject* t_rt, Json::Value pattern )
 {
+	delayCount = 0;
 	m_pattern = pattern;
 	real_target = t_rt;
 	create_position = t_position;

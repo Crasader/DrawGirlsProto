@@ -28,6 +28,8 @@
 #include <boost/lexical_cast.hpp>
 #include "SendMessageUtil.h"
 #include "GDWebSprite.h"
+#include "StoryLayer.h"
+
 enum FriendPopupZorder{
 	kFriendPopupZorder_gray = 1,
 	kFriendPopupZorder_back,
@@ -245,6 +247,12 @@ bool FriendPopup::init()
 ////																														typing_box->setKeypadEnabled(true);
 //																													}));
 //	}
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode))
+	{
+		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode, true);
+		StoryLayer::startStory(this, "menu_friend");
+	}
 	
 	return true;
 }

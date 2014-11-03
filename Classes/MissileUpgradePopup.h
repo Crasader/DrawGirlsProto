@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "hspConnector.h"
+#include "EnumDefine.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -58,8 +59,10 @@ private:
 	int before_damage;
 	
 	void upgradeAction(CCObject* sender, CCControlEvent t_event);
+	void resultLevelUp(Json::Value result_data);
 	void resultSaveUserData(Json::Value result_data);
 	void setAfterUpgrade();
+	void attachUpgradePopup(CCPoint keepPosition, StoneType stoneType, int subType, int level);
 };
 
 #endif /* defined(__DGproto__MissileUpgradePopup__) */

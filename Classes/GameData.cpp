@@ -121,6 +121,13 @@ void GameData::communication(string funcName, CCPoint t_p, int t_i)
 	return;
 }
 
+void GameData::communication(string funcName, CCPoint t_p, int t_i1, int t_i2)
+{
+	CCAssert(V_CCPII.find(funcName) != V_CCPII.end(), funcName.c_str());
+	V_CCPII[funcName](t_p, t_i1, t_i2);
+	return;
+}
+
 void GameData::communication(string funcName, float t_f, bool t_b, CCPoint t_p)
 {
 	CCAssert(V_FBCCP.find(funcName) != V_FBCCP.end(), funcName.c_str());
@@ -202,6 +209,13 @@ void GameData::communication(string funcName, int t_int)
 {
 	CCAssert(V_I.find(funcName) != V_I.end(), funcName.c_str());
 	V_I[funcName](t_int);
+	return;
+}
+
+void GameData::communication(string funcName, int t_int1, int t_int2)
+{
+	CCAssert(V_II.find(funcName) != V_II.end(), funcName.c_str());
+	V_II[funcName](t_int1, t_int2);
 	return;
 }
 
@@ -394,7 +408,8 @@ void GameData::initUserSelectedStartRect( IntRect t_rect )
 	float scale_value = NSDS_GD(mySD->getSilType(), kSDS_SI_scale_d);
 	if(scale_value < 0.1f)
 		scale_value = 1.f;
-	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterIndex.getV());//*scale_value;
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_speed_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());//*scale_value;
 	
 	if(mySGD->isUsingItem(kIC_baseSpeedUp))
 	{
@@ -499,7 +514,8 @@ void GameData::myInit()
 	otherTargetPoints = new CCArray(1);
 	jackState = 0; // jackStateNormal
 	m_jackIsUnbeatable = false;
-	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_speed_d, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	jack_base_speed = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_speed_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 //	int speed_tag = kJackBaseSpeedTag_level1;//myDSH->getIntegerForKey(kDSH_Key_jackBaseSpeed);
 //	if(speed_tag == kJackBaseSpeedTag_level2)
 //		jack_base_speed = 1.5f;

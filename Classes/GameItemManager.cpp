@@ -22,7 +22,7 @@
 
 GameItemBase::GameItemBase()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }
@@ -284,6 +284,12 @@ void GameItemAddTime::acting()
 
 void GameItemAddTime::myInit(bool is_near)
 {
+	if(mySGD->add_time_value.getV() > mySGD->getAddTimeItemLimit())
+	{
+		addChild(KSTimer::create(0.1f, [=](){removeFromParent();}));
+		return;
+	}
+	
 	holding_time = rand()%10 + 20;
 	holding_time *= 60;
 	
@@ -458,15 +464,21 @@ void GameItemAttack::acting()
 	
 	AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_attack%d.mp3", rand()%4+1)->getCString(), false, true);
 	
-	int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
-	int weapon_level = mySGD->getSelectedCharacterHistory().level.getV()+3;
+	int weapon_level = mySGD->getUserdataCharLevel()+3;
 	if(weapon_level>30)weapon_level=30;
-	int weapon_rank = (weapon_level-1)/5 + 1;
-	weapon_level = (weapon_level-1)%5 + 1;
+//	int weapon_rank = (weapon_level-1)/5 + 1;
+//	weapon_level = (weapon_level-1)%5 + 1;
 	
-	int t_damage = mySGD->getSelectedCharacterHistory().power.getV()*1.3f*((rand()%21-10+100)/100.f);
+	int t_damage = mySGD->getUserdataMissileInfoPower()*1.3f;
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	int weapon_type = mInfo.get("type", 0).asInt();
 	
-	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage);
+	double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	if(power_rate < 1.0)
+		power_rate = 1.0;
+	
+	myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rand()%3 + 3, myPoint.convertToCCP(), t_damage, int((power_rate-1.0)*t_damage));
 	
 //	string missile_code;
 //	missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -1234,7 +1246,7 @@ void FeverCoinParent::removing()
 	remove_target->startRemove();
 	remove_target_list.pop_front();
 	
-	mySGD->addChangeGoodsIngameGold(int(10.f*weight_value));
+	mySGD->addChangeGoodsIngameGold(int(10.f*weight_value), 0);
 //	mySGD->setGold(mySGD->getGoodsValue(kGoodsType_gold) + int(10.f*weight_value), false);
 	
 	if(remove_target_list.empty())
@@ -1256,17 +1268,18 @@ void FeverCoinParent::myInit()
 	initWithFile("fever_coin_bronze.png", kDefaultSpriteBatchCapacity);
 	is_removing = false;
 //	weight_value = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)/(myDSH->getIntegerForKey(kDSH_Key_openPuzzleCnt)+1.f)*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, myDSH->getIntegerForKey(kDSH_Key_selectedCharacter)+1);
-	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV());
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	weight_value = 1.f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 }
 
 FloatingCoin::FloatingCoin()
 {
-	m_absorb_distance = ABSORB_DISTANCE;
+	m_absorb_distance = ABSORB_DISTANCE + mySGD->character_magnetic.getV();
 	if(mySGD->isUsingItem(kIC_magnet))
 		m_absorb_distance += MAGNET_DISTANCE;
 }
 
-FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
+FloatingCoin* FloatingCoin::create(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoin* t_fc = new FloatingCoin();
 	t_fc->myInit(t_take_func, t_gold, t_start_point, t_auto_take);
@@ -1314,7 +1327,7 @@ void FloatingCoin::hideAction()
 	unschedule(schedule_selector(FloatingCoin::ting));
 	unschedule(schedule_selector(FloatingCoin::asLonging));
 	
-	coin_img->runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 0), CCCallFunc::create(this, callfunc_selector(FloatingCoin::removeFromParent))));
+	/*coin_img->*/runAction(CCSequence::createWithTwoActions(CCScaleTo::create(0.3f, 0), CCCallFunc::create(this, callfunc_selector(FloatingCoin::removeFromParent))));
 }
 
 void FloatingCoin::startTraceCharacter()
@@ -1334,7 +1347,7 @@ void FloatingCoin::traceCharacter()
 	{
 		stopTraceCharacter();
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold);
+		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
 		
 		take_func(getPosition());
 		
@@ -1357,7 +1370,7 @@ void FloatingCoin::takeIt()
 	if(auto_take)
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold);
+		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
 		
 		take_func(getPosition());
 		
@@ -1506,29 +1519,36 @@ void FloatingCoin::asLonging()
 
 void FloatingCoin::startTing()
 {
+	ting_y = 0.f;
 	start_speed = 2.f+(rand()%20)/10.f;
+	keep_start_speed = start_speed;
 	schedule(schedule_selector(FloatingCoin::ting));
 }
 void FloatingCoin::ting()
 {
-	float after_y = coin_img->getPositionY() + start_speed;
+	float after_y = /*coin_img->getPositionY()*/ting_y + start_speed;
+	float before_y = getPositionY() - ting_y;
+//	coin_img->setPositionY(MAX(coin_img->getPositionY() + start_speed, 0.f));
+	setPositionY(getPositionY() + start_speed);
 	
-	coin_img->setPositionY(MAX(coin_img->getPositionY() + start_speed, 0.f));
-	
+	ting_y = ting_y + start_speed;
 	if(after_y < 0)
 	{
-		start_speed = -start_speed*0.7f;
+		start_speed = keep_start_speed*0.7f;
+		keep_start_speed = start_speed;
 		if(fabsf(start_speed) < 0.3f)
 		{
-			coin_img->setPositionY(0);
+//			coin_img->setPositionY(0);
+			setPositionY(before_y);
 			unschedule(schedule_selector(FloatingCoin::ting));
 			return;
 		}
+		return;
 	}
 	
 	start_speed -= 0.3f;
 }
-void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoint t_start_point, bool t_auto_take)
+void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	is_locked = false;
@@ -1539,24 +1559,29 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	moving_direction = rand()%360 - 180;
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
-	Json::Value goldBalance = mySGD->getGoldBalance();
-	
 	int random_value = rand()%100;
-    if(mySGD->getStageGold() >= goldBalance.get("maxGold",500).asInt())
+    if(mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
         random_value = 99;
   
 	
-	if(random_value < goldBalance["goldPercent"][0].asInt())
+	if(random_value < myGD->getCommunication("GIM_getGoldPercent0"))
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][0].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight0");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight0");
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
-		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_gold.png");
-		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
-		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
-		coin_img->setPosition(CCPointZero);
-		addChild(coin_img);
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_total.png");
+		initWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+		setScale((50-10)/100.f);
+		
+//		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_gold.png");
+//		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+//		coin_img->setPosition(CCPointZero);
+//		addChild(coin_img);
 		CCAnimation* t_animation = CCAnimation::create();
 		t_animation->setDelayPerUnit(0.1f);
 		int add_count = 0;
@@ -1567,99 +1592,103 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 		}
 		CCAnimate* t_animate = CCAnimate::create(t_animation);
 		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-		coin_img->runAction(t_repeat);
+		/*coin_img->*/runAction(t_repeat);
 		
-		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(8);
-		t_particle->setPositionType(kCCPositionTypeRelative);
-		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
-		t_particle->setEmissionRate(50);
-		t_particle->setAngle(90.0);
-		t_particle->setAngleVar(10.0);
-		ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
-		t_particle->setBlendFunc(blendFunc);
-		t_particle->setDuration(-1.f);
-		t_particle->setEmitterMode(kCCParticleModeGravity);
-		t_particle->setStartColor(ccc4f(1.f, 0.835f, 0.1875f, 0.5f));
-		t_particle->setStartColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		t_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
-		t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
-		t_particle->setStartSize(4.0);
-		t_particle->setStartSizeVar(2.0);
-		t_particle->setEndSize(0.0);
-		t_particle->setEndSizeVar(0.0);
-		t_particle->setGravity(ccp(0,0));
-		t_particle->setRadialAccel(0.0);
-		t_particle->setRadialAccelVar(0.0);
-		t_particle->setSpeed(0);
-		t_particle->setSpeedVar(0.0);
-		t_particle->setTangentialAccel(0);
-		t_particle->setTangentialAccelVar(0);
-		t_particle->setTotalParticles(8);
-		t_particle->setLife(1.0);
-		t_particle->setLifeVar(1.0);
-		t_particle->setStartSpin(0);
-		t_particle->setStartSpinVar(40);
-		t_particle->setEndSpin(0);
-		t_particle->setEndSpinVar(40);
-		t_particle->setPosVar(ccp(7,7));
-		t_particle->setPosition(ccp(0, 0));
-		addChild(t_particle);
-		
-//		coin_img = CCSprite::create("coin3.png");
-//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
-//		coin_img->setPosition(CCPointZero);
-//		addChild(coin_img);
+//		CCParticleSystemQuad* t_particle = CCParticleSystemQuad::createWithTotalParticles(8);
+//		t_particle->setPositionType(kCCPositionTypeRelative);
+//		t_particle->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+//		t_particle->setEmissionRate(50);
+//		t_particle->setAngle(90.0);
+//		t_particle->setAngleVar(10.0);
+//		ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+//		t_particle->setBlendFunc(blendFunc);
+//		t_particle->setDuration(-1.f);
+//		t_particle->setEmitterMode(kCCParticleModeGravity);
+//		t_particle->setStartColor(ccc4f(1.f, 0.835f, 0.1875f, 0.5f));
+//		t_particle->setStartColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+//		t_particle->setEndColor(ccc4f(0.f, 0.f, 0.f, 0.f));
+//		t_particle->setEndColorVar(ccc4f(0.f, 0.f, 0.f, 0.f));
+//		t_particle->setStartSize(4.0);
+//		t_particle->setStartSizeVar(2.0);
+//		t_particle->setEndSize(0.0);
+//		t_particle->setEndSizeVar(0.0);
+//		t_particle->setGravity(ccp(0,0));
+//		t_particle->setRadialAccel(0.0);
+//		t_particle->setRadialAccelVar(0.0);
+//		t_particle->setSpeed(0);
+//		t_particle->setSpeedVar(0.0);
+//		t_particle->setTangentialAccel(0);
+//		t_particle->setTangentialAccelVar(0);
+//		t_particle->setTotalParticles(8);
+//		t_particle->setLife(1.0);
+//		t_particle->setLifeVar(1.0);
+//		t_particle->setStartSpin(0);
+//		t_particle->setStartSpinVar(40);
+//		t_particle->setEndSpin(0);
+//		t_particle->setEndSpinVar(40);
+//		t_particle->setPosVar(ccp(7,7));
+//		t_particle->setPosition(ccp(0, 0));
+//		addChild(t_particle);
 	}
-	else if(random_value < goldBalance["goldPercent"][1].asInt()+goldBalance["goldPercent"][0].asInt())
+	else if(random_value < myGD->getCommunication("GIM_getGoldPercent0")+myGD->getCommunication("GIM_getGoldPercent1"))
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][1].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight1");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight1");
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
-		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_silver.png");
-		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
-		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
-		coin_img->setPosition(CCPointZero);
-		addChild(coin_img);
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_total.png");
+		initWithTexture(t_texture, CCRectMake(start_cut*30, 30, 30, 30));
+		setScale((50-10)/100.f);
+		
+//		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_silver.png");
+//		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+//		coin_img->setPosition(CCPointZero);
+//		addChild(coin_img);
 		CCAnimation* t_animation = CCAnimation::create();
 		t_animation->setDelayPerUnit(0.1f);
 		int add_count = 0;
 		for(int i=start_cut;add_count < 6;i=(i+1)%6)
 		{
 			add_count++;
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 30, 30, 30));
 		}
 		CCAnimate* t_animate = CCAnimate::create(t_animation);
 		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-		coin_img->runAction(t_repeat);
-		
-//		coin_img = CCSprite::create("coin2.png");
-//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
-//		coin_img->setPosition(CCPointZero);
-//		addChild(coin_img);
+		/*coin_img->*/runAction(t_repeat);
 	}
 	else
 	{
-		m_gold = t_gold*goldBalance["goldWeight"][2].asInt();
+		m_gold = t_gold*myGD->getCommunication("GIM_getGoldWeight2");
+		sub_gold = m_gold - 1.0*myGD->getCommunication("GIM_getGoldWeight2");
+		if(sub_gold < 0)
+			sub_gold = 0;
 		
 		int start_cut = rand()%6;
 		
-		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_bronze.png");
-		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
-		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
-		coin_img->setPosition(CCPointZero);
-		addChild(coin_img);
+		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_total.png");
+		initWithTexture(t_texture, CCRectMake(start_cut*30, 60, 30, 30));
+		setScale((50-10)/100.f);
+		
+//		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_bronze.png");
+//		coin_img = CCSprite::createWithTexture(t_texture, CCRectMake(start_cut*30, 0, 30, 30));
+//		coin_img->setScale((50-10)/100.f);//(50 - rand()%20)/100.f);
+//		coin_img->setPosition(CCPointZero);
+//		addChild(coin_img);
 		CCAnimation* t_animation = CCAnimation::create();
 		t_animation->setDelayPerUnit(0.1f);
 		int add_count = 0;
 		for(int i=start_cut;add_count < 6;i=(i+1)%6)
 		{
 			add_count++;
-			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 60, 30, 30));
 		}
 		CCAnimate* t_animate = CCAnimate::create(t_animation);
 		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
-		coin_img->runAction(t_repeat);
+		/*coin_img->*/runAction(t_repeat);
 	}
 	
 	startTing();
@@ -1669,7 +1698,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, int t_gold, CCPoi
 	startFloating();
 }
 
-FloatingCoinCreator* FloatingCoinCreator::create(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
+FloatingCoinCreator* FloatingCoinCreator::create(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	FloatingCoinCreator* t_fcc = new FloatingCoinCreator();
 	t_fcc->myInit(t_add_parent, t_take_func, t_frame, t_count, t_gold, t_start_point, t_auto_take);
@@ -1708,7 +1737,7 @@ void FloatingCoinCreator::creating()
 		}
 	}
 }
-void FloatingCoinCreator::myInit(CCNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, int t_gold, CCPoint t_start_point, bool t_auto_take)
+void FloatingCoinCreator::myInit(CCSpriteBatchNode* t_add_parent, function<void(CCPoint)> t_take_func, int t_frame, int t_count, double t_gold, CCPoint t_start_point, bool t_auto_take)
 {
 	take_func = t_take_func;
 	add_parent = t_add_parent;
@@ -1738,12 +1767,18 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 	else
 		t_coin_count = roundf(t_percent/t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10));
 	if(t_coin_count > 0)
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), myGD->getJackPoint().convertToCCP()));
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), myGD->getJackPoint().convertToCCP()));
+	}
 }
 void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
 {
 	if(t_coin_count > 0)
-		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), t_target_point));
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 5, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), t_target_point));
+	}
 }
 void FloatingCoinParent::hideAllFloatingCoin()
 {
@@ -1775,11 +1810,12 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 		clear_reward *= (mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10);
 	}
 	
-	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())));
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())));
 	if(t_coin_count <= 0)
 		t_coin_count = 1;
 	
-	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, int(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_gold_d, mySGD->getSelectedCharacterHistory().characterIndex.getV())), ccp(0,0), true));
+	creator_node->addChild(FloatingCoinCreator::create(coin_node, take_func, 3, t_coin_count, NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()), ccp(0,0), true));
 }
 
 void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
@@ -1790,7 +1826,7 @@ void FloatingCoinParent::myInit(function<void(CCPoint)> t_take_func)
 	creator_node->setPosition(CCPointZero);
 	addChild(creator_node);
 	
-	coin_node = CCNode::create();
+	coin_node = CCSpriteBatchNode::create("fever_coin_total.png");
 	coin_node->setPosition(CCPointZero);
 	addChild(coin_node);
 }
@@ -1812,6 +1848,9 @@ bool GameItemManager::getIsFevering()
 
 void GameItemManager::startItemSetting()
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	for(int i=0;i<2;i++)
 	{
 		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
@@ -1868,6 +1907,9 @@ void GameItemManager::startItemSetting()
 
 void GameItemManager::startCounting()
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	create_counting_value = rand()%5 +  10-selected_item_cnt-double_item_cnt;
 	counting_value = 0;
 	schedule(schedule_selector(GameItemManager::counting), 1.f);
@@ -2083,37 +2125,127 @@ void GameItemManager::removeBeautyStone()
 //	}
 }
 
+TakeEffectManager* TakeEffectManager::create()
+{
+	TakeEffectManager* t_tem = new TakeEffectManager();
+	t_tem->init();
+	t_tem->autorelease();
+	return t_tem;
+}
+
+void TakeEffectManager::removeMyAction()
+{
+	t_4_1->removeFromParent();
+	t_4_2->removeFromParent();
+	t_1_1->removeFromParent();
+	t_2->removeFromParent();
+	t_5->removeFromParent();
+	t_1_2->removeFromParent();
+	t_3->removeFromParent();
+	t_7->removeFromParent();
+	removeFromParent();
+}
+
+void TakeEffectManager::startAnimation()
+{
+	float t_scale = 1.f/myGD->game_scale;
+	
+	t_4_1->setScale(0.f);
+	t_4_1->setOpacity(150);
+	t_4_2->setScale(0.f);
+	t_4_2->setOpacity(0);
+	t_1_1->setScale(0.f);
+	t_2->setScale(1.2f*t_scale);
+	t_5->setScale(1.2f*t_scale);
+	t_5->setOpacity(0);
+	t_1_2->setScale(0.f);
+	t_3->setScale(0.f);
+	t_3->setOpacity(200);
+	t_7->setScale(t_scale);
+	t_7->setOpacity(0);
+	
+	t_4_1->runAction(CCSequence::create(CCDelayTime::create(13.f/30.f), CCScaleTo::create(9.f/30.f, 1.3f*t_scale), NULL));
+	t_4_1->runAction(CCSequence::create(CCDelayTime::create(13.f/30.f), CCFadeTo::create(9.f/30.f, 0), NULL));
+	
+	t_4_2->runAction(CCSequence::create(CCDelayTime::create(12.f/30.f), CCScaleTo::create(1.f/30.f, 1.2f*t_scale), CCScaleTo::create(7.f/30.f, 1.8f*t_scale), NULL));
+	t_4_2->runAction(CCSequence::create(CCDelayTime::create(12.f/30.f), CCFadeTo::create(1.f/30.f, 255), CCFadeTo::create(7.f/30.f, 0), NULL));
+	
+	t_1_1->runAction(CCSequence::create(CCDelayTime::create(1.f/30.f), CCScaleTo::create(11.f/30.f, 1.f*t_scale), NULL));
+	t_1_1->runAction(CCSequence::create(CCDelayTime::create(10.f/30.f), CCFadeTo::create(2.f/30.f, 0), NULL));
+	
+	t_2->runAction(CCScaleTo::create(8.f/30.f, 0.f));
+	t_2->runAction(CCSequence::create(CCDelayTime::create(1.f/30.f), CCFadeTo::create(6.f/30.f, 0), NULL));
+	
+	t_5->runAction(CCSequence::create(CCDelayTime::create(4.f/30.f), CCScaleTo::create(6.f/30.f, 0.f), NULL));
+	t_5->runAction(CCSequence::create(CCDelayTime::create(3.f/30.f), CCFadeTo::create(1.f/30.f, 255), CCFadeTo::create(6.f/30.f, 0), NULL));
+	
+	t_1_2->runAction(CCSequence::create(CCDelayTime::create(10.f/30.f), CCScaleTo::create(1.f/30.f, 0.909f*t_scale), CCScaleTo::create(5.f/30.f, 2.5f*t_scale), NULL));
+	t_1_2->runAction(CCSequence::create(CCDelayTime::create(12.f/30.f), CCFadeTo::create(6.f/30.f, 0), NULL));
+	
+	t_3->runAction(CCSequence::create(CCDelayTime::create(12.f/30.f), CCScaleTo::create(1.f/30.f, 1.2f*t_scale), CCScaleTo::create(6.f/30.f, 1.8f*t_scale), NULL));
+	t_3->runAction(CCSequence::create(CCDelayTime::create(13.f/30.f), CCFadeTo::create(3.f/30.f, 0), NULL));
+	
+	t_7->runAction(CCSequence::create(CCDelayTime::create(13.f/30.f), CCScaleTo::create(4.f/30.f, 1.5f*t_scale), NULL));
+	t_7->runAction(CCSequence::create(CCDelayTime::create(12.f/30.f), CCFadeTo::create(1.f/30.f, 255), CCFadeTo::create(5.f/30.f, 0), NULL));
+	
+	runAction(CCSequence::create(CCDelayTime::create(22.f/30.f), CCCallFunc::create(this, callfunc_selector(TakeEffectManager::removeMyAction)), NULL));
+}
+
 void GameItemManager::showTakeItemEffect(CCPoint t_p)
 {
-//	CCSprite* t_effect = CCSprite::createWithTexture(take_item_effects->getTexture(), CCRectMake(0, 0, 109, 109));
-//	t_effect->setPosition(t_p);
-//	take_item_effects->addChild(t_effect);
+	CCTexture2D* t_texture = take_effect_node->getTexture();
+	
+	CCSprite* t_4_1 = CCSprite::createWithTexture(t_texture, CCRectMake(0, 91, 91, 91));
+	CCSprite* t_4_2 = CCSprite::createWithTexture(t_texture, CCRectMake(0, 91, 91, 91));
+	CCSprite* t_1_1 = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 91, 91));
+	CCSprite* t_2 = CCSprite::createWithTexture(t_texture, CCRectMake(91, 0, 91, 91));
+	CCSprite* t_5 = CCSprite::createWithTexture(t_texture, CCRectMake(91, 91, 91, 91));
+	CCSprite* t_1_2 = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 91, 91));
+	CCSprite* t_3 = CCSprite::createWithTexture(t_texture, CCRectMake(0, 182, 91, 91));
+	CCSprite* t_7 = CCSprite::createWithTexture(t_texture, CCRectMake(91, 182, 91, 91));
+	
+	t_4_1->setPosition(t_p);
+	t_4_2->setPosition(t_p);
+	t_1_1->setPosition(t_p);
+	t_2->setPosition(t_p);
+	t_5->setPosition(t_p);
+	t_1_2->setPosition(t_p);
+	t_3->setPosition(t_p);
+	t_7->setPosition(t_p);
+	
+	take_effect_node->addChild(t_7);
+	take_effect_node->addChild(t_3);
+	take_effect_node->addChild(t_1_2);
+	take_effect_node->addChild(t_5);
+	take_effect_node->addChild(t_2);
+	take_effect_node->addChild(t_1_1);
+	take_effect_node->addChild(t_4_2);
+	take_effect_node->addChild(t_4_1);
+	
+	
+	TakeEffectManager* t_manager = TakeEffectManager::create();
+	t_manager->t_4_1 = t_4_1;
+	t_manager->t_4_2 = t_4_2;
+	t_manager->t_1_1 = t_1_1;
+	t_manager->t_2 = t_2;
+	t_manager->t_5 = t_5;
+	t_manager->t_1_2 = t_1_2;
+	t_manager->t_3 = t_3;
+	t_manager->t_7 = t_7;
+	addChild(t_manager);
+	
+	t_manager->startAnimation();
+	
+//	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
 //	
-//	CCAnimation* t_animation = CCAnimation::create();
-//	t_animation->setDelayPerUnit(0.07f);
-//	for(int i=0;i<2;i++)
-//		for(int j=0;j<5;j++)
-//			t_animation->addSpriteFrameWithTexture(take_item_effects->getTexture(), CCRectMake(j*109, i*109, 109, 109));
-//	CCAnimate* t_animate = CCAnimate::create(t_animation);
-//	CCFadeTo* t_fade = CCFadeTo::create(0.1f, 0);
-//	CCCallFunc* t_call = CCCallFunc::create(t_effect, callfunc_selector(CCSprite::removeFromParent));
-//	CCSequence* t_seq = CCSequence::create(t_animate, t_fade, t_call, NULL);
-//	t_effect->runAction(t_seq);
-	
-	auto t_ccb = KS::loadCCBI<CCSprite*>(this, "fx_item2.ccbi");
-	
-//	CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
-//	CCBReader* reader = new CCBReader(nodeLoader);
-	CCSprite* take_effect = t_ccb.first;//dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("fx_item2.ccbi",this));
-	take_effect->setPosition(t_p);
-	take_effect->setScale(1.f/myGD->game_scale);
-	addChild(take_effect);
-	t_ccb.second->setDelegate(this);
-//	reader->getAnimationManager()->setDelegate(this);
-	effect_animation_manager.push_back(t_ccb.second);
-//	reader->release();
-	
-	effect_que.push_back(take_effect);
+//	CCSprite* take_effect = t_ccb.first;
+//	take_effect->setPosition(t_p);
+//	take_effect->setScale(1.f/myGD->game_scale);
+//	addChild(take_effect);
+//	t_ccb.second->setDelegate(this);
+//	effect_animation_manager.push_back(t_ccb.second);
+//	
+//	effect_que.push_back(take_effect);
 }
 
 void GameItemManager::completedAnimationSequenceNamed (char const * name)
@@ -2130,8 +2262,42 @@ void GameItemManager::completedAnimationSequenceNamed (char const * name)
 	}
 }
 
+void GameItemManager::gameover()
+{
+	is_on_game = false;
+	unschedule(schedule_selector(GameItemManager::counting));
+}
+
+int GameItemManager::getMaxGold()
+{
+	return max_gold.getV();
+}
+int GameItemManager::getGoldPercent0()
+{
+	return gold_percent0.getV();
+}
+int GameItemManager::getGoldPercent1()
+{
+	return gold_percent1.getV();
+}
+int GameItemManager::getGoldWeight0()
+{
+	return gold_weight0.getV();
+}
+int GameItemManager::getGoldWeight1()
+{
+	return gold_weight1.getV();
+}
+int GameItemManager::getGoldWeight2()
+{
+	return gold_weight2.getV();
+}
+
 void GameItemManager::myInit()
 {
+	mySGD->add_time_value = 0;
+	is_on_game = true;
+	
 	clr_cdt_type = mySD->getClearCondition();
 	
 	coin_parent = CCNode::create();
@@ -2186,6 +2352,26 @@ void GameItemManager::myInit()
 	myGD->V_V["GIM_hideAllFloatingCoin"] = std::bind(&FloatingCoinParent::hideAllFloatingCoin, floating_coin_parent);
 	myGD->V_F["GIM_startClearFloatingCoin"] = std::bind(&FloatingCoinParent::startClearFloatCoin, floating_coin_parent, std::placeholders::_1);
 	myGD->V_V["GIM_stopCounting"] = std::bind(&GameItemManager::stopCounting, this);
+	
+	Json::Value goldBalance = mySGD->getGoldBalance();
+	
+	max_gold = goldBalance.get("maxGold",500).asInt();
+	gold_percent0 = goldBalance["goldPercent"][0].asInt();
+	gold_percent1 = goldBalance["goldPercent"][1].asInt();
+	gold_weight0 = goldBalance["goldWeight"][0].asInt();
+	gold_weight1 = goldBalance["goldWeight"][1].asInt();
+	gold_weight2 = goldBalance["goldWeight"][2].asInt();
+	
+	myGD->I_V["GIM_getMaxGold"] = std::bind(&GameItemManager::getMaxGold, this);
+	myGD->I_V["GIM_getGoldPercent0"] = std::bind(&GameItemManager::getGoldPercent0, this);
+	myGD->I_V["GIM_getGoldPercent1"] = std::bind(&GameItemManager::getGoldPercent1, this);
+	myGD->I_V["GIM_getGoldWeight0"] = std::bind(&GameItemManager::getGoldWeight0, this);
+	myGD->I_V["GIM_getGoldWeight1"] = std::bind(&GameItemManager::getGoldWeight1, this);
+	myGD->I_V["GIM_getGoldWeight2"] = std::bind(&GameItemManager::getGoldWeight2, this);
+	
+	take_effect_node = CCSpriteBatchNode::create("fx_item2_total.png");
+	take_effect_node->setPosition(CCPointZero);
+	addChild(take_effect_node, 99999);
 }
 
 //class GameItemPlasma : public GameItemBase

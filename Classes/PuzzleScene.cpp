@@ -82,6 +82,8 @@ bool PuzzleScene::init()
         return false;
     }
 	
+	mySGD->ui_scene_code = kUISceneCode_puzzle;
+	
 //	setBackKeyFunc([=](){
 //		startBacking();
 //	});
@@ -483,7 +485,7 @@ bool PuzzleScene::init()
 	{
 		int take_level, before_take_level;
 		take_level = mySGD->getStageGrade();
-		before_take_level = mySGD->getBeforeRankUpStageGrade();
+		before_take_level = mySGD->getStageGrade();//mySGD->getBeforeRankUpStageGrade();
 		
 //		if(mySGD->is_exchanged && mySGD->is_showtime)		take_level = 4;
 //		else if(mySGD->is_showtime)							take_level = 3;
@@ -500,7 +502,6 @@ bool PuzzleScene::init()
 		bool is_not_empty_card[4] = {false,};
 		
 		clear_star_take_level = before_take_level;
-		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
 		clear_is_empty_piece = true;
 		int played_stage_number = mySD->getSilType();
@@ -513,6 +514,8 @@ bool PuzzleScene::init()
 				is_not_empty_card[i-1] = true;
 			}
 		}
+		
+		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
 		if(!mySGD->getPieceHistory(played_stage_number).is_clear[before_take_level-1].getV())
 		{
@@ -1266,7 +1269,7 @@ void PuzzleScene::showClearPopup()
 	t_popup->setHideFinalAction(this, callfunc_selector(PuzzleScene::hideClearPopup));
 	t_popup->replay_func = [=](){openSettingPopup();};
 	t_popup->goToMainFlow_func = [=](){is_menu_enable = false; startBacking();};
-	t_popup->is_take_star_effect = true;
+	t_popup->is_take_star_effect = clear_is_empty_star;
 	t_popup->is_not_replay = clear_is_stage_unlock | clear_is_first_puzzle_success | clear_is_first_perfect | clear_is_perfect_piece;
 	t_popup->refresh_achieve_func = bind(&PuzzleScene::countingAchievement, this);
 	if(clear_is_stage_unlock)

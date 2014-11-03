@@ -64,10 +64,13 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+	mySGD->ui_scene_code = kUISceneCode_empty;
+	
 	TRACE();
 	is_preloaded_effect = false;
 	
 	card_data_version = -1;
+	hell_data_version = -1;
 	
 	is_downloading = false;
 	
@@ -391,10 +394,36 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			{
 				CCLOG("resetalldata");
 //				setBackKeyEnabled(false);
+				
+				bool is_check_terms = myDSH->getBoolForKey(kDSH_Key_isCheckTerms);
+				bool is_bgm_off = myDSH->getBoolForKey(kDSH_Key_bgmOff);
+				bool is_effect_off = myDSH->getBoolForKey(kDSH_Key_effectOff);
+				int control_joystick_direction = myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection);
+				bool is_joystick_center_not_fixed = myDSH->getBoolForKey(kDSH_Key_isJoystickCenterNotFixed);
+				int joystick_size = myDSH->getIntegerForKey(kDSH_Key_joystickSize);
+				bool is_off_joystick_vib = myDSH->getBoolForKey(kDSH_Key_isOffJoystickVib);
+				bool is_enable_irregular_direction = myDSH->getBoolForKey(kDSH_Key_isEnableIrregularDirection);
+				bool is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
+				bool is_push_off = myDSH->getBoolForKey(kDSH_Key_isPushOff);
+				bool is_message_off = myDSH->getBoolForKey(kDSH_Key_isMessageOff);
+				
 				SaveData::sharedObject()->resetAllData();
 				myDSH->removeCache();
 				mySDS->removeCache();
 				myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
+				
+				myDSH->setBoolForKey(kDSH_Key_bgmOff, is_bgm_off, false);
+				myDSH->setBoolForKey(kDSH_Key_effectOff, is_effect_off, false);
+				myDSH->setIntegerForKey(kDSH_Key_controlJoystickDirection, control_joystick_direction, false);
+				myDSH->setBoolForKey(kDSH_Key_isJoystickCenterNotFixed, is_joystick_center_not_fixed, false);
+				myDSH->setIntegerForKey(kDSH_Key_joystickSize, joystick_size, false);
+				myDSH->setBoolForKey(kDSH_Key_isOffJoystickVib, is_off_joystick_vib, false);
+				myDSH->setBoolForKey(kDSH_Key_isEnableIrregularDirection, is_enable_irregular_direction, false);
+				myDSH->setBoolForKey(kDSH_Key_isSafetyMode, is_safety_mode, false);
+				myDSH->setBoolForKey(kDSH_Key_isPushOff, is_push_off, false);
+				myDSH->setBoolForKey(kDSH_Key_isMessageOff, is_message_off, false);
+				myDSH->setBoolForKey(kDSH_Key_isCheckTerms, is_check_terms);
+				
                 GraphDog::get()->removeTarget(this);
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 				return;
@@ -948,7 +977,7 @@ void TitleRenewalScene::checkReceive()
 		if(command_list.empty())
 		{
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
-			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getSelectedCharacterHistory().level.getV());
+			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
             
             int highPieceGroup = mySGD->getUserdataHighPiece();
             if(highPieceGroup!=0)highPieceGroup-1;
@@ -1275,6 +1304,16 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setIosMenuVisible(result_data["iosMenuVisible"].asInt());
 		mySGD->setIosHideVer(result_data["iosHideVer"].asString());
 		mySGD->setGoldBalance(result_data["goldBalance"].asString());
+		
+		mySGD->setNmlGc(result_data["nmlGc"].asInt());
+		mySGD->setPrmGc(result_data["prmGc"].asInt());
+		mySGD->setGachaRefreshTime(result_data["gachaRefreshTime"].asInt());
+		
+		mySGD->setPvpWinExp(result_data["pvpWinExp"].asInt());
+		mySGD->setPvpLoseExp(result_data["pvpLoseExp"].asInt());
+		mySGD->setGachaCharExp(result_data["gachaCharExp"].asInt());
+		mySGD->setGachaRefreshGem(result_data["gachaRefreshGem"].asInt());
+		mySGD->setAddTimeItemLimit(result_data["addTimeItemLimit"].asInt());
 	}
 	else
 	{
@@ -1290,7 +1329,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-		NSDS_SI(kSDS_GI_hellMode_version_i, result_data["version"].asInt(), false);
+		hell_data_version = result_data["version"].asInt();
 		
 		Json::Value list_data = result_data["list"];
 		int list_count = list_data.size();
@@ -1302,6 +1341,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 			NSDS_SI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1, t_data["openPieceNo"].asInt(), false);
 			NSDS_SS(kSDS_GI_hellMode_int1_title_s, i+1, t_data["title"].asString(), false);
 			NSDS_SS(kSDS_GI_hellMode_int1_content_s, i+1, t_data["content"].asString(), false);
+			NSDS_SI(kSDS_GI_hellMode_int1_characterNo_i, i+1, t_data["characterNo"].asInt(), false);
 			
 			string img_url = t_data["cellImgInfo"].asString();
 			if(NSDS_GS(kSDS_GI_hellMode_int1_cellImgInfo_s, i+1) != img_url)
@@ -2061,13 +2101,34 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			NSDS_SS(kSDS_GI_characterInfo_int1_name_s, i, character_list[i-1]["name"].asString(), false);
 			NSDS_SS(kSDS_GI_characterInfo_int1_purchaseInfo_type_s, i, character_list[i-1]["purchaseInfo"]["type"].asString(), false);
 			NSDS_SI(kSDS_GI_characterInfo_int1_purchaseInfo_value_i, i, character_list[i-1]["purchaseInfo"]["value"].asInt(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_gold_d, i, character_list[i-1]["statInfo"]["gold"].asDouble(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_percent_d, i, character_list[i-1]["statInfo"]["percent"].asDouble(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_feverTime_i, i, character_list[i-1]["statInfo"]["feverTime"].asInt(), false);
-			NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_speed_d, i, character_list[i-1]["statInfo"]["speed"].asDouble(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_life_i, i, character_list[i-1]["statInfo"]["life"].asInt(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_lineColor_i, i, character_list[i-1]["statInfo"]["color"].asInt(), false);
-			NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i, character_list[i-1]["statInfo"]["slot"].asInt(), false);
+			NSDS_SS(kSDS_GI_characterInfo_int1_scriptInfo_s, i, character_list[i-1]["scriptInfo"].asString(), false);
+			Json::Value stat_info = character_list[i-1]["statInfo"];
+			Json::Value pattern_info, mission_info, missile_info, comment_info;
+			Json::Reader t_reader;
+			t_reader.parse(character_list[i-1]["patternInfo"].asString(), pattern_info);
+			t_reader.parse(character_list[i-1]["missionInfo"].asString(), mission_info);
+			t_reader.parse(character_list[i-1]["missileInfo"].asString(), missile_info);
+			t_reader.parse(character_list[i-1]["comment"].asString(), comment_info);
+			int max_level = stat_info.size();
+			NSDS_SI(kSDS_GI_characterInfo_int1_maxLevel_i, i, max_level, false);
+			for(int j=0;j<max_level;j++)
+			{
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, i, j+1, stat_info[j]["gold"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_percent_d, i, j+1, stat_info[j]["percent"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_speed_d, i, j+1, stat_info[j]["speed"].asDouble(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_int2_life_i, i, j+1, stat_info[j]["life"].asInt(), false);
+				NSDS_SI(kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i, i, j+1, stat_info[j]["color"].asInt(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, i, j+1, stat_info[j]["rewindSpd"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, i, j+1, stat_info[j]["monsterWave"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d, i, j+1, stat_info[j]["missileWave"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d, i, j+1, stat_info[j]["magnetic"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, i, j+1, stat_info[j]["power"].asDouble(), false);
+				NSDS_SD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, i, j+1, stat_info[j]["score"].asDouble(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_patternInfo_int2_s, i, j+1, pattern_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missionInfo_int2_s, i, j+1, mission_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, i, j+1, missile_info[j].asString(), false);
+				NSDS_SS(kSDS_GI_characterInfo_int1_comment_int2_s, i, j+1, comment_info[j].asString(), false);
+			}
 			NSDS_SS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i, character_list[i-1]["resourceInfo"]["ccbiID"].asString(), false);
 			
 			if(NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s, i) != character_list[i-1]["resourceInfo"]["ccbi"].asString())
@@ -2119,7 +2180,6 @@ void TitleRenewalScene::resultGetCharacterInfo(Json::Value result_data)
 			}
 			
 			NSDS_SI(kSDS_GI_characterInfo_int1_resourceInfo_size_i, i, character_list[i-1]["resourceInfo"]["size"].asInt(), false);
-			NSDS_SS(kSDS_GI_characterInfo_int1_comment_s, i, character_list[i-1]["comment"].asString(), false);
 		}
 		
 		if(character_download_list.size() > 0)
@@ -4304,7 +4364,10 @@ void TitleRenewalScene::successDownloadAction()
 void TitleRenewalScene::endingCheck()
 {
 	if(card_data_version != -1)
-		NSDS_SI(kSDS_GI_card_version_i, card_data_version);
+		NSDS_SI(kSDS_GI_card_version_i, card_data_version, false);
+	
+	if(hell_data_version != -1)
+		NSDS_SI(kSDS_GI_hellMode_version_i, hell_data_version, false);
 	
 	if(puzzle_download_list.size() > 0)
 		NSDS_SI(kSDS_GI_puzzleListVersion_i, puzzlelist_download_version, false);

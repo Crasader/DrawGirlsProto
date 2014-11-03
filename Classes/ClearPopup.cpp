@@ -234,11 +234,8 @@ bool ClearPopup::init()
 	}
 	
 	int take_level;
-	take_level = mySGD->getBeforeRankUpStageGrade();
-//	if(mySGD->is_showtime && mySGD->is_exchanged)	take_level = 4;
-//	else if(mySGD->is_showtime)					take_level = 3;
-//	else if(mySGD->is_exchanged)				take_level = 2;
-//	else										take_level = 1;
+//	take_level = mySGD->getBeforeRankUpStageGrade();
+	take_level = mySGD->getStageGrade();
 	
 	fiverocks::FiveRocksBridge::trackEvent("Game", "StageResult", ccsf("Grade %d", take_level), ccsf("Stage %03d", stage_number));
 	if(mySGD->ingame_continue_cnt > 0)
@@ -2595,7 +2592,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 				total_star->setPosition(ccp(-2,0));
 				t_star_node->addChild(total_star);
 				
-				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* star_count = KSLabelTTF::create(CCString::createWithFormat("%d", mySGD->getClearStarCount()-/*mySGD->getBeforeRankUpStageGrade()*/mySGD->getStageGrade())->getCString(), mySGD->getFont().c_str(), 12);
 				star_count->enableOuterStroke(ccBLACK, 0.8f);
 				star_count->setPosition(ccp(-2,0));
 				t_star_node->addChild(star_count);
@@ -2675,7 +2672,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 											}, [=](float t){
 												t_star_ani->setScale(1.3f);
 												t_star_ani->setOpacity(0);
-												star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade()+i+1)->getCString());
+												star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-/*mySGD->getBeforeRankUpStageGrade()*/mySGD->getStageGrade()+i+1)->getCString());
 											}));
 										}
 									}));
@@ -2726,7 +2723,7 @@ void ClearPopup::menuAction(CCObject* pSender)
 												}, [=](float t){
 													t_star_ani->setScale(1.3f);
 													t_star_ani->setOpacity(0);
-													star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-mySGD->getBeforeRankUpStageGrade()+i+1)->getCString());
+													star_count->setString(CCString::createWithFormat("%d", mySGD->getClearStarCount()-/*mySGD->getBeforeRankUpStageGrade()*/mySGD->getStageGrade()+i+1)->getCString());
 												}));
 											}
 										}));

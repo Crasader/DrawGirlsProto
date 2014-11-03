@@ -387,17 +387,20 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	pthread_t p_thread;
 	int thr_id;
 	
+	
 	// 쓰레드 생성 아규먼트로 1 을 넘긴다.
 	//TRACE();
+	CCLOG("before thread");
 	thr_id = pthread_create(&p_thread, NULL, t_function, (void*)insertIndex);
+	CCLOG("make thread! %d", thr_id);
 	//TRACE();
-    if (thr_id < 0)
+	if (thr_id < 0)
 	{
 		//쓰레드생성오류시
 		//@ JsonBox::Object resultobj;
-        CCLOG("thread create error!!!!");
+		CCLOG("thread create error!!!!");
 		//TRACE();
-        Json::Value resultobj;
+		Json::Value resultobj;
 		//@		resultobj["state"]= JsonBox::Value("error");
 		//@		resultobj["errorMsg"]=JsonBox::Value("don't create thread");
 		//@		resultobj["errorCode"]=JsonBox::Value(1001);
@@ -407,8 +410,8 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 		resultobj["state"]= "error";
 		resultobj["errorMsg"]="don't create thread";
 		resultobj["errorCode"]=1001;
-        
-        //TRACE();
+		
+		//TRACE();
 		for(std::vector<CommandType>::const_iterator iter = cmdCollect.begin(); iter != cmdCollect.end(); ++iter)
 		{
 			//@@if( iter->target != 0 && iter->selector != 0)
@@ -416,15 +419,14 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 			if(iter->func!=NULL)iter->func(resultobj);
 		}
 		
-        //TRACE();
+		//TRACE();
 		if( cmdQueue.chunk.memory )
 			free(cmdQueue.chunk.memory);
 		commandQueue.erase(insertIndex);
 		
-        //TRACE();
-        return false;
+		//TRACE();
+		return false;
 	}
-	
 	//pthread_mutex_unlock(&this->t_functionMutex2);
 	return true;
 }
@@ -493,7 +495,7 @@ void* GraphDog::t_function(void *_insertIndex)
 	
 	
 	
-	pthread_mutex_lock(&command.caller->t_functionMutex);
+	pthread_mutex_lock(&graphdog->t_functionMutex);
 	Json::Value costr = command.commandStr;
     
     
@@ -644,7 +646,7 @@ void* GraphDog::t_function(void *_insertIndex)
 		b=j+b;
 	}
 	CCLOG("check11 %s",resultStr.c_str());
-	pthread_mutex_unlock(&command.caller->t_functionMutex);
+	pthread_mutex_unlock(&graphdog->t_functionMutex);
 	
 	CCLOG("check12");
 	return NULL;
@@ -678,7 +680,7 @@ void GraphDog::removeCommand(cocos2d::CCObject *target)
 
 void GraphDog::receivedCommand(float dt)
 {
-	//##
+	//# #
 	
 	//pthread_mutex_lock(&graphdog->t_functionMutex);
 	

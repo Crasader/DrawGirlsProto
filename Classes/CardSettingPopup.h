@@ -127,6 +127,8 @@ private:
 	vector<CardSortInfo> card_list;
 	vector<CardSortInfo> event_card_list;
 	
+	void characterClose();
+	
 	void alignChange();
 	
 	void changeSortType( CardSortType t_type, bool is_init = false );

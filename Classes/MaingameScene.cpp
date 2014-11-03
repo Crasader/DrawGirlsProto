@@ -100,6 +100,8 @@ bool Maingame::init()
         return false;
     }
 	
+	mySGD->ui_scene_code = kUISceneCode_empty;
+	
 	myCP = NULL;
 	
 	replay_boss = NULL;
@@ -165,7 +167,7 @@ bool Maingame::init()
 	myGD->V_CCP["Main_startMoveToCCPoint"] = std::bind(&Maingame::startMoveToCCPoint, this, _1);
 	myGD->V_I["Main_takeSpeedUpEffect"] = std::bind(&Maingame::takeSpeedUpEffect, this, _1);
 	myGD->V_CCP["Main_showMissMissile"] = std::bind(&Maingame::showMissMissile, this, _1);
-	myGD->V_CCPI["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2);
+	myGD->V_CCPII["Main_showDamageMissile"] = std::bind(&Maingame::showDamageMissile, this, _1, _2, _3);
 	myGD->CCP_V["Main_getGameNodePosition"] = std::bind(&Maingame::getGameNodePosition, this);
 	myGD->V_V["Main_hideThumb"] = std::bind(&Maingame::hideThumb, this);
 	myGD->V_V["Main_showDrawButtonTutorial"] = std::bind(&Maingame::showDrawButtonTutorial, this);
@@ -1086,6 +1088,78 @@ void Maingame::checkTutorial()
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
 	}
+	else if(mySD->getSilType() == 9 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_100percent))
+	{
+		CCNode* exit_target = this;
+		exit_target->onExit();
+		
+		ASPopupView* t_popup = ASPopupView::create(-200);
+		
+		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+		if(screen_scale_x < 1.f)
+			screen_scale_x = 1.f;
+		
+		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		
+		ControlTipContent* t_container = ControlTipContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_100percent, true);
+																	   
+																	   Json::Reader reader;
+																	   Json::Value root;
+																	   reader.parse(mySDS->getStringForKey(kSDF_stageInfo, mySD->getSilType(), "boss"), root);
+																	   Json::Value boss = root[0u];
+																	   Json::Value patterns = boss["pattern"];
+																	   
+																	   vector<int> pattern_code;
+																	   
+																	   for(int i=0;i<patterns.size();i++)
+																	   {
+																		   int t_code = patterns[i]["pattern"].asInt();
+																		   if(!myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, t_code))
+																		   {
+																			   vector<int>::iterator iter = find(pattern_code.begin(), pattern_code.end(), t_code);
+																			   if(iter == pattern_code.end())
+																				   pattern_code.push_back(t_code);
+																		   }
+																	   }
+																	   
+																	   if(pattern_code.size() > 0)
+																	   {
+																		   ASPopupView* t_popup = ASPopupView::create(-200);
+																		   
+																		   CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+																		   float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+																		   if(screen_scale_x < 1.f)
+																			   screen_scale_x = 1.f;
+																		   
+																		   t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
+																		   t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
+																		   t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+																		   
+																		   PatternTutorialContent* t_container = PatternTutorialContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																																				{
+																																					for(int i=0;i<pattern_code.size();i++)
+																																						myDSH->setBoolForKey(kDSH_Key_hasShowTutorial_int1, pattern_code[i], true);
+																																					exit_target->onEnter();
+																																					mySGD->is_on_maingame = true;
+																																				}, pattern_code);
+																		   t_popup->setContainerNode(t_container);
+																		   exit_target->getParent()->addChild(t_popup);
+																	   }
+																	   else
+																	   {
+																		   exit_target->onEnter();
+																		   mySGD->is_on_maingame = true;
+																	   }
+																	   
+																   }, kSpecialTutorialCode_100percent);
+		t_popup->setContainerNode(t_container);
+		exit_target->getParent()->addChild(t_popup);
+	}
 	else
 	{
 		Json::Reader reader;
@@ -1463,7 +1537,7 @@ void Maingame::ccTouchCancelled(CCTouch *pTouch, CCEvent *pEvent)
 
 void Maingame::backTracking()
 {
-	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame.getV();
 	
 	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
@@ -2232,7 +2306,7 @@ void Maingame::stopBackingCheck()
 
 void Maingame::stunBacking()
 {
-	back_tracking_cnt += mySGD->rewind_cnt_per_frame;
+	back_tracking_cnt += mySGD->rewind_cnt_per_frame.getV();
 	
 	while(back_tracking_cnt >= ing_back_tracking_cnt + 1)
 	{
@@ -2465,6 +2539,7 @@ void Maingame::gameover()
 
 void Maingame::clearScenario()
 {
+	myGIM->gameover();
 	myMS->setVisible(false);
 	if(mySGD->is_endless_mode)
 	{
@@ -3213,6 +3288,8 @@ void Maingame::clearScenario3()
 
 void Maingame::failScenario()
 {
+	myGIM->gameover();
+	
 	if(mySGD->is_endless_mode)
 	{
 		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
@@ -3300,21 +3377,21 @@ void Maingame::endCloseShutter()
 	}
 	else if(mySGD->is_hell_mode)
 	{
-		if(mySGD->getIsCleared())
-		{
-			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-			
-			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
-			CCDirector::sharedDirector()->replaceScene(t_trans);
-		}
-		else
-		{
+//		if(mySGD->getIsCleared())
+//		{
+//			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
+//			
+//			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+//			CCDirector::sharedDirector()->replaceScene(t_trans);
+//		}
+//		else
+//		{
 			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 			
 			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 			//			mySGD->setNextSceneName("newmainflow");
 			//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
-		}
+//		}
 	}
 	else
 	{
@@ -3542,7 +3619,7 @@ void Maingame::showMissMissile( CCPoint t_position )
 													   }));
 }
 
-void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
+void Maingame::showDamageMissile( CCPoint t_position, int t_damage, int t_sub_dmg )
 {
 	CCNode* container = CCNode::create();
 	container->setScale(1.f/myGD->game_scale);
@@ -3559,6 +3636,23 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage )
 	CCCallFunc* t_call = CCCallFunc::create(container, callfunc_selector(CCNode::removeFromParent));
 	CCSequence* t_seq = CCSequence::create(t_delay, t_fade, t_call, NULL);
 	damage_label->runAction(t_seq);
+	
+	if(t_sub_dmg > 0)
+	{
+		KSLabelTTF* sub_dmg_label = KSLabelTTF::create(ccsf("+%d", t_sub_dmg), mySGD->getFont().c_str(), 12);
+		sub_dmg_label->setAnchorPoint(ccp(0.f,0.5f));
+		sub_dmg_label->setColor(ccBLUE);
+		sub_dmg_label->enableOuterStroke(ccBLACK, 0.5f, 100, true);
+		sub_dmg_label->setPosition(ccp(-3,0));
+		sub_dmg_label->setScale(0);
+		container->addChild(sub_dmg_label);
+		
+		CCDelayTime* t_delay1 = CCDelayTime::create(0.3f);
+		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
+		CCFadeTo* t_fade2 = CCFadeTo::create(0.4f, 0);
+		CCSequence* t_seq2 = CCSequence::create(t_delay1, t_scale1, t_fade2, NULL);
+		sub_dmg_label->runAction(t_seq2);
+	}
 	
 //	MissileDamageLabel* damage_label = MissileDamageLabel::create(t_damage);
 //	damage_label->setScale(1.f/1.5f);
@@ -4438,11 +4532,20 @@ void Maingame::refreshThumb()
 {
 	if(!myMS->isVisible())
 		return;
-	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
-	thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
-	t_vs->visitForThumb();
-	thumb_texture->end();
 	
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//    start = std::chrono::system_clock::now();
+	
+	if(myGD->is_changed_map)
+	{
+		VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
+		thumb_texture->beginWithClear(0, 0, 0.f, 0.f);
+		t_vs->visitForThumb();
+		thumb_texture->end();
+		
+		t_vs->visit();
+		myGD->is_changed_map = false;
+	}
 	
 	vector<KSCumberBase*> boss_array = myGD->getMainCumberVector();
 	while(boss_thumbs->count() > boss_array.size())
@@ -4494,7 +4597,9 @@ void Maingame::refreshThumb()
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	
-	t_vs->visit();
+//	end = std::chrono::system_clock::now();
+//	std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLog("refreshThumb time : %f", elapsed_seconds.count());
 }
 
 void Maingame::refreshReplayThumb(int temp_time)
@@ -4506,12 +4611,19 @@ void Maingame::refreshReplayThumb(int temp_time)
 	if(mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)].size() <= play_index || mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_mapTime)][play_index].asInt() > temp_time)
 		return;
 	
+//	std::chrono::time_point<std::chrono::system_clock> start, end;
+//	start = std::chrono::system_clock::now();
+	
 	VisibleSprite* t_vs = (VisibleSprite*)myMS->getVisibleSprite();
 	replay_thumb_texture->beginWithClear(0, 0.f, 0, 0.f);
 	t_vs->replayVisitForThumb(temp_time);
 	replay_thumb_texture->end();
 	
 	t_vs->visit();
+	
+//	end = std::chrono::system_clock::now();
+//	std::chrono::duration<double> elapsed_seconds = end-start;
+//	CCLog("refreshReplayThumb time : %f", elapsed_seconds.count());
 }
 
 void Maingame::refreshReplayScore(int temp_time)

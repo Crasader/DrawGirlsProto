@@ -135,21 +135,36 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	
 	string filename = "shop_ruby%d.png";
 	
-	for(int i=1;i<=6;i++)
+	for(int i=4;i<=6;i++)
 	{
 		CCNode* content_node = CCNode::create();
-		content_node->setPosition(ccp(100,177) + ccp(((i-1)%3)*140, ((i-1)/3)*(-105)));
+		content_node->setPosition(ccp(100,125) + ccp((i-4)*140, 0));
 		back_case->addChild(content_node, 1, kEventShopProductCode_begin + i);
 		
-		CCSprite* n_content = CCSprite::create("shop_button_back.png");
-		CCSprite* s_content = CCSprite::create("shop_button_back.png");
-		s_content->setColor(ccGRAY);
+		CCSprite* content_back = CCSprite::create("onesale_back.png");
+		content_back->setPosition(ccp(0, 0));
+		content_node->addChild(content_back);
+		
+		CCLabelTTF* t_label = CCLabelTTF::create();
+		KSLabelTTF* price_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 15);
+		t_label->addChild(price_label);
+		
+		CCControlButton* price_button = CCControlButton::create(t_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+		price_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EventShopPopup::controlAction), CCControlEventTouchUpInside);
+		price_button->setPreferredSize(CCSizeMake(110, 50));
+		price_button->setTag(kEventShopProductCode_begin + i);
+		price_button->setPosition(ccp(0,-67));
+		content_node->addChild(price_button);
+		
+		price_button->setTouchPriority(touch_priority);
+		
 		
 		CCSprite* inner = CCSprite::create(CCString::createWithFormat(filename.c_str(), i)->getCString());
 		
-		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* ruby_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_countName_s, i-1).c_str(), mySGD->getFont().c_str(), 20, 999, StyledAlignment::kCenterAlignment);
 		ruby_label->setAnchorPoint(ccp(0.5f,0.5f));
-		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-4));
+		ruby_label->setPosition(ccpFromSize(inner->getContentSize()/2.f) + ccp(0,-32));
+		inner->setPosition(ccp(0,10));
 		inner->addChild(ruby_label, 3);
 		
 		content_node->addChild(inner, 2);
@@ -159,20 +174,21 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 		
 		if(!sale_str.empty())
 		{
-			CCSprite* tab = CCSprite::create("shop_tab.png");
-			tab->setPosition(ccp(-34,38.f));
-			content_node->addChild(tab, 4);
+//			CCSprite* tab = CCSprite::create("shop_tab.png");
+//			tab->setPosition(ccp(-34,38.f));
+//			content_node->addChild(tab, 4);
 			
-			CCLabelTTF* sale_label = CCLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 12);
-			sale_label->setPosition(ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f));
-			tab->addChild(sale_label);
+			KSLabelTTF* sale_label = KSLabelTTF::create(sale_str.c_str(), mySGD->getFont().c_str(), 15);
+			sale_label->enableOuterStroke(ccBLACK, 1, 153, true);
+			sale_label->setPosition(ccp(0,content_back->getContentSize().height/2.f-15));//ccp(tab->getContentSize().width/2.f, tab->getContentSize().height/2.f));
+			content_node->addChild(sale_label, 4);
 		}
 		
 //		if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_money))
 //		{
-			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 14);
-			won_label->setPosition(ccp(0, -27));
-			content_node->addChild(won_label, 3);
+//			CCLabelTTF* won_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1).c_str(), mySGD->getFont().c_str(), 14);
+//			won_label->setPosition(ccp(0, -77));
+//			content_node->addChild(won_label, 3);
 //		}
 //		else if(price_type == mySGD->getGoodsTypeToKey(kGoodsType_ruby))
 //		{
@@ -194,15 +210,6 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 //			gold_label->setPosition(ccp(10, -33));
 //			content_node->addChild(gold_label, 3);
 //		}
-		
-		CCMenuItem* content_item = CCMenuItemSprite::create(n_content, s_content, this, menu_selector(EventShopPopup::menuAction));
-		content_item->setTag(kEventShopProductCode_begin + i);
-		
-		CCMenu* content_menu = CCMenu::createWithItem(content_item);
-		content_menu->setPosition(CCPointZero);
-		content_node->addChild(content_menu, 1);
-		
-		content_menu->setTouchPriority(touch_priority);
 	}
 	
 	
@@ -219,6 +226,50 @@ void EventShopPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	}, [=](){
 		is_menu_enable = true;
 	});
+}
+
+void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	int tag = ((CCNode*)sender)->getTag();
+	int t_index = tag - kEventShopProductCode_1;
+	
+	createCheckBuyPopup([=]()
+						{
+							loading_layer = LoadingLayer::create();
+							addChild(loading_layer, 999);
+							
+							Json::Value param;
+							param["productid"] = mySGD->getEventInappProduct(t_index);
+							hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+								KS::KSLog("in-app test \n%", v);
+								if(v["issuccess"].asInt())
+								{
+									Json::Value t_info = mySGD->getProductInfo(mySGD->getEventInappProduct(t_index));
+									if(!t_info.empty())
+									{
+										myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
+										fiverocks::FiveRocksBridge::trackPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
+									}
+									requestItemDelivery();
+								}
+								else
+								{
+									loading_layer->removeFromParent();
+									
+									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+									
+									is_menu_enable = true;
+								}
+							});
+						});
 }
 
 void EventShopPopup::menuAction(CCObject* sender)

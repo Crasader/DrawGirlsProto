@@ -26,6 +26,7 @@ import io.fiverocks.android.FiveRocks;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Map;
 
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONObject;
@@ -45,8 +46,11 @@ import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.hangame.hsp.HSPCore;
+import com.hangame.hsp.HSPMessage;
+import com.hangame.hsp.HSPMessage.HSPReceivePushNotificationListener;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
@@ -128,6 +132,17 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 //		AdXConnect.getAdXConnectEventInstance(getApplicationContext(),"Launch","","");
 
 		IgawCommon.startApplication(DGproto.this);
+		
+		
+		//게임에서 등록해서 쓰는 Push Listener 동작: 필요한 동작 구현-게임이 실행 중인 상태
+		HSPMessage
+		    .addPushNotificationReceiveListener(new HSPReceivePushNotificationListener() {
+		       @Override
+		       public void onPushNotificationReceive(Map<String, Object> pushData) {
+		           Toast.makeText(DGproto.this, (CharSequence) pushData.get("content"), Toast.LENGTH_SHORT).show();
+		       }
+		});
+		
 	}
 	void hideSystemUI()
 	{

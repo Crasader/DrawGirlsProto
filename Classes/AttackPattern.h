@@ -103,14 +103,14 @@ private:
 class FallingStoneWrapper : public AttackPattern
 {
 public:
-	static FallingStoneWrapper* create(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize mSize, int t_type);
+	static FallingStoneWrapper* create(KSCumberBase* cb, Json::Value pattern, CCSize mSize, int t_type);
 	
 	virtual void stopMyAction();
 	
 	void removeEffect();
 	
 private:
-	
+	Json::Value patternData;
 	int keepFrame;
 	int shootFrame;
 	int ingFrame;
@@ -126,7 +126,7 @@ private:
 	
 	void myAction();
 	
-	void myInit(int t_keepFrame, KSCumberBase* cb, int t_shootFrame, float t_distance, CCSize t_mSize, int t_type);
+	void myInit(KSCumberBase* cb,Json::Value pattern, CCSize t_mSize, int t_type);
 };
 
 class Saw : public AttackPattern
@@ -147,7 +147,7 @@ private:
 class ThunderBoltWrapper : public AttackPattern
 {
 public:
-	static ThunderBoltWrapper* create(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
+	static ThunderBoltWrapper* create(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame, float speedr);
 	
 	virtual void stopMyAction();
 	
@@ -178,7 +178,9 @@ private:
 	int targetingFrame;
 	int shootFrame;
 	int ingFrame;
-	deque<CCPoint> pJackArray;
+	float speedRatio;
+	float curIndex;
+	vector<CCPoint> pJackArray;
 	deque<CCPoint> visitPoint;
 	CCSprite* targetingImg;
 	CCSprite* wifiImg;
@@ -190,7 +192,7 @@ private:
 	void startMyAction();
 	
 	void myAction();
-	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame);
+	void myInit(CCPoint t_sp, KSCumberBase* cb, int t_type, int t_targetingFrame, int t_shootFrame, float speedr);
 };
 
 class BigSaw : public AttackPattern
@@ -251,13 +253,14 @@ private:
 class MeteorWrapper : public AttackPattern
 {
 public:
-	static MeteorWrapper* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb);
+	static MeteorWrapper* create(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, float enableP, KSCumberBase* cb);
 	
 	virtual void stopMyAction();
 	
 //	void removeEffect();
 	
 private:
+	float enableProb;
 	int crashArea;
 	int type;
 	int tmCnt;
@@ -277,7 +280,7 @@ private:
 	
 	void myAction();
 	
-	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, KSCumberBase* cb);
+	void myInit(int t_type, int t_tmCnt, int t_totalFrame, int t_crashArea, float enableP, KSCumberBase* cb);
 	
 	void accumCrashCount(int n);
 };
@@ -590,6 +593,7 @@ public:
 	void removeEffect();
 	
 private:
+	Json::Value pattern;
 	float t_move_speed;
 	float t_cushion_cnt;
 	bool t_is_big_bomb;
@@ -976,6 +980,7 @@ protected:
 	int area;
 	int totalFrame;
 	int movingFrame;
+	float enableRatio;
 };
 
 
@@ -1162,6 +1167,32 @@ protected:
 	Json::Value m_pattern;
 };
 
+
+
+class GodOfDeath : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP(GodOfDeath);
+	virtual ~GodOfDeath()
+	{
+		CCLOG("~GodOfDeath");
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patternData);
+	void update(float dt);
+	virtual void stopMyAction();
+protected:
+	//float speed;
+	//float crashSize;
+	float m_followFrames;
+	float m_followSpeed;
+	bool m_isFollow;
+	int m_frameCount;
+	float m_alpha;
+	
+	CCSprite* m_godOfDeathSprite;
+	Well512 m_well512;
+	Json::Value m_pattern;
+};
 
 
 #endif

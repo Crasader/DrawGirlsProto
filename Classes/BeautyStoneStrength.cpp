@@ -694,7 +694,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 			for(int i=0;i<character_count;i++)
 			{
-				int character_slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i+1);
+				int character_slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i+1);
 				for(int j=0;j<character_slot_count;j++)
 				{
 					if(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i+1, j+1) == offering_stone_idx)
@@ -847,7 +847,7 @@ void BeautyStoneStrengthPopup::menuAction(CCObject* pSender)
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 			for(int i=0;i<character_count;i++)
 			{
-				int character_slot_count = NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i+1);
+				int character_slot_count = 2;//NSDS_GI(kSDS_GI_characterInfo_int1_statInfo_slotCnt_i, i+1);
 				for(int j=0;j<character_slot_count;j++)
 				{
 					if(myDSH->getIntegerForKey(kDSH_Key_selectedCharacter_int1_weaponSlot_int2, i+1, j+1) == offering_stone_idx)

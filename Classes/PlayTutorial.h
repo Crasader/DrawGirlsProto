@@ -13,6 +13,7 @@
 #include "cocos-ext.h"
 #include "IntSeries.h"
 #include "SelectorDefine.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -43,10 +44,10 @@ public:
 	CCSprite* pathImg;
 	int pathScale;
 	
-	static TutoPathNode* create(IntPointVector t_pv, string line_color)
+	static TutoPathNode* create(IntPointVector t_pv, string line_color, int color_value)
 	{
 		TutoPathNode* t_pn = new TutoPathNode();
-		t_pn->myInit(t_pv, line_color);
+		t_pn->myInit(t_pv, line_color, color_value);
 		t_pn->autorelease();
 		return t_pn;
 	}
@@ -60,11 +61,17 @@ public:
 private:
 	CCSprite* pathEdge;
 	
-	void myInit(IntPointVector t_pv, string line_color)
+	void myInit(IntPointVector t_pv, string line_color, int color_value)
 	{
 		myPointVector = t_pv;
 		
+		ccColor3B t_color;
+		t_color.r = color_value/256/256;
+		t_color.g = (color_value/256)%256;
+		t_color.b = color_value%256;
+		
 		pathImg = CCSprite::create(("path_" + line_color + ".png").c_str());
+		pathImg->setColor(t_color);
 		pathImg->setAnchorPoint(ccp(0.0, 0.5));
 		pathImg->setRotation(myPointVector.distance.getAngle());
 		pathScale = 1;
@@ -236,7 +243,7 @@ private:
 	
 	void newPathAdd(IntPointVector t_pv)
 	{
-		TutoPathNode* t_pn = TutoPathNode::create(t_pv, path_color);
+		TutoPathNode* t_pn = TutoPathNode::create(t_pv, path_color, path_color_value);
 		t_pn->setTag(1);
 		addChild(t_pn, 1);
 		
@@ -244,6 +251,7 @@ private:
 	}
 	
 	string path_color;
+	int path_color_value;
 	
 	void checkLastAddPath(IntPointVector t_pointvector)
 	{
@@ -458,6 +466,7 @@ private:
 	void myInit();
 };
 
+class LoadingLayer;
 class PlayTutorial : public CCLayer
 {
 public:
@@ -501,6 +510,11 @@ private:
 	
 	int getRecentStep();
 	void nextStep();
+	
+	LoadingLayer* t_loading;
+	CCNode* t_scenario_node;
+	
+	void resultAchieve(Json::Value result_data);
 	
 	void startCatching();
 	void catchingAction();

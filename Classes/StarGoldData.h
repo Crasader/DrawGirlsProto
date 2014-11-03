@@ -62,6 +62,12 @@ typedef enum tSceneCode{
 	kSceneCode_StageSetting
 }SceneCode;
 
+enum UISceneCode{
+	kUISceneCode_empty = 0,
+	kUISceneCode_mainFlow,
+	kUISceneCode_puzzle
+};
+
 enum CardStrengthBefore{
 	kCardStrengthBefore_cardSetting = 0,
 	kCardStrengthBefore_diary,
@@ -183,6 +189,8 @@ enum GoodsType
 	kGoodsType_pass4,
 	kGoodsType_pass5,
 	kGoodsType_pass6,
+	kGoodsType_pass7,
+	kGoodsType_pass8,
 	kGoodsType_heart,
 	kGoodsType_end,
 	kGoodsType_pz,
@@ -228,6 +236,7 @@ enum UserdataType
 	kUserdataType_highScore,
 	kUserdataType_highPiece,
 	kUserdataType_onlyOneBuyPack,
+	kUserdataType_characterLevel,
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
@@ -241,6 +250,12 @@ enum UserdataType
 	kUserdataType_achieve_perfect,
 	kUserdataType_achieve_itemBuyCount,
 	kUserdataType_achieve_seqAttendance,
+	
+	kUserdataType_missileInfo_nextPrice,
+	kUserdataType_missileInfo_power,
+	kUserdataType_missileInfo_nextPower,
+	kUserdataType_missileInfo_prevPower,
+	kUserdataType_missileInfo_isMaxLevel,
 	
 	kUserdataType_end
 };
@@ -267,12 +282,11 @@ class CharacterHistory
 {
 public:
 	KSProtectVar<int> characterNo;
-	KSProtectVar<int> level;
-	KSProtectVar<int> nextPrice;
-	KSProtectVar<int> power;
-	KSProtectVar<int> nextPower;
-	KSProtectVar<int> prevPower;
-	KSProtectVar<bool> isMaxLevel;
+	KSProtectVar<int> characterLevel;
+	KSProtectVar<int> characterExp;
+	KSProtectVar<int> characterCurrentLevelExp; // 현재 레벨의 min 값
+	KSProtectVar<int> characterNextLevelExp; // 현재 레벨의 max 값, 다음 레벨의 min 값
+	KSProtectVar<int> characterNextLevelUpExp; // 다음 레벨의 max 값
 	KSProtectVar<int> characterIndex;
 };
 
@@ -375,7 +389,7 @@ class HeartTime;
 
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
-
+class KSLabelTTF;
 class StarGoldData : public CCObject
 {
 public:
@@ -387,7 +401,7 @@ public:
 	void resetLabels();
 	
 	void setStarLabel(CCLabelBMFont* t_label);
-	void setIngameGoldLabel( CCLabelBMFont* t_label );
+	void setIngameGoldLabel( CCLabelBMFont* t_label, KSLabelTTF* t_label2 );
 //	int getStar();
 //	void setStar(int t_star);
 	
@@ -422,6 +436,7 @@ public:
 	int getBeforeRankUpStageGrade();
 	
 	int getStageGold();
+	int getStageBaseGold();
 	
 	bool getIsAfterSceneChapter();
 	
@@ -543,7 +558,14 @@ public:
 	void initPieceHistory(Json::Value history_list);
 	
 	void initSelectedCharacterNo(int t_i);
+	void initCharacterLevel(int t_i);
+	void initCharacterNextPrice(int t_i);
+	void initCharacterPower(int t_i);
+	void initCharacterNextPower(int t_i);
+	void initCharacterPrevPower(int t_i);
+	void initCharacterIsMaxLevel(int t_i);
 	CharacterHistory getSelectedCharacterHistory();
+	CharacterHistory getSelectedCharacterHistoryOriginal();
 	int getCharacterHistorySize();
 	CharacterHistory getCharacterHistory(int t_index);
 	jsonSelType keep_character_history_callback;
@@ -713,6 +735,8 @@ public:
 	int getUserdataOnlyOneBuyPack();
 	void setUserdataSelectedCharNO(int t_i);
 	int getUserdataSelectedCharNO();
+	void setUserdataCharLevel(int t_i);
+	int getUserdataCharLevel();
 	
 	void setUserdataEndlessIngWin(int t_i);
 	int getUserdataEndlessIngWin();
@@ -736,6 +760,17 @@ public:
 	int getUserdataAchieveSeqAttendance();
 	void setUserdataAchieveItemBuyCount(int t_i);
 	int getUserdataAchieveItemBuyCount();
+	
+	void setUserdataMissileInfoNextPrice(int t_i);
+	int getUserdataMissileInfoNextPrice();
+	void setUserdataMissileInfoPower(int t_i);
+	int getUserdataMissileInfoPower();
+	void setUserdataMissileInfoNextPower(int t_i);
+	int getUserdataMissileInfoNextPower();
+	void setUserdataMissileInfoPrevPower(int t_i);
+	int getUserdataMissileInfoPrevPower();
+	void setUserdataMissileInfoIsMaxLevel(int t_i);
+	int getUserdataMissileInfoIsMaxLevel();
 	
 	string getInappProduct(int t_index);
 	string getEventInappProduct(int t_index);
@@ -895,7 +930,7 @@ public:
 	string getGoodsTypeToKey(GoodsType t_type);
 	GoodsType getGoodsKeyToType(string t_key);
 	GoodsType getItemCodeToGoodsType(ITEM_CODE t_code);
-	void addChangeGoodsIngameGold(int t_value);
+	void addChangeGoodsIngameGold(int t_value, float t_value2);
 	void addChangeGoods(string t_exchangeID, GoodsType t_type = kGoodsType_begin, int t_value = 0, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
 	void addChangeGoods(string t_exchangeID, vector<ChangeGoodsDataDetail> t_detail_list);
 //	void addChangeGoods(GoodsType t_type, int t_value, string t_statsID = "", string t_statsValue = "", string t_content = "", bool t_isPurchase = false);
@@ -921,6 +956,7 @@ public:
 	CommandParam getChangeUserdataParam(jsonSelType t_callback);
 	void initUserdata(Json::Value result_data);
 	void clearChangeUserdata();
+	void refreshUserdata(UserdataType t_type, int t_i);
 	
 	bool isPossibleShowPurchasePopup(PurchaseGuideType t_type);
 	void showPurchasePopup(PurchaseGuideType t_type);
@@ -1021,9 +1057,17 @@ public:
 	void setIosHideVer(string t_str);
 	string getIosHideVer();
 	
-	double rewind_cnt_per_frame;
+	KSProtectVar<double> rewind_cnt_per_frame;
+	KSProtectVar<double> character_magnetic;
 	
 	bool is_option_tutorial;
+	
+	void addCharacterHistoryForGacha(Json::Value result_data);
+	
+	vector<int> is_cleared_grade;
+	
+	UISceneCode ui_scene_code;
+	KSProtectVar<int> add_time_value;
 	
 private:
 	
@@ -1032,6 +1076,7 @@ private:
 	vector<CollectionCardInfo> special_cards;
 	
 	bool is_ingame_gold;
+	bool is_ingame_sub_gold;
 	
 	bool is_not_cleared_stage;
 	int is_unlock_puzzle;
@@ -1047,6 +1092,7 @@ private:
 	CCLabelBMFont* gold_label;
 	CCLabelBMFont* friend_point_label;
 	CCLabelBMFont* ingame_gold_label;
+	KSLabelTTF* ingame_sub_gold_label;
 	HeartTime* heart_time;
 	
 	vector<KSProtectVar<int>> bonus_item_cnt;
@@ -1065,6 +1111,7 @@ private:
 	KSProtectVar<int> game_time;
 	KSProtectVar<int> game_use_time;
 	KSProtectVar<int> ingame_gold;
+	KSProtectVar<float> ingame_sub_gold;
 	
 	int start_map_gacha_cnt;
 		   
@@ -1234,6 +1281,16 @@ private:
 	
 	COMMON_VAR(int, addGemReward, AddGemReward);
 	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
+	
+	COMMON_VAR(int, nmlGc, NmlGc);
+	COMMON_VAR(int, prmGc, PrmGc);
+	COMMON_VAR(int, gachaRefreshTime, GachaRefreshTime);
+	
+	COMMON_VAR(int, pvpWinExp, PvpWinExp);
+	COMMON_VAR(int, pvpLoseExp, PvpLoseExp);
+	COMMON_VAR(int, gachaCharExp, GachaCharExp);
+	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
+	COMMON_VAR(int, addTimeItemLimit, AddTimeItemLimit);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);

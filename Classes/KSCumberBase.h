@@ -19,7 +19,8 @@
 #include "jsoncpp/json.h"
 #include <queue>
 #include "Charges.h"
-
+#include "ServerDataSave.h"
+#include "StarGoldData.h"
 
 USING_NS_CC;
 class CumberEmotion;
@@ -145,7 +146,7 @@ public:
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
 	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false),
-	m_crashAttackTime(0)
+	m_crashAttackTime(0), m_slowDurationFrame(-5)
 	{
 		
 	}
@@ -155,6 +156,8 @@ public:
 	}
 	virtual void checkConfine(float dt) = 0;
 	virtual bool init();
+	
+	int clear_condition;
 	
 	void startMoving();
 	void stopMoving();
@@ -183,6 +186,7 @@ public:
 	{
 		m_cumberTimer += 1/60.f;
 	}
+	virtual void slowStone(float dt);
 	void speedAdjustment(float dt);
 	void selfHealing(float dt);
 	void cumberFrame(float dt);
@@ -248,6 +252,8 @@ public:
 	void applyPassiveData(const std::string& passive);
 	// 오토 밸런스 적용
 	void applyAutoBalance(bool isExchange=false);
+	// 캐릭터 패턴약화 적용
+	void applyDisableOfCharacter();
 	// 분노룰 세팅
 	void settingFuryRule();
 	// 지능 세팅
@@ -412,8 +418,8 @@ public:
 	MOVEMENT m_drawMovement;   // 땅을 그릴 때의 움직임.
 	MOVEMENT m_furyMovement;	   // 분노 모드시 움직임.
 	CUMBER_STATE m_cumberState;
-	vector<ChargeParent*> m_charges;
-	vector<ChargeParent*>& getCharges()
+	vector<ChargeBase*> m_charges;
+	vector<ChargeBase*>& getCharges()
 	{
 		return m_charges;
 	}
@@ -512,7 +518,9 @@ protected:
 			if(stiffenSecond - timer < stiffenDuration || timer < stiffenSecond)
 			{
 				timer = 0;
-				stiffenSecond = stiffenDuration;
+				CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+				Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+				stiffenSecond = stiffenDuration * mInfo.get("stiffenbonus", 1.f).asFloat();
 				return true;
 			}
 			else
@@ -544,6 +552,8 @@ protected:
 	CC_SYNTHESIZE(CumberEmotion*, m_emotion, Emotion);
 	CC_SYNTHESIZE(bool, m_deadState, DeadState);
 	CC_SYNTHESIZE(bool, m_deadTime, DeadTime);
+	CC_SYNTHESIZE(float, m_slowDurationFrame, SlowDurationFrame);
+//	CC_SYNTHESIZE(float, m_slowCurrentTime, SlowCurrentTime);
 
 	// 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률
 	CC_SYNTHESIZE_PASS_BY_REF(vector<Json::Value>, m_attacks, Attacks);

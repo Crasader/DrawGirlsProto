@@ -37,6 +37,7 @@ enum CSS_MenuTag{
 	kCSS_MT_event,
 	kCSS_MT_strength,
 	kCSS_MT_tip,
+	kCSS_MT_character,
 	kCSS_MT_cardBase = 1000000,
 	kCSS_MT_cardMenuBase = 2000000,
 	kCSS_MT_noCardBase = 3000000

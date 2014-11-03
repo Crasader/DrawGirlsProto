@@ -89,20 +89,29 @@ enum SDS_KEY
 	kSDS_GI_characterInfo_int1_name_s,
 	kSDS_GI_characterInfo_int1_purchaseInfo_type_s,
 	kSDS_GI_characterInfo_int1_purchaseInfo_value_i,
-	kSDS_GI_characterInfo_int1_statInfo_gold_d,
-	kSDS_GI_characterInfo_int1_statInfo_percent_d,
-	kSDS_GI_characterInfo_int1_statInfo_feverTime_i,
-	kSDS_GI_characterInfo_int1_statInfo_speed_d,
-	kSDS_GI_characterInfo_int1_statInfo_life_i,
-	kSDS_GI_characterInfo_int1_statInfo_lineColor_i, // 0~6
-	kSDS_GI_characterInfo_int1_statInfo_slotCnt_i,
+	kSDS_GI_characterInfo_int1_maxLevel_i,
+	kSDS_GI_characterInfo_int1_statInfo_int2_gold_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_percent_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_speed_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_life_i,
+	kSDS_GI_characterInfo_int1_statInfo_int2_lineColor_i, // 000000~FFFFFF를 10진수로 바꾼값
+	kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_magnetic_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_power_d,
+	kSDS_GI_characterInfo_int1_statInfo_int2_score_d,
+	kSDS_GI_characterInfo_int1_patternInfo_int2_s,
+	kSDS_GI_characterInfo_int1_missionInfo_int2_s,
+	kSDS_GI_characterInfo_int1_missileInfo_int2_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_ccbi_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_imageID_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_plist_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_pvrccz_s,
 	kSDS_GI_characterInfo_int1_resourceInfo_size_i,
-	kSDS_GI_characterInfo_int1_comment_s,
+	kSDS_GI_characterInfo_int1_comment_int2_s,
+	kSDS_GI_characterInfo_int1_scriptInfo_s,
 	kSDS_GI_monsterVersion_i,
 	kSDS_GI_monsterCount_i, // 1 ~ count
 	kSDS_GI_monsterInfo_int1_no_i,
@@ -191,6 +200,7 @@ enum SDS_KEY
 	kSDS_GI_hellMode_int1_pieceNo_i,
 	kSDS_GI_hellMode_int1_title_s,
 	kSDS_GI_hellMode_int1_content_s,
+	kSDS_GI_hellMode_int1_characterNo_i,
 	kSDS_GI_realTimeMessageVersion_i,
 	kSDS_GI_card_version_i,
 	kSDS_GI_end = 1999,
@@ -352,6 +362,8 @@ public:
 	double gdfk (SDS_KEY fr_key);
 	double getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1);
 	double gdfk (SDS_KEY fr_key, int key_val1);
+	double getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2);
+	double gdfk (SDS_KEY fr_key, int key_val1, int key_val2);
 	double getDoubleForKey (SaveDataFile f_key, int i1, string r_key);
 	double gdfk (int i1, SDS_KEY fr_key);
 	double getDoubleForKey (SaveDataFile f_key, int i1, string r_key, int key_val1);
@@ -360,6 +372,8 @@ public:
 	void sdfk (SDS_KEY fr_key, double val1, bool diskWrite = true);
 	void setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, double val1, bool diskWrite = true);
 	void sdfk (SDS_KEY fr_key, int key_val1, double val1, bool diskWrite = true);
+	void setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, double val1, bool diskWrite = true);
+	void sdfk (SDS_KEY fr_key, int key_val1, int key_val2, double val1, bool diskWrite = true);
 	void setDoubleForKey (SaveDataFile f_key, int i1, string r_key, double val1, bool diskWrite = true);
 	void sdfk (int i1, SDS_KEY fr_key, double val1, bool diskWrite = true);
 	void setDoubleForKey (SaveDataFile f_key, int i1, string r_key, int key_val1, double val1, bool diskWrite = true);

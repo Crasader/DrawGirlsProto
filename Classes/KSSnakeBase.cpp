@@ -658,13 +658,19 @@ void KSSnakeBase::checkConfine(float dt)
 		
 		int rmCnt = 5;
 		
-		int weapon_type = mySGD->getSelectedCharacterHistory().characterNo.getV()-1;
-		int weapon_level = mySGD->getSelectedCharacterHistory().level.getV();
+		int weapon_level = mySGD->getUserdataCharLevel();
 		
-		int weapon_rank = (weapon_level-1)/5 + 1;
-		weapon_level = (weapon_level-1)%5 + 1;
+//		int weapon_rank = (weapon_level-1)/5 + 1;
+//		weapon_level = (weapon_level-1)%5 + 1;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int weapon_type = mInfo.get("type", 0).asInt();
 		
-		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_rank, weapon_level, rmCnt, getPosition(), mySGD->getSelectedCharacterHistory().power.getV());
+		double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		if(power_rate < 1.0)
+			power_rate = 1.0;
+		
+		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower(), int((power_rate-1.0)*mySGD->getUserdataMissileInfoPower()));
 		
 		//		string missile_code;
 		//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
@@ -878,6 +884,7 @@ void KSSnakeBase::attackBehavior( Json::Value _pattern )
 	}
 	else if( pattern == "1007")
 	{
+		startAnimationDirection();
 //		setCumberState(0);
 	}
 	else
@@ -889,6 +896,10 @@ void KSSnakeBase::attackBehavior( Json::Value _pattern )
 			startAnimationDirection();
 		else if(target == "no") // 타게팅이 아니면 돌아라
 			startAnimationNoDirection();
+		else
+		{
+			startAnimationNoDirection();
+		} 
 	}
 }
 

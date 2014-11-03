@@ -28,6 +28,8 @@
 #include "TypingBox.h"
 #include "ASPopupView.h"
 #include "AsyncImage.h"
+#include "StoryLayer.h"
+#include "CharacterSelectPopup.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -239,6 +241,26 @@ bool CardSettingPopup::init()
 	
 	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
 	
+	
+	CCSprite* n_char_img = CCSprite::create("subbutton_pink.png");
+	KSLabelTTF* n_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_character), mySGD->getFont().c_str(), 12.5f);
+	n_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_char_label->setPosition(ccpFromSize(n_char_img->getContentSize()/2.f) + ccp(0,-1));
+	n_char_img->addChild(n_char_label);
+	
+	CCSprite* s_char_img = CCSprite::create("subbutton_pink.png");
+	s_char_img->setColor(ccGRAY);
+	KSLabelTTF* s_char_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_character), mySGD->getFont().c_str(), 12.5f);
+	s_char_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_char_label->setPosition(ccpFromSize(s_char_img->getContentSize()/2.f) + ccp(0,-1));
+	s_char_img->addChild(s_char_label);
+	
+	
+	CCMenuItem* char_menu = CCMenuItemSprite::create(n_char_img, s_char_img, this, menu_selector(CardSettingPopup::menuAction));
+	char_menu->setTag(kCSS_MT_character);
+	char_menu->setPosition(ccp(290,16));
+	tab_menu->addChild(char_menu);
+	
 	/*
 	CCSprite* n_strength_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)n_strength_img)->setGray(true);
@@ -275,81 +297,82 @@ bool CardSettingPopup::init()
 	{
 		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_card, true);
 		
-		CCNode* scenario_node = CCNode::create();
-		addChild(scenario_node, 9999);
-		
-		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
-		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
-		if(screen_scale_x < 1.f)
-			screen_scale_x = 1.f;
-		
-		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-		
-		
-		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
-		ikaruga->setAnchorPoint(ccp(0,0));
-		ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
-		scenario_node->addChild(ikaruga, 1);
-		
-		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
-		typing_box->setHide();
-		scenario_node->addChild(typing_box, 2);
-		
-		CCSprite* n_skip = CCSprite::create("kt_skip.png");
-		CCSprite* s_skip = CCSprite::create("kt_skip.png");
-		s_skip->setColor(ccGRAY);
-		
-		CCMenuLambda* skip_menu = CCMenuLambda::create();
-		skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
-		scenario_node->addChild(skip_menu, 3);
-		skip_menu->setTouchPriority(-19999);
-		skip_menu->setEnabled(false);
-		
-		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
-																	 {
-																		 skip_menu->setEnabled(false);
-																		 
-																		 addChild(KSTimer::create(0.1f, [=]()
-																								  {
-																									  scenario_node->removeFromParent();
-																								  }));
-																	 });
-		skip_menu->addChild(skip_item);
-		
-		typing_box->showAnimation(0.3f);
-		
-		function<void()> end_func3 = [=]()
-		{
-			skip_menu->setEnabled(false);
-			
-			addChild(KSTimer::create(0.1f, [=]()
-									 {
-										 scenario_node->removeFromParent();
-									 }));
-		};
-		
-		function<void()> end_func2 = [=]()
-		{
-			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial5), end_func3);
-		};
-		
-		function<void()> end_func1 = [=]()
-		{
-			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial4), end_func2);
-		};
-		
-		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
-															  {
-																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-															  }, [=](float t)
-															  {
-																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
-																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
-																  skip_menu->setEnabled(true);
-																  
-																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial3), end_func1);
-															  }));
+//		CCNode* scenario_node = CCNode::create();
+//		addChild(scenario_node, 9999);
+//		
+//		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
+//		float screen_scale_x = screen_size.width/screen_size.height/1.5f;
+//		if(screen_scale_x < 1.f)
+//			screen_scale_x = 1.f;
+//		
+//		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+//		
+//		
+//		CCSprite* ikaruga = CCSprite::create("kt_cha_ikaruga_1.png");
+//		ikaruga->setAnchorPoint(ccp(0,0));
+//		ikaruga->setPosition(ccp(240-240*screen_scale_x-ikaruga->getContentSize().width, 160-160*screen_scale_y));
+//		scenario_node->addChild(ikaruga, 1);
+//		
+//		TypingBox* typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(225, 50));
+//		typing_box->setHide();
+//		scenario_node->addChild(typing_box, 2);
+//		
+//		CCSprite* n_skip = CCSprite::create("kt_skip.png");
+//		CCSprite* s_skip = CCSprite::create("kt_skip.png");
+//		s_skip->setColor(ccGRAY);
+//		
+//		CCMenuLambda* skip_menu = CCMenuLambda::create();
+//		skip_menu->setPosition(ccp(240-240*screen_scale_x + 35, 160+160*screen_scale_y - 25 + 150));
+//		scenario_node->addChild(skip_menu, 3);
+//		skip_menu->setTouchPriority(-19999);
+//		skip_menu->setEnabled(false);
+//		
+//		CCMenuItemLambda* skip_item = CCMenuItemSpriteLambda::create(n_skip, s_skip, [=](CCObject* sender)
+//																	 {
+//																		 skip_menu->setEnabled(false);
+//																		 
+//																		 addChild(KSTimer::create(0.1f, [=]()
+//																								  {
+//																									  scenario_node->removeFromParent();
+//																								  }));
+//																	 });
+//		skip_menu->addChild(skip_item);
+//		
+//		typing_box->showAnimation(0.3f);
+//		
+//		function<void()> end_func3 = [=]()
+//		{
+//			skip_menu->setEnabled(false);
+//			
+//			addChild(KSTimer::create(0.1f, [=]()
+//									 {
+//										 scenario_node->removeFromParent();
+//									 }));
+//		};
+//		
+//		function<void()> end_func2 = [=]()
+//		{
+//			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial5), end_func3);
+//		};
+//		
+//		function<void()> end_func1 = [=]()
+//		{
+//			typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial4), end_func2);
+//		};
+//		
+//		scenario_node->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t)
+//															  {
+//																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//															  }, [=](float t)
+//															  {
+//																  ikaruga->setPositionX(240-240*screen_scale_x-ikaruga->getContentSize().width + ikaruga->getContentSize().width*2.f/3.f*t);
+//																  skip_menu->setPositionY(160+160*screen_scale_y - 25 + 150 - 150*t);
+//																  skip_menu->setEnabled(true);
+//																  
+//																  typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_kindTutorial3), end_func1);
+//															  }));
+		StoryLayer::startStory(this, "menu_mycard");
 	}
 	
 //	{
@@ -856,6 +879,25 @@ CCPoint CardSettingPopup::getContentPosition(int t_tag)
 	return return_value;
 }
 
+void CardSettingPopup::characterClose()
+{
+	main_case->setScaleY(0.f);
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
+		main_case->setScaleY(t);
+	}, [=](float t){ // finish
+		main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){
+			main_case->setScaleY(t);
+		}, [=](float t){ // finish
+			main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){ // finish
+				main_case->setScaleY(1.f);
+				is_menu_enable = true;
+			}));}));}));
+}
+
 void CardSettingPopup::menuAction(CCObject* pSender)
 {
 	if(!is_menu_enable)
@@ -1027,6 +1069,22 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			
 			target_final = NULL;
 			hidePopup();
+		}
+		else if(tag == kCSS_MT_character)
+		{
+			addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){
+				main_case->setScaleY(1.2f);
+				addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+					main_case->setScaleY(t);
+				}, [=](float t){
+					main_case->setScaleY(0.f);
+					CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+					t_popup->setHideFinalAction(this, callfunc_selector(CardSettingPopup::characterClose));
+					addChild(t_popup, kCSS_Z_popup);
+				}));
+			}));
 		}
 		else if(tag == kCSS_MT_event)
 		{

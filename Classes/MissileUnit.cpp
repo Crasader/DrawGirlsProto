@@ -18,7 +18,7 @@
 #include "GameData.h"
 #include "DataStorageHub.h"
 #include "Jack.h"
-
+#include "EffectSprite.h"
 #define LZZ_INLINE inline
 
 using namespace std;
@@ -277,10 +277,10 @@ void MissileUnit2::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize
 	setPosition(t_sp);
 	startMove();
 }
-MissileUnit3 * MissileUnit3::create (int t_type, float t_distance, CCSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+MissileUnit3 * MissileUnit3::create (int t_type, float t_distance, CCSize t_mSize, float enablePercent, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	MissileUnit3* t_mu3 = new MissileUnit3();
-	t_mu3->myInit(t_type, t_distance, t_mSize, t_removeEffect, d_removeEffect);
+	t_mu3->myInit(t_type, t_distance, t_mSize, enablePercent, t_removeEffect, d_removeEffect);
 	t_mu3->autorelease();
 	return t_mu3;
 }
@@ -337,32 +337,75 @@ void MissileUnit3::move ()
 	if(afterRect.origin.y + afterRect.size.height / 2.f - jackPosition.y < 200 && shownWarning == false)
 	{
 		shownWarning = true;
-		CCSprite* vertical = CCSprite::create("lazer_sub.png");
-		vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-		vertical->setColor(ccc3(255, 0, 0));
-		vertical->setScaleX(2.f);
-		vertical->setScaleY(0.25f);
-		vertical->setAnchorPoint(ccp(0.5f, 0.5f));
-		vertical->setRotation(90.f);
-		vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
 		
-		addChild(vertical);
-		CCSprite* feelMark = CCSprite::create("stone_warning.png");
-		feelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
-		addChild(feelMark);
-		addChild(KSTimer::create(1.f, [=]()
-														 {
-															 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
-																																			{
-																																				vertical->setOpacity(t);
-																																				feelMark->setOpacity(t);
-																																			}, [=](float t)
-																																			{
-																																				//																						 vertical->removeFromParent();
-																																				//																						 feelMark
-																																			}));
-														 }));
 		
+		
+		ProbSelector ps = {enableProb, 1.f - enableProb};
+		if(ps.getResult() == 1) // disable 확률 되면
+		{
+			
+			
+			EffectSprite* vertical = EffectSprite::create("lazer_sub.png");
+			vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			vertical->setColor(ccc3(255, 0, 0));
+			vertical->setScaleX(2.f);
+			vertical->setScaleY(0.25f);
+			vertical->setAnchorPoint(ccp(0.5f, 0.5f));
+			vertical->setRotation(90.f);
+			vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
+			vertical->setGray();
+			
+			addChild(vertical);
+			
+			CCSprite* cancelMark = CCSprite::create("stone_warning_cancel.png");
+			cancelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
+			addChild(cancelMark);
+			addChild(KSTimer::create(1.f, [=]()
+															 {
+																 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+																																				{
+																																					cancelMark->setOpacity(t);
+																																				}, [=](float t)
+																																				{
+																																					//																						 vertical->removeFromParent();
+																																					//																						 feelMark
+																																					removeFromParentAndCleanup(true);
+																																				}));
+															 }));
+			unschedule(schedule_selector(MissileUnit3::move));
+			
+			
+		}
+		else
+		{
+			CCSprite* vertical = CCSprite::create("lazer_sub.png");
+			vertical->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+			vertical->setColor(ccc3(255, 0, 0));
+			vertical->setScaleX(2.f);
+			vertical->setScaleY(0.25f);
+			vertical->setAnchorPoint(ccp(0.5f, 0.5f));
+			vertical->setRotation(90.f);
+			vertical->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), mapLoopRange::mapHeightInnerEnd));
+			
+			addChild(vertical);
+			
+			
+			CCSprite* feelMark = CCSprite::create("stone_warning.png");
+			feelMark->setPosition(ccp((afterRect.origin.x + afterRect.size.width / 2.f), jackPosition.y + 40));
+			addChild(feelMark);
+			addChild(KSTimer::create(1.f, [=]()
+															 {
+																 addChild(KSGradualValue<float>::create(255, 0, 0.3f, [=](float t)
+																																				{
+																																					vertical->setOpacity(t);
+																																					feelMark->setOpacity(t);
+																																				}, [=](float t)
+																																				{
+																																					//																						 vertical->removeFromParent();
+																																					//																						 feelMark
+																																				}));
+															 }));
+		}
 //		CCLOG("warning!!");
 	}
 	if(afterPosition.y < -mSize.height-60.f)
@@ -371,11 +414,12 @@ void MissileUnit3::move ()
 		removeFromParentAndCleanup(true);
 	}
 }
-void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+void MissileUnit3::myInit (int t_type, float t_distance, CCSize t_mSize, float enableP, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
 	
+	enableProb = enableP;
 	shownWarning = false;
 	myType = t_type;
 	distance = t_distance;
@@ -1045,10 +1089,13 @@ void SatelliteBeam::beamSetPosition (CCPoint t_p)
 {
 	setPosition(t_p);
 	
-	IntPoint beamPoint = IntPoint((t_p.x-1)/pixelSize+1, (t_p.y-1)/pixelSize+1); // center
+	{
+		IntPoint beamPoint = IntPoint((t_p.x-1)/pixelSize+1, (t_p.y-1)/pixelSize+1); // center
+		
+		int crashSize = 1;
+		crashMapForIntRect(IntRect(beamPoint.x - crashSize, beamPoint.y - crashSize, crashSize * 2.f + 1, crashSize * 2.f + 1));
+	}
 	
-	int crashSize = 1;
-	crashMapForIntRect(IntRect(beamPoint.x - crashSize, beamPoint.y - crashSize, crashSize * 2.f, crashSize * 2.f));
 //	for(int x=beamPoint.x-crashSize; x<=beamPoint.x+crashSize; x++)
 //	{
 //		for(int y=beamPoint.y-crashSize; y<=beamPoint.y+crashSize; y++)
@@ -1122,10 +1169,11 @@ void SatelliteBeam::myInit (CCPoint t_sp, int t_type, CCObject * t_removeEffect,
 	
 	startFallingStar();
 }
-FM_Targeting * FM_Targeting::create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree)
+FM_Targeting * FM_Targeting::create (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize,
+																		 float t_fSize, float t_sAngle, float t_fAngle, float inDegree, bool enable)
 {
 	FM_Targeting* t_fmt = new FM_Targeting();
-	t_fmt->myInit(imgFilename, t_sp, t_aniFrame, t_sSize, t_fSize, t_sAngle, t_fAngle, inDegree);
+	t_fmt->myInit(imgFilename, t_sp, t_aniFrame, t_sSize, t_fSize, t_sAngle, t_fAngle, inDegree, enable);
 	t_fmt->autorelease();
 	return t_fmt;
 }
@@ -1139,7 +1187,8 @@ void FM_Targeting::startAction ()
 	
 	targetingImg->runAction(t_spawn);
 }
-void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize, float t_sAngle, float t_fAngle, float inDegree)
+void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, float t_sSize, float t_fSize,
+													 float t_sAngle, float t_fAngle, float inDegree, bool enable)
 {
 	duration = t_aniFrame/60.f;
 	fSize = t_fSize;
@@ -1149,7 +1198,22 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 //	CCBReader* reader = new CCBReader(nodeLoader);
 //	targetingImg = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile("bomb_8_6_1.ccbi",this));//"pattern_meteor1_targeting.ccbi",this));
 //	reader->release();
-	targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1.ccbi").first;
+	if(enable)
+	{
+		targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1.ccbi").first;
+		CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4.ccbi").first;
+		guideLine->setPosition(t_sp);
+		guideLine->setRotation(-inDegree);
+		addChild(guideLine);
+	}
+	else
+	{
+		targetingImg = KS::loadCCBI<CCSprite*>(this, "bomb_8_6_1_2.ccbi").first;
+		CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4_1.ccbi").first;
+		guideLine->setPosition(t_sp);
+		guideLine->setRotation(-inDegree);
+		addChild(guideLine);
+	}
 	targetingImg->setPosition(t_sp);
 	
 	targetingImg->setScale(1.f);
@@ -1157,20 +1221,16 @@ void FM_Targeting::myInit (string imgFilename, CCPoint t_sp, int t_aniFrame, flo
 	
 	addChild(targetingImg);
 
-	CCSprite* guideLine = KS::loadCCBI<CCSprite*>(this, "target4.ccbi").first;
-	guideLine->setPosition(t_sp);
-	guideLine->setRotation(-inDegree);
-	addChild(guideLine);
 	
 	AudioEngine::sharedInstance()->playEffect("se_meteo_1.mp3");
 }
 FallMeteor * FallMeteor::create (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp, CCPoint t_fp, int t_fallFrame, int t_explosionFrame,
-																 IntSize t_mSize, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
+																 IntSize t_mSize, float enableP, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect,
 																 std::function<void(int)> accum)
 {
 	FallMeteor* t_fm = new FallMeteor();
 	t_fm->myInit(t_imgFilename, imgFrameCnt, imgFrameSize, t_sp, t_fp, t_fallFrame,
-							 t_explosionFrame, t_mSize, t_removeEffect, d_removeEffect, accum);
+							 t_explosionFrame, t_mSize, enableP, t_removeEffect, d_removeEffect, accum);
 	t_fm->autorelease();
 	return t_fm;
 }
@@ -1339,12 +1399,16 @@ void FallMeteor::initParticle ()
 }
 void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameSize, CCPoint t_sp,
 												 CCPoint t_fp, int t_fallFrame, int t_explosionFrame, IntSize t_mSize,
+												 float enableP,
 												 CCObject * t_removeEffect, SEL_CallFunc d_removeEffect, std::function<void(int)> accum)
 {
 	crashCount = 0;
+	enableProb = enableP;
 	accumer = accum;
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
+	ProbSelector ps{enableP, 1.f - enableP};
+	enable = (ps.getResult() == 0);
 	
 	imgFilename = t_imgFilename;
 	fp = t_fp;
@@ -1378,24 +1442,45 @@ void FallMeteor::myInit (string t_imgFilename, int imgFrameCnt, CCSize imgFrameS
 		random_sign = 360;
 	else
 		random_sign = -360;
+	m_targetSprite = FM_Targeting::create(imgFilename, t_fp, t_fallFrame, 3.0, 0.7, 0,
+																				random_sign, rad2Deg(atan2f(t_sp.y - t_fp.y, t_sp.x - t_fp.x)), enable);
 	
-	m_targetSprite = FM_Targeting::create(imgFilename, t_fp, t_fallFrame, 3.0, 0.7, 0, random_sign, rad2Deg(atan2f(t_sp.y - t_fp.y, t_sp.x - t_fp.x)));
+	
 	addChild(m_targetSprite);
 	
 	//m_targetSprite->startAction();
 	
-	ingFrame = 0;
-	addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
-				{
-					KS::setOpacity(m_targetSprite, MIN(255, t + 150) );
-//					KS::setColor(m_targetSprite, ccc3(t, t, 255));
-				},
-				[=](float t)
-				{
-					AudioEngine::sharedInstance()->playEffect("se_meteo_2.mp3");
-					schedule(schedule_selector(FallMeteor::fall));
-				}));	
+	if(enable)
+	{
+		ingFrame = 0;
+		addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
+																					 {
+																						 KS::setOpacity(m_targetSprite, MIN(255, t + 150) );
+																						 //					KS::setColor(m_targetSprite, ccc3(t, t, 255));
+																					 },
+																					 [=](float t)
+																					 {
+																						 AudioEngine::sharedInstance()->playEffect("se_meteo_2.mp3");
+																						 schedule(schedule_selector(FallMeteor::fall));
+																					 }));	
+		
+	}
+	else
+	{
+		addChild(KSGradualValue<float>::create(255, 0, fallFrame / 60.f, [=](int t)
+																					 {
+																						 KS::setOpacity(m_targetSprite, MIN(255, t + 150) );
+																						 //					KS::setColor(m_targetSprite, ccc3(t, t, 255));
+																					 },
+																					 [=](float t)
+																					 {
+																						 this->removeFromParent();
+																					 }));
+
+		
+	}
 }
+
 Lazer_Ring * Lazer_Ring::create (float t_ring_angle, CCPoint t_ring_sP, CCPoint t_ring_fP, float t_ring_sS, float t_ring_fS, int t_frame, ccColor3B t_color)
 {
 	Lazer_Ring* t_lr = new Lazer_Ring();
@@ -1445,10 +1530,10 @@ void Lazer_Ring::myInit (float t_ring_angle, CCPoint t_ring_sP, CCPoint t_ring_f
 	
 	startMyAction();
 }
-ThreeCushion * ThreeCushion::create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+ThreeCushion * ThreeCushion::create (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, float enableProb, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	ThreeCushion* t_tc = new ThreeCushion();
-	t_tc->myInit(t_sp, t_speed, t_cushion_cnt, t_is_big_bomb, t_crashArea, t_removeEffect, d_removeEffect);
+	t_tc->myInit(t_sp, t_speed, t_cushion_cnt, t_is_big_bomb, t_crashArea, enableProb, t_removeEffect, d_removeEffect);
 	t_tc->autorelease();
 	return t_tc;
 }
@@ -1487,7 +1572,12 @@ void ThreeCushion::stopMyAction ()
 	AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3", false);
 	unschedule(schedule_selector(ThreeCushion::myAction));
 	initParticle();
-	crashMap();
+	
+	ProbSelector ps = {enableProb, 1.f - enableProb};
+	if(ps.getResult() == 0)
+	{
+		crashMap();
+	}
 	baseNode->removeFromParentAndCleanup(true);
 	baseNode = NULL;
 	//		colorControl = NULL;
@@ -1740,12 +1830,12 @@ CCPoint ThreeCushion::judgeAnglePoint (CCPoint b_p)
 	stopMyAction();
 	return ccp(-1,-1);
 }
-void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
+void ThreeCushion::myInit (CCPoint t_sp, float t_speed, int t_cushion_cnt, bool t_is_big_bomb, int t_crashArea, float enableP, CCObject * t_removeEffect, SEL_CallFunc d_removeEffect)
 {
 	target_removeEffect = t_removeEffect;
 	delegate_removeEffect = d_removeEffect;
 	crashArea = t_crashArea;
-	
+	enableProb = enableP;
 	cushionCnt = t_cushion_cnt;
 	speed = t_speed;
 	angle = 0;
@@ -3726,10 +3816,10 @@ void Burn::myInit (CCPoint t_sp, float t_baseDistance, float t_shootAngle, int t
 	
 	startMyAction();
 }
-PoisonLine * PoisonLine::create (IntPoint t_sp, int frame)
+PoisonLine * PoisonLine::create (IntPoint t_sp, int frame, bool deco)
 {
 	PoisonLine* t_pl = new PoisonLine();
-	t_pl->myInit(t_sp, frame);
+	t_pl->myInit(t_sp, frame, deco);
 	t_pl->autorelease();
 	return t_pl;
 }
@@ -3763,7 +3853,7 @@ void PoisonLine::myAction ()
 	}
 	
 	IntPoint jackPoint = myGD->getJackPoint();
-	if(jackPoint.x == mapPoint.x && jackPoint.y == mapPoint.y)
+	if(jackPoint.x == mapPoint.x && jackPoint.y == mapPoint.y && decoration == false)
 	{
 		myGD->communication("CP_jackCrashDie");
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -3790,26 +3880,42 @@ void PoisonLine::stopMyAction ()
 	}));
 	//		removeFromParentAndCleanup(true);
 }
-void PoisonLine::myInit (IntPoint t_sp, int frame)
+void PoisonLine::myInit (IntPoint t_sp, int frame, bool deco)
 {
 	totalFrame = frame;
 	mapPoint = t_sp;
+	decoration = deco;
 	
 	//		initWithFile("poison_line.png");
-	auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution7.ccbi");
-	line = ret.first;
-//	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	line->setPositionType(kCCPositionTypeGrouped);
-	addChild(line);
+	if(decoration)
+	{
+		auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution_whie.ccbi");
+		
+		line = ret.first;
+		line->setScale(0.7f);
+		//	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		line->setPositionType(kCCPositionTypeGrouped);
+		addChild(line);
+	}
+	else
+	{
+		auto ret = KS::loadCCBI<CCParticleSystemQuad*>(this, "fx_pollution7.ccbi");
+		line = ret.first;
+		line->setScale(0.7f);
+		//	KS::setBlendFunc(line, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+		line->setPositionType(kCCPositionTypeGrouped);
+		addChild(line);
+		
+	}
 	CCPoint myPosition = ccp((t_sp.x-1)*pixelSize+1, (t_sp.y-1)*pixelSize+1);
 	setPosition(myPosition);
 	
 	//		setColor(ccc3(0, 66, 75));
 }
-PoisonDrop * PoisonDrop::create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe)
+PoisonDrop * PoisonDrop::create (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe, float enableRatio)
 {
 	PoisonDrop* t_bd = new PoisonDrop();
-	t_bd->myInit(t_sp, t_fp, t_movingFrame, area, totalframe);
+	t_bd->myInit(t_sp, t_fp, t_movingFrame, area, totalframe, enableRatio);
 	t_bd->autorelease();
 	return t_bd;
 }
@@ -3846,11 +3952,27 @@ void PoisonDrop::myAction ()
 				for(int j=-m_area;j<=m_area;j++)
 				{
 					IntPoint checkPoint = IntPoint(basePoint.x+i,basePoint.y+j);
-					if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline)
+					float maxDistance = m_area;
+					float curDistance = sqrtf(i * i + j * j);
+					if(maxDistance * m_enableRatio >= curDistance)
 					{
-						PoisonLine* t_pl = PoisonLine::create(IntPoint(checkPoint.x, checkPoint.y), m_totalFrame);
-						getParent()->addChild(t_pl);
-						t_pl->startMyAction();
+						if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline)
+						{
+							PoisonLine* t_pl = PoisonLine::create(IntPoint(checkPoint.x, checkPoint.y), m_totalFrame, false);
+							getParent()->addChild(t_pl, 2);
+							t_pl->startMyAction();
+						}
+						
+					}
+					else
+					{
+						if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] == mapOldline)
+						{
+							PoisonLine* t_pl = PoisonLine::create(IntPoint(checkPoint.x, checkPoint.y), m_totalFrame, true);
+							getParent()->addChild(t_pl);
+							t_pl->startMyAction();
+						}
+						
 					}
 				}
 			}
@@ -3888,10 +4010,11 @@ void PoisonDrop::selfRemove ()
 {
 	removeFromParentAndCleanup(true);
 }
-void PoisonDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe)
+void PoisonDrop::myInit (CCPoint t_sp, CCPoint t_fp, int t_movingFrame, int area, int totalframe, float enableRatio)
 {
 	m_area = area;
 	m_totalFrame = totalframe;
+	m_enableRatio = enableRatio;
 	targetImg = KS::loadCCBI<CCSprite*>(this, "target5.ccbi").first;
 	targetImg->setPosition(t_fp);
 	addChild(targetImg);

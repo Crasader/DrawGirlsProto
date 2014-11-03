@@ -18,7 +18,7 @@ protected:
 
 	std::mt19937 m_rEngine; // 엔진
 public:
-	ProbSelector(std::initializer_list<double> s) : m_probs(s)
+	ProbSelector(const std::initializer_list<double>& s) : m_probs(s)
 	{
 		std::random_device rd;	
 		m_rEngine.seed(rd());

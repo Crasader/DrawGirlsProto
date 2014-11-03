@@ -8,10 +8,12 @@
 #include "AudioEngine.h"
 #include "LogData.h"
 
+using namespace placeholders;
+
 using namespace cocos2d;
 #include <functional>
-using namespace placeholders;
 #define LZZ_INLINE inline
+class IntPoint;
 class ShockWave : public CCSpriteBatchNode
 {
 public:

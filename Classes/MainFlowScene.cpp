@@ -61,6 +61,7 @@
 #include "StartSettingPopup.h"
 #include "LoadingTipScene.h"
 #include "RealTimeMessage.h"
+#include "ManyGachaPopup.h"
 
 CCScene* MainFlowScene::scene()
 {
@@ -81,6 +82,8 @@ bool MainFlowScene::init()
     {
         return false;
     }
+	
+	mySGD->ui_scene_code = kUISceneCode_mainFlow;
 	
 //	setBackKeyFunc([=](){
 //		AlertEngine::sharedInstance()->addDoubleAlert("Exit", MyLocal::sharedInstance()->getLocalForKey(LK::kMyLocalKey_exit), "Ok", "Cancel", 1, this, alertfuncII_selector(MainFlowScene::alertAction));
@@ -2731,6 +2734,14 @@ void MainFlowScene::showShopPopup(int t_code)
     addChild(t_shop, kMainFlowZorder_popup+100);
 }
 
+void MainFlowScene::showGachaPopup()
+{
+	is_menu_enable = false;
+	ManyGachaPopup* t_popup = ManyGachaPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -2890,9 +2901,6 @@ void MainFlowScene::menuAction(CCObject* sender)
 			RankNewPopup* t_popup = RankNewPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
-			
-//			RankPopup* t_rp = RankPopup::create(this, callfunc_selector(MainFlowScene::popupClose));
-//			addChild(t_rp, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
@@ -2949,20 +2957,31 @@ void MainFlowScene::menuAction(CCObject* sender)
             if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
             {
                 t_code = kSC_eventPack;
+				
+				ShopPopup* t_shop = ShopPopup::create();
+				t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				t_shop->targetHeartTime(heart_time);
+				t_shop->setShopCode(t_code);
+				t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+				t_shop->addGray();
+				addChild(t_shop, kMainFlowZorder_popup);
             }
             else
             {
-                t_code = kSC_gold;
+//                t_code = kSC_gold;
+				ManyGachaPopup* t_popup = ManyGachaPopup::create();
+				t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				addChild(t_popup, kMainFlowZorder_popup);
             }
             
             
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(t_code);
-			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-			t_shop->addGray();
-			addChild(t_shop, kMainFlowZorder_popup);
+//			ShopPopup* t_shop = ShopPopup::create();
+//			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+//			t_shop->targetHeartTime(heart_time);
+//			t_shop->setShopCode(t_code);
+//			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//			t_shop->addGray();
+//			addChild(t_shop, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)
 		{
@@ -3209,78 +3228,96 @@ void MainFlowScene::setBottom()
 //	}
 	
 	
-	CCSprite* n_shop = CCSprite::create("mainflow_shop.png");
-	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
-	n_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
-	n_shop->addChild(n_shop_label);
-	CCSprite* s_shop = CCSprite::create("mainflow_shop.png");
-	s_shop->setColor(ccGRAY);
-	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
-	s_shop_label->enableOuterStroke(ccBLACK, 1.f);
-	s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
-	s_shop->addChild(s_shop_label);
-	
-	
 	chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-    std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
-    ///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
-    time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
-    
-    int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
-    
-    bool is_on_time_startPack = sub_time <= expireSec;
-    bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-    ///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
-    bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
-    bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
-    bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-    bool is_on_time_eventPack = false;
-    
-    tm* now_tm = localtime(&now_time_t);
-    string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
-    string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
-    
-    int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
-    int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
-    
-    if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
-       atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
-       NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
-       NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
-    {
-        is_on_time_eventPack = true;
-    }
-    
-    bool is_useable_eventPack = true;
-    if(is_have_eventPack && is_on_time_eventPack)
-    {
-        if(is_just_one)
-        {
-            if(!is_buyed_eventPack)
-                is_useable_eventPack = true;
-            else
-                is_useable_eventPack = false;
-        }
-        else
-            is_useable_eventPack = true;
-    }
-    else
-    {
-        is_useable_eventPack = false;
-    }
+	std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+	///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+	time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
 	
+	int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
 	
-	if(NSDS_GB(kSDS_GI_shop_isEvent_b) || ((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack))
+	bool is_on_time_startPack = sub_time <= expireSec;
+	bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+	bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+	bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+	bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+	bool is_on_time_eventPack = false;
+	
+	tm* now_tm = localtime(&now_time_t);
+	string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+	string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+	
+	int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+	int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+	
+	if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+	   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+	   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+	   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
 	{
-		CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
-		n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
-		n_shop->addChild(n_shop_event);
+		is_on_time_eventPack = true;
+	}
+	
+	bool is_useable_eventPack = true;
+	if(is_have_eventPack && is_on_time_eventPack)
+	{
+		if(is_just_one)
+		{
+			if(!is_buyed_eventPack)
+				is_useable_eventPack = true;
+			else
+				is_useable_eventPack = false;
+		}
+		else
+			is_useable_eventPack = true;
+	}
+	else
+	{
+		is_useable_eventPack = false;
+	}
+	
+	CCSprite* n_shop;
+	CCSprite* s_shop;
+	
+	if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
+	{
+		n_shop = CCSprite::create("mainflow_shop.png");
+		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+		n_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
+		n_shop->addChild(n_shop_label);
+		s_shop = CCSprite::create("mainflow_shop.png");
+		s_shop->setColor(ccGRAY);
+		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12);
+		s_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
+		s_shop->addChild(s_shop_label);
 		
-		CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
-		s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+2));
-		s_shop->addChild(s_shop_event);
-		s_shop_event->setColor(ccGRAY);
+		if(NSDS_GB(kSDS_GI_shop_isEvent_b) || ((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack))
+		{
+			CCSprite* n_shop_event = CCSprite::create("mainflow_new.png");
+			n_shop_event->setPosition(ccp(n_shop->getContentSize().width-8, n_shop->getContentSize().height-n_shop_event->getContentSize().height+2));
+			n_shop->addChild(n_shop_event);
+			
+			CCSprite* s_shop_event = CCSprite::create("mainflow_new.png");
+			s_shop_event->setPosition(ccp(s_shop->getContentSize().width-8, s_shop->getContentSize().height-s_shop_event->getContentSize().height+2));
+			s_shop->addChild(s_shop_event);
+			s_shop_event->setColor(ccGRAY);
+		}
+	}
+	else
+	{
+		n_shop = CCSprite::create("mainflow_shop.png");
+		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
+		n_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
+		n_shop->addChild(n_shop_label);
+		s_shop = CCSprite::create("mainflow_shop.png");
+		s_shop->setColor(ccGRAY);
+		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
+		s_shop_label->enableOuterStroke(ccBLACK, 1.f);
+		s_shop_label->setPosition(ccp(s_shop->getContentSize().width/2.f, 7));
+		s_shop->addChild(s_shop_label);
 	}
 	
 	CCMenuItem* shop_item = CCMenuItemSprite::create(n_shop, s_shop, this, menu_selector(MainFlowScene::menuAction));
@@ -3431,9 +3468,9 @@ void MainFlowScene::setBottom()
 	endless_item->setTag(kMainFlowMenuTag_endlessMode);
 	
 	CCMenu* endless_menu = CCMenu::createWithItem(endless_item);
-	if(mySGD->is_hell_mode_enabled)
-		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
-	else
+//	if(mySGD->is_hell_mode_enabled)
+//		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f-29, n_endless->getContentSize().height/2.f+3));
+//	else
 		endless_menu->setPosition(ccp(240,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(52-240+290.f, n_endless->getContentSize().height/2.f+3));
 //	bottom_case->addChild(endless_menu);
 	addChild(endless_menu, kMainFlowZorder_uiButton2);
@@ -3557,85 +3594,84 @@ void MainFlowScene::setBottom()
 	
 	
 
-	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
-	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
+//	CCSprite* n_etc_img = GraySprite::create("mainflow_etc_event.png");
+//	((GraySprite*)n_etc_img)->setGray(!puzzle_number);
+//	
+//	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
+//	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
+//	n_etc_img->addChild(n_event_ment_case);
+//	
+//	if(puzzle_number)
+//	{
+//		KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//		n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f);
+//		n_event_ment_case->addChild(n_event_ment);
+//	}
+//	
+//	
+//	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
+//	if(puzzle_number)
+//		s_etc_img->setColor(ccGRAY);
+//	else
+//		((GraySprite*)s_etc_img)->setDeepGray(!puzzle_number);
+//	
+//	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
+//	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
+//	s_etc_img->addChild(s_event_ment_case);
+//	
+//	if(puzzle_number)
+//	{
+//		KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
+//		s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f);
+//		s_event_ment_case->addChild(s_event_ment);
+//	}
+//	
+//	
+//	CCMenuLambda* etc_menu = CCMenuLambda::create();
+//	if(mySGD->is_hell_mode_enabled)
+//		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
+//	else
+//		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
+//	//		etc_frame->addChild(etc_menu);
+//	addChild(etc_menu, kMainFlowZorder_uiButton);
+//	bottom_list.push_back(etc_menu);
+//	
+//	etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+//	
+//	CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
+//		if(!is_menu_enable)
+//			return;
+//		
+//		is_menu_enable = false;
+//		
+////		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
+//		
+//		
+//			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
+//
+//			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
+//														 {
+//															 mySGD->is_before_stage_img_download = true;
+//															 topOuting();
+//															 bottomPuzzleMode();
+//															 tableDownloading(t_func);
+//														 }, [=](){puzzleLoadSuccess();});
+//			addChild(t_sld, kMainFlowZorder_popup);
+//	});
+//	
+//	etc_menu->addChild(etc_item);
+//	
+//	etc_item->setEnabled(puzzle_number);
 	
-	CCSprite* n_event_ment_case = CCSprite::create("puzzle_event.png");
-	n_event_ment_case->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f + ccp(n_etc_img->getContentSize().width/2.f-n_event_ment_case->getContentSize().width/2.f,18));
-	n_etc_img->addChild(n_event_ment_case);
-	
-	if(puzzle_number)
-	{
-		KSLabelTTF* n_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-		n_event_ment->setPosition(ccpFromSize(n_etc_img->getContentSize())/2.f);
-		n_event_ment_case->addChild(n_event_ment);
-	}
-	
-	
-	CCSprite* s_etc_img = GraySprite::create("mainflow_etc_event.png");
-	if(puzzle_number)
-		s_etc_img->setColor(ccGRAY);
-	else
-		((GraySprite*)s_etc_img)->setDeepGray(!puzzle_number);
-	
-	CCSprite* s_event_ment_case = CCSprite::create("puzzle_event.png");
-	s_event_ment_case->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f + ccp(s_etc_img->getContentSize().width/2.f-s_event_ment_case->getContentSize().width/2.f,18));
-	s_etc_img->addChild(s_event_ment_case);
-	
-	if(puzzle_number)
-	{
-		KSLabelTTF* s_event_ment = KSLabelTTF::create(mySGD->getEventString().c_str(), mySGD->getFont().c_str(), 10);
-		s_event_ment->setPosition(ccpFromSize(s_etc_img->getContentSize())/2.f);
-		s_event_ment_case->addChild(s_event_ment);
-	}
-	
-	
-	CCMenuLambda* etc_menu = CCMenuLambda::create();
-	if(mySGD->is_hell_mode_enabled)
-		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f-50, n_etc_img->getContentSize().height/2.f+3));
-	else
-		etc_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_etc_img->getContentSize().height/2.f+3));
-	//		etc_frame->addChild(etc_menu);
-	addChild(etc_menu, kMainFlowZorder_uiButton);
-	bottom_list.push_back(etc_menu);
-	
-	etc_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-	
-	CCMenuItemLambda* etc_item = CCMenuItemSpriteLambda::create(n_etc_img, s_etc_img, [=](CCObject* sender){
-		if(!is_menu_enable)
-			return;
-		
-		is_menu_enable = false;
-		
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
-		
-		
-			myDSH->setIntegerForKey(kDSH_Key_selectedPuzzleNumber, puzzle_number);
-
-			StageListDown* t_sld = StageListDown::create(this, callfunc_selector(MainFlowScene::basicEnter), puzzle_number, [=](function<void()> t_func)
-														 {
-															 mySGD->is_before_stage_img_download = true;
-															 topOuting();
-															 bottomPuzzleMode();
-															 tableDownloading(t_func);
-														 }, [=](){puzzleLoadSuccess();});
-			addChild(t_sld, kMainFlowZorder_popup);
-	});
-	
-	etc_menu->addChild(etc_item);
-	
-	etc_item->setEnabled(puzzle_number);
-	
-	if(mySGD->is_hell_mode_enabled)
-	{
+//	if(mySGD->is_hell_mode_enabled)
+//	{
 		bool is_hell_open = false;
 		
 		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
 		for(int i=0;!is_hell_open && i<hell_count;i++)
 		{
 			int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
-			PieceHistory t_history = mySGD->getPieceHistory(open_piece_number);
-			if(t_history.is_clear[0].getV() || t_history.is_clear[1].getV() || t_history.is_clear[2].getV() || t_history.is_clear[3].getV())
+			if(mySGD->isClearPiece(open_piece_number))
 				is_hell_open = true;
 		}
 		
@@ -3649,7 +3685,8 @@ void MainFlowScene::setBottom()
 			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
 		
 		CCMenuLambda* hell_menu = CCMenuLambda::create();
-		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
+		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_hell_img->getContentSize().height/2.f+3));
+//		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
 		//		etc_frame->addChild(etc_menu);
 		addChild(hell_menu, kMainFlowZorder_uiButton);
 		bottom_list.push_back(hell_menu);
@@ -3663,7 +3700,7 @@ void MainFlowScene::setBottom()
 		hell_menu->addChild(hell_item);
 		
 		hell_item->setEnabled(is_hell_open);
-	}
+//	}
 	
 	Json::Value v = mySGD->cgp_data;
 	//	Json::Reader r;
@@ -3702,7 +3739,7 @@ void MainFlowScene::setBottom()
 		
 		CCSprite* t_button_img = GDWebSprite::create(v["buttonurl"].asString(), "mainflow_event.png");
 		CommonButton* cgp_button = CommonButton::create(t_button_img, kCCMenuHandlerPriority-1);
-		cgp_button->setPosition(etc_menu->getPosition() + ccp(30,50));
+		cgp_button->setPosition(hell_menu->getPosition() + ccp(30,50));
 		cgp_button->setFunction([=](CCObject* sender)
 								{
 									if(cgp_button->isEnabled() == false)

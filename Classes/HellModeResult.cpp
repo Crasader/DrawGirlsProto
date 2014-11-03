@@ -109,61 +109,76 @@ bool HellModeResult::init()
 			mySGD->addChangeGoods("clearHeartUp", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getGameUseTime()), "클리어하트충전");
 		}
 		
-		if(mySGD->is_clear_diary)
+		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		int character_no = -1;
+		for(int i=0;character_no == -1 && i<hell_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1) == mySD->getSilType())
+				character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+		}
+		if(character_no == -1)
+			character_no = 1;
+		
+		bool is_found = false;
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int i=0;!is_found && i<history_size;i++)
+		{
+			CharacterHistory t_history = mySGD->getCharacterHistory(i);
+			if(t_history.characterNo.getV() == character_no)
+			{
+				is_found = true;
+			}
+		}
+		
+		if(!is_found)
 		{
 			// 카드 획득 통신
 			int card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1);
 
-			mySGD->addHasGottenCardNumber(card_number);
-			
-			Json::Value card_param;
-			card_param["memberID"] = hspConnector::get()->getSocialID();
-			card_param["cardNo"] = card_number;
-			card_param["addCount"] = 1;
-			
-			send_command_list.push_back(CommandParam("updateCardHistory", card_param, [=](Json::Value result_data)
-													  {
-														  TRACE();
-														  if(result_data["result"]["code"].asInt() == GDSUCCESS)
-														  {
-															  TRACE();
-															  for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
-															  {
-																  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
-																	 mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
-																  {
-																	  myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
-																	  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-																	  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-																  }
-															  }
-														  }
-													  }));
-			
-			PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-			bool is_change_history = false;
-			
-			if(!mySGD->isClearPiece(mySD->getSilType()))
-			{
-				t_history.is_clear[0] = true;
-				t_history.clear_count = t_history.try_count.getV();
-				
-				is_change_history = true;
-			}
-			
-			if(is_change_history)
-			{
-				send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, nullptr));
-			}
+//			mySGD->addHasGottenCardNumber(card_number);
+//			
+//			Json::Value card_param;
+//			card_param["memberID"] = hspConnector::get()->getSocialID();
+//			card_param["cardNo"] = card_number;
+//			card_param["addCount"] = 1;
+//			
+//			send_command_list.push_back(CommandParam("updateCardHistory", card_param, [=](Json::Value result_data)
+//													  {
+//														  TRACE();
+//														  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//														  {
+//															  TRACE();
+//															  for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
+//															  {
+//																  if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+//																	 mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
+//																  {
+//																	  myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
+//																	  AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+//																	  CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+//																  }
+//															  }
+//														  }
+//													  }));
+//			
+//			PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+//			bool is_change_history = false;
+//			
+//			if(!mySGD->isClearPiece(mySD->getSilType()))
+//			{
+//				t_history.is_clear[0] = true;
+//				t_history.clear_count = t_history.try_count.getV();
+//				
+//				is_change_history = true;
+//			}
+//			
+//			if(is_change_history)
+//			{
+//				send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, nullptr));
+//			}
 			
 			// 캐릭터 획득 이미지
-			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
-			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
-			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,25));
-			star_back->addChild(take_character_card);
 			
-			int character_no = NSDS_GI(kSDS_CI_int1_characterNo_i, card_number);
 			int character_index = -1;
 			int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 			for(int i=0;character_index == -1 && i<character_count;i++)
@@ -175,32 +190,43 @@ bool HellModeResult::init()
 			
 			CharacterHistory tt_history;
 			tt_history.characterNo = character_no;
-			tt_history.level = 1;
+			
 			send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(tt_history, nullptr));
 			
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.7f);
+			character_node->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,-17));
+			star_back->addChild(character_node);
+			
 			CCSprite* light_back = KS::loadCCBI<CCSprite*>(this, "hell_cha_back.ccbi").first;
-			light_back->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
-			star_back->addChild(light_back);
+			light_back->setPosition(ccp(0,0));
+			character_node->addChild(light_back);
 			
 			CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_index) + ".ccbi").first;
-			character_img->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(-25,-15));
-			star_back->addChild(character_img);
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			KSLabelTTF* take_character_card = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_takeCharacterCard), mySGD->getFont().c_str(), 15);
+			take_character_card->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+			take_character_card->enableOuterStroke(ccc3(60, 20, 0), 1.f, 255, true);
+			take_character_card->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(0,25));
+			star_back->addChild(take_character_card);
 			
 			
-			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
-			t_clipping->setAlphaThreshold(0.1f);
-			
-			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
-			t_clipping->addChild(t_card);
-			t_card->setScale(0.2f);
-			
-			t_clipping->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
-			t_clipping->setScale(1.f/0.2f*0.1f);
-			star_back->addChild(t_clipping);
-			
-			CCSprite* t_frame = CCSprite::create("hell_frame.png");
-			t_frame->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
-			star_back->addChild(t_frame);
+//			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
+//			t_clipping->setAlphaThreshold(0.1f);
+//			
+//			CCSprite* t_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+//			t_clipping->addChild(t_card);
+//			t_card->setScale(0.2f);
+//			
+//			t_clipping->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+//			t_clipping->setScale(1.f/0.2f*0.1f);
+//			star_back->addChild(t_clipping);
+//			
+//			CCSprite* t_frame = CCSprite::create("hell_frame.png");
+//			t_frame->setPosition(ccpFromSize(star_back->getContentSize()/2.f) + ccp(60,0));
+//			star_back->addChild(t_frame);
 			
 //			CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
 //			card_img->setScale(0.15f);
@@ -276,7 +302,7 @@ bool HellModeResult::init()
 	time_title->setPosition(ccp(8, gold_time_back->getContentSize().height/2.f-12));
 	gold_time_back->addChild(time_title);
 	
-	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* time_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_hellContentTime), KS::insert_separator(mySGD->hell_play_time.getV(), "%.1f").c_str()), mySGD->getFont().c_str(), 18);
 	time_content->setAnchorPoint(ccp(1,0.5f));
 	time_content->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	time_content->setPosition(ccp(gold_time_back->getContentSize().width-8, gold_time_back->getContentSize().height/2.f-12));
@@ -306,12 +332,12 @@ bool HellModeResult::init()
 	
 	is_saved_user_data = false;
 	
-	if(mySGD->is_clear_diary)
-	{
-		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1), [=](){endTakeCard();});
-		addChild(t_take_card_popup, kZ_HMR_popup+5);
-	}
-	else
+//	if(mySGD->is_clear_diary)
+//	{
+//		TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1), [=](){endTakeCard();});
+//		addChild(t_take_card_popup, kZ_HMR_popup+5);
+//	}
+//	else
 		endTakeCard();
 	
 //	CCScale9Sprite* left_total_back = CCScale9Sprite::create("common_lightgray.png", CCRectMake(0, 0, 18, 18), CCRectMake(8, 8, 2, 2));
@@ -333,7 +359,7 @@ bool HellModeResult::init()
 	
 	CCLabelTTF* t_ok_node = CCLabelTTF::create();
 	KSLabelTTF* ok_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toMain), mySGD->getFont().c_str(), 27.5f);
-	ok_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	ok_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	t_ok_node->addChild(ok_label);
 	
 	ok_menu = CCControlButton::create(t_ok_node, CCScale9Sprite::create("mainbutton_purple.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -349,7 +375,7 @@ bool HellModeResult::init()
 	
 	CCLabelTTF* t_replay_node = CCLabelTTF::create();
 	KSLabelTTF* replay_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_regame), mySGD->getFont().c_str(), 27.5f);
-	replay_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	replay_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	t_replay_node->addChild(replay_label);
 	
 	replay_menu = CCControlButton::create(t_replay_node, CCScale9Sprite::create("mainbutton_green.png", CCRectMake(0, 0, 215, 65), CCRectMake(107, 32, 1, 1)));
@@ -382,7 +408,6 @@ bool HellModeResult::init()
 	p2_data["character"] = myDSH->getIntegerForKey(kDSH_Key_selectedCharacter);
 	p2_data["highstage"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
-	
 	
 	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, HellModeResult::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
@@ -477,6 +502,7 @@ void HellModeResult::resultGetRank(Json::Value result_data)
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+//		CCLog("resultGetRank : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 		TRACE();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
