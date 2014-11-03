@@ -2546,7 +2546,7 @@ void Jack::showMissionEffect(int t_i)
 	
 	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
 	talk_box->setAnchorPoint(ccp(0.5f,0));
-	talk_box->setPosition(ccp(0,35));
+	talk_box->setPosition(ccp(0,28));
 	addChild(talk_box);
 	
 
@@ -2591,7 +2591,7 @@ void Jack::showPatternEffect(int t_i)
 	
 	CCSprite* talk_box = CCSprite::create("cha_talkbox.png");
 	talk_box->setAnchorPoint(ccp(0.5f,0));
-	talk_box->setPosition(ccp(0,35));
+	talk_box->setPosition(ccp(0,28));
 	addChild(talk_box);
 	
 
