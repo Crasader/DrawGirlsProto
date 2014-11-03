@@ -1195,7 +1195,8 @@ enum class LK
 	kMyLocalKey_nowRefreshNeedGem,
 	kMyLocalKey_character,
 	kMyLocalKey_dontHave,
-	kMyLocalKey_refresh
+	kMyLocalKey_refresh,
+	kMyLocalKey_onlyBaseCharacterInHellmode
 };
 class KsLocal
 {

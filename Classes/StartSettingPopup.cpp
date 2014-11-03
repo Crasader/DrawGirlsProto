@@ -1237,35 +1237,28 @@ void StartSettingPopup::setMain()
 			upgrade_menu->setTouchPriority(touch_priority);
 		}
 		
-		if(!mySGD->is_hell_mode)
-		{
-			CCSprite* n_changeCharacter = CCSprite::create("startsetting_upgrade.png");
-			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
-			n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
-			n_label->setPosition(ccpFromSize(n_changeCharacter->getContentSize()/2.f));
-			n_changeCharacter->addChild(n_label);
-			
-			
-			CCSprite* s_changeCharacter = CCSprite::create("startsetting_upgrade.png");
-			s_changeCharacter->setColor(ccGRAY);
-			KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
-			s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
-			s_label->setPosition(ccpFromSize(s_changeCharacter->getContentSize()/2.f));
-			s_changeCharacter->addChild(s_label);
-			
-			
-			CCMenuItem* changeCharacter_item = CCMenuItemSprite::create(n_changeCharacter, s_changeCharacter, this, menu_selector(StartSettingPopup::changeCharacterAction));
-			
-			CCMenu* changeCharacter_menu = CCMenu::createWithItem(changeCharacter_item);
-			changeCharacter_menu->setPosition(ccp(left_back->getPositionX()-36,43));
-			main_case->addChild(changeCharacter_menu);
-			
-			changeCharacter_menu->setTouchPriority(touch_priority);
-		}
-		else
-		{
-			upgrade_menu->setPosition(ccp(left_back->getPositionX(),43));
-		}
+		CCSprite* n_changeCharacter = CCSprite::create("startsetting_upgrade.png");
+		KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+		n_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
+		n_label->setPosition(ccpFromSize(n_changeCharacter->getContentSize()/2.f));
+		n_changeCharacter->addChild(n_label);
+		
+		
+		CCSprite* s_changeCharacter = CCSprite::create("startsetting_upgrade.png");
+		s_changeCharacter->setColor(ccGRAY);
+		KSLabelTTF* s_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_changeCharacter), mySGD->getFont().c_str(), 12);
+		s_label->enableOuterStroke(ccBLACK, 1, int(255*0.5f), true);
+		s_label->setPosition(ccpFromSize(s_changeCharacter->getContentSize()/2.f));
+		s_changeCharacter->addChild(s_label);
+		
+		
+		CCMenuItem* changeCharacter_item = CCMenuItemSprite::create(n_changeCharacter, s_changeCharacter, this, menu_selector(StartSettingPopup::changeCharacterAction));
+		
+		CCMenu* changeCharacter_menu = CCMenu::createWithItem(changeCharacter_item);
+		changeCharacter_menu->setPosition(ccp(left_back->getPositionX()-36,43));
+		main_case->addChild(changeCharacter_menu);
+		
+		changeCharacter_menu->setTouchPriority(touch_priority);
 	}
 	else
 	{
@@ -1642,19 +1635,26 @@ void StartSettingPopup::changeCharacterAction(CCObject* sender)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
-		main_case->setScaleY(t);
-	}, [=](float t){
-		main_case->setScaleY(1.2f);
-		addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+	if(mySGD->is_hell_mode)
+	{
+		addChild(ASPopupView::getCommonNoti(touch_priority-50, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_onlyBaseCharacterInHellmode), [=](){is_menu_enable = true;}), 9999);
+	}
+	else
+	{
+		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
 			main_case->setScaleY(t);
 		}, [=](float t){
-			main_case->setScaleY(0.f);
-			CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(StartSettingPopup::characterClose));
-			addChild(t_popup, kStartSettingPopupZorder_popup);
+			main_case->setScaleY(1.2f);
+			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){
+				main_case->setScaleY(0.f);
+				CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+				t_popup->setHideFinalAction(this, callfunc_selector(StartSettingPopup::characterClose));
+				addChild(t_popup, kStartSettingPopupZorder_popup);
+			}));
 		}));
-	}));
+	}
 }
 
 void StartSettingPopup::characterClose()

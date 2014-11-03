@@ -1231,6 +1231,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_character] = "캐릭터";
 	obj[LK::kMyLocalKey_dontHave] = "미보유";
 	obj[LK::kMyLocalKey_refresh] = "갱신하기";
+	obj[LK::kMyLocalKey_onlyBaseCharacterInHellmode] = "헬모드에서는 기본 캐릭터로만 플레이 가능합니다.";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
