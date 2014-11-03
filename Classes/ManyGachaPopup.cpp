@@ -440,6 +440,43 @@ void ManyGachaPopup::setNormalGacha()
 					{
 						is_found = true;
 						
+						if(!t_data->is_take.getV())
+						{
+							int history_size = mySGD->getCharacterHistorySize();
+							bool is_found2 = false;
+							for(int l=0;!is_found2 && l<history_size;l++)
+							{
+								CharacterHistory t_history = mySGD->getCharacterHistory(l);
+								if(t_history.characterNo.getV() == reward_count)
+								{
+									is_found2 = true;
+									if(t_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, k+1))
+									{
+										t_data->is_take = true;
+										
+										Json::Value t_json_list;
+										t_json_list.clear();
+										
+										for(int i=0;i<gacha_data_list.size();i++)
+										{
+											t_json_list[i]["exchangeID"] = gacha_data_list[i].exchangeID.getV();
+											t_json_list[i]["level"] = gacha_data_list[i].level.getV();
+											t_json_list[i]["percent"] = gacha_data_list[i].percent.getV();
+											t_json_list[i]["isTake"] = gacha_data_list[i].is_take.getV();
+											for(int j=0;j<gacha_data_list[i].reward_list.size();j++)
+											{
+												t_json_list[i]["reward"][j]["type"] = gacha_data_list[i].reward_list[j].type.getV();
+												t_json_list[i]["reward"][j]["count"] = gacha_data_list[i].reward_list[j].count.getV();
+											}
+										}
+										
+										Json::FastWriter t_writer;
+										myDSH->setStringForKey(kDSH_Key_normalGachaList, t_writer.write(t_json_list));
+									}
+								}
+							}
+						}
+						
 						CCNode* char_node = CCNode::create();
 						char_node->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,0));
 						char_node->setScale(0.4f);
@@ -763,6 +800,43 @@ void ManyGachaPopup::setPremiumGacha()
 					if(reward_count == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, k+1))
 					{
 						is_found = true;
+						
+						if(!t_data->is_take.getV())
+						{
+							int history_size = mySGD->getCharacterHistorySize();
+							bool is_found2 = false;
+							for(int l=0;!is_found2 && l<history_size;l++)
+							{
+								CharacterHistory t_history = mySGD->getCharacterHistory(l);
+								if(t_history.characterNo.getV() == reward_count)
+								{
+									is_found2 = true;
+									if(t_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, k+1))
+									{
+										t_data->is_take = true;
+										
+										Json::Value t_json_list;
+										t_json_list.clear();
+										
+										for(int i=0;i<gacha_data_list.size();i++)
+										{
+											t_json_list[i]["exchangeID"] = gacha_data_list[i].exchangeID.getV();
+											t_json_list[i]["level"] = gacha_data_list[i].level.getV();
+											t_json_list[i]["percent"] = gacha_data_list[i].percent.getV();
+											t_json_list[i]["isTake"] = gacha_data_list[i].is_take.getV();
+											for(int j=0;j<gacha_data_list[i].reward_list.size();j++)
+											{
+												t_json_list[i]["reward"][j]["type"] = gacha_data_list[i].reward_list[j].type.getV();
+												t_json_list[i]["reward"][j]["count"] = gacha_data_list[i].reward_list[j].count.getV();
+											}
+										}
+										
+										Json::FastWriter t_writer;
+										myDSH->setStringForKey(kDSH_Key_premiumGachaList, t_writer.write(t_json_list));
+									}
+								}
+							}
+						}
 						
 						CCNode* char_node = CCNode::create();
 						char_node->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,0));
@@ -1710,21 +1784,38 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 		{
 			title_label->setPosition(ccp(240,240));
 			
-			KSLabelTTF* card_take = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardTake), mySGD->getFont().c_str(), 18);
+			KSLabelTTF* stage_number = KSLabelTTF::create(ccsf(getLocal(LK::kFriendCurrentStage), NSDS_GI(kSDS_CI_int1_stage_i, keep_card_number)), mySGD->getFont().c_str(), 18);
+			stage_number->setColor(ccc3(255, 170, 20));
+			stage_number->enableOuterStroke(ccBLACK, 2.f, int(255*0.7f), true);
+			stage_number->setPosition(ccp(240,200));
+			stage_number->setOpacity(0);
+			t_node->addChild(stage_number);
+			
+			KSLabelTTF* card_take = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), gacha_data_list[selected_value].reward_list[0].count.getV()), mySGD->getFont().c_str(), 18);
 			card_take->enableOuterStroke(ccBLACK, 2.f, int(255*0.7f), true);
 			card_take->setPosition(ccp(240,200));
 			card_take->setOpacity(0);
 			t_node->addChild(card_take);
 			
+			stage_number->setPositionX(240-card_take->getContentSize().width/2.f-2);
+			card_take->setPositionX(240+stage_number->getContentSize().width/2.f+2);
+			
 			KSLabelTTF* sub_title = KSLabelTTF::create((ccsf(getLocal(LK::kMyLocalKey_nGradeCard), NSDS_GI(kSDS_CI_int1_grade_i, keep_card_number)) + string("  ") + NSDS_GS(kSDS_CI_int1_name_s, keep_card_number)).c_str(), mySGD->getFont().c_str(), 18);
+			sub_title->setColor(ccc3(255, 170, 20));
 			sub_title->enableOuterStroke(ccBLACK, 2.f, int(255*0.7f), true);
 			sub_title->setPosition(ccp(detail_back->getContentSize().width/2.f + 50, detail_back->getContentSize().height-20));
 			detail_back->addChild(sub_title);
 			
 			CCSprite* box_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", keep_card_number));
-			box_img->setScale(0.23f);
-			box_img->setPosition(ccp(65, detail_back->getContentSize().height/2.f));
-			detail_back->addChild(box_img);
+			CCSprite* box_case = CCSprite::create("gacha_card_case.png");
+			
+			CCClippingNode* t_clipping = CCClippingNode::create(CCSprite::create("gacha_card_mask.png"));
+			t_clipping->setAlphaThreshold(0.1f);
+			t_clipping->addChild(box_img);
+			t_clipping->addChild(box_case);
+			t_clipping->setScale(0.23f);
+			t_clipping->setPosition(ccp(65, detail_back->getContentSize().height/2.f));
+			detail_back->addChild(t_clipping);
 			
 			KSLabelTTF* count_label = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, keep_card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(145, 90), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 			count_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-10));

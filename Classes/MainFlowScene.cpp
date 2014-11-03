@@ -333,82 +333,88 @@ bool MainFlowScene::init()
         TRACE();
 		is_menu_enable = true;
 	}
-	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
+	else if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_init)
 	{
-        TRACE();
-		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
-		
-		is_openning = true;
-		topOpenning();
-		bottomOpenning();
-		
-		if(mySGD->getMustBeShowNotice())
+		if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_init) // 실행 후 첫 접근시
 		{
-			ASPopupView* t_popup = ASPopupView::create(-9999999);
+			TRACE();
+			AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 			
-			float height_value = 320.f;
-			if(myDSH->screen_convert_rate < 1.f)
-				height_value = 320.f/myDSH->screen_convert_rate;
+			is_openning = true;
+			topOpenning();
+			bottomOpenning();
 			
-			if(height_value < myDSH->ui_top)
-				height_value = myDSH->ui_top;
+			if(mySGD->getMustBeShowNotice())
+			{
+				ASPopupView* t_popup = ASPopupView::create(-9999999);
+				
+				float height_value = 320.f;
+				if(myDSH->screen_convert_rate < 1.f)
+					height_value = 320.f/myDSH->screen_convert_rate;
+				
+				if(height_value < myDSH->ui_top)
+					height_value = myDSH->ui_top;
+				
+				TRACE();
+				t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
+				t_popup->setDimmedPosition(ccp(240, 160));
+				t_popup->setBasePosition(ccp(240, 160));
+				
+				TRACE();
+				NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
+																   {
+																	   TRACE();
+																	   t_popup->removeFromParent();
+																   }, mySGD->getNoticeList());
+				t_popup->setContainerNode(t_container);
+				addChild(t_popup, kMainFlowZorder_popup+9999999);
+			}
 			
-            TRACE();
-			t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, height_value));// /myDSH->screen_convert_rate));
-			t_popup->setDimmedPosition(ccp(240, 160));
-			t_popup->setBasePosition(ccp(240, 160));
+			TRACE();
+			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 			
-            TRACE();
-			NoticeContent* t_container = NoticeContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
-															   {
-                                                                   TRACE();
-																   t_popup->removeFromParent();
-															   }, mySGD->getNoticeList());
-			t_popup->setContainerNode(t_container);
-			addChild(t_popup, kMainFlowZorder_popup+9999999);
+			is_menu_enable = true;
+			TRACE();
 		}
-		
-        TRACE();
-		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
-		
-		is_menu_enable = true;
-        TRACE();
-	}
-	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
-	{
-        TRACE();
-		bottomOpenning();
-		topOnLight();
-		
-        TRACE();
-		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0 || (myDSH->getIntegerForKey(kDSH_Key_showedScenario)%1000 == 0 && myDSH->getIntegerForKey(kDSH_Key_showedScenario)/1000+1 == is_unlock_puzzle) || mySGD->is_on_attendance || mySGD->is_on_rank_reward || mySGD->is_today_mission_first || mySGD->is_new_puzzle_card.getV() || (myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece()))
+		else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_stage)
 		{
-			is_menu_enable = false;
+			TRACE();
+			bottomOpenning();
+			topOnLight();
+			
+			TRACE();
+			if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0 || (myDSH->getIntegerForKey(kDSH_Key_showedScenario)%1000 == 0 && myDSH->getIntegerForKey(kDSH_Key_showedScenario)/1000+1 == is_unlock_puzzle) || mySGD->is_on_attendance || mySGD->is_on_rank_reward || mySGD->is_today_mission_first || mySGD->is_new_puzzle_card.getV() || (myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 0 && mySGD->getUserdataHighPiece() >= mySGD->getEndlessMinPiece()))
+			{
+				is_menu_enable = false;
+			}
+			else
+				is_menu_enable = true;
+			
+			CCSprite* title_name = CCSprite::create("temp_title_name.png");
+			title_name->setPosition(ccp(240,160));
+			title_name->setOpacity(255);
+			addChild(title_name, kMainFlowZorder_back);
+			
+			TRACE();
+			CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
+			CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
+			CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
+			title_name->runAction(t_seq);
+			TRACE();
 		}
 		else
+		{
+			TRACE();
 			is_menu_enable = true;
-		
-		CCSprite* title_name = CCSprite::create("temp_title_name.png");
-		title_name->setPosition(ccp(240,160));
-		title_name->setOpacity(255);
-		addChild(title_name, kMainFlowZorder_back);
-		
-        TRACE();
-		CCFadeTo* t_fade = CCFadeTo::create(0.5f, 0);
-		CCCallFunc* t_call = CCCallFunc::create(title_name, callfunc_selector(CCSprite::removeFromParent));
-		CCSequence* t_seq = CCSequence::create(t_fade, t_call, NULL);
-		title_name->runAction(t_seq);
-        TRACE();
+			TRACE();
+		}
 	}
 	else
 	{
-        TRACE();
+		TRACE();
 		is_menu_enable = true;
-        TRACE();
+		TRACE();
 	}
-	
-	
-	
 	
 	
     TRACE();
@@ -427,7 +433,15 @@ bool MainFlowScene::init()
 		is_menu_enable = false;
 		puzzle_table->setTouchEnabled(false);
 		
-		showHellResult();
+		if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_init)
+			showHellResult();
+		else if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_hellReplay)
+		{
+			StartSettingPopup* t_popup = StartSettingPopup::create();
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::showHellOpening));
+			addChild(t_popup, kMainFlowZorder_popup);
+			myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_init);
+		}
 	}
 	else if(myDSH->getPuzzleMapSceneShowType() == kPuzzleMapSceneShowType_clear)
 	{
@@ -725,6 +739,7 @@ void MainFlowScene::tableOpenning()
 void MainFlowScene::showHellOpening()
 {
 	is_menu_enable = false;
+	puzzle_table->setTouchEnabled(false);
 	
 	HellModeOpening* t_popup = HellModeOpening::create();
 	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
@@ -5809,6 +5824,7 @@ void MainFlowScene::countingAchievement()
 void MainFlowScene::popupClose()
 {
 	is_menu_enable = true;
+	puzzle_table->setTouchEnabled(true);
 }
 
 void MainFlowScene::achievePopupClose()

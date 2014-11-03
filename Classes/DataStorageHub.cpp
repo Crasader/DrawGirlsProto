@@ -602,6 +602,14 @@ void DataStorageHub::setPuzzleMapSceneShowType (int t_type)
 {
 	puzzle_map_scene_show_type = t_type;
 }
+int DataStorageHub::getMainFlowSceneShowType()
+{
+	return mainflow_scene_show_type;
+}
+void DataStorageHub::setMainFlowSceneShowType(int t_type)
+{
+	mainflow_scene_show_type = t_type;
+}
 void DataStorageHub::fFlush ()
 {			myDefault->fFlush(kSDF_myDSH);		}
 void DataStorageHub::removeCache()
@@ -620,6 +628,7 @@ void DataStorageHub::myInit ()
 	myDefault = SaveData::sharedObject();
 	is_cheat_key_enabled = false;
 	puzzle_map_scene_show_type = kPuzzleMapSceneShowType_init;
+	mainflow_scene_show_type = kMainFlowSceneShowType_init;
 	setIntegerForKey(kDSH_Key_tutorial_flowStep, 17);
 	initReturnPair();
 }

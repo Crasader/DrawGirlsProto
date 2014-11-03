@@ -202,7 +202,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	gohome_button->setTouchPriority(touch_priority-1);
 	
-	gohome_button->setEnabled(!mySGD->is_hell_mode);
+//	gohome_button->setEnabled(!mySGD->is_hell_mode);
 	
 	
 	
@@ -223,7 +223,7 @@ void PauseContent::myInit(int t_touch_priority, function<void(void)> t_resume, f
 	
 	replay_button->setTouchPriority(touch_priority-1);
 	
-	replay_button->setEnabled(!mySGD->is_hell_mode);
+//	replay_button->setEnabled(!mySGD->is_hell_mode);
 	
 
 	
