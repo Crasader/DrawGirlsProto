@@ -1194,7 +1194,8 @@ enum class LK
 	kMyLocalKey_missileFireRegi,
 	kMyLocalKey_nowRefreshNeedGem,
 	kMyLocalKey_character,
-	kMyLocalKey_dontHave
+	kMyLocalKey_dontHave,
+	kMyLocalKey_refresh
 };
 class KsLocal
 {

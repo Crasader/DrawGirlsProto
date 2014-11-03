@@ -25,6 +25,7 @@
 #include "GachaDetailPopup.h"
 #include "CCMenuLambda.h"
 #include "PuzzleScene.h"
+#include "GachaRefreshCheckPopup.h"
 
 enum ManyGachaPopupMenu
 {
@@ -923,15 +924,11 @@ void ManyGachaPopup::normalRefresh(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	addChild(ASPopupView::getCommonNoti(touch_priority-10, getLocal(LK::kMyLocalKey_noti), ccsf(getLocal(LK::kMyLocalKey_nowRefreshNeedGem), mySGD->getGachaRefreshGem()),
-										[=]()
-	{
-		normalNowRefreshAction();
-	},
-										12, ccp(0,0), true, true,[=]()
-										{
-											is_menu_enable = true;
-										}), 9999);
+	GachaRefreshCheckPopup* t_popup = GachaRefreshCheckPopup::create(touch_priority-10, [=](){is_menu_enable = true;}, [=]()
+																	 {
+																		 normalNowRefreshAction();
+																	 });
+	addChild(t_popup, 9999);
 }
 
 void ManyGachaPopup::normalRefreshAction()
@@ -971,15 +968,11 @@ void ManyGachaPopup::premiumRefresh(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	addChild(ASPopupView::getCommonNoti(touch_priority-10, getLocal(LK::kMyLocalKey_noti), ccsf(getLocal(LK::kMyLocalKey_nowRefreshNeedGem), mySGD->getGachaRefreshGem()),
-										[=]()
-										{
-											premiumNowRefreshAction();
-										},
-										12, ccp(0,0), true, true,[=]()
-										{
-											is_menu_enable = true;
-										}), 9999);
+	GachaRefreshCheckPopup* t_popup = GachaRefreshCheckPopup::create(touch_priority-10, [=](){is_menu_enable = true;}, [=]()
+																	 {
+																		 premiumNowRefreshAction();
+																	 });
+	addChild(t_popup, 9999);
 }
 
 void ManyGachaPopup::premiumRefreshAction()
