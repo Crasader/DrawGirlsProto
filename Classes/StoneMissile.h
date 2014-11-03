@@ -492,28 +492,8 @@ public:
 		
 		string plistFile = ccsf("jm_particle_%02d.plist", particleNo);
 		
-
-//		CCDictionary* dict = getDictForParticle(plistFile);
-//		
-
-		map<string,CCDictionary*>::iterator it;
-		it=jm_particleList.find(plistFile);
-		CCDictionary *dict;
-		if (it == jm_particleList.end()) {
-			string m_sPlistFile = CCFileUtils::sharedFileUtils()->fullPathForFilename(plistFile.c_str());
-			dict = CCDictionary::createWithContentsOfFileThreadSafe(m_sPlistFile.c_str());
-			dict->retain();
-			jm_particleList[plistFile]=dict;
-		}else{
-			dict=jm_particleList[plistFile];
-			dict->retain();
-		}
+		auto quad = CCParticleSystemQuad::create(plistFile.c_str());
 		
-		auto quad = new CCParticleSystemQuad();
-		quad->initWithDictionary(dict);
-		quad->autorelease();
-		
-	//	auto quad = CCParticleSystemQuad::create(plistFile.c_str());
 		quad->setPositionType(kCCPositionTypeRelative);
 		
 		//		addChild(quad);
@@ -1922,6 +1902,26 @@ public:
 	void update(float dt)
 	{
 		// 여기서 몬스터와 부딪힌거 검사하면서 터짐.
+		bool isEnable = true;
+		bool emptyMonster = false;
+		IntPoint missilePoint = ccp2ip(m_mine->getPosition());
+		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+												 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+		
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+		
 		m_tickCount -= 1.f/60.f;
 
 		if(m_tickCount <= 0)
@@ -2015,9 +2015,12 @@ public:
 	}
 	void beautifier(int level)
 	{
+		m_level = level;
 		makeBeautifier(level, m_streak, m_particle);
-		if(m_streak)addChild(m_streak, -1);
-		if(m_particle)addChild(m_particle, -2);
+		if(m_streak)
+			addChild(m_streak, -1);
+		if(m_particle)
+			addChild(m_particle, -2);
 	}
 		
 
@@ -2303,6 +2306,7 @@ public:
 	
 	void beautifier(int level)
 	{
+		m_level = level;
 		makeBeautifier(level, m_streak, m_particle);
 		if(m_streak)addChild(m_streak, -1);
 		if(m_particle)addChild(m_particle, -2);
@@ -2370,6 +2374,7 @@ public:
 		m_initPosition = initPosition;
 		m_particle = nullptr;
 		m_streak = nullptr;
+		m_radVelocityBonus = mInfo.get("radvelocitybonus", 1.f).asFloat();
 //		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
 //		m_jiggleInterval = 0;
 		m_option = ao;
@@ -2406,7 +2411,7 @@ public:
 			removeFromParent();
 			return;
 		}
-		m_currentRad += M_PI / 180.f * 3.f;
+		m_currentRad += M_PI / 180.f * 3.f * m_radVelocityBonus;
 		for(auto& m : m_sprites)
 		{
 			m.missileSprite->setPosition(m_initPosition + ccp(m.radius * cosf(m_currentRad), m.radius * sinf(m_currentRad)));
@@ -2518,6 +2523,7 @@ protected:
 	int m_subPower;
 	float m_currentRad;
 	CCPoint m_initPosition;
+	float m_radVelocityBonus;
 	std::vector<Missile> m_sprites;
 //	int m_jiggleInterval;
 //	int m_initJiggleInterval;		
