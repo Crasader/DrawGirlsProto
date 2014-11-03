@@ -152,6 +152,7 @@ public:
 	virtual void stopMyAction();
 	
 	
+	bool groundOfJack(int state);
 	
 	
 
