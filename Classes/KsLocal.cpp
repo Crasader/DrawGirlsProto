@@ -94,7 +94,7 @@ void KsLocal::ko()
 	obj[LK::kBonusGameTouch] = "터치! 터치!";
 	obj[LK::kTouchDesc1] = "<font color=#FFFFFF size=11 newline=20>최대한 많이 터치를 하세요.</font><font color=#FFFFFF size=11>돈이 쏟아져요!</font>";
 	
-	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF newline=15>생명의 돌은 다이어리에서 사용할수있어요.</font><font color=#FFFFFF>그럼 피스 퍼펙트 클리어 후 다시 만나요!</font>";
+	obj[LK::kBonusCong] = "<font color=#FFFFFF newline=15>축하합니다.</font><font color=#FFFFFF>피스 퍼펙트 클리어 후 다시 만나요!</font>";
 	obj[LK::kAccountConf] = "계정 설정";
 	obj[LK::kLinkingGoogle] = "구글과 연결되어 있습니다.";
 	obj[LK::kLinkingGameCenter] = "게임센터와 연결되어 있습니다.";
@@ -1021,7 +1021,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scenarioMent59] = "행운을 빌어요.";
 	obj[LK::kMyLocalKey_scenarioMent60] = "첫 대전이라 떨리시죠?\n \n이기면 보상이 있으니 행운을 빌어요.\n그럼 전 이만..";
 	obj[LK::kMyLocalKey_scenarioMent61] = "PVP가 끝나면 이곳으로 와요.";
-	obj[LK::kMyLocalKey_scenarioMent62] = "모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다.";
+	obj[LK::kMyLocalKey_scenarioMent62] = "모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다.\n튜토리얼을 마치겠습니다. 그럼 전 이만!";
 	obj[LK::kMyLocalKey_kindTutorial1] = "업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!";
 	obj[LK::kMyLocalKey_kindTutorial2] = "모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!";
 	obj[LK::kMyLocalKey_kindTutorial3] = "하하! 또 만나네요.\n내카드에서는 스테이지에서 획득한 카드를\n확인할 수 있어요.";
@@ -1229,6 +1229,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missileFireRegi] = "미사일불꽃 저항";
 	obj[LK::kMyLocalKey_nowRefreshNeedGem] = "즉시 목록을 갱신하려면 %d젬이 필요합니다.";
 	obj[LK::kMyLocalKey_character] = "캐릭터";
+	obj[LK::kMyLocalKey_dontHave] = "미보유";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

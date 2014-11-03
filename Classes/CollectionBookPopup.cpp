@@ -210,20 +210,20 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 		}
 	}
 	
-	if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-	{
-		CCSprite* n_diary_19 = CCSprite::create("diary_19.png");
-		CCSprite* s_diary_19 = CCSprite::create("diary_19.png");
-		s_diary_19->setColor(ccGRAY);
-		
-		CCMenuItem* diary_19_item = CCMenuItemSprite::create(n_diary_19, s_diary_19, this, menu_selector(CollectionBookPopup::menuAction));
-		diary_19_item->setTag(kCBP_MT_diary19);
-		
-		CCMenu* diary_19_menu = CCMenu::createWithItem(diary_19_item);
-		diary_19_menu->setPosition(ccp(185,84));
-		target->addChild(diary_19_menu, 1, kCBP_MT_diary19);
-		diary_19_menu->setTouchPriority(-191);
-	}
+//	if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
+//	{
+//		CCSprite* n_diary_19 = CCSprite::create("diary_19.png");
+//		CCSprite* s_diary_19 = CCSprite::create("diary_19.png");
+//		s_diary_19->setColor(ccGRAY);
+//		
+//		CCMenuItem* diary_19_item = CCMenuItemSprite::create(n_diary_19, s_diary_19, this, menu_selector(CollectionBookPopup::menuAction));
+//		diary_19_item->setTag(kCBP_MT_diary19);
+//		
+//		CCMenu* diary_19_menu = CCMenu::createWithItem(diary_19_item);
+//		diary_19_menu->setPosition(ccp(185,84));
+//		target->addChild(diary_19_menu, 1, kCBP_MT_diary19);
+//		diary_19_menu->setTouchPriority(-191);
+//	}
 	
 	CommonButton* close = CommonButton::createCloseButton(-191);
 	close->setFunction([=](CCObject* sender)

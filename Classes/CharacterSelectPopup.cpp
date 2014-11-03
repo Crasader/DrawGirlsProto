@@ -296,8 +296,8 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 	{
 		int real_idx = idx*5 + i;
 		
-		float dis_width = cellSizeForTable(table).width/5.f;
-		CCPoint character_position = ccp(dis_width/2.f + dis_width*i , cellSizeForTable(table).height/2.f);
+		float dis_width = 390.f/5.f;//cellSizeForTable(table).width/5.f;
+		CCPoint character_position = ccp(16 + dis_width/2.f + dis_width*i , cellSizeForTable(table).height/2.f);
 		
 		if(real_idx < list_cnt)
 		{
@@ -367,6 +367,7 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 				if(is_selected)
 				{
 					CCSprite* selected_img = CCSprite::create("cha_select.png");
+					selected_img->setBlendFunc({GL_ONE,GL_ONE});
 					selected_img->setPosition(character_position);
 					cell_back->addChild(selected_img);
 				}

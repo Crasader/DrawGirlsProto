@@ -50,11 +50,11 @@ void ZoomScript::completedAnimationSequenceNamed(const char *name)
 	int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
 	if(grade == 2 || grade == 4)
 	{
-		(this->*delegate_typing_after)();
-		CCTouch* t_touch = new CCTouch();
-		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
-		t_touch->autorelease();
-		target_node->ccTouchEnded(t_touch, NULL);
+//		(this->*delegate_typing_after)();
+//		CCTouch* t_touch = new CCTouch();
+//		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
+//		t_touch->autorelease();
+//		target_node->ccTouchEnded(t_touch, NULL);
 		is_ccb_end = true;
 		next_button->setVisible(is_next_on && is_ccb_end);
 	}
@@ -237,12 +237,12 @@ bool ZoomScript::init()
 	script_case->setPosition(ccp(210,30));
 	addChild(script_case, kZS_Z_script_case);
 	
-	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
-	showtime_morphing_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);
-	showtime_morphing_label->setAnchorPoint(ccp(0,0));
-	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
-	showtime_morphing_label->setVisible(false);
-	script_case->addChild(showtime_morphing_label);
+//	showtime_morphing_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_showtimeMorphingTouch), mySGD->getFont().c_str(), 12);
+//	showtime_morphing_label->enableOuterStroke(ccBLACK, 1, int(255*0.6f), true);
+//	showtime_morphing_label->setAnchorPoint(ccp(0,0));
+//	showtime_morphing_label->setPosition(ccp(0, script_case->getContentSize().height+1));
+//	showtime_morphing_label->setVisible(false);
+//	script_case->addChild(showtime_morphing_label);
 	
 	next_button = CommonButton::create(myLoc->getLocalForKey(LK::kMyLocalKey_ok),15,CCSizeMake(101,44), CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0, 0, 101, 44), CCRectMake(50, 21, 1, 2)), -160);
 	next_button->setFunction([=](CCObject* sender){menuAction(sender);});
@@ -300,7 +300,7 @@ void ZoomScript::startScript()
 	script_label->setDimensions(CCSizeMake(330, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f))));
 	script_case->setContentSize(CCSizeMake(353, t_label->getContentSize().height*(ceil(t_label->getContentSize().width/330.f)) + 15));
 	script_label->setString("");
-	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
+//	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -341,14 +341,27 @@ void ZoomScript::typingAnimation()
 			int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
 			if(grade == 2 || grade == 4)
 			{
-				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
-				zoom_img = tuto.first;
-				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-				addChild(zoom_img, kZS_Z_script_case);
-				
-				tuto.second->setDelegate(this);
-				t_manager = tuto.second;
+//				auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+//				zoom_img = tuto.first;
+//				tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+//				zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+//				addChild(zoom_img, kZS_Z_script_case);
+//				
+//				tuto.second->setDelegate(this);
+//				t_manager = tuto.second;
+                
+                auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+                
+                zoom_img = tuto.first;
+                tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+                
+                
+                zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+                addChild(zoom_img, kZS_Z_script_case);
+                (this->*delegate_typing_after)();
+                
+                tuto.second->setDelegate(this);
+                t_manager = tuto.second;
 			}
 			else
 			{
@@ -374,14 +387,27 @@ void ZoomScript::typingAnimation()
 		
 		if(grade == 2 || grade == 4)
 		{
-			auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
-			zoom_img = tuto.first;
-			tuto.second->runAnimationsForSequenceNamed("Default Timeline");
-			zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
-			addChild(zoom_img, kZS_Z_script_case);
-			
-			tuto.second->setDelegate(this);
-			t_manager = tuto.second;
+//			auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch.ccbi");
+//			zoom_img = tuto.first;
+//			tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+//			zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+//			addChild(zoom_img, kZS_Z_script_case);
+//			
+//			tuto.second->setDelegate(this);
+//			t_manager = tuto.second;
+            
+            auto tuto = KS::loadCCBI<CCSprite*>(this, "tutorial_touch_rotation.ccbi");
+            
+            zoom_img = tuto.first;
+            tuto.second->runAnimationsForSequenceNamed("Default Timeline");
+            
+            
+            zoom_img->setPosition(ccp(240, myDSH->ui_center_y));
+            addChild(zoom_img, kZS_Z_script_case);
+            (this->*delegate_typing_after)();
+            
+            tuto.second->setDelegate(this);
+            t_manager = tuto.second;
 		}
 		else
 		{
@@ -425,15 +451,15 @@ void ZoomScript::moveChecking()
 	
 	if(is_scrolling)
 	{
-		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
-			target_node->movingDistance(ccpSub(after_position, save_position));
+//		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
+//			target_node->movingDistance(ccpSub(after_position, save_position));
 		is_before_scrolling = is_scrolling;
 	}
 	else if(is_before_scrolling)
 	{
 		is_before_scrolling = false;
-		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
-			target_node->movingDistance(CCPointZero);
+//		if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
+//			target_node->movingDistance(CCPointZero);
 	}
 	save_position = after_position;
 }
@@ -1340,9 +1366,9 @@ void ZoomScript::rankupAction()
 	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
-	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
+//	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
-	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
+//	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1371,8 +1397,8 @@ void ZoomScript::showtimeThirdAction()
 	script_label->setString("");
 	script_case->setVisible(true);
 	script_label->setVisible(true);
-	showtime_morphing_label->setVisible(true);
-	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
+//	showtime_morphing_label->setVisible(true);
+//	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1398,9 +1424,9 @@ void ZoomScript::showtimeSeventhAction()
 	script_label->setString("");
 	script_label->setVisible(true);
 	script_case->setVisible(true);
-	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
+//	showtime_morphing_label->setPosition(ccp(0,script_case->getContentSize().height+1));
 	
-	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
+//	if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))showtime_morphing_label->setVisible(true);
 	
 	basic_string<wchar_t> result;
 	utf8::utf8to16(save_text.begin(), save_text.end(), back_inserter(result));
@@ -1591,8 +1617,8 @@ void ZoomScript::ccTouchesBegan( CCSet *pTouches, CCEvent *pEvent )
 			first_touch_p = int(touch);
 			first_touch_point = location;
 			is_scrolling = true;
-			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
-				target_node->ccTouchBegan(touch,pEvent);
+//			if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4)
+//				target_node->ccTouchBegan(touch,pEvent);
 //			if(!is_touched_menu && next_button->ccTouchBegan(touch, pEvent))
 //			{
 //				is_touched_menu = true;
@@ -1662,7 +1688,7 @@ void ZoomScript::ccTouchesMoved( CCSet *pTouches, CCEvent *pEvent )
 			{
 				
 				touch_p = location;
-				if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))target_node->ccTouchMoved(touch,pEvent);
+//				if(is_morphing && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))target_node->ccTouchMoved(touch,pEvent);
 			}else if(multiTouchData.size() == 1){
 				
 				this->moveListXY(ccpSub(touch_p, location));
@@ -1789,14 +1815,14 @@ void ZoomScript::ccTouchesEnded( CCSet *pTouches, CCEvent *pEvent )
 				{
 //					if(NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) >= 3)
 //						target_node->ccTouchEnded(touch, pEvent);
-					if(is_morphing && touch_mode!=2 && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))
-						target_node->ccTouchEnded(touch, pEvent);
+//					if(is_morphing && touch_mode!=2 && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))
+//						target_node->ccTouchEnded(touch, pEvent);
 				}
 				else
 				{
-					if(is_morphing && touch_mode!=2 && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))
-						target_node->morphing(touch, pEvent);
-					return;
+//					if(is_morphing && touch_mode!=2 && (NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 2 || NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number) == 4))
+//						target_node->morphing(touch, pEvent);
+//					return;
 
 					unsigned long long _time = ((unsigned long long)time.tv_sec * 1000000) + time.tv_usec - touchStartTime;
 					CCPoint _spd = ccpMult(ccpSub(location, touchStart_p), 1.f/_time*10000);

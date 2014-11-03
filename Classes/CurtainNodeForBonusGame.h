@@ -300,7 +300,7 @@ public:
 //		inner_right->setContentSize(CCSizeMake(280.5,157.0)); 			// dt (30.5,-78.0)
 //		contentBack->addChild(inner_right);
 		
-		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 + 41.f - 19.f));
+		rName->setPosition(ccpFromSize(contentBack->getContentSize()) / 2.f + ccp(0, 16.5 + 41.f - 29.f));
 		contentBack->addChild(rName);
 		
 		KSLabelTTF* rLabel = KSLabelTTF::create(reward.desc.c_str(), mySGD->getFont().c_str(), 13.f);

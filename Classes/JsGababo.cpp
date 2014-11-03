@@ -363,8 +363,8 @@ void JsGababo::setupReward()
 		front2->addChild(_1winTagLbl, 1);
 		
 		auto _1winReward = CCSprite::create(m_rewards[rewardIndex].spriteName.c_str());
-		_1winReward->setScale(0.7f);
-		_1winReward->setPosition(ccpFromSize(_1winBox->getContentSize()) / 2.f + ccp(0, -4.0));
+		_1winReward->setScale(0.65f);
+		_1winReward->setPosition(ccpFromSize(_1winBox->getContentSize()) / 2.f + ccp(0, -15.0));
 		_1winBox->addChild(_1winReward);
 		auto _1winRewardLbl = KSLabelTTF::create(m_rewards[rewardIndex].desc.c_str(), mySGD->getFont().c_str(), 11.f);
 		_1winRewardLbl->setScale(1.f/0.7f);
