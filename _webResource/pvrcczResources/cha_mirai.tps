@@ -194,9 +194,6 @@
             <filename>boss_yellow/_block.png</filename>
             <filename>cha_asuka/_block.png</filename>
             <filename>cha_imu/_block.png</filename>
-            <filename>cha_mirai/1.png</filename>
-            <filename>cha_mirai/2.png</filename>
-            <filename>cha_mirai/3.png</filename>
             <filename>cha_mirai/mirai_back_head.png</filename>
             <filename>cha_mirai/mirai_back_head2.png</filename>
             <filename>cha_mirai/mirai_back_leg.png</filename>

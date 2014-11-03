@@ -522,7 +522,7 @@ void CharacterSelectPopup::characterChangeAction(CCObject* sender)
 //	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
 	change_loading = LoadingLayer::create(touch_priority-100);
-	addChild(change_loading);
+	addChild(change_loading, kCSP_Z_popup);
 	change_loading->startLoading();
 	
 	int t_tag = ((CCNode*)sender)->getTag();
