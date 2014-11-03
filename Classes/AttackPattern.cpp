@@ -4020,14 +4020,13 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 	m_alpha = 5;
 	m_isFollow = false;
 	m_frameCount = 0;
-	m_godOfDeathSprite = CCSprite::create("ba.png");
+	m_godOfDeathSprite = CCSprite::create("godofdeath.png");
 	m_godOfDeathSprite->setPosition(m_cumber->getPosition());
 	addChild(m_godOfDeathSprite);
 }
 
 void GodOfDeath::update(float dt)
 {
-	
 	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
 	
 	if(ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition()) <= 5
@@ -4050,6 +4049,14 @@ void GodOfDeath::update(float dt)
 		auto jackPosition = myGD->getJackPoint().convertToCCP();
 		float angle = atan2f(jackPosition.y - deather.y, jackPosition.x - deather.x);
 		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(m_followSpeed * cosf(angle), m_followSpeed * sinf(angle)));
+		if(cosf(angle) < 0)
+		{
+			m_godOfDeathSprite->setFlipX(false);
+		}
+		else
+		{
+			m_godOfDeathSprite->setFlipX(true);
+		}
 	}
 	else
 	{

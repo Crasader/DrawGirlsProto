@@ -369,55 +369,55 @@ public:
 		
 		//2부하몹잡기
 		beginScene("mission2");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial11),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial12),kCCTextAlignmentRight,kObjTypeText);
 		
 		//4수집가
 		beginScene("mission4");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial13),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial14),kCCTextAlignmentRight,kObjTypeText);
 		
 		//7비지니스맨
 		beginScene("mission7");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial15),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial16),kCCTextAlignmentRight,kObjTypeText);
 		
 		//8헬모드
 		beginScene("mission8");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial33),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial34),kCCTextAlignmentRight,kObjTypeText);
 		
 		//9퍼센트
 		beginScene("mission9");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial23),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial24),kCCTextAlignmentRight,kObjTypeText);
 		
 		//10점수
 		beginScene("mission10");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial25),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial26),kCCTextAlignmentRight,kObjTypeText);
 		
 		//11콤보
 		beginScene("mission11");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial27),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial28),kCCTextAlignmentRight,kObjTypeText);
 		
 		//12골드
 		beginScene("mission12");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial29),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial30),kCCTextAlignmentRight,kObjTypeText);
 		
 		//13턴수
 		beginScene("mission13");
-		addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial31),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial32),kCCTextAlignmentRight,kObjTypeText);
 		
@@ -476,27 +476,27 @@ public:
 		
 		//신발아이템
 		beginScene("item_9");
-		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		//addSpot("itemPannel","rect",1.f,kObjTypeNone);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial17),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial18),kCCTextAlignmentRight,kObjTypeText);
 
 		
 		//더블아이템
 		beginScene("item_6");
-		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		//addSpot("itemPannel","rect",1.f,kObjTypeNone);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial19),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial20),kCCTextAlignmentRight,kObjTypeText);
 		
 		
 		//자석아이템
 		beginScene("item_11");
-		addSpot("itemPannel","rect",1.f,kObjTypeNone);
+		//addSpot("itemPannel","rect",1.f,kObjTypeNone);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial21),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial22),kCCTextAlignmentRight,kObjTypeText);
 		
 		//랜덤아이템
 		beginScene("item_random");
-		addSpot("item_random","rect",1.f,kObjTypeNone);
+		//addSpot("item_random","rect",1.f,kObjTypeNone);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial8),kCCTextAlignmentLeft,kObjTypeText);
 		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial9),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial10),kCCTextAlignmentRight,kObjTypeText);
