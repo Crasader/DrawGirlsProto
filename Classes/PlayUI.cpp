@@ -1275,7 +1275,7 @@ void PlayUI::addScore (int t_score, int t_sub_score)
 //	CCLOG("damaged_score : %d / score_value : %.0f", damaged_score.getV(), score_value.getV());
 	score_label->setString(CCString::createWithFormat("%d", damaged_score.getV() + int(score_value.getV()))->getCString());
 	if(sub_score_value.getV() > 0)
-		sub_score_label->setString(ccsf("+%d", sub_score_value.getV()));
+		sub_score_label->setString(ccsf("+%s", KS::insert_separator(sub_score_value.getV()).c_str()));
 	
 	if(clr_cdt_type == kCLEAR_score && !is_cleared_cdt)
 	{
