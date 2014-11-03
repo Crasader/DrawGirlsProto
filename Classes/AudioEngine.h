@@ -57,7 +57,7 @@ public:
 		CCLOG("stop sound!! : %s", playing_sound_name.c_str());
 		
 		playing_sound_name = "";
-		mySAE->stopBackgroundMusic();
+		mySAE->stopBackgroundMusic(true);
 	}
 	
 	void setSoundOnOff(bool t_b)
