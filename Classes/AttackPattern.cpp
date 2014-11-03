@@ -603,6 +603,10 @@ void ThunderBoltWrapper::startMyAction()
 	schedule(schedule_selector(ThunderBoltWrapper::myAction), 1/30.f);
 }
 
+bool ThunderBoltWrapper::groundOfJack(int state)
+{
+	return state == mapType::mapOldline || state == mapType::mapOldget;
+}
 void ThunderBoltWrapper::myAction()
 {
 	ingFrame++;
@@ -644,18 +648,18 @@ void ThunderBoltWrapper::myAction()
 		{
 			CCPoint t_p = pJackArray[adjIndex];
 //			pJackArray.pop_front();
-			int emptyCnt = 0;
+			int jack = 0;
 			auto mapPoint = ccp2ip(t_p);
-			if(myGD->mapState[mapPoint.x-1][mapPoint.y] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x+1][mapPoint.y] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x][mapPoint.y-1] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x][mapPoint.y+1] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x+1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x+1][mapPoint.y-1] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x-1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
-			if(myGD->mapState[mapPoint.x-1][mapPoint.y+1] == mapEmpty)	emptyCnt++;
+			if(groundOfJack(myGD->mapState[mapPoint.x-1][mapPoint.y]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x+1][mapPoint.y]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x][mapPoint.y-1]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x][mapPoint.y+1]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x+1][mapPoint.y+1]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x+1][mapPoint.y-1]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x-1][mapPoint.y+1]))	jack++;
+			if(groundOfJack(myGD->mapState[mapPoint.x-1][mapPoint.y+1]))	jack++;
 			
-			if(emptyCnt == 0)
+			if(jack == 8)
 			{
 				//		unschedule(schedule_selector(PoisonLine::myAction));
 				stopMyAction();

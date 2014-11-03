@@ -411,6 +411,11 @@ bool KSLabelTTF::updateTexture()
 	else
 	{
 	}
+
+	if(m_gradationMode)
+	{
+		updateColor();
+	}
 	//ok
 	
 //	// 그라데이션 처리.

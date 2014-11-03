@@ -195,6 +195,26 @@
             <filename>cha_asuka/_block.png</filename>
             <filename>cha_imu/_block.png</filename>
             <filename>cha_mirai/_block.png</filename>
+            <filename>cha_ryouna/_block.png</filename>
+            <filename>cha_ryouna/ryouna_back_arm1.png</filename>
+            <filename>cha_ryouna/ryouna_back_arm2.png</filename>
+            <filename>cha_ryouna/ryouna_back_body.png</filename>
+            <filename>cha_ryouna/ryouna_back_head.png</filename>
+            <filename>cha_ryouna/ryouna_back_leg.png</filename>
+            <filename>cha_ryouna/ryouna_front_arm1.png</filename>
+            <filename>cha_ryouna/ryouna_front_arm2.png</filename>
+            <filename>cha_ryouna/ryouna_front_body.png</filename>
+            <filename>cha_ryouna/ryouna_front_eye.png</filename>
+            <filename>cha_ryouna/ryouna_front_head.png</filename>
+            <filename>cha_ryouna/ryouna_front_leg.png</filename>
+            <filename>cha_ryouna/ryouna_side_arm1.png</filename>
+            <filename>cha_ryouna/ryouna_side_arm2.png</filename>
+            <filename>cha_ryouna/ryouna_side_body.png</filename>
+            <filename>cha_ryouna/ryouna_side_eye.png</filename>
+            <filename>cha_ryouna/ryouna_side_head.png</filename>
+            <filename>cha_ryouna/ryouna_side_leg1.png</filename>
+            <filename>cha_ryouna/ryouna_side_leg2.png</filename>
+            <filename>cha_ryouna/ryouna_wing.png</filename>
         </array>
         <key>ignoreFileList</key>
         <array/>

@@ -4,49 +4,10 @@
     <dict>
         <key>frames</key>
         <dict>
-            <key>1.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,116},{125,112}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{125,112}}</string>
-                <key>sourceSize</key>
-                <string>{125,112}</string>
-            </dict>
-            <key>2.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{129,2},{125,112}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{125,112}}</string>
-                <key>sourceSize</key>
-                <string>{125,112}</string>
-            </dict>
-            <key>3.png</key>
-            <dict>
-                <key>frame</key>
-                <string>{{2,2},{125,112}}</string>
-                <key>offset</key>
-                <string>{0,0}</string>
-                <key>rotated</key>
-                <false/>
-                <key>sourceColorRect</key>
-                <string>{{0,0},{125,112}}</string>
-                <key>sourceSize</key>
-                <string>{125,112}</string>
-            </dict>
             <key>_block.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{251,116},{1,1}}</string>
+                <string>{{47,505},{1,1}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -59,11 +20,11 @@
             <key>murasaki_back_bottom.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,466},{76,43}}</string>
+                <string>{{2,433},{76,43}}</string>
                 <key>offset</key>
                 <string>{-2,-6}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{0,17},{76,43}}</string>
                 <key>sourceSize</key>
@@ -72,7 +33,7 @@
             <key>murasaki_back_head.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{129,116},{120,110}}</string>
+                <string>{{2,2},{120,110}}</string>
                 <key>offset</key>
                 <string>{-0.5,-1}</string>
                 <key>rotated</key>
@@ -85,11 +46,11 @@
             <key>murasaki_doll.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{96,302},{19,31}}</string>
+                <string>{{96,269},{19,31}}</string>
                 <key>offset</key>
                 <string>{-3.5,0.5}</string>
                 <key>rotated</key>
-                <true/>
+                <false/>
                 <key>sourceColorRect</key>
                 <string>{{1,1},{19,31}}</string>
                 <key>sourceSize</key>
@@ -98,11 +59,11 @@
             <key>murasaki_front_bottom.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{80,459},{65,46}}</string>
+                <string>{{72,354},{65,46}}</string>
                 <key>offset</key>
                 <string>{-1.5,-9.5}</string>
                 <key>rotated</key>
-                <false/>
+                <true/>
                 <key>sourceColorRect</key>
                 <string>{{6,19},{65,46}}</string>
                 <key>sourceSize</key>
@@ -111,7 +72,7 @@
             <key>murasaki_front_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{116,264},{34,9}}</string>
+                <string>{{116,231},{34,9}}</string>
                 <key>offset</key>
                 <string>{-0.5,-0.5}</string>
                 <key>rotated</key>
@@ -124,7 +85,7 @@
             <key>murasaki_front_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,302},{92,83}}</string>
+                <string>{{2,269},{92,83}}</string>
                 <key>offset</key>
                 <string>{0.5,13.5}</string>
                 <key>rotated</key>
@@ -137,7 +98,7 @@
             <key>murasaki_front_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{129,228},{118,81}}</string>
+                <string>{{2,114},{118,81}}</string>
                 <key>offset</key>
                 <string>{-3.5,-2.5}</string>
                 <key>rotated</key>
@@ -150,7 +111,7 @@
             <key>murasaki_front_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{96,323},{43,29}}</string>
+                <string>{{97,421},{43,29}}</string>
                 <key>offset</key>
                 <string>{6.5,11}</string>
                 <key>rotated</key>
@@ -163,7 +124,7 @@
             <key>murasaki_side_arm.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{127,323},{22,28}}</string>
+                <string>{{96,302},{22,28}}</string>
                 <key>offset</key>
                 <string>{0,0}</string>
                 <key>rotated</key>
@@ -176,7 +137,7 @@
             <key>murasaki_side_bottom.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{72,387},{70,48}}</string>
+                <string>{{47,433},{70,48}}</string>
                 <key>offset</key>
                 <string>{4,-3.5}</string>
                 <key>rotated</key>
@@ -189,7 +150,7 @@
             <key>murasaki_side_eye.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{116,230},{32,10}}</string>
+                <string>{{116,197},{32,10}}</string>
                 <key>offset</key>
                 <string>{-8.5,0}</string>
                 <key>rotated</key>
@@ -202,7 +163,7 @@
             <key>murasaki_side_head1.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,387},{68,77}}</string>
+                <string>{{2,354},{68,77}}</string>
                 <key>offset</key>
                 <string>{-8.5,16.5}</string>
                 <key>rotated</key>
@@ -215,7 +176,7 @@
             <key>murasaki_side_head2.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{2,230},{112,70}}</string>
+                <string>{{2,197},{112,70}}</string>
                 <key>offset</key>
                 <string>{1.5,-18}</string>
                 <key>rotated</key>
@@ -228,7 +189,7 @@
             <key>murasaki_side_top.png</key>
             <dict>
                 <key>frame</key>
-                <string>{{122,368},{30,29}}</string>
+                <string>{{97,466},{30,29}}</string>
                 <key>offset</key>
                 <string>{-2,10}</string>
                 <key>rotated</key>
@@ -246,9 +207,9 @@
             <key>realTextureFileName</key>
             <string>cha_murasaki.pvr.ccz</string>
             <key>size</key>
-            <string>{256,512}</string>
+            <string>{128,512}</string>
             <key>smartupdate</key>
-            <string>$TexturePacker:SmartUpdate:4bbdd00ec3edad56262e75bc39dc6ba3:bbb523d2f1eafd2c43579c660f4078f8:db5e76246d49d388e78248ebb71f715a$</string>
+            <string>$TexturePacker:SmartUpdate:86d5adb373535ae6194ebc2f82aae944:f3d414bbc5c5f799b2cc30774b8ad724:db5e76246d49d388e78248ebb71f715a$</string>
             <key>textureFileName</key>
             <string>cha_murasaki.pvr.ccz</string>
         </dict>

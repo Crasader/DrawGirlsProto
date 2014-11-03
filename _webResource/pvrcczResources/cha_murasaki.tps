@@ -196,9 +196,6 @@
             <filename>cha_imu/_block.png</filename>
             <filename>cha_mirai/_block.png</filename>
             <filename>cha_murasaki/_block.png</filename>
-            <filename>cha_murasaki/1.png</filename>
-            <filename>cha_murasaki/2.png</filename>
-            <filename>cha_murasaki/3.png</filename>
             <filename>cha_murasaki/murasaki_back_bottom.png</filename>
             <filename>cha_murasaki/murasaki_back_head.png</filename>
             <filename>cha_murasaki/murasaki_doll.png</filename>
