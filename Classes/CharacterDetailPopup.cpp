@@ -136,9 +136,15 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	
 	int sub_base_value = cha_history.characterNextLevelExp.getV() - cha_history.characterCurrentLevelExp.getV();
 	int sub_value = cha_history.characterExp.getV() - cha_history.characterCurrentLevelExp.getV();
-	exp_graph->setPercentage(100.f*sub_value/sub_base_value);
+	float t_percent = 100.f*sub_value/sub_base_value;
+	if(cha_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, cha_idx))
+	{
+		t_percent = 100.f;
+	}
 	
-	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), 100.f*sub_value/sub_base_value/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
+	exp_graph->setPercentage(t_percent);
+	
+	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_percent/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
 	exp_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
 	exp_label->setPosition(ccp(70,52));
 	back_in->addChild(exp_label);

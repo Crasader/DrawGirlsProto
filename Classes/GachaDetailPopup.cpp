@@ -95,7 +95,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 	}
 	else if(goods_info->reward_list[0].type.getV() == "gncd")
 	{
-		KSLabelTTF* sub_title = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardTake), mySGD->getFont().c_str(), 18);
+		KSLabelTTF* sub_title = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), goods_info->reward_list[0].count.getV()), mySGD->getFont().c_str(), 18);
 		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
 		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-20));
 		back_in->addChild(sub_title);
@@ -108,6 +108,13 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 //		KSLabelTTF* count_label = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, keep_card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(145, 90), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
 //		count_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-10));
 //		detail_back->addChild(count_label);
+	}
+	else if(goods_info->reward_list[0].type.getV() == "dhcd")
+	{
+		KSLabelTTF* sub_title = KSLabelTTF::create((getLocal(LK::kMyLocalKey_dontHave) + string(" ") + ccsf(getLocal(LK::kMyLocalKey_cardTake), goods_info->reward_list[0].count.getV())).c_str(), mySGD->getFont().c_str(), 18);
+		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
+		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-20));
+		back_in->addChild(sub_title);
 	}
 	else if(goods_info->reward_list[0].type.getV() == "cp")
 	{

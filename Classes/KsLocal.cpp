@@ -1198,7 +1198,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_goldCount] = "%d 골드";
 	obj[LK::kMyLocalKey_propertyCount] = "%d 개";
 	obj[LK::kMyLocalKey_nGradeCard] = "%d단계카드";
-	obj[LK::kMyLocalKey_cardTake] = "카드 획득!";
+	obj[LK::kMyLocalKey_cardTake] = "%d단계 카드 획득!";
 	obj[LK::kMyLocalKey_goodsScript] = "상품설명";
 	obj[LK::kMyLocalKey_gem] = "젬";
 	obj[LK::kMyLocalKey_gold] = "골드";
