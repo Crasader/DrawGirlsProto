@@ -473,6 +473,28 @@ void ManyGachaPopup::setNormalGacha()
 				t_button_node->addChild(t_count_label);
 
 			}
+			else if(reward_type == "dhcd")
+			{
+				CCPoint base_position = ccpFromSize(t_button_node->getContentSize()/2.f);
+				base_position = base_position + ccpMult(ccp(-11,7), (reward_count-1)/2.f);
+				
+				for(int k=0;k<reward_count;k++)
+				{
+					CCSprite* t_star = CCSprite::create("star_on.png");
+					t_star->setPosition(base_position + ccpMult(ccp(11,0), k));
+					t_button_node->addChild(t_star);
+				}
+				
+				KSLabelTTF* t_count_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_nGradeCard), reward_count), mySGD->getFont().c_str(), 10.5f);
+				t_count_label->enableOuterStroke(ccBLACK, 1, 255, true);
+				t_count_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-15));
+				t_button_node->addChild(t_count_label);
+				
+				KSLabelTTF* t_dontHave_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_dontHave), mySGD->getFont().c_str(), 10.5f);
+				t_dontHave_label->enableOuterStroke(ccBLACK, 1, 255, true);
+				t_dontHave_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-5));
+				t_button_node->addChild(t_dontHave_label);
+			}
 			else if(reward_type == "many")
 			{
 				CCSprite* t_img = CCSprite::create("icon_box.png");
@@ -774,6 +796,28 @@ void ManyGachaPopup::setPremiumGacha()
 				t_count_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-10));
 				t_button_node->addChild(t_count_label);
 				
+			}
+			else if(reward_type == "dhcd")
+			{
+				CCPoint base_position = ccpFromSize(t_button_node->getContentSize()/2.f);
+				base_position = base_position + ccpMult(ccp(-11,7), (reward_count-1)/2.f);
+				
+				for(int k=0;k<reward_count;k++)
+				{
+					CCSprite* t_star = CCSprite::create("star_on.png");
+					t_star->setPosition(base_position + ccpMult(ccp(11,0), k));
+					t_button_node->addChild(t_star);
+				}
+				
+				KSLabelTTF* t_count_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_nGradeCard), reward_count), mySGD->getFont().c_str(), 10.5f);
+				t_count_label->enableOuterStroke(ccBLACK, 1, 255, true);
+				t_count_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-15));
+				t_button_node->addChild(t_count_label);
+				
+				KSLabelTTF* t_dontHave_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_dontHave), mySGD->getFont().c_str(), 10.5f);
+				t_dontHave_label->enableOuterStroke(ccBLACK, 1, 255, true);
+				t_dontHave_label->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,-5));
+				t_button_node->addChild(t_dontHave_label);
 			}
 			else if(reward_type == "many")
 			{
@@ -1164,7 +1208,6 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 
 void ManyGachaPopup::resultNormalRefreshExchange(Json::Value result_data)
 {
-	CCLog("resultNormalRefreshExchange : \n%s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
 		if(result_data["result"]["code"].asInt() == GDFAILTRANSACTION && result_data["command"]["result"]["code"].asInt() == GDPROPERTYISMINUS)
@@ -1287,7 +1330,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 				{
 					mySGD->addCharacterHistoryForGacha(t_property["result"]);
 				}
-				else if(t_property["type"].asString() == "gncd")
+				else if(t_property["type"].asString() == "gncd" || t_property["type"].asString() == "dhcd")
 				{
 					mySGD->addHasGottenCardNumber(t_property["result"]["cardInfo"]["no"].asInt());
 				}
@@ -1372,7 +1415,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 															  }));
 		};
 		
-		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
+		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd" || gacha_data_list[selected_value].reward_list[0].type.getV() == "dhcd")
 		{
 			Json::Value t_card;
 			
@@ -1381,7 +1424,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			for(int i=0;!is_found && i<property_list.size();i++)
 			{
 				Json::Value t_property = property_list[i];
-				if(t_property["type"].asString() == "gncd")
+				if(t_property["type"].asString() == "gncd" || t_property["type"].asString() == "dhcd")
 				{
 					is_found = true;
 					t_card = t_property["result"]["cardInfo"];
@@ -1670,7 +1713,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			detail_back->addChild(count_label);
 			
 		}
-		else if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
+		else if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd" || gacha_data_list[selected_value].reward_list[0].type.getV() == "dhcd")
 		{
 			title_label->setPosition(ccp(240,240));
 			
@@ -2159,7 +2202,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 				{
 					mySGD->addCharacterHistoryForGacha(t_property["result"]);
 				}
-				else if(t_property["type"].asString() == "gncd")
+				else if(t_property["type"].asString() == "gncd" || t_property["type"].asString() == "dhcd")
 				{
 					mySGD->addHasGottenCardNumber(t_property["result"]["cardInfo"]["no"].asInt());
 				}
@@ -2255,7 +2298,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			for(int i=0;!is_found && i<property_list.size();i++)
 			{
 				Json::Value t_property = property_list[i];
-				if(t_property["type"].asString() == "gncd")
+				if(t_property["type"].asString() == "gncd" || t_property["type"].asString() == "dhcd")
 				{
 					is_found = true;
 					t_card = t_property["result"]["cardInfo"];
