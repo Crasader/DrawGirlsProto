@@ -131,6 +131,7 @@ void HellModeOpening::setMain()
 	main_case->addChild(tip_marquee_back);
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
+	tipMaquee->addText(getLocal(LK::kMyLocalKey_hellMarquee2));
 	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_hellMarquee));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
@@ -257,6 +258,8 @@ void HellModeOpening::setMain()
 	right_info_node->setPosition(ccpFromSize(right_back->getContentSize()/2.f));
 	right_back->addChild(right_info_node);
 	
+	if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_hellReplay)
+		clicked_stage = mySD->getSilType();
 	
 	if(clicked_stage != -1)
 	{
@@ -299,7 +302,23 @@ void HellModeOpening::setMain()
 		
 	}, [=]()
 	{
-		is_menu_enable = true;
+		if(myDSH->getMainFlowSceneShowType() == kMainFlowSceneShowType_hellReplay)
+		{
+			CommonAnimation::closePopup(this, main_case, gray, [=](){
+				
+			}, [=](){
+				mySGD->is_hell_mode = true;
+				mySD->setSilType(clicked_stage);
+				
+				StartSettingPopup* t_popup = StartSettingPopup::create();
+				t_popup->setHideFinalAction(getParent(), callfunc_selector(MainFlowScene::showHellOpening));
+				getParent()->addChild(t_popup, kMainFlowZorder_popup);
+				myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_init);
+				removeFromParent();
+			});
+		}
+		else
+			is_menu_enable = true;
 	});
 }
 

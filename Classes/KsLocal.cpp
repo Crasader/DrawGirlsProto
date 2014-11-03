@@ -1141,7 +1141,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missionFailContextSubCumberCatch] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. 부하 </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d마리</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 부족해요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextTurns] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d턴</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이 지나버렸어요!</font>";
 	obj[LK::kMyLocalKey_hellMode] = "헬모드";
-	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 보상으로 캐릭터를 받을 수 있어요.";
+	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 특별한 캐릭터를 얻을 수 있어요.";
 	obj[LK::kMyLocalKey_hellNotOpen] = "<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>";
 	obj[LK::kMyLocalKey_mycharacter] = "내캐릭터";
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
@@ -1232,6 +1232,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_dontHave] = "미보유";
 	obj[LK::kMyLocalKey_refresh] = "갱신하기";
 	obj[LK::kMyLocalKey_onlyBaseCharacterInHellmode] = "헬모드에서는 기본 캐릭터로만 플레이 가능합니다.";
+	obj[LK::kMyLocalKey_hellMarquee2] = "주어진 시간 동안 죽지 않고 버티면 임무 안료!";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

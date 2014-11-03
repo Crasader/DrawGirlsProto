@@ -231,6 +231,12 @@ enum PuzzleMapSceneShowType{
 	kPuzzleMapSceneShowType_stageSetting
 };
 
+enum MainFlowSceneShowType
+{
+	kMainFlowSceneShowType_init = 0,
+	kMainFlowSceneShowType_hellReplay
+};
+
 #define LZZ_INLINE inline
 class DataStorageHub : public CCObject
 {
@@ -279,6 +285,8 @@ public:
 	bool isCheatKeyEnable ();
 	int getPuzzleMapSceneShowType ();
 	void setPuzzleMapSceneShowType (int t_type);
+	int getMainFlowSceneShowType();
+	void setMainFlowSceneShowType(int t_type);
 	void fFlush ();
 	void removeCache();
 	void initReturnPair();
@@ -310,6 +318,7 @@ private:
 	SaveData * myDefault;
 	float gold_get_rate;
 	bool is_cheat_key_enabled;
+	int mainflow_scene_show_type;
 	int puzzle_map_scene_show_type;
 	void myInit ();
 	

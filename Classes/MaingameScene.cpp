@@ -5205,11 +5205,25 @@ void Maingame::goHome ()
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
-	gameover();
+	if(mySGD->is_hell_mode)
+		myGD->communication("UI_hellModeResult");
+	else
+		gameover();
 }
 void Maingame::goReplay ()
 {
 //	setBackKeyEnabled(false);
+	
+	AudioEngine::sharedInstance()->stopAllEffects();
+	AudioEngine::sharedInstance()->stopSound();
+	
+	AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
+	
+	mySGD->is_paused = false;
+	AudioEngine::sharedInstance()->setAppFore();
+	mySGD->gameOver(0, 0, 0);
+	mySGD->resetLabels();
+	myGD->resetGameData();
 	
 	mySGD->setUserdataAchieveNoFail(0);
 	for(int i=kAchievementCode_fail1;i<=kAchievementCode_fail3;i++)
@@ -5227,23 +5241,20 @@ void Maingame::goReplay ()
 	mySGD->setUserdataFailCount(mySGD->getUserdataFailCount()+1);
 	mySGD->changeUserdata(nullptr);
 	
-	
 	myLog->addLog(kLOG_getCoin_i, -1, mySGD->getStageGold());
 	
-//	myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
-	AudioEngine::sharedInstance()->stopAllEffects();
-	AudioEngine::sharedInstance()->stopSound();
-	
-	AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
-	
-	mySGD->is_paused = false;
-	AudioEngine::sharedInstance()->setAppFore();
-	mySGD->gameOver(0, 0, 0);
-	mySGD->resetLabels();
-	myGD->resetGameData();
-	
-	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
-	CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	if(mySGD->is_hell_mode)
+	{
+		myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_hellReplay);
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	}
+	else
+	{
+//		myLog->sendLog(CCString::createWithFormat("replay_%d", myDSH->getIntegerForKey(kDSH_Key_lastSelectedStageForPuzzle_int1, myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)))->getCString());
+		
+		myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stageSetting);
+		CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
+	}
 }
 void Maingame::cancelHome ()
 {
