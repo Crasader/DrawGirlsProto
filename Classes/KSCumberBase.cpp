@@ -2271,10 +2271,11 @@ void KSCumberBase::swelling(float dt)
 }
 void KSCumberBase::lightSmaller()
 {
-	addChild(KSTimer::create
-					 (1.f, [=](){
-		this->endTeleport();
-	}));
+	this->endTeleport();
+//	addChild(KSTimer::create
+//					 (1.f, [=](){
+//		
+//	}));
 
 	//this->endTeleport();
 }

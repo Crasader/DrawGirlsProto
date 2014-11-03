@@ -19,31 +19,31 @@
 	<key>finishColorBlue</key>
 	<real>0.107664555311203</real>
 	<key>finishColorGreen</key>
-	<real>0.54463404417037964</real>
+	<real>0.5446340441703796</real>
 	<key>finishColorRed</key>
-	<real>0.93541216850280762</real>
+	<real>0.9354121685028076</real>
 	<key>finishColorVarianceAlpha</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>finishColorVarianceBlue</key>
 	<real>0.1453993022441864</real>
 	<key>finishColorVarianceGreen</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>finishColorVarianceRed</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>finishParticleSize</key>
 	<real>-1</real>
 	<key>finishParticleSizeVariance</key>
-	<real>40</real>
+	<real>10</real>
 	<key>gravityx</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>gravityy</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>maxParticles</key>
-	<integer>5</integer>
+	<integer>8</integer>
 	<key>particleLifespan</key>
-	<real>0.40000000596046448</real>
+	<real>0.4000000059604645</real>
 	<key>particleLifespanVariance</key>
-	<real>0.20000000298023224</real>
+	<real>0.2000000029802322</real>
 	<key>radialAccelVariance</key>
 	<string>-300.000000</string>
 	<key>radialAcceleration</key>
@@ -51,9 +51,9 @@
 	<key>rotationEnd</key>
 	<real>1</real>
 	<key>rotationEndVariance</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>rotationStart</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>rotationStartVariance</key>
 	<real>100</real>
 	<key>sourcePositionVariancex</key>
@@ -71,23 +71,23 @@
 	<key>startColorAlpha</key>
 	<real>1</real>
 	<key>startColorBlue</key>
-	<real>0.29640355706214905</real>
+	<real>0.296403557062149</real>
 	<key>startColorGreen</key>
-	<real>0.68612635135650635</real>
+	<real>0.6861263513565063</real>
 	<key>startColorRed</key>
 	<real>0.7422211766242981</real>
 	<key>startColorVarianceAlpha</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>startColorVarianceBlue</key>
-	<real>0.37583434581756592</real>
+	<real>0.3758343458175659</real>
 	<key>startColorVarianceGreen</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>startColorVarianceRed</key>
-	<real>0.0</real>
+	<real>0</real>
 	<key>startParticleSize</key>
-	<real>35</real>
+	<real>13</real>
 	<key>startParticleSizeVariance</key>
-	<real>20</real>
+	<real>15</real>
 	<key>tangentialAccelVariance</key>
 	<string>0.000000</string>
 	<key>tangentialAcceleration</key>
