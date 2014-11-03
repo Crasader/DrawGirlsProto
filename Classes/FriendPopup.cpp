@@ -158,7 +158,27 @@ bool FriendPopup::init()
 	m_loadingCCBI->setPosition(ccpFromSize(main_case->getContentSize()) / 2.f + ccp(0, 0));
 	m_loadingCCBI->setVisible(false);
 	
-	m_listButtonCallback(0);
+	Json::Value param;
+	param["memberID"] = myHSP->getMemberID();
+	
+	myHSP->command("getuserdata", param, this, [=](Json::Value v){
+		if(v["result"]["code"] != GDSUCCESS)
+		{
+		
+			m_listButtonCallback(0);
+			return;
+			
+		}
+		// 추천인이 있으면
+		if(v["introducerID"].asInt64() != 0)
+		{
+			m_listButtonCallback(0);
+		}
+		else
+		{
+			m_voteFriendButtonCallback(0);
+		}
+	});
 //	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_achieve))
 //	{
 //		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_achieve, true);
