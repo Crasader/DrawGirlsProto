@@ -17,33 +17,33 @@
 	<key>finishColorAlpha</key>
 	<real>1</real>
 	<key>finishColorBlue</key>
-	<real>0.3549235761165619</real>
+	<real>0.16076914966106415</real>
 	<key>finishColorGreen</key>
-	<real>0.3221226036548615</real>
+	<real>0.37756657600402832</real>
 	<key>finishColorRed</key>
-	<real>0.9393352866172791</real>
+	<real>0.93933528661727905</real>
 	<key>finishColorVarianceAlpha</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>finishColorVarianceBlue</key>
-	<real>0.9045928120613098</real>
+	<real>0.90459281206130981</real>
 	<key>finishColorVarianceGreen</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>finishColorVarianceRed</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>finishParticleSize</key>
 	<real>-1</real>
 	<key>finishParticleSizeVariance</key>
 	<real>40</real>
 	<key>gravityx</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>gravityy</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>maxParticles</key>
 	<integer>5</integer>
 	<key>particleLifespan</key>
-	<real>0.300000011920929</real>
+	<real>0.30000001192092896</real>
 	<key>particleLifespanVariance</key>
-	<real>0.300000011920929</real>
+	<real>0.30000001192092896</real>
 	<key>radialAccelVariance</key>
 	<string>-300.000000</string>
 	<key>radialAcceleration</key>
@@ -51,9 +51,9 @@
 	<key>rotationEnd</key>
 	<real>1</real>
 	<key>rotationEndVariance</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>rotationStart</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>rotationStartVariance</key>
 	<real>100</real>
 	<key>sourcePositionVariancex</key>
@@ -61,9 +61,9 @@
 	<key>sourcePositionVariancey</key>
 	<real>6</real>
 	<key>sourcePositionx</key>
-	<real>362.7265625</real>
+	<real>115.34375</real>
 	<key>sourcePositiony</key>
-	<real>133.7265625</real>
+	<real>131.7421875</real>
 	<key>speed</key>
 	<real>10</real>
 	<key>speedVariance</key>
@@ -71,19 +71,19 @@
 	<key>startColorAlpha</key>
 	<real>1</real>
 	<key>startColorBlue</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>startColorGreen</key>
-	<real>0.569328248500824</real>
+	<real>0.56932824850082397</real>
 	<key>startColorRed</key>
 	<real>1</real>
 	<key>startColorVarianceAlpha</key>
-	<real>0</real>
+	<real>0.0</real>
 	<key>startColorVarianceBlue</key>
-	<real>0.3292627334594727</real>
+	<real>0.32926273345947266</real>
 	<key>startColorVarianceGreen</key>
-	<real>0.1579186916351318</real>
+	<real>0.15791869163513184</real>
 	<key>startColorVarianceRed</key>
-	<real>0.4128109812736511</real>
+	<real>0.41281098127365112</real>
 	<key>startParticleSize</key>
 	<real>40</real>
 	<key>startParticleSizeVariance</key>
@@ -93,7 +93,7 @@
 	<key>tangentialAcceleration</key>
 	<string>21.875000</string>
 	<key>textureFileName</key>
-	<string>p_04.png</string>
+	<string>jm_particle_04_img.png</string>
 	<key>textureImageData</key>
 	<string>eJzNWgdcVEcT3/euH507jiLl6B0E6YiCdBFBRBBs4HHCCRx4NHsXFY1dLFjRqKiRRCMgsWJXgr3E9mEMUaMxGIP61Oi3663mYpR6mAy//92wb3d2dnd2ZnbvRUYCOwCs9UAnEkVRNAh1CHonySc+/B+C7IR+6BA8CEYnyCY/HIdCuVLHAuUxIfTQt5Llkp8aB35OU6YNQFksCGMIthJl0lujI55Dpcwf0h/CAoKjJHmt1g3vFbYy+oYyuBB2ECpKkMVuz7rCNqoQah3sWwXCFfmsDspRxfjofmihLVoXLYQO9I98ri+EZgdkaGI92jwGBRnIJwggdNvZXgMiEEK7ne0F2N912I/isRhhv9OmOUH6Q0RC6LSjX0MIEyX7T+SPLSGs29hOB2IgmtM2tkN92XRS/GTgPeva2nVG9gghQnPbhn6cIdyUHTs/6AP57x4Qfq2xMVjHACIL2Ucr5XtD9FJm3GymL+THIzBoLdRF+2oshFkr5AZDRKGYozxtW+yTAzEE2/4nx4L36Qxk7y3I6w+RhGKE8rVtnnBcGgkx4lNjgeXmEAtRTG9GDtJ/VEdiTEcJxXuICRBjFP3ju72D/BvEaggnxXKFetkQ0zoSa5VFON4uwPbDwmV0/I18z1YID/w/A38jPz4RohjFun9P+78Tjndo3pe8y8koeX7dE6IKIkRhbMjnzYP4EkL/39X8n4RziG/x/AuxzSE/cBL7BA0co9dAVLclpnwuUtgPKA4fhtgLEQohg7gOMRoiCKIC4nsIB8V2/xWi5LkxE9t9AMRliPMQ2yDuQGyHqMVj6o1zg06L1x0hSp5PonzKFs//rxAvIH6HeA7xG8QkSn6uQjao7LsADrZlZL883IcBjmEWuF+UU3njfYv2bF+IeIihEKnYf07EfmsTxHcQtyHeKOAnbG9bcEyZhONGGsQwLC8aIgzCH/fnAmGP7VWI9RJgPZG+KIahMycL8xrY56A6XSBMKXm+6QThQclzqlDcTwIlz/0yIfIhpkDMhViJ7egARB1EwwfjuAtxBuIgrlcC8QVuX4DlpWD5/XB/PXD/XSl5LEJ6IV+hi/VVfzcWJa0pgeWZ4nnMw/OP9H+Gv+9BjIPwgTDDNqD0O7OOEoX3LraFI3gc+xS+6yFOQXhhO/jP7fN380rJYzuKH1cgkrG93MJ7B8WQCxCVFD4nU/8xv4uIkvvc5RBHKfn5BNnvULxXkN3zITzxXl9LfYYzRluJkvvcWRDlFM7RsY0FYr1RzHiXe6F9+s5nsf5dzf8ivA7IftYjX4fL3uWDyF9/hfb2B+VobVZBTP4v7BPsp9Kw/9RVKH+3X1BMXIf8pmI55tFeKqTk595O+V2htQT7H4R96Ufvpyj5OQrlwB89R2Hfi2KQiOqEu5GWCO8HdC+VTjVzBqLkMRjtG6tm6qC4g3KCmM+5LtiWUN6QQLVwb0vJ7+7QebHZewZKnhvFUvKcuNm7C2UQHoMb9j8t5gKUPMdBOZSwFXVRbAzD8b7T4jweA8oZu1Ot/E2BkudB6B6iVWcmPBY0DofOipGUPHdybovPp+R5PPIFrT6/UvLzsCP2EUodC9KDkufObfIplDy/RndrbbpLwDHJAtulUsaCdTFsjy+h5L9boPMKrx1tSTwOflvbfkSWOraNdvkQ3N6vOd/cQnsCx36N9rTHMrg45rbbd+DY4NaSf25BBhqLRmv840faohxPpaO2ieMCOpcq43dObht9DB37vw7vL0p+N2/Znrn8hDxWa3wN9hNKy3Nwv+i+QpnvATCa26/YPyg1v8F9Ip/dKe9lfKS8M9+T4StzjRVk/+P9kk7MAWjY5332nFyZRHXy+1efi/Daczozf31P6tCk0O4ngCv8IBR48i0PZ9L6GEHD5bAywcQ81I3QQs9RKWAT2gp1dDAPnxICBZm67+pbaxKGCvVjFGT2f99v3cwcACOGahjkL7/Vlo3/CPwHn/WRSLNITQAypbmymNBewoEJiUJWHZTEAUzgAkCyKCc7sn9ILGoeHhwozIGV/j4FTy+/HQG44BgWLRS2cf60RNmyXKh1NOS7pYhzRJCfDvmMgtxsVN4Ief7wdMSTaOx8GVQQ8uiNAn6qnHd4W0fO+yM+JVOaAnmkc3ZKZgrij0B+Vn6eGPK0PpAvzJeICyB/EfIWGXmZEsg/R20zxck5cPrQL60WuWJRGuTRrYKqLDYmEPLd4SSqpirwwxX4XPHoXDSowKzsMTJJalqu0EZkK3Tx9vYShokLMsS5uY7RyaL0ZFmKMDArMztZOgYA+ZjfkjaaWyGcZA8Xbw8PR1cnF4WJavZhKwmtrZx70u/tmhGC2r/KPlYvqxQAryY4Nwv+Khu+AoDKGQDoXfurzGIdABpw3SrOKIxHgOwlLTc328fZuaCgwEkiFjmhCX1PLVZoBSn054TEvZ8eYZB4RHJeRq4QzZsoKyMrTybMyU4WiYWOHxpxuxt+XA+HGPEIsUwshS3ioJVJpKlwuaUpklxJllQokX5qEdvZ7AOS2zUk3sbXgD/MCWie4QPar7WAzlMBtMFr4BPi/br14cQBtPPiTe7K7f4tfSRKkvPRR44k9W27wJhYoShPli9/9jZYMAAXaAA+0AfGwBzYAEforzyBL/AHwaA3iAKxIAEMBSKQBjKBDBSA8WAKKARzwAKwFKwEa8FGUAZ2gJ2gEuwFh8AxcBqcBZfAdVAPGsAD0AiegpcEQbAINYJH6BMmhCVhT7gSXkQPIpjoQ8QQCUQSkUpIiTxiPDGNmEMsIlYS64ky4htiD3GIOEmcI34gbhP3id+JFySNVCX5pBFpRTqTXmQAGUHGkkPIVHIUOZacTs4jl5Ol5HaygjxEniYvkfXkA7IJOnAVmoBmSnOkedECaVG0RNoImow2kVZEK6aV0nbQqmnHaRdo9bSHNIrOpPPoQroj3ZceRh9AF9FH0SfS59JX0rfQK+hH6Bfot+mN9NcMNYYhw57hwwhnDGSkMgoYhYxixibGbsZRxiVGA+Mpk8kUMK2ZnswwZgJzJHMccy5zNbOceZB5jnmH2cRisfRZ9iw/VhQrmZXLKmStYG1nHWCdZzWwnrNV2CZsV3YIO5EtZU9lF7O3svezz7Pvsl9yNDmWHB9OFCeFM4Yzn7ORU805w2ngvORqca25ftxY7kjuFO5y7g7uUe4N7hMVFRUzFW+VfioSlckqy1W+VjmhcluFUtVWtVMNVB2smqc6T3Wz6kHVH1SfqKmpWan5qyWq5arNUytTO6x2S+25Ok/dST1cPUV9knqJeoX6efVHGhwNS40AjaEaYzWKNXZpnNF4qMnRtNIM1EzWnKhZorlH84pmkxZPy0UrSitTa67WVq2TWve0WdpW2sHaKdrTtTdoH9a+w6PxzHmBPBFvGm8j7yivgc/kW/PD+SP5c/hf8ev4jTraOm46cTqjdUp09unUC2gCK0G4IEMwX7BTcFnwQtdIN0BXrDtbd4fued1nel30/PXEekV65XqX9F7oC/WD9dP1F+pX6t80oBvYGfQzKDBYY3DU4GEXfhffLqIuRV12drlmSBraGcYYjjPcYFhr2GRkbBRqlG20wuiw0UNjgbG/8UjjJcb7je+b8Ex6mEhMlpgcMPlFqCMMEGYIlwuPCBtNDU3DTPNM15vWmb40szYbYDbVrNzspjnX3Mt8hPkS8xrzRgsTi0iL8RbbLK5Zciy9LNMsl1ket3xmZW0VbzXTqtLqnrWedbj1WOtt1jds1Gx62oyyKbW5aMu09bJNt11te9aOtHO3S7MrsTtjT9p72EvsV9ufc2A4eDtIHUodrjiqOgY45jtuc7ztJHDq4zTVqdLpkbOFc6LzQufjzq+7unfN6Lqx63UXbZfeLlNdql1+d7VzFbmWuF7sptYtpNukblXdHrvZu4nd1rhddee5R7rPdK9x/9PD00PmscPjvqeFZ5LnKs8rXnyvaK+5Xie8Gd69vCd57/WmfDx8cn12+vzm6+ib7rvV91536+7i7hu73/Ez80v2W+9X30PYI6nHuh71PU17Jvcs7fmjv7l/iv8m/7sBtgEjA7YHPOrVtZes1+5ezwJ9AicEHgyiBYUGFQXVBWsHDwheGXwrxCwkNWRbSGOoe+i40INhjLCIsIVhV8KNwkXhZeGNvT17T+h9JEI1on/Eyogf+9j1kfWpjiQje0cujrzR17KvtG9lFIgKj1ocdTPaOnpU9Hf9mP2i+5X0+znGJWZ8zPH+vP7D+m/t/zS2V+z82OsDbAbkDaiJ04gbHFcW9yw+KH5RfP1A54ETBp5OMEiQJFQlshLjEjclNg0KHrR0UMNg98GFgy8PsR4yesjJoQZDM4buG6YxLHnYriRGUnzS1qRXyVHJpclNw8OHrxreKAoULRM9SPFPWZJyX+wnXiS+O8JvxKIR91L9Uhen3k/rmVac9lASKFkpeTwybOTakc/So9I3p7/JiM8oz2RnJmXukWpL06VHsoyzRmedy7bPLsyuH+UzaumoRlmEbFMOkTMkpyqXD5Op2jybvBl5t/N75JfkPy+IK9g1Wmu0dHTtGLsxs8fcHRsy9stx9HGicTXjTcdPGX97QsCE9ROJicMn1kwynzR9UsPk0MlbpnCnpE/5fmrXqYum/jEtflr1dKPpk6ffmRE6Y1uheqGs8MpM35lrZ9FnSWbVze42e8Xs10UpRafmdJ1TPOfVXNHcU1+4fLH8izfzRsyrm+8xf80C5gLpgssLey7cskhr0dhFdxZHLq5YIlxStOSPpcOWnix2K167jLssb1n98j7Lq1ZYrFiw4tXKtJWXSnqVlK8yXDV71bPVKavPr/Ffs2Ot0do5a1+sk6y7uj50fUWpVWnxBuaG/A0/b4zbePxLry/LNhlsmrPpz83SzfVbYrYcKfMsK9tquHX+NnJb3rb72wdvP/tV0FdVOxx3rC8XlM/5Gnyd9/Uv3yR9c3lnxM6aXV67dnxr+e2q3bzdRRVExZiKxsq0yvqqhKpze3rvqan2rd79ndN3m/ea7i3Zp7Nv/n7u/un73xwYe6DpYPbBh4dSD92pGVZz/fDAwxeP9DtSdzTi6IljIccOHw84fuCE34m9J31O7jnldarytMfpilr32t3fu3+/u86jruKM55mqs95nq891P7f/fM/zhy4EXTh2Mfzi6Ut9L527PODy1SuDr9RfTbl674eMHx5fy7/28vrkG4wbRTc1bxbfMrxV+j/b/5XXe9Tvux10u/bH/j9evyO68+CnnJ9eNUz/We3n4rsmd8vuud7bez/k/tlfBv3S8CD7wcuHhb9q/brqkc2jb3/z/622cWBjw2PZ4ze/z32i/2TzH25/1DRFN916mvn05bOi5/rPt1Be1PEX8S/uvix4xXq1/E/bP6tfR7y+8SbzzZv/A6WP/Ic=</string>
 </dict>
