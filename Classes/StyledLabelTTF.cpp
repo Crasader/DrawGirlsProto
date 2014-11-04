@@ -617,24 +617,37 @@ KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
 
 
 void StyledLabelTTF::setColorPos(ccColor3B _color){
-	CCArray* ch= m_oneLineContainer->getChildren();
+	CCArray* ch= this->getChildren();
 	for(int i=0;i<ch->count();i++){
 		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
-		
-		if(KSLabelTTF* checkObj = dynamic_cast<KSLabelTTF*>(childObj)){
-			checkObj->setColor(_color);
+		if(childObj->getTag()==1){
+			CCArray* ch2 = childObj->getChildren();
+			
+			for(int i=0;i<ch2->count();i++){
+				CCNode* childObj2 = (CCNode*)ch->objectAtIndex(i);
+				if(KSLabelTTF* checkObj2 = dynamic_cast<KSLabelTTF*>(childObj2)){
+					checkObj2->setColor(_color);
+			}
+		}
 		}
 	}
 }
 
 void StyledLabelTTF::enableOuterStrokePos(const ccColor3B &strokeColor, float strokeSize, GLubyte strokeOpacity, bool mustUpdateTexture)
 {
-	CCArray* ch= m_oneLineContainer->getChildren();
+	
+	CCArray* ch= this->getChildren();
 	for(int i=0;i<ch->count();i++){
 		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
-		
-		if(KSLabelTTF* checkObj = dynamic_cast<KSLabelTTF*>(childObj)){
-			checkObj->enableOuterStroke(strokeColor,strokeSize,strokeOpacity,mustUpdateTexture);
+		if(childObj->getTag()==1){
+			CCArray* ch2 = childObj->getChildren();
+			
+			for(int i=0;i<ch2->count();i++){
+				CCNode* childObj2 = (CCNode*)ch->objectAtIndex(i);
+				if(KSLabelTTF* checkObj2 = dynamic_cast<KSLabelTTF*>(childObj2)){
+					checkObj2->enableOuterStroke(strokeColor,strokeSize,strokeOpacity,mustUpdateTexture);
+				}
+			}
 		}
 	}
 }
