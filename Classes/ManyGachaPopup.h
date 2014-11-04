@@ -25,13 +25,13 @@ class DownloadFile;
 class ManyGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
-	bool init(int t_touch_priority);
+	bool init(int t_touch_priority, bool t_is_enable_to_shop);
 	void menuAction(CCObject* sender);
 	
-	static ManyGachaPopup* create(int t_touch_priority = -180)
+	static ManyGachaPopup* create(int t_touch_priority = -180, bool t_is_enable_to_shop = true)
 	{
 		ManyGachaPopup *pRet = new ManyGachaPopup();
-		if (pRet && pRet->init(t_touch_priority))
+		if (pRet && pRet->init(t_touch_priority, t_is_enable_to_shop))
 		{
 			pRet->autorelease();
 			return pRet;
@@ -51,6 +51,7 @@ public:
 	virtual void completedAnimationSequenceNamed(const char *name);
 	
 private:
+	bool is_enable_to_shop;
 	int touch_priority;
 	CCObject* target_final;
 	SEL_CallFunc delegate_final;

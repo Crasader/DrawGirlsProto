@@ -80,6 +80,9 @@ bool CharacterSelectPopup::init()
 	
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), 278, 22, "");
 	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_characterMarquee));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_characterMarquee2));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_characterMarquee3));
+	tipMaquee->addText(myLoc->getLocalForKey(LK::kMyLocalKey_characterMarquee4));
 	tipMaquee->setPosition(ccpFromSize(tip_marquee_back->getContentSize()/2.f));
 	tipMaquee->startMarquee();
 	tipMaquee->setAnchorPoint(ccp(0.5f,0.5f));
@@ -230,7 +233,7 @@ bool CharacterSelectPopup::init()
 																				   main_case->setScaleY(t);
 																			   }, [=](float t){
 																				   main_case->setScaleY(0.f);
-																				   ManyGachaPopup* t_popup = ManyGachaPopup::create(touch_priority-100);
+																				   ManyGachaPopup* t_popup = ManyGachaPopup::create(touch_priority-100, false);
 																				   t_popup->setHideFinalAction(this, callfunc_selector(CharacterSelectPopup::gachaClose));
 																				   addChild(t_popup, kCSP_Z_popup);
 																			   }));
