@@ -616,7 +616,28 @@ KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
 }
 
 
+void StyledLabelTTF::setColorPos(ccColor3B _color){
+	CCArray* ch= m_oneLineContainer->getChildren();
+	for(int i=0;i<ch->count();i++){
+		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
+		
+		if(KSLabelTTF* checkObj = dynamic_cast<KSLabelTTF*>(childObj)){
+			checkObj->setColor(_color);
+		}
+	}
+}
 
+void StyledLabelTTF::enableOuterStrokePos(const ccColor3B &strokeColor, float strokeSize, GLubyte strokeOpacity, bool mustUpdateTexture)
+{
+	CCArray* ch= m_oneLineContainer->getChildren();
+	for(int i=0;i<ch->count();i++){
+		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
+		
+		if(KSLabelTTF* checkObj = dynamic_cast<KSLabelTTF*>(childObj)){
+			checkObj->enableOuterStroke(strokeColor,strokeSize,strokeOpacity,mustUpdateTexture);
+		}
+	}
+}
 
 void StyledLabelTTF::setOldAnchorPoint()
 {
