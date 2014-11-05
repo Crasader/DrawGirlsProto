@@ -47,6 +47,12 @@ namespace GraphDogLib {
 		return convStream.str();
 	}
 	
+	std::string trim(std::string str){
+		if(str == "")return str;
+		std::remove(str.begin(), str.end(), ' ');
+		return str;
+	}
+	
 	void ReplaceString(std::string & strCallId, const char * pszBefore, const char * pszAfter )
 	{
 		size_t iPos = strCallId.find( pszBefore );

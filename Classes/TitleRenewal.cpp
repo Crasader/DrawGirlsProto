@@ -1846,7 +1846,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 //			NSDS_SS(kSDS_GI_shopRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
-			NSDS_SS(kSDS_GI_shopRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopRuby_int1_pID_s, i-1, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopRuby_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
@@ -1889,7 +1889,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 //			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceType_s, i-1, t_data["priceType"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_priceName_s, i-1, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_sale_s, i-1, t_data["sale"].asString(), false);
-			NSDS_SS(kSDS_GI_shopEventRuby_int1_pID_s, i-1, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventRuby_int1_pID_s, i-1, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopEventRuby_int1_exchangeID_s, i-1, t_data["exchangeID"].asString(), false);
 		}
 		
@@ -1947,7 +1947,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
-			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
@@ -1962,7 +1962,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
-			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
@@ -1977,7 +1977,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
-			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;

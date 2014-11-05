@@ -29,6 +29,8 @@ using namespace std;
 
 namespace GraphDogLib {
     std::string GDCreateToken(string auID,string udid,string flag,string lang,string nick,string email,string platform,string cTime,string secretKey,string dInfo);
+	
+		std::string trim(std::string str);
     void replaceString( std::string & strCallId, const char * pszBefore, const char * pszAfter );
    //@ string JsonObjectToString(JsonBox::Object _obj);
    //@ JsonBox::Object StringToJsonObject(string _str);
