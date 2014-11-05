@@ -1305,8 +1305,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setIosHideVer(result_data["iosHideVer"].asString());
 		mySGD->setGoldBalance(result_data["goldBalance"].asString());
 		
-		mySGD->setNmlGc(result_data["nmlGc"].asInt());
-		mySGD->setPrmGc(result_data["prmGc"].asInt());
+		mySGD->setNmlGc(result_data["nmlGc"].asString());
+		mySGD->setPrmGc(result_data["prmGc"].asString());
 		mySGD->setGachaRefreshTime(result_data["gachaRefreshTime"].asInt());
 		
 		mySGD->setPvpWinExp(result_data["pvpWinExp"].asInt());

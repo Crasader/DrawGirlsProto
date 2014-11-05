@@ -1282,8 +1282,8 @@ private:
 	COMMON_VAR(int, addGemReward, AddGemReward);
 	COMMON_VAR(int, iosMenuVisible, IosMenuVisible);
 	
-	COMMON_VAR(int, nmlGc, NmlGc);
-	COMMON_VAR(int, prmGc, PrmGc);
+	COMMON_VAR_STR(nmlGc, NmlGc);
+	COMMON_VAR_STR(prmGc, PrmGc);
 	COMMON_VAR(int, gachaRefreshTime, GachaRefreshTime);
 	
 	COMMON_VAR(int, pvpWinExp, PvpWinExp);
