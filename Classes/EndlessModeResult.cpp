@@ -32,6 +32,7 @@
 #include "TypingBox.h"
 #include "FiveRocksCpp.h"
 #include "CharacterExpUp.h"
+#include "TakeCardToDiary.h"
 
 enum EndlessModeResultZorder
 {
@@ -372,6 +373,66 @@ bool EndlessModeResult::init()
 		
 		if(mySGD->getStageGrade() > 0)
 		{
+			int t_take_card_number = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, mySGD->getStageGrade());
+			mySGD->addHasGottenCardNumber(t_take_card_number);
+			
+			Json::Value card_param;
+			card_param["memberID"] = hspConnector::get()->getSocialID();
+			card_param["cardNo"] = t_take_card_number;
+			card_param["addCount"] = mySGD->getClearTakeCardCnt();
+			
+			send_command_list.push_back(CommandParam("updateCardHistory", card_param, [=](Json::Value result_data)
+													 {
+														 TRACE();
+														 if(result_data["result"]["code"].asInt() == GDSUCCESS)
+														 {
+															 TRACE();
+															 for(int i=kAchievementCode_cardCollection1;i<=kAchievementCode_cardCollection3;i++)
+															 {
+																 if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) &&
+																	mySGD->getHasGottenCardsSize() >= myAchieve->getCondition((AchievementCode)i))
+																 {
+																	 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
+																	 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+																	 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+																 }
+															 }
+															 
+															 AchievementCode i = kAchievementCode_cardSet;
+															 if(!myAchieve->isCompleted(i) && !myAchieve->isAchieve(i))
+															 {
+																 int card_stage = NSDS_GI(kSDS_CI_int1_stage_i, t_take_card_number);
+																 bool is_success = true;
+																 for(int i=1;i<=4 && is_success;i++)
+																 {
+																	 int t_card_number = NSDS_GI(card_stage, kSDS_SI_level_int1_card_i, i);
+																	 if(!mySGD->isHasGottenCards(t_card_number))
+																		 is_success = false;
+																 }
+																 
+																 if(is_success)
+																 {
+																	 if(!myAchieve->isNoti(AchievementCode(i)))
+																	 {
+																		 myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
+																		 AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+																		 CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+																	 }
+																	 myAchieve->updateAchieve(nullptr);
+																 }
+															 }
+															 
+															 int gottenCardGroup = mySGD->getHasGottenCardsSize()/10;
+															 fiverocks::FiveRocksBridge::setUserCohortVariable(2, ccsf("[카드보유 %d~%d]",gottenCardGroup*10,gottenCardGroup*10+9));
+														 }
+													 }));
+			
+			TakeCardToDiary* t_take_card_popup = TakeCardToDiary::create(t_take_card_number, [=]()
+																		 {
+																			 
+																		 });
+			addChild(t_take_card_popup, 999);
+			
 			CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
 			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 			t_history.characterExp = ((left_total_score.getV() > right_total_score.getV()) ? mySGD->getPvpWinExp() : mySGD->getPvpLoseExp());
@@ -430,6 +491,7 @@ bool EndlessModeResult::init()
 	
 	if(mySGD->is_changed_userdata)
 		send_command_list.push_back(mySGD->getChangeUserdataParam(nullptr));
+	
 	
 	return true;
 }

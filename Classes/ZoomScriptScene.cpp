@@ -582,7 +582,7 @@ void ZoomScript::menuAction(CCObject *sender)
 				take_grade = mySGD->getStageGrade();
 			}
 			
-			if(mySGD->isTimeEvent(kTimeEventType_card) && take_grade < 4 && !is_time_event_card_on && mySGD->getTimeEventIntValue(kTimeEventType_card) > 0)
+			if(!mySGD->is_endless_mode && mySGD->isTimeEvent(kTimeEventType_card) && take_grade < 4 && !is_time_event_card_on && mySGD->getTimeEventIntValue(kTimeEventType_card) > 0)
 			{
 				is_time_event_card_on = true;
 				int up_value = mySGD->getTimeEventIntValue(kTimeEventType_card);
@@ -1114,7 +1114,11 @@ void ZoomScript::nextScene()
 		target_node = NULL;
 	}
 	
-	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
+	if(mySGD->is_endless_mode)
+	{
+		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+	}
+	else if(mySGD->is_hell_mode)
 	{
 		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 	}

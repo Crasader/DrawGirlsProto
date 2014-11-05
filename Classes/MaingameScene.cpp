@@ -2543,15 +2543,16 @@ void Maingame::clearScenario()
 	myMS->setVisible(false);
 	if(mySGD->is_endless_mode)
 	{
-		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
-		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
-		curtain_node->setScale(myDSH->screen_convert_rate);
-		addChild(curtain_node, shutterZorder+5);
-		
-		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
-		curtain_node->runAction(t_seq);
+//		CCNode* curtain_node = LoadingTipScene::getCurtainTipImage();
+//		curtain_node->setPosition(ccp(240,myDSH->ui_center_y));
+//		curtain_node->setScale(myDSH->screen_convert_rate);
+//		addChild(curtain_node, shutterZorder+5);
+//		
+//		CCDelayTime* t_delay = CCDelayTime::create(0.7f);
+//		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(Maingame::closeShutter));
+//		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
+//		curtain_node->runAction(t_seq);
+		closeShutter();
 	}
 	else
 	{
@@ -3371,9 +3372,18 @@ void Maingame::endCloseShutter()
 {
 //	setBackKeyEnabled(false);
 	
+	AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
 	if(mySGD->is_endless_mode)
 	{
-		CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		if(mySGD->getIsCleared())
+		{
+			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
+			CCDirector::sharedDirector()->replaceScene(t_trans);
+		}
+		else
+		{
+			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
+		}
 	}
 	else if(mySGD->is_hell_mode)
 	{
@@ -3386,8 +3396,6 @@ void Maingame::endCloseShutter()
 //		}
 //		else
 //		{
-			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-			
 			CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 			//			mySGD->setNextSceneName("newmainflow");
 			//			CCDirector::sharedDirector()->replaceScene(LoadingTipScene::scene());
@@ -3397,15 +3405,11 @@ void Maingame::endCloseShutter()
 	{
 		if(mySGD->getIsCleared())
 		{
-			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-			
 			CCTransitionFadeTR* t_trans = CCTransitionFadeTR::create(1.f, ZoomScript::scene());
 			CCDirector::sharedDirector()->replaceScene(t_trans);
 		}
 		else
 		{
-			AudioEngine::sharedInstance()->unloadEffectScene("Maingame");
-			
 			myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_fail);
 			CCDirector::sharedDirector()->replaceScene(PuzzleScene::scene());
 			//			mySGD->setNextSceneName("newmainflow");
