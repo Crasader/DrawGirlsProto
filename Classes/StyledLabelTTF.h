@@ -174,13 +174,17 @@ protected:
 	std::vector<StyledText> m_texts;
 	StyledAlignment m_currentAlignment;
 	
+
+	
 	float m_maxWidth;
 public:
+	
+	void setColorPos(ccColor3B _color);
 	std::vector<StyledText> getTexts()
 	{
 		return m_texts;
 	}
-	
+	void enableOuterStrokePos(const ccColor3B &strokeColor, float strokeSize, GLubyte strokeOpacity, bool mustUpdateTexture);
 	std::vector<StyledText> getTrimedTexts(const std::vector<StyledText>& texts, int s, int e);
 	CC_SYNTHESIZE(int, m_trimStart, TrimStart);
 	CC_SYNTHESIZE(int, m_trimEnd, TrimEnd);

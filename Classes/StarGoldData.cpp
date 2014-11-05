@@ -2324,7 +2324,7 @@ CharacterHistory StarGoldData::getSelectedCharacterHistory()
 	{
 		for(int i=0;i<character_historys.size();i++)
 		{
-			character_historys[i].characterNo == 1;
+			character_historys[i].characterNo.getV() == 1;
 			return character_historys[i];
 		}
 	}

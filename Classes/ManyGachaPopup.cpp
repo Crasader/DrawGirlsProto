@@ -41,12 +41,13 @@ void ManyGachaPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 	delegate_final = d_final;
 }
 
-bool ManyGachaPopup::init(int t_touch_priority)
+bool ManyGachaPopup::init(int t_touch_priority, bool t_is_enable_to_shop)
 {
 	if(!CCLayer::init())
 	{
 		return false;
 	}
+	is_enable_to_shop = t_is_enable_to_shop;
 	touch_priority = t_touch_priority;
 	is_menu_enable = false;
 	
@@ -230,24 +231,27 @@ void ManyGachaPopup::setOpening()
 	gacha_menu->addChild(premium_item);
 	
 	
-	CCSprite* n_shop_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
-	n_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-	n_shop_label->setPosition(ccpFromSize(n_shop_img->getContentSize()/2.f) + ccp(0,-1));
-	n_shop_img->addChild(n_shop_label);
-	
-	CCSprite* s_shop_img = CCSprite::create("subbutton_pink.png");
-	s_shop_img->setColor(ccGRAY);
-	KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
-	s_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-	s_shop_label->setPosition(ccpFromSize(s_shop_img->getContentSize()/2.f) + ccp(0,-1));
-	s_shop_img->addChild(s_shop_label);
-	
-	
-	CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
-	shop_menu->setTag(ManyGachaPopupMenu::kShop);
-	shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(415,24));
-	gacha_menu->addChild(shop_menu);
+	if(is_enable_to_shop)
+	{
+		CCSprite* n_shop_img = CCSprite::create("subbutton_pink.png");
+		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
+		n_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		n_shop_label->setPosition(ccpFromSize(n_shop_img->getContentSize()/2.f) + ccp(0,-1));
+		n_shop_img->addChild(n_shop_label);
+		
+		CCSprite* s_shop_img = CCSprite::create("subbutton_pink.png");
+		s_shop_img->setColor(ccGRAY);
+		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_shop), mySGD->getFont().c_str(), 12.5f);
+		s_shop_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		s_shop_label->setPosition(ccpFromSize(s_shop_img->getContentSize()/2.f) + ccp(0,-1));
+		s_shop_img->addChild(s_shop_label);
+		
+		
+		CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
+		shop_menu->setTag(ManyGachaPopupMenu::kShop);
+		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(415,24));
+		gacha_menu->addChild(shop_menu);
+	}
 }
 
 void ManyGachaPopup::refreshTimeChecking()

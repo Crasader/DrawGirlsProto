@@ -1782,10 +1782,8 @@ void PlayUI::hellModeResult()
 		myGD->communication("CP_startDieAnimation");
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		CCDelayTime* t_delay = CCDelayTime::create(1.5f);
-		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(PlayUI::addResultClearCCB));
-		CCSequence* t_seq = CCSequence::create(t_delay, t_call, NULL);
-		runAction(t_seq);
+		addResultCCB("ui_missonfail.ccbi");
+		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 		
 		endGame(false);
 		
@@ -3327,7 +3325,7 @@ void PlayUI::counting ()
 				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
 				float percentage_value = 100.f*(float(label_value) + (detail_counting_cnt/6)/10.f)/(playtime_limit.getV()+1);
 				progress_timer->setPercentage(percentage_value);
-				if(percentage_value >= 100.f)
+				if(percentage_value >= 100.f && progress_timer->isVisible())
 				{
 					conditionClear();
 				}
@@ -4374,6 +4372,29 @@ void PlayUI::myInit ()
 		star_img->setScale(0.5f);
 		star_img->setPosition(ccp(110,2));
 		progress_timer->addChild(star_img);
+		
+		int hell_cnt = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		bool is_found = false;
+		for(int i=0;!is_found && i<hell_cnt;i++)
+		{
+			if(mySD->getSilType() == NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1))
+			{
+				is_found = true;
+				int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+				
+				int history_size = mySGD->getCharacterHistorySize();
+				bool is_found2 = false;
+				for(int j=0;!is_found2 && j<history_size;j++)
+				{
+					CharacterHistory t_history = mySGD->getCharacterHistory(j);
+					if(t_history.characterNo == cha_no)
+					{
+						is_found2 = true;
+						progress_timer->setVisible(false);
+					}
+				}
+			}
+		}
 	}
 	else if(clr_cdt_type == kCLEAR_percentage)
 	{

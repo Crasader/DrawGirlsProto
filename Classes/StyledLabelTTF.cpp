@@ -616,7 +616,45 @@ KSLabelTTF* StyledLabelTTF::getLabelByTag(int tag){
 }
 
 
+void StyledLabelTTF::setColorPos(ccColor3B _color){
+	CCArray* ch= this->getChildren();
+	for(int i=0;i<ch->count();i++){
+		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
+		if(childObj->getTag()==1){
+			CCArray* ch2 = childObj->getChildren();
+			if(ch2)
+			{
+				for(int j=0;j<ch2->count();j++){
+					CCNode* childObj2 = (CCNode*)ch2->objectAtIndex(j);
+					if(KSLabelTTF* checkObj2 = dynamic_cast<KSLabelTTF*>(childObj2)){
+						checkObj2->setColor(_color);
+					}
+				}
+			}
+		}
+	}
+}
 
+void StyledLabelTTF::enableOuterStrokePos(const ccColor3B &strokeColor, float strokeSize, GLubyte strokeOpacity, bool mustUpdateTexture)
+{
+	
+	CCArray* ch= this->getChildren();
+	for(int i=0;i<ch->count();i++){
+		CCNode* childObj = (CCNode*)ch->objectAtIndex(i);
+		if(childObj->getTag()==1){
+			CCArray* ch2 = childObj->getChildren();
+			if(ch2)
+			{
+				for(int j=0;j<ch2->count();j++){
+					CCNode* childObj2 = (CCNode*)ch2->objectAtIndex(j);
+					if(KSLabelTTF* checkObj2 = dynamic_cast<KSLabelTTF*>(childObj2)){
+						checkObj2->enableOuterStroke(strokeColor,strokeSize,strokeOpacity,mustUpdateTexture);
+					}
+				}
+			}
+		}
+	}
+}
 
 void StyledLabelTTF::setOldAnchorPoint()
 {

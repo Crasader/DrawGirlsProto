@@ -250,12 +250,29 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	special_back->setPosition(ccp(back_in->getContentSize().width/2.f, 23));
 	back_in->addChild(special_back);
 	
+	CCSprite* special_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 0, 0));
 	StyledLabelTTF* special_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, cha_idx, cha_level).c_str(), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kLeftAlignment);
-	special_label->setAnchorPoint(ccp(0.5f,0.5f));
+	special_label->setAnchorPoint(ccp(0.f,1.f));
+	special_node->setPosition(ccp(0,0));
+	special_node->addChild(special_label);
+	special_node->setTextureRect(CCRectMake(0, 0, special_label->getContentSize().width, special_label->getContentSize().height));
+	special_label->setPosition(ccp(0,special_node->getContentSize().height));
+	
+	if(NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, cha_idx) != cha_level)
+	{
+		StyledLabelTTF* next_special_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, cha_idx, cha_level+1).c_str(), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kLeftAlignment);
+		next_special_label->setColorPos(ccGRAY);
+		next_special_label->enableOuterStrokePos(ccGRAY, 0, 0, true);
+		next_special_label->setAnchorPoint(ccp(0.f,1.f));
+		special_node->setTextureRect(CCRectMake(0, 0, MAX(special_label->getContentSize().width, next_special_label->getContentSize().width), special_label->getContentSize().height + next_special_label->getContentSize().height));
+		special_label->setPosition(ccp(0,special_node->getContentSize().height));
+		next_special_label->setPosition(ccp(0,next_special_label->getContentSize().height));
+		special_node->addChild(next_special_label);
+	}
 	
 	CCScrollView* special_scroll = CCScrollView::create(CCSizeMake(special_back->getContentSize().width-6, special_back->getContentSize().height-4));
 	special_scroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
-	special_scroll->setContainer(special_label);
+	special_scroll->setContainer(special_node);
 	special_scroll->setPosition(ccpFromSize(special_back->getContentSize()/2.f) - ccpMult(ccp(special_back->getContentSize().width-6, special_back->getContentSize().height-4), 0.5f));
 	special_scroll->setContentOffset(ccp(0, special_scroll->minContainerOffset().y));
 	special_back->addChild(special_scroll);

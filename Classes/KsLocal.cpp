@@ -1147,7 +1147,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
 	obj[LK::kMyLocalKey_changeCharacter] = "캐릭터변경";
 	obj[LK::kMyLocalKey_selectCharacter] = "캐릭터선택";
-	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 헬모드에서 획득할수있어요!";
+	obj[LK::kMyLocalKey_characterMarquee] = "캐릭터는 헬모드에서 획득할 수 있어요!";
 	obj[LK::kMyLocalKey_characterSelected] = "선택중";
 	obj[LK::kMyLocalKey_characterSelect] = "선  택";
 	obj[LK::kMyLocalKey_takeCharacterCard] = "캐릭터 획득!";
@@ -1232,7 +1232,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_dontHave] = "미보유";
 	obj[LK::kMyLocalKey_refresh] = "갱신하기";
 	obj[LK::kMyLocalKey_onlyBaseCharacterInHellmode] = "헬모드에서는 기본 캐릭터로만 플레이 가능합니다.";
-	obj[LK::kMyLocalKey_hellMarquee2] = "주어진 시간 동안 죽지 않고 버티면 임무 안료!";
+	obj[LK::kMyLocalKey_hellMarquee2] = "주어진 시간 동안 죽지 않고 버티면 임무 완료!";
+	obj[LK::kMyLocalKey_characterMarquee2] = "뽑기에는 더욱 특별한 캐릭터가 등장합니다.";
+	obj[LK::kMyLocalKey_characterMarquee3] = "뽑기에는 같은 캐릭터를 뽑을 경우 해당 캐릭터의 경험치가 올라갑니다.";
+	obj[LK::kMyLocalKey_characterMarquee4] = "선택한 캐릭터로 PvP모드를 플레이하면 캐릭터의 경험치를 올릴 수 있습니다.";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

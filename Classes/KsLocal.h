@@ -1197,7 +1197,10 @@ enum class LK
 	kMyLocalKey_dontHave,
 	kMyLocalKey_refresh,
 	kMyLocalKey_onlyBaseCharacterInHellmode,
-	kMyLocalKey_hellMarquee2
+	kMyLocalKey_hellMarquee2,
+	kMyLocalKey_characterMarquee2,
+	kMyLocalKey_characterMarquee3,
+	kMyLocalKey_characterMarquee4
 };
 class KsLocal
 {

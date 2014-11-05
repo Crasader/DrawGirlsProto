@@ -3689,15 +3689,51 @@ void MainFlowScene::setBottom()
 			if(mySGD->isClearPiece(open_piece_number))
 				is_hell_open = true;
 		}
+	
+	bool is_donthave_hell_character = false;
+	if(is_hell_open && !mySGD->is_hell_mode)
+	{
+		for(int i=0;!is_donthave_hell_character && i<hell_count;i++)
+		{
+			int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+			int history_size = mySGD->getCharacterHistorySize();
+			bool is_found = false;
+			for(int j=0;!is_found && j<history_size;j++)
+			{
+				CharacterHistory t_history = mySGD->getCharacterHistory(j);
+				if(t_history.characterNo.getV() == cha_no)
+				{
+					is_found = true;
+				}
+			}
+			
+			if(!is_found)
+			{
+				is_donthave_hell_character = true;
+			}
+		}
+	}
 		
 		CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
 		((GraySprite*)n_hell_img)->setGray(!is_hell_open);
+	if(is_donthave_hell_character)
+	{
+		GraySprite* n_new = GraySprite::create("mainflow_new.png");
+		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
+		n_hell_img->addChild(n_new);
+	}
 		
 		CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
 		if(is_hell_open)
 			s_hell_img->setColor(ccGRAY);
 		else
 			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
+	if(is_donthave_hell_character)
+	{
+		GraySprite* s_new = GraySprite::create("mainflow_new.png");
+		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));
+		s_hell_img->addChild(s_new);
+	}
 		
 		CCMenuLambda* hell_menu = CCMenuLambda::create();
 		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_hell_img->getContentSize().height/2.f+3));
