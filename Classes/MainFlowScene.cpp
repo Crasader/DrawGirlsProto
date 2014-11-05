@@ -3322,12 +3322,12 @@ void MainFlowScene::setBottom()
 	}
 	else
 	{
-		n_shop = CCSprite::create("mainflow_shop.png");
+		n_shop = CCSprite::create("mainflow_gacha.png");
 		KSLabelTTF* n_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
 		n_shop_label->enableOuterStroke(ccBLACK, 1.f);
 		n_shop_label->setPosition(ccp(n_shop->getContentSize().width/2.f, 7));
 		n_shop->addChild(n_shop_label);
-		s_shop = CCSprite::create("mainflow_shop.png");
+		s_shop = CCSprite::create("mainflow_gacha.png");
 		s_shop->setColor(ccGRAY);
 		KSLabelTTF* s_shop_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_gacha), mySGD->getFont().c_str(), 12);
 		s_shop_label->enableOuterStroke(ccBLACK, 1.f);
