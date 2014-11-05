@@ -2287,6 +2287,7 @@ void StartSettingPopup::goItemGacha(Json::Value result_data)
 			
 			selected_gacha_item = (ITEM_CODE)item_type;
 			mySGD->gacha_item = selected_gacha_item;
+			gacha_item_type = mySGD->gacha_item.getV();
 			
 			item_title_label->setString(convertToItemCodeToItemName(selected_gacha_item).c_str());
 			option_label->setString(mySD->getItemScript(selected_gacha_item).c_str());

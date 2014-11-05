@@ -141,6 +141,10 @@ bool EndlessModeResult::init()
 	
 	right_total_score = right_grade_base_score.getV() + right_grade_decrease_score.getV() + right_damaged_score.getV();
 	
+	int keep_base_gold = mySGD->getStageGold();
+	
+	gold_calc_func = nullptr;
+	
 	if(mySGD->endless_my_victory_on.getV())
 	{
 		is_calc = true;
@@ -151,6 +155,28 @@ bool EndlessModeResult::init()
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = mySGD->endless_my_ing_win.getV() + 1;
 			mySGD->endless_my_ing_score = mySGD->endless_my_ing_score.getV() + int(left_total_score.getV());
+			mySGD->addChangeGoodsIngameGold(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()/2, 0);
+			
+			int t_after_gold = mySGD->getStageGold();
+			gold_calc_func = [=](function<void()> after_func)
+			{
+				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
+											{
+												left_gold_content->setString(ccsf("%d", t_i));
+											}, [=](int t_i)
+											{
+												left_gold_content->setString(ccsf("%d", t_i));
+												after_func();
+											}));
+				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
+													 mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()/2, 0.5f, [=](int t_i)
+													 {
+														 right_gold_content->setString(ccsf("%d", t_i));
+													 }, [=](int t_i)
+													 {
+														 right_gold_content->setString(ccsf("%d", t_i));
+													 }));
+			};
 		}
 		else
 		{
@@ -189,6 +215,28 @@ bool EndlessModeResult::init()
 			mySGD->setUserdataEndlessIngWin(mySGD->endless_my_victory.getV());
 			mySGD->endless_my_ing_win = 0;
 			mySGD->endless_my_ing_score = 0;
+			mySGD->addChangeGoodsIngameGold(-mySGD->getStageBaseGold()/2, -(mySGD->getStageGold()-mySGD->getStageBaseGold())/2.f);
+			
+			int t_after_gold = mySGD->getStageGold();
+			gold_calc_func = [=](function<void()> after_func)
+			{
+				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
+													 {
+														 left_gold_content->setString(ccsf("%d", t_i));
+													 }, [=](int t_i)
+													 {
+														 left_gold_content->setString(ccsf("%d", t_i));
+														 after_func();
+													 }));
+				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
+													 mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2, 0.5f, [=](int t_i)
+													 {
+														 right_gold_content->setString(ccsf("%d", t_i));
+													 }, [=](int t_i)
+													 {
+														 right_gold_content->setString(ccsf("%d", t_i));
+													 }));
+			};
 		}
 		
 //		mySGD->endless_my_total_score = mySGD->endless_my_total_score.getV() + mySGD->getScore();
@@ -247,7 +295,10 @@ bool EndlessModeResult::init()
 	left_content_list.push_back(KS::insert_separator(left_time_decrease_score.getV(), "%.0f"));
 	left_content_list.push_back(KS::insert_separator(left_grade_decrease_score.getV(), "%.0f"));
 	left_content_list.push_back(KS::insert_separator(left_damaged_score.getV()));
-	left_content_list.push_back(KS::insert_separator(mySGD->getStageGold()));
+	if(is_calc)
+		left_content_list.push_back(KS::insert_separator(keep_base_gold));
+	else
+		left_content_list.push_back(KS::insert_separator(mySGD->getStageGold()));
 	left_content_list.push_back(KS::insert_separator(int(mySGD->getPercentage()*100.f)) + "%");
 	
 	right_content_list.push_back(KS::insert_separator(right_area_score.getV()));
@@ -257,7 +308,21 @@ bool EndlessModeResult::init()
 	right_content_list.push_back(KS::insert_separator(right_time_decrease_score.getV(), "%.0f"));
 	right_content_list.push_back(KS::insert_separator(right_grade_decrease_score.getV(), "%.0f"));
 	right_content_list.push_back(KS::insert_separator(right_damaged_score.getV()));
-	right_content_list.push_back(KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()));
+	if(is_calc)
+	{
+		right_content_list.push_back(KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()));
+	}
+	else
+	{
+		if(left_total_score.getV() > right_total_score.getV())
+		{
+			right_content_list.push_back(KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()/2));
+		}
+		else
+		{
+			right_content_list.push_back(KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2));
+		}
+	}
 	right_content_list.push_back(KS::insert_separator(int(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeArea), Json::Value()).asFloat()*100.f)) + "%");
 	
 	setMain();
@@ -505,6 +570,14 @@ CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigne
 	content_label->setAnchorPoint(ccp(1,0.5f));
 	content_label->setPosition(ccp(t_back->getContentSize().width-8, t_back->getContentSize().height/2.f));
 	t_back->addChild(content_label);
+	
+	if(idx == 7)
+	{
+		if(table == left_table)
+			left_gold_content = content_label;
+		else if(table == right_table)
+			right_gold_content = content_label;
+	}
 	
 	return cell;
 }
@@ -1293,12 +1366,6 @@ void EndlessModeResult::startCalcAnimation()
 																			   left_table->setContentOffset(ccp(0, -2*21+42));
 																			   right_table->setContentOffset(ccp(0, -2*21+42));
 																			   
-																			   left_table->setTouchEnabled(true);
-																			   right_table->setTouchEnabled(true);
-																			   
-																			   left_table->CCScrollView::setDelegate(this);
-																			   right_table->CCScrollView::setDelegate(this);
-																			   
 																			   if(left_total_score.getV() > right_total_score.getV())
 																			   {
 																				   // win
@@ -1402,46 +1469,55 @@ void EndlessModeResult::startCalcAnimation()
 																															  particle2->setPosition(result_stamp->getPosition());
 																															  main_case->addChild(particle2);
 																															  
-																															  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
-																															  {
-																																  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																  t_suction_layer->touch_began_func = [=]()
-																																  {
-																																	  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																														   {
-																																															   KS::setOpacity(result_stamp, 255-t*155);
-																																														   }, [=](float t)
-																																														   {
-																																															   KS::setOpacity(result_stamp, 100);
-																																														   }));
-																																	  t_suction_layer->removeFromParent();
-																																  };
-																																  t_suction_layer->is_on_touch_began_func = true;
-																																  addChild(t_suction_layer);
-																																  t_suction_layer->setTouchEnabled(true);
-																															  }
-																															  else
-																															  {
-																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																													   {
-																																														   KS::setOpacity(result_stamp, 255-t*155);
-																																													   }, [=](float t)
-																																													   {
-																																														   KS::setOpacity(result_stamp, 100);
-																																													   }));
-																															  }
-																															  
-																															  
-																															  is_menu_enable = true;
-																															  if(left_total_score.getV() <= right_total_score.getV())
-																															  {
-																																  stop_button->setVisible(true);
-																															  }
-																															  else
-																															  {
-																																  stop_button->setVisible(true);
-																																  next_button->setVisible(true);
-																															  }
+																															  gold_calc_func([=]()
+																																			 {
+																																				 left_table->setTouchEnabled(true);
+																																				 right_table->setTouchEnabled(true);
+																																				 
+																																				 left_table->CCScrollView::setDelegate(this);
+																																				 right_table->CCScrollView::setDelegate(this);
+																																				 
+																																				 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																				 {
+																																					 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																					 t_suction_layer->touch_began_func = [=]()
+																																					 {
+																																						 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																			  {
+																																																				  KS::setOpacity(result_stamp, 255-t*155);
+																																																			  }, [=](float t)
+																																																			  {
+																																																				  KS::setOpacity(result_stamp, 100);
+																																																			  }));
+																																						 t_suction_layer->removeFromParent();
+																																					 };
+																																					 t_suction_layer->is_on_touch_began_func = true;
+																																					 addChild(t_suction_layer);
+																																					 t_suction_layer->setTouchEnabled(true);
+																																				 }
+																																				 else
+																																				 {
+																																					 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																		  {
+																																																			  KS::setOpacity(result_stamp, 255-t*155);
+																																																		  }, [=](float t)
+																																																		  {
+																																																			  KS::setOpacity(result_stamp, 100);
+																																																		  }));
+																																				 }
+																																				 
+																																				 
+																																				 is_menu_enable = true;
+																																				 if(left_total_score.getV() <= right_total_score.getV())
+																																				 {
+																																					 stop_button->setVisible(true);
+																																				 }
+																																				 else
+																																				 {
+																																					 stop_button->setVisible(true);
+																																					 next_button->setVisible(true);
+																																				 }
+																																			 });
 																														  }));
 																			   }
 																			   else
@@ -1464,45 +1540,54 @@ void EndlessModeResult::startCalcAnimation()
 																															  KS::setOpacity(result_stamp, 255);
 																															  result_stamp->setScale(1.f);
 																															  
-																															  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
-																															  {
-																																  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																  t_suction_layer->touch_began_func = [=]()
-																																  {
-																																	  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																														   {
-																																															   KS::setOpacity(result_stamp, 255-t*155);
-																																														   }, [=](float t)
-																																														   {
-																																															   KS::setOpacity(result_stamp, 100);
-																																														   }));
-																																	  t_suction_layer->removeFromParent();
-																																  };
-																																  t_suction_layer->is_on_touch_began_func = true;
-																																  addChild(t_suction_layer);
-																																  t_suction_layer->setTouchEnabled(true);
-																															  }
-																															  else
-																															  {
-																																  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																													   {
-																																														   KS::setOpacity(result_stamp, 255-t*155);
-																																													   }, [=](float t)
-																																													   {
-																																														   KS::setOpacity(result_stamp, 100);
-																																													   }));
-																															  }
-																															  
-																															  is_menu_enable = true;
-																															  if(left_total_score.getV() <= right_total_score.getV())
-																															  {
-																																  stop_button->setVisible(true);
-																															  }
-																															  else
-																															  {
-																																  stop_button->setVisible(true);
-																																  next_button->setVisible(true);
-																															  }
+																															  gold_calc_func([=]()
+																																			 {
+																																				 left_table->setTouchEnabled(true);
+																																				 right_table->setTouchEnabled(true);
+																																				 
+																																				 left_table->CCScrollView::setDelegate(this);
+																																				 right_table->CCScrollView::setDelegate(this);
+																																				 
+																																				 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																				 {
+																																					 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																					 t_suction_layer->touch_began_func = [=]()
+																																					 {
+																																						 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																			  {
+																																																				  KS::setOpacity(result_stamp, 255-t*155);
+																																																			  }, [=](float t)
+																																																			  {
+																																																				  KS::setOpacity(result_stamp, 100);
+																																																			  }));
+																																						 t_suction_layer->removeFromParent();
+																																					 };
+																																					 t_suction_layer->is_on_touch_began_func = true;
+																																					 addChild(t_suction_layer);
+																																					 t_suction_layer->setTouchEnabled(true);
+																																				 }
+																																				 else
+																																				 {
+																																					 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																		  {
+																																																			  KS::setOpacity(result_stamp, 255-t*155);
+																																																		  }, [=](float t)
+																																																		  {
+																																																			  KS::setOpacity(result_stamp, 100);
+																																																		  }));
+																																				 }
+																																				 
+																																				 is_menu_enable = true;
+																																				 if(left_total_score.getV() <= right_total_score.getV())
+																																				 {
+																																					 stop_button->setVisible(true);
+																																				 }
+																																				 else
+																																				 {
+																																					 stop_button->setVisible(true);
+																																					 next_button->setVisible(true);
+																																				 }
+																																			 });
 																														  }));
 																			   }
 																			   

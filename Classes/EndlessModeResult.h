@@ -72,6 +72,8 @@ private:
 	KSProtectVar<int> right_damaged_score;
 	KSProtectVar<int> right_total_score;
 	
+	function<void(function<void()>)> gold_calc_func;
+	
 	CCScale9Sprite* left_back;
 	CCScale9Sprite* right_back;
 	
@@ -86,8 +88,10 @@ private:
 	vector<string> right_content_list;
 	
 	KSLabelTTF* left_total_content;
-	
 	KSLabelTTF* right_total_content;
+	
+	KSLabelTTF* left_gold_content;
+	KSLabelTTF* right_gold_content;
 	
 	vector<CommandParam> send_command_list;
 	void tryTransaction();

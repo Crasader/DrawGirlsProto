@@ -1560,7 +1560,7 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CC
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
 	int random_value = rand()%100;
-    if(mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
+    if(!mySGD->is_endless_mode && mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
         random_value = 99;
   
 	
