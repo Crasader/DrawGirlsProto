@@ -594,8 +594,13 @@ void ManyGachaPopup::setNormalGacha()
 	}
 	else
 	{
+		string nml_gc = mySGD->getNmlGc();
+		Json::Reader t_reader;
+		Json::Value nml_gc_json;
+		t_reader.parse(nml_gc, nml_gc_json);
+		
 		CCSprite* price_icon = CCSprite::create("icon_g.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -955,8 +960,13 @@ void ManyGachaPopup::setPremiumGacha()
 	}
 	else
 	{
+		string prm_gc = mySGD->getPrmGc();
+		Json::Reader t_reader;
+		Json::Value prm_gc_json;
+		t_reader.parse(prm_gc, prm_gc_json);
+		
 		CCSprite* price_icon = CCSprite::create("icon_r.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -1090,7 +1100,12 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass7) <= 0 && mySGD->getNmlGc() > mySGD->getGoodsValue(kGoodsType_gold))
+	string nml_gc = mySGD->getNmlGc();
+	Json::Reader t_reader;
+	Json::Value nml_gc_json;
+	t_reader.parse(nml_gc, nml_gc_json);
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass7) <= 0 && nml_gc_json[int(enable_gacha_list.size()-1)].asInt() > mySGD->getGoodsValue(kGoodsType_gold))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 		{
@@ -1140,7 +1155,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	if(mySGD->getGoodsValue(kGoodsType_pass7) > 0)
 		mySGD->addChangeGoods("nml_gc_p7");
 	else
-		mySGD->addChangeGoods("nml_gc");
+		mySGD->addChangeGoods("nml_gc", GoodsType::kGoodsType_gold, -nml_gc_json[int(enable_gacha_list.size()-1)].asInt());
 	
 	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	
@@ -1188,8 +1203,13 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 										 }
 										 else
 										 {
+											 string nml_gc = mySGD->getNmlGc();
+											 Json::Reader t_reader;
+											 Json::Value nml_gc_json;
+											 t_reader.parse(nml_gc, nml_gc_json);
+											 
 											 CCSprite* price_icon = CCSprite::create("icon_g.png");
-											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -1460,8 +1480,13 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																			}
 																			else
 																			{
+																				string nml_gc = mySGD->getNmlGc();
+																				Json::Reader t_reader;
+																				Json::Value nml_gc_json;
+																				t_reader.parse(nml_gc, nml_gc_json);
+																				
 																				CCSprite* price_icon = CCSprite::create("icon_g.png");
-																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getNmlGc()).c_str(), mySGD->getFont().c_str(), 12);
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -2035,7 +2060,12 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3");
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass8) <= 0 && mySGD->getPrmGc() > mySGD->getGoodsValue(kGoodsType_ruby))
+	string prm_gc = mySGD->getPrmGc();
+	Json::Reader t_reader;
+	Json::Value prm_gc_json;
+	t_reader.parse(prm_gc, prm_gc_json);
+	
+	if(mySGD->getGoodsValue(kGoodsType_pass8) <= 0 && prm_gc_json[int(enable_gacha_list.size()-1)].asInt() > mySGD->getGoodsValue(kGoodsType_ruby))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 															{
@@ -2085,7 +2115,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	if(mySGD->getGoodsValue(kGoodsType_pass8) > 0)
 		mySGD->addChangeGoods("prm_gc_p8");
 	else
-		mySGD->addChangeGoods("prm_gc");
+		mySGD->addChangeGoods("prm_gc", GoodsType::kGoodsType_ruby, -prm_gc_json[int(enable_gacha_list.size()-1)].asInt());
 	
 	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	
@@ -2133,8 +2163,13 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 										 }
 										 else
 										 {
+											 string prm_gc = mySGD->getPrmGc();
+											 Json::Reader t_reader;
+											 Json::Value prm_gc_json;
+											 t_reader.parse(prm_gc, prm_gc_json);
+											 
 											 CCSprite* price_icon = CCSprite::create("icon_r.png");
-											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -2351,8 +2386,13 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																			}
 																			else
 																			{
+																				string prm_gc = mySGD->getPrmGc();
+																				Json::Reader t_reader;
+																				Json::Value prm_gc_json;
+																				t_reader.parse(prm_gc, prm_gc_json);
+																				
 																				CCSprite* price_icon = CCSprite::create("icon_r.png");
-																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getPrmGc()).c_str(), mySGD->getFont().c_str(), 12);
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
