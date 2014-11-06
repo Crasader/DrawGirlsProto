@@ -4078,3 +4078,27 @@ void GodOfDeath::stopMyAction()
 	
 	startSelfRemoveSchedule();
 }
+
+void MeshWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const Json::Value& patternJson)
+{
+	m_cumber = cb;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
+	m_pattern = patternJson;
+	scheduleUpdate();
+}
+
+void MeshWrapper::update(float dt)
+{
+}
+
+void MeshWrapper::stopMyAction()
+{
+	unscheduleUpdate();
+	
+	setEndingWithEarly();
+	
+	startSelfRemoveSchedule();
+}
+

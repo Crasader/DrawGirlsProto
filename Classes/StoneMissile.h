@@ -447,6 +447,8 @@ public:
 		if(m_option & AttackOption::kCancelCasting)
 		{
 			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
+			
+			cumber->setDamageMeasure(0.f);
 		}
 
 		// 몬스터 리액션하라고.
