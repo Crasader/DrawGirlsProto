@@ -97,7 +97,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 	{
 		KSLabelTTF* sub_title = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), goods_info->reward_list[0].count.getV()), mySGD->getFont().c_str(), 18);
 		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
-		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-20));
+		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-55));
 		back_in->addChild(sub_title);
 		
 //		CCSprite* box_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", keep_card_number));
@@ -113,7 +113,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 	{
 		KSLabelTTF* sub_title = KSLabelTTF::create((getLocal(LK::kMyLocalKey_dontHave) + string(" ") + ccsf(getLocal(LK::kMyLocalKey_cardTake), goods_info->reward_list[0].count.getV())).c_str(), mySGD->getFont().c_str(), 18);
 		sub_title->enableOuterStroke(ccBLACK, 1.f, int(255*0.7f), true);
-		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-20));
+		sub_title->setPosition(ccp(back_in->getContentSize().width/2.f, back_in->getContentSize().height-55));
 		back_in->addChild(sub_title);
 	}
 	else if(goods_info->reward_list[0].type.getV() == "cp")
@@ -131,16 +131,16 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_no)
 			{
 				found_index = i+1;
-				int history_size = mySGD->getCharacterHistorySize();
-				for(int j=0;j<history_size;j++)
-				{
-					CharacterHistory t_history = mySGD->getCharacterHistory(j);
-					if(t_history.characterNo.getV() == character_no)
-					{
-						found_level = t_history.characterLevel.getV();
-						break;
-					}
-				}
+//				int history_size = mySGD->getCharacterHistorySize();
+//				for(int j=0;j<history_size;j++)
+//				{
+//					CharacterHistory t_history = mySGD->getCharacterHistory(j);
+//					if(t_history.characterNo.getV() == character_no)
+//					{
+//						found_level = t_history.characterLevel.getV();
+//						break;
+//					}
+//				}
 			}
 		}
 		
@@ -163,7 +163,22 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 		
 		StyledLabelTTF* comment_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, found_index, found_level).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 		comment_label->setAnchorPoint(ccp(0.5f,0.5f));
-		comment_label->setPosition(ccp(back_in->getContentSize().width/2.f + 50,42));
+		comment_label->setPosition(ccp(back_in->getContentSize().width/2.f + 50,40));
+		
+		CCSize comment_size = comment_label->getContentSize();
+		if(comment_size.width > 140)
+		{
+			comment_label->setScale(140.f/comment_size.width);
+			if(comment_size.height > 60*(140.f/comment_size.width))
+			{
+				comment_label->setScale((60*(140.f/comment_size.width))/comment_size.height);
+			}
+		}
+		else if(comment_size.height > 60)
+		{
+			comment_label->setScale(60.f/comment_size.height);
+		}
+		
 		back_in->addChild(comment_label);
 	}
 	else
