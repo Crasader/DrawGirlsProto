@@ -34,6 +34,15 @@ using namespace std;
 	return t_m0; \
 } \
 
+
+#define CREATE_FUNC_CCP_JSON(A) static A* create(CCPoint t_sp, KSCumberBase* cb, const Json::Value& patternJson ) \
+{ \
+A* t_m0 = new A(); \
+t_m0->myInit(t_sp, cb, patternJson); \
+t_m0->autorelease(); \
+return t_m0; \
+} \
+
 class AttackPattern : public CCNode
 {
 public:
@@ -1194,6 +1203,24 @@ protected:
 	Well512 m_well512;
 	Json::Value m_pattern;
 };
+class MeshWrapper : public AttackPattern
+{
+public:
+	CREATE_FUNC_CCP_JSON(MeshWrapper);
+	virtual ~MeshWrapper()
+	{
+		CCLOG("~MeshWrapper");
+	}
+	void myInit(CCPoint t_sp, KSCumberBase* cb, const Json::Value& patternJson);
+	void update(float dt);
+	virtual void stopMyAction();
+protected:
+	//float speed;
+	//float crashSize;
+	Well512 m_well512;
+	Json::Value m_pattern;
+};
+
 
 
 #endif

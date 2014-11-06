@@ -765,5 +765,26 @@ private:
 	void myAction (float dt);
 	void myInit (CCPoint startPosition, float speed, float angleDegree, IntSize mSize, int runDown);
 };
+
+class VMesh : public CCNode
+{
+public:
+	virtual ~VMesh()
+	{
+		CCLOG("~VMESH");
+	}
+	static VMesh* create(const Json::Value& param);
+	void stopMyAction ();
+	void myInit(const Json::Value& param);
+	CCSprite* m_vMesh;
+protected:
+	float m_xPos; // x 위치
+	int m_delayFrames; // 지연 프레임
+	int m_currentFrames;
+	void myAction(float dt);
+	
+};
+
+
 #undef LZZ_INLINE
 #endif
