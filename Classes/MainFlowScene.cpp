@@ -3718,9 +3718,20 @@ void MainFlowScene::setBottom()
 		((GraySprite*)n_hell_img)->setGray(!is_hell_open);
 	if(is_donthave_hell_character)
 	{
-		GraySprite* n_new = GraySprite::create("mainflow_new.png");
-		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
-		n_hell_img->addChild(n_new);
+		CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+		n_hell_img->addChild(n_win_back);
+		
+		KSLabelTTF* n_win_label = KSLabelTTF::create("NEW", mySGD->getFont().c_str(), 9.5f);
+		n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+		n_win_back->addChild(n_win_label);
+		
+		//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+		n_win_back->setPosition(ccp(n_hell_img->getContentSize().width-30, n_hell_img->getContentSize().height-n_win_back->getContentSize().height+13));
+		n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+		
+//		GraySprite* n_new = GraySprite::create("mainflow_new.png");
+//		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
+//		n_hell_img->addChild(n_new);
 	}
 		
 		CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
@@ -3730,9 +3741,20 @@ void MainFlowScene::setBottom()
 			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
 	if(is_donthave_hell_character)
 	{
-		GraySprite* s_new = GraySprite::create("mainflow_new.png");
-		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));
-		s_hell_img->addChild(s_new);
+		CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+		s_hell_img->addChild(s_win_back);
+		
+		KSLabelTTF* s_win_label = KSLabelTTF::create("NEW", mySGD->getFont().c_str(), 9.5f);
+		s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+		s_win_back->addChild(s_win_label);
+		
+		//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+		s_win_back->setPosition(ccp(s_hell_img->getContentSize().width-30, s_hell_img->getContentSize().height-s_win_back->getContentSize().height+13));
+		s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+		
+//		GraySprite* s_new = GraySprite::create("mainflow_new.png");
+//		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));
+//		s_hell_img->addChild(s_new);
 	}
 		
 		CCMenuLambda* hell_menu = CCMenuLambda::create();

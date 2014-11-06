@@ -250,6 +250,10 @@ public:
 	void assignBossData(Json::Value data);
 	// ??
 	void applyPassiveData(const std::string& passive);
+	
+	// 헬모드 밸런스 적용
+	void applyHellBalance(float playTime);
+	
 	// 오토 밸런스 적용
 	void applyAutoBalance(bool isExchange=false);
 	// 캐릭터 패턴약화 적용

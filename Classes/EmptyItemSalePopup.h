@@ -43,6 +43,7 @@ private:
 	CCSprite* back_case;
 	CCControlButton* giveup_button;
 	CCControlButton* purchase_button;
+	CCControlButton* purchase_set_button;
 	
 	//	CCSprite* question_img;
 	//	CCBAnimationManager* question_manager;
@@ -53,6 +54,8 @@ private:
 	void myInit(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func, PurchaseGuideType t_type);
 	void giveupAction(CCObject* sender, CCControlEvent t_event);
 	void purchaseAction(CCObject* sender, CCControlEvent t_event);
+	void purchaseSetAction(CCObject* sender, CCControlEvent t_event);
+	
 	
 //	void requestItemDelivery();
 //	void resultSaveUserData(Json::Value result_data);

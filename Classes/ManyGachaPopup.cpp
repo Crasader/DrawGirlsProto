@@ -249,7 +249,7 @@ void ManyGachaPopup::setOpening()
 		
 		CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
 		shop_menu->setTag(ManyGachaPopupMenu::kShop);
-		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(415,24));
+		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(395,24));
 		gacha_menu->addChild(shop_menu);
 	}
 }
