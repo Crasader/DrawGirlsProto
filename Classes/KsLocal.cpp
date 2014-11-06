@@ -831,13 +831,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_cardGiftSuccessTitle] = "카드선물";
 	obj[LK::kMyLocalKey_cardGiftSuccessContent] = "카드를 선물하였습니다.";
 	obj[LK::kMyLocalKey_profile] = "프로필";
-	obj[LK::kMyLocalKey_cardElemental] = "카드 속성";
+	obj[LK::kMyLocalKey_cardElemental] = "카드속성";
 	obj[LK::kMyLocalKey_touch] = "터치";
 	obj[LK::kMyLocalKey_sound] = "사운드";
 	obj[LK::kMyLocalKey_elementalValue] = "속성(%s)";
 	obj[LK::kMyLocalKey_myCardCount] = "내카드수 ";
 	obj[LK::kMyLocalKey_diaryView] = "다이어리 보기";
-	obj[LK::kMyLocalKey_cardTakeCnt] = "보유장수 %d";
+	obj[LK::kMyLocalKey_cardTakeCnt] = "보유장수";
 	obj[LK::kMyLocalKey_buttonTutorialMent] = "<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!";
 	obj[LK::kMyLocalKey_nickBottomMent] = "\"한 번 입력한 닉네임은 변경할 수 없으니 신중히 선택해 주세요!\"";
 	obj[LK::kMyLocalKey_pleaseInputID] = "아이디를 입력해주세요.";
@@ -1236,6 +1236,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_characterMarquee2] = "뽑기에는 더욱 특별한 캐릭터가 등장합니다.";
 	obj[LK::kMyLocalKey_characterMarquee3] = "뽑기에는 같은 캐릭터를 뽑을 경우 해당 캐릭터의 경험치가 올라갑니다.";
 	obj[LK::kMyLocalKey_characterMarquee4] = "선택한 캐릭터로 PvP모드를 플레이하면 캐릭터의 경험치를 올릴 수 있습니다.";
+	obj[LK::kMyLocalKey_cardNumber] = "카드번호";
 	
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
