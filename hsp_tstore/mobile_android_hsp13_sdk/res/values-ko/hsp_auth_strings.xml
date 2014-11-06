@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">점검 안내</string>
+    <string name="hsp.lnc.status.alert.update.now">지금 업데이트</string>
+    <string name="hsp.lnc.status.alert.later">나중에</string>
+    <string name="hsp.lnc.status.alert.01">등록되지 않은 게임입니다.</string>
+    <string name="hsp.lnc.status.alert.02">보다 안정적인 서비스 이용을 위해서는\n최신버전으로 업데이트가 필요합니다.</string>
+    <string name="hsp.lnc.status.alert.03">보다 안정적인 서비스 이용을 위해서는\n최신버전으로 업데이트가 필요합니다.</string>
+    <string name="hsp.lnc.status.alert.04">점검으로 잠시 서비스 이용이 제한됩니다.</string>
+    <string name="hsp.lnc.status.alert.08">점검으로 잠시 서비스 이용이 제한됩니다.</string>
+    <string name="hsp.lnc.status.alert.10.playable">점검으로 일부 서비스 이용이 제한될 수 있습니다.</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">점검으로 잠시 서비스 이용이 제한됩니다.</string>
+    <string name="hsp.lnc.status.alert.20">클라이언트 정보가 잘못되어 리소스 업데이트에 실패했습니다.고객센터에 문의해주세요.</string>
+    <string name="hsp.lnc.status.alert.91">서비스 이용이 제한된 디바이스입니다.</string>
+    <string name="hsp.lnc.status.alert.92">등록된 일부 디바이스만 서비스 이용이 가능합니다.</string>
+    <string name="hsp.lnc.status.alert.98">서비스가 종료되었습니다.\n그 동안 이용해주셔서 감사합니다.</string>
+    <string name="hsp.lnc.status.alert.99">서버 오류로 인해 게임접속에 실패했습니다.\n게임 종료 후 다시 실행해주세요.</string>
+    <string name="hsp.auth.bridge.description.main">안녕하세요. %1$s님</string>
+    <string name="hsp.auth.bridge.description.main.fortoast">안녕하세요.</string>
+    <string name="hsp.auth.login.hid.alert.punish">이용이 제한된 아이디입니다. 다른 아이디로 로그인 해 주세요.</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">없는 계정입니다. 다른 아이디로 로그인 해 주세요.</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">이미 다른 스마트 한게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
+    <string name="hsp.auth.login.id.alert.alreadymapped">이미 다른 기록과 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요</string>
+    <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
+    <string name="hsp.auth.punished.member.alert">비정상적인 게임 플레이로 이용이 제한되었습니다.</string>
+    <string name="hsp.auth.deactivated.member.alert">해지한 서비스입니다. 이용하실 수 없습니다.</string>
+    <string name="hsp.auth.facebook.login.fail.alert.title">페이스북 로그인 실패</string>
+    <string name="hsp.auth.facebook.login.fail.alert">페이스북 인증 요청에 실패하였습니다.</string>
+</resources>

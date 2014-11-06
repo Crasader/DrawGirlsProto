@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:versionCode="1" android:versionName="1.0" package="com.hangame.hsp">
+
+ 	<application>
+        
+        <!-- [HSP SDK] google login activity start -->
+        <activity android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection" android:name="com.toastgamenew.hsp.auth.login.GoogleLoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+        <!-- this setting is for Google login -->
+        <meta-data android:name="com.google.android.gms.games.APP_ID" android:value="@string/google_app_id"/>
+        <!-- this setting is for Google login, and for Real-time Multiplayer  -->
+        <meta-data android:name="com.google.android.gms.appstate.APP_ID" android:value="@string/google_app_id"/>
+        <!-- [HSP SDK] google login activity end -->
+ 	
+
+        <!-- [HSP SDK] Activity Begin -->
+        <activity android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection" android:finishOnTaskLaunch="true" android:name="com.hangame.hsp.ui.HSPUiActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustResize">
+        </activity>
+        <!-- [HSP SDK] Activity End -->
+        
+        <!-- referrer 설정 -->
+        <receiver android:name="com.hangame.hsp.referrer.InstallReceiver">
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER"/>
+            </intent-filter>
+        </receiver>
+    
+		<!--         this setting need for all domain that use promotion-->
+        <meta-data android:name="com.google.android.gms.version" android:value="@integer/google_play_services_version"/>
+    
+ 	    <activity android:name="com.facebook.LoginActivity" android:theme="@android:style/Theme.Translucent.NoTitleBar">
+        </activity>
+ 	
+
+        <!-- [HSP SDK] NPush Global begin -->
+        <receiver android:name="com.hangame.hsp.push.NPushBroadcastReceiver">
+            <intent-filter>
+
+                <!-- Push Message 를 받기 위한 Intent-Filter. -->
+                <action android:name="com.nhn.nni.intent.RECEIVE"/>
+                <!-- Target ID (=Registration ID) 를 받기 위한 Intent-Filter. -->
+                <action android:name="com.nhn.nni.intent.REGISTRATION"/>
+                <action android:name="com.nhn.nni.intent.EVENT"/>
+
+                <!-- TODO: fill package name -->
+                <category android:name="app_package_name"/>
+            </intent-filter>
+            <intent-filter>
+
+                <!--
+                    nPush 가 강제종료 당했을 때 살리기 위해서 여러 BroadCast 를 등록해놓고 alive 를 체크한다. 
+					- 폰이 부팅되었을 때
+					- Google Talk 이 연결되었을 때
+					- AC 혹은 USB 케이블을 연결했을 때
+					- AC 혹은 USB 케이블을 연결 해제했을 때
+					- 네트워크 상태가 변경되었을 때 (on/off 혹은 망 전환)
+
+                -->
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.GTALK_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED"/>
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED"/>
+            </intent-filter>
+        </receiver>
+
+        <!-- NNI 클라이언트에서 사용하는 서비스 -->
+        <service android:exported="true" android:label="NHN Notification Infra" android:name="com.nhn.nni.NNIMessageService" android:process="com.nhn.nni">
+            <intent-filter android:priority="1">
+                <action android:name="com.nhn.nni.intent.REGISTER"/>
+                <action android:name="com.nhn.nni.intent.UNREGISTER"/>
+                <action android:name="com.nhn.nni.intent.GET_STATE"/>
+            </intent-filter>
+        </service>
+        <service android:name="com.hangame.hsp.push.NPushIntentService"/>
+        <!-- [HSP SDK] NPush Global end -->
+
+    
+       
+        <!-- ﻿[HSP SDK] Payment TStore Activity & Receiver Begin -->
+        <!-- T Store 빌드시에만 사용해주세요.-->
+         <activity android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection" android:excludeFromRecents="true" android:name="com.skplanet.dodo.IapWeb" android:windowSoftInputMode="stateHidden">
+        </activity>
+        
+        <meta-data android:name="iap:api_version" android:value="1"/>
+        <!-- ﻿[HSP SDK] Payment TStore Activity & Receiver End -->
+       
+    </application>
+
+
+    <!-- [HSP SDK] min sdk version begin -->
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="17"/>
+    <!-- [HSP SDK] min sdk version end -->
+
+
+    <!-- [HSP SDK] permission begin -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!-- [HSP SDK] permission end -->
+
+    
+
+
+
+    
+
+
+    <!-- [HSP SDK] toastcore permission begin -->
+	<uses-feature android:name="android.hardware.telephony" android:required="false"/>
+	<uses-permission android:name="android.permission.RECEIVE_SMS"/>
+	<uses-permission android:name="android.permission.READ_SMS"/>	
+    <!-- [HSP SDK] toastcore permission end -->
+
+ 	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+ 	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+
+ 	
+
+
+
+
+    <!-- [HSP SDK] NPush permission begin -->
+    <uses-permission android:name="android.permission.INTERNET"/> <!-- NPush and GCM connects to Google Services. -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/> <!-- GCM requires a Google account. -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/> <!-- 부팅 완료 후에 바로 NNI 서비스 시작 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/> <!-- 3G(LTE) / WIFI 등의 상태 변경에 따라 NNI 재접속 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/> <!-- 로깅을 하기 위해 SD카드를 사용한다. -->
+    <uses-permission android:name="android.permission.WAKE_LOCK"/> <!-- 알림에서 사용. 앱이 절전모드에서 빠져나올수 있도록함 -->
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.READ_PHONE_STATE"/> <!-- 폰의 국가정보, 통신사 정보를 가져오기 위해 사용 -->
+    <uses-permission android:name="android.permission.DISABLE_KEYGUARD"/>
+    <!-- [HSP SDK] NPush permission end -->
+    
+
+    <!-- [HSP SDK] NPush Global permission begin -->
+    <!-- TODO: fill package name -->
+    <permission android:name="app_package_name.permission.NNI_MESSAGE" android:protectionLevel="signature"/>
+
+    <uses-permission android:name="app_package_name.permission.NNI_MESSAGE"/>
+    <!-- [HSP SDK] NPush Global permission end -->
+
+    
+
+
+
+    <!-- ﻿[HSP SDK] Payment TStore SMS Permission Begin -->
+    <!-- T Store 빌드시에만 사용해주세요.-->
+    <uses-permission android:name="android.permission.RECEIVE_SMS"/> 
+    <uses-permission android:name="com.tmoney.vending.INBILLING"/>
+    <permission android:name="com.tmoney.vending.INBILLING"/>
+    <!-- ﻿[HSP SDK] Payment TStore SMS Permission End -->
+
+    
+	
+</manifest>

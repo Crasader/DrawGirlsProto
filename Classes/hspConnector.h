@@ -227,6 +227,7 @@ public:
 	void withdrawAccount(jsonSelType func);
 	void mappingToAccount(jsonSelType func);
 	string getCountryCode();
+	string getMarketCode();
 	string getTimeZone();
 	string getServerAddress();
 	void sendPushMessage();

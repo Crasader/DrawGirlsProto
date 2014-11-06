@@ -461,6 +461,27 @@ string hspConnector::getCountryCode(){
 	
 	return r;
 }
+string hspConnector::getMarketCode(){
+	string r;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	r = "KS";
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getMarketCode", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->ReleaseStringUTFChars(result, revStr);
+		t.env->DeleteLocalRef(t.classID);
+		
+	}
+#endif
+	return r;
+}
 
 
 
