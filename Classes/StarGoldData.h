@@ -1068,6 +1068,7 @@ public:
 	
 	UISceneCode ui_scene_code;
 	KSProtectVar<int> add_time_value;
+	Json::Value hell_balance;
 	
 private:
 	
