@@ -228,6 +228,7 @@ public:
 	void mappingToAccount(jsonSelType func);
 	string getCountryCode();
 	string getMarketCode();
+	string getStoreID();
 	string getTimeZone();
 	string getServerAddress();
 	void sendPushMessage();
