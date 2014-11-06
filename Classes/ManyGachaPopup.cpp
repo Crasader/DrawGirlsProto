@@ -584,7 +584,7 @@ void ManyGachaPopup::setNormalGacha()
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7) > 0)
 	{
 		CCSprite* price_icon = CCSprite::create("icon_p7.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7)).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -950,7 +950,7 @@ void ManyGachaPopup::setPremiumGacha()
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8) > 0)
 	{
 		CCSprite* price_icon = CCSprite::create("icon_p8.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8)).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
