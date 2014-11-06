@@ -372,6 +372,24 @@ void StarGoldData::resetIngameDetailScore()
 
 void StarGoldData::setGameStart()
 {
+	if(is_hell_mode)
+	{
+		int t_stage_number = mySD->getSilType();
+		int hell_size = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		bool is_found = false;
+		for(int i=0;!is_found && i<hell_size;i++)
+		{
+			if(t_stage_number == NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1))
+			{
+				is_found = true;
+				hell_balance.clear();
+				string t_balance = NSDS_GS(kSDS_GI_hellMode_int1_balance_s, i+1);
+				Json::Reader t_reader;
+				t_reader.parse(t_balance, hell_balance);
+			}
+		}
+	}
+	
 	CharacterHistory t_history = getSelectedCharacterHistory();
 	
 	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());

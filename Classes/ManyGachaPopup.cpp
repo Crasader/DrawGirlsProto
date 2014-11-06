@@ -1403,6 +1403,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 		CCNode* t_button = reward_list[selected_index];
 		
 		CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
+		t_take_back->setVisible(false);
 		t_take_back->setOpacity(0);
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
@@ -1427,6 +1428,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 				}
 			}
 			
+			t_take_back->setVisible(true);
 			t_take_back->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
 															  {
 																  t_take_back->setOpacity(t_i);
@@ -2307,6 +2309,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 		
 		CCNode* t_button = reward_list[selected_index];
 		CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
+		t_take_back->setVisible(false);
 		t_take_back->setOpacity(0);
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
@@ -2331,6 +2334,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 				}
 			}
 			
+			t_take_back->setVisible(true);
 			t_take_back->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
 															  {
 																  t_take_back->setOpacity(t_i);
