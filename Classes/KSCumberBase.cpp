@@ -2450,6 +2450,12 @@ void KSCumberBase::settingFuryRule()
 	//		m_furyRule
 }
 
+
+void KSCumberBase::applyHellBalance(float playTime)
+{
+	
+}
+
 void KSCumberBase::applyAutoBalance(bool isExchange)
 {
 	
