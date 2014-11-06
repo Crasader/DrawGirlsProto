@@ -488,6 +488,7 @@ string hspConnector::getMarketCode(){
 
 string hspConnector::getStoreID()
 {
+	return "TS";
 	unsigned long ps;
 	unsigned char* tt = CCFileUtils::sharedFileUtils()->getFileData("HSPConfiguration.xml", "rt", &ps);
 	std::string xml((char*)tt, ps);

@@ -102,7 +102,7 @@
 
         <activity
             android:name="com.nhnent.SKSUMRAN.DGproto"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"
+            android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection"
             android:label="@string/app_name"
             android:launchMode="singleTask"
             android:screenOrientation="landscape"
@@ -173,14 +173,10 @@
 
 
         <!-- HSP Activity Begin -->
-        <activity
-            android:name="com.hangame.hsp.ui.HSPUiActivity"
-            android:configChanges="orientation|keyboardHidden"
-            android:finishOnTaskLaunch="true"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" 
-            >
-        </activity>
+        
+                <activity android:configChanges="locale|keyboardHidden|orientation|screenSize|layoutDirection" 
+                    android:finishOnTaskLaunch="true" android:name="com.hangame.hsp.ui.HSPUiActivity" 
+                    android:theme="@android:style/Theme.Translucent.NoTitleBar" android:windowSoftInputMode="adjustPan"/>
         <!-- HSP Activity End -->
 
 
