@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="58.96dp"
+    android:layout_height="32dp"
+    android:tag="hsp.topbar.sendbutton" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:tag="hsp.topbar.sendbutton.enable" >
+
+            <TextView
+                android:id="@+id/hsp.topbar.sendbutton.text"
+                android:layout_width="58.96dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/hsp.common.orange"
+                android:gravity="center"
+                android:tag="hsp.topbar.sendbutton.text"
+                android:text="fdsa"
+                android:textColor="@color/hsp.topbar.closebutton"
+                android:textSize="13.33dp" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:tag="hsp.topbar.sendbutton.disable"
+        android:visibility="gone" >
+
+            <TextView
+                android:id="@+id/hsp.topbar.sendbutton.text.disable"
+                android:layout_width="58.96dp"
+                android:layout_height="32dp"
+                android:layout_alignParentRight="true"
+                android:background="@color/hsp.topbar.sendbutton.background.disable"
+                android:gravity="center"
+                android:tag="hsp.topbar.sendbutton.text.disable"
+                android:textColor="@color/hsp.topbar.sendbutton.disable"
+                android:textSize="13.33dp" />
+
+    </RelativeLayout>
+
+</RelativeLayout>

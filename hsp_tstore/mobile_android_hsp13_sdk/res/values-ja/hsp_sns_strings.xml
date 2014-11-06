@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.sns.feed.title.twitter">新しいツイート</string>
+    <string name="hsp.sns.feed.title.facebook">Facebook</string>
+    <string name="hsp.sns.feed.message.hint">ひとこと</string>
+    <string name="hsp.sns.feed.alert.send.fail">連携に失敗し、送信ができませんでした。</string>
+
+</resources>

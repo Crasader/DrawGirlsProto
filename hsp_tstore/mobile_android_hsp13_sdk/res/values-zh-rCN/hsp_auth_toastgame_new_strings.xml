@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.toastnew.auth.welcome.agreement">同意【TOAST用户使用协议】并授权TOAST收集您的部分个人信息</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree">同意</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.gameterms">同意<u>使用條款</u></string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.personalinfo">同意<u>个人用户服务条款</u></string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">同意条款</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.terms">阅读TOAST的用户协议</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">查看更多</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">阅读用户须知</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">如果在使用一个ID，请[ID为登录]\n 如果您[登录为客人]，请记住，游戏信息也将被删除，你应该删除应用程序</string>
+    <string name="hsp.toastnew.auth.welcome.idp.login">用ID登录</string>
+    <string name="hsp.toastnew.auth.welcome.guest.login">登录为客人</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.login">以Hangame账号为登录</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login">以Email账号为登录</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login.title">与TOAST ID登录</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.facebook.login.title">与Facebook的帐号登录</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.description">你没有一个ID？<u>创建电子邮件ID</u></string>
+    <string name="hsp.toastnew.auth.login.hid.alert.other.id.login">以[%1$s]为立即开始</string>
+</resources>
