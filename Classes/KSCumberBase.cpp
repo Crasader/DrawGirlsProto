@@ -128,7 +128,7 @@ void KSCumberBase::randomMoving(float dt)
 				//                        myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
@@ -315,7 +315,7 @@ void KSCumberBase::straightMoving(float dt)
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
@@ -528,7 +528,7 @@ void KSCumberBase::followMoving(float dt)
 								
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
@@ -695,7 +695,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			{
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
@@ -867,7 +867,7 @@ void KSCumberBase::circleMoving(float dt)
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
@@ -1032,7 +1032,7 @@ void KSCumberBase::snakeMoving(float dt)
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				if(!myGD->getCommunicationBool("PM_isShortLine"))
 				{
-					myGD->communication("SW_createSW", checkPosition, 0.3f);
+					myGD->communication("SW_createSW", checkPosition, 0.f);
 					if(m_emotion)
 						m_emotion->onTouchingLine();
 				}
