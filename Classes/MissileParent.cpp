@@ -364,14 +364,17 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
 		addChild(KSIntervalCall::create(30, missileNumbers * 3, [=](int seq){
 			int dirs = 2 + MIN((grade-1), 3);
-			for(int r=0; r<dirs; r++)
+			if(myGD->getIsGameover() == false)
 			{
-				float rad = deg2Rad(360.f / dirs * r);
-				
-				rad += addRad;
-				StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power / 3.f, missile_sub_damage / 3.f, ao);
-				jack_missile_node->addChild(sm);
-				sm->beautifier(level);
+				for(int r=0; r<dirs; r++)
+				{
+					float rad = deg2Rad(360.f / dirs * r);
+					
+					rad += addRad;
+					StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power / 3.f, missile_sub_damage / 3.f, ao);
+					jack_missile_node->addChild(sm);
+					sm->beautifier(level);
+				}
 			}
 			
 			

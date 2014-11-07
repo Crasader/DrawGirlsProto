@@ -1866,11 +1866,15 @@ public:
 		m_mine->setScale(1.f/myGD->game_scale);
 		m_mine->setRotation(180);
 		addChild(m_mine);
+//		goalPosition = goalPosition + ccp(10, 0);
+		float runRad = atan2f(goalPosition.y - initPosition.y, goalPosition.x + 10 - initPosition.x);
+		m_mine->setRotation(-rad2Deg(runRad));
 		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
 																				 [=](CCPoint t){
-																					 m_currentRad += M_PI / 180 * 2.f;
+//																					 m_currentRad += M_PI / 180 * 2.f;
 																					 CCPoint rotation = ccp(10 * cosf(m_currentRad), 10 * sinf(m_currentRad));
 																					 m_mine->setPosition(t + rotation);
+																					 CCLog("deg = %f", rad2Deg(runRad) + 90);
 																					 m_mineCenterPosition = t;
 																					 if(m_particle)
 																					 {
@@ -1880,10 +1884,12 @@ public:
 																					 {
 																						 m_streak->setPosition(t + rotation);
 																					 }
+																					 
+																					 
 																					
 																				 },
 																		[=](CCPoint t){
-																			m_currentRad += M_PI / 180 * 2.f;
+//																			m_currentRad += M_PI / 180 * 2.f;
 																			CCPoint rotation = ccp(10 * cosf(m_currentRad), 10 * sinf(m_currentRad));
 																			m_mine->setPosition(t + rotation);
 																			m_mineCenterPosition = t;
@@ -2300,7 +2306,7 @@ public:
 					m_streak->setPosition(afterPosition);
 				}
 
-				m_mine->setRotation(-rad2Deg(m_directionRad));
+				m_mine->setRotation(-rad2Deg(m_directionRad) - 90);
 			}
 	
 		}
@@ -2407,6 +2413,23 @@ public:
 	void update(float dt)
 	{
 //		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
+		bool isEnable = true;
+		bool emptyMonster = false;
+		bool invalidRange = false;
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+		
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
 		m_durationFrame--;
 		if(m_durationFrame <= 0)
 		{
