@@ -33,6 +33,7 @@ enum KindTutorialType
 	kNewMission_gold,
 	kNewMission_turn,
 	kUI_hellmode,
+	kUI_character,
 	kUI_friend,
 	kNewMission_hell
 };

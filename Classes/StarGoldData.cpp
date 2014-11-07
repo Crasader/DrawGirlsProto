@@ -2393,6 +2393,19 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 	{
 		int characterNo = result_data["characterNo"].asInt();
 		Json::Value levelInfo = result_data["levelInfo"];
+		
+		int characterIndex = 0;
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		bool t_found = false;
+		for(int i=0;!t_found && i<character_count;i++)
+		{
+			if(characterNo == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1))
+			{
+				t_found = true;
+				characterIndex = i+1;
+			}
+		}
+		
 		bool is_found = false;
 		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
 		{
@@ -2400,6 +2413,7 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			{
 				is_found = true;
 				
+				character_historys[i].characterIndex = characterIndex;
 				character_historys[i].characterLevel = levelInfo["level"].asInt();
 				character_historys[i].characterExp = levelInfo["exp"].asInt();
 				character_historys[i].characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
@@ -2411,6 +2425,7 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		if(!is_found)
 		{
 			CharacterHistory t_history;
+			t_history.characterIndex = characterIndex;
 			t_history.characterNo = characterNo;
 			t_history.characterLevel = levelInfo["level"].asInt();
 			t_history.characterExp = levelInfo["exp"].asInt();

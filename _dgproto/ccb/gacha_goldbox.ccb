@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>6</integer>
+	<integer>4</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -2984,8 +2984,8 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>0.20000000298023224</real>
-											<real>0.20000000298023224</real>
+											<real>2.2000000476837158</real>
+											<real>2.2000000476837158</real>
 											<true/>
 											<integer>0</integer>
 										</array>
@@ -2998,7 +2998,7 @@
 										<key>type</key>
 										<string>Degrees</string>
 										<key>value</key>
-										<real>0.0</real>
+										<real>220</real>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -4247,8 +4247,8 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>0.0</real>
-											<real>0.0</real>
+											<real>1</real>
+											<real>1</real>
 											<true/>
 											<integer>0</integer>
 										</array>
@@ -4261,7 +4261,7 @@
 										<key>type</key>
 										<string>Degrees</string>
 										<key>value</key>
-										<real>0.0</real>
+										<real>-220</real>
 									</dict>
 									<dict>
 										<key>name</key>
@@ -4614,7 +4614,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 							</dict>
@@ -5696,11 +5696,9 @@
 												<key>type</key>
 												<string>Byte</string>
 												<key>value</key>
-												<integer>255</integer>
+												<integer>0</integer>
 											</dict>
 										</array>
-										<key>selected</key>
-										<true/>
 										<key>seqExpanded</key>
 										<true/>
 									</dict>
@@ -7469,8 +7467,8 @@
 												<string>ScaleLock</string>
 												<key>value</key>
 												<array>
-													<real>1</real>
-													<real>1</real>
+													<real>1.2999999523162842</real>
+													<real>1.1000000238418579</real>
 													<false/>
 													<integer>0</integer>
 												</array>
@@ -7502,7 +7500,7 @@
 												<key>type</key>
 												<string>Byte</string>
 												<key>value</key>
-												<integer>255</integer>
+												<integer>0</integer>
 											</dict>
 											<dict>
 												<key>name</key>
@@ -7541,7 +7539,7 @@
 										<key>value</key>
 										<array>
 											<real>0.0</real>
-											<real>73.611106872558594</real>
+											<real>227.78385925292969</real>
 											<integer>0</integer>
 										</array>
 									</dict>
@@ -7569,7 +7567,7 @@
 										<key>value</key>
 										<array>
 											<real>1</real>
-											<real>1</real>
+											<real>0.5</real>
 											<false/>
 											<integer>0</integer>
 										</array>
@@ -7921,7 +7919,7 @@
 										<key>type</key>
 										<string>Byte</string>
 										<key>value</key>
-										<integer>255</integer>
+										<integer>0</integer>
 									</dict>
 								</array>
 							</dict>
@@ -7949,7 +7947,7 @@
 								<key>value</key>
 								<array>
 									<real>0.0</real>
-									<real>-236.11109924316406</real>
+									<real>-584.0521240234375</real>
 									<integer>0</integer>
 								</array>
 							</dict>
@@ -8040,8 +8038,8 @@
 						<string>Position</string>
 						<key>value</key>
 						<array>
-							<real>0.0</real>
-							<real>57.638885498046875</real>
+							<real>46</real>
+							<real>32.175922393798828</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -8068,8 +8066,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.5</real>
-							<real>0.5</real>
+							<real>1</real>
+							<real>1</real>
 							<true/>
 							<integer>0</integer>
 						</array>
@@ -8082,7 +8080,7 @@
 						<key>type</key>
 						<string>Degrees</string>
 						<key>value</key>
-						<real>0.0</real>
+						<real>-131.60459899902344</real>
 					</dict>
 					<dict>
 						<key>name</key>
@@ -11318,7 +11316,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>2.2999999523162842</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11328,7 +11326,44 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>0.30000001192092896</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_01.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>1.3333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_03.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>
@@ -11362,7 +11397,26 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>1.3333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_02.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>
@@ -11420,7 +11474,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>2.7000000476837158</real>
+			<real>3.3333332538604736</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11430,7 +11484,44 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>0.30000001192092896</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_01.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>1.3333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_03.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>
@@ -11454,7 +11545,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>1.9666666984558105</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11464,7 +11555,44 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>0.30000001192092896</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_01.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>1.3333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_03.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>
@@ -11488,7 +11616,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>2.6333334445953369</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11498,7 +11626,44 @@
 			<key>soundChannel</key>
 			<dict>
 				<key>keyframes</key>
-				<array/>
+				<array>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>0.30000001192092896</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_01.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+					<dict>
+						<key>easing</key>
+						<dict>
+							<key>type</key>
+							<integer>0</integer>
+						</dict>
+						<key>time</key>
+						<real>1.3333333730697632</real>
+						<key>type</key>
+						<integer>9</integer>
+						<key>value</key>
+						<array>
+							<string>gacha_effect_03.mp3</string>
+							<real>1</real>
+							<real>0.0</real>
+							<real>1</real>
+						</array>
+					</dict>
+				</array>
 				<key>type</key>
 				<integer>9</integer>
 			</dict>

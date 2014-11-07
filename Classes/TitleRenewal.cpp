@@ -282,7 +282,7 @@ void TitleRenewalScene::endSplash()
 	state_label->setPosition(ccp(240,30)); // 190
 	addChild(state_label, 2);
 	
-	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	state_label->runAction(t_repeat);
 	
@@ -680,7 +680,7 @@ void TitleRenewalScene::successLogin()
 	TRACE();
 
 	state_label->setVisible(true);
-	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	state_label->runAction(t_repeat);
 	

@@ -892,6 +892,13 @@ enum class LK
 	kMyLocalKey_kindTutorial37,
 	kMyLocalKey_kindTutorial38,
 	kMyLocalKey_kindTutorial39,
+	kMyLocalKey_kindTutorial40,
+	kMyLocalKey_kindTutorial41,
+	kMyLocalKey_kindTutorial42,
+	kMyLocalKey_kindTutorial43,
+	kMyLocalKey_kindTutorial44,
+	kMyLocalKey_kindTutorial45,
+	kMyLocalKey_kindTutorial46,
 	kMyLocalKey_maxSpeed,
 	kMyLocalKey_showtime,
 	kMyLocalKey_miss,
@@ -1201,7 +1208,8 @@ enum class LK
 	kMyLocalKey_characterMarquee2,
 	kMyLocalKey_characterMarquee3,
 	kMyLocalKey_characterMarquee4,
-	kMyLocalKey_cardNumber
+	kMyLocalKey_cardNumber,
+	kMyLocalKey_characterBonus
 };
 class KsLocal
 {

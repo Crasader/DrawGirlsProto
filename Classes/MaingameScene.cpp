@@ -1369,14 +1369,17 @@ void Maingame::counting()
 //		if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getGachaMapFee())
 //		{
 		
-			t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
-		t_smg->remove_func = [=]()
+		if(!mySGD->is_hell_mode)
 		{
-			if(mySGD->start_map_gacha_use_gold_cnt > 0)
-				fiverocks::FiveRocksBridge::trackEvent("UseGold", "StartDraw", ccsf("gacha %02d", mySGD->start_map_gacha_use_gold_cnt), ccsf("Stage %03d", mySD->getSilType()));
-			t_smg = NULL;
-		};
+			t_smg = StartMapGacha::create(this, callfunc_selector(Maingame::gachaOn));
+			t_smg->remove_func = [=]()
+			{
+				if(mySGD->start_map_gacha_use_gold_cnt > 0)
+					fiverocks::FiveRocksBridge::trackEvent("UseGold", "StartDraw", ccsf("gacha %02d", mySGD->start_map_gacha_use_gold_cnt), ccsf("Stage %03d", mySD->getSilType()));
+				t_smg = NULL;
+			};
 			addChild(t_smg, startGachaZorder);
+		}
 //		}
 		
 		if(countingCnt/60 == 1)
