@@ -2604,17 +2604,17 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 		if(playCount>0){
 			m_attackPercent =m_attackPercent - m_attackPercent*playCount*0.03;
-		
 		}
 		
-		if(m_attackPercent>0.3)m_attackPercent=0.3;
-		if(m_attackPercent<0.1)m_attackPercent=0.1;
-		if(m_maxSpeed>0.5f){m_maxSpeed=0.5f; m_minSpeed=m_maxSpeed/2.f;}
-		if(m_aiValue>50)m_aiValue=50;
 		
 		//부수기 공격 확률 낮추기
 		
 		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
+			if(m_attackPercent>0.3)m_attackPercent=0.3;
+			if(m_attackPercent<0.1)m_attackPercent=0.1;
+			if(m_aiValue>50)m_aiValue=50;
+			if(m_maxSpeed>0.5f){m_maxSpeed=0.5f; m_minSpeed=m_maxSpeed/2.f;}
+			
 			for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
 			{
 				if((*iter)["atype"].asString() == "crash"){

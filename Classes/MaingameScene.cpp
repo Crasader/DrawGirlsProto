@@ -3996,7 +3996,12 @@ void Maingame::setLimitMap()
 	int screen_to_map_bottom = ceilf((screen_to_map_center_y - 240.f*screen_size.height/screen_size.width/game_node->getScale())/2.f);
 
 	myGD->limited_step_top = screen_to_map_top;
+	if(myGD->limited_step_top > 428.5f)
+		myGD->limited_step_top = 428.5f;
+	
 	myGD->limited_step_bottom = screen_to_map_bottom;
+	if(myGD->limited_step_bottom < 1.5f)
+		myGD->limited_step_bottom = 1.5f;
 
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
