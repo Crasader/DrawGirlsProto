@@ -1239,6 +1239,14 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_cardNumber] = "카드번호";
 	obj[LK::kMyLocalKey_characterBonus] = "캐릭터보너스";
 	
+	obj[LK::kMyLocalKey_kindTutorial40] = "이건 왠 선반이지?";
+	obj[LK::kMyLocalKey_kindTutorial41] = "이건 나만의 캐릭터 컬렉션!! 언젠가는 모든 캐릭터를 모아서 여길 꽉꽉 채울꺼야!!";
+	obj[LK::kMyLocalKey_kindTutorial42] = "캐릭터? 그건 어떤 기능이 있는거죠?";
+	obj[LK::kMyLocalKey_kindTutorial43] = "캐릭터는 게임내에서 포인터로 사용되는 것으로 기본캐릭터는 빨간색 보석이지만 귀여운 캐릭터로도 플레이할수있지.";
+	obj[LK::kMyLocalKey_kindTutorial44] = "스피드나 파워, 점수보너스 같은 기본능력이 좋을뿐만 아니라 특정미션을 완화시켜준다던가 몬스터의 특정공격패턴을 쉽게만들어주는 기능도 있으니 공략엔 필수라구!";
+	obj[LK::kMyLocalKey_kindTutorial45] = "오옷! 저도 가져야 겠어요!! 어디서 구할수있죠?";
+	obj[LK::kMyLocalKey_kindTutorial46] = "캐릭터는 헬모드나 뽑기를 통해 얻을수있으니 명심하라구~!";
+
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !

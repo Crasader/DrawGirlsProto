@@ -7,7 +7,7 @@
 	<key>currentResolution</key>
 	<integer>0</integer>
 	<key>currentSequenceId</key>
-	<integer>29</integer>
+	<integer>16</integer>
 	<key>fileType</key>
 	<string>CocosBuilder</string>
 	<key>fileVersion</key>
@@ -65,7 +65,7 @@
 									<key>value</key>
 									<array>
 										<real>0.0</real>
-										<real>-20</real>
+										<real>-23</real>
 									</array>
 								</dict>
 							</array>
@@ -4318,7 +4318,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>-1</real>
+									<real>1</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -8478,7 +8478,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>-1</real>
+									<real>1</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -10914,7 +10914,7 @@
 						<key>baseValue</key>
 						<array>
 							<real>0.0</real>
-							<real>-3.5</real>
+							<real>-1</real>
 						</array>
 						<key>name</key>
 						<string>position</string>
@@ -10923,7 +10923,7 @@
 						<key>value</key>
 						<array>
 							<real>0.0</real>
-							<real>-3.5</real>
+							<real>-23</real>
 							<integer>0</integer>
 						</array>
 					</dict>
@@ -10950,8 +10950,8 @@
 						<string>ScaleLock</string>
 						<key>value</key>
 						<array>
-							<real>0.30000001192092896</real>
-							<real>0.30000001192092896</real>
+							<real>0.69999998807907104</real>
+							<real>0.69999998807907104</real>
 							<false/>
 							<integer>0</integer>
 						</array>
@@ -10985,6 +10985,8 @@
 						<true/>
 					</dict>
 				</array>
+				<key>seqExpanded</key>
+				<true/>
 			</dict>
 		</array>
 		<key>customClass</key>
@@ -11093,7 +11095,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -11127,7 +11129,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.0</real>
+			<real>0.80000001192092896</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
