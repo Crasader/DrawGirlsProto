@@ -2099,7 +2099,7 @@ public:
 																					 }
 																					 CCPoint diff = goalPosition - initPosition;
 																					 float rad = atan2f(diff.y, diff.x);
-																					 m_mine->setRotation(-rad2Deg(rad));
+																					 m_mine->setRotation(-rad2Deg(rad) - 90);
 																				 },
 																		[=](CCPoint t){
 																			m_mine->setPosition(t);
@@ -2114,7 +2114,7 @@ public:
 
 																			CCPoint diff = goalPosition - initPosition;
 																			float rad = atan2f(diff.y, diff.x);
-																			m_mine->setRotation(-rad2Deg(rad));
+																			m_mine->setRotation(-rad2Deg(rad) - 90);
 																			scheduleUpdate();
 																		}));			
 		return true;
