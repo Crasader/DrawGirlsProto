@@ -6,10 +6,10 @@
 #include "StarGoldData.h"
 
 #define LZZ_INLINE inline
-ShockWave * ShockWave::create (IntPoint t_createPoint)
+ShockWave * ShockWave::create (IntPoint t_createPoint, float t_f)
 {
 	ShockWave* t_sw = new ShockWave();
-	t_sw->myInit(t_createPoint);
+	t_sw->myInit(t_createPoint, t_f);
 	t_sw->autorelease();
 	return t_sw;
 }
@@ -61,7 +61,7 @@ void ShockWave::ingSW ()
 		addChild(t_sw);
 	}
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	float spread_speed_value = 0.03f - 0.03f*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f;
+	float spread_speed_value = base_speed - base_speed*NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f;
 	
 	if(myGD->getCommunicationBool("UI_isExchanged"))
 		spread_speed_value *= 2.f;
@@ -92,8 +92,9 @@ void ShockWave::ingSW ()
 	
 	ing_frame++;
 }
-void ShockWave::myInit (IntPoint t_createPoint)
+void ShockWave::myInit (IntPoint t_createPoint, float t_f)
 {
+	base_speed = t_f;
 	//		emotion_target = t_emotion;
 	//		emotion_delegate = d_emotion;
 	is_removing = false;
@@ -112,13 +113,13 @@ SW_Parent * SW_Parent::create ()
 	t_mySW->autorelease();
 	return t_mySW;
 }
-void SW_Parent::createSW (IntPoint t_create_point)
+void SW_Parent::createSW (IntPoint t_create_point, float t_f)
 {
 	if(getChildrenCount() == 0)
 	{
 		AudioEngine::sharedInstance()->playEffect("se_energywave.mp3", true);
 //		AudioEngine::sharedInstance()->playEffect("sound_bomb_wave.mp3", true);
-		ShockWave* t_sw = ShockWave::create(t_create_point);
+		ShockWave* t_sw = ShockWave::create(t_create_point, t_f);
 		addChild(t_sw);
 	}
 }
@@ -151,7 +152,7 @@ void SW_Parent::myInit ()
 	//					callfunc_selector(SW_Parent::stopAllSW),
 	//					callfuncIpOC_selector(SW_Parent::createJDSW));
 	
-	myGD->V_Ip["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1);
+	myGD->V_IpF["SW_createSW"] = std::bind(&SW_Parent::createSW, this, _1, _2);
 	myGD->V_V["SW_stopAllSW"] = std::bind(&SW_Parent::stopAllSW, this);
 	myGD->V_Ip["SW_createJDSW"] = std::bind(&SW_Parent::createJDSW, this, _1);
 }
