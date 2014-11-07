@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.toastnew.auth.welcome.agreement">Agree to TOAST Terms and Privacy Policy</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree">Agree</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.gameterms">Agree to <u>Terms of Use</u>.</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.personalinfo">Agree to <u>Privacy Policy</u>.</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">Agree to Terms</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST Terms</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">view more</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">Privacy Policy</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">If there is an ID in use, please [Login with ID]. If you [Guest login], please keep in mind that game information will also be deleted should you delete the app. </string>
+    <string name="hsp.toastnew.auth.welcome.idp.login">Login with ID</string>
+    <string name="hsp.toastnew.auth.welcome.guest.login">Guest login</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.login">Log in with my Facebook ID</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login">Email ID</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login.title">Login with TOAST ID</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.facebook.login.title">Login with Facebook ID</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.description">You don’t have an ID? <u>Create email ID</u></string>
+    <string name="hsp.toastnew.auth.login.hid.alert.other.id.login">Log in as [%1$s] and play</string>
+    
+</resources>

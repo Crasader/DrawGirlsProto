@@ -230,14 +230,15 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	CCLabelTTF* p_label = CCLabelTTF::create();
 	
-	KSLabelTTF* purchase_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_purchase), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* purchase_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_countName_s, m_type-1).c_str()/*myLoc->getLocalForKey(LK::kMyLocalKey_purchase)*/, mySGD->getFont().c_str(), 12);
 	purchase_label->disableOuterStroke();
-	purchase_label->setAnchorPoint(ccp(0,0.5f));
-	purchase_label->setPosition(ccp(0,0));
+	purchase_label->setAnchorPoint(ccp(0.5f,0.5f));
+	purchase_label->setPosition(ccp(0,10));
 	
 	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
 	price_back->setContentSize(CCSizeMake(82, 26));
-	price_back->setPosition(ccp(purchase_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, purchase_label->getContentSize().height/2.f));
+	price_back->setPosition(ccp(purchase_label->getContentSize().width/2.f, -price_back->getContentSize().height/2.f*0.7f-2));
+	price_back->setScale(0.7f);
 	purchase_label->addChild(price_back);
 	
 	CCSprite* price_type = CCSprite::create("price_gold_img.png");
@@ -255,14 +256,46 @@ void EmptyItemSalePopup::myInit(int t_touch_priority, function<void()> t_end_fun
 	
 	purchase_button = CCControlButton::create(p_label, purchase_back);
 	purchase_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EmptyItemSalePopup::purchaseAction), CCControlEventTouchUpInside);
-	purchase_button->setPreferredSize(CCSizeMake(180,48));
-	purchase_button->setPosition(ccp(0,-83));
+	purchase_button->setPreferredSize(CCSizeMake(101,55));
+	purchase_button->setPosition(ccp(-58,-83));
 	m_container->addChild(purchase_button);
-	
-	purchase_label->setPositionX(-(purchase_label->getContentSize().width + 5 + price_back->getContentSize().width)/2.f);
 	
 	purchase_button->setTouchPriority(touch_priority);
 	
+	
+	CCLabelTTF* p_set_label = CCLabelTTF::create();
+	
+	KSLabelTTF* purchase_set_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_countName_s, m_type+1).c_str()/*myLoc->getLocalForKey(LK::kMyLocalKey_purchase)*/, mySGD->getFont().c_str(), 12);
+	purchase_set_label->disableOuterStroke();
+	purchase_set_label->setAnchorPoint(ccp(0.5f,0.5f));
+	purchase_set_label->setPosition(ccp(0,10));
+	
+	CCScale9Sprite* price_set_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
+	price_set_back->setContentSize(CCSizeMake(82, 26));
+	price_set_back->setPosition(ccp(purchase_label->getContentSize().width/2.f, -price_back->getContentSize().height/2.f*0.7f-2));
+	price_set_back->setScale(0.7f);
+	purchase_set_label->addChild(price_set_back);
+	
+	CCSprite* price_set_type = CCSprite::create("price_gold_img.png");
+	//	price_type->setScale(0.7f);
+	price_set_back->addChild(price_set_type);
+	CCLabelTTF* price_set_label = CCLabelTTF::create(NSDS_GS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, m_type+1).c_str(), mySGD->getFont().c_str(), 15);
+	price_set_type->setPosition(ccp(price_set_back->getContentSize().width/2.f-price_set_label->getContentSize().width/2.f-3,price_set_back->getContentSize().height/2.f));
+	price_set_label->setPosition(ccp(price_set_back->getContentSize().width/2.f+price_set_type->getContentSize().width/2.f-5,price_set_back->getContentSize().height/2.f-1));
+	price_set_back->addChild(price_set_label);
+	
+	p_set_label->addChild(purchase_set_label);
+	
+	
+	CCScale9Sprite* purchase_set_back = CCScale9Sprite::create("achievement_button_success.png", CCRectMake(0,0,101,44), CCRectMake(50, 21, 1, 2));
+	
+	purchase_set_button = CCControlButton::create(p_set_label, purchase_set_back);
+	purchase_set_button->addTargetWithActionForControlEvents(this, cccontrol_selector(EmptyItemSalePopup::purchaseSetAction), CCControlEventTouchUpInside);
+	purchase_set_button->setPreferredSize(CCSizeMake(101,55));
+	purchase_set_button->setPosition(ccp(58,-83));
+	m_container->addChild(purchase_set_button);
+	
+	purchase_set_button->setTouchPriority(touch_priority);
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 		
@@ -355,6 +388,79 @@ void EmptyItemSalePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 //		}
 //	});
 //#endif
+	
+}
+
+void EmptyItemSalePopup::purchaseSetAction(CCObject* sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
+	
+	inapp_loading = LoadingLayer::create(-9999, true);
+	addChild(inapp_loading);
+	
+	//#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	
+	if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
+		mySGD->addChangeGoods("pg_snh_set", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+	else if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
+		mySGD->addChangeGoods("pg_ei_set", kGoodsType_begin, 0, "", ccsf("%d", mySGD->getUserdataHighPiece()), "상점");
+	
+	
+	mySGD->changeGoods([=](Json::Value result_data){
+		inapp_loading->removeFromParent();
+		if(result_data["result"]["code"].asInt() == GDSUCCESS)
+		{
+			if(m_type == PurchaseGuideType::kPurchaseGuideType_emptyItem)
+			{
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack3", ccsf("Display %02d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale1)), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale1, 0);
+			}
+			else if(m_type == PurchaseGuideType::kPurchaseGuideType_stupidNpuHelp)
+			{
+				fiverocks::FiveRocksBridge::trackEvent("UseGold", "BundlePack4", ccsf("Display %02d", myDSH->getIntegerForKey(kDSH_Key_showedEmptyItemSale2)), ccsf("Puzzle %03d", myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber)));
+				myDSH->setIntegerForKey(kDSH_Key_showedEmptyItemSale2, 0);
+			}
+			
+			
+			is_menu_enable = true;
+			giveupAction(sender, t_event);
+		}
+		else
+		{
+			mySGD->clearChangeGoods();
+			addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(touch_priority-100, kGoodsType_gold, [=]()
+																{
+																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
+																}), 9999);
+			//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+			is_menu_enable = true;
+		}
+	});
+	
+	//
+	//#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	//	Json::Value param;
+	//	param["productid"] = mySGD->getInappProduct(0); //
+	//	hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
+	//		//																				KS::KSLog("in-app test \n%", v);
+	//		if(v["issuccess"].asInt())
+	//		{
+	//			//			mySGD->addChangeGoods(kGoodsType_ruby, -mySGD->getRankUpRubyFee(), "승급");
+	//			requestItemDelivery();
+	//		}
+	//		else
+	//		{
+	//			inapp_loading->removeFromParent();
+	//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+	//			is_menu_enable = true;
+	//		}
+	//	});
+	//#endif
 	
 }
 

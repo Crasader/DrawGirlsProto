@@ -967,7 +967,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 //			cb->setChargeParent(t_ccn);
 		}
 		
-		cb->setDamageMeasure(0.f);
+//		cb->setDamageMeasure(0.f);
 		myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
 		myGD->showDetailMessage(warningFileName, "w");
 		myGD->communication("Main_showThumbWarning", startPosition);
@@ -1723,6 +1723,17 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				castBranch(atype, func, warningFileName);
 				
 			}
+		}
+		else if(pattern == "1022")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+			
 		}
 			
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.

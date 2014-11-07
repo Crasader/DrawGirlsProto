@@ -26,6 +26,7 @@
 #import "HSPItemDelivery.h"
 #import "KakaoLinkCenter.h"
 #import  <IgaworksAD/AdBrix.h>
+
 //#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
@@ -50,6 +51,7 @@ USING_NS_CC;
 
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
+#include <regex>
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 extern "C"{
 	void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,int hspGameNo, jstring hspGameID, jstring hspGameVersion)
@@ -461,8 +463,44 @@ string hspConnector::getCountryCode(){
 	
 	return r;
 }
+string hspConnector::getMarketCode(){
+	string r;
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	r = "KS";
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "getMarketCode", "()Ljava/lang/String;")) {
+		jstring result = t.env->CallStaticObjectMethod(t.classID, t.methodID);
+		
+		jboolean isCopy = JNI_FALSE;
+		const char* revStr = t.env->GetStringUTFChars(result, &isCopy);
+		r = revStr;
+		
+		t.env->ReleaseStringUTFChars(result, revStr);
+		t.env->DeleteLocalRef(t.classID);
+		
+	}
+#endif
+	return r;
+}
 
 
+string hspConnector::getStoreID()
+{
+	return "TS";
+	unsigned long ps;
+	unsigned char* tt = CCFileUtils::sharedFileUtils()->getFileData("HSPConfiguration.xml", "rt", &ps);
+	std::string xml((char*)tt, ps);
+	 // key="HSP_PAYMENT_STORE_ID" value="TS"
+	std::regex rgx("key=\"HSP_PAYMENT_STORE_ID\" value=\"(\\w+)\"");
+	std::smatch match;
+	
+	if (std::regex_search(xml, match, rgx))
+		return match[1];
+	else
+		return "";
+}
 
 string hspConnector::getTimeZone(){
 	

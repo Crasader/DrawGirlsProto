@@ -372,6 +372,24 @@ void StarGoldData::resetIngameDetailScore()
 
 void StarGoldData::setGameStart()
 {
+	if(is_hell_mode)
+	{
+		int t_stage_number = mySD->getSilType();
+		int hell_size = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+		bool is_found = false;
+		for(int i=0;!is_found && i<hell_size;i++)
+		{
+			if(t_stage_number == NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1))
+			{
+				is_found = true;
+				hell_balance.clear();
+				string t_balance = NSDS_GS(kSDS_GI_hellMode_int1_balance_s, i+1);
+				Json::Reader t_reader;
+				t_reader.parse(t_balance, hell_balance);
+			}
+		}
+	}
+	
 	CharacterHistory t_history = getSelectedCharacterHistory();
 	
 	rewind_cnt_per_frame = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_rewindSpd_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
@@ -2375,6 +2393,19 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 	{
 		int characterNo = result_data["characterNo"].asInt();
 		Json::Value levelInfo = result_data["levelInfo"];
+		
+		int characterIndex = 0;
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		bool t_found = false;
+		for(int i=0;!t_found && i<character_count;i++)
+		{
+			if(characterNo == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1))
+			{
+				t_found = true;
+				characterIndex = i+1;
+			}
+		}
+		
 		bool is_found = false;
 		for(int i=0;!is_found && i<getCharacterHistorySize();i++)
 		{
@@ -2382,6 +2413,7 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 			{
 				is_found = true;
 				
+				character_historys[i].characterIndex = characterIndex;
 				character_historys[i].characterLevel = levelInfo["level"].asInt();
 				character_historys[i].characterExp = levelInfo["exp"].asInt();
 				character_historys[i].characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
@@ -2393,6 +2425,7 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		if(!is_found)
 		{
 			CharacterHistory t_history;
+			t_history.characterIndex = characterIndex;
 			t_history.characterNo = characterNo;
 			t_history.characterLevel = levelInfo["level"].asInt();
 			t_history.characterExp = levelInfo["exp"].asInt();
@@ -3777,7 +3810,7 @@ void StarGoldData::myInit()
 	app_type = "light1";
 	app_version = 4; // 커몬세팅값과 비교해서 앱 종료시키는 버전.
 	
-	client_version = 15; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
+	client_version = 17; // 이 것도 아마 커몬세팅과 비교해서 암튼 클라 저장된 기록들 날려서 새로 다운받게 하게끔 하는 의도.
 	
 	is_ingame_gold = false;
 	is_ingame_sub_gold = false;

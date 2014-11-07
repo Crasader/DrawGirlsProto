@@ -1356,7 +1356,7 @@ void ShopPopup::addGachaButton()
 	
 	CCMenuItem* gacha_menu = CCMenuItemSprite::create(n_gacha_img, s_gacha_img, this, menu_selector(ShopPopup::menuAction));
 	gacha_menu->setTag(kSP_MT_gacha);
-	gacha_menu->setPosition(ccp(415,13));
+	gacha_menu->setPosition(ccp(395,13));
 	tab_menu->addChild(gacha_menu);
 }
 

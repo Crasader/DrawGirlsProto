@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.litmus.find.rooting">由於異常使用該裝置，無法繼續使用服務。</string>
+    <string name="hsp.litmus.find.cheating">檢測到有礙正常使用遊戲的工具。若不刪除該工具，則無法使用本服務。 </string>
+    <string name="hsp.litmus.find.bluestack">檢測到有礙正常使用遊戲的工具。若不刪除該工具，則無法使用本服務。 </string>
+    <string name="hsp.litmus.find.integrity">檢測到有礙正常使用遊戲的工具。若不刪除該工具，則無法使用本服務。</string>
+    <string name="hsp.litmus.log.agreement.title">注意事項！</string>
+    <string name="hsp.litmus.log.agreement.message">若終端機內存有針對本服務所使用之不當程式，則無法使用本服務。若終端機中存有該程式，本公司將取</string>
+    <string name="hsp.litmus.log.agreement.permit">允許</string>
+    <string name="hsp.litmus.log.agreement.refuse">拒絕</string>
+
+</resources>

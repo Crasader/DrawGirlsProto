@@ -3122,6 +3122,15 @@ void PlayUI::counting ()
 		detail_counting_cnt = 0;
 		countingCnt++;
 		use_time++;
+		if(mySGD->is_hell_mode && use_time%5 == 0)
+		{
+			vector<CCNode*> t_vector = myGD->getMainCumberCCNodeVector();
+			for(int i=0;i<t_vector.size();i++)
+			{
+				KSCumberBase* t_boss = (KSCumberBase*)t_vector[i];
+				t_boss->applyHellBalance(use_time);
+			}
+		}
 		
 		if(jack_life_hide_count != -1)
 		{

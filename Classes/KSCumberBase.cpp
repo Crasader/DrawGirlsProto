@@ -2450,6 +2450,44 @@ void KSCumberBase::settingFuryRule()
 	//		m_furyRule
 }
 
+
+void KSCumberBase::applyHellBalance(float playTime)
+{
+	if(mySGD->hell_balance.isNull())return;
+	
+	for(int i=0;i<mySGD->hell_balance.size();i++){
+		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter){
+			if( (*iter)["pattern"].asInt() == mySGD->hell_balance[i].get("patternNo",0).asInt()){
+				CCLOG("111 %s",(*iter).asString().c_str());
+				string t = mySGD->hell_balance[i].get("type","").asString();
+				float original = (*iter).get(t, 0).asFloat();
+				string oper = mySGD->hell_balance[i].get("operator","-").asString();
+				float max = mySGD->hell_balance[i].get("max",99999).asFloat();
+				float min = mySGD->hell_balance[i].get("min",0).asFloat();
+				float value = mySGD->hell_balance[i].get("value",0).asFloat();
+				
+				if(oper == "+"){
+					original+=value;
+				}else if(oper=="*"){
+					original*=value;
+				}else if(oper=="-"){
+					original-=value;
+				}else if(oper=="="){
+					original=value;
+				}
+				
+				if(original>max)original=max;
+				if(original<min)original=min;
+				
+				(*iter)[t]=original;
+				
+				CCLOG("222 %s",(*iter).asString().c_str());
+			}
+		}
+	}
+
+}
+
 void KSCumberBase::applyAutoBalance(bool isExchange)
 {
 	
@@ -2458,22 +2496,30 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
 	int vCount = mySGD->getUserdataAutoLevel();
+	
+	
 	int puzzleNo = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
 	
 	
-    int playCount = 0;
-    
-    if(mySGD->is_endless_mode){
-        playCount = 0;
-        vCount = mySGD->endless_my_victory.getV()*3+5;
-        CCLOG("it's PVP mode!! now victory is %d",vCount);
-    }else if(mySGD->is_hell_mode){
-        playCount = 0;
-        vCount=0;
-    }else{
-       std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
-       playCount = myDSH->getUserIntForStr(playcountKey, 0);
-    }
+	int playCount = 0;
+	
+	if(mySGD->is_endless_mode){
+			playCount = 0;
+			vCount = mySGD->endless_my_victory.getV()*3+5;
+			CCLOG("it's PVP mode!! now victory is %d",vCount);
+	}else if(mySGD->is_hell_mode){
+			playCount = 0;
+			vCount=0;
+	}else{
+		 std::string playcountKey = std::string("playcount_") + boost::lexical_cast<std::string>(mySD->getSilType());
+		 playCount = myDSH->getUserIntForStr(playcountKey, 0);
+	}
+	
+	if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
+		if(vCount>5)vCount=5;
+		
+		playCount=playCount*2;
+	}
 	
 	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
@@ -2522,6 +2568,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		m_attackPercent *=1.2f;
 		if(m_attackPercent<0.25)m_attackPercent=0.25;
 		if(m_attackPercent>0.4)m_attackPercent=0.4;
+		if(m_maxSpeed>0.7f){m_maxSpeed=0.7f; m_minSpeed=m_maxSpeed/2.f;}
 		
 		int sumpercent = 0;
 		int crashCnt= 0;
@@ -2562,21 +2609,24 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 		if(m_attackPercent>0.3)m_attackPercent=0.3;
 		if(m_attackPercent<0.1)m_attackPercent=0.1;
-		if(m_maxSpeed>0.7f){m_maxSpeed=0.7f; m_minSpeed=m_maxSpeed/2.f;}
-		if(m_aiValue>80)m_aiValue=80;
+		if(m_maxSpeed>0.5f){m_maxSpeed=0.5f; m_minSpeed=m_maxSpeed/2.f;}
+		if(m_aiValue>50)m_aiValue=50;
 		
 		//부수기 공격 확률 낮추기
-		for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
-		{
-			if((*iter)["atype"].asString() == "crash"){
-                if(playCount<2)(*iter)["percent"]=1;
-                else (*iter)["percent"]=0;
-			}
-			
-			if((*iter)["atype"].asString() == "special"){
-				if((*iter)["pattern"].asString()!="1007" && (*iter)["pattern"].asString()!="1020"){
-					if(playCount<3)(*iter)["percent"]=1;
-					else (*iter)["percent"]=0;
+		
+		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
+			for(auto iter = m_attacks.begin(); iter != m_attacks.end(); ++iter)
+			{
+				if((*iter)["atype"].asString() == "crash"){
+									if(playCount<3)(*iter)["percent"]=1;
+									else (*iter)["percent"]=0;
+				}
+				
+				if((*iter)["atype"].asString() == "special"){
+					if((*iter)["pattern"].asString()!="1007" && (*iter)["pattern"].asString()!="1020"){
+						if(playCount<5)(*iter)["percent"]=1;
+						else (*iter)["percent"]=0;
+					}
 				}
 			}
 		}

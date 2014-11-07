@@ -282,7 +282,7 @@ void TitleRenewalScene::endSplash()
 	state_label->setPosition(ccp(240,30)); // 190
 	addChild(state_label, 2);
 	
-	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	state_label->runAction(t_repeat);
 	
@@ -680,7 +680,7 @@ void TitleRenewalScene::successLogin()
 	TRACE();
 
 	state_label->setVisible(true);
-	CCSequence* t_seq = CCSequence::create(CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), CCShow::create(), NULL);
+	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
 	state_label->runAction(t_repeat);
 	
@@ -764,6 +764,7 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value shopdata_param;
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+	shopdata_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	
 	Json::Value hell_param;
@@ -1342,6 +1343,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_hellMode_int1_title_s, i+1, t_data["title"].asString(), false);
 			NSDS_SS(kSDS_GI_hellMode_int1_content_s, i+1, t_data["content"].asString(), false);
 			NSDS_SI(kSDS_GI_hellMode_int1_characterNo_i, i+1, t_data["characterNo"].asInt(), false);
+			NSDS_SS(kSDS_GI_hellMode_int1_balance_s, i+1, t_data["balance"].asString(), false);
 			
 			string img_url = t_data["cellImgInfo"].asString();
 			if(NSDS_GS(kSDS_GI_hellMode_int1_cellImgInfo_s, i+1) != img_url)
@@ -1982,6 +1984,36 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			
 			t_index++;
 		}
+		{
+			Json::Value t_data = result_data["pg_ei_set"];
+			
+			//			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_count_i, t_index, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_countName_s, t_index, t_data["countName"].asString(), false);
+			//			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_price_i, t_index, t_data["price"].asInt(), false);
+			//			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceType_s, t_index, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
+			
+			t_index++;
+		}
+		{
+			Json::Value t_data = result_data["pg_snh_set"];
+			
+			//			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_count_i, t_index, t_data["count"].asInt(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_countName_s, t_index, t_data["countName"].asString(), false);
+			//			NSDS_SI(kSDS_GI_shopPurchaseGuide_int1_price_i, t_index, t_data["price"].asInt(), false);
+			//			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceType_s, t_index, t_data["priceType"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
+			
+			t_index++;
+		}
 		
 		for(int i=1;i<=6;i++)
 		{
@@ -2063,6 +2095,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		is_receive_fail = true;
 		Json::Value shop_param;
 		shop_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
+		shop_param["store"] = myHSP->getStoreID();
 		command_list.push_back(CommandParam("getshoplist", shop_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	}
 	

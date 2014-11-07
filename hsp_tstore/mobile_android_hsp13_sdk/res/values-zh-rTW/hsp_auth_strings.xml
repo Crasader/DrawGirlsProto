@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">維護說明</string>
+    <string name="hsp.lnc.status.alert.update.now">現在更新</string>
+    <string name="hsp.lnc.status.alert.later">以後</string>
+    <string name="hsp.lnc.status.alert.01">未註冊的遊戲。</string>
+    <string name="hsp.lnc.status.alert.02">為使用更穩定的服務\n須更新為最新版本。</string>
+    <string name="hsp.lnc.status.alert.03">為使用更穩定的服務\n須更新為最新版本。</string>
+    <string name="hsp.lnc.status.alert.04">維護中，暫時限制使用服務。</string>
+    <string name="hsp.lnc.status.alert.08">維護中，暫時限制使用服務。</string>
+    <string name="hsp.lnc.status.alert.10.playable">維護中，可能會暫時限制部分服務的使用。</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">維護中，暫時限制使用服務。</string>
+    <string name="hsp.lnc.status.alert.20">客戶端資訊錯誤，資源更新失敗。請詢問客服中心。</string>
+    <string name="hsp.lnc.status.alert.91">限制使用服務的裝置。</string>
+    <string name="hsp.lnc.status.alert.92">只有已註冊的部分裝置可使用服務。</string>
+    <string name="hsp.lnc.status.alert.98">服務結束。\n感謝您這段時間的使用。</string>
+    <string name="hsp.lnc.status.alert.99">因伺服器錯誤，導致遊戲連線失敗。\n請結束遊戲後重新執行。</string>
+    <string name="hsp.auth.bridge.description.main">您好。 %1$s</string>
+    <string name="hsp.auth.bridge.description.main.fortoast">您好。</string>
+    <string name="hsp.auth.login.hid.alert.punish">限制使用的ID，請用其他ID登入。</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">不存在的帳號，請用其他ID登入。</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">此ID已和其他Smart Hangame記錄連結。</string>
+    <string name="hsp.auth.login.id.alert.alreadymapped">此ID已和其他Smart Hangame記錄連結。請用其他ID連線。</string>
+    <string name="hsp.toast.auth.login.hid.alert.alreadymapped">此ID已和其他TOAST遊戲記錄連結。</string>
+    <string name="hsp.auth.punished.member.alert">因採取不正常的遊戲方式，已限制使用。</string>
+    <string name="hsp.auth.deactivated.member.alert">您的帳戶已被停用。不能再使用該服務。</string>
+    <string name="hsp.auth.facebook.login.fail.alert.title">Facebook 登入失敗</string>
+    <string name="hsp.auth.facebook.login.fail.alert">Facebook 認證請求失敗。</string>
+</resources>

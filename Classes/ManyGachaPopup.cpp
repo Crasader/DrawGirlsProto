@@ -249,7 +249,7 @@ void ManyGachaPopup::setOpening()
 		
 		CCMenuItem* shop_menu = CCMenuItemSprite::create(n_shop_img, s_shop_img, this, menu_selector(ManyGachaPopup::menuAction));
 		shop_menu->setTag(ManyGachaPopupMenu::kShop);
-		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(415,24));
+		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(395,24));
 		gacha_menu->addChild(shop_menu);
 	}
 }
@@ -584,7 +584,7 @@ void ManyGachaPopup::setNormalGacha()
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7) > 0)
 	{
 		CCSprite* price_icon = CCSprite::create("icon_p7.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass7)).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -950,7 +950,7 @@ void ManyGachaPopup::setPremiumGacha()
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8) > 0)
 	{
 		CCSprite* price_icon = CCSprite::create("icon_p8.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(1).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass8)).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -1403,6 +1403,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 		CCNode* t_button = reward_list[selected_index];
 		
 		CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
+		t_take_back->setVisible(false);
 		t_take_back->setOpacity(0);
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
@@ -1427,6 +1428,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 				}
 			}
 			
+			t_take_back->setVisible(true);
 			t_take_back->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
 															  {
 																  t_take_back->setOpacity(t_i);
@@ -1788,6 +1790,8 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 		detail_back->setOpacity(0);
 		t_node->addChild(detail_back);
 		
+		TouchSuctionLayer* t_suction2 = NULL;
+		
 		if(gacha_data_list[selected_value].reward_list.size() > 1)
 		{
 			// many
@@ -1846,9 +1850,21 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			t_clipping->setPosition(ccp(65, detail_back->getContentSize().height/2.f));
 			detail_back->addChild(t_clipping);
 			
-			KSLabelTTF* count_label = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, keep_card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(145, 90), kCCTextAlignmentCenter, kCCVerticalTextAlignmentCenter);
-			count_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-10));
-			detail_back->addChild(count_label);
+			KSLabelTTF* count_label = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_profile_s, keep_card_number).c_str(), mySGD->getFont().c_str(), 13, CCSizeMake(175, 120), kCCTextAlignmentCenter, kCCVerticalTextAlignmentTop);
+//			count_label->setAnchorPoint(ccp(0,1.f));
+			CCScrollView* profile_scroll = CCScrollView::create(CCSizeMake(175, 85));
+			profile_scroll->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
+			profile_scroll->setContainer(count_label);
+			profile_scroll->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,detail_back->getContentSize().height/2.f-13) - ccpMult(ccp(175,85), 0.5f));
+			profile_scroll->setContentOffset(ccp(0, profile_scroll->minContainerOffset().y));
+			detail_back->addChild(profile_scroll);
+			
+			profile_scroll->setTouchPriority(touch_priority-4);
+			
+			t_suction2 = TouchSuctionLayer::create(touch_priority-3);
+			t_suction2->setSwallowRect(CCRectMake(profile_scroll->getPositionX(), profile_scroll->getPositionY(), 175, 85));
+			t_suction2->setTouchEnabled(true);
+			detail_back->addChild(t_suction2);
 		}
 		else if(gacha_data_list[selected_value].reward_list[0].type.getV() == "cp")
 		{
@@ -2027,7 +2043,6 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 																													   normal_ccb.second->runAnimationsForSequenceNamed("roll_end");
 																												   else
 																													   premium_ccb.second->runAnimationsForSequenceNamed("roll_end");
-																												   
 																												   t_suction->removeFromParent();
 																											   }));
 															  };
@@ -2307,6 +2322,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 		
 		CCNode* t_button = reward_list[selected_index];
 		CCSprite* t_take_back = CCSprite::create("gacha_cell_gain.png");
+		t_take_back->setVisible(false);
 		t_take_back->setOpacity(0);
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
@@ -2331,6 +2347,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 				}
 			}
 			
+			t_take_back->setVisible(true);
 			t_take_back->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
 															  {
 																  t_take_back->setOpacity(t_i);
@@ -2417,7 +2434,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 															  }));
 		};
 		
-		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd")
+		if(gacha_data_list[selected_value].reward_list[0].type.getV() == "gncd" || gacha_data_list[selected_value].reward_list[0].type.getV() == "dhcd")
 		{
 			Json::Value t_card;
 			

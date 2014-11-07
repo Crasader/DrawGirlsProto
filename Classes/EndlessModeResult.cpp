@@ -161,6 +161,25 @@ bool EndlessModeResult::init()
 			int t_after_gold = mySGD->getStageGold();
 			gold_calc_func = [=](function<void()> after_func)
 			{
+				function<void()> ani_func = [=]()
+				{
+					CCSprite* t_gold = CCSprite::create("icon_g.png");
+					t_gold->setScale(0.7f);
+					t_gold->setPosition(right_back->getPosition() + ccp(55,-32));
+					main_case->addChild(t_gold);
+					
+					addChild(KSGradualValue<CCPoint>::create(right_back->getPosition() + ccp(55,-32), left_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
+															 {
+																 t_gold->setPosition(t_p);
+															 }, [=](CCPoint t_p)
+															 {
+																 t_gold->setPosition(t_p);
+																 t_gold->removeFromParent();
+															 }));
+				};
+				
+				ani_func();
+				
 				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
 											{
 												left_gold_content->setString(ccsf("%d", t_i));
@@ -221,6 +240,25 @@ bool EndlessModeResult::init()
 			int t_after_gold = mySGD->getStageGold();
 			gold_calc_func = [=](function<void()> after_func)
 			{
+				function<void()> ani_func = [=]()
+				{
+					CCSprite* t_gold = CCSprite::create("icon_g.png");
+					t_gold->setScale(0.7f);
+					t_gold->setPosition(left_back->getPosition() + ccp(55,-32));
+					main_case->addChild(t_gold);
+					
+					addChild(KSGradualValue<CCPoint>::create(left_back->getPosition() + ccp(55,-32), right_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
+															 {
+																 t_gold->setPosition(t_p);
+															 }, [=](CCPoint t_p)
+															 {
+																 t_gold->setPosition(t_p);
+																 t_gold->removeFromParent();
+															 }));
+				};
+				
+				ani_func();
+				
 				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
 													 {
 														 left_gold_content->setString(ccsf("%d", t_i));

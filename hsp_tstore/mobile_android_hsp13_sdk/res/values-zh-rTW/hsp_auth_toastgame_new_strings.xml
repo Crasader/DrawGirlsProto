@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.toastnew.auth.welcome.agreement">同意TOAST的用戶同意書及個人資訊使用</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree">同意</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.gameterms">同意<u>使用条款</u></string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.personalinfo">同意<u>個人用戶服務條款</u></string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">同意條款</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.terms">閱讀TOAST的用戶同意書</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">查看更多</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">閱讀個人資訊使用同意書</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">如果在使用一個ID，請[ID為登錄]\n 如果您[登錄為客人]，請記住，遊戲信息也將被刪除，你應該刪除的應用程序。</string>
+    <string name="hsp.toastnew.auth.welcome.idp.login">用ID登錄</string>
+    <string name="hsp.toastnew.auth.welcome.guest.login">登錄為客人</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.login">以Hangame賬號爲登入</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login">以Email賬號爲登入</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login.title">與TOAST ID登錄</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.facebook.login.title">與Facebook的帳號登錄</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.description">你沒有一個ID？<u>創建電子郵件ID</u></string>
+    <string name="hsp.toastnew.auth.login.hid.alert.other.id.login">以[%1$s]爲立即開始</string>
+</resources>

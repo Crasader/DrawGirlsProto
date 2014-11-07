@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">维护公告</string>
+    <string name="hsp.lnc.status.alert.update.now">立即更新</string>
+    <string name="hsp.lnc.status.alert.later">下次</string>
+    <string name="hsp.lnc.status.alert.01">是不注册的游戏.</string>
+    <string name="hsp.lnc.status.alert.02">为了利用更好的稳定服务\n必须更新为最新版本.</string>
+    <string name="hsp.lnc.status.alert.03">为了利用更好的稳定服务\n必须更新为最新版本.</string>
+    <string name="hsp.lnc.status.alert.04">在维护中，会暂时限制使用服务.</string>
+    <string name="hsp.lnc.status.alert.08">在维护中，会暂时限制使用服务.</string>
+    <string name="hsp.lnc.status.alert.10.playable">在维护中，会限制使用一些服务.</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">在维护中，会暂时限制使用服务.</string>
+    <string name="hsp.lnc.status.alert.20">客户端信息不正确，无法更新资源.请询问到顾客中心.</string>
+    <string name="hsp.lnc.status.alert.91">是使用服务限制的装置.</string>
+    <string name="hsp.lnc.status.alert.92">一些已注册的装置才可以使用服务.</string>
+    <string name="hsp.lnc.status.alert.98">服务结束\n谢谢你的支持.</string>
+    <string name="hsp.lnc.status.alert.99">服务器发生错误，无法连线到游戏。\n请先关闭游戏后，再运行.</string>
+    <string name="hsp.auth.bridge.description.main">你好. %1$s</string>
+    <string name="hsp.auth.bridge.description.main.fortoast">你好.</string>
+    <string name="hsp.auth.login.hid.alert.punish">这个账号是暂停的。请登录以不同的账号。</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">这个账号是不存在的.以别的账号来登录.</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">这个账号已跟别的智能Hangame记录连接中.请用别的账号来连接.</string>
+    <string name="hsp.auth.login.id.alert.alreadymapped">此账号已跟别的智能Hangame纪录连接.请使用不同账号。</string>
+    <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
+    <string name="hsp.auth.punished.member.alert">由于不正常的行为，受到使用限制.</string>
+    <string name="hsp.auth.deactivated.member.alert">您的帐户已被停用。不能再使用该服务。</string>
+    <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
+    <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>
+    
+</resources>

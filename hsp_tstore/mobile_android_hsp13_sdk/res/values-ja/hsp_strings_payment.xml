@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- HSP Payment Start -->
+    <!-- Error Messages -->
+    <string name="hsp.payment.err.msg.lib.init">購入ライブラリ初期化失敗</string>
+    <string name="hsp.payment.err.msg.shopserver">ショップサーバからエラー発生</string>
+        
+    <!-- User Messages -->
+    <string name="hsp.payment.err.msg.purchase.canceled">ご購入がキャンセルされました。</string>
+    <string name="hsp.payment.err.msg.item.purchase.canceled">アイテム購入がキャンセルされました。</string>
+    <string name="hsp.payment.err.msg.exist.purchase">他の決済が進行中です。既存の画面を閉じて再度お試しください。(この問題が続く場合、アプリを完全に終了してから再起動してください。)</string>
+    <string name="hsp.payment.err.msg.not.login">ご購入を正常に処理できませんでした。\nお手数ですがアプリを終了してから再度お試しください。</string>
+    <string name="hsp.payment.err.msg.exception">現在サーバに問題があります。しばらくしてから再度お試しください。</string>
+    <string name="hsp.payment.err.msg.give.item.fail">アイテムを配布できませんでした。\nお手数ですがお問い合わせフォームよりお問い合わせください。</string>
+	<string name="hsp.payment.err.msg.network.timeout">ネットワーク接続が不安定です。\nしばらくしてから再度お試しください。</string>
+	
+    <string name="hsp.payment.err.msg.unsupported.device">申し訳ございません。ご使用のデバイスはサポート対象外となるため、お支払い手続きを行えません。</string>
+	<string name="hsp.payment.err.msg.unsupported.google.checkout">ご利用のマーケットではお支払いできません。マーケット情報をご確認の上、ご利用ください。</string>
+	       
+	<!-- TStore Messages -->
+	<string name="hsp.payment.tstore.purchase.confirm">${productName} (${price}won)\nDo you want to buy the selected items?</string>
+
+	<!-- Mycard Messages -->
+    <string name="hsp.payment.err.msg.purchase.successed">充值成功!</string>
+    <string name="hsp.payment.err.msg.purchase.failed">充值失敗!</string>    
+    	
+	<!-- General Strings -->
+    <string name="hsp.payment.title.dialog.purchase">決済する</string>
+    <string name="hsp.payment.msg.confirm.purchase">選択した商品を購入しますか？\n\n購入処理に時間がかかる場合があります。決済が完了されるまで、しばらくお待ちください。</string>
+    <string name="hsp.payment.btn.yes">はい</string>
+    <string name="hsp.payment.btn.no">いいえ</string>
+    <string name="hsp.payment.btn.confirm">確認</string>
+    <string name="hsp.payment.btn.cancel">キャンセル</string>
+    <string name="hsp.payment.msg.processing">処理しています。</string>
+    
+</resources>

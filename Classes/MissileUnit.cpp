@@ -4657,4 +4657,44 @@ void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_m
 							}, nullptr));
 				}));
 }
+
+VMesh* VMesh::create(const Json::Value& param)
+{
+	VMesh* t_to = new VMesh();
+	t_to->myInit(param);
+	t_to->autorelease();
+	return t_to;
+}
+void VMesh::stopMyAction ()
+{
+	
+}
+void VMesh::myInit(const Json::Value& param)
+{
+	m_xPos = param.get("x", 0).asFloat();
+	m_delayFrames = param.get("delayframes", 180).asInt();
+	m_currentFrames = 0;
+	schedule(schedule_selector(ThisClassType::myAction));
+	m_vMesh = CCSprite::create("vmesh.png");
+	m_vMesh->setScaleY(4.0f);
+	m_vMesh->setPosition(ccp(m_xPos, 0));
+	m_vMesh->setColor(ccc3(255, 0, 0));
+	addChild(m_vMesh);
+}
+
+void VMesh::myAction(float dt)
+{
+	m_currentFrames++;
+	if(m_currentFrames <= m_delayFrames)
+	{
+		
+	}
+	else
+	{
+		auto jackPosition = myGD->getJackPoint().convertToCCP();
+		CCLOG("diff jack %f", fabsf(jackPosition.x - m_xPos));
+		removeFromParent();
+	}
+	
+}
 #undef LZZ_INLINE

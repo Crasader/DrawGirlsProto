@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<version-list>
+  <module name="HSPSDK" version="2.32.0" />
+  <module name="HSPJavadoc" version="2.26.0" /> 
+  <module name="HSPGuide" version="2.16.0" /> 
+  <module name="HSPRelease_Merging" version="2.26.0.156" /> 
+  <module name="HSPSampleApp" version="2.32.0.1548" /> 
+  <module name="HSPCore" version="2.32.0.1562" />
+  <module name="HSPCore_Hangame" version="2.31.0.1478" />
+  <module name="HSPCore_Linegame" version="2.16.0.156" />
+  <module name="HSPCore_Kakaogame" version="2.24.4.156" />
+  <module name="HSPCore_Bandgame" version="2.28.1.200" />
+  <module name="HSPCore_Globalgame" version="2.30.3.1027" />
+  <module name="HSPCore_Greegame" version="2.29.0.430" />
+  <module name="HSPCore_Toastgame" version="2.32.0.1542" />
+  <module name="HSPCore_Hangame_Toast" version="2.30.4.1120" />
+  <module name="HSPCore_Qihoo" version="" />
+  <module name="HSPCore_Globalcngame_Facebook" version="2.30.3.1027" />
+  <module name="HSPCore_Globalcngame_Jiuhao" version="2.24.1.156" />
+  <module name="HSPCore_Negame" version="2.30.3.989" />
+  <module name="HSPCore_Onebuildgame" version="2.31.0.1482" />
+  <module name="FacebookSDK" version="2.30.3.1030" />
+  <module name="ToastCore" version="2.31.0.1421" />
+  <module name="GooglePlayLib" version="2.30.2.887" />
+  <module name="HSPView_Global" version="2.32.0.1530" />
+  <module name="HSPView_Toast" version="2.32.0.1529" />
+  <module name="HSPView_Toast_New" version="2.30.5.1276" />
+  <module name="HSPView_JP" version="2.22.0.156" />
+  <module name="HSPPayment" version="3.16.3.1302" />
+  <module name="HSPPromotion" version="2.30.5.1293" />
+  <module name="HSPItemDelivery" version="2.24.5.156" />
+  <module name="HSPCoin" version="2.5.0.156" />
+  <module name="HSPCoinJp" version="2.27.0.156" />
+  <module name="HSPSns" version="2.32.0.1525" />
+  <module name="HSPNPush_Hangame" version="12" />
+  <module name="HSPNPush_Line" version="12" />
+  <module name="HSPNPush_Global" version="2.30.4.1165" />
+  <module name="HSPGMessenger" version="2.29.2.587" />
+  <module name="HSPPayment_Google" version="3.3.0" />
+  <module name="HSPPayment_TStore" version="13.01.01" />
+  <module name="HSPPayment_Naver" version="1.0" />
+  <module name="HSPPayment_Gree" version="2.3.0" />
+  <module name="HSPPayment_Mycard" version="1.0.0" />
+  <module name="HSPPayment_ToastStore" version="0.9" />
+</version-list>
