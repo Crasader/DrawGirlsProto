@@ -161,24 +161,27 @@ bool EndlessModeResult::init()
 			int t_after_gold = mySGD->getStageGold();
 			gold_calc_func = [=](function<void()> after_func)
 			{
-				function<void()> ani_func = [=]()
-				{
-					CCSprite* t_gold = CCSprite::create("icon_g.png");
-					t_gold->setScale(0.7f);
-					t_gold->setPosition(right_back->getPosition() + ccp(55,-32));
-					main_case->addChild(t_gold);
-					
-					addChild(KSGradualValue<CCPoint>::create(right_back->getPosition() + ccp(55,-32), left_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
-															 {
-																 t_gold->setPosition(t_p);
-															 }, [=](CCPoint t_p)
-															 {
-																 t_gold->setPosition(t_p);
-																 t_gold->removeFromParent();
-															 }));
-				};
+//				function<void()> ani_func = [=]()
+//				{
+//					CCSprite* t_gold = CCSprite::create("icon_g.png");
+//					t_gold->setScale(0.7f);
+//					t_gold->setPosition(right_back->getPosition() + ccp(55,-32));
+//					main_case->addChild(t_gold);
+//					
+//					addChild(KSGradualValue<CCPoint>::create(right_back->getPosition() + ccp(55,-32), left_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
+//															 {
+//																 t_gold->setPosition(t_p);
+//															 }, [=](CCPoint t_p)
+//															 {
+//																 t_gold->setPosition(t_p);
+//																 t_gold->removeFromParent();
+//															 }));
+//				};
+//				
+//				ani_func();
 				
-				ani_func();
+				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
+				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
 				
 				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
 											{
@@ -240,24 +243,27 @@ bool EndlessModeResult::init()
 			int t_after_gold = mySGD->getStageGold();
 			gold_calc_func = [=](function<void()> after_func)
 			{
-				function<void()> ani_func = [=]()
-				{
-					CCSprite* t_gold = CCSprite::create("icon_g.png");
-					t_gold->setScale(0.7f);
-					t_gold->setPosition(left_back->getPosition() + ccp(55,-32));
-					main_case->addChild(t_gold);
-					
-					addChild(KSGradualValue<CCPoint>::create(left_back->getPosition() + ccp(55,-32), right_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
-															 {
-																 t_gold->setPosition(t_p);
-															 }, [=](CCPoint t_p)
-															 {
-																 t_gold->setPosition(t_p);
-																 t_gold->removeFromParent();
-															 }));
-				};
+//				function<void()> ani_func = [=]()
+//				{
+//					CCSprite* t_gold = CCSprite::create("icon_g.png");
+//					t_gold->setScale(0.7f);
+//					t_gold->setPosition(left_back->getPosition() + ccp(55,-32));
+//					main_case->addChild(t_gold);
+//					
+//					addChild(KSGradualValue<CCPoint>::create(left_back->getPosition() + ccp(55,-32), right_back->getPosition() + ccp(55,-32), 0.5f, [=](CCPoint t_p)
+//															 {
+//																 t_gold->setPosition(t_p);
+//															 }, [=](CCPoint t_p)
+//															 {
+//																 t_gold->setPosition(t_p);
+//																 t_gold->removeFromParent();
+//															 }));
+//				};
+//				
+//				ani_func();
 				
-				ani_func();
+				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
+				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
 				
 				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
 													 {
@@ -1524,171 +1530,186 @@ void EndlessModeResult::startCalcAnimation()
 																			   {
 																				   // win
 																				   
-																				   result_stamp = CCSprite::create("endless_winner.png");
-																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-																				   main_case->addChild(result_stamp);
-																				   
-																				   CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
-																				   win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
-																				   result_stamp->addChild(win_label);
-																				   
-																				   CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
-																				   win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
-																				   result_stamp->addChild(win_ment);
-																				   
-																				   result_stamp->setRotation(-15);
-																				   
-																				   
-																				   KS::setOpacity(result_stamp, 0);
-																				   result_stamp->setScale(2.5f);
-																				   
-																				   CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
-																				   particle1->setPositionType(kCCPositionTypeRelative);
-																				   particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
-																				   particle1->setEmissionRate(300);
-																				   particle1->setAngle(180.0);
-																				   particle1->setAngleVar(180.0);
-																				   ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
-																				   particle1->setBlendFunc(blendFunc);
-																				   particle1->setDuration(0.3f);
-																				   particle1->setEmitterMode(kCCParticleModeGravity);
-																				   particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
-																				   particle1->setStartColorVar(ccc4f(0,0,0,0.f));
-																				   particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
-																				   particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
-																				   particle1->setStartSize(40.0);
-																				   particle1->setStartSizeVar(10.0);
-																				   particle1->setEndSize(0.0);
-																				   particle1->setEndSizeVar(0.0);
-																				   particle1->setGravity(ccp(0,-100));
-																				   particle1->setRadialAccel(50.0);
-																				   particle1->setRadialAccelVar(20.0);
-																				   particle1->setSpeed(50);
-																				   particle1->setSpeedVar(30.0);
-																				   particle1->setTangentialAccel(0);
-																				   particle1->setTangentialAccelVar(0);
-																				   particle1->setTotalParticles(100);
-																				   particle1->setLife(2.0);
-																				   particle1->setLifeVar(0.5);
-																				   particle1->setStartSpin(0.0);
-																				   particle1->setStartSpinVar(0.f);
-																				   particle1->setEndSpin(0.0);
-																				   particle1->setEndSpinVar(0.f);
-																				   particle1->setPosVar(ccp(90,90));
-																				   particle1->setPosition(result_stamp->getPosition());
-																				   particle1->setAutoRemoveOnFinish(true);
-																				   main_case->addChild(particle1);
-																				   
-																				   addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
-																														  {
-																															  KS::setOpacity(result_stamp, t*255);
-																															  result_stamp->setScale(2.5f-t*1.5f);
-																														  }, [=](float t)
-																														  {
-																															  KS::setOpacity(result_stamp, 255);
-																															  result_stamp->setScale(1.f);
-																															  
-																															  CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
-																															  particle2->setPositionType(kCCPositionTypeRelative);
-																															  particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
-																															  particle2->setEmissionRate(80);
-																															  particle2->setAngle(360.0);
-																															  particle2->setAngleVar(0.0);
-																															  particle2->setBlendFunc(blendFunc);
-																															  particle2->setDuration(-1.0);
-																															  particle2->setEmitterMode(kCCParticleModeGravity);
-																															  particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
-																															  particle2->setStartColorVar(ccc4f(0,0,0,0.f));
-																															  particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
-																															  particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
-																															  particle2->setStartSize(25.0);
-																															  particle2->setStartSizeVar(10.0);
-																															  particle2->setEndSize(0.0);
-																															  particle2->setEndSizeVar(0.0);
-																															  particle2->setGravity(ccp(0,0));
-																															  particle2->setRadialAccel(3.0);
-																															  particle2->setRadialAccelVar(0.0);
-																															  particle2->setSpeed(0);
-																															  particle2->setSpeedVar(0.0);
-																															  particle2->setTangentialAccel(0);
-																															  particle2->setTangentialAccelVar(0);
-																															  particle2->setTotalParticles(10);
-																															  particle2->setLife(0.8);
-																															  particle2->setLifeVar(0.25);
-																															  particle2->setStartSpin(0.0);
-																															  particle2->setStartSpinVar(50.f);
-																															  particle2->setEndSpin(0.0);
-																															  particle2->setEndSpinVar(60.f);
-																															  particle2->setPosVar(ccp(80,80));
-																															  particle2->setPosition(result_stamp->getPosition());
-																															  main_case->addChild(particle2);
-																															  
-																															  gold_calc_func([=]()
+																				   gold_calc_func([=]()
+																								  {
+																									  result_stamp = CCSprite::create("endless_winner.png");
+																									  result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+																									  main_case->addChild(result_stamp);
+																									  
+																									  CCLabelBMFont* win_label = CCLabelBMFont::create(CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "winfont.fnt");
+																									  win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
+																									  result_stamp->addChild(win_label);
+																									  
+																									  CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
+																									  win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
+																									  result_stamp->addChild(win_ment);
+																									  
+																									  result_stamp->setRotation(-15);
+																									  
+																									  
+																									  KS::setOpacity(result_stamp, 0);
+																									  result_stamp->setScale(2.5f);
+																									  
+																									  CCParticleSystemQuad* particle1 = CCParticleSystemQuad::createWithTotalParticles(100);
+																									  particle1->setPositionType(kCCPositionTypeRelative);
+																									  particle1->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+																									  particle1->setEmissionRate(300);
+																									  particle1->setAngle(180.0);
+																									  particle1->setAngleVar(180.0);
+																									  ccBlendFunc blendFunc = {GL_ONE, GL_ONE};
+																									  particle1->setBlendFunc(blendFunc);
+																									  particle1->setDuration(0.3f);
+																									  particle1->setEmitterMode(kCCParticleModeGravity);
+																									  particle1->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+																									  particle1->setStartColorVar(ccc4f(0,0,0,0.f));
+																									  particle1->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+																									  particle1->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+																									  particle1->setStartSize(40.0);
+																									  particle1->setStartSizeVar(10.0);
+																									  particle1->setEndSize(0.0);
+																									  particle1->setEndSizeVar(0.0);
+																									  particle1->setGravity(ccp(0,-100));
+																									  particle1->setRadialAccel(50.0);
+																									  particle1->setRadialAccelVar(20.0);
+																									  particle1->setSpeed(50);
+																									  particle1->setSpeedVar(30.0);
+																									  particle1->setTangentialAccel(0);
+																									  particle1->setTangentialAccelVar(0);
+																									  particle1->setTotalParticles(100);
+																									  particle1->setLife(2.0);
+																									  particle1->setLifeVar(0.5);
+																									  particle1->setStartSpin(0.0);
+																									  particle1->setStartSpinVar(0.f);
+																									  particle1->setEndSpin(0.0);
+																									  particle1->setEndSpinVar(0.f);
+																									  particle1->setPosVar(ccp(90,90));
+																									  particle1->setPosition(result_stamp->getPosition());
+																									  particle1->setAutoRemoveOnFinish(true);
+																									  main_case->addChild(particle1);
+																									  
+																									  addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																																			 {
+																																				 KS::setOpacity(result_stamp, t*255);
+																																				 result_stamp->setScale(2.5f-t*1.5f);
+																																			 }, [=](float t)
+																																			 {
+																																				 KS::setOpacity(result_stamp, 255);
+																																				 result_stamp->setScale(1.f);
+																																				 
+																																				 CCParticleSystemQuad* particle2 = CCParticleSystemQuad::createWithTotalParticles(10);
+																																				 particle2->setPositionType(kCCPositionTypeRelative);
+																																				 particle2->setTexture(CCTextureCache::sharedTextureCache()->addImage("particle6.png"));
+																																				 particle2->setEmissionRate(80);
+																																				 particle2->setAngle(360.0);
+																																				 particle2->setAngleVar(0.0);
+																																				 particle2->setBlendFunc(blendFunc);
+																																				 particle2->setDuration(-1.0);
+																																				 particle2->setEmitterMode(kCCParticleModeGravity);
+																																				 particle2->setStartColor(ccc4f(1.f, 0.992f, 0.784f, 1.f));
+																																				 particle2->setStartColorVar(ccc4f(0,0,0,0.f));
+																																				 particle2->setEndColor(ccc4f(0.f,0.f,0.f,1.f));
+																																				 particle2->setEndColorVar(ccc4f(0, 0, 0, 0.f));
+																																				 particle2->setStartSize(25.0);
+																																				 particle2->setStartSizeVar(10.0);
+																																				 particle2->setEndSize(0.0);
+																																				 particle2->setEndSizeVar(0.0);
+																																				 particle2->setGravity(ccp(0,0));
+																																				 particle2->setRadialAccel(3.0);
+																																				 particle2->setRadialAccelVar(0.0);
+																																				 particle2->setSpeed(0);
+																																				 particle2->setSpeedVar(0.0);
+																																				 particle2->setTangentialAccel(0);
+																																				 particle2->setTangentialAccelVar(0);
+																																				 particle2->setTotalParticles(10);
+																																				 particle2->setLife(0.8);
+																																				 particle2->setLifeVar(0.25);
+																																				 particle2->setStartSpin(0.0);
+																																				 particle2->setStartSpinVar(50.f);
+																																				 particle2->setEndSpin(0.0);
+																																				 particle2->setEndSpinVar(60.f);
+																																				 particle2->setPosVar(ccp(80,80));
+																																				 particle2->setPosition(result_stamp->getPosition());
+																																				 main_case->addChild(particle2);
+																																				 
 																																				 if(gift_func)
-																																				{
-																																					gift_func([=]()
-																																							  {
-																																								  left_table->setTouchEnabled(true);
-																																								  right_table->setTouchEnabled(true);
-																																								  
-																																								  left_table->CCScrollView::setDelegate(this);
-																																								  right_table->CCScrollView::setDelegate(this);
-																																								  
-																																								  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
-																																								  {
-																																									  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																									  t_suction_layer->touch_began_func = [=]()
-																																									  {
-																																										  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																							   {
-																																																								   KS::setOpacity(result_stamp, 255-t*155);
-																																																							   }, [=](float t)
-																																																							   {
-																																																								   KS::setOpacity(result_stamp, 100);
-																																																							   }));
-																																										  t_suction_layer->removeFromParent();
-																																									  };
-																																									  t_suction_layer->is_on_touch_began_func = true;
-																																									  addChild(t_suction_layer);
-																																									  t_suction_layer->setTouchEnabled(true);
-																																								  }
-																																								  else
-																																								  {
-																																									  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																						   {
-																																																							   KS::setOpacity(result_stamp, 255-t*155);
-																																																						   }, [=](float t)
-																																																						   {
-																																																							   KS::setOpacity(result_stamp, 100);
-																																																						   }));
-																																								  }
-																																								  
-																																								  
-																																								  is_menu_enable = true;
-																																								  if(left_total_score.getV() <= right_total_score.getV())
-																																								  {
-																																									  stop_button->setVisible(true);
-																																								  }
-																																								  else
-																																								  {
-																																									  stop_button->setVisible(true);
-																																									  next_button->setVisible(true);
-																																								  }
-																																							  });
-																																				}
-																																				 else
-																																				{
-																																				 left_table->setTouchEnabled(true);
-																																				 right_table->setTouchEnabled(true);
-																																				 
-																																				 left_table->CCScrollView::setDelegate(this);
-																																				 right_table->CCScrollView::setDelegate(this);
-																																				 
-																																				 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
 																																				 {
-																																					 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																					 t_suction_layer->touch_began_func = [=]()
+																																					 gift_func([=]()
+																																							   {
+																																								   left_table->setTouchEnabled(true);
+																																								   right_table->setTouchEnabled(true);
+																																								   
+																																								   left_table->CCScrollView::setDelegate(this);
+																																								   right_table->CCScrollView::setDelegate(this);
+																																								   
+																																								   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																								   {
+																																									   TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																									   t_suction_layer->touch_began_func = [=]()
+																																									   {
+																																										   result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																								{
+																																																									KS::setOpacity(result_stamp, 255-t*155);
+																																																								}, [=](float t)
+																																																								{
+																																																									KS::setOpacity(result_stamp, 100);
+																																																								}));
+																																										   t_suction_layer->removeFromParent();
+																																									   };
+																																									   t_suction_layer->is_on_touch_began_func = true;
+																																									   addChild(t_suction_layer);
+																																									   t_suction_layer->setTouchEnabled(true);
+																																								   }
+																																								   else
+																																								   {
+																																									   result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																							{
+																																																								KS::setOpacity(result_stamp, 255-t*155);
+																																																							}, [=](float t)
+																																																							{
+																																																								KS::setOpacity(result_stamp, 100);
+																																																							}));
+																																								   }
+																																								   
+																																								   
+																																								   is_menu_enable = true;
+																																								   if(left_total_score.getV() <= right_total_score.getV())
+																																								   {
+																																									   stop_button->setVisible(true);
+																																								   }
+																																								   else
+																																								   {
+																																									   stop_button->setVisible(true);
+																																									   next_button->setVisible(true);
+																																								   }
+																																							   });
+																																				 }
+																																				 else
+																																				 {
+																																					 left_table->setTouchEnabled(true);
+																																					 right_table->setTouchEnabled(true);
+																																					 
+																																					 left_table->CCScrollView::setDelegate(this);
+																																					 right_table->CCScrollView::setDelegate(this);
+																																					 
+																																					 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																					 {
+																																						 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																						 t_suction_layer->touch_began_func = [=]()
+																																						 {
+																																							 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																				  {
+																																																					  KS::setOpacity(result_stamp, 255-t*155);
+																																																				  }, [=](float t)
+																																																				  {
+																																																					  KS::setOpacity(result_stamp, 100);
+																																																				  }));
+																																							 t_suction_layer->removeFromParent();
+																																						 };
+																																						 t_suction_layer->is_on_touch_began_func = true;
+																																						 addChild(t_suction_layer);
+																																						 t_suction_layer->setTouchEnabled(true);
+																																					 }
+																																					 else
 																																					 {
 																																						 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																																			  {
@@ -1697,123 +1718,123 @@ void EndlessModeResult::startCalcAnimation()
 																																																			  {
 																																																				  KS::setOpacity(result_stamp, 100);
 																																																			  }));
-																																						 t_suction_layer->removeFromParent();
-																																					 };
-																																					 t_suction_layer->is_on_touch_began_func = true;
-																																					 addChild(t_suction_layer);
-																																					 t_suction_layer->setTouchEnabled(true);
+																																					 }
+																																					 
+																																					 
+																																					 is_menu_enable = true;
+																																					 if(left_total_score.getV() <= right_total_score.getV())
+																																					 {
+																																						 stop_button->setVisible(true);
+																																					 }
+																																					 else
+																																					 {
+																																						 stop_button->setVisible(true);
+																																						 next_button->setVisible(true);
+																																					 }
 																																				 }
-																																				 else
-																																				 {
-																																					 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																		  {
-																																																			  KS::setOpacity(result_stamp, 255-t*155);
-																																																		  }, [=](float t)
-																																																		  {
-																																																			  KS::setOpacity(result_stamp, 100);
-																																																		  }));
-																																				 }
-																																				 
-																																				 
-																																				 is_menu_enable = true;
-																																				 if(left_total_score.getV() <= right_total_score.getV())
-																																				 {
-																																					 stop_button->setVisible(true);
-																																				 }
-																																				 else
-																																				 {
-																																					 stop_button->setVisible(true);
-																																					 next_button->setVisible(true);
-																																				 }
-																																				}
-																																			 });
-																														  }));
+																																			 }));
+																								  });
 																			   }
 																			   else
 																			   {
 																				   // lose
 																				   
-																				   result_stamp = CCSprite::create("endless_loser.png");
-																				   result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
-																				   main_case->addChild(result_stamp);
-																				   
-																				   KS::setOpacity(result_stamp, 0);
-																				   result_stamp->setScale(2.5f);
-																				   
-																				   addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
-																														  {
-																															  KS::setOpacity(result_stamp, t*255);
-																															  result_stamp->setScale(2.5f-t*1.5f);
-																														  }, [=](float t)
-																														  {
-																															  KS::setOpacity(result_stamp, 255);
-																															  result_stamp->setScale(1.f);
-																															  
-																															  gold_calc_func([=]()
+																				   gold_calc_func([=]()
+																								  {
+																									  result_stamp = CCSprite::create("endless_loser.png");
+																									  result_stamp->setPosition(ccp(main_case->getContentSize().width/2.f,main_case->getContentSize().height*0.6f));
+																									  main_case->addChild(result_stamp);
+																									  
+																									  KS::setOpacity(result_stamp, 0);
+																									  result_stamp->setScale(2.5f);
+																									  
+																									  addChild(KSGradualValue<float>::create(0.f, 1.f, 8.f/30.f, [=](float t)
 																																			 {
+																																				 KS::setOpacity(result_stamp, t*255);
+																																				 result_stamp->setScale(2.5f-t*1.5f);
+																																			 }, [=](float t)
+																																			 {
+																																				 KS::setOpacity(result_stamp, 255);
+																																				 result_stamp->setScale(1.f);
+																																				 
 																																				 if(gift_func)
-																																				{
-																																					gift_func([=]()
-																																							  {
-																																								  left_table->setTouchEnabled(true);
-																																								  right_table->setTouchEnabled(true);
-																																								  
-																																								  left_table->CCScrollView::setDelegate(this);
-																																								  right_table->CCScrollView::setDelegate(this);
-																																								  
-																																								  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
-																																								  {
-																																									  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																									  t_suction_layer->touch_began_func = [=]()
-																																									  {
-																																										  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																							   {
-																																																								   KS::setOpacity(result_stamp, 255-t*155);
-																																																							   }, [=](float t)
-																																																							   {
-																																																								   KS::setOpacity(result_stamp, 100);
-																																																							   }));
-																																										  t_suction_layer->removeFromParent();
-																																									  };
-																																									  t_suction_layer->is_on_touch_began_func = true;
-																																									  addChild(t_suction_layer);
-																																									  t_suction_layer->setTouchEnabled(true);
-																																								  }
-																																								  else
-																																								  {
-																																									  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																						   {
-																																																							   KS::setOpacity(result_stamp, 255-t*155);
-																																																						   }, [=](float t)
-																																																						   {
-																																																							   KS::setOpacity(result_stamp, 100);
-																																																						   }));
-																																								  }
-																																								  
-																																								  is_menu_enable = true;
-																																								  if(left_total_score.getV() <= right_total_score.getV())
-																																								  {
-																																									  stop_button->setVisible(true);
-																																								  }
-																																								  else
-																																								  {
-																																									  stop_button->setVisible(true);
-																																									  next_button->setVisible(true);
-																																								  }
-																																							  });
-																																				}
-																																				 else
-																																				{
-																																					left_table->setTouchEnabled(true);
-																																				 right_table->setTouchEnabled(true);
-																																				 
-																																				 left_table->CCScrollView::setDelegate(this);
-																																				 right_table->CCScrollView::setDelegate(this);
-																																				 
-																																				 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
 																																				 {
-																																					 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
-																																					 t_suction_layer->touch_began_func = [=]()
+																																					 gift_func([=]()
+																																							   {
+																																								   left_table->setTouchEnabled(true);
+																																								   right_table->setTouchEnabled(true);
+																																								   
+																																								   left_table->CCScrollView::setDelegate(this);
+																																								   right_table->CCScrollView::setDelegate(this);
+																																								   
+																																								   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																								   {
+																																									   TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																									   t_suction_layer->touch_began_func = [=]()
+																																									   {
+																																										   result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																								{
+																																																									KS::setOpacity(result_stamp, 255-t*155);
+																																																								}, [=](float t)
+																																																								{
+																																																									KS::setOpacity(result_stamp, 100);
+																																																								}));
+																																										   t_suction_layer->removeFromParent();
+																																									   };
+																																									   t_suction_layer->is_on_touch_began_func = true;
+																																									   addChild(t_suction_layer);
+																																									   t_suction_layer->setTouchEnabled(true);
+																																								   }
+																																								   else
+																																								   {
+																																									   result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																							{
+																																																								KS::setOpacity(result_stamp, 255-t*155);
+																																																							}, [=](float t)
+																																																							{
+																																																								KS::setOpacity(result_stamp, 100);
+																																																							}));
+																																								   }
+																																								   
+																																								   is_menu_enable = true;
+																																								   if(left_total_score.getV() <= right_total_score.getV())
+																																								   {
+																																									   stop_button->setVisible(true);
+																																								   }
+																																								   else
+																																								   {
+																																									   stop_button->setVisible(true);
+																																									   next_button->setVisible(true);
+																																								   }
+																																							   });
+																																				 }
+																																				 else
+																																				 {
+																																					 left_table->setTouchEnabled(true);
+																																					 right_table->setTouchEnabled(true);
+																																					 
+																																					 left_table->CCScrollView::setDelegate(this);
+																																					 right_table->CCScrollView::setDelegate(this);
+																																					 
+																																					 if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																					 {
+																																						 TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																						 t_suction_layer->touch_began_func = [=]()
+																																						 {
+																																							 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																				  {
+																																																					  KS::setOpacity(result_stamp, 255-t*155);
+																																																				  }, [=](float t)
+																																																				  {
+																																																					  KS::setOpacity(result_stamp, 100);
+																																																				  }));
+																																							 t_suction_layer->removeFromParent();
+																																						 };
+																																						 t_suction_layer->is_on_touch_began_func = true;
+																																						 addChild(t_suction_layer);
+																																						 t_suction_layer->setTouchEnabled(true);
+																																					 }
+																																					 else
 																																					 {
 																																						 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
 																																																			  {
@@ -1822,36 +1843,21 @@ void EndlessModeResult::startCalcAnimation()
 																																																			  {
 																																																				  KS::setOpacity(result_stamp, 100);
 																																																			  }));
-																																						 t_suction_layer->removeFromParent();
-																																					 };
-																																					 t_suction_layer->is_on_touch_began_func = true;
-																																					 addChild(t_suction_layer);
-																																					 t_suction_layer->setTouchEnabled(true);
+																																					 }
+																																					 
+																																					 is_menu_enable = true;
+																																					 if(left_total_score.getV() <= right_total_score.getV())
+																																					 {
+																																						 stop_button->setVisible(true);
+																																					 }
+																																					 else
+																																					 {
+																																						 stop_button->setVisible(true);
+																																						 next_button->setVisible(true);
+																																					 }
 																																				 }
-																																				 else
-																																				 {
-																																					 result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
-																																																		  {
-																																																			  KS::setOpacity(result_stamp, 255-t*155);
-																																																		  }, [=](float t)
-																																																		  {
-																																																			  KS::setOpacity(result_stamp, 100);
-																																																		  }));
-																																				 }
-																																				 
-																																				 is_menu_enable = true;
-																																				 if(left_total_score.getV() <= right_total_score.getV())
-																																				 {
-																																					 stop_button->setVisible(true);
-																																				 }
-																																				 else
-																																				 {
-																																					 stop_button->setVisible(true);
-																																					 next_button->setVisible(true);
-																																				 }
-																																				}
-																																			 });
-																														  }));
+																																			 }));
+																								  });
 																			   }
 																			   
 																			   if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)

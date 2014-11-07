@@ -78,6 +78,7 @@ bool OnePercentTutorial::init(float originalPercent,
 	setFormSetter(back_img);
 	setFormSetter(inner_back);
 	
+//	KSLabelTTF* titleLbl = KSLabelTTF::create(getLocal(LK::kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
 	KSLabelTTF* titleLbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_onePercentTutorial1), mySGD->getFont().c_str(), 12.f);
 	titleLbl->disableOuterStroke();
 	titleLbl->setPosition(ccp(89.0, 247.5));

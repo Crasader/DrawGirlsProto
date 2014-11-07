@@ -660,7 +660,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				param2["from"] = myHSP->getMemberID();
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
-				param["nick"] = memberInfo["nick"].asString();
+				param["nick"] = myDSH->getStringForKey(kDSH_Key_nick); //memberInfo["nick"].asString();
 				param["template"] = "msgRquestFriend";
 				param["custom"] = Json::Value(Json::arrayValue);
 				param["custom"][0] = myDSH->getStringForKey(kDSH_Key_nick);
@@ -772,7 +772,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 				//			param2["from"] = myHSP->getMemberID();
 				param["memberID"] = myHSP->getMemberID();
 				param["friendID"] = memberInfo["memberID"].asString();
-				param["nick"] = memberInfo["nick"].asString();
+				param["nick"] = myDSH->getStringForKey(kDSH_Key_nick); //memberInfo["nick"].asString();
 				param["exchangeID"] = "friendHeart";
 				param["template"] = "msgSendHeart";
 				param["custom"] = Json::Value(Json::arrayValue);
