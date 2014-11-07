@@ -73,6 +73,7 @@ private:
 	KSProtectVar<int> right_total_score;
 	
 	function<void(function<void()>)> gold_calc_func;
+	function<void(function<void()>)> gift_func;
 	
 	CCScale9Sprite* left_back;
 	CCScale9Sprite* right_back;

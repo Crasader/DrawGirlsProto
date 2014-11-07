@@ -648,7 +648,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessCalcTitleLifeScore] = "생명점수";
 	obj[LK::kMyLocalKey_endlessCalcTitleTimeScore] = "시간점수";
 	obj[LK::kMyLocalKey_endlessCalcTitleGradeScore] = "등급점수";
-	obj[LK::kMyLocalKey_endlessCalcTitleTakeGold] = "획득골드";
+	obj[LK::kMyLocalKey_endlessCalcTitleTakeGold] = "골드";
 	obj[LK::kMyLocalKey_endlessCalcTitleTakeArea] = "획득영역";
 	obj[LK::kMyLocalKey_endlessCalcTitleDamagedScore] = "피격점수";
 	obj[LK::kMyLocalKey_win] = "승";
@@ -1237,6 +1237,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_characterMarquee3] = "뽑기에는 같은 캐릭터를 뽑을 경우 해당 캐릭터의 경험치가 올라갑니다.";
 	obj[LK::kMyLocalKey_characterMarquee4] = "선택한 캐릭터로 PvP모드를 플레이하면 캐릭터의 경험치를 올릴 수 있습니다.";
 	obj[LK::kMyLocalKey_cardNumber] = "카드번호";
+	obj[LK::kMyLocalKey_characterBonus] = "캐릭터보너스";
 	
 	obj[LK::kMyLocalKey_kindTutorial40] = "이건 왠 선반이지?";
 	obj[LK::kMyLocalKey_kindTutorial41] = "이건 나만의 캐릭터 컬렉션!! 언젠가는 모든 캐릭터를 모아서 여길 꽉꽉 채울꺼야!!";

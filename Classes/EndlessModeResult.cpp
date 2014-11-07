@@ -377,6 +377,8 @@ bool EndlessModeResult::init()
 		send_command_list.push_back(t_achieve[i]);
 	}
 	
+	gift_func = nullptr;
+	
 	if(is_calc)
 	{
 		Json::Value param;
@@ -402,8 +404,11 @@ bool EndlessModeResult::init()
 														 if(result_data["sendGift"].asBool())
 														 {
 															 is_menu_enable = false;
-															 EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
-															 addChild(t_popup, 999);
+															 gift_func = [=](function<void()> after_func)
+															 {
+																 EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, after_func, result_data);
+																 addChild(t_popup, 999);
+															 };
 														 }
 														 TRACE();
 													 }
@@ -645,24 +650,51 @@ CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigne
 	
 	if(idx == 7)
 	{
-		if(mySGD->isTimeEvent(kTimeEventType_gold))
+		if(table == left_table)
 		{
-			KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 14);
-			gold_event->setColor(ccc3(255, 190, 50));
-			gold_event->enableOuterStroke(ccBLACK, 1.f);
-			gold_event->setAnchorPoint(ccp(0,0.5));
-			gold_event->setPosition(ccp(title_label->getContentSize().width+3,title_label->getContentSize().height/2.f));
-			title_label->addChild(gold_event);
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			double gold_bonus = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 			
-			KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 10);
+			CCPoint base_position = ccp(title_label->getContentSize().width, title_label->getContentSize().height/2.f);
+			if(gold_bonus > 1.0)
+			{
+				CCSprite* gold_bonus_back = CCSprite::create("ending_cha_bonus.png");
+				gold_bonus_back->setAnchorPoint(ccp(0,0.5f));
+				gold_bonus_back->setPosition(base_position);
+				title_label->addChild(gold_bonus_back);
+				
+				KSLabelTTF* character_bonus = KSLabelTTF::create(getLocal(LK::kMyLocalKey_characterBonus), mySGD->getFont().c_str(), 7);
+				character_bonus->enableOuterStroke(ccBLACK, 1, 127, true);
+				character_bonus->setPosition(ccpFromSize(gold_bonus_back->getContentSize()/2.f) + ccp(2,5));
+				gold_bonus_back->addChild(character_bonus);
+				
+				KSLabelTTF* bonus_value = KSLabelTTF::create(ccsf("+%0.f%%", float((gold_bonus-1.0)*100.0)), mySGD->getFont().c_str(), 12);
+				bonus_value->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+				bonus_value->enableOuterStroke(ccBLACK, 1, 127, true);
+				bonus_value->setPosition(ccpFromSize(gold_bonus_back->getContentSize()/2.f) + ccp(2,-4));
+				gold_bonus_back->addChild(bonus_value);
+				
+				base_position = base_position + ccp(gold_bonus_back->getContentSize().width,0);
+			}
 			
-			CCScale9Sprite* event_back = CCScale9Sprite::create("mainflow_new2.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			event_back->setContentSize(CCSizeMake(event_label->getContentSize().width+18, 20));
-			event_back->setPosition(ccp(gold_event->getContentSize().width+4+event_back->getContentSize().width/2.f, gold_event->getContentSize().height/2.f));
-			gold_event->addChild(event_back);
-			
-			event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f));
-			event_back->addChild(event_label);
+			if(mySGD->isTimeEvent(kTimeEventType_gold))
+			{
+				CCSprite* event_back = CCSprite::create("ending_event.png");
+				event_back->setAnchorPoint(ccp(0,0.5f));
+				event_back->setPosition(base_position);
+				title_label->addChild(event_back);
+				
+				KSLabelTTF* event_label = KSLabelTTF::create("EVENT", mySGD->getFont().c_str(), 7);
+				event_label->enableOuterStroke(ccBLACK, 1, 127, true);
+				event_label->setPosition(ccpFromSize(event_back->getContentSize()/2.f) + ccp(2,5));
+				event_back->addChild(event_label);
+				
+				KSLabelTTF* gold_event = KSLabelTTF::create(CCString::createWithFormat("X%.1f", mySGD->getTimeEventFloatValue(kTimeEventType_gold))->getCString(), mySGD->getFont().c_str(), 12);
+				gold_event->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+				gold_event->enableOuterStroke(ccBLACK, 1, 127, true);
+				gold_event->setPosition(ccpFromSize(event_back->getContentSize()/2.f) + ccp(2,-4));
+				event_back->addChild(gold_event);
+			}
 		}
 	}
 	
@@ -1188,6 +1220,28 @@ void EndlessModeResult::setMain()
 	left_total_title->setPosition(ccp(8, left_total_back->getContentSize().height/2.f));
 	left_total_back->addChild(left_total_title);
 	
+	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+	double score_bonus = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	
+	if(score_bonus > 1.0)
+	{
+		CCSprite* score_bonus_back = CCSprite::create("ending_cha_bonus.png");
+		score_bonus_back->setAnchorPoint(ccp(0,0.5f));
+		score_bonus_back->setPosition(ccp(left_total_title->getContentSize().width, left_total_title->getContentSize().height/2.f));
+		left_total_title->addChild(score_bonus_back);
+		
+		KSLabelTTF* character_bonus = KSLabelTTF::create(getLocal(LK::kMyLocalKey_characterBonus), mySGD->getFont().c_str(), 7);
+		character_bonus->enableOuterStroke(ccBLACK, 1, 127, true);
+		character_bonus->setPosition(ccpFromSize(score_bonus_back->getContentSize()/2.f) + ccp(2,5));
+		score_bonus_back->addChild(character_bonus);
+		
+		KSLabelTTF* bonus_value = KSLabelTTF::create(ccsf("+%0.f%%", float((score_bonus-1.0)*100.0)), mySGD->getFont().c_str(), 12);
+		bonus_value->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+		bonus_value->enableOuterStroke(ccBLACK, 1, 127, true);
+		bonus_value->setPosition(ccpFromSize(score_bonus_back->getContentSize()/2.f) + ccp(2,-4));
+		score_bonus_back->addChild(bonus_value);
+	}
+	
 	string start_total_left_content;
 	if(is_calc)
 		start_total_left_content = "0";
@@ -1571,6 +1625,60 @@ void EndlessModeResult::startCalcAnimation()
 																															  
 																															  gold_calc_func([=]()
 																																			 {
+																																				 if(gift_func)
+																																				{
+																																					gift_func([=]()
+																																							  {
+																																								  left_table->setTouchEnabled(true);
+																																								  right_table->setTouchEnabled(true);
+																																								  
+																																								  left_table->CCScrollView::setDelegate(this);
+																																								  right_table->CCScrollView::setDelegate(this);
+																																								  
+																																								  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																								  {
+																																									  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																									  t_suction_layer->touch_began_func = [=]()
+																																									  {
+																																										  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																							   {
+																																																								   KS::setOpacity(result_stamp, 255-t*155);
+																																																							   }, [=](float t)
+																																																							   {
+																																																								   KS::setOpacity(result_stamp, 100);
+																																																							   }));
+																																										  t_suction_layer->removeFromParent();
+																																									  };
+																																									  t_suction_layer->is_on_touch_began_func = true;
+																																									  addChild(t_suction_layer);
+																																									  t_suction_layer->setTouchEnabled(true);
+																																								  }
+																																								  else
+																																								  {
+																																									  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																						   {
+																																																							   KS::setOpacity(result_stamp, 255-t*155);
+																																																						   }, [=](float t)
+																																																						   {
+																																																							   KS::setOpacity(result_stamp, 100);
+																																																						   }));
+																																								  }
+																																								  
+																																								  
+																																								  is_menu_enable = true;
+																																								  if(left_total_score.getV() <= right_total_score.getV())
+																																								  {
+																																									  stop_button->setVisible(true);
+																																								  }
+																																								  else
+																																								  {
+																																									  stop_button->setVisible(true);
+																																									  next_button->setVisible(true);
+																																								  }
+																																							  });
+																																				}
+																																				 else
+																																				{
 																																				 left_table->setTouchEnabled(true);
 																																				 right_table->setTouchEnabled(true);
 																																				 
@@ -1617,6 +1725,7 @@ void EndlessModeResult::startCalcAnimation()
 																																					 stop_button->setVisible(true);
 																																					 next_button->setVisible(true);
 																																				 }
+																																				}
 																																			 });
 																														  }));
 																			   }
@@ -1642,7 +1751,60 @@ void EndlessModeResult::startCalcAnimation()
 																															  
 																															  gold_calc_func([=]()
 																																			 {
-																																				 left_table->setTouchEnabled(true);
+																																				 if(gift_func)
+																																				{
+																																					gift_func([=]()
+																																							  {
+																																								  left_table->setTouchEnabled(true);
+																																								  right_table->setTouchEnabled(true);
+																																								  
+																																								  left_table->CCScrollView::setDelegate(this);
+																																								  right_table->CCScrollView::setDelegate(this);
+																																								  
+																																								  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+																																								  {
+																																									  TouchSuctionLayer* t_suction_layer = TouchSuctionLayer::create(touch_priority-1);
+																																									  t_suction_layer->touch_began_func = [=]()
+																																									  {
+																																										  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																							   {
+																																																								   KS::setOpacity(result_stamp, 255-t*155);
+																																																							   }, [=](float t)
+																																																							   {
+																																																								   KS::setOpacity(result_stamp, 100);
+																																																							   }));
+																																										  t_suction_layer->removeFromParent();
+																																									  };
+																																									  t_suction_layer->is_on_touch_began_func = true;
+																																									  addChild(t_suction_layer);
+																																									  t_suction_layer->setTouchEnabled(true);
+																																								  }
+																																								  else
+																																								  {
+																																									  result_stamp->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.5f, [=](float t)
+																																																						   {
+																																																							   KS::setOpacity(result_stamp, 255-t*155);
+																																																						   }, [=](float t)
+																																																						   {
+																																																							   KS::setOpacity(result_stamp, 100);
+																																																						   }));
+																																								  }
+																																								  
+																																								  is_menu_enable = true;
+																																								  if(left_total_score.getV() <= right_total_score.getV())
+																																								  {
+																																									  stop_button->setVisible(true);
+																																								  }
+																																								  else
+																																								  {
+																																									  stop_button->setVisible(true);
+																																									  next_button->setVisible(true);
+																																								  }
+																																							  });
+																																				}
+																																				 else
+																																				{
+																																					left_table->setTouchEnabled(true);
 																																				 right_table->setTouchEnabled(true);
 																																				 
 																																				 left_table->CCScrollView::setDelegate(this);
@@ -1687,6 +1849,7 @@ void EndlessModeResult::startCalcAnimation()
 																																					 stop_button->setVisible(true);
 																																					 next_button->setVisible(true);
 																																				 }
+																																				}
 																																			 });
 																														  }));
 																			   }
