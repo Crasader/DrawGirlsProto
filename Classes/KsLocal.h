@@ -1201,7 +1201,8 @@ enum class LK
 	kMyLocalKey_characterMarquee2,
 	kMyLocalKey_characterMarquee3,
 	kMyLocalKey_characterMarquee4,
-	kMyLocalKey_cardNumber
+	kMyLocalKey_cardNumber,
+	kMyLocalKey_characterBonus
 };
 class KsLocal
 {
