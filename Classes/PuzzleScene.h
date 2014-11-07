@@ -57,7 +57,7 @@ public:
 	HeartTime* heart_time;
 	CCNode* tutorial_node;
 	
-	void showShopPopup(ShopCode t_code);
+	CCNode* showShopPopup(ShopCode t_code);
 	
 	virtual ~PuzzleScene()
 	{

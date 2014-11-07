@@ -1109,13 +1109,19 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 		{
+			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+			{
+				ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
+				t_shop->setHideFinalAction(target_final, delegate_final);
+			}
+			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+			{
+				ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
+				t_shop->setHideFinalAction(target_final, delegate_final);
+			}
 			target_final = NULL;
 			delegate_final = NULL;
 			hidePopup();
-			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
-			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 		}, [=]()
 															{
 																is_menu_enable = true;
@@ -1231,13 +1237,19 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 																							 {
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
 																								 target_final = NULL;
 																								 delegate_final = NULL;
 																								 hidePopup();
-																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
-																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 																							 }, [=]()
 																							 {
 																								 is_menu_enable = true;
@@ -1310,13 +1322,19 @@ void ManyGachaPopup::resultNormalRefreshExchange(Json::Value result_data)
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 																							 {
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
 																								 target_final = NULL;
 																								 delegate_final = NULL;
 																								 hidePopup();
-																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
-																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 																							 }, [=]()
 																							 {
 																								 is_menu_enable = true;
@@ -2084,13 +2102,19 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 															{
+																if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																{
+																	ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																	t_shop->setHideFinalAction(target_final, delegate_final);
+																}
+																else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																{
+																	ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																	t_shop->setHideFinalAction(target_final, delegate_final);
+																}
 																target_final = NULL;
 																delegate_final = NULL;
 																hidePopup();
-																if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-																	((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
-																else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-																	((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 															}, [=]()
 															{
 																is_menu_enable = true;
@@ -2206,13 +2230,19 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 										 
 										 addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 																							 {
+																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
+																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+																								 {
+																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 t_shop->setHideFinalAction(target_final, delegate_final);
+																								 }
 																								 target_final = NULL;
 																								 delegate_final = NULL;
 																								 hidePopup();
-																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-																									 ((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
-																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-																									 ((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 																							 }, [=]()
 																							 {
 																								 is_menu_enable = true;
