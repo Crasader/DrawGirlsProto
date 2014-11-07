@@ -3502,7 +3502,7 @@ void MainFlowScene::setBottom()
 	{
 		if(mySGD->getUserdataEndlessIngWeek() != mySGD->recent_week_no.getV())
 		{
-			n_endless->runAction(CCRepeatForever::create(CCSequence::create(CCShow::create(), CCDelayTime::create(0.3f), CCHide::create(), CCDelayTime::create(0.3f), NULL)));
+			n_endless->runAction(CCRepeatForever::create(CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL)));
 		}
 		else
 		{

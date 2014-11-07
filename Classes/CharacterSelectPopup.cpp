@@ -27,6 +27,8 @@
 #include "StoneMissile.h"
 #include "CharacterDetailPopup.h"
 #include "CCMenuLambda.h"
+#include "StoryLayer.h"
+#include "TypingBox.h"
 #include "ManyGachaPopup.h"
 
 enum CharacterSelectPopup_Zorder{
@@ -253,6 +255,15 @@ bool CharacterSelectPopup::init()
 							   {
 								   is_menu_enable = true;
 							   });
+	
+	
+	
+	
+	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_character))
+	{
+		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_character, true);
+		StoryLayer::startStory(this, "menu_character");
+	}
 	
 	return true;
 }

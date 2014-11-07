@@ -474,6 +474,16 @@ public:
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial36),kCCTextAlignmentRight,kObjTypeText);
 		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial37),kCCTextAlignmentRight,kObjTypeText);
 		
+		//캐릭터
+		beginScene("menu_character");
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial40),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial41),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial42),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial43),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial44),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_asuka_1.png",getLocal(LK::kMyLocalKey_kindTutorial45),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial46),kCCTextAlignmentRight,kObjTypeText);
+		
 		//신발아이템
 		beginScene("item_9");
 		//addSpot("itemPannel","rect",1.f,kObjTypeNone);
