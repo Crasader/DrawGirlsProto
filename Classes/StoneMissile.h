@@ -1868,7 +1868,7 @@ public:
 		addChild(m_mine);
 //		goalPosition = goalPosition + ccp(10, 0);
 		float runRad = atan2f(goalPosition.y - initPosition.y, goalPosition.x + 10 - initPosition.x);
-		m_mine->setRotation(-rad2Deg(runRad));
+		m_mine->setRotation(-rad2Deg(runRad) - 90);
 		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
 																				 [=](CCPoint t){
 //																					 m_currentRad += M_PI / 180 * 2.f;
