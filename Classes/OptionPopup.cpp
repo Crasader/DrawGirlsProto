@@ -136,8 +136,6 @@ bool OptionPopup::init()
 //	});
 //	addChild(terms, 10000);
 	
-	
-	
 //	KSLabelTTF* ttt= KSLabelTTF::create("대한민국 독립 만세 \n크크크크크 만세", mySGD->getFont().c_str(),
 //																			14.f, CCSizeMake(100, 300), CCTextAlignment::kCCTextAlignmentLeft);
 //	addChild(ttt, 10000);
@@ -304,6 +302,235 @@ bool OptionPopup::init()
 	main_case = CCSprite::create("mainpopup2_back.png");
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kOP_Z_back);
+	
+	
+//	function<void()> ani_func = [=]()
+//	{
+//		{
+//			CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//			CCSprite* t_gold = CCSprite::create("icon_g.png");
+//			t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//			t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//			main_case->addChild(t_gold, 9999);
+//			
+//			addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.5f, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//													 }, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//														 t_gold->removeFromParent();
+//													 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.05f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.45f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.1f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.4f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		{
+//			CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//			CCSprite* t_gold = CCSprite::create("icon_g.png");
+//			t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//			t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//			main_case->addChild(t_gold, 9999);
+//			
+//			addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.45f, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//													 }, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//														 t_gold->removeFromParent();
+//													 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.05f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.4f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.1f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.35f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		{
+//			CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//			CCSprite* t_gold = CCSprite::create("icon_g.png");
+//			t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//			t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//			main_case->addChild(t_gold, 9999);
+//			
+//			addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.55f, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//													 }, [=](CCPoint t_p)
+//													 {
+//														 t_gold->setPosition(t_p);
+//														 t_gold->removeFromParent();
+//													 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.05f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.5f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		{
+//			addChild(KSTimer::create(0.1f, [=]()
+//									 {
+//										 CCPoint rand_position = ccp(rand()%7-3, rand()%7-3);
+//										 CCSprite* t_gold = CCSprite::create("icon_g.png");
+//										 t_gold->setScale(0.7f + (rand()%31 - 15)/100.f);
+//										 t_gold->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position);
+//										 main_case->addChild(t_gold, 9999);
+//										 
+//										 addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32) + rand_position, ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32) + rand_position, 0.45f, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																				  }, [=](CCPoint t_p)
+//																				  {
+//																					  t_gold->setPosition(t_p);
+//																					  t_gold->removeFromParent();
+//																				  }));
+//									 }));
+//		}
+//		
+//		CCTexture2D* t_texture = CCTextureCache::sharedTextureCache()->addImage("fever_coin_total.png");
+//		CCSprite* t_coin = CCSprite::createWithTexture(t_texture, CCRectMake(0, 0, 30, 30));
+//		t_coin->setScale(0.3f);
+//		CCAnimation* t_animation = CCAnimation::create();
+//		t_animation->setDelayPerUnit(0.1f);
+//		int add_count = 0;
+//		for(int i=0;add_count < 6;i=(i+1)%6)
+//		{
+//			add_count++;
+//			t_animation->addSpriteFrameWithTexture(t_texture, CCRectMake(i*30, 0, 30, 30));
+//		}
+//		CCAnimate* t_animate = CCAnimate::create(t_animation);
+//		CCRepeatForever* t_repeat = CCRepeatForever::create(t_animate);
+//		t_coin->runAction(t_repeat);
+//		
+//		t_coin->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32));
+//		main_case->addChild(t_coin, 9999);
+//		
+//		t_coin->addChild(KSGradualValue<float>::create(0.3f, 1.f, 0.2f, [=](float t_f)
+//											   {
+//												   t_coin->setScale(t_f);
+//											   }, [=](float t_f)
+//											   {
+//												   t_coin->setScale(t_f);
+//												   t_coin->addChild(KSTimer::create(0.1f, [=]()
+//																					{
+//																						t_coin->addChild(KSGradualValue<float>::create(1.f, 0.3f, 0.2f, [=](float t_f)
+//																																	   {
+//																																		   t_coin->setScale(t_f);
+//																																	   }, [=](float t_f)
+//																																	   {
+//																																		   t_coin->setScale(t_f);
+//																																	   }));
+//																					}));
+//											   }));
+//		
+//		addChild(KSGradualValue<CCPoint>::create(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-105,-32), ccpFromSize(main_case->getContentSize()/2.f) + ccp(105,-32), 0.5f, [=](CCPoint t_p)
+//												 {
+//													 t_coin->setPosition(t_p);
+//												 }, [=](CCPoint t_p)
+//												 {
+//													 t_coin->setPosition(t_p);
+//													 t_coin->removeFromParent();
+//												 }));
+//
+//		
+//	};
+//	
+//	ani_func();
+//	for(int i=1;i<9999;i++)
+//	{
+//		addChild(KSTimer::create(i, ani_func));
+//	}
+	
 	
 	CCSprite* title_back = CCSprite::create("title_tab.png");
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));

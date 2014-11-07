@@ -163,6 +163,13 @@ void GameData::communication(string funcName, IntPoint t_p)
 	return;
 }
 
+void GameData::communication(string funcName, IntPoint t_p, float t_f)
+{
+	CCAssert(V_IpF.find(funcName) != V_IpF.end(), funcName.c_str());
+	V_IpF[funcName](t_p, t_f);
+	return;
+}
+
 void GameData::communication(string funcName, IntRect t_r)
 {
 	CCAssert(V_Ir.find(funcName) != V_Ir.end(), funcName.c_str());

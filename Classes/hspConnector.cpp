@@ -51,7 +51,9 @@ USING_NS_CC;
 
 #include "DataStorageHub.h"
 #include "StarGoldData.h"
-#include <regex>
+#include "rapidxml/rapidxml.hpp"
+#include "rapidxml/rapidxml_utils.hpp"
+using namespace rapidxml;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 extern "C"{
 	void Java_com_litqoo_lib_hspConnector_SetupOnAndroid(JNIEnv *env, jobject thiz,int hspGameNo, jstring hspGameID, jstring hspGameVersion)
@@ -488,18 +490,42 @@ string hspConnector::getMarketCode(){
 
 string hspConnector::getStoreID()
 {
-	return "TS";
+//	return "TS";
 	unsigned long ps;
+//	CCLOG("%s", CCFileUtils::sharedFileUtils()->fullPathForFilename("HSPConfiguration__.xml").c_str());
 	unsigned char* tt = CCFileUtils::sharedFileUtils()->getFileData("HSPConfiguration.xml", "rt", &ps);
 	std::string xml((char*)tt, ps);
 	 // key="HSP_PAYMENT_STORE_ID" value="TS"
-	std::regex rgx("key=\"HSP_PAYMENT_STORE_ID\" value=\"(\\w+)\"");
-	std::smatch match;
+	xml_document<> xmlDoc;
+	xmlDoc.parse<0>( (char*)xml.c_str() );
 	
-	if (std::regex_search(xml, match, rgx))
-		return match[1];
-	else
-		return "";
+	// root 포인터
+	xml_node<  >* root = xmlDoc.first_node();
+	xml_node<  >* Item;
+	xml_node< >* SubItem;
+	char* Name;
+	char* Value;
+	xml_attribute< >* Attr;
+	// root 하위 Node 탐색
+	Item = root->first_node();
+	for(xml_node<>* node = Item; node; node = node->next_sibling())
+	{
+		Attr = node->first_attribute();
+		//			CCLog("%s", Attr->name());
+		Name = Attr->value();
+		if(Name == std::string("HSP_PAYMENT_STORE_ID"))
+		{
+			Attr = Attr->next_attribute();
+			Name  = Attr->name();	// Attribute 의 이름
+			Value = Attr->value();	// Attribute 의 값
+			return Value;
+		}
+	}
+
+	return "";
+	
+	
+	
 }
 
 string hspConnector::getTimeZone(){

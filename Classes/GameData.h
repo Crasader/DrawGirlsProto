@@ -92,6 +92,7 @@ public:
 	std::map<std::string, std::function<void(float, bool)>> V_FB;
 //	std::map<std::string, std::function<bool(KSCumberBase*, float, float)>> B_CumberBaseFF;
 	std::map<std::string, std::function<void(IntPoint)>> V_Ip;
+	std::map<std::string, std::function<void(IntPoint, float)>> V_IpF;
 	std::map<std::string, std::function<void(IntRect)>> V_Ir;
 	std::map<std::string, std::function<void(CCObject*)>> V_CCO;
 	std::map<std::string, std::function<void(CCPoint)>> V_CCP;
@@ -233,6 +234,7 @@ public:
 	void communication(string funcName, CCObject* t_obj);
 	void communication(string funcName, IntPointVector t_addPath);
 	void communication(string funcName, IntPoint t_p);
+	void communication(string funcName, IntPoint t_p, float t_f);
 	void communication(string funcName, IntRect t_r);
 	void communication(string funcName, IntPoint t_p, int t_i1, int t_i2, int t_i3);
 	void communication(string funcName, IntPoint t_p, CCObject* t_t, SEL_CallFuncI t_d);
