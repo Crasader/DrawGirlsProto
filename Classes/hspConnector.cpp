@@ -512,7 +512,8 @@ string hspConnector::getStoreID()
 	{
 		Attr = node->first_attribute();
 		//			CCLog("%s", Attr->name());
-		if(Attr->name() == std::string("HSP_PAYMENT_STORE_ID"))
+		Name = Attr->value();
+		if(Name == std::string("HSP_PAYMENT_STORE_ID"))
 		{
 			Attr = Attr->next_attribute();
 			Name  = Attr->name();	// Attribute 의 이름
