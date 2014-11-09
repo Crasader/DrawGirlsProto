@@ -454,7 +454,7 @@ void EventShopPopup::createCheckBuyPopup(function<void()> buy_action)
 //	
 	
 	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realBuy),[=](){
 		
 		buy_action();
 		
