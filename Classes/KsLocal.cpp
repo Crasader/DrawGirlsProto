@@ -1156,7 +1156,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_hellTitleTime] = "타임";
 	obj[LK::kMyLocalKey_hellContentTime] = "%s sec";
 	obj[LK::kMyLocalKey_hellTakeCharacter] = "획득!";
-	obj[LK::kMyLocalKey_failHellMode] = "<font newline=16>이런.. 조금 더 힘내요!</font><font color=961>클리어시 캐릭터</font><font newline=16>를</font><font>획득할 수 있어요!</font>";
+	obj[LK::kMyLocalKey_failHellMode] = "<font newline=16>조금 더 힘내요!</font>";
 	obj[LK::kMyLocalKey_needHaveCharacterCard] = "<font strokecolor=000 strokesize=0.5 strokeopacity=60 newline=15>캐릭터카드를</font><font strokecolor=000 strokesize=0.5 strokeopacity=60>획득하세요!</font>";
 	obj[LK::kMyLocalKey_doNotOpenTodoay] = "오늘 하루 그만 보기";
 	obj[LK::kMyInfo]="내정보";
