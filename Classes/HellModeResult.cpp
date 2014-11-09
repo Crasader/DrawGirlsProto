@@ -24,6 +24,7 @@
 #include "StyledLabelTTF.h"
 #include "TouchSuctionLayer.h"
 #include "LabelTTFMarquee.h"
+#include "CharacterExpUp.h"
 
 typedef enum tMenuTagHellModeResult{
 	kMT_HMR_ok = 1,
@@ -120,6 +121,8 @@ bool HellModeResult::init()
 			character_no = 1;
 		
 		bool is_found = false;
+		CharacterHistory found_history;
+		int found_index;
 		int history_size = mySGD->getCharacterHistorySize();
 		for(int i=0;!is_found && i<history_size;i++)
 		{
@@ -127,7 +130,49 @@ bool HellModeResult::init()
 			if(t_history.characterNo.getV() == character_no)
 			{
 				is_found = true;
+				found_history = t_history;
+				found_index = i;
 			}
+		}
+		
+		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+		bool is_change_history = false;
+		
+		if(!mySGD->isClearPiece(mySD->getSilType()))
+		{
+			t_history.is_clear[0] = true;
+			t_history.clear_count = t_history.try_count.getV();
+			
+			is_change_history = true;
+		}
+		
+		if(is_change_history)
+		{
+			if(is_found)
+			{
+				CharacterHistory keep_history = found_history;
+				CharacterHistory t_history = found_history;
+				t_history.characterExp = mySGD->getGachaCharExp();
+				send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_history, [=](Json::Value result_data)
+																				  {
+																					  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																					  {
+																						  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																						  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getCharacterHistory(found_index), ccp(240,160+160*screen_scale_y));
+																						  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
+																					  }
+																				  }));
+			}
+			
+			send_command_list.push_back(mySGD->getUpdatePieceHistoryParam(t_history, [=](Json::Value result_data)
+																		   {
+																			   TRACE();
+																			   if(result_data["result"]["code"] == GDSUCCESS)
+																			   {
+																				   TRACE();
+																			   }
+																			   TRACE();
+																		   }));
 		}
 		
 		if(!is_found)
