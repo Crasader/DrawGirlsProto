@@ -297,6 +297,26 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 													t_popup->setShopCode(kSC_p1);
 													t_popup->setCloseFunc([=]()
 																		  {
+																			  if(take_count)
+																			  {
+																				  take_count->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)));
+																				  float wide_value = take_count->getContentSize().width - 40;
+																				  if(wide_value < 0)
+																					  wide_value = 0;
+																				  take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+																				  take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+																			  }
+																			  
+																			  if(take_count2)
+																			  {
+																				  take_count2->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)));
+																				  float wide_value = take_count2->getContentSize().width - 40;
+																				  if(wide_value < 0)
+																					  wide_value = 0;
+																				  take_back2->setContentSize(CCSizeMake(60+wide_value, 20));
+																				  take_count2->setPosition(ccpFromSize(take_back2->getContentSize()/2.f));
+																			  }
+																			  
 																			  is_menu_enable = true;
 																			  schedule(schedule_selector(ContinueContent::countingSchedule));
 																		  });
@@ -382,6 +402,26 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setShopCode(kSC_gold);
 				t_popup->setCloseFunc([=]()
 									  {
+										  if(take_count)
+										  {
+											  take_count->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)));
+											  float wide_value = take_count->getContentSize().width - 40;
+											  if(wide_value < 0)
+												  wide_value = 0;
+											  take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+											  take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+										  }
+										  
+										  if(take_count2)
+										  {
+											  take_count2->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)));
+											  float wide_value = take_count2->getContentSize().width - 40;
+											  if(wide_value < 0)
+												  wide_value = 0;
+											  take_back2->setContentSize(CCSizeMake(60+wide_value, 20));
+											  take_count2->setPosition(ccpFromSize(take_back2->getContentSize()/2.f));
+										  }
+										  
 										  is_menu_enable = true;
 										  schedule(schedule_selector(ContinueContent::countingSchedule));
 									  });
@@ -558,10 +598,30 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 				t_popup->setScale(myDSH->screen_convert_rate);
 				t_popup->setShopCode(kSC_ruby);
 				t_popup->setCloseFunc([=]()
-									{
-										is_menu_enable = true;
-										schedule(schedule_selector(ContinueContent::countingSchedule));
-									});
+									  {
+										  if(take_count)
+										  {
+											  take_count->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)));
+											  float wide_value = take_count->getContentSize().width - 40;
+											  if(wide_value < 0)
+												  wide_value = 0;
+											  take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+											  take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+										  }
+										  
+										  if(take_count2)
+										  {
+											  take_count2->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)));
+											  float wide_value = take_count2->getContentSize().width - 40;
+											  if(wide_value < 0)
+												  wide_value = 0;
+											  take_back2->setContentSize(CCSizeMake(60+wide_value, 20));
+											  take_count2->setPosition(ccpFromSize(take_back2->getContentSize()/2.f));
+										  }
+										  
+										  is_menu_enable = true;
+										  schedule(schedule_selector(ContinueContent::countingSchedule));
+									  });
 				t_popup->is_continue = true;
 				t_popup->continue_end = [=]()
 				{
@@ -733,6 +793,9 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	price_node->setPosition(ccp(0, -10));
 	
 	
+	take_count = NULL;
+	take_count2 = NULL;
+	
 //	CCScale9Sprite* price_back = CCScale9Sprite::create("gray_ellipse.png", CCRectMake(0,0,82,26), CCRectMake(40,12,2,2));
 //	price_back->setContentSize(CCSizeMake(82, 26));
 //	price_back->setPosition(ccp(c_label->getContentSize().width + price_back->getContentSize().width/2.f + 5, c_label->getContentSize().height/2.f));
@@ -782,14 +845,14 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 	{
 		// 버튼 두개(부활석, 젬 소모)
 		
-        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
+        take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
         take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         float wide_value = take_count->getContentSize().width - 40;
         if(wide_value < 0)
             wide_value = 0;
         
-        CCScale9Sprite* take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+        take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
         take_back->setContentSize(CCSizeMake(60+wide_value, 20));
         take_back->setAnchorPoint(ccp(1.f,0.5f));
         take_back->setPosition(ccp(58,31));
@@ -813,14 +876,14 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		c_label2->setPosition(ccp(0,15));
 		r_label2->addChild(c_label2);
 		
-        KSLabelTTF* take_count2 = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
+        take_count2 = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
         take_count2->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         wide_value = take_count2->getContentSize().width - 40;
         if(wide_value < 0)
             wide_value = 0;
         
-        CCScale9Sprite* take_back2 = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+        take_back2 = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
         take_back2->setContentSize(CCSizeMake(60+wide_value, 20));
         take_back2->setAnchorPoint(ccp(1.f,0.5f));
         take_back2->setPosition(ccp(58,31));
@@ -914,14 +977,14 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 //	}
 	else
 	{
-        KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
+        take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)), mySGD->getFont().c_str(), 11);
         take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
         
         float wide_value = take_count->getContentSize().width - 40;
         if(wide_value < 0)
             wide_value = 0;
         
-        CCScale9Sprite* take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+        take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
         take_back->setContentSize(CCSizeMake(60+wide_value, 20));
         take_back->setAnchorPoint(ccp(1.f,0.5f));
         take_back->setPosition(ccp(58,31));

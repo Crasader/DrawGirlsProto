@@ -266,7 +266,13 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 		next_special_label->setAnchorPoint(ccp(0.f,1.f));
 		special_node->setTextureRect(CCRectMake(0, 0, MAX(special_label->getContentSize().width, next_special_label->getContentSize().width), special_label->getContentSize().height + next_special_label->getContentSize().height));
 		special_label->setPosition(ccp(0,special_node->getContentSize().height));
-		next_special_label->setPosition(ccp(0,next_special_label->getContentSize().height));
+		
+		KSLabelTTF* next_level = KSLabelTTF::create(getLocal(LK::kMyLocalKey_nextLevel), mySGD->getFont().c_str(), 10);
+		next_level->setColor(ccGRAY);
+		next_level->setAnchorPoint(ccp(0,0.5f));
+		next_level->setPosition(ccp(0,next_special_label->getContentSize().height/2.f));
+		next_special_label->setPosition(ccp(next_level->getContentSize().width,next_special_label->getContentSize().height));
+		special_node->addChild(next_level);
 		special_node->addChild(next_special_label);
 	}
 	

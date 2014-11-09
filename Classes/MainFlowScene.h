@@ -89,7 +89,7 @@ public:
 	void showHellResult();
 	void showHellOpening();
 	
-    void showShopPopup(int t_code);
+    CCNode* showShopPopup(int t_code);
 	void showGachaPopup();
     
     virtual void onEnterTransitionDidFinish();

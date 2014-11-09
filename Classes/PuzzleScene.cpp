@@ -2375,7 +2375,7 @@ void PuzzleScene::onEnterTransitionDidFinish()
     TRACE();
 }
 
-void PuzzleScene::showShopPopup(ShopCode t_code)
+CCNode* PuzzleScene::showShopPopup(ShopCode t_code)
 {
 	ShopPopup* t_shop = ShopPopup::create();
 	t_shop->setHideFinalAction(this, callfunc_selector(PuzzleScene::popupClose));
@@ -2383,6 +2383,8 @@ void PuzzleScene::showShopPopup(ShopCode t_code)
 	t_shop->setShopCode(t_code);
 	t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
 	addChild(t_shop, kPuzzleZorder_popup+100);
+	
+	return t_shop;
 }
 
 void PuzzleScene::startAutoTurnPiece()
