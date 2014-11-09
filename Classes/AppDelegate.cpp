@@ -380,7 +380,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
 	
-	GraphDog::get()->setCommandRetryFunc([](std::vector<CommandParam> vcp){
+	GraphDog::get()->setCommandRetryFunc([](std::vector<CommandParam> vcp, int retry){
+		if(retry==0){
+			if(hspConnector::get()->checkInspection()>0){
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			}
+			return;
+		}
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
 			GraphDog::get()->command(vcp);
 		});
