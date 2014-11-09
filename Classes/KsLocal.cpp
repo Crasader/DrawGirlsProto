@@ -1246,6 +1246,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial44] = "스피드나 파워, 점수보너스 같은 기본능력이 좋을뿐만 아니라 특정미션을 완화시켜준다던가 몬스터의 특정공격패턴을 쉽게만들어주는 기능도 있으니 공략엔 필수라구!";
 	obj[LK::kMyLocalKey_kindTutorial45] = "오옷! 저도 가져야 겠어요!! 어디서 구할수있죠?";
 	obj[LK::kMyLocalKey_kindTutorial46] = "캐릭터는 헬모드나 뽑기를 통해 얻을수있으니 명심하라구~!";
+	obj[LK::kMyLocalKey_nextLevel] = "(다음레벨)";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

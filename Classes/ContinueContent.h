@@ -86,6 +86,11 @@ private:
 	CCSprite* price_type2;
 	CCLabelTTF* price_label2;
 	
+	KSLabelTTF* take_count;
+	KSLabelTTF* take_count2;
+	CCScale9Sprite* take_back;
+	CCScale9Sprite* take_back2;
+	
 //	CCControlButton* giveup_button;
 	CCControlButton* continue_button;
 	CCControlButton* continue_button2;

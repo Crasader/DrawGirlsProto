@@ -1455,7 +1455,7 @@ bool ShopPopup::init()
 	tab_menu->setPosition(CCPointZero);
 	main_case->addChild(tab_menu, kSP_Z_content);
 	
-	tab_menu->setTouchPriority(touch_priority-4);
+	tab_menu->setTouchPriority(touch_priority-5);
 	
 	CCSprite* n_ruby_img = CCSprite::create("shoptap_down.png");
 	KSLabelTTF* n_ruby_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rubyShop), mySGD->getFont().c_str(), 12.5f);
