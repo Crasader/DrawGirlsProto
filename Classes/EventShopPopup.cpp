@@ -264,7 +264,7 @@ void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
 								{
 									loading_layer->removeFromParent();
 									
-									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 									
 									is_menu_enable = true;
 								}

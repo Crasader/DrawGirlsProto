@@ -146,6 +146,9 @@ bool EndlessModeResult::init()
 	
 	gold_calc_func = nullptr;
 	
+	left_gold_color = ccWHITE;
+	right_gold_color = ccWHITE;
+	
 	if(mySGD->endless_my_victory_on.getV())
 	{
 		is_calc = true;
@@ -180,6 +183,9 @@ bool EndlessModeResult::init()
 //				
 //				ani_func();
 				
+				left_gold_color = ccc3(255, 255, 20);
+				right_gold_color = ccc3(255, 20, 20);
+				
 				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
 				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
 				
@@ -189,6 +195,7 @@ bool EndlessModeResult::init()
 											}, [=](int t_i)
 											{
 												left_gold_content->setString(ccsf("%d", t_i));
+												left_content_list[7] = KS::insert_separator(t_after_gold);
 												after_func();
 											}));
 				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
@@ -198,6 +205,7 @@ bool EndlessModeResult::init()
 													 }, [=](int t_i)
 													 {
 														 right_gold_content->setString(ccsf("%d", t_i));
+														 right_content_list[7] = KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt()/2);
 													 }));
 			};
 		}
@@ -262,6 +270,9 @@ bool EndlessModeResult::init()
 //				
 //				ani_func();
 				
+				right_gold_color = ccc3(255, 255, 20);
+				left_gold_color = ccc3(255, 20, 20);
+				
 				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
 				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
 				
@@ -271,6 +282,7 @@ bool EndlessModeResult::init()
 													 }, [=](int t_i)
 													 {
 														 left_gold_content->setString(ccsf("%d", t_i));
+														 left_content_list[7] = KS::insert_separator(t_after_gold);
 														 after_func();
 													 }));
 				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
@@ -280,6 +292,7 @@ bool EndlessModeResult::init()
 													 }, [=](int t_i)
 													 {
 														 right_gold_content->setString(ccsf("%d", t_i));
+														 right_content_list[7] = KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2);
 													 }));
 			};
 		}
@@ -712,9 +725,15 @@ CCTableViewCell* EndlessModeResult::tableCellAtIndex(CCTableView *table, unsigne
 	if(idx == 7)
 	{
 		if(table == left_table)
+		{
 			left_gold_content = content_label;
+			content_label->setColor(left_gold_color);
+		}
 		else if(table == right_table)
+		{
 			right_gold_content = content_label;
+			content_label->setColor(right_gold_color);
+		}
 	}
 	
 	return cell;

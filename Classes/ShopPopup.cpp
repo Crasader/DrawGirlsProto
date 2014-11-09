@@ -721,7 +721,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										is_menu_enable = true;
 										mySGD->clearChangeUserdata();
 										mySGD->clearChangeGoods();
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 									}
 								});
 								
@@ -794,7 +794,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 									{
 										loading_layer->removeFromParent();
 										
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 										
 										is_menu_enable = true;
 									}
@@ -1004,7 +1004,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										if(NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b))
 											mySGD->clearChangeUserdata();
 										mySGD->clearChangeGoods();
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 									}
 								});
 								
@@ -1077,7 +1077,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 									{
 										loading_layer->removeFromParent();
 										
-										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 										
 										is_menu_enable = true;
 									}
@@ -2155,7 +2155,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 										{
 											loading_layer->removeFromParent();
 											
-											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 											
 											is_menu_enable = true;
 										}

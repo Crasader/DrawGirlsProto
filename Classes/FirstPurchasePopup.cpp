@@ -309,7 +309,7 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 			CCLOG("FirstPurchase purchaseProduct fail");
 			inapp_loading->removeFromParent();
 //			mySGD->clearChangeUserdata();
-			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
+//			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
 			is_menu_enable = true;
 		}
 	});
