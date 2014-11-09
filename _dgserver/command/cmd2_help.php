@@ -1134,6 +1134,7 @@ public static function help_updatecardhistory(){
 	$r["param"][] = array("name"=>"isMorphing","type"=>"bool","description"=>"모핑가능함?");
 	$r["param"][] = array("name"=>"addCount","type"=>"bool","description"=>"더할갯수");
 	$r["param"][] = array("name"=>"level","type"=>"bool","description"=>"레벨");
+	$r["param"][] = array("name"=>"includeCardInfo","type"=>"bool","description"=>"true 일 경우 해당카드의 정보를 돌려줍니다.");
 	
 	
 	$r["result"][]=ResultState::toArray(1,"success");
@@ -1448,11 +1449,28 @@ public static function help_updatecharacterhistory(){
 
 	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"유저아이디(필수)");
 	$r["param"][] = array("name"=>"characterNo","type"=>"int","description"=>"캐릭터번호");
-	$r["param"][] = array("name"=>"level","type"=>"int","description"=>"레벨");
+	//$r["param"][] = array("name"=>"level","type"=>"int","description"=>"레벨");
+	//$r["param"][] = array("name"=>"levelup","type"=>"bool","description"=>"true 일경우 level을 1 올림");
+	$r["param"][] = array("name"=>"exp","type"=>"int","description"=>"경험치를 더하고, 레벨업이 됬을경우 레벨업을 시킴");
 	
 	$r["result"][]=ResultState::toArray(1,"success");
 	$r["result"][]=ResultState::toArray(2002,"memberID or characterNo");
 	$r["result"][]=ResultState::toArray(2003,"dont find message");
+	
+	return $r;
+}
+
+
+public static function help_levelup(){
+
+	$r["description"] = "레벨업을 합니다.";
+
+	$r["param"][] = array("name"=>"memberID","type"=>"string or int","description"=>"유저아이디(필수)");
+	$r["param"][] = array("name"=>"usePass","type"=>"bool","description"=>"true일경우 이용권소모 false일경우 골드소모");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(ResultState::GDALREADY,"더이상 레벨업할수없음(maxlevel)");
+	$r["result"][]=ResultState::toArray(2002,"memberID or characterNo");
 	
 	return $r;
 }
@@ -1791,6 +1809,22 @@ public static function help_sendcard(){
 
 	return $r;
 }
+
+public static function help_getgachalist(){
+
+	$r["description"] = "가차목록을 불러옵니다.";
+
+	$r["param"][] = array("name"=>"isPremium","type"=>"bool","description"=>"true일경우 비싼목록");
+	
+	$r["result"][]=ResultState::toArray(1,"success");
+	$r["result"][]=ResultState::toArray(1001,"저장오류");
+	$r["result"][]=ResultState::toArray(2002,"memberID");
+	$r["result"][]=ResultState::toArray(ResultState::GDDONTFIND,"정보를 찾을수없음");
+	$r["result"][]=ResultState::toArray(ResultState::GDEXPIRE,"2장이상 있어야 카드 선물가능");
+	
+	return $r;
+}
+
 
 
 

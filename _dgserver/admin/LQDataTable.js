@@ -257,6 +257,7 @@ var getFieldInfo = function(obj){
 		}catch(e){
 			result["isPrimary"]=false;
 		}
+		
 		try{
 			result["isVirtual"]=(typeof(result["fieldHeader"].attr("virtual"))=="undefined")?false:true;
 		}catch(e){
@@ -685,6 +686,7 @@ var editorFunc_array = function(value,option){
 	for(var j in _value){
 		var nTR = $("<tr>").attr("datarow","").appendTo(eTbody);
 		var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(nTR);
+		$("<td>").appendTo(nTR).append(j);
 		var nTD = $("<td>").attr("datafield","").appendTo(nTR);
 		nTD.append(editorSelector(_option["element"],_value[j]));
 		var nTD2 = $("<td>").appendTo(nTR);
@@ -699,7 +701,7 @@ var editorFunc_array = function(value,option){
 	}
 
 	var eTR = $("<tr>").addClass("addrow").appendTo(eTbody);
-	eTR.append("<td bgcolor=cccccc></td><td colspan=2 align=center><input type='button' value='Add to Array' class='LQJSONArrayEditorAdd btn btn-primary'></td></tr>");
+	eTR.append("<td bgcolor=cccccc></td><td colspan=3 align=center><input type='button' value='Add to Array' class='LQJSONArrayEditorAdd btn btn-primary'></td></tr>");
 
 	//log("-----------end-------------");
 	//_result+="</tbody></table>";
@@ -1381,14 +1383,21 @@ var loadDataTable = function(obj,addMode){
 		    	var data = resultData["data"];
 		    	log("getData "+j2s(resultData));
 				//받아온 data와 표시할정보 비교해서 뿌릴데이터모으기
+
+				var indexNumber = tInfo["table"].attr("lastIndexNumber");
+				if(!indexNumber)indexNumber=0;
+
 				for(var i in data){
 					var rowData = data[i];
 					//rColor = '#'+(0x1000000+(Math.random())*0xffffff).toString(16).substr(1,6);
 					if(i%2==0)bgcolor="eeeeee";
 					else bgcolor="ffffff";
 
-					tInfo["table"].find('tbody[datazone]:last').append(makeDataRow(rowData,obj,bgcolor));
+					indexNumber++;
+					tInfo["table"].find('tbody[datazone]:last').append(makeDataRow(rowData,obj,bgcolor,indexNumber));
 				}
+
+				tInfo["table"].attr("lastIndexNumber",indexNumber);
 				
 				
 				var dbWhere = s2j(tInfo["table"].attr("dbWhere"));
@@ -1414,7 +1423,7 @@ var loadDataTable = function(obj,addMode){
 
 
 
-var makeDataRow = function(rowData,tableObj,bgcolor){
+var makeDataRow = function(rowData,tableObj,bgcolor,indexNumber){
 	var tInfo = gf(tableObj);
 	if(!bgcolor)bgcolor="ffffff";
 	var shi =rowData["shardIndex"];
@@ -1423,6 +1432,7 @@ var makeDataRow = function(rowData,tableObj,bgcolor){
 	var dataTR = $("<tr>").attr("data",j2s(rowData)).addClass("LQDataRow").attr("bgcolor",bgcolor).attr("shardIndex",shi);
 	tInfo["table"].find("thead > tr > th").each(function(index,item){
 		var isVirtual = $(this).attr('virtual');
+		var isRank = $(this).attr('rank');
 		var field = $(this).attr('field');
 		var viewer = $(this).attr('viewer');
 		var viewerOption = $(this).attr('viewerOption');
@@ -1432,11 +1442,17 @@ var makeDataRow = function(rowData,tableObj,bgcolor){
 		//데이터필드
 		if(manage==undefined){
 			//viewer 적용
-			if(isVirtual=="" && rowData){
+
+
+			if(isRank==""){
+				value = indexNumber;
+			}else if(isVirtual=="" && rowData){
 				viewer = s2j(viewer);
 				viewer["rowData"]=rowData;
 				viewer = j2s(viewer);
 			}
+
+			
 			var viewValue = viewerSelector(viewer,value);
 			
 			//primary key 속성 넣어주기
@@ -1649,6 +1665,7 @@ $('body').on('click','.LQJSONArrayEditorAdd',function(){
 	var option = dataTable.attr("editor");
 	var eTR = $("<tr>").attr("datarow","");
 	var cTD = $("<td>").attr("bgcolor","cccccc").attr("width",1).css("min-width",1).appendTo(eTR);
+	$("<td>").appendTo(eTR).append("new");
 	if(option)
 		if(typeof(option)=="string")
 			option = s2j(option);

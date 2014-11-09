@@ -2,12 +2,14 @@
 session_cache_expire(60*60*24);
 session_start();
 
-//error_reporting( E_ALL ^ E_NOTICE );
-//ini_set( 'display_errors',  E_ALL ^ E_NOTICE );
+error_reporting( E_ALL ^ E_NOTICE );
+ini_set( 'display_errors',  E_ALL ^ E_NOTICE );
 
 srand((float)microtime() * 10000000);
 
-include_once("DBManager.php");
+include_once("DBManagerLib/DBManagerLib3.php");
+include_once("DBManager/DBManager1.php");
+
 //include_once("DBManagerForManage.php");
 
 $GAMEID = $_POST["gid"];
@@ -18,7 +20,6 @@ $gid = $GAMEID;
 if($checkdb=="test"){
 	include_once("config_test.php");
 }else{
-	LogManager::addLog("select db ->".$gid);
 	if(!@include_once("config/".$gid.".php")){
 		include_once("config.php");
 	}			

@@ -14,6 +14,7 @@ include "manage_header.php";
 		<th primary title='고유번호' field='no' viewer='{"type":"text"}'>고유번호</th>
 		<th title='국가코드' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelectorOnce"}' >국가코드</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
+		<th title='스토어' field='store' viewer='{"type":"text"}' editor='{"type":"select","element":["google","apple","tstore"]}' >스토어</th>
 		<th title='설명' field='comment' viewer='{"type":"text"}' editor='{"type":"textarea"}' >설명</th>
 		<th title='상품ID' field='id' viewer='{"type":"text"}' editor='{"type":"text"}' >상품ID</th>
 		<th title='표시갯수' field='countName' viewer='{"type":"text"}' editor='{"type":"textarea"}' >표시갯수</th>

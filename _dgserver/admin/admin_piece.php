@@ -9,9 +9,10 @@ while($pData = Monster::getRowByQuery("",null,"name,no")){
 
 $listViewer2=array("type"=>"custom","func"=>"patternSelector","field"=>"pattern","title"=>"패턴");
 while($pData = Pattern::getRowByQuery("",null,"type,name,template")){
-	$listViewer2["element"][] = $pData["type"]."-".$pData["name"];
+	$key = $pData["type"]."-".$pData["name"];
+	$listViewer2["element"][] = $key;
 	$listViewer2["value"][]=$pData["type"];
-	$listViewer2["template"][$pData["type"]]=$pData["template"];
+	$listViewer2["template"][$key]=$pData["template"];
 }
 
 ?>
@@ -42,14 +43,19 @@ var selectedPattern = function(obj,value){
 var patternSelector = function(value,option){
 	var editorObj = editorFunc_select(value,option);
 	editorObj.addClass("patternSelector");
-	$('body').on("change",".patternSelector",function(){
-		var editorOption = s2j($(this).attr("editor"));
-		var temp = editorOption["template"][$(this).val()];
-		var md = {"data":{"template":temp},"index":$(this).val()};
-		selectedPattern($(this),md);
-	});
+
 	return editorObj;
 }
+
+$('body').on("change",".patternSelector",function(){
+	var editorOption = s2j($(this).attr("editor"));
+	var temp = editorOption["template"][$(this).find("option:selected").text()];
+	log("gogogo : "+$(this).find("option:selected").text());
+	var md = {"data":{"template":temp},"index":$(this).val()};
+	log("gogogo : "+j2s(md));
+	selectedPattern($(this),md);
+});
+
 var selectedMonster = function(obj,value){
 	var data = s2j(value["data"]);
 	//var row = obj.parent().parent();
@@ -82,14 +88,40 @@ var pathSelector = function(value,option){
 	return r;
 }
 
+
+$(document).ready(function(){
+
+
+	$('body').on('click','#findUserInfo',function(){
+		
+		var dataview = getDataTable("datatable");
+		var id = $("#findNo").val();
+		var selectType = $('.active[id=findType]').val();
+		dataview.attr("dbWhere",'{"where":"'+id+'"}');
+		loadDataTable(dataview);
+	});
+});
+
+
 </script>
-
 <center>
-<form action=admin_piece.php>
-	<input name="gid" value="<?=$gid?>" type="hidden">
-조건 : <input name='where' size="50" value='<?=$_GET['where']?>'> <input type=submit value="확인">
-</form>
+<input name="gid" value="<?=$gid?>" type="hidden">
+<div class="table-responsive">
+	<table align=center>
+		<tr><td>
+			조건
+		</td><td>
+			<div class="input-group">
+	      		<input type="text" class="form-control" id="findNo" value="" size=100>
+	      		<span class="input-group-btn">
+	        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
+	      		</span>
+      		</div>
+		</td></tr>
+	</table>
+</div>
 
+<br><br>
 </center>
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="Piece" dbWhere='{}' dbLimit="100" name="datatable" border=1 align=center>
 	<thead>

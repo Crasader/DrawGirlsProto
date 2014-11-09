@@ -112,19 +112,21 @@ for($i=0;$i<count($categorys);$i++){
 
 <td>
 </table>
-<table align=center border=1><tr><td>
+<table align=center border=1><tr>
 <?php
 $realDir="../images";
 if($_GET["category"])$realDir.="/".$_GET["category"];
 $i=0;
 foreach (filesInDir ($realDir) as $key => $a_file){ 
 	$i++;
-	echo "<img src='".$a_file ."' width='200' class='selectImage' imgname='".$a_file."'>$a_file" ; 
+	echo "<td><a href=#a class='selectImage' imgname='".$a_file."'>";
+	if($i<100)echo "<img src='".$a_file ."' width='200'>";
+	echo "<br><font size=1>$a_file</font></a></td>" ; 
 	
-	if($i%5==0)echo"<br>";
+	if($i%5==0)echo"</tr><tr>";
 } 
 ?>
-</td></tr></table>
+</tr></table>
 
 
 

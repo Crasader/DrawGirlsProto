@@ -22,6 +22,7 @@ while($pData = Shop::getRowByQuery("",null,"id,priceName,countName,comment")){
 		<th virtual title='진행상태' field='state' viewer='{"type":"text"}' >진행상태</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
 		<th title='국가' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelector"}' >국가</th>
+		<th title='스토어' field='store' viewer='{"type":"text"}' editor='{"type":"select","element":["google","apple","tstore"]}' >스토어</th>
 		<th title='설명' field='comment' viewer='{"type":"text"}' editor='{"type":"textarea"}' >설명</th>
 		<th title='할인대상' field='id' viewer='<?=json_encode($listViewer)?>' editor='<?=json_encode($listViewer)?>'>할인대상</th>
 		<th title='시작일시' field='startDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >시작일시</th>

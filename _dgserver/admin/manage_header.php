@@ -44,9 +44,10 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css">
 		<script src="jquery-ui-timepicker-addon.js"></script>
 		<script src="jquery.form.js"></script>
-		<script src="lib.js" charset="UTF-8"></script>
-		<script src="LQDataTable.js" charset="UTF-8"></script>
-		<script src="LQEditor.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="LQEditor_constant.php"></script>
+		<script type="text/javascript" src="lib.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="LQDataTable.js" charset="UTF-8"></script>
+		<script type="text/javascript" src="LQEditor.js" charset="UTF-8"></script>
 		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 
@@ -56,7 +57,6 @@ $left_menu[]=array("title"=>"","url"=>"");
 		<link rel="stylesheet" href="jqueryupload/css/style.css">
 		<!-- CSS to style the file input field as button and adjust the Bootstrap progress bars -->
 		<link rel="stylesheet" href="jqueryupload/css/jquery.fileupload.css">
-
 	</head>
 <body>
 
@@ -107,7 +107,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 							<ul class="nav">
 								<li><a href=manage_userInfo.php?gid=<?=$gid?>>기본정보조회</a></li>
 								<li><a href=manage_modifyHistory.php?gid=<?=$gid?>>변경내역조회</a></li>
-								<li><a href=manage_puzzleHistory.php?gid=<?=$gid?>>퍼즐정보</a></li>
+								<li><a href=manage_puzzleHistory.php?gid=<?=$gid?>>보유퍼즐</a></li>
 								<li><a href=manage_pieceHistory.php?gid=<?=$gid?>>보유피스</a></li>
 								<li><a href=manage_characterHistory.php?gid=<?=$gid?>>보유캐릭터</a></li>
 								<li><a href=manage_cardHistory.php?gid=<?=$gid?>>보유카드</a></li>
@@ -158,6 +158,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_stageClearStats.php?gid=<?=$gid?>>스테이지별 클리어 통계</a></li>
 								<li><a href=manage_stageRetryStats.php?gid=<?=$gid?>>스테이지별 재시도 평균</a></li>
 								<li><a href=manage_charLevelStats.php?gid=<?=$gid?>>레벨 통계</a></li>
+								<li><a href=manage_gachaStats.php?gid=<?=$gid?>>뽑기 통계</a></li>
 
 
 							</ul>
@@ -183,6 +184,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>출석이벤트보상</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>쿠폰관리</a></li>
 								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>쿠폰코드</a></li>
+								<li><a href=manage_gacha.php?gid=<?=$gid?>>뽑기</a></li>
 							</ul>
 						</li>
 						<?php

@@ -1,5 +1,7 @@
 <?php
 include "manage_header.php";
+
+
 ?>
 <script>
 
@@ -10,6 +12,7 @@ $(document).ready(function(){
 		
 		var dataview = getDataForm("userinfo");
 		var id = $("#findNo").val();
+
 		var selectType = $('.active[id=findType]').val();
 		dataview.attr("dbWhere",'{"type":"'+selectType+'","id":"'+id+'"}');
 		loadDataForm(dataview);
@@ -85,9 +88,14 @@ $(document).ready(function(){
 			<td>결제</td><td field="m" viewer='{"type":"text"}'></td>
 		</tr>
 		<tr>
-			<td>케릭터레벨</td><td field="characterLevel" viewer='{"type":"text"}'></td>
+			<td>선택캐릭터</td><td field="selectedCharNO" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td>미사일레벨</td><td field="level" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td></td><td></td>
+		</tr>
+		<tr>
 			<td>추천받은수</td><td field="introduceCnt" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
 			<td>추천인ID</td><td field="introducerID" viewer='{"type":"text"}' editor='{"type":"text"}'></td>
+			<td></td><td></td>
 		</tr>
 		<tr>
 			<td>게임시작일시</td><td field="joinDate" editorx='{"type":"datetime"}' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'></td>
@@ -173,8 +181,8 @@ $(document).ready(function(){
 			<td>아이템뽑기</td>
 			<td>99프로뽑기</td>
 			<td>생명의돌</td>
-			<td>p7(미사용)</td>
-			<td>p8(미사용)</td>
+			<td>일반뽑기권</td>
+			<td>고급뽑기권</td>
 			<td>p9(미사용)</td>
 			<td>p10(미사용)</td>
 			<td>p11(미사용)</td>
@@ -191,6 +199,14 @@ $(document).ready(function(){
 			<td field="p9" viewer='{"type":"text"}'></td>
 			<td field="p10" viewer='{"type":"text"}'></td>
 			<td field="p11" viewer='{"type":"text"}'></td>
+		</tr>
+	</table>
+	<br>
+	<h2 id="tables-contextual-classes">|이번주랭킹</h2>
+	<table class="table table-bordered">	 
+		<tr>
+			<td>PVP랭킹</td><td field="pvpRank" viewer='{"type":"text"}'></td>
+			<td>월드주간랭킹</td><td field="weeklyRank" viewer='{"type":"text"}'></td>		
 		</tr>
 	</table>
 </td></tr>

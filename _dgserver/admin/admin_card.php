@@ -18,13 +18,42 @@ var showCardImg = function(value,option){
 	data = s2j(value);
 	return '<img src='+data["img"]+' width=100>';
 }
+
+
+
+$(document).ready(function(){
+
+
+	$('body').on('click','#findUserInfo',function(){
+		
+		var dataview = getDataTable("datatable");
+		var id = $("#findNo").val();
+		var selectType = $('.active[id=findType]').val();
+		dataview.attr("dbWhere",'{"where":"'+id+'"}');
+		loadDataTable(dataview);
+	});
+});
+
+
 </script>
 <center>
-<form action=admin_card.php>
 <input name="gid" value="<?=$gid?>" type="hidden">
-조건 : <input name='where' size="50" value='<?=$_GET['where']?>'> <input type=submit value="확인">
-</form>
+<div class="table-responsive">
+	<table align=center>
+		<tr><td>
+			조건
+		</td><td>
+			<div class="input-group">
+	      		<input type="text" class="form-control" id="findNo" value="" size=100>
+	      		<span class="input-group-btn">
+	        		<button class="btn btn-default" type="button" id="findUserInfo">조회</button>
+	      		</span>
+      		</div>
+		</td></tr>
+	</table>
+</div>
 
+<br><br>
 </center>
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="Card" dbWhere='{}' dbLimit="200" name="datatable" border=1 align=center>
 	<thead>

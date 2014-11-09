@@ -290,6 +290,7 @@ public static function getrealtimemessage($p){
 	}else{
 		$r["version"]=$no;
 		$r["result"]=ResultState::toArray(ResultState::GDSAMEVERSION);
+		CommitManager::$m_passFunc=true;
 	}
 	
 	return $r;
@@ -360,13 +361,14 @@ public static function getcharacterlist($p){
 		$r[state]="ok";
 		
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		
 		return $r;
 	}
 	
 	
 	$list = array();
-	while($charInfo = Character::getRowByQuery("")){
+	while($charInfo = Character::getRowByQuery("order by `serial` asc")){
 			$charInfo[purchaseInfo]=json_decode($charInfo[purchaseInfo],true);
 			$charInfo[statInfo]=json_decode($charInfo[statInfo],true);
 			$charInfo[resourceInfo]=json_decode($charInfo[resourceInfo],true);
@@ -377,6 +379,9 @@ public static function getcharacterlist($p){
 
 			$script=json_decode($charInfo[comment],true);
 			$charInfo["comment"] = $script[CurrentUserInfo::$country]?$script[CurrentUserInfo::$country]:$script["default"];
+			
+			$script=json_decode($charInfo[scriptInfo],true);
+			$charInfo["scriptInfo"] = $script[CurrentUserInfo::$country]?$script[CurrentUserInfo::$country]:$script["default"];
 	
 			$list[]=$charInfo;
 	}
@@ -393,6 +398,11 @@ public static function getcharacterlist($p){
 
 public static function getshoplist($p){
 
+	$storeID = $p["store"];
+
+	if($storeID=="TS")$storeID="tstore";
+	if($storeID=="KS")$storeID="google";
+	if($storeID=="AS")$storeID="apple";
 
 	$listVer = kvManager::get("shopListVer",1);
 	
@@ -401,6 +411,7 @@ public static function getshoplist($p){
 		$r[state]="ok";
 		
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		
 		return $r;
 	}
@@ -409,23 +420,31 @@ public static function getshoplist($p){
 	$list = array();
 	$oldlistname = "";
 	$shopLoad=false;
+	$storeQuery = "";
+
+	if($storeID){
+		$storeBit = CurrentUserInfo::getStoreBit($storeID);
+		$storeQuery = "and store&".$storeBit.">0";
+	}else{
 	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
+		$storeQuery = "and os&".$osBit.">0";
+	}
 
-	$result = Shop::getQueryResult("select ".Shop::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".Shop::getDBTable()." left join ".Exchange::getDBTable()." on ".Shop::getDBTable().".exchangeID=".Exchange::getDBTable().".id where cc='".CurrentUserInfo::$country."' and os&".$osBit.">0");
-	LogManager::addLog("loginevent1->".mysql_error());
+	$result = Shop::getQueryResult("select ".Shop::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".Shop::getDBTable()." left join ".Exchange::getDBTable()." on ".Shop::getDBTable().".exchangeID=".Exchange::getDBTable().".id where cc='".CurrentUserInfo::$country."' ".$storeQuery);
 	while($shopInfo = mysql_fetch_assoc($result)){
-		LogManager::addLog("data->".json_encode($shopInfo));
-
+	
 		//while($shopInfo = Shop::getRowByQuery("where cc='".CurrentUserInfo::$country."' and os&".$osBit.">0")){
 		$shopInfo["data"]=json_decode($shopInfo["data"],true);
 		$id = $shopInfo["id"];
+		$shopInfo["pID"]=$shopInfo["pID"]." ";
 		$r[$id]=$shopInfo;
 		$shopLoad=true;
 	}
 	if(!$shopLoad){
-		$result2 = Shop::getQueryResult("select ".Shop::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".Shop::getDBTable()." left join ".Exchange::getDBTable()." on ".Shop::getDBTable().".exchangeID=".Exchange::getDBTable().".id where cc='default' and os&".$osBit.">0");
+		$result2 = Shop::getQueryResult("select ".Shop::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".Shop::getDBTable()." left join ".Exchange::getDBTable()." on ".Shop::getDBTable().".exchangeID=".Exchange::getDBTable().".id where cc='default' ".$storeQuery);
 		while($shopInfo = mysql_fetch_assoc($result)){
 			$shopInfo["data"]=json_decode($shopInfo["data"],true);
+			$shopInfo["pID"]=$shopInfo["pID"]." ";
 			$id = $shopInfo["id"];
 			$r[$id]=$shopInfo;
 			$shopLoad=true;
@@ -438,10 +457,11 @@ public static function getshoplist($p){
 	$nowtime = TimeManager::getCurrentTime();
 	$ingEvent = false;
 
-	$result2 = ShopEvent::getQueryResult("select ".ShopEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".ShopEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".ShopEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id where ".ShopEvent::getDBTable().".startDate<=".$today." and ".ShopEvent::getDBTable().".endDate>=".$today." and ".ShopEvent::getDBTable().".startTime<=".$nowtime." and ".ShopEvent::getDBTable().".endTime>=".$nowtime." and ".ShopEvent::getDBTable().".os&".$osBit.">0 and ".ShopEvent::getDBTable().".cc&".$ccBit.">0");
+	$result2 = ShopEvent::getQueryResult("select ".ShopEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".ShopEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".ShopEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id where ".ShopEvent::getDBTable().".startDate<=".$today." and ".ShopEvent::getDBTable().".endDate>=".$today." and ".ShopEvent::getDBTable().".startTime<=".$nowtime." and ".ShopEvent::getDBTable().".endTime>=".$nowtime." and ".ShopEvent::getDBTable().".cc&".$ccBit.">0 ".$storeQuery);
 	while($shopInfo = mysql_fetch_assoc($result)){
 	//while($shopInfo = ShopEvent::getRowByQuery("where startDate<=".$today." and endDate>=".$today." and startTime<=".$nowtime." and endTime>=".$nowtime." and os&".$osBit.">0 and cc&".$ccBit.">0")){
 			$shopInfo["data"]=json_decode($shopInfo["data"],true);
+			$shopInfo["pID"]=$shopInfo["pID"]." ";
 			$id = $shopInfo["id"];
 			$r[$id]=$shopInfo;
 			$ingEvent = true;
@@ -469,6 +489,7 @@ public static function getmonsterlist($p){
 		$r[state]="ok";
 		
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		
 		return $r;
 	}
@@ -500,6 +521,7 @@ public static function getpieceinfo($p){
 	if($piece->version==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -522,6 +544,7 @@ public static function getcardlist($p){
 	if($puzzleListVer==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -568,6 +591,7 @@ public static function getallcardlist($p){
 	if($puzzleListVer==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -605,6 +629,7 @@ public static function getcardlistbylist($p){
 	if($puzzleListVer==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -655,6 +680,7 @@ public static function getadultcardlist($p){
 	if($puzzleListVer==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -748,6 +774,7 @@ public static function gethellmodelist($p){
 	if($hellModeListVer==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}else{
 		// 여기서 eventstagelistversion 도 비교
@@ -786,7 +813,10 @@ public static function gethellmodelist($p){
 
 public static function writelog($p){
 	//LogManager::addLog("----start write log---");
-	
+	if(Logmanager::isLocked()){
+		$result["result"]=ResultState::successToArray();
+		return $result;
+	}
 	if(!$p["input"])$p["input"]=$p["content"];
 	if(!$p["memberID"])$p["memberID"]=1;
 	$userlog = new UserLog($p["memberID"]);
@@ -817,7 +847,7 @@ public static function writelog($p){
 
 ///////////////////////////////////////////
 
-public static function spuser($p){
+public static function dropoutuser($p){
 	$memberID = $p["memberID"];
 	$keylist = $p["keyList"];
 	if($memberID){
@@ -906,11 +936,11 @@ public static function login($p){
 
 		$endlessData =& $user->getRef("endlessData");
 		
-		if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::getCurrentWeekNo()){
+		if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::getCurrentWeekNoForRank()){
 			$endlessData["ing_win"]=0;
 			if($endlessData["ing_state"])$endlessData["lose"]+=1;
 			$endlessData["ing_score"]=0;
-			$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
+			$endlessData["ing_week"]=TimeManager::getCurrentWeekNoForRank();
 		}
 
 		$user->lastDate = TimeManager::getCurrentDateTime();
@@ -968,6 +998,7 @@ public static function join($p){
 	$userIndex = $user->getUserIndex();
 	$user->memberID = $memberID;
 	$user->flag = $p["flag"];
+	$user->level = 1;
 	$user->country = CurrentUserInfo::$country;
 
     //LogManager::addLog("join1 userindex is ".json_encode($userIndex->getArrayData(true)));
@@ -1082,62 +1113,36 @@ public static function getuserdata($p){
 	$nick = $p["nick"];
 	$keylist = $p["keyList"];
 	$isPublic  = $p["isPublic"];
+	$user = null;
 	if($memberid){
-		$user = UserData::create($memberid); //UserData::create($memberid);
-		if($user->isLoaded()){
-			if($isPublic){
-				$r = $user->getArrayDataForPublic();
-			}else{
-				$r = $user->getArrayData(true,$keylist);
-			}
-			$r["state"]="ok";
-			$r["userIndex"]=$user->getUserIndexNo();
-			$r["result"]=ResultState::successToArray();
-		}else{
-			$r["state"]="error";
-			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata1");
-		}
+		$user = UserData::create($memberid);
 	}else if($userindex && $userindex>0){
 		$uIndex = UserIndex::create(0,$userindex);
-		if($uIndex->isLoaded()){
-			$user = UserData::create($uIndex->memberID);
-			if($user->isLoaded()){
-				if($isPublic){
-					$r = $user->getArrayDataForPublic();
-				}else{
-					$r = $user->getArrayData(true,$keylist);
-				}
-				$r["state"]="ok";
-				$r["userIndex"]=$user->getUserIndexNo();
-				$r["result"]=ResultState::successToArray();
-			}else{
-				$r["state"]="error";
-				$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata2");
-			}
-		}else{
-			$r["state"]="error";
-			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata3");
+		if(!$uIndex->isLoaded()){
+			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata2");
+			return $r;
 		}
-
+		$user = UserData::create($uIndex->memberID);
 	}else if($nick){
-		$user = UserData::create(null,null,$nick); //UserData::create($memberid);
-		if($user->isLoaded()){
-			if($isPublic){
-				$r = $user->getArrayDataForPublic();
-			}else{
-				$r = $user->getArrayData(true,$keylist);
-			}
-			$r["state"]="ok";
-			$r["userIndex"]=$user->getUserIndexNo();
-			$r["result"]=ResultState::successToArray();
+		$user = UserData::create(null,null,$nick);
+	}else{
+		$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"memberID");
+		return $r;
+	}
+
+	if($user->isLoaded()){
+		if($isPublic){
+			$r = $user->getArrayDataForPublic();
 		}else{
-			$r["state"]="error";
-			$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata1");
+			$r = $user->getArrayData(true,$keylist);
 		}
+		$r["state"]="ok";
+		$r["userIndex"]=$user->getUserIndexNo();
+		$r["missileInfo"]=Character::getPowerInfo($user->level);
+		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["state"]="error";
-		$r["errorCode"]=10010;
-		$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"memberID");
+		$r["result"]=ResultState::toArray(ResultState::GDDONTFINDUSER,"fail to load userdata1");
 	}
 	
 	return $r;
@@ -1183,6 +1188,9 @@ public static function updateuserdata($p){
 		if(!$user->save())return ResultState::makeReturn(2006);
 		
 		$r=$user->getArrayData();
+		$r["userIndex"]=$user->getUserIndexNo();
+		$r["missileInfo"]=Character::getPowerInfo($user->level);
+
 		$r["result"]=ResultState::successToArray();
 		$r["state"]="ok";
 	}else{
@@ -1481,7 +1489,9 @@ public static function sendmessage($p){
 	$param["data"]=$p["data"];
 	$param["template"]=$p["template"];
 	$param["custom"]=$p["custom"];
-	
+
+	if($p["sendMemberID"])$param["sendMemberID"]=$p["sendMemberID"];
+	if($p["memberID"])$param["sendMemberID"]=$p["memberID"];
 	$sR = self::sendgiftboxhistory($param);
 	
 	return $sR;
@@ -1490,14 +1500,14 @@ public static function sendmessage($p){
 
 public static function addweeklyscore($p){
 
-	$ws =new WeeklyScore($p["memberID"],TimeManager::getCurrentWeekNo());
+	$ws =new WeeklyScore($p["memberID"],TimeManager::getCurrentWeekNoForRank());
 	$ws->memberID = $p["memberID"];
 	$ws->data = $p["data"];
 	$ws->nick = $p["nick"];
 	$ws->flag = $p["flag"];
 	$ws->regDate = TimeManager::getCurrentDateTime();
 	$ws->regTime = TimeManager::getTime();
-	$ws->regWeek = TimeManager::getCurrentWeekNo();
+	$ws->regWeek = TimeManager::getCurrentWeekNoForRank();
 	$ws->score = $ws->score + $p["score"];
 	$ws->count = $ws->count+1;
 	$r["update"]=false;
@@ -1514,7 +1524,7 @@ public static function getweeklyrankbyalluser($p){
 	$memberID = $p["memberID"];
 	$start = $p["start"];
 	$limit = $p["limit"];
-	$weekNo = TimeManager::getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNoForRank();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 	if(!$start)$start=1;
 	if(!$limit)$limit=10;
@@ -1577,7 +1587,7 @@ public static function checkweeklyreward($p){
 	if(!$userInfo->eventCheckWeek){
 	
 	
-	}else if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
+	}else if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNoForRank()){
 	
 	//위의 if제거하고 아래 if주석풀면 계속 해서 확인함
 	//if(1){
@@ -1693,8 +1703,8 @@ public static function checkweeklyreward($p){
 
 	}
 
-	if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNo()){
-		$userInfo->eventCheckWeek = TimeManager::getCurrentWeekNo();
+	if($userInfo->eventCheckWeek!=TimeManager::getCurrentWeekNoForRank()){
+		$userInfo->eventCheckWeek = TimeManager::getCurrentWeekNoForRank();
 		CommitManager::setSuccess($memberID,$userInfo->save());
 	}
 
@@ -1754,6 +1764,9 @@ public static function getstagerankbyalluser($p){
 	if($p["data"])$myRank->data = $p["data"];
 
 	$r["isMax"]=false;
+
+	LogManager::addLog("check my score");
+	
 	if($myscore){
 		//피스클리어
 		$cmP["type"]="piece";
@@ -1769,6 +1782,7 @@ public static function getstagerankbyalluser($p){
 		self::checkmissionevent($cmP);
 
 		if($myRank->score<$myscore){
+			LogManager::addLog("is max! prev:".$myRank->score."- now:".$myscore);
 			$r["isMax"]=true;
 			$myRank->score = $myscore;
 			$myRank->save();
@@ -1804,6 +1818,7 @@ public static function getpuzzleinfo($p){
 	if($puzzle->version==$p[version]){
 		$r[version]=$p[version];
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		return $r;
 	}
 
@@ -2008,10 +2023,12 @@ public static function updatecardhistory($p){
 	$memberID=$p["memberID"];
 	$cardNo=$p["cardNo"];
 	$addCount = $p["addCount"];
+	$includeCardInfo = $p["includeCardInfo"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	if(!$cardNo)return ResultState::makeReturn(2002,"cardNo");
 	
+
 	$cardInfo = new Card($cardNo);
 	if(!$cardInfo->isLoaded()){
 		return ResultState::makeReturn(ResultState::GDDONTFIND);
@@ -2030,11 +2047,15 @@ public static function updatecardhistory($p){
 	$obj->memberID = $memberID;
 	$obj->cardNo = $cardNo;
 	
+	$total=0;
 	if(!$obj->isLoaded()){
 		$obj->level = $cardInfo->level;
+	}else{
+		$total = $obj->count;
 	}
-
+	$cnt=0;
 	if($addCount){
+		$cnt=$addCount;
 		if(!$obj->isLoaded())$obj->count=$addCount;
 		else $obj->count+=$addCount;
 
@@ -2042,6 +2063,8 @@ public static function updatecardhistory($p){
 			return ResultState::makeReturn(ResultState::GDPROPERTYISMINUS);
 		}
 	}
+
+
 
 	if($p["updateTakeDate"] || !$obj->isLoaded())$obj->takeDate=TimeManager::getCurrentDateTime();
 	if($p["comment"])$obj->comment=addslashes($p["comment"]);
@@ -2052,12 +2075,41 @@ public static function updatecardhistory($p){
 	//LogManager::addLog($obj->comment);
 	//LogManager::addLog($obj->getArrayData(true));
 
-	if(!$obj->save())return ResultState::makeReturn(2014,"dont save");
+	CommitManager::begin($memberID);
+
+	CommitManager::setSuccess($memberID,$obj->save());
+	//if(!$obj->save())//return ResultState::makeReturn(2014,"dont save");
+
+
+	if($cnt){
+		$param["memberID"]=$memberID;
+		$param["type"]="cd";
+		$param["count"]=$cnt;
+		$param["total"]=$total+$cnt;
+		$param["statsID"]="cardNo";
+		$param["statsValue"]=$cardNo;
+		$param["content"]=$p["content"];
+		$param["sender"]="user";
+		$param["exchangeID"]=$p["exchangeID"];
+
+		$result = self::updateuserpropertyhistory($param);	
+		if(!ResultState::successCheck($result["result"])){
+			//LogManager::addLog("save fail another prop");
+			CommitManager::setSuccess($memberID,false);
+		}
+	}
 
 	$r["data"]=$obj->getArrayData(true);
+	if($includeCardInfo)$r["cardInfo"]=$cardInfo->getArrayDataForClient();
 	$r["write"]="success";	
-	$r["result"]=ResultState::successToArray();
-	return $r;
+
+	if(CommitManager::commit($memberID)){
+		$r["result"]=ResultState::successToArray();
+		return $r;
+	}else{
+		$r["result"]=ResultState::toArray(ResultState::GDDONTSAVE);
+		return $r;
+	}
 }
 
 
@@ -2317,14 +2369,90 @@ public static function changeuserproperties($p){
 			$ucp["cardNo"]=$value["count"];
 			$ucp["updateTakeDate"]=true;
 			$ucp["addCount"]=1;
+			$ucp["statsID"]=$value["statsID"];
+			$ucp["exchangeID"]=$p["exchangeID"];
+			$ucp["content"]=$value["content"];;
+			$ucp["includeCardInfo"]=true;
 			$result = self::updatecardhistory($ucp);
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
-		//피스획득
+		//카드획득
+		}else if($value["type"]=="dhcd"){
+			$grade = $value["count"];
+			if($grade==0 || $grade>4)$grade=rand(1,4);
+
+			$cs = new CommonSetting("gachaCardNoAdd");
+			$maxcard = CardHistory::getRowByQueryWithShardKey("where `memberID`='".$memberID."' and cardNo<10000",$memberID,"max(cardNo) as maxcardno");
+			$mymaxcardNo = $maxcard["maxcardno"];
+			$maxcardNo = $mymaxcardNo+$cs->value;
+			
+			while($obj = Card::getObjectbyQuery("where `grade`='$grade' and `category`='normal' and `no`>'$mymaxcardNo' and no<'$maxcardNo' order by rand() limit 1")){
+				$ucp["cardNo"]=$obj->no;
+			}
+
+			//카드가 없으면 전체카드랜덤으로
+			if(!$ucp["cardNo"]){
+				while($obj = Card::getObjectbyQuery("where `grade`='$grade' and `category`='normal' order by no asc")){
+					$mycard = new CardHistory($memberID,$obj->no);
+					if(!$mycard->isLoaded()){
+						$ucp["cardNo"]=$obj->no;
+						break;
+					}
+				}
+			}
+
+			//카드가 없으면 전체카드랜덤으로
+			if(!$ucp["cardNo"]){
+				while($obj = Card::getObjectbyQuery("where `grade`='$grade' and `category`='normal' order by rand() limit 1")){
+					$ucp["cardNo"]=$obj->no;
+				}
+			}
+			$ucp["memberID"]=$memberID;
+			$ucp["updateTakeDate"]=true;
+			$ucp["addCount"]=1;
+			$ucp["statsID"]=$value["statsID"];
+			$ucp["exchangeID"]=$p["exchangeID"];
+			$ucp["content"]=$value["content"];;
+			$ucp["includeCardInfo"]=true;
+			$result = self::updatecardhistory($ucp);
+			$rs[]=array("type"=>$value["type"],"result"=>$result);
+		}else if($value["type"]=="gncd"){
+			$grade = $value["count"];
+			if($grade==0 || $grade>4)$grade=rand(1,4);
+
+			$maxcard = CardHistory::getRowByQueryWithShardKey("where `memberID`='".$memberID."' and cardNo<10000",$memberID,"max(cardNo) as maxcardno");
+			$mymaxcardNo = $maxcard["maxcardno"];
+
+			$cs = new CommonSetting("gachaCardNoAdd");
+			$maxcardNo = $mymaxcardNo+$cs->value;
+
+			while($obj = Card::getObjectbyQuery("where `grade`='$grade' and `category`='normal' and no<$maxcardNo order by rand() limit 1")){
+				$ucp["cardNo"]=$obj->no;
+			}
+
+			//카드가 없으면 전체카드랜덤으로
+			if(!$ucp["cardNo"]){
+				while($obj = Card::getObjectbyQuery("where `grade`='$grade' and `category`='normal' order by rand() limit 1")){
+					$ucp["cardNo"]=$obj->no;
+				}
+			}
+			$ucp["memberID"]=$memberID;
+			$ucp["updateTakeDate"]=true;
+			$ucp["addCount"]=1;
+			$ucp["statsID"]=$value["statsID"];
+			$ucp["exchangeID"]=$p["exchangeID"];
+			$ucp["content"]=$value["content"];;
+			$ucp["includeCardInfo"]=true;
+			$result = self::updatecardhistory($ucp);
+			$rs[]=array("type"=>$value["type"],"result"=>$result);
+		//카드마이너스
 		}else if($value["type"]=="cdm"){
 			$ucp["memberID"]=$memberID;
 			$ucp["cardNo"]=$value["count"];
 			$ucp["updateTakeDate"]=true;
 			$ucp["addCount"]=-1;
+			$ucp["statsID"]=$value["statsID"];
+			$ucp["exchangeID"]=$p["exchangeID"];
+			$ucp["content"]=$value["content"];;
 			$result = self::updatecardhistory($ucp);
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
 		//피스획득
@@ -2343,22 +2471,33 @@ public static function changeuserproperties($p){
 			$ucp["updateOpenDate"]=true;
 			$result = self::updatepuzzlehistory($ucp);
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
-		//캐릭터업글
+		//미사일업글
 		}else if($value["type"]=="cu"){
-			$char = new CharacterHistory($memberID,$value["count"]);
-			$ucp["memberID"]=$memberID;
-			$ucp["levelup"]=true;
-			$ucp["characterNo"]=$value["count"];
-			$result = self::updatecharacterhistory($ucp);
+			$userInfo = UserData::create($memberID);
+			$userInfo->level=$userInfo->level+1;
+			LogManager::addLog("aaaaa ".$userInfo->level);
+			if($userInfo->save()){
+				$result = array("result"=>ResultState::toArray(ResultState::GDSUCCESS));
+			}else{
+				$result = array("result"=>ResultState::toArray(ResultState::GDMYSQLQUERY));
+			}
+
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
+
+			// $char = new CharacterHistory($memberID,$value["count"]);
+			// $ucp["memberID"]=$memberID;
+			// $ucp["levelup"]=true;
+			// $ucp["characterNo"]=$value["count"];
+			// $result = self::updatecharacterhistory($ucp);
+			// $rs[]=array("type"=>$value["type"],"result"=>$result);
 
 		//캐릭터획득
 		}else if($value["type"]=="cp"){
 			$ucp["memberID"]=$memberID;
 			$ucp["characterNo"]=$value["count"];
+			$ucp["useExchange"]=true;
 			$result = self::updatecharacterhistory($ucp);
 			$rs[]=array("type"=>$value["type"],"result"=>$result);
-
 		//다른재화
 		}else{
 			$pType = $value["type"];
@@ -2394,7 +2533,7 @@ public static function changeuserproperties($p){
 		}
 
 	
-		if($value["type"]!="r" && $value["type"]!="fr" && $value["type"]!="pr"){
+		if($value["type"]!="r" && $value["type"]!="fr" && $value["type"]!="pr"  && $value["type"]!="cd"  && $value["type"]!="cdm"  && $value["type"]!="dhcd" && $value["type"]!="gncd"){
 			$param["memberID"]=$memberID;
 			$param["type"]=$value["type"];
 			$param["count"]=$value["count"];
@@ -2557,6 +2696,7 @@ public static function getarchivementlist($p){
 		$r[state]="ok";
 		
 		$r["result"]=ResultState::toArray(2001);
+		CommitManager::$m_passFunc=true;
 		
 		return $r;
 	}
@@ -2727,6 +2867,7 @@ public static function sendgiftboxhistory($p){
 
 	$gb = new GiftBoxHistory($memberID);
 	$gb->memberID = $memberID;
+	$gb->sendMemberID = $p["sendMemberID"];
 	$gb->sender = $p["sender"];
 	$gb->content = $p["content"];
 	$gb->data = $p["data"];
@@ -2736,6 +2877,7 @@ public static function sendgiftboxhistory($p){
 		$gb->exchangeID = $p["exchangeID"];
 		$gb->exchangeList = $p["exchangeList"];
 		$gb->reward = $exchange->list;
+		$r["reward"]=$gb->reward;
 	}
 
 
@@ -2901,11 +3043,10 @@ public static function getcharacterhistory($p){
 	$where = "where memberID=".$memberID;
 	$dataList = array();
     while($rData = CharacterHistory::getRowByQueryWithShardKey($where,$memberID)){
-    	$character = new Character($rData["characterNo"]);
-		$powerInfo = $character->getPowerInfo($rData["level"]);
-		$rData=array_merge($rData,$powerInfo);
-
+    	$nextInfo = Character::getExpInfoByExp($rData["exp"]);
+		$rData["levelInfo"]=$nextInfo;
     	$dataList[]=$rData;
+    	LogManager::addLog(json_encode(Character::getExpInfoByExp(6700)));
     }
 
 	$r["list"]=$dataList;
@@ -2915,11 +3056,12 @@ public static function getcharacterhistory($p){
 
 }
 
+
 public static function updatecharacterhistory($p){	
 	
 	$memberID=$p["memberID"];
 	$characterNo=$p["characterNo"];
-	LogManager::addLog("param - ".json_encode($p));
+	$exp = $p["exp"];
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 	if(!$characterNo)return ResultState::makeReturn(2002,"characterNo");
 	
@@ -2929,19 +3071,37 @@ public static function updatecharacterhistory($p){
 	$obj->characterNo = $characterNo;
 	if(!$obj->isLoaded()){
 		$obj->regDate = TimeManager::getCurrentDateTime();
+	}else{
+		LogManager::addLog("load ok");
+		if($p["useExchange"]==true){
+			LogManager::addLog("exchange");
+			$cs = new CommonSetting("gachaCharExp");
+			$exp=$cs->value;
+		}
 	}
 
+	$r=array();
+	if(!$obj->level)$obj->level=1;
 	if($p["level"])$obj->level = $p["level"];
 	if($p["levelup"])$obj->level +=1;
 	if($obj->level==0)$obj->level=1;
+	$nextInfo=array();
+	if($exp){
+		$nextExp = $obj->exp+$exp;
+		$nextInfo = Character::getExpInfoByExp($nextExp);
+		$obj->exp = $nextInfo["exp"];
+		$r["levelInfo"]=$nextInfo;
+		if($obj->level!=$r["levelInfo"]["level"]){
+			$obj->level=$r["levelInfo"]["level"];
+			$r["isLevelUp"]=true;
+		}
+	}else{
+		$nextInfo = Character::getExpInfoByExp($obj->exp);
+	}
 
-	$r=array();
-	
 	if($obj->save()){
 		$r = $obj->getArrayData(true);
-		$character = new Character($obj->characterNo);
-		$powerInfo = $character->getPowerInfo($obj->level);
-		$r=array_merge($r,$powerInfo);
+		$r["levelInfo"]=$nextInfo;
 		$r["result"]=ResultState::successToArray();
 	}else{
 		$r["result"]=ResultState::toArray(2014,"dont save");
@@ -2950,11 +3110,50 @@ public static function updatecharacterhistory($p){
 	return $r;
 }
 
+public static function levelup($p){
+	$usePass = $p["usePass"];
+	$memberID=$p["memberID"];
+	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
+	CommitManager::begin($memberID);
+	$userInfo = UserData::create($memberID);
+	$powerInfo = Character::getPowerInfo($userInfo->level+1);
+	$lev = $powerInfo["level"];
+
+	if($userInfo->level>=$powerInfo["maxLevel"]){
+		return ResultState::makeReturn(ResultState::GDALREADY);
+	}
+
+	CommitManager::setSuccess($memberID,$userInfo->save()+1);
+	
+	$param["memberID"]=$memberID;
+	
+	if(!$usePass){
+		$param["exchangeID"]="cu_g";
+		$param["list"][0]=array("type"=>"g","count"=>($powerInfo["prevPrice"]*-1));
+	}else{
+		$param["exchangeID"]="cu_p";
+	}
+
+	$result = self::exchange($param);
+	if(!ResultState::successCheck($result["result"])){
+		CommitManager::setSuccess($memberID,false);
+
+	}
+
+	if(!CommitManager::commit($memberID)){
+		$result["result"]=ResultState::toArray(ResultState::GDMYSQLQUERY);
+	}
+
+	$result=array_merge($result,$powerInfo);
+	
+	return $result;
+}
+
 public static function gettimeinfo($p){
 	//$r["test"]=$p["test"];
 	//if($p["offset"])TimeManager::setTimeOffset($p["offset"]);
 	$r["timestamp"]=TimeManager::getTime();
-	$r["weekNo"]=TimeManager::getCurrentWeekNo();
+	$r["weekNo"]=TimeManager::getCurrentWeekNoForRank();
 	$r["weekday"]=TimeManager::getCurrentWeekDayNo();
 	$r["date"]=TimeManager::getCurrentDateTime();
 	$r["hour"]=TimeManager::getCurrentHour();
@@ -3013,10 +3212,10 @@ public static function gettodaymission($p){
 
 		$rewardRnd = rand(1,100);
 
-		if($rewardRnd>95)$tMission["rewardInfo"]=$tmReward[0];		//이어하기권
-		else if($rewardRnd>90)$tMission["rewardInfo"]=$tmReward[1]; //업그레이드
-		else if($rewardRnd>70)$tMission["rewardInfo"]=$tmReward[2]; //99가챠
-		else if($rewardRnd>40)$tMission["rewardInfo"]=$tmReward[3]; //뽑기
+		if($rewardRnd>90)$tMission["rewardInfo"]=$tmReward[0];		//이어하기권
+		else if($rewardRnd>80)$tMission["rewardInfo"]=$tmReward[1]; //업그레이드
+		else if($rewardRnd>60)$tMission["rewardInfo"]=$tmReward[2]; //99가챠
+		else if($rewardRnd>30)$tMission["rewardInfo"]=$tmReward[3]; //뽑기
 		else $tMission["rewardInfo"]=$tmReward[4];					//맵가챠
 		
 		$t = $tMission["type"]-1;
@@ -3273,7 +3472,7 @@ public static function getendlessrank($p){
 	$memberID = $p["memberID"];
 	$start = $p["start"];
 	$limit = $p["limit"];
-	$weekNo = TimeManager::getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNoForRank();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 	if(!$start)$start=1;
 	if(!$limit)$limit=50;
@@ -3313,7 +3512,7 @@ public static function getendlessrank($p){
 public static function getendlessrankinfo($p){
 
 	$memberID = $p["memberID"];
-	$weekNo = TimeManager::getCurrentWeekNo();
+	$weekNo = TimeManager::getCurrentWeekNoForRank();
 	if($p["weekNo"])$weekNo=$p["weekNo"];
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
@@ -3345,7 +3544,7 @@ public static function setendlessrank($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNo());
+	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNoForRank());
 
 	$endlessRank->memberID=$memberID;
 	$endlessRank->nick = $p["nick"];
@@ -3362,7 +3561,7 @@ public static function setendlessrank($p){
 		$endlessRank->regDate = TimeManager::getCurrentDateTime();
 	}
 	
-	$endlessRank->regWeek = TimeManager::getCurrentWeekNo();
+	$endlessRank->regWeek = TimeManager::getCurrentWeekNoForRank();
 	
 	$userData = UserData::create($memberID);
 	
@@ -3396,16 +3595,16 @@ public static function finishendlessplay($p){
 
 
 	CommitManager::begin($memberID);
-	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNo());
+	$endlessRank = new EndlessRank($memberID,TimeManager::getCurrentWeekNoForRank());
 	$userData = UserData::create($memberID);
 	$endlessData =& $userData->getRef("endlessData");
 
 	//위크번호다르면 초기화~
-	if($endlessData["ing_week"]!=TimeManager::getCurrentWeekNo()){
+	if($endlessData["ing_week"]!=TimeManager::getCurrentWeekNoForRank()){
 		//LogManager::addLog("reset ing_win , bcus new week");
 		$endlessData["ing_score"]=0;
 		$endlessData["ing_win"]=0;
-		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNoForRank();
 		$endlessData["ing_level"]=0;
 	}
 
@@ -3437,14 +3636,14 @@ public static function finishendlessplay($p){
 	if($endlessData["ing_win"]>$endlessRank->victory)$endlessRank->victory=$endlessData["ing_win"];
 
 	$endlessRank->regDate = TimeManager::getCurrentDateTime();
-	$endlessRank->regWeek = TimeManager::getCurrentWeekNo();
+	$endlessRank->regWeek = TimeManager::getCurrentWeekNoForRank();
 	
 	$r["sendGift"]=false;
 	//졌으면 끄읏
 	if(!$p["victory"]){
 		$endlessData["ing_win"]=0;
 		$endlessData["ing_score"]=0;
-		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNoForRank();
 		$endlessData["lose"]+=1;
 		$endlessData["ing_level"]=0;
 	}else{
@@ -3452,13 +3651,12 @@ public static function finishendlessplay($p){
 		$ew =& $cs->getRef("value");
 		if($endlessData["ing_win"]%$ew["win"]==0){
 			$r["sendGift"]=true;
-			$r["reward"]=$ew["reward"];
 			$param["memberID"]=$memberID;
 			$param["sender"]="GM";
 			$param["content"]=$ew["title"];
-			$param["exchangeID"]=$ew["exchangeID"];
-			$param["reward"]=$ew["reward"];
+			$param["exchangeID"]=$ew["exchangeIDs"][rand(0,count($ew["exchangeIDs"])-1)];
 			$sR = self::sendgiftboxhistory($param);
+			$r["reward"]=$sR["reward"];
 			if(!ResultState::successCheck($sR["result"])){
 				//LogManager::addLog("sendgift save fail");
 				CommitManager::setSuccess($memberID,false);
@@ -3544,11 +3742,11 @@ public static function startendlessplay($p){
 		$endlessData["ing_level"]=$p["autoLevel"];		
 	}
 
-	if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::getCurrentWeekNo()){
+	if($endlessData["ing_state"]==1 || $endlessData["ing_week"]!=TimeManager::getCurrentWeekNoForRank()){
 		$endlessData["ing_win"]=0;
 		$endlessData["lose"]+=1;
 		$endlessData["ing_score"]=0;
-		$endlessData["ing_week"]=TimeManager::getCurrentWeekNo();
+		$endlessData["ing_week"]=TimeManager::getCurrentWeekNoForRank();
 	}
 	
 	$endlessData["ing_state"]=1;
@@ -3576,6 +3774,24 @@ public static function getendlessplayriver($p){
 	$rival2 = $endlessPlayList->getPlayDataByRandom($memberID,$ingLevel,3);
 	
 	$r["rival"] = $rival2[0];
+
+	if($rival2[1]["nick"]==$rival2[2]["nick"]){
+		$rival2[1]["nick"]="LitQoo";
+		$rival2[2]["nick"]="NHNEnt";
+	}
+
+	if($rival2[0]["nick"]==$rival2[1]["nick"]){
+		$rival2[1]["nick"]="LitQoo";
+		$rival2[2]["nick"]="NHNEnt";
+	}
+
+	if($rival2[0]["nick"]==$rival2[2]["nick"]){
+		$rival2[1]["nick"]="LitQoo";
+		$rival2[2]["nick"]="NHNEnt";
+	}
+
+	if($rival2[1]["nick"]==$rival2[2]["nick"])$rival2[1]["nick"]="NPC1";
+
 	unset($rival2[1]["playData"]);
 	unset($rival2[2]["playData"]);
 	$r["dummy"] = $rival2;
@@ -3584,8 +3800,10 @@ public static function getendlessplayriver($p){
 
 	//if(!$sp["no"])
 	
-	srand((double)microtime()*1000000);
-	$sp["no"]=rand(1,$maxStage);
+	$userInfo = UserData::create($memberID);
+
+	srand((double)microtime()*1000000);	
+	$sp["no"]=rand(1,$userInfo->highPiece+$ingLevel*20);
 
 	$r["stageInfo"]=self::getpieceinfo($sp);
 	$r["stageInfo"]["realNo"]=$r["stageInfo"]["no"];
@@ -4117,6 +4335,7 @@ public static function sendcard($p){
 	$cardInfo = new Card($cardNo);
 
 	$param["memberID"]=$toMemberID;
+	$param["sendMemberID"]=$myUserData->memberID;
 	$param["sender"]=$myUserData->nick;
 	$param["template"]=$csInfo["template"];
 	$param["custom"]=array($myUserData->nick,$cardInfo->serial);
@@ -4130,6 +4349,45 @@ public static function sendcard($p){
 	return $sR;
 
 }
+
+//// 가챠상품목록 불러오기
+
+public static function getgachalist($p){
+	
+	$list = array();
+	$levelList = array();
+
+	$levelList = array(1,1,1,1,1,1,1,1,1,1,1,1);
+	$cs = new CommonSetting("gachaForm");
+	$gachaForm =& $cs->getRef("value");
+
+	$gachaKey = "normal";
+	
+	if($p["isPremium"]){
+		$gachaKey = "premium";
+	}
+
+	$k=0;
+	for($i=0;$i<count($gachaForm[$gachaKey]);$i++){
+		for($j=0;$j<$gachaForm[$gachaKey][$i];$j++){
+			$levelList[$k]=$i+1;
+			$k++;
+		}
+	}
+
+	foreach ($levelList as $key => $value) {
+		$reward = new Gacha(null,$value,$p["isPremium"]);
+		$exchange = new Exchange($reward->exchangeID);
+		$list[]=array("exchangeID"=>$reward->exchangeID,"reward"=>$exchange->list,"level"=>$value,"percent"=>$reward->gainProb);
+	}
+	shuffle($list);
+	$r["list"]=$list;
+	$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
+	return $r;
+
+}
+
+
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////
 }

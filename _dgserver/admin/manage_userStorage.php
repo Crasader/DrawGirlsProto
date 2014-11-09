@@ -117,7 +117,8 @@ $(document).ready(function(){
 		<th title='아이템뽑기' field='p4' viewer='{"type":"text"}' editor='{"type":"text"}' >아이템뽑기</th>
 		<th title='99프로뽑기' field='p5' viewer='{"type":"text"}' editor='{"type":"text"}' >99프로뽑기</th>
 		<th title='생명의돌' field='p6' viewer='{"type":"text"}' editor='{"type":"text"}' >생명의돌</th>
-		<th field='p7' viewer='{"type":"text"}' editor='{"type":"text"}' >p7</th>
+		<th title='일반뽑기권' field='p7' viewer='{"type":"text"}' editor='{"type":"text"}' >일반뽑기권</th>
+		<th title='고급뽑기권' field='p8' viewer='{"type":"text"}' editor='{"type":"text"}' >고급뽑기권</th>
 		<th manage='update' ></th>
 		</tr> 
 	</thead>
@@ -131,6 +132,7 @@ $(document).ready(function(){
 		<table><tr><td>
 		<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">	
 			<button id="propType" type="button" value="*" class="btn btn-default active" data-toggle="button">모두보기</button>
+			<button id="propType" type="button" value="cd" class="btn btn-default" data-toggle="button">카드</button>
 			<button id="propType" type="button" value="pr" class="btn btn-default" data-toggle="button">유료젬</button>
 			<button id="propType" type="button" value="fr" class="btn btn-default" data-toggle="button">무료젬</button>
 			<button id="propType" type="button" value="h" class="btn btn-default" data-toggle="button">하트</button>
@@ -158,6 +160,8 @@ $(document).ready(function(){
 		<th title='교환ID' field='exchangeID' viewer='{"type":"text"}' >교환ID</th>
 		<th title='변화량' field='count' viewer='{"type":"text"}' >변화량</th>
 		<th title='총개수' field='total' viewer='{"type":"text"}' >총개수</th>
+		<th title='statsID' field='statsID' viewer='{"type":"text"}' >statsID</th>
+		<th title='statsValue' field='statsValue' viewer='{"type":"text"}' >statsValue</th>
 		<th title='내용' field='content' viewer='{"type":"text"}' >내용</th>
 		<th title='획득일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' >획득일시</th>
 		</tr> 
