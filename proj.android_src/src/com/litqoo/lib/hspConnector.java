@@ -238,9 +238,9 @@ public class hspConnector {
 					JSONObject error = new JSONObject();
 					// 留ㅽ����� ��깃났��� 耳���댁��.
 					if (result.isSuccess() == true) {
-						Toast.makeText(hspConnector.sContext,
-								"濡�洹몄�� ��깃났", Toast.LENGTH_LONG)
-								.show();
+//						Toast.makeText(hspConnector.sContext,
+//								"로그인 성공", Toast.LENGTH_LONG)
+//								.show();
 
 					} else { // 留ㅽ����� ��ㅽ�⑦�� 耳���댁��
 						Log.d("mapping",
@@ -746,7 +746,7 @@ public class hspConnector {
 		return r;
 	}
 	public static String getMarketCode()
-	{
+	{ 
 		String ret = HSPConfiguration.getInstance(hspConnector.sContext).getMarketCode();
 		return ret;
 //		tt.getMarketCode()
