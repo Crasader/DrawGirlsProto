@@ -353,6 +353,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setDuplicateLoginFunc([](){
+		if(hspConnector::get()->checkInspection()>0){
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			return;
+		}
+		
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert1),[](){
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
@@ -363,7 +368,13 @@ bool AppDelegate::applicationDidFinishLaunching()
 	
 	
 	GraphDog::get()->setCmdNoErrorFunc([](){
+		if(hspConnector::get()->checkInspection()>0){
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			return;
+		}
+		
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert2),[](){
+
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
 			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -372,6 +383,11 @@ bool AppDelegate::applicationDidFinishLaunching()
 	});
 	
 	GraphDog::get()->setLongTimeErrorFunc([](){
+		if(hspConnector::get()->checkInspection()>0){
+			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			return;
+		}
+		
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert3),[](){
 			mySGD->resetLabels();
 			AudioEngine::sharedInstance()->stopAllEffects();
@@ -384,11 +400,16 @@ bool AppDelegate::applicationDidFinishLaunching()
 		if(retry==0){
 			if(hspConnector::get()->checkInspection()>0){
 				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				return;
 			}
 			return;
 		}
 		ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
-			GraphDog::get()->command(vcp);
+			if(hspConnector::get()->checkInspection()>0){
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+			}else{
+				GraphDog::get()->command(vcp);
+			}
 		});
 		((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 	});
