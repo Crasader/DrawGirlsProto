@@ -2283,6 +2283,7 @@ void KSCumberBase::lightSmaller()
 void KSCumberBase::endTeleport()
 {
 	startMoving();
+	myGD->setMainCumberPoint(this, ccp2ip(getPosition()));
 	myGD->communication("CP_onPatternEndOf", this);
 }
 

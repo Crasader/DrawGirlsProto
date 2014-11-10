@@ -2122,6 +2122,25 @@ public:
 	void update(float dt)
 	{
 		// 여기서 몬스터와 부딪힌거 검사하면서 터짐.
+		
+		bool isEnable = true;
+		bool emptyMonster = false;
+		bool invalidRange = false;
+		if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+		
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+		
 		m_tickCount -= 1.f/60.f;
 		m_coolFrame = MAX(m_coolFrame - 1, 0);
 		if(m_tickCount <= 0)
