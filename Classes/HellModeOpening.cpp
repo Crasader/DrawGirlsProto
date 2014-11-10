@@ -165,8 +165,14 @@ void HellModeOpening::setMain()
 		t_info.title = NSDS_GS(kSDS_GI_hellMode_int1_title_s, i+1);
 		t_info.content = NSDS_GS(kSDS_GI_hellMode_int1_content_s, i+1);
 		t_info.is_take = false;
+		t_info.is_clear = false;
 		
 		int piece_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
+		if(mySGD->isClearPiece(piece_number))
+		{
+			t_info.is_clear = true;
+		}
+		
 		int card_number = NSDS_GI(piece_number, kSDS_SI_level_int1_card_i, 1);
 		
 		int character_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
@@ -637,17 +643,34 @@ CCTableViewCell* HellModeOpening::tableCellAtIndex(CCTableView *table, unsigned 
 		
 		if(hell_list[idx].is_take)
 		{
-			CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			take_back->setContentSize(CCSizeMake(50, 25));
-			take_back->setPosition(ccp(30,27));
-			take_back->setRotation(-20);
-			cell->addChild(take_back);
-			
-			KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTakeCharacter), mySGD->getFont().c_str(), 12);
-			take_label->setColor(ccc3(255, 255, 30));
-			take_label->enableOuterStroke(ccBLACK, 0.3f, 60, true);
-			take_label->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
-			take_back->addChild(take_label);
+			if(hell_list[idx].is_clear)
+			{
+				CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+				take_back->setContentSize(CCSizeMake(50, 25));
+				take_back->setPosition(ccp(30,27));
+				take_back->setRotation(-20);
+				cell->addChild(take_back);
+				
+				KSLabelTTF* take_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_hellTakeCharacter), mySGD->getFont().c_str(), 12);
+				take_label->setColor(ccc3(255, 255, 30));
+				take_label->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+				take_label->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+				take_back->addChild(take_label);
+			}
+			else
+			{
+				CCScale9Sprite* take_back = CCScale9Sprite::create("subpop_stamp.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+				take_back->setContentSize(CCSizeMake(55, 25));
+				take_back->setPosition(ccp(30,27));
+				take_back->setRotation(-20);
+				cell->addChild(take_back);
+				
+				KSLabelTTF* take_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_characterExpUpValue), mySGD->getGachaCharExp()), mySGD->getFont().c_str(), 10);
+				take_label->setColor(ccc3(255, 255, 30));
+				take_label->enableOuterStroke(ccBLACK, 0.3f, 60, true);
+				take_label->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+				take_back->addChild(take_label);
+			}
 		}
 	}
 	else

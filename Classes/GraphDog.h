@@ -158,10 +158,7 @@ public:
 		r.parse(oss.str().c_str(),v);
 		this->command(action,v,func);
 	}
-	
-	
-	
-	
+
 	std::vector<CCObject*> deleList;
 	
 	void addTarget(CCObject *obj){
@@ -238,7 +235,7 @@ public:
 		cp.func=func;
 		std::vector<CommandParam> p;
 		p.push_back(cp);
-		commandRetryFunc(p);
+		commandRetryFunc(p,1);
 	}
 	
 	long long int getMemberID();
@@ -284,9 +281,9 @@ public:
 	std::function<void(void)> cmdNoErrorFunc;
 	std::function<void(void)> longTimeErrorFunc;
 	std::function<void(void)> commandFinishedFunc;
-	std::function<void(std::vector<CommandParam>)> commandRetryFunc;
+	std::function<void(std::vector<CommandParam>,int)> commandRetryFunc;
 	
-	void setCommandRetryFunc(std::function<void(std::vector<CommandParam>)> func){
+	void setCommandRetryFunc(std::function<void(std::vector<CommandParam>,int)> func){
 		commandRetryFunc = func;
 	}
 	
@@ -305,6 +302,7 @@ public:
 	void setLongTimeErrorFunc(std::function<void(void)> func){
 		longTimeErrorFunc = func;
 	}
+	
 	
 	std::chrono::time_point<std::chrono::system_clock> timecheck;
 	void timeLog(string log){
@@ -431,7 +429,7 @@ private:
 		this->commandFinishedFunc=nullptr;
 		this->commandRetryFunc=nullptr;
 		this->deviceID=0;
-        AutoIncrease::cnt=0;
+		AutoIncrease::cnt=0;
 		
 		
 	}

@@ -1492,7 +1492,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(clr_cdt_type != kCLEAR_percentage && mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= 0.85f)
+	if(clr_cdt_type != kCLEAR_percentage && mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= clearPercentage.getV())
 	{
 		is_on_clear_time_event = true;
 		clear_time_event_func([=]()
@@ -1780,10 +1780,10 @@ void PlayUI::hellModeResult()
 		myGD->communication("Main_allStopSchedule");
 		myGD->communication("Main_startMoveToBossPosition");
 		myGD->communication("CP_startDieAnimation");
-		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		addResultCCB("ui_missonfail.ccbi");
-		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+//		addResultCCB("ui_gameover.ccbi");
+//		AudioEngine::sharedInstance()->playEffect("ment_gameover3.mp3", false, true);
 		
 		endGame(false);
 		
@@ -1825,10 +1825,10 @@ void PlayUI::hellModeResult()
 		myGD->communication("CP_setGameover");
 		myGD->removeAllPattern();
 		myGD->communication("Main_allStopSchedule");
-		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		addResultCCB("ui_missonfail.ccbi");
-		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+//		addResultCCB("ui_missonfail.ccbi");
+//		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 		
 		endGame(false);
 	}
@@ -1924,6 +1924,64 @@ void PlayUI::addResultCCB(string ccb_filename)
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
+		
+		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
+		shadow->setOpacityOuterStroke(0);
+		
+		mission_fail_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
+																   {
+																	   float convert_t;
+																	   if (t < 1 / 2.75)
+																	   {
+																		   t = 7.5625f * t * t;
+																	   } else if (t < 2 / 2.75)
+																	   {
+																		   t -= 1.5f / 2.75f;
+																		   t = 7.5625f * t * t + 0.75f;
+																	   } else if(t < 2.5 / 2.75)
+																	   {
+																		   t -= 2.25f / 2.75f;
+																		   t = 7.5625f * t * t + 0.9375f;
+																	   }
+																	   
+																	   t -= 2.625f / 2.75f;
+																	   convert_t = 7.5625f * t * t + 0.984375f;
+																	   
+																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
+																	   mission_fail_label->setOpacity(t*255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+																   }, [=](float t)
+																   {
+																	   mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y));
+																	   mission_fail_label->setOpacity(255);
+																	   shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+																	   
+																	   mission_fail_label->addChild(KSTimer::create(32.f/30.f, [=]()
+																													{
+																														mission_fail_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																												   {
+																																													   mission_fail_label->setScale(1.f+t*0.6f);
+																																													   mission_fail_label->setOpacity(255-t*255);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																												   }, [=](float t)
+																																												   {
+																																													   mission_fail_label->setScale(1.6f);
+																																													   mission_fail_label->setOpacity(0);
+																																													   shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																													   
+																																													   mission_fail_label->removeFromParent();
+																																												   }));
+																													}));
+																   }));
+	}
+	else if(ccb_filename == "ui_gameover.ccbi")
+	{
+		KSLabelTTF* mission_fail_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleGameover), mySGD->getFont().c_str(), 45);
+		mission_fail_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+		mission_fail_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
+		mission_fail_label->setPosition(ccp(240,myDSH->ui_center_y+93));
+		mission_fail_label->setOpacity(0);
+		addChild(mission_fail_label);
 		
 		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
 		shadow->setOpacityOuterStroke(0);
@@ -2333,11 +2391,11 @@ void PlayUI::setClearPercentage (float t_p)
 {
 	if(clr_cdt_type == kCLEAR_percentage)
 	{
-		float dis_value = t_p - 0.85f;
-		
 		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
 		if(t_iter != mission_oper_list.end())
 		{
+			float dis_value = t_p - 0.85f;
+			
 			if(t_iter->second.oper == "-")
 				dis_value -= t_iter->second.value;
 			else if(t_iter->second.oper == "*")
@@ -2347,9 +2405,9 @@ void PlayUI::setClearPercentage (float t_p)
 			
 			if(dis_value < 0)
 				dis_value = 0;
+			
+			t_p -= dis_value;
 		}
-		
-		t_p -= dis_value;
 	}
 	
 	clearPercentage = t_p;

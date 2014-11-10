@@ -363,6 +363,23 @@ public class hspConnector {
 		return gameServerAddress;
 	}
 
+	public static int checkInspection() {
+		HSPServiceProperties properties = HSPCore.getInstance().getServiceProperties();
+		HSPServiceProperties.HSPLaunchingState state = properties.getLaunchingState();
+		
+		switch ( state )
+		{
+             case HSP_LAUNCHINGSTATE_CLIENT_VERSION_FAIL:
+             	return 2;
+             case HSP_LAUNCHINGSTATE_HANGAME_INSPECTION:
+             case HSP_LAUNCHINGSTATE_GAME_INSPECTION:
+             case HSP_LAUNCHINGSTATE_PLATFORM_INSPECTION:
+             	return 1;
+        }
+
+        return 0;
+	}
+
 	public static int openKakaoMsg() {
 
 		/**

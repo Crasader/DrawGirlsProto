@@ -38,9 +38,10 @@ echo $lname[1];
 		<script src="http://code.jquery.com/ui/1.10.4/jquery-ui.min.js"></script>
 		<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.4/themes/black-tie/jquery-ui.css">
 		<script src="jquery-ui-timepicker-addon.js"></script>
-		<script src="lib.js"></script>
-		<script src="LQDataTable.js"></script>
-		<script src="LQEditor.js"></script>
+		<script type="text/javascript" src="LQEditor_constant.php"></script>
+		<script type="text/javascript" src="lib.js"></script>
+		<script type="text/javascript" src="LQDataTable.js"></script>
+		<script type="text/javascript" src="LQEditor.js"></script>
 		<link rel="stylesheet" href="LQDataTable.css">
 		<!-- Latest compiled and minified CSS -->
 

@@ -47,6 +47,7 @@ $(document).ready(function(){
 		<th title='받은일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"text"}' >받은일시</th>
 		<th title='확인일시' field='confirmDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}'  editor='{"type":"text"}' >확인일시</th>
 		<th title='보낸사람' field='sender' viewer='{"type":"text"}'  editor='{"type":"text"}' >보낸사람</th>
+		<th title='보낸사람ID' field='sendMemberID' viewer='{"type":"text"}'  editor='{"type":"text"}' >보낸사람ID</th>
 		<th title='내용' field='content' viewer='{"type":"text"}'  editor='{"type":"text"}' >내용</th>
 		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}'>교환ID</th>
 		<th title='교환ID' field='exchangeList' viewer='{"type":"autoViewer"}' >교환커스텀</th>

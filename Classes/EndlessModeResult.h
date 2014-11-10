@@ -75,6 +75,9 @@ private:
 	function<void(function<void()>)> gold_calc_func;
 	function<void(function<void()>)> gift_func;
 	
+	ccColor3B left_gold_color;
+	ccColor3B right_gold_color;
+	
 	CCScale9Sprite* left_back;
 	CCScale9Sprite* right_back;
 	

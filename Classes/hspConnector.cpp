@@ -565,8 +565,8 @@ string hspConnector::getServerAddress(){
 	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
 	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
-	serverAddr = "http://182.162.201.147:10010";
-	
+	//serverAddr = "http://182.162.201.147:10010";
+	serverAddr = "http://182.162.196.182:10080";
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
@@ -1189,6 +1189,40 @@ void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam,j
 	 }];
 #endif
 }
+	 
+int hspConnector::checkInspection(){
+
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	JniMethodInfo t;
+	jint ret = -1;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkInspection", "()I")) {
+			
+			ret = t.env->CallStaticIntMethod(t.classID, t.methodID, _key);
+			t.env->DeleteLocalRef(t.classID);
+		}
+	
+	return (int)ret;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
+ 
+	HSPLaunchingState state = [properties launchingState];
+ 
+	switch ( state )
+	{
+		case HSP_LAUNCHINGSTATE_CLIENT_VERSION_FAIL:
+			return 2;
+		case HSP_LAUNCHINGSTATE_HANGAME_INSPECTION:
+		case HSP_LAUNCHINGSTATE_GAME_INSPECTION:
+		case HSP_LAUNCHINGSTATE_PLATFORM_INSPECTION:
+			return 1;
+	}
+	
+	return 0;
+	
+#endif
+	
+}
+	 
 void hspConnector::purchaseProduct(Json::Value param,Json::Value callbackParam, CCObject* target, jsonSelType func)
 {
 	GraphDog::get()->addTarget(target);

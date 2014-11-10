@@ -57,7 +57,7 @@ $(document).ready(function(){
 		<th title='이벤트번호' field='eventNo' viewer='<?=json_encode($listViewer)?>' editor='<?=json_encode($listViewer)?>' >이벤트번호</th>
 		<th title='선물함내용' field='title' viewer='{"type":"text"}' editor='{"type":"text"}' >선물함내용</th>
 		<th title='몇번째날?' field='day' viewer='{"type":"text"}' editor='{"type":"text"}' >몇번째날?</th>
-		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"로그인이벤트","statsID":"loginEvent","statsValueField":"no"}' >교환ID</th>
+		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"출석이벤트","statsID":"attendence","statsValueField":"no"}' >교환ID</th>
 		<th manage='insert delete update' ></th>
 		</tr> 
 	</thead>

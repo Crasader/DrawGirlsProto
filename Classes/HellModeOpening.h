@@ -35,6 +35,7 @@ public:
 	string content;
 	string character_name;
 	bool is_take;
+	bool is_clear;
 };
 class HellModeOpening : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {

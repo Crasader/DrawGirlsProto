@@ -261,6 +261,8 @@ public:
 	void IgawAdbrixFirstTimeExperience(string msg);
 	void IgawAdbrixRetention(string msg);
 	int registerGamePadCallback(jsonSelType func);
+	int checkInspection();
+	
 protected:
 	void registerGamePadCallback(CCObject* target, jsonSelType func);
 public:
