@@ -527,7 +527,41 @@ string hspConnector::getStoreID()
 	
 	
 }
-
+string hspConnector::getHSPConfigurationProp(const std::string& prop)
+{
+	//	return "TS";
+	unsigned long ps;
+	//	CCLOG("%s", CCFileUtils::sharedFileUtils()->fullPathForFilename("HSPConfiguration__.xml").c_str());
+	unsigned char* tt = CCFileUtils::sharedFileUtils()->getFileData("HSPConfiguration.xml", "rt", &ps);
+	std::string xml((char*)tt, ps);
+	// key="HSP_PAYMENT_STORE_ID" value="TS"
+	xml_document<> xmlDoc;
+	xmlDoc.parse<0>( (char*)xml.c_str() );
+	
+	// root 포인터
+	xml_node<  >* root = xmlDoc.first_node();
+	xml_node<  >* Item;
+	xml_node< >* SubItem;
+	char* Name;
+	char* Value;
+	xml_attribute< >* Attr;
+	// root 하위 Node 탐색
+	Item = root->first_node();
+	for(xml_node<>* node = Item; node; node = node->next_sibling())
+	{
+		Attr = node->first_attribute();
+		//			CCLog("%s", Attr->name());
+		Name = Attr->value();
+		if(Name == prop)
+		{
+			Attr = Attr->next_attribute();
+			Name  = Attr->name();	// Attribute 의 이름
+			Value = Attr->value();	// Attribute 의 값
+			return Value;
+		}
+	} 
+	return "";
+}
 string hspConnector::getTimeZone(){
 	
 	string r;

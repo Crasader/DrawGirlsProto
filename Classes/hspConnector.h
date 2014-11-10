@@ -229,6 +229,7 @@ public:
 	string getCountryCode();
 	string getMarketCode();
 	string getStoreID();
+	string getHSPConfigurationProp(const std::string& prop);
 	string getTimeZone();
 	string getServerAddress();
 	void sendPushMessage();
