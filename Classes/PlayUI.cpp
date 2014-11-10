@@ -1780,10 +1780,10 @@ void PlayUI::hellModeResult()
 		myGD->communication("Main_allStopSchedule");
 		myGD->communication("Main_startMoveToBossPosition");
 		myGD->communication("CP_startDieAnimation");
-		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		addResultCCB("ui_gameover.ccbi");
-		AudioEngine::sharedInstance()->playEffect("ment_gameover3.mp3", false, true);
+//		addResultCCB("ui_gameover.ccbi");
+//		AudioEngine::sharedInstance()->playEffect("ment_gameover3.mp3", false, true);
 		
 		endGame(false);
 		
@@ -1825,10 +1825,10 @@ void PlayUI::hellModeResult()
 		myGD->communication("CP_setGameover");
 		myGD->removeAllPattern();
 		myGD->communication("Main_allStopSchedule");
-		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+//		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
-		addResultCCB("ui_missonfail.ccbi");
-		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+//		addResultCCB("ui_missonfail.ccbi");
+//		AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
 		
 		endGame(false);
 	}
