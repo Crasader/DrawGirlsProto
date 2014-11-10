@@ -4676,7 +4676,7 @@ void VMesh::myInit(const Json::Value& param)
 	m_currentFrames = 0;
 	schedule(schedule_selector(ThisClassType::myAction));
 	m_vMesh = CCSprite::create("vmesh.png");
-	m_vMesh->setScaleY(4.0f);
+	m_vMesh->setScaleY(10.0f);
 	m_vMesh->setPosition(ccp(m_xPos, 0));
 	m_vMesh->setColor(ccc3(255, 0, 0));
 	m_vMesh->setOpacity(0);
@@ -4696,6 +4696,65 @@ void VMesh::myAction(float dt)
 	{
 		auto jackPosition = myGD->getJackPoint().convertToCCP();
 		CCLOG("diff jack %f", fabsf(jackPosition.x - m_xPos));
+		
+		if(fabsf(jackPosition.x - m_xPos) <= 30)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		}
+		removeFromParent();
+	}
+	
+}
+
+
+
+
+
+HMesh* HMesh::create(const Json::Value& param)
+{
+	HMesh* t_to = new HMesh();
+	t_to->myInit(param);
+	t_to->autorelease();
+	return t_to;
+}
+void HMesh::stopMyAction ()
+{
+	
+}
+void HMesh::myInit(const Json::Value& param)
+{
+	m_yPos = param.get("y", 0).asFloat();
+	m_originalDelayFrames = m_delayFrames = param.get("delayframes", 180).asInt();
+	m_currentFrames = 0;
+	schedule(schedule_selector(ThisClassType::myAction));
+	m_hMesh = CCSprite::create("hmesh.png");
+	m_hMesh->setScaleX(10.0f);
+	m_hMesh->setPosition(ccp(0, m_yPos));
+	m_hMesh->setColor(ccc3(255, 0, 0));
+	m_hMesh->setOpacity(0);
+	addChild(m_hMesh);
+}
+
+void HMesh::myAction(float dt)
+{
+	m_currentFrames++;
+	if(m_currentFrames <= m_delayFrames)
+	{
+		//
+		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
+		m_hMesh->setOpacity(255.f * progress);
+	}
+	else
+	{
+		auto jackPosition = myGD->getJackPoint().convertToCCP();
+		CCLOG("diff jack %f", fabsf(jackPosition.y - m_yPos));
+		if(fabsf(jackPosition.y - m_yPos) <= 30)
+		{
+			myGD->communication("CP_jackCrashDie");
+			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		}
+
 		removeFromParent();
 	}
 	
