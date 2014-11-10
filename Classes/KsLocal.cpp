@@ -1248,6 +1248,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial46] = "캐릭터는 헬모드나 뽑기를 통해 얻을수있으니 명심하라구~!";
 	obj[LK::kMyLocalKey_nextLevel] = "(다음레벨)";
 	obj[LK::kMyLocalKey_characterExpUpValue] = "Exp +%d";
+	obj[LK::kMyLocalKey_notCleardHellMissionCondition] = "<font>%d초를 버티세요!";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

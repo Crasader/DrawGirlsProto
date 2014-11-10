@@ -120,64 +120,7 @@ bool CharacterSelectPopup::init()
 							});
 	main_case->addChild(close_menu, kCSP_Z_content);
 	
-	
-	list_cnt = NSDS_GI(kSDS_GI_characterCount_i);
-	for(int i=0;i<list_cnt;i++)
-	{
-		CharacterInfo t_info;
-		t_info.m_number = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1);
-		t_info.m_index = i+1;
-		t_info.m_name = NSDS_GS(kSDS_GI_characterInfo_int1_name_s, i+1);
-		t_info.m_character = NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i+1);
-		t_info.is_have = false;
-		t_info.m_card = -1;
-		t_info.m_level = 1;
-		
-		bool is_found = false;
-		int history_size = mySGD->getCharacterHistorySize();
-		for(int j=0;!is_found && j<history_size;j++)
-		{
-			CharacterHistory t_history = mySGD->getCharacterHistory(j);
-			if(t_history.characterNo.getV() == t_info.m_number)
-			{
-				t_info.m_damage = mySGD->getUserdataMissileInfoPower();
-				t_info.m_level = t_history.characterLevel.getV();
-				t_info.is_have = true;
-				is_found = true;
-			}
-		}
-		
-		t_info.m_comment = NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, i+1, t_info.m_level);
-		
-		history_list.push_back(t_info);
-	}
-	
-	int hell_list_cnt = NSDS_GI(kSDS_GI_hellMode_listCount_i);
-	for(int i=0;i<hell_list_cnt;i++)
-	{
-		int stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
-		int card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1);
-		int character_number = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
-		
-		bool is_found = false;
-		int history_size = mySGD->getCharacterHistorySize();
-		for(int j=0;!is_found && j<history_size;j++)
-		{
-			CharacterHistory t_history = mySGD->getCharacterHistory(j);
-			if(t_history.characterNo.getV() == character_number)
-			{
-				for(int j=0;j<list_cnt;j++)
-				{
-					if(history_list[j].m_number == character_number)
-					{
-//						history_list[j].is_have = true;
-						history_list[j].m_card = card_number;
-						break;
-					}
-				}
-			}
-		}
-	}
+	resetInfo();
 	
 	selected_character_number = mySGD->getSelectedCharacterHistory().characterNo.getV();
 	
@@ -268,8 +211,72 @@ bool CharacterSelectPopup::init()
 	return true;
 }
 
+void CharacterSelectPopup::resetInfo()
+{
+	history_list.clear();
+	list_cnt = NSDS_GI(kSDS_GI_characterCount_i);
+	for(int i=0;i<list_cnt;i++)
+	{
+		CharacterInfo t_info;
+		t_info.m_number = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1);
+		t_info.m_index = i+1;
+		t_info.m_name = NSDS_GS(kSDS_GI_characterInfo_int1_name_s, i+1);
+		t_info.m_character = NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, i+1);
+		t_info.is_have = false;
+		t_info.m_card = -1;
+		t_info.m_level = 1;
+		
+		bool is_found = false;
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int j=0;!is_found && j<history_size;j++)
+		{
+			CharacterHistory t_history = mySGD->getCharacterHistory(j);
+			if(t_history.characterNo.getV() == t_info.m_number)
+			{
+				t_info.m_damage = mySGD->getUserdataMissileInfoPower();
+				t_info.m_level = t_history.characterLevel.getV();
+				t_info.is_have = true;
+				is_found = true;
+			}
+		}
+		
+		t_info.m_comment = NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, i+1, t_info.m_level);
+		
+		history_list.push_back(t_info);
+	}
+	
+	int hell_list_cnt = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+	for(int i=0;i<hell_list_cnt;i++)
+	{
+		int stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
+		int card_number = NSDS_GI(stage_number, kSDS_SI_level_int1_card_i, 1);
+		int character_number = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+		
+		bool is_found = false;
+		int history_size = mySGD->getCharacterHistorySize();
+		for(int j=0;!is_found && j<history_size;j++)
+		{
+			CharacterHistory t_history = mySGD->getCharacterHistory(j);
+			if(t_history.characterNo.getV() == character_number)
+			{
+				for(int j=0;j<list_cnt;j++)
+				{
+					if(history_list[j].m_number == character_number)
+					{
+						//						history_list[j].is_have = true;
+						history_list[j].m_card = card_number;
+						break;
+					}
+				}
+			}
+		}
+	}
+}
+
 void CharacterSelectPopup::gachaClose()
 {
+	resetInfo();
+	character_table->reloadData();
 	main_case->setScaleY(0.f);
 	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
 		main_case->setScaleY(t);

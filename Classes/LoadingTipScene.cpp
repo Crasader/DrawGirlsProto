@@ -748,8 +748,14 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	else if(mission_type == kCLEAR_hellMode)
 	{
 //		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
-//		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+//
+		string loading_ment;
+		if(mySGD->isClearPiece(mySD->getSilType()))
+			loading_ment = getLocal(LK::kMyLocalKey_missionCondition8);
+		else
+			loading_ment = ccsf(getLocal(LK::kMyLocalKey_notCleardHellMissionCondition), mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime"));
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(loading_ment.c_str(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);
@@ -1722,7 +1728,13 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 		{
 			//		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			//
-			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition8), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			string loading_ment;
+			if(mySGD->isClearPiece(mySD->getSilType()))
+				loading_ment = getLocal(LK::kMyLocalKey_missionCondition8);
+			else
+				loading_ment = ccsf(getLocal(LK::kMyLocalKey_notCleardHellMissionCondition), mySDS->getIntegerForKey(kSDF_stageInfo, mySD->getSilType(), "playtime"));
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(loading_ment.c_str(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);

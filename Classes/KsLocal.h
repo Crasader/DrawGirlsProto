@@ -1211,7 +1211,8 @@ enum class LK
 	kMyLocalKey_cardNumber,
 	kMyLocalKey_characterBonus,
 	kMyLocalKey_nextLevel,
-	kMyLocalKey_characterExpUpValue
+	kMyLocalKey_characterExpUpValue,
+	kMyLocalKey_notCleardHellMissionCondition
 };
 class KsLocal
 {

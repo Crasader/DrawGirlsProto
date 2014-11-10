@@ -3392,10 +3392,14 @@ void PlayUI::counting ()
 				countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
 				float percentage_value = 100.f*(float(label_value) + (detail_counting_cnt/6)/10.f)/(playtime_limit.getV()+1);
 				progress_timer->setPercentage(percentage_value);
-				if(percentage_value >= 100.f && progress_timer->isVisible())
+				if(percentage_value >= 100.f)
 				{
-					conditionClear();
+					if(progress_timer->isVisible())
+						conditionClear();
+					else
+						is_cleared_cdt = true;
 				}
+				
 				mySGD->hell_play_time = float(label_value) + (detail_counting_cnt/6)/10.f;
 			}
 			else
@@ -3425,7 +3429,10 @@ void PlayUI::counting ()
 			progress_timer->setPercentage(percentage_value);
 			if(percentage_value >= 100.f)
 			{
-				conditionClear();
+				if(progress_timer->isVisible())
+					conditionClear();
+				else
+					is_cleared_cdt = true;
 			}
 			mySGD->hell_play_time = float(label_value) + (detail_counting_cnt/6)/10.f;
 		}
@@ -3576,20 +3583,35 @@ void PlayUI::endGame (bool is_show_reason)
 		}
 		else
 		{
-			keep_percentage = getPercentage();
-			
-			CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
-			CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
-			CCDelayTime* n_d2 = CCDelayTime::create(2.f);
-			CCFiniteTimeAction* nextScene2;
-			if(mySGD->is_endless_mode)
-				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha));
+			if(mySGD->is_hell_mode)
+			{
+				int grade_value = 1;
+				
+				mySGD->gameClear(grade_value, int(getScore()), (beforePercentage^t_tta)/1000.f, countingCnt.getV(), use_time, total_time);
+				CCDelayTime* n_d = CCDelayTime::create(4.5f);
+				CCCallFunc* nextScene = CCCallFunc::create(this, callfunc_selector(PlayUI::nextScene));
+				
+				CCSequence* sequence = CCSequence::createWithTwoActions(n_d, nextScene);
+				
+				runAction(sequence);
+			}
 			else
-				nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
-			
-			CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
-			
-			runAction(sequence);
+			{
+				keep_percentage = getPercentage();
+				
+				CCDelayTime* n_d1 = CCDelayTime::create(4.5f);
+				CCCallFunc* nextScene1 = CCCallFunc::create(this, callfunc_selector(PlayUI::searchEmptyPosition));
+				CCDelayTime* n_d2 = CCDelayTime::create(2.f);
+				CCFiniteTimeAction* nextScene2;
+				if(mySGD->is_endless_mode)
+					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::cancelOnePercentGacha));
+				else
+					nextScene2 = CCCallFunc::create(this, callfunc_selector(PlayUI::showGachaOnePercent));
+				
+				CCSequence* sequence = CCSequence::create(n_d1, nextScene1, n_d2, nextScene2, NULL);
+				
+				runAction(sequence);
+			}
 		}
 	}
 	else
@@ -4457,7 +4479,10 @@ void PlayUI::myInit ()
 					if(t_history.characterNo == cha_no)
 					{
 						is_found2 = true;
-						progress_timer->setVisible(false);
+						if(mySGD->isClearPiece(mySD->getSilType()))
+						{
+							progress_timer->setVisible(false);
+						}
 					}
 				}
 			}

@@ -5883,6 +5883,7 @@ void MainFlowScene::countingAchievement()
 
 void MainFlowScene::popupClose()
 {
+	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_stage);
 	is_menu_enable = true;
 	puzzle_table->setTouchEnabled(true);
 }

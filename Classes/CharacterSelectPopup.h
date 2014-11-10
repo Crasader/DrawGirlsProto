@@ -76,6 +76,7 @@ private:
 	void characterChangeAction(CCObject* sender);
 	void resultUpdateCharacterHistory(Json::Value result_data);
 	void gachaClose();
+	void resetInfo();
 };
 
 #endif /* defined(__DGproto__CharacterSelectPopup__) */
