@@ -2,6 +2,40 @@
 include "header.php";
 
 
+// while($piece = Piece::getObjectbyQuery()){
+// 	$boss =& $piece->getRef("boss");
+// 	if($piece->no<=100){
+// 		$boss[0]["agi"]=$piece->no;	
+		
+// 		$jr =& $piece->getRef("junior");
+// 		for($i=0;$i<count($jr);$i++){
+// 			$jr[$i]["agi"]=$piece->no;
+// 		}
+// 	}else{
+// 		$boss[0]["agi"]=100;	
+// 		$jr =& $piece->getRef("junior");
+// 		for($i=0;$i<count($jr);$i++){
+// 			$jr[$i]["agi"]=100;
+// 		}
+// 	}
+
+
+// 	echo json_encode($piece->boss)."<br><br>";
+// 	echo json_encode($piece->junior)."<br><br>";
+// 	$piece->save();
+// }
+// while($userindex = UserIndex::getRowByQuery()){
+// 	$mID = $userindex["memberID"];
+// 	$userData = new UserData($mID);
+// 	$character = new CharacterHistory($mID,1);
+//	if($userData->level==0){
+// 	$charLevel = $character->level;
+
+// 	$userData->level = $charLevel;
+//	$character->level = 1;
+// 	$character->save();
+//	}
+// }
 // $enc = decryptByAESWithBase64("es1hmm2BeF8wfgnRfKN7D3zgX78TbuzEj4GjeKaQG6tqqxmeHmCbagw6OfUjLnROF4XhcTl8gertaZppPtb8FoNFk5dBCot7D81iEnWfiEd1OsX2mqM8aRsHsbR+DMl8YRkz+LgWpFS+rfyMSet2ntVF7Mu2UOb2DIm6wvJoF5fsjf4y3y3EOlRkyUziccR/6P1jAaLij8bYyFWu45tpDjSGZa+iQBw5cQqfIWUdwt4zhbMVFKWfrcE4dNGUNSQy6ZrWhiCOTUSSS57KLwCVONqskiJ23Dk2SqndpUFBD7RNKDq9MbZKH7MRQthfxmiG");
 
 // echo $enc;

@@ -753,16 +753,19 @@ void GraphDog::receivedCommand(float dt)
 					
 					CCLOG("commands.errorCnt<=1");
 					if(commands.errorCnt<=1){
+						commandRetryFunc(vcp,0);
 						//TRACE();
 						CCLOG("commands.chunk.resultCode != CURLE_OK");
 						this->command(vcp,commands.errorCnt+1);
 						//TRACE();
 					}else{
 						//TRACE();
-						commandRetryFunc(vcp);
+						commandRetryFunc(vcp,1);
 						//TRACE();
 					}
 				}else{
+					std::vector<CommandParam> vcp;
+					commandRetryFunc(vcp,0);
 					
 					//TRACE();
 					for(std::map<string, CommandType>::iterator commandTypeIter = commandQueueIter->second.commands.begin(); commandTypeIter != commandQueueIter->second.commands.end(); ++commandTypeIter)
@@ -962,12 +965,13 @@ void GraphDog::receivedCommand(float dt)
 					if(commands.errorCnt<=1){
 						CCLOG("commands.errorCnt<=1");
 						//TRACE();
+						commandRetryFunc(vcp,0);
 						this->command(vcp,commands.errorCnt+1);
 						//TRACE();
 					}else{
 						CCLOG("!! commands.errorCnt<=1");
 						//TRACE();
-						commandRetryFunc(vcp);
+						commandRetryFunc(vcp,1);
 						//TRACE();
 					}
 				}

@@ -1726,7 +1726,7 @@ public:
 		}
 
 		// 몬스터가 맞는 조건
-		if(found)
+		if(found && !myGD->getIsGameover())
 		{
 			CCPoint effectPosition = m_missileSprite->getPosition();
 			effectPosition.x += rand()%21 - 10;
@@ -2009,7 +2009,7 @@ public:
 		}
 
 
-		if(found)
+		if(found && !myGD->getIsGameover())
 		{
 			CCPoint effectPosition = m_mine->getPosition();
 			effectPosition.x += rand()%21 - 10;
@@ -2149,7 +2149,7 @@ public:
 			removeFromParent();
 			IntPoint mapPoint;
 			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5.f);
-			if(found)
+			if(found && !myGD->getIsGameover())
 			{
 				SpiritAttack* ma = SpiritAttack::create(m_mine->getPosition(), ip2ccp(mapPoint), m_fileName,
 																								m_initTickCount, m_power, m_subPower, m_speed, m_coolFrame, m_option);
@@ -2198,7 +2198,7 @@ public:
 			}
 
 
-			if(found)
+			if(found && !myGD->getIsGameover())
 			{
 				CCPoint effectPosition = m_mine->getPosition();
 				effectPosition.x += rand()%21 - 10;
@@ -2487,14 +2487,16 @@ public:
 				}
 			}
 		
-			for(auto iter : nearMonsters)
-			{
-				CCPoint effectPosition = iter->getPosition();
-				effectPosition.x += rand()%21 - 10;
-				effectPosition.y += rand()%21 - 10;
+			if(!myGD->getIsGameover()){
+				for(auto iter : nearMonsters)
+				{
+					CCPoint effectPosition = iter->getPosition();
+					effectPosition.x += rand()%21 - 10;
+					effectPosition.y += rand()%21 - 10;
 
-				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+					float damage = m_power;
+					executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+				}
 			}
 
 //		if(m_jiggleInterval == 0)
@@ -3254,8 +3256,10 @@ public:
 				effectPosition.y += rand()%21 - 10;
 				
 				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
 				
+				if(!myGD->getIsGameover()){
+					executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
+				}
 				removeFromParentAndCleanup(true);
 			}
 			else  // 거리가 멀면 몬스터 쪽으로 유도함.
@@ -3692,7 +3696,9 @@ public:
 			effectPosition.y += rand()%21 - 10;
 			
 			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(nearCumber), damage, m_subPower, 0.f, effectPosition);
+			if(!myGD->getIsGameover()){
+				executeOption(dynamic_cast<KSCumberBase*>(nearCumber), damage, m_subPower, 0.f, effectPosition);
+			}
 			nearCumber->setSpeedRatioForStone(this, 0.3f);
 			nearCumber->setSlowDurationFrame(60 * 3);
 //			addChild(KSTimer::create(2.f, ))

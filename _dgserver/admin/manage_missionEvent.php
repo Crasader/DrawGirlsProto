@@ -18,7 +18,7 @@ include "manage_header.php";
 		<th title='이벤트값' field='value' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >이벤트값</th>
 		<th title='이벤트값2' field='value2' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >이벤트값2</th>
 		<th title='우편함내용' field='message' viewer='{"type":"text"}' editor='{"type":"text"}' >우편함내용</th>
-		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"로그인이벤트","statsID":"loginEvent","statsValueField":"no"}' >교환ID</th>
+		<th title='교환ID' field='exchangeID' viewer='{"type":"exchangeviewer"}' editor='{"type":"exchangemaker","content":"미션이벤트","statsID":"missionEvent","statsValueField":"no"}' >교환ID</th>
 		<th manage='update delete insert' ></th>
 		</tr> 
 	</thead>

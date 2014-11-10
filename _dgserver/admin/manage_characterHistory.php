@@ -4,7 +4,7 @@
 	$listViewer=array("type"=>"select");
 	while($pData = Character::getRowByQuery("",null,"name,no")){
 		$lang = json_decode($pData["name"],true);
-		$listViewer["element"][] = $pData["no"]."-".$lang["ko"];
+		$listViewer["element"][] = $pData["no"]."-".$lang["kr"];
 		$listViewer["value"][]=$pData["no"];
 	}
 ?>
@@ -52,6 +52,7 @@ $(document).ready(function(){
 			<th title='회원번호' field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >회원번호</th>
 			<th title='캐릭터' field='characterNo' viewer='<?=json_encode($listViewer)?>' editor='<?=json_encode($listViewer)?>' >캐릭터</th>
 			<th title='레벨' field='level' viewer='{"type":"text"}' editor='{"type":"text"}' >레벨</th>
+			<th title='경험치' field='exp' viewer='{"type":"text"}' editor='{"type":"text"}' >경험치</th>
 			<th title='구입일시' field='regDate' viewer='{"type":"datetime","format":"Y/m/d h:i:s"}' editor='{"type":"datetime"}' >구입일시</th>
 			<th manage='delete update insert' ></th>
 		</tr> 

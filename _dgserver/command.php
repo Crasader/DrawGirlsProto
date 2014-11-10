@@ -140,6 +140,7 @@ if($error!=""){
     $commitMemberID=0;
     $commitCmdName="";
     $checkUserdata = false;
+    $transactionErrorList=array();
     for($c=0;$c<count($param);$c++){
         $cmd = (string)$c;
         if(!$param[$cmd]){
@@ -178,8 +179,9 @@ if($error!=""){
 
             if(!CommitManager::$m_passFunc && $commitMemberID && !ResultState::successCheck($r["result"])){
                  CommitManager::setSuccess($commitMemberID,false);
+                 $transactionErrorList["result"]=$r["result"];
+                 $transactionErrorList["name"]=$a;
             }
-            CommitManager::$m_passFunc=false;
 
             
             $p2 = array();
@@ -193,12 +195,14 @@ if($error!=""){
             $p2["output"]=$r;
             $p2["output"]["log"]=$logs;
             $p2["execTime"]=$endTime-$startTime;
-            if($a!="writelog" && $commitMemberID && !CommitManager::isSuccess($commitMemberID))CommandClass::writelog($p2);
+            if($a!="writelog" && !ResultState::successCheck($r["result"]) && !CommitManager::$m_passFunc)CommandClass::writelog($p2);
             
             
             $r["log"]=LogManager::getLogAndClear();
             
             $allResult[$cmd]= $r;
+            
+            CommitManager::$m_passFunc=false;
         }else if($a=="help"){
             $class_methods = get_class_methods('commandClass');
             foreach ($class_methods as $method_name) {
@@ -232,6 +236,7 @@ if($error!=""){
             $allResult[$commitCmdName]=$cr;
         }else{
             $cr["result"] = ResultState::toArray(ResultState::GDFAILTRANSACTION,"transaction fail");
+            $cr["command"]=$transactionErrorList;
             $allResult[$commitCmdName]=$cr;
         }
 
@@ -240,7 +245,7 @@ if($error!=""){
             $cmd = (string)str_pad($cmd, 3,"0",STR_PAD_LEFT);
             if($allResult[$cmd]){
                 $allResult[$cmd]["transaction"]=$commitsuccess;
-                if(!$commitsuccess)$allResult[$cmd]["result"]=ResultState::toArray(ResultState::GDFAILTRANSACTION);
+                if(!$commitsuccess && ResultState::successCheck($allResult[$cmd]["result"]))$allResult[$cmd]["result"]=ResultState::toArray(ResultState::GDFAILTRANSACTION);
             }
         }
 
@@ -260,7 +265,7 @@ $allResult["timestamp"]=TimeManager::getTime();
 $allResult["date"]=TimeManager::getCurrentDateTime();
 $allResult["weekNo"]=TimeManager::getCurrentWeekNo();
 $allResult["cmdNo"]=$param["cmdNo"];
-$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_BIGINT_AS_STRING);
 
 if($mode=="nodes"){
     echo $allResult;

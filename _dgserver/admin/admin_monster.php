@@ -14,14 +14,16 @@ while($pData = Pattern::getRowByQuery("order by category",null,"type,name,templa
 var patternSelector = function(value,option){
 	var editorObj = editorFunc_select(value,option);
 	editorObj.addClass("patternSelector");
-	$('body').on("change",".patternSelector",function(){
-		var editorOption = s2j($(this).attr("editor"));
-		var temp = editorOption["template"][$(this).val()];
-		var md = {"data":{"template":temp},"index":$(this).val()};
-		selectedPattern($(this),md);
-	});
+
 	return editorObj;
 }
+
+$('body').on("change",".patternSelector",function(){
+	var editorOption = s2j($(this).attr("editor"));
+	var temp = editorOption["template"][$(this).val()];
+	var md = {"data":{"template":temp},"index":$(this).val()};
+	selectedPattern($(this),md);
+});
 </script>
 
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="Monster" dbWhere='{}' dbLimit="50" dbSort='{"puzzleNo":"asc"}' name="datatable" border=1 align=center>

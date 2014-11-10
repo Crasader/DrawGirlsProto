@@ -8,9 +8,11 @@ include "manage_header.php";
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserStorage" dbWhere='{"id":"*"}' dbLimit="50" dbSort='{"fr":"desc"}' name="goldRank" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
+		<th virtual rank>rank</th>
 		<th primary field='no' viewer='{"type":"text"}'>no</th>
-		<th field='memberID' viewer='{"type":"text"}' editor='{"type":"text"}' >memberID</th>
-		<th field='fr' viewer='{"type":"text"}' editor='{"type":"text"}' >fr</th>
+		<th virtual field='nick' viewer='{"type":"text"}'>nick</th>
+		<th field='memberID' viewer='{"type":"text"}'>memberID</th>
+		<th field='fr' viewer='{"type":"text"}'>fr</th>
 		</tr> 
 	</thead>
 	<tbody datazone>

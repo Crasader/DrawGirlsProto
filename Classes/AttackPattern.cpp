@@ -2118,8 +2118,10 @@ void CaromWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& pa
 	t_move_speed = pattern.get("speed", 200.0).asDouble() / 100.f;
 	t_cushion_cnt = pattern.get("cushioncount", 4).asInt();
 	t_is_big_bomb = pattern.get("big", false).asInt();
-	t_tmCnt = pattern.get("number", 10).asInt();
+	t_tmCnt = pattern.get("number", 3).asInt();
+	if(t_tmCnt<1)t_tmCnt=1;
 	m_crashArea = pattern.get("area", 20).asInt();
+	if(m_crashArea<1)m_crashArea=1;
 	///////////////////////////////////////////
 
 	scheduleUpdate();
@@ -2544,6 +2546,7 @@ void SawWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string& patt
 	reader.parse(patternData, pattern);
 	speed = pattern.get("speed", 150.f).asDouble() / 100.f;
 	crashsize = pattern.get("crashsize", 20.f).asDouble();
+	if(crashsize<1)crashsize=1;
 	m_cumber = cb;
 	m_earlyRelease = false;
 	setStartingWithEarly();
@@ -2578,8 +2581,10 @@ void SmallSawWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string&
 	Json::Value pattern;
 	reader.parse(patternData, pattern);
 	number = pattern.get("number", 4).asInt();
+	if(number<1)number=1;
 	speed = pattern.get("speed", 200.0).asDouble() / 100.f;
 	crashsize = pattern.get("crashsize", 10).asInt();
+	if(crashsize<1)crashsize=1;
 	m_cumber = cb;
 	m_earlyRelease = false;
 	setStartingWithEarly();
@@ -3176,7 +3181,10 @@ void ThrowBombWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::string
 	reader.parse(patternData, pattern);
 
 	m_frame = 0;
-	m_totalFrame = pattern.get("number", 5).asInt() * 40;
+	int number = pattern.get("number", 5).asInt();
+	if(number<1)number=1;
+	
+	m_totalFrame =  number * 40;
 	m_pattern = pattern;
 	m_targetSprite = KS::loadCCBI<CCSprite*>(this, "target3.ccbi").first;
 	addChild(m_targetSprite);
@@ -3195,18 +3203,20 @@ void ThrowBombWrapper::stopMyAction()
 
 void ThrowBombWrapper::update( float dt )
 {
-	m_frame++;
-	if(m_frame % 40 == 0)
-	{
-		// 쏨~
-		ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);
-		addChild(gun);
-	}
 	if(m_frame == m_totalFrame)
 	{
 		stopMyAction();
 		m_targetSprite->setVisible(false);
+	}else{
+		m_frame++;
+		if(m_frame % 40 == 0)
+		{
+			// 쏨~
+			ThrowBomb* gun = ThrowBomb::create(m_cumber->getPosition(), ip2ccp(myGD->getJackPoint()), m_pattern);
+			addChild(gun);
+		}
 	}
+
 }
 
 void ThrowBombWrapper::targetTraceUpdate(float dt)
@@ -3542,6 +3552,7 @@ void AlongOfTheLineWrapper::myInit( CCPoint t_sp, KSCumberBase* cb, const std::s
 	m_totalFrame = pattern.get("totalframe", 180).asInt();
 	m_speed = pattern.get("linespeed", 100).asInt();
 	m_number = pattern.get("number", 4).asInt();
+	if(m_number<1)m_number=1;
 	scheduleUpdate();
 }
 

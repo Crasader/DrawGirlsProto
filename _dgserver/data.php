@@ -97,7 +97,7 @@ if(!$stopCommand){
 			if(!$p2["memberID"])$p2["memberID"]= $param["memberNo"];
 					
 			$p2["category"]=$p["api"];
-			$p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+			$p2["content"]=json_encode($p,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK | JSON_BIGINT_AS_STRING);
 			$p2["output"]=$allResult[$cmd];
 			commandClass::writelog($p2);
 			//$allResult[$cmd]=array("state"=>"error","msg"=>"don't find command");
@@ -108,7 +108,7 @@ if(!$stopCommand){
 	$allResult[state]="ok";
 	$allResult[timestamp]=TimeManager::getTime();
 	
-	$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE | JSON_NUMERIC_CHECK);
+	$allResult = json_encode($allResult,JSON_UNESCAPED_UNICODE);
 	
 	 if($mode=="nodes"){
 	 	echo $allResult;

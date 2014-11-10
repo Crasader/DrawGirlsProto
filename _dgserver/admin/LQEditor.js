@@ -11,9 +11,13 @@ function ExchangeEditor(value,option){
 	})
 	this.addNewReward = function(value,count){
 		var editTableTR2 = $("<tr>").attr("datarow","");
-		var editTableTD2 = $("<td>").appendTo(editTableTR2).append(propSelect(value));
+		var propSelector = propSelect(value);
+		propSelector.on("change",function(){
+			$(this).parent().parent().find("input").attr("placeholder",propPlaceholder($(this).find("option:selected").val()));
+		});
+		var editTableTD2 = $("<td>").appendTo(editTableTR2).append(propSelector);
 		var editTableTD3 = $("<td>").appendTo(editTableTR2);
-		$("<input>").addClass("form-control form-control-inline").attr("placeholder","value").attr("value",count).appendTo(editTableTD3);
+		$("<input>").addClass("form-control form-control-inline").attr("placeholder",propPlaceholder(value)).attr("value",count).appendTo(editTableTD3);
 		var editTableTD4 = $("<td>").appendTo(editTableTR2);
 		$("<button>").append("-").addClass("btn btn-danger").appendTo(editTableTD4).on("click",{"obj":editTableTR2},function(event){event.data.obj.remove();});
 		this.editTable.find("tr:last").before(editTableTR2);
@@ -76,7 +80,7 @@ function ExchangeEditor(value,option){
 				this.addNewReward(list[i]["type"],list[i]["count"]);
 			}
 		}else{
-			this.addNewReward("g",0);
+			this.addNewReward("g","");
 		}
 		editor.append(editTable);
 
@@ -190,7 +194,7 @@ function ExchangeViewer(value,option){
 	this.addNewReward = function(value,count){
 		var editTableTR2 = $("<tr>").attr("datarow","");
 		var editTableTD2 = $("<td>").appendTo(editTableTR2).append(propChange(value));
-		var editTableTD3 = $("<td>").appendTo(editTableTR2).append(count);
+		var editTableTD3 = $("<td>").attr("align","right").appendTo(editTableTR2).append(count+propSuffix(value));
 		this.editTable.find("tr:last").before(editTableTR2);
 	}
 
@@ -316,7 +320,8 @@ function LanguageEditor(value,option){
 					this.addNewReward(lang,this.list[lang]);	
 			}
 		}else{
-			this.addNewReward("en","");
+			this.addNewReward("default","");
+			this.addNewReward("kr","");
 		}
 		editor.append(editTable);
 
@@ -437,6 +442,7 @@ var puzzleOpenConditionViewer = function(value,option){
 		for(var j in value[i]){
 			if(value[i][j]["type"]=="g")conStr+="골드 "+value[i][j]["value"]+"로 구매";
 			if(value[i][j]["type"]=="s")conStr+="별 "+value[i][j]["value"]+"개 이상 보유";
+			if(value[i][j]["type"]=="c")conStr+="카드 "+value[i][j]["value"]+"장 이상 보유";
 			if(value[i][j]["type"]=="p")conStr+=value[i][j]["value"]+"번 퍼즐 클리어";
 			if(value[i][j]["type"]=="r")conStr+=value[i][j]["value"]+"젬 으로 구매";
 			if(value[i][j]["type"]=="w")conStr+=value[i][j]["weekday"]+"번째 요일 "+value[i][j]["s"]+"~"+value[i][j]["e"];
@@ -727,39 +733,64 @@ var commenter_value = function(obj){
 } 
 
 var propChange = function(value){
-	switch(value){
-		case "m":return "결제";
-		case "r":return "젬";
-		case "pr":return "유료젬";
-		case "fr":return "무료젬";
-		case "g":return "골드";
-		case "h":return "하트";
-		case "i6":return "아이템두배아이템";
-		case "i8":return "시간추가아이템";
-		case "i9":return "신발아이템";
-		case "i11":return "자석아이템";
-		case "p1":return "부활석";
-		case "p2":return "맵가챠권";
-		case "p3":return "캐릭업글권";
-		case "p4":return "아이템뽑기권";
-		case "p5":return "99프로뽑기권";
-		case "p6":return "생명의 돌";
-		case "cd":return "카드";
-		case "pc":return "피스";
-		case "pz":return "퍼즐";
-		case "cu":return "캐릭업글";
-	}
+	if(!LQ_EXHANGE_CATEGORY[value])return ""; 
+	return LQ_EXHANGE_CATEGORY[value]["title"];
+
+	// switch(value){
+	// 	case "m":return "결제";
+	// 	case "r":return "젬";
+	// 	case "pr":return "유료젬";
+	// 	case "fr":return "무료젬";
+	// 	case "g":return "골드";
+	// 	case "h":return "하트";
+	// 	case "i6":return "더블아이템";
+	// 	case "i8":return "시간추가아이템";
+	// 	case "i9":return "신발아이템";
+	// 	case "i11":return "자석아이템";
+	// 	case "p1":return "부활석";
+	// 	case "p2":return "맵가챠권";
+	// 	case "p3":return "미사일업글권";
+	// 	case "p4":return "아이템뽑기권";
+	// 	case "p5":return "99프로뽑기권";
+	// 	case "p6":return "생명의 돌";
+	// 	case "p7":return "일반뽑기권";
+	// 	case "p8":return "고급뽑기권";
+	// 	case "cd":return "카드";
+	// 	case "pc":return "피스";
+	// 	case "pz":return "퍼즐";
+	// 	case "cu":return "캐릭업글";
+	// 	case "cp":return "캐릭터";
+	// }
+}
+
+var propSuffix = function(value){
+	if(!LQ_EXHANGE_CATEGORY[value])return ""; 
+	return LQ_EXHANGE_CATEGORY[value]["suffix"];
+}
+
+var propPlaceholder = function(value){
+	if(!LQ_EXHANGE_CATEGORY[value])return ""; 
+	return LQ_EXHANGE_CATEGORY[value]["placeholder"];
 }
 
 var propSelect = function(value,option){
- return editorFunc_select(value,{"type":"select","element":["결제","골드","젬","유료젬","무료젬","하트","아이템두배아이템","신발아이템","자석아이템","부활석","맵가챠권","캐릭업글권","아이템뽑기권","99프로뽑기권","생명의 돌","메세지","카드","피스","퍼즐","캐릭업글"],"value":["m","g","r","pr","fr","h","i6","i9","i11","p1","p2","p3","p4","p5","p6","msg","cd","pc","pz","cu"]});
+	var elements=[];
+	var values=[];
+	var placeholders=[];
+
+	for(var k in LQ_EXHANGE_CATEGORY){
+		elements.push(LQ_EXHANGE_CATEGORY[k]["title"]);
+		values.push(k);
+		placeholders.push(LQ_EXHANGE_CATEGORY[k]["placeholder"]);
+	}
+ return editorFunc_select(value,{"type":"select","element":elements,"value":values,"placeholder":placeholders});
 }
 
 var rewardViewer = function(value,option){
 	value=s2j(value);
 	var pushData = '<table class="table table-boarded">';
 	for(var i in value){
-		pushData+='<tr><td>'+propChange(value[i]["type"])+'</td><td>'+value[i]["count"]+'개</td></tr>';
+		pushData+='<tr><td>'+propChange(value[i]["type"])+'</td><td>'+value[i]["count"]+''+propSuffix(value[i]["type"])+'</td></tr>';
 	}
 	pushData+="</table>";
 	return pushData;

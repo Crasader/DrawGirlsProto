@@ -33,23 +33,27 @@ include "manage_header.php";
 
 </script>
 
-<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Character" dbWhere='{}' dbLimit="30" name="datatable" border=1 align=center>
+<table class="LQDataTable" dbSource="dataManager2.php" dbClass="Character" dbWhere='{}' dbSort='{"serial":"asc"}' dbLimit="30" name="datatable" border=1 align=center>
 	<thead>
 		<tr>
 		<th primary field='no' viewer='{"type":"text"}' >no</th>
+		<th field='serial' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >serial</th>
 		<th field='name' viewer='{"type":"koreanViewer"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}' >name</th>
 		<th field='sale' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >sale</th>
 		<th field='purchaseInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"type","type":"text"},{"field":"value","type":"text","datatype":"int"}]}' >purchaseInfo</th>
-		<th field='statInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"gold","type":"text","datatype":"int"},{"field":"percent","type":"text","datatype":"int"},{"field":"feverTime","type":"text","datatype":"int"},{"field":"speed","type":"text","datatype":"int"},{"field":"life","type":"text","datatype":"int"},{"field":"color","type":"select","element":[0,1,2,3,4,5,6]}]}' >statInfo</th>
+		<th field='statInfo' viewer='{"type":"autoViewer"}' editor='{"type":"array","element":{"type":"dictionary"}}' >statInfo</th>
 		<th field='resourceInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":[{"field":"ccbiID","type":"text"},{"field":"ccbi","type":"resourceSelector"},{"field":"imageID","type":"text"},{"field":"plist","type":"resourceSelector"},{"field":"pvrccz","type":"resourceSelector"},{"field":"size","type":"text","datatype":"int"}]}' >resourceInfo</th>
-		<th field='missileInfo' viewer='{"type":"autoViewer"}' editor='{"type":"powerInfoEditor"}' >missileInfo</th>
-		<th field='comment' viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"type":"text","field":"ko"},{"type":"text","field":"en"}]}' >comment</th>
+		<th field='missileInfo' viewer='{"type":"autoViewer"}' editor='{"type":"array","element":{"type":"dictionary"}}' >missileInfo</th>
+		<th field='patternInfo' viewer='{"type":"autoViewer"}' editor='{"type":"array","element":{"type":"dictionary"}}' >patternInfo</th>
+		<th field='missionInfo' viewer='{"type":"autoViewer"}' editor='{"type":"array","element":{"type":"dictionary"}}' >missionInfo</th>
+		<th field='scriptInfo' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary"}' >scriptInfo</th>
+		<th field='comment' viewer='{"type":"autoViewer"}' editor='{"type":"dictionary","element":{"field":"kr","type":"array","element":{"type":"text"}}}' >comment</th>
 		<th manage='delete update insert' ></th>
 		</tr> 
 	</thead>
 	<tbody datazone>
 
-	</tbody>
+</tbody>
 </table>
 
 

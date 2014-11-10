@@ -1,7 +1,7 @@
 <?php
 include "header.php";
 
-if(!$_GET['where'])$_GET['where']="regweek=".TimeManager::getCurrentWeekNo();
+if(!$_GET['where'])$_GET['where']="regweek=".TimeManager::getCurrentWeekNoForRank();
 if(!$_GET['limit'])$_GET['limit']=100;
 if(!$_GET['sort'])$_GET['sort']="no desc";
 
