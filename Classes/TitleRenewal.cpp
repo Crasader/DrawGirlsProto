@@ -1994,7 +1994,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
-			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
@@ -2009,7 +2009,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_priceName_s, t_index, t_data["priceName"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_sale_s, t_index, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_data_s, t_index, t_writer.write(t_data["data"]), false);
-			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, t_data["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_pID_s, t_index, GraphDogLib::trim(t_data["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
@@ -2028,7 +2028,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		
 		Json::Value startPack = result_data["startPack"];
 		NSDS_SI(kSDS_GI_shopStartPack_no_i, startPack["no"].asInt(), false);
-		NSDS_SS(kSDS_GI_shopStartPack_pID_s, startPack["pID"].asString(), false);
+		NSDS_SS(kSDS_GI_shopStartPack_pID_s, GraphDogLib::trim(startPack["pID"].asString()), false);
 		NSDS_SS(kSDS_GI_shopStartPack_exchangeID_s, startPack["exchangeID"].asString(), false);
 		
 		Json::Value sp_data = startPack["data"];
@@ -2056,7 +2056,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		if(is_have_eventPack)
 		{
 			NSDS_SI(kSDS_GI_shopEventPack_no_i, eventPack["no"].asInt(), false);
-			NSDS_SS(kSDS_GI_shopEventPack_pID_s, eventPack["pID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopEventPack_pID_s, GraphDogLib::trim(eventPack["pID"].asString()), false);
 			NSDS_SS(kSDS_GI_shopEventPack_exchangeID_s, eventPack["exchangeID"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventPack_startDate_s, eventPack["startDate"].asString(), false);
 			NSDS_SS(kSDS_GI_shopEventPack_endDate_s, eventPack["endDate"].asString(), false);

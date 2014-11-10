@@ -1197,9 +1197,9 @@ int hspConnector::checkInspection(){
 	jint ret = -1;
 	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "checkInspection", "()I")) {
 			
-			ret = t.env->CallStaticIntMethod(t.classID, t.methodID, _key);
+			ret = t.env->CallStaticIntMethod(t.classID, t.methodID);
 			t.env->DeleteLocalRef(t.classID);
-		}
+    }
 	
 	return (int)ret;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
