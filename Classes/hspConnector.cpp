@@ -615,6 +615,8 @@ string hspConnector::getServerAddress(){
 		t.env->ReleaseStringUTFChars(result, revStr);
 		t.env->DeleteLocalRef(t.classID);
 	}
+	serverAddr = "http://" + serverAddr;
+	
 	
 	
 #endif
