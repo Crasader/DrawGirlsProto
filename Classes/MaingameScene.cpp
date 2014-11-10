@@ -4575,12 +4575,12 @@ void Maingame::refreshThumb()
 		boss_thumbs->addObject(boss_position_img);
 	}
 	
-	CCAssert(!boss_array.empty(), "boss empty!!");
+//	CCAssert(!boss_array.empty(), "boss empty!!");
 	for(int i=0;i<boss_array.size();i++)
 	{
 		CCNode* boss_position_img = (CCNode*)boss_thumbs->objectAtIndex(i);
 		CCNode* boss_pointer = (CCNode*)boss_array[i];
-		CCAssert(boss_pointer->getPositionX() >= 0 && boss_pointer->getPositionX() <= 320 && boss_pointer->getPositionY() >= 0 && boss_pointer->getPositionY() <= 430, "boss position out!!");
+//		CCAssert(boss_pointer->getPositionX() >= 0 && boss_pointer->getPositionX() <= 320 && boss_pointer->getPositionY() >= 0 && boss_pointer->getPositionY() <= 430, "boss position out!!");
 		boss_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	
