@@ -780,6 +780,7 @@ public:
 protected:
 	float m_xPos; // x 위치
 	int m_delayFrames; // 지연 프레임
+	int m_originalDelayFrames;
 	int m_currentFrames;
 	void myAction(float dt);
 	

@@ -1736,7 +1736,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				Json::Value param;
 				param["x"] = 100;
 				
-				VMesh* t = VMesh::create(param);
+				MeshWrapper* t = MeshWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				pattern_container->addChild(t);
 			};
 			castBranch(atype, func, warningFileName);

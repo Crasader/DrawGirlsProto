@@ -4672,13 +4672,14 @@ void VMesh::stopMyAction ()
 void VMesh::myInit(const Json::Value& param)
 {
 	m_xPos = param.get("x", 0).asFloat();
-	m_delayFrames = param.get("delayframes", 180).asInt();
+	m_originalDelayFrames = m_delayFrames = param.get("delayframes", 180).asInt();
 	m_currentFrames = 0;
 	schedule(schedule_selector(ThisClassType::myAction));
 	m_vMesh = CCSprite::create("vmesh.png");
 	m_vMesh->setScaleY(4.0f);
 	m_vMesh->setPosition(ccp(m_xPos, 0));
 	m_vMesh->setColor(ccc3(255, 0, 0));
+	m_vMesh->setOpacity(0);
 	addChild(m_vMesh);
 }
 
@@ -4687,7 +4688,9 @@ void VMesh::myAction(float dt)
 	m_currentFrames++;
 	if(m_currentFrames <= m_delayFrames)
 	{
-		
+		//
+		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
+		m_vMesh->setOpacity(255.f * progress);
 	}
 	else
 	{
