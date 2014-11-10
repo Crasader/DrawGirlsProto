@@ -39,7 +39,7 @@
 	<key>gravityy</key>
 	<real>0</real>
 	<key>maxParticles</key>
-	<integer>10</integer>
+	<integer>5</integer>
 	<key>particleLifespan</key>
 	<real>0.300000011920929</real>
 	<key>particleLifespanVariance</key>

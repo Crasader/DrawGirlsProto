@@ -785,7 +785,25 @@ protected:
 	void myAction(float dt);
 	
 };
-
+class HMesh : public CCNode
+{
+public:
+	virtual ~HMesh()
+	{
+		CCLOG("~HMESH");
+	}
+	static HMesh* create(const Json::Value& param);
+	void stopMyAction ();
+	void myInit(const Json::Value& param);
+	CCSprite* m_hMesh;
+protected:
+	float m_yPos; // y 위치
+	int m_delayFrames; // 지연 프레임
+	int m_originalDelayFrames;
+	int m_currentFrames;
+	void myAction(float dt);
+	
+};
 
 #undef LZZ_INLINE
 #endif
