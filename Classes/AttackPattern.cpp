@@ -4117,6 +4117,24 @@ void MeshWrapper::update(float dt)
 		param["delayframes"] = m_pattern.get("delay", 120).asInt();
 		VMesh* t = VMesh::create(param);
 		addChild(t);
+		CCLOG("VMESH create");
+	}
+	
+	int hInterval = m_pattern.get("duration", 180).asFloat() / m_pattern.get("hcount", 4).asFloat();
+	if(m_currentFrames % hInterval == 0)
+	{
+		Json::Value param;
+		param["y"] = ks19937::getIntValue(0, mapHeightInnerEnd * 2);
+		param["delayframes"] = m_pattern.get("delay", 120).asInt();
+		HMesh* t = HMesh::create(param);
+		addChild(t);
+		CCLOG("HMESH create");
+	
+	}
+	
+	if(m_currentFrames >= m_pattern.get("duration", 180).asInt())
+	{
+		stopMyAction();
 	}
 }
 
