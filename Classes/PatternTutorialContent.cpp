@@ -57,17 +57,20 @@ void PatternTutorialContent::menuAction(CCObject* sender)
 	}
 	else
 	{
-		CCNode* add_parent = show_content->getParent();
-		CCPoint add_position = show_content->getPosition();
-		
-		show_content->removeFromParent();
-		show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
-		show_content->setPosition(add_position);
-		add_parent->addChild(show_content);
-		
-		pattern_title->setString(myLoc->getLocalForKey(LK(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
-		pattern_content->setString(myLoc->getLocalForKey(LK(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
-		
+		if(show_content)
+		{
+			CCNode* add_parent = show_content->getParent();
+			CCPoint add_position = show_content->getPosition();
+			
+			show_content->removeFromParent();
+			show_content = CCSprite::create(CCString::createWithFormat("pattern%d_tutorial.png", pattern_list[ing_close_cnt])->getCString());
+			show_content->setPosition(add_position);
+			add_parent->addChild(show_content);
+			
+			pattern_title->setString(myLoc->getLocalForKey(LK(getTitleLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
+			pattern_content->setString(myLoc->getLocalForKey(LK(getContentLocalKeyForPatternNumber(pattern_list[ing_close_cnt]))));
+			
+		}
 		addChild(KSTimer::create(0.5f, [=](){is_menu_enable = true;}));
 	}
 }

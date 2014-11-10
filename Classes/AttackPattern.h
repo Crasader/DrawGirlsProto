@@ -1219,6 +1219,7 @@ protected:
 	//float crashSize;
 	Well512 m_well512;
 	Json::Value m_pattern;
+	int m_currentFrames;
 };
 
 

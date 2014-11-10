@@ -4098,10 +4098,26 @@ void MeshWrapper::myInit(CCPoint t_sp, KSCumberBase* cb, const Json::Value& patt
 	
 	m_pattern = patternJson;
 	scheduleUpdate();
+	
+	
+	// j 프레임동안 x 가 몇개 나올것이냐. 각 패턴의 딜레이를 설정가능함...
+	// patternJson = {"duration" : 180, "hcount" : 4, "delay" : 120}
+	m_currentFrames = 0;
 }
 
 void MeshWrapper::update(float dt)
 {
+	m_currentFrames++;
+	
+	int vInterval = m_pattern.get("duration", 180).asFloat() / m_pattern.get("vcount", 4).asFloat();
+	if(m_currentFrames % vInterval == 0)
+	{
+		Json::Value param;
+		param["x"] = ks19937::getIntValue(0, mapWidthInnerEnd * 2);
+		param["delayframes"] = m_pattern.get("delay", 120).asInt();
+		VMesh* t = VMesh::create(param);
+		addChild(t);
+	}
 }
 
 void MeshWrapper::stopMyAction()
