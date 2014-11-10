@@ -559,7 +559,7 @@ string hspConnector::getHSPConfigurationProp(const std::string& prop)
 			Value = Attr->value();	// Attribute 의 값
 			return Value;
 		}
-	} 
+	}
 	return "";
 }
 string hspConnector::getTimeZone(){
@@ -595,11 +595,12 @@ string hspConnector::getTimeZone(){
 
 string hspConnector::getServerAddress(){
 	string serverAddr;
+	string isDevelop = getHSPConfigurationProp("LIT_DEVELOP_SERVER");
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
 	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
-	serverAddr = "http://182.162.201.147:10010";
+	
 //	serverAddr = "http://182.162.196.182:10080";
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -615,10 +616,12 @@ string hspConnector::getServerAddress(){
 		t.env->DeleteLocalRef(t.classID);
 	}
 	
-	serverAddr = "http://"+serverAddr;
-	serverAddr = "http://182.162.201.147:10010";
-#endif
 	
+#endif
+	if(isDevelop == "true")
+	{
+		serverAddr = "http://182.162.201.147:10010";
+	}
 	
 	return serverAddr.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
