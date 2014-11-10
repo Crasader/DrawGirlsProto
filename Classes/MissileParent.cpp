@@ -462,11 +462,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				}
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+				{
+					creator();
+				}
 			}));
 		}
-		
-	
 	}
 	
 	else if(stoneType == StoneType::kStoneType_protector)
@@ -1732,7 +1733,10 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+				Json::Value param;
+				param["x"] = 100;
+				
+				VMesh* t = VMesh::create(param);
 				pattern_container->addChild(t);
 			};
 			castBranch(atype, func, warningFileName);
