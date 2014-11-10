@@ -2459,7 +2459,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_bgm.mp3", false);
 //			AudioEngine::sharedInstance()->playEffect("bgm_gameclear.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_clear_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString(), false, true);
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_stageclear%d.mp3", rand()%2+2)->getCString(), false, false);
 		ClearShowTime* t_cst = ClearShowTime::create(myUI->getIsExchanged(), myUI->getPercentage() >= 1.f, game_node, this, callfunc_selector(Maingame::clearScenario));
 		game_node->addChild(t_cst, clearshowtimeZorder);
 
@@ -2472,7 +2472,7 @@ void Maingame::gameover()
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_bgm.mp3", false);
 		AudioEngine::sharedInstance()->playEffect("bgm_gameover.mp3");
 //		AudioEngine::sharedInstance()->playEffect("sound_gameover_ment.mp3", false);
-		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString(), false, true);
+		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_gameover%d.mp3", rand()%3+1)->getCString(), false, false);
 
 		AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
 		
@@ -4575,10 +4575,12 @@ void Maingame::refreshThumb()
 		boss_thumbs->addObject(boss_position_img);
 	}
 	
+	CCAssert(!boss_array.empty(), "boss empty!!");
 	for(int i=0;i<boss_array.size();i++)
 	{
 		CCNode* boss_position_img = (CCNode*)boss_thumbs->objectAtIndex(i);
 		CCNode* boss_pointer = (CCNode*)boss_array[i];
+		CCAssert(boss_pointer->getPositionX() >= 0 && boss_pointer->getPositionX() <= 320 && boss_pointer->getPositionY() >= 0 && boss_pointer->getPositionY() <= 430, "boss position out!!");
 		boss_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(boss_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	

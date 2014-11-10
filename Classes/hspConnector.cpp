@@ -565,8 +565,8 @@ string hspConnector::getServerAddress(){
 	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
 	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
-	//serverAddr = "http://182.162.201.147:10010";
-	serverAddr = "http://182.162.196.182:10080";
+	serverAddr = "http://182.162.201.147:10010";
+//	serverAddr = "http://182.162.196.182:10080";
 
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	JniMethodInfo t;
