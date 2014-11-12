@@ -362,7 +362,7 @@ bool AccountManagerPopup::init(int touchP)
 									
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 									TRACE();
-									CCLOG("save accountType %d", mm2);
+									CCLog("save accountType %d", mm2);
 									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
@@ -491,6 +491,7 @@ bool AccountManagerPopup::init(int touchP)
 																		if(result_data["error"]["isSuccess"].asBool())
 																		{
 																			mySGD->resetLabels();
+																			CCLog("save accountType %d", mm2);
 																			myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 																			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 																		}
@@ -507,6 +508,15 @@ bool AccountManagerPopup::init(int touchP)
 																	CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 #endif
 																	
+																}
+																else if(t["msg"].asString() != "")
+																{
+																	auto ment	= StyledLabelTTF::create(t["msg"].asString().c_str(),
+																																		 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+																	ment->setAnchorPoint(ccp(0.5f, 0.5f));
+																	ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																																									 ment, nullptr);
+																	addChild(alert);
 																}
 																else
 																{
@@ -531,6 +541,7 @@ bool AccountManagerPopup::init(int touchP)
 					if(t["error"]["isSuccess"].asInt())
 					{
 						mySGD->resetLabels();
+						CCLog("save accountType %d", mm2);
 						myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
 						std::string msg;
 						
@@ -572,6 +583,15 @@ bool AccountManagerPopup::init(int touchP)
 																														 });
 						addChild(alert);
 
+					}
+					else if(t["msg"].asString() != "")
+					{
+						auto ment	= StyledLabelTTF::create(t["msg"].asString().c_str(),
+																							 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+						ment->setAnchorPoint(ccp(0.5f, 0.5f));
+						ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																														 ment, nullptr);
+						addChild(alert);
 					}
 					else
 					{
@@ -631,6 +651,7 @@ bool AccountManagerPopup::init(int touchP)
 			if(t["error"]["isSuccess"].asBool()) {
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				mySGD->resetLabels();
+				CCLog("save accountType %d", willSaveLogin);
 				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)willSaveLogin);
 				std::string msg;
 				
@@ -678,7 +699,17 @@ bool AccountManagerPopup::init(int touchP)
 					anotherAccountFunctor(hspmap, willSaveLogin, t["prevMemberNo"].asUInt64(), tryName);
 					CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				}
-				else {
+				else if(t["msg"].asString() != "")
+				{
+					auto ment	= StyledLabelTTF::create(t["msg"].asString().c_str(),
+																						 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+					ment->setAnchorPoint(ccp(0.5f, 0.5f));
+					ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
+																													 ment, nullptr);
+					addChild(alert);
+				}
+				else
+				{
 					auto ment	= StyledLabelTTF::create(getLocal(LK::kCantLinking),
 																						 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 					ment->setAnchorPoint(ccp(0.5f, 0.5f));

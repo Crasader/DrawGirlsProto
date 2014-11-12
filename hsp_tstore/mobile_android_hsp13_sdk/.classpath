@@ -18,10 +18,10 @@
 	<classpathentry exported="true" kind="lib" path="libs/ToastCore-2.31.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/HSPNPush_Global-2.30.4.jar"/>
 	<classpathentry exported="true" kind="lib" path="libs/npushclient_v1.9.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/HSPPayment-3.16.3.jar"/>
-	<classpathentry exported="true" kind="lib" path="libs/iap_plugin-13.01.01.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="libs/HSPPayment-3.17.0.jar"/>
+	<classpathentry kind="lib" path="libs/iap_plugin-14.01.00.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
