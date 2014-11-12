@@ -106,7 +106,12 @@ static AppDelegate s_sharedApplication;
 //	/* Storing an existing user information and initializing game. */
 //	[self.viewController log:@"User information has initialized"];
 }
-
+-(void) onPushMessageReceive:(NSNotification*)notification
+{
+	NSDictionary* dic = [notification userInfo];
+ 
+	NSLog(@"받은 노티피케이션 정보 : %@", dic);
+}
 - (void)registerHSPEventObserver
 {
 	/* Registering the method to be called in HSPCore before authentication session expiration. */
@@ -117,8 +122,14 @@ static AppDelegate s_sharedApplication;
 	[[HSPCore sharedHSPCore] addBeforeResetAccountListener:^{
 		[self onBeforeSessionExpire];
 	}];
+
 	
 	/* Registering Notification to obtain authentication session expired event of HSPCore.*/
+	[[NSNotificationCenter defaultCenter] addObserver:self
+																					selector:@selector(onPushMessageReceive:)
+																							name:HSPPushNotificationName
+																						object:nil];
+	
 	[[NSNotificationCenter defaultCenter] addObserver:self
 																					 selector:@selector(onSessionExpireComplete:)
 																							 name:HSPDidLogoutNotificationName
@@ -168,9 +179,12 @@ static AppDelegate s_sharedApplication;
 {
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 }
-
+void uncaughtExceptionHandler(NSException *exception) {
+	NSLog(@"CRASH: %@", exception);
+	NSLog(@"Stack Trace: %@", [exception callStackSymbols]);
+}
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-	
+	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 	// Override point for customization after application launch.
 
 	[IgaworksAD igaworksADWithAppKey:@"58229468"
@@ -276,6 +290,9 @@ static AppDelegate s_sharedApplication;
 		
 		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
 		CCLOG("AUTO LOGIN TYPE == %d", lType);
+//		[[HSPCore sharedHSPCore] loginWithManualLogin:NO completionHandler:^(BOOL playable, HSPError* error) {
+//			// 로그인 응답 처리
+//		}];
 		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
 			//
 		}];

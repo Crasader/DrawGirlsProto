@@ -433,6 +433,8 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
+		CCLOG("member eeeee id %s", hspConnector::get()->getSocialID().c_str());
+		KS::KSLog("member eeeee id %", hspConnector::get()->getSocialID().c_str());
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
 		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
@@ -450,17 +452,20 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		CCLog("login error = %s", result_data["error"].get("localizedDescription", "NONE_LOCAL").asString().c_str());
 
 		TRACE();
-		
+		// 실패했을 경우 저장안되어있으면 게스트로 들어감.
 		auto tryLogin = [=](){
+			TRACE();
 			if(result_data["error"].get("localizedDescription", "").asString() == "")
 			{
+				TRACE();
 				Json::Value param;
 				param["ManualLogin"] = true;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
 				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #else
-				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+//				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GUEST);
 #endif
     
 #else
@@ -478,7 +483,9 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 #ifdef LQTEST
 				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #else
-				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+//				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+				param["LoginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GUEST);
+				
 #endif
     
 #else
@@ -505,10 +512,12 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				addChild(KSTimer::create(3, tryLogin));
 			}
 			else{
+				TRACE();
 				loginCnt=0;
 				ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert2),
 																												tryLogin);
 				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+				TRACE();
 			}
 		}
 		

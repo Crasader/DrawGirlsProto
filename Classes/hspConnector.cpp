@@ -1376,7 +1376,8 @@ void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 					Json::Value obj;
 					NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 					[resultDict setObject:[NSString stringWithFormat:@"<font color=#FFFFFF newline=14>게임센터로 로그인을 재 시도 하시려면</font>"
-																 "<font color=#FFAA14>앱을 종료 후 [설정->게임센터] 에서 로그인 후 재시도 해 주시기 바랍니다.</font>"] forKey:@"msg"];
+																 "<font color=#FFAA14 newline=14>앱을 종료 후 [설정->게임센터] 에서 로그인 후</font>"
+																 "<font color=#FFAA14>재시도 해 주시기 바랍니다.</font>"] forKey:@"msg"];
 					addErrorInResult(resultDict, error);
 					callFuncMainQueue2(0,0,_key,resultDict);
 					return;

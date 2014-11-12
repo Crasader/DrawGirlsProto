@@ -5,7 +5,7 @@
 	<key>HSP_IMAGE_FORMAT</key>
 	<string>JPEG</string>
 	<key>HSP_DEBUG_LEVEL</key>
-	<string>LOW</string>
+	<string>HIGH</string>
 	<key>HSP_ENABLE_ASSERTION</key>
 	<false/>
 	<key>HSP_LAUNCHING_ZONE</key>
@@ -31,7 +31,7 @@
 	<key>HSP_MARKET</key>
 	<string>KA</string>
 	<key>HSP_USE_PUSH</key>
-	<false/>
+	<true/>
 	<key>HSP_USE_AUTOSUSPEND</key>
 	<true/>
 	<key>HSP_ENFORCED_GUEST_LOGIN</key>
