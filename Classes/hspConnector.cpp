@@ -381,20 +381,27 @@ void callFuncMainQueue(Json::Value param,Json::Value callbackParam,CCObject *tar
 
 void callFuncMainQueue2(Json::Value param,Json::Value callbackParam,int _dkey,void*resultDict){
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	TRACE();
 	NSData *_jdata= [NSJSONSerialization dataWithJSONObject:(NSDictionary *)resultDict options:NSJSONWritingPrettyPrinted error:nil];
 	NSString *jsonString = [[NSString alloc] initWithData:_jdata encoding:NSUTF8StringEncoding];
 	Json::Reader reader;
 	Json::Value resultObj;
 
+	TRACE();
 	reader.parse([jsonString cStringUsingEncoding:NSUTF8StringEncoding], resultObj);
-	
+	TRACE();
 	jsonDelegator::DeleSel *delesel = jsonDelegator::get()->load(_dkey);
-    if(delesel==nullptr)return;
+	TRACE();
+	if(delesel==nullptr)return;
 	if(!param.isNull())resultObj["param"] = param;
 	if(!callbackParam.isNull())resultObj["callback"] = callbackParam;
 	dispatch_async(dispatch_get_main_queue(),
 								 ^{
-									 if(delesel->func != NULL)delesel->func(resultObj);
+									 TRACE();
+									 if(delesel->func != NULL)
+									 {
+										 delesel->func(resultObj);
+									 }
 									 jsonDelegator::get()->remove(_dkey);
 								 }
 								);
@@ -421,6 +428,7 @@ void hspConnector::mappingToAccount(jsonSelType func){
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithCompletionHandler:
 	 ^(HSPError *error)
 	 {
+		 
 		 CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 addErrorInResult(resultDict, error);
@@ -490,12 +498,13 @@ string hspConnector::getMarketCode(){
 
 string hspConnector::getStoreID()
 {
-//	return "TS";
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	//	return "TS";
 	unsigned long ps;
-//	CCLOG("%s", CCFileUtils::sharedFileUtils()->fullPathForFilename("HSPConfiguration__.xml").c_str());
+	//	CCLOG("%s", CCFileUtils::sharedFileUtils()->fullPathForFilename("HSPConfiguration__.xml").c_str());
 	unsigned char* tt = CCFileUtils::sharedFileUtils()->getFileData("HSPConfiguration.xml", "rt", &ps);
 	std::string xml((char*)tt, ps);
-	 // key="HSP_PAYMENT_STORE_ID" value="TS"
+	// key="HSP_PAYMENT_STORE_ID" value="TS"
 	xml_document<> xmlDoc;
 	xmlDoc.parse<0>( (char*)xml.c_str() );
 	
@@ -521,11 +530,11 @@ string hspConnector::getStoreID()
 			return Value;
 		}
 	}
-
+	
 	return "";
-	
-	
-	
+#else
+	return "AS";
+#endif
 }
 string hspConnector::getHSPConfigurationProp(const std::string& prop)
 {
@@ -595,11 +604,13 @@ string hspConnector::getTimeZone(){
 
 string hspConnector::getServerAddress(){
 	string serverAddr;
-	string isDevelop = getHSPConfigurationProp("LIT_DEVELOP_SERVER");
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	HSPServiceProperties* properties = [HSPCore sharedHSPCore].serviceProperties;
 	NSString* gameServerAddress = [properties serverAddressFromName: HSP_SERVERNAME_GAMESVR];
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
+	
+	// plist 얻어와서 작업해야 하는데 일단은 그냥
+//	serverAddr = "http://182.162.201.147:10010";
 	
 //	serverAddr = "http://182.162.196.182:10080";
 
@@ -617,13 +628,14 @@ string hspConnector::getServerAddress(){
 	}
 	serverAddr = "http://" + serverAddr;
 	
-	
-	
-#endif
+	string isDevelop = getHSPConfigurationProp("LIT_DEVELOP_SERVER");
 	if(isDevelop == "true")
 	{
 		serverAddr = "http://182.162.201.147:10010";
 	}
+	
+	
+#endif
 	
 	return serverAddr.c_str();
 	//std::transform(r.begin(), r.end(), r.begin(), towlower);
@@ -673,10 +685,6 @@ void hspConnector::logout(jsonSelType func){
 }
 
 void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType func){
-	
-	
-	
-
 	int dkey = jsonDelegator::get()->add(func, 0, 0);
 	TRACE();
 	jsonSelType nextFunc = [dkey,this](Json::Value obj){
@@ -1350,24 +1358,39 @@ void hspConnector::mappingToAccount(int mt, bool force, jsonSelType func)
 //			// 로그인 응답 처리
 //			NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 //			[resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
-//			
+//
 //			addErrorInResult(resultDict, error);
 //			callFuncMainQueue2(param,callbackParam,nextFunc,resultDict);
 //			
 //		}
-	 
-	CCLOG("mapping try!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+	
+	
 	
 	[[HSPCore sharedHSPCore] requestMappingToAccountWithMappingType:(HSPMappingType)mt overwrite:force
 			completionHandler:^(HSPError *error, int64_t memberNo) {
 				CCLOG("mapping callback!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				KS::KSLog("memberNo!!!!!!!!!!!!!!!!!!!!!!!!!!!! %", memberNo);
+				if([error code] == (int)HSP_ERR_DOMAIN_LOGINSERVICE && mt == (int)HSPMapping::kGAMECENTER)
+				{
+					TRACE();
+					Json::Value obj;
+					NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+					[resultDict setObject:[NSString stringWithFormat:@"<font color=#FFFFFF newline=14>게임센터로 로그인을 재 시도 하시려면</font>"
+																 "<font color=#FFAA14>앱을 종료 후 [설정->게임센터] 에서 로그인 후 재시도 해 주시기 바랍니다.</font>"] forKey:@"msg"];
+					addErrorInResult(resultDict, error);
+					callFuncMainQueue2(0,0,_key,resultDict);
+					return;
+				}
+				else
+				{
+					TRACE();
+					Json::Value obj;
+					NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+					[resultDict setObject:[NSNumber numberWithLongLong:memberNo] forKey:@"prevMemberNo"];
+					addErrorInResult(resultDict, error);
+					callFuncMainQueue2(0,0,_key,resultDict);
+				}
 				
-				Json::Value obj;
-				NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
-				[resultDict setObject:[NSNumber numberWithLongLong:memberNo] forKey:@"prevMemberNo"];
-				addErrorInResult(resultDict, error);
-				callFuncMainQueue2(0,0,_key,resultDict);
 			}];
 	
 	

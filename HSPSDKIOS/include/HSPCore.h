@@ -61,6 +61,9 @@ typedef enum
 	HSP_OAUTHPROVIDER_GUEST,        /**< Guest. */
 	HSP_OAUTHPROVIDER_WEIBO,		/**< Weibo. */
 	HSP_OAUTHPROVIDER_GAMECENTER,	/**< Apple Game Center. */
+	HSP_OAUTHPROVIDER_HANGAME_JP,	/**< Hangame jp. */
+	HSP_OAUTHPROVIDER_HANGAME_JP_EMAIL,	/**< Hangame jp Email. */
+	HSP_OAUTHPROVIDER_LASTLOGIN			/**< Only Japnan. */
 } HSPOAuthProvider;
 
 /**
@@ -472,7 +475,7 @@ typedef enum
  * @brief Attempts to log in the HSP server.<br>
  * If logged in before, HSP attempts to log in the server with the same account automatically. If it succeeds, HSP gets the login result through the added handler. If it fails, HSP attempts to log in manually depending on the value of manualLogin; this process needs ID and password.<br>
  * After the login result is returned through the handler, you can use the 'state' function to analyze the current state and handle exceptions.
- * 
+ *
  * @param manualLogin Whether to attempt to log in manually after auto login fails.
  * @param completionHandler Is called when a response to the request to log in is received from the server.
  *
@@ -486,15 +489,16 @@ typedef enum
  * 	{
  * 		NSLog(@"Logged in successfully");
  * 	} else
- * 	{	
+ * 	{
  * 		NSLog(@"Login failed (%@)", error);
  * 	}
- * }]; 
+ * }];
  * @endcode
  * @serviceDomain HANGAME LINEGAME GLOBALGAME_SG
  */
 - (void)loginWithManualLogin:(BOOL)manualLogin
 		   completionHandler:(void (^)(BOOL playable, HSPError *error))completionHandler;
+
 
 /**
  * @brief Attempts to log with oAuth Data in the HSP server.<br>

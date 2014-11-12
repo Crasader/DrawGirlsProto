@@ -165,10 +165,15 @@
 #define HSP_USE_JOGA						(@"HSP_USE_JOGA")
 
 /**
+ * @brief A key of Login retry times value stored in the dictionary of HSPConfiguration.
+ */
+#define HSP_LOGIN_RETRY_TIMES				(@"HSP_LOGIN_RETRY_TIMES")
+
+/**
  * @brief A key for Facebook URL scheme suffix used while in Facebook App-to-App authentication.
  * The suffix can be registered on Facebook developer's settings page for the app
  */
-#define HSP_FACEBOOK_URL_SCHEME_SUFFIX (@"HSP_FACEBOOK_URL_SCHEME_SUFFIX")
+#define HSP_FACEBOOK_URL_SCHEME_SUFFIX		(@"HSP_FACEBOOK_URL_SCHEME_SUFFIX")
 
 /**
  * Information that can be returned by the debug method.
@@ -457,6 +462,13 @@
  * @serviceDomain HANGAME
  */
 - (BOOL)isUseJoga;
+
+/**
+ * @brief Returns How Time Retry Login
+ * @return NSNumber*
+ * @serviceDomain HANGAME_JP
+ */
+- (NSNumber*)loginRetryTimes;
 
 /**
  * @brief Sets the HSP launching zone.<br>This function does not change HSPConfiguration.plist.

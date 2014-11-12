@@ -5,7 +5,7 @@
 	<key>HSP_IMAGE_FORMAT</key>
 	<string>JPEG</string>
 	<key>HSP_DEBUG_LEVEL</key>
-	<string>HIGH</string>
+	<string>LOW</string>
 	<key>HSP_ENABLE_ASSERTION</key>
 	<false/>
 	<key>HSP_LAUNCHING_ZONE</key>
