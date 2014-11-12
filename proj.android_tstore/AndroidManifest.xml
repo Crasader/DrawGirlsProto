@@ -227,7 +227,7 @@
 
         <meta-data
             android:name="iap:api_version"
-            android:value="1" />
+            android:value="2" />
         <!-- [HSP SDK] Payment TStore Activity & Receiver End -->
 
 
@@ -282,9 +282,7 @@
     <!-- [HSP SDK] Payment TStore SMS Permission Begin -->
     <!-- T Store 빌드 시에만 사용해 주세요. -->
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
-    <uses-permission android:name="com.tmoney.vending.INBILLING" />
-
-    <permission android:name="com.tmoney.vending.INBILLING" />
+    
     <!-- [HSP SDK] Payment TStore SMS Permission End -->
 
 </manifest>
