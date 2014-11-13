@@ -447,6 +447,9 @@ public:
 		}
 		bool firstMoving; // 처음 분노를 시작했다면 true
 	}m_furyMode;
+	
+	
+	virtual void selfBomb(Json::Value param) = 0;
 protected:
 	
 	

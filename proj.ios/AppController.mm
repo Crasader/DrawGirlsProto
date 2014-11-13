@@ -287,15 +287,16 @@ void uncaughtExceptionHandler(NSException *exception) {
 	[self reportAppOpen];
 	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
 	{
-		
 		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
 		CCLOG("AUTO LOGIN TYPE == %d", lType);
-//		[[HSPCore sharedHSPCore] loginWithManualLogin:NO completionHandler:^(BOOL playable, HSPError* error) {
-//			// 로그인 응답 처리
-//		}];
-		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
-			//
+		[[HSPCore sharedHSPCore] loginWithManualLogin:NO completionHandler:^(BOOL playable, HSPError* error) {
+			// 로그인 응답 처리
+			CCLog("___ playable %d", playable);
+			CCLog("___ isSuccess %d", [error isSuccess]);
 		}];
+//		[[HSPCore sharedHSPCore] loginWithOAuthProvider:lType completionHandler:^(BOOL playable, HSPError *error) {
+//			//
+//		}];
 	}
 		cocos2d::CCApplication::sharedApplication()->applicationWillEnterForeground();
 	

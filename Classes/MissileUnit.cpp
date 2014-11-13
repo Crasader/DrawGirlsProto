@@ -4657,7 +4657,6 @@ void RunDownSaw::myInit (CCPoint t_sp, float t_speed, float t_angle, IntSize t_m
 							}, nullptr));
 				}));
 }
-
 VMesh* VMesh::create(const Json::Value& param)
 {
 	VMesh* t_to = new VMesh();
@@ -4671,16 +4670,31 @@ void VMesh::stopMyAction ()
 }
 void VMesh::myInit(const Json::Value& param)
 {
-	m_xPos = param.get("x", 0).asFloat();
+	m_pos = param.get("x", 0).asFloat();
 	m_originalDelayFrames = m_delayFrames = param.get("delayframes", 180).asInt();
 	m_currentFrames = 0;
 	schedule(schedule_selector(ThisClassType::myAction));
-	m_vMesh = CCSprite::create("vmesh.png");
-	m_vMesh->setScaleY(10.0f);
-	m_vMesh->setPosition(ccp(m_xPos, 0));
-	m_vMesh->setColor(ccc3(255, 0, 0));
-	m_vMesh->setOpacity(0);
-	addChild(m_vMesh);
+	float prob = param.get("enableprob", 1.f).asFloat();
+	ProbSelector ps = {prob, 1.f - prob};
+	m_enabled = ps.getResult() == 0;
+	
+	m_mesh = EffectSprite::create("lazer_sub.png");
+	if(m_enabled == false)
+	{
+		m_mesh->setGray();
+	}
+	m_mesh->setRotation(90);
+	m_mesh->setScaleX(5.0f);
+	m_mesh->setPosition(ccp(m_pos, 0));
+	//	m_hMesh->setColor(ccc3(255, 0, 0));
+	m_dColor = 255.f / (float)m_delayFrames;
+	//	m_hMesh->setOpacity(0);
+	addChild(m_mesh);
+	
+	m_laserContainer = CCNode::create();
+	addChild(m_laserContainer);
+	m_attacked = false;
+	m_thickness = param.get("thickness", 12).asInt();
 }
 
 void VMesh::myAction(float dt)
@@ -4690,19 +4704,57 @@ void VMesh::myAction(float dt)
 	{
 		//
 		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
-		m_vMesh->setOpacity(255.f * progress);
+		auto c = m_mesh->getColor();
+		c.g -= m_dColor;
+		m_mesh->setColor(c);
+		//		m_hMesh->setOpacity(255.f * progress);
 	}
-	else
+	else if(m_attacked == false)
 	{
-		auto jackPosition = myGD->getJackPoint().convertToCCP();
-		CCLOG("diff jack %f", fabsf(jackPosition.x - m_xPos));
-		
-		if(fabsf(jackPosition.x - m_xPos) <= 30)
+		m_attacked = true;
+		m_mesh->setVisible(false);
+		if(m_enabled)
 		{
-			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			auto ret2 = CCSprite::create("pattern_laser_yellow_h.png");
+			CCSprite* laser3 = ret2;
+			//				laser3->setContentSize(lazer_main->getContentSize());
+			KS::setBlendFunc(laser3, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
+			laser3->setPosition(ccp(m_mesh->getPositionX(), 0));
+			laser3->setScaleY(40);
+			//laser3->setScaleY(m_crashSize/8.f);
+			//laser3->setScaleY(2.f);
+			m_laserContainer->addChild(laser3);
+			
+			auto jackPosition = myGD->getJackPoint().convertToCCP();
+			CCLOG("diff jack %f", fabsf(jackPosition.x - m_pos));
+			if(fabsf(jackPosition.x - m_pos) <= m_thickness)
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			}
 		}
-		removeFromParent();
+		
+		
+		
+		
+		addChild(KSGradualValue<float>::create(1.f, 0.1f, 0.3f, [=](float t){
+			for(int i=0; i<m_laserContainer->getChildrenCount(); i++)
+			{
+				CCSprite* ts = (CCSprite*)m_laserContainer->getChildren()->objectAtIndex(i);
+				ts->setScaleX(t);
+			}
+		}, [=](float t) {
+			for(int i=0; i<m_laserContainer->getChildrenCount(); i++)
+			{
+				CCSprite* ts = (CCSprite*)m_laserContainer->getChildren()->objectAtIndex(i);
+				ts->setScaleX(t);
+			}
+			
+			removeFromParent();
+		}));
+		
+		
+		
 	}
 	
 }
@@ -4724,16 +4776,38 @@ void HMesh::stopMyAction ()
 }
 void HMesh::myInit(const Json::Value& param)
 {
-	m_yPos = param.get("y", 0).asFloat();
+	m_pos = param.get("y", 0).asFloat();
 	m_originalDelayFrames = m_delayFrames = param.get("delayframes", 180).asInt();
 	m_currentFrames = 0;
+	
+	
+	
+	
 	schedule(schedule_selector(ThisClassType::myAction));
-	m_hMesh = CCSprite::create("hmesh.png");
-	m_hMesh->setScaleX(10.0f);
-	m_hMesh->setPosition(ccp(0, m_yPos));
-	m_hMesh->setColor(ccc3(255, 0, 0));
-	m_hMesh->setOpacity(0);
-	addChild(m_hMesh);
+	
+	float prob = param.get("enableprob", 1.f).asFloat();
+	ProbSelector ps = {prob, 1.f - prob};
+	m_enabled = ps.getResult() == 0;
+	
+	m_mesh = EffectSprite::create("lazer_sub.png");
+	if(m_enabled == false)
+	{
+		m_mesh->setGray();
+	}
+
+	
+	
+	m_mesh->setScaleX(5.0f);
+	m_mesh->setPosition(ccp(0, m_pos));
+//	m_hMesh->setColor(ccc3(255, 0, 0));
+	m_dColor = 255.f / (float)m_delayFrames;
+//	m_hMesh->setOpacity(0);
+	addChild(m_mesh);
+	
+	m_laserContainer = CCNode::create();
+	addChild(m_laserContainer);
+	m_attacked = false;
+	m_thickness = param.get("thickness", 12).asInt();
 }
 
 void HMesh::myAction(float dt)
@@ -4743,19 +4817,55 @@ void HMesh::myAction(float dt)
 	{
 		//
 		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
-		m_hMesh->setOpacity(255.f * progress);
+		auto c = m_mesh->getColor();
+		c.g -= m_dColor;
+		m_mesh->setColor(c);
+//		m_hMesh->setOpacity(255.f * progress);
 	}
-	else
+	else if(m_attacked == false)
 	{
-		auto jackPosition = myGD->getJackPoint().convertToCCP();
-		CCLOG("diff jack %f", fabsf(jackPosition.y - m_yPos));
-		if(fabsf(jackPosition.y - m_yPos) <= 30)
+		m_mesh->setVisible(false);
+		m_attacked = true;
+		
+		if(m_enabled)
 		{
-			myGD->communication("CP_jackCrashDie");
-			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			auto ret2 = CCSprite::create("pattern_laser_yellow_w.png");
+			CCSprite* laser3 = ret2;
+			//				laser3->setContentSize(lazer_main->getContentSize());
+			KS::setBlendFunc(laser3, ccBlendFunc{GL_ONE, GL_ONE_MINUS_SRC_ALPHA});
+			laser3->setPosition(ccp(0, m_mesh->getPositionY()));
+			laser3->setScaleX(40);
+			//laser3->setScaleY(m_crashSize/8.f);
+			//laser3->setScaleY(2.f);
+			m_laserContainer->addChild(laser3);
+			auto jackPosition = myGD->getJackPoint().convertToCCP();
+			CCLOG("diff jack %f", fabsf(jackPosition.y - m_pos));
+			if(fabsf(jackPosition.y - m_pos) <= m_thickness)
+			{
+				myGD->communication("CP_jackCrashDie");
+				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+			}
+	
 		}
+		
+		addChild(KSGradualValue<float>::create(1.f, 0.1f, 0.3f, [=](float t){
+			for(int i=0; i<m_laserContainer->getChildrenCount(); i++)
+			{
+				CCSprite* ts = (CCSprite*)m_laserContainer->getChildren()->objectAtIndex(i);
+				ts->setScaleY(t);
+			}
+		}, [=](float t) {
+			for(int i=0; i<m_laserContainer->getChildrenCount(); i++)
+			{
+				CCSprite* ts = (CCSprite*)m_laserContainer->getChildren()->objectAtIndex(i);
+				ts->setScaleY(t);
+			}
 
-		removeFromParent();
+			removeFromParent();
+		}));
+
+			
+
 	}
 	
 }
