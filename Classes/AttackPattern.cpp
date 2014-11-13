@@ -4115,6 +4115,7 @@ void MeshWrapper::update(float dt)
 		Json::Value param;
 		param["x"] = ks19937::getIntValue(0, mapWidthInnerEnd * 2);
 		param["delayframes"] = m_pattern.get("delay", 120).asInt();
+		param["enableprob"] = m_pattern.get("enableprob", 1.f).asFloat();
 		VMesh* t = VMesh::create(param);
 		addChild(t);
 		CCLOG("VMESH create");
@@ -4126,6 +4127,7 @@ void MeshWrapper::update(float dt)
 		Json::Value param;
 		param["y"] = ks19937::getIntValue(0, mapHeightInnerEnd * 2);
 		param["delayframes"] = m_pattern.get("delay", 120).asInt();
+		param["enableprob"] = m_pattern.get("enableprob", 1.f).asFloat();
 		HMesh* t = HMesh::create(param);
 		addChild(t);
 		CCLOG("HMESH create");
@@ -4147,3 +4149,22 @@ void MeshWrapper::stopMyAction()
 	startSelfRemoveSchedule();
 }
 
+JunirBombWrapper* JunirBombWrapper::create(KSCumberBase* cumber, Json::Value param)
+{
+	JunirBombWrapper* t_m32 = new JunirBombWrapper();
+	t_m32->myInit(cumber, param);
+	t_m32->autorelease();
+	return t_m32;
+}
+
+void JunirBombWrapper::myInit(KSCumberBase* cumber, Json::Value param)
+{
+//	myGD->communication("CP_startTeleport", cumber);
+	startSelfRemoveSchedule();
+	
+	
+	for(auto i : myGD->getSubCumberVector())
+	{
+		i->selfBomb(param);
+	}
+}

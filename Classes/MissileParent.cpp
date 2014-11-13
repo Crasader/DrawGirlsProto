@@ -1345,6 +1345,23 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				castBranch(atype, func, warningFileName);
 			}
 		}
+		else if(pattern == "115") // 부하몹 폭발
+		{
+			if(exe)
+			{
+				startFirePosition = startPosition;
+				auto func = [=](CCObject* cb)
+				{
+					KSCumberBase* cumber = (KSCumberBase*)cb;
+					JunirBombWrapper* t_m32 = JunirBombWrapper::create(cumber, patternData);
+					pattern_container->addChild(t_m32);
+					cumber->setAttackPattern(nullptr);
+//					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+//					pattern_container->addChild(t);
+				};
+				castBranch(atype, func, warningFileName);
+			}
+		}
 		else if(pattern == "1001")
 		{
 			if(exe)

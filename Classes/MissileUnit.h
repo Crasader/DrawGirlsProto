@@ -14,6 +14,7 @@
 #include <functional>
 #include <set>
 #include "IntSeries.h"
+#include "EffectSprite.h"
 USING_NS_CC_EXT;
 USING_NS_CC;
 #define MAX_SCALE_X	10.f
@@ -771,18 +772,23 @@ class VMesh : public CCNode
 public:
 	virtual ~VMesh()
 	{
-		CCLOG("~VMESH");
+		CCLOG("~VMesh");
 	}
 	static VMesh* create(const Json::Value& param);
 	void stopMyAction ();
 	void myInit(const Json::Value& param);
-	CCSprite* m_vMesh;
+	EffectSprite* m_mesh;
 protected:
-	float m_xPos; // x 위치
+	float m_pos; // y 위치
 	int m_delayFrames; // 지연 프레임
 	int m_originalDelayFrames;
 	int m_currentFrames;
 	void myAction(float dt);
+	int m_dColor;
+	CCNode* m_laserContainer;
+	bool m_attacked;
+	bool m_enabled;
+	int m_thickness;
 	
 };
 class HMesh : public CCNode
@@ -795,14 +801,18 @@ public:
 	static HMesh* create(const Json::Value& param);
 	void stopMyAction ();
 	void myInit(const Json::Value& param);
-	CCSprite* m_hMesh;
+	EffectSprite* m_mesh;
 protected:
-	float m_yPos; // y 위치
+	float m_pos; // y 위치
 	int m_delayFrames; // 지연 프레임
 	int m_originalDelayFrames;
 	int m_currentFrames;
 	void myAction(float dt);
-	
+	int m_dColor;
+	CCNode* m_laserContainer;
+	bool m_attacked;
+	bool m_enabled;
+	int m_thickness;	
 };
 
 #undef LZZ_INLINE

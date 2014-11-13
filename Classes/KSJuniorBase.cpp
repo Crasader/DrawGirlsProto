@@ -646,6 +646,47 @@ void KSJuniorBase::setGameover()
 	unschedule(schedule_selector(ThisClassType::speedAdjustment));
 }
 
+void KSJuniorBase::selfBomb(Json::Value param)
+{
+	myGD->communication("CP_removeSubCumber", this);
+	removeFromParentAndCleanup(true);
+	AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3", false);
+//	unschedule(schedule_selector(ThreeCushion::myAction));
+//	initParticle();
+	
+	CCSprite* particle = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi").first;
+	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	//	reader->release();
+	particle->setPosition(getPosition());
+	particle->setRotation(rand()%360);
+	addChild(particle);
+	
+	//////// 폭발
+	CCNode* baseNode = this;
+	IntPoint centerPoint = IntPoint(round((baseNode->getPositionX()-1)/pixelSize+1),round((baseNode->getPositionY()-1)/pixelSize+1));
+	
+	float radius = 40 / 2.f;
+	for(int y=-radius; y<=radius; y++)
+	{
+		for(int x=-radius; x<=radius; x++)
+		{
+			float distance = (IntPoint(x, y)).length();
+			if(distance <= radius)
+			{
+				crashMapForIntPoint(centerPoint + IntPoint(x, y));
+			}
+		}
+	}
+	//////////////////////////////////
+	baseNode->removeFromParentAndCleanup(true);
+	
+//	CCDelayTime* t_delay = CCDelayTime::create(0.5);
+//	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));
+//	
+//	CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call2);
+//	runAction(t_seq);
+}
+
 
 
 
