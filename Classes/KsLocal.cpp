@@ -1257,6 +1257,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_nextLevel] = "(다음레벨)";
 	obj[LK::kMyLocalKey_characterExpUpValue] = "Exp +%d";
 	obj[LK::kMyLocalKey_notCleardHellMissionCondition] = "<font>%d초를 버티세요!";
+	
+	obj[LK::kMyLocalKey_missile] = "미사일";
+	obj[LK::kMyLocalKey_damage] = "데미지";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
