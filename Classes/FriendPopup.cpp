@@ -169,7 +169,7 @@ bool FriendPopup::init()
 			return;
 			
 		}
-		bool antiApple = !(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
+		bool antiApple = mySGD->antiApple();
 		// 추천인이 있으면
 		if(v["introducerID"].asInt64() != 0 || antiApple)
 		{

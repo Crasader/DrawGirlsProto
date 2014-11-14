@@ -4446,3 +4446,12 @@ string StarGoldData::getDiaryDownUrl(){	return diaryDownUrl;	}
 
 void StarGoldData::setIosHideVer(string t_str){	iosHideVer = t_str.c_str();	}
 string StarGoldData::getIosHideVer(){	return iosHideVer;	}
+
+bool StarGoldData::antiApple()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	return false;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return !(mySGD->getIosMenuVisible() && graphdog->getAppVersionString() != mySGD->getIosHideVer());
+#endif
+}
