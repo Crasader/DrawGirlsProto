@@ -649,7 +649,7 @@ void KSJuniorBase::setGameover()
 void KSJuniorBase::selfBomb(Json::Value param)
 {
 	myGD->communication("CP_removeSubCumber", this);
-	removeFromParentAndCleanup(true);
+	
 	AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3", false);
 //	unschedule(schedule_selector(ThreeCushion::myAction));
 //	initParticle();

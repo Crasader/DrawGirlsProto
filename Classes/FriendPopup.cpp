@@ -269,12 +269,15 @@ bool FriendPopup::init()
 //																													}));
 //	}
 	
-	if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode))
+
+	if(mySGD->antiApple() == false)
 	{
-		myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode, true);
-		StoryLayer::startStory(this, "menu_friend");
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode) )
+		{
+			myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kUI_hellmode, true);
+			StoryLayer::startStory(this, "menu_friend");
+		}
 	}
-	
 	return true;
 }
 

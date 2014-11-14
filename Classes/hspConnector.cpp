@@ -610,7 +610,7 @@ string hspConnector::getServerAddress(){
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
 	
 	// plist 얻어와서 작업해야 하는데 일단은 그냥
-	serverAddr = "http://182.162.201.147:10010";
+//	serverAddr = "http://182.162.201.147:10010";
 	
 //	serverAddr = "http://182.162.196.182:10080";
 
