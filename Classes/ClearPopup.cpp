@@ -123,7 +123,7 @@ bool ClearPopup::init()
 	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 	p1["data"] = p1_data;
 	
-	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
+	//send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
 	
 	is_rank_changed = false;
     
@@ -204,9 +204,8 @@ bool ClearPopup::init()
 	title->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title, kZ_CP_menu);
 	
-	
-	CCSprite* stage_tab = CCSprite::create("title_tab.png");
-	stage_tab->setPosition(ccp(76,253));
+	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
+	stage_tab->setPosition(ccp(133.5, 256.5));
 	main_case->addChild(stage_tab);
 	
 	int stage_number = mySD->getSilType();
@@ -426,8 +425,9 @@ bool ClearPopup::init()
 	p2_data["character"] = mySGD->getUserdataSelectedCharNO();
 	p2_data["highPiece"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
+	param2["getWeeklyRank"]=true;
 	
-	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, ClearPopup::resultGetRank)));
+	send_command_list.push_back(CommandParam("addweeklyandstagescore", param2, json_selector(this, ClearPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, ClearPopup::resultGetTime)));
 	
@@ -768,16 +768,47 @@ void ClearPopup::resultGetTime(Json::Value result_data)
 //}
 void ClearPopup::resultGetRank(Json::Value result_data)
 {
+	
+	
 	TRACE();
+	
+	CCLOG("gogogo %s",result_data.asString().c_str());
 	cell_action_list.clear();
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		
+		string backimgFile;
+		if(result_data["isMax"].asBool()){
+			backimgFile="ending_tab.png";
+		}else{
+			backimgFile="tabbutton_up.png";
+		}
+		
+		CCSprite* rank_tab = CCSprite::create(backimgFile.c_str());
+		
+		rank_tab->setPosition(ccp(347.5, 256.5));
+		main_case->addChild(rank_tab,100);
+		
+		KSLabelTTF* piece_number_label = KSLabelTTF::create("월드 주간 랭킹",	mySGD->getFont().c_str(), 11);
+		piece_number_label->setColor(ccc3(255, 255, 255));
+		piece_number_label->disableOuterStroke();
+		piece_number_label->setPosition(ccpFromSize(rank_tab->getContentSize()/2.f) + ccp(0,1));
+		rank_tab->addChild(piece_number_label,kZ_CP_img+100);
+		
+		if(result_data["isMax"].asBool()){
+			piece_number_label->setString(CCString::createWithFormat("%d스테이지 랭킹",result_data["stageNo"].asInt())->getCString());
+		}else{
+			piece_number_label->setString("월드 주간 랭킹");
+		}
+		
 		TRACE();
+		
+		CCLOG("gogogo %s",result_data.asString().c_str());
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(347,240));
+		graph_back->setPosition(ccp(347,234));
 		main_case->addChild(graph_back, kZ_CP_img);
 		
 //		KSLabelTTF* t_rank_a = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_rankA), mySGD->getFont().c_str(), 9);
@@ -822,7 +853,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,1));
-		rank_percent_case->setPosition(ccp(249+195,240));
+		rank_percent_case->setPosition(ccp(249+195,235));
 		main_case->addChild(rank_percent_case, kZ_CP_img);
 		
 		KSLabelTTF* percent_label = KSLabelTTF::create("100%", mySGD->getFont().c_str(), 12);
@@ -836,7 +867,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		
 		cell_action_list.push_back([=](){
-			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,240));
+			CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,235));
 			rank_percent_case->runAction(t_move);
 			
 			CCDelayTime* t_delay2 = CCDelayTime::create(1.f);
@@ -1010,7 +1041,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(result_data["myscore"].asString().c_str()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(55, 35, 150));
