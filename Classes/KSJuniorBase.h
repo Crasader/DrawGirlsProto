@@ -16,6 +16,8 @@ public:
 	KSJuniorBase() : RADIUS(15.f)
 	{
 		m_cumberState = kCumberStateNothing;
+        m_selfBomb.currentFrame = 0;
+        m_selfBomb.subFrameCount = 0;
 		CCLOG("%s %d kCumberStateMoving", __FILE__, __LINE__);
 	}
 	virtual ~KSJuniorBase(){}
@@ -142,8 +144,8 @@ protected:
 	
 	struct SelfBomb
 	{
-		int currentFrame = 0;
-		int subFrameCount = 0;
+		int currentFrame;
+		int subFrameCount;
 	}m_selfBomb;
 	
 
