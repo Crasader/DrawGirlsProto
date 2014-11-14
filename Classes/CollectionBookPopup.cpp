@@ -290,6 +290,9 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(gift, 1, kCBP_MT_gift);
 	
 	gift->setVisible(t_card_info.count.getV() >= 2);
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	gift->setVisible(gift->isVisible() && mySGD->getIsOnGiftForIOS());
+#endif
 	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 //	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
