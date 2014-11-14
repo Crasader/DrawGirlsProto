@@ -348,21 +348,16 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading42] = "에피소드 하나를 완성할 때마다 특별한 카드를 선물로 드립니다.";
 	obj[LK::kMyLocalKey_titleLoading43] = "클리어 점수는 영역획득점수와 콤보점수, 남은 타임 보너스가 합산된 점수입니다.";
 	obj[LK::kMyLocalKey_titleLoading44] = "고득점을 노린다면 연속 콤보를 성공시켜 보세요.";
-#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	if(mySGD->getIsOnGiftForIOS())
-	{
-		obj[LK::kMyLocalKey_titleLoading45] = "친구를 초대하고 추천인 보상을 받으세요. 추천을 받은 횟수에 따라 더 많은 보상을 받을 수 있습니다.";
-		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 내카드>다이어리에서 보낼 수 있습니다.";
-	}
-	else
+	if(mySGD->antiApple())
 	{
 		obj[LK::kMyLocalKey_titleLoading45] = "클리어 점수는 영역획득점수와 콤보점수, 남은 타임 보너스가 합산된 점수입니다.";
 		obj[LK::kMyLocalKey_titleLoading46] = "고득점을 노린다면 연속 콤보를 성공시켜 보세요.";
 	}
-#else
-	obj[LK::kMyLocalKey_titleLoading45] = "친구를 초대하고 추천인 보상을 받으세요. 추천을 받은 횟수에 따라 더 많은 보상을 받을 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 내카드>다이어리에서 보낼 수 있습니다.";
-#endif
+	else
+	{
+		obj[LK::kMyLocalKey_titleLoading45] = "친구를 초대하고 추천인 보상을 받으세요. 추천을 받은 횟수에 따라 더 많은 보상을 받을 수 있습니다.";
+		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 내카드>다이어리에서 보낼 수 있습니다.";
+	}
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
