@@ -108,8 +108,11 @@ private:
 	function<void()> repeat_character_action;
 	
 	CCMenu* upgrade_menu;
-	KSLabelTTF* missile_data_level;
-	KSLabelTTF* missile_data_power;
+	KSLabelTTF* character_level_label;
+	KSLabelTTF* missile_level_label;
+	KSLabelTTF* character_power_label;
+	KSLabelTTF* missile_power_label;
+	KSLabelTTF* total_power_label;
 	void upgradeAction(CCObject* sender);
 	void changeCharacterAction(CCObject* sender);
 	
