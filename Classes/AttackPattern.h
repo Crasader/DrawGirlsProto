@@ -1222,6 +1222,16 @@ protected:
 	int m_currentFrames;
 };
 
-
+class JunirBombWrapper : public AttackPattern // teleport
+{
+public:
+	static JunirBombWrapper* create(KSCumberBase* cumber, Json::Value param);
+	
+private:
+	KSCumberBase* m_cumber;
+	
+	
+	void myInit(KSCumberBase* cumber, Json::Value param);
+};
 
 #endif

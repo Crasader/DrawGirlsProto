@@ -169,8 +169,9 @@ bool FriendPopup::init()
 			return;
 			
 		}
+		bool antiApple = mySGD->antiApple();
 		// 추천인이 있으면
-		if(v["introducerID"].asInt64() != 0)
+		if(v["introducerID"].asInt64() != 0 || antiApple)
 		{
 			m_listButtonCallback(0);
 		}

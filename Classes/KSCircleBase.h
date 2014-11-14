@@ -147,6 +147,7 @@ public:
 	float getRadius();
 	void attachEmotion();
 	void setGameover();
+	virtual void selfBomb(Json::Value param){}
 
 protected:
 	bool m_lookToLeft;

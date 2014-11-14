@@ -26,7 +26,7 @@
 #import "HSPItemDelivery.h"
 #import "KakaoLinkCenter.h"
 #import  <IgaworksAD/AdBrix.h>
-
+#include "HSPEnums.h"
 //#import "HSPUiReference.h"
 //#import "HSPKakao.h"
 //#import "Kakao.h"
@@ -610,7 +610,7 @@ string hspConnector::getServerAddress(){
 	serverAddr = [gameServerAddress cStringUsingEncoding:NSUTF8StringEncoding];
 	
 	// plist 얻어와서 작업해야 하는데 일단은 그냥
-//	serverAddr = "http://182.162.201.147:10010";
+	serverAddr = "http://182.162.201.147:10010";
 	
 //	serverAddr = "http://182.162.196.182:10080";
 
@@ -714,24 +714,55 @@ void hspConnector::login(Json::Value param,Json::Value callbackParam,jsonSelType
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST	
 	[[HSPCore sharedHSPCore] loginWithOAuthProvider:HSP_OAUTHPROVIDER_GUEST completionHandler:
-#endif
-#ifndef LQTEST
-	 int LoginType = (int)HSPLogin::GAMECENTER;
-	 HSPOAuthProvider loginT = (HSPOAuthProvider)param.get("LoginType", LoginType).asInt();
-	 CCLOG("loginWithOAuthProvider with (login type) : %d", (int)loginT);
-	[[HSPCore sharedHSPCore] loginWithOAuthProvider:loginT completionHandler:
-#endif
 	 ^(BOOL playable, HSPError* error) {
 		 TRACE();
 		 KS::KSLog("loginWithOAuthProvider callback, member id = %", myHSP->getMemberID());
-		// 로그인 응답 처리
+		 // 로그인 응답 처리
 		 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
 		 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
 		 TRACE();
 		 addErrorInResult(resultDict, error);
 		 callFuncMainQueue2(param,callbackParam, _key,resultDict);
 		 TRACE();
-	}];
+	 }];
+#endif
+#ifndef LQTEST
+	HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
+	// 이미 로그인이 되어있으면 로그인을 따로 안함.
+	if(loginType != HSPLoginTypeX::HSPLoginTypeUNKNOWN)
+	{
+		NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+//		[resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
+		TRACE();
+		NSMutableDictionary* error = [NSMutableDictionary dictionary];
+		[error setObject:[NSNumber numberWithBool:YES] forKey:@"isSuccess"];
+		[resultDict setObject:error forKey:@"error"];
+		
+//		addErrorInResult(resultDict, error);
+		callFuncMainQueue2(param,callbackParam, _key,resultDict); 
+	}
+	else
+	{
+		int LoginType = (int)HSPLogin::GAMECENTER;
+	 HSPOAuthProvider loginT = (HSPOAuthProvider)param.get("LoginType", LoginType).asInt();
+	 CCLOG("loginWithOAuthProvider with (login type) : %d", (int)loginT);
+		[[HSPCore sharedHSPCore] loginWithOAuthProvider:loginT completionHandler:
+		 ^(BOOL playable, HSPError* error) {
+			 TRACE();
+			 KS::KSLog("loginWithOAuthProvider callback, member id = %", myHSP->getMemberID());
+			 // 로그인 응답 처리
+			 NSMutableDictionary *resultDict = [NSMutableDictionary dictionary];
+			 [resultDict setObject:[NSNumber numberWithBool:playable] forKey:@"playable"];
+			 TRACE();
+			 addErrorInResult(resultDict, error);
+			 callFuncMainQueue2(param,callbackParam, _key,resultDict);
+			 TRACE();
+		 }];
+		
+	}
+	
+#endif
+	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	bool ManualLogin =true;
 	int LoginType = (int)HSPLogin::GUEST;

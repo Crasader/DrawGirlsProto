@@ -1070,6 +1070,7 @@ public:
 	KSProtectVar<int> add_time_value;
 	Json::Value hell_balance;
 	
+	bool antiApple();
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
