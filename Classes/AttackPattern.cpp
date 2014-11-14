@@ -4031,9 +4031,13 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 	m_alpha = 5;
 	m_isFollow = false;
 	m_frameCount = 0;
-	m_godOfDeathSprite = CCSprite::create("godofdeath.png");
+	auto pair = KS::loadCCBI<CCSprite*>(this, "pattern_god.ccbi");
+	m_godOfDeathSprite = pair.first;
+	m_manager = pair.second;
+//	 = CCSprite::create("godofdeath.png");
 	m_godOfDeathSprite->setPosition(m_cumber->getPosition());
 	addChild(m_godOfDeathSprite);
+	m_killed = false;
 }
 
 void GodOfDeath::update(float dt)
@@ -4041,11 +4045,16 @@ void GodOfDeath::update(float dt)
 	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
 	
 	if(ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition()) <= 5
-							 && myGD->getCommunicationBool("Jack_isDie") == false)
+							 && myGD->getCommunicationBool("Jack_isDie") == false && m_killed == false)
 	{
+		m_killed = true;
 		myGD->communication("CP_jackCrashDie");
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-		stopMyAction();
+		m_manager->runAnimationsForSequenceNamed("die");
+		unschedule(schedule_selector(ThisClassType::update));
+		addChild(KSTimer::create(1.5f, [=](){
+			stopMyAction();
+		}));
 	}
 	m_frameCount++;
 	if(m_isFollow)
@@ -4062,11 +4071,13 @@ void GodOfDeath::update(float dt)
 		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(m_followSpeed * cosf(angle), m_followSpeed * sinf(angle)));
 		if(cosf(angle) < 0)
 		{
-			m_godOfDeathSprite->setFlipX(false);
+			KS::setFlipX(m_godOfDeathSprite, false);
+//			m_godOfDeathSprite->setFlipX(false);
 		}
 		else
 		{
-			m_godOfDeathSprite->setFlipX(true);
+			KS::setFlipX(m_godOfDeathSprite, true);
+//			m_godOfDeathSprite->setFlipX(true);
 		}
 	}
 	else
@@ -4160,11 +4171,65 @@ JunirBombWrapper* JunirBombWrapper::create(KSCumberBase* cumber, Json::Value par
 void JunirBombWrapper::myInit(KSCumberBase* cumber, Json::Value param)
 {
 //	myGD->communication("CP_startTeleport", cumber);
+	m_cumber = cumber;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
+	setEndingWithEarly();
 	startSelfRemoveSchedule();
 	
-	
+	vector<KSCumberBase*> copyArray;
 	for(auto i : myGD->getSubCumberVector())
+	{
+		copyArray.push_back(i);
+	}
+	
+	for(auto i : copyArray)
 	{
 		i->selfBomb(param);
 	}
+}
+
+
+WiperMissileWrapper* WiperMissileWrapper::create(KSCumberBase* cumber, Json::Value param)
+{
+	WiperMissileWrapper* t_m32 = new WiperMissileWrapper();
+	t_m32->myInit(cumber, param);
+	t_m32->autorelease();
+	return t_m32;
+}
+
+void WiperMissileWrapper::myInit(KSCumberBase* cumber, Json::Value param)
+{
+	//	myGD->communication("CP_startTeleport", cumber);
+	m_cumber = cumber;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
+	std::string fileName = CCString::createWithFormat("cumber_missile%d.png", param.get("color", 1).asInt())->getCString();
+	if(KS::isExistFile(fileName))
+		batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
+	else
+		batchNode = CCSpriteBatchNode::create("cumber_missile1.png", 300);
+	
+	//	batchNode->setBlendFunc(ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+	addChild(batchNode);
+	
+	
+	////////////////
+	
+	//////////////////
+	
+	stopMyAction();
+}
+
+
+void WiperMissileWrapper::stopMyAction()
+{
+	unscheduleUpdate();
+	
+	setEndingWithEarly();
+	
+	startSelfRemoveSchedule();
+	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
 }

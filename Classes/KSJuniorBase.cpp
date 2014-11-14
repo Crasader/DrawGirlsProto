@@ -648,37 +648,132 @@ void KSJuniorBase::setGameover()
 
 void KSJuniorBase::selfBomb(Json::Value param)
 {
-	myGD->communication("CP_removeSubCumber", this);
-	removeFromParentAndCleanup(true);
-	AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3", false);
-//	unschedule(schedule_selector(ThreeCushion::myAction));
-//	initParticle();
+	int delayFrames = param.get("delay", 200).asInt();
+	m_selfBomb.currentFrame = 0;
+	m_selfBomb.subFrameCount = 0;
+	float enableProb = param.get("enableprob", 1.f).asFloat();
+	ProbSelector ps = {enableProb, 1.f - enableProb};
+	int enable = ps.getResult() == 0;
+	addChild(KSSchedule::create([=](float dt)
+															{
+																m_selfBomb.currentFrame++;
+																
+																if(m_selfBomb.currentFrame == delayFrames)
+																{
+																	CCNode* baseNode = this;
+//																	if(enable)
+																	
+																	
+																	AudioEngine::sharedInstance()->playEffect("sound_threecusion_bomb.mp3", false);
+																	//	unschedule(schedule_selector(ThreeCushion::myAction));
+																	//	initParticle();
+																	
+																	CCSprite* particle = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi").first;
+																	if(enable == false)
+																	{
+																		particle->setColor(ccc3(0, 0, 0));
+																	}
+																	
+																	
+																	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
+																	//	reader->release();
+																	particle->setPosition(getPosition());
+																	particle->setRotation(rand()%360);
+																	addChild(particle);
+																	
+																	if(enable)
+																	{
+																		//////// 폭발
+																		IntPoint centerPoint = ccp2ip(getPosition());
+																		
+																		float radius = param.get("crasharea", 20.f).asFloat() / 2.f;
+																		for(int y=-radius; y<=radius; y++)
+																		{
+																			for(int x=-radius; x<=radius; x++)
+																			{
+																				float distance = (IntPoint(x, y)).length();
+																				if(distance <= radius)
+																				{
+																					crashMapForIntPoint(centerPoint + IntPoint(x, y));
+																				}
+																			}
+																		}
+																		
+																	}
 	
-	CCSprite* particle = KS::loadCCBI<CCSprite*>(this, "bomb_8_8.ccbi").first;
-	KS::setBlendFunc(particle, ccBlendFunc{GL_SRC_ALPHA, GL_ONE});
-	//	reader->release();
-	particle->setPosition(getPosition());
-	particle->setRotation(rand()%360);
-	addChild(particle);
-	
-	//////// 폭발
-	CCNode* baseNode = this;
-	IntPoint centerPoint = IntPoint(round((baseNode->getPositionX()-1)/pixelSize+1),round((baseNode->getPositionY()-1)/pixelSize+1));
-	
-	float radius = 40 / 2.f;
-	for(int y=-radius; y<=radius; y++)
-	{
-		for(int x=-radius; x<=radius; x++)
-		{
-			float distance = (IntPoint(x, y)).length();
-			if(distance <= radius)
-			{
-				crashMapForIntPoint(centerPoint + IntPoint(x, y));
-			}
-		}
-	}
-	//////////////////////////////////
-	baseNode->removeFromParentAndCleanup(true);
+																	
+																																		//////////////////////////////////
+																	addChild(KSTimer::create(0.5f, [=](){
+																		myGD->communication("CP_removeSubCumber", this);
+																		baseNode->removeFromParentAndCleanup(true);
+																	}));
+																	return false;
+																	
+																}
+																else
+																{
+																	
+//																	currentFrame == delayFrames
+																	m_selfBomb.subFrameCount++;
+																	ccColor3B blinkColor;
+																	if(enable)
+																	{
+																		blinkColor = ccc3(255, 0, 0);
+																	}
+																	else
+																	{
+																		blinkColor = ccc3(0, 0, 0);
+																	}
+																	if(delayFrames - m_selfBomb.currentFrame < 60)
+																	{
+																		if(m_selfBomb.subFrameCount % 12 == 0)
+																		{
+																			KS::setColor(this, ccc3(255, 255, 255));
+																			m_selfBomb.subFrameCount = 0;
+																		}
+																		else if(m_selfBomb.subFrameCount % 6 == 0)
+																		{
+																			KS::setColor(this, blinkColor);
+//																			addChild(KSGradualValue<float>::create(m_furyMode.colorRef, 255, 0.5f,
+//																																						 [=](float t)
+//																																						 {
+//																																							 KS::setColor(this, ccc3(255, t, t));
+//																																						 }, nullptr));
+																			
+																		}
+																		
+																	}
+																	else if(delayFrames - m_selfBomb.currentFrame < 120)
+																	{
+																		if(m_selfBomb.subFrameCount % 24 == 0)
+																		{
+																			KS::setColor(this, ccc3(255, 255, 255));
+																			m_selfBomb.subFrameCount = 0;
+																		}
+																		else if(m_selfBomb.subFrameCount % 12 == 0)
+																		{
+																			KS::setColor(this, blinkColor);
+																		}
+
+																		
+																	}
+																	else
+																	{
+																		if(m_selfBomb.subFrameCount % 48 == 0)
+																		{
+																			KS::setColor(this, ccc3(255, 255, 255));
+																			m_selfBomb.subFrameCount = 0;
+																		}
+																		else if(m_selfBomb.subFrameCount % 24 == 0)
+																		{
+																			KS::setColor(this, blinkColor);
+																		}
+																	}
+																}
+																
+																return true;
+																
+															}));
 	
 //	CCDelayTime* t_delay = CCDelayTime::create(0.5);
 //	CCCallFunc* t_call2 = CCCallFunc::create(this, callfunc_selector(ThreeCushion::selfRemove));

@@ -140,6 +140,11 @@ protected:
 		int state; // 1 : 도는상태, 2 : 다시 제 위치로 돌아가는 상태
 	}m_noDirection;
 	
+	struct SelfBomb
+	{
+		int currentFrame = 0;
+		int subFrameCount = 0;
+	}m_selfBomb;
 	
 
 	

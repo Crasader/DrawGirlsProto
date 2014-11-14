@@ -1198,10 +1198,12 @@ protected:
 	bool m_isFollow;
 	int m_frameCount;
 	float m_alpha;
+	bool m_killed;
 	
 	CCSprite* m_godOfDeathSprite;
 	Well512 m_well512;
 	Json::Value m_pattern;
+	CCBAnimationManager* m_manager;
 };
 class MeshWrapper : public AttackPattern
 {
@@ -1228,10 +1230,25 @@ public:
 	static JunirBombWrapper* create(KSCumberBase* cumber, Json::Value param);
 	
 private:
-	KSCumberBase* m_cumber;
+//	KSCumberBase* m_cumber;
 	
 	
 	void myInit(KSCumberBase* cumber, Json::Value param);
 };
+
+class WiperMissileWrapper : public AttackPattern // teleport
+{
+public:
+	static WiperMissileWrapper* create(KSCumberBase* cumber, Json::Value param);
+	
+private:
+	//	KSCumberBase* m_cumber;
+	
+	
+	void myInit(KSCumberBase* cumber, Json::Value param);
+	CCSpriteBatchNode* batchNode;
+	virtual void stopMyAction();
+};
+
 
 #endif
