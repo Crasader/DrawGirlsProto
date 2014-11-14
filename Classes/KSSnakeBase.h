@@ -134,6 +134,7 @@ public:
 	float getRadius();
 	void attachEmotion();
 	void setGameover();
+	virtual void selfBomb(Json::Value param){}
 protected:
 	const float RADIUS;
 	const float BODY_RADIUS;
