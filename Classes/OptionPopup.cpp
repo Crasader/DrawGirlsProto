@@ -712,6 +712,7 @@ bool OptionPopup::init()
 	tab_menu->addChild(attendance_item);
 	
 	
+	attendance_item->setVisible(!mySGD->antiApple());
 	
 	
 	CommonButton* close_menu = CommonButton::createCloseButton(-171);
