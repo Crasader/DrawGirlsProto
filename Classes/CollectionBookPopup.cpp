@@ -290,6 +290,7 @@ void CollectionBookPopup::setRightPage(CCNode *target, int card_number)
 	target->addChild(gift, 1, kCBP_MT_gift);
 	
 	gift->setVisible(t_card_info.count.getV() >= 2);
+	gift->setVisible(gift->isVisible() && !mySGD->antiApple());
 	
 //	CCSprite* n_zoom = CCSprite::create("diary_zoom.png");
 //	CCSprite* s_zoom = CCSprite::create("diary_zoom.png");
