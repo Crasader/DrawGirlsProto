@@ -24,9 +24,6 @@ class KSJuniorBase;
 
 void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 {
-	FixedSizeDeque<int> wee;
-	std::queue<int> wee2;
-	
 	IntPoint jackPoint = myGD->getJackPoint();
 	
 	if(t_p.isInnerMap() && (myGD->mapState[t_p.x][t_p.y] == mapOldline || myGD->mapState[t_p.x][t_p.y] == mapOldget)) // just moment, only map crash
@@ -54,6 +51,14 @@ void KSCumberBase::crashMapForIntPoint( IntPoint t_p )
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 		myGD->communication("Main_showLineDiePosition", t_p);
 	}
+}
+void KSCumberBase::crashMapForCircle(IntPoint center, int radius)
+{
+//	crashMapForIntRect (IntRect t_r)
+//	{
+	
+		
+//		return crashCount;
 }
 
 
@@ -1412,7 +1417,7 @@ void KSCumberBase::cumberAttack(float dt)
 			// 같은 패턴이 3초내 발동되면 해당패턴은 안넣음.
 
 			bool falseCondition = (*iter)["pattern"].asString() == m_lastPattern.exePattern &&
-			currentSecond <= m_lastPattern.exeTime + 3000 ||
+			currentSecond <= m_lastPattern.exeTime + 3 ||
 			(*iter)["atype"].asString() == "crash" && m_crashAttackTime + crashReattackTerm >= m_cumberTimer;
 			
 			// 미사일이면 무조건 후보에 오름
