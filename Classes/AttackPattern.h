@@ -1244,11 +1244,21 @@ public:
 private:
 	//	KSCumberBase* m_cumber;
 	
-	
 	void myInit(KSCumberBase* cumber, Json::Value param);
 	CCSpriteBatchNode* batchNode;
 	virtual void stopMyAction();
 };
 
-
+class HideCloudWrapper : public AttackPattern // 뭉게구름
+{
+public:
+	static HideCloudWrapper* create(KSCumberBase* cumber, Json::Value param);
+	
+private:
+	//	KSCumberBase* m_cumber;
+	
+	
+	void myInit(KSCumberBase* cumber, Json::Value param);
+	virtual void stopMyAction();
+};
 #endif

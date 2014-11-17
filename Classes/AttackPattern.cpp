@@ -4216,6 +4216,61 @@ void WiperMissileWrapper::myInit(KSCumberBase* cumber, Json::Value param)
 	addChild(batchNode);
 	
 	
+	float theta = atan2f(myGD->getJackPointCCP().y - cumber->getPosition().y, myGD->getJackPointCCP().x - cumber->getPosition().x) ;
+	float originalTheta = theta;
+	theta += M_PI / 2.f;
+	int number = param.get("number", 4).asInt();
+	float margin = param.get("margin", 1.f).asFloat();
+	float speed = param.get("speed", 100.f).asFloat() / 100.f;
+	
+	if(number % 2 == 0)
+	{
+		float startNumber = -(number / 2 - 0.5f) * margin;
+		
+		for(int i=0; i<number; ++i)
+		{
+			CCPoint mPoint = cumber->getPosition() + ccp(startNumber * cosf(theta), startNumber * sinf(theta));
+			///////////////////////////////////////
+			MissileUnit* t_mu2 = MissileUnit::create(mPoint, rad2Deg(originalTheta), speed,
+																							 fileName.c_str(), CCSizeMake(4, 4),0, 0, true);
+			batchNode->addChild(t_mu2);
+			t_mu2->setOpacity(255);
+
+			startNumber += margin;
+			
+			float tempProb = param.get("enableprob", 1.f).asFloat();
+			ProbSelector ps = {tempProb, 1.f - tempProb};
+			if(ps.getResult() == 1)
+			{
+				t_mu2->setOpacity(100);
+				t_mu2->setEnabled(false);
+			}
+		}
+	}
+	else
+	{
+		float startNumber = -((int)(number / 2));
+		for(int i=0; i<number; ++i)
+		{
+			CCPoint mPoint = cumber->getPosition() + ccp(startNumber * cosf(theta), startNumber * sinf(theta));
+			///////////////////////////////////////
+			MissileUnit* t_mu2 = MissileUnit::create(mPoint, rad2Deg(originalTheta), speed,
+																							 fileName.c_str(), CCSizeMake(4, 4),0, 0, true);
+			batchNode->addChild(t_mu2);
+			t_mu2->setOpacity(255);
+			
+			startNumber += margin;
+			
+			float tempProb = param.get("enableprob", 1.f).asFloat();
+			ProbSelector ps = {tempProb, 1.f - tempProb};
+			if(ps.getResult() == 1)
+			{
+				t_mu2->setOpacity(100);
+				t_mu2->setEnabled(false);
+			}
+
+		}
+	}
 	////////////////
 	
 	//////////////////
@@ -4232,4 +4287,54 @@ void WiperMissileWrapper::stopMyAction()
 	
 	startSelfRemoveSchedule();
 	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
+}
+
+/////////////
+HideCloudWrapper* HideCloudWrapper::create(KSCumberBase* cumber, Json::Value param)
+{
+	HideCloudWrapper* t_m32 = new HideCloudWrapper();
+	t_m32->myInit(cumber, param);
+	t_m32->autorelease();
+	return t_m32;
+}
+
+void HideCloudWrapper::myInit(KSCumberBase* cumber, Json::Value param)
+{
+	//	myGD->communication("CP_startTeleport", cumber);
+	m_cumber = cumber;
+	m_earlyRelease = true;
+	setStartingWithEarly();
+	
+	
+	////////////////
+	// number, speed, duration
+	//////////////////
+	int number = param.get("number", 3).asInt();
+	for(int i=0; i<number; i++)
+	{
+//		float tempProb = param.get("enableprob", 1.f).asFloat();
+//		ProbSelector ps = {tempProb, 1.f - tempProb};
+//		if(ps.getResult() == 0)
+		{
+			Json::Value tParam;
+			tParam["speed"] = param.get("speed", 100.f).asFloat() / 100.f;
+			tParam["duration"] = param.get("duration", 400).asInt();
+			tParam["enableprob"] = param.get("enableprob", 1.f).asFloat();
+			HideCloud* hc = HideCloud::create(cumber, tParam);
+			addChild(hc);
+		}
+	}
+	
+	stopMyAction();
+}
+
+
+void HideCloudWrapper::stopMyAction()
+{
+	unscheduleUpdate();
+	
+	setEndingWithEarly();
+	
+	startSelfRemoveSchedule();
+//	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
 }
