@@ -5219,9 +5219,9 @@ void Maingame::goHome ()
 	
 	mySGD->is_paused = false;
 	AudioEngine::sharedInstance()->setAppFore();
-	if(mySGD->is_hell_mode)
-		myGD->communication("UI_hellModeResult");
-	else
+//	if(mySGD->is_hell_mode)
+//		myGD->communication("UI_hellModeResult");
+//	else
 		gameover();
 }
 void Maingame::goReplay ()
