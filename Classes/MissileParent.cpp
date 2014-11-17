@@ -900,6 +900,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		{
 		}
 	}
+	if(patternData["pattern"].asInt() == 115) // 부하몹 터트리기.
+	{
+		if(myGD->getSubCumberCount() == 0)
+		{
+			return invalid;
+		}
+	}
 //	Json::Value patternDisableArray = R"( [{"type":"pattern","target":"112", "oper":"*","crasharea":0.8},
 //	{"type":"pattern","target":"1014","prop":"불발확률","value":0.3}])";
 	
@@ -1352,10 +1359,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				startFirePosition = startPosition;
 				auto func = [=](CCObject* cb)
 				{
-					KSCumberBase* cumber = (KSCumberBase*)cb;
-					JunirBombWrapper* t_m32 = JunirBombWrapper::create(cumber, patternData);
+//					KSCumberBase* cumber = (KSCumberBase*)cb;
+//					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+//					pattern_container->addChild(t);
+					
+					JunirBombWrapper* t_m32 = JunirBombWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
 					pattern_container->addChild(t_m32);
-					cumber->setAttackPattern(nullptr);
+//					cumber->setAttackPattern(nullptr);
 //					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 //					pattern_container->addChild(t);
 				};
@@ -1750,13 +1760,34 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				Json::Value param;
-				param["x"] = 100;
 				
 				MeshWrapper* t = MeshWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				pattern_container->addChild(t);
 			};
 			castBranch(atype, func, warningFileName);
+		}
+		else if(pattern == "1023")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				WiperMissileWrapper* t = WiperMissileWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+
+			
+		}
+		else if(pattern == "1024")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				HideCloudWrapper* t = HideCloudWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+			
 			
 		}
 			

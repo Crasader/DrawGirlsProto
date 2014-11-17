@@ -95,61 +95,64 @@ void MissileUnit::move ()
 	}
 	
 	setPosition(r_p);
-	
-	if(is_checking)
+	if(enabled)
 	{
-		IntPoint jackPoint = myGD->getJackPoint();
-		CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
-		
-		CCRect missile_rect = CCRectMake(p_p.x - crashSize.width/2.f, p_p.y - crashSize.height/2.f, crashSize.width, crashSize.height);
-		
-		//			IntPoint p_pBeforePoint = ccp2ip(beforePosition);
-		//			IntPoint p_pPoint = ccp2ip(p_p);
-		if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
+		if(is_checking)
 		{
-			is_checking = false;
-			//				if(mySGD->getIsHard() || myGD->getJackState())
-			// 수퍼 미사일이거나 맵 밖이라면 죽임.
-			if(isSuper ||
-				 (myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine")))
+			IntPoint jackPoint = myGD->getJackPoint();
+			CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize+1,(jackPoint.y-1)*pixelSize+1);
+			
+			CCRect missile_rect = CCRectMake(p_p.x - crashSize.width/2.f, p_p.y - crashSize.height/2.f, crashSize.width, crashSize.height);
+			
+			//			IntPoint p_pBeforePoint = ccp2ip(beforePosition);
+			//			IntPoint p_pPoint = ccp2ip(p_p);
+			if(missile_rect.containsPoint(jackPosition)) //  && myGD->getJackState()
 			{
-				myGD->communication("CP_jackCrashDie");
-				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				stopMove();
-				removeEffect();
+				is_checking = false;
+				//				if(mySGD->getIsHard() || myGD->getJackState())
+				// 수퍼 미사일이거나 맵 밖이라면 죽임.
+				if(isSuper ||
+					 (myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine")))
+				{
+					myGD->communication("CP_jackCrashDie");
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+					stopMove();
+					removeEffect();
+				}
+				else
+				{
+					myGD->communication("Jack_showMB");
+				}
 			}
+			//##
 			else
 			{
-				myGD->communication("Jack_showMB");
-			}
-		}
-		//##
-		else
-		{
-			float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
-			int loop = ccpLength(p_p - beforePosition) / 1.414f;
-			CCPoint t2 = beforePosition;
-			for(int i=0; i<loop; i++)
-			{
-				
-				t2.x += 1.414f * cos(angle);
-				t2.y += 1.414f * sin(angle);
-				
-				IntPoint t = ccp2ip(t2);
+				float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
+				int loop = ccpLength(p_p - beforePosition) / 1.414f;
+				CCPoint t2 = beforePosition;
+				for(int i=0; i<loop; i++)
+				{
+					
+					t2.x += 1.414f * cos(angle);
+					t2.y += 1.414f * sin(angle);
+					
+					IntPoint t = ccp2ip(t2);
+					if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+					{
+						if(!myGD->getCommunicationBool("PM_isShortLine"))
+							myGD->communication("PM_addPathBreaking", t);
+					}
+				}
+				IntPoint t = ccp2ip(p_p);
 				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 				{
 					if(!myGD->getCommunicationBool("PM_isShortLine"))
 						myGD->communication("PM_addPathBreaking", t);
 				}
 			}
-			IntPoint t = ccp2ip(p_p);
-			if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
-			{
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
-					myGD->communication("PM_addPathBreaking", t);
-			}
 		}
 	}
+	
 	
 	da *= reduce_da;
 }
@@ -163,6 +166,7 @@ void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize 
 	distance = t_distance;
 	da = t_da;
 	reduce_da = t_reduce_da;
+	enabled = true;
 //	setOpacity(0);
 //	auto missile = KS::loadCCBI<CCSprite*>(this, "ingame_missile.ccbi").first;
 //	missile->setPosition(ccp(getContentSize().width / 2.f, getContentSize().height / 2.f));
@@ -170,6 +174,11 @@ void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize 
 //	addChild(missile);
 	setPosition(t_sp);
 	startMove();
+}
+
+void MissileUnit::setEnabled(bool e)
+{
+	enabled = e;
 }
 MissileUnit2 * MissileUnit2::create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da)
 {
@@ -4868,5 +4877,73 @@ void HMesh::myAction(float dt)
 
 	}
 	
+}
+HideCloud* HideCloud::create(KSCumberBase* cumber, const Json::Value& param)
+{
+	HideCloud* t_bd = new HideCloud();
+	t_bd->myInit(cumber, param);
+	t_bd->autorelease();
+	return t_bd;
+}
+
+void HideCloud::myInit(KSCumberBase* cumber, const Json::Value& param)
+{
+	// fx_tornado1.ccbi
+	
+//	mapLoopRange::mapWidth
+	CCPoint jackPoint = myGD->getJackPointCCP();
+	
+	CCPoint targetPoint = CCPointZero;
+	targetPoint = ccp(ks19937::getFloatValue(MAX(0, jackPoint.x - 150), MIN(mapLoopRange::mapWidthInnerEnd*2 - 1, jackPoint.x + 150)),
+										ks19937::getFloatValue(MAX(0, jackPoint.y - 150), MIN(mapLoopRange::mapHeightInnerEnd*2 - 1, jackPoint.y + 150)));
+	m_cloudSprite = KS::loadCCBI<CCSprite*>(this, "fx_tornado1.ccbi").first;
+	float tempProb = param.get("enableprob", 1.f).asFloat();
+	ProbSelector ps = {tempProb, 1.f - tempProb};
+	float goalOpacity;
+	if(ps.getResult() == 0)
+	{
+//		goalOpacity = 255.f;
+	}
+	else
+	{
+//		goalOpacity = 100.f;
+	}
+
+	
+	m_cloudSprite->setPosition(targetPoint);
+	addChild(m_cloudSprite);
+	
+	m_durations = param.get("duration", 300).asInt();
+	m_speed = param.get("speed", 100.f).asFloat() / 100.f;
+	m_currentFrames = 0;
+	
+	
+	m_hided = false;
+	scheduleUpdate();
+}
+
+void HideCloud::update(float dt)
+{
+	m_currentFrames++;
+	
+	
+	if(m_currentFrames >= m_durations && m_hided == false)
+	{
+		m_hided = true;
+		addChild(KSGradualValue<float>::create(1.f, 0.1f, 0.5f, [=](float t)
+																					 {
+																						 m_cloudSprite->setScale(t);
+																					 }, [=](float t)
+																					 {
+																						 m_cloudSprite->setScale(t);
+																						 removeFromParent();
+																					 }));
+	}
+	else
+	{
+		float theta = ks19937::getFloatValue(0, 2 * M_PI);
+		CCPoint dP = ccpMult(ccp(cosf(theta), sin(theta)), m_speed);
+		m_cloudSprite->setPosition(m_cloudSprite->getPosition() + dP);
+	}
 }
 #undef LZZ_INLINE
