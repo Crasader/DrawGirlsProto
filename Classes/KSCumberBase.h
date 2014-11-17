@@ -162,6 +162,7 @@ public:
 	void startMoving();
 	void stopMoving();
 	void crashMapForIntPoint(IntPoint t_p);
+	void crashMapForCircle(IntPoint center, int radius);
 	
 	void setCumberState(int e);
 	CUMBER_STATE getCumberState();
