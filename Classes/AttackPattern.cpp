@@ -4233,6 +4233,7 @@ void WiperMissileWrapper::myInit(KSCumberBase* cumber, Json::Value param)
 			///////////////////////////////////////
 			MissileUnit* t_mu2 = MissileUnit::create(mPoint, rad2Deg(originalTheta), speed,
 																							 fileName.c_str(), CCSizeMake(4, 4),0, 0, true);
+			t_mu2->setLineTouch(false); // 선 터치는 안하도록함.
 			batchNode->addChild(t_mu2);
 			t_mu2->setOpacity(255);
 

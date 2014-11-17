@@ -27,7 +27,10 @@ public:
 	static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da,
 															 bool isSuper = false);
 	void setEnabled(bool e);
+	void setLineTouch(bool e);
 private:
+	bool lineTouch;
+	
 	bool isSuper;
 	float angle;
 	float distance;

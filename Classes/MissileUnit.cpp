@@ -127,27 +127,31 @@ void MissileUnit::move ()
 			//##
 			else
 			{
-				float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
-				int loop = ccpLength(p_p - beforePosition) / 1.414f;
-				CCPoint t2 = beforePosition;
-				for(int i=0; i<loop; i++)
+				if(lineTouch)
 				{
-					
-					t2.x += 1.414f * cos(angle);
-					t2.y += 1.414f * sin(angle);
-					
-					IntPoint t = ccp2ip(t2);
+					float angle = atan2(p_p.y - beforePosition.y, p_p.x - beforePosition.x);
+					int loop = ccpLength(p_p - beforePosition) / 1.414f;
+					CCPoint t2 = beforePosition;
+					for(int i=0; i<loop; i++)
+					{
+						
+						t2.x += 1.414f * cos(angle);
+						t2.y += 1.414f * sin(angle);
+						
+						IntPoint t = ccp2ip(t2);
+						if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
+						{
+							if(!myGD->getCommunicationBool("PM_isShortLine"))
+								myGD->communication("PM_addPathBreaking", t);
+						}
+					}
+					IntPoint t = ccp2ip(p_p);
 					if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
 					{
 						if(!myGD->getCommunicationBool("PM_isShortLine"))
 							myGD->communication("PM_addPathBreaking", t);
 					}
-				}
-				IntPoint t = ccp2ip(p_p);
-				if(t.isInnerMap() && myGD->mapState[t.x][t.y] == mapType::mapNewline)
-				{
-					if(!myGD->getCommunicationBool("PM_isShortLine"))
-						myGD->communication("PM_addPathBreaking", t);
+					
 				}
 			}
 		}
@@ -159,6 +163,7 @@ void MissileUnit::move ()
 void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize t_cs, float t_da, float t_reduce_da,
 													bool t_isSuper)
 {
+	lineTouch = true; // 선 건듬.
 	is_checking = true;
 	isSuper = t_isSuper;
 	crashSize = t_cs;
@@ -179,6 +184,10 @@ void MissileUnit::myInit (CCPoint t_sp, float t_angle, float t_distance, CCSize 
 void MissileUnit::setEnabled(bool e)
 {
 	enabled = e;
+}
+void MissileUnit::setLineTouch(bool e)
+{
+	lineTouch = e;
 }
 MissileUnit2 * MissileUnit2::create (CCPoint t_sp, float t_angle, float t_distance, string imgFilename, CCSize t_cs, float t_da, float t_reduce_da)
 {
