@@ -1437,6 +1437,16 @@ Jelly* Jelly::create(KSCumberBase* cumber, const Json::Value& param)
 	t_bd->autorelease();
 	return t_bd;
 }
+Jelly::~Jelly()
+{
+	
+	if(m_step == 3)
+	{
+		myGD->setAlphaSpeed(myGD->getAlphaSpeed() + m_decreaseSpeed);
+	}
+	
+	CCLOG("~Jelly");
+}
 
 void Jelly::myInit(KSCumberBase* cumber, const Json::Value& param)
 {
@@ -1446,22 +1456,41 @@ void Jelly::myInit(KSCumberBase* cumber, const Json::Value& param)
 	m_jellySprite = KS::loadCCBI<CCSprite*>(this, "pattern_cloud.ccbi").first;
 	addChild(m_jellySprite);
 	m_jellySprite->setPosition(cumber->getPosition());
+	float randomRad = ks19937::getFloatValue(0, 2*M_PI);
+	addChild(KSGradualValue<CCPoint>::create(cumber->getPosition(), cumber->getPosition() + ccp(30.f * cosf(randomRad), 30 * sinf(randomRad)), 0.5f, [=](CCPoint t){
+		m_jellySprite->setPosition(t);
+		
+	}, [=](CCPoint t){
+		m_jellySprite->setPosition(t);
+		scheduleUpdate();
+		
+	}));
 	m_currentSeek = 0;
 	m_lifeTime = param.get("life", 200).asInt();
 	m_seekTime = param.get("seek", 300).asInt();
-	scheduleUpdate();
 	m_step = 1;
+	m_decreaseSpeed = 0.5f;
+	m_currentSpeed = 1.f;
+	
+	float tempProb = param.get("enableprob", 1.f).asFloat();
+	ProbSelector ps = {tempProb, 1.f - tempProb};
+
+	m_enabled = ps.getResult() == 0;
+	
+	if(m_enabled == false)
+	{
+		m_jellySprite->setColor(ccc3(0, 0, 0)); // 비활성화
+	}
 }
 
 void Jelly::update(float dt)
 {
-	m_currentSeek++;
-	
+	CCPoint goalPosition = myGD->getJackPointCCP();
+	m_currentSpeed = MAX(0.6f, m_currentSpeed - 0.005f);
+	float rad = atan2f(goalPosition.y - m_jellySprite->getPositionY(), goalPosition.x - m_jellySprite->getPositionX() );
 	if(m_step == 1)
 	{
-		CCPoint goalPosition = myGD->getJackPointCCP();
-		float rad = atan2f(m_jellySprite->getPositionY() - goalPosition.y, m_jellySprite->getPositionX() - goalPosition.x);
-		m_jellySprite->setPosition(m_jellySprite->getPosition() + ccp(2.f * cosf(rad), 2.f * sin(rad)));
+		m_jellySprite->setPosition(m_jellySprite->getPosition() + ccp(m_currentSpeed * cosf(rad), m_currentSpeed * sin(rad)));
 		
 		
 		float distance = ccpLength(m_jellySprite->getPosition() - goalPosition);
@@ -1478,13 +1507,14 @@ void Jelly::update(float dt)
 		if(m_currentSeek < m_seekTime)
 		{
 			CCPoint goalPosition = myGD->getJackPointCCP();
-			float rad = atan2f(m_jellySprite->getPositionY() - goalPosition.y, m_jellySprite->getPositionX() - goalPosition.x);
-			m_jellySprite->setPosition(m_jellySprite->getPosition() + ccp(2.f * cosf(rad), 2.f * sin(rad)));
+//			float rad = atan2f(m_jellySprite->getPositionY() - goalPosition.y, m_jellySprite->getPositionX() - goalPosition.x);
+			m_jellySprite->setPosition(m_jellySprite->getPosition() + ccp(m_currentSpeed * cosf(rad), m_currentSpeed * sin(rad)));
 			
 			
 			float distance = ccpLength(m_jellySprite->getPosition() - goalPosition);
 			if(distance <= 2)
 			{
+				myGD->setAlphaSpeed(myGD->getAlphaSpeed() - m_decreaseSpeed);
 				m_step = 3;
 			}
 		}
@@ -1498,17 +1528,25 @@ void Jelly::update(float dt)
 	else if(m_step == 3)
 	{
 		// 물었다.
-		m_currentLife++;
-		CCPoint goalPosition = myGD->getJackPointCCP();
-		m_jellySprite->setPosition(goalPosition);
-
-		if(m_currentLife < m_lifeTime)
+		if(m_enabled == false)
 		{
-			
+			removeFromParent();
 		}
 		else
 		{
-			removeFromParent();
+			m_currentLife++;
+			CCPoint goalPosition = myGD->getJackPointCCP();
+			m_jellySprite->setPosition(goalPosition);
+			
+			if(m_currentLife < m_lifeTime)
+			{
+				
+			}
+			else
+			{
+				removeFromParent();
+			}
+			
 		}
 	}
 	

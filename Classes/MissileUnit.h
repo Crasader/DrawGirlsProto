@@ -843,10 +843,7 @@ class Jelly : public CCNode
 {
 public:
 	static Jelly * create (KSCumberBase* cumber, const Json::Value& param);
-	virtual ~Jelly()
-	{
-		CCLOG("~Jelly");
-	}
+	virtual ~Jelly();
 private:
 	void myInit (KSCumberBase* cumber, const Json::Value& param);
 	void update(float dt);
@@ -854,9 +851,13 @@ private:
 	int m_currentSeek;
 	int m_currentLife;
 	int m_step;
+	float m_currentSpeed;
+	bool m_enabled;
+	
 private:
 	int m_seekTime;
-	int m_lifeTime; 
+	int m_lifeTime;
+	int m_decreaseSpeed;
 };
 #undef LZZ_INLINE
 #endif

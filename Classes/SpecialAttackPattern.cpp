@@ -1300,6 +1300,22 @@ void JellyWrapper::myInit(KSCumberBase* cumber, Json::Value param)
 	////////////////
 	// number, speed, duration
 	//////////////////
+	int number = param.get("number", 3).asInt();
+	for(int i=0; i<number; i++)
+	{
+		//		float tempProb = param.get("enableprob", 1.f).asFloat();
+		//		ProbSelector ps = {tempProb, 1.f - tempProb};
+		//		if(ps.getResult() == 0)
+		{
+			Json::Value tParam = param;
+//			tParam["speed"] = param.get("speed", 100.f).asFloat() / 100.f;
+//			tParam["duration"] = param.get("duration", 400).asInt();
+//			tParam["enableprob"] = param.get("enableprob", 1.f).asFloat();
+			Jelly* hc = Jelly::create(cumber, tParam);
+			addChild(hc);
+		}
+	}
+	
 	stopMyAction();
 }
 
