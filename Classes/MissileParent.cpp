@@ -1790,6 +1790,16 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			
 			
 		}
+		else if(pattern == "1025")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				JellyWrapper* t = JellyWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+		}
 			
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.
 		{

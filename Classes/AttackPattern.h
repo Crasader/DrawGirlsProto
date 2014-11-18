@@ -1261,4 +1261,17 @@ private:
 	void myInit(KSCumberBase* cumber, Json::Value param);
 	virtual void stopMyAction();
 };
+
+class JellyWrapper : public AttackPattern // 젤리
+{
+public:
+	static JellyWrapper* create(KSCumberBase* cumber, Json::Value param);
+	
+private:
+	//	KSCumberBase* m_cumber;
+	
+	
+	void myInit(KSCumberBase* cumber, Json::Value param);
+	virtual void stopMyAction();
+};
 #endif

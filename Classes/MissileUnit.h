@@ -839,5 +839,24 @@ private:
 	float m_speed;
 };
 
+class Jelly : public CCNode
+{
+public:
+	static Jelly * create (KSCumberBase* cumber, const Json::Value& param);
+	virtual ~Jelly()
+	{
+		CCLOG("~Jelly");
+	}
+private:
+	void myInit (KSCumberBase* cumber, const Json::Value& param);
+	void update(float dt);
+	CCSprite* m_jellySprite;
+	int m_currentSeek;
+	int m_currentLife;
+	int m_step;
+private:
+	int m_seekTime;
+	int m_lifeTime; 
+};
 #undef LZZ_INLINE
 #endif
