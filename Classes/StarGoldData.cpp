@@ -2535,17 +2535,14 @@ void StarGoldData::resultUpdateTodayMission(Json::Value result_data)
 
 int StarGoldData::getClearStarCount()
 {
-	int return_value = 0;
-	for(int i=0;i<piece_historys.size();i++)
-	{
-		for(int j=0;j<4;j++)
-		{
-			if(piece_historys[i].is_clear[j].getV())
-				return_value += j+1;
-		}
-	}
-	
-	return return_value;
+    int return_value = 0;
+    for(int i=0;i<has_gotten_cards.size();i++)
+    {
+        if(has_gotten_cards[i].count.getV()>0)
+            return_value += has_gotten_cards[i].grade.getV();
+    }
+    
+    return return_value;
 }
 
 bool StarGoldData::isEmptyAchieveNotiQueue()

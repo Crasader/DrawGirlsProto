@@ -186,7 +186,7 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 		string t_type = goods_info->reward_list[0].type.getV();
 		string sub_string, count_string;
 		
-		if(t_type == "r")
+		if(t_type == "r" || t_type=="fr" || t_type=="pr")
 		{
 			sub_string = getLocal(LK::kMyLocalKey_gem);
 			count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), goods_info->reward_list[0].count.getV());
@@ -263,6 +263,9 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 		back_in->addChild(sub_title);
 		
 		CCSprite* box_img = CCSprite::create(ccsf("icon_%s.png", t_type.c_str()));
+        
+        if(!box_img)box_img = CCSprite::create("icon_box.png");
+        
 		box_img->setScale(2.5f);
 		box_img->setPosition(ccpFromSize(back_in->getContentSize()/2.f));
 		back_in->addChild(box_img);
