@@ -33,13 +33,16 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -48,14 +51,12 @@ import android.view.View.OnSystemUiVisibilityChangeListener;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.hangame.hsp.HSPConfiguration;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPMessage;
 import com.hangame.hsp.HSPMessage.HSPReceivePushNotificationListener;
 import com.hangame.hsp.HSPOAuthProvider;
 import com.hangame.hsp.HSPResult;
 import com.hangame.hsp.HSPState;
-import com.hangame.hsp.payment.HSPPayment;
 import com.igaworks.IgawCommon;
 //import com.igaworks.IgawCommon;
 //import com.kamcord.android.Kamcord;
@@ -72,10 +73,35 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	public static final int SCREEN_ORIENTATION_SENSOR_LANDSCAPE = 6;
 	private static native int getUserState();
 	private static LuaGLSurfaceView glSurfaceView;
+	
+	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-
 		
+		SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
+        pref.getString("check", "");
+        if(pref.getString("check", "").isEmpty()){
+        	Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
+        	shortcutIntent.addCategory(Intent.CATEGORY_LAUNCHER);
+        	shortcutIntent.setClassName(this, getClass().getName());
+        	shortcutIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK| 
+        			Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+        	Intent intent = new Intent();
+
+        	intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
+        	intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getResources().getString(R.string.app_name));
+        	intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+        			Intent.ShortcutIconResource.fromContext(this, R.drawable.icon));
+        	intent.putExtra("duplicate", false);
+        	intent.setAction("com.android.launcher.action.INSTALL_SHORTCUT");
+
+        	sendBroadcast(intent);
+        }
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString("check", "exist");
+        editor.commit();
+        
+
 		//aaaaa
 		Log.i("com.litqoo.dgproto", "init1 kamcord");
 		//Kamcord.initKeyAndSecret("VlEoFwFydvNVhMhMCPIlPTuwO79AATr3eMuixaF4YFO",
