@@ -551,6 +551,9 @@ void ManyGachaPopup::setNormalGacha()
 			else
 			{
 				CCSprite* t_img = CCSprite::create(ccsf("icon_%s.png", reward_type.c_str()));
+                
+                if(!t_img)t_img = CCSprite::create("icon_box.png");
+                
 				t_img->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,5));
 				t_button_node->addChild(t_img);
 				
@@ -917,6 +920,9 @@ void ManyGachaPopup::setPremiumGacha()
 			else
 			{
 				CCSprite* t_img = CCSprite::create(ccsf("icon_%s.png", reward_type.c_str()));
+                
+                if(!t_img)t_img = CCSprite::create("icon_box.png");
+                
 				t_img->setPosition(ccpFromSize(t_button_node->getContentSize()/2.f) + ccp(0,5));
 				t_button_node->addChild(t_img);
 				
@@ -1988,7 +1994,7 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			string t_type = gacha_data_list[selected_value].reward_list[0].type.getV();
 			string sub_string, count_string;
 			
-			if(t_type == "r")
+			if(t_type == "r" || t_type=="fr" || t_type=="pr")
 			{
 				sub_string = getLocal(LK::kMyLocalKey_gemTake);
 				count_string = ccsf(getLocal(LK::kMyLocalKey_gemCount), gacha_data_list[selected_value].reward_list[0].count.getV());
@@ -2065,6 +2071,9 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			detail_back->addChild(sub_title);
 			
 			CCSprite* box_img = CCSprite::create(ccsf("icon_%s.png", t_type.c_str()));
+            
+            if(!box_img)box_img = CCSprite::create("icon_box.png");
+            
 			box_img->setScale(2.5f);
 			box_img->setPosition(ccpFromSize(detail_back->getContentSize()/2.f));
 			detail_back->addChild(box_img);
