@@ -1198,9 +1198,18 @@ void MapScanner::exchangeMS()
 		visibleImg = NULL;
 	}
 
-	visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3));
-	visibleImg->setPosition(CCPointZero);
-	addChild(visibleImg, visibleZorder);
+	if(mySGD->is_hell_mode)
+	{
+		visibleImg = VisibleParent::create("hell_visible.png", false, "hell_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3));
+		visibleImg->setPosition(CCPointZero);
+		addChild(visibleImg, visibleZorder);
+	}
+	else
+	{
+		visibleImg = VisibleParent::create(CCString::createWithFormat("card%d_visible.png",NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), false, CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3))->getCString(), NSDS_GI(silType, kSDS_SI_level_int1_card_i, 3));
+		visibleImg->setPosition(CCPointZero);
+		addChild(visibleImg, visibleZorder);
+	}
 
 	visibleImg->setDrawRects(t_rect_array);
 	scanMap();
@@ -1314,7 +1323,14 @@ BackFilename MapScanner::getBackVisibleFilename()
 {
 	BackFilename r_value;
 
-	r_value.filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	if(mySGD->is_hell_mode)
+	{
+		r_value.filename = "hell_visible.png";
+	}
+	else
+	{
+		r_value.filename = CCString::createWithFormat("card%d_visible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	}
 	r_value.isPattern = false;
 
 	return r_value;
@@ -1324,7 +1340,14 @@ BackFilename MapScanner::getBackInvisibleFilename()
 {
 	BackFilename r_value;
 
-	r_value.filename = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	if(mySGD->is_hell_mode)
+	{
+		r_value.filename = "hell_invisible.png";
+	}
+	else
+	{
+		r_value.filename = CCString::createWithFormat("card%d_invisible.png", NSDS_GI(silType, kSDS_SI_level_int1_card_i, 1))->getCString();
+	}
 	r_value.isPattern = false;
 
 	return r_value;
@@ -1802,16 +1825,30 @@ InvisibleSprite* InvisibleSprite::create( const char* filename, bool isPattern )
 void InvisibleSprite::myInit( const char* filename, bool isPattern )
 {
 	int t_puzzle_number = myDSH->getIntegerForKey(kDSH_Key_selectedPuzzleNumber);
-	
-	EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
-	t_spr->setPosition(ccp(160,215));
-	t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
-
-	// ######################## hs code bbu woo~ ##############################
-	t_spr->setTag(8707);
-	// ######################## hs code bbu woo~ ##############################
-	
-	addChild(t_spr);
+	if(mySGD->is_hell_mode)
+	{
+		EffectSprite* t_spr = EffectSprite::createWithTexture(CCTextureCache::sharedTextureCache()->addImage(filename));
+		t_spr->setPosition(ccp(160,215));
+		t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+		
+		// ######################## hs code bbu woo~ ##############################
+		t_spr->setTag(8707);
+		// ######################## hs code bbu woo~ ##############################
+		
+		addChild(t_spr);
+	}
+	else
+	{
+		EffectSprite* t_spr = EffectSprite::createWithTexture(mySIL->addImage(filename));
+		t_spr->setPosition(ccp(160,215));
+		t_spr->setColorSilhouette(NSDS_GI(t_puzzle_number, kSDS_PZ_color_r_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_g_d), NSDS_GI(t_puzzle_number, kSDS_PZ_color_b_d));
+		
+		// ######################## hs code bbu woo~ ##############################
+		t_spr->setTag(8707);
+		// ######################## hs code bbu woo~ ##############################
+		
+		addChild(t_spr);
+	}
 }
 
 VisibleSprite* VisibleSprite::create( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number )
@@ -2309,7 +2346,10 @@ void VisibleSprite::setRectToVertex()
 
 void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<IntRectSTL>* t_drawRects, string sil_filename, int t_card_number )
 {
-	initWithTexture(mySIL->addImage(filename));
+	if(mySGD->is_hell_mode)
+		initWithFile(filename);
+	else
+		initWithTexture(mySIL->addImage(filename));
 	setBrighten(1.f);
 //	setColor(ccGRAY);
 	setPosition(ccp(160,215));
@@ -2336,7 +2376,10 @@ void VisibleSprite::myInit( const char* filename, bool isPattern, std::vector<In
 	
 	drawRects = t_drawRects;
 	
-	safety_img = RectsSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
+	if(mySGD->is_hell_mode)
+		safety_img = RectsSprite::createWithTexture(CCTextureCache::sharedTextureCache()->addImage(sil_filename.c_str()));
+	else
+		safety_img = RectsSprite::createWithTexture(mySIL->addImage(sil_filename.c_str()));
 	safety_img->setSilhouetteConvert(0);
 	safety_img->setPosition(ccp(getContentSize().width/2.f, getContentSize().height/2.f));
 	addChild(safety_img);
