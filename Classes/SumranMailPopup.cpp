@@ -388,7 +388,7 @@ void SumranMailPopup::takeAllReward(CCObject* sender)
 						
 						for(int i=0;i<m_mailList.size();i++){
 							Json::Value info = m_mailList[i];
-							if(info.get("reward","list").asString()==""){
+							if(info.get("reward","").asString()=="" || info.get("exchangeList","").asString()!=""){
 								newList.append(info);
 							}
 						}

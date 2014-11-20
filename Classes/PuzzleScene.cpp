@@ -2649,13 +2649,15 @@ void PuzzleScene::setRight()
 				
 				t_clipping->addChild(t_inner);
 				
-                
+				bool is_cleared = mySGD->getPieceHistory(selected_stage_number).is_clear[i-1].getV();
+				
                 //if(mySGD->getPieceHistory(selected_stage_number).is_clear[i-1].getV())
 				{
 					int card_rank = NSDS_GI(kSDS_CI_int1_rank_i, step_card_number);
 					for(int j=0;j<card_rank;j++)
 					{
-						CCSprite* t_star = CCSprite::create("star_on.png");
+						GraySprite* t_star = GraySprite::create("star_on.png");
+						t_star->setGray(!is_cleared);
 						t_star->setPosition(ccpAdd(step_position, ccp(-48.f+j*13.5f,10)));
 						right_body->addChild(t_star);
 					}

@@ -87,7 +87,8 @@ void AreaGage::onChange()
 	for(int i=0;i<3;i++)
 	{
 		GraySprite* star_img = GraySprite::create("star_on.png");
-		star_img->setGray(mySGD->is_cleared_grade[2] == 1);
+		int card_number3 = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 3);
+		star_img->setGray(mySGD->getHasGottenCardDataForCardNumber(card_number3).count.getV() > 0);//mySGD->is_cleared_grade[2] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star1->addChild(star_img);
 	}
@@ -97,7 +98,8 @@ void AreaGage::onChange()
 	for(int i=0;i<4;i++)
 	{
 		GraySprite* star_img = GraySprite::create("star_on.png");
-		star_img->setGray(mySGD->is_cleared_grade[3] == 1);
+		int card_number4 = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 4);
+		star_img->setGray(mySGD->getHasGottenCardDataForCardNumber(card_number4).count.getV() > 0);//mySGD->is_cleared_grade[3] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}
@@ -229,7 +231,8 @@ void AreaGage::myInit(float t_clear_percent)
 	
 	{
 		GraySprite* star_img = GraySprite::create("star_on.png");
-		star_img->setGray(mySGD->is_cleared_grade[0] == 1);
+		int card_number1 = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 1);
+		star_img->setGray(mySGD->getHasGottenCardDataForCardNumber(card_number1).count.getV() > 0);//mySGD->is_cleared_grade[0] == 1);
 		star_img->setPosition(ccp(0,0));
 		star1->addChild(star_img);
 	}
@@ -243,7 +246,8 @@ void AreaGage::myInit(float t_clear_percent)
 	for(int i=0;i<2;i++)
 	{
 		GraySprite* star_img = GraySprite::create("star_on.png");
-		star_img->setGray(mySGD->is_cleared_grade[1] == 1);
+		int card_number2 = NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, 2);
+		star_img->setGray(mySGD->getHasGottenCardDataForCardNumber(card_number2).count.getV() > 0);//mySGD->is_cleared_grade[1] == 1);
 		star_img->setPosition(base_position + d_position*i);
 		star2->addChild(star_img);
 	}

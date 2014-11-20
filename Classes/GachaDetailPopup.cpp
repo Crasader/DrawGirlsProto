@@ -161,7 +161,14 @@ void GachaDetailPopup::myInit(int t_touch_priority, GachaData* t_goods_info, fun
 		char_name_label->setPosition(character_name_back->getPosition() + ccp(26, 0));
 		back_in->addChild(char_name_label);
 		
-		StyledLabelTTF* comment_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, found_index, found_level).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+		Json::Value script_json;
+		string script_str = NSDS_GS(kSDS_GI_characterInfo_int1_scriptInfo_s, found_index);
+		Json::Reader json_reader;
+		json_reader.parse(script_str, script_json);
+		
+		string script_data = script_json.get("info", "").asString();
+		
+		StyledLabelTTF* comment_label = StyledLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 		comment_label->setAnchorPoint(ccp(0.5f,0.5f));
 		comment_label->setPosition(ccp(back_in->getContentSize().width/2.f + 50,40));
 		
