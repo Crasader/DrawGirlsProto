@@ -1180,7 +1180,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
-		Json::Value ex1_result = result_data["list"][1];
+		Json::Value ex1_result = result_data["list"]["001"];
 		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
 		{
 			mySGD->clearChangeGoods();
@@ -2211,7 +2211,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
-		Json::Value ex1_result = result_data["list"][1];
+		Json::Value ex1_result = result_data["list"]["001"];
 		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
 		{
 			mySGD->clearChangeGoods();

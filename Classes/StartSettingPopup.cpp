@@ -3090,7 +3090,7 @@ void StartSettingPopup::callStart()
 		
 		if(mySGD->is_endless_mode)
 		{
-			if(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+//			if(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 				is_startGame = true;
 		}
 		

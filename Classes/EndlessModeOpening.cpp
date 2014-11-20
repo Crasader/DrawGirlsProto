@@ -27,6 +27,8 @@
 #include "LabelTTFMarquee.h"
 #include "CCMenuLambda.h"
 #include "TypingBox.h"
+#include "PuzzleScene.h"
+#include "HeartTime.h"
 
 enum EndlessModeOpeningZorder
 {
@@ -382,24 +384,92 @@ void EndlessModeOpening::setMain()
 								  is_menu_enable = false;
 								  
 								  if(kind_tutorial_pvp != nullptr)
-									{
-										CCLog("before kind_tutorial_pvp()");
-										kind_tutorial_pvp();
-										CCLog("after_kind_tutorial_pvp()");
-									}
+								  {
+									  CCLog("before kind_tutorial_pvp()");
+									  kind_tutorial_pvp();
+									  CCLog("after_kind_tutorial_pvp()");
+								  }
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
 								  ready_loading = LoadingLayer::create(-99999);
 								  addChild(ready_loading, 99999);
 								  
+								  transaction_list.clear();
+								  
+								  Json::Value transaction_param;
+								  transaction_param["memberID"] = myHSP->getSocialID();
+								  transaction_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+																		  {
+//																			  CCLog("ready result : \n%s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																			  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																			{
+																				ready_loading->removeFromParent();
+																				ready_loading = NULL;
+																				
+																				is_menu_enable = true;
+																				
+																				Json::Value getheart_result = result_data["list"]["001"];
+																				if(getheart_result.get("isMinus", false).asBool())
+																				{
+																					mySGD->heartRefreshSuccess(getheart_result);
+																					((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+																					
+																					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
+																																		{
+																																			ShopPopup* t_shop = ShopPopup::create();
+																																			t_shop->setHideFinalAction(this, callfunc_selector(EndlessModeOpening::failTransaction));
+																																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																																			t_shop->setShopCode(kSC_heart);
+																																			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																																			addChild(t_shop, kEndlessModeOpeningZorder_content+9);
+																																		}, [=]()
+																																		{
+																																			if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																																			{
+																																				CCLog("before tutorial_fail_func()");
+																																				tutorial_fail_func();
+																																				CCLog("after tutorial_fail_func()");
+																																			}
+																																		}), 9999);
+																				}
+																				else
+																				{
+																					addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+																			  
+																				  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																				  {
+																					  CCLog("before tutorial_fail_func()");
+																					  tutorial_fail_func();
+																					  CCLog("after tutorial_fail_func()");
+																				  }
+																				}
+																			}
+																		  }));
+								  
+									Json::Value heart_param;
+									heart_param["memberID"] = myHSP->getMemberID();
+									if(!(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1))
+										heart_param["use"] = true;
+									transaction_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
+																		  {
+																			  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																			  {
+																				  mySGD->heartRefreshSuccess(result_data);
+																				  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+																			  }
+																		  }));
+								  
 								  Json::Value param;
 								  param["memberID"] = myHSP->getMemberID();
 								  //																	  param["no"] = 34;
 								  param["autoLevel"] = mySGD->getUserdataAutoLevel();
-//								  param["highPiece"] = mySGD->getUserdataHighPiece();
+								  //								  param["highPiece"] = mySGD->getUserdataHighPiece();
 								  param["win"] = mySGD->getUserdataEndlessIngWin();
-								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+								  
+								  transaction_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeOpening::resultGetEndlessPlayData)));
+								  myHSP->command(transaction_list);
+//								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 							  });
 	
 	CommonAnimation::openPopup(this, main_case, gray, [=](){
@@ -845,6 +915,16 @@ void EndlessModeOpening::setMain()
 	});
 }
 
+void EndlessModeOpening::failTransaction()
+{
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	{
+		CCLog("before tutorial_fail_func()");
+		tutorial_fail_func();
+		CCLog("after tutorial_fail_func()");
+	}
+}
+
 void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 {
 	GraphDogLib::JsonToLog("getendlessplaydata : %s", result_data);
@@ -879,20 +959,6 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_stageNo)] = result_data["stageInfo"]["realNo"].asInt();
 		
 		saveStageInfo(result_data["stageInfo"]);
-	}
-	else
-	{
-		ready_loading->removeFromParent();
-		ready_loading = NULL;
-		
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
-		{
-			CCLog("before tutorial_fail_func()");
-			tutorial_fail_func();
-			CCLog("after tutorial_fail_func()");
-		}
 	}
 }
 
