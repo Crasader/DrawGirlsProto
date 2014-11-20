@@ -260,7 +260,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS_FULL" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
-    
+   	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> 
 
     <permission
         android:name="com.nhnent.SKSUMRAN.permission.C2D_MESSAGE"
