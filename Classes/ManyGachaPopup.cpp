@@ -26,6 +26,7 @@
 #include "CCMenuLambda.h"
 #include "PuzzleScene.h"
 #include "GachaRefreshCheckPopup.h"
+#include "FiveRocksCpp.h"
 
 enum ManyGachaPopupMenu
 {
@@ -1432,6 +1433,9 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
 		
+		
+		fiverocks::FiveRocksBridge::trackEvent("UseGold", "Do_gacha", ccsf("Do%02d", 12 - enable_gacha_list.size() + 1), ccsf("%s_%d", gacha_data_list[selected_value].reward_list[0].type.getV().c_str(), gacha_data_list[selected_value].reward_list[0].count.getV()), selected_level);
+		
 		success_func = [=]()
 		{
 			Json::Value property_list = result_data["list"];
@@ -2403,6 +2407,8 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 		t_take_back->setOpacity(0);
 		t_take_back->setPosition(ccpFromSize(t_button->getContentSize()/2.f));
 		t_button->addChild(t_take_back);
+		
+		fiverocks::FiveRocksBridge::trackEvent("UseGem", "Do_gacha", ccsf("Do%02d", 12 - enable_gacha_list.size() + 1), ccsf("%s_%d", gacha_data_list[selected_value].reward_list[0].type.getV().c_str(), gacha_data_list[selected_value].reward_list[0].count.getV()), selected_level);
 		
 		success_func = [=]()
 		{
