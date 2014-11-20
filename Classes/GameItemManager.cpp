@@ -1560,9 +1560,8 @@ void FloatingCoin::myInit(function<void(CCPoint)> t_take_func, double t_gold, CC
 	moving_speed = rand()%10 / 10.f + 1.f;
 	
 	int random_value = rand()%100;
-    if(!mySGD->is_endless_mode && mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
-        random_value = 99;
-  
+	if(mySGD->getStageGold() >= myGD->getCommunication("GIM_getMaxGold"))
+		random_value = 99;
 	
 	if(random_value < myGD->getCommunication("GIM_getGoldPercent0"))
 	{
@@ -2356,6 +2355,8 @@ void GameItemManager::myInit()
 	Json::Value goldBalance = mySGD->getGoldBalance();
 	
 	max_gold = goldBalance.get("maxGold",500).asInt();
+	if(mySGD->is_endless_mode)
+		max_gold = max_gold.getV()*3;
 	gold_percent0 = goldBalance["goldPercent"][0].asInt();
 	gold_percent1 = goldBalance["goldPercent"][1].asInt();
 	gold_weight0 = goldBalance["goldWeight"][0].asInt();

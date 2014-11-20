@@ -1986,9 +1986,31 @@ void ManyGachaPopup::completedAnimationSequenceNamed(const char *name)
 			char_name_label->setPosition(character_name_back->getPosition() + ccp(32, 0));
 			detail_back->addChild(char_name_label);
 			
-			StyledLabelTTF* comment_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, found_index, found_level).c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
+			Json::Value script_json;
+			string script_str = NSDS_GS(kSDS_GI_characterInfo_int1_scriptInfo_s, found_index);
+			Json::Reader json_reader;
+			json_reader.parse(script_str, script_json);
+			
+			string script_data = script_json.get("info", "").asString();
+			
+			StyledLabelTTF* comment_label = StyledLabelTTF::create(script_data.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kLeftAlignment);
 			comment_label->setAnchorPoint(ccp(0.5f,0.5f));
-			comment_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 50,47));
+			comment_label->setPosition(ccp(detail_back->getContentSize().width/2.f + 60,47));
+			
+			CCSize comment_size = comment_label->getContentSize();
+			if(comment_size.width > 150)
+			{
+				comment_label->setScale(150.f/comment_size.width);
+				if(comment_size.height > 70*(150.f/comment_size.width))
+				{
+					comment_label->setScale((70*(150.f/comment_size.width))/comment_size.height);
+				}
+			}
+			else if(comment_size.height > 70)
+			{
+				comment_label->setScale(70.f/comment_size.height);
+			}
+			
 			detail_back->addChild(comment_label);
 		}
 		else
