@@ -944,7 +944,7 @@ void Maingame::finalSetting()
 
 void Maingame::checkTutorial()
 {
-	if(mySD->getSilType() == 3 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle))
+	if(mySD->getSilType() == 6 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_lineTangle))
 	{
 		CCNode* exit_target = this;
 		exit_target->onExit();
@@ -1016,7 +1016,7 @@ void Maingame::checkTutorial()
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
 	}
-	else if(mySD->getSilType() == 6 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_slimLine))
+	else if(mySD->getSilType() == 2 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_slimLine))
 	{
 		CCNode* exit_target = this;
 		exit_target->onExit();
@@ -1088,7 +1088,7 @@ void Maingame::checkTutorial()
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
 	}
-	else if(mySD->getSilType() == 9 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_100percent))
+	else if(mySD->getSilType() == 4 && !myDSH->getBoolForKey(kDSH_Key_hasShowTutorial_int1, kSpecialTutorialCode_100percent))
 	{
 		CCNode* exit_target = this;
 		exit_target->onExit();
