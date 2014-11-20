@@ -2083,8 +2083,9 @@ public:
 		m_mine->setScale(1.f/myGD->game_scale);
 		m_particle = NULL;
 		m_streak = NULL;
-		
 		m_option = ao;
+		m_limitAttackCount = 3; // 3대 까지 때림
+		m_currentAttackCount = 0;
 		addChild(m_mine);
 		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
 																				 [=](CCPoint t){
@@ -2225,6 +2226,12 @@ public:
 
 				float damage = m_power;
 				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
+				m_currentAttackCount++;
+				if(m_currentAttackCount == m_limitAttackCount)
+				{
+					m_tickCount = 0.f;
+					
+				}
 
 				//removeFromParentAndCleanup(true);
 			}
@@ -2341,6 +2348,7 @@ public:
 	
 	
 protected:
+	
 	CCPoint m_initPosition;
 	CCPoint m_goalPosition;
 	float m_tickCount;
@@ -2356,6 +2364,8 @@ protected:
 	float m_speed;
 	int m_coolFrame; // 0 이어야 타격이 가능함. 공격할 때 initCoolFrame 으로 초기화되고 매 프레임당 -- 됨.
 	int m_initCoolFrame;
+	int m_limitAttackCount;
+	int m_currentAttackCount;
 //	int m_level;
 	std::string m_fileName;
 };
