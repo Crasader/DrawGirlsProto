@@ -327,7 +327,7 @@ void StartSettingPopup::setMain()
 //	}
 	
 	
-	CommonButton* back_button = CommonButton::createCloseButton(touch_priority);
+	back_button = CommonButton::createCloseButton(touch_priority);
 	setFormSetter(back_button);
 	back_button->setPosition(ccp(main_case->getContentSize().width-20, main_case->getContentSize().height-12));
 	back_button->setFunction([=](CCObject* sender)
@@ -3120,6 +3120,11 @@ void StartSettingPopup::realStartAction(bool is_use_heart)
 											  }
 											  else if(result_data.get("isMinus", false).asBool())
 											  {
+												  if(mySGD->is_endless_mode)
+													{
+														back_button->setVisible(true);
+													}
+												  
 												  mySGD->heartRefreshSuccess(result_data);
 												  if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 												  {

@@ -1492,7 +1492,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		m_areaGage->setPercentage(t_p);
 	percentage_decrease_cnt = 0;
 	
-	if(clr_cdt_type != kCLEAR_percentage && mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > clearPercentage.getV() && t_p <= clearPercentage.getV())
+//	CCLog("isTimeEventClear : %d, is_on_clear_time_event : %d, isGameover : %d, clearPercentage : %f, timeEventValue : %f, t_p : %f", mySGD->isTimeEvent(kTimeEventType_clear), is_on_clear_time_event, isGameover, clearPercentage.getV(), mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f, t_p);
+	
+	if(clr_cdt_type != kCLEAR_percentage && mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p <= 0.85f)
 	{
 		is_on_clear_time_event = true;
 		clear_time_event_func([=]()

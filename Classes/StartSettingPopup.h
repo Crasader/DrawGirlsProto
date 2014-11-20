@@ -57,6 +57,8 @@ private:
 	
 	CCNode* tutorial_node;
 	
+	CommonButton* back_button;
+	
 	function<void()> tutorial_success_func;
 	function<void()> tutorial_fail_func;
 	
