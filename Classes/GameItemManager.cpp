@@ -2356,7 +2356,7 @@ void GameItemManager::myInit()
 	
 	max_gold = goldBalance.get("maxGold",500).asInt();
 	if(mySGD->is_endless_mode)
-		max_gold = max_gold.getV()*3;
+		max_gold = max_gold.getV()*5;
 	gold_percent0 = goldBalance["goldPercent"][0].asInt();
 	gold_percent1 = goldBalance["goldPercent"][1].asInt();
 	gold_weight0 = goldBalance["goldWeight"][0].asInt();
