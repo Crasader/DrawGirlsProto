@@ -86,6 +86,8 @@ public:
 		
 private:
 	
+	bool is_change_minimap_on;
+	
 	PlayUI* myUI;
 	
 	CCNode* game_node;
@@ -279,6 +281,7 @@ private:
 	CCSprite* character_thumb;
 	CCArray* boss_thumbs;
 	CCArray* sub_thumbs;
+	CCArray* change_thumbs;
 	CCPoint thumb_base_position;
 	CCRenderTexture* thumb_texture;
 	CCScale9Sprite* thumb_case;

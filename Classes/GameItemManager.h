@@ -376,6 +376,7 @@ public:
 	void dieCreateItem();
 	void showCoin(CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCoin);
 	void stopCoin();
+	CCArray* getCoinChildren();
 	
 	virtual void completedAnimationSequenceNamed (char const * name);
 	

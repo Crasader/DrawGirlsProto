@@ -1260,6 +1260,7 @@ void KsLocal::ko()
 	
 	obj[LK::kMyLocalKey_missile] = "미사일";
 	obj[LK::kMyLocalKey_damage] = "데미지";
+	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

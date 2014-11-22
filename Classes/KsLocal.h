@@ -1214,7 +1214,8 @@ enum class LK
 	kMyLocalKey_characterExpUpValue,
 	kMyLocalKey_notCleardHellMissionCondition,
 	kMyLocalKey_missile,
-	kMyLocalKey_damage
+	kMyLocalKey_damage,
+	kMyLocalKey_todayMissionOnlyNormalStage
 };
 class KsLocal
 {

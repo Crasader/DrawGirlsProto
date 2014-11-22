@@ -287,7 +287,7 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	if(mySGD->getUserdataSelectedCharNO() != character_no)
 	{
 		CCLabelTTF* t_label = CCLabelTTF::create();
-		KSLabelTTF* select_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_equip), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* select_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_choice), mySGD->getFont().c_str(), 12);
 		t_label->addChild(select_label);
 		
 		select_button = CCControlButton::create(t_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));

@@ -89,7 +89,11 @@ void TodayMissionPopup::myInit(int t_touch_priority, function<void()> t_end_func
 							  });
 	m_container->addChild(close_button);
 	
-	
+	KSLabelTTF* normal_stage_only = KSLabelTTF::create(getLocal(LK::kMyLocalKey_todayMissionOnlyNormalStage), mySGD->getFont().c_str(), 9);
+	normal_stage_only->setColor(ccYELLOW);
+	normal_stage_only->enableOuterStroke(ccBLACK, 0.7f, 180, true);
+	normal_stage_only->setPosition(ccpFromSize(back_case->getContentSize()) + ccp(-normal_stage_only->getContentSize().width/2.f-45, -37));
+	back_case->addChild(normal_stage_only);
 	
 	TodayMissionType mission_type = (TodayMissionType)mySGD->today_mission_info.mission_type.getV();
 	

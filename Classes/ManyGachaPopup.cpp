@@ -212,22 +212,22 @@ void ManyGachaPopup::setOpening()
 	inner_node->addChild(gacha_menu);
 	gacha_menu->setTouchPriority(touch_priority-1);
 	
-	CCSprite* n_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
-	CCSprite* s_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
+	CCSprite* n_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 164));
+	CCSprite* s_normal = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 164));
 //	s_normal->setColor(ccGRAY);
 	
 	CCMenuItem* normal_item = CCMenuItemSprite::create(n_normal, s_normal, this, menu_selector(ManyGachaPopup::menuAction));
 	normal_item->setTag(ManyGachaPopupMenu::kNormal);
-	normal_item->setPosition(ccp(main_inner->getContentSize().width/2.f-53, 120));
+	normal_item->setPosition(ccp(main_inner->getContentSize().width/2.f-53, 108));
 	gacha_menu->addChild(normal_item);
 	
-	CCSprite* n_premium = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
-	CCSprite* s_premium = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 140));
+	CCSprite* n_premium = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 164));
+	CCSprite* s_premium = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, 90, 164));
 //	s_premium->setColor(ccGRAY);
 	
 	CCMenuItem* premium_item = CCMenuItemSprite::create(n_premium, s_premium, this, menu_selector(ManyGachaPopup::menuAction));
 	premium_item->setTag(ManyGachaPopupMenu::kPremium);
-	premium_item->setPosition(ccp(main_inner->getContentSize().width/2.f+63, 120));
+	premium_item->setPosition(ccp(main_inner->getContentSize().width/2.f+63, 108));
 	gacha_menu->addChild(premium_item);
 	
 	

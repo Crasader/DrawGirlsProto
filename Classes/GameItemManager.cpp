@@ -1962,6 +1962,11 @@ void GameItemManager::showCoin(CCObject* t_ui, SEL_CallFuncCCpI d_takeExchangeCo
 	}
 }
 
+CCArray* GameItemManager::getCoinChildren()
+{
+	return coin_parent->getChildren();
+}
+
 void GameItemManager::stopCoin()
 {
 	int loop_cnt = coin_parent->getChildrenCount();
