@@ -953,7 +953,6 @@ void HellModeResult::endShowPopup()
 
 void HellModeResult::hidePopup()
 {
-	mySGD->is_hell_mode = false;
 	is_menu_enable = false;
 	//	rankTableView->setTouchEnabled(false);
 	
@@ -1044,7 +1043,7 @@ void HellModeResult::menuAction(CCObject* pSender)
 		AudioEngine::sharedInstance()->stopEffect("sound_calc.mp3");
 		AudioEngine::sharedInstance()->playSound("bgm_ui.mp3", true);
 		//		mySGD->resetLabels();
-		
+		mySGD->is_hell_mode = false;
 		hidePopup();
 	}
 	else if(tag == kMT_HMR_replay)
@@ -1059,7 +1058,6 @@ void HellModeResult::menuAction(CCObject* pSender)
 											   {
 												   gray->setOpacity(0);
 												   main_case->setPosition(ccp(240,160-450));
-												   mySGD->is_hell_mode = false;
 												   replay_func();
 												   removeFromParent();
 											   }));
