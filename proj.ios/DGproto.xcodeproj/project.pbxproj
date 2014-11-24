@@ -521,7 +521,7 @@
 		D76973E318EBFFB900E3FD55 /* xtrcrypt.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736218EBFFB900E3FD55 /* xtrcrypt.cpp */; };
 		D76973E418EBFFB900E3FD55 /* zdeflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736418EBFFB900E3FD55 /* zdeflate.cpp */; };
 		D76973E518EBFFB900E3FD55 /* zinflate.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736618EBFFB900E3FD55 /* zinflate.cpp */; };
-		D76973E618EBFFB900E3FD55 /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736818EBFFB900E3FD55 /* zlib.cpp */; };
+		D76973E618EBFFB900E3FD55 /* cryptozlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736818EBFFB900E3FD55 /* cryptozlib.cpp */; };
 		D76973E918ED020F00E3FD55 /* CipherUtils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76973E818ED020F00E3FD55 /* CipherUtils.cpp */; };
 		D76973EC18F67DA000E3FD55 /* EncryptCharsA.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76973EB18F67DA000E3FD55 /* EncryptCharsA.cpp */; };
 		D76973EF18F7E99C00E3FD55 /* SumranMailPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76973EE18F7E99C00E3FD55 /* SumranMailPopup.cpp */; };
@@ -1114,7 +1114,7 @@
 		D7A8A29219DD0B6000158A61 /* CurtainNodeForBonusGame.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7BE735919515368009BFE67 /* CurtainNodeForBonusGame.cpp */; };
 		D7A8A29319DD0B6000158A61 /* elgamal.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76972AE18EBFFB800E3FD55 /* elgamal.cpp */; };
 		D7A8A29419DD0B6000158A61 /* ConvexGraph.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B2C5358C19949A9200516F99 /* ConvexGraph.cpp */; };
-		D7A8A29519DD0B6000158A61 /* zlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736818EBFFB900E3FD55 /* zlib.cpp */; };
+		D7A8A29519DD0B6000158A61 /* cryptozlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D769736818EBFFB900E3FD55 /* cryptozlib.cpp */; };
 		D7A8A29619DD0B6000158A61 /* mars.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76972E018EBFFB800E3FD55 /* mars.cpp */; };
 		D7A8A29719DD0B6000158A61 /* panama.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D76972FE18EBFFB800E3FD55 /* panama.cpp */; };
 		D7A8A29819DD0B6000158A61 /* GaBaBo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7995365190B74DE008489B1 /* GaBaBo.cpp */; };
@@ -1419,6 +1419,8 @@
 		D7A8A3EF19DD0B6000158A61 /* json_internalmap.inl in Resources */ = {isa = PBXBuildFile; fileRef = D70B55B01814BE8E001FC90A /* json_internalmap.inl */; };
 		D7A8A3F019DD0B6000158A61 /* json_valueiterator.inl in Resources */ = {isa = PBXBuildFile; fileRef = D70B55B41814BE8E001FC90A /* json_valueiterator.inl */; };
 		D7A8A3F319DD0B6000158A61 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = D70B55B71814BE8E001FC90A /* sconscript */; };
+		D7AF2BEA1A1F27D800F557A3 /* sha3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BDF1A1F27D800F557A3 /* sha3.cpp */; };
+		D7AF2BEB1A1F27D800F557A3 /* sha3.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BDF1A1F27D800F557A3 /* sha3.cpp */; };
 		D7AF3849189239EA00A3AD05 /* JackMissileShow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */; };
 		D7AF384A189239EA00A3AD05 /* PuzzleListShadow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */; };
 		D7B2BE8D1914F14E00010C7F /* TodayMissionPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */; };
@@ -2491,8 +2493,8 @@
 		D769736518EBFFB900E3FD55 /* zdeflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zdeflate.h; sourceTree = "<group>"; };
 		D769736618EBFFB900E3FD55 /* zinflate.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zinflate.cpp; sourceTree = "<group>"; };
 		D769736718EBFFB900E3FD55 /* zinflate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = zinflate.h; sourceTree = "<group>"; };
-		D769736818EBFFB900E3FD55 /* zlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = zlib.cpp; sourceTree = "<group>"; };
-		D769736918EBFFB900E3FD55 /* myzlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myzlib.h; sourceTree = "<group>"; };
+		D769736818EBFFB900E3FD55 /* cryptozlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cryptozlib.cpp; sourceTree = "<group>"; };
+		D769736918EBFFB900E3FD55 /* cryptozlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cryptozlib.h; sourceTree = "<group>"; };
 		D76973E718ED020E00E3FD55 /* CipherUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CipherUtils.h; sourceTree = "<group>"; };
 		D76973E818ED020F00E3FD55 /* CipherUtils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CipherUtils.cpp; sourceTree = "<group>"; };
 		D76973EA18F67DA000E3FD55 /* EncryptCharsA.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EncryptCharsA.h; sourceTree = "<group>"; };
@@ -2934,6 +2936,8 @@
 		D7A72A7019FE63E400A5ACBD /* ManyGachaPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ManyGachaPopup.h; sourceTree = "<group>"; };
 		D7A72A7119FE63E400A5ACBD /* ManyGachaPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ManyGachaPopup.cpp; sourceTree = "<group>"; };
 		D7A8A3FB19DD0B6000158A61 /* 땅따먹기 섬란카구라.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "땅따먹기 섬란카구라.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		D7AF2BDE1A1F27D800F557A3 /* sha3.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sha3.h; sourceTree = "<group>"; };
+		D7AF2BDF1A1F27D800F557A3 /* sha3.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sha3.cpp; sourceTree = "<group>"; };
 		D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JackMissileShow.cpp; sourceTree = "<group>"; };
 		D7AF3846189239EA00A3AD05 /* JackMissileShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JackMissileShow.h; sourceTree = "<group>"; };
 		D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PuzzleListShadow.cpp; sourceTree = "<group>"; };
@@ -4696,6 +4700,8 @@
 		D769726618EBFFB800E3FD55 /* cryptopp */ = {
 			isa = PBXGroup;
 			children = (
+				D7AF2BDE1A1F27D800F557A3 /* sha3.h */,
+				D7AF2BDF1A1F27D800F557A3 /* sha3.cpp */,
 				D769726718EBFFB800E3FD55 /* 3way.cpp */,
 				D769726818EBFFB800E3FD55 /* 3way.h */,
 				D769726918EBFFB800E3FD55 /* adler32.cpp */,
@@ -4953,8 +4959,8 @@
 				D769736518EBFFB900E3FD55 /* zdeflate.h */,
 				D769736618EBFFB900E3FD55 /* zinflate.cpp */,
 				D769736718EBFFB900E3FD55 /* zinflate.h */,
-				D769736818EBFFB900E3FD55 /* zlib.cpp */,
-				D769736918EBFFB900E3FD55 /* myzlib.h */,
+				D769736818EBFFB900E3FD55 /* cryptozlib.cpp */,
+				D769736918EBFFB900E3FD55 /* cryptozlib.h */,
 			);
 			path = cryptopp;
 			sourceTree = "<group>";
@@ -6416,7 +6422,7 @@
 				D7A8A29219DD0B6000158A61 /* CurtainNodeForBonusGame.cpp in Sources */,
 				D7A8A29319DD0B6000158A61 /* elgamal.cpp in Sources */,
 				D7A8A29419DD0B6000158A61 /* ConvexGraph.cpp in Sources */,
-				D7A8A29519DD0B6000158A61 /* zlib.cpp in Sources */,
+				D7A8A29519DD0B6000158A61 /* cryptozlib.cpp in Sources */,
 				D7A8A29619DD0B6000158A61 /* mars.cpp in Sources */,
 				D7A8A29719DD0B6000158A61 /* panama.cpp in Sources */,
 				D7A8A29819DD0B6000158A61 /* GaBaBo.cpp in Sources */,
@@ -6507,6 +6513,7 @@
 				D7A8A2EC19DD0B6000158A61 /* serpent.cpp in Sources */,
 				D7A8A2ED19DD0B6000158A61 /* HellModeOpening.cpp in Sources */,
 				D7A8A2EE19DD0B6000158A61 /* LabelReader.cpp in Sources */,
+				D7AF2BEB1A1F27D800F557A3 /* sha3.cpp in Sources */,
 				D7A8A2EF19DD0B6000158A61 /* rc5.cpp in Sources */,
 				D7A8A2F019DD0B6000158A61 /* IntSeries.cpp in Sources */,
 				D7A8A2F119DD0B6000158A61 /* GDLib.cpp in Sources */,
@@ -7076,7 +7083,7 @@
 				D7BE738419515369009BFE67 /* CurtainNodeForBonusGame.cpp in Sources */,
 				D769738D18EBFFB900E3FD55 /* elgamal.cpp in Sources */,
 				B2C5369B19949A9300516F99 /* ConvexGraph.cpp in Sources */,
-				D76973E618EBFFB900E3FD55 /* zlib.cpp in Sources */,
+				D76973E618EBFFB900E3FD55 /* cryptozlib.cpp in Sources */,
 				D76973A618EBFFB900E3FD55 /* mars.cpp in Sources */,
 				D76973B318EBFFB900E3FD55 /* panama.cpp in Sources */,
 				D7995366190B74DE008489B1 /* GaBaBo.cpp in Sources */,
@@ -7167,6 +7174,7 @@
 				D7B6353119D9665C00BA4785 /* HellModeOpening.cpp in Sources */,
 				D79EF66019D80CF700979D79 /* LabelReader.cpp in Sources */,
 				D76973BD18EBFFB900E3FD55 /* rc5.cpp in Sources */,
+				D7AF2BEA1A1F27D800F557A3 /* sha3.cpp in Sources */,
 				B2ED1058183E7BBB0030A857 /* IntSeries.cpp in Sources */,
 				D7A72A7219FE63E400A5ACBD /* ManyGachaPopup.cpp in Sources */,
 				D70B566D1814BE8E001FC90A /* GDLib.cpp in Sources */,
@@ -7500,7 +7508,7 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 					"$(PROJECT_DIR)",
 				);
-				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7642,7 +7650,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -7687,7 +7695,7 @@
 					"\"$(SRCROOT)/../boost_1_55_0\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries",
 					"$(inherited)",
@@ -7729,7 +7737,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD)";
-				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
 				CLANG_CXX_LIBRARY = "libc++";
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -7740,7 +7748,7 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/Nelo2",
 					"$(PROJECT_DIR)",
 				);
-				GCC_OPTIMIZATION_LEVEL = 1;
+				GCC_OPTIMIZATION_LEVEL = fast;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -7772,7 +7780,7 @@
 					"\"$(SRCROOT)/../boost_1_55_0\"",
 				);
 				INFOPLIST_FILE = Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(SRCROOT)/../../../cocos2dx/platform/third_party/ios/libraries",
 					"$(inherited)",
