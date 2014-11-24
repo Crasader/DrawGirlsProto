@@ -6,7 +6,7 @@
 // complete reimplementation of the zlib compression format.
 
 #include "pch.h"
-#include "zlib.h"
+#include "cryptozlib.h"
 #include "zdeflate.h"
 #include "zinflate.h"
 
