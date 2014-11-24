@@ -5,6 +5,7 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="/GooglePlayLib/libs/google-play-services_5.0.jar" sourcepath="/GooglePlayLib/libs/google-play-services_5.0.jar"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="src_naver"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

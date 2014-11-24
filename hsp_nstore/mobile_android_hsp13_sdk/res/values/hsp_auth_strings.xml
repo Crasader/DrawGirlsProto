@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">Maintenance information</string>
+    <string name="hsp.lnc.status.alert.update.now">Update Now</string>
+    <string name="hsp.lnc.status.alert.later">Later</string>
+    <string name="hsp.lnc.status.alert.01">This game is unregistered.</string>
+    <string name="hsp.lnc.status.alert.02">You must update your game for\nbetter service stability.</string>
+    <string name="hsp.lnc.status.alert.03">You must update your game for\nbetter service stability.</string>
+    <string name="hsp.lnc.status.alert.04">The service is unavailable during a maintenance.</string>
+    <string name="hsp.lnc.status.alert.08">The service is unavailable during a maintenance.</string>
+    <string name="hsp.lnc.status.alert.10.playable">The service may partly unavailable during a maintenance.</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">The service is unavailable during a maintenance.</string>
+    <string name="hsp.lnc.status.alert.20">Failed to update game resources due to incorrect client information. Please contact our customer service center.</string>
+    <string name="hsp.lnc.status.alert.91">You cannot use the service with this device.</string>
+    <string name="hsp.lnc.status.alert.92">Only some of the registered devices can be used. </string>
+    <string name="hsp.lnc.status.alert.98">The service is closed.\nThank you for your support.</string>
+    <string name="hsp.lnc.status.alert.99">Failed to connect to the server due to an error.\nPlease close the app and run it again.</string>
+    <string name="hsp.auth.bridge.description.main">Welcome, %1$s.</string>
+    <string name="hsp.auth.bridge.description.main.fortoast">Welcome.</string>
+    <string name="hsp.auth.login.hid.alert.punish">This ID is suspended. Please log in with a different ID.</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">This account does not exist. Please log in with a different ID.</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">The ID is already associated with a different Smart Hangame title. Please use a different ID.</string>
+    <string name="hsp.auth.login.id.alert.alreadymapped">The ID is already associated with a different title. Please use a different ID.</string>
+    <string name="hsp.toast.auth.login.hid.alert.alreadymapped">이미 다른 TOAST 게임 기록이 연결되어 있는 아이디입니다. 다른 아이디로 연결해 주세요.</string>
+    <string name="hsp.auth.punished.member.alert">The gameplay is restricted due to abnormal gameplay.</string>
+    <string name="hsp.auth.deactivated.member.alert">Your account has been deactivated. Can\'t use this service anymore.</string>
+    <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
+    <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>
+</resources>

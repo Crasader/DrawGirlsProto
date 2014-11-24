@@ -1,8 +1,4 @@
 LOCAL_PATH := $(call my-dir) 
-include $(CLEAR_VARS) 
-LOCAL_MODULE := dodo-lib #이름은 빌드스크립트내(IAP Lib. 이름 포함)에서 겹치지 않도록만 지정하면 됩니다. 
-LOCAL_SRC_FILES := $(TARGET_ARCH_ABI)/libdodo.so #실제 라이브러리 위치 및 이름 
-include $(PREBUILT_SHARED_LIBRARY) 
  
 
 

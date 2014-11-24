@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.sns.feed.title.twitter">New Tweet</string>
+    <string name="hsp.sns.feed.title.facebook">Facebook</string>
+    <string name="hsp.sns.feed.message.hint">Write</string>
+    <string name="hsp.sns.feed.alert.send.fail">There was an error posting your SNS.</string>
+
+</resources>

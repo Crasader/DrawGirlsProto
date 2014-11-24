@@ -407,10 +407,11 @@ public class hspConnector {
 					// // check, intent is available.
 					// if (!kakaoLink.isAvailableIntent())
 					// return;
+					String packName = AppContext.getPackageName(); // com.nhnent.SKSUMRAN 으로 시작하는게 맞는지...
 					kakaoLink.openKakaoLink((Activity) hspConnector.sContext,
 							"http://hgurl.me/am7",
 							"��������� ��ㅻ�쎌�ㅼ�� ������!!\n�����곕㉨湲� 由ы�댁�� with ��щ��移닿뎄��� ��댁�⑥�대��",
-							"com.nhnent.SKSUMRAN", "1.0", "�����곕㉨湲� 由ы�댁�� with ��щ��移닿뎄��� ��댁�⑥�대��",
+							packName, "1.0", "�����곕㉨湲� 由ы�댁�� with ��щ��移닿뎄��� ��댁�⑥�대��",
 							"UTF-8");
 
 				}

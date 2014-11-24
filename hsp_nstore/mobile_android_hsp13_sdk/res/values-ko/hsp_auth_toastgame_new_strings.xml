@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.toastnew.auth.welcome.agreement"> TOAST 이용약관과 개인정보 수집, 이용에 동의 합니다.</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree">동의</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.gameterms"><u>게임이용약관</u>에 동의합니다.</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.personalinfo"><u>개인정보 수집, 이용</u>에 동의합니다.</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">유의사항</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">약관동의</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST 이용약관 보기</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">내용보기</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">개인정보 수집 이용보기</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">이용중이던 아이디가 있으시면 [아이디로 로그인]을 해 주세요\n [게스트 로그인]을 하시면 앱 삭제 시 게임정보가 함께 삭제되오니 유의해 주세요 </string>
+    <string name="hsp.toastnew.auth.welcome.idp.login">아이디 로그인</string>
+    <string name="hsp.toastnew.auth.welcome.guest.login">게스트 로그인</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.login">아이디로 로그인</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login.title">TOAST ID 로그인</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login">이메일 아이디</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.facebook.login.title">Facebook ID 로그인</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.description">아이디가 없으세요? <u>이메일 아이디 만들기</u></string>
+    <string name="hsp.toastnew.auth.login.hid.alert.other.id.login">[%1$s]으로 바로 시작</string>
+</resources>

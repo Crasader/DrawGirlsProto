@@ -36,5 +36,10 @@
 			<type>2</type>
 			<location>/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.android_src/src</location>
 		</link>
+		<link>
+			<name>src_naver</name>
+			<type>2</type>
+			<location>/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.android_nstore/src</location>
+		</link>
 	</linkedResources>
 </projectDescription>

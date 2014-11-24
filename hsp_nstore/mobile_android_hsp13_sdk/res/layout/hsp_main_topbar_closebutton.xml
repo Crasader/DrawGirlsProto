@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="47.44dp"
+    android:layout_height="35.33dp"
+    android:orientation="horizontal"
+    android:tag="hsp.topbar.closebutton" >
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="@color/hsp.topbar.closebutton.line1" />
+
+    <ImageView
+        android:layout_width="1dp"
+        android:layout_height="fill_parent"
+        android:background="@color/hsp.topbar.closebutton.line2" />
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="center"
+        android:text="@string/hsp.common.close"
+        android:textColor="@color/hsp.topbar.closebutton"
+        android:textSize="13.33dp"
+        android:tag="hsp.topbar.closebutton.title" />
+
+</LinearLayout>

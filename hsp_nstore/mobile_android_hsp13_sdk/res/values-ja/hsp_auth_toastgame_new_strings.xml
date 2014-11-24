@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.toastnew.auth.welcome.agreement">TOAST利用規約、個人情報収集および利用方針に同意します。</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree">同意する</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.gameterms"><u>利用規約</u>に同意します。</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.agree.personalinfo"><u>プライバシーポリシー</u>に同意します。</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.attention">Attention</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.terms.agree">利用規約に同意</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.terms">TOAST利用規約はこちら</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show">もっと見る</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.show.personalinfo">個人情報収集および利用方針はこちら</string>
+    <string name="hsp.toastnew.auth.welcome.agreement.alert">使用中のIDがある場合は、[IDでログイン]してください。\n [ゲストとしてログイン]した場合、アプリを削除するとゲームの情報も削除されますのでご注意ください。</string>
+    <string name="hsp.toastnew.auth.welcome.idp.login">IDログイン</string>
+    <string name="hsp.toastnew.auth.welcome.guest.login">ゲストとしてログイン</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.login">ハンゲームIDでログイン</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login">電子メールIDでログイン</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.email.login.title">TOAST IDでログイン</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.facebook.login.title">FacebookのIDでログイン</string>
+    <string name="hsp.toastnew.auth.welcome.alert.hid.description">IDをお持ちでない方は、<u>電子メールで新規登録を行ってください。</u></string>
+    <string name="hsp.toastnew.auth.login.hid.alert.other.id.login">[%1$s]ですぐ始める</string>
+    
+</resources>

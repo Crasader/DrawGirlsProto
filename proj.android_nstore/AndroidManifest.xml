@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nhnent.SKSUMRAN"
+    package="com.nhnent.SKSUMRAN.NA"
     android:versionCode="11"
     android:versionName="1.1.0" >
 
@@ -217,18 +217,14 @@
         
         <!-- [HSP SDK] Payment TStore Activity & Receiver Begin -->
 
-
-        <!-- T Store 빌드 시에만 사용해 주세요. -->
+        <!-- Naver IAP 빌드시에만 사용해주세요. -->
         <activity
-            android:name="com.skplanet.dodo.IapWeb"
+            android:name="com.hangame.hsp.payment.naver.activity.NaverIAPActivity"
             android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection"
-            android:excludeFromRecents="true"
-            android:windowSoftInputMode="stateHidden" />
-
-        <meta-data
-            android:name="iap:api_version"
-            android:value="2" />
-        <!-- [HSP SDK] Payment TStore Activity & Receiver End -->
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden" >
+        </activity>
+        <!-- ﻿[HSP SDK] Payment Naver IAP Activity End -->
 
 
     </application>
