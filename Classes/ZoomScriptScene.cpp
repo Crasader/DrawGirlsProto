@@ -47,21 +47,24 @@ enum ZS_Zorder{
 
 void ZoomScript::completedAnimationSequenceNamed(const char *name)
 {
-	int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
-	if(grade == 2 || grade == 4)
+	if(target_node)
 	{
-//		(this->*delegate_typing_after)();
-//		CCTouch* t_touch = new CCTouch();
-//		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
-//		t_touch->autorelease();
-//		target_node->ccTouchEnded(t_touch, NULL);
-		is_ccb_end = true;
-		next_button->setVisible(is_next_on && is_ccb_end);
-	}
-	else
-	{
-		is_ccb_end = true;
-		next_button->setVisible(is_next_on && is_ccb_end);
+		int grade =  NSDS_GI(kSDS_CI_int1_grade_i, target_node->card_number);
+		if(grade == 2 || grade == 4)
+		{
+			//		(this->*delegate_typing_after)();
+			//		CCTouch* t_touch = new CCTouch();
+			//		t_touch->setTouchInfo(0,240, myDSH->ui_center_y);
+			//		t_touch->autorelease();
+			//		target_node->ccTouchEnded(t_touch, NULL);
+			is_ccb_end = true;
+			next_button->setVisible(is_next_on && is_ccb_end);
+		}
+		else
+		{
+			is_ccb_end = true;
+			next_button->setVisible(is_next_on && is_ccb_end);
+		}
 	}
 }
 
@@ -79,6 +82,8 @@ bool ZoomScript::init()
 //	setBackKeyEnabled(true);
 	
 	setKeypadEnabled(true);
+	
+	t_manager = NULL;
 	
 	first_img = NULL;
 	second_img = NULL;
@@ -1071,6 +1076,11 @@ void ZoomScript::menuAction(CCObject *sender)
 void ZoomScript::nextScene()
 {
 //	setBackKeyEnabled(false);
+	
+	if(t_manager)
+	{
+		t_manager->setDelegate(NULL);
+	}
 	
 	if(first_img)
 	{

@@ -517,10 +517,10 @@ bool PuzzleScene::init()
 		
 		clear_is_empty_star = !is_not_empty_card[before_take_level-1];
 		
-        if(mySGD->isHasGottenCards(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level))){
-            clear_is_empty_star=false;
-        }
-        
+//        if(mySGD->isHasGottenCards(NSDS_GI(mySD->getSilType(), kSDS_SI_level_int1_card_i, take_level))){
+//            clear_is_empty_star=false;
+//        }
+		
         
 		if(!mySGD->getPieceHistory(played_stage_number).is_clear[before_take_level-1].getV())
 		{

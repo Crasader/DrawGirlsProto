@@ -1758,10 +1758,13 @@ FloatingCoinParent* FloatingCoinParent::create(function<void(CCPoint)> t_take_fu
 }
 void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	float t_d = 2.f/100.f;
 	
 	int t_coin_count;
-	if(mySGD->is_endless_mode || mySGD->is_hell_mode)
+	if(mySGD->is_endless_mode)
 		t_coin_count = roundf(t_percent/t_d);
 	else
 		t_coin_count = roundf(t_percent/t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10));
@@ -1773,6 +1776,9 @@ void FloatingCoinParent::showPercentFloatingCoin(float t_percent)
 }
 void FloatingCoinParent::showAttackFloatingCoin(CCPoint t_target_point, int t_coin_count)
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	if(t_coin_count > 0)
 	{
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
@@ -1796,6 +1802,9 @@ void FloatingCoinParent::hideAllFloatingCoin()
 
 void FloatingCoinParent::startClearFloatCoin(float t_percent)
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	float t_d = 2.f/100.f;
 	
 	int t_coin_count;
@@ -1921,6 +1930,9 @@ void GameItemManager::stopCounting()
 
 void GameItemManager::dieCreateItem()
 {
+	if(mySGD->is_hell_mode)
+		return;
+	
 	for(int i=0;i<5;i++)
 	{
 		if(getChildrenCount()-child_base_cnt < 6)
