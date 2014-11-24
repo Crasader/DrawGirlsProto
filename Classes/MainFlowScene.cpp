@@ -2554,6 +2554,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																														 t_info.is_have_date_condition = false;
 																																														 t_info.is_have_ruby_condition = false;
 																																														 t_info.need_star_count = 0;
+																																														 t_info.need_card_count = 0;
 																																														 
 																																														 for(int i=0;!t_info.is_open && i<condition_list.size();i++)
 																																														 {
@@ -2583,6 +2584,15 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																																		 t_info.is_base_condition_success = false;
 																																																	 }
 																																																 }
+																																																 else if(t_type == "c")
+																																																	{
+																																																		t_info.need_card_count = t_condition["value"].asInt();
+																																																		if(mySGD->getHasGottenCardsSize() < t_info.need_card_count)
+																																																		{
+																																																			and_open = false;
+																																																			t_info.is_base_condition_success = false;
+																																																		}
+																																																	}
 																																																 else if(t_type == "g")
 																																																 {
 																																																	 t_info.need_ruby_value = t_condition["value"].asInt();
@@ -2666,7 +2676,7 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																													 t_history.open_type = "";
 																																													 mySGD->setPuzzleHistoryForNotSave(t_history);
 																																													 
-																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
+																																													 addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought)), 9999);
 																																													 
 																																													 //											  addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, kGoodsType_ruby, [=]()
 																																													 //											  {

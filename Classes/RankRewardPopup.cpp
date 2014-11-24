@@ -230,7 +230,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 									left_graph_case->getPosition() + ccpFromSize(left_graph_case->getContentSize()/(-2.f)) + ccp(left_graph_case->getContentSize().width, left_graph_case->getContentSize().height/2.f) + ccp(0,-1));
 	back_case->addChild(stage_percent_case, 1);
 	
-	KSLabelTTF* stage_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", stage_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* stage_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", ceilf(stage_rank_percent*100.f))->getCString(), mySGD->getFont().c_str(), 13);
 	stage_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 	stage_percent_label->setPosition(ccpFromSize(stage_percent_case->getContentSize()/2.f) + ccp(0,-3));
 	stage_percent_case->addChild(stage_percent_label);
@@ -407,7 +407,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 									  right_graph_case->getPosition() + ccpFromSize(right_graph_case->getContentSize()/(-2.f)) + ccp(right_graph_case->getContentSize().width, right_graph_case->getContentSize().height/2.f) + ccp(0,-1));
 	back_case->addChild(endless_percent_case);
 	
-	KSLabelTTF* endless_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", endless_rank_percent*100.f)->getCString(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* endless_percent_label = KSLabelTTF::create(CCString::createWithFormat("%.0f%%", ceilf(endless_rank_percent*100.f))->getCString(), mySGD->getFont().c_str(), 13);
 	endless_percent_label->enableOuterStroke(ccc3(50, 25, 0), 1);
 	endless_percent_label->setPosition(ccpFromSize(endless_percent_case->getContentSize()/2.f) + ccp(0,-3));
 	endless_percent_case->addChild(endless_percent_label);
