@@ -2588,6 +2588,9 @@ void PlayUI::takeAddTimeItem ()
 	countingCnt -= change_time;
 	total_time += change_time;
 	
+	if(countingCnt-1 < playtime_limit-30)
+		AudioEngine::sharedInstance()->stopEffect("se_clock.mp3");
+	
 	CCLOG("addtime value : %d", change_time);
 //	if(mySGD->isUsingItem(kIC_longTime))
 //	{
