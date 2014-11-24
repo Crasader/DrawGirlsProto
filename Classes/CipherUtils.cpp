@@ -247,6 +247,7 @@ std::string CipherUtils::decryptDESBASE64(const char *keyString, const char* cip
 }
 
 
+//#include "cocos2d.h"
 std::string CipherUtils::encryptAESBASE64(const char *keyString, const char* plain)
 {
 	assert(strlen(keyString) == AES::DEFAULT_KEYLENGTH);
@@ -261,10 +262,11 @@ std::string CipherUtils::encryptAESBASE64(const char *keyString, const char* pla
 		e.SetKey( key, sizeof(key) );
 		
 		std::string base64;
-		cipher.clear();
+//		cipher.clear();
 		// The StreamTransformationFilter adds padding
 		//  as required. ECB and CBC Mode must be padded
 		//  to the block size of the cipher.
+		
 		StringSource(plain, true,
 								 new StreamTransformationFilter( e,
 																								new StringSink( base64 ), StreamTransformationFilter::ZEROS_PADDING
@@ -291,8 +293,8 @@ std::string CipherUtils::decryptAESBASE64(const char *keyString, const char* cip
 	memset( key, 0x00, CryptoPP::AES::DEFAULT_KEYLENGTH );
 	memcpy(key, keyString, AES::DEFAULT_KEYLENGTH);
 //	strncpy((char *)key, keyString, AES::DEFAULT_KEYLENGTH);
-	CCLOG("key 0 %c", key[0]);
-	std::string decrypted;	
+//	CCLOG("key 0 %c", key[0]);
+	std::string decrypted;
 	try
 	{
 		std::string base64;
@@ -303,7 +305,7 @@ std::string CipherUtils::decryptAESBASE64(const char *keyString, const char* cip
 		string hexStr;
 		CryptoPP::StringSource s3(base64, true,
 															new CryptoPP::HexEncoder( new CryptoPP::StringSink( hexStr )));
-		CCLOG("base64 data %s", hexStr.c_str());
+//		CCLOG("base64 data %s", hexStr.c_str());
 		// ECB Mode does not use an IV
 		d.SetKey( key, sizeof(key) );
 		

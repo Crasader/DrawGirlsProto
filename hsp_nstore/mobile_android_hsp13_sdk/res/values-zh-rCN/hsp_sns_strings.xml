@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.sns.feed.title.twitter">新的推文</string>
+    <string name="hsp.sns.feed.title.facebook">脸谱网</string>
+    <string name="hsp.sns.feed.message.hint">写作</string>
+    <string name="hsp.sns.feed.alert.send.fail">连线失败了，无法传送.</string>
+
+</resources>

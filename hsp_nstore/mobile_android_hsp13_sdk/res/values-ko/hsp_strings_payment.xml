@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- HSP Payment Start -->
+    <!-- Error Messages -->
+    <string name="hsp.payment.err.msg.lib.init">구매 라이브러리 초기화 실패</string>
+    <string name="hsp.payment.err.msg.shopserver">샵서버에서 오류 발생</string>
+    
+    <!-- User Messages -->
+    <string name="hsp.payment.err.msg.purchase.canceled">구입이 취소되었습니다.</string>
+    <string name="hsp.payment.err.msg.item.purchase.canceled">아이템 구입이 취소되었습니다.</string>
+    <string name="hsp.payment.err.msg.exist.purchase">진행 중인 결제창이 존재합니다.(상황이 지속될 경우 앱을 완전히 종료 후 재실행 해주세요)</string>
+    <string name="hsp.payment.err.msg.not.login">계정이 비정상적으로 연결되어 결제를 진행할 수 없습니다.\n앱을 완전히 종료 후 다시 시도해주세요.</string>
+    <string name="hsp.payment.err.msg.exception">일시적인 오류가 발생했습니다. 잠시 후 다시 이용해주세요.</string>
+    <string name="hsp.payment.err.msg.give.item.fail">아이템 지급에 오류가 발생했습니다. 고객센터에 문의해주세요.</string>
+	<string name="hsp.payment.err.msg.network.timeout">접속 상태가 고르지 못합니다. 잠시 후 다시 시도해주세요.</string>
+	
+    <string name="hsp.payment.err.msg.unsupported.device">죄송합니다.\n지원하지 않는 디바이스이므로\n결제를 진행할 수 없습니다.</string>
+	<string name="hsp.payment.err.msg.unsupported.google.checkout">현재 마켓은 결제를 지원하지 않습니다. 마켓정보를 확인해주세요.</string>
+	
+	<!-- Mycard Messages -->
+	<string name="hsp.payment.err.msg.purchase.successed">충전에 성공하셨습니다.</string>
+	<string name="hsp.payment.err.msg.purchase.failed">결제실패!</string>
+	
+	<!-- TStore Messages -->
+	<string name="hsp.payment.tstore.purchase.confirm">${productName} (${price}원)에 대한\n결제를 진행 하시겠습니까?</string>
+	       
+	<!-- General Strings -->
+    <string name="hsp.payment.title.dialog.purchase">결제하기</string>
+    <string name="hsp.payment.msg.confirm.purchase">선택하신 상품을 구매하시겠습니까?\n\n구매 진행 중 약간의 시간이 소요될 수 있으므로 결제가 완료되기 전까지 잠시만 기다려주세요.</string>
+    <string name="hsp.payment.btn.yes">예</string>
+    <string name="hsp.payment.btn.no">아니오</string>
+    <string name="hsp.payment.btn.confirm">확인</string>
+    <string name="hsp.payment.btn.cancel">취소</string>
+    <string name="hsp.payment.msg.processing">처리중입니다.</string>
+	
+</resources>

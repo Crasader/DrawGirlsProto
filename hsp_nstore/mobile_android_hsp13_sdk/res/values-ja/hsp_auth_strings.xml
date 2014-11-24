@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="hsp.lnc.status.alert.guide.check">メンテナンス案内</string>
+    <string name="hsp.lnc.status.alert.update.now">今すぐアップデート</string>
+    <string name="hsp.lnc.status.alert.later">後で</string>
+    <string name="hsp.lnc.status.alert.01">登録されていないゲームです。</string>
+    <string name="hsp.lnc.status.alert.02">より安定されたサービスのために\n最新バージョンへのアップデートが必要です。</string>
+    <string name="hsp.lnc.status.alert.03">より安定されたサービスのために\n最新バージョンへのアップデートが必要です。</string>
+    <string name="hsp.lnc.status.alert.04">メンテナンスのため、しばらくサービスの利用が制限されます。</string>
+    <string name="hsp.lnc.status.alert.08">メンテナンスのため、しばらくサービスの利用が制限されます。</string>
+    <string name="hsp.lnc.status.alert.10.playable">メンテナンスのため、一部のサービスの利用が制限される場合があります。</string>
+    <string name="hsp.lnc.status.alert.10.not.playable">メンテナンスのため、しばらくサービスの利用が制限されます。</string>
+    <string name="hsp.lnc.status.alert.20">クライアント情報が正しくないため、リソースのアップデートに失敗しました。ハンゲームにお問い合わせください。</string>
+    <string name="hsp.lnc.status.alert.91">サービスの利用が制限されたデバイスです。</string>
+    <string name="hsp.lnc.status.alert.92">登録された一部のデバイスでしかサービスを利用できません。</string>
+    <string name="hsp.lnc.status.alert.98">サービスが終了されました。\n今までご利用いただき、誠にありがとうございます。</string>
+    <string name="hsp.lnc.status.alert.99">サーバーエラーのため、ゲーム接続に失敗しました。\nゲームを終了してから、やり直してください。 </string>
+    <string name="hsp.auth.bridge.description.main">ようこそ。%1$sさん</string>
+    <string name="hsp.auth.bridge.description.main.fortoast">ようこそ。</string>
+    <string name="hsp.auth.login.hid.alert.punish">利用が制限されたIDです。他のIDでログインしてください。</string>
+    <string name="hsp.auth.login.hid.alert.withdraw">存在しないアカウントです。他のIDでログインしてください。</string>
+    <string name="hsp.auth.login.hid.alert.alreadymapped">既に他のスマートハンゲームの記録が登録されているIDです。他のIDで登録してください。</string>
+    <string name="hsp.auth.login.id.alert.alreadymapped">既に他のゲーム記録が登録されているIDです。他のIDで登録してください。</string>
+    <string name="hsp.toast.auth.login.hid.alert.alreadymapped">既に他のゲーム記録が登録されているIDです。他のIDで登録してください。</string>
+    <string name="hsp.auth.punished.member.alert">禁止されている行為が確認され、利用停止されました。</string>
+    <string name="hsp.auth.deactivated.member.alert">あなたのアカウントは無効になっている。もう、このサービスを使用することはできません。</string>
+    <string name="hsp.auth.facebook.login.fail.alert.title">Facebook login failed.</string>
+    <string name="hsp.auth.facebook.login.fail.alert">Facebook authentication request failed.</string>
+    
+</resources>
