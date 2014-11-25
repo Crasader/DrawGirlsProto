@@ -1439,7 +1439,7 @@ public:
 		// 몬스터가 맞는 조건
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		if(distance <= 12 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
+		if(distance <= 10 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			
@@ -2121,45 +2121,50 @@ public:
 	bool init(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
-
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-	
-		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
-		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
-		m_power = power;
-		m_subPower = subPower;
-		m_currentRad = 0;
-		m_initPosition = initPosition;
-		m_particle = nullptr;
-		m_streak = nullptr;
-		m_radVelocityBonus = mInfo.get("radvelocitybonus", 1.f).asFloat();
-//		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
-//		m_jiggleInterval = 0;
-		m_option = ao;
-		for(float r = 15; r<=m_radius; r+=15)
-		{
-			Missile m;
-			m.radius = r;
-			m.missileSprite = CCSprite::create(fileName.c_str());
-			m.particle = nullptr;
-			m.streak = nullptr;
-			makeBeautifier(25, m.streak,m.particle);
-			addChild(m.missileSprite);
-			if(m.particle)addChild(m.particle,-1);
-			if(m.streak)addChild(m.streak,-2);
-			m.missileSprite->setScale(1 / myGD->game_scale);
-			m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
-			m_sprites.push_back(m);
-		}
-//		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
-//		spr->setPosition(initPosition);
-//		spr->setScale(radius / 100.f);
-//		spr->setOpacity(100);
-//		addChild(spr);
-//		m_rangeSprite = spr;
-		scheduleUpdate();
-		return true;	
+//myGD->getJackPoint()
+		addChild(KSTimer::create(1.f, [=](){
+			m_initPosition = myGD->getJackPointCCP();
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			
+			m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
+			m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
+			m_power = power;
+			m_subPower = subPower;
+			m_currentRad = 0;
+//			m_initPosition = initPosition;
+			m_particle = nullptr;
+			m_streak = nullptr;
+			m_radVelocityBonus = mInfo.get("radvelocitybonus", 1.f).asFloat();
+			//		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
+			//		m_jiggleInterval = 0;
+			m_option = ao;
+			for(float r = 15; r<=m_radius; r+=15)
+			{
+				Missile m;
+				m.radius = r;
+				m.missileSprite = CCSprite::create(fileName.c_str());
+				m.particle = nullptr;
+				m.streak = nullptr;
+				makeBeautifier(25, m.streak,m.particle);
+				addChild(m.missileSprite);
+				if(m.particle)addChild(m.particle,-1);
+				if(m.streak)addChild(m.streak,-2);
+				m.missileSprite->setScale(1 / myGD->game_scale);
+				m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
+				m_sprites.push_back(m);
+			}
+			//		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
+			//		spr->setPosition(initPosition);
+			//		spr->setScale(radius / 100.f);
+			//		spr->setOpacity(100);
+			//		addChild(spr);
+			//		m_rangeSprite = spr;
+			scheduleUpdate();
+			
+			
+		}));
+		return true;
 	}
 	void update(float dt)
 	{
