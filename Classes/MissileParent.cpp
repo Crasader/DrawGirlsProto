@@ -369,7 +369,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				if(found == true)
 				{
 					
-					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 10 + 3 * grade, power, missile_sub_damage, ao);
+					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 15 + 3 * grade, power, missile_sub_damage, ao);
 					ma->beautifier(level);
 					jack_missile_node->addChild(ma);
 				}
