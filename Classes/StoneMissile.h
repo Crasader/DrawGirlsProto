@@ -1670,11 +1670,13 @@ public:
 		m_initRad = rad;
 		scheduleUpdate();
 
+		m_updateFrameCount = 0;
 
 		return true;
 	}
 	void update(float dt)
 	{
+		m_updateFrameCount++;
 		bool isEnable = true;
 		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
 		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
@@ -1697,32 +1699,35 @@ public:
 		KSCumberBase* minDistanceCumber = nullptr;
 		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 		bool found = false;
-		for(auto iter : myGD->getMainCumberVector())
+		if(m_updateFrameCount >= 3)
 		{
-			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-			if(distance < 10)
-			{
-				minDistance = distance;
-				minDistanceCumber = iter;
-				found = true;
-				break;
-			}
-		}	
-		if(found == false)
-		{
-			for(auto iter : myGD->getSubCumberVector())
+			for(auto iter : myGD->getMainCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(iter->getDeadState() == false && distance < 10)
+				if(distance < 10)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
 					found = true;
 					break;
 				}
-			}	
+			}
+			if(found == false)
+			{
+				for(auto iter : myGD->getSubCumberVector())
+				{
+					CCPoint targetPosition = iter->getPosition();
+					float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
+					if(iter->getDeadState() == false && distance < 10)
+					{
+						minDistance = distance;
+						minDistanceCumber = iter;
+						found = true;
+						break;
+					}
+				}	
+			}
 		}
 
 		// 몬스터가 맞는 조건
@@ -1761,6 +1766,7 @@ public:
 	
 	
 protected:
+	int m_updateFrameCount;
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
