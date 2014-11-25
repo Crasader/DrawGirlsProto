@@ -203,6 +203,30 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, float missileNumbers, CCPoint initPosition,
 																							 int missile_damage, int missile_sub_damage)
 {
+	switch(stoneType)
+	{
+		case StoneType::kStoneType_laser:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_mine:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_protector:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_range:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_spirit:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_spread:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+		case StoneType::kStoneType_guided:
+			missileNumbers = MIN(30.f, missileNumbers);
+			break;
+	}
 	int grade = ceilf((float)level / 5.f);
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
