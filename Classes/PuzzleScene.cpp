@@ -2962,14 +2962,62 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
+			if(myrank != i+1)
+			{
+				int character_number = read_data.get("character", 1).asInt();
+				int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+				int found_index = -1;
+				for(int i=0;found_index == -1 && i<character_count;i++)
+				{
+					if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+					{
+						found_index = i+1;
+					}
+				}
+				
+				if(found_index != -1)
+				{
+					CCNode* character_node = CCNode::create();
+					character_node->setScale(0.9f);
+					character_node->setPosition(ccp(37, 8));
+					list_cell_case->addChild(character_node);
+					
+					auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+					CCSprite* character_img = character_ccb.first;
+					character_img->setPosition(ccp(0,0));
+					character_node->addChild(character_img);
+					
+					character_ccb.second->runAnimationsForSequenceNamed("move_down");
+				}
+			}
+			
 			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			if(i >= 3)
-				selectedFlagSpr->setPosition(ccp(25.5f, rank_position.y-5));
+			
+			if(myrank != i+1)
+			{
+				if(i >= 3)
+				{
+					selectedFlagSpr->setPosition(ccp(25.5f, rank_position.y-5));
+					selectedFlagSpr->setScale(0.7);
+				}
+				else
+				{
+					selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f-9));
+					selectedFlagSpr->setScale(0.58);
+				}
+			}
 			else
-				selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
-			selectedFlagSpr->setScale(0.7);
+			{
+				if(i >= 3)
+					selectedFlagSpr->setPosition(ccp(25.5f, rank_position.y-5));
+				else
+					selectedFlagSpr->setPosition(ccp(37,list_cell_case->getContentSize().height/2.f));
+				selectedFlagSpr->setScale(0.7);
+			}
+			
 			list_cell_case->addChild(selectedFlagSpr);
+			
 			
 			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)
@@ -3027,6 +3075,16 @@ void PuzzleScene::resultGetRank(Json::Value result_data)
 			selectedFlagSpr->setPosition(ccp(25.5f,list_cell_case->getContentSize().height/2.f-5));
 			selectedFlagSpr->setScale(0.7);
 			list_cell_case->addChild(selectedFlagSpr);
+			
+//			CCNode* character_node = CCNode::create();
+//			character_node->setScale(0.33f);
+//			character_node->setPosition(ccp(238, 11));
+//			list_cell_case->addChild(character_node);
+//			
+//			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + ".ccbi");
+//			CCSprite* character_img = character_ccb.first;
+//			character_img->setPosition(ccp(0,0));
+//			character_node->addChild(character_img);
 			
 			CCLabelTTF* t_nick_size = CCLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 12.5f);
 			if(t_nick_size->getContentSize().width > 70)

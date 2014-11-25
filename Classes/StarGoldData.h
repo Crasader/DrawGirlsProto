@@ -898,6 +898,7 @@ public:
 	KSProtectVar<long long> endless_regDate;
 	KSProtectVar<int> endless_lose;
 	KSProtectVar<int> endless_win;
+	KSProtectVar<int> endless_character_no;
 	
 	void setReplayPlayingInfo(Json::Value t_data)
 	{

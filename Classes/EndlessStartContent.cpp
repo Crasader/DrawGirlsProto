@@ -17,6 +17,7 @@
 #include "FlagSelector.h"
 #include "CommonAnimation.h"
 #include "TypingBox.h"
+#include "StageImgLoader.h"
 
 EndlessStartContent* EndlessStartContent::create(int t_touch_priority, function<void(CCObject*)> t_selector)
 {
@@ -69,19 +70,34 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCSprite* left_back = CCSprite::create("endless_popup.png");
-	left_back->setPosition(ccp(-132, 0));
+	left_back->setPosition(ccp(-110, 0));
 	addChild(left_back);
+	
+	CCNode* left_character_node = CCNode::create();
+	left_character_node->setScale(0.6f);
+	left_character_node->setPosition(ccp(left_back->getContentSize().width/2.f, 75));
+	left_back->addChild(left_character_node);
+	
+	auto left_character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + ".ccbi");
+	CCSprite* left_character_img = left_character_ccb.first;
+	left_character_img->setPosition(ccp(0,0));
+	left_character_node->addChild(left_character_img);
+	
+//	left_character_ccb.second->runAnimationsForSequenceNamed("move_down");
 	
 	CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 	
 	CCSprite* left_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(myDSH->getStringForKey(kDSH_Key_flag)).c_str());
-	left_flag->setScale(1.2f);
-	left_flag->setPosition(ccp(left_back->getContentSize().width/2.f, 88));
+	left_flag->setScale(0.7f);
+	left_flag->setPosition(ccp(left_back->getContentSize().width/2.f, 48));
 	left_back->addChild(left_flag);
 	
 	KSLabelTTF* left_nick = KSLabelTTF::create(myDSH->getStringForKey(kDSH_Key_nick).c_str(), mySGD->getFont().c_str(), 13);
-	left_nick->setPosition(ccp(left_back->getContentSize().width/2.f, 55));
+	left_nick->setPosition(ccp(left_back->getContentSize().width/2.f, 47));
 	left_back->addChild(left_nick);
+	
+	left_flag->setPositionX(left_flag->getPositionX() - left_nick->getContentSize().width/2.f - 2);
+	left_nick->setPositionX(left_nick->getPositionX() + left_flag->getContentSize().width/2.f*left_flag->getScale() + 2);
 	
 //	KSLabelTTF* left_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalLevel), mySGD->endless_my_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
 //	left_level->setPosition(ccp(left_bottom_back->getContentSize().width/2.f, left_bottom_back->getContentSize().height-38));
@@ -89,7 +105,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	KSLabelTTF* left_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 20);
 	left_ing_win->setColor(ccc3(0,215,220));
-	left_ing_win->setPosition(ccp(left_back->getContentSize().width/2.f, 30));
+	left_ing_win->setPosition(ccp(left_back->getContentSize().width/2.f, 25));
 	left_back->addChild(left_ing_win);
 	
 //	int win_count = mySGD->endless_my_win.getV();
@@ -103,25 +119,54 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	
 	
 	CCSprite* right_back = CCSprite::create("endless_popup.png");
-	right_back->setPosition(ccp(132, 0));
+	right_back->setPosition(ccp(110, 0));
 	addChild(right_back);
 	
+	int character_number = mySGD->endless_character_no.getV();
+	int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+	int found_index = -1;
+	for(int i=0;found_index == -1 && i<character_count;i++)
+	{
+		if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+		{
+			found_index = i+1;
+		}
+	}
+	
+	if(found_index != -1)
+	{
+		CCNode* right_character_node = CCNode::create();
+		right_character_node->setScale(0.6f);
+		right_character_node->setPosition(ccp(right_back->getContentSize().width/2.f, 75));
+		right_back->addChild(right_character_node);
+		
+		auto right_character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+		CCSprite* right_character_img = right_character_ccb.first;
+		right_character_img->setPosition(ccp(0,0));
+		right_character_node->addChild(right_character_img);
+		
+//		right_character_ccb.second->runAnimationsForSequenceNamed("move_down");
+	}
+	
 	CCSprite* right_flag = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(mySGD->endless_flag.getV()).c_str());
-	right_flag->setScale(1.2f);
-	right_flag->setPosition(ccp(right_back->getContentSize().width/2.f, 88));
+	right_flag->setScale(0.7f);
+	right_flag->setPosition(ccp(right_back->getContentSize().width/2.f, 48));
 	right_back->addChild(right_flag);
 	
 	KSLabelTTF* right_nick = KSLabelTTF::create(mySGD->endless_nick.getV().c_str(), mySGD->getFont().c_str(), 13);
-	right_nick->setPosition(ccp(right_back->getContentSize().width/2.f, 55));
+	right_nick->setPosition(ccp(right_back->getContentSize().width/2.f, 47));
 	right_back->addChild(right_nick);
 
+	right_flag->setPositionX(right_flag->getPositionX() - right_nick->getContentSize().width/2.f - 2);
+	right_nick->setPositionX(right_nick->getPositionX() + right_flag->getContentSize().width/2.f*right_flag->getScale() + 2);
+	
 //	KSLabelTTF* right_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalLevel), mySGD->endless_level.getV())->getCString(), mySGD->getFont().c_str(), 12);
 //	right_level->setPosition(ccp(right_bottom_back->getContentSize().width/2.f, right_bottom_back->getContentSize().height-38));
 //	right_bottom_back->addChild(right_level);
 	
 	KSLabelTTF* right_ing_win = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rivalIngWin), mySGD->endless_victory.getV())->getCString(), mySGD->getFont().c_str(), 20);
 	right_ing_win->setColor(ccc3(0,215,220));
-	right_ing_win->setPosition(ccp(right_back->getContentSize().width/2.f, 30));
+	right_ing_win->setPosition(ccp(right_back->getContentSize().width/2.f, 25));
 	right_back->addChild(right_ing_win);
 	
 //	int right_win_count = mySGD->replay_playing_info.get(mySGD->getReplayKey(kReplayKey_win), Json::Value()).asInt();

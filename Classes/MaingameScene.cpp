@@ -4616,28 +4616,31 @@ void Maingame::refreshThumb()
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
 	}
 	
-	CCArray* change_array = myGIM->getCoinChildren();
-	if(change_array)
+	if(is_change_minimap_on)
 	{
-		while(change_thumbs->count() > change_array->count())
+		CCArray* change_array = myGIM->getCoinChildren();
+		if(change_array)
 		{
-			CCNode* change_position_img = (CCNode*)change_thumbs->lastObject();
-			change_thumbs->removeObject(change_position_img);
-			change_position_img->removeFromParent();
-		}
-		while(change_thumbs->count() < change_array->count())
-		{
-			CCSprite* change_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, 1.5f));
-//			change_position_img->setColor(ccBLUE);
-			addChild(change_position_img, clearshowtimeZorder);
-			change_thumbs->addObject(change_position_img);
-		}
-		
-		for(int i=0;i<change_array->count();i++)
-		{
-			CCNode* change_position_img = (CCNode*)change_thumbs->objectAtIndex(i);
-			CCNode* change_pointer = (CCNode*)change_array->objectAtIndex(i);
-			change_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(change_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+			while(change_thumbs->count() > change_array->count())
+			{
+				CCNode* change_position_img = (CCNode*)change_thumbs->lastObject();
+				change_thumbs->removeObject(change_position_img);
+				change_position_img->removeFromParent();
+			}
+			while(change_thumbs->count() < change_array->count())
+			{
+				CCSprite* change_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, 1.5f));
+				//			change_position_img->setColor(ccBLUE);
+				addChild(change_position_img, clearshowtimeZorder);
+				change_thumbs->addObject(change_position_img);
+			}
+			
+			for(int i=0;i<change_array->count();i++)
+			{
+				CCNode* change_position_img = (CCNode*)change_thumbs->objectAtIndex(i);
+				CCNode* change_pointer = (CCNode*)change_array->objectAtIndex(i);
+				change_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(change_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+			}
 		}
 	}
 	
