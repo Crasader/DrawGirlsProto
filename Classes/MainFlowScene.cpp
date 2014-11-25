@@ -3509,13 +3509,48 @@ void MainFlowScene::setBottom()
 	if(mySGD->getUserdataHighPiece() < mySGD->getEndlessMinPiece())
 	{
 		n_endless->setGray(true);
-		s_endless->setColor(ccc3(50, 50, 50));
+		s_endless->setDeepGray(true);
 	}
 	else
 	{
 		if(mySGD->getUserdataEndlessIngWeek() != mySGD->recent_week_no.getV())
 		{
 			n_endless->runAction(CCRepeatForever::create(CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL)));
+			
+			Json::Value t_json;
+			Json::Reader t_reader;
+			t_reader.parse(mySGD->getPvpLeadMent(), t_json);
+			
+			if(t_json.size() >= 1)
+			{
+				int rand_value = rand()%t_json.size();
+				
+				CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+				n_endless->addChild(n_win_back);
+				
+				KSLabelTTF* n_win_label = KSLabelTTF::create(t_json[rand_value].asString().c_str(), mySGD->getFont().c_str(), 9.5f);
+				n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+				n_win_back->addChild(n_win_label);
+				
+				//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+				n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+				n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+				if(n_win_label->getContentSize().width + 15 > 60)
+					n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
+				
+				CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+				s_endless->addChild(s_win_back);
+				
+				KSLabelTTF* s_win_label = KSLabelTTF::create(t_json[rand_value].asString().c_str(), mySGD->getFont().c_str(), 9.5f);
+				s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+				s_win_back->addChild(s_win_label);
+				
+				//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+				s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+				s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+				if(s_win_label->getContentSize().width + 15 > 60)
+					s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
+			}
 		}
 		else
 		{
@@ -3554,39 +3589,113 @@ void MainFlowScene::setBottom()
 					}
 					else
 					{
-						n_win_back->removeFromParent();
-						s_win_back->removeFromParent();
+						Json::Value t_json;
+						Json::Reader t_reader;
+						t_reader.parse(mySGD->getPvpLeadMent(), t_json);
+						
+						if(t_json.size() >= 1)
+						{
+							int rand_value = rand()%t_json.size();
+							
+							n_win_label->setString(t_json[rand_value].asString().c_str());
+							if(n_win_label->getContentSize().width + 15 > 60)
+								n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
+							s_win_label->setString(t_json[rand_value].asString().c_str());
+							if(s_win_label->getContentSize().width + 15 > 60)
+								s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
+						}
+						else
+						{
+							n_win_back->removeFromParent();
+							s_win_back->removeFromParent();
+						}
 						refresh_ing_win_func = nullptr;
 					}
 				};
 			}
 			else
 			{
+				Json::Value t_json;
+				Json::Reader t_reader;
+				t_reader.parse(mySGD->getPvpLeadMent(), t_json);
+				
+				bool is_created = false;
+				CCScale9Sprite* n_win_back;
+				KSLabelTTF* n_win_label;
+				CCScale9Sprite* s_win_back;
+				KSLabelTTF* s_win_label;
+				if(t_json.size() >= 1)
+				{
+					is_created = true;
+					int rand_value = rand()%t_json.size();
+					
+					n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+					n_endless->addChild(n_win_back);
+					
+					n_win_label = KSLabelTTF::create(t_json[rand_value].asString().c_str(), mySGD->getFont().c_str(), 9.5f);
+					n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+					n_win_back->addChild(n_win_label);
+					
+					//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+					n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+					n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+					if(n_win_label->getContentSize().width + 15 > 60)
+						n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
+					
+					s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+					s_endless->addChild(s_win_back);
+					
+					s_win_label = KSLabelTTF::create(t_json[rand_value].asString().c_str(), mySGD->getFont().c_str(), 9.5f);
+					s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+					s_win_back->addChild(s_win_label);
+					
+					//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+					s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+					s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+					if(s_win_label->getContentSize().width + 15 > 60)
+						s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
+				}
+				
 				refresh_ing_win_func = [=]()
 				{
 					if(mySGD->endless_my_victory.getV() > 0)
 					{
-						CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						n_endless->addChild(n_win_back);
-						
-						KSLabelTTF* n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
-						n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-						n_win_back->addChild(n_win_label);
-						
-//						n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-						n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
-						n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
-						
-						CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-						s_endless->addChild(s_win_back);
-						
-						KSLabelTTF* s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
-						s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-						s_win_back->addChild(s_win_label);
-						
-//						s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-						s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
-						s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+						if(is_created)
+						{
+							n_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
+							s_win_label->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString());
+							n_win_label->setScale(1.f);
+							s_win_label->setScale(1.f);
+						}
+						else
+						{
+							CCScale9Sprite* n_win_back;
+							KSLabelTTF* n_win_label;
+							CCScale9Sprite* s_win_back;
+							KSLabelTTF* s_win_label;
+							
+							n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+							n_endless->addChild(n_win_back);
+							
+							n_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+							n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+							n_win_back->addChild(n_win_label);
+							
+							//						n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+							n_win_back->setPosition(ccp(n_endless->getContentSize().width-30, n_endless->getContentSize().height-n_win_back->getContentSize().height+13));
+							n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+							
+							s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+							s_endless->addChild(s_win_back);
+							
+							s_win_label = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessIngWin), mySGD->endless_my_victory.getV())->getCString(), mySGD->getFont().c_str(), 9.5f);
+							s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+							s_win_back->addChild(s_win_label);
+							
+							//						s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+							s_win_back->setPosition(ccp(s_endless->getContentSize().width-30, s_endless->getContentSize().height-s_win_back->getContentSize().height+13));
+							s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+						}
 					}
 				};
 			}
@@ -3726,7 +3835,19 @@ void MainFlowScene::setBottom()
 			}
 		}
 	}
+	
+	string hell_lead_ment = "NEW";
+	Json::Value t_json;
+	Json::Reader t_reader;
+	t_reader.parse(mySGD->getHellLeadMent(), t_json);
+	
+	if(t_json.size() >= 1)
+	{
+		int rand_value = rand()%t_json.size();
 		
+		hell_lead_ment = t_json[rand_value].asString();
+	}
+	
 		CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
 		((GraySprite*)n_hell_img)->setGray(!is_hell_open);
 	if(is_donthave_hell_character)
@@ -3734,13 +3855,15 @@ void MainFlowScene::setBottom()
 		CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 		n_hell_img->addChild(n_win_back);
 		
-		KSLabelTTF* n_win_label = KSLabelTTF::create("NEW", mySGD->getFont().c_str(), 9.5f);
+		KSLabelTTF* n_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
 		n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		n_win_back->addChild(n_win_label);
 		
 		//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
 		n_win_back->setPosition(ccp(n_hell_img->getContentSize().width-30, n_hell_img->getContentSize().height-n_win_back->getContentSize().height+13));
 		n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+		if(n_win_label->getContentSize().width + 15 > 60)
+			n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
 		
 //		GraySprite* n_new = GraySprite::create("mainflow_new.png");
 //		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
@@ -3757,13 +3880,15 @@ void MainFlowScene::setBottom()
 		CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
 		s_hell_img->addChild(s_win_back);
 		
-		KSLabelTTF* s_win_label = KSLabelTTF::create("NEW", mySGD->getFont().c_str(), 9.5f);
+		KSLabelTTF* s_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
 		s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
 		s_win_back->addChild(s_win_label);
 		
 		//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
 		s_win_back->setPosition(ccp(s_hell_img->getContentSize().width-30, s_hell_img->getContentSize().height-s_win_back->getContentSize().height+13));
 		s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+		if(s_win_label->getContentSize().width + 15 > 60)
+			s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
 		
 //		GraySprite* s_new = GraySprite::create("mainflow_new.png");
 //		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));

@@ -428,6 +428,7 @@ void MissileUpgradePopup::resultLevelUp(Json::Value result_data)
 																else
 																	((PuzzleScene*)getParent()->getParent())->showShopPopup(kSC_gold);
 															}), 9999);
+		is_menu_enable = true;
 	}
 	loading_layer->removeFromParent();
 }

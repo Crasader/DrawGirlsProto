@@ -20,12 +20,17 @@ USING_NS_CC;
 #define MAX_SCALE_X	10.f
 #define ADD_SCALE_X	2.5f
 #define LZZ_INLINE inline
+class KSCumberBase;
 class MissileUnit : public CCSprite
 {
 public:
 	static MissileUnit * create (CCPoint t_sp, float t_angle, float t_distance, std::string imgFilename, CCSize t_cs, float t_da, float t_reduce_da,
 															 bool isSuper = false);
+	void setEnabled(bool e);
+	void setLineTouch(bool e);
 private:
+	bool lineTouch;
+	
 	bool isSuper;
 	float angle;
 	float distance;
@@ -33,6 +38,7 @@ private:
 	float da;
 	float reduce_da;
 	float is_checking;
+	bool enabled;
 	void startMove ();
 	void stopMove ();
 	void removeEffect ();
@@ -812,8 +818,46 @@ protected:
 	CCNode* m_laserContainer;
 	bool m_attacked;
 	bool m_enabled;
-	int m_thickness;	
+	int m_thickness;
 };
 
+class HideCloud : public CCNode
+{
+public:
+	static HideCloud * create (KSCumberBase* cumber, const Json::Value& param);
+	virtual ~HideCloud()
+	{
+		CCLOG("~HideCloud");
+	}
+private:
+	void myInit (KSCumberBase* cumber, const Json::Value& param);
+	void update(float dt);
+	CCSprite* m_cloudSprite;
+	int m_durations;
+	int m_currentFrames;
+	bool m_hided;
+	float m_speed;
+};
+
+class Jelly : public CCNode
+{
+public:
+	static Jelly * create (KSCumberBase* cumber, const Json::Value& param);
+	virtual ~Jelly();
+private:
+	void myInit (KSCumberBase* cumber, const Json::Value& param);
+	void update(float dt);
+	CCSprite* m_jellySprite;
+	int m_currentSeek;
+	int m_currentLife;
+	int m_step;
+	float m_currentSpeed;
+	bool m_enabled;
+	
+private:
+	int m_seekTime;
+	int m_lifeTime;
+	int m_decreaseSpeed;
+};
 #undef LZZ_INLINE
 #endif

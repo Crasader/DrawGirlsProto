@@ -1049,10 +1049,19 @@ void StartSettingPopup::setMain()
 		
 		repeat_character_action();
 		
-		CCSprite* level_case = CCSprite::create("startsetting_levelbox.png");
+		CCSprite* level_case = CCSprite::create("startsetting_levelbox2.png");
 		setFormSetter(level_case);
-		level_case->setPosition(ccp(left_back->getPositionX(),75));
+		level_case->setPosition(ccp(left_back->getPositionX(),92));
 		main_case->addChild(level_case);
+		
+		KSLabelTTF* character_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_character), mySGD->getFont().c_str(), 10);
+		character_label->setPosition(ccp(27, level_case->getContentSize().height/2.f - 1));
+		level_case->addChild(character_label);
+		
+		KSLabelTTF* missile_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_missile), mySGD->getFont().c_str(), 10);
+		missile_label->setPosition(ccp(27, level_case->getContentSize().height/2.f - 16));
+		level_case->addChild(missile_label);
+		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
 																t_history.characterLevel.getV());
@@ -1066,17 +1075,42 @@ void StartSettingPopup::setMain()
 		attachMissilePreview(ccp(left_back->getPositionX(), 158), missile_type_code, missile_level);
 		
 		
-		missile_data_level = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString(), mySGD->getFont().c_str(), 12);
-		setFormSetter(missile_data_level);
-		missile_data_level->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		missile_data_level->setPosition(ccp(left_back->getPositionX()-29,75));
-		main_case->addChild(missile_data_level);
+		character_level_label = KSLabelTTF::create(ccsf("Lv.%d", mySGD->getSelectedCharacterHistory().characterLevel.getV()), mySGD->getFont().c_str(), 12);
+//		character_level_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		character_level_label->setColor(ccc3(185, 230, 0));
+		character_level_label->setPosition(ccp(75,level_case->getContentSize().height/2.f - 1));
+		level_case->addChild(character_level_label);
 		
-		missile_data_power = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString(), mySGD->getFont().c_str(), 12);
-		setFormSetter(missile_data_power);
-		missile_data_power->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-		missile_data_power->setPosition(ccp(left_back->getPositionX()+29,75));
-		main_case->addChild(missile_data_power);
+		int base_power = mySGD->getUserdataMissileInfoPower();
+		double power_bonus = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, mySGD->getSelectedCharacterHistory().characterIndex.getV(), mySGD->getSelectedCharacterHistory().characterLevel.getV());
+		power_bonus -= 1.0;
+		if(power_bonus < 0.0)
+			power_bonus = 0.0;
+		
+		KSLabelTTF* damage_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_damage), mySGD->getFont().c_str(), 10);
+		damage_label->enableOuterStroke(ccBLACK, 1.f, 180, true);
+		damage_label->setPosition(ccp(77, level_case->getContentSize().height/2.f + 17));
+		level_case->addChild(damage_label);
+		
+		total_power_label = KSLabelTTF::create(KS::insert_separator(base_power + int(base_power*power_bonus)).c_str(), mySGD->getFont().c_str(), 14);
+		total_power_label->enableOuterStroke(ccBLACK, 1.f, 180, true);
+		total_power_label->setAnchorPoint(ccp(1,0.5f));
+		total_power_label->setPosition(ccp(level_case->getContentSize().width-7, level_case->getContentSize().height/2.f + 17));
+		level_case->addChild(total_power_label);
+		
+		character_power_label = KSLabelTTF::create(ccsf("(+%d)", int(base_power*power_bonus)), mySGD->getFont().c_str(), 10);
+		character_power_label->setPosition(ccp(115,level_case->getContentSize().height/2.f - 1));
+		level_case->addChild(character_power_label);
+		
+		missile_level_label = KSLabelTTF::create(ccsf("Lv.%d", mySGD->getUserdataCharLevel()), mySGD->getFont().c_str(), 12);
+//		missile_level_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		missile_level_label->setColor(ccc3(185, 230, 0));
+		missile_level_label->setPosition(ccp(75,level_case->getContentSize().height/2.f - 16));
+		level_case->addChild(missile_level_label);
+		
+		missile_power_label = KSLabelTTF::create(ccsf("(+%d)", base_power), mySGD->getFont().c_str(), 10);
+		missile_power_label->setPosition(ccp(115,level_case->getContentSize().height/2.f - 16));
+		level_case->addChild(missile_power_label);
 		
 		if(mySGD->getUserdataMissileInfoIsMaxLevel())
 		{
@@ -1720,6 +1754,21 @@ void StartSettingPopup::characterClose()
 	
 	repeat_character_action();
 	
+	int base_power = mySGD->getUserdataMissileInfoPower();
+	
+	character_level_label->setString(ccsf("Lv.%d", mySGD->getSelectedCharacterHistory().characterLevel.getV()));
+	missile_level_label->setString(ccsf("Lv.%d", mySGD->getUserdataCharLevel()));
+	
+	double power_bonus = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, mySGD->getSelectedCharacterHistory().characterIndex.getV(), mySGD->getSelectedCharacterHistory().characterLevel.getV());
+	power_bonus -= 1.0;
+	if(power_bonus < 0.0)
+		power_bonus = 0.0;
+	
+	character_power_label->setString(ccsf("(+%d)", int(base_power*power_bonus)));
+	missile_power_label->setString(ccsf("(+%d)", base_power));
+	
+	total_power_label->setString(KS::insert_separator(base_power + int(base_power*power_bonus)).c_str());
+	
 	// 원래 선택되어진 캐릭터 선택이 변경될 때.
 	CCPoint keep_position;
 	if(missile_img)
@@ -1892,8 +1941,20 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 		MissileUpgradePopup* t_popup = MissileUpgradePopup::create(touch_priority-100, [=](){popupClose();}, [=](){
 			int missile_level = mySGD->getUserdataCharLevel();
 			
-			missile_data_level->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_levelValue), missile_level)->getCString());
-			missile_data_power->setString(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_powerValue), KS::insert_separator(mySGD->getUserdataMissileInfoPower()).c_str())->getCString());
+			int base_power = mySGD->getUserdataMissileInfoPower();
+			
+			character_level_label->setString(ccsf("Lv.%d", mySGD->getSelectedCharacterHistory().characterLevel.getV()));
+			missile_level_label->setString(ccsf("Lv.%d", missile_level));
+			
+			double power_bonus = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, mySGD->getSelectedCharacterHistory().characterIndex.getV(), mySGD->getSelectedCharacterHistory().characterLevel.getV());
+			power_bonus -= 1.0;
+			if(power_bonus < 0.0)
+				power_bonus = 0.0;
+			
+			character_power_label->setString(ccsf("(+%d)", int(base_power*power_bonus)));
+			missile_power_label->setString(ccsf("(+%d)", base_power));
+			
+			total_power_label->setString(KS::insert_separator(base_power + int(base_power*power_bonus)).c_str());
 			
 			CCPoint keep_position;
 			if(missile_img)
@@ -3034,7 +3095,7 @@ void StartSettingPopup::callStart()
 		
 		if(mySGD->is_endless_mode)
 		{
-			if(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+//			if(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
 				is_startGame = true;
 		}
 		

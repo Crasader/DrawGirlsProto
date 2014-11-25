@@ -1086,9 +1086,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_communityNotOpenContent] = "준비입니다. 공식카페를 이용해 주세요.";
 	obj[LK::kMyLocalKey_joystickSize] = "조이스틱\n크기";
 	obj[LK::kMyLocalKey_useSideDirection] = "대각선\n사용";
-	obj[LK::kMyLocalKey_toDiary19] = "S다이어리";
-	obj[LK::kMyLocalKey_toDiary19Title] = "S 다이어리";
-	obj[LK::kMyLocalKey_toDiary19Content] = "<font size=12 newline=15>S 다이어리가 없네요.</font><font size=12 newline=15>더욱 화끈하고! 쎈! 그녀들이 기다립니다.</font><font size=12>해당앱으로 연결하시겠습니까?</font>";
+	obj[LK::kMyLocalKey_toDiary19] = "다이어리 연동";
+	obj[LK::kMyLocalKey_toDiary19Title] = "연동";
+	obj[LK::kMyLocalKey_toDiary19Content] = "<font size=12 newline=15>다이어리 앱에서</font><font size=12 newline=15>다음 코드를 입력해주세요.</font>";
 	obj[LK::kMyLocalKey_toDiary19Button] = "S 다이어리 다운 받기";
 	obj[LK::kMyLocalKey_joystickVib] = "조이스틱\n진동";
 	obj[LK::kMyLocalKey_joystickSizeQuestionTitle] = "조이스틱 크기조절";
@@ -1257,6 +1257,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_nextLevel] = "(다음레벨 %dLv)";
 	obj[LK::kMyLocalKey_characterExpUpValue] = "Exp +%d";
 	obj[LK::kMyLocalKey_notCleardHellMissionCondition] = "<font>%d초를 버티세요!";
+	
+	obj[LK::kMyLocalKey_missile] = "미사일";
+	obj[LK::kMyLocalKey_damage] = "데미지";
+	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	

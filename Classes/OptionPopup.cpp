@@ -1252,32 +1252,32 @@ bool OptionPopup::init()
 	
 	
 	
-//	CCSprite* n_diary_img = CCSprite::create("option_19.png");
-//	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
-//	n_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-//	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
-//	n_diary_img->addChild(n_diary_label);
-//	
-//	CCSprite* s_diary_img = CCSprite::create("option_19.png");
-//	s_diary_img->setColor(ccGRAY);
-//	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
-//	s_diary_label->setColor(ccGRAY);
-//	s_diary_label->disableOuterStroke();
-//	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
-//	s_diary_img->addChild(s_diary_label);
-//	
-//	CCSprite* d_diary_img = CCSprite::create("option_19.png");
-//	d_diary_img->setColor(ccGRAY);
-//	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
-//	d_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
-//	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
-//	d_diary_img->addChild(d_diary_label);
-//	
-//	
-//	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(OptionPopup::menuAction));
-//	diary_item->setTag(kOP_MT_toDiary19);
-//	diary_item->setPosition(ccp(191,16));//293
-//	tab_menu->addChild(diary_item);
+	CCSprite* n_diary_img = CCSprite::create("option_19.png");
+	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	n_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	n_diary_img->addChild(n_diary_label);
+	
+	CCSprite* s_diary_img = CCSprite::create("option_19.png");
+	s_diary_img->setColor(ccGRAY);
+	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	s_diary_label->setColor(ccGRAY);
+	s_diary_label->disableOuterStroke();
+	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	s_diary_img->addChild(s_diary_label);
+	
+	CCSprite* d_diary_img = CCSprite::create("option_19.png");
+	d_diary_img->setColor(ccGRAY);
+	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19), mySGD->getFont().c_str(), 12.5f);
+	d_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
+	d_diary_img->addChild(d_diary_label);
+	
+	
+	CCMenuItem* diary_item = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(OptionPopup::menuAction));
+	diary_item->setTag(kOP_MT_toDiary19);
+	diary_item->setPosition(ccp(191,16));//293
+	tab_menu->addChild(diary_item);
 
 	
 	//	CCSprite* n_noti = CCSprite::create("option_noti.png");
@@ -1450,40 +1450,40 @@ void OptionPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kOP_MT_toDiary19)
 	{
-		if(graphdog->isExistApp())
-		{
-			// 다이어리 앱 설치되어 있음
-			
-			LoadingLayer* t_loading = LoadingLayer::create(-9999);
-			addChild(t_loading, 9999);
-			t_loading->startLoading();
-			
-			Json::Value t_param;
-			t_param["memberID"] = myHSP->getMemberID();
-			
-			myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
-						   {
-							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-								{
-									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), -1); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
-								}
-							   else
-								{
-									CCLOG("failed makediarycode");
-								}
-							   
-							   t_loading->removeFromParent();
-							   is_menu_enable = true;
-						   });
-		}
-		else
-		{
+//		if(graphdog->isExistApp())
+//		{
+//			// 다이어리 앱 설치되어 있음
+//			
+//			LoadingLayer* t_loading = LoadingLayer::create(-9999);
+//			addChild(t_loading, 9999);
+//			t_loading->startLoading();
+//			
+//			Json::Value t_param;
+//			t_param["memberID"] = myHSP->getMemberID();
+//			
+//			myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
+//						   {
+//							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//								{
+//									graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), -1); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+//								}
+//							   else
+//								{
+//									CCLOG("failed makediarycode");
+//								}
+//							   
+//							   t_loading->removeFromParent();
+//							   is_menu_enable = true;
+//						   });
+//		}
+//		else
+//		{
 			Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
 														 {
 															 is_menu_enable = true;
 														 });
 			addChild(t_popup, 999);
-		}
+//		}
 	}
 	else if(tag == kOP_MT_logout)
 	{

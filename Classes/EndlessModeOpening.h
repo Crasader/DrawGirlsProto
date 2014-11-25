@@ -156,6 +156,9 @@ private:
 	CCNode* animation_node2;
 	void setMain();
 	
+	vector<CommandParam> transaction_list;
+	
+	void failTransaction();
 	void resultGetEndlessPlayData(Json::Value result_data);
 	void saveStageInfo(Json::Value result_data);
 	

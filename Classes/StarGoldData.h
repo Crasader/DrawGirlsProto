@@ -1297,6 +1297,8 @@ private:
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
+	COMMON_VAR_STR(pvpLeadMent, PvpLeadMent);
+	COMMON_VAR_STR(hellLeadMent, HellLeadMent);
 };
 
 #endif

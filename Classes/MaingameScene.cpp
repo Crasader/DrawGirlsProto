@@ -101,6 +101,7 @@ bool Maingame::init()
     }
 	
 	mySGD->is_hell_mode = mySD->getSilType() > 100000;
+	is_change_minimap_on = false;
 	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	
@@ -729,6 +730,8 @@ void Maingame::finalSetting()
 	CCSequence* thumb_seq = CCSequence::createWithTwoActions(thumb_delay, thumb_call);
 	CCRepeatForever* thumb_repeat = CCRepeatForever::create(thumb_seq);
 	thumb_texture->runAction(thumb_repeat);
+	
+	change_thumbs = new CCArray(1);
 	
 	boss_thumbs = new CCArray(1);
 	
@@ -4611,6 +4614,31 @@ void Maingame::refreshThumb()
 		CCNode* sub_position_img = (CCNode*)sub_thumbs->objectAtIndex(i);
 		CCNode* sub_pointer = (CCNode*)sub_array[i];
 		sub_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(sub_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+	}
+	
+	CCArray* change_array = myGIM->getCoinChildren();
+	if(change_array)
+	{
+		while(change_thumbs->count() > change_array->count())
+		{
+			CCNode* change_position_img = (CCNode*)change_thumbs->lastObject();
+			change_thumbs->removeObject(change_position_img);
+			change_position_img->removeFromParent();
+		}
+		while(change_thumbs->count() < change_array->count())
+		{
+			CCSprite* change_position_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 1.5f, 1.5f));
+//			change_position_img->setColor(ccBLUE);
+			addChild(change_position_img, clearshowtimeZorder);
+			change_thumbs->addObject(change_position_img);
+		}
+		
+		for(int i=0;i<change_array->count();i++)
+		{
+			CCNode* change_position_img = (CCNode*)change_thumbs->objectAtIndex(i);
+			CCNode* change_pointer = (CCNode*)change_array->objectAtIndex(i);
+			change_position_img->setPosition(ccpAdd(thumb_base_position, ccpMult(change_pointer->getPosition(), thumb_texture->getScale())));//thumb_scale)));
+		}
 	}
 	
 //	end = std::chrono::system_clock::now();

@@ -611,7 +611,7 @@ void CumberParent::myInit()
 	
 	//myMP = MissileParent::create(mainCumber->getBossEye());
 	myMP = MissileParent::create(nullptr);
-	addChild(myMP);
+	addChild(myMP, 1);
 	
 	myMFP = MapFragmentParent::create();
 	addChild(myMFP);
