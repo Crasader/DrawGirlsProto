@@ -374,6 +374,7 @@ enum StoneType
 	kStoneType_global = 6,
 	kStoneType_protector,
 	kStoneType_slow,
+	kStoneType_tornado,
 };
 
 enum class Curtain
