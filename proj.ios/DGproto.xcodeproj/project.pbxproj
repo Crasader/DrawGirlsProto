@@ -1419,6 +1419,20 @@
 		D7A8A3F319DD0B6000158A61 /* sconscript in Resources */ = {isa = PBXBuildFile; fileRef = D70B55B71814BE8E001FC90A /* sconscript */; };
 		D7AF2BF51A24513E00F557A3 /* cryptozlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF41A24513E00F557A3 /* cryptozlib.cpp */; };
 		D7AF2BF61A24513E00F557A3 /* cryptozlib.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF41A24513E00F557A3 /* cryptozlib.cpp */; };
+		D7AF2BFF1A24536500F557A3 /* TCGSecene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF81A24536500F557A3 /* TCGSecene.cpp */; };
+		D7AF2C001A24536500F557A3 /* TCGSecene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF81A24536500F557A3 /* TCGSecene.cpp */; };
+		D7AF2C011A24536500F557A3 /* SpecialMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF91A24536500F557A3 /* SpecialMissileUnit.cpp */; };
+		D7AF2C021A24536500F557A3 /* SpecialMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BF91A24536500F557A3 /* SpecialMissileUnit.cpp */; };
+		D7AF2C031A24536500F557A3 /* SpecialAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFA1A24536500F557A3 /* SpecialAttackPattern.cpp */; };
+		D7AF2C041A24536500F557A3 /* SpecialAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFA1A24536500F557A3 /* SpecialAttackPattern.cpp */; };
+		D7AF2C051A24536500F557A3 /* NormalMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFB1A24536500F557A3 /* NormalMissileUnit.cpp */; };
+		D7AF2C061A24536500F557A3 /* NormalMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFB1A24536500F557A3 /* NormalMissileUnit.cpp */; };
+		D7AF2C071A24536500F557A3 /* NormalAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFC1A24536500F557A3 /* NormalAttackPattern.cpp */; };
+		D7AF2C081A24536500F557A3 /* NormalAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFC1A24536500F557A3 /* NormalAttackPattern.cpp */; };
+		D7AF2C091A24536500F557A3 /* CrashMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */; };
+		D7AF2C0A1A24536500F557A3 /* CrashMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */; };
+		D7AF2C0B1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */; };
+		D7AF2C0C1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */; };
 		D7AF3849189239EA00A3AD05 /* JackMissileShow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */; };
 		D7AF384A189239EA00A3AD05 /* PuzzleListShadow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */; };
 		D7B2BE8D1914F14E00010C7F /* TodayMissionPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */; };
@@ -2934,6 +2948,14 @@
 		D7A8A3FB19DD0B6000158A61 /* 땅따먹기 섬란카구라.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "땅따먹기 섬란카구라.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7AF2BF31A24513E00F557A3 /* cryptozlib.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = cryptozlib.h; sourceTree = "<group>"; };
 		D7AF2BF41A24513E00F557A3 /* cryptozlib.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = cryptozlib.cpp; sourceTree = "<group>"; };
+		D7AF2BF71A24536500F557A3 /* TCGSecene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TCGSecene.h; sourceTree = "<group>"; };
+		D7AF2BF81A24536500F557A3 /* TCGSecene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = TCGSecene.cpp; sourceTree = "<group>"; };
+		D7AF2BF91A24536500F557A3 /* SpecialMissileUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialMissileUnit.cpp; sourceTree = "<group>"; };
+		D7AF2BFA1A24536500F557A3 /* SpecialAttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpecialAttackPattern.cpp; sourceTree = "<group>"; };
+		D7AF2BFB1A24536500F557A3 /* NormalMissileUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NormalMissileUnit.cpp; sourceTree = "<group>"; };
+		D7AF2BFC1A24536500F557A3 /* NormalAttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NormalAttackPattern.cpp; sourceTree = "<group>"; };
+		D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashMissileUnit.cpp; sourceTree = "<group>"; };
+		D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashAttackPattern.cpp; sourceTree = "<group>"; };
 		D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JackMissileShow.cpp; sourceTree = "<group>"; };
 		D7AF3846189239EA00A3AD05 /* JackMissileShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JackMissileShow.h; sourceTree = "<group>"; };
 		D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PuzzleListShadow.cpp; sourceTree = "<group>"; };
@@ -3720,6 +3742,14 @@
 		D70B551A1814BE8D001FC90A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D7AF2BF71A24536500F557A3 /* TCGSecene.h */,
+				D7AF2BF81A24536500F557A3 /* TCGSecene.cpp */,
+				D7AF2BF91A24536500F557A3 /* SpecialMissileUnit.cpp */,
+				D7AF2BFA1A24536500F557A3 /* SpecialAttackPattern.cpp */,
+				D7AF2BFB1A24536500F557A3 /* NormalMissileUnit.cpp */,
+				D7AF2BFC1A24536500F557A3 /* NormalAttackPattern.cpp */,
+				D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */,
+				D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */,
 				D7ED5BA71A0729F500CE6713 /* GachaRefreshCheckPopup.h */,
 				D7ED5BA81A0729F500CE6713 /* GachaRefreshCheckPopup.cpp */,
 				D7ED5BA91A0729F500CE6713 /* GachaData.h */,
@@ -6093,6 +6123,7 @@
 				D7A8A15819DD0B6000158A61 /* seed.cpp in Sources */,
 				D7A8A15919DD0B6000158A61 /* NewMainFlowScene.cpp in Sources */,
 				D7A8A15A19DD0B6000158A61 /* xtr.cpp in Sources */,
+				D7AF2C081A24536500F557A3 /* NormalAttackPattern.cpp in Sources */,
 				D7A8A15B19DD0B6000158A61 /* pssr.cpp in Sources */,
 				D7A8A15C19DD0B6000158A61 /* chipmunk.c in Sources */,
 				D7AF2BF61A24513E00F557A3 /* cryptozlib.cpp in Sources */,
@@ -6337,6 +6368,7 @@
 				D7A8A24419DD0B6000158A61 /* b2WheelJoint.cpp in Sources */,
 				D7A8A24519DD0B6000158A61 /* pubkey.cpp in Sources */,
 				D7A8A24619DD0B6000158A61 /* CCDataReaderHelper.cpp in Sources */,
+				D7AF2C001A24536500F557A3 /* TCGSecene.cpp in Sources */,
 				D7B3A2ED19EBC61B00DC8938 /* AsyncImage.cpp in Sources */,
 				D7A8A24719DD0B6000158A61 /* CCDisplayFactory.cpp in Sources */,
 				D7A8A24819DD0B6000158A61 /* CCControlSlider.cpp in Sources */,
@@ -6414,6 +6446,7 @@
 				D7A8A28F19DD0B6000158A61 /* ScrollViewReader.cpp in Sources */,
 				D7A8A29019DD0B6000158A61 /* CCMenuItemImageLoader.cpp in Sources */,
 				D7A8A29119DD0B6000158A61 /* fipsalgt.cpp in Sources */,
+				D7AF2C021A24536500F557A3 /* SpecialMissileUnit.cpp in Sources */,
 				D7A8A29219DD0B6000158A61 /* CurtainNodeForBonusGame.cpp in Sources */,
 				D7A8A29319DD0B6000158A61 /* elgamal.cpp in Sources */,
 				D7A8A29419DD0B6000158A61 /* ConvexGraph.cpp in Sources */,
@@ -6430,6 +6463,7 @@
 				D7A8A2A019DD0B6000158A61 /* CCComAudio.cpp in Sources */,
 				D7A8A2A119DD0B6000158A61 /* AnimationState.cpp in Sources */,
 				D7A8A2A219DD0B6000158A61 /* BackKeyBase.cpp in Sources */,
+				D7AF2C041A24536500F557A3 /* SpecialAttackPattern.cpp in Sources */,
 				D7A8A2A319DD0B6000158A61 /* Lua_web_socket.cpp in Sources */,
 				D7A8A2A419DD0B6000158A61 /* AlertEngine.cpp in Sources */,
 				D7A8A2A519DD0B6000158A61 /* hrtimer.cpp in Sources */,
@@ -6478,6 +6512,7 @@
 				D7A8A2CF19DD0B6000158A61 /* DownloadFile.cpp in Sources */,
 				D7A8A2D019DD0B6000158A61 /* ShockWave.cpp in Sources */,
 				D7A8A2D119DD0B6000158A61 /* authenc.cpp in Sources */,
+				D7AF2C0C1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */,
 				D7A8A2D219DD0B6000158A61 /* Roulette.cpp in Sources */,
 				D7A8A2D319DD0B6000158A61 /* CCComAttribute.cpp in Sources */,
 				D7A8A2D419DD0B6000158A61 /* rw.cpp in Sources */,
@@ -6554,6 +6589,7 @@
 				D7A8A31A19DD0B6000158A61 /* json_reader.cpp in Sources */,
 				D7A8A31B19DD0B6000158A61 /* CCBAnimationManager.cpp in Sources */,
 				D7A8A31C19DD0B6000158A61 /* json_value.cpp in Sources */,
+				D7AF2C061A24536500F557A3 /* NormalMissileUnit.cpp in Sources */,
 				D7A8A31D19DD0B6000158A61 /* json_writer.cpp in Sources */,
 				D7A8A31E19DD0B6000158A61 /* CCDatas.cpp in Sources */,
 				D7A8A31F19DD0B6000158A61 /* StartSettingPopup.cpp in Sources */,
@@ -6669,6 +6705,7 @@
 				D7A8A38D19DD0B6000158A61 /* WithdrawPopup.cpp in Sources */,
 				D7A8A38E19DD0B6000158A61 /* PopCake.cpp in Sources */,
 				D7A8A38F19DD0B6000158A61 /* ZoomScriptScene.cpp in Sources */,
+				D7AF2C0A1A24536500F557A3 /* CrashMissileUnit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -6753,6 +6790,7 @@
 				D76973C918EBFFB900E3FD55 /* seed.cpp in Sources */,
 				D7B8D9C318A7A2150004D680 /* NewMainFlowScene.cpp in Sources */,
 				D76973E218EBFFB900E3FD55 /* xtr.cpp in Sources */,
+				D7AF2C071A24536500F557A3 /* NormalAttackPattern.cpp in Sources */,
 				D76973B718EBFFB900E3FD55 /* pssr.cpp in Sources */,
 				15C154891683116B00D239F2 /* chipmunk.c in Sources */,
 				D7AF2BF51A24513E00F557A3 /* cryptozlib.cpp in Sources */,
@@ -6997,6 +7035,7 @@
 				15C1554A1683118600D239F2 /* b2WheelJoint.cpp in Sources */,
 				D76973B818EBFFB900E3FD55 /* pubkey.cpp in Sources */,
 				D79EF63919D80CF700979D79 /* CCDataReaderHelper.cpp in Sources */,
+				D7AF2BFF1A24536500F557A3 /* TCGSecene.cpp in Sources */,
 				D7B3A2EC19EBC61B00DC8938 /* AsyncImage.cpp in Sources */,
 				D79EF63319D80CF700979D79 /* CCDisplayFactory.cpp in Sources */,
 				D79EF67419D80CF700979D79 /* CCControlSlider.cpp in Sources */,
@@ -7074,6 +7113,7 @@
 				D79EF66519D80CF700979D79 /* ScrollViewReader.cpp in Sources */,
 				D79EF61719D80CF700979D79 /* CCMenuItemImageLoader.cpp in Sources */,
 				D769739418EBFFB900E3FD55 /* fipsalgt.cpp in Sources */,
+				D7AF2C011A24536500F557A3 /* SpecialMissileUnit.cpp in Sources */,
 				D7BE738419515369009BFE67 /* CurtainNodeForBonusGame.cpp in Sources */,
 				D769738D18EBFFB900E3FD55 /* elgamal.cpp in Sources */,
 				B2C5369B19949A9300516F99 /* ConvexGraph.cpp in Sources */,
@@ -7090,6 +7130,7 @@
 				D79EF63F19D80CF700979D79 /* CCComAudio.cpp in Sources */,
 				D79EF6AC19D80CF700979D79 /* AnimationState.cpp in Sources */,
 				D76F5AB019C835EB00CB5DAB /* BackKeyBase.cpp in Sources */,
+				D7AF2C031A24536500F557A3 /* SpecialAttackPattern.cpp in Sources */,
 				1A9CE91F1765A2C2000E3062 /* Lua_web_socket.cpp in Sources */,
 				D70B563F1814BE8E001FC90A /* AlertEngine.cpp in Sources */,
 				D769739F18EBFFB900E3FD55 /* hrtimer.cpp in Sources */,
@@ -7138,6 +7179,7 @@
 				B2ED1051183CFA880030A857 /* ShockWave.cpp in Sources */,
 				D769737018EBFFB900E3FD55 /* authenc.cpp in Sources */,
 				B2CDB68A185EDA8F0034A99C /* Roulette.cpp in Sources */,
+				D7AF2C0B1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */,
 				D79EF63E19D80CF700979D79 /* CCComAttribute.cpp in Sources */,
 				D76973C518EBFFB900E3FD55 /* rw.cpp in Sources */,
 				D70B56641814BE8E001FC90A /* EventPopup.cpp in Sources */,
@@ -7214,6 +7256,7 @@
 				D79EF60819D80CF700979D79 /* CCBAnimationManager.cpp in Sources */,
 				D70B56801814BE8E001FC90A /* json_value.cpp in Sources */,
 				D70B56821814BE8E001FC90A /* json_writer.cpp in Sources */,
+				D7AF2C051A24536500F557A3 /* NormalMissileUnit.cpp in Sources */,
 				D79EF63019D80CF700979D79 /* CCDatas.cpp in Sources */,
 				D799535118FF9D3F008489B1 /* StartSettingPopup.cpp in Sources */,
 				D70B56851814BE8E001FC90A /* KSCumberBase.cpp in Sources */,
@@ -7329,6 +7372,7 @@
 				D70B56BA1814BE8E001FC90A /* WithdrawPopup.cpp in Sources */,
 				D790DF4018E50D260047ABFF /* PopCake.cpp in Sources */,
 				D70B56BC1814BE8E001FC90A /* ZoomScriptScene.cpp in Sources */,
+				D7AF2C091A24536500F557A3 /* CrashMissileUnit.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
