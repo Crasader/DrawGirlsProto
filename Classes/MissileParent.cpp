@@ -643,7 +643,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 //				creator();
 //			}));
 //		}
-	}
+//	}
 
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
