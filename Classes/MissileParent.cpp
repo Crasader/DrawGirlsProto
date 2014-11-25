@@ -455,7 +455,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	{
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 
-		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 60 * 3 + 60 * grade,
+		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 10 * 60 + 20 * level,
 																					power / 3.f, missile_sub_damage / 3.f, ao);
 		addChild(ra);
 	}
