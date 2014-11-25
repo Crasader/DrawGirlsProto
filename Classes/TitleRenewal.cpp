@@ -1324,6 +1324,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setGachaCharExp(result_data["gachaCharExp"].asInt());
 		mySGD->setGachaRefreshGem(result_data["gachaRefreshGem"].asInt());
 		mySGD->setAddTimeItemLimit(result_data["addTimeItemLimit"].asInt());
+		mySGD->setStageClearExp(result_data["stageClearExp"].asInt());
 	}
 	else
 	{

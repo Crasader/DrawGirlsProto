@@ -73,6 +73,7 @@ private:
 	unsigned int numberOfCellsInTableView(CCTableView *table);
 	
 	void detailAction(CCObject* sender);
+	void notHaveAction(CCObject* sender);
 	void characterChangeAction(CCObject* sender);
 	void resultUpdateCharacterHistory(Json::Value result_data);
 	void gachaClose();

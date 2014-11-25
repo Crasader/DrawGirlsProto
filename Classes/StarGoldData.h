@@ -1293,6 +1293,7 @@ private:
 	COMMON_VAR(int, gachaCharExp, GachaCharExp);
 	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
 	COMMON_VAR(int, addTimeItemLimit, AddTimeItemLimit);
+	COMMON_VAR(int, stageClearExp, StageClearExp);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);

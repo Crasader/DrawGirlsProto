@@ -100,6 +100,8 @@ bool Maingame::init()
         return false;
     }
 	
+	mySGD->is_hell_mode = mySD->getSilType() > 100000;
+	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	
 	myCP = NULL;

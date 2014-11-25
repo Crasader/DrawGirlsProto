@@ -351,6 +351,8 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		CCLOG("resultGetRank : \n%s", GraphDogLib::JsonObjectToString(result_data).c_str());
+		
 		//cell_action_list.clear();
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		

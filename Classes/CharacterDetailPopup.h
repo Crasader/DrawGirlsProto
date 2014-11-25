@@ -20,12 +20,13 @@ class TouchSuctionLayer;
 class CharacterDetailPopup : public CCLayer
 {
 public:
-	static CharacterDetailPopup* create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func);
+	static CharacterDetailPopup* create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have = true);
 	
 private:
 	int touch_priority;
 	function<void()> end_func;
 	function<void()> select_func;
+	bool is_have;
 	
 	bool is_menu_enable;
 	
@@ -39,7 +40,7 @@ private:
 	CCControlButton* select_button;
 	
 	void selectAction(CCObject* sender, CCControlEvent t_event);
-	void myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func);
+	void myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have);
 };
 
 #endif /* defined(__DGproto__CharacterDetailPopup__) */

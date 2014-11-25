@@ -20,15 +20,15 @@
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
 
-CharacterDetailPopup* CharacterDetailPopup::create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func)
+CharacterDetailPopup* CharacterDetailPopup::create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have)
 {
 	CharacterDetailPopup* t_mup = new CharacterDetailPopup();
-	t_mup->myInit(t_touch_priority, t_cha_idx, t_end_func, t_select_func);
+	t_mup->myInit(t_touch_priority, t_cha_idx, t_end_func, t_select_func, t_is_have);
 	t_mup->autorelease();
 	return t_mup;
 }
 
-void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func)
+void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have)
 {
 	is_menu_enable = false;
 	
@@ -36,6 +36,7 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	end_func = t_end_func;
 	select_func = t_select_func;
 	cha_idx = t_cha_idx;
+	is_have = t_is_have;
 	
 	CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
 	float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -67,7 +68,13 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,6));
 	back_case->addChild(back_in);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_name_s, cha_idx).c_str(), mySGD->getFont().c_str(), 12);
+	string character_name = "";
+	if(is_have)
+		character_name = NSDS_GS(kSDS_GI_characterInfo_int1_name_s, cha_idx);
+	else
+		character_name = "???";
+	
+	KSLabelTTF* title_label = KSLabelTTF::create(character_name.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
 	title_label->setAnchorPoint(ccp(0.5f,0.5f));
 	title_label->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(-85, back_case->getContentSize().height/2.f-35));
@@ -102,9 +109,16 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	light_back->setPosition(ccp(0,0));
 	character_node->addChild(light_back);
 	
-	CCSprite* character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, cha_idx) + ".ccbi").first;
+	auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, cha_idx) + ".ccbi");
+	CCSprite* character_img = character_ccb.first;
 	character_img->setPosition(ccp(0,0));
 	character_node->addChild(character_img);
+	
+	if(!is_have)
+	{
+		character_ccb.second->stopAllActions();
+		KS::setColor(character_img, ccBLACK);
+	}
 	
 	int character_no = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, cha_idx);
 	int history_size = mySGD->getCharacterHistorySize();
@@ -120,7 +134,11 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 		}
 	}
 	
-	int cha_level = cha_history.characterLevel.getV();
+	int cha_level;
+	if(is_have)
+		cha_level = cha_history.characterLevel.getV();
+	else
+		cha_level = 1;
 	
 	KSLabelTTF* level_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_levelValue), cha_level), mySGD->getFont().c_str(), 11);
 	level_label->setAnchorPoint(ccp(1,0.5f));
@@ -134,20 +152,32 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	exp_graph->setCover("cha_graph_front.png", "cha_graph_center.png");
 	exp_graph->setBack("cha_graph_back.png");
 	
-	int sub_base_value = cha_history.characterNextLevelExp.getV() - cha_history.characterCurrentLevelExp.getV();
-	int sub_value = cha_history.characterExp.getV() - cha_history.characterCurrentLevelExp.getV();
-	float t_percent = 100.f*sub_value/sub_base_value;
-	if(cha_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, cha_idx))
+	if(is_have)
 	{
-		t_percent = 100.f;
+		int sub_base_value = cha_history.characterNextLevelExp.getV() - cha_history.characterCurrentLevelExp.getV();
+		int sub_value = cha_history.characterExp.getV() - cha_history.characterCurrentLevelExp.getV();
+		float t_percent = 100.f*sub_value/sub_base_value;
+		if(cha_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, cha_idx))
+		{
+			t_percent = 100.f;
+		}
+		
+		exp_graph->setPercentage(t_percent);
+		
+		KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_percent/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
+		exp_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		exp_label->setPosition(ccp(70,52));
+		back_in->addChild(exp_label);
 	}
-	
-	exp_graph->setPercentage(t_percent);
-	
-	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_percent/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
-	exp_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-	exp_label->setPosition(ccp(70,52));
-	back_in->addChild(exp_label);
+	else
+	{
+		exp_graph->setPercentage(0);
+		
+		KSLabelTTF* exp_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_expN_M), 0/*KS::insert_separator(cha_history.characterExp.getV()).c_str(), KS::insert_separator(cha_history.characterNextLevelExp.getV()).c_str()*/), mySGD->getFont().c_str(), 11);
+		exp_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		exp_label->setPosition(ccp(70,52));
+		back_in->addChild(exp_label);
+	}
 	
 	
 	CCSprite* base_back = CCSprite::create("cha_box.png");
@@ -284,7 +314,7 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	special_back->addChild(special_scroll);
 	special_scroll->setTouchPriority(touch_priority);
 	
-	if(mySGD->getUserdataSelectedCharNO() != character_no)
+	if(mySGD->getUserdataSelectedCharNO() != character_no && is_have)
 	{
 		CCLabelTTF* t_label = CCLabelTTF::create();
 		KSLabelTTF* select_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_equip), mySGD->getFont().c_str(), 12);

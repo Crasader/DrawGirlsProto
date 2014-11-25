@@ -60,6 +60,8 @@ bool StartSettingPopup::init()
 	
 	//	mySGD->selectFriendCard();
 	
+	mySGD->is_hell_mode = mySD->getSilType() > 100000;
+	
 	item_title_label = NULL;
 	option_label = NULL;
 	//	card_img = NULL;
@@ -131,12 +133,15 @@ bool StartSettingPopup::init()
 	t_suction->setTouchEnabled(true);
 	addChild(t_suction);
 	
-	PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
-	if(!t_history.is_open.getV())
-	{
-		t_history.is_open = true;
-		mySGD->setPieceHistory(t_history, nullptr);
-	}
+//	if(!mySGD->is_hell_mode && !mySGD->is_endless_mode)
+//	{
+		PieceHistory t_history = mySGD->getPieceHistory(mySD->getSilType());
+		if(!t_history.is_open.getV())
+		{
+			t_history.is_open = true;
+			mySGD->setPieceHistory(t_history, nullptr);
+		}
+//	}
 	
 	return true;
 }
