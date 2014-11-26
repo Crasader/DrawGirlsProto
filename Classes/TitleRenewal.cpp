@@ -65,6 +65,8 @@ bool TitleRenewalScene::init()
 	}
 	
 	mySGD->ui_scene_code = kUISceneCode_empty;
+	mySGD->is_endless_mode = false;
+	mySGD->is_hell_mode = false;
 	
 	TRACE();
 	is_preloaded_effect = false;
