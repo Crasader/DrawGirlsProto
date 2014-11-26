@@ -396,7 +396,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			img_menu->setPosition(ccp(0,-15));
 			eventPack_node->addChild(img_menu);
 			
-			img_menu->setTouchPriority(touch_priority-4);
+			img_menu->setTouchPriority(touch_priority-3);
 		}
 		else if(is_useable_eventPack) // 이벤트팩이 존재하고 해당 이벤트팩의 시간이 맞는 경우
 		{
@@ -415,7 +415,7 @@ void ShopPopup::setShopCode(ShopCode t_code)
 			img_menu->setPosition(ccp(0,-15));
 			eventPack_node->addChild(img_menu);
 			
-			img_menu->setTouchPriority(touch_priority-4);
+			img_menu->setTouchPriority(touch_priority-3);
 		}
 	}
 	else if(recent_shop_code != kSC_card)

@@ -27,6 +27,8 @@
 #include "LabelTTFMarquee.h"
 #include "CCMenuLambda.h"
 #include "TypingBox.h"
+#include "PuzzleScene.h"
+#include "HeartTime.h"
 
 enum EndlessModeOpeningZorder
 {
@@ -382,24 +384,92 @@ void EndlessModeOpening::setMain()
 								  is_menu_enable = false;
 								  
 								  if(kind_tutorial_pvp != nullptr)
-									{
-										CCLog("before kind_tutorial_pvp()");
-										kind_tutorial_pvp();
-										CCLog("after_kind_tutorial_pvp()");
-									}
+								  {
+									  CCLog("before kind_tutorial_pvp()");
+									  kind_tutorial_pvp();
+									  CCLog("after_kind_tutorial_pvp()");
+								  }
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
 								  ready_loading = LoadingLayer::create(-99999);
 								  addChild(ready_loading, 99999);
 								  
+								  transaction_list.clear();
+								  
+								  Json::Value transaction_param;
+								  transaction_param["memberID"] = myHSP->getSocialID();
+								  transaction_list.push_back(CommandParam("starttransaction", transaction_param, [=](Json::Value result_data)
+																		  {
+//																			  CCLog("ready result : \n%s", GraphDogLib::JsonObjectToString(result_data).c_str());
+																			  if(result_data["result"]["code"].asInt() != GDSUCCESS)
+																			{
+																				ready_loading->removeFromParent();
+																				ready_loading = NULL;
+																				
+																				is_menu_enable = true;
+																				
+																				Json::Value getheart_result = result_data["list"]["001"];
+																				if(getheart_result.get("isMinus", false).asBool())
+																				{
+																					mySGD->heartRefreshSuccess(getheart_result);
+																					((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+																					
+																					addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-500, kGoodsType_money, [=]()
+																																		{
+																																			ShopPopup* t_shop = ShopPopup::create();
+																																			t_shop->setHideFinalAction(this, callfunc_selector(EndlessModeOpening::failTransaction));
+																																			t_shop->targetHeartTime(((MainFlowScene*)getParent())->heart_time);
+																																			t_shop->setShopCode(kSC_heart);
+																																			t_shop->setShopBeforeCode(kShopBeforeCode_puzzle);
+																																			addChild(t_shop, kEndlessModeOpeningZorder_content+9);
+																																		}, [=]()
+																																		{
+																																			if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																																			{
+																																				CCLog("before tutorial_fail_func()");
+																																				tutorial_fail_func();
+																																				CCLog("after tutorial_fail_func()");
+																																			}
+																																		}), 9999);
+																				}
+																				else
+																				{
+																					addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+																			  
+																				  if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+																				  {
+																					  CCLog("before tutorial_fail_func()");
+																					  tutorial_fail_func();
+																					  CCLog("after tutorial_fail_func()");
+																				  }
+																				}
+																			}
+																		  }));
+								  
+									Json::Value heart_param;
+									heart_param["memberID"] = myHSP->getMemberID();
+									if(!(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1))
+										heart_param["use"] = true;
+									transaction_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
+																		  {
+																			  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																			  {
+																				  mySGD->heartRefreshSuccess(result_data);
+																				  ((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+																			  }
+																		  }));
+								  
 								  Json::Value param;
 								  param["memberID"] = myHSP->getMemberID();
 								  //																	  param["no"] = 34;
 								  param["autoLevel"] = mySGD->getUserdataAutoLevel();
-//								  param["highPiece"] = mySGD->getUserdataHighPiece();
+								  //								  param["highPiece"] = mySGD->getUserdataHighPiece();
 								  param["win"] = mySGD->getUserdataEndlessIngWin();
-								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
+								  
+								  transaction_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeOpening::resultGetEndlessPlayData)));
+								  myHSP->command(transaction_list);
+//								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 							  });
 	
 	CommonAnimation::openPopup(this, main_case, gray, [=](){
@@ -845,6 +915,16 @@ void EndlessModeOpening::setMain()
 	});
 }
 
+void EndlessModeOpening::failTransaction()
+{
+	if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
+	{
+		CCLog("before tutorial_fail_func()");
+		tutorial_fail_func();
+		CCLog("after tutorial_fail_func()");
+	}
+}
+
 void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 {
 	GraphDogLib::JsonToLog("getendlessplaydata : %s", result_data);
@@ -879,20 +959,6 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 		mySGD->replay_playing_info[mySGD->getReplayKey(kReplayKey_stageNo)] = result_data["stageInfo"]["realNo"].asInt();
 		
 		saveStageInfo(result_data["stageInfo"]);
-	}
-	else
-	{
-		ready_loading->removeFromParent();
-		ready_loading = NULL;
-		
-		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
-		
-		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)
-		{
-			CCLog("before tutorial_fail_func()");
-			tutorial_fail_func();
-			CCLog("after tutorial_fail_func()");
-		}
 	}
 }
 
@@ -1567,7 +1633,6 @@ public:
 		}
 		if(B)
 		{
-			
 			B->setPosition(ccp(36.5,32.5)); 			// dt (9.5,-6.0)
 		}
 		if(C)
@@ -1589,7 +1654,6 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-			
 		RewardTableDelegator* rtd = new RewardTableDelegator();
 		rtd->init();
 		rtd->autorelease();
@@ -1630,6 +1694,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			t_rank.flag = t_list[i]["flag"].asString();
 			t_rank.victory = t_list[i]["victory"].asInt();
 			t_rank.regDate = t_list[i]["regDate"].asInt64();
+			t_rank.data = t_list[i].get("data", "").asString();
 			
 			rank_list.push_back(t_rank);
 		}
@@ -1925,14 +1990,52 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 		list_cell_case->addChild(rank_label);
 	}
 	
+	Json::Reader reader;
+	Json::Value read_data;
+	reader.parse(rank_list[idx].data.getV(), read_data);
+	
+	if(my_rank != idx+1)
+	{
+		int character_number = read_data.get("character", 1).asInt();
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		int found_index = -1;
+		for(int i=0;found_index == -1 && i<character_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+			{
+				found_index = i+1;
+			}
+		}
+		
+		if(found_index != -1)
+		{
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.8f);
+			character_node->setPosition(ccp(50, 6));
+			list_cell_case->addChild(character_node);
+			
+			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+			CCSprite* character_img = character_ccb.first;
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			character_ccb.second->runAnimationsForSequenceNamed("move_down");
+		}
+	}
+	
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-//	if(idx >= 3)
-//		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
-//	else
+	if(my_rank == idx+1)
+	{
 		selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
-	selectedFlagSpr->setScale(0.8);
+		selectedFlagSpr->setScale(0.8);
+	}
+	else
+	{
+		selectedFlagSpr->setPosition(ccp(50,7));
+		selectedFlagSpr->setScale(0.5);
+	}
 	list_cell_case->addChild(selectedFlagSpr);
 	
 //	CCLabelTTF* t_nick_size = CCLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);

@@ -9,12 +9,16 @@
 #include "Diary19Popup.h"
 #include "TouchSuctionLayer.h"
 #include "DataStorageHub.h"
-#include "MyLocalization.h"
+//#include "MyLocalization.h"
+#include "KsLocal.h"
 #include "KSLabelTTF.h"
 #include "StyledLabelTTF.h"
 #include "StarGoldData.h"
 #include "CommonButton.h"
 #include "CommonAnimation.h"
+#include "LoadingLayer.h"
+#include "hspConnector.h"
+#include "ASPopupView.h"
 
 Diary19Popup* Diary19Popup::create(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame)
 {
@@ -62,9 +66,9 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	back_case->setPosition(ccp(0,0));
 	m_container->addChild(back_case);
 	
-	CCScale9Sprite* back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(251,68));
-	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,9));
+	back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
+	back_in->setContentSize(CCSizeMake(251,104));
+	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,-10));
 	back_case->addChild(back_in);
 	
 	string title_str, content_str;
@@ -99,24 +103,33 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	
 	StyledLabelTTF* content_label = StyledLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	content_label->setAnchorPoint(ccp(0.5f,0.5f));
-	content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f));
+	content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f) + ccp(0,15));
 	back_in->addChild(content_label);
 	
 	
-	CCLabelTTF* r_label = CCLabelTTF::create();
-	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Button), mySGD->getFont().c_str(), 13);
-	rightnow_label->disableOuterStroke();
-	r_label->addChild(rightnow_label);
+	t_loading = LoadingLayer::create(touch_priority-100);
+	addChild(t_loading, 999);
+	t_loading->startLoading();
 	
-	CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
+	Json::Value mdc_param;
+	mdc_param["memberID"] = myHSP->getSocialID();
 	
-	CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
-	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
-	rightnow_button->setPreferredSize(CCSizeMake(155,44));
-	rightnow_button->setPosition(ccp(0,-50));
-	m_container->addChild(rightnow_button);
+	myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
 	
-	rightnow_button->setTouchPriority(touch_priority);
+//	CCLabelTTF* r_label = CCLabelTTF::create();
+//	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Button), mySGD->getFont().c_str(), 13);
+//	rightnow_label->disableOuterStroke();
+//	r_label->addChild(rightnow_label);
+//	
+//	CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
+//	
+//	CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
+//	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
+//	rightnow_button->setPreferredSize(CCSizeMake(155,44));
+//	rightnow_button->setPosition(ccp(0,-50));
+//	m_container->addChild(rightnow_button);
+//	
+//	rightnow_button->setTouchPriority(touch_priority);
 	
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
@@ -125,19 +138,64 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	});
 }
 
-void Diary19Popup::buttonAction(CCObject* sender, CCControlEvent t_event)
+void Diary19Popup::resultMakeDiaryCode(Json::Value result_data)
 {
-	if(!is_menu_enable)
-		return;
+//	CCLog("resultMakeDiaryCode : %s", GraphDogLib::JsonObjectToString(result_data).c_str());
 	
-	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
-	
-	myHSP->openUrl(mySGD->getDiaryDownUrl().c_str());
-	
-	CommonAnimation::closePopup(this, m_container, gray, [=](){
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		mySGD->network_check_cnt = 0;
 		
-	}, [=](){
-		end_func();
-		removeFromParent();
-	});
+		t_loading->removeFromParent();
+		KSLabelTTF* code_label = KSLabelTTF::create(result_data["diaryCode"].asString().c_str(), mySGD->getFont().c_str(), 18);
+		code_label->setColor(ccc3(255, 170, 20));
+		code_label->enableOuterStroke(ccBLACK, 1.f, 180, true);
+		code_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f) + ccp(0,-20));
+		back_in->addChild(code_label);
+	}
+	else
+	{
+		mySGD->network_check_cnt++;
+		
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+				Json::Value mdc_param;
+				mdc_param["memberID"] = myHSP->getSocialID();
+				
+				myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
+			}, 1);
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 Json::Value mdc_param;
+										 mdc_param["memberID"] = myHSP->getSocialID();
+										 
+										 myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
+									 }));
+		}
+	}
 }
+
+//void Diary19Popup::buttonAction(CCObject* sender, CCControlEvent t_event)
+//{
+//	if(!is_menu_enable)
+//		return;
+//	
+//	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+//	
+//	myHSP->openUrl(mySGD->getDiaryDownUrl().c_str());
+//	
+//	CommonAnimation::closePopup(this, m_container, gray, [=](){
+//		
+//	}, [=](){
+//		end_func();
+//		removeFromParent();
+//	});
+//}

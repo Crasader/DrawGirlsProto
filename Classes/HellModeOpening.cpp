@@ -364,7 +364,7 @@ void HellModeOpening::resultGetRank(Json::Value result_data)
 		int alluser = result_data["alluser"].asInt();
 		int myrank = result_data["myrank"].asInt();
 		
-		float rank_percent = alluser == 0 ? 1.f : 1.f * myrank/alluser;
+		float rank_percent = (alluser == 0 ? 1.f : 1.f * myrank/alluser);
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");//"puzzle_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,1));

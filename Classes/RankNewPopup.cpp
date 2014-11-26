@@ -22,6 +22,7 @@
 #include "TypingBox.h"
 #include "CCMenuLambda.h"
 #include "StoryLayer.h"
+#include "StageImgLoader.h"
 
 void RankNewPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -577,6 +578,18 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
+//			CCNode* character_node = CCNode::create();
+//			character_node->setScale(0.8f);
+//			character_node->setPosition(ccp(238, 2));
+//			list_cell_case->addChild(character_node);
+//			
+//			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, mySGD->getSelectedCharacterHistory().characterIndex.getV()) + ".ccbi");
+//			CCSprite* character_img = character_ccb.first;
+//			character_img->setPosition(ccp(0,0));
+//			character_node->addChild(character_img);
+//			
+//			character_ccb.second->runAnimationsForSequenceNamed("move_down");
+			
 			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",rank_data["myscore"].asInt())->getCString()).c_str(), mySGD->getFont().c_str(), 12);
 			score_label->setColor(ccc3(39, 6, 132));
 			score_label->setAnchorPoint(ccp(1,0.5f));
@@ -597,7 +610,6 @@ void RankNewPopup::resultGetRank(Json::Value result_data)
 					setFormSetter(list_cell_case);
 				});
 			}
-			
 			
 			for(int i=0;i<cell_action_list.size();i++)
 				cell_action_list[i]();
@@ -741,14 +753,49 @@ CCTableViewCell* RankNewPopup::rankTableCellAtIndex(CCTableView *table, unsigned
 	Json::Reader reader;
 	Json::Value read_data;
 	reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
+	
+	if(myrank != i+1)
+	{
+		int character_number = read_data.get("character", 1).asInt();
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		int found_index = -1;
+		for(int i=0;found_index == -1 && i<character_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+			{
+				found_index = i+1;
+			}
+		}
+		
+		if(found_index != -1)
+		{
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.8f);
+			character_node->setPosition(ccp(50, 6));
+			list_cell_case->addChild(character_node);
+			
+			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+			CCSprite* character_img = character_ccb.first;
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			character_ccb.second->runAnimationsForSequenceNamed("move_down");
+		}
+	}
+	
 	string flag = user_list[i].get("flag", "kr").asString().c_str();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-//	if(i >= 3)
-//		selectedFlagSpr->setPosition(ccp(45.75f, 19 - 2.f-5));
-//	else
+	if(myrank == i+1)
+	{
 		selectedFlagSpr->setPosition(ccp(50, 16));
-	selectedFlagSpr->setScale(0.8f);
+		selectedFlagSpr->setScale(0.8f);
+	}
+	else
+	{
+		selectedFlagSpr->setPosition(ccp(50, 7));
+		selectedFlagSpr->setScale(0.5f);
+	}
 	list_cell_case->addChild(selectedFlagSpr);
 	setFormSetter(selectedFlagSpr);
 	

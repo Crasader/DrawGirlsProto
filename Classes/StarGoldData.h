@@ -898,6 +898,7 @@ public:
 	KSProtectVar<long long> endless_regDate;
 	KSProtectVar<int> endless_lose;
 	KSProtectVar<int> endless_win;
+	KSProtectVar<int> endless_character_no;
 	
 	void setReplayPlayingInfo(Json::Value t_data)
 	{
@@ -1293,9 +1294,13 @@ private:
 	COMMON_VAR(int, gachaCharExp, GachaCharExp);
 	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
 	COMMON_VAR(int, addTimeItemLimit, AddTimeItemLimit);
+	COMMON_VAR(int, stageClearExp, StageClearExp);
+	COMMON_VAR(int, isDiaryLinkOn, IsDiaryLinkOn);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
+	COMMON_VAR_STR(pvpLeadMent, PvpLeadMent);
+	COMMON_VAR_STR(hellLeadMent, HellLeadMent);
 };
 
 #endif

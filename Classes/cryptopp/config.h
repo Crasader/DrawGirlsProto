@@ -1,11 +1,6 @@
 #ifndef CRYPTOPP_CONFIG_H
 #define CRYPTOPP_CONFIG_H
 
-// For TARGET_OS_IPHONE and TARGET_IPHONE_SIMULATOR
-#if defined(__APPLE__)
-# include "TargetConditionals.h"
-#endif
-
 // ***************** Important Settings ********************
 
 // define this if running on a big-endian CPU
@@ -27,11 +22,6 @@
 // Currently the only feature used is random number generation.
 // This macro will be ignored if NO_OS_DEPENDENCE is defined.
 #define USE_MS_CRYPTOAPI
-
-// Define this to 1 to enforce the requirement in FIPS 186-2 Change Notice 1 that only 1024 bit moduli be used
-#ifndef DSA_1024_BIT_MODULUS_ONLY
-#	define DSA_1024_BIT_MODULUS_ONLY 1
-#endif
 
 // ***************** Less Important Settings ***************
 
@@ -256,14 +246,6 @@ NAMESPACE_END
 #define CRYPTOPP_UNCAUGHT_EXCEPTION_AVAILABLE
 #endif
 
-// For cross-compiles, just ignore host settings that bleed through for Xcode/iOS
-// We will accidentally catch some device builds that use x86 on Android.
-#if defined(__ANDROID__) || defined(TARGET_OS_IPHONE) || defined(TARGET_IPHONE_SIMULATOR)
-# define CRYPTOPP_DISABLE_ASM 1
-# define CRYPTOPP_DISABLE_SSE2 1
-# define CRYPTOPP_DISABLE_SSE3 1
-#endif
-
 #ifdef CRYPTOPP_DISABLE_X86ASM		// for backwards compatibility: this macro had both meanings
 #define CRYPTOPP_DISABLE_ASM
 #define CRYPTOPP_DISABLE_SSE2
@@ -314,11 +296,6 @@ NAMESPACE_END
 	#define CRYPTOPP_BOOL_ALIGN16_ENABLED 0
 #endif
 
-#if defined(__APPLE__)
-# undef CRYPTOPP_BOOL_ALIGN16_ENABLED
-# define CRYPTOPP_BOOL_ALIGN16_ENABLED 0
-#endif
-
 // how to allocate 16-byte aligned memory (for SSE2)
 #if defined(CRYPTOPP_MSVC6PP_OR_LATER)
 	#define CRYPTOPP_MM_MALLOC_AVAILABLE
@@ -366,7 +343,7 @@ NAMESPACE_END
 	#define CRYPTOPP_ALLOW_UNALIGNED_DATA_ACCESS
 #endif
 
-#define CRYPTOPP_VERSION 561
+#define CRYPTOPP_VERSION 562
 
 // ***************** determine availability of OS features ********************
 
@@ -477,7 +454,4 @@ NAMESPACE_END
 #define CRYPTOPP_STATIC_TEMPLATE_CLASS CRYPTOPP_EXTERN_STATIC_TEMPLATE_CLASS
 #endif
 
-
-#define CRYPTOPP_DISABLE_ASM 1
-#define CRYPTOPP_DISABLE_SSE2 1
 #endif

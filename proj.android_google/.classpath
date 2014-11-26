@@ -4,7 +4,9 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry kind="lib" path="/GooglePlayLib/libs/google-play-services_5.0.jar" sourcepath="/GooglePlayLib/libs/google-play-services_5.0.jar"/>
-	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="src" path="common_src"/>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="lib" path="libs/acra-4.5.0.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

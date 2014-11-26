@@ -46,7 +46,7 @@ public:
 		obj->autorelease();
 		return obj;
 	}
-	bool init(KSCumberBase* target, int durationFrame, int power, int subPower)
+	bool __attribute__ ((noinline)) init(KSCumberBase* target, int durationFrame, int power, int subPower)
 	{
 		m_durationFrame = durationFrame;
 		m_power = power;
@@ -1439,7 +1439,7 @@ public:
 		// 몬스터가 맞는 조건
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		if(distance <= 12 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
+		if(distance <= 10 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			
@@ -1670,11 +1670,13 @@ public:
 		m_initRad = rad;
 		scheduleUpdate();
 
+		m_updateFrameCount = 0;
 
 		return true;
 	}
 	void update(float dt)
 	{
+		m_updateFrameCount++;
 		bool isEnable = true;
 		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
 		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
@@ -1697,32 +1699,35 @@ public:
 		KSCumberBase* minDistanceCumber = nullptr;
 		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 		bool found = false;
-		for(auto iter : myGD->getMainCumberVector())
+		if(m_updateFrameCount >= 5)
 		{
-			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-			if(distance < 10)
-			{
-				minDistance = distance;
-				minDistanceCumber = iter;
-				found = true;
-				break;
-			}
-		}	
-		if(found == false)
-		{
-			for(auto iter : myGD->getSubCumberVector())
+			for(auto iter : myGD->getMainCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(iter->getDeadState() == false && distance < 10)
+				if(distance < 10)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
 					found = true;
 					break;
 				}
-			}	
+			}
+			if(found == false)
+			{
+				for(auto iter : myGD->getSubCumberVector())
+				{
+					CCPoint targetPosition = iter->getPosition();
+					float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
+					if(iter->getDeadState() == false && distance < 10)
+					{
+						minDistance = distance;
+						minDistanceCumber = iter;
+						found = true;
+						break;
+					}
+				}	
+			}
 		}
 
 		// 몬스터가 맞는 조건
@@ -1761,6 +1766,7 @@ public:
 	
 	
 protected:
+	int m_updateFrameCount;
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
@@ -2054,297 +2060,13 @@ class SpiritAttack : public StoneAttack
 {
 public:
 	static SpiritAttack* create(CCPoint initPosition, CCPoint goalPosition, const string& fileName, float tickCount, int power, int subPower,
-															float speed, int coolFrame, AttackOption ao)
-	{
-		SpiritAttack* ma = new SpiritAttack();
-		ma->init(initPosition, goalPosition, fileName, tickCount, power, subPower, speed, coolFrame, ao);
-		ma->autorelease();
-		return ma;
-	}	
+															float speed, int coolFrame, AttackOption ao) ;
 
-	bool init(CCPoint initPosition, CCPoint goalPosition, const string& fileName, int tickCount, int power, int subPower, float speed, int coolFrame, AttackOption ao)
-	{
-		StoneAttack::init();
-		m_fileName = fileName;
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		m_initPosition = initPosition ;
-		m_goalPosition = goalPosition ;
-		m_tickCount = tickCount* mInfo.get("tickbonus", 1.f).asFloat();
-		m_initTickCount = tickCount* mInfo.get("tickbonus", 1.f).asFloat();
-		m_power = power;
-		m_subPower = subPower;
-		m_speed = speed;	
-		m_initCoolFrame = coolFrame * mInfo.get("intervalbonus", 1.f).asFloat();
-		m_coolFrame = 0;
-		m_mine = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
-//		m_mine->setScale(1.f/myGD->game_scale);
-//		m_mine->setPosition(initPosition);
-		m_mine->setScale(1.f/myGD->game_scale);
-		m_particle = NULL;
-		m_streak = NULL;
-		m_option = ao;
-		m_limitAttackCount = 3; // 3대 까지 때림
-		m_currentAttackCount = 0;
-		addChild(m_mine);
-		addChild(KSGradualValue<CCPoint>::create(initPosition, goalPosition, 1.f,
-																				 [=](CCPoint t){
-																					 m_mine->setPosition(t);
-																					 if(m_particle)
-																					 {
-																						 m_particle->setPosition(t);
-																					 }
-																					 if(m_streak)
-																					 {
-																						 m_streak->setPosition(t);
-																					 }
-																					 CCPoint diff = goalPosition - initPosition;
-																					 float rad = atan2f(diff.y, diff.x);
-																					 m_mine->setRotation(-rad2Deg(rad) - 90);
-																				 },
-																		[=](CCPoint t){
-																			m_mine->setPosition(t);
-																			if(m_particle)
-																			{
-																				m_particle->setPosition(t);
-																			}
-																			if(m_streak)
-																			{
-																				m_streak->setPosition(t);
-																			}
-
-																			CCPoint diff = goalPosition - initPosition;
-																			float rad = atan2f(diff.y, diff.x);
-																			m_mine->setRotation(-rad2Deg(rad) - 90);
-																			scheduleUpdate();
-																		}));			
-		return true;
-	}
-	void update(float dt)
-	{
-		// 여기서 몬스터와 부딪힌거 검사하면서 터짐.
-		
-		bool isEnable = true;
-		bool emptyMonster = false;
-		bool invalidRange = false;
-		if(
-			 myGD->getIsGameover() ||
-			 emptyMonster ||
-			 invalidRange
-			 )
-		{
-			isEnable = false;
-		}
-		
-		if(!isEnable)
-		{
-			removeFromParentAndCleanup(true);
-			return;
-		}
-		
-		m_tickCount -= 1.f/60.f;
-		m_coolFrame = MAX(m_coolFrame - 1, 0);
-		if(m_tickCount <= 0)
-		{
-			removeFromParent();
-		}
-
-
-		int surroundCnt = 0;
-		IntPoint setPoint = ccp2ip(m_mine->getPosition());
-		//if(setPoint.isInnerMap() && myGD->mapState[setPoint.x][setPoint.y] != mapEmpty)	
-			//surroundCnt = 4;
-
-		IntPoint checkPoint = IntPoint(setPoint.x-1, setPoint.y);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x+1, setPoint.y);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x, setPoint.y-1);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x, setPoint.y+1);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		if(surroundCnt >= 4) // 갇힘.
-		{
-			CCNode* parentNode = getParent();
-			removeFromParent();
-			IntPoint mapPoint;
-			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5.f);
-			if(found && !myGD->getIsGameover())
-			{
-				SpiritAttack* ma = SpiritAttack::create(m_mine->getPosition(), ip2ccp(mapPoint), m_fileName,
-																								m_initTickCount, m_power, m_subPower, m_speed, m_coolFrame, m_option);
-				ma->beautifier(m_level);
-				parentNode->addChild(ma);
-			}
-
-			return;
-		}
-
-
-
-		if(m_coolFrame == 0)
-		{
-			m_coolFrame = m_initCoolFrame;
-			float minDistance = std::numeric_limits<float>::max();
-			KSCumberBase* minDistanceCumber = nullptr;
-			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
-			bool found = false;
-			for(auto iter : myGD->getMainCumberVector())
-			{
-				CCPoint targetPosition = iter->getPosition();
-				float distance = ccpLength(targetPosition - m_mine->getPosition());
-				if(distance < 25)
-				{
-					minDistance = distance;
-					minDistanceCumber = iter;
-					found = true;
-					break;
-				}
-			}	
-			if(found == false)
-			{
-				for(auto iter : myGD->getSubCumberVector())
-				{
-					CCPoint targetPosition = iter->getPosition();
-					float distance = ccpLength(targetPosition - m_mine->getPosition());
-					if(distance < 25)
-					{
-						minDistance = distance;
-						minDistanceCumber = iter;
-						found = true;
-						break;
-					}
-				}	
-			}
-
-
-			if(found && !myGD->getIsGameover())
-			{
-				CCPoint effectPosition = m_mine->getPosition();
-				effectPosition.x += rand()%21 - 10;
-				effectPosition.y += rand()%21 - 10;
-
-				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
-				m_currentAttackCount++;
-				if(m_currentAttackCount == m_limitAttackCount)
-				{
-					m_tickCount = 0.f;
-					
-				}
-
-				//removeFromParentAndCleanup(true);
-			}
-		}	
-
-		{ // 움직임.
-
-			CCPoint afterPosition;
-			IntPoint afterPoint;
-			int changeDirection = ProbSelector::sel(0.05, 1.0 - 0.05, 0.0);
-			if(changeDirection == 1)
-			{
-				m_directionRad += ks19937::getFloatValue(deg2Rad(-4), deg2Rad(+4));
-			}
-
-
-			int sela = ProbSelector::sel(0.005, 1.0 - 0.005, 0.0);
-			if(sela == 0)
-			{
-				m_directionRad += ks19937::getFloatValue(deg2Rad(90), deg2Rad(270));
-			}
-
-
-			bool validPosition = false;
-			int cnt = 0;
-			bool onceOutlineAndMapCollision = false;
-			bool pathFound = true; // 일단 찾았다고 셋 해놓고 특수한 경우에 false 시킴.
-
-
-			while(!validPosition)
-			{
-				cnt++;
-				float speedX = m_speed * cos(m_directionRad); // * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
-				float speedY = m_speed * sin(m_directionRad); //  * (1 + cnt / 30.f * (3.f / (0.5f * MAX(0.1f, m_speed)) - 1));
-				CCPoint spiritPosition = m_mine->getPosition();
-
-				afterPosition = spiritPosition + ccp(speedX, speedY);
-				afterPoint = ccp2ip(afterPosition);
-
-				IntPoint checkPosition;
-				int collisionCode = 0;
-				if(afterPoint.isInnerMap() == false || myGD->mapState[afterPoint.x][afterPoint.y] == mapType::mapOldget ||
-					 myGD->mapState[afterPoint.x][afterPoint.y] == mapType::mapOldline ||
-					 myGD->mapState[afterPoint.x][afterPoint.y] == mapType::mapOutline)
-				{
-					collisionCode = 1;
-				}
-				else if(myGD->mapState[afterPoint.x][afterPoint.y] == mapType::mapNewline)
-				{
-					collisionCode = 2;
-				}
-				else if(myGD->mapState[afterPoint.x][afterPoint.y] == mapType::mapEmpty)
-				{
-					collisionCode = 3;
-				}
-				
-				
-				if(collisionCode == 1)
-				{
-					onceOutlineAndMapCollision = true;
-					m_directionRad += ks19937::getFloatValue(deg2Rad(90), deg2Rad(270));
-
-					if(m_directionRad < 0)                        m_directionRad += deg2Rad(360);
-					else if(m_directionRad > deg2Rad(360))        m_directionRad -= deg2Rad(360);
-				}
-				else if(collisionCode == 2)
-				{
-					m_directionRad += ks19937::getFloatValue(deg2Rad(90), deg2Rad(270));
-					if(m_directionRad < 0)                        m_directionRad += deg2Rad(360);
-					else if(m_directionRad > deg2Rad(360))        m_directionRad -= deg2Rad(360);
-				}
-				else if(collisionCode == 3)
-				{
-					validPosition = true;
-				}
-				else
-				{
-					CCLOG("what!?");
-					validPosition = true;
-				}
-
-
-				if(cnt >= 30)
-				{
-					pathFound = false;
-					validPosition = true;
-				}
-			}
-			if(pathFound)
-			{
-				m_mine->setPosition(afterPosition);
-				if(m_particle)
-				{
-					m_particle->setPosition(afterPosition);
-				}
-				if(m_streak)
-				{
-					m_streak->setPosition(afterPosition);
-				}
-
-				m_mine->setRotation(-rad2Deg(m_directionRad) - 90);
-			}
+	bool init(CCPoint initPosition, CCPoint goalPosition, const string& fileName, int tickCount, int power, int subPower, float speed, int coolFrame, AttackOption ao);
+	void update(float dt);
 	
-		}
-	}
-	
-	void beautifier(int level)
-	{
-		m_level = level;
-		makeBeautifier(level, m_streak, m_particle);
-		if(m_streak)addChild(m_streak, -1);
-		if(m_particle)addChild(m_particle, -2);
-	}
+	void beautifier(int level);
+
 	
 	
 protected:
@@ -2399,45 +2121,50 @@ public:
 	bool init(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
-
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-	
-		m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
-		m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
-		m_power = power;
-		m_subPower = subPower;
-		m_currentRad = 0;
-		m_initPosition = initPosition;
-		m_particle = nullptr;
-		m_streak = nullptr;
-		m_radVelocityBonus = mInfo.get("radvelocitybonus", 1.f).asFloat();
-//		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
-//		m_jiggleInterval = 0;
-		m_option = ao;
-		for(float r = 15; r<=m_radius; r+=15)
-		{
-			Missile m;
-			m.radius = r;
-			m.missileSprite = CCSprite::create(fileName.c_str());
-			m.particle = nullptr;
-			m.streak = nullptr;
-			makeBeautifier(25, m.streak,m.particle);
-			addChild(m.missileSprite);
-			if(m.particle)addChild(m.particle,-1);
-			if(m.streak)addChild(m.streak,-2);
-			m.missileSprite->setScale(1 / myGD->game_scale);
-			m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
-			m_sprites.push_back(m);
-		}
-//		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
-//		spr->setPosition(initPosition);
-//		spr->setScale(radius / 100.f);
-//		spr->setOpacity(100);
-//		addChild(spr);
-//		m_rangeSprite = spr;
-		scheduleUpdate();
-		return true;	
+//myGD->getJackPoint()
+		addChild(KSTimer::create(1.f, [=](){
+			m_initPosition = myGD->getJackPointCCP();
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			
+			m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
+			m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
+			m_power = power;
+			m_subPower = subPower;
+			m_currentRad = 0;
+//			m_initPosition = initPosition;
+			m_particle = nullptr;
+			m_streak = nullptr;
+			m_radVelocityBonus = mInfo.get("radvelocitybonus", 1.f).asFloat();
+			//		m_initJiggleInterval = jiggleInterval * mInfo.get("intervalbonus", 1.f).asFloat();
+			//		m_jiggleInterval = 0;
+			m_option = ao;
+			for(float r = 15; r<=m_radius; r+=15)
+			{
+				Missile m;
+				m.radius = r;
+				m.missileSprite = CCSprite::create(fileName.c_str());
+				m.particle = nullptr;
+				m.streak = nullptr;
+				makeBeautifier(25, m.streak,m.particle);
+				addChild(m.missileSprite);
+				if(m.particle)addChild(m.particle,-1);
+				if(m.streak)addChild(m.streak,-2);
+				m.missileSprite->setScale(1 / myGD->game_scale);
+				m.missileSprite->setPosition(m_initPosition + ccp(r * cosf(m_currentRad), r * sinf(m_currentRad)));
+				m_sprites.push_back(m);
+			}
+			//		CCSprite* spr = KS::loadCCBI<CCSprite*>(this, "me_scope.ccbi").first;
+			//		spr->setPosition(initPosition);
+			//		spr->setScale(radius / 100.f);
+			//		spr->setOpacity(100);
+			//		addChild(spr);
+			//		m_rangeSprite = spr;
+			scheduleUpdate();
+			
+			
+		}));
+		return true;
 	}
 	void update(float dt)
 	{
@@ -3432,20 +3159,20 @@ public:
 		
 		return object;
 	}
-	static SlowAttack* createForShowWindow(const string& fileName, bool selfRotation, int grade, int level)
-	{
-		SlowAttack* object = new SlowAttack();
-		object->initForShowWindow(fileName, selfRotation, grade, level);
-		object->autorelease();
-		return object;
-	}
-	static SlowAttack* createForShowStartSettingPopup(CCNode* start_node, const string& filename, bool selfRotation, int grade, int level)
-	{
-		SlowAttack* object = new SlowAttack();
-		object->initForShowStartSettingPopup(start_node, filename, selfRotation, grade, level);
-		object->autorelease();
-		return object;
-	}
+//	static SlowAttack* createForShowWindow(const string& fileName, bool selfRotation, int grade, int level)
+//	{
+//		SlowAttack* object = new SlowAttack();
+//		object->initForShowWindow(fileName, selfRotation, grade, level);
+//		object->autorelease();
+//		return object;
+//	}
+//	static SlowAttack* createForShowStartSettingPopup(CCNode* start_node, const string& filename, bool selfRotation, int grade, int level)
+//	{
+//		SlowAttack* object = new SlowAttack();
+//		object->initForShowStartSettingPopup(start_node, filename, selfRotation, grade, level);
+//		object->autorelease();
+//		return object;
+//	}
 	
 	bool init(CCNode* targetNode, CCPoint initPosition, const string& fileName, float initSpeed, float initRad, int power, int subPower,
 						AttackOption ao)
@@ -3799,3 +3526,130 @@ protected:
 	int m_subPower;
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
 };
+
+class Tornado : public StoneAttack
+{
+public:
+	static Tornado* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+												 int dotNumber, float angleVelocity, int frameInterval, int power, int subPower,
+														AttackOption ao, float t_length = 100.f)
+	{
+		Tornado* object = new Tornado();
+		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, frameInterval, power, subPower, ao, t_length);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	
+	
+	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+						int dotNumber, float angleVelocity, int frameInterval, int power, int subPower,
+						AttackOption ao, float t_length)
+	{
+		StoneAttack::init();
+//		m_missileStep = 1;
+		m_fileName = fileName;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		m_initRadius = radius;
+		m_initRad = initRad;
+		m_initSpeed = initSpeed;
+		m_dotNumber = dotNumber;
+		m_angleVelocity = angleVelocity;
+		if(cosf(m_initRad) < 0)
+			m_angleVelocity *= -1;
+		m_frameInterval = frameInterval;
+		m_power = power;
+		m_subPower = subPower;
+//		m_currentCenter = initPosition;
+		m_elipticA = 1.8f;
+		m_elipticB = 1.0f;
+		
+		
+		m_currentRad = 0.f;
+		m_currentFrame = 0;
+		
+		m_ao = ao;
+		
+		m_length = t_length;
+		m_initPosition = initPosition;
+		
+//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+		
+		scheduleUpdate();
+
+		
+//		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+//		m_option = ao;
+//		m_power = power;
+//		m_subPower = subPower;
+//		m_targetNode = targetNode;
+//		m_initRad = initRad;
+		
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
+	
+	float m_length;
+	CCPoint m_initPosition;
+	
+	float m_initRadius, m_initRad, m_initSpeed, m_angleVelocity;
+	int m_dotNumber, m_frameInterval;
+	float m_currentRad;
+	int m_currentFrame;
+	std::string m_fileName;
+	float m_elipticA;
+	float m_elipticB;
+	
+	CCPoint m_currentCenter;
+	
+	AttackOption m_ao;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	int m_subPower;
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+
+
+
+
+

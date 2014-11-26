@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="32dp"
+	android:background="@color/hsp.toast.common.white.red"
+    android:orientation="vertical"
+    android:tag="hsp.topbar" >
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginLeft="13.33dp"
+        android:layout_marginRight="13.33dp" >
+
+        <TextView
+            android:id="@+id/hsp.topbar.title"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_alignParentLeft="true"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:singleLine="true"
+            android:tag="hsp.topbar.title"
+            android:textColor="@color/hsp.common.white"
+			android:textStyle="bold"
+			android:shadowColor="#000"
+			android:shadowRadius="0.76"
+			android:shadowDy="1"
+            android:textSize="15dp" />
+
+	        <FrameLayout
+	            android:id="@+id/hsp.toast.topbar.button"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_centerInParent="true"
+	            android:layout_alignParentRight="true"
+	            android:tag="hsp.toast.topbar.button" />
+    </RelativeLayout>
+
+
+</LinearLayout>

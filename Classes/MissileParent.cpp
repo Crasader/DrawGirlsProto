@@ -203,6 +203,34 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, float missileNumbers, CCPoint initPosition,
 																							 int missile_damage, int missile_sub_damage)
 {
+//	switch(stoneType)
+//	{
+//		case StoneType::kStoneType_laser:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_mine:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_protector:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_range:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_spirit:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_spread:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_guided:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_tornado:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//
+//	}
 	int grade = ceilf((float)level / 5.f);
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
@@ -345,7 +373,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				if(found == true)
 				{
 					
-					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 10 + 3 * grade, power, missile_sub_damage, ao);
+					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 15 + 3 * grade, power, missile_sub_damage, ao);
 					ma->beautifier(level);
 					jack_missile_node->addChild(ma);
 				}
@@ -431,7 +459,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	{
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 
-		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 60 * 3 + 60 * grade,
+		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 10 * 60 + 20 * level,
 																					power / 3.f, missile_sub_damage / 3.f, ao);
 		addChild(ra);
 	}
@@ -583,6 +611,32 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				creator();
 			}));
 		}
+	}
+	else if(stoneType == StoneType::kStoneType_tornado)
+	{
+		// 프로텍터 미사일 형식
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		level = 1;
+//		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		string fileName = "jack_missile_01_07.png";
+		
+		std::vector<KSCumberBase*> main_vector = myGD->getMainCumberVector();
+		
+		Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
+																	0.f, // 반지름
+																	(main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle(),//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
+																	1.2f, // 본체 속도
+																	2, // 방향개수.
+																	M_PI / 180.f * 132.f, // 각속도
+																	7, // 인타발.
+																	power,
+																	missile_sub_damage,
+																	ao);
+		ms->beautifier(level);
+		jack_missile_node->addChild(ms);
 	}
 
 }
@@ -898,6 +952,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 		}
 		else
 		{
+		}
+	}
+	if(patternData["pattern"].asInt() == 115) // 부하몹 터트리기.
+	{
+		if(myGD->getSubCumberCount() == 0)
+		{
+			return invalid;
 		}
 	}
 //	Json::Value patternDisableArray = R"( [{"type":"pattern","target":"112", "oper":"*","crasharea":0.8},
@@ -1352,10 +1413,13 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 				startFirePosition = startPosition;
 				auto func = [=](CCObject* cb)
 				{
-					KSCumberBase* cumber = (KSCumberBase*)cb;
-					JunirBombWrapper* t_m32 = JunirBombWrapper::create(cumber, patternData);
+//					KSCumberBase* cumber = (KSCumberBase*)cb;
+//					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
+//					pattern_container->addChild(t);
+					
+					JunirBombWrapper* t_m32 = JunirBombWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
 					pattern_container->addChild(t_m32);
-					cumber->setAttackPattern(nullptr);
+//					cumber->setAttackPattern(nullptr);
 //					RunDownSawWrapper* t = RunDownSawWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 //					pattern_container->addChild(t);
 				};
@@ -1750,14 +1814,45 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 			startFirePosition = startPosition;
 			auto func = [=](CCObject* cb)
 			{
-				Json::Value param;
-				param["x"] = 100;
 				
 				MeshWrapper* t = MeshWrapper::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD);
 				pattern_container->addChild(t);
 			};
 			castBranch(atype, func, warningFileName);
+		}
+		else if(pattern == "1023")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				WiperMissileWrapper* t = WiperMissileWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+
 			
+		}
+		else if(pattern == "1024")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				HideCloudWrapper* t = HideCloudWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
+			
+			
+		}
+		else if(pattern == "1025")
+		{
+			startFirePosition = startPosition;
+			auto func = [=](CCObject* cb)
+			{
+				JellyWrapper* t = JellyWrapper::create(dynamic_cast<KSCumberBase*>(cb), patternData);
+				pattern_container->addChild(t);
+			};
+			castBranch(atype, func, warningFileName);
 		}
 			
 		else if(pattern.size() >= 2 && pattern[0] == 'a' && pattern[1] == 't') // ccb 관련 공격.

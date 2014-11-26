@@ -11,12 +11,14 @@
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 
 class TouchSuctionLayer;
+class LoadingLayer;
 class Diary19Popup : public CCLayer
 {
 public:
@@ -31,13 +33,15 @@ private:
 	CCPoint center_position;
 	
 	TouchSuctionLayer* suction;
+	LoadingLayer* t_loading;
 	
 	CCSprite* gray;
 	CCNode* m_container;
 	CCSprite* back_case;
+	CCScale9Sprite* back_in;
 	
-	void buttonAction(CCObject* sender, CCControlEvent t_event);
-	
+//	void buttonAction(CCObject* sender, CCControlEvent t_event);
+	void resultMakeDiaryCode(Json::Value result_data);
 	void myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame);
 };
 

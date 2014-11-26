@@ -112,7 +112,7 @@ bool FailPopup::init()
 	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
 	p1["data"] = p1_data;
 	
-	send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
+	//send_command_list.push_back(CommandParam("addweeklyscore", p1, nullptr));
 	
 	this->endDecreaseCardDuration();
 	
@@ -218,8 +218,9 @@ bool FailPopup::init()
 	title_label->setPosition(ccp(inner_left->getContentSize().width/2.f,154));
 	inner_left->addChild(title_label, kZ_FP_img);
 	
-	CCSprite* stage_tab = CCSprite::create("title_tab.png");
-	stage_tab->setPosition(ccp(76,253));
+	CCSprite* stage_tab = CCSprite::create("ending_tab.png");
+	stage_tab->setPosition(ccp(133.5, 256.5));
+	setFormSetter(stage_tab);
 	main_case->addChild(stage_tab);
 	
 	if(mySGD->is_before_selected_event_stage)
@@ -685,8 +686,9 @@ bool FailPopup::init()
 	p2_data["character"] = mySGD->getUserdataSelectedCharNO();
 	p2_data["highPiece"] = mySGD->getUserdataHighPiece();
 	param2["data"] = p2_data;
+	param2["getWeeklyRank"]=true;
 	
-	send_command_list.push_back(CommandParam("getstagerankbyalluser", param2, json_selector(this, FailPopup::resultGetRank)));
+	send_command_list.push_back(CommandParam("addweeklyandstagescore", param2, json_selector(this, FailPopup::resultGetRank)));
 	mySGD->keep_time_info.is_loaded = false;
 	send_command_list.push_back(CommandParam("gettimeinfo", Json::Value(), json_selector(this, FailPopup::resultGetTime)));
 	
@@ -976,14 +978,40 @@ void FailPopup::resultGetRank(Json::Value result_data)
         fail_label->removeFromParent();
         fail_label = NULL;
     }
-    
+	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		TRACE();
+		
+		string backimgFile;
+		if(result_data["isMax"].asBool()){
+			backimgFile="ending_tab.png";
+		}else{
+			backimgFile="tabbutton_up.png";
+		}
+		
+		CCSprite* rank_tab = CCSprite::create(backimgFile.c_str());
+		
+		rank_tab->setPosition(ccp(347.5, 256.5));
+		main_case->addChild(rank_tab,kZ_FP_img+10);
+		
+		KSLabelTTF* piece_number_label = KSLabelTTF::create("월드 주간 랭킹",	mySGD->getFont().c_str(), 11);
+		piece_number_label->setColor(ccc3(255, 255, 255));
+		piece_number_label->disableOuterStroke();
+		piece_number_label->setPosition(ccpFromSize(rank_tab->getContentSize()/2.f) + ccp(0,1));
+		rank_tab->addChild(piece_number_label);
+		
+		if(result_data["isMax"].asBool()){
+			piece_number_label->setString(CCString::createWithFormat("%d스테이지 랭킹",result_data["stageNo"].asInt())->getCString());
+			piece_number_label->setScale((rank_tab->getContentSize().width-5)/piece_number_label->getContentSize().width);
+		}else{
+			piece_number_label->setString("월드 주간 랭킹");
+		}
+		
 		CCSpriteFrameCache::sharedSpriteFrameCache()->addSpriteFramesWithFile("flags.plist");
 		
 		CCSprite* graph_back = CCSprite::create("ending_graph.png");
-		graph_back->setPosition(ccp(347,240));
+		graph_back->setPosition(ccp(347,234));
 		main_case->addChild(graph_back, kZ_FP_img);
 		setFormSetter(graph_back);
 		
@@ -1025,7 +1053,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		
 		CCSprite* rank_percent_case = CCSprite::create("gameresult_rank_percent.png");
 		rank_percent_case->setAnchorPoint(ccp(0.5,1));
-		rank_percent_case->setPosition(ccp(249+195,240));
+		rank_percent_case->setPosition(ccp(249+195,235));
 		main_case->addChild(rank_percent_case, kZ_FP_img);
 		setFormSetter(rank_percent_case);
 		
@@ -1041,7 +1069,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		percent_label->setPosition(ccp(rank_percent_case->getContentSize().width/2.f+1, rank_percent_case->getContentSize().height/2.f-3));
 		rank_percent_case->addChild(percent_label, kZ_FP_img);
 		
-		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,240));
+		CCMoveTo* t_move = CCMoveTo::create(2.f*(1.f-rank_percent), ccp(249 + 195.f*rank_percent,235));
 		rank_percent_case->runAction(t_move);
 		
 		Json::Value user_list = result_data["list"];
@@ -1088,8 +1116,8 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
-				rank_label->setPosition(ccp(33,rank_position.y+8));
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 14);
+				rank_label->setPosition(rank_position);//ccp(33,rank_position.y+8));
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -1097,13 +1125,47 @@ void FailPopup::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
+			if(myrank != i+1)
+			{
+				int character_number = read_data.get("character", 1).asInt();
+				int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+				int found_index = -1;
+				for(int i=0;found_index == -1 && i<character_count;i++)
+				{
+					if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+					{
+						found_index = i+1;
+					}
+				}
+				
+				if(found_index != -1)
+				{
+					CCNode* character_node = CCNode::create();
+					character_node->setScale(0.75f);
+					character_node->setPosition(ccp(49, 8));
+					list_cell_case->addChild(character_node);
+					
+					auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+					CCSprite* character_img = character_ccb.first;
+					character_img->setPosition(ccp(0,0));
+					character_node->addChild(character_img);
+					
+					character_ccb.second->runAnimationsForSequenceNamed("move_down");
+				}
+			}
+			
 			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			if(i >= 3)
-				selectedFlagSpr->setPosition(ccp(33,15.5f-5));
+			if(myrank != i+1)
+			{
+				selectedFlagSpr->setPosition(ccp(49,8.f));
+				selectedFlagSpr->setScale(0.55);
+			}
 			else
+			{
 				selectedFlagSpr->setPosition(ccp(49,15.5f));
-			selectedFlagSpr->setScale(0.8);
+				selectedFlagSpr->setScale(0.8);
+			}
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
@@ -1181,7 +1243,7 @@ void FailPopup::resultGetRank(Json::Value result_data)
 				list_cell_case->addChild(nick_label);
 			}
 			
-			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(CCString::createWithFormat("%d",int(mySGD->getScore()))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+			KSLabelTTF* score_label = KSLabelTTF::create(KS::insert_separator(result_data["myscore"].asString().c_str()).c_str(), mySGD->getFont().c_str(), 13);
 			score_label->disableOuterStroke();
 			score_label->setAnchorPoint(ccp(1,0.5));
 			score_label->setColor(ccc3(55, 35, 150));

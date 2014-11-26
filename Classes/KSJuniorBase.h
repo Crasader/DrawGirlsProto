@@ -16,6 +16,8 @@ public:
 	KSJuniorBase() : RADIUS(15.f)
 	{
 		m_cumberState = kCumberStateNothing;
+        m_selfBomb.currentFrame = 0;
+        m_selfBomb.subFrameCount = 0;
 		CCLOG("%s %d kCumberStateMoving", __FILE__, __LINE__);
 	}
 	virtual ~KSJuniorBase(){}
@@ -140,6 +142,11 @@ protected:
 		int state; // 1 : 도는상태, 2 : 다시 제 위치로 돌아가는 상태
 	}m_noDirection;
 	
+	struct SelfBomb
+	{
+		int currentFrame;
+		int subFrameCount;
+	}m_selfBomb;
 	
 
 	

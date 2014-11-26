@@ -30,6 +30,7 @@
 #include "StoryLayer.h"
 #include "TypingBox.h"
 #include "ManyGachaPopup.h"
+#include "GachaDetailPopup.h"
 
 enum CharacterSelectPopup_Zorder{
 	kCSP_Z_gray = 0,
@@ -395,9 +396,37 @@ CCTableViewCell* CharacterSelectPopup::tableCellAtIndex(CCTableView *table, unsi
 			}
 			else
 			{
-				CCSprite* character_back = CCSprite::create("cha_off.png");
-				character_back->setPosition(character_position);
-				cell_back->addChild(character_back);
+//				CCSprite* character_back = CCSprite::create("cha_off.png");
+//				character_back->setPosition(character_position);
+//				cell_back->addChild(character_back);
+				
+				string back_file = "cha_off.png";
+				
+				CCSprite* n_back = CCSprite::create(back_file.c_str());
+				CCSprite* s_back = CCSprite::create(back_file.c_str());
+				s_back->setColor(ccGRAY);
+				
+				CCMenuItem* back_item = CCMenuItemSprite::create(n_back, s_back, this, menu_selector(CharacterSelectPopup::notHaveAction));
+				back_item->setTag(history_list[real_idx].m_number);
+				
+				ScrollMenu* back_menu = ScrollMenu::create(back_item, NULL);
+				back_menu->setPosition(character_position);
+				cell_back->addChild(back_menu);
+				back_menu->setTouchPriority(touch_priority-1);
+				
+				CCNode* character_node = CCNode::create();
+				character_node->setPosition(character_position + ccp(0,-25));
+				character_node->setScale(0.8f);
+				cell_back->addChild(character_node);
+				
+				auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + history_list[real_idx].m_character + ".ccbi");
+				CCSprite* character_img = character_ccb.first;
+				character_img->setPosition(ccp(0,0));
+				character_node->addChild(character_img);
+				
+				character_ccb.second->stopAllActions();
+				
+				KS::setColor(character_img, ccBLACK);
 			}
 //			CCScale9Sprite* back_img;
 //			
@@ -531,6 +560,42 @@ void CharacterSelectPopup::detailAction(CCObject *sender)
 																	 characterChangeAction(t_node);
 																 });
 	addChild(t_popup, kCSP_Z_popup);
+}
+
+void CharacterSelectPopup::notHaveAction(CCObject* sender)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	int t_tag = ((CCNode*)sender)->getTag();
+
+	GachaData* t_data = new GachaData();
+	t_data->exchangeID = "";//t_json_data["exchangeID"].asString();
+	t_data->level = 4;//t_json_data["level"].asInt();
+	t_data->percent = 0;//t_json_data["percent"].asInt();
+	t_data->is_take = false;//t_json_data.get("isTake", false).asBool();
+	
+	GachaRewardData t_grd;
+	t_grd.type = "cp";//t_json_reward["type"].asString();
+	t_grd.count = t_tag;//t_json_reward["count"].asInt();
+	t_data->reward_list.push_back(t_grd);
+	
+	GachaDetailPopup* t_popup = GachaDetailPopup::create(touch_priority-20, t_data, [=](){
+		delete t_data;
+		is_menu_enable = true;});
+	addChild(t_popup, 999);
+	
+//	CharacterDetailPopup* t_popup = CharacterDetailPopup::create(touch_priority-10, t_tag, [=](){is_menu_enable = true;}, [=]()
+//																 {
+//																	 CCNode* t_node = CCNode::create();
+//																	 t_node->setTag(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, t_tag));
+//																	 characterChangeAction(t_node);
+//																 }, false);
+//	addChild(t_popup, kCSP_Z_popup);
 }
 
 void CharacterSelectPopup::characterChangeAction(CCObject* sender)

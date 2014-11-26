@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- HSP Payment Start -->
+    <!-- Error Messages -->
+    <string name="hsp.payment.err.msg.lib.init">Failed to initialize the buy library</string>
+    <string name="hsp.payment.err.msg.shopserver">An error occurred in the store server.</string>
+    
+    <!-- User Messages -->
+    <string name="hsp.payment.err.msg.purchase.canceled">You canceled your purchase.</string>
+    <string name="hsp.payment.err.msg.item.purchase.canceled">You canceled your item purchase.</string>
+    <string name="hsp.payment.err.msg.exist.purchase">You already have an active Payment window. Please close the app and try again if the problem continues.</string>
+    <string name="hsp.payment.err.msg.not.login">The transaction cannot be completed because the account is abnormally logged in. Please close the app and try again.</string>
+    <string name="hsp.payment.err.msg.exception">A temporary error has occurred. Please try again later.</string>
+    <string name="hsp.payment.err.msg.give.item.fail">An error occurred while adding items. Please contact our customer service center.</string>
+	<string name="hsp.payment.err.msg.network.timeout">The connection is unstable. Please try again later.</string>
+	
+    <string name="hsp.payment.err.msg.unsupported.device">Sorry. The transaction cannot be completed because this device is unsupported.</string>
+	<string name="hsp.payment.err.msg.unsupported.google.checkout">This market does not support transactions. Please check your market information.</string>
+	
+	<!-- Mycard Messages -->
+    <string name="hsp.payment.err.msg.purchase.successed">You successed your purchase!</string>
+    <string name="hsp.payment.err.msg.purchase.failed">You failed your purchase!</string>
+    
+	<!-- TStore Messages -->
+	<string name="hsp.payment.tstore.purchase.confirm">${productName} (${price}won)\nDo you want to buy the selected items?</string>
+	
+	<!-- General Strings -->
+    <string name="hsp.payment.title.dialog.purchase">Payment</string>
+    <string name="hsp.payment.msg.confirm.purchase">Do you want to buy the selected items?\n\nPlease wait until the transaction is complete. This may take a while.</string>
+    <string name="hsp.payment.btn.yes">Yes</string>
+    <string name="hsp.payment.btn.no">No</string>
+    <string name="hsp.payment.btn.confirm">OK</string>
+    <string name="hsp.payment.btn.cancel">Cancel</string>
+    <string name="hsp.payment.msg.processing">Processing.</string>
+	
+</resources>

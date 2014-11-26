@@ -114,7 +114,7 @@ void HeartTime::refreshHeartTime()
 	{
 		int sub_value = mySGD->getHeartCoolTime() - (recent_time_second - myDSH->getIntegerForKey(kDSH_Key_heartTime));
 		int minute_value = sub_value/60;
-		int second_value = sub_value%60 + 1;
+		int second_value = sub_value%60;
 		state_label = CCLabelBMFont::create(CCString::createWithFormat("%d:%02d", minute_value, second_value)->getCString(), "mainflow_top_font1.fnt");
 		state_label->setAnchorPoint(ccp(0.5,0.5));
 		state_label->setPosition(ccp(73,-6));

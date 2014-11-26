@@ -343,9 +343,19 @@ int AchieveConditionReward::getRecentValue(AchievementCode t_code) // -1 인지 
 	int return_value;
 	
 	if(t_code == kAchievementCode_gold1 || t_code == kAchievementCode_gold2 || t_code == kAchievementCode_gold3)
-	{	return_value = mySGD->getGoodsValue(kGoodsType_gold);	}
+	{
+		if(data_map[t_code].getIngCount() >= getCondition(t_code))
+			return_value = data_map[t_code].getIngCount();
+		else
+			return_value = mySGD->getGoodsValue(kGoodsType_gold);
+	}
 	else if(t_code == kAchievementCode_ruby1 || t_code == kAchievementCode_ruby2 || t_code == kAchievementCode_ruby3)
-	{	return_value = mySGD->getGoodsValue(kGoodsType_ruby);	}
+	{
+		if(data_map[t_code].getIngCount() >= getCondition(t_code))
+			return_value = data_map[t_code].getIngCount();
+		else
+			return_value = mySGD->getGoodsValue(kGoodsType_ruby);
+	}
 	else if(t_code == kAchievementCode_mapGacha1 || t_code == kAchievementCode_mapGacha2 || t_code == kAchievementCode_mapGacha3)
 	{	return_value = mySGD->getUserdataAchieveMapGacha();	}
 	else if(t_code == kAchievementCode_luckySeven1)

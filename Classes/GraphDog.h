@@ -15,7 +15,7 @@
 #include <stdlib.h>
 #include <queue>
 #include <list>
-#define GRAPHDOG_VERSION    "2"
+#define GRAPHDOG_VERSION    "3"
 #include "jsoncpp/json.h"
 #include "KSProtect.h"
 #include "KSUtil.h"
