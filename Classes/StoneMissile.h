@@ -3679,7 +3679,7 @@ public:
 					// tempRad 각인 타원의 접선의 기울기 구하기 위해... (미분한걸 아탄)
 					float x = -m_elipticA * sinf(tempRad);
 					float y = m_elipticB * cosf(tempRad);
-					float elipticRad = atan2f(y, x) + m_initRad;
+					float elipticRad = atan2f(y, x) - M_PI + m_initRad;
 					//				elipticRad += M_PI / 2.f;
  				StraightMissile* sm = StraightMissile::create(Pn, m_fileName, elipticRad, 1.5f,
 																											m_power, m_subPower, m_ao);
