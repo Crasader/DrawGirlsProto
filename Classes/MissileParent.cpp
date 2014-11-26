@@ -620,14 +620,18 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		int subType = mInfo.get("subType", 1).asInt();
 		
 		level = 1;
-		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+//		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		string fileName = "jack_missile_01_07.png";
+		
+		std::vector<KSCumberBase*> main_vector = myGD->getMainCumberVector();
+		
 		Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
-																	4.f, // 반지름
-																	ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
-																	0.4f, // 본체 속도
-																	3, // 방향개수.
-																	M_PI / 180.f * 85.f, // 각속도
-																	9, // 인타발.
+																	0.f, // 반지름
+																	(main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle(),//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
+																	1.2f, // 본체 속도
+																	2, // 방향개수.
+																	M_PI / 180.f * 132.f, // 각속도
+																	7, // 인타발.
 																	power,
 																	missile_sub_damage,
 																	ao);

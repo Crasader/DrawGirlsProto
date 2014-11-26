@@ -305,4 +305,146 @@ void SpiritAttack::beautifier(int level)
 	if(m_particle)addChild(m_particle, -2);
 }
 
+void Tornado::update(float dt)
+{
+	if(getChildrenCount() == 0) // 자식이 없어지면 삭쿠제.
+	{
+		//			myGD->communication("EP_stopCrashAction");
+		removeFromParentAndCleanup(true);
+	}
+	m_currentFrame++;
+	
+	bool isEnable = true;
+	bool emptyMonster = false;
+	bool invalidRange;
+	if(m_missileSprite)
+	{
+		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
+		invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+						missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		
+		if(invalidRange)
+		{
+			CCPoint keep_position = m_missileSprite->getPosition();
+			
+			int final_cnt = 10;
+			float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
+			for(int i=0;i<final_cnt;i++)
+			{
+				StraightMissile* sm = StraightMissile::create(keep_position, m_fileName, m_initRad + final_angle_rad*i, 1.8f,
+															  m_power, m_subPower, m_ao);
+				
+				addChild(sm);
+			}
+		}
+		
+	}
+	else
+	{
+		invalidRange = false;
+	}
+	if(
+			 myGD->getIsGameover() ||
+			 emptyMonster ||
+			 invalidRange
+			 )
+	{
+		isEnable = false;
+	}
+	
+	if(!isEnable)
+	{
+		if(m_missileSprite)
+		{
+			m_missileSprite->removeFromParentAndCleanup(true);
+			
+			m_missileSprite = nullptr;
+			
+			if(m_streak)
+			{
+				m_streak->removeFromParent();
+				m_streak = nullptr;
+			}
+			if(m_particle)
+			{
+				
+				m_particle->removeFromParent();
+				m_particle = nullptr;
+			}
+			
+			return;
+			
+		}
+		
+	}
+	
+	if(m_missileSprite)
+	{
+		m_missileSprite->setRotation(m_missileSprite->getRotation() + m_angleVelocity/m_frameInterval);
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_initRad) * m_initSpeed, sin(m_initRad) * m_initSpeed));
+		if(m_particle)
+			m_particle->setPosition(m_missileSprite->getPosition());
+		
+		if(m_streak)
+			m_streak->setPosition(m_missileSprite->getPosition());
+		
+		if(m_currentFrame % m_frameInterval == 0)
+		{
+			m_currentRad += m_angleVelocity;
+			for(int n=0; n<m_dotNumber; n++)
+			{
+				CCPoint Pn = m_missileSprite->getPosition()  + ccp( cosf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticA,
+																   sinf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticB);
+				
+				
+				
+				float tempRad = m_currentRad + (float)n * 2 * M_PI / (float)m_dotNumber;
+				// tempRad 각인 타원의 접선의 기울기 구하기 위해... (미분한걸 아탄)
+				float x = -m_elipticA * sinf(tempRad);
+				float y = m_elipticB * cosf(tempRad);
+				float elipticRad = atan2f(y, x) - M_PI + m_initRad;
+				//				elipticRad += M_PI / 2.f;
+				if(fabsf(atan2f(y, x) - M_PI) < 60.f/180.f*M_PI && rand()%7 < 6)
+					continue;
+				
+				StraightMissile* sm = StraightMissile::create(Pn, m_fileName, elipticRad, 1.3f,
+															  m_power, m_subPower, m_ao);
+				
+				addChild(sm);
+			}
+			
+		}
+		
+		if((m_missileSprite->getPosition() - m_initPosition).getLength() > m_length)
+		{
+			CCPoint keep_position = m_missileSprite->getPosition();
+			
+			int final_cnt = 10;
+			float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
+			for(int i=0;i<final_cnt;i++)
+			{
+				StraightMissile* sm = StraightMissile::create(keep_position, m_fileName, m_initRad + final_angle_rad*i, 1.8f,
+															  m_power, m_subPower, m_ao);
+				
+				addChild(sm);
+			}
+			
+			m_missileSprite->removeFromParent();
+			m_missileSprite = nullptr;
+			
+			if(m_streak)
+			{
+				m_streak->removeFromParent();
+				m_streak = nullptr;
+			}
+			if(m_particle)
+			{
+				
+				m_particle->removeFromParent();
+				m_particle = nullptr;
+			}
+		}
+	}
+}
+
 #undef LZZ_INLINE
