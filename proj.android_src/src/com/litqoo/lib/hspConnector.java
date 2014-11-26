@@ -34,6 +34,7 @@ import android.widget.Toast;
 
 
 
+
 //import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPCore.HSPLoginType;
@@ -60,7 +61,7 @@ import com.hangame.hsp.ui.HSPUiUri;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterKey;
 import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
 import com.igaworks.adbrix.IgawAdbrix;
-import com.nhnent.SKSUMRAN.LuaGLSurfaceView;
+import com.nhnent.SKSUMRAN.NA.LuaGLSurfaceView;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -99,7 +100,7 @@ public class hspConnector {
 	private static boolean sAccelerometerEnabled;
 	private static String sPackageName;
 	private static String sFileDirectory;
-	private static Context sContext = null; // DGProto Activity ���.
+	private static Context sContext = null; // DGProto Activity 占쏙옙占�.
 
 	// ===========================================================
 	// Constructors
@@ -213,14 +214,15 @@ public class hspConnector {
 		HSPCore core = HSPCore.getInstance();
 		Log.d("before cur State", core.getState().toString());
 		if (core != null) {
-			// Boolean isOverWriteMapping = true; // true ��대㈃ ��대�� 留ㅽ����� sno瑜� 媛����濡�
-			// 留ㅽ�������⑤�ㅻ�� ���誘몄�대��.
-			Boolean isOverWriteMapping = Boolean.valueOf(force); // false ��대㈃ ��대��
-			// 留ㅽ����� sno���
-			// 嫄대�ㅼ�� ���怨�
-			// ��쇰�우�쇰��
-			// �����ㅼ＜湲곕�� ������.
+			// Boolean isOverWriteMapping = true; // true 占쏙옙������ 占쏙옙���占쏙옙 筌���쏙옙占쏙옙占쏙옙 sno���占� 揶�占쏙옙占쏙옙嚥∽옙
+			// 筌���쏙옙占쏙옙占쏙옙占쏙옙��ㅿ옙��삼옙占� 占쏙옙占썼��紐�占쎈��占쏙옙.
+			Boolean isOverWriteMapping = Boolean.valueOf(force); // false 占쏙옙������ 占쏙옙���占쏙옙
+			// 筌���쏙옙占쏙옙占쏙옙 sno占쏙옙占�
+			// 椰����占썬�쇽옙占� 占쏙옙占썸�⑨옙
+			// 占쏙옙��곤옙��곤옙��곤옙占�
+			// 占쏙옙占쏙옙占썬�쇽��疫꿸��占쏙옙 占쏙옙占쏙옙占쏙옙.
 
+			
 			HSPMappingType mt2 = HSPMappingType.values()[mt];
 			HSPCore.getInstance().requestMappingToAccount(mt2,
 					isOverWriteMapping,
@@ -236,26 +238,26 @@ public class hspConnector {
 									+ result);
 					JSONObject r = new JSONObject();
 					JSONObject error = new JSONObject();
-					// 留ㅽ����� ��깃났��� 耳���댁��.
+					// 筌���쏙옙占쏙옙占쏙옙 占쏙옙源���э옙占쏙옙 ��놂옙占쏙옙���占쏙옙.
 					if (result.isSuccess() == true) {
 //						Toast.makeText(hspConnector.sContext,
-//								"로그인 성공", Toast.LENGTH_LONG)
+//								"濡�洹몄�� ��깃났", Toast.LENGTH_LONG)
 //								.show();
 
-					} else { // 留ㅽ����� ��ㅽ�⑦�� 耳���댁��
+					} else { // 筌���쏙옙占쏙옙占쏙옙 占쏙옙��쏙옙���占쏙옙 ��놂옙占쏙옙���占쏙옙
 						Log.d("mapping",
 								"HSP Remapping Failed - error = "
 										+ result);
 						if (result.getCode() == HSPResultCode.HSP_RESULT_CODE_ALREADY_MAPPED_ACCOUNT_TO_SNO) {
 
-							// 留���� ��대�� 留ㅽ�������� ������ id��쇨�� ���硫� 留ㅽ�������� ������ memberNo瑜�
-							// ��살�� ��� ������.
+							// 筌�占쏙옙占쏙옙 占쏙옙���占쏙옙 筌���쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙 id占쏙옙��⑨옙占� 占쏙옙占쏙��占� 筌���쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙 memberNo���占�
+							// 占쏙옙��댐옙占� 占쏙옙占� 占쏙옙占쏙옙占쏙옙.
 
 							Log.d("TAG", "previous member number : "
 									+ prevMemberNo);
 
 						}
-						// ������ �����ъ����� ������
+						// 占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占싼�占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙
 						Log.d("mapping", "Detail Error code = "
 								+ result.getCode() + ", domain = "
 								+ result.getDomain() + ", detail = "
@@ -272,8 +274,8 @@ public class hspConnector {
 						// Log.i("litqoo", "HSP Login Error = " +
 						// result);
 
-						// ��������������������������� ��������������������������� 占쏙옙占썲�����������������占쏙옙占썲��占�
-						// ������������������������占쏙옙���������������������占�.
+						// 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� ��������������뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��������������뀐옙占썲��占�
+						// 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���������占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썲��占�.
 						int errorCode = result.getCode();
 						String errorDescription = result.getDetail();
 
@@ -304,7 +306,7 @@ public class hspConnector {
 			});
 
 		} else {
-			// 珥�湲고��媛� ���吏� ������ 寃쎌��
+			// ��ο옙疫꿸��占쏙옙揶�占� 占쏙옙占쏙��占� 占쏙옙占쏙옙占쏙옙 野����占쏙옙
 			Log.d("mapping", "HSPCore.getInstance() is NULL");
 		}
 		// }
@@ -316,7 +318,7 @@ public class hspConnector {
 		HSPUiUri uri = HSPUiFactory
 				.getUiUri(HSPUiUri.HSPUiUriAction.SUPPORTS_NOTICE);
 		HSPUiLauncher.getInstance().launch(uri);
-		// URI��� �����쇰�명�곕�� 異�媛������� 寃쎌�� ��������� 媛���� 異�媛���� ��� �����듬�����.
+		// URI占쏙옙占� 占쏙옙占쏙옙占쎌�곤옙紐�占쎄��占쏙옙 ��곤옙揶�占쏙옙占쏙옙占쏙옙占� 野����占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占� 揶�占쏙옙占쏙옙 ��곤옙揶�占쏙옙占쏙옙 占쏙옙占� 占쏙옙占쏙옙占쎈�э옙占쏙옙占쏙옙.
 		uri.setParameter(HSPUiUriParameterKey.TOPBAR_SHOW,
 				HSPUiUriParameterValue.TRUE);
 		uri.setParameter(HSPUiUriParameterKey.GNB_SHOW,
@@ -324,33 +326,33 @@ public class hspConnector {
 	}
 
 	public static void openHSPUrl(final String url) {
-		// ��� ���蹂� URI Action(WEBVIEW)��쇰�� HSPUiUri ��몄�ㅽ�댁�ㅻ�� �����깊����� HSPUri*
+		// 占쏙옙占� 占쏙옙占썼��占� URI Action(WEBVIEW)占쏙옙��곤옙占� HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�삼옙占� 占쏙옙占쏙옙占쎄��占쏙옙占쏙옙占� HSPUri*
 		HSPUiUri uriWebview = HSPUiFactory
 				.getUiUri(HSPUiUri.HSPUiUriAction.WEBVIEW);
 
-		// 3. ���������怨���� ������ Web Page Url��� �����쇰�명�곕�� ��ㅼ��������.
+		// 3. 占쏙옙占쏙옙占쏙옙占쏙옙占썸�⑨옙占쏙옙占� 占쏙옙占쏙옙占쏙옙 Web Page Url占쏙옙占� 占쏙옙占쏙옙占쎌�곤옙紐�占쎄��占쏙옙 占쏙옙��쇽옙占쏙옙占쏙옙占쏙옙占�.
 
 		uriWebview.setParameter(HSPUiUri.HSPUiUriParameterKey.WEB_URL, url);
 
-		// 4. �����깅�� HSPUiUri ��몄�ㅽ�댁�ㅻ�� ��댁�⑺����� HSPUiLauncher��� launch ���泥���� ������.
+		// 4. 占쏙옙占쏙옙占쎄��占쏙옙 HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�삼옙占� 占쏙옙���占썩�븝옙占쏙옙占쏙옙 HSPUiLauncher占쏙옙占� launch 占쏙옙占쏙㎗占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙.
 
-		// 寃���� ������ ��대�� HSPUiUri ��몄�ㅽ�댁�ㅼ�� ��대�뱁����� HSP���硫댁�� 異���ν�����.
+		// 野�占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙���占쏙옙 HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�쇽옙占� 占쏙옙���占쎈��占쏙옙占쏙옙占� HSP占쏙옙占쏙�����占쏙옙 ��곤옙占쏙옙館占쏙옙占쏙옙占�.
 		HSPUiLauncher.getInstance().launch(uriWebview);
 
 	}
 
 	public static void openCSCenter(final String url) {
-		// ��� ���蹂� URI Action(WEBVIEW)��쇰�� HSPUiUri ��몄�ㅽ�댁�ㅻ�� �����깊����� HSPUri*
+		// 占쏙옙占� 占쏙옙占썼��占� URI Action(WEBVIEW)占쏙옙��곤옙占� HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�삼옙占� 占쏙옙占쏙옙占쎄��占쏙옙占쏙옙占� HSPUri*
 		HSPUiUri uriWebview = HSPUiFactory
 				.getUiUri(HSPUiUri.HSPUiUriAction.SUPPORTS_CSCENTER);
 
-		// 3. ���������怨���� ������ Web Page Url��� �����쇰�명�곕�� ��ㅼ��������.
+		// 3. 占쏙옙占쏙옙占쏙옙占쏙옙占썸�⑨옙占쏙옙占� 占쏙옙占쏙옙占쏙옙 Web Page Url占쏙옙占� 占쏙옙占쏙옙占쎌�곤옙紐�占쎄��占쏙옙 占쏙옙��쇽옙占쏙옙占쏙옙占쏙옙占�.
 
 		// uriWebview.setParameter(HSPUiUri.HSPUiUriParameterKey.WEB_URL, url);
 
-		// 4. �����깅�� HSPUiUri ��몄�ㅽ�댁�ㅻ�� ��댁�⑺����� HSPUiLauncher��� launch ���泥���� ������.
+		// 4. 占쏙옙占쏙옙占쎄��占쏙옙 HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�삼옙占� 占쏙옙���占썩�븝옙占쏙옙占쏙옙 HSPUiLauncher占쏙옙占� launch 占쏙옙占쏙㎗占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙.
 
-		// 寃���� ������ ��대�� HSPUiUri ��몄�ㅽ�댁�ㅼ�� ��대�뱁����� HSP���硫댁�� 異���ν�����.
+		// 野�占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙 占쏙옙���占쏙옙 HSPUiUri 占쏙옙紐�占썬�쏙옙���占썬�쇽옙占� 占쏙옙���占쎈��占쏙옙占쏙옙占� HSP占쏙옙占쏙�����占쏙옙 ��곤옙占쏙옙館占쏙옙占쏙옙占�.
 		HSPUiLauncher.getInstance().launch(uriWebview);
 
 	}
@@ -407,11 +409,11 @@ public class hspConnector {
 					// // check, intent is available.
 					// if (!kakaoLink.isAvailableIntent())
 					// return;
-					String packName = AppContext.getPackageName(); // com.nhnent.SKSUMRAN 으로 시작하는게 맞는지...
+					String packName = AppContext.getPackageName(); // com.nhnent.SKSUMRAN ��쇰�� ������������寃� 留����吏�...
 					kakaoLink.openKakaoLink((Activity) hspConnector.sContext,
 							"http://hgurl.me/am7",
-							"��������� ��ㅻ�쎌�ㅼ�� ������!!\n�����곕㉨湲� 由ы�댁�� with ��щ��移닿뎄��� ��댁�⑥�대��",
-							packName, "1.0", "�����곕㉨湲� 由ы�댁�� with ��щ��移닿뎄��� ��댁�⑥�대��",
+							"占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙��삼옙���占썬�쇽옙占� 占쏙옙占쏙옙占쏙옙!!\n占쏙옙占쏙옙占쎄����ⓩ묾占� ��귐�占쎈��占쏙옙 with 占쏙옙��占쏙옙燁삳�용��占쏙옙占� 占쏙옙���占썩�ο옙���占쏙옙",
+							packName, "1.0", "占쏙옙占쏙옙占쎄����ⓩ묾占� ��귐�占쎈��占쏙옙 with 占쏙옙��占쏙옙燁삳�용��占쏙옙占� 占쏙옙���占썩�ο옙���占쏙옙",
 							"UTF-8");
 
 				}
@@ -644,6 +646,12 @@ public class hspConnector {
 		//		sContext.
 	}
 	public static void login(final int _key, final boolean manualLogin,
+			final String loginStr) {
+		HSPOAuthProvider lType = HSPOAuthProvider.valueOf(loginStr);
+		hspConnector.login(_key, manualLogin, lType.ordinal()); 
+	}
+
+	public static void login(final int _key, final boolean manualLogin,
 			final int loginType) {
 		Log.d("", "login function");
 		hspConnector.handler.post(new Runnable() {
@@ -656,6 +664,7 @@ public class hspConnector {
 					// Log.i("com.litqoo.dgproto", "hspcore create ok2");
 
 
+					
 					HSPOAuthProvider lType = HSPOAuthProvider.values()[loginType];
 					core.login(activity, lType, new HSPCore.HSPLoginCB() {
 
@@ -671,8 +680,8 @@ public class hspConnector {
 								// Log.i("litqoo", "HSP Login Error = " +
 								// result);
 
-								// ��������������������������� ��������������������������� 占쏙옙占썲�����������������占쏙옙占썲��占�
-								// ������������������������占쏙옙���������������������占�.
+								// 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� ��������������뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��������������뀐옙占썲��占�
+								// 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���������占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썲��占�.
 								int errorCode = result.getCode();
 								String errorDescription = result.getDetail();
 
@@ -939,8 +948,8 @@ public class hspConnector {
 
 				//				requestItemDeliveryNative();
 
-				//RequestItemDelivery(); ��몄�������� 誘� 諛곗�� �����댄�� 議댁�� ���臾� 泥댄��
-				//�����댄�� 議댁�� �����ㅻ㈃ 吏�湲� ���濡���몄�� 諛�  FinishItemDelivery();
+				//RequestItemDelivery(); 占쏙옙紐�占쏙옙占쏙옙占쏙옙占쏙옙 沃�占� 獄�怨�占쏙옙 占쏙옙占쏙옙占쎈��占쏙옙 鈺곕��占쏙옙 占쏙옙占썼�억옙 筌ｋ��占쏙옙
+				//占쏙옙占쏙옙占쎈��占쏙옙 鈺곕��占쏙옙 占쏙옙占쏙옙占썬�삠�� 筌�占썸묾占� 占쏙옙占썸에占쏙옙占쎈��占쏙옙 獄�占�  FinishItemDelivery();
 				// TODO Auto-generated method stub
 				// Log.i("litqoo","~~~~~~HSPAfterLoginListener");
 
@@ -1024,7 +1033,7 @@ public class hspConnector {
 		Map<String, String> mapData = new LinkedHashMap<String, String>();
 		mapData.put("content", mMessage);
 		mapData.put("url", "http://www.hangame.com");
-		mapData.put("extraData", "��リ옇占쏙옙��������������������⑨옙������占쏙옙���������");
+		mapData.put("extraData", "占쏙옙��れ�����������占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��⑥��占쏙옙占쏙옙占쏙옙���������占쏙옙占쏙옙占쏙옙占쏙옙占�");
 
 		HSPMessage.sendPushNotification(mReceiver, "test ~!!", mapData,
 				new HSPMessage.HSPSendPushNotificationCB() {
