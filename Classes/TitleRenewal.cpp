@@ -3248,6 +3248,7 @@ void TitleRenewalScene::changeScene()
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
+	myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_init);
     GraphDog::get()->removeTarget(this);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
