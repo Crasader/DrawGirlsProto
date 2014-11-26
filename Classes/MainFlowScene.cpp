@@ -111,6 +111,8 @@ bool MainFlowScene::init()
 	
 	not_event_puzzle_list.clear();
 	
+	last_open_puzzle_index = 0;
+	
 	int puzzle_count = NSDS_GI(kSDS_GI_puzzleListCount_i);
 	for(int i=1;i<=puzzle_count;i++)
 	{
@@ -275,6 +277,8 @@ bool MainFlowScene::init()
 		
 		if(!t_info.is_open)
 			locked_puzzle_count++;
+		else
+			last_open_puzzle_index = i;
 	}
 	
     TRACE();
@@ -2717,8 +2721,12 @@ unsigned int MainFlowScene::numberOfCellsInTableView(CCTableView *table)
 {
 	int puzzle_count = not_event_puzzle_list.size();//NSDS_GI(kSDS_GI_puzzleListCount_i);
 	
-	int view_count = puzzle_count - locked_puzzle_count;
-	view_count += mySGD->getUnlockFrameCnt() + 1;
+	int view_count;
+//	view_count = puzzle_count - locked_puzzle_count;
+//	view_count += mySGD->getUnlockFrameCnt() + 1;
+	
+	view_count = last_open_puzzle_index+1;
+	view_count += mySGD->getUnlockFrameCnt();
 	
 	if(view_count > puzzle_count + 1)
 		view_count = puzzle_count + 1;

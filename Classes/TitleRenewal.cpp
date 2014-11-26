@@ -430,6 +430,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			}
 		}
 		
+		loginCnt = 0;
 		
 		Json::Value param;
 		param["memberID"] = hspConnector::get()->getSocialID();
@@ -497,15 +498,15 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 			}
 		};
 		
-		//오류나도 3번은 자동 로그인 시도
-		// 점검이면 그냥 재시도k
-		if(result_data["error"]["code"].asInt() == 8197)
-		{
-			addChild(KSTimer::create(3, tryLogin));
-		}
-		// 점검이 아니면 그냥 재시도 계속...
-		else
-		{
+//		//오류나도 3번은 자동 로그인 시도
+//		// 점검이면 그냥 재시도k
+//		if(result_data["error"]["code"].asInt() == 8197)
+//		{
+//			addChild(KSTimer::create(3, tryLogin));
+//		}
+//		// 점검이 아니면 그냥 재시도 계속...
+//		else
+//		{
 			if(loginCnt<3){
 				this->loginCnt++;
 				CCLOG("failed login , try login %d",loginCnt+1);
@@ -519,7 +520,7 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
 				TRACE();
 			}
-		}
+//		}
 		
 	}
 }
@@ -619,21 +620,38 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else
 	{
-		TRACE();
-		
-		Json::Value param;
-		param["memberID"] = hspConnector::get()->getSocialID();
+		function<void()> tryLogin = [=]()
+		{
+			Json::Value param;
+			param["memberID"] = hspConnector::get()->getSocialID();
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
-		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+			param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
 #else
-		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+			param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
 #endif
+			
+#else
+			param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+#endif
+			hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+		};
 		
-#else
-		param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
-#endif
-		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+		if(loginCnt<3){
+			this->loginCnt++;
+			CCLOG("failed login , try login %d",loginCnt+1);
+			addChild(KSTimer::create(3, tryLogin));
+		}
+		else{
+			TRACE();
+			loginCnt=0;
+			ASPopupView *alert = ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert5),
+															tryLogin);
+			((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+			TRACE();
+		}
+		
+		TRACE();
 		
 //		Json::Value param;
 //		param["memberID"] = hspConnector::get()->getSocialID();
@@ -1327,6 +1345,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setStageClearExp(result_data["stageClearExp"].asInt());
 		mySGD->setPvpLeadMent(result_data["pvpLeadMent"].asString());
 		mySGD->setHellLeadMent(result_data["hellLeadMent"].asString());
+		
+		mySGD->setIsDiaryLinkOn(result_data["isDiaryLinkOn"].asInt());
 	}
 	else
 	{

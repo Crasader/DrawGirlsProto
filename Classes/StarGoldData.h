@@ -1295,6 +1295,7 @@ private:
 	COMMON_VAR(int, gachaRefreshGem, GachaRefreshGem);
 	COMMON_VAR(int, addTimeItemLimit, AddTimeItemLimit);
 	COMMON_VAR(int, stageClearExp, StageClearExp);
+	COMMON_VAR(int, isDiaryLinkOn, IsDiaryLinkOn);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);

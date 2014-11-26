@@ -622,12 +622,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		level = 1;
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
-																	6.f, // 반지름
+																	4.f, // 반지름
 																	ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
 																	0.4f, // 본체 속도
 																	3, // 방향개수.
-																	M_PI / 180.f * 57.f, // 각속도
-																	4, // 인타발.
+																	M_PI / 180.f * 85.f, // 각속도
+																	9, // 인타발.
 																	power,
 																	missile_sub_damage,
 																	ao);

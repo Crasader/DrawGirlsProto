@@ -1278,6 +1278,12 @@ bool OptionPopup::init()
 	diary_item->setTag(kOP_MT_toDiary19);
 	diary_item->setPosition(ccp(191,16));//293
 	tab_menu->addChild(diary_item);
+	
+	if(!mySGD->getIsDiaryLinkOn())
+	{
+		diary_item->setVisible(false);
+		diary_item->setEnabled(false);
+	}
 
 	
 	//	CCSprite* n_noti = CCSprite::create("option_noti.png");

@@ -3667,9 +3667,9 @@ public:
 			
 			if(m_currentFrame % m_frameInterval == 0)
 			{
+				m_currentRad += m_angleVelocity;
 				for(int n=0; n<m_dotNumber; n++)
 				{
-					m_currentRad += m_angleVelocity;
 					CCPoint Pn = m_missileSprite->getPosition()  + ccp( cosf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticA,
 																														 sinf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticB);
 					

@@ -1261,6 +1261,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_missile] = "미사일";
 	obj[LK::kMyLocalKey_damage] = "데미지";
 	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
+	obj[LK::kMyLocalKey_reConnectAlert5] = "서버와의 접속에 오류가 발생하였습니다.\n다시 시도합니다.";
 
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
