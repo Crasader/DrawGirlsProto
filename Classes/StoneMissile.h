@@ -3563,6 +3563,8 @@ public:
 		m_initSpeed = initSpeed;
 		m_dotNumber = dotNumber;
 		m_angleVelocity = angleVelocity;
+		if(cosf(m_initRad) < 0)
+			m_angleVelocity *= -1;
 		m_frameInterval = frameInterval;
 		m_power = power;
 		m_subPower = subPower;
