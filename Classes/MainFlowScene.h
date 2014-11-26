@@ -123,6 +123,10 @@ private:
 	CountingBMLabel* gold_label;
 //	CountingBMLabel* friend_point_label;
 	
+	void puzzleListRefreshTutoPopupClose();
+	void puzzleListRefreshPopupClose();
+	void puzzleListRefresh();
+	
 	int last_open_puzzle_index;
 	CCTableView* puzzle_table;
 	void cellAction(CCObject* sender);
