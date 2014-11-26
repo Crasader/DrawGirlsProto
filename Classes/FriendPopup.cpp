@@ -29,6 +29,7 @@
 #include "SendMessageUtil.h"
 #include "GDWebSprite.h"
 #include "StoryLayer.h"
+#include "StageImgLoader.h"
 
 enum FriendPopupZorder{
 	kFriendPopupZorder_gray = 1,
@@ -457,11 +458,38 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 		setFormSetter(currentStage);
 		currentStage->setPosition(ccp(238.0, 17.5f));
 
+		int character_number = memberInfo.get("characterNo", 1).asInt();
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		int found_index = -1;
+		for(int i=0;found_index == -1 && i<character_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+			{
+				found_index = i+1;
+			}
+		}
+		
+		if(found_index != -1)
+		{
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.8f);
+			character_node->setPosition(ccp(25.5, 10));
+			cell_back->addChild(character_node);
+			
+			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+			CCSprite* character_img = character_ccb.first;
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			character_ccb.second->runAnimationsForSequenceNamed("move_down");
+		}
+		
 		
 		CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(memberInfo["flag"].asString()).c_str());
 		setFormSetter(selectedFlagSpr);
 		cell_back->addChild(selectedFlagSpr, 1);
-		selectedFlagSpr->setPosition(ccp(25.5, 17.0)); 			// dt (25.5, 17.0)
+		selectedFlagSpr->setPosition(ccp(25.5, 10.0)); 			// dt (25.5, 17.0)
+		selectedFlagSpr->setScale(0.7f);
 		
 	};
 	
@@ -1071,7 +1099,6 @@ void FriendPopup::setListMenu()
 				 }
 				 */
 				
-				KS::KSLog("%", v);
 				if(v["result"]["code"] != GDSUCCESS)
 				{
 					addChild(ASPopupView::getCommonNoti(m_touchPriority - 1, getLocal(LK::kFriendNoti),
@@ -1194,7 +1221,7 @@ void FriendPopup::setAddMenu()
 			myHSP->command("getuserlistbyrandom", param, this, [=](Json::Value v){
 				if(add_menu->isEnabled() == true)
 					return;
-
+				
 				m_loadingCCBI->setVisible(false);
 //				ll->removeFromParent();
 //				loadingCCBI->removeFromParent();
