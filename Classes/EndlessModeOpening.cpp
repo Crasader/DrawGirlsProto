@@ -1633,7 +1633,6 @@ public:
 		}
 		if(B)
 		{
-			
 			B->setPosition(ccp(36.5,32.5)); 			// dt (9.5,-6.0)
 		}
 		if(C)
@@ -1655,7 +1654,6 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
-			
 		RewardTableDelegator* rtd = new RewardTableDelegator();
 		rtd->init();
 		rtd->autorelease();
@@ -1696,6 +1694,7 @@ void EndlessModeOpening::resultGetEndlessRank(Json::Value result_data)
 			t_rank.flag = t_list[i]["flag"].asString();
 			t_rank.victory = t_list[i]["victory"].asInt();
 			t_rank.regDate = t_list[i]["regDate"].asInt64();
+			t_rank.data = t_list[i].get("data", "").asString();
 			
 			rank_list.push_back(t_rank);
 		}
@@ -1991,14 +1990,52 @@ CCTableViewCell* EndlessModeOpening::tableCellAtIndex(CCTableView *table, unsign
 		list_cell_case->addChild(rank_label);
 	}
 	
+	Json::Reader reader;
+	Json::Value read_data;
+	reader.parse(rank_list[idx].data.getV(), read_data);
+	
+	if(my_rank != idx+1)
+	{
+		int character_number = read_data.get("character", 1).asInt();
+		int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+		int found_index = -1;
+		for(int i=0;found_index == -1 && i<character_count;i++)
+		{
+			if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+			{
+				found_index = i+1;
+			}
+		}
+		
+		if(found_index != -1)
+		{
+			CCNode* character_node = CCNode::create();
+			character_node->setScale(0.8f);
+			character_node->setPosition(ccp(50, 6));
+			list_cell_case->addChild(character_node);
+			
+			auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+			CCSprite* character_img = character_ccb.first;
+			character_img->setPosition(ccp(0,0));
+			character_node->addChild(character_img);
+			
+			character_ccb.second->runAnimationsForSequenceNamed("move_down");
+		}
+	}
+	
 	string flag = rank_list[idx].flag.getV();
 	
 	CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-//	if(idx >= 3)
-//		selectedFlagSpr->setPosition(ccp(35,rank_position.y-5));
-//	else
+	if(my_rank == idx+1)
+	{
 		selectedFlagSpr->setPosition(ccp(50,list_cell_case->getContentSize().height/2.f));
-	selectedFlagSpr->setScale(0.8);
+		selectedFlagSpr->setScale(0.8);
+	}
+	else
+	{
+		selectedFlagSpr->setPosition(ccp(50,7));
+		selectedFlagSpr->setScale(0.5);
+	}
 	list_cell_case->addChild(selectedFlagSpr);
 	
 //	CCLabelTTF* t_nick_size = CCLabelTTF::create(rank_list[idx].nick.getV().c_str(), mySGD->getFont().c_str(), 12);

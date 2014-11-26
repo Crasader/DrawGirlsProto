@@ -32,6 +32,7 @@ public:
 	KSProtectStr flag;
 	KSProtectVar<int> victory;
 	KSProtectVar<long long> regDate;
+	KSProtectStr data;
 };
 
 class KSLabelTTF;

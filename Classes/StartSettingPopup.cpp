@@ -1000,7 +1000,7 @@ void StartSettingPopup::setMain()
 	{
 		cumber_node = CCNode::create();
 		setFormSetter(cumber_node);
-		cumber_node->setPosition(ccp(left_back->getPositionX(),158));
+		cumber_node->setPosition(ccp(left_back->getPositionX(),178));
 		main_case->addChild(cumber_node);
 		
 		t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
@@ -1013,7 +1013,7 @@ void StartSettingPopup::setMain()
 		character_img = t_char.first;
 		character_manager = t_char.second;
 		
-		character_img->setPosition(ccp(left_back->getPositionX()-60, 100));
+		character_img->setPosition(ccp(left_back->getPositionX()-60, 125));
 		main_case->addChild(character_img);
 		
 		repeat_character_action = [=]()
@@ -1072,7 +1072,7 @@ void StartSettingPopup::setMain()
 		// 처음에 미사일 만들어지는 부분.
 		int missile_level = mySGD->getUserdataCharLevel();
 		
-		attachMissilePreview(ccp(left_back->getPositionX(), 158), missile_type_code, missile_level);
+		attachMissilePreview(ccp(left_back->getPositionX(), 178), missile_type_code, missile_level);
 		
 		
 		character_level_label = KSLabelTTF::create(ccsf("Lv.%d", mySGD->getSelectedCharacterHistory().characterLevel.getV()), mySGD->getFont().c_str(), 12);
@@ -1304,7 +1304,7 @@ void StartSettingPopup::setMain()
 #if 0
 		cumber_node = CCNode::create();
 		setFormSetter(cumber_node);
-		cumber_node->setPosition(ccp(left_back->getPositionX(),158));
+		cumber_node->setPosition(ccp(left_back->getPositionX(),175));
 		main_case->addChild(cumber_node);
 		
 		t_cumber = CumberShowWindow::create(mySD->getSilType(), kCumberShowWindowSceneCode_cardChange);
@@ -1339,7 +1339,7 @@ void StartSettingPopup::setMain()
 				cumber_node->stopAllActions();
 				cumber_node->runAction(CCSequence::create(CCScaleBy::create(0.06f,0.9),CCScaleTo::create(0.1,1), NULL));
 			});
-			t_gm->setPosition(ccp(left_back->getPositionX(),158));
+			t_gm->setPosition(ccp(left_back->getPositionX(),175));
 			main_case->addChild(t_gm);
 			
 			
@@ -1710,7 +1710,7 @@ void StartSettingPopup::characterClose()
 	character_img = t_char.first;
 	character_manager = t_char.second;
 	
-	character_img->setPosition(ccp(left_back->getPositionX()-60, 100));
+	character_img->setPosition(ccp(left_back->getPositionX()-60, 125));
 	character_img->setScaleX(1.f);
 	main_case->addChild(character_img);
 	
@@ -1779,7 +1779,7 @@ void StartSettingPopup::characterClose()
 	}
 	else
 	{
-		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+		keep_position = ccp(main_case->getContentSize().width*0.2f-1, 178);
 	}
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
@@ -1965,7 +1965,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			}
 			else
 			{
-				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+				keep_position = ccp(main_case->getContentSize().width*0.2f-1, 178);
 			}
 			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),
@@ -2052,7 +2052,7 @@ void StartSettingPopup::upgradeAction(CCObject *sender)
 			}
 			else
 			{
-				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 158);
+				missile_position = ccp(main_case->getContentSize().width*0.2f-1, 175);
 			}
 			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(),

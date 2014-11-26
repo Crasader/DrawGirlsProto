@@ -958,8 +958,8 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			}
 			else
 			{
-				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 10);
-				rank_label->setPosition(ccp(33.f, rank_position.y+8));//rank_position);
+				KSLabelTTF* rank_label = KSLabelTTF::create(CCString::createWithFormat("%d", i+1)->getCString(), mySGD->getFont().c_str(), 14);
+				rank_label->setPosition(rank_position);
 				list_cell_case->addChild(rank_label);
 			}
 			
@@ -967,13 +967,47 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 			Json::Value read_data;
 			reader.parse(user_list[i].get("data", Json::Value()).asString(), read_data);
 			
+			if(myrank != i+1)
+			{
+				int character_number = read_data.get("character", 1).asInt();
+				int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+				int found_index = -1;
+				for(int i=0;found_index == -1 && i<character_count;i++)
+				{
+					if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1) == character_number)
+					{
+						found_index = i+1;
+					}
+				}
+				
+				if(found_index != -1)
+				{
+					CCNode* character_node = CCNode::create();
+					character_node->setScale(0.75f);
+					character_node->setPosition(ccp(49, 8));
+					list_cell_case->addChild(character_node);
+					
+					auto character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, found_index) + ".ccbi");
+					CCSprite* character_img = character_ccb.first;
+					character_img->setPosition(ccp(0,0));
+					character_node->addChild(character_img);
+					
+					character_ccb.second->runAnimationsForSequenceNamed("move_down");
+				}
+			}
+			
 			string flag = user_list[i].get("flag", "kr").asString().c_str();
 			CCSprite* selectedFlagSpr = CCSprite::createWithSpriteFrameName(FlagSelector::getFlagString(flag).c_str());
-			if(i >= 3)
-				selectedFlagSpr->setPosition(ccp(33.f,rank_position.y-5));
+			if(myrank != i+1)
+			{
+				selectedFlagSpr->setPosition(ccp(49,8.f));
+				selectedFlagSpr->setScale(0.55);
+			}
 			else
+			{
 				selectedFlagSpr->setPosition(ccp(49,15.5f));
-			selectedFlagSpr->setScale(0.8);
+				selectedFlagSpr->setScale(0.8);
+			}
 			list_cell_case->addChild(selectedFlagSpr);
 			
 			CCLabelTTF* t_nick_size = CCLabelTTF::create(user_list[i].get("nick", Json::Value()).asString().c_str(), mySGD->getFont().c_str(), 12.5f);
