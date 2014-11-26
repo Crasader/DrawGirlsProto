@@ -203,34 +203,34 @@ void MissileParent::createJackMissile( int jm_type, int cmCnt, float missile_spe
 void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, float missileNumbers, CCPoint initPosition,
 																							 int missile_damage, int missile_sub_damage)
 {
-	switch(stoneType)
-	{
-		case StoneType::kStoneType_laser:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_mine:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_protector:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_range:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_spirit:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_spread:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_guided:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-		case StoneType::kStoneType_tornado:
-			missileNumbers = MIN(30.f, missileNumbers);
-			break;
-
-	}
+//	switch(stoneType)
+//	{
+//		case StoneType::kStoneType_laser:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_mine:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_protector:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_range:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_spirit:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_spread:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_guided:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//		case StoneType::kStoneType_tornado:
+//			missileNumbers = MIN(30.f, missileNumbers);
+//			break;
+//
+//	}
 	int grade = ceilf((float)level / 5.f);
 	int power = missile_damage;
 	AttackOption ao = getAttackOption(stoneType, grade);
@@ -620,14 +620,18 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		int subType = mInfo.get("subType", 1).asInt();
 		
 		level = 1;
-		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+//		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		string fileName = "jack_missile_01_07.png";
+		
+		std::vector<KSCumberBase*> main_vector = myGD->getMainCumberVector();
+		
 		Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
-																	6.f, // 반지름
-																	ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
-																	0.4f, // 본체 속도
-																	3, // 방향개수.
-																	M_PI / 180.f * 57.f, // 각속도
-																	4, // 인타발.
+																	0.f, // 반지름
+																	(main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle(),//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
+																	1.2f, // 본체 속도
+																	2, // 방향개수.
+																	M_PI / 180.f * 132.f, // 각속도
+																	7, // 인타발.
 																	power,
 																	missile_sub_damage,
 																	ao);

@@ -123,6 +123,7 @@ private:
 	CountingBMLabel* gold_label;
 //	CountingBMLabel* friend_point_label;
 	
+	int last_open_puzzle_index;
 	CCTableView* puzzle_table;
 	void cellAction(CCObject* sender);
 	virtual CCTableViewCell* tableCellAtIndex(CCTableView *table, unsigned int idx);

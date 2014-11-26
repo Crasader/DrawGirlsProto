@@ -427,7 +427,7 @@ void RivalSelectPopup::selectRival(int t_index)
 	mySGD->endless_victory = mySGD->dummy_list[t_index]["victory"].asInt();
 	mySGD->endless_autoLevel = mySGD->dummy_list[t_index]["autoLevel"].asInt();
 	mySGD->endless_level = mySGD->dummy_list[t_index]["level"].asInt();
-	mySGD->endless_character_no = mySGD->dummy_list[t_index].get("charNo", 1).asInt();
+	mySGD->endless_character_no = mySGD->dummy_list[t_index].get("characterNo", 1).asInt();
 	
 	CommonAnimation::closePopup(this, m_container, gray, [=](){
 		
