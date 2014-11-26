@@ -1699,7 +1699,7 @@ public:
 		KSCumberBase* minDistanceCumber = nullptr;
 		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 		bool found = false;
-		if(m_updateFrameCount >= 3)
+		if(m_updateFrameCount >= 5)
 		{
 			for(auto iter : myGD->getMainCumberVector())
 			{

@@ -812,6 +812,7 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		
 		if(result_data["isMax"].asBool()){
 			piece_number_label->setString(CCString::createWithFormat("%d스테이지 랭킹",result_data["stageNo"].asInt())->getCString());
+			piece_number_label->setScale((rank_tab->getContentSize().width-5)/piece_number_label->getContentSize().width);
 		}else{
 			piece_number_label->setString("월드 주간 랭킹");
 		}
