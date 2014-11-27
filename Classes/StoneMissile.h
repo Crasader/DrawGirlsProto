@@ -3668,10 +3668,10 @@ class Tornado : public StoneAttack
 public:
 	static Tornado* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
 												 int dotNumber, float angleVelocity, int frameInterval, int power, int subPower,
-														AttackOption ao, float t_length = 100.f)
+														AttackOption ao, float t_length, int t_final_cnt, int t_level)
 	{
 		Tornado* object = new Tornado();
-		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, frameInterval, power, subPower, ao, t_length);
+		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, frameInterval, power, subPower, ao, t_length, t_final_cnt, t_level);
 		
 		object->autorelease();
 		
@@ -3682,7 +3682,7 @@ public:
 	
 	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
 						int dotNumber, float angleVelocity, int frameInterval, int power, int subPower,
-						AttackOption ao, float t_length)
+			  AttackOption ao, float t_length, int t_final_cnt, int t_level)
 	{
 		StoneAttack::init();
 //		m_missileStep = 1;
@@ -3690,6 +3690,8 @@ public:
 		m_particle = NULL;
 		m_streak = NULL;
 		m_start_node = NULL;
+		final_cnt = t_final_cnt;
+		mm_level = t_level;
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
@@ -3709,7 +3711,7 @@ public:
 		m_elipticB = 1.0f;
 		
 		
-		m_currentRad = 0.f;
+		m_currentRad = m_initRad + M_PI;
 		m_currentFrame = 0;
 		
 		m_ao = ao;
@@ -3718,16 +3720,26 @@ public:
 		m_initPosition = initPosition;
 		
 //		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
-		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite = CCSprite::create("whitepaper2.png", CCRectMake(0,0,1,1));//m_initRadius,m_initRadius));
+//		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
 		//m_missileSprite->setRotationY(t);
 		//m_missileSprite->setRotationX(t);
 		//}));
-		addChild(m_missileSprite, 1);
+		addChild(m_missileSprite);
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		m_missileSprite->setPosition(initPosition);
+		
+		
+		float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
+		for(int i=final_cnt-1;i>=0;i--)
+		{
+			CCSprite* missile_main_body = CCSprite::create(m_fileName.c_str());
+			missile_main_body->setRotation((m_initRad + final_angle_rad*i)/M_PI*180);
+			missile_main_body->setPosition(ccp(0,0));
+			m_missileSprite->addChild(missile_main_body);
+		}
 		
 		scheduleUpdate();
 
@@ -3765,6 +3777,8 @@ protected:
 	
 	float m_length;
 	CCPoint m_initPosition;
+	int final_cnt;
+	int mm_level;
 	
 	float m_initRadius, m_initRad, m_initSpeed, m_angleVelocity;
 	int m_dotNumber, m_frameInterval;

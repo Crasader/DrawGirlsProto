@@ -327,7 +327,6 @@ void Tornado::update(float dt)
 		{
 			CCPoint keep_position = m_missileSprite->getPosition();
 			
-			int final_cnt = 10;
 			float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
 			for(int i=0;i<final_cnt;i++)
 			{
@@ -335,6 +334,7 @@ void Tornado::update(float dt)
 															  m_power, m_subPower, m_ao);
 				
 				addChild(sm);
+				sm->beautifier(mm_level);
 			}
 		}
 		
@@ -393,8 +393,8 @@ void Tornado::update(float dt)
 			m_currentRad += m_angleVelocity;
 			for(int n=0; n<m_dotNumber; n++)
 			{
-				CCPoint Pn = m_missileSprite->getPosition()  + ccp( cosf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticA,
-																   sinf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticB);
+				CCPoint Pn = m_missileSprite->getPosition();//  + ccp( cosf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticA,
+															//	   sinf(m_currentRad + 2 * M_PI / m_dotNumber * n) * m_initRadius * m_elipticB);
 				
 				
 				
@@ -411,6 +411,9 @@ void Tornado::update(float dt)
 															  m_power, m_subPower, m_ao);
 				
 				addChild(sm);
+//				sm->beautifier(mm_level);
+				
+				sm->addChild(KSTimer::create(0.4f, [=](){sm->removeFromParent();}));
 			}
 			
 		}
@@ -419,7 +422,6 @@ void Tornado::update(float dt)
 		{
 			CCPoint keep_position = m_missileSprite->getPosition();
 			
-			int final_cnt = 10;
 			float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
 			for(int i=0;i<final_cnt;i++)
 			{
@@ -427,6 +429,7 @@ void Tornado::update(float dt)
 															  m_power, m_subPower, m_ao);
 				
 				addChild(sm);
+				sm->beautifier(mm_level);
 			}
 			
 			m_missileSprite->removeFromParent();

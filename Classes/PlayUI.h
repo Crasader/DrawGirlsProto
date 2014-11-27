@@ -66,6 +66,8 @@ public:
 private:
 	int keeping_frame;
 	bool is_keeping;
+	bool is_holding;
+	int hold_frame;
 	void startKeep ();
 	void keeping ();
 	CCNode* score_label;

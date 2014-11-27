@@ -51,6 +51,8 @@ public:
 	virtual void completedAnimationSequenceNamed(const char *name);
 	
 private:
+	int full_character_count;
+	
 	bool is_enable_to_shop;
 	int touch_priority;
 	CCObject* target_final;

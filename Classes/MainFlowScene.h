@@ -123,6 +123,9 @@ private:
 	CountingBMLabel* gold_label;
 //	CountingBMLabel* friend_point_label;
 	
+	function<void()> hell_button_refresh_func;
+	
+	void hellButtonRefreshPopupClose();
 	void puzzleListRefreshTutoPopupClose();
 	void puzzleListRefreshPopupClose();
 	void puzzleListRefresh();
