@@ -468,7 +468,7 @@ void CircleDance::update(float dt)
 //		for(auto i : m_satellites)
 		for(auto iter = m_satellites.begin(); iter != m_satellites.end(); )
 		{
-			Satellite i = *iter;
+			Satellite& i = *iter;
 			i.rad += M_PI / 180.f * 5.f;
 			i.sprite->setPosition(m_missileSprite->getPosition() + ccp(m_initRadius * cosf(i.rad), m_initRadius * sin(i.rad)));
 			

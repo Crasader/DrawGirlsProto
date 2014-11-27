@@ -3864,6 +3864,7 @@ public:
 			t.sprite = satell;
 			t.rad = rad;
 			m_satellites.push_back(t);
+			addChild(satell);
 			
 		}
 		
