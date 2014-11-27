@@ -747,7 +747,7 @@ void MainFlowScene::showHellOpening()
 	puzzle_table->setTouchEnabled(false);
 	
 	HellModeOpening* t_popup = HellModeOpening::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::hellButtonRefreshPopupClose));
 	addChild(t_popup, kMainFlowZorder_popup);
 }
 
@@ -3955,6 +3955,27 @@ void MainFlowScene::setBottom()
 	
 //	if(mySGD->is_hell_mode_enabled)
 //	{
+	
+	CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
+	CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
+	
+	CCMenuLambda* hell_menu = CCMenuLambda::create();
+	hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_hell_img->getContentSize().height/2.f+3));
+	//		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
+	//		etc_frame->addChild(etc_menu);
+	addChild(hell_menu, kMainFlowZorder_uiButton);
+	bottom_list.push_back(hell_menu);
+	
+	hell_menu->setTouchPriority(kCCMenuHandlerPriority-1);
+	
+	CCMenuItemLambda* hell_item = CCMenuItemSpriteLambda::create(n_hell_img, s_hell_img, [=](CCObject* sender){
+		showHellOpening();
+	});
+	
+	hell_menu->addChild(hell_item);
+	
+	hell_button_refresh_func = [=]()
+	{
 		bool is_hell_open = false;
 		
 		int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
@@ -3964,106 +3985,95 @@ void MainFlowScene::setBottom()
 			if(mySGD->isClearPiece(open_piece_number))
 				is_hell_open = true;
 		}
-	
-	bool is_donthave_hell_character = false;
-	if(is_hell_open && !mySGD->is_hell_mode)
-	{
-		for(int i=0;!is_donthave_hell_character && i<hell_count;i++)
+		
+		bool is_donthave_hell_character = false;
+		if(is_hell_open && !mySGD->is_hell_mode)
 		{
-			int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
-			int history_size = mySGD->getCharacterHistorySize();
-			bool is_found = false;
-			for(int j=0;!is_found && j<history_size;j++)
+			for(int i=0;!is_donthave_hell_character && i<hell_count;i++)
 			{
-				CharacterHistory t_history = mySGD->getCharacterHistory(j);
-				if(t_history.characterNo.getV() == cha_no)
+				int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+				int history_size = mySGD->getCharacterHistorySize();
+				bool is_found = false;
+				for(int j=0;!is_found && j<history_size;j++)
 				{
-					is_found = true;
+					CharacterHistory t_history = mySGD->getCharacterHistory(j);
+					if(t_history.characterNo.getV() == cha_no)
+					{
+						is_found = true;
+					}
+				}
+				
+				if(!is_found)
+				{
+					is_donthave_hell_character = true;
 				}
 			}
-			
-			if(!is_found)
-			{
-				is_donthave_hell_character = true;
-			}
 		}
-	}
-	
-	string hell_lead_ment = "NEW";
-	Json::Value t_json;
-	Json::Reader t_reader;
-	t_reader.parse(mySGD->getHellLeadMent(), t_json);
-	
-	if(t_json.size() >= 1)
-	{
-		int rand_value = rand()%t_json.size();
 		
-		hell_lead_ment = t_json[rand_value].asString();
-	}
-	
-		CCSprite* n_hell_img = GraySprite::create("mainflow_hell_event.png");
+		string hell_lead_ment = "NEW";
+		Json::Value t_json;
+		Json::Reader t_reader;
+		t_reader.parse(mySGD->getHellLeadMent(), t_json);
+		
+		if(t_json.size() >= 1)
+		{
+			int rand_value = rand()%t_json.size();
+			
+			hell_lead_ment = t_json[rand_value].asString();
+		}
+		
 		((GraySprite*)n_hell_img)->setGray(!is_hell_open);
-	if(is_donthave_hell_character)
-	{
-		CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-		n_hell_img->addChild(n_win_back);
 		
-		KSLabelTTF* n_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
-		n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-		n_win_back->addChild(n_win_label);
+		if(is_donthave_hell_character)
+		{
+			CCScale9Sprite* n_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+			n_hell_img->addChild(n_win_back);
+			
+			KSLabelTTF* n_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
+			n_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+			n_win_back->addChild(n_win_label);
+			
+			//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
+			n_win_back->setPosition(ccp(n_hell_img->getContentSize().width-30, n_hell_img->getContentSize().height-n_win_back->getContentSize().height+13));
+			n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
+			if(n_win_label->getContentSize().width + 15 > 60)
+				n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
+			
+			//		GraySprite* n_new = GraySprite::create("mainflow_new.png");
+			//		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
+			//		n_hell_img->addChild(n_new);
+		}
 		
-		//				n_win_back->setContentSize(CCSizeMake(15+n_win_label->getContentSize().width, 20));
-		n_win_back->setPosition(ccp(n_hell_img->getContentSize().width-30, n_hell_img->getContentSize().height-n_win_back->getContentSize().height+13));
-		n_win_label->setPosition(ccp(n_win_back->getContentSize().width/2.f, n_win_back->getContentSize().height/2.f) + ccp(0,1));
-		if(n_win_label->getContentSize().width + 15 > 60)
-			n_win_label->setScale(60.f/(n_win_label->getContentSize().width+15));
-		
-//		GraySprite* n_new = GraySprite::create("mainflow_new.png");
-//		n_new->setPosition(ccpFromSize(n_hell_img->getContentSize()) + ccp(0,0));
-//		n_hell_img->addChild(n_new);
-	}
-		
-		CCSprite* s_hell_img = GraySprite::create("mainflow_hell_event.png");
 		if(is_hell_open)
 			s_hell_img->setColor(ccGRAY);
 		else
 			((GraySprite*)s_hell_img)->setDeepGray(!is_hell_open);
-	if(is_donthave_hell_character)
-	{
-		CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
-		s_hell_img->addChild(s_win_back);
 		
-		KSLabelTTF* s_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
-		s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
-		s_win_back->addChild(s_win_label);
-		
-		//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
-		s_win_back->setPosition(ccp(s_hell_img->getContentSize().width-30, s_hell_img->getContentSize().height-s_win_back->getContentSize().height+13));
-		s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
-		if(s_win_label->getContentSize().width + 15 > 60)
-			s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
-		
-//		GraySprite* s_new = GraySprite::create("mainflow_new.png");
-//		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));
-//		s_hell_img->addChild(s_new);
-	}
-		
-		CCMenuLambda* hell_menu = CCMenuLambda::create();
-		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f, n_hell_img->getContentSize().height/2.f+3));
-//		hell_menu->setPosition(ccp(385,-(myDSH->puzzle_ui_top-320.f)/2.f+10) + ccp(43-240+240.f+15, n_hell_img->getContentSize().height/2.f+3));
-		//		etc_frame->addChild(etc_menu);
-		addChild(hell_menu, kMainFlowZorder_uiButton);
-		bottom_list.push_back(hell_menu);
-		
-		hell_menu->setTouchPriority(kCCMenuHandlerPriority-1);
-		
-		CCMenuItemLambda* hell_item = CCMenuItemSpriteLambda::create(n_hell_img, s_hell_img, [=](CCObject* sender){
-			showHellOpening();
-		});
-		
-		hell_menu->addChild(hell_item);
+		if(is_donthave_hell_character)
+		{
+			CCScale9Sprite* s_win_back = CCScale9Sprite::create("mainflow_new3.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+			s_hell_img->addChild(s_win_back);
+			
+			KSLabelTTF* s_win_label = KSLabelTTF::create(hell_lead_ment.c_str(), mySGD->getFont().c_str(), 9.5f);
+			s_win_label->enableOuterStroke(ccBLACK, 1, int(255*0.5), true);
+			s_win_back->addChild(s_win_label);
+			
+			//				s_win_back->setContentSize(CCSizeMake(15+s_win_label->getContentSize().width, 20));
+			s_win_back->setPosition(ccp(s_hell_img->getContentSize().width-30, s_hell_img->getContentSize().height-s_win_back->getContentSize().height+13));
+			s_win_label->setPosition(ccp(s_win_back->getContentSize().width/2.f, s_win_back->getContentSize().height/2.f) + ccp(0,1));
+			if(s_win_label->getContentSize().width + 15 > 60)
+				s_win_label->setScale(60.f/(s_win_label->getContentSize().width+15));
+			
+			//		GraySprite* s_new = GraySprite::create("mainflow_new.png");
+			//		s_new->setPosition(ccpFromSize(s_hell_img->getContentSize()) + ccp(0,0));
+			//		s_hell_img->addChild(s_new);
+		}
 		
 		hell_item->setEnabled(is_hell_open);
+	};
+	
+	hell_button_refresh_func();
+	
 //	}
 	
 	Json::Value v = mySGD->cgp_data;
@@ -6203,6 +6213,12 @@ void MainFlowScene::puzzleListRefreshTutoPopupClose()
 {
 	puzzleListRefresh();
 	tutorialCardSettingClose();
+}
+
+void MainFlowScene::hellButtonRefreshPopupClose()
+{
+	hell_button_refresh_func();
+	popupClose();
 }
 
 void MainFlowScene::tutorialCardSettingClose()

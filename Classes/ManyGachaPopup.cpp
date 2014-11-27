@@ -48,6 +48,7 @@ bool ManyGachaPopup::init(int t_touch_priority, bool t_is_enable_to_shop)
 	{
 		return false;
 	}
+	full_character_count = 0;
 	is_enable_to_shop = t_is_enable_to_shop;
 	touch_priority = t_touch_priority;
 	is_menu_enable = false;
@@ -370,6 +371,8 @@ void ManyGachaPopup::setNormalGacha()
 	
 	buttons_menu->setTouchPriority(touch_priority-1);
 	
+	full_character_count = 0;
+	
 	for(int i=0;i<3;i++)
 	{
 		for(int j=0;j<4;j++)
@@ -477,6 +480,7 @@ void ManyGachaPopup::setNormalGacha()
 										
 										Json::FastWriter t_writer;
 										myDSH->setStringForKey(kDSH_Key_normalGachaList, t_writer.write(t_json_list));
+										full_character_count++;
 									}
 								}
 							}
@@ -604,7 +608,7 @@ void ManyGachaPopup::setNormalGacha()
 		t_reader.parse(nml_gc, nml_gc_json);
 		
 		CCSprite* price_icon = CCSprite::create("icon_g.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -740,6 +744,8 @@ void ManyGachaPopup::setPremiumGacha()
 	
 	buttons_menu->setTouchPriority(touch_priority-1);
 	
+	full_character_count = 0;
+	
 	for(int i=0;i<3;i++)
 	{
 		for(int j=0;j<4;j++)
@@ -846,6 +852,7 @@ void ManyGachaPopup::setPremiumGacha()
 										
 										Json::FastWriter t_writer;
 										myDSH->setStringForKey(kDSH_Key_premiumGachaList, t_writer.write(t_json_list));
+										full_character_count++;
 									}
 								}
 							}
@@ -973,7 +980,7 @@ void ManyGachaPopup::setPremiumGacha()
 		t_reader.parse(prm_gc, prm_gc_json);
 		
 		CCSprite* price_icon = CCSprite::create("icon_r.png");
-		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+		KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 		price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 		price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 		price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -1222,7 +1229,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 											 t_reader.parse(nml_gc, nml_gc_json);
 											 
 											 CCSprite* price_icon = CCSprite::create("icon_g.png");
-											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -1516,7 +1523,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 																				t_reader.parse(nml_gc, nml_gc_json);
 																				
 																				CCSprite* price_icon = CCSprite::create("icon_g.png");
-																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(nml_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -2281,7 +2288,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 											 t_reader.parse(prm_gc, prm_gc_json);
 											 
 											 CCSprite* price_icon = CCSprite::create("icon_r.png");
-											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+											 KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 											 price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 											 price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 											 price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
@@ -2514,7 +2521,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 																				t_reader.parse(prm_gc, prm_gc_json);
 																				
 																				CCSprite* price_icon = CCSprite::create("icon_r.png");
-																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1)].asInt()).c_str(), mySGD->getFont().c_str(), 12);
+																				KSLabelTTF* price_label = KSLabelTTF::create(KS::insert_separator(prm_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt()).c_str(), mySGD->getFont().c_str(), 12);
 																				price_back->setContentSize(CCSizeMake(5+price_icon->getContentSize().width+price_label->getContentSize().width+5, 23));
 																				price_icon->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_label->getContentSize().width/2.f-5, 0));
 																				price_label->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_icon->getContentSize().width/2.f-5, 0));
