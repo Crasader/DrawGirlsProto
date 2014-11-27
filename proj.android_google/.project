@@ -32,12 +32,12 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>src</name>
+			<name>common_src</name>
 			<type>2</type>
 			<location>/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.android_src/src</location>
 		</link>
 		<link>
-			<name>src_google</name>
+			<name>src</name>
 			<type>2</type>
 			<location>/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/proj.android_google/src</location>
 		</link>

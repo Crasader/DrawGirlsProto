@@ -2530,6 +2530,8 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																												 {
 																																													 is_menu_enable = true;
 																																													 
+																																													 last_open_puzzle_index = 0;
+																																													 
 																																													 is_puzzle_enter_list.clear();
 																																													 
 																																													 TRACE();
@@ -2651,6 +2653,8 @@ void MainFlowScene::detailCondition(CCObject* sender, CCControlEvent t_event)
 																																														 
 																																														 if(!t_info.is_open)
 																																															 locked_puzzle_count++;
+																																														 else
+																																															 last_open_puzzle_index = i;
 																																													 }
 																																													 
 																																													 CCPoint t_offset = puzzle_table->getContentOffset();
@@ -2774,8 +2778,149 @@ void MainFlowScene::showGachaPopup()
 {
 	is_menu_enable = false;
 	ManyGachaPopup* t_popup = ManyGachaPopup::create();
-	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 	addChild(t_popup, kMainFlowZorder_popup);
+}
+
+void MainFlowScene::puzzleListRefresh()
+{
+	last_open_puzzle_index = 0;
+	
+	is_puzzle_enter_list.clear();
+	
+	TRACE();
+	locked_puzzle_count = 0;
+	
+	TRACE();
+	for(int i=0;i<not_event_puzzle_list.size();i++)
+	{
+		int t_puzzle_number = not_event_puzzle_list[i];
+		
+		PuzzleOpenInfo t_info;
+		t_info.is_open = mySGD->getPuzzleHistory(t_puzzle_number).is_open.getV();
+		
+		string puzzle_condition = NSDS_GS(t_puzzle_number, kSDS_PZ_condition_s);
+		
+		Json::Value condition_list;
+		Json::Reader reader;
+		reader.parse(puzzle_condition, condition_list);
+		
+		TRACE();
+		if(condition_list.size() <= 0)
+			t_info.is_open = true;
+		
+		t_info.is_base_condition_success = true;
+		t_info.is_have_week_condition = false;
+		t_info.is_have_date_condition = false;
+		t_info.is_have_ruby_condition = false;
+		t_info.need_star_count = 0;
+		t_info.need_card_count = 0;
+		
+		for(int i=0;!t_info.is_open && i<condition_list.size();i++)
+		{
+			Json::Value t_condition_and = condition_list[i];
+			
+			bool and_open = true;
+			bool is_time_condition = false;
+			
+			for(int j=0;j<t_condition_and.size();j++)
+			{
+				Json::Value t_condition = t_condition_and[j];
+				string t_type = t_condition["type"].asString();
+				if(t_type == "p")
+				{
+					if(!mySGD->getPuzzleHistory(t_condition["value"].asInt()).is_clear.getV())
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "s")
+				{
+					t_info.need_star_count = t_condition["value"].asInt();
+					if(mySGD->getClearStarCount() < t_info.need_star_count)
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "c")
+				{
+					t_info.need_card_count = t_condition["value"].asInt();
+					if(mySGD->getHasGottenCardsSize() < t_info.need_card_count)
+					{
+						and_open = false;
+						t_info.is_base_condition_success = false;
+					}
+				}
+				else if(t_type == "g")
+				{
+					t_info.need_ruby_value = t_condition["value"].asInt();
+					and_open = false;
+					t_info.is_have_ruby_condition = true;
+				}
+				else if(t_type == "w")
+				{
+					is_time_condition = true;
+					t_info.is_have_week_condition = true;
+					if(!mySGD->keep_time_info.is_loaded)
+						and_open = false;
+					else
+					{
+						int weekday = t_condition["weekday"].asInt();
+						t_info.keep_weekday = weekday;
+						if(mySGD->keep_time_info.weekday.getV() != -1 && mySGD->keep_time_info.weekday.getV() != weekday)
+							and_open = false;
+						t_info.keep_week_start = t_condition["s"].asInt();
+						t_info.keep_week_end = t_condition["e"].asInt();
+						if(mySGD->keep_time_info.hour.getV() < t_condition["s"].asInt() || mySGD->keep_time_info.hour.getV() >= t_condition["e"].asInt())
+							and_open = false;
+					}
+				}
+				else if(t_type == "d")
+				{
+					is_time_condition = true;
+					t_info.is_have_date_condition = true;
+					t_info.keep_date_start = t_condition["s"].asString();
+					if(mySGD->keep_time_info.date.getV() < t_condition["s"].asInt64() || mySGD->keep_time_info.date.getV() >= t_condition["e"].asInt64())
+						and_open = false;
+				}
+			}
+			
+			TRACE();
+			if(and_open)
+			{
+				t_info.is_open = true;
+				if(!is_time_condition)
+				{
+					PuzzleHistory t_history = mySGD->getPuzzleHistory(t_puzzle_number);
+					t_history.is_open = true;
+					t_history.open_type = "무료";
+					mySGD->setPuzzleHistory(t_history, nullptr);
+				}
+			}
+		}
+		
+		t_info.before_locked_puzzle_count = locked_puzzle_count;
+		t_info.puzzle_number = t_puzzle_number;
+		is_puzzle_enter_list.push_back(t_info);
+		
+		if(!t_info.is_open)
+			locked_puzzle_count++;
+		else
+			last_open_puzzle_index = i;
+	}
+	
+	CCPoint t_offset = puzzle_table->getContentOffset();
+	puzzle_table->reloadData();
+	puzzle_table->setContentOffset(t_offset);
+
+}
+
+void MainFlowScene::puzzleListRefreshPopupClose()
+{
+	puzzleListRefresh();
+	popupClose();
 }
 
 void MainFlowScene::menuAction(CCObject* sender)
@@ -2995,7 +3140,7 @@ void MainFlowScene::menuAction(CCObject* sender)
                 t_code = kSC_eventPack;
 				
 				ShopPopup* t_shop = ShopPopup::create();
-				t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 				t_shop->targetHeartTime(heart_time);
 				t_shop->setShopCode(t_code);
 				t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -3006,7 +3151,7 @@ void MainFlowScene::menuAction(CCObject* sender)
             {
 //                t_code = kSC_gold;
 				ManyGachaPopup* t_popup = ManyGachaPopup::create();
-				t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+				t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 				addChild(t_popup, kMainFlowZorder_popup);
             }
             
@@ -3024,7 +3169,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 			puzzle_table->setTouchEnabled(false);
 			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
 			CardSettingPopup* t_popup = CardSettingPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::tutorialCardSettingClose));
+			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_mission)
@@ -6052,6 +6197,12 @@ void MainFlowScene::mailPopupClose()
 	}));
 	is_menu_enable = true;
     TRACE();
+}
+
+void MainFlowScene::puzzleListRefreshTutoPopupClose()
+{
+	puzzleListRefresh();
+	tutorialCardSettingClose();
 }
 
 void MainFlowScene::tutorialCardSettingClose()
