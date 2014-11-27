@@ -554,7 +554,7 @@ protected:
 	CC_SYNTHESIZE(FreezeAttack*, m_freezeAttack, FreezeAttack);
 	CC_SYNTHESIZE(ChaosAttack*, m_chaosAttack, ChaosAttack);
 	CC_SYNTHESIZE(SightOutAttack*, m_sightOutAttack, SightOutAttack);
-	CC_SYNTHESIZE(float, m_damageMeasure, DamageMeasure);
+//	CC_SYNTHESIZE(float, m_damageMeasure, DamageMeasure);
 	CC_SYNTHESIZE(float, m_remainHp, RemainHp);
 	CC_SYNTHESIZE(float, m_totalHp, TotalHp);
 	CC_SYNTHESIZE(CumberEmotion*, m_emotion, Emotion);
@@ -574,6 +574,10 @@ public:	deque<Json::Value>& getAttackQueue()
 //	CC_SYNTHESIZE(vector<ChargeParent*>, m_charges, Charges);
 //	vector<ChargeParent*> m_charges;
 //	CC_SYNTHESIZE(ChargeParent*, m_chargeParent, ChargeParent);
+protected: float m_damageMeasure;
+public: virtual float getDamageMeasure(void) const { return m_damageMeasure; }
+public: virtual void setDamageMeasure(float var){ m_damageMeasure = var;
+	myGD->communication("UI_changeCastingGage",var / (getTotalHp() * 0.1f));}
 };
 
 #endif /* defined(__DGproto__KSCumberBase__) */

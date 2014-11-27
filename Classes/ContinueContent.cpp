@@ -497,6 +497,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
                                                   t_popup->removeFromParent();
                                                   if(result_data["result"]["code"].asInt() == GDSUCCESS)
                                                   {
+													  mySGD->ingame_continue_cnt++;
                                                       //										   giveup_button->setEnabled(false);
                                                       continue_button->setEnabled(false);
                                                       
