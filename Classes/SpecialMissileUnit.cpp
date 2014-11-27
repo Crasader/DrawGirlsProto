@@ -1171,6 +1171,8 @@ void VMesh::myInit(const Json::Value& param)
 	addChild(m_laserContainer);
 	m_attacked = false;
 	m_thickness = param.get("thickness", 12).asInt();
+	
+	
 }
 
 void VMesh::myAction(float dt)
@@ -1181,13 +1183,15 @@ void VMesh::myAction(float dt)
 		//
 		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
 		auto c = m_mesh->getColor();
-		c.g -= m_dColor;
+		c.r -= m_dColor;
+		c.b -= m_dColor;
 		m_mesh->setColor(c);
 		//		m_hMesh->setOpacity(255.f * progress);
 	}
 	else if(m_attacked == false)
 	{
 		m_attacked = true;
+		AudioEngine::sharedInstance()->playEffect("se_destructionlaser_2.mp3", false);
 		m_mesh->setVisible(false);
 		if(m_enabled)
 		{
@@ -1294,12 +1298,15 @@ void HMesh::myAction(float dt)
 		//
 		float progress = (float)m_currentFrames / (float)m_originalDelayFrames;
 		auto c = m_mesh->getColor();
-		c.g -= m_dColor;
+		c.r -= m_dColor;
+		c.b -= m_dColor;
+//		c.g -= m_dColor;
 		m_mesh->setColor(c);
 		//		m_hMesh->setOpacity(255.f * progress);
 	}
 	else if(m_attacked == false)
 	{
+		AudioEngine::sharedInstance()->playEffect("se_destructionlaser_2.mp3", false);
 		m_mesh->setVisible(false);
 		m_attacked = true;
 		
