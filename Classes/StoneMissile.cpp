@@ -469,7 +469,7 @@ void CircleDance::update(float dt)
 		KSCumberBase* nearCumber = nullptr;
 		for(auto bosses : myGD->getMainCumberVector())
 		{
-			if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= 100)
+			if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= 60)
 			{
 				nearCumber = bosses;
 				isNearMonster = true;
@@ -478,7 +478,7 @@ void CircleDance::update(float dt)
 		}
 		for(auto mob : myGD->getSubCumberVector())
 		{
-			if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= 100)
+			if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= 60)
 			{
 				nearCumber = mob;
 				isNearMonster = true;

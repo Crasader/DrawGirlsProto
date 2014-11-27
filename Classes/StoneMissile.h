@@ -1842,7 +1842,7 @@ public:
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(distance < 10)
+				if(distance < 13)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
@@ -1856,7 +1856,7 @@ public:
 				{
 					CCPoint targetPosition = iter->getPosition();
 					float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-					if(iter->getDeadState() == false && distance < 10)
+					if(iter->getDeadState() == false && distance < 13)
 					{
 						minDistance = distance;
 						minDistanceCumber = iter;
@@ -3890,7 +3890,7 @@ public:
 			
 		}
 		
-		addChild(KSGradualValue<float>::create(0.f, m_initRadius, 0.5f, [=](float t)
+		addChild(KSGradualValue<float>::create(0.f, m_initRadius, 0.3f, [=](float t)
 																					 {
 																						 for(auto i : m_satellites)
 																						 {

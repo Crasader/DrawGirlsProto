@@ -350,7 +350,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			};
 			
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -547,7 +548,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(gm);
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -578,7 +580,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(gm);
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -659,7 +662,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(ms);
 			};
 			addChild(KSTimer::create(0.50 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -675,6 +679,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		
 		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
 		int j = 0;
+		missileNumbersInt *= 3;
 		for(int i=missileNumbersInt; i>=0; i-=20, j++)
 		{
 			auto creator = [=](){
@@ -684,12 +689,15 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																										 nearCumber->getPosition().x - myGD->getJackPointCCP().x),// 방향
 																							1.2f, // 속도
 																							mNumber, // 개수
-																							M_PI / 180.f * 5.f, power, missile_sub_damage, ao);
+																							M_PI / 180.f * 10.f, power, missile_sub_damage, ao);
 				//		ms->beautifier(level);
 				jack_missile_node->addChild(ms);
 			};
-			addChild(KSTimer::create(0.30 * (j + 1), [=](){
-				creator();
+			addChild(KSTimer::create(0.80 * (j + 1), [=](){
+				if(myGD->getIsGameover() == false)
+				{
+					creator();
+				}
 			}));
 			
 		}

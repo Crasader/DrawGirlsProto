@@ -523,6 +523,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_warning111] = "해바라기";
 	obj[LK::kMyLocalKey_warning112] = "얼음폭탄";
 	obj[LK::kMyLocalKey_warning113] = "유도폭탄";
+	obj[LK::kMyLocalKey_warning114] = "닳는 톱니";
+	obj[LK::kMyLocalKey_warning115] = "부하몹폭발";
 	obj[LK::kMyLocalKey_warning1001] = "토네이도";
 	obj[LK::kMyLocalKey_warning1002] = "태양권";
 	obj[LK::kMyLocalKey_warning1003] = "슬로우존";
@@ -543,6 +545,11 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_warning1018] = "문득구름";
 	obj[LK::kMyLocalKey_warning1019] = "거대화";
 	obj[LK::kMyLocalKey_warning1020] = "부하몬스터 소환";
+	obj[LK::kMyLocalKey_warning1021] = "죽음의 신";
+	obj[LK::kMyLocalKey_warning1022] = "레이저 그물";
+	obj[LK::kMyLocalKey_warning1023] = "와이퍼 미사일";
+	obj[LK::kMyLocalKey_warning1024] = "뭉게구름";
+	obj[LK::kMyLocalKey_warning1025] = "젤리";
 	obj[LK::kMyLocalKey_warningBossSuccess] = "보스공격저지";
 	obj[LK::kMyLocalKey_warningLastLife] = "마지막 목숨";
 	obj[LK::kMyLocalKey_newBossPattern] = "새로운 보스 공격!";
