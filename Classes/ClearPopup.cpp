@@ -560,18 +560,21 @@ bool ClearPopup::init()
 																	  }
 																  }));
 	
-	CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
-	CharacterHistory t_char_history = mySGD->getSelectedCharacterHistory();
-	t_char_history.characterExp = mySGD->getStageClearExp();
-	send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_char_history, [=](Json::Value result_data)
-																	  {
-																		  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	if(mySGD->getStageClearExp() > 0)
+	{
+		CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
+		CharacterHistory t_char_history = mySGD->getSelectedCharacterHistory();
+		t_char_history.characterExp = mySGD->getStageClearExp();
+		send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_char_history, [=](Json::Value result_data)
 																		  {
-																			  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-																			  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getSelectedCharacterHistory(), ccp(240,160+160*screen_scale_y));
-																			  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
-																		  }
-																	  }));
+																			  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																			  {
+																				  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																				  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getSelectedCharacterHistory(), ccp(240,160+160*screen_scale_y));
+																				  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
+																			  }
+																		  }));
+	}
 	
     return true;
 }

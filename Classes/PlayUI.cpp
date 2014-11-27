@@ -1386,10 +1386,33 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		for(int i=kAchievementCode_luckySeven1;i<=kAchievementCode_luckySeven3;i++)
 		{
+			int i = kAchievementCode_luckySeven1;
+			
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-			   t_p == t_beforePercentage + myAchieve->getCondition((AchievementCode)i)/0.001f)
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		{
+			int i = kAchievementCode_luckySeven2;
+			
+			if(myAchieve->isCompleted(kAchievementCode_luckySeven1) && !myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		{
+			int i = kAchievementCode_luckySeven3;
+			
+			if(myAchieve->isCompleted(kAchievementCode_luckySeven1) && myAchieve->isCompleted(kAchievementCode_luckySeven2) && !myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
 			{
 				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
