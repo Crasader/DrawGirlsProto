@@ -4688,6 +4688,30 @@ void PlayUI::myInit ()
 //		addChild(icon_img, 0, kCT_UI_clrCdtIcon);
 	}
 	
+	casting_cancel_node = CCNode::create();
+	casting_cancel_node->setPosition(ccp(240,17));
+	addChild(casting_cancel_node);
+	
+	CCSprite* casting_cancel_back = CCSprite::create("fever_gage_back.png");
+	casting_cancel_back->setPosition(ccp(0,0));
+	casting_cancel_node->addChild(casting_cancel_back);
+	
+	casting_cancel_gage = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
+	casting_cancel_gage->setType(kCCProgressTimerTypeBar);
+	casting_cancel_gage->setMidpoint(ccp(0,0));
+	casting_cancel_gage->setBarChangeRate(ccp(1,0));
+	casting_cancel_gage->setPercentage(0);
+	casting_cancel_gage->setPosition(ccp(0,0));
+	casting_cancel_node->addChild(casting_cancel_gage);
+	
+	casting_cancel_chance_label = KSLabelTTF::create("캐스팅 취소 찬스!!", mySGD->getFont().c_str(), 20);
+	casting_cancel_chance_label->enableOuterStroke(ccBLACK, 1, 255, true);
+	casting_cancel_chance_label->setPosition(ccp(0,0));
+	casting_cancel_node->addChild(casting_cancel_chance_label);
+	
+	casting_cancel_chance_label->setVisible(false);
+	casting_cancel_node->setVisible(false);
+	
 	my_combo = ComboParent::create(score_label);
 	my_combo->setPosition(CCPointZero);
 	addChild(my_combo);
@@ -4789,6 +4813,25 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_addTurnCnt"] = std::bind(&PlayUI::addTurnCnt, this);
 	myGD->V_V["UI_checkScoreMission"] = std::bind(&PlayUI::checkScoreMission, this);
 	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
+	myGD->V_F["UI_changeCastingGage"] = [=](float t_f)
+	{
+//		casting_cancel_gage->stopAllActions();
+//		
+//		casting_cancel_chance_label->stopAllActions();
+//		if(t_f >= 1.f)
+//		{
+//			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
+//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
+//			casting_cancel_chance_label->runAction(t_repeat);
+//		}
+//		else
+//		{
+//			casting_cancel_chance_label->setVisible(false);
+//		}
+//		
+//		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
+//		casting_cancel_gage->runAction(t_to);
+	};
 }
 
 void PlayUI::hideThumb()

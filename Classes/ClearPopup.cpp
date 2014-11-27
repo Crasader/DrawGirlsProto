@@ -560,18 +560,18 @@ bool ClearPopup::init()
 																	  }
 																  }));
 	
-//	CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
-//	CharacterHistory t_char_history = mySGD->getSelectedCharacterHistory();
-//	t_char_history.characterExp = mySGD->getStageClearExp();
-//	send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_char_history, [=](Json::Value result_data)
-//																	  {
-//																		  if(result_data["result"]["code"].asInt() == GDSUCCESS)
-//																		  {
-//																			  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
-//																			  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getSelectedCharacterHistory(), ccp(240,160+160*screen_scale_y));
-//																			  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
-//																		  }
-//																	  }));
+	CharacterHistory keep_history = mySGD->getSelectedCharacterHistory();
+	CharacterHistory t_char_history = mySGD->getSelectedCharacterHistory();
+	t_char_history.characterExp = mySGD->getStageClearExp();
+	send_command_list.push_back(mySGD->getUpdateCharacterHistoryParam(t_char_history, [=](Json::Value result_data)
+																	  {
+																		  if(result_data["result"]["code"].asInt() == GDSUCCESS)
+																		  {
+																			  float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+																			  CharacterExpUp* t_exp_up = CharacterExpUp::create(keep_history, mySGD->getSelectedCharacterHistory(), ccp(240,160+160*screen_scale_y));
+																			  CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1)->addChild(t_exp_up, 99999998);
+																		  }
+																	  }));
 	
     return true;
 }
@@ -804,17 +804,16 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 		rank_tab->setPosition(ccp(347.5, 256.5));
 		main_case->addChild(rank_tab,100);
 		
-		KSLabelTTF* piece_number_label = KSLabelTTF::create("월드 주간 랭킹",	mySGD->getFont().c_str(), 11);
-		piece_number_label->setColor(ccc3(255, 255, 255));
+		KSLabelTTF* piece_number_label = KSLabelTTF::create("",	mySGD->getFont().c_str(), 11);
+		piece_number_label->setColor(ccc3(20, 40, 70));
 		piece_number_label->disableOuterStroke();
 		piece_number_label->setPosition(ccpFromSize(rank_tab->getContentSize()/2.f) + ccp(0,1));
 		rank_tab->addChild(piece_number_label,kZ_CP_img+100);
 		
 		if(result_data["isMax"].asBool()){
-			piece_number_label->setString(CCString::createWithFormat("%d스테이지 랭킹",result_data["stageNo"].asInt())->getCString());
-			piece_number_label->setScale((rank_tab->getContentSize().width-5)/piece_number_label->getContentSize().width);
+			piece_number_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent27));
 		}else{
-			piece_number_label->setString("월드 주간 랭킹");
+			piece_number_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_weeklyranking));
 		}
 		
 		TRACE();
