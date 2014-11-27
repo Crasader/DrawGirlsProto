@@ -325,7 +325,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 	// turn on display FPS
 	
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	pDirector->setDisplayStats(true);
+	pDirector->setDisplayStats(false);
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	pDirector->setDisplayStats(false);

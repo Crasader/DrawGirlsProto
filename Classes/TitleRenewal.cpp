@@ -794,7 +794,6 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value shopdata_param;
 	shopdata_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
-	shopdata_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("getshoplist", shopdata_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	
 	Json::Value hell_param;
@@ -815,7 +814,6 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value notice_param;
 	notice_param["buildNo"] = myHSP->getVersionCode();
-	notice_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
 	Json::Value timeevent_param;
@@ -823,7 +821,6 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
-	attendance_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
 	
 	Json::Value rank_reward_param;
@@ -2132,7 +2129,6 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 		is_receive_fail = true;
 		Json::Value shop_param;
 		shop_param["version"] = NSDS_GI(kSDS_GI_shopVersion_i);
-		shop_param["store"] = myHSP->getStoreID();
 		command_list.push_back(CommandParam("getshoplist", shop_param, json_selector(this, TitleRenewalScene::resultGetShopList)));
 	}
 	
