@@ -8,22 +8,18 @@ enum HSPLoginTypeX
   HSPLoginTypeGSQAURE,
   HSPLoginTypeFACEBOOK,
   HSPLoginTypeKAKAO,
-  HSPLoginTypeCREATING_ACCOUNT,
   HSPLoginTypeTOAST,
-  HSPLoginTypePAYCO,
-  HSPLoginTypeGOOGLE 
+  HSPLoginTypeGOOGLE,
+  HSPLoginTypeNAVER
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	HSPLoginTypeUNKNOWN,
-  HSPLoginTypeGUEST,
-  HSPLoginTypeGSQAURE,
-  HSPLoginTypeFACEBOOK,
-  HSPLoginTypeKAKAO,
-  HSPLoginTypeCREATING_ACCOUNT,
-  HSPLoginTypeTOAST,
-  HSPLoginTypePAYCO,
-  HSPLoginTypeGOOGLE
-	
-	
+	HSPLoginTypeGUEST,
+	HSPLoginTypeGSQAURE,
+	HSPLoginTypeFACEBOOK,
+	HSPLoginTypeKAKAO,
+	HSPLoginTypeTOAST,
+	HSPLoginTypeGOOGLE,
+	HSPLoginTypeNAVER
 //	HSP_LOGIN_TYPE_UNKNOWN = 0,
 //	HSP_LOGIN_TYPE_GUEST,
 //	HSP_LOGIN_TYPE_GSQUARE,
@@ -39,29 +35,35 @@ enum HSPLoginTypeX
 enum class HSPMapping
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	
 	kID,
 	kHANGAME,
-	kEMAIL,
+	kTOAST,
 	kBAND,
-	kFACEBOOK,
+	kFACEBOOK= 4,
 	kGOOGLE,
+	kNAVER,
 	kTWITTER
+	
+	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-	kHANGAME,
-	kEMAIL,
-	kFACEBOOK,
-	kTWITTER,
-	kGAMECENTER
+	kHANGAME = 0,	/**< Hangame mapping type. */
+	kTOAST,			/**< Toast mapping type. */
+	kFACEBOOK,       /**< Facebook mapping type. */
+	kTWITTER,        /**< Twitter mapping type. */
+	kGAMECENTER,		/**< Game Center mapping type. */
+	kNAVER			/**< Naver mapping type. */
 #endif
 };
 
+// 안드로이드는 실제 oauth 하기위해 쓰고
+// ios 는 이거 할거다? 하면서 물어보기 위해 쓰는 듯.
 enum class HSPLogin
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	TWITTER,
 	MIXI,
 	FACEBOOK,
-	YAHOO,
 	GOOGLE,
 	HANGAME,
 	NAVER,
@@ -72,29 +74,28 @@ enum class HSPLogin
 	POKETROKET,
 	HANGAMEJP,
 	HANGAMEJP_EMAIL,
-	EMAIL,
 	NEID,
-	PAYCO,
 	GUEST,
 	GSQUARE,
 	BAND
+	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	TWITTER,
 	MIXI,
 	FACEBOOK,
-	YAHOO,
-	GOOGLE,
+	GAMECENTER,
 	HANGAME,
 	NAVER,
 	LINE,
 	KAKAO,
 	GREE,
 	HANGAME_EX,
-	GSQUARE,
 	POKETROKET,
+	HANGAMEJP,
+	HANGAMEJP_EMAIL,
 	NEID,
 	GUEST,
-	WEIBO,
-	GAMECENTER	
+	GSQUARE,
+	BAND
 #endif
 };

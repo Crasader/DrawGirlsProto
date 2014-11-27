@@ -46,6 +46,7 @@
 #include <string>
 #include <sstream>
 #include <algorithm>
+#include "AccountManagerPopup.h"
 using namespace std;
 USING_NS_CC;
 
@@ -165,7 +166,16 @@ extern "C"{
 	{
 		jboolean isCopy = JNI_FALSE;
 //		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
-		return myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST);
+		return getSavedOAuthType((int)HSPLogin::GUEST);
+		
+		//env->ReleaseStringUTFChars(revStr2, revStr);
+		
+	}
+	int Java_com_nhnent_SKSUMRAN_NA_DGproto_getUserState(JNIEnv *env, jobject thiz)
+	{
+		jboolean isCopy = JNI_FALSE;
+		//		hspConnector::get()->setup(_gameID,hspGameNo,_gameVersion);
+		return getSavedOAuthType((int)HSPLogin::GUEST);
 		
 		//env->ReleaseStringUTFChars(revStr2, revStr);
 		

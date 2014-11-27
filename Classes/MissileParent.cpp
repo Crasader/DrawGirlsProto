@@ -544,20 +544,20 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				float random_float = random_value/10.f;
 				bool selfRotation = false;
 				
-				switch(subType)
-				{
-					case 2:
-					case 4:
-					case 7:
-						selfRotation = true;
-						break;
-					case 3:
-					case 5:
-						selfRotation = false;
-						break;
-					default:
-						selfRotation = true;
-				}
+//				switch(subType)
+//				{
+//					case 2:
+//					case 4:
+//					case 7:
+//						selfRotation = true;
+//						break;
+//					case 3:
+//					case 5:
+//						selfRotation = false;
+//						break;
+//					default:
+//						selfRotation = true;
+//				}
 				//				if(grade == 1 || grade == 4)
 				//					selfRotation = true;
 				random_float = 0.f;

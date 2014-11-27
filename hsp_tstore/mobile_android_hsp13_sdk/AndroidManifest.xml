@@ -74,15 +74,12 @@
         <!-- [HSP SDK] NPush Global end -->
 
     
-       
         <!-- ﻿[HSP SDK] Payment TStore Activity & Receiver Begin -->
         <!-- T Store 빌드시에만 사용해주세요.-->
          <activity android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection" android:excludeFromRecents="true" android:name="com.skplanet.dodo.IapWeb" android:windowSoftInputMode="stateHidden">
         </activity>
-        
-        <meta-data android:name="iap:api_version" android:value="1"/>
+        <meta-data android:name="iap:api_version" android:value="2"/>
         <!-- ﻿[HSP SDK] Payment TStore Activity & Receiver End -->
-       
     </application>
 
 
@@ -146,14 +143,9 @@
     
 
 
-
     <!-- ﻿[HSP SDK] Payment TStore SMS Permission Begin -->
     <!-- T Store 빌드시에만 사용해주세요.-->
     <uses-permission android:name="android.permission.RECEIVE_SMS"/> 
-    <uses-permission android:name="com.tmoney.vending.INBILLING"/>
-    <permission android:name="com.tmoney.vending.INBILLING"/>
     <!-- ﻿[HSP SDK] Payment TStore SMS Permission End -->
-
     
-	
 </manifest>

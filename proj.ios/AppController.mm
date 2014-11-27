@@ -26,6 +26,7 @@
 #import "cocos2d.h"
 #import "EAGLView.h"
 #import "AppDelegate.h"
+#include "AccountManagerPopup.h"
 //#include "StarGoldData.h"
 
 #import "RootViewController.h"
@@ -287,7 +288,7 @@ void uncaughtExceptionHandler(NSException *exception) {
 	[self reportAppOpen];
 	if ( [HSPCore sharedHSPCore].state != HSP_STATE_INIT )
 	{
-		HSPOAuthProvider lType = (HSPOAuthProvider)myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSP_OAUTHPROVIDER_GAMECENTER);
+		HSPOAuthProvider lType = (HSPOAuthProvider)getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER);
 		CCLOG("AUTO LOGIN TYPE == %d", lType);
 		[[HSPCore sharedHSPCore] loginWithManualLogin:NO completionHandler:^(BOOL playable, HSPError* error) {
 			// 로그인 응답 처리

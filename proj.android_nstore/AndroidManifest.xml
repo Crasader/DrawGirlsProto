@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nhnent.SKSUMRAN.NA"
-    android:versionCode="11"
-    android:versionName="1.1.0" >
+    android:versionCode="14"
+    android:versionName="1.1.3" >
 
     <uses-sdk
         android:minSdkVersion="9"
@@ -16,11 +16,11 @@
         android:label="@string/app_name" >
         <meta-data android:name="igaworks_app_key" android:value="423654496"/>
 		<meta-data android:name="igaworks_hash_key" android:value="10afd56431d74f03"/>
-		<meta-data android:name="igaworks_market_info" android:value="tstore" />
+		<meta-data android:name="igaworks_market_info" android:value="nstore" />
         
         <meta-data
             android:name="io.fiverocks.android.appstore"
-            android:value="TStore" />
+            android:value="NStore" />
         <!-- <meta-data android:name="USEQASERVER" android:value="ON" /> 
         <meta-data
             android:name="APP_NAME"
@@ -37,7 +37,7 @@
                 <action android:name="com.google.android.c2dm.intent.RECEIVE" />
                 <action android:name="com.google.android.gcm.intent.RETRY" />
 
-                <category android:name="com.nhnent.SKSUMRAN" />
+                <category android:name="com.nhnent.SKSUMRAN.NA" />
             </intent-filter>
         </receiver>
         <!-- <receiver
@@ -69,8 +69,8 @@
                 <action android:name="com.nhn.nni.intent.EVENT" />
 
                 <!-- TODO: fill package name -->
-                <category android:name="com.nhnent.SKSUMRAN" />
-`
+                <category android:name="com.nhnent.SKSUMRAN.NA" />
+
             </intent-filter>
             <intent-filter>
 
@@ -101,7 +101,7 @@
             android:value="@string/google_app_id" />
 
         <activity
-            android:name="com.nhnent.SKSUMRAN.DGproto"
+            android:name="com.nhnent.SKSUMRAN.NA.DGproto"
             android:configChanges="orientation|screenSize|locale|keyboardHidden|layoutDirection"
             android:label="@string/app_name"
             android:launchMode="singleTask"
@@ -259,10 +259,10 @@
    	<uses-permission android:name="com.android.launcher.permission.INSTALL_SHORTCUT" /> 
 
     <permission
-        android:name="com.nhnent.SKSUMRAN.permission.C2D_MESSAGE"
+        android:name="com.nhnent.SKSUMRAN.NA.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.nhnent.SKSUMRAN.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.nhnent.SKSUMRAN.NA.permission.C2D_MESSAGE" />
 
     <!-- HSP permission end -->
 
@@ -270,14 +270,13 @@
     <!-- [HSP SDK] NPush Global permission begin -->
     <!-- TODO: fill package name -->
     <permission
-        android:name="com.nhnent.SKSUMRAN.permission.NNI_MESSAGE"
+        android:name="com.nhnent.SKSUMRAN.NA.permission.NNI_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.nhnent.SKSUMRAN.permission.NNI_MESSAGE" />
+    <uses-permission android:name="com.nhnent.SKSUMRAN.NA.permission.NNI_MESSAGE" />
     <!-- [HSP SDK] NPush Global permission end -->
     <!-- [HSP SDK] Payment TStore SMS Permission Begin -->
     <!-- T Store 빌드 시에만 사용해 주세요. -->
-    <uses-permission android:name="android.permission.RECEIVE_SMS" />
     
     <!-- [HSP SDK] Payment TStore SMS Permission End -->
 
