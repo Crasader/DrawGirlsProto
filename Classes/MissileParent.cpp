@@ -622,51 +622,33 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		missileNumbersInt /= 2;
 		
 		int shoot_frame_cnt, shoot_final_cnt;
-		if(level <= 2)
-		{
-			shoot_frame_cnt = 20;
-			shoot_final_cnt = 4 + level-2;
-		}
-		else if(level <= 5)
-		{
-			shoot_frame_cnt = 16;
-			shoot_final_cnt = 5 + level-5;
-		}
-		else if(level <= 8)
-		{
-			shoot_frame_cnt = 14;
-			shoot_final_cnt = 6 + level-8;
-		}
-		else if(level <= 11)
-		{
-			shoot_frame_cnt = 12;
-			shoot_final_cnt = 7 + level-11;
-		}
+		if(level <= 2){
+			shoot_frame_cnt = 20;}
+		else if(level <= 5){
+			shoot_frame_cnt = 16;}
+		else if(level <= 9){
+			shoot_frame_cnt = 14;}
+		else if(level <= 14){
+			shoot_frame_cnt = 12;}
+		else if(level <= 20){
+			shoot_frame_cnt = 11;}
+		else if(level <= 27){
+			shoot_final_cnt = 10;}
+		else{
+			shoot_frame_cnt = 9;}
+		
+		if(level <= 4)
+			shoot_final_cnt = 3;
+		else if(level <= 9)
+			shoot_final_cnt = 4;
 		else if(level <= 14)
-		{
-			shoot_frame_cnt = 11;
-			shoot_final_cnt = 8 + level-14;
-		}
-		else if(level <= 18)
-		{
-			shoot_frame_cnt = 10;
-			shoot_final_cnt = 9 + level-18;
-		}
-		else if(level <= 22)
-		{
-			shoot_frame_cnt = 9;
-			shoot_final_cnt = 10 + level-22;
-		}
+			shoot_final_cnt = 5;
+		else if(level <= 20)
+			shoot_final_cnt = 6;
 		else if(level <= 27)
-		{
-			shoot_frame_cnt = 8;
-			shoot_final_cnt = 11 + level-27;
-		}
+			shoot_final_cnt = 7;
 		else
-		{
-			shoot_frame_cnt = 7;
-			shoot_final_cnt = 12 + level-30;
-		}
+			shoot_final_cnt = 8;
 		
 		for(int i=0; i<missileNumbersInt; i++)
 		{
@@ -677,14 +659,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				
 				Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
 											  0.f, // 반지름
-											  (main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle(),//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
+											  (main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle() + (rand()%141-70)/10.f/180.f*M_PI,//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
 											  1.2f, // 본체 속도
 											  2, // 방향개수.
 											  M_PI / 180.f * 132.f, // 각속도
 											  shoot_frame_cnt, // 인타발.
 											  power,
 											  missile_sub_damage,
-											  ao, 100.f, shoot_final_cnt, level);
+											  ao, 100.f + rand()%41-20, shoot_final_cnt, level);
 				ms->beautifier(level);
 				jack_missile_node->addChild(ms);
 			};
