@@ -1386,10 +1386,33 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			}
 		}
 		
-		for(int i=kAchievementCode_luckySeven1;i<=kAchievementCode_luckySeven3;i++)
 		{
+			int i = kAchievementCode_luckySeven1;
+			
 			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
-			   t_p == t_beforePercentage + myAchieve->getCondition((AchievementCode)i)/0.001f)
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		{
+			int i = kAchievementCode_luckySeven2;
+			
+			if(myAchieve->isCompleted(kAchievementCode_luckySeven1) && !myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			}
+		}
+		{
+			int i = kAchievementCode_luckySeven3;
+			
+			if(myAchieve->isCompleted(kAchievementCode_luckySeven1) && myAchieve->isCompleted(kAchievementCode_luckySeven2) && !myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted(AchievementCode(i)) &&
+			   int(round(t_p*1000)) == int(round(t_beforePercentage*1000)) + myAchieve->getCondition((AchievementCode)i))
 			{
 				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
 				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
@@ -4704,13 +4727,13 @@ void PlayUI::myInit ()
 	casting_cancel_gage->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_gage);
 	
-	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 20);
+	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 15);
 	casting_cancel_chance_label->enableOuterStroke(ccBLACK, 1, 255, true);
 	casting_cancel_chance_label->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_chance_label);
 	
 	casting_cancel_chance_label->setVisible(false);
-	casting_cancel_node->setVisible(false);
+//	casting_cancel_node->setVisible(false);
 	
 	my_combo = ComboParent::create(score_label);
 	my_combo->setPosition(CCPointZero);
@@ -4815,22 +4838,23 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
 	myGD->V_F["UI_changeCastingGage"] = [=](float t_f)
 	{
-//		casting_cancel_gage->stopAllActions();
-//		
-//		casting_cancel_chance_label->stopAllActions();
-//		if(t_f >= 1.f)
-//		{
-//			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
-//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
-//			casting_cancel_chance_label->runAction(t_repeat);
-//		}
-//		else
-//		{
-//			casting_cancel_chance_label->setVisible(false);
-//		}
-//		
-//		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
-//		casting_cancel_gage->runAction(t_to);
+		casting_cancel_gage->stopAllActions();
+		
+		casting_cancel_chance_label->stopAllActions();
+		if(t_f >= 1.f)
+		{
+			t_f = 1.f;
+			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
+			casting_cancel_chance_label->runAction(t_repeat);
+		}
+		else
+		{
+			casting_cancel_chance_label->setVisible(false);
+		}
+		
+		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
+		casting_cancel_gage->runAction(t_to);
 	};
 }
 
