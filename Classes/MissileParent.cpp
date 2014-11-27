@@ -679,8 +679,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 											  0.f, // 반지름
 											  (main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle(),//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
 											  1.2f, // 본체 속도
-											  3, // 방향개수.
-											  M_PI / 180.f * 81.f, // 각속도
+											  2, // 방향개수.
+											  M_PI / 180.f * 132.f, // 각속도
 											  shoot_frame_cnt, // 인타발.
 											  power,
 											  missile_sub_damage,
@@ -688,7 +688,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				ms->beautifier(level);
 				jack_missile_node->addChild(ms);
 			};
-			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+			addChild(KSTimer::create(0.50 * (i + 1), [=](){
 				creator();
 			}));
 		}

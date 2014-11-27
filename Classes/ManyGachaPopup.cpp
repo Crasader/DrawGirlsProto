@@ -1119,7 +1119,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	Json::Value nml_gc_json;
 	t_reader.parse(nml_gc, nml_gc_json);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass7) <= 0 && nml_gc_json[int(enable_gacha_list.size()-1)].asInt() > mySGD->getGoodsValue(kGoodsType_gold))
+	if(mySGD->getGoodsValue(kGoodsType_pass7) <= 0 && nml_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt() > mySGD->getGoodsValue(kGoodsType_gold))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_gold, [=]()
 		{
@@ -1175,7 +1175,7 @@ void ManyGachaPopup::normalAction(CCObject* sender, CCControlEvent t_event)
 	if(mySGD->getGoodsValue(kGoodsType_pass7) > 0)
 		mySGD->addChangeGoods("nml_gc_p7");
 	else
-		mySGD->addChangeGoods("nml_gc", GoodsType::kGoodsType_gold, -nml_gc_json[int(enable_gacha_list.size()-1)].asInt());
+		mySGD->addChangeGoods("nml_gc", GoodsType::kGoodsType_gold, -nml_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt());
 	
 	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	
@@ -2178,7 +2178,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	Json::Value prm_gc_json;
 	t_reader.parse(prm_gc, prm_gc_json);
 	
-	if(mySGD->getGoodsValue(kGoodsType_pass8) <= 0 && prm_gc_json[int(enable_gacha_list.size()-1)].asInt() > mySGD->getGoodsValue(kGoodsType_ruby))
+	if(mySGD->getGoodsValue(kGoodsType_pass8) <= 0 && prm_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt() > mySGD->getGoodsValue(kGoodsType_ruby))
 	{
 		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-999, GoodsType::kGoodsType_ruby, [=]()
 															{
@@ -2234,7 +2234,7 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 	if(mySGD->getGoodsValue(kGoodsType_pass8) > 0)
 		mySGD->addChangeGoods("prm_gc_p8");
 	else
-		mySGD->addChangeGoods("prm_gc", GoodsType::kGoodsType_ruby, -prm_gc_json[int(enable_gacha_list.size()-1)].asInt());
+		mySGD->addChangeGoods("prm_gc", GoodsType::kGoodsType_ruby, -prm_gc_json[int(enable_gacha_list.size()-1) + full_character_count].asInt());
 	
 	string exchange_id = gacha_data_list[selected_value].exchangeID.getV();
 	

@@ -412,6 +412,8 @@ void Tornado::update(float dt)
 				
 				addChild(sm);
 //				sm->beautifier(mm_level);
+				
+				sm->addChild(KSTimer::create(0.4f, [=](){sm->removeFromParent();}));
 			}
 			
 		}

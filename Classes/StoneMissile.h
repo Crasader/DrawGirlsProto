@@ -3597,7 +3597,7 @@ public:
 		
 		
 		float final_angle_rad = 360.f/final_cnt/180.f*M_PI;
-		for(int i=0;i<final_cnt;i++)
+		for(int i=final_cnt-1;i>=0;i--)
 		{
 			CCSprite* missile_main_body = CCSprite::create(m_fileName.c_str());
 			missile_main_body->setRotation((m_initRad + final_angle_rad*i)/M_PI*180);

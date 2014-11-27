@@ -16,6 +16,7 @@
 #include "OnePercentTutorial.h"
 #include "CommonAnimation.h"
 #include "ConvexGraph.h"
+#include "Jack.h"
 #define LZZ_INLINE inline
 using namespace cocos2d;
 using namespace std;
@@ -146,40 +147,41 @@ void ComboParent::startKeep ()
 }
 void ComboParent::keeping ()
 {
-	//		if(myGD->getJackState() == jackState::jackStateDrawing)
-	//		{
-	//			if(!is_holding)
-	//			{
-	//				is_holding = true;
-	//				hold_frame = 1;
-	//			}
-	//			else
-	//			{
-	//				hold_frame++;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			if(is_holding)
-	//			{
-	//				is_holding = false;
-	//				keeping_frame -= hold_frame;
-	//			}
-	
-	keeping_frame--;
-//	((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
-	
-	if(keeping_frame <= 0)
+	if(myGD->getJackState() == jackState::jackStateDrawing)
 	{
-		stopKeep();
+		if(!is_holding)
+		{
+			is_holding = true;
+			hold_frame = 1;
+		}
+		else
+		{
+			hold_frame++;
+		}
 	}
-	//		}
+	else
+	{
+		if(is_holding)
+		{
+			is_holding = false;
+			keeping_frame -= hold_frame;
+		}
+		
+		keeping_frame--;
+		//	((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
+		
+		if(keeping_frame <= 0)
+		{
+			stopKeep();
+		}
+	}
 }
 void ComboParent::myInit (CCNode* t_score_label)
 {
 	is_keeping = false;
 	score_label = t_score_label;
-	//		is_holding = false;
+	is_holding = false;
+	hold_frame = 0;
 }
 FeverParent * FeverParent::create (CCNode* t_counting_label)
 {
