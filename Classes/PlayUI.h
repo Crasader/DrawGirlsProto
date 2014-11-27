@@ -365,6 +365,10 @@ private:
 	void addResultCCB(string ccb_filename);
 	KSProtectVar<float> keep_percentage;
 	
+	CCNode* casting_cancel_node;
+	CCProgressTimer* casting_cancel_gage;
+	KSLabelTTF* casting_cancel_chance_label;
+	
 	ConvexGraph* progress_timer;
 	
 	

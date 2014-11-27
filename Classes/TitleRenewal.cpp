@@ -66,6 +66,8 @@ bool TitleRenewalScene::init()
 	}
 	
 	mySGD->ui_scene_code = kUISceneCode_empty;
+	mySGD->is_endless_mode = false;
+	mySGD->is_hell_mode = false;
 	
 	TRACE();
 	is_preloaded_effect = false;
@@ -3247,6 +3249,7 @@ void TitleRenewalScene::changeScene()
 	TRACE();
 	mySGD->is_safety_mode = myDSH->getBoolForKey(kDSH_Key_isSafetyMode);
 	myDSH->setPuzzleMapSceneShowType(kPuzzleMapSceneShowType_init);
+	myDSH->setMainFlowSceneShowType(kMainFlowSceneShowType_init);
     GraphDog::get()->removeTarget(this);
 	CCDirector::sharedDirector()->replaceScene(MainFlowScene::scene());
 //	CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());

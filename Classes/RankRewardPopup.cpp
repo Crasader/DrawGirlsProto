@@ -263,7 +263,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	left_second_title->setPosition(ccp(10, left_second_back->getContentSize().height/2.f));
 	left_second_back->addChild(left_second_title);
 	
-	KSLabelTTF* left_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["stage"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageRankValue), stage_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* left_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["stage"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageRankValue), ceilf(stage_rank_percent*100.f))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 	left_second_content->setColor(ccc3(255, 170, 20));
 	left_second_content->setAnchorPoint(ccp(1,0.5));
 	left_second_content->setPosition(ccp(left_second_back->getContentSize().width-10, left_second_back->getContentSize().height/2.f));
@@ -440,7 +440,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_second_title->setPosition(ccp(10, right_second_back->getContentSize().height/2.f));
 	right_second_back->addChild(right_second_title);
 	
-	KSLabelTTF* right_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["endless"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessRankValue), endless_rank_percent*100.f)->getCString()).c_str(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_second_content = KSLabelTTF::create((KS::insert_separator(mySGD->rank_reward_data["endless"]["myrank"].asInt()) + CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessRankValue), ceilf(endless_rank_percent*100.f))->getCString()).c_str(), mySGD->getFont().c_str(), 13);
 	right_second_content->setColor(ccc3(255, 170, 20));
 	right_second_content->setAnchorPoint(ccp(1,0.5));
 	right_second_content->setPosition(ccp(right_second_back->getContentSize().width-10, right_second_back->getContentSize().height/2.f));
@@ -457,7 +457,7 @@ void RankRewardPopup::myInit(int t_touch_priority, function<void()> t_end_func)
 	right_third_title->setPosition(ccp(10, right_third_back->getContentSize().height/2.f));
 	right_third_back->addChild(right_third_title);
 	
-	KSLabelTTF* right_third_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessVictoryScript), KS::insert_separator(mySGD->rank_reward_data["endless"]["count"].asInt()).c_str())->getCString(), mySGD->getFont().c_str(), 13);
+	KSLabelTTF* right_third_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardEndlessVictoryScript), KS::insert_separator(mySGD->rank_reward_data["endless"].get("victory", 0).asInt()).c_str())->getCString(), mySGD->getFont().c_str(), 13);
 	right_third_content->setColor(ccc3(255, 170, 20));
 	right_third_content->setAnchorPoint(ccp(1,0.5));
 	right_third_content->setPosition(ccp(right_third_back->getContentSize().width-10, right_third_back->getContentSize().height/2.f));
