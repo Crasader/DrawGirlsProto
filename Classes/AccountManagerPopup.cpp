@@ -13,6 +13,27 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #import "HSPCore.h"
 #endif
+
+
+void saveOAuthType(int i)
+{
+	if(i == 3)
+		i = 4;
+	else if(i == 14)
+		i = 17;
+	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)i);
+}
+
+int getSavedOAuthType(int def)
+{
+	int i = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)def);
+	if(i == 4)
+		return 3;
+	else if(i == 17)
+		return 14;
+	else
+		return i;
+}
 AccountManagerPopup::AccountManagerPopup()
 {
 	
@@ -363,7 +384,10 @@ bool AccountManagerPopup::init(int touchP)
 									myDSH->setStringForKey(kDSH_Key_savedMemberID, boost::lexical_cast<std::string>(prevMemberNo));
 									TRACE();
 									CCLog("save accountType %d", mm2);
-									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+									saveOAuthType((int)mm2);
+									
+//									myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+									
 									myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true); // 약관 동의~~~
 									myDSH->setIntegerForKey(kDSH_Key_clientVersion, mySGD->client_version);
 									CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
@@ -371,10 +395,12 @@ bool AccountManagerPopup::init(int touchP)
 									Json::Value param;
 									
 									
+									// 14는 게스트 매직넘버
+									int guestNumber = 14;
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+100;
+									param["loginType"] = getSavedOAuthType(guestNumber) + 100;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-									param["loginType"] = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)HSPLogin::GUEST)+200;
+									param["loginType"] = getSavedOAuthType(guestNumber) + 200;
 #endif
 									
 									myHSP->command("updateuserdata", param, nullptr);
@@ -422,9 +448,9 @@ bool AccountManagerPopup::init(int touchP)
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 						ment->setAnchorPoint(ccp(0.5f, 0.5f));
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+						this->showWarning("", HSPMapping::kGOOGLE, ment, loadFunction);
 #else
-						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
+						this->showWarning("", HSPMapping::kGAMECENTER, ment, loadFunction);
 #endif
 					}
 					else
@@ -442,9 +468,9 @@ bool AccountManagerPopup::init(int touchP)
 																													mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 						ment->setAnchorPoint(ccp(0.5f, 0.5f));
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-						this->showWarning("", HSPMapping::kGOOGLE, HSPLogin::GOOGLE, ment, loadFunction);
+						this->showWarning("", HSPMapping::kGOOGLE, ment, loadFunction);
 #else
-						this->showWarning("", HSPMapping::kGAMECENTER, HSPLogin::GOOGLE, ment, loadFunction);
+						this->showWarning("", HSPMapping::kGAMECENTER, ment, loadFunction);
 #endif
 //						loadFunction();
 					}
@@ -470,7 +496,7 @@ bool AccountManagerPopup::init(int touchP)
 #else
 														HSPMapping::kGAMECENTER,
 #endif
-														HSPLogin::GOOGLE, ment, [=]()
+														ment, [=]()
 														{
 															CCLog("-----------------------------------------------------------------------");
 															TRACE();
@@ -492,7 +518,7 @@ bool AccountManagerPopup::init(int touchP)
 																		{
 																			mySGD->resetLabels();
 																			CCLog("save accountType %d", mm2);
-																			myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+																			saveOAuthType((int)mm2);
 																			CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 																		}
 																		else
@@ -504,7 +530,7 @@ bool AccountManagerPopup::init(int touchP)
 																	hspConnector::get()->logout(m_logoutRepeater1);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 																	mySGD->resetLabels();
-																	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+																	saveOAuthType((int)mm2);
 																	CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
 #endif
 																	
@@ -542,7 +568,7 @@ bool AccountManagerPopup::init(int touchP)
 					{
 						mySGD->resetLabels();
 						CCLog("save accountType %d", mm2);
-						myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
+						saveOAuthType((int)mm2);
 						std::string msg;
 						
 						if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
@@ -600,38 +626,7 @@ bool AccountManagerPopup::init(int touchP)
 				});
 				
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
-//				mySGD->resetLabels();
-//				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)mm2);
-//				std::string msg;
-//				
-//				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
-//				{
-//					msg = ccsf(getLocal(LK::kUnlinkAccount1),
-//										 descMapper.at(loginType).c_str());
-//				}
-//				msg += ccsf(getLocal(LK::kLinkAccount1),
-//										tryName.c_str()
-//										);
-//				auto content = StyledLabelTTF::create(msg.c_str(),
-//																							mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-//				content->setAnchorPoint(ccp(0.5f, 0.5f));
-//				
-//				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, getLocal(LK::kWarningDesc),
-//																												 content,
-//																												 [=]()
-//																												 {
-//																													 CCLOG("ttTT");
-//																													 CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
-//																												 });
-//				addChild(alert);
 
-//				auto st = StyledLabelTTF::create(getLocal(LK::kNetworkError),
-//															 mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
-//				
-//				st->setAnchorPoint(ccp(0.5f, 0.5f));
-//				ASPopupView* alert = ASPopupView::getCommonNoti2(touchP - 2, "LQError",
-//																												 st, nullptr);
-//				addChild(alert);
 			}
 		});
 	};
@@ -652,7 +647,7 @@ bool AccountManagerPopup::init(int touchP)
 				CCLog("%s %s %d", __FILE__, __FUNCTION__, __LINE__);
 				mySGD->resetLabels();
 				CCLog("save accountType %d", willSaveLogin);
-				myDSH->setIntegerForKey(kDSH_Key_accountType, (int)willSaveLogin);
+				saveOAuthType((int)willSaveLogin);
 				std::string msg;
 				
 				if(loginType != HSPLoginTypeX::HSPLoginTypeGUEST)
@@ -771,7 +766,7 @@ bool AccountManagerPopup::init(int touchP)
 	setFormSetter(titleLbl);
 	return true;
 }
-void AccountManagerPopup::showWarning(const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin,
+void AccountManagerPopup::showWarning(const std::string& desc, HSPMapping hspmap,
 											 StyledLabelTTF* announce,
 											 std::function<void(void)> loginProcess){
 	ASPopupView* warningPopup = ASPopupView::createDimmed(m_touchP - 4);

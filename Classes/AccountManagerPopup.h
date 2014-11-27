@@ -8,6 +8,11 @@ USING_NS_CC;
 
 class StyledLabelTTF;
 class ASPopupView;
+
+void saveOAuthType(int i);
+int getSavedOAuthType(int def);
+
+
 class AccountManagerPopup : public CCLayer
 {
 public:
@@ -23,7 +28,7 @@ public:
 		return t;
 	}
 	
-	void showWarning(const std::string& desc, HSPMapping hspmap, HSPLogin willSaveLogin,
+	void showWarning(const std::string& desc, HSPMapping hspmap, 
 																							StyledLabelTTF* announce,
 																							std::function<void(void)> loginProcess);
 	//virtual void registerWithTouchDispatcher();

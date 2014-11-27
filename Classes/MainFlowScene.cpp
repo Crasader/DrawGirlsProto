@@ -62,7 +62,7 @@
 #include "LoadingTipScene.h"
 #include "RealTimeMessage.h"
 #include "ManyGachaPopup.h"
-
+#include "AccountManagerPopup.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -4925,7 +4925,7 @@ void MainFlowScene::topOnLight()
 																															   
 																															   TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
 																															   {
-																																   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																   if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																	{
 																																		mySGD->is_on_accountLinkLead = true;
 																																		AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -4963,7 +4963,7 @@ void MainFlowScene::topOnLight()
 																														   }
 																														   else
 																														   {
-																															   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																															   if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																															   {
 																																   mySGD->is_on_accountLinkLead = true;
 																																   AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5008,7 +5008,7 @@ void MainFlowScene::topOnLight()
 																		
 																		TodayMissionPopup* t_popup = TodayMissionPopup::create(-300, [=]()
 																		{
-																			if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																			if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																			{
 																				mySGD->is_on_accountLinkLead = true;
 																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5046,7 +5046,7 @@ void MainFlowScene::topOnLight()
 																	}
 																	else
 																	{
-																		if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																		if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																		{
 																			mySGD->is_on_accountLinkLead = true;
 																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5108,7 +5108,7 @@ void MainFlowScene::topOnLight()
 																																																	 }
 																																																	 else
 																																																		{
-                                                                                                                                                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																																			if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																																			{
 																																																				mySGD->is_on_accountLinkLead = true;
 																																																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5155,7 +5155,7 @@ void MainFlowScene::topOnLight()
 																																		  }
 																																		  else
 																																			{
-																																				if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																				if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																				{
 																																					mySGD->is_on_accountLinkLead = true;
 																																					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5228,7 +5228,7 @@ void MainFlowScene::topOnLight()
 																																	  }
 																																	  else
 																																	  {
-																																		  if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																																		  if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																																		  {
 																																			  mySGD->is_on_accountLinkLead = true;
 																																			  AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5275,7 +5275,7 @@ void MainFlowScene::topOnLight()
 																		   }
 																		   else
 																		   {
-																			   if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+																			   if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																			   {
 																				   mySGD->is_on_accountLinkLead = true;
 																				   AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5335,7 +5335,7 @@ void MainFlowScene::topOnLight()
 																	   }
 																	   else
 																		{
-                                                                            if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                            if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																			{
 																				mySGD->is_on_accountLinkLead = true;
 																				AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5382,7 +5382,7 @@ void MainFlowScene::topOnLight()
 																   }
 																   else
 																	{
-                                                                        if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                                                                        if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 																		{
 																			mySGD->is_on_accountLinkLead = true;
 																			AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5436,7 +5436,7 @@ void MainFlowScene::topOnLight()
 			}
 			else
 			{
-                if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+                if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 				{
 					mySGD->is_on_accountLinkLead = true;
 					AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()
@@ -5479,7 +5479,7 @@ void MainFlowScene::topOnLight()
 		
 		pvp_tutorial();
 	}
-	else if(!mySGD->is_on_accountLinkLead && myDSH->getIntegerForKey(kDSH_Key_accountType) == int(HSPLogin::GUEST) && rand()%3 == 0)
+	else if(!mySGD->is_on_accountLinkLead && getSavedOAuthType(0) == int(HSPLogin::GUEST) && rand()%3 == 0)
 	{
 		mySGD->is_on_accountLinkLead = true;
 		AccountLinkLeadPopup* t_popup = AccountLinkLeadPopup::create(-300, [=](){is_menu_enable = true;}, [=]()

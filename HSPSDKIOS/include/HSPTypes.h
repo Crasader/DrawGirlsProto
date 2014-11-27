@@ -163,24 +163,19 @@ typedef enum
 	HSP_LOGIN_TYPE_KAKAO,
 	
 	/**
-	 * Creating Account Login.
-	 */
-	HSP_LOGIN_TYPE_CREATINGACCOUNT,
-	
-	/**
 	 * Toast Login.
 	 */
 	HSP_LOGIN_TYPE_TOAST,
 	
 	/**
-	 * Payco Login.
-	 */
-	HSP_LOGIN_TYPE_PAYCO,
-
-	/**
 	 * Gamecenter Login.
 	 */
 	HSP_LOGIN_TYPE_GAMECENTER,
+	
+	/**
+	 * Naver Login.
+	 */
+	HSP_LOGIN_TYPE_NAVER
 } HSPLoginType;
 
 /**

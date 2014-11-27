@@ -44,18 +44,9 @@
  */
 typedef enum
 {
-	HSP_OAUTHPROVIDER_TWITTER = 0,  /**< Twitter. */
-	HSP_OAUTHPROVIDER_MIXI,			/**< Mixi. */
-	HSP_OAUTHPROVIDER_FACEBOOK,     /**< Facebook. */
-	HSP_OAUTHPROVIDER_YAHOO,		/**< Yahoo. */
-	HSP_OAUTHPROVIDER_GOOGLE,		/**< Google. */
+	HSP_OAUTHPROVIDER_FACEBOOK = 0, /**< Facebook. */
 	HSP_OAUTHPROVIDER_HANGAME,		/**< Hangame. */
 	HSP_OAUTHPROVIDER_NAVER,		/**< Naver. */
-	HSP_OAUTHPROVIDER_LINE,			/**< Line. */
-	HSP_OAUTHPROVIDER_KAKAO,		/**< Kakao. */
-	HSP_OAUTHPROVIDER_GREE,			/**< Gree. */
-	HSP_OAUTHPROVIDER_HANGAME_EX,	/**< Hangame_ex. */
-	HSP_OAUTHPROVIDER_GSQUARE,		/**< GSquare. */
 	HSP_OAUTHPROVIDER_POKETROKET,	/**< pocketroket. */
 	HSP_OAUTHPROVIDER_NEID,         /**< NEID. */
 	HSP_OAUTHPROVIDER_GUEST,        /**< Guest. */
@@ -72,10 +63,11 @@ typedef enum
 typedef enum
 {
 	HSP_MAPPINGTYPE_HANGAME = 0,	/**< Hangame mapping type. */
-	HSP_MAPPINGTYPE_EMAIL,			/**< Email mapping type. */
+	HSP_MAPPINGTYPE_TOAST,			/**< Toast mapping type. */
 	HSP_MAPPINGTYPE_FACEBOOK,       /**< Facebook mapping type. */
 	HSP_MAPPINGTYPE_TWITTER,        /**< Twitter mapping type. */
 	HSP_MAPPINGTYPE_GAMECENTER,		/**< Game Center mapping type. */
+	HSP_MAPPINGTYPE_NAVER			/**< Naver mapping type. */
 } HSPMappingType;
 
 /**
