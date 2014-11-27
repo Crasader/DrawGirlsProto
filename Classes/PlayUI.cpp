@@ -4704,7 +4704,7 @@ void PlayUI::myInit ()
 	casting_cancel_gage->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_gage);
 	
-	casting_cancel_chance_label = KSLabelTTF::create("캐스팅 취소 찬스!!", mySGD->getFont().c_str(), 20);
+	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 20);
 	casting_cancel_chance_label->enableOuterStroke(ccBLACK, 1, 255, true);
 	casting_cancel_chance_label->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_chance_label);

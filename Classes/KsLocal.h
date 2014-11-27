@@ -1216,7 +1216,8 @@ enum class LK
 	kMyLocalKey_missile,
 	kMyLocalKey_damage,
 	kMyLocalKey_todayMissionOnlyNormalStage,
-	kMyLocalKey_reConnectAlert5
+	kMyLocalKey_reConnectAlert5,
+	kMyLocalKey_castingCancelChance
 };
 class KsLocal
 {
