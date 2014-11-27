@@ -147,27 +147,27 @@ void ComboParent::startKeep ()
 }
 void ComboParent::keeping ()
 {
-	if(myGD->getJackState() == jackState::jackStateDrawing)
-	{
-		if(!is_holding)
-		{
-			is_holding = true;
-			hold_frame = 1;
-		}
-		else
-		{
-			hold_frame++;
-		}
-	}
-	else
-	{
-		if(is_holding)
-		{
-			is_holding = false;
-			hold_frame = 0;
-//			keeping_frame -= hold_frame;
-		}
-		
+//	if(myGD->getJackState() == jackState::jackStateDrawing)
+//	{
+//		if(!is_holding)
+//		{
+//			is_holding = true;
+//			hold_frame = 1;
+//		}
+//		else
+//		{
+//			hold_frame++;
+//		}
+//	}
+//	else
+//	{
+//		if(is_holding)
+//		{
+//			is_holding = false;
+//			hold_frame = 0;
+////			keeping_frame -= hold_frame;
+//		}
+	
 		keeping_frame--;
 		//	((ComboView*)getChildByTag(1))->setPercentage(keeping_frame/500.f);
 		
@@ -175,7 +175,7 @@ void ComboParent::keeping ()
 		{
 			stopKeep();
 		}
-	}
+//	}
 }
 void ComboParent::myInit (CCNode* t_score_label)
 {

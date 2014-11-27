@@ -3991,21 +3991,25 @@ void MainFlowScene::setBottom()
 		{
 			for(int i=0;!is_donthave_hell_character && i<hell_count;i++)
 			{
-				int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
-				int history_size = mySGD->getCharacterHistorySize();
-				bool is_found = false;
-				for(int j=0;!is_found && j<history_size;j++)
+				int open_piece_number = NSDS_GI(kSDS_GI_hellMode_int1_openPieceNo_i, i+1);
+				if(mySGD->isClearPiece(open_piece_number))
 				{
-					CharacterHistory t_history = mySGD->getCharacterHistory(j);
-					if(t_history.characterNo.getV() == cha_no)
+					int cha_no = NSDS_GI(kSDS_GI_hellMode_int1_characterNo_i, i+1);
+					int history_size = mySGD->getCharacterHistorySize();
+					bool is_found = false;
+					for(int j=0;!is_found && j<history_size;j++)
 					{
-						is_found = true;
+						CharacterHistory t_history = mySGD->getCharacterHistory(j);
+						if(t_history.characterNo.getV() == cha_no)
+						{
+							is_found = true;
+						}
 					}
-				}
-				
-				if(!is_found)
-				{
-					is_donthave_hell_character = true;
+					
+					if(!is_found)
+					{
+						is_donthave_hell_character = true;
+					}
 				}
 			}
 		}
