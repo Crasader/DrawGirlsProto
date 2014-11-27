@@ -6,7 +6,7 @@
         version="3.3.0" />
     <module
         name="HSPPayment_TStore"
-        version="13.01.01" />
+        version="14.01.00" />
     <module
         name="HSPPayment_Olleh"
         version="2.0.4" />

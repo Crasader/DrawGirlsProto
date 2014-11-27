@@ -17,22 +17,37 @@
 
 void saveOAuthType(int i)
 {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)i);
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	if(i == 3)
 		i = 4;
 	else if(i == 14)
 		i = 17;
 	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)i);
+
+#endif
 }
 
 int getSavedOAuthType(int def)
 {
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	int i = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)def);
+	return i;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	
+	int i = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)def);
+	CCLOG("@@@@ old const = %d", i);
 	if(i == 4)
 		return 3;
 	else if(i == 17)
 		return 14;
 	else
 		return i;
+
+	
+#endif
+
 }
 AccountManagerPopup::AccountManagerPopup()
 {
