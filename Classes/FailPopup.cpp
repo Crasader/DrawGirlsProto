@@ -996,14 +996,13 @@ void FailPopup::resultGetRank(Json::Value result_data)
 		main_case->addChild(rank_tab,kZ_FP_img+10);
 		
 		KSLabelTTF* piece_number_label = KSLabelTTF::create("월드 주간 랭킹",	mySGD->getFont().c_str(), 11);
-		piece_number_label->setColor(ccc3(255, 255, 255));
+		piece_number_label->setColor(ccc3(20, 40, 70));
 		piece_number_label->disableOuterStroke();
 		piece_number_label->setPosition(ccpFromSize(rank_tab->getContentSize()/2.f) + ccp(0,1));
 		rank_tab->addChild(piece_number_label);
 		
 		if(result_data["isMax"].asBool()){
-			piece_number_label->setString(CCString::createWithFormat("%d스테이지 랭킹",result_data["stageNo"].asInt())->getCString());
-			piece_number_label->setScale((rank_tab->getContentSize().width-5)/piece_number_label->getContentSize().width);
+			piece_number_label->setString("스테이지 랭킹");
 		}else{
 			piece_number_label->setString("월드 주간 랭킹");
 		}
