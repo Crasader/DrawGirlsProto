@@ -164,7 +164,8 @@ void ComboParent::keeping ()
 		if(is_holding)
 		{
 			is_holding = false;
-			keeping_frame -= hold_frame;
+			hold_frame = 0;
+//			keeping_frame -= hold_frame;
 		}
 		
 		keeping_frame--;
