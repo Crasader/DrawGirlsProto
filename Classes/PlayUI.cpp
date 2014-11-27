@@ -4733,7 +4733,7 @@ void PlayUI::myInit ()
 	casting_cancel_node->addChild(casting_cancel_chance_label);
 	
 	casting_cancel_chance_label->setVisible(false);
-//	casting_cancel_node->setVisible(false);
+	casting_cancel_node->setVisible(false);
 	
 	my_combo = ComboParent::create(score_label);
 	my_combo->setPosition(CCPointZero);
