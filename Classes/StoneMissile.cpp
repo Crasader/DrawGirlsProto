@@ -465,7 +465,54 @@ void CircleDance::update(float dt)
 	
 	if(m_missileSprite)
 	{
-		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_initRad) * m_initSpeed, sin(m_initRad) * m_initSpeed));
+		bool isNearMonster = false;
+		KSCumberBase* nearCumber = nullptr;
+		for(auto bosses : myGD->getMainCumberVector())
+		{
+			if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= 100)
+			{
+				nearCumber = bosses;
+				isNearMonster = true;
+				break;
+			}
+		}
+		for(auto mob : myGD->getSubCumberVector())
+		{
+			if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= 100)
+			{
+				nearCumber = mob;
+				isNearMonster = true;
+				break;
+			}
+		}
+		
+		// 유도하귀
+		{
+			float tt;
+			if(isNearMonster)
+			{
+				// 미사일에서 몬스터까지의 각도
+				tt = atan2f(nearCumber->getPosition().y - m_missileSprite->getPosition().y,
+										nearCumber->getPosition().x - m_missileSprite->getPosition().x);
+			}
+			else
+			{
+				tt = m_currentRad;
+			}
+			//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+			//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
+			
+			//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+			float tempTt = tt - m_currentRad;
+			bool sign = tt - m_currentRad > 0  ? 1 : -1;
+			float missileSpeed = m_initSpeed * 1.3f;
+			if(isNearMonster)
+			{
+				m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
+			}
+		}
+		
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_currentRad) * m_initSpeed, sin(m_currentRad) * m_initSpeed));
 		
 		
 //		for(auto i : m_satellites)
@@ -473,7 +520,7 @@ void CircleDance::update(float dt)
 		{
 			Satellite& i = *iter;
 			i.rad += M_PI / 180.f * 5.f;
-			i.sprite->setPosition(m_missileSprite->getPosition() + ccp(m_initRadius * cosf(i.rad), m_initRadius * sin(i.rad)));
+			i.sprite->setMissilePosition(m_missileSprite->getPosition() + ccp(m_initRadius * cosf(i.rad), m_initRadius * sin(i.rad)));
 			
 			
 			bool isEnable = true;
@@ -486,7 +533,8 @@ void CircleDance::update(float dt)
 			if(
 				 myGD->getIsGameover() ||
 				 emptyMonster ||
-				 invalidRange
+				 invalidRange ||
+				 i.sprite->m_touched == true
 				 )
 			{
 				i.sprite->removeFromParent();

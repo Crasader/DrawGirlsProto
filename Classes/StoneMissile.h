@@ -1477,6 +1477,8 @@ public:
 					break;
 				}
 			}
+			
+			// 유도하귀
 			{
 				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
 				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
@@ -1792,6 +1794,7 @@ public:
 	bool init(CCPoint initPosition, const string& fileName, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
+		m_touched = false;
 //		m_initSpeed = initSpeed;
 		m_power = power;
 		m_subPower = subPower;
@@ -1824,7 +1827,8 @@ public:
 		
 		if(!isEnable)
 		{
-			removeFromParentAndCleanup(true);
+			m_touched = true;
+//			removeFromParentAndCleanup(true);
 			return;
 		}
 		
@@ -1832,7 +1836,7 @@ public:
 		KSCumberBase* minDistanceCumber = nullptr;
 		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 		bool found = false;
-		if(m_updateFrameCount >= 5)
+		if(m_updateFrameCount >= 5 && m_touched == false) // 때린적이 없다면
 		{
 			for(auto iter : myGD->getMainCumberVector())
 			{
@@ -1872,7 +1876,8 @@ public:
 			
 			float damage = m_power;
 			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
-			removeFromParentAndCleanup(true);
+			m_touched = true;
+//			removeFromParentAndCleanup(true);
 		}
 		else  // 거리가 멀면 진행 시킴.
 		{
@@ -1900,9 +1905,10 @@ public:
 		
 //		m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
 	}
-	
+	bool m_touched;
 protected:
 	int m_updateFrameCount;
+	
 //	float m_initSpeed; // 초기 속도.
 //	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
@@ -3835,10 +3841,10 @@ public:
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		
-		m_initRadius = radius;
+		m_initRadius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
 		m_initRad = initRad;
-		m_initSpeed = initSpeed;
-		m_dotNumber = dotNumber;
+		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		m_dotNumber = dotNumber * mInfo.get("dotbonus", 1.f).asFloat();
 		m_angleVelocity = angleVelocity;
 		if(cosf(m_initRad) < 0)
 			m_angleVelocity *= -1;
@@ -3849,7 +3855,7 @@ public:
 		m_elipticB = 1.0f;
 		
 		
-		m_currentRad = 0.f;
+		m_currentRad = m_initRad;
 		m_currentFrame = 0;
 		
 		m_ao = ao;
@@ -3858,6 +3864,7 @@ public:
 		
 		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setVisible(false);
 		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
@@ -3872,7 +3879,8 @@ public:
 		
 		for(int i=0; i<m_dotNumber; i++)
 		{
-			CCSprite* satell = CCSprite::create(fileName.c_str());
+			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, ao);
+//			CCSprite* satell = CCSprite::create(fileName.c_str());
 			float rad = 2 * M_PI / m_dotNumber * i;
 			Satellite t;
 			t.sprite = satell;
@@ -3886,7 +3894,7 @@ public:
 																					 {
 																						 for(auto i : m_satellites)
 																						 {
-																							 i.sprite->setPosition(m_missileSprite->getPosition() +
+																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
 																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
 																						 }
 																						 
@@ -3894,7 +3902,7 @@ public:
 																					 {
 																						 for(auto i : m_satellites)
 																						 {
-																							 i.sprite->setPosition(m_missileSprite->getPosition() +
+																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
 																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
 																						 }
 																						 
@@ -3957,7 +3965,7 @@ protected:
 	struct Satellite
 	{
 		float rad;
-		CCSprite* sprite;
+		StaticMissile* sprite;
 	};
 	vector<Satellite> m_satellites; // 똥파리..
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
