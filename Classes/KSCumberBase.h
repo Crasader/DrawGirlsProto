@@ -146,7 +146,7 @@ public:
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
 	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false),
-	m_crashAttackTime(0), m_slowDurationFrame(-5)
+	m_crashAttackTime(0), m_slowDurationFrame(-5), m_damageMeasure(0.f)
 	{
 		
 	}

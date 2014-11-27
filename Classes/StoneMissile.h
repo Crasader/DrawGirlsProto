@@ -439,7 +439,7 @@ public:
 		// 캐스팅 캔슬.
 		
 		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage + subdamage);
-		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f) // 전체 피통의 10% 가 깎이면 캐스팅 취소함.
+		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && cumber->getCumberState() != kCumberStateMoving) // 전체 피통의 10% 가 깎이면 캐스팅 취소함.
 		{
 			m_option = m_option | AttackOption::kCancelCasting; // 캐스팅 속성 추가.
 		}

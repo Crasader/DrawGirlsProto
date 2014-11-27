@@ -4704,7 +4704,7 @@ void PlayUI::myInit ()
 	casting_cancel_gage->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_gage);
 	
-	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 20);
+	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 15);
 	casting_cancel_chance_label->enableOuterStroke(ccBLACK, 1, 255, true);
 	casting_cancel_chance_label->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_chance_label);
@@ -4820,6 +4820,7 @@ void PlayUI::myInit ()
 		casting_cancel_chance_label->stopAllActions();
 		if(t_f >= 1.f)
 		{
+			t_f = 1.f;
 			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
 			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
 			casting_cancel_chance_label->runAction(t_repeat);
