@@ -283,16 +283,26 @@ void HellModeOpening::setMain()
 								  
 								  if(clicked_stage != -1)
 									{
-										CommonAnimation::closePopup(this, main_case, gray, [=](){
+										addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t)
+																			   {
+																				   gray->setOpacity(255*t);
+																			   }, [=](float t)
+																			   {
+																				   gray->setOpacity(0);
+																				   
+																				   mySGD->is_hell_mode = true;
+																				   mySD->setSilType(clicked_stage);
+																				   
+																				   StartSettingPopup* t_popup = StartSettingPopup::create();
+																				   t_popup->setHideFinalAction(getParent(), callfunc_selector(MainFlowScene::showHellOpening));
+																				   getParent()->addChild(t_popup, kMainFlowZorder_popup);
+																				   removeFromParent();
+																			   }));
+										
+										CommonAnimation::closePopup(this, main_case, nullptr, [=](){
 											
 										}, [=](){
-											mySGD->is_hell_mode = true;
-											mySD->setSilType(clicked_stage);
 											
-											StartSettingPopup* t_popup = StartSettingPopup::create();
-											t_popup->setHideFinalAction(getParent(), callfunc_selector(MainFlowScene::showHellOpening));
-											getParent()->addChild(t_popup, kMainFlowZorder_popup);
-											removeFromParent();
 										});
 									}
 								  else

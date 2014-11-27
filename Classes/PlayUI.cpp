@@ -4710,7 +4710,7 @@ void PlayUI::myInit ()
 	casting_cancel_node->addChild(casting_cancel_chance_label);
 	
 	casting_cancel_chance_label->setVisible(false);
-//	casting_cancel_node->setVisible(false);
+	casting_cancel_node->setVisible(false);
 	
 	my_combo = ComboParent::create(score_label);
 	my_combo->setPosition(CCPointZero);
@@ -4815,22 +4815,22 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
 	myGD->V_F["UI_changeCastingGage"] = [=](float t_f)
 	{
-		casting_cancel_gage->stopAllActions();
-		
-		casting_cancel_chance_label->stopAllActions();
-		if(t_f >= 1.f)
-		{
-			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
-			casting_cancel_chance_label->runAction(t_repeat);
-		}
-		else
-		{
-			casting_cancel_chance_label->setVisible(false);
-		}
-		
-		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
-		casting_cancel_gage->runAction(t_to);
+//		casting_cancel_gage->stopAllActions();
+//		
+//		casting_cancel_chance_label->stopAllActions();
+//		if(t_f >= 1.f)
+//		{
+//			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
+//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
+//			casting_cancel_chance_label->runAction(t_repeat);
+//		}
+//		else
+//		{
+//			casting_cancel_chance_label->setVisible(false);
+//		}
+//		
+//		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
+//		casting_cancel_gage->runAction(t_to);
 	};
 }
 
