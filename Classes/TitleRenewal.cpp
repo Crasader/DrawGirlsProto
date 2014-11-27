@@ -815,6 +815,7 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value notice_param;
 	notice_param["buildNo"] = myHSP->getVersionCode();
+	notice_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("getnoticelist", notice_param, json_selector(this, TitleRenewalScene::resultGetNoticeList)));
 	
 	Json::Value timeevent_param;
@@ -822,6 +823,7 @@ void TitleRenewalScene::successLogin()
 	
 	Json::Value attendance_param;
 	attendance_param["memberID"] = myHSP->getMemberID();
+	attendance_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("checkattendenceevent", attendance_param, json_selector(this, TitleRenewalScene::resultCheckAttendanceEvent)));
 	
 	Json::Value rank_reward_param;

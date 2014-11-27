@@ -6078,6 +6078,7 @@ void MainFlowScene::countingMessage()
 	
 	Json::Value real_time_message_param;
 	real_time_message_param["version"] = 0;//NSDS_GI(kSDS_GI_realTimeMessageVersion_i);
+	real_time_message_param["store"] = myHSP->getStoreID();
 	command_list.push_back(CommandParam("getrealtimemessage", real_time_message_param, [=](Json::Value result_data)
 										{
 											if(result_data["result"]["code"].asInt() == GDSUCCESS)
