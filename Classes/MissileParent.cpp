@@ -681,10 +681,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 											  1.2f, // 본체 속도
 											  3, // 방향개수.
 											  M_PI / 180.f * 81.f, // 각속도
-											  20, // 인타발.
+											  shoot_frame_cnt, // 인타발.
 											  power,
 											  missile_sub_damage,
-											  ao, 100.f, 7, level);
+											  ao, 100.f, shoot_final_cnt, level);
 				ms->beautifier(level);
 				jack_missile_node->addChild(ms);
 			};
