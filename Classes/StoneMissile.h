@@ -1776,6 +1776,142 @@ protected:
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
 
+class StaticMissile : public StoneAttack
+{
+public:
+	static StaticMissile* create(CCPoint initPosition, const string& fileName, int power, int subPower, AttackOption ao)
+	{
+		StaticMissile* object = new StaticMissile();
+		object->init(initPosition, fileName, power, subPower, ao);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	bool init(CCPoint initPosition, const string& fileName, int power, int subPower, AttackOption ao)
+	{
+		StoneAttack::init();
+//		m_initSpeed = initSpeed;
+		m_power = power;
+		m_subPower = subPower;
+		m_option = ao;
+		m_missileSprite = CCSprite::create(fileName.c_str());
+		addChild(m_missileSprite);
+		m_missileSprite->setPosition(initPosition);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+//		m_initRad = rad;
+		scheduleUpdate();
+		
+		m_updateFrameCount = 0;
+		
+		return true;
+	}
+	void update(float dt)
+	{
+		m_updateFrameCount++;
+		bool isEnable = true;
+		IntPoint missilePoint = ccp2ip(m_missileSprite->getPosition());
+		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+												 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		if(
+			 myGD->getIsGameover() ||
+			 invalidRange
+			 )
+		{
+			isEnable = false;
+		}
+		
+		if(!isEnable)
+		{
+			removeFromParentAndCleanup(true);
+			return;
+		}
+		
+		float minDistance = std::numeric_limits<float>::max();
+		KSCumberBase* minDistanceCumber = nullptr;
+		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
+		bool found = false;
+		if(m_updateFrameCount >= 5)
+		{
+			for(auto iter : myGD->getMainCumberVector())
+			{
+				CCPoint targetPosition = iter->getPosition();
+				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
+				if(distance < 10)
+				{
+					minDistance = distance;
+					minDistanceCumber = iter;
+					found = true;
+					break;
+				}
+			}
+			if(found == false)
+			{
+				for(auto iter : myGD->getSubCumberVector())
+				{
+					CCPoint targetPosition = iter->getPosition();
+					float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
+					if(iter->getDeadState() == false && distance < 10)
+					{
+						minDistance = distance;
+						minDistanceCumber = iter;
+						found = true;
+						break;
+					}
+				}
+			}
+		}
+		
+		// 몬스터가 맞는 조건
+		if(found && !myGD->getIsGameover())
+		{
+			CCPoint effectPosition = m_missileSprite->getPosition();
+			effectPosition.x += rand()%21 - 10;
+			effectPosition.y += rand()%21 - 10;
+			
+			float damage = m_power;
+			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
+			removeFromParentAndCleanup(true);
+		}
+		else  // 거리가 멀면 진행 시킴.
+		{
+			
+		}
+	}
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	void setMissilePosition(CCPoint pt)
+	{
+		m_missileSprite->setPosition(pt);
+		if(m_particle)
+		{
+			m_particle->setPosition(pt);
+		}
+		if(m_streak)
+		{
+			m_streak->setPosition(pt);
+		}
+		
+//		m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
+	}
+	
+protected:
+	int m_updateFrameCount;
+//	float m_initSpeed; // 초기 속도.
+//	float m_initRad; // 처음에 날아가는 각도.
+	int m_power; // 파워.
+	int m_subPower;
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCSprite* m_missileSprite; // 미사일 객체.
+};
+
 //SpreadMissile 적용할 차례.
 
 ////////////////////////////////////////////////////
@@ -3653,3 +3789,161 @@ protected:
 
 
 
+
+class CircleDance : public StoneAttack
+{
+public:
+	static CircleDance* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+												 int dotNumber, float angleVelocity, int power, int subPower,
+												 AttackOption ao)
+	{
+		CircleDance* object = new CircleDance();
+		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, power, subPower, ao);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	
+	
+	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+						int dotNumber, float angleVelocity, int power, int subPower,
+						AttackOption ao)
+	{
+		StoneAttack::init();
+		//		m_missileStep = 1;
+		m_fileName = fileName;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		m_initRadius = radius;
+		m_initRad = initRad;
+		m_initSpeed = initSpeed;
+		m_dotNumber = dotNumber;
+		m_angleVelocity = angleVelocity;
+		if(cosf(m_initRad) < 0)
+			m_angleVelocity *= -1;
+		m_power = power;
+		m_subPower = subPower;
+		//		m_currentCenter = initPosition;
+		m_elipticA = 1.8f;
+		m_elipticB = 1.0f;
+		
+		
+		m_currentRad = 0.f;
+		m_currentFrame = 0;
+		
+		m_ao = ao;
+		
+		m_initPosition = initPosition;
+		
+		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+		
+		
+		
+		for(int i=0; i<m_dotNumber; i++)
+		{
+			CCSprite* satell = CCSprite::create(fileName.c_str());
+			float rad = 2 * M_PI / m_dotNumber * i;
+			Satellite t;
+			t.sprite = satell;
+			t.rad = rad;
+			m_satellites.push_back(t);
+			
+		}
+		
+		addChild(KSGradualValue<float>::create(0.f, m_initRadius, 0.5f, [=](float t)
+																					 {
+																						 for(auto i : m_satellites)
+																						 {
+																							 i.sprite->setPosition(m_missileSprite->getPosition() +
+																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
+																						 }
+																						 
+																					 }, [=](float t)
+																					 {
+																						 for(auto i : m_satellites)
+																						 {
+																							 i.sprite->setPosition(m_missileSprite->getPosition() +
+																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
+																						 }
+																						 
+																						 scheduleUpdate();
+																						 
+																					 }));
+		
+		
+		
+		//		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		//		m_option = ao;
+		//		m_power = power;
+		//		m_subPower = subPower;
+		//		m_targetNode = targetNode;
+		//		m_initRad = initRad;
+		
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
+	
+	CCPoint m_initPosition;
+	
+	float m_initRadius, m_initRad, m_initSpeed, m_angleVelocity;
+	int m_dotNumber;
+	float m_currentRad;
+	int m_currentFrame;
+	std::string m_fileName;
+	float m_elipticA;
+	float m_elipticB;
+	
+	CCPoint m_currentCenter;
+	
+	AttackOption m_ao;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	int m_subPower;
+	
+	struct Satellite
+	{
+		float rad;
+		CCSprite* sprite;
+	};
+	vector<Satellite> m_satellites; // 똥파리..
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};

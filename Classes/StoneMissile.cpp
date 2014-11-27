@@ -447,4 +447,59 @@ void Tornado::update(float dt)
 	}
 }
 
+////////////
+void CircleDance::update(float dt)
+{
+	if(getChildrenCount() == 1) // 자식이 없어지면 삭쿠제.
+	{
+		//			myGD->communication("EP_stopCrashAction");
+		removeFromParentAndCleanup(true);
+	}
+	m_currentFrame++;
+	
+	
+	
+	
+	if(m_missileSprite)
+	{
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_initRad) * m_initSpeed, sin(m_initRad) * m_initSpeed));
+		
+		
+//		for(auto i : m_satellites)
+		for(auto iter = m_satellites.begin(); iter != m_satellites.end(); )
+		{
+			Satellite i = *iter;
+			i.rad += M_PI / 180.f * 5.f;
+			i.sprite->setPosition(m_missileSprite->getPosition() + ccp(m_initRadius * cosf(i.rad), m_initRadius * sin(i.rad)));
+			
+			
+			bool isEnable = true;
+			bool emptyMonster = false;
+			bool invalidRange;
+			IntPoint missilePoint = ccp2ip(i.sprite->getPosition());
+			invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+											missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+
+			if(
+				 myGD->getIsGameover() ||
+				 emptyMonster ||
+				 invalidRange
+				 )
+			{
+				i.sprite->removeFromParent();
+				iter = m_satellites.erase(iter);
+			}
+			else
+			{
+				++iter;
+			}
+		}
+		
+		
+		
+		
+		
+	}
+
+}
 #undef LZZ_INLINE

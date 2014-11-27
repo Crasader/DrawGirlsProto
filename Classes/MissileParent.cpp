@@ -638,6 +638,23 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		ms->beautifier(level);
 		jack_missile_node->addChild(ms);
 	}
+	else if(stoneType == StoneType::kStoneType_circleDance)
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		level = 1;
+		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		
+		CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, 20.f,
+																					0.f, // 방향
+																					1.2f, // 속도
+																					3, // 개수
+																					M_PI / 180.f * 5.f, power, missile_sub_damage, ao);
+//		ms->beautifier(level);
+		jack_missile_node->addChild(ms);
+	}
 
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
@@ -662,15 +679,30 @@ AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 	{
 		return AttackOption::kStiffen;
 	}
-	else if(st == StoneType::kStoneType_range)
-	{
-		return AttackOption::kStiffen;
-	}
-
 	else if(st == StoneType::kStoneType_global)
 	{
 		return AttackOption::kStiffen;
 	}
+
+	else if(st == StoneType::kStoneType_protector)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_tornado)
+	{
+		return AttackOption::kStiffen;
+	}
+	else if(st == StoneType::kStoneType_circleDance)
+	{
+		return AttackOption::kStiffen;
+	}
+	else
+	{
+		return AttackOption::kStiffen;
+	}
+
+
+	
 // 등급에 따라 옵션이 붙게 하는 코든데 없앰.
 #if 0 
 	if(st == StoneType::kStoneType_guided)
