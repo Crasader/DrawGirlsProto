@@ -451,6 +451,10 @@ public:
 	
 	
 	virtual void selfBomb(Json::Value param) = 0;
+	virtual bool isBoss()
+	{
+		return true;
+	}
 protected:
 	
 	
