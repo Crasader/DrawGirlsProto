@@ -3787,6 +3787,8 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_111.ccbi"] = LK::kMyLocalKey_warning111;
 	fileName2Language["warning_112.ccbi"] = LK::kMyLocalKey_warning112;
 	fileName2Language["warning_113.ccbi"] = LK::kMyLocalKey_warning113;
+	fileName2Language["warning_114.ccbi"] = LK::kMyLocalKey_warning114;
+	fileName2Language["warning_115.ccbi"] = LK::kMyLocalKey_warning115;
 	fileName2Language["warning_1001.ccbi"] = LK::kMyLocalKey_warning1001;
 	fileName2Language["warning_1002.ccbi"] = LK::kMyLocalKey_warning1002;
 	fileName2Language["warning_1003.ccbi"] = LK::kMyLocalKey_warning1003;
@@ -3807,6 +3809,13 @@ void Maingame::showDetailMessage(const std::string& fileName, const std::string&
 	fileName2Language["warning_1018.ccbi"] = LK::kMyLocalKey_warning1018;
 	fileName2Language["warning_1019.ccbi"] = LK::kMyLocalKey_warning1019;
 	fileName2Language["warning_1020.ccbi"] = LK::kMyLocalKey_warning1020;
+	fileName2Language["warning_1021.ccbi"] = LK::kMyLocalKey_warning1021;
+	fileName2Language["warning_1022.ccbi"] = LK::kMyLocalKey_warning1022;
+	fileName2Language["warning_1023.ccbi"] = LK::kMyLocalKey_warning1023;
+	fileName2Language["warning_1024.ccbi"] = LK::kMyLocalKey_warning1024;
+	fileName2Language["warning_1025.ccbi"] = LK::kMyLocalKey_warning1025;
+	fileName2Language["warning_1026.ccbi"] = LK::kMyLocalKey_warning1026;
+	fileName2Language["warning_1027.ccbi"] = LK::kMyLocalKey_warning1027;
 	fileName2Language["warning_boss_success.ccbi"] = LK::kMyLocalKey_warningBossSuccess;
 	fileName2Language["warning_over_02.ccbi"] = LK::kMyLocalKey_warningLastLife;
 	

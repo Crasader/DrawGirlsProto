@@ -357,6 +357,7 @@ bool GraphDog::command(const std::vector<CommandParam>& params,int errorCnt)
 	
 	
 	jsonTotalCmd["country"]=hspConnector::get()->getCountryCode();
+	jsonTotalCmd["store"]=hspConnector::get()->getStoreID();
 	jsonTotalCmd["timezone"]=myDSH->getStringForKey(kDSH_Key_timeZone);
 	jsonTotalCmd["memberID"]=getMemberID();
 	jsonTotalCmd["socialID"]=getSocialID();

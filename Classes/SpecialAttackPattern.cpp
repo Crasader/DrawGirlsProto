@@ -1148,7 +1148,7 @@ void WiperMissileWrapper::myInit(KSCumberBase* cumber, Json::Value param)
 	m_earlyRelease = true;
 	setStartingWithEarly();
 	
-	std::string fileName = CCString::createWithFormat("cumber_missile%d.png", param.get("color", 1).asInt())->getCString();
+	std::string fileName = CCString::createWithFormat("cumber_missile%d.png", param.get("color", 10).asInt())->getCString();
 	if(KS::isExistFile(fileName))
 		batchNode = CCSpriteBatchNode::create(fileName.c_str(), 300);
 	else

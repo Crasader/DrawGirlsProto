@@ -39,7 +39,7 @@ public:
 	int storySeq;
 	function<void(void)> callbackFunc;
 	bool isAdd;
-    
+	bool findedStory;
 	static StoryLayer* create(string _storyID)
 	{
 		StoryLayer* obj = new StoryLayer();
@@ -52,7 +52,7 @@ public:
 		if(!CCLayer::init()){
 			return false;
 		}
-		
+		findedStory=false;
 		isAdd=false;
 		suction = TouchSuctionLayer::create(-9998);
 		addChild(suction);
@@ -161,10 +161,17 @@ public:
         TRACE();
         sl->callbackFunc = _endFunc;
 		TRACE();
-        obj->addChild(sl,9999999);
         
 		TRACE();
         sl->loadStory();
+		
+		if(sl->findedStory==false){
+			if(sl->callbackFunc)sl->callbackFunc();
+			return;
+		}
+		
+		
+		obj->addChild(sl,9999999);
 		TRACE();
         sl->addChild(KSGradualValue<float>::create(0, 150, 1, [sl](int a){
 			sl->black->setOpacity(a);
@@ -519,6 +526,7 @@ public:
 		//CCLOG("Scene %s,",this->storyID.c_str());
 		if(this->storyID == _storyID){
 			isAdd=true;
+			findedStory=true;
 		}else{
 			isAdd=false;
 		}

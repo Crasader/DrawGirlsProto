@@ -82,6 +82,7 @@ public:
 	int attackWithKSCode(CCPoint startPosition, std::string &pattern, KSCumberBase* cb, bool exe);
 	int getJackMissileCnt();
 	void removeAllPattern();
+	KSCumberBase* getNearestCumber(CCPoint pt);
 private:
 	
 	int clear_condition;

@@ -253,37 +253,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		{
 			auto creator = [=](){
 				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-				KSCumberBase* target = nullptr;
-				std::vector<KSCumberBase*> targets;
-				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
-				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-				target = targets[ks19937::getIntValue(0, targets.size() - 1)];
-							
-				CCPoint minDis = ccp(99999, 99999);
-				KSCumberBase* nearCumber = myGD->getMainCumberVector()[0];
-				for(int i = 0; i<myGD->getMainCumberCount();i++)
-				{
-					KSCumberBase* cumber = myGD->getMainCumberVector()[i];
-					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
-					if(ccpLength(nowDis)<ccpLength(minDis))
-					{
-						nearCumber=cumber;
-						minDis = nowDis;
-					}
-				}
-				
-				for(int i = 0; i<myGD->getSubCumberCount();i++){
-					KSCumberBase* cumber = myGD->getSubCumberVector()[i];
-					CCPoint nowDis = cumber->getPosition()-myGD->getJackPoint().convertToCCP();
-					if(cumber->getDeadState() == false)
-					{
-						if(ccpLength(nowDis)<ccpLength(minDis))
-						{
-							nearCumber=cumber;
-							minDis = nowDis;
-						}
-					}
-				}
+				KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
 				
 				int random_value = rand()%7 - 3;
 				float random_float = random_value/10.f;
@@ -380,7 +350,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			};
 			
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -577,7 +548,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(gm);
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -608,7 +580,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(gm);
 			};
 			addChild(KSTimer::create(0.30 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -671,7 +644,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(ms);
 			};
 			addChild(KSTimer::create(0.50 * (i + 1), [=](){
-				creator();
+				if(myGD->getIsGameover() == false)
+					creator();
 			}));
 		}
 	}
@@ -684,13 +658,32 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		level = 1;
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		
-		CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, 20.f,
-																					0.f, // 방향
-																					1.2f, // 속도
-																					3, // 개수
-																					M_PI / 180.f * 5.f, power, missile_sub_damage, ao);
-//		ms->beautifier(level);
-		jack_missile_node->addChild(ms);
+		
+		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+		int j = 0;
+		missileNumbersInt *= 3;
+		for(int i=missileNumbersInt; i>=0; i-=20, j++)
+		{
+			auto creator = [=](){
+				int mNumber = MIN(i, 20);
+				CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f),
+																							atan2f(nearCumber->getPosition().y - myGD->getJackPointCCP().y,
+																										 nearCumber->getPosition().x - myGD->getJackPointCCP().x),// 방향
+																							1.2f, // 속도
+																							mNumber, // 개수
+																							M_PI / 180.f * 10.f, power, missile_sub_damage, ao);
+				//		ms->beautifier(level);
+				jack_missile_node->addChild(ms);
+			};
+			addChild(KSTimer::create(0.80 * (j + 1), [=](){
+				if(myGD->getIsGameover() == false)
+				{
+					creator();
+				}
+			}));
+			
+		}
+		
 	}
 
 }
@@ -907,6 +900,42 @@ void MissileParent::removeAllPattern()
 //		pattern_container->getChildren()->removeObject(i);
 	}
 	pattern_container->removeAllChildren();
+}
+
+KSCumberBase* MissileParent::getNearestCumber(cocos2d::CCPoint pt)
+{
+	KSCumberBase* target = nullptr;
+	std::vector<KSCumberBase*> targets;
+	targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+	targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+	target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+	
+	CCPoint minDis = ccp(99999, 99999);
+	KSCumberBase* nearCumber = myGD->getMainCumberVector()[0];
+	for(int i = 0; i<myGD->getMainCumberCount();i++)
+	{
+		KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+		CCPoint nowDis = cumber->getPosition()-pt;
+		if(ccpLength(nowDis)<ccpLength(minDis))
+		{
+			nearCumber=cumber;
+			minDis = nowDis;
+		}
+	}
+	
+	for(int i = 0; i<myGD->getSubCumberCount();i++){
+		KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+		CCPoint nowDis = cumber->getPosition()-pt;
+		if(cumber->getDeadState() == false)
+		{
+			if(ccpLength(nowDis)<ccpLength(minDis))
+			{
+				nearCumber=cumber;
+				minDis = nowDis;
+			}
+		}
+	}
+	return nearCumber;
 }
 void MissileParent::subOneDie()
 {
