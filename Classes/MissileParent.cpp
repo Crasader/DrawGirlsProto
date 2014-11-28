@@ -386,7 +386,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	else if(stoneType == StoneType::kStoneType_spread)
 	{
 		addChild(KSIntervalCall::create(20, missileNumbers, [=](int seq){
-			if(myGD->getIsGameover() == false)
+			if(myGD->getIsGameover() == true)
 				return;
 			
 			int adderForGrade = 0;
