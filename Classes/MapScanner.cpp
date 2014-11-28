@@ -294,19 +294,39 @@ void MapScanner::scanMap()
 			
 			bfsCheck(mapEmpty, mapScaningEmptySide, mainCumberPoint); // main cumber
 			
-			for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+			if(dgPointer->game_step == kGS_limited)
 			{
-				if(dgPointer->mapState[i][mapHeightInnerBegin] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerBegin));
-				if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerEnd-1));
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					if(dgPointer->mapState[i][dgPointer->limited_step_bottom] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, dgPointer->limited_step_bottom));
+					if(dgPointer->mapState[i][dgPointer->limited_step_top] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, dgPointer->limited_step_top));
+				}
+				for(int j=dgPointer->limited_step_bottom;j<=dgPointer->limited_step_top;j++)
+				{
+					if(dgPointer->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerBegin, j));
+					if(dgPointer->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerEnd-1, j));
+				}
 			}
-			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+			else
 			{
-				if(dgPointer->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerBegin, j));
-				if(dgPointer->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
-					bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerEnd-1, j));
+				for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
+				{
+					if(dgPointer->mapState[i][mapHeightInnerBegin] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerBegin));
+					if(dgPointer->mapState[i][mapHeightInnerEnd-1] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(i, mapHeightInnerEnd-1));
+				}
+				for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
+				{
+					if(dgPointer->mapState[mapWidthInnerBegin][j] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerBegin, j));
+					if(dgPointer->mapState[mapWidthInnerEnd-1][j] == mapScaningEmptySide)
+						bfsCheck(mapScaningEmptySide, mapNewget, IntPoint(mapWidthInnerEnd-1, j));
+				}
 			}
 		}
 	}

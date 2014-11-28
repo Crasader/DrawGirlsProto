@@ -4010,7 +4010,7 @@ void Maingame::setLimitMap()
 
 	for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
 	{
-		if(j < screen_to_map_bottom || j > screen_to_map_top)
+		if(j < myGD->limited_step_bottom || j > myGD->limited_step_top)//if(j < screen_to_map_bottom || j > screen_to_map_top)
 		{
 			for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 			{
