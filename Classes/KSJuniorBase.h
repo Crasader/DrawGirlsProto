@@ -116,6 +116,10 @@ public:
 	void attachEmotion() { }
 	void setGameover();
 	virtual void selfBomb(Json::Value param);
+	virtual bool isBoss()
+	{
+		return false;
+	}
 protected:
 
 	
