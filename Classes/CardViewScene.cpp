@@ -144,6 +144,7 @@ bool CardViewScene::init()
 		first_img->addChild(t_ccb_img);
 		
 		ccb_manager = t_ccb.second;
+		ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		first_img->touch_ccb_func = [=]()
 		{
@@ -334,9 +335,6 @@ bool CardViewScene::init()
 	else
 	{
 //		morphing_filename = "morphing_heart_on.ccbi";
-		
-		if(NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, card_number))
-			ccb_manager->runAnimationsForSequenceNamed("Default Timeline");
 		
 		refresh_morphing_sound();
 		

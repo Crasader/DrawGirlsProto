@@ -2401,9 +2401,13 @@ void KSCumberBase::assignBossData(Json::Value boss)
 	float agi = MAX(boss.get("agi", 0).asDouble(), 0);
 	float ai = MAX(0, boss.get("ai", 0).asInt() );
 	
+	if(boss.get("shape","").asString()=="")m_isBoss=false;
+	else m_isBoss=true;
+	
 	m_totalHp = m_remainHp = hp;
 	m_agility = agi;
 	m_aiValue = ai;
+	
 	m_startScale = startScale;
 	m_minScale = minScale;
 	m_maxScale = maxScale;
@@ -2497,7 +2501,7 @@ void KSCumberBase::applyHellBalance(float playTime)
 void KSCumberBase::applyAutoBalance(bool isExchange)
 {
 	
-
+	bool isJr = !m_isBoss;//false; //!isBoss();
 	bool isClear = mySGD->isClearPiece(mySD->getSilType());
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
@@ -2553,14 +2557,14 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		myGD->setAlphaSpeed(myGD->getAlphaSpeed()+speedBalance);
 	}
 	
-	if(m_attackPercent<=0)vCount*=0.5f;
+	if(isJr)vCount*=0.5f;
 
 	//체인지시 오토벨런싱 다시
 	if(isExchange){
 		
 		if(vCount>0){
 			m_aiValue = m_aiValue+10.f*vCount;
-			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
+			if(!isJr)m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.04;
 			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
@@ -2571,9 +2575,9 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		m_aiValue *=2;
 		if(m_aiValue<50)m_aiValue=50;
 		
-		m_attackPercent *=1.2f;
-		if(m_attackPercent<0.25)m_attackPercent=0.25;
-		if(m_attackPercent>0.4)m_attackPercent=0.4;
+		if(!isJr)m_attackPercent *=1.2f;
+		if(!isJr && m_attackPercent<0.25)m_attackPercent=0.25;
+		if(!isJr && m_attackPercent>0.4)m_attackPercent=0.4;
 		if(m_maxSpeed>0.7f){m_maxSpeed=0.7f; m_minSpeed=m_maxSpeed/2.f;}
 		
 		int sumpercent = 0;
@@ -2602,22 +2606,24 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	}else{
 		vCount*=0.8f;
 		
+		if(isJr && m_maxSpeed>0.4f){m_maxSpeed=0.4f; m_minSpeed=m_maxSpeed/2.f;}
+		
 		if(vCount>0){
 			m_aiValue = m_aiValue+10.f*vCount;
-			m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
+			if(!isJr)m_attackPercent = m_attackPercent+m_attackPercent*vCount*0.02;
 			m_maxSpeed = m_maxSpeed+m_maxSpeed*vCount*0.005;
 		}
 		
 		if(playCount>0){
-			m_attackPercent =m_attackPercent - m_attackPercent*playCount*0.03;
+			if(!isJr)m_attackPercent =m_attackPercent - m_attackPercent*playCount*0.03;
 		}
 		
 		
 		//부수기 공격 확률 낮추기
 		
 		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
-			if(m_attackPercent>0.3)m_attackPercent=0.3;
-			if(m_attackPercent<0.1)m_attackPercent=0.1;
+			if(!isJr && m_attackPercent>0.3)m_attackPercent=0.3;
+			if(!isJr && m_attackPercent<0.1)m_attackPercent=0.1;
 			if(m_aiValue>50)m_aiValue=50;
 			if(m_maxSpeed>0.5f){m_maxSpeed=0.5f; m_minSpeed=m_maxSpeed/2.f;}
 			
@@ -2641,7 +2647,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 	}
 	
-	if(m_attackPercent<=0 && m_maxSpeed>0.6f){m_maxSpeed=0.6f; m_minSpeed=m_maxSpeed/2.f;}
+	if(isJr && m_maxSpeed>0.6f){m_maxSpeed=0.6f; m_minSpeed=m_maxSpeed/2.f;}
 	if(m_maxSpeed>0.8f){m_maxSpeed=0.8f; m_minSpeed=m_maxSpeed/2.f;}
 
 	settingFuryRule();

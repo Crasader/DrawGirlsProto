@@ -303,6 +303,10 @@ public:
 	bool isMovable(){
 		return (m_cumberState & kCumberStateMoving) && ((m_cumberState & kCumberStateDamaging) == 0);
 	}
+//	virtual bool isBoss()
+//	{
+//		return true;
+//	}
 public:
 	int m_stopFrameCount;
 	int m_castFrameCount;
@@ -493,6 +497,7 @@ protected:
 	bool m_slience;
 	int m_crashCount;
 	int m_aiValue;
+	bool m_isBoss;
 	bool m_flipProperty;
 	int m_castingCancelCount; // 캐스팅이 취소당한 횟수를 셈.
 	IntPoint m_mapPoint; // 자기 자신의 맵포인트를 저장함. setPosition 할 때 마다 수정해줘야함.

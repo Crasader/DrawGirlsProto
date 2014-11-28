@@ -514,7 +514,7 @@ public:
 	{
 		
 		
-			motionStreak = addStreak(level);
+			motionStreak = addStreak(level/2.f);
 		
 			if(level <= 5)
 			{
