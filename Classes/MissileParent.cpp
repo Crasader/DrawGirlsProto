@@ -630,9 +630,11 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				
 				std::vector<KSCumberBase*> main_vector = myGD->getMainCumberVector();
 				
+				KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+				
 				Tornado* ms = Tornado::create(myGD->getJackPointCCP(), fileName,
 											  0.f, // 반지름
-											  (main_vector[0]->getPosition() - myGD->getJackPointCCP()).getAngle() + (rand()%141-70)/10.f/180.f*M_PI,//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
+											  (nearCumber->getPosition() - myGD->getJackPointCCP()).getAngle() + (rand()%141-70)/10.f/180.f*M_PI,//ks19937::getFloatValue(0, 2*M_PI), // 시작 방향
 											  1.2f, // 본체 속도
 											  2, // 방향개수.
 											  M_PI / 180.f * 132.f, // 각속도
@@ -659,30 +661,37 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		
 		
-		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
-		int j = 0;
+		
+		
 		missileNumbersInt *= 3;
-		for(int i=missileNumbersInt; i>=0; i-=20, j++)
-		{
-			auto creator = [=](){
-				int mNumber = MIN(i, 20);
-				CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f),
-																							atan2f(nearCumber->getPosition().y - myGD->getJackPointCCP().y,
-																										 nearCumber->getPosition().x - myGD->getJackPointCCP().x),// 방향
-																							1.2f, // 속도
-																							mNumber, // 개수
-																							M_PI / 180.f * 10.f, power, missile_sub_damage, ao);
-				//		ms->beautifier(level);
-				jack_missile_node->addChild(ms);
-			};
-			addChild(KSTimer::create(0.80 * (j + 1), [=](){
-				if(myGD->getIsGameover() == false)
-				{
-					creator();
-				}
-			}));
+		addChild(KSTimer::create(0.0f, [=](){
+			KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+			float ny = nearCumber->getPosition().y;
+			float nx = nearCumber->getPosition().x;
+			int j = 0;
+			for(int i=missileNumbersInt; i>=0; i-=20, j++)
+			{
+				auto creator = [=](){
+					int mNumber = MIN(i, 20);
+					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
+																								atan2f(ny - myGD->getJackPointCCP().y,
+																											 nx - myGD->getJackPointCCP().x),// 방향
+																								1.2f, // 속도
+																								mNumber, // 개수
+																								M_PI / 180.f * 10.f, power, missile_sub_damage, ao);
+					//		ms->beautifier(level);
+					jack_missile_node->addChild(ms);
+				};
+				addChild(KSTimer::create(0.80 * (j), [=](){
+					if(myGD->getIsGameover() == false)
+					{
+						creator();
+					}
+				}));
+				
+			}
 			
-		}
+		}));
 		
 	}
 
@@ -915,6 +924,9 @@ KSCumberBase* MissileParent::getNearestCumber(cocos2d::CCPoint pt)
 	for(int i = 0; i<myGD->getMainCumberCount();i++)
 	{
 		KSCumberBase* cumber = myGD->getMainCumberVector()[i];
+		IntPoint ip = ccp2ip(cumber->getPosition());
+		if(myGD->mapState[ip.x][ip.y] != mapEmpty)
+			continue;
 		CCPoint nowDis = cumber->getPosition()-pt;
 		if(ccpLength(nowDis)<ccpLength(minDis))
 		{
@@ -925,6 +937,9 @@ KSCumberBase* MissileParent::getNearestCumber(cocos2d::CCPoint pt)
 	
 	for(int i = 0; i<myGD->getSubCumberCount();i++){
 		KSCumberBase* cumber = myGD->getSubCumberVector()[i];
+		IntPoint ip = ccp2ip(cumber->getPosition());
+		if(myGD->mapState[ip.x][ip.y] != mapEmpty)
+			continue;
 		CCPoint nowDis = cumber->getPosition()-pt;
 		if(cumber->getDeadState() == false)
 		{
