@@ -657,7 +657,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		level = 1;
+//		level = 1;
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		
 		
