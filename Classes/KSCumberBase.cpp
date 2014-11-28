@@ -2501,7 +2501,7 @@ void KSCumberBase::applyHellBalance(float playTime)
 void KSCumberBase::applyAutoBalance(bool isExchange)
 {
 	
-	bool isJr = !m_isBoss;//false; //!isBoss();
+	bool isJr = !isBoss();//!m_isBoss;//false; //!isBoss();
 	bool isClear = mySGD->isClearPiece(mySD->getSilType());
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
