@@ -207,7 +207,8 @@ void KSJuniorBase::checkConfine(float dt)
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty
+		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty ||
+		 mapPoint.isInnerMap() == false
 		 
 		 /* &&
 		 
