@@ -2243,6 +2243,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->V_V["MP_subOneDie"] = std::bind(&MissileParent::subOneDie, this);
 	myGD->I_V["MP_getJackMissileCnt"] = std::bind(&MissileParent::getJackMissileCnt, this);
 	myGD->removeAllPattern = std::bind(&MissileParent::removeAllPattern, this);
+	myGD->getNearestCumber = std::bind(&MissileParent::getNearestCumber, this, _1);
 }
 
 void MissileParent::removeChargeInArray( CCObject* remove_charge )
