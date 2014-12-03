@@ -123,6 +123,7 @@ void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)>
 	addChild(right_back);
 	
 	int character_number = mySGD->endless_character_no.getV();
+	if(character_number==0)character_number=1;
 	int character_count = NSDS_GI(kSDS_GI_characterCount_i);
 	int found_index = -1;
 	for(int i=0;found_index == -1 && i<character_count;i++)
