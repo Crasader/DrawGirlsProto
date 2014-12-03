@@ -1375,6 +1375,12 @@ void OptionPopup::cheatAction(CCObject *sender)
 
 void OptionPopup::menuAction(CCObject* pSender)
 {
+//	addChild(KSTimer::create(0.5f, [=](){
+//		CCLog("ResetBgm");
+//		removeFromParent();
+//		bgm_img->getPosition();
+//		
+//	}));
 	if(!is_menu_enable)
 	{
 		return;
