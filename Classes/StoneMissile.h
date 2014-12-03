@@ -2010,6 +2010,7 @@ public:
 		m_particle = nullptr;
 		m_streak = nullptr;
 		m_currentRad = 0.f;
+		m_step = 1;
 		m_mine = CCSprite::create(fileName.c_str());
 		m_mine->setScale(1.f/myGD->game_scale);
 		m_mine->setRotation(180);
@@ -2083,10 +2084,17 @@ public:
 		if(m_tickCount <= 0)
 		{
 			removeFromParent();
+			return;
 		}
+		
+		if(m_step == 1)
+		{
+			
+		}
+		
 
-		CCPoint rotation = ccp(10 * cosf(m_currentRad), 10 * sinf(m_currentRad));
-		m_currentRad += M_PI / 180 * 4.f;
+		CCPoint rotation = ccp(15 * cosf(m_currentRad), 15 * sinf(m_currentRad));
+		m_currentRad += M_PI / 180 * 6.f;
 		m_mine->setPosition(m_mineCenterPosition + rotation);
 		m_mine->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
 		if(m_particle)
@@ -2131,8 +2139,8 @@ public:
 		for(auto iter : myGD->getMainCumberVector())
 		{
 			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_mineCenterPosition);
-			if(distance < 25)
+			float distance = ccpLength(targetPosition - m_mine->getPosition());
+			if(distance < 20)
 			{
 				minDistance = distance;
 				minDistanceCumber = iter;
@@ -2145,8 +2153,8 @@ public:
 			for(auto iter : myGD->getSubCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
-				float distance = ccpLength(targetPosition - m_mineCenterPosition);
-				if(distance < 25)
+				float distance = ccpLength(targetPosition - m_mine->getPosition());
+				if(distance < 20)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
@@ -2159,14 +2167,20 @@ public:
 
 		if(found && !myGD->getIsGameover())
 		{
-			CCPoint effectPosition = m_mine->getPosition();
-			effectPosition.x += rand()%21 - 10;
-			effectPosition.y += rand()%21 - 10;
-			
-			float damage = m_power;
-			executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
+			addChild(KSIntervalCall::create(1, 3, [=](int i){
+				CCPoint effectPosition = m_mine->getPosition();
+				effectPosition.x += rand()%21 - 10;
+				effectPosition.y += rand()%21 - 10;
+				
+				float damage = m_power;
+				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
+				if(i == 2)
+				{
+					removeFromParentAndCleanup(true);
+				}
+				
+			}));
 
-			removeFromParentAndCleanup(true);
 		}
 	}
 	void beautifier(int level)
@@ -2194,6 +2208,8 @@ protected:
 	ASMotionStreak* m_streak;
 	CCPoint m_mineCenterPosition;
 	float m_currentRad;
+	
+	int m_step;
 };
 
 
@@ -2388,12 +2404,15 @@ public:
 			if(!myGD->getIsGameover()){
 				for(auto iter : nearMonsters)
 				{
-					CCPoint effectPosition = iter->getPosition();
-					effectPosition.x += rand()%21 - 10;
-					effectPosition.y += rand()%21 - 10;
-
-					float damage = m_power;
-					executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+					if(iter->getDeadState() == false)
+					{
+						CCPoint effectPosition = iter->getPosition();
+						effectPosition.x += rand()%21 - 10;
+						effectPosition.y += rand()%21 - 10;
+						
+						float damage = m_power;
+						executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+					}
 				}
 			}
 
@@ -3035,55 +3054,67 @@ public:
 		if(m_missileStep == 1)
 		{
 			m_lifeFrames--;
+			
+			// 생명력이 떨어져서 발사...
 			if(m_lifeFrames <= 0 && m_hiding == false)
 			{
 				m_hiding = true;
-				if(m_particle)
-				{
-					m_particle->setEmissionRate(0);
-				}
-				if(m_streak)
-				{
-					m_streak->removeFromParent();
-					m_streak = nullptr;
-				}
-				addChild(KSGradualValue<float>::create(255, 0, 1.f, [=](float t)
-																							 {
-																								 m_missileSprite->setOpacity(t);
-
-																								 
-																							 }, [=](float t)
-																							 {
-																								 this->removeFromParent();
-//																								 m_missileSprite->removeFromParent();
-																								 m_missileSprite = nullptr;
-																								
-																							 }));
-			}
-			m_currentRadius += 0.4f;
-			m_currentRad += M_PI / 180.f * 4.f;
-			
-			CCPoint xy = myGD->getJackPointCCP() +
-					ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
-			if(m_missileSprite)
-			{
-				m_missileSprite->setPosition(xy);
-				m_missileSprite->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
 				
-				if(m_particle)
-					m_particle->setPosition(m_missileSprite->getPosition());
+				m_missileStep = 2;
+				KSCumberBase* nearCumber = myGD->getNearestCumber(m_missileSprite->getPosition());
+				if(nearCumber)
+				{
+					m_currentRad = atan2f(nearCumber->getPosition().y - m_missileSprite->getPosition().y,
+																nearCumber->getPosition().x - m_missileSprite->getPosition().x);
+				}
+				///////////////
 				
-				if(m_streak)
-					m_streak->setPosition(m_missileSprite->getPosition());
+//				if(m_particle)
+//				{
+//					m_particle->setEmissionRate(0);
+//				}
+//				if(m_streak)
+//				{
+//					m_streak->removeFromParent();
+//					m_streak = nullptr;
+//				}
+//				addChild(KSGradualValue<float>::create(255, 0, 1.f, [=](float t)
+//																							 {
+//																								 m_missileSprite->setOpacity(t);
+//
+//																								 
+//																							 }, [=](float t)
+//																							 {
+//																								 this->removeFromParent();
+//																								 m_missileSprite = nullptr;
+//																								
+//																							 }));
 			}
-			
-			if(m_currentRadius >= m_finalRadius)
+			else //! m_lifeFrames <= 0 && m_hiding == false
 			{
-				m_currentRadius = m_finalRadius;
-			}
-			
-			if(m_hiding == false)
-			{
+				m_currentRadius += 0.4f;
+				m_currentRad += M_PI / 180.f * 4.f;
+				
+				CCPoint xy = myGD->getJackPointCCP() +
+				ccp(m_currentRadius * cosf(m_currentRad), m_currentRadius * sinf(m_currentRad));
+				if(m_missileSprite)
+				{
+					m_missileSprite->setPosition(xy);
+					m_missileSprite->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
+					
+					if(m_particle)
+						m_particle->setPosition(m_missileSprite->getPosition());
+					
+					if(m_streak)
+						m_streak->setPosition(m_missileSprite->getPosition());
+				}
+				
+				if(m_currentRadius >= m_finalRadius)
+				{
+					m_currentRadius = m_finalRadius;
+				}
+				
+				
 				std::vector<KSCumberBase*> targets;
 				KSCumberBase* target = nullptr;
 				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
@@ -3133,7 +3164,43 @@ public:
 		}
 		else if(m_missileStep == 2)
 		{
-						
+			float missileSpeed = m_initSpeed * 1.3f;
+			
+			m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
+																																				sin(m_currentRad) * missileSpeed));
+			
+			if(m_selfRotation)
+			{
+				m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
+			}
+			else
+			{
+				m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+			}
+	
+			
+			// 공격나가는 도중임...
+			CCPoint targetPosition = m_targetNode->getPosition();
+			CCPoint subDistance = ccpSub(targetPosition, m_missileSprite->getPosition());
+			float distance = sqrtf(powf(subDistance.x, 2.f) + powf(subDistance.y, 2.f));
+			//			CCLOG("distance : %f", distance);
+			
+			// 몬스터가 맞는 조건
+			if(distance <= 6)
+			{
+				AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
+				
+				CCPoint effectPosition = m_missileSprite->getPosition();
+				effectPosition.x += rand()%21 - 10;
+				effectPosition.y += rand()%21 - 10;
+				
+				float damage = m_power;
+				
+				if(!myGD->getIsGameover()){
+					executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
+				}
+				removeFromParentAndCleanup(true);
+			}
 		}
 		else if(m_missileStep == 3)
 		{
