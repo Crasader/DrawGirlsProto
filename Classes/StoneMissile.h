@@ -439,7 +439,9 @@ public:
 		// 캐스팅 캔슬.
 		
 		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage + subdamage);
-		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && cumber->getCumberState() != kCumberStateMoving) // 전체 피통의 10% 가 깎이면 캐스팅 취소함.
+		
+		// 전체 피통의 10% 가 깎이면 캐스팅 취소함.
+		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && cumber->getAttackPattern() && cumber->getCharges().empty() == false)
 		{
 			m_option = m_option | AttackOption::kCancelCasting; // 캐스팅 속성 추가.
 		}
@@ -1466,6 +1468,7 @@ public:
 				if(ccpLength(bosses->getPosition() - m_missileSprite->getPosition()) <= m_range)
 				{
 					isNearMonster = true;
+					diffPosition = bosses->getPosition() - missilePosition;
 					break;
 				}
 			}
@@ -1474,6 +1477,7 @@ public:
 				if(ccpLength(mob->getPosition() - m_missileSprite->getPosition()) <= m_range)
 				{
 					isNearMonster = true;
+					diffPosition = mob->getPosition() - missilePosition;
 					break;
 				}
 			}
@@ -2089,99 +2093,196 @@ public:
 		
 		if(m_step == 1)
 		{
+			CCPoint rotation = ccp(15 * cosf(m_currentRad), 15 * sinf(m_currentRad));
+			m_currentRad += M_PI / 180 * 6.f;
+			m_mine->setPosition(m_mineCenterPosition + rotation);
+			m_mine->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
+			if(m_particle)
+			{
+				m_particle->setPosition(m_mineCenterPosition + rotation);
+			}
+			if(m_streak)
+			{
+				m_streak->setPosition(m_mineCenterPosition + rotation);
+			}
 			
-		}
-		
-
-		CCPoint rotation = ccp(15 * cosf(m_currentRad), 15 * sinf(m_currentRad));
-		m_currentRad += M_PI / 180 * 6.f;
-		m_mine->setPosition(m_mineCenterPosition + rotation);
-		m_mine->setRotation(CC_RADIANS_TO_DEGREES(m_currentRad)*-1+180);
-		if(m_particle)
-		{
-			m_particle->setPosition(m_mineCenterPosition + rotation);
-		}
-		if(m_streak)
-		{
-			m_streak->setPosition(m_mineCenterPosition + rotation);
-		}
-		
-		int surroundCnt = 0;
-		IntPoint setPoint = ccp2ip(m_mineCenterPosition);
-		IntPoint checkPoint = IntPoint(setPoint.x-1, setPoint.y);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x+1, setPoint.y);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x, setPoint.y-1);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		checkPoint = IntPoint(setPoint.x, setPoint.y+1);
-		if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
-		if(surroundCnt >= 4) // 갇힘.
-		{
-			CCNode* parentNode = getParent();
-			removeFromParent();
-			IntPoint mapPoint;
-			bool found = myGD->getEmptyRandomPoint(&mapPoint, 5.f);
-			if(found)
+			int surroundCnt = 0;
+			IntPoint setPoint = ccp2ip(m_mineCenterPosition);
+			IntPoint checkPoint = IntPoint(setPoint.x-1, setPoint.y);
+			if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
+			checkPoint = IntPoint(setPoint.x+1, setPoint.y);
+			if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
+			checkPoint = IntPoint(setPoint.x, setPoint.y-1);
+			if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
+			checkPoint = IntPoint(setPoint.x, setPoint.y+1);
+			if(checkPoint.isInnerMap() && myGD->mapState[checkPoint.x][checkPoint.y] != mapEmpty)		surroundCnt++;
+			if(surroundCnt >= 4) // 갇힘.
 			{
-				MineAttack* ma = MineAttack::create(m_mineCenterPosition, ip2ccp(mapPoint), m_fileName, m_initTickCount, m_power, m_subPower, m_option);
-				ma->beautifier(m_level);
-				parentNode->addChild(ma);
+				CCNode* parentNode = getParent();
+				removeFromParent();
+				IntPoint mapPoint;
+				bool found = myGD->getEmptyRandomPoint(&mapPoint, 5.f);
+				if(found)
+				{
+					MineAttack* ma = MineAttack::create(m_mineCenterPosition, ip2ccp(mapPoint), m_fileName, m_initTickCount, m_power, m_subPower, m_option);
+					ma->beautifier(m_level);
+					parentNode->addChild(ma);
+				}
+				
+				return;
 			}
-
-			return;
-		}
-
-		float minDistance = std::numeric_limits<float>::max();
-		KSCumberBase* minDistanceCumber = nullptr;
-		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
-		bool found = false;
-		for(auto iter : myGD->getMainCumberVector())
-		{
-			CCPoint targetPosition = iter->getPosition();
-			float distance = ccpLength(targetPosition - m_mine->getPosition());
-			if(distance < 20)
-			{
-				minDistance = distance;
-				minDistanceCumber = iter;
-				found = true;
-				break;
-			}
-		}	
-		if(found == false)
-		{
-			for(auto iter : myGD->getSubCumberVector())
+			
+			float minDistance = std::numeric_limits<float>::max();
+			KSCumberBase* minDistanceCumber = nullptr;
+			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
+			bool found = false;
+			for(auto iter : myGD->getMainCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_mine->getPosition());
-				if(distance < 20)
+				if(distance < 50)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
 					found = true;
 					break;
 				}
-			}	
-		}
-
-
-		if(found && !myGD->getIsGameover())
-		{
-			addChild(KSIntervalCall::create(1, 3, [=](int i){
-				CCPoint effectPosition = m_mine->getPosition();
-				effectPosition.x += rand()%21 - 10;
-				effectPosition.y += rand()%21 - 10;
-				
-				float damage = m_power;
-				executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
-				if(i == 2)
+			}
+			if(found == false)
+			{
+				for(auto iter : myGD->getSubCumberVector())
 				{
-					removeFromParentAndCleanup(true);
+					CCPoint targetPosition = iter->getPosition();
+					float distance = ccpLength(targetPosition - m_mine->getPosition());
+					if(distance < 50)
+					{
+						minDistance = distance;
+						minDistanceCumber = iter;
+						found = true;
+						break;
+					}
 				}
-				
-			}));
-
+			}
+			
+			if(found)
+			{
+				m_step = 2;
+				m_targetNode = minDistanceCumber;
+				m_currentRad = atan2f(m_targetNode->getPosition().y - m_mine->getPosition().y,
+															m_targetNode->getPosition().x - m_mine->getPosition().x);
+				m_mine->setColor(ccc3(255, 0, 0));
+			}
+	
 		}
+		
+		else if(m_step == 2)
+		{
+			CCPoint missilePosition = m_mine->getPosition();
+			CCPoint cumberPosition;
+			cumberPosition = m_targetNode->getPosition();
+			CCPoint diffPosition = cumberPosition - missilePosition;
+			
+			bool isNearMonster = true;
+			diffPosition = myGD->getNearestCumber(missilePosition)->getPosition() - missilePosition;
+			
+			// 유도하귀
+			{
+				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
+				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
+				//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
+				
+				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
+				float tempTt = tt - m_currentRad;
+				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				float missileSpeed = 2.f * 1.3f;
+				if(isNearMonster)
+				{
+					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
+				}
+				else
+				{
+					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
+				}
+				m_mine->setPosition(m_mine->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
+																																					sin(m_currentRad) * missileSpeed));
+				m_mine->setRotation(-rad2Deg(m_currentRad) - 90);
+				
+				if(m_particle)
+				{
+					m_particle->setPosition(m_mine->getPosition());
+				}
+				if(m_streak)
+				{
+					m_streak->setPosition(m_mine->getPosition());
+				}
+
+				
+//				if(m_selfRotation)
+//				{
+//					m_missileSprite->setRotation(m_missileSprite->getRotation() + 20);
+//				}
+//				else
+//				{
+//					m_missileSprite->setRotation(-rad2Deg(m_currentRad) - 90);
+//				}
+			}
+			
+			
+			
+			float minDistance = std::numeric_limits<float>::max();
+			KSCumberBase* minDistanceCumber = nullptr;
+			// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
+			bool found = false;
+			for(auto iter : myGD->getMainCumberVector())
+			{
+				CCPoint targetPosition = iter->getPosition();
+				float distance = ccpLength(targetPosition - m_mine->getPosition());
+				if(distance < 5)
+				{
+					minDistance = distance;
+					minDistanceCumber = iter;
+					found = true;
+					break;
+				}
+			}
+			if(found == false)
+			{
+				for(auto iter : myGD->getSubCumberVector())
+				{
+					CCPoint targetPosition = iter->getPosition();
+					float distance = ccpLength(targetPosition - m_mine->getPosition());
+					if(distance < 5)
+					{
+						minDistance = distance;
+						minDistanceCumber = iter;
+						found = true;
+						break;
+					}
+				}
+			}
+			
+			
+			if(found && !myGD->getIsGameover())
+			{
+				addChild(KSIntervalCall::create(1, 3, [=](int i){
+					CCPoint effectPosition = m_mine->getPosition();
+					effectPosition.x += rand()%21 - 10;
+					effectPosition.y += rand()%21 - 10;
+					
+					float damage = m_power;
+					executeOption(dynamic_cast<KSCumberBase*>(minDistanceCumber), damage, m_subPower, 0.f, effectPosition);
+					if(i == 2)
+					{
+						removeFromParentAndCleanup(true);
+					}
+					
+				}));
+				
+			}
+		}
+
+		
+		
 	}
 	void beautifier(int level)
 	{
@@ -2208,7 +2309,7 @@ protected:
 	ASMotionStreak* m_streak;
 	CCPoint m_mineCenterPosition;
 	float m_currentRad;
-	
+	KSCumberBase* m_targetNode;
 	int m_step;
 };
 
