@@ -576,7 +576,10 @@ protected:
 protected: float m_damageMeasure;\
 public: virtual float getDamageMeasure(void) const { return m_damageMeasure; }\
 public: virtual void setDamageMeasure(float var){ m_damageMeasure = var;
-	myGD->communication("UI_changeCastingGage",var / (getTotalHp() * 0.1f));
+	if(isBoss())
+	{
+		myGD->communication("UI_changeCastingGage",var / (getTotalHp() * 0.1f));
+	}
 }
 	
 
