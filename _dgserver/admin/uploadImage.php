@@ -417,19 +417,28 @@ class UploadHandler
     protected function get_unique_filename($name,
         $type = null, $index = null, $content_range = null) {
     	if($this->options['writeMode']=="random"){
-    		$date=date("his",time());
-    		$newname=trim($name);
-    		$nnn = explode(" ",$newname);
-    		$hjj = explode(".",$newname);
+    		
+
+
+            $hjj = explode(".",$name);
     		$hjj = $hjj[count($hjj)-1];
 		
-			for($i=0;$i<=count($nnn);$i++){
-				$newname2.=$nnn[$i];
-			}
-			$newname=trim($newname2);
-			$newname=hmac('ripemd160', "lq".$date.$newname).".".$hjj;
+            $date=date("mdhis",time());
+            $validCharacters = "1234567890abcdefghijklmnopqrstuxyvwz";
+            $validCharNumber = strlen($validCharacters);
+         
+            $result = "";
+         
+            for ($i = 0; $i < 10; $i++) {
+                $index = mt_rand(0, $validCharNumber - 1);
+                $result .= $validCharacters[$index];
+            }
+
+			$newname=trim($result);
+			$newname="lq".$date.$newname.".".$hjj;
 			
 			$name = $newname;
+
 		}
 		if($this->options['writeMode']=="update"){
 	        while(is_dir($this->get_upload_path($name))) {

@@ -36,7 +36,12 @@ $(document).ready(function(){
 		</td></tr></table>
 </div>
 <br><br>
-<h2 id="tables-contextual-classes">|변경내역조회</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|변경내역조회</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ModifyHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1>
 	<thead>
 		<tr>

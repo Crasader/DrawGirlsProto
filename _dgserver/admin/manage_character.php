@@ -33,6 +33,12 @@ include "manage_header.php";
 
 </script>
 
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|캐릭터</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="Character" dbWhere='{}' dbSort='{"serial":"asc"}' dbLimit="30" name="datatable" border=1 align=center>
 	<thead>
 		<tr>

@@ -87,6 +87,8 @@ if(!$gid){
 <td><a href=admin_usingfilelist.php?gid=<?=$gid?>>usingfilelist<br><font color=red>사용파일목록</font></a></td>
 <td><a href=admin_autoLeveling.php?gid=<?=$gid?>>autoLeveling<br><font color=red>레벨링</font></a></td>
 <td><a href=admin_updateQueryMaker.php?gid=<?=$gid?>>updateQueryMaker<br><font color=red>업데이트쿼리생성</font></a></td>
+<td><a href=admin_timeMachine.php?gid=<?=$gid?>>timeMachine<br><font color=red>뽑기아이템회수</font></a></td>
+<td><a href=admin_restore.php?gid=<?=$gid?>>restore<br><font color=red>카드/캐릭터복구</font></a></td>
 </tr>
 </table>
 

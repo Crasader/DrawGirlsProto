@@ -9,6 +9,7 @@ $sInfo["HTTPGATEWAY_PORT"]="18080";
 $sInfo["secretKey"]="qrqhyrlgprghedvh";
 Infomation::setStaticInfo($sInfo);
 
+LogManager::setLock(false);
 
 /***************************************************************************************
 

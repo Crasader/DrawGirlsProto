@@ -66,7 +66,13 @@ var clearList = function(value,option){
 </div>
 <br><br>
 
-<h2 id="tables-contextual-classes">|피스정보조회</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|피스정보조회</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">엑셀로 다운받기</a>
+</td></tr></table>
+
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PieceHistory" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

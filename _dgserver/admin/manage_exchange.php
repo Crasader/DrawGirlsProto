@@ -47,7 +47,14 @@ $(document).ready(function(){
 		</td></tr></table>
 </div>
 <br><br>
-<h2 id="tables-contextual-classes">|교환ID(시스템)</h2>
+
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|교환ID(system)</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="Exchange" dbWhere='{}' dbLimit="100" dbSort='{"no":"asc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

@@ -131,6 +131,7 @@ var cuponMaker_value = function(obj){
 <h2 id="tables-contextual-classes">|쿠폰코드</h2>
 </td>
 <td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a> /
 	<script>
 
 		$(document).ready(function(){
@@ -149,7 +150,7 @@ var cuponMaker_value = function(obj){
 		});
 
 	</script>
-	<button class="btn btn-default" id="downAll">일괄저장</a>
+	<a href="#" id="downAll">쿠폰일괄저장</a>
 </td>
 </table>
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="cuponCode" dbWhere='{"type":"cuponNo","id":<?=$_GET["cuponNo"]?>}' dbLimit="10" dbSort='{"no":"desc"}' editRowOnly="ture" editType="form" name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>

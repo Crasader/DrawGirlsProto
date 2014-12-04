@@ -612,6 +612,26 @@ var countrySelector_value = function(obj){
 	return setTypeEditor_value(obj);
 }
 
+var storeSelector = function(value,option){
+	option = s2j(option);
+	option["element"]=["google","apple","tstore","nstore"];
+	option["value"]=["google","apple","tstore","nstore"];
+	option["all"]="전체스토어";
+	return setTypeEditor(value,option);
+}
+
+var storeSelector_value = function(obj){
+	return setTypeEditor_value(obj);
+}
+
+var storeViewer = function(value,option){
+	option = s2j(option);
+	option["element"]=["google","apple","tstore","nstore"];
+	option["value"]=["google","apple","tstore","nstore"];
+	option["all"]="전체스토어";
+	return setTypeViewer(value,option);
+}
+
 var countrySelectorOnce = function(value,option){
 	option = s2j(option);
 	option["element"]=["한국","태국","대만","홍콩","베트남","필리핀","싱가폴","마카오","말레이시아","인도네시아","일본","중국","미국","전체"];
