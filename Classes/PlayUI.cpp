@@ -1448,6 +1448,34 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			my_fp->addFeverGage(up_count);
 		}
 		
+		if(clr_cdt_type == kCLEAR_littlePercent && t_p*100.f >= t_beforePercentage*100.f + clr_cdt_cnt.getV())
+		{
+			conditionFail();
+			
+			mySGD->fail_code = kFC_missionfail;
+			
+			stopCounting();
+			int boss_count = myGD->getMainCumberCount();
+			for(int i=0;i<boss_count;i++)
+			{
+				myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+			}
+			// timeover
+			isGameover = true;
+			myGD->communication("CP_setGameover");
+			myGD->removeAllPattern();
+			myGD->communication("Main_allStopSchedule");
+			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+			
+			addResultCCB("ui_missonfail.ccbi");
+			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+			
+			endGame(false);
+			
+			myGD->setIsGameover(true); // ks 가 추가함. 타이밍을 뒤로 ...
+			return;
+		}
+		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		if(t_p >= t_beforePercentage + NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_percent_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.f)
 		{
@@ -1583,7 +1611,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 									{
 										checkScoreMission();
 									}
-								  else if(clr_cdt_type == kCLEAR_turns)
+								  else if(clr_cdt_type == kCLEAR_turns || clr_cdt_type == kCLEAR_littlePercent)
 									  conditionClear();
 								  
 								  if(is_cleared_cdt)
@@ -1711,7 +1739,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		{
 			checkScoreMission();
 		}
-		else if(clr_cdt_type == kCLEAR_turns)
+		else if(clr_cdt_type == kCLEAR_turns || clr_cdt_type == kCLEAR_littlePercent)
 			conditionClear();
 		
 		if(is_cleared_cdt)
@@ -1958,6 +1986,20 @@ void PlayUI::addResultCCB(string ccb_filename)
             context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
             mission_fail_label->addChild(context_label);
         }
+		else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_casting)
+		{
+			context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextCasting), clr_cdt_cnt.getV() - casting_cancel_cnt.getV()), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+			context_label->setAnchorPoint(ccp(0.5f,0.5f));
+			context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+			mission_fail_label->addChild(context_label);
+		}
+		else if(clr_cdt_type == CLEAR_CONDITION::kCLEAR_littlePercent)
+		{
+			context_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionFailContextLittlePercent), clr_cdt_cnt.getV()), mySGD->getFont().c_str(), 25, 999, StyledAlignment::kCenterAlignment);
+			context_label->setAnchorPoint(ccp(0.5f,0.5f));
+			context_label->setPosition(ccpFromSize(mission_fail_label->getContentSize()/2.f) + ccp(0,-43));
+			mission_fail_label->addChild(context_label);
+		}
 		
 		KSLabelTTF* shadow = CommonAnimation::applyBigShadow(mission_fail_label, mission_fail_label->getFontSize());
 		shadow->setOpacityOuterStroke(0);
@@ -3843,6 +3885,7 @@ void PlayUI::myInit ()
 	high_combo_cnt = 0;
 	
 	turn_cnt = 0;
+	casting_cancel_cnt = 0;
 	
 	score_attack_damage = 0;
 	
@@ -4686,6 +4729,83 @@ void PlayUI::myInit ()
 		clr_cdt_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
 		mission_clear_remove_nodes.push_back(clr_cdt_label);
 	}
+	else if(clr_cdt_type == kCLEAR_casting)
+	{
+		mission_button->doOpen();
+		
+		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		int t_casting_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionCount_i);
+		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
+		if(t_iter != mission_oper_list.end())
+		{
+			if(t_iter->second.oper == "-")
+				t_casting_value -= t_iter->second.value;
+			else if(t_iter->second.oper == "*")
+				t_casting_value *= t_iter->second.value;
+			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+		}
+		
+		clr_cdt_cnt = t_casting_value;
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_mission14Label), t_casting_value)->getCString(), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.f,0.5f));
+		addChild(t_condition_label, 2);
+		
+		CCLabelTTF* clr_cdt_label = CCLabelTTF::create(CCString::createWithFormat("%d", casting_cancel_cnt.getV())->getCString(), mySGD->getFont().c_str(), 16);
+		clr_cdt_label->setColor(ccc3(255, 170, 20));
+		clr_cdt_label->setAnchorPoint(ccp(1,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(clr_cdt_label->getContentSize().width/2.f - t_condition_label->getContentSize().width/2.f, -1));
+		clr_cdt_label->setPosition(mission_back->getPosition() + ccp(-t_condition_label->getContentSize().width/2.f + clr_cdt_label->getContentSize().width/2.f, -1));
+		addChild(clr_cdt_label, 2, kCT_UI_clrCdtLabel);
+		
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+		
+		clr_cdt_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){clr_cdt_label->setPositionY(t);}, [=](float t){clr_cdt_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(clr_cdt_label);
+		
+		if(t_casting_value <= 0)
+			conditionClear();
+	}
+	else if(clr_cdt_type == kCLEAR_littlePercent)
+	{
+		mission_button->doOpen();
+		
+		is_cleared_cdt = false;
+		
+		mission_back = CCSprite::create("ui_mission_button_open.png");
+		mission_back->setPosition(ccp(80, myDSH->ui_top-25+UI_OUT_DISTANCE));
+		addChild(mission_back, 2);
+		mission_back->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){mission_back->setPositionY(t);}, [=](float t){mission_back->setPositionY(myDSH->ui_top-25);}));
+		
+		int t_percent_value = NSDS_GI(mySD->getSilType(), kSDS_SI_missionOptionPercent_i);
+		map<int, MissionOper>::iterator t_iter = mission_oper_list.find((int)clr_cdt_type);
+		if(t_iter != mission_oper_list.end())
+		{
+			if(t_iter->second.oper == "+")
+				t_percent_value += t_iter->second.value;
+			else if(t_iter->second.oper == "*")
+				t_percent_value *= t_iter->second.value;
+			
+			myGD->communication("Jack_showMissionEffect", int(clr_cdt_type));
+		}
+		
+		clr_cdt_cnt = t_percent_value;
+		
+		CCLabelTTF* t_condition_label = CCLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_mission15Label), t_percent_value), mySGD->getFont().c_str(), 12);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(mission_back->getPosition() + ccp(0,-1));
+		addChild(t_condition_label, 2);
+		t_condition_label->addChild(KSGradualValue<float>::create(myDSH->ui_top-25+UI_OUT_DISTANCE, myDSH->ui_top-25, UI_IN_TIME, [=](float t){t_condition_label->setPositionY(t);}, [=](float t){t_condition_label->setPositionY(myDSH->ui_top-25);}));
+		mission_clear_remove_nodes.push_back(t_condition_label);
+	}
 	else if(clr_cdt_type == kCLEAR_default)
 	{
 		if(mySD->getSilType() != 1)
@@ -4841,13 +4961,14 @@ void PlayUI::myInit ()
 	{
 		casting_cancel_gage->ks_animator_node->removeAllChildren();
 		
-		casting_cancel_chance_label->stopAllActions();
+//		casting_cancel_chance_label->stopAllActions();
 		if(t_f >= 1.f)
 		{
 			t_f = 1.f;
-			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.3f), CCHide::create(), CCDelayTime::create(0.3f), NULL);
-			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
-			casting_cancel_chance_label->runAction(t_repeat);
+			casting_cancel_chance_label->setVisible(true);
+//			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.3f), CCHide::create(), CCDelayTime::create(0.3f), NULL);
+//			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
+//			casting_cancel_chance_label->runAction(t_repeat);
 		}
 		else
 		{
@@ -4866,11 +4987,33 @@ void PlayUI::myInit ()
 	myGD->V_B["UI_setIsCasting"] = [=](bool t_b)
 	{
 		if(!is_casting && t_b)
+		{
+			bool keep_visible = casting_cancel_chance_label->isVisible();
 			casting_cancel_chance_label->setString(getLocal(LK::kMyLocalKey_attackRightNow));
+			casting_cancel_chance_label->setVisible(keep_visible);
+		}
 		else if(is_casting && !t_b)
+		{
+			bool keep_visible = casting_cancel_chance_label->isVisible();
 			casting_cancel_chance_label->setString(getLocal(LK::kMyLocalKey_castingCancelChance));
+			casting_cancel_chance_label->setVisible(keep_visible);
+		}
 		
 		is_casting = t_b;
+	};
+	myGD->V_V["UI_castingCancel"] = [=]()
+	{
+		casting_cancel_cnt = casting_cancel_cnt.getV() + 1;
+		if(clr_cdt_type == kCLEAR_casting)
+		{
+			CCLabelTTF* t_label = (CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel);
+			t_label->setString(ccsf("%d", casting_cancel_cnt.getV()));
+			
+			if(casting_cancel_cnt.getV() >= clr_cdt_cnt.getV())
+			{
+				conditionClear();
+			}
+		}
 	};
 }
 

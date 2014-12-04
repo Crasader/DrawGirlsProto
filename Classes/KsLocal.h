@@ -1234,7 +1234,17 @@ enum class LK
 	kMyLocalKey_todayMissionOnlyNormalStage,
 	kMyLocalKey_reConnectAlert5,
 	kMyLocalKey_castingCancelChance,
-	kMyLocalKey_attackRightNow
+	kMyLocalKey_attackRightNow,
+	kMyLocalKey_missionCondition14,
+	kMyLocalKey_missionCondition15,
+	kMyLocalKey_missionTitle14,
+	kMyLocalKey_missionTitle15,
+	kMyLocalKey_missionDiscription14,
+	kMyLocalKey_missionDiscription15,
+	kMyLocalKey_missionFailContextCasting,
+	kMyLocalKey_missionFailContextLittlePercent,
+	kMyLocalKey_mission14Label,
+	kMyLocalKey_mission15Label
 };
 class KsLocal
 {

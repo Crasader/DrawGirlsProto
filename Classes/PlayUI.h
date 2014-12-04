@@ -304,6 +304,7 @@ private:
 	KSProtectVar<int> combo_cnt;
 	int high_combo_cnt;
 	KSProtectVar<int> turn_cnt;
+	KSProtectVar<int> casting_cancel_cnt;
 	GoldLabel * gold_label;
 	CCNode* top_center_node;
 	CCLabelBMFont * score_label;

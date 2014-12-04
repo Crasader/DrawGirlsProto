@@ -441,7 +441,7 @@ public:
 		cumber->setDamageMeasure(cumber->getDamageMeasure() + damage + subdamage);
 		
 		// 전체 피통의 10% 가 깎이면 캐스팅 취소함.
-		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && cumber->getAttackPattern() && cumber->getCharges().empty() == false)
+		if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && (cumber->getAttackPattern() || cumber->getCharges().empty() == false))
 		{
 			m_option = m_option | AttackOption::kCancelCasting; // 캐스팅 속성 추가.
 		}
@@ -452,6 +452,7 @@ public:
 			
 			cumber->setDamageMeasure(0.f);
 			myGD->communication("UI_setIsCasting", false);
+			myGD->communication("UI_castingCancel");
 		}
 
 		// 몬스터 리액션하라고.

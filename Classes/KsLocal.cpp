@@ -1275,6 +1275,16 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
+	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
+	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
+	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
+	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
+	obj[LK::kMyLocalKey_mission14Label] = "/%d회";
+	obj[LK::kMyLocalKey_mission15Label] = "%d%%이하";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2476,6 +2486,16 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
+	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
+	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
+	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
+	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
+	obj[LK::kMyLocalKey_mission14Label] = "/%d회";
+	obj[LK::kMyLocalKey_mission15Label] = "%d%%이하";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

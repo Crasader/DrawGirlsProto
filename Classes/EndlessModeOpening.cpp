@@ -1010,6 +1010,10 @@ void EndlessModeOpening::saveStageInfo(Json::Value result_data)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
 	else if(t_mission["type"].asInt() == kCLEAR_turns)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_casting)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["count"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_littlePercent)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 	
 	
 	Json::Value shopItems = result_data["shopItems"];

@@ -31,6 +31,8 @@ public:
 	
 private:
 	
+	bool is_end_schedule;
+	
 	CCRect view_rect;
 	bool is_showtime;
 	CCNode* game_node;
