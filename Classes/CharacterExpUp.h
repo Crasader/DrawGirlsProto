@@ -26,6 +26,7 @@ public:
 	
 private:
 	
+	bool is_max_level;
 	CCPoint base_position;
 	KSLabelTTF* char_level;
 	int level;
