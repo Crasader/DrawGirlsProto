@@ -4845,7 +4845,7 @@ void PlayUI::myInit ()
 		if(t_f >= 1.f)
 		{
 			t_f = 1.f;
-			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.4f), CCHide::create(), CCDelayTime::create(0.4f), NULL);
+			CCSequence* t_action = CCSequence::create(CCShow::create(), CCDelayTime::create(0.3f), CCHide::create(), CCDelayTime::create(0.3f), NULL);
 			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
 			casting_cancel_chance_label->runAction(t_repeat);
 		}
@@ -4865,6 +4865,11 @@ void PlayUI::myInit ()
 	};
 	myGD->V_B["UI_setIsCasting"] = [=](bool t_b)
 	{
+		if(!is_casting && t_b)
+			casting_cancel_chance_label->setString(getLocal(LK::kMyLocalKey_attackRightNow));
+		else if(is_casting && !t_b)
+			casting_cancel_chance_label->setString(getLocal(LK::kMyLocalKey_castingCancelChance));
+		
 		is_casting = t_b;
 	};
 }

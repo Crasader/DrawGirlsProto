@@ -1274,6 +1274,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
+	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2474,6 +2475,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
+	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
