@@ -32,6 +32,16 @@ enum GAMESTEP{
 
 float deg2Rad(float x) ;
 float rad2Deg(float x);
+template <typename T>
+T toPositiveAngle(T angle)
+{
+	angle = fmod(angle, 360);
+	while(angle < 0) { //pretty sure this comparison is valid for doubles and floats
+		angle += 360.0;
+	}
+	
+	return angle;
+}
 
 enum SetMapType{
 	kSMT_side = 1,
