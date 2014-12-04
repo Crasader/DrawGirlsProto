@@ -15,6 +15,7 @@
 USING_NS_CC;
 using namespace std;
 
+class StyledLabelTTF;
 class RealTimeMessage : public CCNode
 {
 public:
@@ -28,8 +29,10 @@ public:
 	
 private:
 	
-	void checkRealTimeMessageQueue();
+	CCScale9Sprite* back_img;
+	StyledLabelTTF* content_label;
 	
+	void checkRealTimeMessageQueue();
 	void autoRemoveAction()
 	{
 		if(getParent() != NULL)
@@ -38,6 +41,9 @@ private:
 			removeFromParent();
 		}
 	}
+	
+	void startShake();
+	void stopShake();
 	
 	CCPoint base_position;
 	void myInit(string t_message, CCPoint t_base_position);
