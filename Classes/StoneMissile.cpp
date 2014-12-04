@@ -457,6 +457,7 @@ void CircleDance::update(float dt)
 	{
 		//			myGD->communication("EP_stopCrashAction");
 		removeFromParentAndCleanup(true);
+		return;
 	}
 	m_currentFrame++;
 	
@@ -552,5 +553,37 @@ void CircleDance::update(float dt)
 		
 	}
 
+}
+
+void Boomerang::update(float dt)
+{
+//	if(getChildrenCount() == 1) // 자식이 없어지면 삭쿠제.
+//	{
+//		removeFromParentAndCleanup(true);
+//		return;
+//	}
+	
+	m_centerRad += M_PI / 180.f * 4.f;
+	
+	CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
+											 sinf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) + cosf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad));
+
+	m_missileSprite->setPosition(m_params.initPosition + tracer);
+	
+	
+	m_revolutionRad += M_PI / 180.f * 4.f;
+	for(auto& iter : m_satellites)
+	{
+		iter.rad += M_PI / 180.f * 4.f;
+		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(iter.rad) + m_params.revelutionA / 2.f) - m_params.revelutionA / 2.f * sinf(iter.rad) * sinf(m_initRad),
+													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(iter.rad) + m_params.revelutionA / 2.f) + m_params.revelutionA / 2.f * sinf(iter.rad) * cosf(m_initRad));
+//		CCPoint tr = ccp(m_params.revelutionA * cosf(iter.rad), m_params.revelutionA / 2.f * sinf(iter.rad));
+		iter.sprite->setPosition(m_missileSprite->getPosition() + tracer2);
+	}
+	
+	
+	
+	
+	
 }
 #undef LZZ_INLINE

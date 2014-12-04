@@ -239,6 +239,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int subType = mInfo.get("subType", 1).asInt();
+	stoneType = StoneType::kStoneType_boomerang;
 //	stoneType = StoneType::kStoneType_guided;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
@@ -694,7 +695,46 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		}));
 		
 	}
+	else if(stoneType == StoneType::kStoneType_boomerang)
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		//		level = 1;
+		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		
+		
+		
+		
+//		missileNumbersInt *= 3;
+		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+		float ny = nearCumber->getPosition().y;
+		float nx = nearCumber->getPosition().x;
+		
+		auto creator = [=](){
+			Boomerang::Params params;
+			params.initPosition = myGD->getJackPointCCP();
+			params.goalPosition = ccp(nx, ny);
+			params.centerSpeed = 1.5f;
+			params.subPower = missile_sub_damage;
+			params.power = power;
+			params.numbers = 10; // 10개.
+			params.revelutionA = 20.f;
+			params.fileName = fileName;
+			
+			Boomerang* ms = Boomerang::create(params);
+			jack_missile_node->addChild(ms);
+		};
+		if(myGD->getIsGameover() == false)
+		{
+			creator();
+		}
+	
 
+		
+	}
+	
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 { 
@@ -1100,6 +1140,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	std::string atype = patternData["atype"].asString();
 	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func, const std::string& warningFileName)
 	{
+		// 캐스팅 시작시
 		if(atype == "crash")
 		{
 			CrashChargeNodeLambda* t_ccn =

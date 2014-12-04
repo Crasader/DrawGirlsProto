@@ -451,6 +451,8 @@ public:
 			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
 			
 			cumber->setDamageMeasure(0.f);
+			
+			// 캐스팅 취소될 때.
 		}
 
 		// 몬스터 리액션하라고.
@@ -4137,4 +4139,133 @@ protected:
 	};
 	vector<Satellite> m_satellites; // 똥파리..
 	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+
+
+class Boomerang : public StoneAttack
+{
+public:
+	struct Params
+	{
+		CCPoint initPosition;
+		string fileName;
+		CCPoint goalPosition;
+		float centerSpeed;
+		float selfRotationVelocity; // 자전 속도
+		float radius;
+		int numbers; // 미사일 개수
+		int power;
+		int subPower;
+		float revelutionA;
+		
+		AttackOption ao;
+	};
+	static Boomerang* create(const Params& params)
+	{
+		Boomerang* object = new Boomerang();
+		object->init(params);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	
+	
+	bool init(const Params& params)
+	{
+		StoneAttack::init();
+		m_params = params;
+		//		m_missileStep = 1;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		// m_params 와 mInfo 결합 해야됨.
+		
+		
+		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setVisible(true);
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(m_params.initPosition);
+		
+		m_centerA = ccpLength(m_params.initPosition - m_params.goalPosition) / 2.f;
+		m_centerRad = M_PI;
+		m_initRad = atan2f(m_params.goalPosition.y - m_params.initPosition.y, m_params.goalPosition.x - m_params.initPosition.x);
+		m_revolutionRad	 = 0.f;
+		
+		for(int i=0; i<m_params.numbers; i++)
+		{
+			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower,m_params.ao);
+			//			CCSprite* satell = CCSprite::create(fileName.c_str());
+			float rad = 2 * M_PI / m_params.numbers * i;
+			Satellite t;
+			t.sprite = satell;
+			t.rad = rad;
+			m_satellites.push_back(t);
+			addChild(satell);
+			
+		}
+	
+		
+		scheduleUpdate();
+		
+		
+		
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	Params m_params;
+	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
+	
+	float m_currentRad;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	
+	float m_centerRad;
+	float m_centerA;
+	float m_centerB;
+	float m_initRad;
+	float m_revolutionRad;
+		//			myGD->communication("EP_stopCrashAction");
+	struct Satellite
+	{
+		float rad;
+		StaticMissile* sprite;
+	};
+	vector<Satellite> m_satellites; // 똥파리..
+
+	
 };
