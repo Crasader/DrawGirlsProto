@@ -893,6 +893,123 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	return rv.c_str();
 }
 
+Json::Value ServerDataSave::getSavedServerData(Json::Value t_key_list)
+{
+	Json::Value return_value;
+	return_value.clear();
+	
+	for(int i=0;i<t_key_list.size();i++)
+	{
+		Json::Value t_data = t_key_list[i];
+		string t_type = t_data["type"].asString();
+		string t_key = t_data["key"].asString();
+		string t_filename = t_data["filename"].asString();
+		if(t_type == "b")
+		{
+			iter_bool = sds_cache_bool.find(t_filename + t_key);
+			if(iter_bool != sds_cache_bool.end())
+				return_value[i] = iter_bool->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, "false");
+		}
+		else if(t_type == "i")
+		{
+			iter_int = sds_cache_int.find(t_filename + t_key);
+			if(iter_int != sds_cache_int.end())
+				return_value[i] = iter_int->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0);
+		}
+		else if(t_type == "d")
+		{
+			iter_double = sds_cache_double.find(t_filename + t_key);
+			if(iter_double != sds_cache_double.end())
+				return_value[i] = iter_double->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0.0);
+		}
+		else if(t_type == "s")
+		{
+			iter_string = sds_cache_string.find(t_filename + t_key);
+			if(iter_string != sds_cache_string.end())
+				return_value[i] = iter_string->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, "");
+		}
+		else if(t_type == "f")
+		{
+			iter_float = sds_cache_float.find(t_filename + t_key);
+			if(iter_float != sds_cache_float.end())
+				return_value[i] = iter_float->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0.0);
+		}
+	}
+	
+	return return_value;
+}
+
+Json::Value ServerDataSave::getSavedServerDataFile(string t_filename)
+{
+	return myDefault->getFileData(t_filename);
+}
+
+void ServerDataSave::saveServerData(Json::Value t_data_list)
+{
+	for(int i=0;i<t_data_list.size();i++)
+	{
+		Json::Value t_data = t_data_list[i];
+		string t_type = t_data["type"].asString();
+		string t_key = t_data["key"].asString();
+		string t_filename = t_data["filename"].asString();
+		if(t_type == "b")
+		{
+			string t_value = t_data["value"].asString();
+			bool t_b = (t_value == "true");
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_bool[c_key] = t_b;
+		}
+		else if(t_type == "i")
+		{
+			int t_value = t_data["value"].asInt();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_int[c_key] = t_value;
+		}
+		else if(t_type == "d")
+		{
+			double t_value = t_data["value"].asDouble();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_double[c_key] = t_value;
+		}
+		else if(t_type == "s")
+		{
+			string t_value = t_data["value"].asString();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_string[c_key] = t_value;
+		}
+		else if(t_type == "f")
+		{
+			double t_value = t_data["value"].asDouble();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_float[c_key] = float(t_value);
+		}
+	}
+}
+void ServerDataSave::saveServerDataFile(string t_filename, Json::Value t_data)
+{
+	
+}
+
 void ServerDataSave::fFlush(SaveDataFile f_key){			myDefault->fFlush(f_key);		}
 void ServerDataSave::fFlush(SaveDataFile f_key, int i1){	myDefault->fFlush(f_key, i1);	}
 void ServerDataSave::fFlush(SDS_KEY fr_key)

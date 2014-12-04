@@ -1510,15 +1510,44 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
-				else
+				else if(t_info.is_have_ruby_condition)
 				{
 					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
-					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 100.f));
-					not_clear_img->addChild(condition_content);
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCardGold), t_info.need_card_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+					}
 				}
+				else
+				{
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCard), t_info.need_card_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+					}
+				}
+				
+				
 				
 				if(t_info.is_have_ruby_condition)
 				{

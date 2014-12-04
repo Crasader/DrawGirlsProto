@@ -82,6 +82,9 @@ public:
 	void createJSON(SaveDataFile t_sdf, int i1);
 	void createJSON(string filename);
 	
+	Json::Value getFileData(string filename);
+	void setFileData(string filename, Json::Value t_data);
+	
 	void resetData(SaveDataFile t_sdf);
 	void resetData(string filename);
 	void resetAllData();

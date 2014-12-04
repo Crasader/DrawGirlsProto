@@ -65,6 +65,21 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+//	CCLog("test : \n%s", mySDS->getSavedServerDataFile("STAGE1INFO").toStyledString().c_str());
+//	
+//	Json::Value t_key_list;
+//	t_key_list.clear();
+//	
+//	Json::Value t_data;
+//	t_data.clear();
+//	t_data["type"] = "s";
+//	t_data["key"] = "title";
+//	t_data["filename"] = "PUZZLE1INFO";
+//	
+//	t_key_list[0] = t_data;
+//	
+//	CCLog("test2 : \n%s", mySDS->getSavedServerData(t_key_list).toStyledString().c_str());
+	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	mySGD->is_endless_mode = false;
 	mySGD->is_hell_mode = false;

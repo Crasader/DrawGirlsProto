@@ -7,6 +7,7 @@
 #include "SaveData.h"
 #include <map>
 #include "KSProtect.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 
@@ -408,6 +409,11 @@ public:
 	void removeCache();
 	
 	string getRKey (SDS_KEY t_key);
+	
+	Json::Value getSavedServerData(Json::Value t_key_list);
+	Json::Value getSavedServerDataFile(string t_filename);
+	void saveServerData(Json::Value t_data_list);
+	void saveServerDataFile(string t_filename, Json::Value t_data);
 	
 private:
 	map<string, KSProtectVar<bool>> sds_cache_bool;
