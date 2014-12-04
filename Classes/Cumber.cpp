@@ -393,6 +393,11 @@ void CumberParent::createSubCumber(IntPoint s_p)
 		addChild(t_SC);
 		subCumberArray.push_back(t_SC);	
 		t_SC->setPosition(ip2ccp(s_p));
+		
+		MobHpGraph* t_sub_hp = MobHpGraph::create(t_SC, "junior_hp_bar.png");
+		addChild(t_sub_hp);
+		hp_graphs.push_back(t_sub_hp);
+		
 //		addChild(KSGradualValue<float>::create(0.1f, 1.0f, 0.5f, [=](float d){
 //			t_SC->setScale(d);
 //		}, [=](float d){
