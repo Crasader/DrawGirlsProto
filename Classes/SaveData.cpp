@@ -227,6 +227,63 @@ void SaveData::setKeyValue(string filename, string _key, double _value, bool dis
 void SaveData::setKeyValue(SaveDataFile t_sdf, string _key, double _value, bool diskWrite /*= true*/){			setKeyValue(getSyncKey(t_sdf), _key, _value, diskWrite);		}
 void SaveData::setKeyValue(SaveDataFile t_sdf, int i1, string _key, double _value, bool diskWrite /*= true*/){	setKeyValue(getSyncKey(t_sdf, i1), _key, _value, diskWrite);	}
 
+Json::Value SaveData::getFileData(string filename)
+{
+	Json::Value return_value;
+	return_value.clear();
+	
+	map<string, bool>::iterator iter;
+	iter = file_init.find(filename);
+	if(iter == file_init.end())
+		createJSON(filename);
+	
+	string file_key = stringEncWithAES(filename);
+	
+	Json::Value::Members t_member = file_sync[file_key].getMemberNames();
+	while(!t_member.empty())
+	{
+		string t_key = t_member.back();
+		string real_key = stringDecodeWithAES(t_key);
+		string t_v = (file_sync[file_key])[t_key].asString();
+		string t_v2 = stringDecodeWithAES(t_v);
+		return_value[real_key.c_str()] = t_v2;
+		t_member.pop_back();
+	}
+	
+	return return_value;
+}
+
+void SaveData::setFileData(string filename, Json::Value t_data)
+{
+	map<string, bool>::iterator iter;
+	iter = file_init.find(filename);
+	if(iter == file_init.end())
+		createJSON(filename);
+	
+	string file_key = stringEncWithAES(filename);
+	
+	Json::Value::Members t_member = t_data.getMemberNames();
+	while(!t_member.empty())
+	{
+		string t_key = t_member.back();
+		string t_value = t_data[t_key].asString();
+		
+		string key = stringEncWithAES(t_key);
+		ostringstream valueoss;
+		valueoss << t_value;
+		string value = stringEncWithAES(valueoss.str());
+		file_sync[file_key][key] = value;
+		
+		t_member.pop_back();
+	}
+	
+//	if(diskWrite)
+//	{
+		Json::FastWriter writer;
+		while(testF(filename, writer.write(file_sync[file_key])) <= -1){}
+//	}
+}
+
 string SaveData::getValue(string filename, string _key, string _defaultValue)
 {
 	map<string, bool>::iterator iter;
