@@ -2174,18 +2174,28 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	if(animation_node1)
 	{
 		animation_node1->removeFromParent();
+		animation_node1 = nullptr;
 	}
 	if(animation_node2)
 	{
 		animation_node2->removeFromParent();
+		animation_node2 = nullptr;
 	}
-	addChild(animation_node1 = KSGradualValue<float>::create(current_rank_percent, rank_percent*100.f,
-																				 1.f, [=](float t){
-																					 percent_label->setString(ccsf("%.0f%%", t));
-																				 }, [=](float t){
-																					 percent_label->setString(ccsf("%.0f%%", t));
-																					 animation_node1 = nullptr;
-																				 }));
+	
+	if(myrank <= 50)
+	{
+		percent_label->setString(ccsf(getLocal(LK::kMyLocalKey_rankRewardRankValue), myrank));
+	}
+	else
+	{
+		addChild(animation_node1 = KSGradualValue<float>::create(current_rank_percent, rank_percent*100.f,
+																 1.f, [=](float t){
+																	 percent_label->setString(ccsf("%.0f%%", t));
+																 }, [=](float t){
+																	 percent_label->setString(ccsf("%.0f%%", t));
+																	 animation_node1 = nullptr;
+																 }));
+	}
 	
 	addChild(animation_node2 = KSGradualValue<float>::create(rank_percent_case->getPositionX(),
 																														 rank_percent_case->getParent()->getContentSize().width*rank_percent,

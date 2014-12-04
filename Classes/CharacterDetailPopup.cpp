@@ -204,64 +204,64 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	int power_int = round((power_value - 1.0)*100.0);
 //	if(power_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_power));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", power_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_power));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", power_int);
 	}
 	
 	int speed_int = round((speed_value - 1.1)*100.0);
 //	if(speed_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_speed));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", speed_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_speed));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", speed_int);
 	}
 	
 	int magnet_int = round(magnet_value);
 //	if(magnet_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_magnetEffect));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d</font>", magnet_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_magnetEffect));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d</font>", magnet_int);
 	}
 	
 	int missile_int = round((2.0 - missile_value)/2.0*100.0);
 //	if(missile_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileCreateValue));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", missile_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileCreateValue));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", missile_int);
 	}
 	
 	int rewind_int = round((rewind_value - 2.0)/2.0*100.0);
 //	if(rewind_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_cancelSpeed));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", rewind_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_cancelSpeed));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", rewind_int);
 	}
 	
 	int gold_int = round((gold_value - 1.0)*100.0);
 //	if(gold_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_goldBonus));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", gold_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_goldBonus));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", gold_int);
 	}
 	
 	int score_int = round((score_value - 1.0)*100.0);
 //	if(score_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_scoreBonus));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", score_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_scoreBonus));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", score_int);
 	}
 	
 	int wave_int = round(wave_value);
 //	if(wave_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_shockRegi));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", wave_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_shockRegi));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", wave_int);
 	}
 	
 	int ms_wave_int = round(ms_wave_value);
 //	if(ms_wave_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileFireRegi));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", ms_wave_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileFireRegi));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", ms_wave_int);
 	}
 	
 	StyledLabelTTF* base_label = StyledLabelTTF::create(base_str.c_str(), mySGD->getFont().c_str(), 8, 999, StyledAlignment::kLeftAlignment);
