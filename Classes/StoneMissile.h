@@ -451,6 +451,7 @@ public:
 			myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
 			
 			cumber->setDamageMeasure(0.f);
+			myGD->communication("UI_setIsCasting", false);
 		}
 
 		// 몬스터 리액션하라고.

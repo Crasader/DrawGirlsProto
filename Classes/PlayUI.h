@@ -368,7 +368,7 @@ private:
 	KSProtectVar<float> keep_percentage;
 	
 	CCNode* casting_cancel_node;
-	CCProgressTimer* casting_cancel_gage;
+	ConvexGraph* casting_cancel_gage;
 	KSLabelTTF* casting_cancel_chance_label;
 	
 	ConvexGraph* progress_timer;
@@ -408,6 +408,10 @@ private:
 	int draw_button_tutorial_show;
 	CCSprite* bomb_img;
 	int ing_bomb_value;
+	
+	bool is_casting;
+	bool is_tinting_casting_gage;
+	void castingCheck();
 	
 	map<int, MissionOper> mission_oper_list;
 };

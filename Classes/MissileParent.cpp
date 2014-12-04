@@ -1100,6 +1100,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	std::string atype = patternData["atype"].asString();
 	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func, const std::string& warningFileName)
 	{
+		myGD->communication("UI_setIsCasting", true);
 		if(atype == "crash")
 		{
 			CrashChargeNodeLambda* t_ccn =

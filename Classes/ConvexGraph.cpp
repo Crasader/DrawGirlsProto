@@ -70,8 +70,16 @@ void ConvexGraph::setPercentage(float t_percentage)
 	}
 }
 
+float ConvexGraph::getPercentage()
+{
+	return m_percentage;
+}
+
 void ConvexGraph::myInit(string t_front_filename, CCRect t_front_9_out, CCRect t_front_9_in, CCSize t_full_size, ConvexGraphType t_type)
 {
+	ks_animator_node = CCNode::create();
+	addChild(ks_animator_node);
+	
 	cover_clipping_node = NULL;
 	back_img = NULL;
 	

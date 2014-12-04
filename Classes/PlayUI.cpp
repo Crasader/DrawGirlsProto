@@ -3459,7 +3459,7 @@ void PlayUI::counting ()
 		countingLabel->setColor(ccYELLOW);
 		countingLabel->setOpacity(255);
 		countingLabel->setScale(1.f);
-		countingLabel->setPosition(ccp(240,17));
+		countingLabel->setPosition(ccp(240,32));
 		if(clr_cdt_type == kCLEAR_hellMode)
 		{
 			countingLabel->setString(CCString::createWithFormat("%d.%d", label_value, detail_counting_cnt/6)->getCString());
@@ -4058,11 +4058,11 @@ void PlayUI::myInit ()
 	countingLabel = CCLabelBMFont::create(CCString::createWithFormat("%d", counting_label_init_value)->getCString(), "timefont.fnt");
 	countingLabel->setAlignment(kCCTextAlignmentCenter);
 	countingLabel->setAnchorPoint(ccp(0.5f,0.5f));
-	countingLabel->setPosition(ccp(240,17-UI_OUT_DISTANCE));
+	countingLabel->setPosition(ccp(240,32-UI_OUT_DISTANCE));
 	countingLabel->setColor(ccYELLOW);
 	addChild(countingLabel);
 	
-	addChild(KSGradualValue<float>::create(17-UI_OUT_DISTANCE, 17, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(17);}));
+	addChild(KSGradualValue<float>::create(32-UI_OUT_DISTANCE, 32, UI_IN_TIME, [=](float t){countingLabel->setPositionY(t);}, [=](float t){countingLabel->setPositionY(32);}));
 	
 	isFirst = true;
 	//		beforePercentage = 0;
@@ -4715,23 +4715,18 @@ void PlayUI::myInit ()
 	}
 	
 	casting_cancel_node = CCNode::create();
-	casting_cancel_node->setPosition(ccp(240,17));
+	casting_cancel_node->setPosition(ccp(240,12));
 	addChild(casting_cancel_node);
 	
-	CCSprite* casting_cancel_back = CCSprite::create("fever_gage_back.png");
-	casting_cancel_back->setPosition(ccp(0,0));
-	casting_cancel_node->addChild(casting_cancel_back);
-	
-	casting_cancel_gage = CCProgressTimer::create(CCSprite::create("fever_gage_top.png"));
-	casting_cancel_gage->setType(kCCProgressTimerTypeBar);
-	casting_cancel_gage->setMidpoint(ccp(0,0));
-	casting_cancel_gage->setBarChangeRate(ccp(1,0));
-	casting_cancel_gage->setPercentage(0);
+	casting_cancel_gage = ConvexGraph::create("boss_cancelgage_front.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(85, 13), ConvexGraphType::width);
 	casting_cancel_gage->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_gage);
 	
-	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 15);
-	casting_cancel_chance_label->enableOuterStroke(ccBLACK, 1, 255, true);
+	casting_cancel_gage->setBack("boss_cancelgage_back.png");
+	casting_cancel_gage->setPercentage(0);
+	
+	casting_cancel_chance_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_castingCancelChance), mySGD->getFont().c_str(), 9.5f);
+	casting_cancel_chance_label->enableOuterStroke(ccc3(115, 0, 145), 1, 255, true);
 	casting_cancel_chance_label->setPosition(ccp(0,0));
 	casting_cancel_node->addChild(casting_cancel_chance_label);
 	
@@ -4806,6 +4801,9 @@ void PlayUI::myInit ()
 											   [=](float t){using_item_vectors[i]->setPositionX(ccpAdd(item_base_position, ccpMult(distance_position, i)).x);}));
 	}
 	
+	is_casting = false;
+	is_tinting_casting_gage = false;
+	schedule(schedule_selector(PlayUI::castingCheck));
 	
 	myGD->V_II["UI_addScore"] = std::bind(&PlayUI::addScore, this, _1, _2);
 	myGD->V_FB["UI_setPercentage"] = std::bind(&PlayUI::setPercentage, this, _1, _2);
@@ -4841,7 +4839,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
 	myGD->V_F["UI_changeCastingGage"] = [=](float t_f)
 	{
-		casting_cancel_gage->stopAllActions();
+		casting_cancel_gage->ks_animator_node->removeAllChildren();
 		
 		casting_cancel_chance_label->stopAllActions();
 		if(t_f >= 1.f)
@@ -4853,12 +4851,47 @@ void PlayUI::myInit ()
 		}
 		else
 		{
+			casting_cancel_gage->front_img->setColor(ccWHITE);
 			casting_cancel_chance_label->setVisible(false);
 		}
 		
-		CCProgressTo* t_to = CCProgressTo::create(0.3f, t_f*100.f);
-		casting_cancel_gage->runAction(t_to);
+		casting_cancel_gage->ks_animator_node->addChild(KSGradualValue<float>::create(casting_cancel_gage->getPercentage(), t_f*100.f, 0.3f, [=](float t_f)
+									  {
+										  casting_cancel_gage->setPercentage(t_f);
+									  }, [=](float t_f)
+									  {
+										  casting_cancel_gage->setPercentage(t_f);
+									  }));
 	};
+	myGD->V_B["UI_setIsCasting"] = [=](bool t_b)
+	{
+		is_casting = t_b;
+	};
+}
+
+void PlayUI::castingCheck()
+{
+	if(is_casting)
+	{
+		if(!is_tinting_casting_gage)
+		{
+			is_tinting_casting_gage = true;
+			CCScale9Sprite* gage_sprite = casting_cancel_gage->front_img;
+			
+			CCSequence* t_action = CCSequence::create(CCTintTo::create(0.3f, 255, 0, 0), CCDelayTime::create(0.1f), CCTintTo::create(0.3f, 255, 255, 255), CCDelayTime::create(0.1f), NULL);
+			CCRepeatForever* t_repeat = CCRepeatForever::create(t_action);
+			gage_sprite->runAction(t_repeat);
+		}
+	}
+	else
+	{
+		if(is_tinting_casting_gage)
+		{
+			casting_cancel_gage->front_img->stopAllActions();
+			casting_cancel_gage->front_img->setColor(ccWHITE);
+			is_tinting_casting_gage = false;
+		}
+	}
 }
 
 void PlayUI::hideThumb()

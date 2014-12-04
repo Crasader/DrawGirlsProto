@@ -28,9 +28,13 @@ class ConvexGraph : public CCNode
 public:
 	static ConvexGraph* create(string t_front_filename, CCRect t_front_9_out, CCRect t_front_9_in, CCSize t_full_size, ConvexGraphType t_type);
 	void setPercentage(float t_percentage);
+	float getPercentage();
 	
 	void setBack(string t_back_filename);
 	void setCover(string t_cover_filename, string t_mask_filename);
+	
+	CCNode* ks_animator_node; // KSGradual 이든 KSTimer 든 스케쥴 객체의 부모, ConvexGraph에 애니메이션을 넣을때 이 객체에다가 붙인다.
+	CCScale9Sprite* front_img;
 	
 private:
 	
@@ -40,7 +44,6 @@ private:
 	CCSize full_size;
 	CCSize zero_size;
 	ConvexGraphType m_type;
-	CCScale9Sprite* front_img;
 	float m_percentage;
 	
 	CCClippingNode* cover_clipping_node;
