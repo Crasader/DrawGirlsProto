@@ -7,6 +7,7 @@ class CurrentUserInfo{
 	static public $socialID;
 	static public $country="kr";
 	static public $timezone="Asia/Seoul";
+	static public $store="tstore";
 
 	static public function getLocalizedValueInData($data){
 		return $data[CurrentUserInfo::$country]?$data[CurrentUserInfo::$country]:$data["default"];	
@@ -14,7 +15,7 @@ class CurrentUserInfo{
 
 	static public $ccList = array("kr","th","tw","hk","vn","ph","sg","mo","my","id","jp","cn","us");
 	static public $osList = array("ios","android");
-	static public $storeList = array("google","apple","tstore");
+	static public $storeList = array("google","apple","tstore","nstore");
 	
 	static public function getCountryBit($cc){
 		$idx = array_search($cc,self::$ccList);
@@ -32,6 +33,13 @@ class CurrentUserInfo{
 		$idx = array_search($store,self::$storeList);
 		if($idx!==false)return 1<<$idx;
 		return 0;
+	}
+
+	static public function setStoreIDByStoreCode($code){
+		if($code=="TS") self::$store="tstore";
+		if($code=="KS")	self::$store="google";
+		if($code=="AS") self::$store="apple";
+		if($code=="NA")	self::$store="nstore";
 	}
 }
 

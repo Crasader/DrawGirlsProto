@@ -31,15 +31,17 @@ include "header.php";
 			$("body").on("click",".selectImage", function(e){ //user click on remove text
 				imgurl = $(this).attr('imgname')
 				fsize = filesize(imgurl)/1024;
-				
+				var dky = <?php echo $_GET[delkey]?$_GET[delkey]:0; ?>;
 				imgurl = imgurl.replace("../images/", "http://<?php echo $_SERVER["SERVER_NAME"].":".$_SERVER["SERVER_PORT"]; ?>/images/");
 				
 				log("select"+imgurl+" size:"+fsize);
 				
-				opener.changeJsonFormInput(<?php echo $_GET[delkey]; ?>,imgurl,fsize);
+				if(dky){
+				opener.changeJsonFormInput(dky,imgurl,fsize);
 
 		        //$(opener.document).find("#{{ input }}").val($(this).prop('src')).change();
 		        window.close();
+				}
 				return false;
 			}) 
 
@@ -80,7 +82,7 @@ $uploaderForm.="</select>";
 
 $uploaderForm.='writeMode :
 <select name="writeMode">
-<option value="random">random : 랜덤파일명</option>
+<option value="random" selected>random : 랜덤파일명</option>
 <option value="update">update : 숫자늘리기</option>
 <option value="overwrite">overwrite : 덮어쓰기</option>
 </select>';

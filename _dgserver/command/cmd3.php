@@ -255,12 +255,13 @@ public static function getnoticelist($p){
 
 	$r = array();
 
+	$storeBit = CurrentUserInfo::getStoreBit(CurrentUserInfo::$store);
 	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 	$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
 	$addQuery = "";
 	//if($buildNo)$addQuery = "and maxBuildNo>=".$buildNo." and minBuildNo<=".$buildNo;
 	
-	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os&".$osBit.">0 and cc&".$ccBit.">0 and isPopup=1 and isForDiary=0 order by `order` asc")){
+	while($rData = Notice::getRowByQuery("where startDate<$nowDate and endDate>$nowDate and os&".$osBit.">0 and cc&".$ccBit.">0 and store&".$storeBit.">0 and isPopup=1 and isForDiary=0 order by `order` asc")){ //store&".$storeBit.">0 and 
 		$rData[imgInfo]=json_decode($rData[imgInfo],true);	
 		$r["list"][]=$rData;
 	}
@@ -276,13 +277,15 @@ public static function getnoticelist($p){
 public static function getrealtimemessage($p){
 	$no=$p["version"];
 	if(!$no)$no=0;
+
+	$storeBit = CurrentUserInfo::getStoreBit(CurrentUserInfo::$store);
 	$nowDate = TimeManager::getCurrentDateTime();
 	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 	$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
 	$timecheck = TimeManager::getTimestampByUTC()-300;
 	$todayDateTime = TimeManager::getCurrentDateTimeForKorea();
 
-	$r = RealtimeMsg::getRowByQuery("where startDate<$todayDateTime and endDate>$todayDateTime and os&".$osBit.">0 and cc&".$ccBit.">0 order by no desc limit 1");
+	$r = RealtimeMsg::getRowByQuery("where startDate<$todayDateTime and endDate>$todayDateTime and os&".$osBit.">0 and store&".$storeBit.">0 and cc&".$ccBit.">0  order by no desc limit 1"); //and store&".$storeBit.">0
 	if($r){
 		$r["version"]=$r["no"];
 		$r["result"]=ResultState::successToArray();
@@ -398,12 +401,7 @@ public static function getcharacterlist($p){
 
 public static function getshoplist($p){
 
-	$storeID = $p["store"];
-
-	if($storeID=="TS")$storeID="tstore";
-	if($storeID=="KS")$storeID="google";
-	if($storeID=="AS")$storeID="apple";
-	if($storeID=="NA")$storeID="nstore";
+	$storeID = CurrentUserInfo::$store;
 
 	$listVer = kvManager::get("shopListVer",1);
 	
@@ -427,7 +425,7 @@ public static function getshoplist($p){
 		$storeBit = CurrentUserInfo::getStoreBit($storeID);
 		$storeQuery = "and store&".$storeBit.">0";
 	}else{
-	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
+		$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 		$storeQuery = "and os&".$osBit.">0";
 	}
 
@@ -894,16 +892,46 @@ public static function makediarycode($p){
 
 	$user = UserData::create($memberID);
 	if(!$user->isLoaded())return ResultState::makeReturn(ResultState::GDDONTFINDUSER);
-	$user->diaryCode = CuponCode::getRandomString(5);
+	
+	$randcode = CuponCode::getRandomString(4);
+	$code = $randcode.dechex($user->getUserIndexNo());
+
+	LogManager::addLog("randcode:".$randcode."/userindex:".$user->getUserIndexNo()."/enNumber:".dechex($user->getUserIndexNo()));
+	$user->diaryCode = $code;
 
 	if($user->save()){
 		$r["diaryCode"]=$user->diaryCode;
-		$r["result"]=ResultState::successToArray(ResultState::GDSUCCESS);
+		$r["result"]=ResultState::successToArray();
 		return $r;
 	}else{
 		return ResultState::makeReturn(ResultState::GDDONTSAVE,mysql_error());
 	}
+}
 
+public static function checkdiarycode($p){
+	$diaryCode = $p["diaryCode"];
+	$code = substr($diaryCode, 0,4);
+	$uindex = hexdec(substr($diaryCode, 4));
+	LogManager::addLog("code:".$code." / number:".substr($diaryCode, 4)." deNumber:".$uindex);
+	$userIndex = UserIndex::create(null,$uindex);
+
+	if(!$userIndex->isLoaded()){
+		LogManager::addLog("dont find user");
+		return ResultState::makeReturn(ResultState::GDEXPIRE);
+	}
+
+	$userData = UserData::create($userIndex->memberID);
+
+	if($userData->diaryCode==$diaryCode){
+		$r["result"] = ResultState::toArray(ResultState::GDSUCCESS);
+		$r["diaryCode"]=$diaryCode; //CuponCode::getRandomString(5);
+		$r["memberID"]=$userData->memberID;
+		$userData->diaryCode=$r["diaryCode"];
+		if($userData->save())return $r;
+		else return ResultState::makeReturn(ResultState::GDDONTSAVE);
+	}else{
+		return ResultState::makeReturn(ResultState::GDEXPIRE);
+	}
 }
 
 public static function login($p){
@@ -1079,6 +1107,8 @@ public static function join($p){
 		CommitManager::commit($memberID);
 	}
 
+
+
 	return ResultState::makeReturn(1001);
 }
 
@@ -1212,8 +1242,9 @@ public static function getuserlistbyrandom($p){
 	if(!is_array($friendlist))$friendlist=array();
 	$friendlist[]=$memberID;
 	$userList=array();
-	while($other = UserData::getRowByQueryWithRandom("where nick <> '' order by rand() limit $limit","memberID,nick,lastDate,flag,highPiece,highScore")){
+	while($other = UserData::getRowByQueryWithRandom("where nick <> '' order by rand() limit $limit","memberID,nick,lastDate,flag,highPiece,highScore,selectedCharNO")){
 		if(!in_array($other["memberID"],$friendlist)){
+			$other["characterNo"]=$other["selectedCharNO"];
 			$userList[]=$other;
 		}
 	}
@@ -1742,7 +1773,96 @@ public static function setstagescore($p){
 }
 
 
+public static function addweeklyandstagescore($p){
+	$stageNo = $p["stageNo"];
+	$myscore = $p["myScore"];
+	$memberID = $p["memberID"];
+	
+	if(!$stageNo)return ResultState::makeReturn(2002,"stageNo");
 
+
+	$myRank = new StageScore($memberID,$stageNo);
+	$myRank->memberID = $memberID;
+	$myRank->stageNo = $stageNo;
+	$myRank->nick = $p["nick"];
+	$myRank->flag = $p["flag"];
+	$myRank->data = $p["data"];
+	
+	if($p["data"])$myRank->data = $p["data"];
+
+	$r["isMax"]=false;
+
+	if($p["getWeeklyRank"]){
+		//주간랭킹등록
+
+		$ws =new WeeklyScore($memberID,TimeManager::getCurrentWeekNoForRank());
+		$ws->memberID = $memberID;
+		$ws->data = $p["data"];
+		$ws->nick = $p["nick"];
+		$ws->flag = $p["flag"];
+		$ws->regDate = TimeManager::getCurrentDateTime();
+		$ws->regTime = TimeManager::getTime();
+		$ws->regWeek = TimeManager::getCurrentWeekNoForRank();
+		$ws->count = $ws->count+1;
+
+		if($myscore){
+			$ws->score = $ws->score + $myscore;
+			$r["saveWeekly"]=$ws->save();
+		}
+	}
+
+	if($myscore){
+		
+		//피스클리어
+		$cmP["type"]="piece";
+		$cmP["value"]=$stageNo;
+		$cmP["memberID"]=$memberID;
+		self::checkmissionevent($cmP);
+
+		//미션이벤트체크
+		$cmP["type"]="pieceScore";
+		$cmP["value"]=$myscore;
+		$cmP["value2"]=$stageNo;
+		$cmP["memberID"]=$memberID;
+		self::checkmissionevent($cmP);
+
+		if($myRank->score<$myscore){
+			LogManager::addLog("is max! prev:".$myRank->score."- now:".$myscore);
+			$r["isMax"]=true;
+			$myRank->score = $myscore;
+			$myRank->save();
+		}else{
+
+		}
+
+		//$myRank->score = $myscore;
+	}else{
+		$r["isMax"]==true;
+	}
+
+	// 스테이지랭킹 
+	if($r["isMax"]==true){
+		$r["list"] = $myRank->getTop4();
+		$r["alluser"] = $myRank->getAllUser();
+		$r["myrank"] = $myRank->getMyRank();
+		$r["myscore"] = $myRank->score;
+	}else{
+		LogManager::addLog("is not max! weekly score gogo");
+		$r["list"] = $ws->getTopRank(1,4);
+		$r["alluser"] = $ws->getAllUser();
+		$r["myrank"] = $ws->getMyRank();
+		$r["myscore"] = $ws->score;
+	}
+
+	$r["stageNo"] = $stageNo;
+	
+	if($r["myrank"]<=0 || $r["myrank"]>$r["alluser"])$r["myrank"]=$r["alluser"];
+
+	$r["result"]=ResultState::successToArray();
+
+	return $r;
+
+}
 
 public static function getstagerankbyalluser($p){
 
@@ -1763,7 +1883,6 @@ public static function getstagerankbyalluser($p){
 	if($p["data"])$myRank->data = $p["data"];
 
 	$r["isMax"]=false;
-
 	
 	if($myscore){
 		//피스클리어
@@ -1780,6 +1899,7 @@ public static function getstagerankbyalluser($p){
 		self::checkmissionevent($cmP);
 
 		if($myRank->score<$myscore){
+			LogManager::addLog("is max! prev:".$myRank->score."- now:".$myscore);
 			$r["isMax"]=true;
 			$myRank->score = $myscore;
 			$myRank->save();
@@ -1787,7 +1907,6 @@ public static function getstagerankbyalluser($p){
 
 		$myRank->score = $myscore;
 	}
-
 
 	$r["list"] = $myRank->getTop4();
 	$r["alluser"] = $myRank->getAllUser();
@@ -2799,7 +2918,7 @@ public static function getgiftboxhistory($p){
 			if($rData["exchangeList"]){
 				$rData["exchangeList"] = json_decode($rData["exchangeList"],true);
 				$rData["reward"] = Exchange::mergeCustom($rData["reward"],$rData["exchangeList"]);
-				//unset($rData["exchangeList"]);
+				unset($rData["exchangeList"]);
 			}
     	
     	}
@@ -2988,7 +3107,6 @@ public static function confirmallgiftboxhistory($p){
 	
 	$error .= mysql_error();
 	if(CommitManager::commit($memberID)){
-	LogManager::addLog("->".mysql_error());
 		$r["result"]=ResultState::successToArray();
 		$r["list"]=$cResult["list"];
 	}else{
@@ -3003,10 +3121,10 @@ public static function checkgiftboxhistory($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
+
 	$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
 
 	$where = "where memberID=".$memberID." and regDate>$lastDay and confirmDate='' limit 1";
-
 	//$userInfo = UserIndex::create($memberID);
 	$q = GiftBoxHistory::getQueryResultWithShardKey("select count(*) from ".GiftBoxHistory::getDBTable()." ".$where,$memberID);
 	//LogManager::addLog("select count(*) from ".GiftBoxHistory::getDBTable()." ".$where);
@@ -3035,7 +3153,6 @@ public static function getcharacterhistory($p){
     	$nextInfo = Character::getExpInfoByExp($rData["exp"]);
 		$rData["levelInfo"]=$nextInfo;
     	$dataList[]=$rData;
-    	LogManager::addLog(json_encode(Character::getExpInfoByExp(6700)));
     }
 
 	$r["list"]=$dataList;
@@ -3061,9 +3178,7 @@ public static function updatecharacterhistory($p){
 	if(!$obj->isLoaded()){
 		$obj->regDate = TimeManager::getCurrentDateTime();
 	}else{
-		LogManager::addLog("load ok");
 		if($p["useExchange"]==true){
-			LogManager::addLog("exchange");
 			$cs = new CommonSetting("gachaCharExp");
 			$exp=$cs->value;
 		}
@@ -3265,14 +3380,11 @@ public static function updatetodaymission($p){
 		return ResultState::makeReturn(ResultState::GDSUCCESS,"date not same");
 	}
 
-	LogManager::addLog(json_encode($tMission)); 
-	LogManager::addLog(json_encode($tLevel)); 
 	$tMission["count"]+=$p["count"];
 	$checkFirst = false;
 	$checkCount = $tMission["count"];
 	$mCount = $tMission["count"];
 	if($tMission["count"]<$tMission["goal"])$tMission["isSuccess"]=false;
-	LogManager::addLog("mysql ".mysql_error());
 	if($tMission["count"]>=$tMission["goal"] && $tMission["isSuccess"]!=true){
 		$tMission["isSuccess"]=true;
 		// $p["memberID"]=$memberID;
@@ -3282,12 +3394,10 @@ public static function updatetodaymission($p){
 		// $p["statsValue"]=$tMission["type"];
 		// $p["content"]="오늘미션보상";
 		// $result = self::addproperty($p);
-		LogManager::addLog("change level1 : ".json_encode($tLevel));
 		$checkFirst=true;
 		//$tMission["count"]=0;
 		$missiontype = $tMission["type"]-1;
 		$tLevel[$missiontype]+=1;
-		LogManager::addLog("change level2 : ".json_encode($tLevel));
 		// if(!ResultState::successCheck($result["result"])){
 		// 	CommitManager::setSuccess($memberID,false);
 		// }
@@ -3298,19 +3408,14 @@ public static function updatetodaymission($p){
 		$param["exchangeID"]=$tMission["rewardInfo"]["exchangeID"];
 		$sR = self::sendgiftboxhistory($param);
 
-		LogManager::addLog("fuck->".json_encode($sR)); 
 		if(!ResultState::successCheck($sR["result"])){
 			CommitManager::setSuccess($memberID,false);
 		}
 	}
 
-	LogManager::addLog(json_encode($tMission)); 
-	LogManager::addLog(json_encode($tLevel)); 
 	//$user->TMInfo = $tMission;
 	$a = $user->save();
-	LogManager::addLog("usersave ".$a);
 	CommitManager::setSuccess($memberID,$a);
-	LogManager::addLog("mysql ".mysql_error());
 	
 	if(CommitManager::commit($memberID)){
 		$r = $tMission;
@@ -3326,7 +3431,6 @@ public static function updatetodaymission($p){
 		$r["result"] = ResultState::successToArray();
 		return $r;
 	}else{
-		LogManager::addLog("mysql ".mysql_error());
 		return ResultState::makeReturn(1001);
 	}
 }
@@ -3345,9 +3449,7 @@ public static function exchange($p){
 	
 
 	if(is_array($p["list"])){
-		LogManager::addLog("start exchange custom");
 		$eList =& $exchange->getRef("list");
-		LogManager::addLog("start exchange list is ".json_encode($eList));
 		
 		for ($j=0; $j<count($p["list"]);$j++) {
 			for($i=0;$i<count($eList);$i++){
@@ -3400,6 +3502,7 @@ public static function checkloginevent($p){
 	
 	CommitManager::begin($memberID);
 	
+	$storeBit = CurrentUserInfo::getStoreBit(CurrentUserInfo::$store);
 	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 	$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
 	$userData = UserData::create($memberID);
@@ -3408,11 +3511,9 @@ public static function checkloginevent($p){
 	$nowTime = TimeManager::getCurrentTime();
 	$eventCheckData =& $userData->getRef("eventCheckData");
 
-	$result = LoginEvent::getQueryResult("select ".LoginEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".LoginEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".LoginEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id  where ".LoginEvent::getDBTable().".startDate<$todayDateTime and ".LoginEvent::getDBTable().".endDate>$todayDateTime and ".LoginEvent::getDBTable().".os&".$osBit.">0 and ".LoginEvent::getDBTable().".cc&".$ccBit.">0");
-	LogManager::addLog("loginevent1->".mysql_error());
+	$result = LoginEvent::getQueryResult("select ".LoginEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".LoginEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".LoginEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id  where ".LoginEvent::getDBTable().".startDate<$todayDateTime and ".LoginEvent::getDBTable().".endDate>$todayDateTime and ".LoginEvent::getDBTable().".os&".$osBit.">0 and ".LoginEvent::getDBTable().".cc&".$ccBit.">0 and ".LoginEvent::getDBTable().".store&".$storeBit.">0");
 	while($rData = mysql_fetch_assoc($result)){
 
-		LogManager::addLog("data->".json_encode($rData));
 		$idx=-1;
 		for($i=0;$i<count($eventCheckData);$i++){
 			if($eventCheckData[$i]["no"]==$rData["no"]){
@@ -3443,14 +3544,11 @@ public static function checkloginevent($p){
 			}
 		}
 	}
-	LogManager::addLog("loginevent2->".mysql_error());
 	CommitManager::setSuccess($memberID,$userData->save());
-	LogManager::addLog("loginevent3->".mysql_error());
 	if(CommitManager::commit($memberID)){
 		return ResultState::makeReturn(1);
 	}
 
-	LogManager::addLog("loginevent5->".mysql_error());
 	return ResultState::makeReturn(1001);
 
 }
@@ -3762,6 +3860,11 @@ public static function getendlessplayriver($p){
 
 	$rival2 = $endlessPlayList->getPlayDataByRandom($memberID,$ingLevel,3);
 	
+	for($i=0;$i<count($rival2);$i++){
+		$uChar = UserData::create($rival2[$i]["memberID"]);
+		$rival2[$i]["characterNo"]=$uChar->selectedCharNO;
+	}
+
 	$r["rival"] = $rival2[0];
 
 	if($rival2[1]["nick"]==$rival2[2]["nick"]){
@@ -3779,8 +3882,8 @@ public static function getendlessplayriver($p){
 		$rival2[2]["nick"]="NHNEnt";
 	}
 
-	if($rival2[1]["nick"]==$rival2[2]["nick"])$rival2[1]["nick"]="NPC1";
 
+	unset($rival2[0]["playData"]);
 	unset($rival2[1]["playData"]);
 	unset($rival2[2]["playData"]);
 	$r["dummy"] = $rival2;
@@ -3791,8 +3894,9 @@ public static function getendlessplayriver($p){
 	
 	$userInfo = UserData::create($memberID);
 
-	srand((double)microtime()*1000000);	
-	
+	srand((double)microtime()*1000000);
+
+
 	$max = 20+$ingLevel*20;
 	if($max>100)$max=100;
 	$sp["no"]=rand(1,$max);
@@ -4354,6 +4458,42 @@ public static function getgachalist($p){
 	$gachaForm =& $cs->getRef("value");
 
 	$gachaKey = "normal";
+	$isPremium=false;
+	if($p["isPremium"]){
+		$gachaKey = "premium";
+		$isPremium=true;
+	}
+
+	$k=0;
+	for($i=0;$i<count($gachaForm[$gachaKey]);$i++){
+		//$i+1 = 등급, $gachaForm[$gachaKey][$i] 등급갯수 		
+		$pre="";
+		$level = $i+1;
+		if(!$isPremium)$pre = " and premiumOnly=0 ";
+		else $pre = " and premiumOnly=1 ";
+		$q_where = "level=".$level." ".$pre." and showProb>0 order by rand()*100+showProb desc limit ".$gachaForm[$gachaKey][$i];
+			
+		while($rData = Gacha::getRowByQuery("where ".$q_where)){
+			$exchange = new Exchange($rData["exchangeID"]);
+			$list[]=array("exchangeID"=>$rData["exchangeID"],"reward"=>$exchange->list,"level"=>$level,"percent"=>$rData["gainProb"]);
+	
+		}
+
+	}
+
+	shuffle($list);
+	$r["list"]=$list;
+	$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
+	return $r;
+/*
+	$list = array();
+	$levelList = array();
+
+	$levelList = array(1,1,1,1,1,1,1,1,1,1,1,1);
+	$cs = new CommonSetting("gachaForm");
+	$gachaForm =& $cs->getRef("value");
+
+	$gachaKey = "normal";
 	
 	if($p["isPremium"]){
 		$gachaKey = "premium";
@@ -4375,8 +4515,7 @@ public static function getgachalist($p){
 	shuffle($list);
 	$r["list"]=$list;
 	$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
-	return $r;
-
+*/
 }
 
 

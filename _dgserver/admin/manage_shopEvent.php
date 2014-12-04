@@ -14,7 +14,13 @@ while($pData = Shop::getRowByQuery("",null,"id,priceName,countName,comment")){
 
 
 <br><br>
-<h2 id="tables-contextual-classes">|상점 이벤트</h2>
+
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|상점이벤트</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="ShopEvent" dbWhere='{}' name="datatable" border=1 align=center editRowOnly="true" editType="form" commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
