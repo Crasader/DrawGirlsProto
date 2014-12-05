@@ -35,9 +35,9 @@ float rad2Deg(float x);
 template <typename T>
 T toPositiveAngle(T angle)
 {
-	angle = fmod(angle, 360);
+	angle = fmod(angle, 2*M_PI);
 	while(angle < 0) { //pretty sure this comparison is valid for doubles and floats
-		angle += 360.0;
+		angle += 2*M_PI;
 	}
 	
 	return angle;

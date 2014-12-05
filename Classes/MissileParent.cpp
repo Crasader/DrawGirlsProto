@@ -722,6 +722,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			params.numbers = 10; // 10개.
 			params.revelutionA = 20.f;
 			params.fileName = fileName;
+			params.ao = ao;
 			
 			Boomerang* ms = Boomerang::create(params);
 			jack_missile_node->addChild(ms);
@@ -732,6 +733,17 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		}
 	
 
+		
+	}
+	else if(stoneType == StoneType::kStoneType_chain)
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		//		level = 1;
+		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		
 		
 	}
 	

@@ -4218,6 +4218,7 @@ public:
 			
 		}
 	
+		m_missileStep = 1;
 		
 		scheduleUpdate();
 		
