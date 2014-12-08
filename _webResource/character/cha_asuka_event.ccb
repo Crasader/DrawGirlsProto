@@ -3333,6 +3333,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -5910,7 +5912,7 @@
 								<string>ScaleLock</string>
 								<key>value</key>
 								<array>
-									<real>1</real>
+									<real>-1</real>
 									<real>1</real>
 									<false/>
 									<integer>0</integer>
@@ -5952,6 +5954,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -9073,7 +9077,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>-1</real>
+											<real>1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -14974,8 +14978,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15283,8 +15287,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15592,8 +15596,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15669,8 +15673,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15746,8 +15750,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15823,8 +15827,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15900,8 +15904,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -15977,8 +15981,8 @@
 																	<integer>7</integer>
 																	<key>value</key>
 																	<array>
-																		<string>asuka_front_eye.png</string>
-																		<string>cha_asuka.plist</string>
+																		<string>asuka_santa_front_eye.png</string>
+																		<string>cha_asuka_event.plist</string>
 																	</array>
 																</dict>
 																<dict>
@@ -16121,7 +16125,7 @@
 														<key>value</key>
 														<array>
 															<string>cha_asuka_event.plist</string>
-															<string>asuka_santa_back_head2.png</string>
+															<string>asuka_santa_front_eye.png</string>
 														</array>
 													</dict>
 													<dict>
@@ -16136,6 +16140,10 @@
 														</array>
 													</dict>
 												</array>
+												<key>selected</key>
+												<true/>
+												<key>seqExpanded</key>
+												<true/>
 											</dict>
 										</array>
 										<key>customClass</key>
@@ -18514,7 +18522,7 @@
 										<string>ScaleLock</string>
 										<key>value</key>
 										<array>
-											<real>-1</real>
+											<real>1</real>
 											<real>1</real>
 											<false/>
 											<integer>0</integer>
@@ -18566,6 +18574,8 @@
 										</array>
 									</dict>
 								</array>
+								<key>seqExpanded</key>
+								<true/>
 							</dict>
 						</array>
 						<key>customClass</key>
@@ -18802,8 +18812,6 @@
 				</array>
 			</dict>
 		</array>
-		<key>selected</key>
-		<true/>
 	</dict>
 	<key>notes</key>
 	<array/>
@@ -18845,7 +18853,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -18879,7 +18887,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -18913,7 +18921,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -18947,7 +18955,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -18981,7 +18989,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19015,7 +19023,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19049,7 +19057,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19083,7 +19091,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19117,7 +19125,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19151,7 +19159,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19185,7 +19193,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19211,7 +19219,7 @@
 				<integer>10</integer>
 			</dict>
 			<key>chainedSequenceId</key>
-			<integer>16</integer>
+			<integer>-1</integer>
 			<key>length</key>
 			<real>0.80000001192092896</real>
 			<key>name</key>
@@ -19219,7 +19227,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19253,7 +19261,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
@@ -19287,7 +19295,7 @@
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>0.80000001192092896</real>
+			<real>0.0</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
