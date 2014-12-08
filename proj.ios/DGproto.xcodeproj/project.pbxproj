@@ -337,58 +337,6 @@
 		D73FE3271A122B6D001087ED /* libHSPPayment.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D73FE2C51A122B69001087ED /* libHSPPayment.a */; };
 		D73FE3281A122B6D001087ED /* libHSPServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D73FE2C61A122B69001087ED /* libHSPServices.a */; };
 		D73FE3291A122B6D001087ED /* libHSPServices.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D73FE2C61A122B69001087ED /* libHSPServices.a */; };
-		D73FE32A1A122B6D001087ED /* HSPInterfaceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2CA1A122B69001087ED /* HSPInterfaceLocalizedString.strings */; };
-		D73FE32B1A122B6D001087ED /* HSPInterfaceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2CA1A122B69001087ED /* HSPInterfaceLocalizedString.strings */; };
-		D73FE32C1A122B6D001087ED /* HSP_bt_SNS_feed_send.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D01A122B69001087ED /* HSP_bt_SNS_feed_send.png */; };
-		D73FE32D1A122B6D001087ED /* HSP_bt_SNS_feed_send.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D01A122B69001087ED /* HSP_bt_SNS_feed_send.png */; };
-		D73FE32E1A122B6D001087ED /* HSPServiceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D41A122B69001087ED /* HSPServiceLocalizedString.strings */; };
-		D73FE32F1A122B6D001087ED /* HSPServiceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D41A122B69001087ED /* HSPServiceLocalizedString.strings */; };
-		D73FE3301A122B6D001087ED /* HSPConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D61A122B69001087ED /* HSPConfiguration.plist */; };
-		D73FE3311A122B6D001087ED /* HSPConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D61A122B69001087ED /* HSPConfiguration.plist */; };
-		D73FE3321A122B6D001087ED /* HSPLaunchingZone.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D71A122B69001087ED /* HSPLaunchingZone.plist */; };
-		D73FE3331A122B6D001087ED /* HSPLaunchingZone.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D71A122B69001087ED /* HSPLaunchingZone.plist */; };
-		D73FE3341A122B6D001087ED /* HSPUITheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D81A122B69001087ED /* HSPUITheme.plist */; };
-		D73FE3351A122B6D001087ED /* HSPUITheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2D81A122B69001087ED /* HSPUITheme.plist */; };
-		D73FE3361A122B6D001087ED /* HSP_toast_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DA1A122B69001087ED /* HSP_toast_btn_navi_close.png */; };
-		D73FE3371A122B6D001087ED /* HSP_toast_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DA1A122B69001087ED /* HSP_toast_btn_navi_close.png */; };
-		D73FE3381A122B6D001087ED /* HSP_toast_btn_navi_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DB1A122B69001087ED /* HSP_toast_btn_navi_close@2x.png */; };
-		D73FE3391A122B6D001087ED /* HSP_toast_btn_navi_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DB1A122B69001087ED /* HSP_toast_btn_navi_close@2x.png */; };
-		D73FE33A1A122B6D001087ED /* HSP_toast_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DC1A122B69001087ED /* HSP_toast_btn_navi_prev.png */; };
-		D73FE33B1A122B6D001087ED /* HSP_toast_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DC1A122B69001087ED /* HSP_toast_btn_navi_prev.png */; };
-		D73FE33C1A122B6D001087ED /* HSP_toast_btn_navi_prev@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DD1A122B69001087ED /* HSP_toast_btn_navi_prev@2x.png */; };
-		D73FE33D1A122B6D001087ED /* HSP_toast_btn_navi_prev@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DD1A122B69001087ED /* HSP_toast_btn_navi_prev@2x.png */; };
-		D73FE33E1A122B6D001087ED /* hspuibase_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DE1A122B69001087ED /* hspuibase_btn_navi_close.png */; };
-		D73FE33F1A122B6D001087ED /* hspuibase_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DE1A122B69001087ED /* hspuibase_btn_navi_close.png */; };
-		D73FE3401A122B6D001087ED /* hspuibase_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DF1A122B69001087ED /* hspuibase_btn_navi_prev.png */; };
-		D73FE3411A122B6D001087ED /* hspuibase_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2DF1A122B69001087ED /* hspuibase_btn_navi_prev.png */; };
-		D73FE3421A122B6D001087ED /* loginService.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E31A122B69001087ED /* loginService.strings */; };
-		D73FE3431A122B6D001087ED /* loginService.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E31A122B69001087ED /* loginService.strings */; };
-		D73FE3441A122B6D001087ED /* login_bg_bridge_login.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E61A122B69001087ED /* login_bg_bridge_login.png */; };
-		D73FE3451A122B6D001087ED /* login_bg_bridge_login.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E61A122B69001087ED /* login_bg_bridge_login.png */; };
-		D73FE3461A122B6D001087ED /* login_bg_bridge_login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E71A122B69001087ED /* login_bg_bridge_login@2x.png */; };
-		D73FE3471A122B6D001087ED /* login_bg_bridge_login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E71A122B69001087ED /* login_bg_bridge_login@2x.png */; };
-		D73FE3481A122B6D001087ED /* login_img_etc_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E81A122B69001087ED /* login_img_etc_welcome_logo@2x.png */; };
-		D73FE3491A122B6D001087ED /* login_img_etc_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E81A122B69001087ED /* login_img_etc_welcome_logo@2x.png */; };
-		D73FE34A1A122B6D001087ED /* login_img_hangame_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E91A122B69001087ED /* login_img_hangame_welcome_logo@2x.png */; };
-		D73FE34B1A122B6D001087ED /* login_img_hangame_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2E91A122B69001087ED /* login_img_hangame_welcome_logo@2x.png */; };
-		D73FE34C1A122B6D001087ED /* login_img_toast_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EA1A122B69001087ED /* login_img_toast_welcome_logo@2x.png */; };
-		D73FE34D1A122B6D001087ED /* login_img_toast_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EA1A122B69001087ED /* login_img_toast_welcome_logo@2x.png */; };
-		D73FE34E1A122B6D001087ED /* login_img_welcome_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EB1A122B69001087ED /* login_img_welcome_bg@2x.png */; };
-		D73FE34F1A122B6D001087ED /* login_img_welcome_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EB1A122B69001087ED /* login_img_welcome_bg@2x.png */; };
-		D73FE3501A122B6D001087ED /* login_toast_img_welcome_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EC1A122B69001087ED /* login_toast_img_welcome_message@2x.png */; };
-		D73FE3511A122B6D001087ED /* login_toast_img_welcome_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2EC1A122B69001087ED /* login_toast_img_welcome_message@2x.png */; };
-		D73FE3521A122B6D001087ED /* LoginBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F01A122B69001087ED /* LoginBridgeViewController.xib */; };
-		D73FE3531A122B6D001087ED /* LoginBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F01A122B69001087ED /* LoginBridgeViewController.xib */; };
-		D73FE3541A122B6D001087ED /* LoginOAuthExportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F11A122B69001087ED /* LoginOAuthExportViewController.xib */; };
-		D73FE3551A122B6D001087ED /* LoginOAuthExportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F11A122B69001087ED /* LoginOAuthExportViewController.xib */; };
-		D73FE3561A122B6D001087ED /* LoginOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F21A122B69001087ED /* LoginOAuthViewController.xib */; };
-		D73FE3571A122B6D001087ED /* LoginOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F21A122B69001087ED /* LoginOAuthViewController.xib */; };
-		D73FE3581A122B6D001087ED /* LoginOAuthWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F31A122B69001087ED /* LoginOAuthWebViewController.xib */; };
-		D73FE3591A122B6D001087ED /* LoginOAuthWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F31A122B69001087ED /* LoginOAuthWebViewController.xib */; };
-		D73FE35A1A122B6D001087ED /* LoginWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F41A122B69001087ED /* LoginWebViewController.xib */; };
-		D73FE35B1A122B6D001087ED /* LoginWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2F41A122B69001087ED /* LoginWebViewController.xib */; };
-		D73FE35C1A122B6D001087ED /* HSPPaymentLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2FA1A122B69001087ED /* HSPPaymentLocalizable.strings */; };
-		D73FE35D1A122B6D001087ED /* HSPPaymentLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D73FE2FA1A122B69001087ED /* HSPPaymentLocalizable.strings */; };
 		D741D93119DBA51B0051C63D /* Semaphore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D741D92F19DBA51B0051C63D /* Semaphore.cpp */; };
 		D741D9F219DBD0960051C63D /* Twitter.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D741D9F119DBD0960051C63D /* Twitter.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D741D9F419DBD1ED0051C63D /* GameKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D741D9F319DBD1ED0051C63D /* GameKit.framework */; };
@@ -1433,6 +1381,60 @@
 		D7AF2C0A1A24536500F557A3 /* CrashMissileUnit.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */; };
 		D7AF2C0B1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */; };
 		D7AF2C0C1A24536500F557A3 /* CrashAttackPattern.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */; };
+		D7AF2C481A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C111A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings */; };
+		D7AF2C491A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C111A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings */; };
+		D7AF2C4A1A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C171A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png */; };
+		D7AF2C4B1A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C171A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png */; };
+		D7AF2C4C1A25A0C700F557A3 /* HSPServiceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1B1A25A0C700F557A3 /* HSPServiceLocalizedString.strings */; };
+		D7AF2C4D1A25A0C700F557A3 /* HSPServiceLocalizedString.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1B1A25A0C700F557A3 /* HSPServiceLocalizedString.strings */; };
+		D7AF2C4E1A25A0C700F557A3 /* HSPConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1D1A25A0C700F557A3 /* HSPConfiguration.plist */; };
+		D7AF2C4F1A25A0C700F557A3 /* HSPConfiguration.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1D1A25A0C700F557A3 /* HSPConfiguration.plist */; };
+		D7AF2C501A25A0C700F557A3 /* HSPLaunchingZone.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1E1A25A0C700F557A3 /* HSPLaunchingZone.plist */; };
+		D7AF2C511A25A0C700F557A3 /* HSPLaunchingZone.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1E1A25A0C700F557A3 /* HSPLaunchingZone.plist */; };
+		D7AF2C521A25A0C700F557A3 /* HSPUITheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1F1A25A0C700F557A3 /* HSPUITheme.plist */; };
+		D7AF2C531A25A0C700F557A3 /* HSPUITheme.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C1F1A25A0C700F557A3 /* HSPUITheme.plist */; };
+		D7AF2C541A25A0C700F557A3 /* HSP_toast_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C211A25A0C700F557A3 /* HSP_toast_btn_navi_close.png */; };
+		D7AF2C551A25A0C700F557A3 /* HSP_toast_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C211A25A0C700F557A3 /* HSP_toast_btn_navi_close.png */; };
+		D7AF2C561A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C221A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png */; };
+		D7AF2C571A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C221A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png */; };
+		D7AF2C581A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C231A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png */; };
+		D7AF2C591A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C231A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png */; };
+		D7AF2C5A1A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C241A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png */; };
+		D7AF2C5B1A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C241A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png */; };
+		D7AF2C5C1A25A0C700F557A3 /* hspuibase_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C251A25A0C700F557A3 /* hspuibase_btn_navi_close.png */; };
+		D7AF2C5D1A25A0C700F557A3 /* hspuibase_btn_navi_close.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C251A25A0C700F557A3 /* hspuibase_btn_navi_close.png */; };
+		D7AF2C5E1A25A0C700F557A3 /* hspuibase_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C261A25A0C700F557A3 /* hspuibase_btn_navi_prev.png */; };
+		D7AF2C5F1A25A0C700F557A3 /* hspuibase_btn_navi_prev.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C261A25A0C700F557A3 /* hspuibase_btn_navi_prev.png */; };
+		D7AF2C601A25A0C700F557A3 /* loginService.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2A1A25A0C700F557A3 /* loginService.strings */; };
+		D7AF2C611A25A0C700F557A3 /* loginService.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2A1A25A0C700F557A3 /* loginService.strings */; };
+		D7AF2C621A25A0C700F557A3 /* login_bg_bridge_login.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2D1A25A0C700F557A3 /* login_bg_bridge_login.png */; };
+		D7AF2C631A25A0C700F557A3 /* login_bg_bridge_login.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2D1A25A0C700F557A3 /* login_bg_bridge_login.png */; };
+		D7AF2C641A25A0C700F557A3 /* login_bg_bridge_login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2E1A25A0C700F557A3 /* login_bg_bridge_login@2x.png */; };
+		D7AF2C651A25A0C700F557A3 /* login_bg_bridge_login@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2E1A25A0C700F557A3 /* login_bg_bridge_login@2x.png */; };
+		D7AF2C661A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2F1A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png */; };
+		D7AF2C671A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C2F1A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png */; };
+		D7AF2C681A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C301A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png */; };
+		D7AF2C691A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C301A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png */; };
+		D7AF2C6A1A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C311A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png */; };
+		D7AF2C6B1A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C311A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png */; };
+		D7AF2C6C1A25A0C700F557A3 /* login_img_welcome_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C321A25A0C700F557A3 /* login_img_welcome_bg@2x.png */; };
+		D7AF2C6D1A25A0C700F557A3 /* login_img_welcome_bg@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C321A25A0C700F557A3 /* login_img_welcome_bg@2x.png */; };
+		D7AF2C6E1A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C331A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png */; };
+		D7AF2C6F1A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C331A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png */; };
+		D7AF2C701A25A0C700F557A3 /* LoginBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C371A25A0C700F557A3 /* LoginBridgeViewController.xib */; };
+		D7AF2C711A25A0C700F557A3 /* LoginBridgeViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C371A25A0C700F557A3 /* LoginBridgeViewController.xib */; };
+		D7AF2C721A25A0C700F557A3 /* LoginOAuthExportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C381A25A0C700F557A3 /* LoginOAuthExportViewController.xib */; };
+		D7AF2C731A25A0C700F557A3 /* LoginOAuthExportViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C381A25A0C700F557A3 /* LoginOAuthExportViewController.xib */; };
+		D7AF2C741A25A0C700F557A3 /* LoginOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C391A25A0C700F557A3 /* LoginOAuthViewController.xib */; };
+		D7AF2C751A25A0C700F557A3 /* LoginOAuthViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C391A25A0C700F557A3 /* LoginOAuthViewController.xib */; };
+		D7AF2C761A25A0C700F557A3 /* LoginOAuthWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C3A1A25A0C700F557A3 /* LoginOAuthWebViewController.xib */; };
+		D7AF2C771A25A0C700F557A3 /* LoginOAuthWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C3A1A25A0C700F557A3 /* LoginOAuthWebViewController.xib */; };
+		D7AF2C781A25A0C700F557A3 /* LoginWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C3B1A25A0C700F557A3 /* LoginWebViewController.xib */; };
+		D7AF2C791A25A0C700F557A3 /* LoginWebViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C3B1A25A0C700F557A3 /* LoginWebViewController.xib */; };
+		D7AF2C7A1A25A0C700F557A3 /* HSPPaymentLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C411A25A0C700F557A3 /* HSPPaymentLocalizable.strings */; };
+		D7AF2C7B1A25A0C700F557A3 /* HSPPaymentLocalizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C411A25A0C700F557A3 /* HSPPaymentLocalizable.strings */; };
+		D7AF2C7C1A25A0C700F557A3 /* HSPSDK_Version.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C471A25A0C700F557A3 /* HSPSDK_Version.plist */; };
+		D7AF2C7D1A25A0C700F557A3 /* HSPSDK_Version.plist in Resources */ = {isa = PBXBuildFile; fileRef = D7AF2C471A25A0C700F557A3 /* HSPSDK_Version.plist */; };
 		D7AF3849189239EA00A3AD05 /* JackMissileShow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */; };
 		D7AF384A189239EA00A3AD05 /* PuzzleListShadow.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */; };
 		D7B2BE8D1914F14E00010C7F /* TodayMissionPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7B2BE8C1914F14E00010C7F /* TodayMissionPopup.cpp */; };
@@ -1532,6 +1534,8 @@
 		D7F4127C18C9B27E009372B2 /* BeautyStoneSynthesis.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F4127718C9B27E009372B2 /* BeautyStoneSynthesis.cpp */; };
 		D7F4127D18C9B27E009372B2 /* BeautyStoneStrength.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F4127918C9B27E009372B2 /* BeautyStoneStrength.cpp */; };
 		D7F4127E18C9B27E009372B2 /* BeautyStoneSetting.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7F4127B18C9B27E009372B2 /* BeautyStoneSetting.cpp */; };
+		D7FC7A841A358EFE00E33617 /* libTAGAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7FC7A831A358EFE00E33617 /* libTAGAnalytics.a */; };
+		D7FC7A851A358F0E00E33617 /* libTAGAnalytics.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D7FC7A831A358EFE00E33617 /* libTAGAnalytics.a */; };
 		D7FD8DC3195804650090094C /* JsGababo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D7FD8DC2195804650090094C /* JsGababo.cpp */; };
 		F293B3CD15EB7BE500256477 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CC15EB7BE500256477 /* QuartzCore.framework */; };
 		F293B3CF15EB7BE500256477 /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F293B3CE15EB7BE500256477 /* OpenGLES.framework */; };
@@ -2192,48 +2196,6 @@
 		D73FE2C41A122B69001087ED /* libHSPItemDelivery.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libHSPItemDelivery.a; sourceTree = "<group>"; };
 		D73FE2C51A122B69001087ED /* libHSPPayment.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libHSPPayment.a; sourceTree = "<group>"; };
 		D73FE2C61A122B69001087ED /* libHSPServices.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; path = libHSPServices.a; sourceTree = "<group>"; };
-		D73FE2CB1A122B69001087ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2CC1A122B69001087ED /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2CD1A122B69001087ED /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2D01A122B69001087ED /* HSP_bt_SNS_feed_send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_bt_SNS_feed_send.png; sourceTree = "<group>"; };
-		D73FE2D11A122B69001087ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPInterfaceLocalizedString.strings"; sourceTree = "<group>"; };
-		D73FE2D21A122B69001087ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPInterfaceLocalizedString.strings"; sourceTree = "<group>"; };
-		D73FE2D51A122B69001087ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2D61A122B69001087ED /* HSPConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPConfiguration.plist; sourceTree = "<group>"; };
-		D73FE2D71A122B69001087ED /* HSPLaunchingZone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPLaunchingZone.plist; sourceTree = "<group>"; };
-		D73FE2D81A122B69001087ED /* HSPUITheme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPUITheme.plist; sourceTree = "<group>"; };
-		D73FE2DA1A122B69001087ED /* HSP_toast_btn_navi_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_toast_btn_navi_close.png; sourceTree = "<group>"; };
-		D73FE2DB1A122B69001087ED /* HSP_toast_btn_navi_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HSP_toast_btn_navi_close@2x.png"; sourceTree = "<group>"; };
-		D73FE2DC1A122B69001087ED /* HSP_toast_btn_navi_prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_toast_btn_navi_prev.png; sourceTree = "<group>"; };
-		D73FE2DD1A122B69001087ED /* HSP_toast_btn_navi_prev@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HSP_toast_btn_navi_prev@2x.png"; sourceTree = "<group>"; };
-		D73FE2DE1A122B69001087ED /* hspuibase_btn_navi_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hspuibase_btn_navi_close.png; sourceTree = "<group>"; };
-		D73FE2DF1A122B69001087ED /* hspuibase_btn_navi_prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hspuibase_btn_navi_prev.png; sourceTree = "<group>"; };
-		D73FE2E01A122B69001087ED /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2E11A122B69001087ED /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
-		D73FE2E41A122B69001087ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/loginService.strings; sourceTree = "<group>"; };
-		D73FE2E61A122B69001087ED /* login_bg_bridge_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bg_bridge_login.png; sourceTree = "<group>"; };
-		D73FE2E71A122B69001087ED /* login_bg_bridge_login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg_bridge_login@2x.png"; sourceTree = "<group>"; };
-		D73FE2E81A122B69001087ED /* login_img_etc_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_etc_welcome_logo@2x.png"; sourceTree = "<group>"; };
-		D73FE2E91A122B69001087ED /* login_img_hangame_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_hangame_welcome_logo@2x.png"; sourceTree = "<group>"; };
-		D73FE2EA1A122B69001087ED /* login_img_toast_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_toast_welcome_logo@2x.png"; sourceTree = "<group>"; };
-		D73FE2EB1A122B69001087ED /* login_img_welcome_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_welcome_bg@2x.png"; sourceTree = "<group>"; };
-		D73FE2EC1A122B69001087ED /* login_toast_img_welcome_message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_toast_img_welcome_message@2x.png"; sourceTree = "<group>"; };
-		D73FE2ED1A122B69001087ED /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/loginService.strings; sourceTree = "<group>"; };
-		D73FE2EE1A122B69001087ED /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/loginService.strings; sourceTree = "<group>"; };
-		D73FE2F01A122B69001087ED /* LoginBridgeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginBridgeViewController.xib; sourceTree = "<group>"; };
-		D73FE2F11A122B69001087ED /* LoginOAuthExportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthExportViewController.xib; sourceTree = "<group>"; };
-		D73FE2F21A122B69001087ED /* LoginOAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthViewController.xib; sourceTree = "<group>"; };
-		D73FE2F31A122B69001087ED /* LoginOAuthWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthWebViewController.xib; sourceTree = "<group>"; };
-		D73FE2F41A122B69001087ED /* LoginWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginWebViewController.xib; sourceTree = "<group>"; };
-		D73FE2F51A122B69001087ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/loginService.strings"; sourceTree = "<group>"; };
-		D73FE2F61A122B69001087ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/loginService.strings"; sourceTree = "<group>"; };
-		D73FE2F71A122B69001087ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPServiceLocalizedString.strings"; sourceTree = "<group>"; };
-		D73FE2F81A122B69001087ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPServiceLocalizedString.strings"; sourceTree = "<group>"; };
-		D73FE2FB1A122B69001087ED /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
-		D73FE2FC1A122B69001087ED /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
-		D73FE2FD1A122B69001087ED /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
-		D73FE2FE1A122B69001087ED /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPPaymentLocalizable.strings"; sourceTree = "<group>"; };
-		D73FE2FF1A122B69001087ED /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPPaymentLocalizable.strings"; sourceTree = "<group>"; };
 		D741D92F19DBA51B0051C63D /* Semaphore.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Semaphore.cpp; sourceTree = "<group>"; };
 		D741D93019DBA51B0051C63D /* Semaphore.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Semaphore.h; sourceTree = "<group>"; };
 		D741D9F119DBD0960051C63D /* Twitter.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Twitter.framework; path = System/Library/Frameworks/Twitter.framework; sourceTree = SDKROOT; };
@@ -2956,6 +2918,50 @@
 		D7AF2BFC1A24536500F557A3 /* NormalAttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = NormalAttackPattern.cpp; sourceTree = "<group>"; };
 		D7AF2BFD1A24536500F557A3 /* CrashMissileUnit.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashMissileUnit.cpp; sourceTree = "<group>"; };
 		D7AF2BFE1A24536500F557A3 /* CrashAttackPattern.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CrashAttackPattern.cpp; sourceTree = "<group>"; };
+		D7AF2C0D1A25A05600F557A3 /* HSPGameCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HSPGameCenter.h; sourceTree = "<group>"; };
+		D7AF2C121A25A0C700F557A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C131A25A0C700F557A3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C141A25A0C700F557A3 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPInterfaceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C171A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_bt_SNS_feed_send.png; sourceTree = "<group>"; };
+		D7AF2C181A25A0C700F557A3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPInterfaceLocalizedString.strings"; sourceTree = "<group>"; };
+		D7AF2C191A25A0C700F557A3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPInterfaceLocalizedString.strings"; sourceTree = "<group>"; };
+		D7AF2C1C1A25A0C700F557A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C1D1A25A0C700F557A3 /* HSPConfiguration.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPConfiguration.plist; sourceTree = "<group>"; };
+		D7AF2C1E1A25A0C700F557A3 /* HSPLaunchingZone.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPLaunchingZone.plist; sourceTree = "<group>"; };
+		D7AF2C1F1A25A0C700F557A3 /* HSPUITheme.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = HSPUITheme.plist; sourceTree = "<group>"; };
+		D7AF2C211A25A0C700F557A3 /* HSP_toast_btn_navi_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_toast_btn_navi_close.png; sourceTree = "<group>"; };
+		D7AF2C221A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HSP_toast_btn_navi_close@2x.png"; sourceTree = "<group>"; };
+		D7AF2C231A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = HSP_toast_btn_navi_prev.png; sourceTree = "<group>"; };
+		D7AF2C241A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "HSP_toast_btn_navi_prev@2x.png"; sourceTree = "<group>"; };
+		D7AF2C251A25A0C700F557A3 /* hspuibase_btn_navi_close.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hspuibase_btn_navi_close.png; sourceTree = "<group>"; };
+		D7AF2C261A25A0C700F557A3 /* hspuibase_btn_navi_prev.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hspuibase_btn_navi_prev.png; sourceTree = "<group>"; };
+		D7AF2C271A25A0C700F557A3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C281A25A0C700F557A3 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPServiceLocalizedString.strings; sourceTree = "<group>"; };
+		D7AF2C2B1A25A0C700F557A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/loginService.strings; sourceTree = "<group>"; };
+		D7AF2C2D1A25A0C700F557A3 /* login_bg_bridge_login.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = login_bg_bridge_login.png; sourceTree = "<group>"; };
+		D7AF2C2E1A25A0C700F557A3 /* login_bg_bridge_login@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_bg_bridge_login@2x.png"; sourceTree = "<group>"; };
+		D7AF2C2F1A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_etc_welcome_logo@2x.png"; sourceTree = "<group>"; };
+		D7AF2C301A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_hangame_welcome_logo@2x.png"; sourceTree = "<group>"; };
+		D7AF2C311A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_toast_welcome_logo@2x.png"; sourceTree = "<group>"; };
+		D7AF2C321A25A0C700F557A3 /* login_img_welcome_bg@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_img_welcome_bg@2x.png"; sourceTree = "<group>"; };
+		D7AF2C331A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "login_toast_img_welcome_message@2x.png"; sourceTree = "<group>"; };
+		D7AF2C341A25A0C700F557A3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/loginService.strings; sourceTree = "<group>"; };
+		D7AF2C351A25A0C700F557A3 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/loginService.strings; sourceTree = "<group>"; };
+		D7AF2C371A25A0C700F557A3 /* LoginBridgeViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginBridgeViewController.xib; sourceTree = "<group>"; };
+		D7AF2C381A25A0C700F557A3 /* LoginOAuthExportViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthExportViewController.xib; sourceTree = "<group>"; };
+		D7AF2C391A25A0C700F557A3 /* LoginOAuthViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthViewController.xib; sourceTree = "<group>"; };
+		D7AF2C3A1A25A0C700F557A3 /* LoginOAuthWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginOAuthWebViewController.xib; sourceTree = "<group>"; };
+		D7AF2C3B1A25A0C700F557A3 /* LoginWebViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LoginWebViewController.xib; sourceTree = "<group>"; };
+		D7AF2C3C1A25A0C700F557A3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/loginService.strings"; sourceTree = "<group>"; };
+		D7AF2C3D1A25A0C700F557A3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/loginService.strings"; sourceTree = "<group>"; };
+		D7AF2C3E1A25A0C700F557A3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPServiceLocalizedString.strings"; sourceTree = "<group>"; };
+		D7AF2C3F1A25A0C700F557A3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPServiceLocalizedString.strings"; sourceTree = "<group>"; };
+		D7AF2C421A25A0C700F557A3 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
+		D7AF2C431A25A0C700F557A3 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
+		D7AF2C441A25A0C700F557A3 /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/HSPPaymentLocalizable.strings; sourceTree = "<group>"; };
+		D7AF2C451A25A0C700F557A3 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/HSPPaymentLocalizable.strings"; sourceTree = "<group>"; };
+		D7AF2C461A25A0C700F557A3 /* zh-Hant */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant"; path = "zh-Hant.lproj/HSPPaymentLocalizable.strings"; sourceTree = "<group>"; };
+		D7AF2C471A25A0C700F557A3 /* HSPSDK_Version.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = HSPSDK_Version.plist; sourceTree = "<group>"; };
 		D7AF3845189239EA00A3AD05 /* JackMissileShow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JackMissileShow.cpp; sourceTree = "<group>"; };
 		D7AF3846189239EA00A3AD05 /* JackMissileShow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JackMissileShow.h; sourceTree = "<group>"; };
 		D7AF3847189239EA00A3AD05 /* PuzzleListShadow.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = PuzzleListShadow.cpp; sourceTree = "<group>"; };
@@ -3131,6 +3137,10 @@
 		D7F4127918C9B27E009372B2 /* BeautyStoneStrength.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeautyStoneStrength.cpp; sourceTree = "<group>"; };
 		D7F4127A18C9B27E009372B2 /* BeautyStoneSetting.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BeautyStoneSetting.h; sourceTree = "<group>"; };
 		D7F4127B18C9B27E009372B2 /* BeautyStoneSetting.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BeautyStoneSetting.cpp; sourceTree = "<group>"; };
+		D7FC7A801A3589A300E33617 /* NEAFlat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NEAFlat.h; sourceTree = "<group>"; };
+		D7FC7A811A3589A300E33617 /* TAGAnalytics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGAnalytics.h; sourceTree = "<group>"; };
+		D7FC7A831A358EFE00E33617 /* libTAGAnalytics.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = libTAGAnalytics.a; path = ../Classes/libTAGAnalytics.a; sourceTree = "<group>"; };
+		D7FC7A861A35902700E33617 /* TAGAnalyticsCpp.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TAGAnalyticsCpp.h; sourceTree = "<group>"; };
 		D7FD8DC1195804650090094C /* JsGababo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JsGababo.h; sourceTree = "<group>"; };
 		D7FD8DC2195804650090094C /* JsGababo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = JsGababo.cpp; sourceTree = "<group>"; };
 		F293B3C815EB7BE500256477 /* DGproto.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DGproto.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -3155,13 +3165,16 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7FC7A841A358EFE00E33617 /* libTAGAnalytics.a in Frameworks */,
+				D7A8A39C19DD0B6000158A61 /* CoreTelephony.framework in Frameworks */,
+				D7A8A39519DD0B6000158A61 /* libsqlite3.dylib in Frameworks */,
+				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
 				D7B3A2FB19EE236800DC8938 /* libxml2.dylib in Frameworks */,
 				D73FE30F1A122B6B001087ED /* libUnittWebSocketClient.a in Frameworks */,
 				D7B3A2FA19EE155900DC8938 /* MobileCoreServices.framework in Frameworks */,
 				D73FE30D1A122B6B001087ED /* libssl.a in Frameworks */,
 				D7A8A3BF19DD0B6000158A61 /* CoreGraphics.framework in Frameworks */,
 				D7B3A2F419EE150900DC8938 /* CoreData.framework in Frameworks */,
-				D7A8A3A819DD0B6000158A61 /* AdSupport.framework in Frameworks */,
 				D73FE31D1A122B6C001087ED /* libXStreamStatic_x86.a in Frameworks */,
 				D73FE3171A122B6C001087ED /* libXSystemStatic.a in Frameworks */,
 				D73FE3011A122B6A001087ED /* FacebookSDK.framework in Frameworks */,
@@ -3174,7 +3187,6 @@
 				D73FE3231A122B6C001087ED /* libHSPInterface.a in Frameworks */,
 				D73FE31B1A122B6C001087ED /* libXPlatformStatic_x86.a in Frameworks */,
 				D7A8A39419DD0B6000158A61 /* libstdc++.dylib in Frameworks */,
-				D7A8A39519DD0B6000158A61 /* libsqlite3.dylib in Frameworks */,
 				D7A8A39619DD0B6000158A61 /* Security.framework in Frameworks */,
 				D7A8A39719DD0B6000158A61 /* StoreKit.framework in Frameworks */,
 				D73FE3251A122B6C001087ED /* libHSPItemDelivery.a in Frameworks */,
@@ -3182,7 +3194,6 @@
 				D73FE3211A122B6C001087ED /* libHSPCgp.a in Frameworks */,
 				D7A8A39A19DD0B6000158A61 /* AddressBook.framework in Frameworks */,
 				D7A8A39B19DD0B6000158A61 /* CoreText.framework in Frameworks */,
-				D7A8A39C19DD0B6000158A61 /* CoreTelephony.framework in Frameworks */,
 				D7A8A39D19DD0B6000158A61 /* libcocos2dx.a in Frameworks */,
 				D73FE3291A122B6D001087ED /* libHSPServices.a in Frameworks */,
 				D7B3A2F119EE14BA00DC8938 /* IgaworksAD.framework in Frameworks */,
@@ -3218,13 +3229,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D7FC7A851A358F0E00E33617 /* libTAGAnalytics.a in Frameworks */,
+				A71A441917D583ED004B9F01 /* AdSupport.framework in Frameworks */,
 				D7B3A2F919EE155100DC8938 /* MobileCoreServices.framework in Frameworks */,
 				D73FE30E1A122B6B001087ED /* libUnittWebSocketClient.a in Frameworks */,
 				D7B3A2F719EE153A00DC8938 /* libxml2.dylib in Frameworks */,
 				D73FE30C1A122B6B001087ED /* libssl.a in Frameworks */,
 				D7B3A2F319EE14FF00DC8938 /* CoreData.framework in Frameworks */,
 				D721EB1F19E528C60008EE63 /* iAd.framework in Frameworks */,
-				A71A441917D583ED004B9F01 /* AdSupport.framework in Frameworks */,
 				D73FE31C1A122B6C001087ED /* libXStreamStatic_x86.a in Frameworks */,
 				D73FE3161A122B6C001087ED /* libXSystemStatic.a in Frameworks */,
 				D73FE3001A122B69001087ED /* FacebookSDK.framework in Frameworks */,
@@ -3742,6 +3754,7 @@
 		D70B551A1814BE8D001FC90A /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D7FC7A861A35902700E33617 /* TAGAnalyticsCpp.h */,
 				D7AF2BF71A24536500F557A3 /* TCGSecene.h */,
 				D7AF2BF81A24536500F557A3 /* TCGSecene.cpp */,
 				D7AF2BF91A24536500F557A3 /* SpecialMissileUnit.cpp */,
@@ -4380,9 +4393,9 @@
 		D73FE2721A122B68001087ED /* HSPSDKIOS */ = {
 			isa = PBXGroup;
 			children = (
+				D7AF2C0E1A25A0C700F557A3 /* resource */,
 				D73FE2731A122B68001087ED /* include */,
 				D73FE29D1A122B69001087ED /* lib */,
-				D73FE2C71A122B69001087ED /* resource */,
 			);
 			name = HSPSDKIOS;
 			path = ../HSPSDKIOS;
@@ -4391,6 +4404,7 @@
 		D73FE2731A122B68001087ED /* include */ = {
 			isa = PBXGroup;
 			children = (
+				D7AF2C0D1A25A05600F557A3 /* HSPGameCenter.h */,
 				D73FE2741A122B68001087ED /* HSPAchievement.h */,
 				D73FE2751A122B68001087ED /* HSPAmigo.h */,
 				D73FE2761A122B68001087ED /* HSPBip.h */,
@@ -4608,119 +4622,6 @@
 				D73FE2C11A122B69001087ED /* libXSystemStatic_x86.a */,
 			);
 			path = lib;
-			sourceTree = "<group>";
-		};
-		D73FE2C71A122B69001087ED /* resource */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2C81A122B69001087ED /* HSPCore */,
-				D73FE2F91A122B69001087ED /* HSPPayment */,
-			);
-			path = resource;
-			sourceTree = "<group>";
-		};
-		D73FE2C81A122B69001087ED /* HSPCore */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2C91A122B69001087ED /* HSPInterface */,
-				D73FE2D31A122B69001087ED /* HSPServices */,
-			);
-			path = HSPCore;
-			sourceTree = "<group>";
-		};
-		D73FE2C91A122B69001087ED /* HSPInterface */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2CA1A122B69001087ED /* HSPInterfaceLocalizedString.strings */,
-				D73FE2CE1A122B69001087ED /* SNS */,
-			);
-			path = HSPInterface;
-			sourceTree = "<group>";
-		};
-		D73FE2CE1A122B69001087ED /* SNS */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2CF1A122B69001087ED /* images */,
-			);
-			path = SNS;
-			sourceTree = "<group>";
-		};
-		D73FE2CF1A122B69001087ED /* images */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2D01A122B69001087ED /* HSP_bt_SNS_feed_send.png */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
-		D73FE2D31A122B69001087ED /* HSPServices */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2D41A122B69001087ED /* HSPServiceLocalizedString.strings */,
-				D73FE2D61A122B69001087ED /* HSPConfiguration.plist */,
-				D73FE2D71A122B69001087ED /* HSPLaunchingZone.plist */,
-				D73FE2D81A122B69001087ED /* HSPUITheme.plist */,
-				D73FE2D91A122B69001087ED /* images */,
-				D73FE2E21A122B69001087ED /* LoginService */,
-			);
-			path = HSPServices;
-			sourceTree = "<group>";
-		};
-		D73FE2D91A122B69001087ED /* images */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2DA1A122B69001087ED /* HSP_toast_btn_navi_close.png */,
-				D73FE2DB1A122B69001087ED /* HSP_toast_btn_navi_close@2x.png */,
-				D73FE2DC1A122B69001087ED /* HSP_toast_btn_navi_prev.png */,
-				D73FE2DD1A122B69001087ED /* HSP_toast_btn_navi_prev@2x.png */,
-				D73FE2DE1A122B69001087ED /* hspuibase_btn_navi_close.png */,
-				D73FE2DF1A122B69001087ED /* hspuibase_btn_navi_prev.png */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
-		D73FE2E21A122B69001087ED /* LoginService */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2E31A122B69001087ED /* loginService.strings */,
-				D73FE2E51A122B69001087ED /* images */,
-				D73FE2EF1A122B69001087ED /* xib */,
-			);
-			path = LoginService;
-			sourceTree = "<group>";
-		};
-		D73FE2E51A122B69001087ED /* images */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2E61A122B69001087ED /* login_bg_bridge_login.png */,
-				D73FE2E71A122B69001087ED /* login_bg_bridge_login@2x.png */,
-				D73FE2E81A122B69001087ED /* login_img_etc_welcome_logo@2x.png */,
-				D73FE2E91A122B69001087ED /* login_img_hangame_welcome_logo@2x.png */,
-				D73FE2EA1A122B69001087ED /* login_img_toast_welcome_logo@2x.png */,
-				D73FE2EB1A122B69001087ED /* login_img_welcome_bg@2x.png */,
-				D73FE2EC1A122B69001087ED /* login_toast_img_welcome_message@2x.png */,
-			);
-			path = images;
-			sourceTree = "<group>";
-		};
-		D73FE2EF1A122B69001087ED /* xib */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2F01A122B69001087ED /* LoginBridgeViewController.xib */,
-				D73FE2F11A122B69001087ED /* LoginOAuthExportViewController.xib */,
-				D73FE2F21A122B69001087ED /* LoginOAuthViewController.xib */,
-				D73FE2F31A122B69001087ED /* LoginOAuthWebViewController.xib */,
-				D73FE2F41A122B69001087ED /* LoginWebViewController.xib */,
-			);
-			path = xib;
-			sourceTree = "<group>";
-		};
-		D73FE2F91A122B69001087ED /* HSPPayment */ = {
-			isa = PBXGroup;
-			children = (
-				D73FE2FA1A122B69001087ED /* HSPPaymentLocalizable.strings */,
-			);
-			path = HSPPayment;
 			sourceTree = "<group>";
 		};
 		D769726618EBFFB800E3FD55 /* cryptopp */ = {
@@ -5718,9 +5619,134 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		D7AF2C0E1A25A0C700F557A3 /* resource */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C0F1A25A0C700F557A3 /* HSPCore */,
+				D7AF2C401A25A0C700F557A3 /* HSPPayment */,
+				D7AF2C471A25A0C700F557A3 /* HSPSDK_Version.plist */,
+			);
+			path = resource;
+			sourceTree = "<group>";
+		};
+		D7AF2C0F1A25A0C700F557A3 /* HSPCore */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C101A25A0C700F557A3 /* HSPInterface */,
+				D7AF2C1A1A25A0C700F557A3 /* HSPServices */,
+			);
+			path = HSPCore;
+			sourceTree = "<group>";
+		};
+		D7AF2C101A25A0C700F557A3 /* HSPInterface */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C111A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings */,
+				D7AF2C151A25A0C700F557A3 /* SNS */,
+			);
+			path = HSPInterface;
+			sourceTree = "<group>";
+		};
+		D7AF2C151A25A0C700F557A3 /* SNS */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C161A25A0C700F557A3 /* images */,
+			);
+			path = SNS;
+			sourceTree = "<group>";
+		};
+		D7AF2C161A25A0C700F557A3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C171A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		D7AF2C1A1A25A0C700F557A3 /* HSPServices */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C1B1A25A0C700F557A3 /* HSPServiceLocalizedString.strings */,
+				D7AF2C1D1A25A0C700F557A3 /* HSPConfiguration.plist */,
+				D7AF2C1E1A25A0C700F557A3 /* HSPLaunchingZone.plist */,
+				D7AF2C1F1A25A0C700F557A3 /* HSPUITheme.plist */,
+				D7AF2C201A25A0C700F557A3 /* images */,
+				D7AF2C291A25A0C700F557A3 /* LoginService */,
+			);
+			path = HSPServices;
+			sourceTree = "<group>";
+		};
+		D7AF2C201A25A0C700F557A3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C211A25A0C700F557A3 /* HSP_toast_btn_navi_close.png */,
+				D7AF2C221A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png */,
+				D7AF2C231A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png */,
+				D7AF2C241A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png */,
+				D7AF2C251A25A0C700F557A3 /* hspuibase_btn_navi_close.png */,
+				D7AF2C261A25A0C700F557A3 /* hspuibase_btn_navi_prev.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		D7AF2C291A25A0C700F557A3 /* LoginService */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C2A1A25A0C700F557A3 /* loginService.strings */,
+				D7AF2C2C1A25A0C700F557A3 /* images */,
+				D7AF2C361A25A0C700F557A3 /* xib */,
+			);
+			path = LoginService;
+			sourceTree = "<group>";
+		};
+		D7AF2C2C1A25A0C700F557A3 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C2D1A25A0C700F557A3 /* login_bg_bridge_login.png */,
+				D7AF2C2E1A25A0C700F557A3 /* login_bg_bridge_login@2x.png */,
+				D7AF2C2F1A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png */,
+				D7AF2C301A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png */,
+				D7AF2C311A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png */,
+				D7AF2C321A25A0C700F557A3 /* login_img_welcome_bg@2x.png */,
+				D7AF2C331A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
+		D7AF2C361A25A0C700F557A3 /* xib */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C371A25A0C700F557A3 /* LoginBridgeViewController.xib */,
+				D7AF2C381A25A0C700F557A3 /* LoginOAuthExportViewController.xib */,
+				D7AF2C391A25A0C700F557A3 /* LoginOAuthViewController.xib */,
+				D7AF2C3A1A25A0C700F557A3 /* LoginOAuthWebViewController.xib */,
+				D7AF2C3B1A25A0C700F557A3 /* LoginWebViewController.xib */,
+			);
+			path = xib;
+			sourceTree = "<group>";
+		};
+		D7AF2C401A25A0C700F557A3 /* HSPPayment */ = {
+			isa = PBXGroup;
+			children = (
+				D7AF2C411A25A0C700F557A3 /* HSPPaymentLocalizable.strings */,
+			);
+			path = HSPPayment;
+			sourceTree = "<group>";
+		};
+		D7FC7A7F1A3589A300E33617 /* TAGAnalytics */ = {
+			isa = PBXGroup;
+			children = (
+				D7FC7A801A3589A300E33617 /* NEAFlat.h */,
+				D7FC7A811A3589A300E33617 /* TAGAnalytics.h */,
+			);
+			name = TAGAnalytics;
+			path = ../TAGAnalytics;
+			sourceTree = "<group>";
+		};
 		F293B3BD15EB7BE500256477 = {
 			isa = PBXGroup;
 			children = (
+				D7FC7A7F1A3589A300E33617 /* TAGAnalytics */,
 				D73FE2721A122B68001087ED /* HSPSDKIOS */,
 				D7B3A2FC19EE4B3100DC8938 /* SDKResources.bundle */,
 				D7B3A2EF19EE14BA00DC8938 /* IgaworksAD.framework */,
@@ -5768,6 +5794,7 @@
 		F293B3CB15EB7BE500256477 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D7FC7A831A358EFE00E33617 /* libTAGAnalytics.a */,
 				D7B3A2F819EE155100DC8938 /* MobileCoreServices.framework */,
 				D7B3A2F519EE153200DC8938 /* libxml2.dylib */,
 				D7B3A2F219EE14FF00DC8938 /* CoreData.framework */,
@@ -5926,57 +5953,58 @@
 			buildActionMask = 2147483647;
 			files = (
 				D73FE1841A10C63E001087ED /* HSPConfiguration.xml in Resources */,
-				D73FE3451A122B6D001087ED /* login_bg_bridge_login.png in Resources */,
-				D73FE34B1A122B6D001087ED /* login_img_hangame_welcome_logo@2x.png in Resources */,
+				D7AF2C631A25A0C700F557A3 /* login_bg_bridge_login.png in Resources */,
+				D7AF2C691A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png in Resources */,
 				D7A8A3C619DD0B6000158A61 /* Icon-57.png in Resources */,
-				D73FE3471A122B6D001087ED /* login_bg_bridge_login@2x.png in Resources */,
-				D73FE3391A122B6D001087ED /* HSP_toast_btn_navi_close@2x.png in Resources */,
-				D73FE3551A122B6D001087ED /* LoginOAuthExportViewController.xib in Resources */,
+				D7AF2C651A25A0C700F557A3 /* login_bg_bridge_login@2x.png in Resources */,
+				D7AF2C571A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png in Resources */,
+				D7AF2C731A25A0C700F557A3 /* LoginOAuthExportViewController.xib in Resources */,
 				D7A8A3C719DD0B6000158A61 /* Icon-114.png in Resources */,
 				D7A8A3C819DD0B6000158A61 /* Icon-144.png in Resources */,
 				D7A8A3CA19DD0B6000158A61 /* fonts in Resources */,
 				D7A8A3CE19DD0B6000158A61 /* hello.lua in Resources */,
-				D73FE3591A122B6D001087ED /* LoginOAuthWebViewController.xib in Resources */,
-				D73FE33F1A122B6D001087ED /* hspuibase_btn_navi_close.png in Resources */,
-				D73FE34F1A122B6D001087ED /* login_img_welcome_bg@2x.png in Resources */,
-				D73FE3351A122B6D001087ED /* HSPUITheme.plist in Resources */,
+				D7AF2C771A25A0C700F557A3 /* LoginOAuthWebViewController.xib in Resources */,
+				D7AF2C5D1A25A0C700F557A3 /* hspuibase_btn_navi_close.png in Resources */,
+				D7AF2C6D1A25A0C700F557A3 /* login_img_welcome_bg@2x.png in Resources */,
+				D7AF2C531A25A0C700F557A3 /* HSPUITheme.plist in Resources */,
 				D7A8A3D219DD0B6000158A61 /* hello2.lua in Resources */,
-				D73FE3571A122B6D001087ED /* LoginOAuthViewController.xib in Resources */,
+				D7AF2C751A25A0C700F557A3 /* LoginOAuthViewController.xib in Resources */,
 				D7A8A3D319DD0B6000158A61 /* AudioEngine.lua in Resources */,
 				D7A8A3D619DD0B6000158A61 /* CCBReaderLoad.lua in Resources */,
 				D7A8A3D719DD0B6000158A61 /* Default-568h@2x.png in Resources */,
-				D73FE32D1A122B6D001087ED /* HSP_bt_SNS_feed_send.png in Resources */,
+				D7AF2C4B1A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png in Resources */,
 				D7A8A3DA19DD0B6000158A61 /* Default.png in Resources */,
 				D7A8A3DB19DD0B6000158A61 /* Default@2x.png in Resources */,
 				D7A8A3DC19DD0B6000158A61 /* Icon-Small-50.png in Resources */,
-				D73FE35D1A122B6D001087ED /* HSPPaymentLocalizable.strings in Resources */,
-				D73FE33D1A122B6D001087ED /* HSP_toast_btn_navi_prev@2x.png in Resources */,
-				D73FE33B1A122B6D001087ED /* HSP_toast_btn_navi_prev.png in Resources */,
-				D73FE32F1A122B6D001087ED /* HSPServiceLocalizedString.strings in Resources */,
+				D7AF2C7B1A25A0C700F557A3 /* HSPPaymentLocalizable.strings in Resources */,
+				D7AF2C5B1A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png in Resources */,
+				D7AF2C591A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png in Resources */,
+				D7AF2C4D1A25A0C700F557A3 /* HSPServiceLocalizedString.strings in Resources */,
 				D7A8A3DE19DD0B6000158A61 /* Icon-Small.png in Resources */,
 				D7A8A3E019DD0B6000158A61 /* Icon-Small@2x.png in Resources */,
-				D73FE3411A122B6D001087ED /* hspuibase_btn_navi_prev.png in Resources */,
-				D73FE3431A122B6D001087ED /* loginService.strings in Resources */,
-				D73FE35B1A122B6D001087ED /* LoginWebViewController.xib in Resources */,
+				D7AF2C5F1A25A0C700F557A3 /* hspuibase_btn_navi_prev.png in Resources */,
+				D7AF2C611A25A0C700F557A3 /* loginService.strings in Resources */,
+				D7AF2C791A25A0C700F557A3 /* LoginWebViewController.xib in Resources */,
 				D7A8A3E219DD0B6000158A61 /* Icon.png in Resources */,
 				D7B3A2FE19EE4B3100DC8938 /* SDKResources.bundle in Resources */,
-				D73FE3311A122B6D001087ED /* HSPConfiguration.plist in Resources */,
+				D7AF2C4F1A25A0C700F557A3 /* HSPConfiguration.plist in Resources */,
 				D7A8A3E519DD0B6000158A61 /* Icon@2x.png in Resources */,
 				D7A8A3E619DD0B6000158A61 /* pixelation.fsh in Resources */,
+				D7AF2C7D1A25A0C700F557A3 /* HSPSDK_Version.plist in Resources */,
 				D7A8A3E719DD0B6000158A61 /* res_img in Resources */,
 				D7A8A3E919DD0B6000158A61 /* res_sound in Resources */,
-				D73FE34D1A122B6D001087ED /* login_img_toast_welcome_logo@2x.png in Resources */,
-				D73FE3491A122B6D001087ED /* login_img_etc_welcome_logo@2x.png in Resources */,
+				D7AF2C6B1A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png in Resources */,
+				D7AF2C671A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png in Resources */,
 				D7A8A3EB19DD0B6000158A61 /* Icon-72.png in Resources */,
-				D73FE3371A122B6D001087ED /* HSP_toast_btn_navi_close.png in Resources */,
+				D7AF2C551A25A0C700F557A3 /* HSP_toast_btn_navi_close.png in Resources */,
 				D7A8A3EE19DD0B6000158A61 /* json_internalarray.inl in Resources */,
-				D73FE32B1A122B6D001087ED /* HSPInterfaceLocalizedString.strings in Resources */,
+				D7AF2C491A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings in Resources */,
 				D7A8A3EF19DD0B6000158A61 /* json_internalmap.inl in Resources */,
 				D7A8A3F019DD0B6000158A61 /* json_valueiterator.inl in Resources */,
-				D73FE3511A122B6D001087ED /* login_toast_img_welcome_message@2x.png in Resources */,
-				D73FE3531A122B6D001087ED /* LoginBridgeViewController.xib in Resources */,
+				D7AF2C6F1A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png in Resources */,
+				D7AF2C711A25A0C700F557A3 /* LoginBridgeViewController.xib in Resources */,
 				D7A8A3F319DD0B6000158A61 /* sconscript in Resources */,
-				D73FE3331A122B6D001087ED /* HSPLaunchingZone.plist in Resources */,
+				D7AF2C511A25A0C700F557A3 /* HSPLaunchingZone.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -5985,57 +6013,58 @@
 			buildActionMask = 2147483647;
 			files = (
 				15C1569B1683138E00D239F2 /* Icon-57.png in Resources */,
-				D73FE3441A122B6D001087ED /* login_bg_bridge_login.png in Resources */,
-				D73FE34A1A122B6D001087ED /* login_img_hangame_welcome_logo@2x.png in Resources */,
+				D7AF2C621A25A0C700F557A3 /* login_bg_bridge_login.png in Resources */,
+				D7AF2C681A25A0C700F557A3 /* login_img_hangame_welcome_logo@2x.png in Resources */,
 				15C1569D1683138E00D239F2 /* Icon-114.png in Resources */,
-				D73FE3461A122B6D001087ED /* login_bg_bridge_login@2x.png in Resources */,
-				D73FE3381A122B6D001087ED /* HSP_toast_btn_navi_close@2x.png in Resources */,
-				D73FE3541A122B6D001087ED /* LoginOAuthExportViewController.xib in Resources */,
+				D7AF2C641A25A0C700F557A3 /* login_bg_bridge_login@2x.png in Resources */,
+				D7AF2C561A25A0C700F557A3 /* HSP_toast_btn_navi_close@2x.png in Resources */,
+				D7AF2C721A25A0C700F557A3 /* LoginOAuthExportViewController.xib in Resources */,
 				15C1569E1683138E00D239F2 /* Icon-144.png in Resources */,
 				1AC3623516D47C5C000847F2 /* fonts in Resources */,
 				1AC3623616D47C5C000847F2 /* hello.lua in Resources */,
 				1AC3623716D47C5C000847F2 /* hello2.lua in Resources */,
-				D73FE3581A122B6D001087ED /* LoginOAuthWebViewController.xib in Resources */,
-				D73FE33E1A122B6D001087ED /* hspuibase_btn_navi_close.png in Resources */,
-				D73FE34E1A122B6D001087ED /* login_img_welcome_bg@2x.png in Resources */,
-				D73FE3341A122B6D001087ED /* HSPUITheme.plist in Resources */,
+				D7AF2C761A25A0C700F557A3 /* LoginOAuthWebViewController.xib in Resources */,
+				D7AF2C5C1A25A0C700F557A3 /* hspuibase_btn_navi_close.png in Resources */,
+				D7AF2C6C1A25A0C700F557A3 /* login_img_welcome_bg@2x.png in Resources */,
+				D7AF2C521A25A0C700F557A3 /* HSPUITheme.plist in Resources */,
 				46C59AD317641FF300F43DC3 /* AudioEngine.lua in Resources */,
-				D73FE3561A122B6D001087ED /* LoginOAuthViewController.xib in Resources */,
+				D7AF2C741A25A0C700F557A3 /* LoginOAuthViewController.xib in Resources */,
 				46C59AD417641FF300F43DC3 /* CCBReaderLoad.lua in Resources */,
 				A71A473A17D59D34004B9F01 /* Default-568h@2x.png in Resources */,
 				A71A473B17D59D34004B9F01 /* Default.png in Resources */,
-				D73FE32C1A122B6D001087ED /* HSP_bt_SNS_feed_send.png in Resources */,
+				D7AF2C4A1A25A0C700F557A3 /* HSP_bt_SNS_feed_send.png in Resources */,
 				A71A473C17D59D34004B9F01 /* Default@2x.png in Resources */,
 				A71A477C17D59D34004B9F01 /* Icon-Small-50.png in Resources */,
 				A71A477D17D59D34004B9F01 /* Icon-Small.png in Resources */,
-				D73FE35C1A122B6D001087ED /* HSPPaymentLocalizable.strings in Resources */,
-				D73FE33C1A122B6D001087ED /* HSP_toast_btn_navi_prev@2x.png in Resources */,
-				D73FE33A1A122B6D001087ED /* HSP_toast_btn_navi_prev.png in Resources */,
-				D73FE32E1A122B6D001087ED /* HSPServiceLocalizedString.strings in Resources */,
+				D7AF2C7A1A25A0C700F557A3 /* HSPPaymentLocalizable.strings in Resources */,
+				D7AF2C5A1A25A0C700F557A3 /* HSP_toast_btn_navi_prev@2x.png in Resources */,
+				D7AF2C581A25A0C700F557A3 /* HSP_toast_btn_navi_prev.png in Resources */,
+				D7AF2C4C1A25A0C700F557A3 /* HSPServiceLocalizedString.strings in Resources */,
 				D73FE1821A0B6BC9001087ED /* HSPConfiguration.xml in Resources */,
 				A71A477E17D59D34004B9F01 /* Icon-Small@2x.png in Resources */,
-				D73FE3401A122B6D001087ED /* hspuibase_btn_navi_prev.png in Resources */,
-				D73FE3421A122B6D001087ED /* loginService.strings in Resources */,
-				D73FE35A1A122B6D001087ED /* LoginWebViewController.xib in Resources */,
+				D7AF2C5E1A25A0C700F557A3 /* hspuibase_btn_navi_prev.png in Resources */,
+				D7AF2C601A25A0C700F557A3 /* loginService.strings in Resources */,
+				D7AF2C781A25A0C700F557A3 /* LoginWebViewController.xib in Resources */,
 				A71A477F17D59D34004B9F01 /* Icon.png in Resources */,
 				D7B3A2FD19EE4B3100DC8938 /* SDKResources.bundle in Resources */,
-				D73FE3301A122B6D001087ED /* HSPConfiguration.plist in Resources */,
+				D7AF2C4E1A25A0C700F557A3 /* HSPConfiguration.plist in Resources */,
 				A71A478017D59D34004B9F01 /* Icon@2x.png in Resources */,
 				D7DD859E18E003BF008003D4 /* pixelation.fsh in Resources */,
+				D7AF2C7C1A25A0C700F557A3 /* HSPSDK_Version.plist in Resources */,
 				A71A516017D6E96C004B9F01 /* res_img in Resources */,
 				A71A516117D6E96C004B9F01 /* res_sound in Resources */,
-				D73FE34C1A122B6D001087ED /* login_img_toast_welcome_logo@2x.png in Resources */,
-				D73FE3481A122B6D001087ED /* login_img_etc_welcome_logo@2x.png in Resources */,
+				D7AF2C6A1A25A0C700F557A3 /* login_img_toast_welcome_logo@2x.png in Resources */,
+				D7AF2C661A25A0C700F557A3 /* login_img_etc_welcome_logo@2x.png in Resources */,
 				A71A516317D6EBD0004B9F01 /* Icon-72.png in Resources */,
-				D73FE3361A122B6D001087ED /* HSP_toast_btn_navi_close.png in Resources */,
+				D7AF2C541A25A0C700F557A3 /* HSP_toast_btn_navi_close.png in Resources */,
 				D70B567D1814BE8E001FC90A /* json_internalarray.inl in Resources */,
-				D73FE32A1A122B6D001087ED /* HSPInterfaceLocalizedString.strings in Resources */,
+				D7AF2C481A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings in Resources */,
 				D70B567E1814BE8E001FC90A /* json_internalmap.inl in Resources */,
 				D70B56811814BE8E001FC90A /* json_valueiterator.inl in Resources */,
-				D73FE3501A122B6D001087ED /* login_toast_img_welcome_message@2x.png in Resources */,
-				D73FE3521A122B6D001087ED /* LoginBridgeViewController.xib in Resources */,
+				D7AF2C6E1A25A0C700F557A3 /* login_toast_img_welcome_message@2x.png in Resources */,
+				D7AF2C701A25A0C700F557A3 /* LoginBridgeViewController.xib in Resources */,
 				D70B56831814BE8E001FC90A /* sconscript in Resources */,
-				D73FE3321A122B6D001087ED /* HSPLaunchingZone.plist in Resources */,
+				D7AF2C501A25A0C700F557A3 /* HSPLaunchingZone.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -7392,50 +7421,50 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		D73FE2CA1A122B69001087ED /* HSPInterfaceLocalizedString.strings */ = {
+		D7AF2C111A25A0C700F557A3 /* HSPInterfaceLocalizedString.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D73FE2CB1A122B69001087ED /* en */,
-				D73FE2CC1A122B69001087ED /* ja */,
-				D73FE2CD1A122B69001087ED /* ko */,
-				D73FE2D11A122B69001087ED /* zh-Hans */,
-				D73FE2D21A122B69001087ED /* zh-Hant */,
+				D7AF2C121A25A0C700F557A3 /* en */,
+				D7AF2C131A25A0C700F557A3 /* ja */,
+				D7AF2C141A25A0C700F557A3 /* ko */,
+				D7AF2C181A25A0C700F557A3 /* zh-Hans */,
+				D7AF2C191A25A0C700F557A3 /* zh-Hant */,
 			);
 			name = HSPInterfaceLocalizedString.strings;
 			sourceTree = "<group>";
 		};
-		D73FE2D41A122B69001087ED /* HSPServiceLocalizedString.strings */ = {
+		D7AF2C1B1A25A0C700F557A3 /* HSPServiceLocalizedString.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D73FE2D51A122B69001087ED /* en */,
-				D73FE2E01A122B69001087ED /* ja */,
-				D73FE2E11A122B69001087ED /* ko */,
-				D73FE2F71A122B69001087ED /* zh-Hans */,
-				D73FE2F81A122B69001087ED /* zh-Hant */,
+				D7AF2C1C1A25A0C700F557A3 /* en */,
+				D7AF2C271A25A0C700F557A3 /* ja */,
+				D7AF2C281A25A0C700F557A3 /* ko */,
+				D7AF2C3E1A25A0C700F557A3 /* zh-Hans */,
+				D7AF2C3F1A25A0C700F557A3 /* zh-Hant */,
 			);
 			name = HSPServiceLocalizedString.strings;
 			sourceTree = "<group>";
 		};
-		D73FE2E31A122B69001087ED /* loginService.strings */ = {
+		D7AF2C2A1A25A0C700F557A3 /* loginService.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D73FE2E41A122B69001087ED /* en */,
-				D73FE2ED1A122B69001087ED /* ja */,
-				D73FE2EE1A122B69001087ED /* ko */,
-				D73FE2F51A122B69001087ED /* zh-Hans */,
-				D73FE2F61A122B69001087ED /* zh-Hant */,
+				D7AF2C2B1A25A0C700F557A3 /* en */,
+				D7AF2C341A25A0C700F557A3 /* ja */,
+				D7AF2C351A25A0C700F557A3 /* ko */,
+				D7AF2C3C1A25A0C700F557A3 /* zh-Hans */,
+				D7AF2C3D1A25A0C700F557A3 /* zh-Hant */,
 			);
 			name = loginService.strings;
 			sourceTree = "<group>";
 		};
-		D73FE2FA1A122B69001087ED /* HSPPaymentLocalizable.strings */ = {
+		D7AF2C411A25A0C700F557A3 /* HSPPaymentLocalizable.strings */ = {
 			isa = PBXVariantGroup;
 			children = (
-				D73FE2FB1A122B69001087ED /* en */,
-				D73FE2FC1A122B69001087ED /* ja */,
-				D73FE2FD1A122B69001087ED /* ko */,
-				D73FE2FE1A122B69001087ED /* zh-Hans */,
-				D73FE2FF1A122B69001087ED /* zh-Hant */,
+				D7AF2C421A25A0C700F557A3 /* en */,
+				D7AF2C431A25A0C700F557A3 /* ja */,
+				D7AF2C441A25A0C700F557A3 /* ko */,
+				D7AF2C451A25A0C700F557A3 /* zh-Hans */,
+				D7AF2C461A25A0C700F557A3 /* zh-Hant */,
 			);
 			name = HSPPaymentLocalizable.strings;
 			sourceTree = "<group>";
