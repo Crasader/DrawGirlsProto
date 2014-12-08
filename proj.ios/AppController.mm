@@ -43,6 +43,10 @@
 #endif // HSPSDK_SUPPORTS_UI
 #import "HSPMyProfile.h"
 #import "HSPMessage.h"
+#import "TagAnalytics.h"
+
+
+
 
 //#define FIVEROCKS_APP_ID @"YOUR_APP_ID"
 //#define FIVEROCKS_APP_KEY @"YOUR_APP_KEY"
@@ -187,6 +191,15 @@ void uncaughtExceptionHandler(NSException *exception) {
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 	// Override point for customization after application launch.
+	
+	[TAGAnalytics initializeSdk:@"AppID"
+	 
+										companyId:@"CompanyID"
+	 
+									 appVersion:@"AppVersion"
+	 
+						 useLoggingUserId:YES];
+	
 
 	[IgaworksAD igaworksADWithAppKey:@"58229468"
 												andHashKey:@"03c0b0579dd4470b"
