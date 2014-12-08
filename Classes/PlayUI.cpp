@@ -1342,7 +1342,7 @@ float PlayUI::getPercentage ()
 void PlayUI::setPercentage (float t_p, bool t_b)
 {
 	float last_get_percentage = 0;
-	
+	float t_t_beforePercentage = 0;
 	if(isFirst)
 	{
 		isFirst = false;
@@ -1353,6 +1353,7 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		//			t_p = 0.99f;
 		myGD->communication("CP_changeMaxSize", t_p);
 		float t_beforePercentage = (beforePercentage^t_tta)/1000.f;
+		t_t_beforePercentage = t_beforePercentage;
 		
 		bool is_five_percent = false;
 		
@@ -1367,7 +1368,6 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 				CCPoint jackPosition = ccp((jackPoint.x-1)*pixelSize + 1, (jackPoint.y-1)*pixelSize + 1);
 				
 //				myGD->communication("Main_goldGettingEffect", jackPosition, int(floorf((t_p-t_beforePercentage)*200.f)));
-				myGD->communication("GIM_showPercentFloatingCoin", t_p-t_beforePercentage);
 				
 				last_get_percentage = t_p-t_beforePercentage;
 				
@@ -1450,6 +1450,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(clr_cdt_type == kCLEAR_littlePercent && t_p*100.f >= t_beforePercentage*100.f + clr_cdt_cnt.getV())
 		{
+			if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+				myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
+			
 			conditionFail();
 			
 			mySGD->fail_code = kFC_missionfail;
@@ -1555,6 +1558,8 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 							  {
 								  // no
 								  clearPercentage = 0.85f;
+								  if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+									  myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
 							  }, [=]()
 							  {
 								  // yes
@@ -1667,6 +1672,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 								  }
 								  else
 								  {
+									  if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+										  myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
+									  
 									  conditionFail();
 									  
 									  mySGD->fail_code = kFC_missionfail;
@@ -1795,6 +1803,9 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		}
 		else
 		{
+			if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+				myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
+			
 			conditionFail();
 			
 			mySGD->fail_code = kFC_missionfail;
@@ -1819,6 +1830,11 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 			
 			myGD->setIsGameover(true); // ks 가 추가함. 타이밍을 뒤로 ...
 		}
+	}
+	else
+	{
+		if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+			myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
 	}
 }
 
@@ -2201,7 +2217,7 @@ void PlayUI::conditionClear ()
 	if(mission_back)
 	{
 		mission_back->removeAllChildren();
-		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getLocalCode().c_str())->getCString());
+		CCSprite* t_success_img = CCSprite::create(CCString::createWithFormat("ui_mission_clear_%s.png", myLoc->getSupportLocalCode())->getCString());
 		t_success_img->setPosition(ccpFromSize(mission_back->getContentSize()/2.f));
 		mission_back->addChild(t_success_img);
 	}
