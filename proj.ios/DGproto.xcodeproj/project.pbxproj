@@ -132,6 +132,8 @@
 		A71A516017D6E96C004B9F01 /* res_img in Resources */ = {isa = PBXBuildFile; fileRef = A71A515E17D6E96C004B9F01 /* res_img */; };
 		A71A516117D6E96C004B9F01 /* res_sound in Resources */ = {isa = PBXBuildFile; fileRef = A71A515F17D6E96C004B9F01 /* res_sound */; };
 		A71A516317D6EBD0004B9F01 /* Icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = A71A516217D6EBD0004B9F01 /* Icon-72.png */; };
+		A7BD1E001A3141C20079AF12 /* CharacterStrengthPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BD1DFE1A3141C10079AF12 /* CharacterStrengthPopup.cpp */; };
+		A7BD1E011A3141C20079AF12 /* CharacterStrengthPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A7BD1DFE1A3141C10079AF12 /* CharacterStrengthPopup.cpp */; };
 		B237D7FE1869115A009087E6 /* SlidingPuzzle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B237D7FC1869115A009087E6 /* SlidingPuzzle.cpp */; };
 		B24861C1184F73C2004CF7D7 /* FriendListPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24861B9184F73C2004CF7D7 /* FriendListPopup.cpp */; };
 		B24861C2184F73C2004CF7D7 /* JoinGameFriendPopup.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B24861BB184F73C2004CF7D7 /* JoinGameFriendPopup.cpp */; };
@@ -1793,6 +1795,8 @@
 		A71A515E17D6E96C004B9F01 /* res_img */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res_img; sourceTree = "<group>"; };
 		A71A515F17D6E96C004B9F01 /* res_sound */ = {isa = PBXFileReference; lastKnownFileType = folder; path = res_sound; sourceTree = "<group>"; };
 		A71A516217D6EBD0004B9F01 /* Icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Icon-72.png"; sourceTree = SOURCE_ROOT; };
+		A7BD1DFE1A3141C10079AF12 /* CharacterStrengthPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CharacterStrengthPopup.cpp; sourceTree = "<group>"; };
+		A7BD1DFF1A3141C10079AF12 /* CharacterStrengthPopup.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CharacterStrengthPopup.h; sourceTree = "<group>"; };
 		B237D7FC1869115A009087E6 /* SlidingPuzzle.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SlidingPuzzle.cpp; sourceTree = "<group>"; };
 		B237D7FD1869115A009087E6 /* SlidingPuzzle.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SlidingPuzzle.h; sourceTree = "<group>"; };
 		B24861B9184F73C2004CF7D7 /* FriendListPopup.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = FriendListPopup.cpp; sourceTree = "<group>"; };
@@ -4339,6 +4343,8 @@
 				D7B3A2DA19E7CD9A00DC8938 /* KakaoLinkCenter.m */,
 				D7B3A2DB19E7CD9A00DC8938 /* KakaoLinkCenter.h */,
 				D7A72A6F19F9F43900A5ACBD /* PassiveOp.h */,
+				A7BD1DFE1A3141C10079AF12 /* CharacterStrengthPopup.cpp */,
+				A7BD1DFF1A3141C10079AF12 /* CharacterStrengthPopup.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -6262,6 +6268,7 @@
 				D7ED5BA61A04C13700CE6713 /* CharacterDetailPopup.cpp in Sources */,
 				D7A8A1DE19DD0B6000158A61 /* CCLayerGradientLoader.cpp in Sources */,
 				D7A8A1DF19DD0B6000158A61 /* FirstPurchasePopup.cpp in Sources */,
+				A7BD1E011A3141C20079AF12 /* CharacterStrengthPopup.cpp in Sources */,
 				D7A8A1E019DD0B6000158A61 /* b2DynamicTree.cpp in Sources */,
 				D7A8A1E119DD0B6000158A61 /* b2TimeOfImpact.cpp in Sources */,
 				D7A8A1E219DD0B6000158A61 /* b2ChainShape.cpp in Sources */,
@@ -6929,6 +6936,7 @@
 				D79EF61219D80CF700979D79 /* CCLabelBMFontLoader.cpp in Sources */,
 				D79EF61519D80CF700979D79 /* CCLayerGradientLoader.cpp in Sources */,
 				D79953791910988F008489B1 /* FirstPurchasePopup.cpp in Sources */,
+				A7BD1E001A3141C20079AF12 /* CharacterStrengthPopup.cpp in Sources */,
 				D7ED5BA51A04C13700CE6713 /* CharacterDetailPopup.cpp in Sources */,
 				15C155251683118600D239F2 /* b2DynamicTree.cpp in Sources */,
 				15C155261683118600D239F2 /* b2TimeOfImpact.cpp in Sources */,
