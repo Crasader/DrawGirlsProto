@@ -83,6 +83,8 @@ public:
 	int getJackMissileCnt();
 	void removeAllPattern();
 	KSCumberBase* getNearestCumber(CCPoint pt);
+	KSCumberBase* getNearestCumberWithExclude(cocos2d::CCPoint pt, const std::vector<KSCumberBase*>& exclude);
+
 private:
 	
 	int clear_condition;
