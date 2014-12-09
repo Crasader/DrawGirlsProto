@@ -2954,6 +2954,18 @@ void MainFlowScene::puzzleListRefreshPopupClose()
 	popupClose();
 }
 
+void MainFlowScene::showInvenPopup()
+{
+	is_menu_enable = false;
+	
+	puzzle_table->setTouchEnabled(false);
+	mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+	
+	InvenPopup* t_popup = InvenPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -3199,14 +3211,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)
 		{
-			puzzle_table->setTouchEnabled(false);
-			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-
-			InvenPopup* t_popup = InvenPopup::create();
-			
-			
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
-			addChild(t_popup, kMainFlowZorder_popup);
+			showInvenPopup();
 			
 //			CardSettingPopup* t_popup = CardSettingPopup::create();
 //			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
@@ -3559,13 +3564,13 @@ void MainFlowScene::setBottom()
 //	}
 		
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
-	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12);
 	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
 	n_cardsetting->addChild(n_cardsetting_label);
 	CCSprite* s_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	s_cardsetting->setColor(ccGRAY);
-	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12);
 	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
 	s_cardsetting->addChild(s_cardsetting_label);

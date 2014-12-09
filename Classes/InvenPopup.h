@@ -30,7 +30,6 @@ public:
 	
 	// a selector callback
 	void menuAction(CCObject* pSender);
-	void reOpenPopup();
 	
 	// preprocessor macro for "static create()" constructor ( node() deprecated )
 	CREATE_FUNC(InvenPopup);
@@ -180,6 +179,8 @@ private:
 	void endShowPopup();
 	void hidePopup();
 	void endHidePopup();
+	
+	void reOpenPopup();
 	
 	bool is_menu_enable;
 	CCTableView* reward_table;

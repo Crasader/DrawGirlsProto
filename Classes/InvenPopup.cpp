@@ -25,6 +25,7 @@
 #include "StageImgLoader.h"
 #include "CardSettingPopup.h"
 #include "MainFlowScene.h"
+#include "CharacterSelectPopup.h"
 
 #include <boost/lexical_cast.hpp>
 void InvenPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -75,22 +76,16 @@ bool InvenPopup::init()
 	title_back->setPosition(ccp(60,main_case->getContentSize().height-13));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_label = KSLabelTTF::create("인벤토리", mySGD->getFont().c_str(), 12);
+	KSLabelTTF* title_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12);
 	title_label->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	title_label->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0, 2));
 	title_back->addChild(title_label);
-	
-	//<<<<<<< HEAD
-	//	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	//
-	//=======
 	
 	CommonAnimation::applyShadow(title_label);
 	
 	
 	CCScale9Sprite* main_inner_left = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
 	
-	//>>>>>>> origin/standAlone
 	main_inner_left->setContentSize(CCSizeMake(524.f / 2.f, 394.f / 2.f));
 	main_inner_left->setPosition(ccp(321.5, 129.5));
 	setFormSetter(main_inner_left);
@@ -147,7 +142,7 @@ bool InvenPopup::init()
 	CCRect mission_size = CCRectMake(0, 0, 225, 22);
 	CCPoint mission_position = ccp(main_case->getContentSize().width/2.f+97, main_case->getContentSize().height+2-23.5f);
 	LabelTTFMarquee* tipMaquee = LabelTTFMarquee::create(ccc4(0, 0, 0, 0), mission_size.size.width, mission_size.size.height, "");
-	tipMaquee->addText("가지고 있는 아이템을 상세히 보여드립니다.");
+	tipMaquee->addText(getLocal(LK::kMyLocalKey_haveItemDetailShow));
 	tipMaquee->setPosition(mission_position);
 	tipMaquee->startMarquee();
 	tipMaquee->setFontSize(12.f);
@@ -264,11 +259,11 @@ bool InvenPopup::init()
 	}
 		
 	
-	m_infoList.push_back(MyInfo("<font color=#FFFFFF>가입일시</font>", "<font color=#FF8c8c>" + std::string(GraphDogLib::dateFormat(getLocal(LK::kMyLocalKey_yearMonthDay), mySGD->join_date)) + "</font>"));
-	m_infoList.push_back(MyInfo("<font color=#FFFFFF>최고스테이지</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
-	m_infoList.push_back(MyInfo("<font color=#FFFFFF>플레이 판수</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(playCount) + "</font>"));
-	m_infoList.push_back(MyInfo("<font color=#FFFFFF>PVP 최고연승</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessVictory()) + "</font>"));
-	m_infoList.push_back(MyInfo("<font color=#FFFFFF>PVP 최고점수</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessScore()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_joinDate) + "</font>", "<font color=#FF8c8c>" + std::string(GraphDogLib::dateFormat(getLocal(LK::kMyLocalKey_yearMonthDay), mySGD->join_date)) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_highStage) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_playCount) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(playCount) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighVictory) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessVictory()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighScore) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessScore()) + "</font>"));
 	m_infoTable->reloadData();
 
 	//////////////////////////
@@ -278,14 +273,14 @@ bool InvenPopup::init()
 	tab_menu->setTouchPriority(-182);
 	
 	CCSprite* n_mychar_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_mychar_label = KSLabelTTF::create("내캐릭터", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_mychar_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycharacter), mySGD->getFont().c_str(), 12.5f);
 	n_mychar_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_mychar_label->setPosition(ccpFromSize(n_mychar_img->getContentSize()/2.f) + ccp(0,-1));
 	n_mychar_img->addChild(n_mychar_label);
 	
 	CCSprite* s_mychar_img = CCSprite::create("subbutton_pink.png");
 	s_mychar_img->setColor(ccGRAY);
-	KSLabelTTF* s_mychar_label = KSLabelTTF::create("내캐릭터", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_mychar_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycharacter), mySGD->getFont().c_str(), 12.5f);
 	s_mychar_label->setColor(ccGRAY);
 	s_mychar_label->disableOuterStroke();
 	s_mychar_label->setPosition(ccpFromSize(s_mychar_img->getContentSize()/2.f) + ccp(0,-1));
@@ -293,7 +288,7 @@ bool InvenPopup::init()
 	
 	CCSprite* d_mychar_img = CCSprite::create("subbutton_pink.png");
 	d_mychar_img->setColor(ccGRAY);
-	KSLabelTTF* d_mychar_label = KSLabelTTF::create("내캐릭터", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_mychar_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycharacter), mySGD->getFont().c_str(), 12.5f);
 	d_mychar_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_mychar_label->setPosition(ccpFromSize(d_mychar_img->getContentSize()/2.f) + ccp(0,-1));
 	d_mychar_img->addChild(d_mychar_label);
@@ -306,14 +301,14 @@ bool InvenPopup::init()
 	
 	
 	CCSprite* n_mycard_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_mycard_label = KSLabelTTF::create("내카드", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_mycard_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12.5f);
 	n_mycard_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_mycard_label->setPosition(ccpFromSize(n_mycard_img->getContentSize()/2.f) + ccp(0,-1));
 	n_mycard_img->addChild(n_mycard_label);
 	
 	CCSprite* s_mycard_img = CCSprite::create("subbutton_pink.png");
 	s_mycard_img->setColor(ccGRAY);
-	KSLabelTTF* s_mycard_label = KSLabelTTF::create("내카드", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_mycard_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12.5f);
 	s_mycard_label->setColor(ccGRAY);
 	s_mycard_label->disableOuterStroke();
 	s_mycard_label->setPosition(ccpFromSize(s_mycard_img->getContentSize()/2.f) + ccp(0,-1));
@@ -321,7 +316,7 @@ bool InvenPopup::init()
 	
 	CCSprite* d_mycard_img = CCSprite::create("subbutton_pink.png");
 	d_mycard_img->setColor(ccGRAY);
-	KSLabelTTF* d_mycard_label = KSLabelTTF::create("내카드", mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_mycard_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12.5f);
 	d_mycard_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_mycard_label->setPosition(ccpFromSize(d_mycard_img->getContentSize()/2.f) + ccp(0,-1));
 	d_mycard_img->addChild(d_mycard_label);
@@ -381,6 +376,21 @@ void InvenPopup::endHidePopup()
 }
 void InvenPopup::reOpenPopup()
 {
+	main_case->setScaleY(0.f);
+	addChild(KSGradualValue<float>::create(0.f, 1.2f, 0.1f, [=](float t){
+		main_case->setScaleY(t);
+	}, [=](float t){ // finish
+		main_case->setScaleY(1.2f);
+		addChild(KSGradualValue<float>::create(1.2f, 0.8f, 0.1f, [=](float t){
+			main_case->setScaleY(t);
+		}, [=](float t){ // finish
+			main_case->setScaleY(0.8f);
+			addChild(KSGradualValue<float>::create(0.8f, 1.f, 0.05f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){ // finish
+				main_case->setScaleY(1.f);
+				is_menu_enable = true;
+			}));}));}));
 }
 void InvenPopup::menuAction(CCObject* pSender)
 {
@@ -396,6 +406,19 @@ void InvenPopup::menuAction(CCObject* pSender)
 	
 	if(tag == myChar)
 	{
+		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+			main_case->setScaleY(t);
+		}, [=](float t){
+			main_case->setScaleY(1.2f);
+			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+				main_case->setScaleY(t);
+			}, [=](float t){
+				main_case->setScaleY(0.f);
+				CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+				t_popup->setHideFinalAction(this, callfunc_selector(InvenPopup::reOpenPopup));
+				addChild(t_popup, 9);
+			}));
+		}));
 	}
 	else if(tag == myCard)
 	{
@@ -416,7 +439,7 @@ void InvenPopup::menuAction(CCObject* pSender)
 			t_popup->setHideFinalAction(tf, df);
 		});
 #endif
-		t_popup->setHideFinalAction(target_final, delegate_final);
+		t_popup->setHideFinalAction(target_final, callfunc_selector(MainFlowScene::showInvenPopup));
 		getParent()->addChild(t_popup, kMainFlowZorder_popup);
 	}
 	
