@@ -1787,17 +1787,17 @@ protected:
 class StaticMissile : public StoneAttack
 {
 public:
-	static StaticMissile* create(CCPoint initPosition, const string& fileName, int power, int subPower, AttackOption ao)
+	static StaticMissile* create(CCPoint initPosition, const string& fileName, int power, int subPower, int range, int delayFrame, AttackOption ao)
 	{
 		StaticMissile* object = new StaticMissile();
-		object->init(initPosition, fileName, power, subPower, ao);
+		object->init(initPosition, fileName, power, subPower, range, delayFrame, ao);
 		
 		object->autorelease();
 		
 		
 		return object;
 	}
-	bool init(CCPoint initPosition, const string& fileName, int power, int subPower, AttackOption ao)
+	bool init(CCPoint initPosition, const string& fileName, int power, int subPower, int range, int delayFrame, AttackOption ao)
 	{
 		StoneAttack::init();
 		m_touched = false;
@@ -1805,11 +1805,14 @@ public:
 		m_power = power;
 		m_subPower = subPower;
 		m_option = ao;
+		m_range = range;
+		m_delayFrame = delayFrame;
 		m_missileSprite = CCSprite::create(fileName.c_str());
 		addChild(m_missileSprite);
 		m_missileSprite->setPosition(initPosition);
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 //		m_initRad = rad;
+		m_notTarget = nullptr;
 		scheduleUpdate();
 		
 		m_updateFrameCount = 0;
@@ -1842,13 +1845,13 @@ public:
 		KSCumberBase* minDistanceCumber = nullptr;
 		// 미사일과 몬스터와 거리가 2 보다 작은 경우가 있다면 폭발 시킴.
 		bool found = false;
-		if(m_updateFrameCount >= 5 && m_touched == false) // 때린적이 없다면
+		if(m_updateFrameCount >= m_delayFrame && m_touched == false) // 때린적이 없다면
 		{
 			for(auto iter : myGD->getMainCumberVector())
 			{
 				CCPoint targetPosition = iter->getPosition();
 				float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-				if(distance < 13)
+				if(distance < m_range)
 				{
 					minDistance = distance;
 					minDistanceCumber = iter;
@@ -1862,7 +1865,7 @@ public:
 				{
 					CCPoint targetPosition = iter->getPosition();
 					float distance = ccpLength(targetPosition - m_missileSprite->getPosition());
-					if(iter->getDeadState() == false && distance < 13)
+					if(iter->getDeadState() == false && distance < m_range)
 					{
 						minDistance = distance;
 						minDistanceCumber = iter;
@@ -1896,7 +1899,17 @@ public:
 		if(m_streak)addChild(m_streak, -1);
 		if(m_particle)addChild(m_particle, -2);
 	}
+	/// position getter
+	const CCPoint& getPosition()
+	{
+		return getMissilePosition();
+	}
 	
+	/// position setter
+	void setPosition(const CCPoint& newPosition)
+	{
+		setMissilePosition(newPosition);
+	}
 	void setMissilePosition(CCPoint pt)
 	{
 		m_missileSprite->setPosition(pt);
@@ -1911,7 +1924,24 @@ public:
 		
 //		m_missileSprite->setRotation(-rad2Deg(m_initRad) - 90);
 	}
+	
+	float getRotation()
+	{
+		return m_missileSprite->getRotation();
+	}
+	
+	/// rotation setter
+	void setRotation(float newRotation)
+	{
+		m_missileSprite->setRotation(newRotation);
+	}
+
+	const CCPoint& getMissilePosition()
+	{
+		return m_missileSprite->getPosition();
+	}
 	bool m_touched;
+	KSCumberBase* m_notTarget;
 protected:
 	int m_updateFrameCount;
 	
@@ -1919,7 +1949,10 @@ protected:
 //	float m_initRad; // 처음에 날아가는 각도.
 	int m_power; // 파워.
 	int m_subPower;
+	int m_delayFrame;
+	int m_range;
 	CCParticleSystemQuad* m_particle;
+	
 	ASMotionStreak* m_streak;
 	CCSprite* m_missileSprite; // 미사일 객체.
 };
@@ -3984,11 +4017,11 @@ class CircleDance : public StoneAttack
 {
 public:
 	static CircleDance* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
-												 int dotNumber, float angleVelocity, int power, int subPower,
+												 int dotNumber, float angleVelocity, int level, int power, int subPower,
 												 AttackOption ao)
 	{
 		CircleDance* object = new CircleDance();
-		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, power, subPower, ao);
+		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, level, power, subPower, ao);
 		
 		object->autorelease();
 		
@@ -3998,7 +4031,7 @@ public:
 	
 	
 	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
-						int dotNumber, float angleVelocity, int power, int subPower,
+						int dotNumber, float angleVelocity, int level, int power, int subPower,
 						AttackOption ao)
 	{
 		StoneAttack::init();
@@ -4049,7 +4082,8 @@ public:
 		
 		for(int i=0; i<m_dotNumber; i++)
 		{
-			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, ao);
+			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, 13, 5, ao);
+			satell->beautifier(level);
 //			CCSprite* satell = CCSprite::create(fileName.c_str());
 			float rad = 2 * M_PI / m_dotNumber * i;
 			Satellite t;
@@ -4207,7 +4241,7 @@ public:
 		
 		for(int i=0; i<m_params.numbers; i++)
 		{
-			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower,m_params.ao);
+			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower, 13, 5, m_params.ao);
 			//			CCSprite* satell = CCSprite::create(fileName.c_str());
 			float rad = 2 * M_PI / m_params.numbers * i;
 			Satellite t;
@@ -4270,3 +4304,118 @@ protected:
 
 	
 };
+
+
+class Chain : public StoneAttack
+{
+public:
+	struct Params
+	{
+		CCPoint initPosition;
+		string fileName;
+		int depth;
+		int power;
+		float chainDistance;
+		float speed;
+		int subPower;
+		int level;
+		AttackOption ao;
+	};
+	static Chain* create(const Params& params)
+	{
+		Chain* object = new Chain();
+		object->init(params);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	
+	
+	bool init(const Params& params)
+	{
+		StoneAttack::init();
+		m_params = params;
+		//		m_missileStep = 1;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		// m_params 와 mInfo 결합 해야됨.
+		
+		
+		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setVisible(true);
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(m_params.initPosition);
+		
+		
+		KSCumberBase* nearCumber = myGD->getNearestCumber(myGD->getJackPointCCP());
+		float ny = nearCumber->getPosition().y;
+		float nx = nearCumber->getPosition().x;
+		
+		m_targetNode = nearCumber;
+		m_targeted.push_back(m_targetNode);
+		m_chainMissile = StaticMissile::create(params.initPosition, params.fileName, params.power, params.subPower, 2, 40, params.ao);
+		m_chainMissile->beautifier(params.level);
+		addChild(m_chainMissile);
+		m_currentRad = atan2f(ny - m_params.initPosition.y, nx - m_params.initPosition.x);
+//		m_params.initRad = atan2f(ny - m_params.initPosition.y, nx - m_params.initPosition.x);
+		
+		
+		m_missileStep = 1;
+		
+		scheduleUpdate();
+		
+		
+		
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+	
+protected:
+	Params m_params;
+	int m_missileStep; // 미사일 단계
+	float m_currentRad;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	KSCumberBase* m_targetNode;
+
+	StaticMissile* m_chainMissile;
+	vector<KSCumberBase*> m_targeted;
+	//			myGD->communication("EP_stopCrashAction");
+};
+
+
