@@ -1305,6 +1305,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass10] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2535,6 +2536,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass10] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
