@@ -63,6 +63,8 @@
 #include "RealTimeMessage.h"
 #include "ManyGachaPopup.h"
 #include "AccountManagerPopup.h"
+
+#include "InvenPopup.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -3111,6 +3113,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 			RankNewPopup* t_popup = RankNewPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
+			
+			
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
@@ -3197,9 +3201,16 @@ void MainFlowScene::menuAction(CCObject* sender)
 		{
 			puzzle_table->setTouchEnabled(false);
 			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-			CardSettingPopup* t_popup = CardSettingPopup::create();
+
+			InvenPopup* t_popup = InvenPopup::create();
+			
+			
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
+			
+//			CardSettingPopup* t_popup = CardSettingPopup::create();
+//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
+//			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_mission)
 		{

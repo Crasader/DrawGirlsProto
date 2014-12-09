@@ -192,11 +192,11 @@ void uncaughtExceptionHandler(NSException *exception) {
 	NSSetUncaughtExceptionHandler(&uncaughtExceptionHandler);
 	// Override point for customization after application launch.
 	
-	[TAGAnalytics initializeSdk:@"AppID"
+	[TAGAnalytics initializeSdk:@"QA8LmqYa"
 	 
-										companyId:@"CompanyID"
+										companyId:@"tk8on6Xe"
 	 
-									 appVersion:@"AppVersion"
+									 appVersion:@"1.0.0"
 	 
 						 useLoggingUserId:YES];
 	
