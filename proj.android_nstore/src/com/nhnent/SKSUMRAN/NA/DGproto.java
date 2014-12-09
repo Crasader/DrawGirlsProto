@@ -79,9 +79,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		int result = GameAnalytics.initializeSdk(getApplicationContext(), "AppID", 
-				"CompanyID", "AppVersion", true);
-
+		int result = GameAnalytics.initializeSdk(getApplicationContext(), "QA8LmqYa", 
+				"tk8on6Xe", "1.0.0", true);
+		
 		if(result != GameAnalytics.S_SUCCESS)
 		{
 
