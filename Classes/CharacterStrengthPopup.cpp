@@ -506,6 +506,7 @@ void CharacterStrengthPopup::expUpAction()
 												 
 												 delete t_after_history;
 												 t_after_history = NULL;
+												 is_full = false;
 												 
 												 up_exp_value = 0;
 												 maybe_exp_value->setString("0");
