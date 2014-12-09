@@ -930,6 +930,7 @@ void EndlessModeOpening::resultGetEndlessPlayData(Json::Value result_data)
 	GraphDogLib::JsonToLog("getendlessplaydata : %s", result_data);
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		mySGD->is_pvp_event = result_data["isEvent"].asBool();
 		mySGD->resetReplayPlayingInfo();
 		
 		if(myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1)

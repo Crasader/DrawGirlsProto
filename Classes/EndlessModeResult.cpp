@@ -2842,6 +2842,7 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		TRACE();
+		mySGD->is_pvp_event = result_data["isEvent"].asBool();
 		mySGD->resetReplayPlayingInfo();
 		
 		if(!result_data["rival"]["playData"].isNull())

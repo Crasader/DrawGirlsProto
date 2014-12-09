@@ -23,6 +23,7 @@ public:
 	static EndlessStartContent* create(int t_touch_priority, function<void(CCObject*)> t_selector);
 	
 //	virtual void completedAnimationSequenceNamed (char const * name);
+	function<void()> touch_func;
 	
 private:
 	int touch_priority;

@@ -921,6 +921,7 @@ public:
 		is_play_replay = false;
 		replay_playing_info.clear();
 	}
+	bool is_pvp_event;
 	
 	string getReplayKey(ReplayKey t_key);
 	
