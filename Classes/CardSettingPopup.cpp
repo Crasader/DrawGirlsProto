@@ -261,6 +261,27 @@ bool CardSettingPopup::init()
 	char_menu->setPosition(ccp(290,16));
 	tab_menu->addChild(char_menu);
 	
+	
+	
+	CCSprite* n_card_gacha_img = CCSprite::create("subbutton_violet.png");
+	KSLabelTTF* n_card_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 12.5f);
+	n_card_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	n_card_gacha_label->setPosition(ccpFromSize(n_card_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	n_card_gacha_img->addChild(n_card_gacha_label);
+	
+	CCSprite* s_card_gacha_img = CCSprite::create("subbutton_violet.png");
+	s_char_img->setColor(ccGRAY);
+	KSLabelTTF* s_card_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 12.5f);
+	s_card_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+	s_card_gacha_label->setPosition(ccpFromSize(s_card_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+	s_card_gacha_img->addChild(s_card_gacha_label);
+	
+	
+	CCMenuItem* card_gacha_menu = CCMenuItemSprite::create(n_card_gacha_img, s_card_gacha_img, this, menu_selector(CardSettingPopup::menuAction));
+	card_gacha_menu->setTag(kCSS_MT_cardGacha);
+	card_gacha_menu->setPosition(ccp(50,16));
+	tab_menu->addChild(card_gacha_menu);
+	
 	/*
 	CCSprite* n_strength_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)n_strength_img)->setGray(true);
@@ -1085,6 +1106,10 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 					addChild(t_popup, kCSS_Z_popup);
 				}));
 			}));
+		}
+		else if(tag == kCSS_MT_cardGacha)
+		{
+			is_menu_enable = true;
 		}
 		else if(tag == kCSS_MT_event)
 		{
