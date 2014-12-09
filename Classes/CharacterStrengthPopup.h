@@ -33,6 +33,7 @@ public:
 	
 private:
 	bool is_max;
+	bool is_full;
 	int character_idx;
 	bool is_menu_enable;
 	int touch_priority;

@@ -61,6 +61,7 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	t_after_history = NULL;
 	
 	is_max = false;
+	is_full = false;
 	is_menu_enable = false;
 	touch_priority = t_touch_priority;
 	character_idx = t_character_idx;
@@ -394,7 +395,7 @@ CCTableViewCell* CharacterStrengthPopup::tableCellAtIndex( CCTableView *table, u
 		cell->addChild(t_card_menu);
 		t_card_menu->setTouchPriority(touch_priority-2);
 		
-		if(is_max || t_info->count.getV() - target_count <= 1)
+		if(is_max || is_full || t_info->count.getV() - target_count <= 1)
 		{
 			n_card->setGray(true);
 			s_card->setGray(true);
@@ -779,13 +780,13 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 	int card_number = ((CCNode*)t_sender)->getTag();
 	
 	CCSprite* n_mask = CCSprite::create("cardsetting_mask.png");
-	n_mask->setScale(1.f/0.2f*0.08f);
+	n_mask->setScale(1.f/0.2f*0.076f);
 	CCClippingNode* n_clipping = CCClippingNode::create(n_mask);
 	n_clipping->setAlphaThreshold(0.1f);
 	
 	CCSprite* n_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
 	n_clipping->addChild(n_card);
-	n_card->setScale(0.08f);
+	n_card->setScale(0.076f);
 	
 	CCSprite* n_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, n_card->getContentSize().width*n_card->getScale(), n_card->getContentSize().height*n_card->getScale()));
 	n_clipping->setPosition(ccp(n_node->getContentSize().width/2.f, n_node->getContentSize().height/2.f));
@@ -799,13 +800,13 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 	n_node->addChild(n_exp);
 	
 	CCSprite* s_mask = CCSprite::create("cardsetting_mask.png");
-	s_mask->setScale(1.f/0.2f*0.08f);
+	s_mask->setScale(1.f/0.2f*0.076f);
 	CCClippingNode* s_clipping = CCClippingNode::create(s_mask);
 	s_clipping->setAlphaThreshold(0.1f);
 	
 	CCSprite* s_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
 	s_clipping->addChild(s_card);
-	s_card->setScale(0.08f);
+	s_card->setScale(0.076f);
 	
 	CCSprite* s_node = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, s_card->getContentSize().width*s_card->getScale(), s_card->getContentSize().height*s_card->getScale()));
 	s_clipping->setPosition(ccp(s_node->getContentSize().width/2.f, s_node->getContentSize().height/2.f));
@@ -864,6 +865,8 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																		CCMenuItemSpriteLambda* tt_item = target_item_list[idx];
 																		target_item_list.erase(target_item_list.begin() + idx);
 																		
+																		is_full = false;
+																		
 																		if(target_item_list.size() <= 0)
 																		{
 																			strength_button->setColor(ccGRAY);
@@ -896,13 +899,15 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																								 }));
 																	});
 	t_item->setTag(target_item_list.size());
-	t_item->setPosition(ccp(23 + target_item_list.size()*28, 23.5f));
+	t_item->setPosition(ccp(20 + target_item_list.size()*26.4f, 23.5f));
 	target_menu->addChild(t_item);
 	
 	
 	target_item_list.push_back(t_item);
 	target_card_number_list.push_back(card_number);
 	
+	if(target_card_number_list.size() >= 10)
+		is_full = true;
 	
 	CCPoint t_offset = card_table->getContentOffset();
 	card_table->reloadData();
