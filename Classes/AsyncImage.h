@@ -10,11 +10,12 @@
 #define __DGproto__AsyncImage__
 
 #include "cocos2d.h"
+#include "GraySprite.h"
 
 USING_NS_CC;
 using namespace std;
 
-class AsyncImage : public CCSprite
+class AsyncImage : public GraySprite
 {
 public:
 	static AsyncImage* create(string t_filename, string t_before_filename);

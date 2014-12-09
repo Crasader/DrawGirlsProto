@@ -157,7 +157,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
 				else if(t_mission["type"].asInt() == kCLEAR_turns)
 					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
-				
+				else if(t_mission["type"].asInt() == kCLEAR_casting)
+					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["count"].asInt(), false);
+				else if(t_mission["type"].asInt() == kCLEAR_littlePercent)
+					NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 				
 				
 				Json::Value shopItems = stage_list[i]["shopItems"];
@@ -270,6 +273,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //					}
 					
 					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+					NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 					
 					Json::Value t_imgInfo = t_card["imgInfo"];
 					
@@ -492,6 +496,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //			}
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
@@ -706,6 +711,7 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //			}
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			

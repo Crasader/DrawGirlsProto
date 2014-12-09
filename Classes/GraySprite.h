@@ -24,6 +24,7 @@ public:
     static GraySprite* create(const char* pszFileName);
 	static GraySprite* createWithTexture(CCTexture2D* pTexture);
 	static GraySprite* createWithTexture(CCTexture2D* pTexture, const CCRect& tRect);
+	bool initWithTexture(CCTexture2D* pTexture);
     bool initWithTexture(CCTexture2D* pTexture, const CCRect& tRect);
     void setGray (bool isGray);
 	void setDeepGray(bool isGray);

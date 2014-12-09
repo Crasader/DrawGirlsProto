@@ -190,6 +190,30 @@ class UserIndex extends DBTable2{
 		return $r;
 
 	}
+
+	public static function getNickName2($param){
+		$r = array();
+		for($i=0;$i<count($param);$i++){
+			$p = $param[$i];
+			
+			if($p["type"]=="sno")$user = UserIndex::create($p["find"]);
+			else $user = UserIndex::create(null,null,null,$p["find"]);
+
+			if(!$user->isLoaded()){
+				return ResultState::makeReturn(ResultState::GDDONTFIND,$p["find"]."를 찾을수없습니다.");
+			}
+
+
+			$result["nick"]=$user->nick;
+			$result["memberID"]=$user->memberID;
+			$result["count"]=$p["count"];
+		
+			$r["list"][]=$result;
+		}
+		$r["result"]=ResultState::toArray(ResultState::GDSUCCESS);
+		return $r;
+
+	}
 	
 }
 
@@ -424,6 +448,66 @@ class SendItem extends DBTable2{
 		return $result;
 	}
 
+	public static function updateWithLQForm2($param){
+		$data = $param["data"];
+
+		//LogManager::addLog(json_encode($data));
+
+
+
+		$exchange = new Exchange($data["exchangeID"]);
+
+		if(!$exchange->isLoaded() && $data["exchangeID"])return ResultState::makeReturn(ResultState::GDDONTSAVE,"교환정보 로드실패");
+
+		$result["exchangeID"]=$exchange->id;
+		$result["reward"]=$exchange->list;
+		$rList = array();
+		foreach ($data["memberList"] as $mID => $mdata) {
+			CommitManager::begin($mID);
+			
+			$userInfo = UserData::create($mID);
+
+			if(!$userInfo->isLoaded()){
+				$rList[$mID]=array("result"=>"fail","nick"=>$mdata["nick"]);
+				continue;
+			}
+
+			//선물상자로 지급
+			if($data["sendType"]["type"]=="giftbox"){
+				$param["memberID"]=$mID;
+				$param["sender"]="GM";
+				$param["content"]=$data["sendType"]["message"];
+				$param["data"]=$data["sendType"]["data"];
+				$param["exchangeID"]=$exchange->id;
+				$param["reward"]=$exchange->list;
+				$param["exchangeList"]=array(array("type"=>$param["reward"][0]["type"],"count"=>$mdata["count"]));
+
+				$param["exchangeList"][0]["count"]=$mdata["count"];
+				$sR = commandClass::sendgiftboxhistory($param);
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
+			
+			//바로지급
+			}else{
+
+				$param["memberID"]=$mID;
+				$param["exchangeID"]=$exchange->id;
+				$param["reward"]=$exchange->list;
+				$param["list"]=array(array("type"=>$param["reward"][0]["type"],"count"=>$mdata["count"]));
+				$sR = commandClass::exchange($param);
+				CommitManager::setSuccess($mID,ResultState::successCheck($sR["result"]));
+			}
+
+			if(CommitManager::commit($mID)){
+				$rList[$mID]=array("result"=>"success","nick"=>$mdata["nick"]);
+			}else{
+				$rList[$mID]=array("result"=>"fail","nick"=>$mdata["nick"]);
+			}
+		}
+		$result["list"]=$rList;
+		$result["result"]=ResultState::successToArray("전송되었습니다.");
+		return $result;
+	}
+
 }
 
 class UserData extends DBTable2{
@@ -515,6 +599,7 @@ class UserData extends DBTable2{
 		$data["highPiece"]=$this->highPiece;
 		$data["highScore"]=$this->highScore;
 		$data["introduceCnt"]=$this->introduceCnt;
+		$data["characterNo"]=$this->selectedCharNO;
 		return $data;
 	}
 
@@ -1542,12 +1627,10 @@ class GiftBoxHistory extends DBTable2{
 		self::initial();
 
 		$elist=array();
-		while($rData = self::getRowByQueryWithShardKey("where memberID='".$memberID."' and confirmDate=0",$memberID)){
-	LogManager::addLog("->".mysql_error());
+		while($rData = self::getRowByQueryWithShardKey("where memberID='".$memberID."' and confirmDate=0 and exchangeList=''",$memberID)){
 			if($rData["exchangeID"])$elist[]=$rData["exchangeID"];
 		}
-	LogManager::addLog("->".mysql_error());
-
+	
 		return $elist;
 	}
 
@@ -1556,10 +1639,8 @@ class GiftBoxHistory extends DBTable2{
 
 		//LogManager::addLog("comfirmAll start ".$memberID);
 		$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
-	LogManager::addLog("->".mysql_error());
-		$result = self::getQueryResultWithShardKey("update ".self::getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$memberID."' and confirmDate=0 and regDate>$lastDay and exchangeID<>''",$memberID,false);
+		$result = self::getQueryResultWithShardKey("update ".self::getDBTable()." set confirmDate='".TimeManager::getCurrentDateTime()."' where memberID='".$memberID."' and confirmDate=0 and regDate>$lastDay and exchangeID<>'' and exchangeList=''",$memberID,false);
 		
-	LogManager::addLog("->".mysql_error()."confirmall is".json_encode($result));
 		return $result;
 	}
 
@@ -1785,7 +1866,8 @@ class LoginEvent extends DBTable2{
 		$data=array();
 		$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 		$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
-		$result = LoginEvent::getQueryResult("select ".LoginEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".LoginEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".LoginEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id  where ".LoginEvent::getDBTable().".endDate>".TimeManager::getCurrentDateTime()." and ".LoginEvent::getDBTable().".endTime=235959 and ".LoginEvent::getDBTable().".startTime=0  and ".LoginEvent::getDBTable().".os&".$osBit.">0 and ".LoginEvent::getDBTable().".cc&".$ccBit.">0 limit 3");
+		$storeBit = CurrentUserInfo::getStoreBit(CurrentUserInfo::$store);
+		$result = LoginEvent::getQueryResult("select ".LoginEvent::getDBTable().".*,".Exchange::getDBTable().".list as reward from ".LoginEvent::getDBTable()." left join ".Exchange::getDBTable()." on ".LoginEvent::getDBTable().".exchangeID=".Exchange::getDBTable().".id  where ".LoginEvent::getDBTable().".endDate>".TimeManager::getCurrentDateTime()." and ".LoginEvent::getDBTable().".isSpecialDay=1 and ".LoginEvent::getDBTable().".os&".$osBit.">0 and ".LoginEvent::getDBTable().".cc&".$ccBit.">0  order by ".LoginEvent::getDBTable().".startDate limit 3"); //and ".LoginEvent::getDBTable().".store&".$storeBit.">0
 		LogManager::addLog("error?".mysql_error());
 		// = LoginEvent::getRowByQuery("where endDate>".TimeManager::getCurrentDateTime()." and endTime=235959 and endDate-startDate=235959 limit 3")
 		if(!$result)return $data;
@@ -2751,6 +2833,21 @@ class Shop extends DBTable2{
 
 		parent::__construct();
 
+		self::setLQTableSelectQueryCustomFunction(function ($param){
+			if(!$param["where"])return "";
+
+			if(!$param["where"]["storeID"])return "";
+
+			if($param["where"]["storeID"]=="*")return "";
+
+			if($param["where"]["storeID"]){
+				$storeBit = CurrentUserInfo::getStoreBit($param["where"]["storeID"]);
+				return "where store&".$storeBit.">0";
+			}
+			return "";
+		});
+
+
 		if($pID || $exchangeID){
 			if($pID){
 				$q_where = "pID='".$pID."'";
@@ -3604,21 +3701,36 @@ class EndlessPlayList extends DBTable2{
 
 	public function getPlayDataByRandom($memberID,$lvl=1,$limit=1,$fieldlist="*"){
 		$result = array();
+
+		self::setDBTable("EndlessPlayList_".TimeManager::getCurrentDate());
 		$query = EndlessPlayList::getQueryResult("select ".$fieldlist." from `".EndlessPlayList::getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".EndlessPlayList::getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 
-		
+
 		//LogManager::addLog("select ".$fieldlist." from `".EndlessPlayList::getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".EndlessPlayList::getDBTable()."`) and victory<=".($lvl+1)." and victory>=".($lvl-1)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$limit);
 		
-
-
-		if($query){
 		$check=false;
+		
+		if($query){
 			while($rData = mysql_fetch_assoc($query)){
 				if($check)unset($rData["playData"]);
 				$result[]=$rData;
 				$check=true;
 			}
 		}
+
+		if(count($result)<$limit){
+			self::setDBTable("EndlessPlayList_".TimeManager::getYesterDate());
+			$nlimit = $limit - count($result);
+			$query = EndlessPlayList::getQueryResult("select ".$fieldlist." from `".EndlessPlayList::getDBTable()."` where memberID in (SELECT DISTINCT memberID FROM `".EndlessPlayList::getDBTable()."`) and victory<=".($lvl+5)." and victory>=".($lvl-5)." and memberID <> ".$memberID." ORDER BY RAND() limit ".$nlimit);
+			if($query){
+				while($rData = mysql_fetch_assoc($query)){
+					if($check)unset($rData["playData"]);
+					$result[]=$rData;
+					$check=true;
+				}
+			}
+		}
+
 		//LogManager::addLog("test size is".count($result));
 		self::setDBTable("EndlessPlayList");
 		$i=0;
@@ -3844,7 +3956,8 @@ class MissionEvent extends DBTable2{
 
 		$this->no = $no;
 		if($no){
-			$q_where = "`no`='".$no."'";
+			$today = TimeManager::getCurrentDateTime();
+			$q_where = "`no`='".$no."' and startDate<=".$today." and endDate>=".$today;
 			parent::load($q_where);
 		}else if($type || $value){
 			$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
@@ -4103,6 +4216,23 @@ class Gacha extends DBTable2{
 	public function __construct($no=null,$level=null,$isPremium=false){
 
 		parent::__construct();
+
+		self::setLQTableSelectQueryCustomFunction(function ($param){
+			if(!$param["where"])return "";
+
+			if(!$param["where"]["isPre"])return "";
+
+			if($param["where"]["isPre"]=="*")return "";
+
+			if($param["where"]["isPre"]=="true"){
+				return "where premiumOnly=1";
+			}
+
+			if($param["where"]["isPre"]=="false"){
+				return "where premiumOnly=0";
+			}
+			return "";
+		});
 
 		if($no){
 			$q_where = "no=".$no;

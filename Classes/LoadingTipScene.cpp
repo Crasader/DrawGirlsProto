@@ -1505,6 +1505,98 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			StoryLayer::startStory(this, "mission13",nullptr);
 		}
 	}
+	else if(mission_type == kCLEAR_casting)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition14), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_casting))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_casting, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+//			StoryLayer::startStory(this, "mission13",nullptr);
+		}
+	}
+	else if(mission_type == kCLEAR_littlePercent)
+	{
+		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
+		
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition15), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+		mission_back->addChild(t_condition_label);
+		
+		if(!myDSH->getBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_littlePercent))
+		{
+			CCPoint center_position = ok_item->getPosition();
+			ok_item->setPosition(center_position + ccp(60,0));
+			ok_img->setPosition(center_position + ccp(60,0));
+			
+			no_img = CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1));
+			no_img->setContentSize(CCSizeMake(120, 45));
+			no_img->setPosition(center_position + ccp(-50,0));
+			loading_tip_back->addChild(no_img);
+			no_img->setVisible(false);
+			
+			KSLabelTTF* no_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_noReview), mySGD->getFont().c_str(), 13);
+			no_label->disableOuterStroke();
+			no_label->setPosition(ccpFromSize(no_img->getContentSize()/2.f));
+			no_img->addChild(no_label);
+			
+			CCSprite* n_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			n_no->setOpacity(0);
+			CCSprite* s_no = CCSprite::create("whitePaper.png", CCRectMake(0, 0, no_img->getContentSize().width, no_img->getContentSize().height));
+			s_no->setOpacity(0);
+			
+			CCMenuItemLambda* no_item = CCMenuItemSpriteLambda::create(n_no, s_no, [=](CCObject* sender)
+																	   {
+																		   myDSH->setBoolForKey(kDSH_Key_showedKindTutorial_int1, KindTutorialType::kNewMission_littlePercent, true);
+																		   
+																		   this->ok_menu->setEnabled(false);
+																		   AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+																		   onMinimumTime();
+																	   });
+			no_item->setPosition(center_position + ccp(-50,0));
+			ok_menu->addChild(no_item);
+			
+			
+			//			StoryLayer::startStory(this, "mission13",nullptr);
+		}
+	}
 	
 //	mission_back->setScale(1.5f);
 //	KS::setOpacity(mission_back, 0);
@@ -1780,6 +1872,24 @@ CCNode* LoadingTipScene::getOpenCurtainNode(bool is_gameover)
 			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 			
 			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_casting)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition14), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
+			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
+			mission_back->addChild(t_condition_label);
+		}
+		else if(mission_type == kCLEAR_littlePercent)
+		{
+			int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionPercent_i);
+			
+			StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition15), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 			t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 			t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 			mission_back->addChild(t_condition_label);

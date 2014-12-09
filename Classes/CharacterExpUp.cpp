@@ -24,6 +24,7 @@ CharacterExpUp* CharacterExpUp::create(CharacterHistory t_before_history, Charac
 
 void CharacterExpUp::myInit(CharacterHistory t_before_history, CharacterHistory t_after_history, CCPoint t_base_position)
 {
+	is_max_level = t_before_history.characterLevel.getV() == NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, t_before_history.characterIndex.getV());
 	base_position = t_base_position;
 	
 	setPosition(base_position + ccp(0,27));
@@ -76,7 +77,10 @@ void CharacterExpUp::myInit(CharacterHistory t_before_history, CharacterHistory 
 	int sub_value = exp_value - t_before_history.characterCurrentLevelExp.getV();
 	
 	before_percentage = 100.f*sub_value/sub_base_value;
-	progress_timer->setPercentage(before_percentage);
+	if(is_max_level)
+		progress_timer->setPercentage(100.f);
+	else
+		progress_timer->setPercentage(before_percentage);
 	
 	int after_sub_base_value = t_after_history.characterNextLevelExp.getV() - t_after_history.characterCurrentLevelExp.getV();
 	int after_sub_value = after_exp_value - t_after_history.characterCurrentLevelExp.getV();
@@ -97,6 +101,9 @@ void CharacterExpUp::myInit(CharacterHistory t_before_history, CharacterHistory 
 	exp_label->setPosition(ccp(127,15));
 	back_img->addChild(exp_label);
 	
+	if(is_max_level)
+		exp_label->setString("MAX");
+	
 	setPosition(base_position + ccp(0,back_img->getContentSize().height/2.f));
 	
 	CCMoveTo* t_show = CCMoveTo::create(0.5f, base_position + ccp(0,-back_img->getContentSize().height/2.f));
@@ -116,47 +123,54 @@ void CharacterExpUp::myInit(CharacterHistory t_before_history, CharacterHistory 
 
 void CharacterExpUp::startUpAnimation()
 {
-	if(level == after_level)
+	if(is_max_level)
 	{
-		addChild(KSGradualValue<float>::create(before_percentage, after_percentage, 0.3f, [=](float t_f)
-									  {
-										  progress_timer->setPercentage(t_f);
-									  }, [=](float t_f)
-									  {
-										  progress_timer->setPercentage(t_f);
-									  }));
-		
-		addChild(KSGradualValue<float>::create(/*before_exp, after_exp_value*/before_percentage, after_percentage, 0.3f, [=](float t_f)
-											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
-											 }, [=](float t_f)
-											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
-												 end_func();
-											 }));
+		end_func();
 	}
-	else if(level < after_level)
+	else
 	{
-		addChild(KSGradualValue<float>::create(before_percentage, 100.f, dis_time, [=](float t_f)
-											   {
-												   progress_timer->setPercentage(t_f);
-											   }, [=](float t_f)
-											   {
-												   progress_timer->setPercentage(t_f);
-												   before_percentage = 0.f;
-											   }));
-		
-		addChild(KSGradualValue<float>::create(/*before_exp, before_exp + exp_per_time*dis_time*/before_percentage, 100.f, dis_time, [=](float t_f)
-											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
-											 }, [=](float t_f)
-											 {
-												 exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
-//												 before_exp = t_f;
-												 ++level;
-												 char_level->setString(ccsf(getLocal(LK::kMyLocalKey_levelValue), level));
-												 startUpAnimation();
-											 }));
+		if(level == after_level)
+		{
+			addChild(KSGradualValue<float>::create(before_percentage, after_percentage, 0.3f, [=](float t_f)
+												   {
+													   progress_timer->setPercentage(t_f);
+												   }, [=](float t_f)
+												   {
+													   progress_timer->setPercentage(t_f);
+												   }));
+			
+			addChild(KSGradualValue<float>::create(/*before_exp, after_exp_value*/before_percentage, after_percentage, 0.3f, [=](float t_f)
+												   {
+													   exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
+												   }, [=](float t_f)
+												   {
+													   exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
+													   end_func();
+												   }));
+		}
+		else if(level < after_level)
+		{
+			addChild(KSGradualValue<float>::create(before_percentage, 100.f, dis_time, [=](float t_f)
+												   {
+													   progress_timer->setPercentage(t_f);
+												   }, [=](float t_f)
+												   {
+													   progress_timer->setPercentage(t_f);
+													   before_percentage = 0.f;
+												   }));
+			
+			addChild(KSGradualValue<float>::create(/*before_exp, before_exp + exp_per_time*dis_time*/before_percentage, 100.f, dis_time, [=](float t_f)
+												   {
+													   exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
+												   }, [=](float t_f)
+												   {
+													   exp_label->setString(ccsf(getLocal(LK::kMyLocalKey_expN_M), t_f/*KS::insert_separator(t_f, "%.0f").c_str(), KS::insert_separator(after_max_exp_value).c_str()*/));
+													   //												 before_exp = t_f;
+													   ++level;
+													   char_level->setString(ccsf(getLocal(LK::kMyLocalKey_levelValue), level));
+													   startUpAnimation();
+												   }));
+		}
 	}
 }
 

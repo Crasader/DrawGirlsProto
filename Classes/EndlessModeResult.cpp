@@ -1373,7 +1373,7 @@ void EndlessModeResult::setMain()
 			win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 			result_stamp->addChild(win_label);
 			
-			CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
+			CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getSupportLocalCode())->getCString());
 			win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
 			result_stamp->addChild(win_ment);
 			
@@ -1559,7 +1559,7 @@ void EndlessModeResult::startCalcAnimation()
 																									  win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 																									  result_stamp->addChild(win_label);
 																									  
-																									  CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
+																									  CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getSupportLocalCode())->getCString());
 																									  win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
 																									  result_stamp->addChild(win_ment);
 																									  
@@ -2842,6 +2842,7 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		TRACE();
+		mySGD->is_pvp_event = result_data["isEvent"].asBool();
 		mySGD->resetReplayPlayingInfo();
 		
 		if(!result_data["rival"]["playData"].isNull())
@@ -2922,6 +2923,10 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
 	else if(t_mission["type"].asInt() == kCLEAR_turns)
 		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_casting)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["count"].asInt(), false);
+	else if(t_mission["type"].asInt() == kCLEAR_littlePercent)
+		NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 	
 	
 	Json::Value shopItems = result_data["shopItems"];
@@ -3034,6 +3039,7 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 //		}
 		
 		NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+		NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 		
 		Json::Value t_imgInfo = t_card["imgInfo"];
 		

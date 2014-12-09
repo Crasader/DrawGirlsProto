@@ -191,6 +191,10 @@ enum GoodsType
 	kGoodsType_pass6,
 	kGoodsType_pass7,
 	kGoodsType_pass8,
+	kGoodsType_pass9,
+	kGoodsType_pass10,
+	kGoodsType_pass11,
+	kGoodsType_pass12,
 	kGoodsType_heart,
 	kGoodsType_end,
 	kGoodsType_pz,
@@ -237,9 +241,11 @@ enum UserdataType
 	kUserdataType_highPiece,
 	kUserdataType_onlyOneBuyPack,
 	kUserdataType_characterLevel,
+	kUserdataType_joinDate,
 	
 	kUserdataType_endlessData_ingWin,
 	kUserdataType_endlessData_ingWeek,
+	kUserdataType_endlessData_victory,
 	kUserdataType_endlessData_score,
 	
 	kUserdataType_achieve_mapGacha,
@@ -516,6 +522,8 @@ public:
 	
 	int getHasGottenCardsSize();
 	
+	void refreshCardData(Json::Value t_data);
+	
 	int getDoubleItemValue();
 	int getLongTimeValue();
 	int getBaseSpeedUpValue();
@@ -573,6 +581,7 @@ public:
 	void setCharacterHistory(CharacterHistory t_history, jsonSelType call_back);
 	void initCharacterHistory(Json::Value history_list);
 	void resultUpdateCharacterHistory(Json::Value result_data);
+	void refreshCharacterHistory(Json::Value t_data);
 	
 	int getClearStarCount();
 	
@@ -587,11 +596,11 @@ public:
 	
 	void setBonusItemCnt(ITEM_CODE t_code, int t_cnt)
 	{
-		bonus_item_cnt[t_code] = t_cnt;
+		bonus_item_cnt[int(t_code)] = t_cnt;
 	}
 	int getBonusItemCnt(ITEM_CODE t_code)
 	{
-		return bonus_item_cnt[t_code].getV();
+		return bonus_item_cnt[int(t_code)].getV();
 	}
 	
 	void resetNoticeList(Json::Value t_notice_list);
@@ -743,6 +752,7 @@ public:
 	void setUserdataEndlessIngWeek(int t_i);
 	int getUserdataEndlessIngWeek();
 	int getUserdataEndlessScore();
+	int getUserdataEndlessVictory();
 	
 	void setUserdataAchieveMapGacha(int t_i);
 	int getUserdataAchieveMapGacha();
@@ -911,6 +921,7 @@ public:
 		is_play_replay = false;
 		replay_playing_info.clear();
 	}
+	bool is_pvp_event;
 	
 	string getReplayKey(ReplayKey t_key);
 	
@@ -1072,6 +1083,8 @@ public:
 	Json::Value hell_balance;
 	
 	bool antiApple();
+	
+	string join_date;
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;
@@ -1301,6 +1314,10 @@ private:
 	COMMON_VAR_STR(goldBalance, GoldBalance);
 	COMMON_VAR_STR(pvpLeadMent, PvpLeadMent);
 	COMMON_VAR_STR(hellLeadMent, HellLeadMent);
+	
+	COMMON_VAR(int, goldPerExp, GoldPerExp);
+	COMMON_VAR_STR(exchangeIDForGold, ExchangeIDForGold);
+	COMMON_VAR_STR(exchangeIDForPass, ExchangeIDForPass);
 };
 
 #endif

@@ -26,22 +26,29 @@ ClearShowTime* ClearShowTime::create( bool t_exchanged, bool t_is, CCNode* t_gam
 
 void ClearShowTime::visit()
 {
-	glEnable(GL_SCISSOR_TEST);
-
-	int viewport [4];
-	glGetIntegerv (GL_VIEWPORT, viewport);
-	CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
-	float wScale = viewport[2] / rSize.width;
-	float hScale = viewport[3] / rSize.height;
-	float x = view_rect.origin.x*wScale + viewport[0];
-	float y = view_rect.origin.y*hScale + viewport[1];
-	float w = view_rect.size.width*wScale;
-	float h = view_rect.size.height*hScale;
-	glScissor(x,y,w,h);
-
-	CCNode::visit();
-
-	glDisable(GL_SCISSOR_TEST);
+	if(!is_end_schedule)
+	{
+		glEnable(GL_SCISSOR_TEST);
+		
+		int viewport [4];
+		glGetIntegerv (GL_VIEWPORT, viewport);
+		CCSize rSize = CCEGLView::sharedOpenGLView()->getDesignResolutionSize(); // getSize
+		float wScale = viewport[2] / rSize.width;
+		float hScale = viewport[3] / rSize.height;
+		float x = view_rect.origin.x*wScale + viewport[0];
+		float y = view_rect.origin.y*hScale + viewport[1];
+		float w = view_rect.size.width*wScale;
+		float h = view_rect.size.height*hScale;
+		glScissor(x,y,w,h);
+		
+		CCNode::visit();
+		
+		glDisable(GL_SCISSOR_TEST);
+	}
+	else
+	{
+		CCNode::visit();
+	}
 }
 
 void ClearShowTime::startClearView(CCPoint t_p)
@@ -67,21 +74,22 @@ void ClearShowTime::addViewHeight()
 	{
 		unschedule(schedule_selector(ClearShowTime::addViewHeight));
 
-		int remove_target = 0;
-		while(game_node->getChildrenCount() <= 1)
-		{
-			CCNode* t_target = (CCNode*)game_node->getChildren()->objectAtIndex(remove_target);
-			if(t_target == this)
-			{
-				remove_target++;
-			}
-			else
-			{
-				game_node->removeChild(t_target, true);
-			}
-		}
+//		int remove_target = 0;
+//		while(game_node->getChildrenCount() <= 1)
+//		{
+//			CCNode* t_target = (CCNode*)game_node->getChildren()->objectAtIndex(remove_target);
+//			if(t_target == this)
+//			{
+//				remove_target++;
+//			}
+//			else
+//			{
+//				game_node->removeChild(t_target, true);
+//			}
+//		}
 
 		changeScene();
+		is_end_schedule = true;
 //		CCDelayTime* t_delay = CCDelayTime::create(1.5f);
 //		CCCallFunc* t_call = CCCallFunc::create(this, callfunc_selector(ClearShowTime::changeScene));
 //		CCSequence* t_seq = CCSequence::createWithTwoActions(t_delay, t_call);
@@ -91,6 +99,7 @@ void ClearShowTime::addViewHeight()
 
 void ClearShowTime::myInit( bool t_exchanged, bool t_is, CCNode* t_game_node, CCObject* t_changeScene, SEL_CallFunc d_changeScene )
 {
+	is_end_schedule = false;
 	is_showtime = t_is;
 	game_node = t_game_node;
 	target_changeScene = t_changeScene;

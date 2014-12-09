@@ -206,6 +206,7 @@ void ChargeNodeLambda::charging()
 	{
 		//AudioEngine::sharedInstance()->stopEffect("se_castmissile.mp3");
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_attack.mp3");
+		myGD->communication("UI_setIsCasting", false);
 		actionFunction(real_target);
 		
 		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
@@ -331,6 +332,7 @@ void SpecialChargeNodeLambda::charging()
 	if(charge_cnt >= charge_frame)
 	{
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_option.mp3");
+		myGD->communication("UI_setIsCasting", false);
 		actionFunction(real_target);
 		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		removeSelf();
@@ -463,6 +465,7 @@ void CrashChargeNodeLambda::charging()
 		//			myGD->communication("CP_setCasting", false);
 		AudioEngine::sharedInstance()->stopAllEffects();
 //		AudioEngine::sharedInstance()->stopEffect("sound_casting_crash.mp3");
+		myGD->communication("UI_setIsCasting", false);
 		actionFunction(real_target);
 		myGD->communication("Jack_showPatternEffect", m_pattern["pattern"].asInt());
 		CCLOG("removeSelf call");

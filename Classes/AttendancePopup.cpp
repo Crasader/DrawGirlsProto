@@ -536,6 +536,22 @@ string AttendancePopup::getGoodsTypeLocalData(string t_type)
 	{
 		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass8);
 	}
+	else if(t_goods == kGoodsType_pass9)
+	{
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass9);
+	}
+	else if(t_goods == kGoodsType_pass10)
+	{
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass10);
+	}
+	else if(t_goods == kGoodsType_pass11)
+	{
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass11);
+	}
+	else if(t_goods == kGoodsType_pass12)
+	{
+		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypePass12);
+	}
 	else
 	{
 		return_value = myLoc->getLocalForKey(LK::kMyLocalKey_attendanceGoodsTypeMany);
@@ -619,6 +635,26 @@ CCNode* AttendancePopup::getGoodsNode(string t_type, CCPoint base_position)
 		return_node = CCSprite::create("icon_p8.png");
 		return_node->setPosition(base_position + ccp(0,-2));
 	}
+	else if(t_goods == kGoodsType_pass9)
+	{
+		return_node = CCSprite::create("icon_p9.png");
+		return_node->setPosition(base_position + ccp(0,-2));
+	}
+	else if(t_goods == kGoodsType_pass10)
+	{
+		return_node = CCSprite::create("icon_p10.png");
+		return_node->setPosition(base_position + ccp(0,-2));
+	}
+	else if(t_goods == kGoodsType_pass11)
+	{
+		return_node = CCSprite::create("icon_p11.png");
+		return_node->setPosition(base_position + ccp(0,-2));
+	}
+	else if(t_goods == kGoodsType_pass12)
+	{
+		return_node = CCSprite::create("icon_p12.png");
+		return_node->setPosition(base_position + ccp(0,-2));
+	}
 	else if(t_goods == kGoodsType_heart)
 	{
 		return_node = CCSprite::create("icon_h.png");
@@ -694,6 +730,22 @@ CCSprite* AttendancePopup::getGoodsType(string t_type)
 	else if(t_goods == kGoodsType_pass8)
 	{
 		return_node = CCSprite::create("icon_p8.png");
+	}
+	else if(t_goods == kGoodsType_pass9)
+	{
+		return_node = CCSprite::create("icon_p9.png");
+	}
+	else if(t_goods == kGoodsType_pass10)
+	{
+		return_node = CCSprite::create("icon_p10.png");
+	}
+	else if(t_goods == kGoodsType_pass11)
+	{
+		return_node = CCSprite::create("icon_p11.png");
+	}
+	else if(t_goods == kGoodsType_pass12)
+	{
+		return_node = CCSprite::create("icon_p12.png");
 	}
 	else if(t_goods == kGoodsType_heart)
 	{
@@ -821,6 +873,46 @@ CCNode* AttendancePopup::getGoodsSmallNodeAndCount(string t_type, int t_count)
 	else if(t_goods == kGoodsType_pass8)
 	{
 		CCSprite* t_icon = CCSprite::create("icon_p8.png");
+		t_icon->setScale(0.6f);
+		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
+		return_node->addChild(t_icon);
+		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
+	}
+	else if(t_goods == kGoodsType_pass9)
+	{
+		CCSprite* t_icon = CCSprite::create("icon_p9.png");
+		t_icon->setScale(0.6f);
+		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
+		return_node->addChild(t_icon);
+		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
+	}
+	else if(t_goods == kGoodsType_pass10)
+	{
+		CCSprite* t_icon = CCSprite::create("icon_p10.png");
+		t_icon->setScale(0.6f);
+		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
+		return_node->addChild(t_icon);
+		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
+	}
+	else if(t_goods == kGoodsType_pass11)
+	{
+		CCSprite* t_icon = CCSprite::create("icon_p11.png");
+		t_icon->setScale(0.6f);
+		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
+		return_node->addChild(t_icon);
+		return_node->addChild(count_label);
+		t_icon->setPosition(ccp(-count_label->getContentSize().width/2.f-3, 0));
+		count_label->setPosition(ccp(t_icon->getContentSize().width*t_icon->getScale()/2.f-3, 0));
+	}
+	else if(t_goods == kGoodsType_pass12)
+	{
+		CCSprite* t_icon = CCSprite::create("icon_p12.png");
 		t_icon->setScale(0.6f);
 		KSLabelTTF* count_label = KSLabelTTF::create(KS::insert_separator(ccsf("%d", t_count)).c_str(), mySGD->getFont().c_str(), 10);
 		return_node->addChild(t_icon);

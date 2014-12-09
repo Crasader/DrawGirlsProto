@@ -5,7 +5,7 @@ void KsLocal::initLocal()
 {	
 	ko();
 	en();
-	ja();
+//	ja();
 }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -32,7 +32,7 @@ const char* KsLocal::getSupportLocalCode()
 	
 	if(!supportable)
 	{
-		languageType = "en";
+		languageType = "ko";
 	}
 	
 	return languageType.c_str();
@@ -40,11 +40,12 @@ const char* KsLocal::getSupportLocalCode()
 
 const char* KsLocal::getLocalForKey( LK key )
 {
-	languageType = "ko";// getSupportLocalCode();
+//	languageType = "ko";// getSupportLocalCode();
+	languageType = getSupportLocalCode();
 	
 	vector<string> langTypes;
 	langTypes.push_back(languageType);
-	vector<string> entries = {"en", "ja", "ko"};
+	vector<string> entries = {"en", /*"ja", */"ko"};
 	langTypes.insert(langTypes.end(), entries.begin(), entries.end());
 	for(auto& lang : langTypes)
 	{
@@ -1274,6 +1275,38 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
+	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
+	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
+	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
+	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
+	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
+	obj[LK::kMyLocalKey_mission14Label] = "/%d회";
+	obj[LK::kMyLocalKey_mission15Label] = "%d%%이하";
+	obj[LK::kMyLocalKey_strengthen] = "강화";
+	obj[LK::kMyLocalKey_materialCard] = "재료카드";
+	obj[LK::kMyLocalKey_strengthenCharacter] = "강화 캐릭터";
+	obj[LK::kMyLocalKey_selectedCardList] = "선택된 카드 목록";
+	obj[LK::kMyLocalKey_10cardsStrengthenPossibleAtOne] = "한번에 10장까지 강화 가능합니다.";
+	obj[LK::kMyLocalKey_maybeStrengthenExp] = "예상강화\n경험치";
+	obj[LK::kMyLocalKey_doStrengthen] = "강화하기";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass9] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass10] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass11] = "티켓";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass12] = "티켓";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass9] = "<font newline=15>카드뽑기권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass10] = "<font newline=15>캐릭강화권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass11] = "<font newline=15>카드합성권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass12] = "<font newline=15>쩌리권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass9] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass10] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
+	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2474,6 +2507,38 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
+	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
+	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
+	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
+	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
+	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
+	obj[LK::kMyLocalKey_mission14Label] = "/%d회";
+	obj[LK::kMyLocalKey_mission15Label] = "%d%%이하";
+	obj[LK::kMyLocalKey_strengthen] = "강화";
+	obj[LK::kMyLocalKey_materialCard] = "재료카드";
+	obj[LK::kMyLocalKey_strengthenCharacter] = "강화 캐릭터";
+	obj[LK::kMyLocalKey_selectedCardList] = "선택된 카드 목록";
+	obj[LK::kMyLocalKey_10cardsStrengthenPossibleAtOne] = "한번에 10장까지 강화 가능합니다.";
+	obj[LK::kMyLocalKey_maybeStrengthenExp] = "예상강화\n경험치";
+	obj[LK::kMyLocalKey_doStrengthen] = "강화하기";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass9] = "Ticket";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass10] = "Ticket";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass11] = "Ticket";
+	obj[LK::kMyLocalKey_rankRewardGoodsTypePass12] = "Ticket";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass9] = "<font newline=15>카드뽑기권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass10] = "<font newline=15>캐릭강화권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass11] = "<font newline=15>카드합성권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass12] = "<font newline=15>쩌리권을 %d개를 드립니다.";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass9] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass10] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
+	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
+	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

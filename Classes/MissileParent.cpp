@@ -239,7 +239,6 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int subType = mInfo.get("subType", 1).asInt();
-	stoneType = StoneType::kStoneType_range;
 //	stoneType = StoneType::kStoneType_guided;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
@@ -679,9 +678,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																											 nx - myGD->getJackPointCCP().x),// 방향
 																								1.2f, // 속도
 																								mNumber, // 개수
-																								M_PI / 180.f * 10.f,
-																								level,
-																								power, missile_sub_damage, ao);
+																								M_PI / 180.f * 10.f, power, missile_sub_damage, ao);
 					//		ms->beautifier(level);
 					jack_missile_node->addChild(ms);
 				};
@@ -697,85 +694,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		}));
 		
 	}
-	else if(stoneType == StoneType::kStoneType_boomerang)
-	{
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		int subType = mInfo.get("subType", 1).asInt();
-		
-		//		level = 1;
-		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-		
-		
-		
-		
-//		missileNumbersInt *= 3;
-		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
-		float ny = nearCumber->getPosition().y;
-		float nx = nearCumber->getPosition().x;
-		
-		auto creator = [=](){
-			Boomerang::Params params;
-			params.initPosition = myGD->getJackPointCCP();
-			params.goalPosition = ccp(nx, ny);
-			params.centerSpeed = 1.5f;
-			params.subPower = missile_sub_damage;
-			params.power = power;
-			params.numbers = 10; // 10개.
-			params.revelutionA = 20.f;
-			params.fileName = fileName;
-			params.ao = ao;
-			
-			Boomerang* ms = Boomerang::create(params);
-			jack_missile_node->addChild(ms);
-		};
-		if(myGD->getIsGameover() == false)
-		{
-			creator();
-		}
-	
 
-		
-	}
-	else if(stoneType == StoneType::kStoneType_chain)
-	{
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		int subType = mInfo.get("subType", 1).asInt();
-		
-		//		level = 1;
-		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-		
-		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
-		float ny = nearCumber->getPosition().y;
-		float nx = nearCumber->getPosition().x;
-		
-		auto creator = [=](){
-			Chain::Params params;
-
-			
-			
-			params.initPosition = myGD->getJackPointCCP();
-			params.fileName = fileName;
-			params.depth = 3;
-			params.chainDistance = 100;
-			
-			params.subPower = missile_sub_damage;
-			params.speed = 3.f;
-			params.power = power;
-			params.ao = ao;
-			params.level = level;
-			
-			Chain* ms = Chain::create(params);
-			jack_missile_node->addChild(ms);
-		};
-		if(myGD->getIsGameover() == false)
-		{
-			creator();
-		}
-	
-	}
-	
 }
 AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 { 
@@ -1033,48 +952,6 @@ KSCumberBase* MissileParent::getNearestCumber(cocos2d::CCPoint pt)
 	}
 	return nearCumber;
 }
-KSCumberBase* MissileParent::getNearestCumberWithExclude(cocos2d::CCPoint pt, const std::vector<KSCumberBase*>& exclude)
-{
-	KSCumberBase* target = nullptr;
-	std::vector<KSCumberBase*> targets;
-	targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
-	targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-	
-	
-	// exclude 에 있는것들 다 뺌
-	for(auto iter = exclude.begin(); iter != exclude.end(); ++iter)
-	{
-		auto removeIter = find(targets.begin(), targets.end(), *iter);
-		if(removeIter != targets.end())
-		{
-			targets.erase(removeIter);
-		}
-	}
-	if(targets.empty() == true)
-	{
-		return nullptr;
-	}
-	target = targets[ks19937::getIntValue(0, targets.size() - 1)];
-	
-	CCPoint minDis = ccp(99999, 99999);
-	KSCumberBase* nearCumber = target;
-	for(auto cumber : targets)
-	{
-		IntPoint ip = ccp2ip(cumber->getPosition());
-		if(myGD->mapState[ip.x][ip.y] != mapEmpty)
-			continue;
-		CCPoint nowDis = cumber->getPosition()-pt;
-		if(cumber->getDeadState() == false)
-		{
-			if(ccpLength(nowDis)<ccpLength(minDis))
-			{
-				nearCumber=cumber;
-				minDis = nowDis;
-			}
-		}
-	}
-	return nearCumber;
-}
 void MissileParent::subOneDie()
 {
 	vector<KSCumberBase*> subCumberArray = myGD->getSubCumberVector();
@@ -1223,7 +1100,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 	std::string atype = patternData["atype"].asString();
 	auto castBranch = [=](const std::string atype, std::function<void(CCObject*)> func, const std::string& warningFileName)
 	{
-		// 캐스팅 시작시
+		myGD->communication("UI_setIsCasting", true);
 		if(atype == "crash")
 		{
 			CrashChargeNodeLambda* t_ccn =
@@ -2368,7 +2245,6 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->I_V["MP_getJackMissileCnt"] = std::bind(&MissileParent::getJackMissileCnt, this);
 	myGD->removeAllPattern = std::bind(&MissileParent::removeAllPattern, this);
 	myGD->getNearestCumber = std::bind(&MissileParent::getNearestCumber, this, _1);
-	myGD->getNearestCumberWithExclude = std::bind(&MissileParent::getNearestCumberWithExclude, this, _1, _2);
 }
 
 void MissileParent::removeChargeInArray( CCObject* remove_charge )

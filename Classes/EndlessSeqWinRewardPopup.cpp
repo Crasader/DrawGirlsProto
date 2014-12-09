@@ -194,6 +194,22 @@ string EndlessSeqWinRewardPopup::getRewardString(string t_type, int t_count)
 	{
 		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass8), t_count);
 	}
+	else if(goods_type == kGoodsType_pass9)
+	{
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass9), t_count);
+	}
+	else if(goods_type == kGoodsType_pass10)
+	{
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass10), t_count);
+	}
+	else if(goods_type == kGoodsType_pass11)
+	{
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass11), t_count);
+	}
+	else if(goods_type == kGoodsType_pass12)
+	{
+		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass12), t_count);
+	}
 	else
 	{
 		return_value = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeMany), t_count);
@@ -285,6 +301,30 @@ CCNode* EndlessSeqWinRewardPopup::getRewardNode(string t_type)
 	else if(goods_type == kGoodsType_pass8)
 	{
 		CCSprite* t_img = CCSprite::create("icon_p8.png");
+		t_img->setScale(1.f*1.5f);
+		return_node->addChild(t_img);
+	}
+	else if(goods_type == kGoodsType_pass9)
+	{
+		CCSprite* t_img = CCSprite::create("icon_p9.png");
+		t_img->setScale(1.f*1.5f);
+		return_node->addChild(t_img);
+	}
+	else if(goods_type == kGoodsType_pass10)
+	{
+		CCSprite* t_img = CCSprite::create("icon_p10.png");
+		t_img->setScale(1.f*1.5f);
+		return_node->addChild(t_img);
+	}
+	else if(goods_type == kGoodsType_pass11)
+	{
+		CCSprite* t_img = CCSprite::create("icon_p11.png");
+		t_img->setScale(1.f*1.5f);
+		return_node->addChild(t_img);
+	}
+	else if(goods_type == kGoodsType_pass12)
+	{
+		CCSprite* t_img = CCSprite::create("icon_p12.png");
 		t_img->setScale(1.f*1.5f);
 		return_node->addChild(t_img);
 	}

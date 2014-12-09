@@ -334,6 +334,8 @@ std::string SilhouetteData::getConditionTitle()
 	else if(my_clear_condition == kCLEAR_combo)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle11);
 	else if(my_clear_condition == kCLEAR_gold)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle12);
 	else if(my_clear_condition == kCLEAR_turns)				return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle13);
+	else if(my_clear_condition == kCLEAR_casting)			return_value = getLocal(LK::kMyLocalKey_missionTitle14);
+	else if(my_clear_condition == kCLEAR_littlePercent)		return_value = getLocal(LK::kMyLocalKey_missionTitle15);
 	else													return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionTitle0);
 
 	return return_value;
@@ -363,6 +365,8 @@ std::string SilhouetteData::getConditionContent( int t_type )
 	else if(t_type == kCLEAR_combo)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription11);
 	else if(t_type == kCLEAR_gold)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription12);
 	else if(t_type == kCLEAR_turns)					return_value = myLoc->getLocalForKey(LK::kMyLocalKey_missionDiscription13);
+	else if(t_type == kCLEAR_casting)				return_value = getLocal(LK::kMyLocalKey_missionDiscription14);
+	else if(t_type == kCLEAR_littlePercent)			return_value = getLocal(LK::kMyLocalKey_missionDiscription15);
 	else
 	{
 		if(mySGD->isTimeEvent(kTimeEventType_clear))

@@ -1,9 +1,10 @@
 <?php
 include "header.php";
 $stopCommand = true;
-
-include "../command/cmd2_help.php";
-include "../command/cmd2.php";
+$version=$_GET["version"];
+if(!$version)$version=2;
+include "../command/cmd".$version."_help.php";
+include "../command/cmd".$version.".php";
 
 
 ?>
@@ -47,7 +48,7 @@ $(document).ready(function(){
 	$('body').on('click','.doAction',function(){
 		var api = $(".custom-combobox-input").val();
 		var pdata = getLQEditorValue("p");
-		var param = {"mode":"nodes","version":"2","gid":gid};
+		var param = {"mode":"nodes","version":<?=$version?>,"gid":gid};
 		var apiurl = "../data.php";
 
 		param["a"]=j2s(api);
@@ -234,6 +235,10 @@ $(document).ready(function(){
   </script>
 
 <center>
+현재버전 : <?=$version?> / 
+<a href=admin_apiTest.php?version=2>graphdog ver2</a> / 
+<a href=admin_apiTest.php?version=3>graphdog ver3</a>
+<br>
  <table class="LQDataEditor" border=1 width=50%>
  	<tr>
  		<td colspan=2>

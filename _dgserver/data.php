@@ -44,7 +44,8 @@ if($mode){
 	
 }
 
-include "command/cmd2.php";
+if($version)include "command/cmd".$version.".php";
+else include "command/cmd2.php";
 
 // if($version)include "command/cmd".$version.".php";
 // else include "command/cmd1.php";

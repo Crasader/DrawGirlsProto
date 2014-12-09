@@ -1140,9 +1140,10 @@ void ClearPopup::resultGetRank(Json::Value result_data)
 				{
 					changedRankLbl = ccsf("▼   %d", before_stage_high_rank - myrank);
 				}
-				KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 12);
+				KSLabelTTF* changedRank = KSLabelTTF::create(changedRankLbl.c_str(), mySGD->getFont().c_str(), 14);
 				changedRank->setPosition(ccpFromSize(t_list_cell_case_back->getContentSize()) / 2.f);
-				changedRank->setColor(ccc3(255, 179, 0));
+				changedRank->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+				changedRank->enableOuterStroke(ccBLACK, 1.5f, int(255*0.7f), true);
 				t_list_cell_case_back->addChild(changedRank);
 				
 				float flipDelay = 3.f;

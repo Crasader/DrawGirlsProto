@@ -77,7 +77,7 @@ $(document).ready(function(){
 		<th field='profile' viewer='{"type":"text"}' editor='{"type":"textarea"}' >profile</th>
 		<th field='mPrice' viewer='{"type":"text"}' editor='{"type":"dictionary","element":[{"field":"r","type":"text","datatype":"int"},{"field":"p6","type":"text","datatype":"int"}]}' >mPrice</th>
 		<th field='category' viewer='{"type":"text"}' editor='{"type":"select","element":["normal","nPuzzle","special","event","ePuzzle","gift","leader"]}' >category</th>
-		<th field='type' viewer='{"type":"text"}' editor='{"type":"select","element":["음","양","섬"],"value":[1,2,3]}' >type</th>
+		<th field='type' viewer='{"type":"text"}' editor='{"type":"select","element":["음","양","섬"],"value":[0,1,2]}' >type</th>
 		<th field='level' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >level</th>
 		<th field='characterNo' viewer='{"type":"text"}' editor='{"type":"text","datatype":"int"}' >characterNo</th>
 		<th field='sound' viewer='{"type":"text"}' editor='{"type":"array","element":{"type":"text"}}' >sound</th>

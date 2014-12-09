@@ -45,6 +45,21 @@ e.table
 	VARIABLEKEY - dictionary에서 key명은 유저가 정하면서 형식이 정해진 필드를 추가할경우, dictionary 옵션의 field에 사용
 */
 
+var exportToCsv = function(linkObj,data) {
+
+    var str;
+    var orderedData = [];
+    
+    for(var i = 0; i < data.length; i++) {
+        orderedData.push(data[i].join(','));
+    }    
+
+    str = orderedData.join('\r\n');
+    var uri = 'data:application/csv;charset=UTF-8,' + encodeURI(str);
+    //window.open(uri);
+
+    linkObj.attr({'href':uri,"download":filename});
+}
 
 var timeToDate = function (timestamp, fmt) {
 	fmt = fmt || "%Y/%M/%d %H:%m:%s"
@@ -2080,6 +2095,37 @@ $('body').on('click','.LQLoadNext',function(){
 });
 
 
+$('body').on('click','.LQSaveCSVBtn',function(){
+		var linkObj=$(this);
+		var table = getDataTable($(this).attr("tableName"));
+		var resultData = []
+		var cnt = 0
+		resultData[cnt] = [];
+		table.find("th").each(function(index,item){
+			if($(this).attr("manage")==undefined){
+				resultData[cnt].push($(this).html())
+			}
+		});
+
+		cnt++;
+		resultData[cnt] = [];
+		table.find("tbody[datazone]").find("tr").each(function(index,item){
+			var trData = s2j($(this).attr("data"));
+			$(this).find(".LQDataCell").each(function(index,item){
+				var fname = $(this).attr("field");
+				resultData[cnt].push(""+trData[fname]);
+			});
+			cnt++;
+			resultData[cnt] = [];
+		});
+
+		log(resultData);
+		var today = new Date();
+		var todaystr = today.getFullYear()+""+today.getMonth()+today.getDate()+today.getHours()+today.getMinutes();
+
+		filename =table.attr("dbClass")+todaystr+".csv"
+		exportToCsv(linkObj,resultData,filename);
+});
 
 ////////////////////////////////// init ////////////////////////
 

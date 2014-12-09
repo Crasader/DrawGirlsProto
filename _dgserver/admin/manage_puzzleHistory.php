@@ -9,7 +9,9 @@
 	}
 ?>
 <script>
-	var loadFunc = function(table,data){
+
+
+	var loadFunc = function(table,data,filename){
 		var defaultData = s2j(table.attr("defaultData"));
 		if(typeof(defaultData)=="undefined")defaultData={};
 
@@ -18,6 +20,7 @@
 		} 
 
 		table.attr("defaultData",j2s(defaultData));
+
 	}
 
 $(document).ready(function(){
@@ -33,6 +36,8 @@ $(document).ready(function(){
 		dataview.attr("dbWhere",'{"type":"'+selectType+'","id":"'+id+'"}');
 		loadDataTable(dataview);
 	});
+
+	
 });
 
 </script>
@@ -56,7 +61,13 @@ $(document).ready(function(){
 		</td></tr></table>
 </div>
 <br><br>
-<h2 id="tables-contextual-classes">|퍼즐내역조회</h2>
+
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|보유퍼즐</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="PuzzleHistory" autoLoad="false" dbWhere='{}' dbLimit="50" dbSort='{"no":"desc"}' name="datatable" border=1  commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

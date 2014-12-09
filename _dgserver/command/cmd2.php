@@ -368,7 +368,7 @@ public static function getcharacterlist($p){
 	
 	
 	$list = array();
-	while($charInfo = Character::getRowByQuery("order by `serial` asc")){
+	while($charInfo = Character::getRowByQuery("where serial<1000 order by `serial` asc")){
 			$charInfo[purchaseInfo]=json_decode($charInfo[purchaseInfo],true);
 			$charInfo[statInfo]=json_decode($charInfo[statInfo],true);
 			$charInfo[resourceInfo]=json_decode($charInfo[resourceInfo],true);
@@ -403,6 +403,7 @@ public static function getshoplist($p){
 	if($storeID=="TS")$storeID="tstore";
 	if($storeID=="KS")$storeID="google";
 	if($storeID=="AS")$storeID="apple";
+	if($storeID=="NA")$storeID="nstore";
 
 	$listVer = kvManager::get("shopListVer",1);
 	
@@ -1077,8 +1078,6 @@ public static function join($p){
 	}else{
 		CommitManager::commit($memberID);
 	}
-
-
 
 	return ResultState::makeReturn(1001);
 }
@@ -1765,7 +1764,6 @@ public static function getstagerankbyalluser($p){
 
 	$r["isMax"]=false;
 
-	LogManager::addLog("check my score");
 	
 	if($myscore){
 		//피스클리어
@@ -1782,7 +1780,6 @@ public static function getstagerankbyalluser($p){
 		self::checkmissionevent($cmP);
 
 		if($myRank->score<$myscore){
-			LogManager::addLog("is max! prev:".$myRank->score."- now:".$myscore);
 			$r["isMax"]=true;
 			$myRank->score = $myscore;
 			$myRank->save();
@@ -2802,7 +2799,7 @@ public static function getgiftboxhistory($p){
 			if($rData["exchangeList"]){
 				$rData["exchangeList"] = json_decode($rData["exchangeList"],true);
 				$rData["reward"] = Exchange::mergeCustom($rData["reward"],$rData["exchangeList"]);
-				unset($rData["exchangeList"]);
+				//unset($rData["exchangeList"]);
 			}
     	
     	}
@@ -2974,30 +2971,21 @@ public static function confirmallgiftboxhistory($p){
 	$cResult = array();
 
 	$param["memberID"]=$memberID;
-	LogManager::addLog("->".mysql_error());
 	$param["exchangeIDList"]=GiftBoxHistory::getAllExchangeID($memberID);
 	if(count($param["exchangeIDList"])<=0)return ResultState::makeReturn(ResultState::GDSUCCESS);
-	LogManager::addLog("->".mysql_error()."exchangeIDList->".json_encode($param["exchangeIDList"]));
-	//LogManager::addLog("exchangeIDlist is ".json_encode($param["exchangeIDList"]));
 	$cResult = self::exchangebylist($param);
-	LogManager::addLog("->".mysql_error()."exchangeIDList->".json_encode($cResult));
-
+	
 	CommitManager::setSuccess($memberID,GiftBoxHistory::confirmAll($memberID));
 
-	LogManager::addLog("->".mysql_error());
 	$error = "";
 	$error .= mysql_error();
-	LogManager::addLog("->".mysql_error());
 	if(ResultState::successCheck($cResult["result"])){
-	LogManager::addLog("->".mysql_error());	//LogManager::addLog("cresult is true");
 		CommitManager::setSuccess($memberID,true);
 	}else{
 		//LogManager::addLog("cresult is false ".json_encode($cResult));
-	LogManager::addLog("->".mysql_error());
 		CommitManager::setSuccess($memberID,false);
 	}
 	
-	LogManager::addLog("->".mysql_error());
 	$error .= mysql_error();
 	if(CommitManager::commit($memberID)){
 	LogManager::addLog("->".mysql_error());
@@ -3015,8 +3003,9 @@ public static function checkgiftboxhistory($p){
 
 	if(!$memberID)return ResultState::makeReturn(2002,"memberID");
 
-	$where = "where memberID=".$memberID;
-	$where = $where." and confirmDate='' limit 1";
+	$lastDay = TimeManager::getDateTime(TimeManager::getTime()-60*60*24*30);
+
+	$where = "where memberID=".$memberID." and regDate>$lastDay and confirmDate='' limit 1";
 
 	//$userInfo = UserIndex::create($memberID);
 	$q = GiftBoxHistory::getQueryResultWithShardKey("select count(*) from ".GiftBoxHistory::getDBTable()." ".$where,$memberID);
@@ -3432,7 +3421,7 @@ public static function checkloginevent($p){
 			}
 		}
 
-		if($idx!=-1 && (($rData["repeat"] && $eventCheckData[$idx]["date"]!=$todayDate) || ($todayDate!=$eventCheckData[$idx]["date"]))){
+		if($idx!=-1 && $rData["repeat"] && $eventCheckData[$idx]["date"]!=$todayDate){
 			unset($eventCheckData[$idx]);
 			$eventCheckData = array_values($eventCheckData);
 			$idx=-1;
@@ -3803,7 +3792,10 @@ public static function getendlessplayriver($p){
 	$userInfo = UserData::create($memberID);
 
 	srand((double)microtime()*1000000);	
-	$sp["no"]=rand(1,$userInfo->highPiece+$ingLevel*20);
+	
+	$max = 20+$ingLevel*20;
+	if($max>100)$max=100;
+	$sp["no"]=rand(1,$max);
 
 	$r["stageInfo"]=self::getpieceinfo($sp);
 	$r["stageInfo"]["realNo"]=$r["stageInfo"]["no"];
