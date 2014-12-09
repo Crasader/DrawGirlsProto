@@ -3896,8 +3896,8 @@ public:
 	
 	
 	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
-						int dotNumber, float angleVelocity, int level, int power, int subPower,
-			  AttackOption ao, float t_length, int t_final_cnt, int t_level)
+						int dotNumber, float angleVelocity, int frameInterval, int power, int subPower,
+						AttackOption ao, float t_length, int t_final_cnt, int t_level)
 	{
 		StoneAttack::init();
 //		m_missileStep = 1;
@@ -4016,6 +4016,167 @@ protected:
 
 
 
+class CircleDance : public StoneAttack
+{
+public:
+	static CircleDance* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+														 int dotNumber, float angleVelocity, int level, int power, int subPower,
+												 AttackOption ao)
+	{
+		CircleDance* object = new CircleDance();
+		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, level, power, subPower, ao);
+		
+		object->autorelease();
+		
+		
+		return object;
+	}
+	
+	
+	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
+						int dotNumber, float angleVelocity, int level, int power, int subPower,
+						AttackOption ao)
+	{
+		StoneAttack::init();
+		//		m_missileStep = 1;
+		m_fileName = fileName;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		m_initRadius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
+		m_initRad = initRad;
+		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		m_dotNumber = dotNumber * mInfo.get("dotbonus", 1.f).asFloat();
+		m_angleVelocity = angleVelocity;
+		if(cosf(m_initRad) < 0)
+			m_angleVelocity *= -1;
+		m_power = power;
+		m_subPower = subPower;
+		//		m_currentCenter = initPosition;
+		m_elipticA = 1.8f;
+		m_elipticB = 1.0f;
+		
+		
+		m_currentRad = m_initRad;
+		m_currentFrame = 0;
+		
+		m_ao = ao;
+		
+		m_initPosition = initPosition;
+		
+		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setVisible(false);
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(initPosition);
+		
+		
+		
+		for(int i=0; i<m_dotNumber; i++)
+		{
+			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, 13, 5, ao);
+//			CCSprite* satell = CCSprite::create(fileName.c_str());
+			float rad = 2 * M_PI / m_dotNumber * i;
+			Satellite t;
+			t.sprite = satell;
+			t.rad = rad;
+			m_satellites.push_back(t);
+			addChild(satell);
+			
+		}
+		
+		addChild(KSGradualValue<float>::create(0.f, m_initRadius, 0.3f, [=](float t)
+																					 {
+																						 for(auto i : m_satellites)
+																						 {
+																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
+																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
+																						 }
+																						 
+																					 }, [=](float t)
+																					 {
+																						 for(auto i : m_satellites)
+																						 {
+																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
+																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
+																						 }
+																						 
+																						 scheduleUpdate();
+																						 
+																					 }));
+		
+		
+		
+		//		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		//		m_option = ao;
+		//		m_power = power;
+		//		m_subPower = subPower;
+		//		m_targetNode = targetNode;
+		//		m_initRad = initRad;
+		
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
+	
+	CCPoint m_initPosition;
+	
+	float m_initRadius, m_initRad, m_initSpeed, m_angleVelocity;
+	int m_dotNumber;
+	float m_currentRad;
+	int m_currentFrame;
+	std::string m_fileName;
+	float m_elipticA;
+	float m_elipticB;
+	
+	CCPoint m_currentCenter;
+	
+	AttackOption m_ao;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	int m_subPower;
+	
+	struct Satellite
+	{
+		float rad;
+		StaticMissile* sprite;
+	};
+	vector<Satellite> m_satellites; // 똥파리..
+	CC_SYNTHESIZE(int, m_power, Power); // 파워.
+};
+
 class Boomerang : public StoneAttack
 {
 public:
@@ -4081,9 +4242,7 @@ public:
 		
 		for(int i=0; i<m_params.numbers; i++)
 		{
-			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, ao);
-			satell->beautifier(level);
-
+			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower, 13, 5, m_params.ao);
 			//			CCSprite* satell = CCSprite::create(fileName.c_str());
 			float rad = 2 * M_PI / m_params.numbers * i;
 			Satellite t;
@@ -4260,166 +4419,3 @@ protected:
 	//			myGD->communication("EP_stopCrashAction");
 };
 
-
-class CircleDance : public StoneAttack
-{
-public:
-	static CircleDance* create(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
-														 int dotNumber, float angleVelocity, int level, int power, int subPower,
-
-												 AttackOption ao)
-	{
-		CircleDance* object = new CircleDance();
-		object->init(initPosition, fileName, radius, initRad, initSpeed, dotNumber, angleVelocity, power, subPower, ao);
-
-		
-		object->autorelease();
-		
-		
-		return object;
-	}
-	
-	
-	bool init(CCPoint initPosition, const string& fileName, float radius, float initRad, float initSpeed,
-						int dotNumber, float angleVelocity, int level, int power, int subPower,
-						AttackOption ao)
-	{
-		StoneAttack::init();
-		//		m_missileStep = 1;
-		m_fileName = fileName;
-		m_particle = NULL;
-		m_streak = NULL;
-		m_start_node = NULL;
-		
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		
-		m_initRadius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
-		m_initRad = initRad;
-		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
-		m_dotNumber = dotNumber * mInfo.get("dotbonus", 1.f).asFloat();
-		m_angleVelocity = angleVelocity;
-		if(cosf(m_initRad) < 0)
-			m_angleVelocity *= -1;
-		m_power = power;
-		m_subPower = subPower;
-		//		m_currentCenter = initPosition;
-		m_elipticA = 1.8f;
-		m_elipticB = 1.0f;
-		
-		
-		m_currentRad = m_initRad;
-		m_currentFrame = 0;
-		
-		m_ao = ao;
-		
-		m_initPosition = initPosition;
-		
-		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
-		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setVisible(false);
-		m_missileSprite->setColor(ccc3( 255, 0, 0));
-		m_missileSprite->setScale(1.f/myGD->game_scale);
-		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
-		//m_missileSprite->setRotationY(t);
-		//m_missileSprite->setRotationX(t);
-		//}));
-		addChild(m_missileSprite, 1);
-		m_missileSprite->setScale(1.f/myGD->game_scale);
-		m_missileSprite->setPosition(initPosition);
-		
-		
-		
-		for(int i=0; i<m_dotNumber; i++)
-		{
-			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, ao);
-//			CCSprite* satell = CCSprite::create(fileName.c_str());
-			float rad = 2 * M_PI / m_dotNumber * i;
-			Satellite t;
-			t.sprite = satell;
-			t.rad = rad;
-			m_satellites.push_back(t);
-			addChild(satell);
-			
-		}
-		
-		addChild(KSGradualValue<float>::create(0.f, m_initRadius, 0.3f, [=](float t)
-																					 {
-																						 for(auto i : m_satellites)
-																						 {
-																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
-																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
-																						 }
-																						 
-																					 }, [=](float t)
-																					 {
-																						 for(auto i : m_satellites)
-																						 {
-																							 i.sprite->setMissilePosition(m_missileSprite->getPosition() +
-																																		 ccp(t * cosf(i.rad), t * sinf(i.rad)));
-																						 }
-																						 
-																						 scheduleUpdate();
-																						 
-																					 }));
-		
-		
-		
-		//		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
-		//		m_option = ao;
-		//		m_power = power;
-		//		m_subPower = subPower;
-		//		m_targetNode = targetNode;
-		//		m_initRad = initRad;
-		
-		return true;
-	}
-	void update(float dt);
-	
-	void beautifier(int level)
-	{
-		makeBeautifier(level, m_streak, m_particle);
-		if(m_streak)addChild(m_streak, -1);
-		if(m_particle)addChild(m_particle, -2);
-	}
-	
-	// 반지름 설정
-	void setShowWindowRotationRadius(float r)
-	{
-		
-	}
-	// 각속도 설정
-	void setShowWindowVelocityRad(float r)
-	{
-		
-	}
-protected:
-	int m_missileStep; // 미사일 단계 : 1 = 캐릭터로 부터 빙글빙글 돌면서 나타나는 과정 2 = 몬스터를 찾는 과정 3 = 날아갈 때.
-	
-	CCPoint m_initPosition;
-	
-	float m_initRadius, m_initRad, m_initSpeed, m_angleVelocity;
-	int m_dotNumber;
-	float m_currentRad;
-	int m_currentFrame;
-	std::string m_fileName;
-	float m_elipticA;
-	float m_elipticB;
-	
-	CCPoint m_currentCenter;
-	
-	AttackOption m_ao;
-	CCSprite* m_missileSprite; // 미사일 객체.
-	CCParticleSystemQuad* m_particle;
-	ASMotionStreak* m_streak;
-	CCNode* m_start_node;
-	int m_subPower;
-	
-	struct Satellite
-	{
-		float rad;
-		StaticMissile* sprite;
-	};
-	vector<Satellite> m_satellites; // 똥파리..
-	CC_SYNTHESIZE(int, m_power, Power); // 파워.
-};
