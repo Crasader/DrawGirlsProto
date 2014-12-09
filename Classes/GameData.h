@@ -32,6 +32,16 @@ enum GAMESTEP{
 
 float deg2Rad(float x) ;
 float rad2Deg(float x);
+template <typename T>
+T toPositiveAngle(T angle)
+{
+	angle = fmod(angle, 2*M_PI);
+	while(angle < 0) { //pretty sure this comparison is valid for doubles and floats
+		angle += 2*M_PI;
+	}
+	
+	return angle;
+}
 
 enum SetMapType{
 	kSMT_side = 1,
@@ -129,6 +139,7 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getMainCumberVector;
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	std::function<KSCumberBase*(CCPoint pt)> getNearestCumber;
+	std::function<KSCumberBase*(CCPoint pt, const std::vector<KSCumberBase*>)> getNearestCumberWithExclude;
 	std::function<void(const std::string& fileName, const std::string& type)> showDetailMessage;
 	std::function<void(StoneType, int level, float percent, CCPoint initPosition, int missile_damage,
 										 int missile_sub_damage)> createJackMissileWithStoneFunctor;

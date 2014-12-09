@@ -65,6 +65,7 @@ import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 import com.nhnent.SKSUMRAN.NA.LuaGLSurfaceView;
 import com.nhnent.SKSUMRAN.NA.R;
+import com.toast.android.analytics.GameAnalytics;
 
 @SuppressLint("NewApi")
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
@@ -78,7 +79,15 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
-		
+		int result = GameAnalytics.initializeSdk(getApplicationContext(), "AppID", 
+				"CompanyID", "AppVersion", true);
+
+		if(result != GameAnalytics.S_SUCCESS)
+		{
+
+			Log.d("toast", "initialize error " + GameAnalytics.getResultMessage(result));
+
+		}	
 		SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         pref.getString("check", "");
         if(pref.getString("check", "").isEmpty()){
@@ -259,6 +268,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onResume()
 	{
 		super.onResume();     
+		GameAnalytics.traceActivation(this);
 		hideSystemUI();
 		IgawCommon.startSession(DGproto.this);
 		//IgawCommon.startSession(DGproto.this);
@@ -331,6 +341,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onPause()
 	{
 		super.onPause();
+	    GameAnalytics.traceDeactivation(this);
 		IgawCommon.endSession();
 		suspend();
 	}

@@ -48,17 +48,28 @@
             </intent-filter> 
         </receiver> -->
         <receiver android:name="io.fiverocks.android.FiveRocksReceiver" />
-		<receiver
-		    android:name="com.igaworks.IgawReceiver"
-		    android:exported="true" >
-		    <intent-filter>
-		        <action android:name="com.android.vending.INSTALL_REFERRER" />
-		    </intent-filter>
+		        <receiver
+            android:name="com.hangame.hsp.referrer.InstallReceiver"  android:exported="true" >
+            <intent-filter>
+                <action android:name="com.android.vending.INSTALL_REFERRER" />
+            </intent-filter>
 
-		    <meta-data
-		        android:name="forward"
-		        android:value="com.hangame.hsp.referrer.InstallReceiver" />
-		</receiver>
+            <meta-data
+                android:name="forward1"
+                android:value="com.igaworks.IgawReceiver" />
+            <meta-data
+                android:name="forward2"
+                android:value="com.toast.android.analytics.InstallReferrerReceiver" />
+
+        </receiver>
+        <receiver
+            android:name="com.toast.android.analytics.ExecutionReferrerReceiver"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="com.toast.android.analytics.toastpromotion.EXECUTION" />
+            </intent-filter>
+        </receiver>
+
 		<receiver android:name="com.hangame.hsp.push.NPushBroadcastReceiver" >
             <intent-filter>
 
@@ -99,6 +110,11 @@
         <meta-data
             android:name="com.google.android.gms.appstate.APP_ID"
             android:value="@string/google_app_id" />
+        <meta-data 
+
+            android:name="com.toast.android.analytics.appstore" 
+
+            android:value="Google" />
 
         <activity
             android:name="com.nhnent.SKSUMRAN.DGproto"

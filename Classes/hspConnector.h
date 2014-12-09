@@ -264,6 +264,13 @@ public:
 	int registerGamePadCallback(jsonSelType func);
 	int checkInspection();
 	
+	void analyticsPurchase(string itemCode, float payment, float unitCost, string currency, int level);
+	void analyticsTraceMoneyAcquisition(string itemCode, string type, int amount, int level);
+	void analyticsTraceMoneyConsumption(string itemCode, string type, int amount, int level);
+	void analyticsTraceLevelUp(int l);
+	void analyticsTraceFriendCount(int f);
+	void analyticsSetUserId(string userId, bool t); // t = true (userid)
+	
 protected:
 	void registerGamePadCallback(CCObject* target, jsonSelType func);
 public:

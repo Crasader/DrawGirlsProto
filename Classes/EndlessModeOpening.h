@@ -5,9 +5,9 @@
 //  Created by 사원3 on 2014. 5. 19..
 //
 //
+#ifndef END_TEST__
+#define END_TEST__
 
-#ifndef __DGproto__EndlessModeOpening__
-#define __DGproto__EndlessModeOpening__
 
 #include "cocos2d.h"
 #include "cocos-ext.h"
@@ -194,4 +194,5 @@ private:
 	void putInformation(Json::Value info);
 };
 
-#endif /* defined(__DGproto__EndlessModeOpening__) */
+
+#endif
