@@ -604,6 +604,22 @@ CCNode* RankRewardPopup::getTakeRewardScript(Json::Value reward_list)
 	{
 		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass8))->getCString(), mySGD->getFont().c_str(), 12);
 	}
+	else if(t_type == kGoodsType_pass9)
+	{
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass9))->getCString(), mySGD->getFont().c_str(), 12);
+	}
+	else if(t_type == kGoodsType_pass10)
+	{
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass10))->getCString(), mySGD->getFont().c_str(), 12);
+	}
+	else if(t_type == kGoodsType_pass11)
+	{
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass11))->getCString(), mySGD->getFont().c_str(), 12);
+	}
+	else if(t_type == kGoodsType_pass12)
+	{
+		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypePass12))->getCString(), mySGD->getFont().c_str(), 12);
+	}
 	else
 	{
 		return_node = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardStageReward), myLoc->getLocalForKey(LK::kMyLocalKey_rankRewardGoodsTypeMany))->getCString(), mySGD->getFont().c_str(), 12);
@@ -669,6 +685,22 @@ CCNode* RankRewardPopup::getTakeRewardImg(string t_goods_str)
 	{
 		return_node = CCSprite::create("icon_p8.png");
 	}
+	else if(t_type == kGoodsType_pass9)
+	{
+		return_node = CCSprite::create("icon_p9.png");
+	}
+	else if(t_type == kGoodsType_pass10)
+	{
+		return_node = CCSprite::create("icon_p10.png");
+	}
+	else if(t_type == kGoodsType_pass11)
+	{
+		return_node = CCSprite::create("icon_p11.png");
+	}
+	else if(t_type == kGoodsType_pass12)
+	{
+		return_node = CCSprite::create("icon_p12.png");
+	}
 	else
 	{
 		return_node = CCSprite::create("rankpopup_top50_gift.png");
@@ -733,6 +765,22 @@ CCNode* RankRewardPopup::getRewardImg(string t_goods_str)
 	else if(t_type == kGoodsType_pass8)
 	{
 		return_node = CCSprite::create("icon_p8.png");
+	}
+	else if(t_type == kGoodsType_pass9)
+	{
+		return_node = CCSprite::create("icon_p9.png");
+	}
+	else if(t_type == kGoodsType_pass10)
+	{
+		return_node = CCSprite::create("icon_p10.png");
+	}
+	else if(t_type == kGoodsType_pass11)
+	{
+		return_node = CCSprite::create("icon_p11.png");
+	}
+	else if(t_type == kGoodsType_pass12)
+	{
+		return_node = CCSprite::create("icon_p12.png");
 	}
 	else
 	{

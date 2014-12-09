@@ -1244,7 +1244,26 @@ enum class LK
 	kMyLocalKey_missionFailContextCasting,
 	kMyLocalKey_missionFailContextLittlePercent,
 	kMyLocalKey_mission14Label,
-	kMyLocalKey_mission15Label
+	kMyLocalKey_mission15Label,
+	kMyLocalKey_strengthen,
+	kMyLocalKey_materialCard,
+	kMyLocalKey_strengthenCharacter,
+	kMyLocalKey_selectedCardList,
+	kMyLocalKey_10cardsStrengthenPossibleAtOne,
+	kMyLocalKey_maybeStrengthenExp,
+	kMyLocalKey_doStrengthen,
+	kMyLocalKey_rankRewardGoodsTypePass9,
+	kMyLocalKey_rankRewardGoodsTypePass10,
+	kMyLocalKey_rankRewardGoodsTypePass11,
+	kMyLocalKey_rankRewardGoodsTypePass12,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass9,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass10,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass11,
+	kMyLocalKey_endlessSeqWinRewardGoodsTypePass12,
+	kMyLocalKey_attendanceGoodsTypePass9,
+	kMyLocalKey_attendanceGoodsTypePass10,
+	kMyLocalKey_attendanceGoodsTypePass11,
+	kMyLocalKey_attendanceGoodsTypePass12
 };
 class KsLocal
 {

@@ -874,6 +874,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
 	else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
 	else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "%d_haveAdult";
+	else if(t_key == kSDS_CI_int1_exp_i)						rv = "%d_exp";
 	else if(t_key == kSDS_CI_int1_version_i)					rv = "%d_version";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";

@@ -1126,6 +1126,7 @@ void EndlessModeOpening::saveStageInfo(Json::Value result_data)
 //		}
 		
 		NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+		NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 		
 		Json::Value t_imgInfo = t_card["imgInfo"];
 		

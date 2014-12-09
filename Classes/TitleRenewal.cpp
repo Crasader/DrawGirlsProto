@@ -1364,6 +1364,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setHellLeadMent(result_data["hellLeadMent"].asString());
 		
 		mySGD->setIsDiaryLinkOn(result_data["isDiaryLinkOn"].asInt());
+		
+		Json::Value strength_info = result_data["strengthInfo"];
+		mySGD->setExchangeIDForGold(strength_info["exchangeIDForGold"].asString());
+		mySGD->setGoldPerExp(strength_info["goldPerExp"].asInt());
+		mySGD->setExchangeIDForPass(strength_info["exchangeIDForPass"].asString());
 	}
 	else
 	{
@@ -1549,6 +1554,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 					
 					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+					NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 					
 					Json::Value t_imgInfo = t_card["imgInfo"];
 					
@@ -2799,6 +2805,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 //			}
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			

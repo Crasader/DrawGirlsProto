@@ -1007,7 +1007,7 @@ void JsGababo::showHandsMotionWrapper()
 					win_label->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f+10));
 					result_stamp->addChild(win_label);
 					
-					CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getLocalCode().c_str())->getCString());
+					CCSprite* win_ment = CCSprite::create(CCString::createWithFormat("endless_win_%s.png", myLoc->getSupportLocalCode())->getCString());
 					win_ment->setPosition(ccp(result_stamp->getContentSize().width/2.f, result_stamp->getContentSize().height/2.f-25));
 					result_stamp->addChild(win_ment);
 					
