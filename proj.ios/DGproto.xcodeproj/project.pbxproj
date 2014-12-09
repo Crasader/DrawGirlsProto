@@ -7801,7 +7801,6 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/WebSocket/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/JSONKit/lib",
 					"$(SRCROOT)/../libs",
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/libs",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
@@ -7888,7 +7887,6 @@
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/WebSocket/lib",
 					"$(SRCROOT)/../HSPSDKIOS/lib/externals/JSONKit/lib",
 					"$(SRCROOT)/../libs",
-					"/Users/ksook/DevLibs/cocos2d-x-2.1.5/projects/DrawGirlsProto/libs",
 				);
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
