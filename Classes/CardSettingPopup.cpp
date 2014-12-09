@@ -279,7 +279,7 @@ bool CardSettingPopup::init()
 	
 	CCMenuItem* card_gacha_menu = CCMenuItemSprite::create(n_card_gacha_img, s_card_gacha_img, this, menu_selector(CardSettingPopup::menuAction));
 	card_gacha_menu->setTag(kCSS_MT_cardGacha);
-	card_gacha_menu->setPosition(ccp(50,16));
+	card_gacha_menu->setPosition(ccp(90,16));
 	tab_menu->addChild(card_gacha_menu);
 	
 	/*

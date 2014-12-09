@@ -1266,7 +1266,14 @@ enum class LK
 	kMyLocalKey_attendanceGoodsTypePass12,
 	kMyLocalKey_yearMonthDay,
 	kMyLocalKey_pvpTakableEventCard,
-	kMyLocalKey_cardGacha
+	kMyLocalKey_cardGacha,
+	kMyLocalKey_inventory,
+	kMyLocalKey_haveItemDetailShow,
+	kMyLocalKey_joinDate,
+	kMyLocalKey_highStage,
+	kMyLocalKey_playCount,
+	kMyLocalKey_pvpHighVictory,
+	kMyLocalKey_pvpHighScore
 };
 class KsLocal
 {

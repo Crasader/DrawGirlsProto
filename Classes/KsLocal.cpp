@@ -1308,6 +1308,13 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
 	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	obj[LK::kMyLocalKey_cardGacha] = "카드뽑기";
+	obj[LK::kMyLocalKey_inventory] = "인벤토리";
+	obj[LK::kMyLocalKey_haveItemDetailShow] = "가지고 있는 아이템을 상세히 보여드립니다.";
+	obj[LK::kMyLocalKey_joinDate] = "가입일시";
+	obj[LK::kMyLocalKey_highStage] = "최고스테이지";
+	obj[LK::kMyLocalKey_playCount] = "플레이 판수";
+	obj[LK::kMyLocalKey_pvpHighVictory] = "PvP 최고연승";
+	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2541,6 +2548,13 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
 	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	obj[LK::kMyLocalKey_cardGacha] = "카드뽑기";
+	obj[LK::kMyLocalKey_inventory] = "인벤토리";
+	obj[LK::kMyLocalKey_haveItemDetailShow] = "가지고 있는 아이템을 상세히 보여드립니다.";
+	obj[LK::kMyLocalKey_joinDate] = "가입일시";
+	obj[LK::kMyLocalKey_highStage] = "최고스테이지";
+	obj[LK::kMyLocalKey_playCount] = "플레이 판수";
+	obj[LK::kMyLocalKey_pvpHighVictory] = "PvP 최고연승";
+	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
