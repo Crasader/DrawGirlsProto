@@ -1318,6 +1318,8 @@ private:
 	COMMON_VAR(int, goldPerExp, GoldPerExp);
 	COMMON_VAR_STR(exchangeIDForGold, ExchangeIDForGold);
 	COMMON_VAR_STR(exchangeIDForPass, ExchangeIDForPass);
+	COMMON_VAR_STR(gababoProb, GababoProb);
+	
 };
 
 #endif

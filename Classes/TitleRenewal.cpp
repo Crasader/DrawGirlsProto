@@ -1369,6 +1369,11 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setExchangeIDForGold(strength_info["exchangeIDForGold"].asString());
 		mySGD->setGoldPerExp(strength_info["goldPerExp"].asInt());
 		mySGD->setExchangeIDForPass(strength_info["exchangeIDForPass"].asString());
+		
+		mySGD->setGababoProb(result_data["gababo"].asString());
+
+		
+		
 	}
 	else
 	{

@@ -844,23 +844,35 @@ void JsGababo::showHandsMotionWrapper()
 		functor[0] = bind(&JsGababo::loseSkill, this, std::placeholders::_1);
 		functor[1] = bind(&JsGababo::winSkill, this, std::placeholders::_1);
 		functor[2] = bind(&JsGababo::drawSkill, this, std::placeholders::_1);
+		
+		Json::Value arr = mySGD->getGababoProb();
+		double probTable[3][3];
+		
+		for(int i=0; i<arr.size(); i++)
+		{
+			Json::Value arr2 = arr[i];
+			for(int j=0; j<arr2.size(); j++)
+			{
+				probTable[i][j] = arr2[j].asDouble();
+			}
+		}
 		if(m_winCount == 0)
 		{
 			// 이길 확률 70 % 질 확률 15% 비길 확률 50%
-			ProbSelector ps = {40, 30, 30};
+			ProbSelector ps = {probTable[0][0], probTable[0][1], probTable[0][2]};
 //			ProbSelector ps = {70.f, 100000.f, 50.f};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 1)
 		{
 			// 이길 확률 60% 질 확률 20% 비길 확률 60%
-			ProbSelector ps =  {30,40,30};
+			ProbSelector ps = {probTable[1][0], probTable[1][1], probTable[1][2]};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		else if(m_winCount == 2)
 		{
 			// 이길 확률 50 % 질 확률 25% 비길 확률 30%
-			ProbSelector ps = {20, 60, 20};
+			ProbSelector ps = {probTable[2][0], probTable[2][1], probTable[2][2]};
 			computer = functor[ps.getResult()](m_mySelection);
 		}
 		
