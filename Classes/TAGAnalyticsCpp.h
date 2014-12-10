@@ -7,8 +7,7 @@
 //
 
 
-#ifndef NEAFlat_NEAFlatCpp_h
-#define NEAFlat_NEAFlatCpp_h
+#pragma once
 
 #include <string>
 
@@ -66,4 +65,3 @@ namespace toast
     }
 }
 
-#endif

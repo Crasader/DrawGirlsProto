@@ -595,9 +595,9 @@ void Boomerang::update(float dt)
 		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
 		m_centerRad += clampf(signRad, deg2Rad(-5.5f), deg2Rad(5.5f));
 //		m_centerRad += (diffRad - m_centerRad);
-		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_centerRad) * 2.f, sinf(m_centerRad) * 2.f));
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_centerRad) * 1.5f, sinf(m_centerRad) * 1.5f));
 
-		if( ccpLength(myGD->getJackPointCCP() - m_missileSprite->getPosition()) < 10 )
+		if( ccpLength(myGD->getJackPointCCP() - m_missileSprite->getPosition()) < 2 )
 		{
 			m_missileStep = 3;
 			removeFromParent();
@@ -675,7 +675,9 @@ void Chain::update(float dt)
 				float nx = nearCumber->getPosition().x;
 				
 				m_targetNode = nearCumber;
-				m_chainMissile = StaticMissile::create(pos, m_params.fileName, m_params.power, m_params.subPower, 2, 40, m_params.ao);
+				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
+																							 m_params.power + m_params.power * (m_originalDepth - m_params.depth + 1) * 0.2f,
+																							 m_params.subPower, 2, 20, m_params.ao);
 				m_chainMissile->beautifier(m_params.level);
 				addChild(m_chainMissile);
 				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
@@ -701,7 +703,8 @@ void Chain::update(float dt)
 		m_currentRad += deltaRad;
 		
 		m_chainMissile->setMissilePosition(m_chainMissile->getMissilePosition() + ccp(cosf(m_currentRad) * m_params.speed, sinf(m_currentRad) * m_params.speed));
-		CCLog("%f %f", m_chainMissile->getPosition().x, m_chainMissile->getPosition().y);
+		m_chainMissile->setRotation(-rad2Deg(m_currentRad) - 90.f);
+
 		
 	}
 	

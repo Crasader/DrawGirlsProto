@@ -656,6 +656,10 @@ public class hspConnector {
 	{
 		GameAnalytics.traceFriendCount(f);
 	}
+	public static void AnalyticsSetUserId(String userId, boolean t)
+	{
+		GameAnalytics.setUserId(userId, t);
+	}
 	
 	public static void registerGamePadCallback(final int _key)
 	{ 
