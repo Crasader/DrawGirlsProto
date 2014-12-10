@@ -1660,10 +1660,10 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+//				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
 				DownloadFile t_df1;
 				t_df1.size = t_faceInfo["size"].asInt();
@@ -2659,10 +2659,10 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+//				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
 				DownloadFile t_df1;
 				t_df1.size = t_faceInfo["size"].asInt();

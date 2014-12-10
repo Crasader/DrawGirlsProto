@@ -3920,6 +3920,8 @@ void StarGoldData::myInit()
 	is_ingame_sub_gold = false;
 	total_card_cnt = 0;
 	
+	card_gacha_no = -1;
+	
 	loading_tip_back_number = 1;
 	
 	max_network_check_cnt = 6; // 0.5초 단위로

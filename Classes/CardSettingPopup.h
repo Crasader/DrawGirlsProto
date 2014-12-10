@@ -12,6 +12,8 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "StarGoldData.h"
+#include "DownloadFile.h"
+#include "StageImgLoader.h"
 
 //#include <deque>
 #include <map>
@@ -49,6 +51,8 @@ class IntPoint;
 class CommonButton;
 //class ScrollBar;
 class KSLabelTTF;
+class LoadingLayer;
+class ConvexGraph;
 class CardSettingPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -104,6 +108,16 @@ private:
 	int recent_sort_type;
 	
 	CCTableView* card_table;
+	vector<DownloadFile> card_download_list;
+	int ing_download_cnt;
+	int success_download_cnt;
+	vector<DownloadImgInfo> download_set;
+	vector<int> is_enable_index;
+	void startFileDownloadSet();
+	void checkDownloading();
+	ConvexGraph* card_progress_timer;
+	LoadingLayer* card_loading;
+	bool is_downloading;
 	
 	CCScale9Sprite* take_count_back;
 	KSLabelTTF* title_label;
