@@ -98,33 +98,7 @@
 						<key>animatedProperties</key>
 						<dict>
 							<key>0</key>
-							<dict>
-								<key>visible</key>
-								<dict>
-									<key>keyframes</key>
-									<array>
-										<dict>
-											<key>easing</key>
-											<dict>
-												<key>type</key>
-												<integer>0</integer>
-											</dict>
-											<key>name</key>
-											<string>visible</string>
-											<key>time</key>
-											<real>0.0</real>
-											<key>type</key>
-											<integer>1</integer>
-											<key>value</key>
-											<true/>
-										</dict>
-									</array>
-									<key>name</key>
-									<string>visible</string>
-									<key>type</key>
-									<integer>1</integer>
-								</dict>
-							</dict>
+							<dict/>
 						</dict>
 						<key>baseClass</key>
 						<string>CCLayer</string>
@@ -685,16 +659,6 @@
 						<integer>0</integer>
 						<key>properties</key>
 						<array>
-							<dict>
-								<key>baseValue</key>
-								<integer>1</integer>
-								<key>name</key>
-								<string>visible</string>
-								<key>type</key>
-								<string>Check</string>
-								<key>value</key>
-								<true/>
-							</dict>
 							<dict>
 								<key>name</key>
 								<string>anchorPoint</string>
@@ -1805,7 +1769,7 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>3.5999999046325684</real>
+											<real>3.3666665554046631</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -1822,7 +1786,7 @@
 											<key>name</key>
 											<string>opacity</string>
 											<key>time</key>
-											<real>3.6333334445953369</real>
+											<real>3.4000000953674316</real>
 											<key>type</key>
 											<integer>5</integer>
 											<key>value</key>
@@ -2045,7 +2009,7 @@
 											<key>name</key>
 											<string>scale</string>
 											<key>time</key>
-											<real>3.5999999046325684</real>
+											<real>3.3666665554046631</real>
 											<key>type</key>
 											<integer>4</integer>
 											<key>value</key>
@@ -2063,7 +2027,7 @@
 											<key>name</key>
 											<string>scale</string>
 											<key>time</key>
-											<real>3.6333334445953369</real>
+											<real>3.4000000953674316</real>
 											<key>type</key>
 											<integer>4</integer>
 											<key>value</key>
@@ -2165,6 +2129,8 @@
 								<integer>0</integer>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -4050,13 +4016,13 @@
 			<key>chainedSequenceId</key>
 			<integer>-1</integer>
 			<key>length</key>
-			<real>4</real>
+			<real>3.4000000953674316</real>
 			<key>name</key>
 			<string>Default Timeline</string>
 			<key>offset</key>
 			<real>0.0</real>
 			<key>position</key>
-			<real>4</real>
+			<real>3.4000000953674316</real>
 			<key>resolution</key>
 			<real>30</real>
 			<key>scale</key>
