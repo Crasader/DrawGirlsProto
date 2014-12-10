@@ -76,9 +76,19 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		String versionName = null;
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(
+					"com.nhnent.SKSUMRAN", 
+					PackageManager.GET_SIGNATURES);
+			
+			versionName = info.versionName;		
+		} catch (NameNotFoundException e) {
+
+		}
 		
 		int result = GameAnalytics.initializeSdk(getApplicationContext(), "QA8LmqYa", 
-				"tk8on6Xe", "1.0.0", true);
+				"tk8on6Xe", versionName, true);
 
 		if(result != GameAnalytics.S_SUCCESS)
 		{
@@ -129,7 +139,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.1.3")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", versionName)){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
