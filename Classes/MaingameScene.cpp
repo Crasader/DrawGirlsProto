@@ -952,7 +952,7 @@ void Maingame::finalSetting()
 			event_title->setPosition(ccp(0, 15));
 			event_node->addChild(event_title);
 			
-			KSLabelTTF* event_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_pvpTakableEventCard), mySGD->getFont().c_str(), 15);
+			KSLabelTTF* event_label = KSLabelTTF::create(mySGD->pvp_event_title.c_str(), mySGD->getFont().c_str(), 15);
 			event_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 			event_label->setPosition(ccp(0, -25));
 			event_node->addChild(event_label);

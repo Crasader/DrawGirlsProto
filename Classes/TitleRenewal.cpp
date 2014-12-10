@@ -1552,6 +1552,8 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 				for(int i=0;i<cards.size();i++)
 				{
 					Json::Value t_card = cards[i];
+					if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
+						continue;
 					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 					NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -1678,10 +1680,10 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					}
 					
 					Json::Value t_faceInfo = t_card["faceInfo"];
-					if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+					if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
 					{
 						NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+//						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 						
 						DownloadFile t_df1;
 						t_df1.size = t_faceInfo["size"].asInt();
@@ -2758,6 +2760,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
+				continue;
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -2928,10 +2932,10 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+//				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
 				DownloadFile t_df1;
 				t_df1.size = t_faceInfo["size"].asInt();

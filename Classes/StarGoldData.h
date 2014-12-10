@@ -922,6 +922,7 @@ public:
 		replay_playing_info.clear();
 	}
 	bool is_pvp_event;
+	string pvp_event_title;
 	
 	string getReplayKey(ReplayKey t_key);
 	
@@ -1083,8 +1084,12 @@ public:
 	Json::Value hell_balance;
 	
 	bool antiApple();
-	
 	string join_date;
+	
+	KSProtectVar<int> card_gacha_no;
+	KSProtectStr card_gacha_msg;
+	vector<KSProtectVar<int>> card_gacha_list;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

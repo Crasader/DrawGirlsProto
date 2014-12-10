@@ -1306,7 +1306,6 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
-	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	obj[LK::kMyLocalKey_cardGacha] = "카드뽑기";
 	obj[LK::kMyLocalKey_inventory] = "인벤토리";
 	obj[LK::kMyLocalKey_haveItemDetailShow] = "가지고 있는 아이템을 상세히 보여드립니다.";
@@ -2546,7 +2545,6 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass11] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_attendanceGoodsTypePass12] = "<font size=12>%d<font size=8>장";
 	obj[LK::kMyLocalKey_yearMonthDay] = "y년 m월 d일";
-	obj[LK::kMyLocalKey_pvpTakableEventCard] = "이벤트 카드를 획득할 수 있습니다.";
 	obj[LK::kMyLocalKey_cardGacha] = "카드뽑기";
 	obj[LK::kMyLocalKey_inventory] = "인벤토리";
 	obj[LK::kMyLocalKey_haveItemDetailShow] = "가지고 있는 아이템을 상세히 보여드립니다.";
