@@ -1012,7 +1012,7 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 
 void GodOfDeath::update(float dt)
 {
-	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
+//	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
 	
 	if(ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition()) <= 5
 		 && myGD->getCommunicationBool("Jack_isDie") == false && m_killed == false)
