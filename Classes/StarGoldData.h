@@ -1090,6 +1090,8 @@ public:
 	KSProtectStr card_gacha_msg;
 	vector<KSProtectVar<int>> card_gacha_list;
 	
+	bool is_god_of_death;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

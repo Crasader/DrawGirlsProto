@@ -1019,7 +1019,10 @@ void GodOfDeath::update(float dt)
 	{
 		m_killed = true;
 		myGD->communication("CP_jackCrashDie");
-		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		mySGD->is_god_of_death = false;
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+		myGD->communication("UI_showTimeover");
+		
 		m_manager->runAnimationsForSequenceNamed("die");
 		unschedule(schedule_selector(ThisClassType::update));
 		addChild(KSTimer::create(1.5f, [=](){

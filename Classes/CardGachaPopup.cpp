@@ -370,7 +370,7 @@ void CardGachaPopup::oneAction(CCObject *t_sender, CCControlEvent t_event)
 
 void CardGachaPopup::resultOne(Json::Value result_data)
 {
-	CCLog("resultOne : \n%s", result_data.toStyledString().c_str());
+//	CCLog("resultOne : \n%s", result_data.toStyledString().c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
@@ -485,7 +485,7 @@ void CardGachaPopup::fiveAction(CCObject *t_sender, CCControlEvent t_event)
 
 void CardGachaPopup::resultFive(Json::Value result_data)
 {
-	CCLog("resultFive : \n%s", result_data.toStyledString().c_str());
+//	CCLog("resultFive : \n%s", result_data.toStyledString().c_str());
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		loading_layer->removeFromParent();
@@ -818,17 +818,17 @@ void CardGachaPopup::cardPositioning()
 	if(is_final)
 	{
 		unschedule(schedule_selector(CardGachaPopup::cardPositioning));
-		CCSprite* take_card_img = (CCSprite*)cover_img->getParent();
+		CCSprite* take_card_img = (CCSprite*)cover_clipping->getParent();
 		addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
 											   {
 												   take_card_img->setPositionY(t_f);
 												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-												   cover_img->setPositionY(t_f);
+												   cover_img->setPositionY(t_f/take_card_img->getScale());
 											   }, [=](float t_f)
 											   {
 												   take_card_img->setPositionY(t_f);
 												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-												   cover_img->setPositionY(t_f);
+												   cover_img->setPositionY(t_f/take_card_img->getScale());
 												   
 												   addChild(KSTimer::create(0.3f, [=]()
 												   {

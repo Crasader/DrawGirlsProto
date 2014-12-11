@@ -413,6 +413,7 @@ private:
 	bool is_casting;
 	bool is_tinting_casting_gage;
 	void castingCheck();
+	void showTimeover();
 	
 	map<int, MissionOper> mission_oper_list;
 };
