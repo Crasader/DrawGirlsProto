@@ -729,9 +729,14 @@ void CardGachaPopup::cardMoving()
 			
 			card_que.push_back(t_card_img);
 			
+			cover_clipping = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width, t_card_img->getContentSize().height)));
+			cover_clipping->setAlphaThreshold(0.1f);
+			cover_clipping->setPosition(ccpFromSize(t_card_img->getContentSize()/2.f));
+			t_card_img->addChild(cover_clipping);
+			
 			cover_img = CCSprite::create("cardgacha_card.png");
-			cover_img->setPosition(ccpFromSize(t_card_img->getContentSize()/2.f));
-			t_card_img->addChild(cover_img);
+			cover_img->setPosition(ccp(0,0));
+			cover_clipping->addChild(cover_img);
 			
 			step_cnt = kCardGachaAnimationStep_positioning;
 			unschedule(schedule_selector(CardGachaPopup::cardMoving));
@@ -817,11 +822,13 @@ void CardGachaPopup::cardPositioning()
 		addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
 											   {
 												   take_card_img->setPositionY(t_f);
-												   cover_img->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+												   cover_img->setPositionY(t_f);
 											   }, [=](float t_f)
 											   {
 												   take_card_img->setPositionY(t_f);
-												   cover_img->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+												   cover_img->setPositionY(t_f);
 												   
 												   addChild(KSTimer::create(0.3f, [=]()
 												   {

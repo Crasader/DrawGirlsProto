@@ -48,6 +48,7 @@ private:
 	CCControlButton* five_button;
 	CCControlButton* ok_button;
 	CCSprite* cover_img;
+	CCClippingNode* cover_clipping;
 	CCSprite* big_card_img;
 	CCSprite* t_gray;
 	float positioning_value;
