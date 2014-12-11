@@ -211,11 +211,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	KSLabelTTF* one_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_oneGacha), mySGD->getFont().c_str(), 18);
 	one_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	one_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
-	one_label->setPosition(ccp(-28,5));
+	one_label->setPosition(ccp(-38,5));
 	t2_label->addChild(one_label);
 	
 	price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-	price_back->setContentSize(CCSizeMake(50, 30));
+	price_back->setContentSize(CCSizeMake(70, 30));
 	price_back->setPosition(ccp(32,0));
 	t2_label->addChild(price_back);
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
@@ -230,7 +230,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 		
 		sub_ment1 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardPass_countName_s).c_str(), mySGD->getFont().c_str(), 10);
 		sub_ment1->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-		sub_ment1->setPosition(ccp(-28, -10));
+		sub_ment1->setPosition(ccp(-38, -10));
 		price_back->getParent()->addChild(sub_ment1);
 	}
 	else
@@ -257,12 +257,12 @@ void CardGachaPopup::myInit(int t_touch_priority)
 		
 		sub_ment1 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_countName_s).c_str(), mySGD->getFont().c_str(), 10);
 		sub_ment1->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-		sub_ment1->setPosition(ccp(-28, -10));
+		sub_ment1->setPosition(ccp(-38, -10));
 		price_back->getParent()->addChild(sub_ment1);
 	}
 	
 	one_button = CCControlButton::create(t2_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
-	one_button->setPreferredSize(CCSizeMake(145, 55));
+	one_button->setPreferredSize(CCSizeMake(165, 55));
 	one_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::oneAction), CCControlEventTouchUpInside);
 	one_button->setPosition(ccp(-80, -124));
 	main_case->addChild(one_button);
@@ -273,11 +273,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	KSLabelTTF* five_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_fiveGacha), mySGD->getFont().c_str(), 18);
 	five_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	five_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
-	five_label->setPosition(ccp(-28,5));
+	five_label->setPosition(ccp(-38,5));
 	t3_label->addChild(five_label);
 	
 	CCScale9Sprite* price_back2 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-	price_back2->setContentSize(CCSizeMake(52, 30));
+	price_back2->setContentSize(CCSizeMake(72, 30));
 	price_back2->setPosition(ccp(30,0));
 	t3_label->addChild(price_back2);
 	
@@ -303,11 +303,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	
 	KSLabelTTF* sub_ment = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardDozen_countName_s).c_str(), mySGD->getFont().c_str(), 10);
 	sub_ment->enableOuterStroke(ccBLACK, 0.5f, 255, true);
-	sub_ment->setPosition(ccp(-28, -10));
+	sub_ment->setPosition(ccp(-38, -10));
 	price_back2->getParent()->addChild(sub_ment);
 	
 	five_button = CCControlButton::create(t3_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
-	five_button->setPreferredSize(CCSizeMake(145, 55));
+	five_button->setPreferredSize(CCSizeMake(165, 55));
 	five_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::fiveAction), CCControlEventTouchUpInside);
 	five_button->setPosition(ccp(80, -124));
 	main_case->addChild(five_button);
@@ -318,7 +318,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	step_cnt = kCardGachaAnimationStep_ready;
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
-	close_button->setPosition(ccp(240,140) + ccp(-20,-12));
+	close_button->setPosition(ccp(240,140) + ccp(-20-10,-12));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -660,7 +660,7 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 			price_back->removeFromParent();
 			
 			price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
-			price_back->setContentSize(CCSizeMake(50, 30));
+			price_back->setContentSize(CCSizeMake(70, 30));
 			price_back->setPosition(ccp(32,0));
 			t_parent->addChild(price_back);
 			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
