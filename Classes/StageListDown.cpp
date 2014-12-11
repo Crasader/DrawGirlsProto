@@ -392,31 +392,40 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 					}
 					
 					Json::Value t_faceInfo = t_card["faceInfo"];
-					if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+					if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
 					{
 						NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-//						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 						
-						DownloadFile t_df1;
-						t_df1.size = t_faceInfo["size"].asInt();
-						t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-						t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-						t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-						sf_list.push_back(t_df1);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+						{
+							DownloadFile t_df1;
+							t_df1.size = t_faceInfo["size"].asInt();
+							t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+							t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+							t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+							sf_list.push_back(t_df1);
+						}
 						
-						DownloadFile t_df2;
-						t_df2.size = t_faceInfo["size"].asInt();
-						t_df2.img = t_faceInfo["plist"].asString().c_str();
-						t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-						t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-						sf_list.push_back(t_df2);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+						{
+							DownloadFile t_df2;
+							t_df2.size = t_faceInfo["size"].asInt();
+							t_df2.img = t_faceInfo["plist"].asString().c_str();
+							t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+							t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+							sf_list.push_back(t_df2);
+						}
 						
-						DownloadFile t_df3;
-						t_df3.size = t_faceInfo["size"].asInt();
-						t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-						t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-						t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-						sf_list.push_back(t_df3);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+						{
+							DownloadFile t_df3;
+							t_df3.size = t_faceInfo["size"].asInt();
+							t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+							t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+							t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+							sf_list.push_back(t_df3);
+						}
 						
 //						if(!is_add_cf)
 //						{
@@ -434,6 +443,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
 //						
 //						cf_list.push_back(t_cf);
+					}
+					else
+					{
+						NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 					}
 				}
 				
@@ -614,31 +627,40 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-//				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
-				DownloadFile t_df1;
-				t_df1.size = t_faceInfo["size"].asInt();
-				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-				sf_list.push_back(t_df1);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+				{
+					DownloadFile t_df1;
+					t_df1.size = t_faceInfo["size"].asInt();
+					t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+					t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+					t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df1);
+				}
 				
-				DownloadFile t_df2;
-				t_df2.size = t_faceInfo["size"].asInt();
-				t_df2.img = t_faceInfo["plist"].asString().c_str();
-				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-				sf_list.push_back(t_df2);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+				{
+					DownloadFile t_df2;
+					t_df2.size = t_faceInfo["size"].asInt();
+					t_df2.img = t_faceInfo["plist"].asString().c_str();
+					t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+					t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df2);
+				}
 				
-				DownloadFile t_df3;
-				t_df3.size = t_faceInfo["size"].asInt();
-				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-				sf_list.push_back(t_df3);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+				{
+					DownloadFile t_df3;
+					t_df3.size = t_faceInfo["size"].asInt();
+					t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+					t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+					t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df3);
+				}
 				
 //				if(!is_add_cf)
 //				{
@@ -656,6 +678,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
 //				
 //				cf_list.push_back(t_cf);
+			}
+			else
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 			}
 			
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
@@ -830,31 +856,40 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 				}
 			}
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
-//				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
-				DownloadFile t_df1;
-				t_df1.size = t_faceInfo["size"].asInt();
-				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-				sf_list.push_back(t_df1);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+				{
+					DownloadFile t_df1;
+					t_df1.size = t_faceInfo["size"].asInt();
+					t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+					t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+					t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df1);
+				}
 				
-				DownloadFile t_df2;
-				t_df2.size = t_faceInfo["size"].asInt();
-				t_df2.img = t_faceInfo["plist"].asString().c_str();
-				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-				sf_list.push_back(t_df2);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+				{
+					DownloadFile t_df2;
+					t_df2.size = t_faceInfo["size"].asInt();
+					t_df2.img = t_faceInfo["plist"].asString().c_str();
+					t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+					t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df2);
+				}
 				
-				DownloadFile t_df3;
-				t_df3.size = t_faceInfo["size"].asInt();
-				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-				sf_list.push_back(t_df3);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+				{
+					DownloadFile t_df3;
+					t_df3.size = t_faceInfo["size"].asInt();
+					t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+					t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+					t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+					sf_list.push_back(t_df3);
+				}
 				
 //				if(!is_add_cf)
 //				{
@@ -872,6 +907,10 @@ void StageListDown::resultGetStageList(Json::Value result_data)
 //				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
 //				
 //				cf_list.push_back(t_cf);
+			}
+			else
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 			}
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}

@@ -1272,7 +1272,9 @@ enum class LK
 	kMyLocalKey_highStage,
 	kMyLocalKey_playCount,
 	kMyLocalKey_pvpHighVictory,
-	kMyLocalKey_pvpHighScore
+	kMyLocalKey_pvpHighScore,
+	kMyLocalKey_oneGacha,
+	kMyLocalKey_fiveGacha
 };
 class KsLocal
 {

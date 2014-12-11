@@ -13,6 +13,12 @@
 #include "CommonAnimation.h"
 #include "AudioEngine.h"
 #include "CardSettingPopup.h"
+#include "StageImgLoader.h"
+#include "KSLabelTTF.h"
+#include "KsLocal.h"
+#include "StyledLabelTTF.h"
+#include "LoadingLayer.h"
+#include "ASPopupView.h"
 
 CardGachaPopup* CardGachaPopup::create(int t_touch_priority)
 {
@@ -42,6 +48,15 @@ enum CardGachaPopupZorder
 	kCardGachaPopupZorder_main_case
 };
 
+enum CardGachaAnimationStep
+{
+	kCardGachaAnimationStep_ready = 0,
+	kCardGachaAnimationStep_fasting,
+	kCardGachaAnimationStep_slowing,
+	kCardGachaAnimationStep_takeCardCreate,
+	kCardGachaAnimationStep_positioning
+};
+
 void CardGachaPopup::myInit(int t_touch_priority)
 {
 	is_menu_enable = false;
@@ -65,17 +80,206 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	gray->setScaleY(myDSH->ui_top/320.f/myDSH->screen_convert_rate);
 	addChild(gray, kCardGachaPopupZorder_gray);
 	
-	main_case = CCSprite::create("mainpopup2_back.png");
+	left_character = CCSprite::create("cardgacha_cha1.png");
+	left_character->setAnchorPoint(ccp(0,0));
+	left_character->setPosition(ccp(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, -(320*gray->getScaleY() - 320)/2.f));
+	addChild(left_character, kCardGachaPopupZorder_gray);
+	
+	right_character = CCSprite::create("cardgacha_cha2.png");
+	right_character->setAnchorPoint(ccp(1,0));
+	right_character->setPosition(ccp(480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width, -(320*gray->getScaleY() - 320)/2.f));
+	addChild(right_character, kCardGachaPopupZorder_gray);
+	
+//	main_case = CCSprite::create("mainpopup2_back.png");
+//	main_case->setPosition(ccp(240,160-14.f));
+//	addChild(main_case, kCardGachaPopupZorder_main_case);
+	
+	main_case = CCNode::create();
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kCardGachaPopupZorder_main_case);
 	
+	CCSprite* title_back = CCSprite::create("cardgacha_title.png");
+	title_back->setPosition(ccp(0,110));
+	main_case->addChild(title_back);
+	
+	KSLabelTTF* title_main = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 22);
+	title_main->enableOuterStroke(ccBLACK, 1.5f, 255, true);
+	title_main->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,10));
+	title_back->addChild(title_main);
+	
+	StyledLabelTTF* title_msg = StyledLabelTTF::create(mySGD->card_gacha_msg.getV().c_str(), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+	title_msg->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,-6));
+	title_back->addChild(title_msg);
+	
+	moving_speed = 2.f;
+	
+	card_que.clear();
+	
+	card_type_size = mySGD->card_gacha_list.size();
+	
+	CCSprite* gacha_case_back = CCSprite::create("cardgacha_case_back.png");
+	gacha_case_back->setPosition(ccp(0,-10));
+	main_case->addChild(gacha_case_back);
+	
+	CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
+	t_card_img->setPosition(ccp(0,0));
+	t_card_img->setScale(0.25f);
+	
+	card_que.push_back(t_card_img);
+	
+	float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
+	
+	float change_scale = 1.f;
+	CCPoint change_origin = ccp(0,0);
+	if(screen_scale_x > 1.f)
+	{
+		change_origin.x = -(screen_scale_x-1.f)*480.f/2.f;
+		change_scale = screen_scale_x;
+	}
+	if(screen_scale_y > 1.f)
+		change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
+	CCSize win_size = CCDirector::sharedDirector()->getWinSize();
+	
+	clipping_node = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width*t_card_img->getScale() + 10, 320*gray->getScaleY() + 16.5f)));
+	clipping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
+	clipping_node->setAlphaThreshold(0.1f);
+	clipping_node->setPosition(ccp(0,-16.5f));
+	main_case->addChild(clipping_node);
+	
+	clipping_node->addChild(t_card_img);
 	
 	
+	mask_rect = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, t_card_img->getContentSize().width*t_card_img->getScale() + 10, t_card_img->getContentSize().height*t_card_img->getScale() + 10));
+	mask_rect->setPosition(ccp(0,-16.5f));
+	main_case->addChild(mask_rect);
+	
+	mask_bounding_rect = mask_rect->boundingBox();
+	mask_bounding_rect.origin.x -= 5.f;
+	mask_bounding_rect.size.width += 100.f;
 	
 	
+	CCSprite* gacha_case_front = CCSprite::create("cardgacha_case_front.png");
+	gacha_case_front->setPosition(ccp(0,-10));
+	main_case->addChild(gacha_case_front);
+	
+	
+	CCSprite* t_card_img2 = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
+	t_card_img2->setPosition(t_card_img->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+	t_card_img2->setScale(0.25f);
+	clipping_node->addChild(t_card_img2);
+	
+	card_que.push_back(t_card_img2);
+	
+	CCSprite* t_card_img3 = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
+	t_card_img3->setPosition(t_card_img2->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+	t_card_img3->setScale(0.25f);
+	clipping_node->addChild(t_card_img3);
+	
+	card_que.push_back(t_card_img3);
+	
+	CCLabelTTF* t_label = CCLabelTTF::create();
+	KSLabelTTF* button_label = KSLabelTTF::create("STOP", mySGD->getFont().c_str(), 15);
+	button_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	button_label->setPosition(ccp(0,0));
+	t_label->addChild(button_label);
+	
+	stop_button = CCControlButton::create(t_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+	stop_button->setPreferredSize(CCSizeMake(92, 45));
+	stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::myStopAction), CCControlEventTouchUpInside);
+	stop_button->setPosition(ccp(0, -124));
+	main_case->addChild(stop_button);
+	
+	stop_button->setTouchPriority(touch_priority-1);
+	stop_button->setVisible(false);
+	
+	CCLabelTTF* t4_label = CCLabelTTF::create();
+	KSLabelTTF* ok_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_onePercentGame10), mySGD->getFont().c_str(), 15);
+	ok_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	ok_label->setPosition(ccp(0,0));
+	t4_label->addChild(ok_label);
+	
+	ok_button = CCControlButton::create(t4_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+	ok_button->setPreferredSize(CCSizeMake(92, 45));
+	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::okAction), CCControlEventTouchUpInside);
+	ok_button->setPosition(ccp(0, -124));
+	main_case->addChild(ok_button, 1);
+	
+	ok_button->setTouchPriority(touch_priority-1);
+	ok_button->setVisible(false);
+	
+	CCLabelTTF* t2_label = CCLabelTTF::create();
+	KSLabelTTF* one_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_oneGacha), mySGD->getFont().c_str(), 18);
+	one_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	one_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	one_label->setPosition(ccp(-28,0));
+	t2_label->addChild(one_label);
+	
+	price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	price_back->setContentSize(CCSizeMake(50, 30));
+	price_back->setPosition(ccp(32,0));
+	t2_label->addChild(price_back);
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
+	{
+		CCSprite* price_type = CCSprite::create("icon_p9.png");
+		price_type->setScale(0.8f);
+		KSLabelTTF* price_value = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9)).c_str(), mySGD->getFont().c_str(), 14);
+		price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
+		price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
+		price_back->addChild(price_type);
+		price_back->addChild(price_value);
+	}
+	else
+	{
+		CCSprite* price_type = CCSprite::create("icon_r.png");
+		price_type->setScale(0.8f);
+		KSLabelTTF* price_value = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
+		price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
+		price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
+		price_back->addChild(price_type);
+		price_back->addChild(price_value);
+	}
+	
+	one_button = CCControlButton::create(t2_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+	one_button->setPreferredSize(CCSizeMake(145, 55));
+	one_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::oneAction), CCControlEventTouchUpInside);
+	one_button->setPosition(ccp(-80, -124));
+	main_case->addChild(one_button);
+	
+	one_button->setTouchPriority(touch_priority-1);
+	
+	CCLabelTTF* t3_label = CCLabelTTF::create();
+	KSLabelTTF* five_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_fiveGacha), mySGD->getFont().c_str(), 18);
+	five_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	five_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+	five_label->setPosition(ccp(-28,0));
+	t3_label->addChild(five_label);
+	
+	CCScale9Sprite* price_back2 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	price_back2->setContentSize(CCSizeMake(52, 30));
+	price_back2->setPosition(ccp(30,0));
+	t3_label->addChild(price_back2);
+	
+	CCSprite* price_type2 = CCSprite::create("icon_r.png");
+	price_type2->setScale(0.8f);
+	KSLabelTTF* price_value2 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardDozen_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
+	price_type2->setPosition(ccpFromSize(price_back2->getContentSize()/2.f) + ccp(-price_value2->getContentSize().width/2.f-4,0));
+	price_value2->setPosition(ccpFromSize(price_back2->getContentSize()/2.f) + ccp(price_type2->getContentSize().width*price_type2->getScale()/2.f-4, 0));
+	price_back2->addChild(price_type2);
+	price_back2->addChild(price_value2);
+	
+	five_button = CCControlButton::create(t3_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+	five_button->setPreferredSize(CCSizeMake(145, 55));
+	five_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::fiveAction), CCControlEventTouchUpInside);
+	five_button->setPosition(ccp(80, -124));
+	main_case->addChild(five_button);
+	
+	five_button->setTouchPriority(touch_priority-1);
+	
+	
+	step_cnt = kCardGachaAnimationStep_ready;
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
-	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
+	close_button->setPosition(ccp(240,140) + ccp(-20,-12));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -91,6 +295,22 @@ void CardGachaPopup::myInit(int t_touch_priority)
 								  
 								  target_final = NULL;
 								  
+								  addChild(KSGradualValue<float>::create(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width*0.2f, -(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, 0.25f, [=](float t_f)
+																		 {
+																			 left_character->setPositionX(t_f);
+																		 }, [=](float t_f)
+																		 {
+																			 left_character->setPositionX(t_f);
+																		 }));
+								  
+								  addChild(KSGradualValue<float>::create(480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width*0.2f, 480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width, 0.25f, [=](float t_f)
+																		 {
+																			 right_character->setPositionX(t_f);
+																		 }, [=](float t_f)
+																		 {
+																			 right_character->setPositionX(t_f);
+																		 }));
+								  
 								  CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
 															  {
 																  if(target_final && delegate_final)
@@ -100,8 +320,583 @@ void CardGachaPopup::myInit(int t_touch_priority)
 							  });
 	main_case->addChild(close_button);
 	
+	addChild(KSGradualValue<float>::create(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, -(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width*0.2f, 0.25f, [=](float t_f)
+										   {
+											   left_character->setPositionX(t_f);
+										   }, [=](float t_f)
+										   {
+											   left_character->setPositionX(t_f);
+										   }));
+	
+	addChild(KSGradualValue<float>::create(480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width, 480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width*0.2f, 0.25f, [=](float t_f)
+										   {
+											   right_character->setPositionX(t_f);
+										   }, [=](float t_f)
+										   {
+											   right_character->setPositionX(t_f);
+										   }));
+	
 	CommonAnimation::openPopup(this, main_case, gray, [=](){}, [=]()
 							   {
+								   schedule(schedule_selector(CardGachaPopup::cardMoving));
 								   is_menu_enable = true;
 							   });
 }
+
+void CardGachaPopup::oneAction(CCObject *t_sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	loading_layer = LoadingLayer::create(touch_priority-100);
+	addChild(loading_layer, 999);
+	loading_layer->startLoading();
+	
+	Json::Value param;
+	param["memberID"] = myHSP->getSocialID();
+	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["count"] = 1;
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
+		param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
+	else
+		param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardOnce_exchangeID_s);
+	
+	myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultOne));
+}
+
+void CardGachaPopup::resultOne(Json::Value result_data)
+{
+	CCLog("resultOne : \n%s", result_data.toStyledString().c_str());
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		loading_layer->removeFromParent();
+		
+		take_card_number_list.clear();
+		
+		Json::Value cardlist = result_data["cardlist"];
+		for(int i=0;i<cardlist.size();i++)
+		{
+			mySGD->refreshCardData(cardlist[i]["data"]);
+			KSProtectVar<int> t_prt;
+			t_prt = cardlist[i]["data"]["cardNo"].asInt();
+			take_card_number_list.push_back(t_prt);
+		}
+		
+		Json::Value exchangeResult = result_data["exchangeResult"]["list"];
+		for(int i=0;i<exchangeResult.size();i++)
+		{
+			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
+		}
+		
+		step_cnt = kCardGachaAnimationStep_fasting;
+		one_button->setVisible(false);
+		five_button->setVisible(false);
+		addChild(KSGradualValue<float>::create(2.f, 10.f, 0.5f, [=](float t_f)
+											   {
+												   moving_speed = t_f;
+											   }, [=](float t_f)
+											   {
+												   moving_speed = t_f;
+												   addChild(KSTimer::create(0.2f, [=]()
+																			{
+																				stop_button->setVisible(true);
+																				is_menu_enable = true;
+																			}));
+											   }));
+	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		mySGD->network_check_cnt = 0;
+		
+		mySGD->refreshGoodsData(result_data["minusType"].asString(), result_data["minusCount"].asInt());
+		
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
+		
+		loading_layer->removeFromParent();
+		is_menu_enable = true;
+	}
+	else
+	{
+		mySGD->network_check_cnt++;
+		
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+				Json::Value param;
+				param["memberID"] = myHSP->getSocialID();
+				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["count"] = 1;
+				if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
+					param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
+				else
+					param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardOnce_exchangeID_s);
+				
+				myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultOne));
+			}, 1);
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 Json::Value param;
+										 param["memberID"] = myHSP->getSocialID();
+										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["count"] = 1;
+										 if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
+											 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
+										 else
+											 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardOnce_exchangeID_s);
+										 
+										 myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultOne));
+									 }));
+		}
+	}
+}
+
+void CardGachaPopup::fiveAction(CCObject *t_sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	loading_layer = LoadingLayer::create(touch_priority-100);
+	addChild(loading_layer, 999);
+	loading_layer->startLoading();
+	
+	Json::Value param;
+	param["memberID"] = myHSP->getSocialID();
+	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["count"] = 5;
+	param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
+	
+	myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultFive));
+}
+
+void CardGachaPopup::resultFive(Json::Value result_data)
+{
+	CCLog("resultFive : \n%s", result_data.toStyledString().c_str());
+	if(result_data["result"]["code"].asInt() == GDSUCCESS)
+	{
+		loading_layer->removeFromParent();
+		
+		take_card_number_list.clear();
+		
+		Json::Value cardlist = result_data["cardlist"];
+		for(int i=0;i<cardlist.size();i++)
+		{
+			mySGD->refreshCardData(cardlist[i]["data"]);
+			KSProtectVar<int> t_prt;
+			t_prt = cardlist[i]["data"]["cardNo"].asInt();
+			take_card_number_list.push_back(t_prt);
+		}
+		
+		Json::Value exchangeResult = result_data["exchangeResult"]["list"];
+		for(int i=0;i<exchangeResult.size();i++)
+		{
+			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
+		}
+		
+		step_cnt = kCardGachaAnimationStep_fasting;
+		one_button->setVisible(false);
+		five_button->setVisible(false);
+		addChild(KSGradualValue<float>::create(2.f, 10.f, 0.5f, [=](float t_f)
+											   {
+												   moving_speed = t_f;
+											   }, [=](float t_f)
+											   {
+												   moving_speed = t_f;
+												   addChild(KSTimer::create(0.2f, [=]()
+																			{
+																				stop_button->setVisible(true);
+																				is_menu_enable = true;
+																			}));
+											   }));
+	}
+	else if(result_data["result"]["code"].asInt() == GDPROPERTYISMINUS)
+	{
+		mySGD->network_check_cnt = 0;
+		
+		mySGD->refreshGoodsData(result_data["minusType"].asString(), result_data["minusCount"].asInt());
+		
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
+		
+		loading_layer->removeFromParent();
+		is_menu_enable = true;
+	}
+	else
+	{
+		mySGD->network_check_cnt++;
+		
+		if(mySGD->network_check_cnt >= mySGD->max_network_check_cnt)
+		{
+			mySGD->network_check_cnt = 0;
+			
+			ASPopupView *alert = ASPopupView::getCommonNotiTag(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_reConnect), myLoc->getLocalForKey(LK::kMyLocalKey_reConnectAlert4),[=](){
+				Json::Value param;
+				param["memberID"] = myHSP->getSocialID();
+				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["count"] = 5;
+				param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
+				
+				myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultFive));
+			}, 1);
+			if(alert)
+				((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
+		}
+		else
+		{
+			addChild(KSTimer::create(0.5f, [=]()
+									 {
+										 Json::Value param;
+										 param["memberID"] = myHSP->getSocialID();
+										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["count"] = 5;
+										 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
+										 
+										 myHSP->command("getcardbygacha", param, json_selector(this, CardGachaPopup::resultFive));
+									 }));
+		}
+	}
+}
+
+void CardGachaPopup::myStopAction(CCObject* t_sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	step_cnt = kCardGachaAnimationStep_slowing;
+	stop_button->setVisible(false);
+	addChild(KSGradualValue<float>::create(10.f, 4.f, 0.5f, [=](float t_f)
+										   {
+											   moving_speed = t_f;
+										   }, [=](float t_f)
+										   {
+											   moving_speed = t_f;
+											   step_cnt = kCardGachaAnimationStep_takeCardCreate;
+										   }));
+}
+
+void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	ok_button->setVisible(false);
+	
+	take_card_number_list.pop_front();
+	
+	function<void()> final_func;
+	
+	moving_speed = 2.f;
+	
+	if(take_card_number_list.empty())
+	{
+		step_cnt = kCardGachaAnimationStep_ready;
+		schedule(schedule_selector(CardGachaPopup::cardMoving));
+		
+		final_func = [=]()
+		{
+			// 각 버튼의 재화 확인
+			CCNode* t_parent = price_back->getParent();
+			
+			price_back->removeFromParent();
+			
+			price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+			price_back->setContentSize(CCSizeMake(50, 30));
+			price_back->setPosition(ccp(32,0));
+			t_parent->addChild(price_back);
+			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
+			{
+				CCSprite* price_type = CCSprite::create("icon_p9.png");
+				price_type->setScale(0.8f);
+				KSLabelTTF* price_value = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9)).c_str(), mySGD->getFont().c_str(), 14);
+				price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
+				price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
+				price_back->addChild(price_type);
+				price_back->addChild(price_value);
+			}
+			else
+			{
+				CCSprite* price_type = CCSprite::create("icon_r.png");
+				price_type->setScale(0.8f);
+				KSLabelTTF* price_value = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
+				price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
+				price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
+				price_back->addChild(price_type);
+				price_back->addChild(price_value);
+			}
+			
+			one_button->setVisible(true);
+			five_button->setVisible(true);
+			
+			is_menu_enable = true;
+		};
+	}
+	else
+	{
+		step_cnt = kCardGachaAnimationStep_fasting;
+		schedule(schedule_selector(CardGachaPopup::cardMoving));
+		
+		final_func = [=]()
+		{
+			addChild(KSGradualValue<float>::create(2.f, 10.f, 0.5f, [=](float t_f)
+												   {
+													   moving_speed = t_f;
+												   }, [=](float t_f)
+												   {
+													   moving_speed = t_f;
+													   addChild(KSTimer::create(0.2f, [=]()
+																				{
+																					stop_button->setVisible(true);
+																					is_menu_enable = true;
+																				}));
+												   }));
+		};
+	}
+	
+	addChild(KSGradualValue<int>::create(255, 0, 0.3f, [=](int t_i)
+										 {
+											 t_gray->setOpacity(t_i);
+										 }, [=](int t_i)
+										 {
+											 t_gray->setOpacity(t_i);
+											 t_gray->removeFromParent();
+										 }));
+	
+	addChild(KSGradualValue<float>::create(0.5f, 0.f, 0.3f, [=](float t_f)
+										   {
+											   big_card_img->setScale(t_f);
+										   }, [=](float t_f)
+										   {
+											   big_card_img->setScale(t_f);
+											   final_func();
+										   }));
+}
+
+void CardGachaPopup::cardMoving()
+{
+	deque<deque<CCSprite*>::iterator> remove_list;
+	remove_list.clear();
+	
+	for(auto t_iter = card_que.begin();t_iter != card_que.end();++t_iter)
+	{
+		CCSprite* t_card_img = *t_iter;
+		t_card_img->setPositionX(t_card_img->getPositionX() - moving_speed);
+		
+		CCRect card_bounding = t_card_img->boundingBox();
+		card_bounding.origin = card_bounding.origin + clipping_node->getPosition();
+		
+		if(!mask_bounding_rect.intersectsRect(card_bounding))
+		{
+			remove_list.push_back(t_iter);
+		}
+	}
+	
+	while(!remove_list.empty())
+	{
+		auto t_iter = remove_list.front();
+		(*t_iter)->removeFromParent();
+		card_que.erase(t_iter);
+		remove_list.pop_front();
+		
+		if(remove_list.empty() && step_cnt == kCardGachaAnimationStep_takeCardCreate)
+		{
+			CCSprite* last_card = card_que.back();
+			
+			CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
+			t_card_img->setPosition(last_card->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+			t_card_img->setScale(0.25f);
+			clipping_node->addChild(t_card_img);
+			
+			card_que.push_back(t_card_img);
+			
+			cover_img = CCSprite::create("cardgacha_card.png");
+			cover_img->setPosition(ccpFromSize(t_card_img->getContentSize()/2.f));
+			t_card_img->addChild(cover_img);
+			
+			step_cnt = kCardGachaAnimationStep_positioning;
+			unschedule(schedule_selector(CardGachaPopup::cardMoving));
+			positioning_value = t_card_img->getPositionX();
+			schedule(schedule_selector(CardGachaPopup::cardPositioning));
+		}
+		else
+		{
+			CCSprite* last_card = card_que.back();
+			
+			CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
+			t_card_img->setPosition(last_card->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+			t_card_img->setScale(0.25f);
+			clipping_node->addChild(t_card_img);
+			
+			card_que.push_back(t_card_img);
+		}
+	}
+}
+
+void CardGachaPopup::cardPositioning()
+{
+	if(moving_speed >= 0.55f)
+	{
+		moving_speed -= 0.05f;
+	}
+	else
+		moving_speed = 0.5f;
+	
+	deque<deque<CCSprite*>::iterator> remove_list;
+	remove_list.clear();
+	
+	float move_value;
+	bool is_final = false;
+	if(positioning_value <= moving_speed)
+	{
+		is_final = true;
+		move_value = positioning_value;
+		positioning_value = 0;
+	}
+	else
+	{
+		move_value = moving_speed;
+		positioning_value -= moving_speed;
+	}
+	
+	
+	for(auto t_iter = card_que.begin();t_iter != card_que.end();++t_iter)
+	{
+		CCSprite* t_card_img = *t_iter;
+		t_card_img->setPositionX(t_card_img->getPositionX() - move_value);
+		
+		CCRect card_bounding = t_card_img->boundingBox();
+		card_bounding.origin = card_bounding.origin + clipping_node->getPosition();
+		
+		if(!mask_bounding_rect.intersectsRect(card_bounding))
+		{
+			remove_list.push_back(t_iter);
+		}
+	}
+	
+	while(!remove_list.empty())
+	{
+		auto t_iter = remove_list.front();
+		(*t_iter)->removeFromParent();
+		card_que.erase(t_iter);
+		remove_list.pop_front();
+		
+		CCSprite* last_card = card_que.back();
+		
+		CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
+		t_card_img->setPosition(last_card->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+		t_card_img->setScale(0.25f);
+		clipping_node->addChild(t_card_img);
+		
+		card_que.push_back(t_card_img);
+	}
+	
+	if(is_final)
+	{
+		unschedule(schedule_selector(CardGachaPopup::cardPositioning));
+		CCSprite* take_card_img = (CCSprite*)cover_img->getParent();
+		addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
+											   {
+												   take_card_img->setPositionY(t_f);
+												   cover_img->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+											   }, [=](float t_f)
+											   {
+												   take_card_img->setPositionY(t_f);
+												   cover_img->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+												   
+												   addChild(KSTimer::create(0.3f, [=]()
+												   {
+													   t_gray = CCSprite::create("back_gray.png");
+													   t_gray->setOpacity(0);
+													   t_gray->setPosition(ccp(0,14));
+													   t_gray->setScaleX(gray->getScaleX());
+													   t_gray->setScaleY(gray->getScaleY());
+													   main_case->addChild(t_gray);
+													   
+													   big_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
+													   big_card_img->setScale(0.5f);
+													   big_card_img->setPosition(ccp(0,400));
+													   main_case->addChild(big_card_img);
+													   
+													   CCSprite* top_case = CCSprite::create("diary_frame_top.png");
+													   top_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,215));
+													   big_card_img->addChild(top_case);
+													   
+													   CCSprite* bottom_case = CCSprite::create("diary_frame_bottom.png");
+													   bottom_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,-215));
+													   big_card_img->addChild(bottom_case);
+													   
+													   CCSprite* left_case = CCSprite::create("diary_frame_left.png");
+													   left_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(-160,0));
+													   big_card_img->addChild(left_case);
+													   
+													   CCSprite* right_case = CCSprite::create("diary_frame_right.png");
+													   right_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(160,0));
+													   big_card_img->addChild(right_case);
+													   
+													   addChild(KSGradualValue<int>::create(0, 255, 1.f, [=](int t_i)
+																							{
+																								t_gray->setOpacity(t_i);
+																							}, [=](int t_i)
+																							{
+																								t_gray->setOpacity(t_i);
+																							}));
+													   
+													   addChild(KSGradualValue<float>::create(400, 10, 1.5f, [=](float t_f)
+																							  {
+																								  big_card_img->setPositionY(t_f);
+																							  }, [=](float t_f)
+																							  {
+																								  big_card_img->setPositionY(t_f);
+																								  
+																								  take_card_img->setPositionY(0);
+																								  cover_img->setPositionY(take_card_img->getContentSize().height/2.f);
+																								  
+																								  int t_grade = NSDS_GI(kSDS_CI_int1_grade_i, take_card_number_list.front().getV());
+																								  KSLabelTTF* grade_card_take = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), t_grade), mySGD->getFont().c_str(), 40);
+																								  if(t_grade == 1)
+																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																								  else if(t_grade == 2)
+																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																								  else if(t_grade == 3)
+																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																								  else if(t_grade == 4)
+																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																								  grade_card_take->enableOuterStroke(ccBLACK, 2.f, 255, true);
+																								  grade_card_take->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f));
+																								  big_card_img->addChild(grade_card_take);
+																								  
+																								  addChild(KSGradualValue<float>::create(0.f, 1.f/big_card_img->getScale(), 0.3f, [=](float t_f)
+																																		 {
+																																			 grade_card_take->setScale(t_f);
+																																		 }, [=](float t_f)
+																																		 {
+																																			 grade_card_take->setScale(t_f);
+																																			 ok_button->setVisible(true);
+																																			 is_menu_enable = true;
+																																		 }));
+																							  }));
+												   }));
+											   }));
+	}
+}
+

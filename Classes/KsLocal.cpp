@@ -1314,6 +1314,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_playCount] = "플레이 판수";
 	obj[LK::kMyLocalKey_pvpHighVictory] = "PvP 최고연승";
 	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
+	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
+	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2553,6 +2555,8 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_playCount] = "플레이 판수";
 	obj[LK::kMyLocalKey_pvpHighVictory] = "PvP 최고연승";
 	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
+	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
+	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
