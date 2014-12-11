@@ -2667,6 +2667,9 @@ void PlayUI::takeSilenceItem()
 
 void PlayUI::takeAddTimeItem ()
 {
+	if(mySGD->is_god_of_death)
+		return;
+	
 	int change_time = NSDS_GI(mySD->getSilType(), kSDS_SI_itemOptionAddTimeSec_i);
 	mySGD->add_time_value = mySGD->add_time_value.getV() + change_time;
 	countingCnt -= change_time;
@@ -3376,83 +3379,69 @@ void PlayUI::counting ()
 				AudioEngine::sharedInstance()->playEffect("ment_timeover.mp3", false, true);
 				
 				t_is_die = true;
-				//			if(jack_life > 0)
-				//			{
-				myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
-				//			}
-				//			else
-				//			{
-				//				stopCounting();
-				//				// timeover
-				//
-				//				mySGD->fail_code = kFC_timeover;
-				//
-				//				myGD->communication("Main_allStopSchedule");
-				//				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-				//				result_sprite = CCSprite::create("game_timeover.png");
-				//				result_sprite->setRotation(-25);
-				//				result_sprite->setPosition(ccp(240,myDSH->ui_center_y));
-				//				addChild(result_sprite);
-				//
-				//				endGame();
-				//			}
 				
+				mySGD->is_god_of_death = true;
+				Json::Value pd;
+				pd["speed"] = 3.f;
+				myGD->attachGodOfDeath(myGD->getMainCumberVector()[0], pd);
 				
-				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
-				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-				time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
-				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
-				time_over_label->setOpacity(0);
-				addChild(time_over_label);
-				
-				KSLabelTTF* shadow = CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
-				shadow->setOpacityOuterStroke(0);
-				
-				time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
-																		{
-																			float convert_t;
-																			if (t < 1 / 2.75)
-																			{
-																				convert_t = 7.5625f * t * t;
-																			} else if (t < 2 / 2.75)
-																			{
-																				t -= 1.5f / 2.75f;
-																				convert_t = 7.5625f * t * t + 0.75f;
-																			} else if(t < 2.5 / 2.75)
-																			{
-																				t -= 2.25f / 2.75f;
-																				convert_t = 7.5625f * t * t + 0.9375f;
-																			}
-																			
-																			t -= 2.625f / 2.75f;
-																			convert_t = 7.5625f * t * t + 0.984375f;
-																			
-																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
-																			time_over_label->setOpacity(t*255);
-																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
-																		}, [=](float t)
-																		{
-																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
-																			time_over_label->setOpacity(255);
-																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
-																			
-																			time_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
-																													  {
-																														  time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
-																																												  {
-																																													  time_over_label->setScale(1.f+t*0.6f);
-																																													  time_over_label->setOpacity(255-t*255);
-																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-																																												  }, [=](float t)
-																																												  {
-																																													  time_over_label->setScale(1.6f);
-																																													  time_over_label->setOpacity(0);
-																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-																																													  
-																																													  time_over_label->removeFromParent();
-																																												  }));
-																													  }));
-																		}));
+//				myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+//				
+//				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
+//				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+//				time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
+//				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
+//				time_over_label->setOpacity(0);
+//				addChild(time_over_label);
+//				
+//				KSLabelTTF* shadow = CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
+//				shadow->setOpacityOuterStroke(0);
+//				
+//				time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
+//																		{
+//																			float convert_t;
+//																			if (t < 1 / 2.75)
+//																			{
+//																				convert_t = 7.5625f * t * t;
+//																			} else if (t < 2 / 2.75)
+//																			{
+//																				t -= 1.5f / 2.75f;
+//																				convert_t = 7.5625f * t * t + 0.75f;
+//																			} else if(t < 2.5 / 2.75)
+//																			{
+//																				t -= 2.25f / 2.75f;
+//																				convert_t = 7.5625f * t * t + 0.9375f;
+//																			}
+//																			
+//																			t -= 2.625f / 2.75f;
+//																			convert_t = 7.5625f * t * t + 0.984375f;
+//																			
+//																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
+//																			time_over_label->setOpacity(t*255);
+//																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+//																		}, [=](float t)
+//																		{
+//																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
+//																			time_over_label->setOpacity(255);
+//																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+//																			
+//																			time_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
+//																													  {
+//																														  time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+//																																												  {
+//																																													  time_over_label->setScale(1.f+t*0.6f);
+//																																													  time_over_label->setOpacity(255-t*255);
+//																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+//																																												  }, [=](float t)
+//																																												  {
+//																																													  time_over_label->setScale(1.6f);
+//																																													  time_over_label->setOpacity(0);
+//																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+//																																													  
+//																																													  time_over_label->removeFromParent();
+//																																												  }));
+//																													  }));
+//																		}));
 			}
 		}
 	}
@@ -3537,6 +3526,66 @@ void PlayUI::counting ()
 	}
 	
 }
+
+void PlayUI::showTimeover()
+{
+	KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
+	time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
+	time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
+	time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
+	time_over_label->setOpacity(0);
+	addChild(time_over_label);
+	
+	KSLabelTTF* shadow = CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
+	shadow->setOpacityOuterStroke(0);
+	
+	time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
+															{
+																float convert_t;
+																if (t < 1 / 2.75)
+																{
+																	convert_t = 7.5625f * t * t;
+																} else if (t < 2 / 2.75)
+																{
+																	t -= 1.5f / 2.75f;
+																	convert_t = 7.5625f * t * t + 0.75f;
+																} else if(t < 2.5 / 2.75)
+																{
+																	t -= 2.25f / 2.75f;
+																	convert_t = 7.5625f * t * t + 0.9375f;
+																}
+																
+																t -= 2.625f / 2.75f;
+																convert_t = 7.5625f * t * t + 0.984375f;
+																
+																time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
+																time_over_label->setOpacity(t*255);
+																shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+															}, [=](float t)
+															{
+																time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
+																time_over_label->setOpacity(255);
+																shadow->setOpacityOuterStroke(255 * 0.3f*(t));
+																
+																time_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
+																										  {
+																											  time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
+																																									  {
+																																										  time_over_label->setScale(1.f+t*0.6f);
+																																										  time_over_label->setOpacity(255-t*255);
+																																										  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																									  }, [=](float t)
+																																									  {
+																																										  time_over_label->setScale(1.6f);
+																																										  time_over_label->setOpacity(0);
+																																										  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
+																																										  
+																																										  time_over_label->removeFromParent();
+																																									  }));
+																										  }));
+															}));
+}
+
 void PlayUI::lifeBonus ()
 {
 	if(jack_life > 0)
@@ -3862,6 +3911,7 @@ void PlayUI::takeItemCollect ()
 
 void PlayUI::myInit ()
 {
+	mySGD->is_god_of_death = false;
 	mission_oper_list.clear();
 	
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
@@ -4973,6 +5023,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_addTurnCnt"] = std::bind(&PlayUI::addTurnCnt, this);
 	myGD->V_V["UI_checkScoreMission"] = std::bind(&PlayUI::checkScoreMission, this);
 	myGD->V_V["UI_hellModeResult"] = std::bind(&PlayUI::hellModeResult, this);
+	myGD->V_V["UI_showTimeover"] = std::bind(&PlayUI::showTimeover, this);
 	myGD->V_F["UI_changeCastingGage"] = [=](float t_f)
 	{
 		casting_cancel_gage->ks_animator_node->removeAllChildren();
