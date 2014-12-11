@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "SelectorDefine.h"
 #include <algorithm>
+#include "jsoncpp/json.h"
 
 using namespace cocos2d;
 using namespace std;
@@ -140,6 +141,7 @@ public:
 	std::function<std::vector<KSCumberBase*>&(void)> getSubCumberVector;
 	std::function<KSCumberBase*(CCPoint pt)> getNearestCumber;
 	std::function<KSCumberBase*(CCPoint pt, const std::vector<KSCumberBase*>)> getNearestCumberWithExclude;
+	std::function<void(KSCumberBase*, Json::Value patternD)> attachGodOfDeath;
 	std::function<void(const std::string& fileName, const std::string& type)> showDetailMessage;
 	std::function<void(StoneType, int level, float percent, CCPoint initPosition, int missile_damage,
 										 int missile_sub_damage)> createJackMissileWithStoneFunctor;
