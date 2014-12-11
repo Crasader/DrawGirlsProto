@@ -818,92 +818,114 @@ void CardGachaPopup::cardPositioning()
 	if(is_final)
 	{
 		unschedule(schedule_selector(CardGachaPopup::cardPositioning));
-		CCSprite* take_card_img = (CCSprite*)cover_clipping->getParent();
-		addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
-											   {
-												   take_card_img->setPositionY(t_f);
-												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-												   cover_img->setPositionY(t_f/take_card_img->getScale());
-											   }, [=](float t_f)
-											   {
-												   take_card_img->setPositionY(t_f);
-												   cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-												   cover_img->setPositionY(t_f/take_card_img->getScale());
-												   
-												   addChild(KSTimer::create(0.3f, [=]()
-												   {
-													   t_gray = CCSprite::create("back_gray.png");
-													   t_gray->setOpacity(0);
-													   t_gray->setPosition(ccp(0,14));
-													   t_gray->setScaleX(gray->getScaleX());
-													   t_gray->setScaleY(gray->getScaleY());
-													   main_case->addChild(t_gray);
-													   
-													   big_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
-													   big_card_img->setScale(0.5f);
-													   big_card_img->setPosition(ccp(0,400));
-													   main_case->addChild(big_card_img);
-													   
-													   CCSprite* top_case = CCSprite::create("diary_frame_top.png");
-													   top_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,215));
-													   big_card_img->addChild(top_case);
-													   
-													   CCSprite* bottom_case = CCSprite::create("diary_frame_bottom.png");
-													   bottom_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,-215));
-													   big_card_img->addChild(bottom_case);
-													   
-													   CCSprite* left_case = CCSprite::create("diary_frame_left.png");
-													   left_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(-160,0));
-													   big_card_img->addChild(left_case);
-													   
-													   CCSprite* right_case = CCSprite::create("diary_frame_right.png");
-													   right_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(160,0));
-													   big_card_img->addChild(right_case);
-													   
-													   addChild(KSGradualValue<int>::create(0, 255, 1.f, [=](int t_i)
-																							{
-																								t_gray->setOpacity(t_i);
-																							}, [=](int t_i)
-																							{
-																								t_gray->setOpacity(t_i);
-																							}));
-													   
-													   addChild(KSGradualValue<float>::create(400, 10, 1.5f, [=](float t_f)
-																							  {
-																								  big_card_img->setPositionY(t_f);
-																							  }, [=](float t_f)
-																							  {
-																								  big_card_img->setPositionY(t_f);
-																								  
-																								  take_card_img->setPositionY(0);
-																								  cover_img->setPositionY(take_card_img->getContentSize().height/2.f);
-																								  
-																								  int t_grade = NSDS_GI(kSDS_CI_int1_grade_i, take_card_number_list.front().getV());
-																								  KSLabelTTF* grade_card_take = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), t_grade), mySGD->getFont().c_str(), 40);
-																								  if(t_grade == 1)
-																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-																								  else if(t_grade == 2)
-																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-																								  else if(t_grade == 3)
-																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-																								  else if(t_grade == 4)
-																									  grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
-																								  grade_card_take->enableOuterStroke(ccBLACK, 2.f, 255, true);
-																								  grade_card_take->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f));
-																								  big_card_img->addChild(grade_card_take);
-																								  
-																								  addChild(KSGradualValue<float>::create(0.f, 1.f/big_card_img->getScale(), 0.3f, [=](float t_f)
-																																		 {
-																																			 grade_card_take->setScale(t_f);
-																																		 }, [=](float t_f)
-																																		 {
-																																			 grade_card_take->setScale(t_f);
-																																			 ok_button->setVisible(true);
-																																			 is_menu_enable = true;
-																																		 }));
-																							  }));
-												   }));
-											   }));
+		
+		addChild(KSTimer::create(0.3f, [=]()
+								 {
+									 CCSprite* take_card_img = (CCSprite*)cover_clipping->getParent();
+									 addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
+																			{
+																				take_card_img->setPositionY(t_f);
+																				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+																				cover_img->setPositionY(t_f/take_card_img->getScale());
+																			}, [=](float t_f)
+																			{
+																				take_card_img->setPositionY(t_f);
+																				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+																				cover_img->setPositionY(t_f/take_card_img->getScale());
+																				
+																				addChild(KSTimer::create(0.3f, [=]()
+																										 {
+																											 t_gray = CCSprite::create("back_gray.png");
+																											 t_gray->setOpacity(0);
+																											 t_gray->setPosition(ccp(0,14));
+																											 t_gray->setScaleX(gray->getScaleX());
+																											 t_gray->setScaleY(gray->getScaleY());
+																											 main_case->addChild(t_gray);
+																											 
+																											 big_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
+																											 big_card_img->setScale(0.5f);
+																											 big_card_img->setPosition(ccp(0,400));
+																											 main_case->addChild(big_card_img);
+																											 
+																											 CCSprite* top_case = CCSprite::create("diary_frame_top.png");
+																											 top_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,215));
+																											 big_card_img->addChild(top_case);
+																											 
+																											 CCSprite* bottom_case = CCSprite::create("diary_frame_bottom.png");
+																											 bottom_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,-215));
+																											 big_card_img->addChild(bottom_case);
+																											 
+																											 CCSprite* left_case = CCSprite::create("diary_frame_left.png");
+																											 left_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(-160,0));
+																											 big_card_img->addChild(left_case);
+																											 
+																											 CCSprite* right_case = CCSprite::create("diary_frame_right.png");
+																											 right_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(160,0));
+																											 big_card_img->addChild(right_case);
+																											 
+																											 addChild(KSGradualValue<int>::create(0, 255, 1.f, [=](int t_i)
+																																				  {
+																																					  t_gray->setOpacity(t_i);
+																																				  }, [=](int t_i)
+																																				  {
+																																					  t_gray->setOpacity(t_i);
+																																				  }));
+																											 
+																											 addChild(KSGradualValue<float>::create(400, 10, 1.5f, [=](float t_f)
+																																					{
+																																						big_card_img->setPositionY(t_f);
+																																					}, [=](float t_f)
+																																					{
+																																						big_card_img->setPositionY(t_f);
+																																						
+																																						take_card_img->setPositionY(0);
+																																						cover_img->setPositionY(take_card_img->getContentSize().height/2.f);
+																																						
+																																						CCSprite* light_back = CCSprite::create("showtime_spin_light.png");
+																																						light_back->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f));
+																																						big_card_img->addChild(light_back, -1);
+																																						
+																																						light_back->setScale(0.f);
+																																						
+																																						CCRotateBy* t_rotate = CCRotateBy::create(1.f, 120);
+																																						CCRepeatForever* t_repeat = CCRepeatForever::create(t_rotate);
+																																						light_back->runAction(t_repeat);
+																																						
+																																						int t_grade = NSDS_GI(kSDS_CI_int1_grade_i, take_card_number_list.front().getV());
+																																						KSLabelTTF* grade_card_take = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_cardTake), t_grade), mySGD->getFont().c_str(), 40);
+																																						if(t_grade == 1)
+																																							grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																																						else if(t_grade == 2)
+																																							grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																																						else if(t_grade == 3)
+																																							grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																																						else if(t_grade == 4)
+																																							grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+																																						grade_card_take->enableOuterStroke(ccBLACK, 2.f, 255, true);
+																																						grade_card_take->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f));
+																																						big_card_img->addChild(grade_card_take);
+																																						
+																																						addChild(KSGradualValue<float>::create(0.f, 1.f/big_card_img->getScale(), 0.3f, [=](float t_f)
+																																															   {
+																																																   light_back->setScale(t_f);
+																																															   }, [=](float t_f)
+																																															   {
+																																																   light_back->setScale(t_f);
+																																															   }));
+																																						
+																																						addChild(KSGradualValue<float>::create(0.f, 1.f/big_card_img->getScale(), 0.3f, [=](float t_f)
+																																															   {
+																																																   grade_card_take->setScale(t_f);
+																																															   }, [=](float t_f)
+																																															   {
+																																																   grade_card_take->setScale(t_f);
+																																																   ok_button->setVisible(true);
+																																																   is_menu_enable = true;
+																																															   }));
+																																					}));
+																										 }));
+																			}));
+								 }));
 	}
 }
 
