@@ -1076,6 +1076,12 @@ KSCumberBase* MissileParent::getNearestCumberWithExclude(cocos2d::CCPoint pt, co
 	return nearCumber;
 }
 
+void MissileParent::attachGodOfDeath(KSCumberBase* cb, Json::Value patternD)
+{
+	GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD.asString());
+	getPatternContainer()->addChild(t);
+}
+
 
 void MissileParent::subOneDie()
 {
@@ -2371,6 +2377,7 @@ void MissileParent::myInit( CCNode* boss_eye )
 	myGD->removeAllPattern = std::bind(&MissileParent::removeAllPattern, this);
 	myGD->getNearestCumber = std::bind(&MissileParent::getNearestCumber, this, _1);
 	myGD->getNearestCumberWithExclude = std::bind(&MissileParent::getNearestCumberWithExclude, this, _1, _2);
+	myGD->attachGodOfDeath = std::bind(&MissileParent::attachGodOfDeath, this, _1, _2);
 
 }
 

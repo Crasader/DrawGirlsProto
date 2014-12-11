@@ -569,6 +569,7 @@ void Boomerang::update(float dt)
 		// 날아가는 구간
 		m_centerRad += M_PI / 180.f * 4.f * 50.f / m_centerA;
 		
+		
 		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
 												 sinf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) + cosf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad));
 		
@@ -579,7 +580,6 @@ void Boomerang::update(float dt)
 			m_missileStep = 2;
 			m_missileSprite->setColor(ccc3(255, 0, 0));
 		}
-		
 	}
 	else if(m_missileStep == 2)
 	{
@@ -613,8 +613,11 @@ void Boomerang::update(float dt)
 	{
 		Satellite& i = *iter;
 		//		iter.rad += M_PI / 180.f * 4.f;
-		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(i.rad) + m_params.revelutionA / 2.f) - m_params.revelutionA / 2.f * sinf(i.rad) * sinf(m_revolutionRad),
-													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(i.rad) + m_params.revelutionA / 2.f) + m_params.revelutionA / 2.f * sinf(i.rad) * cosf(m_revolutionRad));
+		float tx = 0.f;
+		float revolB = m_params.revelutionA / 2.f;
+		float ty = -revolB;
+		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(i.rad) + tx) - sinf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) ,
+													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(i.rad) + tx) + cosf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) );
 		//		CCPoint tr = ccp(m_params.revelutionA * cosf(iter.rad), m_params.revelutionA / 2.f * sinf(iter.rad));
 		i.sprite->setMissilePosition(m_missileSprite->getPosition() + tracer2);
 		

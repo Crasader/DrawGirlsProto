@@ -14,16 +14,23 @@
 #import "HSPCore.h"
 #endif
 
-
+static int oldGoogle = 4;
+static int newGoogle = 3;
+static int oldGuest = 17;
+static int newGuest = 14;
+static int newFacebook = 2;
+static int oldFacebook = 2;
 void saveOAuthType(int i)
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)i);
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-	if(i == 3)
-		i = 4;
-	else if(i == 14)
-		i = 17;
+	if(i == newGoogle)
+		i = oldGoogle;
+	else if(i == newGuest)
+		i = oldGuest;
+	else if(i == newFacebook)
+		i = oldFacebook;
 	myDSH->setIntegerForKey(kDSH_Key_accountType, (int)i);
 
 #endif
@@ -38,16 +45,40 @@ int getSavedOAuthType(int def)
 	
 	int i = myDSH->getIntegerForKeyDefault(kDSH_Key_accountType, (int)def);
 	CCLOG("@@@@ old const = %d", i);
-	if(i == 4)
-		return 3;
-	else if(i == 17)
-		return 14;
+	if(i == oldGoogle)
+		return newGoogle;
+	else if(i == oldGuest)
+		return newGuest;
+	else if(i == oldFacebook)
+		return newFacebook;
 	else
 		return i;
 
 	
 #endif
 
+}
+
+
+int newOAuthTypeToServerOAuthType(int newT)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	if(newT == HSP_OAUTHPROVIDER_FACEBOOK)
+		return 0;
+	else if(newT == HSP_OAUTHPROVIDER_GUEST)
+		return 1;
+	else if(newT == HSP_OAUTHPROVIDER_GAMECENTER)
+		return 2;
+	return -1;
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	if(newT == newGoogle)
+		return 3;
+	if(newT == newGuest)
+		return 1;
+	if(newT == newFacebook)
+		return 0;
+	return -1;
+#endif
 }
 AccountManagerPopup::AccountManagerPopup()
 {
@@ -410,12 +441,11 @@ bool AccountManagerPopup::init(int touchP)
 									Json::Value param;
 									
 									
-									// 14는 게스트 매직넘버
-									int guestNumber = 14;
+									
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-									param["loginType"] = getSavedOAuthType(guestNumber) + 100;
+									param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType(newGuest) ) + 100;
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-									param["loginType"] = getSavedOAuthType(guestNumber) + 200;
+									param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType(newGuest) ) + 200;
 #endif
 									
 									myHSP->command("updateuserdata", param, nullptr);

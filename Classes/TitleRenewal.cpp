@@ -456,14 +456,15 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		KS::KSLog("member eeeee id %", hspConnector::get()->getSocialID().c_str());
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
-		param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST);
+		param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
 #else
-		param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER);
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
 #endif
 		
 #else
-		param["loginType"] = getSavedOAuthType((int)HSPLogin::GUEST);
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSPLogin::GUEST) );
 #endif
+		CCLog("server type ============== %d", param["loginType"].asInt());
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	}
 	else
@@ -644,14 +645,15 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 			param["memberID"] = hspConnector::get()->getSocialID();
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
-			param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
 #else
-			param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
 #endif
 			
 #else
-			param["loginType"] = getSavedOAuthType((int)HSPLogin::GUEST);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSPLogin::GUEST) );
 #endif
+			CCLog("server type ============== %d", param["loginType"].asInt());
 			hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 		};
 		

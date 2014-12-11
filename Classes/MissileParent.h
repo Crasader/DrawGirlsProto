@@ -84,6 +84,7 @@ public:
 	void removeAllPattern();
 	KSCumberBase* getNearestCumber(CCPoint pt);
 	KSCumberBase* getNearestCumberWithExclude(cocos2d::CCPoint pt, const std::vector<KSCumberBase*>& exclude);
+	void attachGodOfDeath(KSCumberBase* cb, Json::Value patternD);
 
 private:
 	
