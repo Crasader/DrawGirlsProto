@@ -2103,6 +2103,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGachaCardOnce_sale_s, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGachaCardOnce_data_s, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopGachaCardOnce_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_reward_s, t_data["reward"].asString(), false);
 		}
 		{
 			Json::Value t_data = result_data["gachaCardDozen"];
@@ -2112,6 +2113,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGachaCardDozen_sale_s, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGachaCardDozen_data_s, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopGachaCardDozen_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_reward_s, t_data["reward"].asString(), false);
 		}
 		{
 			Json::Value t_data = result_data["gachaCardPass"];
@@ -2121,6 +2123,7 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGachaCardPass_sale_s, t_data["sale"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGachaCardPass_data_s, t_writer.write(t_data["data"]), false);
 			NSDS_SS(kSDS_GI_shopGachaCardPass_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_reward_s, t_data["reward"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)

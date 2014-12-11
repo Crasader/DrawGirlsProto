@@ -51,6 +51,7 @@ private:
 	CCClippingNode* cover_clipping;
 	CCSprite* big_card_img;
 	CCSprite* t_gray;
+	KSLabelTTF* sub_ment1;
 	float positioning_value;
 	
 	LoadingLayer* loading_layer;

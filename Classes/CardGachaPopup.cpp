@@ -211,7 +211,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	KSLabelTTF* one_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_oneGacha), mySGD->getFont().c_str(), 18);
 	one_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	one_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
-	one_label->setPosition(ccp(-28,0));
+	one_label->setPosition(ccp(-28,5));
 	t2_label->addChild(one_label);
 	
 	price_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -227,16 +227,38 @@ void CardGachaPopup::myInit(int t_touch_priority)
 		price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
 		price_back->addChild(price_type);
 		price_back->addChild(price_value);
+		
+		sub_ment1 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardPass_countName_s).c_str(), mySGD->getFont().c_str(), 10);
+		sub_ment1->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		sub_ment1->setPosition(ccp(-28, -10));
+		price_back->getParent()->addChild(sub_ment1);
 	}
 	else
 	{
-		CCSprite* price_type = CCSprite::create("icon_r.png");
+		string t_type = "icon_r.png";
+		
+		Json::Reader t_reader;
+		Json::Value t_reward;
+		t_reader.parse(NSDS_GS(kSDS_GI_shopGachaCardOnce_reward_s), t_reward);
+		
+		GoodsType goods_type = mySGD->getGoodsKeyToType(t_reward[0]["type"].asString());
+		if(goods_type == kGoodsType_ruby)
+			t_type = "icon_r.png";
+		else if(goods_type == kGoodsType_gold)
+			t_type = "icon_g.png";
+		
+		CCSprite* price_type = CCSprite::create(t_type.c_str());
 		price_type->setScale(0.8f);
 		KSLabelTTF* price_value = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
 		price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
 		price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
 		price_back->addChild(price_type);
 		price_back->addChild(price_value);
+		
+		sub_ment1 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_countName_s).c_str(), mySGD->getFont().c_str(), 10);
+		sub_ment1->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+		sub_ment1->setPosition(ccp(-28, -10));
+		price_back->getParent()->addChild(sub_ment1);
 	}
 	
 	one_button = CCControlButton::create(t2_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
@@ -251,7 +273,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	KSLabelTTF* five_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_fiveGacha), mySGD->getFont().c_str(), 18);
 	five_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	five_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
-	five_label->setPosition(ccp(-28,0));
+	five_label->setPosition(ccp(-28,5));
 	t3_label->addChild(five_label);
 	
 	CCScale9Sprite* price_back2 = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
@@ -259,13 +281,30 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	price_back2->setPosition(ccp(30,0));
 	t3_label->addChild(price_back2);
 	
-	CCSprite* price_type2 = CCSprite::create("icon_r.png");
+	string t_type = "icon_r.png";
+	
+	Json::Reader t_reader;
+	Json::Value t_reward;
+	t_reader.parse(NSDS_GS(kSDS_GI_shopGachaCardDozen_reward_s), t_reward);
+	
+	GoodsType goods_type = mySGD->getGoodsKeyToType(t_reward[0]["type"].asString());
+	if(goods_type == kGoodsType_ruby)
+		t_type = "icon_r.png";
+	else if(goods_type == kGoodsType_gold)
+		t_type = "icon_g.png";
+	
+	CCSprite* price_type2 = CCSprite::create(t_type.c_str());
 	price_type2->setScale(0.8f);
 	KSLabelTTF* price_value2 = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardDozen_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
 	price_type2->setPosition(ccpFromSize(price_back2->getContentSize()/2.f) + ccp(-price_value2->getContentSize().width/2.f-4,0));
 	price_value2->setPosition(ccpFromSize(price_back2->getContentSize()/2.f) + ccp(price_type2->getContentSize().width*price_type2->getScale()/2.f-4, 0));
 	price_back2->addChild(price_type2);
 	price_back2->addChild(price_value2);
+	
+	KSLabelTTF* sub_ment = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardDozen_countName_s).c_str(), mySGD->getFont().c_str(), 10);
+	sub_ment->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+	sub_ment->setPosition(ccp(-28, -10));
+	price_back2->getParent()->addChild(sub_ment);
 	
 	five_button = CCControlButton::create(t3_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	five_button->setPreferredSize(CCSizeMake(145, 55));
@@ -633,16 +672,32 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 				price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
 				price_back->addChild(price_type);
 				price_back->addChild(price_value);
+				
+				sub_ment1->setString(NSDS_GS(kSDS_GI_shopGachaCardPass_countName_s).c_str());
 			}
 			else
 			{
-				CCSprite* price_type = CCSprite::create("icon_r.png");
+				string t_type = "icon_r.png";
+				
+				Json::Reader t_reader;
+				Json::Value t_reward;
+				t_reader.parse(NSDS_GS(kSDS_GI_shopGachaCardOnce_reward_s), t_reward);
+				
+				GoodsType goods_type = mySGD->getGoodsKeyToType(t_reward[0]["type"].asString());
+				if(goods_type == kGoodsType_ruby)
+					t_type = "icon_r.png";
+				else if(goods_type == kGoodsType_gold)
+					t_type = "icon_g.png";
+				
+				CCSprite* price_type = CCSprite::create(t_type.c_str());
 				price_type->setScale(0.8f);
 				KSLabelTTF* price_value = KSLabelTTF::create(NSDS_GS(kSDS_GI_shopGachaCardOnce_priceName_s).c_str(), mySGD->getFont().c_str(), 14);
 				price_type->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(-price_value->getContentSize().width/2.f-4,0));
 				price_value->setPosition(ccpFromSize(price_back->getContentSize()/2.f) + ccp(price_type->getContentSize().width*price_type->getScale()/2.f-4, 0));
 				price_back->addChild(price_type);
 				price_back->addChild(price_value);
+				
+				sub_ment1->setString(NSDS_GS(kSDS_GI_shopGachaCardOnce_countName_s).c_str());
 			}
 			
 			one_button->setVisible(true);
