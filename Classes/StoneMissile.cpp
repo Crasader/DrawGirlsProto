@@ -570,8 +570,12 @@ void Boomerang::update(float dt)
 		m_centerRad += M_PI / 180.f * 4.f * 50.f / m_centerA;
 		
 		
-		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
-												 sinf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) + cosf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad));
+		auto traceMat = CCAffineTransformIdentity;
+		traceMat = CCAffineTransformRotate(traceMat, m_initRad);
+		CCPoint tracer = CCPointApplyAffineTransform(ccp(m_centerA * cosf(m_centerRad) + m_centerA,
+																		m_centerA / 4.f * sinf(m_centerRad)), traceMat);
+//		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - sinf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad),
+//												 sinf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) + cosf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad));
 		
 		m_missileSprite->setPosition(m_params.initPosition + tracer);
 		
@@ -616,8 +620,13 @@ void Boomerang::update(float dt)
 		float tx = 0.f;
 		float revolB = m_params.revelutionA / 2.f;
 		float ty = -revolB;
-		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(i.rad) + tx) - sinf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) ,
-													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(i.rad) + tx) + cosf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) );
+		CCAffineTransform revolMat = CCAffineTransformIdentity;
+		revolMat = CCAffineTransformTranslate(CCAffineTransformRotate(revolMat, m_revolutionRad), tx, ty);
+		CCPoint tracer2 = CCPointApplyAffineTransform(ccp(m_params.revelutionA * cosf(i.rad), revolB * sinf(i.rad)),
+																revolMat);
+		
+//		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(i.rad) + tx) - sinf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) ,
+//													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(i.rad) + tx) + cosf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) );
 		//		CCPoint tr = ccp(m_params.revelutionA * cosf(iter.rad), m_params.revelutionA / 2.f * sinf(iter.rad));
 		i.sprite->setMissilePosition(m_missileSprite->getPosition() + tracer2);
 		
@@ -718,4 +727,78 @@ void Chain::update(float dt)
 	
 	
 }
+
+
+void HeartMissile::update(float dt)
+{
+	if(getChildrenCount() == 1) // 자식이 없어지면 삭쿠제.
+	{
+		removeFromParentAndCleanup(true);
+		return;
+	}
+	
+	float value = 1.f;
+	if(m_scaleStep == 1)
+	{
+		value = m_value.getValue();
+		bool stepContinue = m_value.step(1.f / 60.f);
+		if(!stepContinue)
+		{
+			m_scaleStep = 2;
+			m_value.init(m_value.getTo(), 1.f, 0.4f);
+		}
+	}
+	else if(m_scaleStep == 2)
+	{
+		value = m_value.getValue();
+		bool stepContinue = m_value.step(1.f / 60.f);
+		if(!stepContinue)
+		{
+			m_scaleStep = 1;
+			m_value.init(1.f, 1.3f, 0.3f, elasticOut);
+		}
+
+	}
+	m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp( m_params.speed * cosf(m_initRad), m_params.speed * sin(m_initRad)) );
+	
+	for(auto iter = m_satellites.begin(); iter != m_satellites.end(); )
+	{
+		Satellite& i = *iter;
+		
+		CCAffineTransform mat = CCAffineTransformIdentity;
+		mat = CCAffineTransformScale(mat, 1.f, 1.2f);
+		mat = CCAffineTransformScale(mat, value, value);
+		
+//		mat = CCAffineTransformTranslate(mat, m_missileSprite->getPosition().x, m_missileSprite->getPosition().y);
+		CCPoint shape = ccp(16 * sinf(i.rad),
+												13*cosf(i.rad) - 5*cos(2 * i.rad) - 2 * cosf(3*i.rad));
+		
+		shape = CCPointApplyAffineTransform(shape, mat);
+		i.sprite->setPosition(m_missileSprite->getPosition() + shape);
+//		m_missileSprite->setPosition( + tracer);
+		
+		bool invalidRange;
+		IntPoint missilePoint = ccp2ip(i.sprite->getMissilePosition());
+		invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+										missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		
+		if(
+			 myGD->getIsGameover() ||
+			 
+			 invalidRange ||
+			 i.sprite->m_touched == true
+			 )
+		{
+			i.sprite->removeFromParent();
+			iter = m_satellites.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+	
+	
+}
+
 #undef LZZ_INLINE

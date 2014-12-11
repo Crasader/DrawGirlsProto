@@ -774,6 +774,39 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		}
 		
 	}
+	else if(stoneType == StoneType::kStoneType_heart)
+	{
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		int subType = mInfo.get("subType", 1).asInt();
+		
+		//		level = 1;
+		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+		
+		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+		float ny = nearCumber->getPosition().y;
+		float nx = nearCumber->getPosition().x;
+		
+		auto creator = [=](){
+			HeartMissile::Params params;
+			params.initPosition = myGD->getJackPointCCP();
+			params.goalPosition = ccp(nx, ny);
+			params.centerSpeed = 1.5f;
+			params.subPower = missile_sub_damage;
+			params.power = power;
+			params.numbers = 10; // 10개.
+			params.fileName = fileName;
+			params.speed = 1.f;
+			params.ao = ao;
+			
+			HeartMissile* ms = HeartMissile::create(params);
+			jack_missile_node->addChild(ms);
+		};
+		if(myGD->getIsGameover() == false)
+		{
+			creator();
+		}
+	}
 
 
 }

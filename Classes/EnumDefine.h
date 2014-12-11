@@ -379,7 +379,8 @@ enum StoneType
 	kStoneType_tornado,
 	kStoneType_circleDance = 10,
 	kStoneType_boomerang,
-	kStoneType_chain
+	kStoneType_chain,
+	kStoneType_heart
 	
 };
 

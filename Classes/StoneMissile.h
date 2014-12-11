@@ -13,6 +13,7 @@
 #include "GameItemManager.h"
 #include "StarGoldData.h"
 #include "ASMotionStreak.h"
+#include "EasingAction.h"
 
 enum AttackOption
 {
@@ -1938,6 +1939,17 @@ public:
 	{
 		m_missileSprite->setRotation(newRotation);
 	}
+
+	void setScale(float scale)
+	{
+		m_missileSprite->setScale(scale);
+	}
+	
+	float getScale()
+	{
+		return m_missileSprite->getScale();
+	}
+	
 	
 	const CCPoint& getMissilePosition()
 	{
@@ -4420,4 +4432,125 @@ protected:
 	vector<KSCumberBase*> m_targeted;
 	//			myGD->communication("EP_stopCrashAction");
 };
-
+class HeartMissile : public StoneAttack
+{
+public:
+	struct Params
+	{
+		CCPoint initPosition;
+		string fileName;
+		CCPoint goalPosition;
+		float centerSpeed;
+		float selfRotationVelocity; // 자전 속도
+		float radius;
+		int numbers; // 미사일 개수
+		int power;
+		int subPower;
+		int level;
+		float speed;
+		float revelutionA;
+		
+		AttackOption ao;
+	};
+	static HeartMissile* create(const Params& params)
+	{
+		HeartMissile* object = new HeartMissile();
+		object->init(params);
+		
+		object->autorelease();
+		
+		return object;
+	}
+	
+	
+	bool init(const Params& params)
+	{
+		StoneAttack::init();
+		m_params = params;
+		//		m_missileStep = 1;
+		m_particle = NULL;
+		m_streak = NULL;
+		m_start_node = NULL;
+		
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		
+		// m_params 와 mInfo 결합 해야됨.
+		
+		
+		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
+		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
+		m_missileSprite->setVisible(true);
+		m_missileSprite->setColor(ccc3( 255, 0, 0));
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
+		//m_missileSprite->setRotationY(t);
+		//m_missileSprite->setRotationX(t);
+		//}));
+		addChild(m_missileSprite, 1);
+		m_missileSprite->setScale(1.f/myGD->game_scale);
+		m_missileSprite->setPosition(m_params.initPosition);
+		
+		m_initRad = atan2f(m_params.goalPosition.y - m_params.initPosition.y, m_params.goalPosition.x - m_params.initPosition.x);
+		
+		for(int i=0; i<m_params.numbers; i++)
+		{
+			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower, 13, 5, m_params.ao);
+			satell->setScale(0.4f);
+			//			CCSprite* satell = CCSprite::create(fileName.c_str());
+			float rad = 2 * M_PI / m_params.numbers * (float)i;
+			Satellite t;
+			t.sprite = satell;
+			t.rad = rad;
+			m_satellites.push_back(t);
+			addChild(satell);
+			
+		}
+		
+		
+		scheduleUpdate();
+		
+		m_scaleStep = 1; //  커질 때
+		
+		m_value.init(1.f, 1.3f, 0.3f, elasticOut);
+		return true;
+	}
+	void update(float dt);
+	
+	void beautifier(int level)
+	{
+		makeBeautifier(level, m_streak, m_particle);
+		if(m_streak)addChild(m_streak, -1);
+		if(m_particle)addChild(m_particle, -2);
+	}
+	
+	// 반지름 설정
+	void setShowWindowRotationRadius(float r)
+	{
+		
+	}
+	// 각속도 설정
+	void setShowWindowVelocityRad(float r)
+	{
+		
+	}
+protected:
+	int m_scaleStep;
+	FromToWithDuration2<float> m_value;
+	Params m_params;
+	float m_currentRad;
+	CCSprite* m_missileSprite; // 미사일 객체.
+	CCParticleSystemQuad* m_particle;
+	ASMotionStreak* m_streak;
+	CCNode* m_start_node;
+	float m_initRad;
+	//			myGD->communication("EP_stopCrashAction");
+	struct Satellite
+	{
+		float rad;
+		StaticMissile* sprite;
+	};
+	vector<Satellite> m_satellites; // 똥파리..
+	
+	
+};
