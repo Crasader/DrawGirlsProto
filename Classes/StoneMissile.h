@@ -4244,7 +4244,7 @@ public:
 		{
 			StaticMissile* satell = StaticMissile::create(CCPointZero, m_params.fileName.c_str(), m_params.power, m_params.subPower, 13, 5, m_params.ao);
 			//			CCSprite* satell = CCSprite::create(fileName.c_str());
-			float rad = 2 * M_PI / m_params.numbers * i;
+			float rad = 2 * M_PI / m_params.numbers * (float)i / 2.f;
 			Satellite t;
 			t.sprite = satell;
 			t.rad = rad;
