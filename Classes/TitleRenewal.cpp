@@ -2125,6 +2125,26 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopGachaCardPass_exchangeID_s, t_data["exchangeID"].asString(), false);
 			NSDS_SS(kSDS_GI_shopGachaCardPass_reward_s, t_data["reward"].asString(), false);
 		}
+		{
+			Json::Value t_data = result_data["composeUseStone"];
+			
+			NSDS_SS(kSDS_GI_shopComposeCardStone_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_reward_s, t_data["reward"].asString(), false);
+		}
+		{
+			Json::Value t_data = result_data["composeUsePass"];
+			
+			NSDS_SS(kSDS_GI_shopComposeCardPass_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_reward_s, t_data["reward"].asString(), false);
+		}
 		
 		for(int i=1;i<=6;i++)
 		{

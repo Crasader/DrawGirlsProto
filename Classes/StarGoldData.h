@@ -391,6 +391,17 @@ public:
 	}
 };
 
+class CardComposeInfo
+{
+public:
+	KSProtectVar<int> compose_no;
+	KSProtectStr title;
+	KSProtectStr msg;
+	vector<KSProtectVar<int>> material_card_list;
+	KSProtectVar<int> need_exp;
+	KSProtectVar<int> compose_card_number;
+};
+
 class HeartTime;
 
 #define SGD_KEY	0xD9
@@ -557,6 +568,7 @@ public:
 	CommandParam getUpdatePieceHistoryParam(PieceHistory t_history, jsonSelType call_back);
 	Json::Value getSavePieceHistoryParam(PieceHistory t_history);
 	bool isClearPiece(int stage_number);
+	bool isPerfectPiece(int stage_number);
 	int getPieceHistorySize();
 	PieceHistory getPieceHistoryForIndex(int t_index);
 	PieceHistory getPieceHistory(int stage_number);
@@ -1091,6 +1103,7 @@ public:
 	vector<KSProtectVar<int>> card_gacha_list;
 	
 	bool is_god_of_death;
+	vector<CardComposeInfo> card_compose_list;
 	
 private:
 	

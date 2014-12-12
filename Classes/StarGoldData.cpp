@@ -1014,7 +1014,7 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 		}
 	} pred;
 	
-	sort(t_card_list.begin(), t_card_list.end(), pred);
+	stable_sort(t_card_list.begin(), t_card_list.end(), pred);
 	
 	for(int i=0;i<t_card_list.size();i++)
 	{
@@ -1326,7 +1326,7 @@ int StarGoldData::getPreStageCardNumber( int recent_card_number )
 		}
 	} pred;
 	
-	sort(t_card_list.begin(), t_card_list.end(), pred);
+	stable_sort(t_card_list.begin(), t_card_list.end(), pred);
 	
 	for(int i=0;i<t_card_list.size();i++)
 	{
@@ -1361,7 +1361,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_take)
 	{
@@ -1372,7 +1372,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_takeReverse)
 	{
@@ -1383,7 +1383,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 		
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_gradeUp) // rank
 	{
@@ -1394,7 +1394,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_gradeDown) // rank
 	{
@@ -1405,7 +1405,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 }
 
@@ -2110,6 +2110,15 @@ bool StarGoldData::isClearPiece(int stage_number)
 	for(int i=0;i<piece_historys.size();i++)
 		if(piece_historys[i].stage_number.getV() == stage_number)
 			return piece_historys[i].is_clear[0].getV() || piece_historys[i].is_clear[1].getV() || piece_historys[i].is_clear[2].getV() || piece_historys[i].is_clear[3].getV();
+	
+	return false;
+}
+
+bool StarGoldData::isPerfectPiece(int stage_number)
+{
+	for(int i=0;i<piece_historys.size();i++)
+		if(piece_historys[i].stage_number.getV() == stage_number)
+			return piece_historys[i].is_clear[0].getV() && piece_historys[i].is_clear[1].getV() && piece_historys[i].is_clear[2].getV() && piece_historys[i].is_clear[3].getV();
 	
 	return false;
 }

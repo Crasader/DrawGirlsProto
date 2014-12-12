@@ -1316,6 +1316,12 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
 	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
+	obj[LK::kMyLocalKey_cardCompose] = "카드합성";
+	obj[LK::kMyLocalKey_detailContextShow] = "상세 내용을 보여드립니다.";
+	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
+	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
+	obj[LK::kMyLocalKey_doCompose] = "합성하기";
+	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2557,6 +2563,12 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_pvpHighScore] = "PvP 최고점수";
 	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
+	obj[LK::kMyLocalKey_cardCompose] = "카드합성";
+	obj[LK::kMyLocalKey_detailContextShow] = "상세 내용을 보여드립니다.";
+	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
+	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
+	obj[LK::kMyLocalKey_doCompose] = "합성하기";
+	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
