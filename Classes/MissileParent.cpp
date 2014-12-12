@@ -768,10 +768,18 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			Chain* ms = Chain::create(params);
 			jack_missile_node->addChild(ms);
 		};
-		if(myGD->getIsGameover() == false)
+		int j = 0;
+		for(int i=missileNumbersInt; i>=0; i-=2, j++)
 		{
-			creator();
+			addChild(KSTimer::create(0.80 * (j), [=](){
+				if(myGD->getIsGameover() == false)
+				{
+					creator();
+				}
+			}));
+			
 		}
+		
 		
 	}
 
