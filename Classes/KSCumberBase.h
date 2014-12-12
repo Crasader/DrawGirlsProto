@@ -146,7 +146,8 @@ public:
 	m_speedRatioForStone(1.f), m_speedRatio(1.f),
 	m_flipProperty(false), m_emotion(nullptr),
 	m_stopFrameCount(0), m_castFrameCount(0), m_lastCastTime(0.f), m_deadState(false),
-	m_crashAttackTime(0), m_slowDurationFrame(-5), m_damageMeasure(0.f)
+	m_crashAttackTime(0), m_slowDurationFrame(-5), m_damageMeasure(0.f),
+	m_rushCrashSize(1.f)
 	{
 		
 	}
@@ -569,6 +570,7 @@ protected:
 	CC_SYNTHESIZE(bool, m_deadState, DeadState);
 	CC_SYNTHESIZE(bool, m_deadTime, DeadTime);
 	CC_SYNTHESIZE(float, m_slowDurationFrame, SlowDurationFrame);
+	CC_SYNTHESIZE(float, m_rushCrashSize, RushCrashSize);
 //	CC_SYNTHESIZE(float, m_slowCurrentTime, SlowCurrentTime);
 
 	// 공격할 패턴의 번호를 가지고 있음. percent 가 공격을 쓸 확률

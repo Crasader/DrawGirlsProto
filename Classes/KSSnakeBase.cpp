@@ -545,7 +545,7 @@ void KSSnakeBase::crashMapForPosition(CCPoint targetPt)
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
 	set<IntPoint> crashArea;
-	float half_distance = RADIUS*getCumberScale() * 1.2f; // 깎을 영역은 충돌 영역크기보다 1.2 배.
+	float half_distance = RADIUS*getCumberScale() * 1.2f * getRushCrashSize(); // 깎을 영역은 충돌 영역크기보다 1.2 배.
 	int ip_half_distance = half_distance / 2;
 	// 충돌 영역에 대한 포인트 추가.
 	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)

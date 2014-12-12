@@ -1576,6 +1576,7 @@ int MissileParent::attackWithKSCode(CCPoint startPosition, std::string &patternD
 					
 					int totalFrame = patternData.get("totalframe", 300).asInt();
 					t->furyModeOn(totalFrame);
+					t->setRushCrashSize(patternData.get("crashratio", 1.f).asFloat());
 				};
 				castBranch(atype, func, warningFileName);
 				
