@@ -61,11 +61,12 @@ void ShockWave::ingSW ()
 		addChild(t_sw);
 	}
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	float reg_value = MIN(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()) - base_speed, 95.f)/100.f;
+	float reg_value = MIN(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_monsterWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV()) - base_speed + 100, 95.f)/100.f;
+	
 	float spread_speed_value = 0.03f - 0.03f*reg_value;
 	
 	if(myGD->getCommunicationBool("UI_isExchanged"))
-		spread_speed_value *= 2.f;
+		spread_speed_value *= 1.5f;
 	
 	CCArray* my_child = getChildren();
 	

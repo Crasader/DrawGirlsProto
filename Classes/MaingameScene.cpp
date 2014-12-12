@@ -521,8 +521,8 @@ void Maingame::finalSetting()
 	game_node->addChild(myJack, myJackZorder);
 	myJack->initStartPosition(game_node->getPosition());
 	
-	myPM = PathManager::create();
-	game_node->addChild(myPM, myPMZorder);
+	
+	
 	
 	myGIM = GameItemManager::create();
 	game_node->addChild(myGIM, attackItemZorder);
@@ -531,6 +531,17 @@ void Maingame::finalSetting()
 	
 	myCP = CumberParent::create();
 	game_node->addChild(myCP, myCPZorder);
+	
+	std::vector<KSCumberBase*> maincumbers = myCP->getMainCumbers();
+	int agi=0;
+	for(int i=0;i<maincumbers.size();i++){
+		agi = ((KSCumberBase*)maincumbers[i])->getAgility();
+		break;
+	}
+	
+	
+	myPM = PathManager::create(agi);
+	game_node->addChild(myPM, myPMZorder);
 	
 	
 	line_particle = CCParticleSystemQuad::createWithTotalParticles(100);
