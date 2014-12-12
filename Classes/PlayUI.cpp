@@ -5071,7 +5071,7 @@ void PlayUI::myInit ()
 	myGD->V_V["UI_castingCancel"] = [=]()
 	{
 		casting_cancel_cnt = casting_cancel_cnt.getV() + 1;
-		if(clr_cdt_type == kCLEAR_casting)
+		if(!is_cleared_cdt && clr_cdt_type == kCLEAR_casting)
 		{
 			CCLabelTTF* t_label = (CCLabelTTF*)getChildByTag(kCT_UI_clrCdtLabel);
 			t_label->setString(ccsf("%d", casting_cancel_cnt.getV()));

@@ -136,6 +136,8 @@ private:
 	void hidePopup();
 	void endHidePopup();
 	
+	int download_type;
+	
 	CCPoint getContentPosition(int t_tag);
 	
 	vector<CardSortInfo> card_list;

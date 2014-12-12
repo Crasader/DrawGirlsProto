@@ -771,6 +771,18 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopGachaCardPass_data_s)				rv = "sgcpData";
 	else if(t_key == kSDS_GI_shopGachaCardPass_exchangeID_s)		rv = "sgcpXcID";
 	else if(t_key == kSDS_GI_shopGachaCardPass_reward_s)			rv = "sgcpRwd";
+	else if(t_key == kSDS_GI_shopComposeCardStone_countName_s)		rv = "sccsCntName";
+	else if(t_key == kSDS_GI_shopComposeCardStone_priceName_s)		rv = "sccsPrcName";
+	else if(t_key == kSDS_GI_shopComposeCardStone_sale_s)			rv = "sccsSale";
+	else if(t_key == kSDS_GI_shopComposeCardStone_data_s)			rv = "sccsData";
+	else if(t_key == kSDS_GI_shopComposeCardStone_exchangeID_s)		rv = "sccsXcID";
+	else if(t_key == kSDS_GI_shopComposeCardStone_reward_s)			rv = "sccsRwd";
+	else if(t_key == kSDS_GI_shopComposeCardPass_countName_s)		rv = "sccpCntName";
+	else if(t_key == kSDS_GI_shopComposeCardPass_priceName_s)		rv = "sccpPrcName";
+	else if(t_key == kSDS_GI_shopComposeCardPass_sale_s)			rv = "sccpSale";
+	else if(t_key == kSDS_GI_shopComposeCardPass_data_s)			rv = "sccpData";
+	else if(t_key == kSDS_GI_shopComposeCardPass_exchangeID_s)		rv = "sccpXcID";
+	else if(t_key == kSDS_GI_shopComposeCardPass_reward_s)			rv = "sccpRwd";
 	else if(t_key == kSDS_GI_shopItem_int1_countName_s)			rv = "si%dcntName";
 //	else if(t_key == kSDS_GI_shopItem_int1_price_i)				rv = "si%dprice";
 //	else if(t_key == kSDS_GI_shopItem_int1_priceType_s)			rv = "si%dprcType";
