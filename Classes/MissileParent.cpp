@@ -239,7 +239,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int subType = mInfo.get("subType", 1).asInt();
-//	stoneType = StoneType::kStoneType_guided;
+//	stoneType = StoneType::kStoneType_boomerang;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
 		addChild(KSSchedule::create([=](float dt)
@@ -248,8 +248,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																}));
 		
 
-		
-		for(int i=0; i<missileNumbersInt; i++)
+		int missileM = MAX(1, missileNumbersInt * mInfo.get("attackratio", 1.f).asFloat());
+		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
 				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
@@ -498,7 +498,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		for(int i=0; i<missileNumbersInt; i++)
+		int missileM = MAX(1, missileNumbersInt * 0.8f);
+		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
 				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
@@ -1128,6 +1129,9 @@ void MissileParent::attachGodOfDeath(KSCumberBase* cb, Json::Value patternD)
 {
 	GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD.asString());
 	getPatternContainer()->addChild(t);
+	
+//	myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
+	myGD->showDetailMessage("warning_1021.ccbi", "w");
 }
 
 
