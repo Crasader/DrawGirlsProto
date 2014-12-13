@@ -1023,13 +1023,18 @@ void GodOfDeath::update(float dt)
 		myGD->communication("CP_jackCrashDie");
 		mySGD->is_god_of_death = false;
 		myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
-		myGD->communication("UI_showTimeover");
+//		myGD->communication("UI_showTimeover");
 		
 		m_manager->runAnimationsForSequenceNamed("die");
 		unschedule(schedule_selector(ThisClassType::update));
-		addChild(KSTimer::create(1.5f, [=](){
-			stopMyAction();
-		}));
+		
+		m_godOfDeathSprite->removeFromParent();
+		m_godOfDeathSprite = nullptr;
+		stopMyAction();
+		return;
+//		addChild(KSTimer::create(1.5f, [=](){
+//			
+//		}));
 	}
 	m_frameCount++;
 	float spd = m_followSpeed;
