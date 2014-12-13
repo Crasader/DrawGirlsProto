@@ -260,10 +260,10 @@ bool InvenPopup::init()
 		
 	
 	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_joinDate) + "</font>", "<font color=#FF8c8c>" + std::string(GraphDogLib::dateFormat(getLocal(LK::kMyLocalKey_yearMonthDay), mySGD->join_date)) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_highStage) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_playCount) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(playCount) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighVictory) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessVictory()) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighScore) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessScore()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_highStage) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_playCount) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(playCount) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighVictory) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->getUserdataEndlessVictory()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighScore) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->getUserdataEndlessScore()) + "</font>"));
 	m_infoTable->reloadData();
 
 	//////////////////////////
