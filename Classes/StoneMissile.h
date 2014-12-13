@@ -4267,7 +4267,7 @@ public:
 		
 		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setVisible(true);
+		m_missileSprite->setVisible(false);
 		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
@@ -4395,7 +4395,7 @@ public:
 		
 		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setVisible(true);
+		m_missileSprite->setVisible(false);
 		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
