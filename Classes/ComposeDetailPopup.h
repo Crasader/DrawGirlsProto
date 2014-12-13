@@ -12,6 +12,7 @@
 #include "cocos2d.h"
 #include "cocos-ext.h"
 #include "KSProtect.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -19,6 +20,7 @@ using namespace std;
 
 class KSLabelTTF;
 class CardSortInfo;
+class LoadingLayer;
 class ComposeDetailPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
 public:
@@ -46,6 +48,8 @@ private:
 	CCTableView* card_table;
 	CCTableView* selected_table;
 	
+	LoadingLayer* loading_layer;
+	
 	vector<int> target_card_number_list;
 	vector<CardSortInfo*> card_data_list;
 	
@@ -61,6 +65,9 @@ private:
 	virtual CCSize tableCellSizeForIndex(CCTableView *table, unsigned int idx);
 	
 	void cardAction(CCObject* t_sender);
+	void unselectedAction(CCObject* t_sender);
+	void composeOn();
+	void resultCompose(Json::Value result_data);
 };
 
 #endif /* defined(__DGproto__ComposeDetailPopup__) */

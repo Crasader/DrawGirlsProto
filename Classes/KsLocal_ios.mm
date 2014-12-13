@@ -13,5 +13,6 @@ std::string KsLocal::getLocalCode()
 	NSString * languageCode = [temp objectForKey:NSLocaleLanguageCode];
 	
 	tempCode = [languageCode cStringUsingEncoding:NSASCIIStringEncoding];
+//    tempCode = "ko";
 	return tempCode;
 }

@@ -192,6 +192,7 @@ enum SpecialTutorialCode{
 	kSpecialTutorialCode_control = 100000,
 	kSpecialTutorialCode_slimLine,
 	kSpecialTutorialCode_100percent,
+	kSpecialTutorialCode_bossPrison,
 	kSpecialTutorialCode_lineTangle
 };
 

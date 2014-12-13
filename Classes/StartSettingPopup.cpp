@@ -436,6 +436,9 @@ void StartSettingPopup::setMain()
 	else
 	{
 		is_tutorial = true;
+        
+        fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting", myHSP->getStoreID().c_str());
+        
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 3);
 		
 		CCNode* scenario_node = CCNode::create();

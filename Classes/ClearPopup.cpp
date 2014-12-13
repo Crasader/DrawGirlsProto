@@ -1529,6 +1529,8 @@ void ClearPopup::endTakeCard()
 {
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 6)
 	{
+        fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T10_SuccessGame", myHSP->getStoreID().c_str());
+        
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 1000);
 		
 		CCNode* scenario_node = CCNode::create();

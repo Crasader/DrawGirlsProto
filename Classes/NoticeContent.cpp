@@ -178,7 +178,7 @@ void NoticeContent::myInit(int t_touch_priority, function<void(CCObject*)> t_sel
 	addChild(back,0);
 	back->setFunction([=](CCObject* btn){
 		//CCLog("testtest");
-		if(loading_circle->isVisible()==false && notice_list[ing_close_cnt].get("linkURL", "").asString()!=""){
+		if(loading_circle->isVisible()==false && notice_list[ing_close_cnt].get("linkURL", "").asString()!="" && notice_list[ing_close_cnt].get("linkURL", "").asString()!="#a"){
 			hspConnector::get()->openHSPUrl(notice_list[ing_close_cnt]["linkURL"].asString().c_str());
 			//CCLog("openurl %s",notice_list[ing_close_cnt]["linkURL"].asString().c_str());
 		}

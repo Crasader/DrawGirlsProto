@@ -14,8 +14,8 @@
         android:hardwareAccelerated="false"
         android:icon="@drawable/icon"
         android:label="@string/app_name" >
-        <meta-data android:name="igaworks_app_key" android:value="423654496"/>
-		<meta-data android:name="igaworks_hash_key" android:value="10afd56431d74f03"/>
+        <meta-data android:name="igaworks_app_key" android:value="725451101"/>
+		<meta-data android:name="igaworks_hash_key" android:value="8b732233e7ad45c0"/>
 		<meta-data android:name="igaworks_market_info" android:value="nstore" />
         
         <meta-data

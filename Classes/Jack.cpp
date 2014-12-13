@@ -16,6 +16,7 @@
 #include "AchieveNoti.h"
 #include "CommonAnimation.h"
 #include "AttackPattern.h"
+#include "FiveRocksCpp.h"
 void Jack::searchAndMoveOldline(IntMoveState searchFirstMoveState)
 {
 	queue<IntMoveState> bfsArray;
@@ -1558,6 +1559,21 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 	//		return;
 	if(!isDie && !myGD->getJackIsUnbeatable() && !myGD->getIsGameover())
 	{
+        if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 6)
+        {
+            string param2 = "";
+            if(die_type == DieType::kDieType_timeover)
+                param2 = "Time";
+            else if(die_type == DieType::kDieType_shockwave)
+                param2 = "Shockwave";
+            else if(die_type == DieType::kDieType_missileToLine)
+                param2 = "Missile";
+            else
+                param2 = "Other";
+            
+            fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T09_Die", param2.c_str());
+        }
+        
 		myGD->communication("Main_checkHideStartMapGacha");
 		
 		AudioEngine::sharedInstance()->playEffect(CCString::createWithFormat("ment_die%d.mp3", rand()%3+1)->getCString(), false, true);

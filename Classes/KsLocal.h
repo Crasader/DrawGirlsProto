@@ -1280,7 +1280,12 @@ enum class LK
 	kMyLocalKey_necessaryCardAndNeedExp,
 	kMyLocalKey_necessaryCard,
 	kMyLocalKey_doCompose,
-	kMyLocalKey_necessaryPlease
+	kMyLocalKey_necessaryPlease,
+	kMyLocalKey_notEnoughtEXP,
+	kMyLocalKey_composeUsedCardIsRemove,
+	kMyLocalKey_notEnoughtP1,
+	kMyLocalKey_controlTip_bossPrison_title,
+	kMyLocalKey_controlTip_bossPrison_content
 };
 class KsLocal
 {
