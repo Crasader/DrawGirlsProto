@@ -267,7 +267,7 @@ void TitleRenewalScene::endSplash()
 //		realInit();
 //	}));
 	
-	auto t_title = KS::loadCCBI<CCSprite*>(this, "title_01.ccbi");
+	auto t_title = KS::loadCCBI<CCSprite*>(this, "title_xmas.ccbi");
 	title_img = t_title.first;
 	title_img->setPosition(ccp(240,160));
 	addChild(title_img);
@@ -1373,9 +1373,10 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setExchangeIDForPass(strength_info["exchangeIDForPass"].asString());
 		
 		mySGD->setGababoProb(result_data["gababo"].asString());
-
+		mySGD->setOnAdultTag(result_data["onAdultTag"].asInt());
 		
-		
+		mySGD->setCardGachaMsgLeft(result_data["cardGachaMsg"]["left"].asString());
+		mySGD->setCardGachaMsgRight(result_data["cardGachaMsg"]["right"].asString());
 	}
 	else
 	{

@@ -242,7 +242,7 @@ bool CardSettingPopup::init()
 	
 	diary_menu = CCMenuItemSprite::create(n_diary_img, s_diary_img, d_diary_img, this, menu_selector(CardSettingPopup::menuAction));
 	diary_menu->setTag(kCSS_MT_diary);
-	diary_menu->setPosition(ccp(395,16));
+	diary_menu->setPosition(ccp(400,16));
 	tab_menu->addChild(diary_menu);
 	
 	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
@@ -264,7 +264,7 @@ bool CardSettingPopup::init()
 	
 	CCMenuItem* char_menu = CCMenuItemSprite::create(n_char_img, s_char_img, this, menu_selector(CardSettingPopup::menuAction));
 	char_menu->setTag(kCSS_MT_character);
-	char_menu->setPosition(ccp(290,16));
+	char_menu->setPosition(ccp(298,16));
 	tab_menu->addChild(char_menu);
 	
 	
@@ -305,7 +305,7 @@ bool CardSettingPopup::init()
 	
 	CCMenuItem* card_compose_menu = CCMenuItemSprite::create(n_card_compose_img, s_card_compose_img, this, menu_selector(CardSettingPopup::menuAction));
 	card_compose_menu->setTag(kCSS_MT_cardCompose);
-	card_compose_menu->setPosition(ccp(185,16));
+	card_compose_menu->setPosition(ccp(188,16));
 	tab_menu->addChild(card_compose_menu);
 	
 	
@@ -1373,6 +1373,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 										t_info.msg = t_info_json["msg"].asString();
 										t_info.need_exp = t_info_json["needExp"].asInt();
 										t_info.compose_card_number = t_info_json["cardNo"].asInt();
+										t_info.need_stone = t_info_json["needStone"].asInt();
 										Json::Value material = t_info_json["materialCards"];
 										t_info.material_card_list.clear();
 										for(int j=0;j<material.size();j++)
@@ -1827,16 +1828,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 				int c_count = t_info.count.getV();
 				if(c_count == 1)
 				{
-//					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//						case_filename = "cardsetting_on19.png";
-//					else
+					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+						case_filename = "cardsetting_on19.png";
+					else
 						case_filename = "cardsetting_on.png";
 				}
 				else
 				{
-//					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//						case_filename = "cardsetting_on_many19.png";
-//					else
+					if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+						case_filename = "cardsetting_on_many19.png";
+					else
 						case_filename = "cardsetting_on_many.png";
 					add_position = ccp(-2,3);
 				}
@@ -1897,9 +1898,9 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			else
 			{
 				string empty_back_filename;
-//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//					empty_back_filename = "cardsetting_off19.png";
-//				else
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+					empty_back_filename = "cardsetting_off19.png";
+				else
 					empty_back_filename = "cardsetting_off.png";
 				
 				CCSprite* empty_back = CCSprite::create(empty_back_filename.c_str());
@@ -1943,16 +1944,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int c_count = t_info.count.getV();
 			if(c_count == 1)
 			{
-//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//					case_filename = "cardsetting_on19.png";
-//				else
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+					case_filename = "cardsetting_on19.png";
+				else
 					case_filename = "cardsetting_on.png";
 			}
 			else
 			{
-//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//					case_filename = "cardsetting_on_many19.png";
-//				else
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+					case_filename = "cardsetting_on_many19.png";
+				else
 					case_filename = "cardsetting_on_many.png";
 				add_position = ccp(-2,3);
 			}
@@ -2029,16 +2030,16 @@ CCTableViewCell* CardSettingPopup::tableCellAtIndex( CCTableView *table, unsigne
 			int c_count = t_info.count.getV();
 			if(c_count == 1)
 			{
-//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//					case_filename = "cardsetting_on19.png";
-//				else
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+					case_filename = "cardsetting_on19.png";
+				else
 					case_filename = "cardsetting_on.png";
 			}
 			else
 			{
-//				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number))
-//					case_filename = "cardsetting_on_many19.png";
-//				else
+				if(NSDS_GB(kSDS_CI_int1_haveAdult_b, card_number) && mySGD->getOnAdultTag())
+					case_filename = "cardsetting_on_many19.png";
+				else
 					case_filename = "cardsetting_on_many.png";
 				add_position = ccp(-2,3);
 			}

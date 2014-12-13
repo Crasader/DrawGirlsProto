@@ -1322,6 +1322,11 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
 	obj[LK::kMyLocalKey_doCompose] = "합성하기";
 	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
+	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
+	obj[LK::kMyLocalKey_composeUsedCardIsRemove] = "합성에 사용된 카드는\n모두 사라집니다.";
+	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2569,6 +2574,11 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
 	obj[LK::kMyLocalKey_doCompose] = "합성하기";
 	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
+	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
+	obj[LK::kMyLocalKey_composeUsedCardIsRemove] = "합성에 사용된 카드는\n모두 사라집니다.";
+	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

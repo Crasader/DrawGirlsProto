@@ -158,7 +158,7 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	character_title_back->addChild(light_back);
 	
 	character_img = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, character_idx) + ".ccbi").first;
-	character_img->setPosition(ccp(character_title_back->getContentSize().width/2.f, character_title_back->getContentSize().height/2.f-10));
+	character_img->setPosition(ccp(character_title_back->getContentSize().width/2.f, character_title_back->getContentSize().height/2.f-1));
 	character_title_back->addChild(character_img);
 	
 	int history_count = mySGD->getCharacterHistorySize();
@@ -199,7 +199,8 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	}
 	
 	exp_value = KSLabelTTF::create(ccsf("EXP %s/%s", KS::insert_separator(t_history.characterExp.getV()).c_str(), KS::insert_separator(t_history.characterNextLevelExp.getV()).c_str()), mySGD->getFont().c_str(), 11);
-	exp_value->setPosition(ccp(character_title_back->getContentSize().width/2.f, 50));
+	exp_value->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
+	exp_value->setPosition(ccp(character_title_back->getContentSize().width/2.f, 49));
 	character_title_back->addChild(exp_value);
 	
 	
@@ -806,6 +807,7 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 	s_clipping->setAlphaThreshold(0.1f);
 	
 	CCSprite* s_card = mySIL->getLoadedImg(ccsf("card%d_visible.png", card_number));
+	s_card->setColor(ccGRAY);
 	s_clipping->addChild(s_card);
 	s_card->setScale(0.076f);
 	

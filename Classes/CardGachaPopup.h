@@ -53,6 +53,7 @@ private:
 	CCSprite* t_gray;
 	KSLabelTTF* sub_ment1;
 	float positioning_value;
+	KSLabelTTF* grade_card_take;
 	
 	LoadingLayer* loading_layer;
 	CCSprite* left_character;
