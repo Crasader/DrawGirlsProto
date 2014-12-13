@@ -35,7 +35,9 @@ enum KindTutorialType
 	kUI_hellmode,
 	kUI_character,
 	kUI_friend,
-	kNewMission_hell
+	kNewMission_hell,
+	kNewMission_casting,
+	kNewMission_littlePercent
 };
 
 class TouchSuctionLayer;

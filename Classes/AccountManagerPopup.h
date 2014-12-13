@@ -11,7 +11,7 @@ class ASPopupView;
 
 void saveOAuthType(int i);
 int getSavedOAuthType(int def);
-
+int newOAuthTypeToServerOAuthType(int newT);
 
 class AccountManagerPopup : public CCLayer
 {

@@ -131,8 +131,8 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_weeklyRank.php?gid=<?=$gid?>>주간누적랭킹</a></li>
 								<li><a href=manage_inappRank.php?gid=<?=$gid?>>결제랭킹</a></li>
 								<li><a href=manage_goldRank.php?gid=<?=$gid?>>골드랭킹</a></li>
-								<li><a href=manage_freeRubyRank.php?gid=<?=$gid?>>무료루비랭킹</a></li>
-								<li><a href=manage_purchaseRubyRank.php?gid=<?=$gid?>>유료루비랭킹</a></li>
+								<li><a href=manage_freeRubyRank.php?gid=<?=$gid?>>무료젬랭킹</a></li>
+								<li><a href=manage_purchaseRubyRank.php?gid=<?=$gid?>>유료젬랭킹</a></li>
 								<li><a href=manage_introduceRank.php?gid=<?=$gid?>>추천인랭킹</a></li>
 							</ul>
 		            	</li>
@@ -173,6 +173,7 @@ $left_menu[]=array("title"=>"","url"=>"");
 		            	<li>이벤트
 							<ul class="nav">
 								<li><a href=manage_sendItem.php?gid=<?=$gid?>>재화/아이템 선물하기</a></li>
+								<li><a href=manage_sendItemCustom.php?gid=<?=$gid?>>재화/아이템 선물하기(custom)</a></li>
 								<li><a href=manage_notice.php?gid=<?=$gid?>>공지사항</a></li>
 								<li><a href=manage_realTimeMsg.php?gid=<?=$gid?>>실시간메세지</a></li>
 								<li><a href=manage_loginEvent.php?gid=<?=$gid?>>로그인이벤트</a></li>
@@ -184,7 +185,8 @@ $left_menu[]=array("title"=>"","url"=>"");
 								<li><a href=manage_attendenceEventDay.php?gid=<?=$gid?>>출석이벤트보상</a></li>
 								<li><a href=manage_cuponManager.php?gid=<?=$gid?>>쿠폰관리</a></li>
 								<li><a href=manage_cuponCode.php?gid=<?=$gid?>>쿠폰코드</a></li>
-								<li><a href=manage_gacha.php?gid=<?=$gid?>>뽑기</a></li>
+								<li><a href=manage_gacha.php?gid=<?=$gid?>>뽑기구성</a></li>
+								<li><a href=manage_gachaProb.php?gid=<?=$gid?>>뽑기확률</a></li>
 							</ul>
 						</li>
 						<?php

@@ -76,6 +76,17 @@ bool GraySprite::initWithTexture(CCTexture2D* pTexture, const CCRect& tRect ){
     return false;
 }
 
+bool GraySprite::initWithTexture(CCTexture2D* pTexture)
+{
+	do{
+		CC_BREAK_IF(!CCSprite::initWithTexture(pTexture));
+		
+		setGray(false);
+		return true;
+	} while (0);
+	return false;
+}
+
 void GraySprite::setGray (bool isGray) {
     if(isGray) {
         GLchar* pszFragSource =

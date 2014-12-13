@@ -753,6 +753,36 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_data_s)			rv = "sp%ddata";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_pID_s)			rv = "sp%dpID";
 	else if(t_key == kSDS_GI_shopPurchaseGuide_int1_exchangeID_s)	rv = "sp%dxcID";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_countName_s)			rv = "sgcoCntName";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_priceName_s)			rv = "sgcoPrcName";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_sale_s)				rv = "sgcoSale";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_data_s)				rv = "sgcoData";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_exchangeID_s)		rv = "sgcoXcID";
+	else if(t_key == kSDS_GI_shopGachaCardOnce_reward_s)			rv = "sgcoRwd";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_countName_s)		rv = "sgcdCntName";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_priceName_s)		rv = "sgcdPrcName";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_sale_s)				rv = "sgcdSale";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_data_s)				rv = "sgcdData";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_exchangeID_s)		rv = "sgcdXcID";
+	else if(t_key == kSDS_GI_shopGachaCardDozen_reward_s)			rv = "sgcdRwd";
+	else if(t_key == kSDS_GI_shopGachaCardPass_countName_s)			rv = "sgcpCntName";
+	else if(t_key == kSDS_GI_shopGachaCardPass_priceName_s)			rv = "sgcpPrcName";
+	else if(t_key == kSDS_GI_shopGachaCardPass_sale_s)				rv = "sgcpSale";
+	else if(t_key == kSDS_GI_shopGachaCardPass_data_s)				rv = "sgcpData";
+	else if(t_key == kSDS_GI_shopGachaCardPass_exchangeID_s)		rv = "sgcpXcID";
+	else if(t_key == kSDS_GI_shopGachaCardPass_reward_s)			rv = "sgcpRwd";
+	else if(t_key == kSDS_GI_shopComposeCardStone_countName_s)		rv = "sccsCntName";
+	else if(t_key == kSDS_GI_shopComposeCardStone_priceName_s)		rv = "sccsPrcName";
+	else if(t_key == kSDS_GI_shopComposeCardStone_sale_s)			rv = "sccsSale";
+	else if(t_key == kSDS_GI_shopComposeCardStone_data_s)			rv = "sccsData";
+	else if(t_key == kSDS_GI_shopComposeCardStone_exchangeID_s)		rv = "sccsXcID";
+	else if(t_key == kSDS_GI_shopComposeCardStone_reward_s)			rv = "sccsRwd";
+	else if(t_key == kSDS_GI_shopComposeCardPass_countName_s)		rv = "sccpCntName";
+	else if(t_key == kSDS_GI_shopComposeCardPass_priceName_s)		rv = "sccpPrcName";
+	else if(t_key == kSDS_GI_shopComposeCardPass_sale_s)			rv = "sccpSale";
+	else if(t_key == kSDS_GI_shopComposeCardPass_data_s)			rv = "sccpData";
+	else if(t_key == kSDS_GI_shopComposeCardPass_exchangeID_s)		rv = "sccpXcID";
+	else if(t_key == kSDS_GI_shopComposeCardPass_reward_s)			rv = "sccpRwd";
 	else if(t_key == kSDS_GI_shopItem_int1_countName_s)			rv = "si%dcntName";
 //	else if(t_key == kSDS_GI_shopItem_int1_price_i)				rv = "si%dprice";
 //	else if(t_key == kSDS_GI_shopItem_int1_priceType_s)			rv = "si%dprcType";
@@ -874,6 +904,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
 	else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
 	else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "%d_haveAdult";
+	else if(t_key == kSDS_CI_int1_exp_i)						rv = "%d_exp";
 	else if(t_key == kSDS_CI_int1_version_i)					rv = "%d_version";
 	
 	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
@@ -891,6 +922,123 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_AI_int1_groupNo_i)					rv = "%d_gn";
 	
 	return rv.c_str();
+}
+
+Json::Value ServerDataSave::getSavedServerData(Json::Value t_key_list)
+{
+	Json::Value return_value;
+	return_value.clear();
+	
+	for(int i=0;i<t_key_list.size();i++)
+	{
+		Json::Value t_data = t_key_list[i];
+		string t_type = t_data["type"].asString();
+		string t_key = t_data["key"].asString();
+		string t_filename = t_data["filename"].asString();
+		if(t_type == "b")
+		{
+			iter_bool = sds_cache_bool.find(t_filename + t_key);
+			if(iter_bool != sds_cache_bool.end())
+				return_value[i] = iter_bool->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, "false");
+		}
+		else if(t_type == "i")
+		{
+			iter_int = sds_cache_int.find(t_filename + t_key);
+			if(iter_int != sds_cache_int.end())
+				return_value[i] = iter_int->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0);
+		}
+		else if(t_type == "d")
+		{
+			iter_double = sds_cache_double.find(t_filename + t_key);
+			if(iter_double != sds_cache_double.end())
+				return_value[i] = iter_double->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0.0);
+		}
+		else if(t_type == "s")
+		{
+			iter_string = sds_cache_string.find(t_filename + t_key);
+			if(iter_string != sds_cache_string.end())
+				return_value[i] = iter_string->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, "");
+		}
+		else if(t_type == "f")
+		{
+			iter_float = sds_cache_float.find(t_filename + t_key);
+			if(iter_float != sds_cache_float.end())
+				return_value[i] = iter_float->second.getV();
+			else
+				return_value[i] = myDefault->getValue(t_filename, t_key, 0.0);
+		}
+	}
+	
+	return return_value;
+}
+
+Json::Value ServerDataSave::getSavedServerDataFile(string t_filename)
+{
+	return myDefault->getFileData(t_filename);
+}
+
+void ServerDataSave::saveServerData(Json::Value t_data_list)
+{
+	for(int i=0;i<t_data_list.size();i++)
+	{
+		Json::Value t_data = t_data_list[i];
+		string t_type = t_data["type"].asString();
+		string t_key = t_data["key"].asString();
+		string t_filename = t_data["filename"].asString();
+		if(t_type == "b")
+		{
+			string t_value = t_data["value"].asString();
+			bool t_b = (t_value == "true");
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_bool[c_key] = t_b;
+		}
+		else if(t_type == "i")
+		{
+			int t_value = t_data["value"].asInt();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_int[c_key] = t_value;
+		}
+		else if(t_type == "d")
+		{
+			double t_value = t_data["value"].asDouble();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_double[c_key] = t_value;
+		}
+		else if(t_type == "s")
+		{
+			string t_value = t_data["value"].asString();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_string[c_key] = t_value;
+		}
+		else if(t_type == "f")
+		{
+			double t_value = t_data["value"].asDouble();
+			myDefault->setKeyValue(t_filename, t_key, t_value, true);
+			
+			string c_key = t_filename + t_key;
+			sds_cache_float[c_key] = float(t_value);
+		}
+	}
+}
+void ServerDataSave::saveServerDataFile(string t_filename, Json::Value t_data)
+{
+	
 }
 
 void ServerDataSave::fFlush(SaveDataFile f_key){			myDefault->fFlush(f_key);		}

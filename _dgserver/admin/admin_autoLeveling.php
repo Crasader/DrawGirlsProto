@@ -2,19 +2,24 @@
 include "header.php";
 
 
-exit;
 ?>
 
 
 <form action="admin_autoLeveling.php" method="get">
 <input type=hidden name="gid" value=<?=$gid?>>
-	passwd <input type=password name="passwd">
+	puzzle <input type=text name="targetPuzzle"><br>
+	passwd <input type=password name="passwd"><br>
 	<input type=submit value="start Leveling">
 </from>
 
 <br>
 <?php
 
+$targetPuzzle = $_GET["targetPuzzle"];
+if(!$targetPuzzle){
+	echo "대상퍼즐을 설정해주세요";
+	exit;
+}
 if($_GET["passwd"]=="1234"){
 	srand(1);
 	function makePattern($patternInfo,$vlevel,$type,$patternNo=null){
@@ -119,7 +124,7 @@ if($_GET["passwd"]=="1234"){
 		if($monsterInfo["attackpercent"]>0.3)$monsterInfo["attackpercent"]=0.3;
 
 		$maxSpeed = (1.3-0.3)/(float)20.0*$level+0.4;
-		if($maxSpeed>1)$maxSpeed=1;
+		if($maxSpeed>0.8)$maxSpeed=0.8;
 		$monsterInfo["speed"]=array("min"=>$maxSpeed/(float)2,"start"=>$maxSpeed,"max"=>$maxSpeed);  
 		$monsterInfo["scale"]=array("min"=>0.4,"start"=>0.4,"max"=>0.4);
 
@@ -187,7 +192,12 @@ if($_GET["passwd"]=="1234"){
 		$jrInfo["ai"]=$bossInfo[ai]*0.5;
 		$jrInfo["agi"]=$bossInfo[agi]*0.5;
 
-		$jrInfo["speed"]=array("min"=>$bossInfo[speed][min]*0.75,"start"=>$bossInfo[speed][start]*0.75,"max"=>$bossInfo[speed][max]*0.75);  
+		$minSpd = $bossInfo[speed][min]*0.75;
+		$maxSpd = $bossInfo[speed][start]*0.75;
+
+		if($minSpd>0.25)$minSpd=0.25;
+		if($maxSpd>0.5)$maxSpd=0.5;
+		$jrInfo["speed"]=array("min"=>$minSpd,"start"=>$maxSpd,"max"=>$maxSpd);  
 		$jrInfo["scale"]=array("min"=>0.4,"start"=>0.4,"max"=>0.4);
 
 		return $jrInfo;
@@ -228,8 +238,15 @@ if($_GET["passwd"]=="1234"){
 	}
 
 	$level=1;
-	while($puzzle = Puzzle::getObjectByQuery("where isEvent=0 order by no asc")){
-		
+
+	kvManager::increase("pieceListVer");
+	$newPieceVersion = kvManager::get("pieceListVer",1);
+	kvManager::increase("puzzleListVer");
+	$newPuzzleVersion = kvManager::get("puzzleListVer",1);
+	while($puzzle = Puzzle::getObjectByQuery("where no=".$targetPuzzle." and isEvent=0 order by no asc")){
+		$puzzle->version = $newPuzzleVersion;
+		$puzzle->save();
+		$level = $puzzle->order;
 		$monster = new Monster(null,$puzzle->no,1);
 		$junior = new Monster(null,$puzzle->no,0);
 		echo "<font color=red><b> START ".$puzzle->no." PUZZLE</b><br>";
@@ -276,6 +293,9 @@ if($_GET["passwd"]=="1234"){
 
 			echo json_encode($piece->getArrayData(true));
 			echo "<br>";
+
+			$piece->version=$newPieceVersion;
+
 			if($piece->save()){
 				echo "<font color=orange>save SUCCESS</font>";
 			}else{
@@ -287,7 +307,7 @@ if($_GET["passwd"]=="1234"){
 			unset($jr);
 			
 		}
-		$level++;
+		//$level++;
 
 		unset($junior);
 		unset($monster);

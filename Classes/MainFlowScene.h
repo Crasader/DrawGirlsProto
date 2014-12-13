@@ -89,6 +89,8 @@ public:
 	void showHellResult();
 	void showHellOpening();
 	
+	void showInvenPopup();
+	
     CCNode* showShopPopup(int t_code);
 	void showGachaPopup();
     

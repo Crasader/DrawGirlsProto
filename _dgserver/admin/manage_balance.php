@@ -2,8 +2,14 @@
 include "manage_header.php";
 
 
-$result = Piece::getQueryResultWithShardKey("select * from ".Piece::getDBTable()." where no<=100 order by no asc",1);
+$result = Piece::getQueryResultWithShardKey("select * from ".Piece::getDBTable()." where `type`='normal' order by no asc",1);
 ?>
+
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|밸런스</h2>
+</td><td align=right>
+</td></tr></table>
+
 <center>
 <table border=1>
 	<tr align=center>

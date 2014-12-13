@@ -7,11 +7,12 @@
     CurrentUserInfo::$language = $_GET["lang"];
     CurrentUserInfo::$country = $_GET["country"];
     CurrentUserInfo::$timezone = $_GET["timezone"];
-
-    if(!CurrentUserInfo::$os)CurrentUserInfo::$os = "android";
+    CurrentUserInfo::setStoreIDByStoreCode($_GET["store"]);
+    if(!CurrentUserInfo::$store)CurrentUserInfo::$store="tstore";
+	if(!CurrentUserInfo::$os)CurrentUserInfo::$os = "android";
     if(!CurrentUserInfo::$language) CurrentUserInfo::$language = "ko";
-    if(!CurrentUserInfo::$country) CurrentUserInfo::$language = "kr";
-    if(!CurrentUserInfo::$timezone) CurrentUserInfo::$language = "asia/seoul";
+    if(!CurrentUserInfo::$country) CurrentUserInfo::$country = "kr";
+    if(!CurrentUserInfo::$timezone) CurrentUserInfo::$timezone = "asia/seoul";
 
     
 ?>
@@ -31,11 +32,12 @@
 <?php
 
 	$nowDate = TimeManager::getCurrentDateTime();
-
+	$storeBit = CurrentUserInfo::getStoreBit(CurrentUserInfo::$store);
 	$osBit = CurrentUserInfo::getOsBit(CurrentUserInfo::$os);
 	$ccBit = CurrentUserInfo::getCountryBit(CurrentUserInfo::$country);
+
 	$noticeCnt=0;
-	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os&".$osBit.">0 and cc&".$ccBit.">0 and isList>0 order by `order` asc")){
+	while($obj = Notice::getObjectByQuery("where startDate<$nowDate and endDate>$nowDate and os&".$osBit.">0 and cc&".$ccBit.">0 and store&".$storeBit.">0 and isList>0 order by `order` asc")){
 		$noticeCnt++;
 		$imgInfo = json_decode($obj->banner,true); 
 		$url = "event.php?gid=".$gid."&no=".$obj->no;

@@ -98,7 +98,12 @@ var cuponCount = function(value,option){
 
 
 <br><br>
-<h2 id="tables-contextual-classes">|쿠폰관리</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|쿠폰관리</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="CuponManager" dbLimit="30" dbWhere='{}' name="datatable" editRowOnly="true" editType="form" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

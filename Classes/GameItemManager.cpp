@@ -1347,7 +1347,10 @@ void FloatingCoin::traceCharacter()
 	{
 		stopTraceCharacter();
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
+		float f_gold = m_gold-sub_gold;
+		int i_gold = m_gold-sub_gold;
+		f_gold = f_gold - i_gold;
+		mySGD->addChangeGoodsIngameGold(i_gold, sub_gold+f_gold);
 		
 		take_func(getPosition());
 		
@@ -1370,7 +1373,10 @@ void FloatingCoin::takeIt()
 	if(auto_take)
 	{
 		AudioEngine::sharedInstance()->playEffect("sound_fever_coin.m4a", false, true);
-		mySGD->addChangeGoodsIngameGold(m_gold-sub_gold, sub_gold);
+		float f_gold = m_gold-sub_gold;
+		int i_gold = m_gold-sub_gold;
+		f_gold = f_gold - i_gold;
+		mySGD->addChangeGoodsIngameGold(i_gold, sub_gold+f_gold);
 		
 		take_func(getPosition());
 		
@@ -1814,12 +1820,17 @@ void FloatingCoinParent::startClearFloatCoin(float t_percent)
 		t_coin_count = roundf(t_percent/t_d);
 	else
 	{
-		t_coin_count = roundf(t_percent/(t_d*(mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10)));
+		t_coin_count = roundf(t_percent/(t_d/((mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10))));
 		clear_reward *= (mySD->getSilType()+10)/(mySGD->getUserdataHighPiece()+10);
 	}
 	
+	if(t_coin_count <= 0)
+		t_coin_count = 1;
+	
+	t_coin_count += int(clear_reward);
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-	t_coin_count += roundf(clear_reward/(NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())));
+	t_coin_count *= NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_gold_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+	
 	if(t_coin_count <= 0)
 		t_coin_count = 1;
 	

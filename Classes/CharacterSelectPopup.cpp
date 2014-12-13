@@ -31,6 +31,7 @@
 #include "TypingBox.h"
 #include "ManyGachaPopup.h"
 #include "GachaDetailPopup.h"
+#include "CharacterStrengthPopup.h"
 
 enum CharacterSelectPopup_Zorder{
 	kCSP_Z_gray = 0,
@@ -558,6 +559,22 @@ void CharacterSelectPopup::detailAction(CCObject *sender)
 																	 CCNode* t_node = CCNode::create();
 																	 t_node->setTag(NSDS_GI(kSDS_GI_characterInfo_int1_no_i, t_tag));
 																	 characterChangeAction(t_node);
+																 }, [=]()
+																 {
+																	 CCObject* t_keep = target_final;
+																	 SEL_CallFunc d_keep = delegate_final;
+																	 CharacterStrengthPopup* t_popup = CharacterStrengthPopup::create(touch_priority-10, t_tag, [=]()
+																	 {
+																		 if(t_keep && d_keep)
+																			 (t_keep->*d_keep)();
+																	 });
+																	 getParent()->addChild(t_popup, getZOrder());
+																	 
+																	 CommonAnimation::closePopup(this, main_case, NULL, [=](){
+																		 
+																	 }, [=](){
+																		 removeFromParent();
+																	 });
 																 });
 	addChild(t_popup, kCSP_Z_popup);
 }

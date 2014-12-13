@@ -64,6 +64,9 @@
 #include "ManyGachaPopup.h"
 #include "AccountManagerPopup.h"
 #include "FiveRocksCpp.h"
+
+#include "InvenPopup.h"
+
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -1511,15 +1514,44 @@ CCTableViewCell* MainFlowScene::tableCellAtIndex(CCTableView *table, unsigned in
 					condition_content->setPosition(ccp(67.5f, 102.5f));
 					not_clear_img->addChild(condition_content);
 				}
-				else
+				else if(t_info.is_have_ruby_condition)
 				{
 					condition_title->setPosition(condition_title->getPosition() + ccp(0,5));
 					
-					KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
-					condition_content->disableOuterStroke();
-					condition_content->setPosition(ccp(67.5f, 100.f));
-					not_clear_img->addChild(condition_content);
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentRuby), t_info.need_star_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCardGold), t_info.need_card_count, KS::insert_separator(t_info.need_ruby_value).c_str()), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 100.f));
+						not_clear_img->addChild(condition_content);
+					}
 				}
+				else
+				{
+					if(t_info.need_star_count >= t_info.need_card_count)
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContent), t_info.need_star_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+					}
+					else
+					{
+						KSLabelTTF* condition_content = KSLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_frameOpenConditionContentCard), t_info.need_card_count)->getCString(), mySGD->getFont().c_str(), 10);
+						condition_content->disableOuterStroke();
+						condition_content->setPosition(ccp(67.5f, 102.5f));
+						not_clear_img->addChild(condition_content);
+					}
+				}
+				
+				
 				
 				if(t_info.is_have_ruby_condition)
 				{
@@ -2924,6 +2956,18 @@ void MainFlowScene::puzzleListRefreshPopupClose()
 	popupClose();
 }
 
+void MainFlowScene::showInvenPopup()
+{
+	is_menu_enable = false;
+	
+	puzzle_table->setTouchEnabled(false);
+	mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
+	
+	InvenPopup* t_popup = InvenPopup::create();
+	t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
+	addChild(t_popup, kMainFlowZorder_popup);
+}
+
 void MainFlowScene::menuAction(CCObject* sender)
 {
 	if(!is_menu_enable)
@@ -3083,6 +3127,8 @@ void MainFlowScene::menuAction(CCObject* sender)
 			RankNewPopup* t_popup = RankNewPopup::create();
 			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
 			addChild(t_popup, kMainFlowZorder_popup);
+			
+			
 		}
 		else if(tag == kMainFlowMenuTag_shop)
 		{
@@ -3167,11 +3213,11 @@ void MainFlowScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kMainFlowMenuTag_cardSetting)
 		{
-			puzzle_table->setTouchEnabled(false);
-			mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
-			CardSettingPopup* t_popup = CardSettingPopup::create();
-			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
-			addChild(t_popup, kMainFlowZorder_popup);
+			showInvenPopup();
+			
+//			CardSettingPopup* t_popup = CardSettingPopup::create();
+//			t_popup->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshTutoPopupClose));
+//			addChild(t_popup, kMainFlowZorder_popup);
 		}
 		else if(tag == kMainFlowMenuTag_mission)
 		{
@@ -3521,13 +3567,13 @@ void MainFlowScene::setBottom()
 //	}
 		
 	CCSprite* n_cardsetting = CCSprite::create("mainflow_cardsetting.png");
-	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* n_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12);
 	n_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	n_cardsetting_label->setPosition(ccp(n_cardsetting->getContentSize().width/2.f, 7));
 	n_cardsetting->addChild(n_cardsetting_label);
 	CCSprite* s_cardsetting = CCSprite::create("mainflow_cardsetting.png");
 	s_cardsetting->setColor(ccGRAY);
-	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_mycard), mySGD->getFont().c_str(), 12);
+	KSLabelTTF* s_cardsetting_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12);
 	s_cardsetting_label->enableOuterStroke(ccBLACK, 1.f);
 	s_cardsetting_label->setPosition(ccp(s_cardsetting->getContentSize().width/2.f, 7));
 	s_cardsetting->addChild(s_cardsetting_label);

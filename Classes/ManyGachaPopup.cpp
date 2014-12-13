@@ -1577,6 +1577,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
@@ -1664,26 +1665,39 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
-				DownloadFile t_df1;
-				t_df1.size = t_faceInfo["size"].asInt();
-				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-				card_download_list.push_back(t_df1);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+				{
+					DownloadFile t_df1;
+					t_df1.size = t_faceInfo["size"].asInt();
+					t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+					t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+					t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df1);
+				}
 				
-				DownloadFile t_df2;
-				t_df2.size = t_faceInfo["size"].asInt();
-				t_df2.img = t_faceInfo["plist"].asString().c_str();
-				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-				card_download_list.push_back(t_df2);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+				{
+					DownloadFile t_df2;
+					t_df2.size = t_faceInfo["size"].asInt();
+					t_df2.img = t_faceInfo["plist"].asString().c_str();
+					t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+					t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df2);
+				}
 				
-				DownloadFile t_df3;
-				t_df3.size = t_faceInfo["size"].asInt();
-				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-				card_download_list.push_back(t_df3);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+				{
+					DownloadFile t_df3;
+					t_df3.size = t_faceInfo["size"].asInt();
+					t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+					t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+					t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df3);
+				}
+			}
+			else
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 			}
 			
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
@@ -2575,6 +2589,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
@@ -2662,26 +2677,39 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
-				DownloadFile t_df1;
-				t_df1.size = t_faceInfo["size"].asInt();
-				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-				card_download_list.push_back(t_df1);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+				{
+					DownloadFile t_df1;
+					t_df1.size = t_faceInfo["size"].asInt();
+					t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+					t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+					t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df1);
+				}
 				
-				DownloadFile t_df2;
-				t_df2.size = t_faceInfo["size"].asInt();
-				t_df2.img = t_faceInfo["plist"].asString().c_str();
-				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-				card_download_list.push_back(t_df2);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+				{
+					DownloadFile t_df2;
+					t_df2.size = t_faceInfo["size"].asInt();
+					t_df2.img = t_faceInfo["plist"].asString().c_str();
+					t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+					t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df2);
+				}
 				
-				DownloadFile t_df3;
-				t_df3.size = t_faceInfo["size"].asInt();
-				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-				card_download_list.push_back(t_df3);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+				{
+					DownloadFile t_df3;
+					t_df3.size = t_faceInfo["size"].asInt();
+					t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+					t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+					t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df3);
+				}
+			}
+			else
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 			}
 			
 			mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);

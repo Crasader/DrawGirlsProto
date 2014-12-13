@@ -65,6 +65,21 @@ bool TitleRenewalScene::init()
 		return false;
 	}
 	
+//	CCLog("test : \n%s", mySDS->getSavedServerDataFile("STAGE1INFO").toStyledString().c_str());
+//	
+//	Json::Value t_key_list;
+//	t_key_list.clear();
+//	
+//	Json::Value t_data;
+//	t_data.clear();
+//	t_data["type"] = "s";
+//	t_data["key"] = "title";
+//	t_data["filename"] = "PUZZLE1INFO";
+//	
+//	t_key_list[0] = t_data;
+//	
+//	CCLog("test2 : \n%s", mySDS->getSavedServerData(t_key_list).toStyledString().c_str());
+	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	mySGD->is_endless_mode = false;
 	mySGD->is_hell_mode = false;
@@ -441,14 +456,15 @@ void TitleRenewalScene::resultLogin( Json::Value result_data )
 		KS::KSLog("member eeeee id %", hspConnector::get()->getSocialID().c_str());
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
-		param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST);
+		param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
 #else
-		param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER);
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
 #endif
 		
 #else
-		param["loginType"] = getSavedOAuthType((int)HSPLogin::GUEST);
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSPLogin::GUEST) );
 #endif
+		CCLog("server type ============== %d", param["loginType"].asInt());
 		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 	}
 	else
@@ -631,14 +647,15 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 			param["memberID"] = hspConnector::get()->getSocialID();
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #ifdef LQTEST
-			param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
 #else
-			param["loginType"] = getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
 #endif
 			
 #else
-			param["loginType"] = getSavedOAuthType((int)HSPLogin::GUEST);
+			param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSPLogin::GUEST) );
 #endif
+			CCLog("server type ============== %d", param["loginType"].asInt());
 			hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
 		};
 		
@@ -1351,6 +1368,16 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setHellLeadMent(result_data["hellLeadMent"].asString());
 		
 		mySGD->setIsDiaryLinkOn(result_data["isDiaryLinkOn"].asInt());
+		
+		Json::Value strength_info = result_data["strengthInfo"];
+		mySGD->setExchangeIDForGold(strength_info["exchangeIDForGold"].asString());
+		mySGD->setGoldPerExp(strength_info["goldPerExp"].asInt());
+		mySGD->setExchangeIDForPass(strength_info["exchangeIDForPass"].asString());
+		
+		mySGD->setGababoProb(result_data["gababo"].asString());
+
+		
+		
 	}
 	else
 	{
@@ -1459,6 +1486,10 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["gold"].asInt(), false);
 				else if(t_mission["type"].asInt() == kCLEAR_turns)
 					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["turns"].asInt(), false);
+				else if(t_mission["type"].asInt() == kCLEAR_casting)
+					NSDS_SI(stage_number, kSDS_SI_missionOptionCount_i, t_option["count"].asInt(), false);
+				else if(t_mission["type"].asInt() == kCLEAR_littlePercent)
+					NSDS_SI(stage_number, kSDS_SI_missionOptionPercent_i, t_option["percent"].asInt(), false);
 				
 				
 				Json::Value shopItems = stage_info["shopItems"];
@@ -1523,6 +1554,8 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 				for(int i=0;i<cards.size();i++)
 				{
 					Json::Value t_card = cards[i];
+					if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
+						continue;
 					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 					NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -1532,6 +1565,7 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 					
 					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+					NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 					
 					Json::Value t_imgInfo = t_card["imgInfo"];
 					
@@ -1653,26 +1687,35 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 						NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 						
-						DownloadFile t_df1;
-						t_df1.size = t_faceInfo["size"].asInt();
-						t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-						t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-						t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-						card_download_list.push_back(t_df1);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+						{
+							DownloadFile t_df1;
+							t_df1.size = t_faceInfo["size"].asInt();
+							t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+							t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+							t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+							card_download_list.push_back(t_df1);
+						}
 						
-						DownloadFile t_df2;
-						t_df2.size = t_faceInfo["size"].asInt();
-						t_df2.img = t_faceInfo["plist"].asString().c_str();
-						t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-						t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-						card_download_list.push_back(t_df2);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+						{
+							DownloadFile t_df2;
+							t_df2.size = t_faceInfo["size"].asInt();
+							t_df2.img = t_faceInfo["plist"].asString().c_str();
+							t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+							t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+							card_download_list.push_back(t_df2);
+						}
 						
-						DownloadFile t_df3;
-						t_df3.size = t_faceInfo["size"].asInt();
-						t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-						t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-						t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-						card_download_list.push_back(t_df3);
+						if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+						{
+							DownloadFile t_df3;
+							t_df3.size = t_faceInfo["size"].asInt();
+							t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+							t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+							t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+							card_download_list.push_back(t_df3);
+						}
 						
 //						if(!is_add_cf)
 //						{
@@ -1690,6 +1733,10 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 //						t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
 //						
 //						card_reduction_list.push_back(t_cf);
+					}
+					else
+					{
+						NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 					}
 				}
 				
@@ -2049,6 +2096,56 @@ void TitleRenewalScene::resultGetShopList(Json::Value result_data)
 			NSDS_SS(kSDS_GI_shopPurchaseGuide_int1_exchangeID_s, t_index, t_data["exchangeID"].asString(), false);
 			
 			t_index++;
+		}
+		{
+			Json::Value t_data = result_data["gachaCardOnce"];
+			
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardOnce_reward_s, t_data["reward"].asString(), false);
+		}
+		{
+			Json::Value t_data = result_data["gachaCardDozen"];
+			
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardDozen_reward_s, t_data["reward"].asString(), false);
+		}
+		{
+			Json::Value t_data = result_data["gachaCardPass"];
+			
+			NSDS_SS(kSDS_GI_shopGachaCardPass_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopGachaCardPass_reward_s, t_data["reward"].asString(), false);
+		}
+		{
+			Json::Value t_data = result_data["composeUseStone"];
+			
+			NSDS_SS(kSDS_GI_shopComposeCardStone_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardStone_reward_s, t_data["reward"].asString(), false);
+		}
+		{
+			Json::Value t_data = result_data["composeUsePass"];
+			
+			NSDS_SS(kSDS_GI_shopComposeCardPass_countName_s, t_data["countName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_priceName_s, t_data["priceName"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_sale_s, t_data["sale"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_data_s, t_writer.write(t_data["data"]), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_exchangeID_s, t_data["exchangeID"].asString(), false);
+			NSDS_SS(kSDS_GI_shopComposeCardPass_reward_s, t_data["reward"].asString(), false);
 		}
 		
 		for(int i=1;i<=6;i++)
@@ -2728,6 +2825,8 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
+				continue;
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -2782,6 +2881,7 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 //			}
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
 			
 			Json::Value t_imgInfo = t_card["imgInfo"];
 			
@@ -2902,26 +3002,35 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 				
-				DownloadFile t_df1;
-				t_df1.size = t_faceInfo["size"].asInt();
-				t_df1.img = t_faceInfo["ccbi"].asString().c_str();
-				t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
-				t_df1.key = mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str();
-				card_download_list.push_back(t_df1);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+				{
+					DownloadFile t_df1;
+					t_df1.size = t_faceInfo["size"].asInt();
+					t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+					t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+					t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df1);
+				}
 				
-				DownloadFile t_df2;
-				t_df2.size = t_faceInfo["size"].asInt();
-				t_df2.img = t_faceInfo["plist"].asString().c_str();
-				t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
-				t_df2.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str();
-				card_download_list.push_back(t_df2);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+				{
+					DownloadFile t_df2;
+					t_df2.size = t_faceInfo["size"].asInt();
+					t_df2.img = t_faceInfo["plist"].asString().c_str();
+					t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+					t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df2);
+				}
 				
-				DownloadFile t_df3;
-				t_df3.size = t_faceInfo["size"].asInt();
-				t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
-				t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
-				t_df3.key = mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str();
-				card_download_list.push_back(t_df3);
+				if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+				{
+					DownloadFile t_df3;
+					t_df3.size = t_faceInfo["size"].asInt();
+					t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+					t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+					t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+					card_download_list.push_back(t_df3);
+				}
 				
 //				if(!is_add_cf)
 //				{
@@ -2939,6 +3048,10 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 //				t_cf.ccb_filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
 //				
 //				card_reduction_list.push_back(t_cf);
+			}
+			else
+			{
+				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
 			}
 			mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
 		}

@@ -36,10 +36,12 @@
 #import "AppController.h"
 #import <sys/types.h>
 #import <sys/sysctl.h>
+#import "TagAnalytics.h"
 //#import "KALocalUser.h"
 //#import "KAAuth.h"
 //#import "KakaoSDKViewController.h"
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+#include "TAGAnalyticsCpp.h"
 #include "platform/android/jni/JniHelper.h"
 #include "jni.h"
 #endif
@@ -1733,27 +1735,154 @@ void hspConnector::IgawAdbrixFirstTimeExperience(string msg)
 #endif
  
 }
-	 void hspConnector::IgawAdbrixRetention(string msg)
-	 {
+void hspConnector::IgawAdbrixRetention(string msg)
+{
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
-		 JniMethodInfo t;
-		 int r = 0;
-		 if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixRetention",
-																			 "(Ljava/lang/String;)V")) {
-			 jstring param1 = t.env->NewStringUTF(msg.c_str());
-			 t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
-			 t.env->DeleteLocalRef(param1);
-			 t.env->DeleteLocalRef(t.classID);
-		 }
-		 
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "IgawAdbrixRetention",
+																		 "(Ljava/lang/String;)V")) {
+		jstring param1 = t.env->NewStringUTF(msg.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
-		 //	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
-		 //						withData:[NSString stringWithUTF8String:data.c_str()]
-		 //				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
-		 [AdBrix retention:[NSString stringWithUTF8String:msg.c_str()]];
+	//	[tracker sendEvent:[NSString stringWithUTF8String:event.c_str()]
+	//						withData:[NSString stringWithUTF8String:data.c_str()]
+	//				 andCurrency:[NSString stringWithUTF8String:currency.c_str()]];
+	[AdBrix retention:[NSString stringWithUTF8String:msg.c_str()]];
 #endif
-		 
-	 }
+	
+}
+
+void hspConnector::analyticsPurchase(string itemCode, float payment, float unitCost, string currency, int level)
+{
+	
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::tracePurchase(itemCode, payment, unitCost, currency, level);
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsPurchase",
+																		 "(Ljava/lang/String;FFLjava/lang/String;I)V")) {
+		jstring param1 = t.env->NewStringUTF(itemCode.c_str());
+		jstring param2 = t.env->NewStringUTF(currency.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1, payment, unitCost, param2, level);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics tracePurchase:[NSString stringWithUTF8String:itemCode.c_str()] payment:payment unitCost:unitCost
+										 currency:[NSString stringWithUTF8String:currency.c_str()] level:level];
+	
+#endif
+	
+}
+void hspConnector::analyticsTraceMoneyAcquisition(string itemCode, string type, int amount, int level)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::traceMoneyAcquisition(itemCode, type, amount, level);
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsTraceMoneyAcquisition",
+																		 "(Ljava/lang/String;Ljava/lang/String;II)V")) {
+		jstring param1 = t.env->NewStringUTF(itemCode.c_str());
+		jstring param2 = t.env->NewStringUTF(type.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1, param2, amount, level);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics traceMoneyAcquisition:[NSString stringWithUTF8String:itemCode.c_str()] type:[NSString stringWithUTF8String:type.c_str()]
+										acquisitionAmount:amount level:level];
+#endif
+
+
+}
+void hspConnector::analyticsTraceMoneyConsumption(string itemCode, string type, int amount, int level)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::traceMoneyConsumption(itemCode, type, amount, level);
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsTraceMoneyConsumption",
+																		 "(Ljava/lang/String;Ljava/lang/String;II)V")) {
+		jstring param1 = t.env->NewStringUTF(itemCode.c_str());
+		jstring param2 = t.env->NewStringUTF(type.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1, param2, amount, level);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(param2);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics traceMoneyConsumption:[NSString stringWithUTF8String:itemCode.c_str()] type:[NSString stringWithUTF8String:type.c_str()]
+										consumptionAmount:amount level:level];
+#endif
+}
+void hspConnector::analyticsTraceLevelUp(int l)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::traceLevelUp(l);
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsTraceLevelUp",
+																		 "(I)V")) {
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, l);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics traceLevelUp:l];
+#endif
+	
+}
+void hspConnector::analyticsTraceFriendCount(int f)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::traceFriendCount(f);
+	JniMethodInfo t;
+	int r = 0;
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsTraceFriendCount",
+																		 "(I)V")) {
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, f);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics traceFriendCount:f];
+#endif
+	
+}
+
+void hspConnector::analyticsSetUserId(string userId, bool promo)
+{
+	
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+//	toast::analytics::setUserId(userId, t);
+	JniMethodInfo t;
+	int r = 0;
+	
+	if (JniHelper::getStaticMethodInfo(t, "com/litqoo/lib/hspConnector", "AnalyticsSetUserId",
+																		 "(Ljava/lang/String;Z)V")) {
+		jstring param1 = t.env->NewStringUTF(userId.c_str());
+		t.env->CallStaticVoidMethod(t.classID, t.methodID, param1, promo);
+		t.env->DeleteLocalRef(param1);
+		t.env->DeleteLocalRef(t.classID);
+	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	[TAGAnalytics setUserId:[NSString stringWithUTF8String:userId.c_str()] useCampaignOrPromotion:promo];
+#endif
+}
+
+
 int hspConnector::registerGamePadCallback(jsonSelType func)
 {
 	int registeredKey = -1;

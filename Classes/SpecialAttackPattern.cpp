@@ -1012,14 +1012,17 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 
 void GodOfDeath::update(float dt)
 {
-	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
+//	CCLOG("char distance : %f", ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition() ));
 	
 	if(ccpLength( myGD->getJackPoint().convertToCCP() - m_godOfDeathSprite->getPosition()) <= 5
 		 && myGD->getCommunicationBool("Jack_isDie") == false && m_killed == false)
 	{
 		m_killed = true;
 		myGD->communication("CP_jackCrashDie");
-		myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
+		mySGD->is_god_of_death = false;
+		myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+		myGD->communication("UI_showTimeover");
+		
 		m_manager->runAnimationsForSequenceNamed("die");
 		unschedule(schedule_selector(ThisClassType::update));
 		addChild(KSTimer::create(1.5f, [=](){

@@ -89,7 +89,12 @@ $(document).ready(function(){
 </div>
 <br><br>
 
-<h2 id="tables-contextual-classes">|아이템 정보조회</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|보유재화</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserStorage" autoLoad="false" dbWhere='{}' dbLimit="10" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>
@@ -127,7 +132,11 @@ $(document).ready(function(){
 	</tbody>
 </table>
 
-<h2 id="tables-contextual-classes">|아이템 히스토리
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|아이템 히스토리</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='itemhistory' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
 	<div>
 		<table><tr><td>
 		<div class="btn-group radio-btn" data-toggle-name="radius_options" data-toggle="buttons-radio">	

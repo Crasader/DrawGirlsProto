@@ -25,11 +25,11 @@ $allData2 = pieceHistoryStats("tryCount");
 파란색 총시도횟수, 노란색 최초클리어까지 걸린횟수
 <br>
 <?php
-	$r=printStatsList($allData);
+	$r=printStatsList($allData); 
 	$r2=printStatsList($allData2);
-	$gData=$r[0];
-	$gData2=$r2[0];
-	$printList = $r[1];
+	$gData=$r[0]; // clearCount
+	$gData2=$r2[0]; // tryCount
+	$printList = $r[1]; // clearCount
 ?>
 <table width="95%" align=center><tr><td height=500 id="placeholder">
 

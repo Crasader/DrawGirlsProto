@@ -211,7 +211,9 @@ typedef enum t_CLEAR_CONDITION{
 	kCLEAR_score,			// 10
 	kCLEAR_combo,			// 11
 	kCLEAR_gold,			// 12
-	kCLEAR_turns			// 13
+	kCLEAR_turns,			// 13
+	kCLEAR_casting,			// 14
+	kCLEAR_littlePercent	// 15
 }CLEAR_CONDITION;
 
 typedef enum t_ITEM_CODE{
@@ -375,7 +377,9 @@ enum StoneType
 	kStoneType_protector,
 	kStoneType_slow,
 	kStoneType_tornado,
-	kStoneType_circleDance
+	kStoneType_circleDance = 10,
+	kStoneType_boomerang,
+	kStoneType_chain
 	
 };
 

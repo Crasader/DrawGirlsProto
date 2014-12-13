@@ -7,6 +7,7 @@
 #include "SaveData.h"
 #include <map>
 #include "KSProtect.h"
+#include "jsoncpp/json.h"
 
 USING_NS_CC;
 
@@ -166,6 +167,36 @@ enum SDS_KEY
 	kSDS_GI_shopPurchaseGuide_int1_data_s,
 	kSDS_GI_shopPurchaseGuide_int1_pID_s,
 	kSDS_GI_shopPurchaseGuide_int1_exchangeID_s,
+	kSDS_GI_shopGachaCardOnce_countName_s,
+	kSDS_GI_shopGachaCardOnce_priceName_s,
+	kSDS_GI_shopGachaCardOnce_sale_s,
+	kSDS_GI_shopGachaCardOnce_data_s,
+	kSDS_GI_shopGachaCardOnce_exchangeID_s,
+	kSDS_GI_shopGachaCardOnce_reward_s,
+	kSDS_GI_shopGachaCardDozen_countName_s,
+	kSDS_GI_shopGachaCardDozen_priceName_s,
+	kSDS_GI_shopGachaCardDozen_sale_s,
+	kSDS_GI_shopGachaCardDozen_data_s,
+	kSDS_GI_shopGachaCardDozen_exchangeID_s,
+	kSDS_GI_shopGachaCardDozen_reward_s,
+	kSDS_GI_shopGachaCardPass_countName_s,
+	kSDS_GI_shopGachaCardPass_priceName_s,
+	kSDS_GI_shopGachaCardPass_sale_s,
+	kSDS_GI_shopGachaCardPass_data_s,
+	kSDS_GI_shopGachaCardPass_exchangeID_s,
+	kSDS_GI_shopGachaCardPass_reward_s,
+	kSDS_GI_shopComposeCardStone_countName_s,
+	kSDS_GI_shopComposeCardStone_priceName_s,
+	kSDS_GI_shopComposeCardStone_sale_s,
+	kSDS_GI_shopComposeCardStone_data_s,
+	kSDS_GI_shopComposeCardStone_exchangeID_s,
+	kSDS_GI_shopComposeCardStone_reward_s,
+	kSDS_GI_shopComposeCardPass_countName_s,
+	kSDS_GI_shopComposeCardPass_priceName_s,
+	kSDS_GI_shopComposeCardPass_sale_s,
+	kSDS_GI_shopComposeCardPass_data_s,
+	kSDS_GI_shopComposeCardPass_exchangeID_s,
+	kSDS_GI_shopComposeCardPass_reward_s,
 	kSDS_GI_shopItem_int1_countName_s,
 //	kSDS_GI_shopItem_int1_price_i,
 //	kSDS_GI_shopItem_int1_priceType_s,
@@ -290,6 +321,7 @@ enum SDS_KEY
 	kSDS_CI_int1_faceInfoPvrccz_s,
 	kSDS_CI_int1_faceInfoPlist_s,
 	kSDS_CI_int1_haveAdult_b,
+	kSDS_CI_int1_exp_i,
 	kSDS_CI_int1_version_i,
 	kSDS_CI_end = 3999,
 	kSDS_AI_base = 4000,
@@ -408,6 +440,11 @@ public:
 	void removeCache();
 	
 	string getRKey (SDS_KEY t_key);
+	
+	Json::Value getSavedServerData(Json::Value t_key_list);
+	Json::Value getSavedServerDataFile(string t_filename);
+	void saveServerData(Json::Value t_data_list);
+	void saveServerDataFile(string t_filename, Json::Value t_data);
 	
 private:
 	map<string, KSProtectVar<bool>> sds_cache_bool;

@@ -49,6 +49,7 @@ if($mode){
     CurrentUserInfo::$memberID = $param["memberID"];
     CurrentUserInfo::$socialID = $param["socialID"];
     CurrentUserInfo::$country = "kr";//$param["country"];
+    CurrentUserInfo::setStoreIDByStoreCode($param["store"]);
     if($param["timezone"])CurrentUserInfo::$timezone = $param["timezone"];
     if($param["log"])LogManager::$m_isLocked=false;
     // if(!is_array($param)){
@@ -60,7 +61,7 @@ if($mode){
     
 }
 
-
+LogManager::addLog("asefsf command/cmd".$version);
 if($version)include "command/cmd".$version.".php";
 else include "command/cmd2.php";
 
@@ -237,6 +238,7 @@ if($error!=""){
         }else{
             $cr["result"] = ResultState::toArray(ResultState::GDFAILTRANSACTION,"transaction fail");
             $cr["command"]=$transactionErrorList;
+            $cr["list"] = $allResult;
             $allResult[$commitCmdName]=$cr;
         }
 

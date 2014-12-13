@@ -20,21 +20,22 @@
 #include "KSUtil.h"
 #include "StyledLabelTTF.h"
 
-CharacterDetailPopup* CharacterDetailPopup::create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have)
+CharacterDetailPopup* CharacterDetailPopup::create(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, function<void()> t_strength_func, bool t_is_have)
 {
 	CharacterDetailPopup* t_mup = new CharacterDetailPopup();
-	t_mup->myInit(t_touch_priority, t_cha_idx, t_end_func, t_select_func, t_is_have);
+	t_mup->myInit(t_touch_priority, t_cha_idx, t_end_func, t_select_func, t_strength_func, t_is_have);
 	t_mup->autorelease();
 	return t_mup;
 }
 
-void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, bool t_is_have)
+void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<void()> t_end_func, function<void()> t_select_func, function<void()> t_strength_func, bool t_is_have)
 {
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;
 	end_func = t_end_func;
 	select_func = t_select_func;
+	strength_func = t_strength_func;
 	cha_idx = t_cha_idx;
 	is_have = t_is_have;
 	
@@ -204,64 +205,64 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	int power_int = round((power_value - 1.0)*100.0);
 //	if(power_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_power));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", power_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_power));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", power_int);
 	}
 	
 	int speed_int = round((speed_value - 1.1)*100.0);
 //	if(speed_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_speed));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", speed_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_speed));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", speed_int);
 	}
 	
 	int magnet_int = round(magnet_value);
 //	if(magnet_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_magnetEffect));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d</font>", magnet_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_magnetEffect));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d</font>", magnet_int);
 	}
 	
 	int missile_int = round((2.0 - missile_value)/2.0*100.0);
 //	if(missile_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileCreateValue));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", missile_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileCreateValue));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", missile_int);
 	}
 	
 	int rewind_int = round((rewind_value - 2.0)/2.0*100.0);
 //	if(rewind_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_cancelSpeed));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", rewind_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_cancelSpeed));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", rewind_int);
 	}
 	
 	int gold_int = round((gold_value - 1.0)*100.0);
 //	if(gold_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_goldBonus));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", gold_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_goldBonus));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", gold_int);
 	}
 	
 	int score_int = round((score_value - 1.0)*100.0);
 //	if(score_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_scoreBonus));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", score_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_scoreBonus));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", score_int);
 	}
 	
 	int wave_int = round(wave_value);
 //	if(wave_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_shockRegi));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", wave_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_shockRegi));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", wave_int);
 	}
 	
 	int ms_wave_int = round(ms_wave_value);
 //	if(ms_wave_int > 0)
 	{
-		base_str += ccsf("<font size=8.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileFireRegi));
-		base_str += ccsf("<font newline=10 size=9.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", ms_wave_int);
+		base_str += ccsf("<font size=9.5 color=#550A1E strokesize=0.5 strokecolor=#FFFFFF strokeopacity=102>%s </font>", getLocal(LK::kMyLocalKey_missileFireRegi));
+		base_str += ccsf("<font newline=11.5 size=10.5 color=#FFFFFF strokesize=1 strokecolor=#000000 strokeopacity=153>+%d%%</font>", ms_wave_int);
 	}
 	
 	StyledLabelTTF* base_label = StyledLabelTTF::create(base_str.c_str(), mySGD->getFont().c_str(), 8, 999, StyledAlignment::kLeftAlignment);
@@ -288,6 +289,8 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	special_node->setTextureRect(CCRectMake(0, 0, special_label->getContentSize().width, special_label->getContentSize().height));
 	special_label->setPosition(ccp(0,special_node->getContentSize().height));
 	
+	strength_button = NULL;
+	
 	if(NSDS_GI(kSDS_GI_characterInfo_int1_maxLevel_i, cha_idx) != cha_level)
 	{
 		StyledLabelTTF* next_special_label = StyledLabelTTF::create(NSDS_GS(kSDS_GI_characterInfo_int1_comment_int2_s, cha_idx, cha_level+1).c_str(), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kLeftAlignment);
@@ -304,6 +307,20 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 		next_special_label->setPosition(ccp(next_level->getContentSize().width,next_special_label->getContentSize().height));
 		special_node->addChild(next_level);
 		special_node->addChild(next_special_label);
+		
+		if(is_have)
+		{
+			CCLabelTTF* t_label = CCLabelTTF::create();
+			KSLabelTTF* select_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_strengthen), mySGD->getFont().c_str(), 12);
+			t_label->addChild(select_label);
+			
+			strength_button = CCControlButton::create(t_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
+			strength_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CharacterDetailPopup::strengthAction), CCControlEventTouchUpInside);
+			strength_button->setPreferredSize(CCSizeMake(92, 45));
+			strength_button->setPosition(ccp(back_case->getContentSize().width/2.f, 43));
+			back_case->addChild(strength_button);
+			strength_button->setTouchPriority(touch_priority);
+		}
 	}
 	
 	CCScrollView* special_scroll = CCScrollView::create(CCSizeMake(special_back->getContentSize().width-6, special_back->getContentSize().height-4));
@@ -313,6 +330,8 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 	special_scroll->setContentOffset(ccp(0, special_scroll->minContainerOffset().y));
 	special_back->addChild(special_scroll);
 	special_scroll->setTouchPriority(touch_priority);
+	
+	select_button = NULL;
 	
 	if(mySGD->getUserdataSelectedCharNO() != character_no && is_have)
 	{
@@ -328,9 +347,32 @@ void CharacterDetailPopup::myInit(int t_touch_priority, int t_cha_idx, function<
 		select_button->setTouchPriority(touch_priority);
 	}
 	
+	if(strength_button && select_button)
+	{
+		select_button->setPositionX(select_button->getPositionX() - 50);
+		strength_button->setPositionX(strength_button->getPositionX() + 50);
+	}
+	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
 	}, [=](){
 		is_menu_enable = true;
+	});
+}
+
+void CharacterDetailPopup::strengthAction(CCObject* sender, CCControlEvent t_event)
+{
+	if(!is_menu_enable)
+		return;
+	
+	is_menu_enable = false;
+	
+	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	CommonAnimation::closePopup(this, m_container, gray, [=](){
+		
+	}, [=](){
+		strength_func();
+		removeFromParent();
 	});
 }
 

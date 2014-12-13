@@ -1014,7 +1014,7 @@ int StarGoldData::getNextStageCardNumber( int recent_card_number )
 		}
 	} pred;
 	
-	sort(t_card_list.begin(), t_card_list.end(), pred);
+	stable_sort(t_card_list.begin(), t_card_list.end(), pred);
 	
 	for(int i=0;i<t_card_list.size();i++)
 	{
@@ -1326,7 +1326,7 @@ int StarGoldData::getPreStageCardNumber( int recent_card_number )
 		}
 	} pred;
 	
-	sort(t_card_list.begin(), t_card_list.end(), pred);
+	stable_sort(t_card_list.begin(), t_card_list.end(), pred);
 	
 	for(int i=0;i<t_card_list.size();i++)
 	{
@@ -1361,7 +1361,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_take)
 	{
@@ -1372,7 +1372,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_takeReverse)
 	{
@@ -1383,7 +1383,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 		
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_gradeUp) // rank
 	{
@@ -1394,7 +1394,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 	else if(t_type == kCST_gradeDown) // rank
 	{
@@ -1405,7 +1405,7 @@ void StarGoldData::changeSortType( CardSortType t_type )
 			}
 		} pred;
 
-		sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
+		stable_sort(has_gotten_cards.begin(), has_gotten_cards.end(), pred);
 	}
 }
 
@@ -1888,6 +1888,49 @@ void StarGoldData::initCollectionBook()
 	CCLOG("total card : %d", int(has_gotten_cards.size()));
 }
 
+void StarGoldData::refreshCardData(Json::Value t_data)
+{
+	int card_number = t_data["cardNo"].asInt();
+	
+	bool is_found = false;
+	int max_take_number = 0;
+	for(int i=0;!is_found && i<has_gotten_cards.size();i++)
+	{
+		if(has_gotten_cards[i].card_number.getV() == card_number)
+		{
+			is_found = true;
+			has_gotten_cards[i].user_ment = t_data["comment"].asString();
+			has_gotten_cards[i].count = t_data["count"].asInt();
+			has_gotten_cards[i].is_morphing = t_data["isMorphing"].asBool();
+			
+			if(has_gotten_cards[i].count.getV() <= 0)
+			{
+				has_gotten_cards.erase(has_gotten_cards.begin() + i);
+			}
+		}
+		else
+		{
+			if(has_gotten_cards[i].take_number.getV() > max_take_number)
+				max_take_number = has_gotten_cards[i].take_number.getV();
+		}
+	}
+	
+	if(!is_found)
+	{
+		CardSortInfo t_info;
+		t_info.card_number = card_number;
+		t_info.take_number = max_take_number+1;
+		t_info.grade = 0;
+		t_info.rank = 0;
+		t_info.user_ment = t_data["comment"].asString();
+		t_info.is_morphing = t_data["isMorphing"].asBool();
+		t_info.count = t_data["count"].asInt();
+		
+		if(t_info.count.getV() > 0)
+			has_gotten_cards.push_back(t_info);
+	}
+}
+
 void StarGoldData::initTakeCardInfo(Json::Value card_list, vector<int>& card_data_load_list)
 {
 	has_gotten_cards.clear();
@@ -2067,6 +2110,15 @@ bool StarGoldData::isClearPiece(int stage_number)
 	for(int i=0;i<piece_historys.size();i++)
 		if(piece_historys[i].stage_number.getV() == stage_number)
 			return piece_historys[i].is_clear[0].getV() || piece_historys[i].is_clear[1].getV() || piece_historys[i].is_clear[2].getV() || piece_historys[i].is_clear[3].getV();
+	
+	return false;
+}
+
+bool StarGoldData::isPerfectPiece(int stage_number)
+{
+	for(int i=0;i<piece_historys.size();i++)
+		if(piece_historys[i].stage_number.getV() == stage_number)
+			return piece_historys[i].is_clear[0].getV() && piece_historys[i].is_clear[1].getV() && piece_historys[i].is_clear[2].getV() && piece_historys[i].is_clear[3].getV();
 	
 	return false;
 }
@@ -2441,6 +2493,54 @@ void StarGoldData::resultUpdateCharacterHistory(Json::Value result_data)
 		keep_character_history_callback(result_data);
 }
 
+void StarGoldData::refreshCharacterHistory(Json::Value t_data)
+{
+	int characterNo = t_data["characterNo"].asInt();
+	Json::Value levelInfo = t_data["levelInfo"];
+	
+	int characterIndex = 0;
+	int character_count = NSDS_GI(kSDS_GI_characterCount_i);
+	bool t_found = false;
+	for(int i=0;!t_found && i<character_count;i++)
+	{
+		if(characterNo == NSDS_GI(kSDS_GI_characterInfo_int1_no_i, i+1))
+		{
+			t_found = true;
+			characterIndex = i+1;
+		}
+	}
+	
+	bool is_found = false;
+	for(int i=0;!is_found && i<getCharacterHistorySize();i++)
+	{
+		if(character_historys[i].characterNo.getV() == characterNo)
+		{
+			is_found = true;
+			
+			character_historys[i].characterIndex = characterIndex;
+			character_historys[i].characterLevel = levelInfo["level"].asInt();
+			character_historys[i].characterExp = levelInfo["exp"].asInt();
+			character_historys[i].characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+			character_historys[i].characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+			character_historys[i].characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
+		}
+	}
+	
+	if(!is_found)
+	{
+		CharacterHistory t_history;
+		t_history.characterIndex = characterIndex;
+		t_history.characterNo = characterNo;
+		t_history.characterLevel = levelInfo["level"].asInt();
+		t_history.characterExp = levelInfo["exp"].asInt();
+		t_history.characterNextLevelExp = levelInfo["nextLevelExp"].asInt();
+		t_history.characterCurrentLevelExp = levelInfo["currentLevelExp"].asInt();
+		t_history.characterNextLevelUpExp = levelInfo["nextLevelUpExp"].asInt();
+		
+		character_historys.push_back(t_history);
+	}
+}
+
 CommandParam StarGoldData::getUpdateTodayMissionParam(jsonSelType t_callback)
 {
 	update_today_mission_callback = t_callback;
@@ -2660,6 +2760,14 @@ string StarGoldData::getGoodsTypeToKey(GoodsType t_type)
 		return_value = "p7";
 	else if(t_type == kGoodsType_pass8)
 		return_value = "p8";
+	else if(t_type == kGoodsType_pass9)
+		return_value = "p9";
+	else if(t_type == kGoodsType_pass10)
+		return_value = "p10";
+	else if(t_type == kGoodsType_pass11)
+		return_value = "p11";
+	else if(t_type == kGoodsType_pass12)
+		return_value = "p12";
 	else if(t_type == kGoodsType_heart)
 		return_value = "h";
 	else if(t_type == kGoodsType_pz)
@@ -3380,6 +3488,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "onlyOneBuyPack";
 	else if(t_type == kUserdataType_characterLevel)
 		return_value = "level";
+	else if(t_type == kUserdataType_joinDate)
+		return_value = "joinDate";
 	
 	else if(t_type == kUserdataType_endlessData_ingWin)
 		return_value = "ing_win";
@@ -3387,6 +3497,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "ing_week";
 	else if(t_type == kUserdataType_endlessData_score)
 		return_value = "score";
+	else if(t_type == kUserdataType_endlessData_victory)
+		return_value = "victory";
 	
 	else if(t_type == kUserdataType_achieve_mapGacha)
 		return_value = "aMapGacha";
@@ -3486,7 +3598,7 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		{
 			userdata_storage[(UserdataType)i] = result_data["archiveData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
-		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score)
+		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score || i == kUserdataType_endlessData_victory)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 			if(i == kUserdataType_endlessData_ingWin)
@@ -3507,6 +3619,10 @@ void StarGoldData::initUserdata(Json::Value result_data)
 				initCharacterPrevPower(userdata_storage[(UserdataType)i].getV());
 			else if(i == kUserdataType_missileInfo_isMaxLevel)
 				initCharacterIsMaxLevel(userdata_storage[(UserdataType)i].getV());
+		}
+		else if(i == kUserdataType_joinDate)
+		{
+			join_date = result_data[getUserdataTypeToKey((UserdataType)i)].asString();
 		}
 		else
 		{
@@ -3812,6 +3928,8 @@ void StarGoldData::myInit()
 	is_ingame_gold = false;
 	is_ingame_sub_gold = false;
 	total_card_cnt = 0;
+	
+	card_gacha_no = -1;
 	
 	loading_tip_back_number = 1;
 	
@@ -4278,6 +4396,7 @@ void StarGoldData::setUserdataEndlessIngWeek(int t_i)
 }
 int StarGoldData::getUserdataEndlessIngWeek(){	return userdata_storage[kUserdataType_endlessData_ingWeek].getV();	}
 int StarGoldData::getUserdataEndlessScore(){	return userdata_storage[kUserdataType_endlessData_score].getV();	}
+int StarGoldData::getUserdataEndlessVictory(){	return userdata_storage[kUserdataType_endlessData_victory].getV();	}
 
 void StarGoldData::setUserdataAchieveMapGacha(int t_i)
 {

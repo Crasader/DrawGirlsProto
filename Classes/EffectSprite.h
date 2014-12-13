@@ -34,6 +34,9 @@ static const GLchar* silCvtFrag =
 static const GLchar* colorSilFrag =
 #include "ColorSilhouette.h"
 
+static const GLchar* colorOpaSilFrag =
+#include "ColorOpacitySilhouette.h"
+
 static const GLchar * grayVert =
 #include "GrayVert.h"
 
@@ -56,7 +59,8 @@ enum class CurrentMode
 	kGray,
 	kGrayPixelation,
 	kGrayBlur,
-	kColorSil
+	kColorSil,
+	kColorOpaSil
 };
 class EffectSprite : public CCSprite
 {
@@ -242,6 +246,26 @@ public:
 		
 		GLint color3Index = getShaderProgram()->getUniformLocationForName("color3");
 		getShaderProgram()->setUniformLocationWith3f(color3Index, t_r/255.f, t_g/255.f, t_b/255.f);
+	}
+	
+	void setColorOpacitySilhouette(int t_r, int t_g, int t_b, int t_o)
+	{
+		if(m_currentMode != CurrentMode::kColorOpaSil)
+		{
+			CCGLProgram* pProgram = new CCGLProgram();
+			pProgram->initWithVertexShaderByteArray(ccPositionTextureColor_vert, colorOpaSilFrag);
+			setShaderProgram(pProgram);
+			pProgram->release();
+			m_currentMode = CurrentMode::kColorOpaSil;
+			afterEffect(pProgram);
+		}
+		else
+		{
+			getShaderProgram()->use();
+		}
+		
+		GLint color4Index = getShaderProgram()->getUniformLocationForName("color4");
+		getShaderProgram()->setUniformLocationWith4f(color4Index, t_r/255.f, t_g/255.f, t_b/255.f, t_o/255.f);
 	}
 	
 	void setNonEffect()

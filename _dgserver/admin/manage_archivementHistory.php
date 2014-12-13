@@ -50,7 +50,13 @@ $(document).ready(function(){
 </div>
 <br><br>
 
-<h2 id="tables-contextual-classes">|업적정보</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|업적진행현황</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="ArchivementHistory" autoLoad="false" dbWhere='{}' dbLimit="50" dbSort='{"no":"desc"}' name="datatable" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

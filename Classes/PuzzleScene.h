@@ -88,6 +88,7 @@ private:
 	bool clear_is_first_perfect;
 	bool clear_is_stage_unlock;
 	bool clear_is_perfect_piece;
+	bool clear_is_not_have_card;
 	
 	bool is_menu_enable;
 	

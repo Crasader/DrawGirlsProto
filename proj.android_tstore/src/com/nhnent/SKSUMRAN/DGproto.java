@@ -33,7 +33,6 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
@@ -42,7 +41,6 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Base64;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -63,7 +61,7 @@ import com.igaworks.IgawCommon;
 //import com.kamcord.android.Kamcord;
 import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
-import com.nhnent.SKSUMRAN.R;
+import com.toast.android.analytics.GameAnalytics;
 //import com.litqoo.lib.KRunnable;
 
 @SuppressLint("NewApi")
@@ -78,6 +76,27 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		String versionName = null;
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(
+					"com.nhnent.SKSUMRAN", 
+					PackageManager.GET_SIGNATURES);
+			
+			versionName = info.versionName;		
+		} catch (NameNotFoundException e) {
+
+		}
+		
+		int result = GameAnalytics.initializeSdk(getApplicationContext(), "QA8LmqYa", 
+				"tk8on6Xe", versionName, true);
+
+		if(result != GameAnalytics.S_SUCCESS)
+		{
+
+			Log.d("toast", "initialize error " + GameAnalytics.getResultMessage(result));
+
+		}
+	
 		
 		SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         pref.getString("check", "");
@@ -120,7 +139,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.1.3")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", versionName)){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
@@ -158,7 +177,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 
 		//IgawCommon.startApplication(DGproto.this);
 
-		// 'isupdate'������������占� ��������������������������� 2.4 占쏙옙釉����占쏙옙釉����������������占� 嶺�������������������������占쏙옙占썹��占썲��������筌�占썲��������. 'loglevel' ��������������쇰┛�����몃�⑼��占썲�������� ��������������������������� ��β�쎌�����諭���� ��������������쇰┛占쏙옙恝������占� ���������筌�占썲����������������������������������� ������������������������������������������������������������������占�. 占쏙옙怨ㅼ�������������������������������������������������������� ������������占� ���������������������������占쏙옙占썲��占� '0(���������占쏙옙��������占� ������������占�)'���������占쏙옙怨ㅼ�����占� ���������筌�占썲��������������������������������������������������������������.
+		// 'isupdate'占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 2.4 ������������占쏙옙占쏙옙������������占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占� 癲ワ옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��������������뱄옙占썲����뀐옙占쏙옙占쏙옙占쏙옙占썹��占썲����뀐옙占쏙옙占쏙옙占쏙옙占�. 'loglevel' 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��겸��占쏙옙占쏙옙占쎈��占썩�쇽옙占썲����뀐옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙棺占쎌��占쏙옙占쏙옙占썼キ占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��겸��������������占쏙옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占썹��占썲����뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占�. �����������ⓦ�쇽옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썲�������������뀐옙占썲��占� '0(占쏙옙占쏙옙占쏙옙占쏙옙占썲��������占쏙옙占쏙옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占�)'占쏙옙占쏙옙占쏙옙占쏙옙占썲����������ⓦ�쇽옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占썹��占썲����뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占�.
 //		AdXConnect.getAdXConnectInstance(getApplicationContext(), false, 1);
 //
 //		AdXConnect.getAdXConnectEventInstance(getApplicationContext(),"Launch","","");
@@ -166,7 +185,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		IgawCommon.startApplication(DGproto.this);
 		
 		
-		//���占썲�������������������������������������������� ���������繹�占썲�����������������占쏙옙占썲�������� �����������⑨옙��������� Push Listener ���������������������������: ���������������������������������������占� ��������������������������� 占쏙옙���占썲��������-���占썲�����������������������������占� ���������占쏙옙���������占� 繞�恝���������������占� ���������������������������
+		//占쏙옙占썲����뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占썹뭐占썲����뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙��������������뀐옙占쏙옙占쏙옙占쏙옙占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썩�⑥��占쏙옙占쏙옙占쏙옙占쏙옙占� Push Listener 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占�: 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썲��占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占� ���������占쏙옙占썲����뀐옙占쏙옙占쏙옙占쏙옙占�-占쏙옙占썲����뀐옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙���占� 占쏙옙占쏙옙占쏙옙占쏙옙占썲��������占쏙옙占쏙옙占쏙옙占쏙옙占썲��占� 濚�占썸��占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占썲��占� 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占�
 		HSPMessage
 		    .addPushNotificationReceiveListener(new HSPReceivePushNotificationListener() {
 		       @Override
@@ -259,6 +278,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onResume()
 	{
 		super.onResume();     
+		GameAnalytics.traceActivation(this);
 		hideSystemUI();
 		IgawCommon.startSession(DGproto.this);
 		//IgawCommon.startSession(DGproto.this);
@@ -291,7 +311,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 										if (result.isSuccess() == false) {
 											//Log.i("litqoo", "HSP Login Error = " + result);
 
-											// ??????????????????????????? ??????????????????????????? 占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙?????????????????占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙占쏙옙??占쏙옙占썲��占�? ????????????????????????占쏙옙占쏙옙占쏙옙占쏙옙占�?????????????????????占쏙옙占썲��占�?.
+											// ??????????????????????????? ??????????????????????????? ���������������������������������������������������������������������������������?????????????????���������������������������������������������������������������������������������??��������������뀐옙占썲��占�? ????????????????????????���������������������������������������占�?????????????????????��������������뀐옙占썲��占�?.
 											int errorCode = result.getCode();
 											String errorDescription = result.getDetail();
 
@@ -330,7 +350,9 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	@Override
 	protected void onPause()
 	{
+
 		super.onPause();
+		GameAnalytics.traceDeactivation(this);
 		IgawCommon.endSession();
 		suspend();
 	}

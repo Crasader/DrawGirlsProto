@@ -35,6 +35,7 @@ import android.widget.Toast;
 
 
 
+
 //import com.AdX.tag.AdXConnect;
 import com.hangame.hsp.HSPCore;
 import com.hangame.hsp.HSPCore.HSPLoginType;
@@ -63,6 +64,7 @@ import com.hangame.hsp.ui.HSPUiUri.HSPUiUriParameterValue;
 import com.igaworks.adbrix.IgawAdbrix;
 import com.nhnent.SKSUMRAN.LuaGLSurfaceView;
 //import com.nhnent.SKSUMRAN.NA.LuaGLSurfaceView;
+import com.toast.android.analytics.GameAnalytics;
 
 //import com.kakao.api.Kakao;
 //import com.kakao.api.KakaoResponseHandler;
@@ -634,6 +636,31 @@ public class hspConnector {
 		// AdXConnect.getAdXConnectEventInstance(getApplicationContext(), "Sale", "2.50", "USD");
 //		AdXConnect.getAdXConnectEventInstance(sContext.getApplicationContext(), event, data, currency);
 	}
+	public static void AnalyticsPurchase(String itemCode, float payment, float unitCost, String currency, int level)
+	{
+		GameAnalytics.tracePurchase(itemCode, payment, unitCost, currency, level);
+	}
+	public static void AnalyticsTraceMoneyAcquisition(String itemCode, String type, int amount, int level) 
+	{
+		GameAnalytics.traceMoneyAcquisition(itemCode, type, amount, level);
+	}
+	public static void AnalyticsTraceMoneyConsumption(String usageCode, String type, int amount, int level) 
+	{
+		GameAnalytics.traceMoneyConsumption(usageCode, type, amount, level);
+	}
+	public static void AnalyticsTraceLevelUp(int l)
+	{
+		GameAnalytics.traceLevelUp(l);
+	}
+	public static void AnalyticsTraceFriendCount(int f)
+	{
+		GameAnalytics.traceFriendCount(f);
+	}
+	public static void AnalyticsSetUserId(String userId, boolean t)
+	{
+		GameAnalytics.setUserId(userId, t);
+	}
+	
 	public static void registerGamePadCallback(final int _key)
 	{ 
 		mGLView.setCallbackKey(_key);

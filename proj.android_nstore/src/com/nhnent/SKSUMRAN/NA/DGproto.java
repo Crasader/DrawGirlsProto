@@ -65,6 +65,7 @@ import com.litqoo.lib.KSActivityBase;
 import com.litqoo.lib.hspConnector;
 import com.nhnent.SKSUMRAN.NA.LuaGLSurfaceView;
 import com.nhnent.SKSUMRAN.NA.R;
+import com.toast.android.analytics.GameAnalytics;
 
 @SuppressLint("NewApi")
 public class DGproto extends KSActivityBase{//Cocos2dxActivity{
@@ -78,7 +79,26 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		String versionName = null;
+		try {
+			PackageInfo info = getPackageManager().getPackageInfo(
+					"com.nhnent.SKSUMRAN.NA", 
+					PackageManager.GET_SIGNATURES);
+			
+			versionName = info.versionName;		
+		} catch (NameNotFoundException e) {
+
+		}
 		
+		int result = GameAnalytics.initializeSdk(getApplicationContext(), "QA8LmqYa", 
+				"tk8on6Xe", versionName, true);
+		
+		if(result != GameAnalytics.S_SUCCESS)
+		{
+
+			Log.d("toast", "initialize error " + GameAnalytics.getResultMessage(result));
+
+		}	
 		SharedPreferences pref = getSharedPreferences("pref", MODE_PRIVATE);
         pref.getString("check", "");
         if(pref.getString("check", "").isEmpty()){
@@ -120,7 +140,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
 		//FiveRocks.setDebugEnabled(true);
 
-		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", "1.1.3")){
+		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", versionName)){
 			Log.i("com.litqoo.dgproto", "hspcore create ok");
 			com.litqoo.lib.hspConnector.testRegisterListener();
 		}else{
@@ -259,6 +279,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onResume()
 	{
 		super.onResume();     
+		GameAnalytics.traceActivation(this);
 		hideSystemUI();
 		IgawCommon.startSession(DGproto.this);
 		//IgawCommon.startSession(DGproto.this);
@@ -331,6 +352,7 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	protected void onPause()
 	{
 		super.onPause();
+	    GameAnalytics.traceDeactivation(this);
 		IgawCommon.endSession();
 		suspend();
 	}

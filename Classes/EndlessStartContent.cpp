@@ -53,6 +53,9 @@ void EndlessStartContent::menuAction(CCObject* sender)
 	
 	is_menu_enable = false;
 	
+	if(touch_func)
+		touch_func();
+	
 	CommonAnimation::closePopup(this, this, nullptr, [=](){
 		
 	}, [=](){
@@ -63,6 +66,7 @@ void EndlessStartContent::menuAction(CCObject* sender)
 
 void EndlessStartContent::myInit(int t_touch_priority, function<void(CCObject*)> t_selector)
 {
+	touch_func = nullptr;
 	is_menu_enable = false;
 	
 	touch_priority = t_touch_priority;

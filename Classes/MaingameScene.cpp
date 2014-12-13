@@ -521,8 +521,8 @@ void Maingame::finalSetting()
 	game_node->addChild(myJack, myJackZorder);
 	myJack->initStartPosition(game_node->getPosition());
 	
-	myPM = PathManager::create();
-	game_node->addChild(myPM, myPMZorder);
+	
+	
 	
 	myGIM = GameItemManager::create();
 	game_node->addChild(myGIM, attackItemZorder);
@@ -531,6 +531,17 @@ void Maingame::finalSetting()
 	
 	myCP = CumberParent::create();
 	game_node->addChild(myCP, myCPZorder);
+	
+	std::vector<KSCumberBase*> maincumbers = myCP->getMainCumbers();
+	int agi=0;
+	for(int i=0;i<maincumbers.size();i++){
+		agi = ((KSCumberBase*)maincumbers[i])->getAgility();
+		break;
+	}
+	
+	
+	myPM = PathManager::create(agi);
+	game_node->addChild(myPM, myPMZorder);
 	
 	
 	line_particle = CCParticleSystemQuad::createWithTotalParticles(100);
@@ -930,7 +941,10 @@ void Maingame::finalSetting()
 		
 		t_popup->setDimmedSize(CCSizeMake(screen_scale_x*480.f, myDSH->ui_top));// /myDSH->screen_convert_rate));
 		t_popup->setDimmedPosition(ccp(240, myDSH->ui_center_y));
-		t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
+		if(mySGD->is_pvp_event)
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y-30));
+		else
+			t_popup->setBasePosition(ccp(240, myDSH->ui_center_y));
 		
 		EndlessStartContent* t_container = EndlessStartContent::create(t_popup->getTouchPriority(), [=](CCObject* sender)
 																   {
@@ -940,6 +954,43 @@ void Maingame::finalSetting()
 																   });
 		t_popup->setContainerNode(t_container);
 		exit_target->getParent()->addChild(t_popup);
+		
+		if(mySGD->is_pvp_event)
+		{
+			CCNode* event_node = CCNode::create();
+			
+			CCSprite* event_title = CCSprite::create("endless_eventstage.png");
+			event_title->setPosition(ccp(0, 15));
+			event_node->addChild(event_title);
+			
+			KSLabelTTF* event_label = KSLabelTTF::create(mySGD->pvp_event_title.c_str(), mySGD->getFont().c_str(), 15);
+			event_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
+			event_label->setPosition(ccp(0, -25));
+			event_node->addChild(event_label);
+			
+			
+			event_node->setPosition(ccp(-event_title->getContentSize().width/2.f, myDSH->ui_center_y + 75));
+			t_popup->addChild(event_node);
+			
+			event_node->addChild(KSGradualValue<CCPoint>::create(event_node->getPosition(), ccp(240, myDSH->ui_center_y + 75), 0.25f, [=](CCPoint t_p)
+																  {
+																	  event_node->setPosition(t_p);
+																  }, [=](CCPoint t_p)
+																  {
+																	  event_node->setPosition(t_p);
+																  }));
+			
+			t_container->touch_func = [=]()
+			{
+				event_node->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.25f, [=](float t_f)
+																   {
+																	   event_node->setScaleY(t_f);
+																   }, [=](float t_f)
+																   {
+																	   event_node->setScaleY(t_f);
+																   }));
+			};
+		}
 	}
 	else
 	{

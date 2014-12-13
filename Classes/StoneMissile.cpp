@@ -457,6 +457,7 @@ void CircleDance::update(float dt)
 	{
 		//			myGD->communication("EP_stopCrashAction");
 		removeFromParentAndCleanup(true);
+		return;
 	}
 	m_currentFrame++;
 	
@@ -521,6 +522,7 @@ void CircleDance::update(float dt)
 			Satellite& i = *iter;
 			i.rad += M_PI / 180.f * 5.f;
 			i.sprite->setMissilePosition(m_missileSprite->getPosition() + ccp(m_initRadius * cosf(i.rad), m_initRadius * sin(i.rad)));
+			i.sprite->setRotation(rad2Deg(i.rad));
 			
 			
 			bool isEnable = true;
@@ -552,5 +554,168 @@ void CircleDance::update(float dt)
 		
 	}
 
+}
+
+void Boomerang::update(float dt)
+{
+	if(getChildrenCount() == 1) // 자식이 없어지면 삭쿠제.
+	{
+		removeFromParentAndCleanup(true);
+		return;
+	}
+	
+	if(m_missileStep == 1)
+	{
+		// 날아가는 구간
+		m_centerRad += M_PI / 180.f * 4.f * 50.f / m_centerA;
+		
+		
+		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
+												 sinf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) + cosf(m_initRad) * m_centerA / 4.f * sinf(m_centerRad));
+		
+		m_missileSprite->setPosition(m_params.initPosition + tracer);
+		
+		if(m_centerRad >= 2 * M_PI)
+		{
+			m_missileStep = 2;
+			m_missileSprite->setColor(ccc3(255, 0, 0));
+		}
+	}
+	else if(m_missileStep == 2)
+	{
+		// 돌아오는 구간
+		// 미사일 중심에서 캐릭터로 방향 전환을 시도해야됨.
+		// 방향 전환 기준은 m_centerRad 를 변화시키는 방향.
+		
+		float diffRad = atan2f(myGD->getJackPointCCP().y - m_missileSprite->getPosition().y,
+													 myGD->getJackPointCCP().x - m_missileSprite->getPosition().x);
+		// 					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
+		int sign = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad) > 0 ? 1 : -1;
+		m_centerRad = toPositiveAngle(m_centerRad);
+		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+		m_centerRad += clampf(signRad, deg2Rad(-5.5f), deg2Rad(5.5f));
+//		m_centerRad += (diffRad - m_centerRad);
+		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_centerRad) * 1.5f, sinf(m_centerRad) * 1.5f));
+
+		if( ccpLength(myGD->getJackPointCCP() - m_missileSprite->getPosition()) < 2 )
+		{
+			m_missileStep = 3;
+			removeFromParent();
+			return;
+		}
+		
+		
+	}
+	
+	
+	m_revolutionRad += M_PI / 180.f * 8.f;
+	for(auto iter = m_satellites.begin(); iter != m_satellites.end(); )
+	{
+		Satellite& i = *iter;
+		//		iter.rad += M_PI / 180.f * 4.f;
+		float tx = 0.f;
+		float revolB = m_params.revelutionA / 2.f;
+		float ty = -revolB;
+		CCPoint tracer2 = ccp(cosf(m_revolutionRad)*(m_params.revelutionA * cosf(i.rad) + tx) - sinf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) ,
+													sinf(m_revolutionRad) * (m_params.revelutionA * cosf(i.rad) + tx) + cosf(m_revolutionRad) * (revolB * sinf(i.rad) + ty) );
+		//		CCPoint tr = ccp(m_params.revelutionA * cosf(iter.rad), m_params.revelutionA / 2.f * sinf(iter.rad));
+		i.sprite->setMissilePosition(m_missileSprite->getPosition() + tracer2);
+		
+		
+		bool invalidRange;
+		IntPoint missilePoint = ccp2ip(i.sprite->getMissilePosition());
+		invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+										missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+		
+		if(
+			 myGD->getIsGameover() ||
+			 
+			 invalidRange ||
+			 i.sprite->m_touched == true
+			 )
+		{
+			i.sprite->removeFromParent();
+			iter = m_satellites.erase(iter);
+		}
+		else
+		{
+			++iter;
+		}
+	}
+	
+	
+}
+
+void Chain::update(float dt)
+{
+	
+	bool invalidRange;
+	IntPoint missilePoint = ccp2ip(m_chainMissile->getMissilePosition());
+	invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
+									missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
+	
+	if(
+		 myGD->getIsGameover() ||
+		 
+		 invalidRange
+		 
+		 )
+	{
+		removeFromParent();
+	}
+	else if(m_chainMissile->m_touched == true)
+	{
+		CCPoint pos = m_chainMissile->getPosition();
+		m_chainMissile->removeFromParent();
+		m_params.depth--;
+		if(m_params.depth >= 1)
+		{
+			KSCumberBase* nearCumber = myGD->getNearestCumberWithExclude(pos, m_targeted);
+			if(nearCumber && ccpLength(pos - nearCumber->getPosition()) < m_params.chainDistance)
+			{
+				m_targeted.push_back(nearCumber);
+				float ny = nearCumber->getPosition().y;
+				float nx = nearCumber->getPosition().x;
+				
+				m_targetNode = nearCumber;
+				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
+																							 m_params.power + m_params.power * (m_originalDepth - m_params.depth + 1) * 0.2f,
+																							 m_params.subPower, 2, 20, m_params.ao);
+				m_chainMissile->beautifier(m_params.level);
+				addChild(m_chainMissile);
+				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
+				
+			}
+			else
+			{
+				removeFromParent();
+			}
+			
+		}
+		else
+		{
+			removeFromParent();
+		}
+		return;
+	}
+	else
+	{
+		float diffRad = ccpToAngle((m_targetNode->getPosition() - m_chainMissile->getMissilePosition()));
+		
+		float deltaRad = toPositiveAngle(diffRad) - toPositiveAngle(m_currentRad);
+		m_currentRad += deltaRad;
+		
+		m_chainMissile->setMissilePosition(m_chainMissile->getMissilePosition() + ccp(cosf(m_currentRad) * m_params.speed, sinf(m_currentRad) * m_params.speed));
+		m_chainMissile->setRotation(-rad2Deg(m_currentRad) - 90.f);
+
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 }
 #undef LZZ_INLINE

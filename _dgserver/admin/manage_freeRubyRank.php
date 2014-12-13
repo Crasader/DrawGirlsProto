@@ -4,7 +4,12 @@ include "manage_header.php";
 
 <input name="gid" value="<?=$gid?>" type="hidden">
 
-<h2 id="tables-contextual-classes">|무료루비랭킹</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|무료젬랭킹</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
 <table class="LQDataTable" dbSource="dataManager2.php"  dbClass="UserStorage" dbWhere='{"id":"*"}' dbLimit="50" dbSort='{"fr":"desc"}' name="goldRank" border=1 commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

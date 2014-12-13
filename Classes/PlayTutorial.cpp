@@ -1671,7 +1671,7 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 //		CCNodeLoaderLibrary* nodeLoader = CCNodeLoaderLibrary::sharedCCNodeLoaderLibrary();
 //		CCBReader* reader = new CCBReader(nodeLoader);
 //		draw_button = dynamic_cast<CCSprite*>(reader->readNodeGraphFromFile(CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString(),this));
-		auto t_ccb = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getLocalCode().c_str())->getCString());
+		auto t_ccb = KS::loadCCBI<CCSprite*>(this, CCString::createWithFormat("gameui_button_%s.ccbi", myLoc->getSupportLocalCode())->getCString());
 		draw_button = t_ccb.first;
 		button_ani = t_ccb.second;
 		//		draw_button = CCSprite::create("ui_draw.png");
@@ -2129,7 +2129,7 @@ void PlayTutorial::nextStep()
 						  ui_percent->stopAllActions();
 						  ui_percent->setVisible(true);
 						  
-						  CCSprite* clear_condition = CCSprite::create(CCString::createWithFormat("play_tutorial_gage_guide_%s.png", myLoc->getLocalCode().c_str())->getCString());
+						  CCSprite* clear_condition = CCSprite::create(CCString::createWithFormat("play_tutorial_gage_guide_%s.png", myLoc->getSupportLocalCode())->getCString());
 						  clear_condition->setPosition(ccp(240,myDSH->ui_top-58));
 						  addChild(clear_condition, 4);
 						  
@@ -2146,7 +2146,7 @@ void PlayTutorial::nextStep()
 						  CCRepeat* t_repeat2 = CCRepeat::create(t_seq2, 3);
 						  time_label->runAction(t_repeat2);
 						  
-						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getLocalCode().c_str())->getCString());
+						  CCSprite* time_case = CCSprite::create(CCString::createWithFormat("play_tutorial_time_guide_%s.png", myLoc->getSupportLocalCode())->getCString());
 						  time_case->setPosition(ccp(240,37));
 						  addChild(time_case, 4);
 						  

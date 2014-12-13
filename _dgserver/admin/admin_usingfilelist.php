@@ -49,11 +49,13 @@ function patchResource($dir,$refKey,$imgKey,$cls,$func =null){
 		$func = function($refKey,$imgKey,$dir,$obj){
 			global $_GET;
 			global $gid;
+			
+
+
 			$imgInfo =& $obj->getRef($refKey);
-			
 			if(!$imgInfo) return false;
-			
 			$pointArray = explode(".",$imgInfo[$imgKey]);
+
 			$lcnt = count($pointArray)-1;
 			$lename = $pointArray[$lcnt];
 			$lastPoint = $pointArray[$lcnt];
@@ -181,6 +183,8 @@ patchResource("p_o","original","image","Puzzle");
 patchResource("p_f","face","image","Puzzle");
 
 patchResource("p_f","face","image","Puzzle");
+
+
 
 patchResource("char","resourceInfo","ccbi","Character");
 

@@ -11,6 +11,7 @@ include "manage_header.php";
 		<tr>
 		<th primary title='고유번호' field='no' viewer='{"type":"text"}' >고유번호</th>
 		<th title='메세지' field='message' viewer='{"type":"text"}' editor='{"type":"textarea"}' >메세지</th>
+		<th title='스토어' field='store' viewer='{"type":"storeViewer"}' editor='{"type":"storeSelector"}' >스토어</th>
 		<th title='운영체제' field='os' viewer='{"type":"osViewer"}' editor='{"type":"osSelector"}' >운영체제</th>
 		<th title='국가' field='cc' viewer='{"type":"countryViewer"}' editor='{"type":"countrySelector"}' >국가</th>
 		<th field='startDate' editor='{"type":"datetime"}' viewer='{"type":"datetime"}'>시작일시</th>

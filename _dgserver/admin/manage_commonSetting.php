@@ -6,7 +6,13 @@ include "manage_header.php";
 
 
 <br><br>
-<h2 id="tables-contextual-classes">|기본설정</h2>
+<table width=100%><tr><td>
+	<h2 id="tables-contextual-classes">|기본설정</h2>
+</td><td align=right>
+	<a class='LQSaveCSVBtn' tableName='datatable' download="filename.csv" href="#">CSV 다운받기</a>
+</td></tr></table>
+
+
 <table class="LQDataTable" dbSource="dataManager2.php" dbClass="CommonSetting" dbWhere='{}' dbLimit="100" name="datatable" border=1 align=center commenter='{"type":"custom","func":"commenter"}'>
 	<thead>
 		<tr>

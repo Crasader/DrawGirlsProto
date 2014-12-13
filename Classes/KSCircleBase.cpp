@@ -297,7 +297,7 @@ void KSCircleBase::crashMapForPosition(CCPoint targetPt)
 	CCPoint afterPosition = targetPt;
 	IntPoint afterPoint = ccp2ip(afterPosition);
 	set<IntPoint> crashArea;
-	float half_distance = RADIUS*getCumberScale() * 1.2f; // 깎을 영역은 충돌 영역크기보다 1.2 배.
+	float half_distance = RADIUS*getCumberScale() * 1.2f * getRushCrashSize(); // 깎을 영역은 충돌 영역크기보다 1.2 배.
 	int ip_half_distance = half_distance / 2;
 	// 충돌 영역에 대한 포인트 추가.
 	for(int i=afterPoint.x-ip_half_distance;i<=afterPoint.x+ip_half_distance;i++)
@@ -520,45 +520,49 @@ void KSCircleBase::checkConfine(float dt)
 		 myGD->mapState[mapPoint.x-1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x+1][mapPoint.y] != mapEmpty &&
 		 myGD->mapState[mapPoint.x][mapPoint.y-1] != mapEmpty &&
-		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty
+		 myGD->mapState[mapPoint.x][mapPoint.y+1] != mapEmpty ||
+		 mapPoint.isInnerMap() == false
 		 
 		 /* &&
 			
 			dynamic_cast<KSJuniorBase*>(this)*/)
 	{
-		AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
 		
-		
-		int rmCnt = 5;
-		
-		int weapon_level = mySGD->getUserdataCharLevel();
-		
-//		int weapon_rank = (weapon_level-1)/5 + 1;
-//		weapon_level = (weapon_level-1)%5 + 1;
-		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		int weapon_type = mInfo.get("type", 0).asInt();
-	
-		double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		if(power_rate < 1.0)
-			power_rate = 1.0;
-		
-		myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower(), int((power_rate-1.0)*mySGD->getUserdataMissileInfoPower()));
-		
-		//		string missile_code;
-		//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
-		//
-		//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
-		//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
-		//
-		//		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
-		
-//		mySGD->increaseCatchCumber();
-		myGD->communication("CP_removeMainCumber", this);
-		
-		
-		removeFromParentAndCleanup(true);
+		if(myGD->getMainCumberCount() >= 2)
+		{
+			AudioEngine::sharedInstance()->playEffect("sound_jack_basic_missile_shoot.mp3", false);
+			
+			
+			int rmCnt = 5;
+			
+			int weapon_level = mySGD->getUserdataCharLevel();
+			
+			//		int weapon_rank = (weapon_level-1)/5 + 1;
+			//		weapon_level = (weapon_level-1)%5 + 1;
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			int weapon_type = mInfo.get("type", 0).asInt();
+			
+			double power_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_power_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			if(power_rate < 1.0)
+				power_rate = 1.0;
+			
+			myGD->createJackMissileWithStoneFunctor((StoneType)weapon_type, weapon_level, rmCnt, getPosition(), mySGD->getUserdataMissileInfoPower(), int((power_rate-1.0)*mySGD->getUserdataMissileInfoPower()));
+			
+			//		string missile_code;
+			//		missile_code = NSDS_GS(kSDS_CI_int1_missile_type_s, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			//		int missile_type = MissileDamageData::getMissileType(missile_code.c_str());
+			//
+			//		//				myGD->communication("Main_goldGettingEffect", jackPosition, int((t_p - t_beforePercentage)/JM_CONDITION*myDSH->getGoldGetRate()));
+			//		float missile_speed = NSDS_GD(kSDS_CI_int1_missile_speed_d, myDSH->getIntegerForKey(kDSH_Key_selectedCard));
+			//
+			//		myGD->communication("MP_createJackMissile", missile_type, rmCnt, missile_speed, getPosition());
+			
+			//		mySGD->increaseCatchCumber();
+			
+			myGD->communication("CP_removeMainCumber", this);
+			removeFromParentAndCleanup(true);
+		}
 		return;
 	}
 }
