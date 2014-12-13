@@ -239,7 +239,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 	Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 	int subType = mInfo.get("subType", 1).asInt();
-//	stoneType = StoneType::kStoneType_guided;
+//	stoneType = StoneType::kStoneType_boomerang;
 	if(stoneType == StoneType::kStoneType_guided)
 	{
 		addChild(KSSchedule::create([=](float dt)
@@ -248,8 +248,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 																}));
 		
 
-		
-		for(int i=0; i<missileNumbersInt; i++)
+		int missileM = MAX(1, missileNumbersInt * mInfo.get("attackratio", 1.f).asFloat());
+		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
 				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
@@ -430,9 +430,31 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	{
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 
-		RangeAttack* ra = RangeAttack::create(initPosition, fileName, 25 + missileNumbers * 5, 10 * 60 + 20 * level,
-																					power / 3.f, missile_sub_damage / 3.f, ao);
-		addChild(ra);
+		float radius = 25 + missileNumbers * 5;
+		
+		KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+		float ny = nearCumber->getPosition().y;
+		float nx = nearCumber->getPosition().x;
+		int j = 0;
+//		for(float i=missileNumbersInt; i>=0; i-=100.f, j++)
+		{
+			auto creator = [=](){
+//				float mNumber = MIN(i, 100);
+				RangeAttack* ra = RangeAttack::create(initPosition, fileName, radius, MIN(120 * 10 / 35.f * radius, 3000),
+																							power / 3.f, missile_sub_damage / 3.f, ao);
+				jack_missile_node->addChild(ra);
+				
+			};
+			addChild(KSTimer::create(0.80 * (j), [=](){
+				if(myGD->getIsGameover() == false)
+				{
+					creator();
+				}
+			}));
+			
+		}
+		
+		
 	}
 
 	else if(stoneType == StoneType::kStoneType_global)
@@ -476,7 +498,8 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		for(int i=0; i<missileNumbersInt; i++)
+		int missileM = MAX(1, missileNumbersInt * 0.8f);
+		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
 				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
@@ -713,14 +736,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		float ny = nearCumber->getPosition().y;
 		float nx = nearCumber->getPosition().x;
 		
-		auto creator = [=](){
+		auto creator = [=](int nu){
 			Boomerang::Params params;
 			params.initPosition = myGD->getJackPointCCP();
 			params.goalPosition = ccp(nx, ny);
 			params.centerSpeed = 1.5f;
 			params.subPower = missile_sub_damage;
 			params.power = power;
-			params.numbers = 10; // 10개.
+			params.numbers = nu; // 10개.
 			params.revelutionA = 20.f;
 			params.fileName = fileName;
 			params.ao = ao;
@@ -728,10 +751,28 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			Boomerang* ms = Boomerang::create(params);
 			jack_missile_node->addChild(ms);
 		};
-		if(myGD->getIsGameover() == false)
-		{
-			creator();
-		}
+		
+	
+		
+		missileNumbersInt *= 1.5f;
+		addChild(KSTimer::create(0.0f, [=](){
+			KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
+			float ny = nearCumber->getPosition().y;
+			float nx = nearCumber->getPosition().x;
+			int j = 0;
+			for(int i=missileNumbersInt; i>=0; i-=10, j++)
+			{
+				int mNumber = MIN(i, 10);
+				addChild(KSTimer::create(0.80 * (j), [=](){
+					if(myGD->getIsGameover() == false)
+					{
+						creator(mNumber);
+					}
+				}));
+				
+			}
+			
+		}));
 		
 		
 		
@@ -769,9 +810,9 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			jack_missile_node->addChild(ms);
 		};
 		int j = 0;
-		for(int i=missileNumbersInt; i>=0; i-=2, j++)
+		for(int i=missileNumbersInt; i>=0; i-=1, j++)
 		{
-			addChild(KSTimer::create(0.80 * (j), [=](){
+			addChild(KSTimer::create(0.40 * (j), [=](){
 				if(myGD->getIsGameover() == false)
 				{
 					creator();
@@ -1088,6 +1129,9 @@ void MissileParent::attachGodOfDeath(KSCumberBase* cb, Json::Value patternD)
 {
 	GodOfDeath* t = GodOfDeath::create(startFirePosition, dynamic_cast<KSCumberBase*>(cb), patternD.asString());
 	getPatternContainer()->addChild(t);
+	
+//	myGD->communication("Main_showScreenSideWarning"); // 화면에 빨간 테두리 만드는 함수
+	myGD->showDetailMessage("warning_1021.ccbi", "w");
 }
 
 

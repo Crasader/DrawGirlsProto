@@ -1804,8 +1804,10 @@ void KSCumberBase::getRandomPositionToJack(IntPoint* ip, bool* finded)
 	IntPoint jackPoint = myGD->getJackPoint();
 	IntPoint mapPoint;
 	vector<IntPoint> shuffledPositions;
+//	for(int x = 1; x <= mapLoopRange::mapWidthInnerEnd - 1; x+=5)
 	for(int x = 3; x <= mapLoopRange::mapWidthInnerEnd - 3; x+=5)
 	{
+//		for(int y = 1; y <= mapLoopRange::mapHeightInnerEnd - 1; y+=5)
 		for(int y = 3; y <= mapLoopRange::mapHeightInnerEnd - 3; y+=5)
 		{
 			if(myGD->mapState[x][y] == mapEmpty)

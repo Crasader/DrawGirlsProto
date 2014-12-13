@@ -567,7 +567,7 @@ void Boomerang::update(float dt)
 	if(m_missileStep == 1)
 	{
 		// 날아가는 구간
-		m_centerRad += M_PI / 180.f * 4.f * 50.f / m_centerA;
+		m_centerRad += M_PI / 180.f * 3.f * 50.f / m_centerA;
 		
 		
 		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
@@ -671,15 +671,16 @@ void Chain::update(float dt)
 		if(m_params.depth >= 1)
 		{
 			KSCumberBase* nearCumber = myGD->getNearestCumberWithExclude(pos, m_targeted);
-			if(nearCumber && ccpLength(pos - nearCumber->getPosition()) < m_params.chainDistance)
+			if(nearCumber && ccpLength(pos - nearCumber->getPosition()) < m_params.chainDistance && nearCumber->getDeadState() == false)
 			{
 				m_targeted.push_back(nearCumber);
 				float ny = nearCumber->getPosition().y;
 				float nx = nearCumber->getPosition().x;
 				
 				m_targetNode = nearCumber;
+				m_params.power *= 0.6f;
 				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
-																							 m_params.power + m_params.power * (m_originalDepth - m_params.depth + 1) * 0.2f,
+																							 m_params.power,
 																							 m_params.subPower, 2, 20, m_params.ao);
 				m_chainMissile->beautifier(m_params.level);
 				addChild(m_chainMissile);
@@ -708,6 +709,43 @@ void Chain::update(float dt)
 		m_chainMissile->setMissilePosition(m_chainMissile->getMissilePosition() + ccp(cosf(m_currentRad) * m_params.speed, sinf(m_currentRad) * m_params.speed));
 		m_chainMissile->setRotation(-rad2Deg(m_currentRad) - 90.f);
 
+	
+		CCPoint pos = m_chainMissile->getPosition();
+		
+		
+//		KSCumberBase* nearCumber = myGD->getNearestCumberWithExclude(pos, m_targeted);
+		// 목표물로 잡은 놈과 거의 붙었는데 기절상태라면
+		// 기절 안한놈과 때리지 않았던 놈을 타겟으로 잡고 공격을 함.
+		if(m_targetNode && ccpLength(pos - m_targetNode->getPosition()) < 2 && m_targetNode->getDeadState() == true)
+		{
+			m_chainMissile->removeFromParent();
+			m_chainMissile = nullptr;
+			
+			auto tempTargets = m_targeted;
+			tempTargets.push_back(m_targetNode);
+			KSCumberBase* nearCumber = myGD->getNearestCumberWithExclude(pos, tempTargets);
+			
+			if(nearCumber && ccpLength(pos - nearCumber->getPosition()) < m_params.chainDistance && nearCumber->getDeadState() == false)
+			{
+				float ny = nearCumber->getPosition().y;
+				float nx = nearCumber->getPosition().x;
+				
+				m_targetNode = nearCumber;
+				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
+																							 m_params.power,
+																							 m_params.subPower, 2, 20, m_params.ao);
+				m_chainMissile->beautifier(m_params.level);
+				addChild(m_chainMissile);
+				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
+				
+			}
+			else
+			{
+				removeFromParent();
+				
+			}
+		}
+		
 		
 	}
 	

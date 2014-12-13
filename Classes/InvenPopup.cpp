@@ -201,10 +201,10 @@ bool InvenPopup::init()
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p7), goodsToImageFile(kGoodsType_pass7), mySGD->getGoodsValue(kGoodsType_pass7)));
 
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p8), goodsToImageFile(kGoodsType_pass8), mySGD->getGoodsValue(kGoodsType_pass8)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p9), goodsToImageFile(kGoodsType_pass9), mySGD->getGoodsValue(kGoodsType_pass9)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p10), goodsToImageFile(kGoodsType_pass10), mySGD->getGoodsValue(kGoodsType_pass10)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p11), goodsToImageFile(kGoodsType_pass11), mySGD->getGoodsValue(kGoodsType_pass11)));
+	m_itemList.push_back(HasItem("", "", mySGD->getGoodsValue(kGoodsType_pass1)));
 	m_itemTable->reloadData();
 	
 	
@@ -260,10 +260,10 @@ bool InvenPopup::init()
 		
 	
 	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_joinDate) + "</font>", "<font color=#FF8c8c>" + std::string(GraphDogLib::dateFormat(getLocal(LK::kMyLocalKey_yearMonthDay), mySGD->join_date)) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_highStage) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_playCount) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(playCount) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighVictory) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessVictory()) + "</font>"));
-	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighScore) + "</font>", "<font color=#FF8c8c>" + boost::lexical_cast<std::string>(mySGD->getUserdataEndlessScore()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_highStage) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->mySGD->getUserdataHighPiece()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_playCount) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(playCount) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighVictory) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->getUserdataEndlessVictory()) + "</font>"));
+	m_infoList.push_back(MyInfo(string("<font color=#FFFFFF>") + getLocal(LK::kMyLocalKey_pvpHighScore) + "</font>", "<font color=#FF8c8c>" + KS::insert_separator(mySGD->getUserdataEndlessScore()) + "</font>"));
 	m_infoTable->reloadData();
 
 	//////////////////////////
@@ -475,16 +475,22 @@ CCTableViewCell* InvenPopup::itemTableCellAtIndex(CCTableView *table, unsigned i
 		
 		setFormSetter(desc);
 		CCSprite* descImg = CCSprite::create(m_itemList[i].itemFile.c_str());
-		cellBack->addChild(descImg);
-		descImg->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, 2.5));
-		setFormSetter(descImg);
+		if(descImg)
+		{
+			cellBack->addChild(descImg);
+			descImg->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, 2.5));
+			setFormSetter(descImg);
+			
+			KSLabelTTF* cntLabel = KSLabelTTF::create(boost::lexical_cast<std::string>(m_itemList[i].itemCount).c_str(),
+																								mySGD->getFont().c_str(),
+																								11.f);
+			cellBack->addChild(cntLabel);
+			cntLabel->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, -19.0));
+			setFormSetter(cntLabel);
+			
+		}
 		
-		KSLabelTTF* cntLabel = KSLabelTTF::create(boost::lexical_cast<std::string>(m_itemList[i].itemCount).c_str(),
-																							mySGD->getFont().c_str(),
-																							11.f);
-		cellBack->addChild(cntLabel);
-		cntLabel->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, -19.0));
-		setFormSetter(cntLabel);
+		
 	
 		
 		cell->addChild(cellBack);

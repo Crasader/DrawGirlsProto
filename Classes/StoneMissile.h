@@ -1214,6 +1214,7 @@ public:
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		m_initSpeed = initSpeed * mInfo.get("speedbonus", 1.f).asFloat();
+		m_attackNumbers = mInfo.get("attacknumbers", 1).asInt();
 		m_option = ao;
 		m_power = power;
 		m_subPower = subPower;
@@ -1453,9 +1454,16 @@ public:
 			
 			float damage = m_power;
 			TRACE();
-			executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
-			
-			removeFromParentAndCleanup(true);
+			addChild(KSIntervalCall::create(1, m_attackNumbers + 1, [=](int i){
+				if(i == m_attackNumbers + 1) // 마지막 인덱스에선 지움.
+				{
+					removeFromParentAndCleanup(true);
+				}
+				else
+				{
+					executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
+				}
+			}));
 		}
 		else  // 거리가 멀면 몬스터 쪽으로 유도함.
 		{
@@ -1604,7 +1612,8 @@ public:
 protected:
 	float m_initSpeed; // 초기 속도.
 	float m_initRad; // 처음에 날아가는 각도.
-	float m_currentRad; // 범위내 들어왔을 때 현재 각도. 
+	float m_currentRad; // 범위내 들어왔을 때 현재 각도.
+	int m_attackNumbers; // 한번에 몇대 때릴건지.
 
 	bool m_guided; // 유도 모드인지 여부.
 	int m_range; // 유도 범위.
@@ -2409,6 +2418,7 @@ public:
 	};
 	static RangeAttack* create(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
+		CCLog("radius = %f", radius);
 		RangeAttack* obj = new RangeAttack();
 		obj->init(initPosition, fileName, radius, durationFrame, power, subPower, ao);
 		obj->autorelease();
@@ -2421,6 +2431,7 @@ public:
 	bool init(CCPoint initPosition, const std::string& fileName, float radius, int durationFrame, int power, int subPower, AttackOption ao)
 	{
 		StoneAttack::init();
+		m_attackCount = 0;
 //myGD->getJackPoint()
 		addChild(KSTimer::create(1.f, [=](){
 			m_initPosition = myGD->getJackPointCCP();
@@ -2428,6 +2439,7 @@ public:
 			Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 			
 			m_radius = radius * mInfo.get("radiusbonus", 1.f).asFloat();
+			m_attackCount = m_radius / 4.f * 4.f / 5.f * 1.f / 1.f;
 			m_durationFrame = durationFrame * mInfo.get("durationbonus", 1.f).asFloat();
 			m_power = power;
 			m_subPower = subPower;
@@ -2554,6 +2566,12 @@ public:
 						
 						float damage = m_power;
 						executeOption(dynamic_cast<KSCumberBase*>(iter), damage, m_subPower, 0.f, effectPosition);
+						m_attackCount--;
+						if(m_attackCount <= 0)
+						{
+							removeFromParent();
+							return;
+						}
 					}
 				}
 			}
@@ -2603,6 +2621,7 @@ public:
 	
 
 protected:
+	int m_attackCount;
 	float m_radius;
 	float m_durationFrame;
 	int m_power;
@@ -3338,10 +3357,20 @@ public:
 				
 				float damage = m_power;
 				
-				if(!myGD->getIsGameover()){
-					executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
-				}
-				removeFromParentAndCleanup(true);
+				addChild(KSIntervalCall::create(1, 3, [=](int i){
+					if(i == 3)
+					{
+						
+						removeFromParentAndCleanup(true);
+					}
+					else
+					{
+						if(!myGD->getIsGameover()){
+							executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
+						}
+						
+					}
+				}));
 			}
 		}
 		else if(m_missileStep == 3)
@@ -3364,10 +3393,24 @@ public:
 				
 				float damage = m_power;
 				
-				if(!myGD->getIsGameover()){
-					executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
-				}
-				removeFromParentAndCleanup(true);
+				addChild(KSIntervalCall::create(1, 3, [=](int i){
+					if(i == 3)
+					{
+						
+						removeFromParentAndCleanup(true);
+					}
+					else
+					{
+						if(!myGD->getIsGameover()){
+							executeOption(dynamic_cast<KSCumberBase*>(m_targetNode), damage, m_subPower, 0.f, effectPosition);
+						}
+						
+					}
+				}));
+				
+				
+				
+				
 			}
 			else  // 거리가 멀면 몬스터 쪽으로 유도함.
 			{
@@ -4224,7 +4267,7 @@ public:
 		
 		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setVisible(true);
+		m_missileSprite->setVisible(false);
 		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
@@ -4352,7 +4395,7 @@ public:
 		
 		//		m_missileSprite = CCSprite::create(fileName.c_str()); // KS::loadCCBI<CCSprite*>(this, fileName).first;
 		m_missileSprite = CCSprite::create("whitePaper.png", CCRectMake(0,0,10,10));//m_initRadius,m_initRadius));
-		m_missileSprite->setVisible(true);
+		m_missileSprite->setVisible(false);
 		m_missileSprite->setColor(ccc3( 255, 0, 0));
 		m_missileSprite->setScale(1.f/myGD->game_scale);
 		//addChild(KSGradualValue<float>::create(0, 360 * 99, 5, [=](float t){
