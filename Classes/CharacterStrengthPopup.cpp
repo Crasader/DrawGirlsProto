@@ -682,7 +682,7 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 			
 			CCPoint sub_position = a_main - b_main;
 			
-			addChild(KSTimer::create(0.07f*(target_item_list.size()-1-i), [=]()
+			addChild(KSTimer::create(0.1f*(target_item_list.size()-1-i), [=]()
 									 {
 										 addChild(KSGradualValue<CCPoint>::create(target_item_list[i]->getPosition(), target_item_list[i]->getPosition() + sub_position, 0.25f, [=](CCPoint t_p)
 																				  {
@@ -690,7 +690,13 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 																				  }, [=](CCPoint t_p)
 																				  {
 																					  target_item_list[i]->setPosition(t_p);
-//																					  target_item_list[i]->setVisible(false);
+																					  auto t_ccb = KS::loadCCBI<CCSprite*>(this, "cha_strength_bomb.ccbi");
+																					  target_item_list[i]->getNormalImage()->addChild(t_ccb.first,999);
+																					  t_ccb.first->setPosition(ccpFromSize(target_item_list[i]->getNormalImage()->getContentSize()/2.f));
+																					  t_ccb.second->setAnimationCompletedCallbackLambda(t_ccb.first, [=](const char* t_c)
+																																		{
+																																			target_item_list[i]->setVisible(false);
+																																		});
 																					  if(i == 0)
 																						{
 																							exp_up_func();

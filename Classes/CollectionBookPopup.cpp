@@ -511,6 +511,17 @@ void CollectionBookPopup::setLeftPage(CCNode *target, int card_number)
 	left_top_paper->setPosition(ccp(44,276));
 	target->addChild(left_top_paper);
 	
+	CCScale9Sprite* exp_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf("EXP %s", KS::insert_separator(NSDS_GI(kSDS_CI_int1_exp_i, card_number)).c_str()), mySGD->getFont().c_str(), 11);
+	exp_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+	exp_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
+	exp_back->setContentSize(CCSizeMake(exp_label->getContentSize().width + 10, exp_label->getContentSize().height + 7));
+	exp_label->setPosition(ccpFromSize(exp_back->getContentSize()/2.f) + ccp(0,-1));
+	exp_back->addChild(exp_label);
+	exp_back->setAnchorPoint(ccp(1,0.f));
+	exp_back->setPosition(ccp(217,40));
+	target->addChild(exp_back);
+	
 	CCSprite* right_bottom_paper = CCSprite::create("diary_paper.png");
 	right_bottom_paper->setRotation(180);
 	right_bottom_paper->setPosition(ccp(213,44));
