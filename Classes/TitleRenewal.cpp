@@ -1379,6 +1379,19 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setCardGachaMsgLeft(result_data["cardGachaMsg"]["left"].asString());
 		mySGD->setCardGachaMsgRight(result_data["cardGachaMsg"]["right"].asString());
+		mySGD->setManyGachaMsgLeft(result_data["manyGachaMsg"]["left"].asString());
+		mySGD->setManyGachaMsgRight(result_data["manyGachaMsg"]["right"].asString());
+		
+		mySGD->setNoCreateItemComboCnt(result_data["noCreateItemComboCnt"].asInt());
+		string diary_store_url = "";
+		diary_store_url = result_data["diaryStoreUrl"].asString();
+		Json::Value json_diary_store_url;
+		Json::Reader t_reader;
+		t_reader.parse(diary_store_url, json_diary_store_url);
+		json_diary_store_url.get(myHSP->getStoreID(), "").asString();
+		if(diary_store_url == "")
+			diary_store_url = result_data["diaryStoreUrl"]["default"].asString();
+		mySGD->setDiaryStoreUrl(diary_store_url);
 	}
 	else
 	{

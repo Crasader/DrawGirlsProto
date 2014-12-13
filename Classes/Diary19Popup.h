@@ -40,7 +40,7 @@ private:
 	CCSprite* back_case;
 	CCScale9Sprite* back_in;
 	
-//	void buttonAction(CCObject* sender, CCControlEvent t_event);
+	void buttonAction(CCObject* sender, CCControlEvent t_event);
 	void resultMakeDiaryCode(Json::Value result_data);
 	void myInit(int t_touch_priority, function<void()> t_end_func, bool t_is_ingame);
 };

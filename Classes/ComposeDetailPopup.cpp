@@ -90,6 +90,8 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	main_case->setPosition(ccp(240,160-14.f));
 	addChild(main_case, kComposeDetailPopupZorder_main_case);
 	
+	is_full = false;
+	
 	vector<KSProtectVar<int>> t_material_list = mySGD->card_compose_list[compose_idx].material_card_list;
 	int material_count = t_material_list.size();
 	
@@ -159,7 +161,9 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	necessary_tab_title->setPosition(ccpFromSize(necessary_tab->getContentSize()/2.f));
 	necessary_tab->addChild(necessary_tab_title);
 	
-	for(int i=0;i<material_count;i++)
+	is_necessary_on = true;
+	
+	for(int i=material_count-1;i>=0;i--)
 	{
 		CardSortInfo t_info = mySGD->getHasGottenCardDataForCardNumber(t_material_list[i].getV());
 		CCPoint t_position = ccp(0,0);
@@ -193,9 +197,13 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			frame_img->addChild(count_label);
 			
 			necessary_back->addChild(clipping_node);
+			
+			if(t_info.count.getV() < 2)
+				is_necessary_on = false;
 		}
 		else
 		{
+			is_necessary_on = false;
 			CCSprite* not_have_back = CCSprite::create("cardsetting_off.png");
 			not_have_back->setPosition(t_position);
 			necessary_back->addChild(not_have_back);
@@ -230,11 +238,11 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	sum_exp_label->setPosition(ccpFromSize(selected_card_back->getContentSize()) + ccp(-7,-9));
 	selected_card_back->addChild(sum_exp_label);
 	
-//	KSLabelTTF* selected_card_list_sub_ment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_10cardsStrengthenPossibleAtOne), mySGD->getFont().c_str(), 8);
-//	selected_card_list_sub_ment->setColor(ccc3(30, 25, 70));
-//	selected_card_list_sub_ment->setAnchorPoint(ccp(0,0));
-//	selected_card_list_sub_ment->setPosition(ccp(selected_card_list_ment->getPositionX() + selected_card_list_ment->getContentSize().width + 5, selected_card_list_ment->getPositionY()));
-//	selected_card_back->addChild(selected_card_list_sub_ment);
+	KSLabelTTF* selected_card_list_sub_ment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_10cardsStrengthenPossibleAtOne), mySGD->getFont().c_str(), 8);
+	selected_card_list_sub_ment->setColor(ccc3(30, 25, 70));
+	selected_card_list_sub_ment->setAnchorPoint(ccp(0,0));
+	selected_card_list_sub_ment->setPosition(ccp(selected_card_list_ment->getPositionX() + selected_card_list_ment->getContentSize().width + 5, selected_card_list_ment->getPositionY()));
+	selected_card_back->addChild(selected_card_list_sub_ment);
 	
 	target_card_number_list.clear();
 	
@@ -250,7 +258,7 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	selected_table->setPosition(ccp(7,6));
 	selected_table->setDelegate(this);
 	selected_card_back->addChild(selected_table);
-	selected_table->setTouchPriority(touch_priority-1);
+//	selected_table->setTouchPriority(touch_priority-1);
 	
 	card_table->reloadData();
 	selected_table->reloadData();
@@ -274,6 +282,22 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 		price_icon->setPosition(ccp(-price_value->getContentSize().width/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f));
 		price_back->addChild(price_icon);
 		price_back->addChild(price_value);
+		
+		KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(GoodsType::kGoodsType_pass11)), mySGD->getFont().c_str(), 11);
+		take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		
+		float wide_value = take_count->getContentSize().width - 40;
+		if(wide_value < 0)
+			wide_value = 0;
+		
+		take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+		take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+		take_back->setAnchorPoint(ccp(1.f,0.5f));
+		take_back->setPosition(ccp(68,27));
+		t_button_label->addChild(take_back);
+		
+		take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+		take_back->addChild(take_count);
 	}
 	else
 	{
@@ -284,6 +308,22 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 		price_icon->setPosition(ccp(-price_value->getContentSize().width/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f));
 		price_back->addChild(price_icon);
 		price_back->addChild(price_value);
+		
+		KSLabelTTF* take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(GoodsType::kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
+		take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		
+		float wide_value = take_count->getContentSize().width - 40;
+		if(wide_value < 0)
+			wide_value = 0;
+		
+		take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+		take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+		take_back->setAnchorPoint(ccp(1.f,0.5f));
+		take_back->setPosition(ccp(68,27));
+		t_button_label->addChild(take_back);
+		
+		take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+		take_back->addChild(take_count);
 	}
 	
 	compose_button = CCControlButton::create(t_button_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
@@ -412,7 +452,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 			cell->addChild(t_card_menu);
 			t_card_menu->setTouchPriority(touch_priority-2);
 			
-			if(t_info->count.getV() - target_count <= 1)
+			if(is_full || t_info->count.getV() - target_count <= 1)
 			{
 				n_card->setGray(true);
 				s_card->setGray(true);
@@ -523,7 +563,12 @@ void ComposeDetailPopup::composeAction(CCObject* t_sender, CCControlEvent t_even
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
-	if(sum_exp_value.getV() < mySGD->card_compose_list[compose_idx].need_exp.getV())
+	if(!is_necessary_on)
+	{
+		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_shortageMaterialCard)), 9999);
+		is_menu_enable = true;
+	}
+	else if(sum_exp_value.getV() < mySGD->card_compose_list[compose_idx].need_exp.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_notEnoughtEXP)), 9999);
 		is_menu_enable = true;
@@ -646,6 +691,9 @@ void ComposeDetailPopup::cardAction(CCObject *t_sender)
 //		compose_button->setEnabled(true);
 //	}
 	
+	if(target_card_number_list.size() >= 10)
+		is_full = true;
+	
 	selected_table->reloadData();
 	selected_table->setContentOffset(ccp(MIN(selected_table->minContainerOffset().x, 0), selected_table->getContentOffset().y));
 	
@@ -678,6 +726,8 @@ void ComposeDetailPopup::unselectedAction(CCObject* t_sender)
 //	}
 	
 	target_card_number_list.erase(target_card_number_list.begin() + t_idx);
+	
+	is_full = false;
 	
 	CCPoint keep_offset = selected_table->getContentOffset();
 	selected_table->reloadData();
@@ -765,7 +815,6 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		
 		CCSprite* card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_compose_list[compose_idx].compose_card_number.getV()));
 		card_img->setScale(0.5f);
-		card_img->setOpacity(0);
 		card_img->setPosition(ccp(240,172));
 		addChild(card_img, 99);
 		
@@ -785,6 +834,8 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		right_case->setPosition(ccpFromSize(card_img->getContentSize()/2.f) + ccp(160,0));
 		card_img->addChild(right_case);
 		
+		KS::setOpacity(card_img, 0);
+		
 		zoom_3->addChild(KSGradualValue<float>::create(0.f, 1.3f, 11.f/30.f, [=](float t_f)
 													   {
 														   zoom_3->setScale(t_f);
@@ -802,7 +853,7 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 																											  }));
 															   zoom_3->addChild(KSTimer::create(3.f/30.f, [=]()
 																								{
-																									card_img->setOpacity(255);
+																									KS::setOpacity(card_img, 255);
 																									
 																									zoom_3->addChild(KSGradualValue<int>::create(255, 0, 8.f/30.f, [=](int t_i)
 																																				 {
@@ -881,10 +932,10 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 																						   }));
 										  card_img->addChild(KSGradualValue<int>::create(255, 0, 5.f/30.f, [=](int t_i)
 																						 {
-																							 card_img->setOpacity(t_i);
+																							 KS::setOpacity(card_img, t_i);
 																						 }, [=](int t_i)
 																						 {
-																							 card_img->setOpacity(t_i);
+																							 KS::setOpacity(card_img, t_i);
 																						 }));
 										  black_img->addChild(KSGradualValue<int>::create(150, 0, 5.f/30.f, [=](int t_i)
 																						  {

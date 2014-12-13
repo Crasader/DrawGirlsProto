@@ -246,7 +246,7 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	target_menu = CCMenuLambda::create();
 	target_menu->setPosition(CCPointZero);
 	selected_card_back->addChild(target_menu);
-	target_menu->setTouchPriority(touch_priority-2);
+	target_menu->setTouchPriority(touch_priority-3);
 	
 	CCLabelTTF* t_button_label = CCLabelTTF::create();
 	KSLabelTTF* strength_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_doStrengthen), mySGD->getFont().c_str(), 16);
@@ -540,7 +540,9 @@ void CharacterStrengthPopup::expUpAction()
 												 
 												 CCPoint t_offset = card_table->getContentOffset();
 												 card_table->reloadData();
-												 card_table->setContentOffset(t_offset);
+												 if(card_table->minContainerOffset().y > 0)
+													 t_offset.y = card_table->minContainerOffset().y;
+												 card_table->setContentOffset(ccp(t_offset.x, t_offset.y));
 												 
 												 loading_layer->removeFromParent();
 												 is_menu_enable = true;
@@ -893,7 +895,7 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																		for(int i=0;i<target_item_list.size();i++)
 																		{
 																			target_item_list[i]->setTag(i);
-																			target_item_list[i]->setPosition(ccp(23 + i*28, 23.5f));
+																			target_item_list[i]->setPosition(ccp(20 + i*26.4f, 23.5f));
 																		}
 																		
 																		addChild(KSTimer::create(0.1f, [=]()

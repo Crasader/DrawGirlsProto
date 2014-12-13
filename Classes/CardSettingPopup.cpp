@@ -305,7 +305,7 @@ bool CardSettingPopup::init()
 	
 	CCMenuItem* card_compose_menu = CCMenuItemSprite::create(n_card_compose_img, s_card_compose_img, this, menu_selector(CardSettingPopup::menuAction));
 	card_compose_menu->setTag(kCSS_MT_cardCompose);
-	card_compose_menu->setPosition(ccp(188,16));
+	card_compose_menu->setPosition(ccp(182,16));
 	tab_menu->addChild(card_compose_menu);
 	
 	

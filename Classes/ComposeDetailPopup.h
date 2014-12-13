@@ -39,11 +39,14 @@ private:
 	KSLabelTTF* sum_exp_label;
 	CCSprite* gray;
 	CCSprite* main_case;
+	bool is_necessary_on;
+	bool is_full;
 	
 	CCScale9Sprite* price_back;
 	CCControlButton* compose_button;
 	CCSprite* price_icon;
 	KSLabelTTF* price_value;
+	CCScale9Sprite* take_back;
 	
 	CCTableView* card_table;
 	CCTableView* selected_table;

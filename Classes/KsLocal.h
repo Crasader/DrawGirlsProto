@@ -1285,7 +1285,11 @@ enum class LK
 	kMyLocalKey_composeUsedCardIsRemove,
 	kMyLocalKey_notEnoughtP1,
 	kMyLocalKey_controlTip_bossPrison_title,
-	kMyLocalKey_controlTip_bossPrison_content
+	kMyLocalKey_controlTip_bossPrison_content,
+	kMyLocalKey_shortageMaterialCard,
+	kMyLocalKey_sDiary,
+	kMyLocalKey_toShowAdultImgForSdiaryNeed,
+	kMyLocalKey_download
 };
 class KsLocal
 {

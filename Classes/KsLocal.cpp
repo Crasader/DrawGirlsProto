@@ -1318,7 +1318,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	obj[LK::kMyLocalKey_cardCompose] = "카드합성";
-	obj[LK::kMyLocalKey_detailContextShow] = "상세 내용을 보여드립니다.";
+	obj[LK::kMyLocalKey_detailContextShow] = "카드를 합성하여 새로운 카드를 만들 수 있습니다.";
 	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
 	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
 	obj[LK::kMyLocalKey_doCompose] = "합성하기";
@@ -1328,6 +1328,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수 카드가 부족해요.";
+	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
+	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
+	obj[LK::kMyLocalKey_download] = "다운로드";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2570,7 +2574,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_oneGacha] = "1장뽑기";
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	obj[LK::kMyLocalKey_cardCompose] = "카드합성";
-	obj[LK::kMyLocalKey_detailContextShow] = "상세 내용을 보여드립니다.";
+	obj[LK::kMyLocalKey_detailContextShow] = "카드를 합성하여 새로운 카드를 만들 수 있습니다.";
 	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
 	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
 	obj[LK::kMyLocalKey_doCompose] = "합성하기";
@@ -2580,6 +2584,10 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수 카드가 부족해요.";
+	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
+	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
+	obj[LK::kMyLocalKey_download] = "다운로드";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

@@ -187,27 +187,31 @@ void ManyGachaPopup::setOpening()
 	right_char->setPosition(ccp(main_inner->getContentSize().width - right_char->getContentSize().width/2.f + 13, right_char->getContentSize().height/2.f - 3));
 	inner_node->addChild(right_char);
 	
-	CCSprite* left_talkbox = CCSprite::create("gacha_talkbox.png");
-	left_talkbox->setPosition(ccp(48,190));
-	inner_node->addChild(left_talkbox);
+	if(mySGD->getManyGachaMsgLeft() != "")
+	{
+		CCSprite* left_talkbox = CCSprite::create("gacha_talkbox.png");
+		left_talkbox->setPosition(ccp(48,190));
+		inner_node->addChild(left_talkbox);
+		
+		StyledLabelTTF* left_talkment = StyledLabelTTF::create(mySGD->getManyGachaMsgLeft().c_str(), mySGD->getFont().c_str(), 11, 0, StyledAlignment::kCenterAlignment);
+		left_talkment->setAnchorPoint(ccp(0.5f,0.5f));
+		left_talkment->setPosition(ccp(48,195));
+		inner_node->addChild(left_talkment);
+	}
 	
-	KSLabelTTF* left_talkment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_goodLuckAyameaFighting), mySGD->getFont().c_str(), 11);
-	left_talkment->setColor(ccBLACK);
-	left_talkment->disableOuterStroke();
-	left_talkment->setPosition(ccp(48,195));
-	inner_node->addChild(left_talkment);
-	
-	CCSprite* right_talkbox = CCSprite::create("gacha_talkbox.png");
-	right_talkbox->setPosition(ccp(main_inner->getContentSize().width - 40,185));
-	right_talkbox->setScale(0.8f);
-	right_talkbox->setFlipX(true);
-	inner_node->addChild(right_talkbox);
-	
-	KSLabelTTF* right_talkment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_brotherJustOne), mySGD->getFont().c_str(), 11);
-	right_talkment->setColor(ccBLACK);
-	right_talkment->disableOuterStroke();
-	right_talkment->setPosition(ccp(main_inner->getContentSize().width - 40,190));
-	inner_node->addChild(right_talkment);
+	if(mySGD->getManyGachaMsgRight() != "")
+	{
+		CCSprite* right_talkbox = CCSprite::create("gacha_talkbox.png");
+		right_talkbox->setPosition(ccp(main_inner->getContentSize().width - 40,185));
+		right_talkbox->setScale(0.8f);
+		right_talkbox->setFlipX(true);
+		inner_node->addChild(right_talkbox);
+		
+		StyledLabelTTF* right_talkment = StyledLabelTTF::create(mySGD->getManyGachaMsgRight().c_str(), mySGD->getFont().c_str(), 11, 0, StyledAlignment::kCenterAlignment);
+		right_talkment->setAnchorPoint(ccp(0.5f,0.5f));
+		right_talkment->setPosition(ccp(main_inner->getContentSize().width - 40,190));
+		inner_node->addChild(right_talkment);
+	}
 	
 	CCMenu* gacha_menu = CCMenu::create();
 	gacha_menu->setPosition(ccp(0,0));

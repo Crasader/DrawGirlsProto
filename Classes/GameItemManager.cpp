@@ -2009,7 +2009,11 @@ void GameItemManager::counting()
 {
 	counting_value++;
 	
-	if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2*(double_item_cnt > 0 ? 2 : 1))
+	if(myGD->getCommunication("UI_getComboCnt") >= mySGD->getNoCreateItemComboCnt())
+	{
+		
+	}
+	else if(clr_cdt_type == kCLEAR_bossLifeZero && getChildrenCount()-child_base_cnt < 2*(double_item_cnt > 0 ? 2 : 1))
 	{
 		if(myGD->jack_base_speed + myGD->Fcommunication("Jack_getSpeedUpValue") >= 2.f)
 		{
@@ -2044,7 +2048,7 @@ void GameItemManager::counting()
 		counting_value = 0;
 	}
 	
-	if(counting_value >= create_counting_value)
+	if(myGD->getCommunication("UI_getComboCnt") < mySGD->getNoCreateItemComboCnt() && counting_value >= create_counting_value)
 	{
 		if(getChildrenCount()-child_base_cnt < 6*(double_item_cnt > 0 ? 2 : 1))
 			addItem();

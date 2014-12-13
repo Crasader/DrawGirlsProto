@@ -21,6 +21,7 @@ using namespace std;
 
 class KSLabelTTF;
 class LoadingLayer;
+class CommonButton;
 class CardGachaPopup : public CCLayer
 {
 public:
@@ -47,13 +48,15 @@ private:
 	CCScale9Sprite* price_back;
 	CCControlButton* five_button;
 	CCControlButton* ok_button;
-	CCSprite* cover_img;
-	CCClippingNode* cover_clipping;
+//	CCSprite* cover_img;
+//	CCClippingNode* cover_clipping;
+	CCSprite* small_cover;
 	CCSprite* big_card_img;
 	CCSprite* t_gray;
 	KSLabelTTF* sub_ment1;
 	float positioning_value;
 	KSLabelTTF* grade_card_take;
+	CommonButton* close_button;
 	
 	LoadingLayer* loading_layer;
 	CCSprite* left_character;
