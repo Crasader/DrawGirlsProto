@@ -2500,9 +2500,11 @@ void KSCumberBase::applyHellBalance(float playTime)
 
 void KSCumberBase::applyAutoBalance(bool isExchange)
 {
+	//퍼펙트클리어인지 알아야함. -> 퍼펙트 클리어라면 퍼센트 조절 하지 않기
+	//파동,불꽃 속도 저하 50스테이지까지
 	
 	bool isJr = !isBoss();//!m_isBoss;//false; //!isBoss();
-	bool isClear = mySGD->isClearPiece(mySD->getSilType());
+	bool isPerfectClear = mySGD->isPerfectPiece(mySD->getSilType());
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
 	int vCount = mySGD->getUserdataAutoLevel();
@@ -2530,7 +2532,6 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 		playCount=playCount*2;
 	}
-	
 	
 	//연승중이면 오토벨런스트라이 값을 늘려서 어렵게
 
@@ -2621,7 +2622,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 		
 		//부수기 공격 확률 낮추기
 		
-		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode){
+		if(!mySGD->is_endless_mode && !mySGD->is_hell_mode && !isPerfectClear){
 			if(!isJr && m_attackPercent>0.3)m_attackPercent=0.3;
 			if(!isJr && m_attackPercent<0.1)m_attackPercent=0.1;
 			if(m_aiValue>50)m_aiValue=50;

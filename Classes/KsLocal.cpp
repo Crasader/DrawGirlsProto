@@ -13,6 +13,7 @@ std::string KsLocal::getLocalCode()
 {
 	string tempCode;
 	tempCode = getCurrentLanguageJNI();
+//    tempCode = "ko";
 	return tempCode;
 }
 #endif

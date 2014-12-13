@@ -103,10 +103,10 @@ enum pathBreakingState{
 class PathBreakingParent : public CCNode
 {
 public:
-	static PathBreakingParent* create(IntPoint t_start, vector<IntPoint>* t_linked_list)
+	static PathBreakingParent* create(IntPoint t_start, vector<IntPoint>* t_linked_list, int agi)
 	{
 		PathBreakingParent* t_pbp = new PathBreakingParent();
-		t_pbp->myInit(t_start, t_linked_list);
+		t_pbp->myInit(t_start, t_linked_list,agi);
 		t_pbp->autorelease();
 		return t_pbp;
 	}
@@ -131,7 +131,7 @@ private:
 		bool is_end = false;
 		
 		if(myGD->getCommunicationBool("UI_isExchanged"))
-			total_dis += dis_value*2.0;
+			total_dis += dis_value*1.5;
 		else
 			total_dis += dis_value;
 		
@@ -170,11 +170,11 @@ private:
 		}
 	}
 	
-	void myInit(IntPoint t_start, vector<IntPoint>* t_linked_list)
+	void myInit(IntPoint t_start, vector<IntPoint>* t_linked_list,int agi)
 	{
 		total_dis = 0.0;
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-		dis_value = 1.0 - NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.0;
+		dis_value = MIN(1.f,MAX(0.5,agi/60.f)) - NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_missileWave_d, t_history.characterIndex.getV(), t_history.characterLevel.getV())/100.0;
 		
 		plinked_list = t_linked_list;
 		
@@ -230,10 +230,10 @@ const int SHORTLINE_VALUE = 3;
 class PathManager : public CCNode
 {
 public:
-	static PathManager* create()
+	static PathManager* create(int agi)
 	{
 		PathManager* t_PM = new PathManager();
-		t_PM->myInit();
+		t_PM->myInit(agi);
 		t_PM->autorelease();
 		return t_PM;
 	}
@@ -360,7 +360,7 @@ private:
 		if(getTag() == pathBreakingStateFalse)
 		{
 			setTag(pathBreakingStateTrue);
-			PathBreakingParent* n_pbp = PathBreakingParent::create(start, &linked_list);
+			PathBreakingParent* n_pbp = PathBreakingParent::create(start, &linked_list,path_agi);
 			n_pbp->setTag(childTagInPathParentPathBreaking);
 			if(n_pbp->isActing())
 				addChild(n_pbp, 2);
@@ -471,8 +471,10 @@ private:
 	}
 	
 	int path_color_value;
-	void myInit()
+	int path_agi;
+	void myInit(int agi)
 	{
+		path_agi=agi;
 		for(int i=mapWidthInnerBegin;i<mapWidthInnerEnd;i++)
 		{
 			for(int j=mapHeightInnerBegin;j<mapHeightInnerEnd;j++)
