@@ -400,6 +400,7 @@ public:
 	vector<KSProtectVar<int>> material_card_list;
 	KSProtectVar<int> need_exp;
 	KSProtectVar<int> compose_card_number;
+	KSProtectVar<int> need_stone;
 };
 
 class HeartTime;
@@ -1330,6 +1331,8 @@ private:
 	COMMON_VAR(int, stageClearExp, StageClearExp);
 	COMMON_VAR(int, isDiaryLinkOn, IsDiaryLinkOn);
 	
+	COMMON_VAR(int, onAdultTag, OnAdultTag);
+	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
 	COMMON_VAR_STR(pvpLeadMent, PvpLeadMent);
@@ -1340,6 +1343,8 @@ private:
 	COMMON_VAR_STR(exchangeIDForPass, ExchangeIDForPass);
 	COMMON_VAR_STR(gababoProb, GababoProb);
 	
+	COMMON_VAR_STR(cardGachaMsgLeft, CardGachaMsgLeft);
+	COMMON_VAR_STR(cardGachaMsgRight, CardGachaMsgRight);
 };
 
 #endif

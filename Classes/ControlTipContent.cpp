@@ -160,10 +160,12 @@ string ControlTipContent::getCCBfilenameForTipNumber(int t_code)
 {
 	string return_value = "";
 	if(t_code == kSpecialTutorialCode_lineTangle)
-		return_value = "tutorial_tip2";
+		return_value = "tutorial_tip4";
 	else if(t_code == kSpecialTutorialCode_slimLine)
 		return_value = "tutorial_tip1";
 	else if(t_code == kSpecialTutorialCode_100percent)
+		return_value = "tutorial_tip2";
+	else if(t_code == kSpecialTutorialCode_bossPrison)
 		return_value = "tutorial_tip3";
     
     if(myDSH->getIntegerForKey(kDSH_Key_controlJoystickDirection) == kControlJoystickDirection_left)
@@ -183,6 +185,8 @@ int ControlTipContent::getTitleLocalKeyForTipNumber(int t_code)
 		return_value = int(LK::kMyLocalKey_controlTip_slimLine_title);
 	else if(t_code == kSpecialTutorialCode_100percent)
 		return_value = int(LK::kMyLocalKey_controlTip_100percent_title);
+	else if(t_code == kSpecialTutorialCode_bossPrison)
+		return_value = int(LK::kMyLocalKey_controlTip_bossPrison_title);
 	
 	return return_value;
 }
@@ -196,6 +200,8 @@ int ControlTipContent::getContentLocalKeyForTipNumber(int t_code)
 		return_value = int(LK::kMyLocalKey_controlTip_slimLine_content);
 	else if(t_code == kSpecialTutorialCode_100percent)
 		return_value = int(LK::kMyLocalKey_controlTip_100percent_content);
+	else if(t_code == kSpecialTutorialCode_bossPrison)
+		return_value = int(LK::kMyLocalKey_controlTip_bossPrison_content);
 	
 	return return_value;
 }

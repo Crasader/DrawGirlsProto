@@ -936,12 +936,13 @@ CCTableViewCell* RankNewPopup::rewardTableCellAtIndex(CCTableView *table, unsign
 		else if(rubyCount >= 1)rubyImgFileName = "shop_ruby1.png";
 	}else if(rType=="g"){
 		rScale= 0.5f;
-		if(rubyCount >= 10000)rubyImgFileName = "shop_gold6.png";
-		else if(rubyCount >= 5000)rubyImgFileName = "shop_gold5.png";
-		else if(rubyCount >= 1000)rubyImgFileName = "shop_gold4.png";
-		else if(rubyCount >= 500)rubyImgFileName = "shop_gold3.png";
-		else if(rubyCount >= 200)rubyImgFileName = "shop_gold2.png";
-		else if(rubyCount >= 1)rubyImgFileName = "shop_gold1.png";
+//		if(rubyCount >= 10000)rubyImgFileName = "shop_gold6.png";
+//		else if(rubyCount >= 5000)rubyImgFileName = "shop_gold5.png";
+//		else if(rubyCount >= 1000)rubyImgFileName = "shop_gold4.png";
+//		else if(rubyCount >= 500)rubyImgFileName = "shop_gold3.png";
+//		else if(rubyCount >= 200)rubyImgFileName = "shop_gold2.png";
+//		else if(rubyCount >= 1)rubyImgFileName = "shop_gold1.png";
+		rubyImgFileName = "shop_gold2.png";
 	}else if(rType=="p1"){
 		rScale= 0.5f;
 		if(rubyCount >= 100)rubyImgFileName = "shop_p1_6.png";

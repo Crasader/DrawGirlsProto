@@ -1199,7 +1199,9 @@ protected:
 	int m_frameCount;
 	float m_alpha;
 	bool m_killed;
-	
+	float m_unFollowSpeed;
+	//bool m_isTarget;
+	//float m_dirAngle;
 	CCSprite* m_godOfDeathSprite;
 	Well512 m_well512;
 	Json::Value m_pattern;

@@ -996,8 +996,10 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 	scheduleUpdate();
 	
 	
-	m_followFrames = 60;
-	m_followSpeed = 1.5f;
+	m_followFrames = m_pattern.get("followFrames", 60).asFloat();
+	m_followSpeed = m_pattern.get("followSpeed", 2).asFloat();
+	m_unFollowSpeed = m_pattern.get("unFollowSpeed", 0.6f).asFloat();
+	
 	m_alpha = 5;
 	m_isFollow = false;
 	m_frameCount = 0;
@@ -1030,18 +1032,37 @@ void GodOfDeath::update(float dt)
 		}));
 	}
 	m_frameCount++;
-	if(m_isFollow)
-	{
+	float spd = m_followSpeed;
+	
+	
+	
+	auto deather = m_godOfDeathSprite->getPosition();
+	auto jackPosition = myGD->getJackPoint().convertToCCP();
+
+	if(!m_isFollow){
+			spd=m_unFollowSpeed;
+			if(m_frameCount >= m_followFrames * 4 - m_alpha)
+			{
+				m_frameCount = 0;
+				m_alpha += 5;
+				m_isFollow = true;
+				//m_dirAngle =  atan2f(50-rand()%100/100.f,50-rand()%100/100.f);
+			}
+	}else{
 		if(m_frameCount >= m_followFrames + m_alpha)
 		{
 			m_isFollow = false;
 			m_frameCount = 0;
+			//m_dirAngle = atan2f(jackPosition.y - deather.y+100-rand()%200, jackPosition.x - deather.x+100-rand()%200);
 		}
-		
-		auto deather = m_godOfDeathSprite->getPosition();
-		auto jackPosition = myGD->getJackPoint().convertToCCP();
-		float angle = atan2f(jackPosition.y - deather.y, jackPosition.x - deather.x);
-		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(m_followSpeed * cosf(angle), m_followSpeed * sinf(angle)));
+	}
+	
+	
+	
+	float angle = angle = atan2f(jackPosition.y - deather.y, jackPosition.x - deather.x);
+
+	
+		m_godOfDeathSprite->setPosition(m_godOfDeathSprite->getPosition() + ccp(spd * cosf(angle), spd * sinf(angle)));
 		if(cosf(angle) < 0)
 		{
 			KS::setFlipX(m_godOfDeathSprite, false);
@@ -1052,17 +1073,20 @@ void GodOfDeath::update(float dt)
 			KS::setFlipX(m_godOfDeathSprite, true);
 			//			m_godOfDeathSprite->setFlipX(true);
 		}
-	}
-	else
-	{
-		if(m_frameCount >= m_followFrames * 4 - m_alpha)
-		{
-			m_frameCount = 0;
-			m_alpha += 5;
-			m_isFollow = true;
-		}
-		
-	}
+//	}
+//	else
+//	{
+//		if(m_frameCount >= m_followFrames * 4 - m_alpha)
+//		{
+//			m_frameCount = 0;
+//			m_alpha += 5;
+//			m_isFollow = true;
+//		}
+//		
+//	}
+	
+
+
 }
 
 void GodOfDeath::stopMyAction()

@@ -823,6 +823,8 @@ bool PuzzleScene::init()
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
 			{
+                fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T03_PuzzleScene", myHSP->getStoreID().c_str());
+                
 				myDSH->setIntegerForKey(kDSH_Key_showedScenario, 2);
 				
 				CCNode* scenario_node = CCNode::create();
@@ -1398,17 +1400,45 @@ void PuzzleScene::endGetStar()
 				Json::Value reward_info = mySGD->getAllClearReward();
 				
 				BonusGameReward gr1;
-				gr1.spriteName = "shop_gold3.png";//"morphing_heart3.png";
+				if(mySGD->getGoodsKeyToType(reward_info[0]["reward"][0]["type"].asString()) == kGoodsType_gold)
+					gr1.spriteName = "shop_gold3.png";//"morphing_heart3.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[0]["reward"][0]["type"].asString()) == kGoodsType_ruby)
+					gr1.spriteName = "shop_ruby2.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[0]["reward"][0]["type"].asString()) == kGoodsType_pass6)
+					gr1.spriteName = "morphing_heart3.png";
+				else
+					gr1.spriteName = "shop_gold3.png";//"morphing_heart3.png";
 				gr1.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[0]["reward"][0]["count"].asInt());
 				
 				BonusGameReward gr2;
-				gr2.spriteName = "shop_gold4.png";//"morphing_heart3.png";
+				if(mySGD->getGoodsKeyToType(reward_info[1]["reward"][0]["type"].asString()) == kGoodsType_gold)
+					gr2.spriteName = "shop_gold4.png";//"morphing_heart3.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[1]["reward"][0]["type"].asString()) == kGoodsType_ruby)
+					gr2.spriteName = "shop_ruby3.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[1]["reward"][0]["type"].asString()) == kGoodsType_pass6)
+					gr2.spriteName = "morphing_heart3.png";
+				else
+					gr2.spriteName = "shop_gold4.png";//"morphing_heart3.png";
 				gr2.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[1]["reward"][0]["count"].asInt());
 				BonusGameReward gr3;
-				gr3.spriteName = "shop_gold5.png";//"morphing_heart3.png";
+				if(mySGD->getGoodsKeyToType(reward_info[2]["reward"][0]["type"].asString()) == kGoodsType_gold)
+					gr3.spriteName = "shop_gold5.png";//"morphing_heart3.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[2]["reward"][0]["type"].asString()) == kGoodsType_ruby)
+					gr3.spriteName = "shop_ruby4.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[2]["reward"][0]["type"].asString()) == kGoodsType_pass6)
+					gr3.spriteName = "morphing_heart3.png";
+				else
+					gr3.spriteName = "shop_gold5.png";//"morphing_heart3.png";
 				gr3.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[2]["reward"][0]["count"].asInt());
 				BonusGameReward gr4;
-				gr4.spriteName = "shop_gold6.png";//"morphing_heart3.png";
+				if(mySGD->getGoodsKeyToType(reward_info[3]["reward"][0]["type"].asString()) == kGoodsType_gold)
+					gr4.spriteName = "shop_gold6.png";//"morphing_heart3.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[3]["reward"][0]["type"].asString()) == kGoodsType_ruby)
+					gr4.spriteName = "shop_ruby5.png";
+				else if(mySGD->getGoodsKeyToType(reward_info[3]["reward"][0]["type"].asString()) == kGoodsType_pass6)
+					gr4.spriteName = "morphing_heart3.png";
+				else
+					gr4.spriteName = "shop_gold6.png";//"morphing_heart3.png";
 				gr4.desc = ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_gababoReward), reward_info[3]["reward"][0]["count"].asInt());
 //				GaBaBo* gbb = GaBaBo::create(-500, {gr1, gr2, gr3,gr4}, [=](int t_i)
 //											 {
@@ -2241,10 +2271,11 @@ void PuzzleScene::menuAction(CCObject* sender)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			os="android";
 #endif
-			string lang = KS::getLocalCode();
-			string cc = myHSP->getCountryCode();
-			string tz = myHSP->getTimeZone();
-			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+            string lang = KS::getLocalCode();
+            string cc = myHSP->getCountryCode();
+            string tz = myHSP->getTimeZone();
+            string store = myHSP->getStoreID();
+            myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os+"&store="+store);
 			
 			
 //			CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){
