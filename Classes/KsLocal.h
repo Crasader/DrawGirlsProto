@@ -1200,6 +1200,9 @@ enum class LK
 	kMyLocalKey_p6,
 	kMyLocalKey_p7,
 	kMyLocalKey_p8,
+	kMyLocalKey_p9,
+	kMyLocalKey_p10,
+	kMyLocalKey_p11,
 	
 	kMyLocalKey_controlTip_100percent_title,
 	kMyLocalKey_controlTip_100percent_content,

@@ -201,10 +201,10 @@ bool InvenPopup::init()
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p7), goodsToImageFile(kGoodsType_pass7), mySGD->getGoodsValue(kGoodsType_pass7)));
 
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p8), goodsToImageFile(kGoodsType_pass8), mySGD->getGoodsValue(kGoodsType_pass8)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
-	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p1), goodsToImageFile(kGoodsType_pass1), mySGD->getGoodsValue(kGoodsType_pass1)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p9), goodsToImageFile(kGoodsType_pass9), mySGD->getGoodsValue(kGoodsType_pass9)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p10), goodsToImageFile(kGoodsType_pass10), mySGD->getGoodsValue(kGoodsType_pass10)));
+	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p11), goodsToImageFile(kGoodsType_pass11), mySGD->getGoodsValue(kGoodsType_pass11)));
+	m_itemList.push_back(HasItem("", "", mySGD->getGoodsValue(kGoodsType_pass1)));
 	m_itemTable->reloadData();
 	
 	
@@ -475,16 +475,22 @@ CCTableViewCell* InvenPopup::itemTableCellAtIndex(CCTableView *table, unsigned i
 		
 		setFormSetter(desc);
 		CCSprite* descImg = CCSprite::create(m_itemList[i].itemFile.c_str());
-		cellBack->addChild(descImg);
-		descImg->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, 2.5));
-		setFormSetter(descImg);
+		if(descImg)
+		{
+			cellBack->addChild(descImg);
+			descImg->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, 2.5));
+			setFormSetter(descImg);
+			
+			KSLabelTTF* cntLabel = KSLabelTTF::create(boost::lexical_cast<std::string>(m_itemList[i].itemCount).c_str(),
+																								mySGD->getFont().c_str(),
+																								11.f);
+			cellBack->addChild(cntLabel);
+			cntLabel->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, -19.0));
+			setFormSetter(cntLabel);
+			
+		}
 		
-		KSLabelTTF* cntLabel = KSLabelTTF::create(boost::lexical_cast<std::string>(m_itemList[i].itemCount).c_str(),
-																							mySGD->getFont().c_str(),
-																							11.f);
-		cellBack->addChild(cntLabel);
-		cntLabel->setPosition(ccpFromSize(cellBack->getContentSize()) / 2.f + ccp(0, -19.0));
-		setFormSetter(cntLabel);
+		
 	
 		
 		cell->addChild(cellBack);
