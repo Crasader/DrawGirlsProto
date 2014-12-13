@@ -1731,6 +1731,8 @@ void Maingame::removeConditionLabel()
 
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 5)
 	{
+        fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T08_MainGame", myHSP->getStoreID().c_str());
+        
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 6);
 		
 		bool t_jack_stun = myJack->isStun;

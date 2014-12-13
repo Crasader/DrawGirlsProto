@@ -823,6 +823,8 @@ bool PuzzleScene::init()
 			
 			if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 1)
 			{
+                fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T03_PuzzleScene", myHSP->getStoreID().c_str());
+                
 				myDSH->setIntegerForKey(kDSH_Key_showedScenario, 2);
 				
 				CCNode* scenario_node = CCNode::create();
@@ -2241,10 +2243,11 @@ void PuzzleScene::menuAction(CCObject* sender)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			os="android";
 #endif
-			string lang = KS::getLocalCode();
-			string cc = myHSP->getCountryCode();
-			string tz = myHSP->getTimeZone();
-			myHSP->openHSPUrl(serverUrl+"/event.php?lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+            string lang = KS::getLocalCode();
+            string cc = myHSP->getCountryCode();
+            string tz = myHSP->getTimeZone();
+            string store = myHSP->getStoreID();
+            myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os+"&store="+store);
 			
 			
 //			CurtainNodeForBonusGame* bonusGame = CurtainNodeForBonusGame::create(kBonusGameCode_gababo, (int)Curtain::kTouchPriority, [=](){

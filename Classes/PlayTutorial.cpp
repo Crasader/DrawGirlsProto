@@ -23,6 +23,7 @@
 #include "TypingBox.h"
 #include "JoystickPositionSelectPopup.h"
 #include "ASPopupView.h"
+#include "FiveRocksCpp.h"
 
 void TutoPathManager::myInit(function<TutoMapType(IntPoint)> t_getMapData, function<void(IntPoint, TutoMapType)> t_setMapData, int t_height)
 {
@@ -1950,6 +1951,8 @@ bool PlayTutorial::init()
 													   t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial2), [=]()
 																	 //"먼저 영역 위를 이동하는 방법에 대해 소개해드릴게요.\n아래에 조이스틱이 있습니다.\n이 조이스틱으로 캐릭터를 원하는 방향으로 이동시킬 수 있어요.\n조이스틱으로 캐릭터를 위로 이동시켜보세요.", [=]()
 																	 {
+                                                                         if(!mySGD->is_option_tutorial)
+                                                                             fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial1", myHSP->getStoreID().c_str());
 																		 top_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_tutorial3));//"캐릭터를 위로 이동시키기");
 																		 tutorial_step = 1;
 																		 t_sm->removeFromParent();
@@ -2067,6 +2070,9 @@ void PlayTutorial::nextStep()
 		
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial4), [=]()//"다음에는 영역을 획득하는 방법을 알아보도록 해요.\n아래의 꾸욱 버튼을 누르고 있으면\n영역 바깥으로 나갈 수 있답니다.\n보이는 것처럼 영역을 획득해보세요.", [=]()
 		{
+            if(!mySGD->is_option_tutorial)
+                fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T06_Tutorial2", myHSP->getStoreID().c_str());
+            
 			controler->setTouchEnabled(true);
 			area_take_sample->removeFromParent();
 			mark_img->setPosition(ccp(80,myDSH->ui_center_y));
@@ -2111,6 +2117,9 @@ void PlayTutorial::nextStep()
 		
 //		AudioEngine::sharedInstance()->playEffect("ment_tutorial9.mp3", false, true);
 		
+        if(!mySGD->is_option_tutorial)
+            fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T07_Tutorial3", myHSP->getStoreID().c_str());
+        
 		t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial6), [=]()
 					  //"파란 실루엣 영역을 획득해야 게임 달성도가 올라갑니다.", [=]()
 					  {

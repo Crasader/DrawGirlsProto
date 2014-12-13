@@ -63,6 +63,7 @@
 #include "RealTimeMessage.h"
 #include "ManyGachaPopup.h"
 #include "AccountManagerPopup.h"
+#include "FiveRocksCpp.h"
 CCScene* MainFlowScene::scene()
 {
     CCScene *scene = CCScene::create();
@@ -3207,10 +3208,11 @@ void MainFlowScene::menuAction(CCObject* sender)
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 			os="android";
 #endif
-			string lang = KS::getLocalCode();
-			string cc = myHSP->getCountryCode();
-			string tz = myHSP->getTimeZone();
-			myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os);
+            string lang = KS::getLocalCode();
+            string cc = myHSP->getCountryCode();
+            string tz = myHSP->getTimeZone();
+            string store = myHSP->getStoreID();
+            myHSP->openHSPUrl(serverUrl+"/event.php?gid="+GraphDog::get()->getAppID()+"&lang="+lang+"&country="+cc+"&timezone="+tz+"&os="+os+"&store="+store);
 //			CCDirector::sharedDirector()->replaceScene(NewMainFlowScene::scene());
 			
 //			is_menu_enable = true; // 임시
@@ -4620,6 +4622,8 @@ void MainFlowScene::topOnLight()
 	
 	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
 	{
+        fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T02_MainScene", myHSP->getStoreID().c_str());
+        
 		myDSH->setIntegerForKey(kDSH_Key_showedScenario, 1);
 		
 		mySGD->is_on_attendance = false;

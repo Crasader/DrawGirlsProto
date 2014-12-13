@@ -539,6 +539,8 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	}
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
+        fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join", myHSP->getStoreID().c_str());
+        
 		is_menu_enable = true;
 		
 		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_connectingServer));

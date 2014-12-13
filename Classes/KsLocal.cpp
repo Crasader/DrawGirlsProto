@@ -4,8 +4,8 @@
 void KsLocal::initLocal()
 {	
 	ko();
-	en();
-	ja();
+//	en();
+//	ja();
 }
 
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
@@ -13,6 +13,7 @@ std::string KsLocal::getLocalCode()
 {
 	string tempCode;
 	tempCode = getCurrentLanguageJNI();
+//    tempCode = "ko";
 	return tempCode;
 }
 #endif
@@ -32,7 +33,7 @@ const char* KsLocal::getSupportLocalCode()
 	
 	if(!supportable)
 	{
-		languageType = "en";
+		languageType = "ko";
 	}
 	
 	return languageType.c_str();
