@@ -567,7 +567,7 @@ void Boomerang::update(float dt)
 	if(m_missileStep == 1)
 	{
 		// 날아가는 구간
-		m_centerRad += M_PI / 180.f * 4.f * 50.f / m_centerA;
+		m_centerRad += M_PI / 180.f * 3.f * 50.f / m_centerA;
 		
 		
 		CCPoint tracer = ccp(cosf(m_initRad)*(m_centerA * cosf(m_centerRad) + m_centerA) - m_centerA / 4.f * sinf(m_centerRad) * sinf(m_initRad),
