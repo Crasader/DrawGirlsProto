@@ -406,19 +406,22 @@ void InvenPopup::menuAction(CCObject* pSender)
 	
 	if(tag == myChar)
 	{
-		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
-			main_case->setScaleY(t);
-		}, [=](float t){
-			main_case->setScaleY(1.2f);
-			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
-				main_case->setScaleY(t);
-			}, [=](float t){
-				main_case->setScaleY(0.f);
-				CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
-				t_popup->setHideFinalAction(this, callfunc_selector(InvenPopup::reOpenPopup));
-				addChild(t_popup, 9);
-			}));
-		}));
+//		addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+//			main_case->setScaleY(t);
+//		}, [=](float t){
+//			main_case->setScaleY(1.2f);
+//			addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+//				main_case->setScaleY(t);
+//			}, [=](float t){
+//				main_case->setScaleY(0.f);
+		CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+		t_popup->setHideFinalAction(target_final, delegate_final);//this, callfunc_selector(InvenPopup::reOpenPopup));
+		getParent()->addChild(t_popup, getZOrder()); // 이전에는 그냥 addChild 에 z 9 였음
+		
+		target_final = NULL;
+		hidePopup();
+//			}));
+//		}));
 	}
 	else if(tag == myCard)
 	{
@@ -426,8 +429,6 @@ void InvenPopup::menuAction(CCObject* pSender)
 		auto parent = getParent();
 		auto tf = target_final;
 		auto df = delegate_final;
-		
-		hidePopup();
 		
 		mySGD->before_cardsetting = kSceneCode_PuzzleMapScene;
 		CardSettingPopup* t_popup = CardSettingPopup::create();
@@ -439,8 +440,11 @@ void InvenPopup::menuAction(CCObject* pSender)
 			t_popup->setHideFinalAction(tf, df);
 		});
 #endif
-		t_popup->setHideFinalAction(target_final, callfunc_selector(MainFlowScene::showInvenPopup));
+		t_popup->setHideFinalAction(target_final, delegate_final);//callfunc_selector(MainFlowScene::showInvenPopup));
 		getParent()->addChild(t_popup, kMainFlowZorder_popup);
+		
+		target_final = NULL;
+		hidePopup();
 	}
 	
 	

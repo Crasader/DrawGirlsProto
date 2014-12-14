@@ -15,6 +15,7 @@
 #include <map>
 #include "KSProtect.h"
 #include "DownloadFile.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -43,6 +44,7 @@ class LoadingLayer;
 class TouchSuctionLayer;
 class CommonButton;
 class KSLabelTTF;
+class ConvexGraph;
 class ShopPopup : public CCLayer, public CCTableViewDelegate, public CCTableViewDataSource
 {
 public:
@@ -167,6 +169,14 @@ private:
 	void replayAction(CCObject* sender);
 	
 	vector<CommandParam> command_list;
+	vector<DownloadFile> card_download_list;
+	LoadingLayer* card_loading;
+	ConvexGraph* card_progress_timer;
+	int success_download_cnt;
+	vector<DownloadImgInfo> download_set;
+	vector<int> is_enable_index;
+	void startFileDownloadSet();
+	void checkDownloading();
 	
 	bool is_downloading;
 	int ing_download_cnt;

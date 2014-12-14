@@ -34,6 +34,7 @@
 #include "LoadingLayer.h"
 #include "ConvexGraph.h"
 #include "CardComposePopup.h"
+#include "InvenPopup.h"
 
 void CardSettingPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
 {
@@ -220,21 +221,21 @@ bool CardSettingPopup::init()
 	
 	
 	CCSprite* n_diary_img = CCSprite::create("subbutton_pink.png");
-	KSLabelTTF* n_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* n_diary_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12.5f);
 	n_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	n_diary_label->setPosition(ccpFromSize(n_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	n_diary_img->addChild(n_diary_label);
 	
 	CCSprite* s_diary_img = CCSprite::create("subbutton_pink.png");
 	s_diary_img->setColor(ccGRAY);
-	KSLabelTTF* s_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* s_diary_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12.5f);
 	s_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	s_diary_label->setPosition(ccpFromSize(s_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	s_diary_img->addChild(s_diary_label);
 	
 	CCSprite* d_diary_img = GraySprite::create("subbutton_pink.png");
 	((GraySprite*)d_diary_img)->setGray(true);
-	KSLabelTTF* d_diary_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_diaryView), mySGD->getFont().c_str(), 12.5f);
+	KSLabelTTF* d_diary_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_inventory), mySGD->getFont().c_str(), 12.5f);
 	d_diary_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
 	d_diary_label->setPosition(ccpFromSize(d_diary_img->getContentSize()/2.f) + ccp(0,-1));
 	d_diary_img->addChild(d_diary_label);
@@ -245,7 +246,7 @@ bool CardSettingPopup::init()
 	diary_menu->setPosition(ccp(400,16));
 	tab_menu->addChild(diary_menu);
 	
-	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
+//	diary_menu->setEnabled(mySGD->getHasGottenCardsSize() > 0);
 	
 	
 	CCSprite* n_char_img = CCSprite::create("subbutton_pink.png");
@@ -1084,55 +1085,66 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 		}
 		else if(tag == kCSS_MT_diary)
 		{
-			if(recent_sort_type == kCST_default)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault, card_table->getContentOffset().y);
-			}
-			else if(recent_sort_type == kCST_take)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTake, card_table->getContentOffset().y);
-			}
-			else if(recent_sort_type == kCST_takeReverse)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse, card_table->getContentOffset().y);
-			}
-			else if(recent_sort_type == kCST_gradeUp)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade, card_table->getContentOffset().y);
-			}
-			else if(recent_sort_type == kCST_gradeDown)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
-			}
-			else if(recent_sort_type == kCST_event)
-			{
-				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent, card_table->getContentOffset().y);
-			}
+//			if(recent_sort_type == kCST_default)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetDefault, card_table->getContentOffset().y);
+//			}
+//			else if(recent_sort_type == kCST_take)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTake, card_table->getContentOffset().y);
+//			}
+//			else if(recent_sort_type == kCST_takeReverse)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetTakeReverse, card_table->getContentOffset().y);
+//			}
+//			else if(recent_sort_type == kCST_gradeUp)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGrade, card_table->getContentOffset().y);
+//			}
+//			else if(recent_sort_type == kCST_gradeDown)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetGradeReverse, card_table->getContentOffset().y);
+//			}
+//			else if(recent_sort_type == kCST_event)
+//			{
+//				myDSH->setIntegerForKey(kDSH_Key_cardSettingTableOffsetEvent, card_table->getContentOffset().y);
+//			}
+//			
+//			mySGD->selected_collectionbook = mySGD->getHasGottenCardsDataCardNumber(mySGD->getHasGottenCardsSize()-1);
+//			
+//			CollectionBookPopup* t_popup = CollectionBookPopup::create();
+//			t_popup->setHideFinalAction(target_final, delegate_final);
+//			getParent()->addChild(t_popup, kMainFlowZorder_popup);
+//			
+//			target_final = NULL;
 			
-			mySGD->selected_collectionbook = mySGD->getHasGottenCardsDataCardNumber(mySGD->getHasGottenCardsSize()-1);
-			
-			CollectionBookPopup* t_popup = CollectionBookPopup::create();
+			InvenPopup* t_popup = InvenPopup::create();
 			t_popup->setHideFinalAction(target_final, delegate_final);
-			getParent()->addChild(t_popup, kMainFlowZorder_popup);
+			getParent()->addChild(t_popup, getZOrder());
 			
 			target_final = NULL;
+			
 			hidePopup();
 		}
 		else if(tag == kCSS_MT_character)
 		{
-			addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
-				main_case->setScaleY(t);
-			}, [=](float t){
-				main_case->setScaleY(1.2f);
-				addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
-					main_case->setScaleY(t);
-				}, [=](float t){
-					main_case->setScaleY(0.f);
-					CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
-					t_popup->setHideFinalAction(this, callfunc_selector(CardSettingPopup::characterClose));
-					addChild(t_popup, kCSS_Z_popup);
-				}));
-			}));
+//			addChild(KSGradualValue<float>::create(1.f, 1.2f, 0.05f, [=](float t){
+//				main_case->setScaleY(t);
+//			}, [=](float t){
+//				main_case->setScaleY(1.2f);
+//				addChild(KSGradualValue<float>::create(1.2f, 0.f, 0.1f, [=](float t){
+//					main_case->setScaleY(t);
+//				}, [=](float t){
+//					main_case->setScaleY(0.f);
+			
+			CharacterSelectPopup* t_popup = CharacterSelectPopup::create();
+			t_popup->setHideFinalAction(target_final, delegate_final);//this, callfunc_selector(CardSettingPopup::characterClose));
+			getParent()->addChild(t_popup, getZOrder());//kCSS_Z_popup); // 원래는 그냥 addChild 에 z popup enum 이었음
+			
+			target_final = NULL;
+			hidePopup();
+//				}));
+//			}));
 		}
 		else if(tag == kCSS_MT_cardGacha)
 		{

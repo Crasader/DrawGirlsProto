@@ -365,11 +365,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
-								  CardSettingPopup* t_popup = CardSettingPopup::create();
-								  t_popup->setHideFinalAction(target_final, delegate_final);
-								  getParent()->addChild(t_popup, getZOrder());
-								  
-								  target_final = NULL;
+//								  CardSettingPopup* t_popup = CardSettingPopup::create();
+//								  t_popup->setHideFinalAction(target_final, delegate_final);
+//								  getParent()->addChild(t_popup, getZOrder());
+//								  
+//								  target_final = NULL;
 								  
 								  addChild(KSGradualValue<float>::create(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width*0.2f, -(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, 0.25f, [=](float t_f)
 																		 {

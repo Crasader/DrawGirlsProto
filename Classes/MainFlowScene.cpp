@@ -2797,11 +2797,11 @@ CCNode* MainFlowScene::showShopPopup(int t_code)
     is_menu_enable = false;
     
     ShopPopup* t_shop = ShopPopup::create();
-    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
     t_shop->targetHeartTime(heart_time);
     t_shop->setShopCode((ShopCode)t_code);
     t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-//    t_shop->addGray();
+    t_shop->addGray();
     addChild(t_shop, kMainFlowZorder_popup+100);
 	
 	return t_shop;
@@ -3005,7 +3005,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		{
 //			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
 			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_ruby);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -3015,7 +3015,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		else if(tag == kMainFlowMenuTag_goldShop)
 		{
 			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_gold);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -3025,7 +3025,7 @@ void MainFlowScene::menuAction(CCObject* sender)
 		else if(tag == kMainFlowMenuTag_heartShop)
 		{
 			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+			t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 			t_shop->targetHeartTime(heart_time);
 			t_shop->setShopCode(kSC_heart);
 			t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5158,7 +5158,7 @@ void MainFlowScene::topOnLight()
                                                                                                                                    else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                                                                                    {
                                                                                                                                        ShopPopup* t_shop = ShopPopup::create();
-                                                                                                                                       t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                       t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                                                                        t_shop->targetHeartTime(heart_time);
                                                                                                                                        t_shop->setShopCode(kSC_eventPack);
                                                                                                                                        t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5196,7 +5196,7 @@ void MainFlowScene::topOnLight()
                                                                                                                                else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                                                                                {
                                                                                                                                    ShopPopup* t_shop = ShopPopup::create();
-                                                                                                                                   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                                                                    t_shop->targetHeartTime(heart_time);
                                                                                                                                    t_shop->setShopCode(kSC_eventPack);
                                                                                                                                    t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5241,7 +5241,7 @@ void MainFlowScene::topOnLight()
                                                                             else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                             {
                                                                                 ShopPopup* t_shop = ShopPopup::create();
-                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                 t_shop->targetHeartTime(heart_time);
                                                                                 t_shop->setShopCode(kSC_eventPack);
                                                                                 t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5279,7 +5279,7 @@ void MainFlowScene::topOnLight()
                                                                         else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                         {
                                                                             ShopPopup* t_shop = ShopPopup::create();
-                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                             t_shop->targetHeartTime(heart_time);
                                                                             t_shop->setShopCode(kSC_eventPack);
                                                                             t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5341,7 +5341,7 @@ void MainFlowScene::topOnLight()
                                                                                                                                                                                                             else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                                                                                                                                                             {
                                                                                                                                                                                                                 ShopPopup* t_shop = ShopPopup::create();
-                                                                                                                                                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                                                                                                                                                 t_shop->targetHeartTime(heart_time);
                                                                                                                                                                                                                 t_shop->setShopCode(kSC_eventPack);
                                                                                                                                                                                                                 t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5388,7 +5388,7 @@ void MainFlowScene::topOnLight()
                                                                                                                                                 else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                                                                                                 {
                                                                                                                                                     ShopPopup* t_shop = ShopPopup::create();
-                                                                                                                                                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                                                                                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                                                                                     t_shop->targetHeartTime(heart_time);
                                                                                                                                                     t_shop->setShopCode(kSC_eventPack);
                                                                                                                                                     t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5461,7 +5461,7 @@ void MainFlowScene::topOnLight()
 																																		  else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
 																																		  {
 																																			  ShopPopup* t_shop = ShopPopup::create();
-																																			  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																																			  t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 																																			  t_shop->targetHeartTime(heart_time);
 																																			  t_shop->setShopCode(kSC_eventPack);
 																																			  t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5508,7 +5508,7 @@ void MainFlowScene::topOnLight()
 																			   else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
 																			   {
 																				   ShopPopup* t_shop = ShopPopup::create();
-																				   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+																				   t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
 																				   t_shop->targetHeartTime(heart_time);
 																				   t_shop->setShopCode(kSC_eventPack);
 																				   t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5568,7 +5568,7 @@ void MainFlowScene::topOnLight()
                                                                             else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                             {
                                                                                 ShopPopup* t_shop = ShopPopup::create();
-                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                                t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                                 t_shop->targetHeartTime(heart_time);
                                                                                 t_shop->setShopCode(kSC_eventPack);
                                                                                 t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5615,7 +5615,7 @@ void MainFlowScene::topOnLight()
                                                                         else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                                                                         {
                                                                             ShopPopup* t_shop = ShopPopup::create();
-                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                                                                            t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                                                                             t_shop->targetHeartTime(heart_time);
                                                                             t_shop->setShopCode(kSC_eventPack);
                                                                             t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5669,7 +5669,7 @@ void MainFlowScene::topOnLight()
                 else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
                 {
                     ShopPopup* t_shop = ShopPopup::create();
-                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+                    t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
                     t_shop->targetHeartTime(heart_time);
                     t_shop->setShopCode(kSC_eventPack);
                     t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
@@ -5712,7 +5712,7 @@ void MainFlowScene::topOnLight()
     else if(((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack) && rand()%2 == 0)
     {
         ShopPopup* t_shop = ShopPopup::create();
-        t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::popupClose));
+        t_shop->setHideFinalAction(this, callfunc_selector(MainFlowScene::puzzleListRefreshPopupClose));
         t_shop->targetHeartTime(heart_time);
         t_shop->setShopCode(kSC_eventPack);
         t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
