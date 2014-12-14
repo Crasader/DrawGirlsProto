@@ -463,7 +463,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 		for(int i=0;i<cardlist.size();i++)
 		{
 			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
-				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV())), ccsf("%d", cardlist[i]["data"]["cardNo"].asInt()));
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("Try %d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV())), ccsf("Card %d", cardlist[i]["data"]["cardNo"].asInt()));
 			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;
@@ -588,7 +588,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 		for(int i=0;i<cardlist.size();i++)
 		{
 			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
-				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()-5+i+1)), ccsf("%d", cardlist[i]["data"]["cardNo"].asInt()));
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("Try %d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()-5+i+1)), ccsf("Card %d", cardlist[i]["data"]["cardNo"].asInt()));
 			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;

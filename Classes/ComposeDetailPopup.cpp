@@ -778,7 +778,7 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 			fiverocks_goods_type = "p11";
 		else
 			fiverocks_goods_type = "p1";
-		fiverocks::FiveRocksBridge::trackEvent("Game", "Compose", ccsf("%d", mySGD->card_compose_list[compose_idx].compose_no.getV()), fiverocks_goods_type.c_str());
+		fiverocks::FiveRocksBridge::trackEvent("Game", "Compose", ccsf("Card %d", mySGD->card_compose_list[compose_idx].compose_no.getV()), fiverocks_goods_type.c_str());
 		
 		mySGD->refreshCardData(result_data["card"]);
 		

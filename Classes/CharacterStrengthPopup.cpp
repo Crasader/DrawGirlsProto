@@ -574,7 +574,7 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 		mySGD->network_check_cnt = 0;
 		
 		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0)
-			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("%d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("%d", mySGD->getUserdataHighPiece()));
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("Char %d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("Stage %d", mySGD->getUserdataHighPiece()));
 		
 		// 카드정보 갱신
 		Json::Value cardData = result_data["cardData"];
