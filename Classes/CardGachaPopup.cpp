@@ -19,6 +19,7 @@
 #include "StyledLabelTTF.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
+#include "FiveRocksCpp.h"
 
 CardGachaPopup* CardGachaPopup::create(int t_touch_priority)
 {
@@ -453,6 +454,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 		loading_layer->removeFromParent();
 		
 		myDSH->setIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV(), myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()) + 1, true);
+		
 		close_button->setVisible(false);
 		
 		take_card_number_list.clear();
@@ -460,6 +462,9 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 		Json::Value cardlist = result_data["cardlist"];
 		for(int i=0;i<cardlist.size();i++)
 		{
+			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV())), ccsf("%d", cardlist[i]["data"]["cardNo"].asInt()));
+			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;
 			t_prt = cardlist[i]["data"]["cardNo"].asInt();
@@ -472,7 +477,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
-		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -582,6 +587,9 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 		Json::Value cardlist = result_data["cardlist"];
 		for(int i=0;i<cardlist.size();i++)
 		{
+			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("%d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()-5+i+1)), ccsf("%d", cardlist[i]["data"]["cardNo"].asInt()));
+			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;
 			t_prt = cardlist[i]["data"]["cardNo"].asInt();
@@ -594,7 +602,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
-		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -669,7 +677,7 @@ void CardGachaPopup::myStopAction(CCObject* t_sender, CCControlEvent t_event)
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
-	AudioEngine::sharedInstance()->stopEffect("se_mapgacha.mp3");
+//	AudioEngine::sharedInstance()->stopEffect("se_mapgacha.mp3");
 	
 	step_cnt = kCardGachaAnimationStep_slowing;
 	stop_button->setVisible(false);
@@ -762,7 +770,7 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 	}
 	else
 	{
-		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		schedule(schedule_selector(CardGachaPopup::cardMoving));
 		
@@ -852,6 +860,8 @@ void CardGachaPopup::cardMoving()
 		card_que.erase(t_iter);
 		remove_list.pop_front();
 		
+		AudioEngine::sharedInstance()->playEffect("se_flipcard.mp3");
+		
 		if(remove_list.empty() && step_cnt == kCardGachaAnimationStep_takeCardCreate)
 		{
 			CCSprite* last_card = card_que.back();
@@ -938,6 +948,8 @@ void CardGachaPopup::cardPositioning()
 		(*t_iter)->removeFromParent();
 		card_que.erase(t_iter);
 		remove_list.pop_front();
+		
+		AudioEngine::sharedInstance()->playEffect("se_flipcard.mp3");
 		
 		CCSprite* last_card = card_que.back();
 		

@@ -296,6 +296,8 @@ public:
 			mySAE->preloadEffect("se_typing_4.mp3");
 			mySAE->preloadEffect("se_typing_5.mp3");
 			
+			mySAE->preloadEffect("se_flipcard.mp3");
+			
 			is_preloaded = true;
 		}
 	}

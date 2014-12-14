@@ -321,6 +321,8 @@ void MissileUpgradePopup::resultLevelUp(Json::Value result_data)
 			mySGD->refreshGoodsData(t_goods["type"].asString(), t_goods["count"].asInt());
 		}
 		
+		myHSP->analyticsTraceLevelUp(result_data["level"].asInt());
+		
 		mySGD->refreshUserdata(UserdataType::kUserdataType_characterLevel, result_data["level"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_nextPrice, result_data["currentPrice"].asInt());
 		mySGD->refreshUserdata(UserdataType::kUserdataType_missileInfo_power, result_data["power"].asInt());

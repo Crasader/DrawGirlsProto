@@ -728,6 +728,8 @@ void TitleRenewalScene::successLogin()
 {
 	TRACE();
 
+	myHSP->analyticsSetUserId(myHSP->getSocialID(), false);
+	
 	state_label->setVisible(true);
 	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);

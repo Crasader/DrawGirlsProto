@@ -1153,6 +1153,8 @@ void FriendPopup::setListMenu()
 				rightMentBack->setPosition(ccp(390.0, 212.0));
 				rightMentBack->setContentSize(CCSizeMake(100.0, 24.0));
 				rightMent->setPosition(ccp(364.5, 212.0));
+				
+				myHSP->analyticsTraceFriendCount(m_friendList.size());
 			});
 			
 			

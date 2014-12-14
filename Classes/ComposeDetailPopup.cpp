@@ -771,6 +771,14 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		mySGD->network_check_cnt = 0;
 		loading_layer->removeFromParent();
 		
+		string fiverocks_goods_type;
+		
+		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) <= 0)
+			fiverocks_goods_type = "p11";
+		else
+			fiverocks_goods_type = "p1";
+		fiverocks::FiveRocksBridge::trackEvent("Game", "Compose", ccsf("%d", mySGD->card_compose_list[compose_idx].compose_no.getV()), fiverocks_goods_type.c_str());
+		
 		mySGD->refreshCardData(result_data["card"]);
 		
 		Json::Value expCards = result_data["expCards"];

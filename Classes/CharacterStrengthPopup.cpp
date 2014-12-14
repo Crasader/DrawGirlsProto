@@ -23,6 +23,7 @@
 #include "CCMenuLambda.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
+#include "FiveRocksCpp.h"
 
 CharacterStrengthPopup* CharacterStrengthPopup::create(int t_touch_priority, int t_character_idx, function<void()> t_end_func)
 {
@@ -571,6 +572,9 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->network_check_cnt = 0;
+		
+		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0)
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("%d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("%d", mySGD->getUserdataHighPiece()));
 		
 		// 카드정보 갱신
 		Json::Value cardData = result_data["cardData"];
