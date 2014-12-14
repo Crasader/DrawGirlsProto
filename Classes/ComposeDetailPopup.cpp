@@ -23,6 +23,7 @@
 #include "ASPopupView.h"
 #include "CardComposePopup.h"
 #include "LoadingLayer.h"
+#include "FiveRocksCpp.h"
 
 ComposeDetailPopup* ComposeDetailPopup::create(int t_touch_priority, int t_compose_idx)
 {
