@@ -10,6 +10,8 @@
 #if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 #import <Foundation/Foundation.h>
 #endif
+#include "hspConnector.h"
+#include "StarGoldData.h"
 
 #include "KSUtil.h"
 CCSprite* StageImgLoader::getUnsafeLoadedImg(string filename)
@@ -290,12 +292,19 @@ void StageImgLoader::downloadImg( string t_url, int t_size, string t_down_filena
 	target_fail = t_fail;
 	delegate_fail = d_fail;
 	down_filename = t_down_filename;
-
+	
 	startDownload(t_url, t_size);
 }
 
 void StageImgLoader::downloadImg(DownloadImgInfo t_info, int t_index)
 {
+	if(t_info.download_url.substr(0,1) == "/")
+	{
+//		CCLog("before t_url : %s", t_info.download_url.c_str());
+		t_info.download_url = mySGD->getCdnUrl() + myHSP->getStoreID() + t_info.download_url;
+//		CCLog("after t_url : %s", t_info.download_url.c_str());
+	}
+	
 	downloading_list[t_index].download_url = t_info.download_url;
 	downloading_list[t_index].download_size = t_info.download_size;
 	downloading_list[t_index].download_filename = t_info.download_filename;
@@ -332,6 +341,13 @@ bool StageImgLoader::isLoadedImg( string filename )
 
 void StageImgLoader::startDownload( string t_url, int t_size )
 {
+	if(t_url.substr(0,1) == "/")
+	{
+//		CCLog("before t_url : %s", t_url.c_str());
+		t_url = mySGD->getCdnUrl() + myHSP->getStoreID() + t_url;
+//		CCLog("after t_url : %s", t_url.c_str());
+	}
+	
 	p_url = t_url;
 	total_size = t_size*1024;
 
