@@ -567,6 +567,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		}else{
 			presentIcon = CCSprite::create("postbox_friendinvite.png");
 		}
+		if(!presentIcon)presentIcon = CCSprite::create("postbox_present.png");
+		
 		profileImg->addChild(presentIcon);
 		presentIcon->setPosition(ccpFromSize(profileImg->getContentSize()) / 2.f);
 		//profileImg->setScale(30.f / profileImg->getContentSize().width);
@@ -691,8 +693,11 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				else if(rewardType=="p6")rewardName->setString("생명의돌");
 																				else if(rewardType=="p7")rewardName->setString("일반뽑기권");
 																				else if(rewardType=="p8")rewardName->setString("고급뽑기권");
+																				else if(rewardType=="p9")rewardName->setString("카드뽑기권");
+																				else if(rewardType=="p10")rewardName->setString("캐릭강화권");
+																				else if(rewardType=="p11")rewardName->setString("카드합성권");
 																				else if(rewardType=="cd")rewardName->setString("");
-																				else rewardName->setString("??");
+																				else rewardName->setString("");
 																				
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
@@ -703,7 +708,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				}else{
 																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
                                                                                     
-                                                                                    if(!spr)spr = CCSprite::create("icon_box.png");
+																					if(!spr)spr = CCSprite::create("icon_box.png");
                                                                                     
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}

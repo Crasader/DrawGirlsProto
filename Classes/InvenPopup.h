@@ -117,6 +117,18 @@ private:
 		{
 			return("icon_p8.png");
 		}
+		else if(t_goods == kGoodsType_pass9)
+		{
+			return("icon_p9.png");
+		}
+		else if(t_goods == kGoodsType_pass10)
+		{
+			return("icon_p10.png");
+		}
+		else if(t_goods == kGoodsType_pass11)
+		{
+			return("icon_p11.png");
+		}
 		else if(t_goods == kGoodsType_heart)
 		{
 			return("icon_h.png");

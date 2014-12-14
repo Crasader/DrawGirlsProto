@@ -466,7 +466,8 @@ void EndlessModeOpening::setMain()
 								  param["autoLevel"] = mySGD->getUserdataAutoLevel();
 								  //								  param["highPiece"] = mySGD->getUserdataHighPiece();
 								  param["win"] = mySGD->getUserdataEndlessIngWin();
-								  
+									
+									param["level"] = mySGD->getUserdataCharLevel();
 								  transaction_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeOpening::resultGetEndlessPlayData)));
 								  myHSP->command(transaction_list);
 //								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));

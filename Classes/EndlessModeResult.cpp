@@ -524,7 +524,7 @@ bool EndlessModeResult::init()
 		param2["memberID"] = myHSP->getMemberID();
 		param2["score"] = left_total_score.getV();//mySGD->getScore();
 		param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-		param2["level"] = mySGD->endless_my_level.getV();
+		param2["level"] = mySGD->getUserdataCharLevel();
 		param2["autoLevel"] = 1;
 		param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 		param2["victory"] = mySGD->endless_my_victory.getV();
@@ -922,6 +922,7 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 		param["memberID"] = myHSP->getMemberID();
 		param["win"] = mySGD->getUserdataEndlessIngWin();//mySGD->getUserdataAutoLevel();
 		param["highPiece"] = mySGD->getUserdataHighPiece();
+		param["level"] = mySGD->getUserdataCharLevel();
 		command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
 		
 		TRACE();
