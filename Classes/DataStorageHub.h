@@ -185,7 +185,9 @@ typedef enum t_DSH_Key{
 	kDSH_Key_normalGachaList,
 	kDSH_Key_premiumGachaList,
 	kDSH_Key_normalGachaDataTime,
-	kDSH_Key_premiumGachaDataTime
+	kDSH_Key_premiumGachaDataTime,
+	
+	kDSH_Key_cardGachaTryCnt_int1
 }DSH_Key;
 
 enum SpecialTutorialCode{

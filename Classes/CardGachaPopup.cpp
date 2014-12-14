@@ -435,6 +435,7 @@ void CardGachaPopup::oneAction(CCObject *t_sender, CCControlEvent t_event)
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 	param["count"] = 1;
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -451,6 +452,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
+		myDSH->setIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV(), myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()) + 1, true);
 		close_button->setVisible(false);
 		
 		take_card_number_list.clear();
@@ -470,6 +472,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -509,6 +512,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 				param["count"] = 1;
 				if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 					param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -527,6 +531,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 										 param["count"] = 1;
 										 if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 											 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -555,6 +560,7 @@ void CardGachaPopup::fiveAction(CCObject *t_sender, CCControlEvent t_event)
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 	param["count"] = 5;
 	param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 	
@@ -568,6 +574,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
+		myDSH->setIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV(), myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()) + 5, true);
 		close_button->setVisible(false);
 		
 		take_card_number_list.clear();
@@ -587,6 +594,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -626,6 +634,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 				param["count"] = 5;
 				param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 				
@@ -641,6 +650,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 										 param["count"] = 5;
 										 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 										 
@@ -658,6 +668,8 @@ void CardGachaPopup::myStopAction(CCObject* t_sender, CCControlEvent t_event)
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+	AudioEngine::sharedInstance()->stopEffect("se_mapgacha.mp3");
 	
 	step_cnt = kCardGachaAnimationStep_slowing;
 	stop_button->setVisible(false);
@@ -750,6 +762,7 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 	}
 	else
 	{
+		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		schedule(schedule_selector(CardGachaPopup::cardMoving));
 		
@@ -1019,6 +1032,8 @@ void CardGachaPopup::cardPositioning()
 						zoom_3->setOpacity(0);
 						zoom_3->setPosition(ccp(0,20));
 						main_case->addChild(zoom_3);
+						
+						AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
 						
 						zoom_3->addChild(KSGradualValue<float>::create(1.5f, 1.3f, 11.f/30.f, [=](float t_f)
 					   {

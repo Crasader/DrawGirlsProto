@@ -692,6 +692,9 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 																				  }, [=](CCPoint t_p)
 																				  {
 																					  target_item_list[i]->setPosition(t_p);
+																					  
+																					  AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
+																					  
 																					  auto t_ccb = KS::loadCCBI<CCSprite*>(this, "cha_strength_bomb.ccbi");
 																					  target_item_list[i]->getNormalImage()->addChild(t_ccb.first,999);
 																					  t_ccb.first->setPosition(ccpFromSize(target_item_list[i]->getNormalImage()->getContentSize()/2.f));

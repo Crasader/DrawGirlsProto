@@ -836,6 +836,8 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		
 		KS::setOpacity(card_img, 0);
 		
+		AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
+		
 		zoom_3->addChild(KSGradualValue<float>::create(0.f, 1.3f, 11.f/30.f, [=](float t_f)
 													   {
 														   zoom_3->setScale(t_f);
