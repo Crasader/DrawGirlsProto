@@ -2553,7 +2553,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_materialCard] = "재료카드";
 	obj[LK::kMyLocalKey_strengthenCharacter] = "강화 캐릭터";
 	obj[LK::kMyLocalKey_selectedCardList] = "선택된 카드 목록";
-	obj[LK::kMyLocalKey_10cardsStrengthenPossibleAtOne] = "한번에 10장까지 강화 가능합니다.";
+	obj[LK::kMyLocalKey_10cardsStrengthenPossibleAtOne] = "한번에 10장까지 선택 가능합니다.";
 	obj[LK::kMyLocalKey_maybeStrengthenExp] = "예상강화\n경험치";
 	obj[LK::kMyLocalKey_doStrengthen] = "강화하기";
 	obj[LK::kMyLocalKey_rankRewardGoodsTypePass9] = "Ticket";
