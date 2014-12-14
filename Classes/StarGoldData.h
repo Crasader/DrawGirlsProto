@@ -1349,6 +1349,7 @@ private:
 	COMMON_VAR_STR(manyGachaMsgLeft, ManyGachaMsgLeft);
 	COMMON_VAR_STR(manyGachaMsgRight, ManyGachaMsgRight);
 	COMMON_VAR_STR(diaryStoreUrl, DiaryStoreUrl);
+	COMMON_VAR_STR(cdnUrl, CdnUrl);
 };
 
 #endif

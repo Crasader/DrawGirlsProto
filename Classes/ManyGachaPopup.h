@@ -14,6 +14,7 @@
 #include "hspConnector.h"
 #include "IntSeries.h"
 #include "GachaData.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
@@ -22,6 +23,7 @@ using namespace std;
 class LoadingLayer;
 class KSLabelTTF;
 class DownloadFile;
+class ConvexGraph;
 class ManyGachaPopup : public CCLayer, public CCBAnimationManagerDelegate
 {
 public:
@@ -78,6 +80,16 @@ private:
 	void setPremiumGacha();
 	
 	LoadingLayer* loading_layer;
+	LoadingLayer* card_loading;
+	ConvexGraph* card_progress_timer;
+	int ing_download_cnt;
+	int success_download_cnt;
+	vector<DownloadImgInfo> download_set;
+	vector<int> is_enable_index;
+	void startFileDownloadSet();
+	void checkDownloading();
+	bool is_downloading;
+	
 	
 	void resultGetGachaList(Json::Value result_data);
 	void resultGetGachaListNow(Json::Value result_data);

@@ -1392,6 +1392,8 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		if(diary_store_url == "")
 			diary_store_url = result_data["diaryStoreUrl"]["default"].asString();
 		mySGD->setDiaryStoreUrl(diary_store_url);
+		
+		mySGD->setCdnUrl(result_data["cdnURL"].asString());
 	}
 	else
 	{
