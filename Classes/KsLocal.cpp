@@ -1275,7 +1275,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 	obj[LK::kMyLocalKey_reConnectAlert5] = "서버와의 접속에 오류가 발생하였습니다.\n다시 시도합니다.";
 	obj[LK::kMyLocalKey_castingCancelChance] = "캐스팅 취소 찬스!!";
-	
+    
+    obj[LK::kMyLocalKey_patternContent1021] = "어디든 쫓아오며 닿는순간 죽어요.";
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
@@ -2534,7 +2535,8 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 	obj[LK::kMyLocalKey_reConnectAlert5] = "An error occurred in the connection to the server.\nTry again.";
 	obj[LK::kMyLocalKey_castingCancelChance] = "캐스팅 취소 찬스!!";
-	
+    
+    obj[LK::kMyLocalKey_patternContent1021] = "어디든 쫓아오며 닿는순간 죽어요.";
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
 	obj[LK::kMyLocalKey_patternContent1023] = "안전지대라도 위험해요.";
 	obj[LK::kMyLocalKey_patternContent1024] = "시야를 가려요.";
