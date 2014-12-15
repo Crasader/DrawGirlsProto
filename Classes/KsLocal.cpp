@@ -547,7 +547,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_warning1018] = "문득구름";
 	obj[LK::kMyLocalKey_warning1019] = "거대화";
 	obj[LK::kMyLocalKey_warning1020] = "부하몬스터 소환";
-	obj[LK::kMyLocalKey_warning1021] = "죽음의 신";
+	obj[LK::kMyLocalKey_warning1021] = "사신 소환";
 	obj[LK::kMyLocalKey_warning1022] = "레이저 그물";
 	obj[LK::kMyLocalKey_warning1023] = "와이퍼 미사일";
 	obj[LK::kMyLocalKey_warning1024] = "뭉게구름";
@@ -1808,7 +1808,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_warning1018] = "Sudden Cloude";
 	obj[LK::kMyLocalKey_warning1019] = "Enlarge";
 	obj[LK::kMyLocalKey_warning1020] = "Summon minion";
-	obj[LK::kMyLocalKey_warning1021] = "죽음의 신";
+	obj[LK::kMyLocalKey_warning1021] = "사신 소환";
 	obj[LK::kMyLocalKey_warning1022] = "레이저 그물";
 	obj[LK::kMyLocalKey_warning1023] = "와이퍼 미사일";
 	obj[LK::kMyLocalKey_warning1024] = "뭉게구름";
