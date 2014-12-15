@@ -1221,6 +1221,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
+//		CCLog("normal result : %s", result_data.toStyledString().c_str());
 		Json::Value ex1_result = result_data["list"]["001"];
 		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
 		{
@@ -1318,7 +1319,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 					send_commend_list.clear();
 					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+					mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultNormalProperties));
 				}, 1);
 				if(alert)
 					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -1339,7 +1340,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 											 send_commend_list.clear();
 											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+											 mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultNormalProperties));
 										 }));
 			}
 		}
@@ -2391,7 +2392,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 					send_commend_list.clear();
 					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
 					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+					mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultPremiumProperties));
 				}, 1);
 				if(alert)
 					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -2412,7 +2413,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 											 send_commend_list.clear();
 											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
 											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+											 mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultPremiumProperties));
 										 }));
 			}
 		}
