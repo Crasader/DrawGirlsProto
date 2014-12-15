@@ -650,12 +650,14 @@ void Chain::update(float dt)
 {
 	
 	bool invalidRange;
+	bool emptyMonster = !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
 	IntPoint missilePoint = ccp2ip(m_chainMissile->getMissilePosition());
 	invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
 									missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);
 	
 	if(
 		 myGD->getIsGameover() ||
+		 emptyMonster ||
 		 
 		 invalidRange
 		 
