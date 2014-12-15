@@ -2506,7 +2506,7 @@ void KSCumberBase::applyAutoBalance(bool isExchange)
 	//파동,불꽃 속도 저하 50스테이지까지
 	
 	bool isJr = !isBoss();//!m_isBoss;//false; //!isBoss();
-	bool isPerfectClear = mySGD->isPerfectPiece(mySD->getSilType());
+	bool isPerfectClear = mySGD->isClearPiece(mySD->getSilType());
 	int autobalanceTry = NSDS_GI(mySD->getSilType(), kSDS_SI_autoBalanceTry_i);
 	
 	int vCount = mySGD->getUserdataAutoLevel();
