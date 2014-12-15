@@ -613,6 +613,22 @@ string hspConnector::getTimeZone(){
 	return r.c_str();
 }
 
+string hspConnector::getBuildType()
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	return "real";
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	string isDevelop = getHSPConfigurationProp("LIT_DEVELOP_SERVER");
+	if(isDevelop == "true")
+		return "dev";
+	
+	string launching_zone = getHSPConfigurationProp("HSP_LAUNCHING_ZONE");
+	if(launching_zone == "ALPHA-KR")
+		return "alpha";
+	else
+		return "real";
+#endif
+}
 
 string hspConnector::getServerAddress(){
 	string serverAddr;
