@@ -18,7 +18,6 @@
 #include "LabelTTFMarquee.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
-#include "StageImgLoader.h"
 #include "MainFlowScene.h"
 #include "ShopPopup.h"
 #include "DownloadFile.h"
@@ -27,13 +26,17 @@
 #include "PuzzleScene.h"
 #include "GachaRefreshCheckPopup.h"
 #include "FiveRocksCpp.h"
+#include "CardGachaPopup.h"
+#include "LoadingLayer.h"
+#include "ConvexGraph.h"
 
 enum ManyGachaPopupMenu
 {
 	kClose = 0,
 	kNormal,
 	kPremium,
-	kShop
+	kShop,
+	kCardGacha
 };
 
 void ManyGachaPopup::setHideFinalAction(CCObject *t_final, SEL_CallFunc d_final)
@@ -187,27 +190,31 @@ void ManyGachaPopup::setOpening()
 	right_char->setPosition(ccp(main_inner->getContentSize().width - right_char->getContentSize().width/2.f + 13, right_char->getContentSize().height/2.f - 3));
 	inner_node->addChild(right_char);
 	
-	CCSprite* left_talkbox = CCSprite::create("gacha_talkbox.png");
-	left_talkbox->setPosition(ccp(48,190));
-	inner_node->addChild(left_talkbox);
+	if(mySGD->getManyGachaMsgLeft() != "")
+	{
+		CCSprite* left_talkbox = CCSprite::create("gacha_talkbox.png");
+		left_talkbox->setPosition(ccp(48,190));
+		inner_node->addChild(left_talkbox);
+		
+		StyledLabelTTF* left_talkment = StyledLabelTTF::create(mySGD->getManyGachaMsgLeft().c_str(), mySGD->getFont().c_str(), 11, 0, StyledAlignment::kCenterAlignment);
+		left_talkment->setAnchorPoint(ccp(0.5f,0.5f));
+		left_talkment->setPosition(ccp(48,195));
+		inner_node->addChild(left_talkment);
+	}
 	
-	KSLabelTTF* left_talkment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_goodLuckAyameaFighting), mySGD->getFont().c_str(), 11);
-	left_talkment->setColor(ccBLACK);
-	left_talkment->disableOuterStroke();
-	left_talkment->setPosition(ccp(48,195));
-	inner_node->addChild(left_talkment);
-	
-	CCSprite* right_talkbox = CCSprite::create("gacha_talkbox.png");
-	right_talkbox->setPosition(ccp(main_inner->getContentSize().width - 40,185));
-	right_talkbox->setScale(0.8f);
-	right_talkbox->setFlipX(true);
-	inner_node->addChild(right_talkbox);
-	
-	KSLabelTTF* right_talkment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_brotherJustOne), mySGD->getFont().c_str(), 11);
-	right_talkment->setColor(ccBLACK);
-	right_talkment->disableOuterStroke();
-	right_talkment->setPosition(ccp(main_inner->getContentSize().width - 40,190));
-	inner_node->addChild(right_talkment);
+	if(mySGD->getManyGachaMsgRight() != "")
+	{
+		CCSprite* right_talkbox = CCSprite::create("gacha_talkbox.png");
+		right_talkbox->setPosition(ccp(main_inner->getContentSize().width - 40,185));
+		right_talkbox->setScale(0.8f);
+		right_talkbox->setFlipX(true);
+		inner_node->addChild(right_talkbox);
+		
+		StyledLabelTTF* right_talkment = StyledLabelTTF::create(mySGD->getManyGachaMsgRight().c_str(), mySGD->getFont().c_str(), 11, 0, StyledAlignment::kCenterAlignment);
+		right_talkment->setAnchorPoint(ccp(0.5f,0.5f));
+		right_talkment->setPosition(ccp(main_inner->getContentSize().width - 40,190));
+		inner_node->addChild(right_talkment);
+	}
 	
 	CCMenu* gacha_menu = CCMenu::create();
 	gacha_menu->setPosition(ccp(0,0));
@@ -253,6 +260,26 @@ void ManyGachaPopup::setOpening()
 		shop_menu->setTag(ManyGachaPopupMenu::kShop);
 		shop_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(395,24));
 		gacha_menu->addChild(shop_menu);
+		
+		
+		CCSprite* n_card_gacha_img = CCSprite::create("subbutton_pink.png");
+		KSLabelTTF* n_card_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 12.5f);
+		n_card_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		n_card_gacha_label->setPosition(ccpFromSize(n_card_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+		n_card_gacha_img->addChild(n_card_gacha_label);
+		
+		CCSprite* s_card_gacha_img = CCSprite::create("subbutton_pink.png");
+		s_card_gacha_img->setColor(ccGRAY);
+		KSLabelTTF* s_card_gacha_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 12.5f);
+		s_card_gacha_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		s_card_gacha_label->setPosition(ccpFromSize(s_card_gacha_img->getContentSize()/2.f) + ccp(0,-1));
+		s_card_gacha_img->addChild(s_card_gacha_label);
+		
+		
+		CCMenuItem* card_gacha_menu = CCMenuItemSprite::create(n_card_gacha_img, s_card_gacha_img, this, menu_selector(ManyGachaPopup::menuAction));
+		card_gacha_menu->setTag(ManyGachaPopupMenu::kCardGacha);
+		card_gacha_menu->setPosition(ccpFromSize(main_inner->getContentSize()/2.f) - ccpFromSize(main_case->getContentSize()/2.f) + ccp(293,24));
+		gacha_menu->addChild(card_gacha_menu);
 	}
 }
 
@@ -1194,6 +1221,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() != GDSUCCESS)
 	{
+//		CCLog("normal result : %s", result_data.toStyledString().c_str());
 		Json::Value ex1_result = result_data["list"]["001"];
 		if(ex1_result["result"]["code"].asInt() == GDPROPERTYISMINUS)
 		{
@@ -1291,7 +1319,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 					send_commend_list.clear();
 					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+					mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultNormalProperties));
 				}, 1);
 				if(alert)
 					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -1312,7 +1340,7 @@ void ManyGachaPopup::resultNormalProperties(Json::Value result_data)
 											 send_commend_list.clear();
 											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange)));
 											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultNormalExchange));
-											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+											 mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultNormalProperties));
 										 }));
 			}
 		}
@@ -1567,6 +1595,7 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			
 			card_download_list.clear();
 			
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -1574,7 +1603,6 @@ void ManyGachaPopup::resultNormalExchange(Json::Value result_data)
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
 			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
@@ -2364,7 +2392,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 					send_commend_list.clear();
 					send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
 					//	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-					mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+					mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultPremiumProperties));
 				}, 1);
 				if(alert)
 					((CCNode*)CCDirector::sharedDirector()->getRunningScene()->getChildren()->objectAtIndex(0))->addChild(alert,999999);
@@ -2385,7 +2413,7 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 											 send_commend_list.clear();
 											 send_commend_list.push_back(CommandParam("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange)));
 											 //	myHSP->command("exchange", param, json_selector(this, ManyGachaPopup::resultPremiumExchange));
-											 mySGD->changeGoodsTransaction(send_commend_list, nullptr);
+											 mySGD->changeGoodsTransaction(send_commend_list, json_selector(this, ManyGachaPopup::resultPremiumProperties));
 										 }));
 			}
 		}
@@ -2579,6 +2607,7 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			
 			card_download_list.clear();
 			
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
@@ -2586,7 +2615,6 @@ void ManyGachaPopup::resultPremiumExchange(Json::Value result_data)
 			NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 			
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 			NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
 			NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
@@ -2987,6 +3015,337 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
 				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 		}
+	}
+	else if(t_tag == ManyGachaPopupMenu::kCardGacha)
+	{
+		card_loading = LoadingLayer::create(-9999);
+		addChild(card_loading, 9999);
+		card_loading->startLoading();
+		
+		myHSP->command("getcardgachalist", Json::Value(), [=](Json::Value result_data)
+					   {
+						   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+						   {
+							   mySGD->card_gacha_no = result_data["no"].asInt();
+							   mySGD->card_gacha_msg = result_data["msg"].asString();
+							   mySGD->card_gacha_list.clear();
+							   card_download_list.clear();
+							   
+							   Json::Value cards = result_data["cardlist"];
+							   for(int i=0;i<cards.size();i++)
+							   {
+								   Json::Value t_card = cards[i];
+								   KSProtectVar<int> t_gacha_card_no;
+								   t_gacha_card_no = t_card["no"].asInt();
+								   mySGD->card_gacha_list.push_back(t_gacha_card_no);
+								   NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+								   NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
+								   if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
+									   continue;
+								   NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
+								   NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
+								   NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
+								   NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
+								   NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
+								   
+								   
+								   NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
+								   NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
+								   
+								   Json::Value t_imgInfo = t_card["imgInfo"];
+								   
+								   //			bool is_add_cf = false;
+								   
+								   if(NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card["no"].asInt()) != t_imgInfo["img"].asString())
+								   {
+									   // check, after download ----------
+									   DownloadFile t_df;
+									   t_df.size = t_imgInfo["size"].asInt();
+									   t_df.img = t_imgInfo["img"].asString().c_str();
+									   t_df.filename = CCSTR_CWF("card%d_visible.png", t_card["no"].asInt())->getCString();
+									   t_df.key = CCSTR_CWF("%d_imgInfo", t_card["no"].asInt())->getCString();
+									   
+									   auto iter = find(card_download_list.begin(), card_download_list.end(), t_df);
+									   if(iter == card_download_list.end())
+									   {
+										   card_download_list.push_back(t_df);
+										   // ================================
+									   }
+								   }
+								   
+								   Json::Value t_aniInfo = t_card["aniInfo"];
+								   NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card["no"].asInt(), t_aniInfo["isAni"].asBool(), false);
+								   if(t_aniInfo["isAni"].asBool())
+								   {
+									   Json::Value t_detail = t_aniInfo["detail"];
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card["no"].asInt(), t_detail["loopLength"].asInt(), false);
+									   
+									   Json::Value t_loopSeq = t_detail["loopSeq"];
+									   for(int j=0;j<t_loopSeq.size();j++)
+										   NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card["no"].asInt(), j, t_loopSeq[j].asInt(), false);
+									   
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card["no"].asInt(), t_detail["cutWidth"].asInt(), false);
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card["no"].asInt(), t_detail["cutHeight"].asInt(), false);
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card["no"].asInt(), t_detail["cutLength"].asInt(), false);
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card["no"].asInt(), t_detail["positionX"].asInt(), false);
+									   NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card["no"].asInt(), t_detail["positionY"].asInt(), false);
+									   
+									   if(NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card["no"].asInt()) != t_detail["img"].asString())
+									   {
+										   // check, after download ----------
+										   DownloadFile t_df;
+										   t_df.size = t_detail["size"].asInt();
+										   t_df.img = t_detail["img"].asString().c_str();
+										   t_df.filename = CCSTR_CWF("card%d_animation.png", t_card["no"].asInt())->getCString();
+										   t_df.key = CCSTR_CWF("%d_aniInfo_detail_img", t_card["no"].asInt())->getCString();
+										   
+										   auto iter = find(card_download_list.begin(), card_download_list.end(), t_df);
+										   if(iter == card_download_list.end())
+											   card_download_list.push_back(t_df);
+										   // ================================
+									   }
+								   }
+								   
+								   NSDS_SS(kSDS_CI_int1_script_s, t_card["no"].asInt(), t_card["script"].asString(), false);
+								   NSDS_SS(kSDS_CI_int1_profile_s, t_card["no"].asInt(), t_card["profile"].asString(), false);
+								   NSDS_SS(kSDS_CI_int1_name_s, t_card["no"].asInt(), t_card["name"].asString(), false);
+								   NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_ruby)].asInt(), false);
+								   NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card["no"].asInt(), t_card["mPrice"][mySGD->getGoodsTypeToKey(kGoodsType_pass6)].asInt(), false);
+								   
+								   NSDS_SI(kSDS_CI_int1_type_i, t_card["no"].asInt(), t_card["type"].asInt(), false);
+								   NSDS_SS(kSDS_CI_int1_category_s, t_card["no"].asInt(), t_card["category"].asString(), false);
+								   NSDS_SI(kSDS_CI_int1_level_i, t_card["no"].asInt(), t_card["level"].asInt(), false);
+								   
+								   int sound_cnt = t_card["sound"].size();
+								   NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card["no"].asInt(), sound_cnt, false);
+								   for(int j=1;j<=sound_cnt;j++)
+								   {
+									   NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card["no"].asInt(), j, t_card["sound"][j-1].asString(), false);
+								   }
+								   
+								   NSDS_SI(kSDS_CI_int1_characterNo_i, t_card["no"].asInt(), t_card["characterNo"].asInt(), false);
+								   
+								   Json::Value t_silImgInfo = t_card["silImgInfo"];
+								   NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card["no"].asInt(), t_silImgInfo["isSil"].asBool(), false);
+								   if(t_silImgInfo["isSil"].asBool())
+								   {
+									   if(NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card["no"].asInt()) != t_silImgInfo["img"].asString())
+									   {
+										   // check, after download ----------
+										   DownloadFile t_df;
+										   t_df.size = t_silImgInfo["size"].asInt();
+										   t_df.img = t_silImgInfo["img"].asString().c_str();
+										   t_df.filename = CCSTR_CWF("card%d_invisible.png", t_card["no"].asInt())->getCString();
+										   t_df.key = CCSTR_CWF("%d_silImgInfo_img", t_card["no"].asInt())->getCString();
+										   
+										   auto iter = find(card_download_list.begin(), card_download_list.end(), t_df);
+										   if(iter == card_download_list.end())
+											   card_download_list.push_back(t_df);
+										   // ================================
+									   }
+								   }
+								   
+								   Json::Value t_faceInfo = t_card["faceInfo"];
+								   if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+								   {
+									   NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
+									   NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
+									   
+									   if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
+									   {
+										   DownloadFile t_df1;
+										   t_df1.size = t_faceInfo["size"].asInt();
+										   t_df1.img = t_faceInfo["ccbi"].asString().c_str();
+										   t_df1.filename = t_faceInfo["ccbiID"].asString() + ".ccbi";
+										   t_df1.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoCcbi_s).c_str(), t_card["no"].asInt());
+										   card_download_list.push_back(t_df1);
+									   }
+									   
+									   if(NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".plist"))
+									   {
+										   DownloadFile t_df2;
+										   t_df2.size = t_faceInfo["size"].asInt();
+										   t_df2.img = t_faceInfo["plist"].asString().c_str();
+										   t_df2.filename = t_faceInfo["imageID"].asString() + ".plist";
+										   t_df2.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPlist_s).c_str(), t_card["no"].asInt());
+										   card_download_list.push_back(t_df2);
+									   }
+									   
+									   if(NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card["no"].asInt()) != (t_faceInfo["imageID"].asString() + ".pvr.ccz"))
+									   {
+										   DownloadFile t_df3;
+										   t_df3.size = t_faceInfo["size"].asInt();
+										   t_df3.img = t_faceInfo["pvrccz"].asString().c_str();
+										   t_df3.filename = t_faceInfo["imageID"].asString() + ".pvr.ccz";
+										   t_df3.key = ccsf(mySDS->getRKey(kSDS_CI_int1_faceInfoPvrccz_s).c_str(), t_card["no"].asInt());
+										   card_download_list.push_back(t_df3);
+									   }
+								   }
+								   else
+								   {
+									   NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), false, false);
+								   }
+								   mySDS->fFlush(t_card["piece"].asInt(), kSDS_SI_base);
+							   }
+							   
+							   mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+							   
+							   if(card_download_list.size() > 0)
+							   {
+								   card_progress_timer = ConvexGraph::create("loading_progress_front2.png", CCRectMake(0, 0, 13, 13), CCRectMake(6, 6, 1, 1), CCSizeMake(201, 13), ConvexGraphType::width);
+								   card_progress_timer->setPosition(ccp(240,100));
+								   card_loading->addChild(card_progress_timer);
+								   
+								   card_progress_timer->setCover("loading_progress_front1.png", "loading_progress_mask.png");
+								   card_progress_timer->setBack("loading_progress_back.png");
+								   
+								   ing_download_cnt = 1;
+								   success_download_cnt = 0;
+								   
+								   download_set.clear();
+								   is_enable_index.clear();
+								   for(int i=0;i<5;i++)
+								   {
+									   is_enable_index.push_back(i);
+								   }
+								   
+								   startFileDownloadSet();
+							   }
+							   else
+							   {
+								   card_loading->removeFromParent();
+								   
+								   CardGachaPopup* t_popup = CardGachaPopup::create(-200);
+								   t_popup->setHideFinalAction(target_final, delegate_final);
+								   getParent()->addChild(t_popup, getZOrder());
+								   
+								   target_final = NULL;
+								   hidePopup();
+							   }
+						   }
+						   else
+						   {
+							   is_menu_enable = true;
+							   card_loading->removeFromParent();
+							   addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+						   }
+					   });
+	}
+}
+
+void ManyGachaPopup::startFileDownloadSet()
+{
+	int max_thread_cnt = 5;
+	int total_download_cnt = card_download_list.size();
+	int before_download_size = download_set.size();
+	
+	for(int i=download_set.size();ing_download_cnt <= total_download_cnt && i<max_thread_cnt;i++)
+	{
+		DownloadImgInfo t_info;
+		if(card_download_list.size() > 0 && ing_download_cnt <= card_download_list.size())
+		{
+			t_info.download_url = card_download_list[ing_download_cnt-1].img;
+			t_info.download_size = card_download_list[ing_download_cnt-1].size;
+			t_info.download_filename = card_download_list[ing_download_cnt-1].filename;
+		}
+		else
+		{
+			break;
+		}
+		
+		t_info.is_fail = false;
+		t_info.is_end = false;
+		download_set.push_back(t_info);
+		
+		ing_download_cnt++;
+	}
+	
+	if(download_set.size() > 0)
+	{
+		for(int i=before_download_size;i<download_set.size();i++)
+		{
+			int will_download_index = is_enable_index.back();
+			CCLOG("start download idx : %d / filename : %s", will_download_index, download_set[i].download_filename.c_str());
+			mySIL->downloadImg(download_set[i], will_download_index);
+			is_enable_index.pop_back();
+		}
+		if(!is_downloading)
+		{
+			is_downloading = true;
+			schedule(schedule_selector(ManyGachaPopup::checkDownloading));
+		}
+	}
+	else
+	{
+		unschedule(schedule_selector(ManyGachaPopup::checkDownloading));
+		
+		
+		for(int i=0;i<card_download_list.size();i++)
+		{
+			SDS_SS(kSDF_cardInfo, card_download_list[i].key,
+				   card_download_list[i].img, false);
+		}
+		mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+		
+		card_loading->removeFromParent();
+		
+		CardGachaPopup* t_popup = CardGachaPopup::create(-200);
+		t_popup->setHideFinalAction(target_final, delegate_final);
+		getParent()->addChild(t_popup, getZOrder());
+		
+		target_final = NULL;
+		hidePopup();
+	}
+}
+
+void ManyGachaPopup::checkDownloading()
+{
+	int max_thread_cnt = 5;
+	bool is_successed = false;
+	for(int i=0;i<max_thread_cnt;i++)
+	{
+		if(mySIL->downloading_list[i].is_end)
+		{
+			if(mySIL->downloading_list[i].is_fail)
+			{
+				CCLOG("fail download idx : %d / filename : %s", i, mySIL->downloading_list[i].download_filename.c_str());
+				auto iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(mySIL->downloading_list[i].download_filename));
+				if(iter != download_set.end())
+				{
+					CCLOG("start download idx : %d / filename : %s", i, iter->download_filename.c_str());
+					mySIL->downloadImg((*iter), i);
+				}
+				else
+				{
+					CCLOG("not found fail set");
+				}
+			}
+			else
+			{
+				CCLOG("success download idx : %d / filename : %s", i, mySIL->downloading_list[i].download_filename.c_str());
+				auto iter = find(download_set.begin(), download_set.end(), DownloadImgInfo(mySIL->downloading_list[i].download_filename));
+				if(iter != download_set.end())
+				{
+					download_set.erase(iter);
+				}
+				else
+				{
+					CCLOG("not found success set");
+				}
+				is_enable_index.push_back(i);
+				success_download_cnt++;
+				is_successed = true;
+			}
+		}
+	}
+	
+	float download_percent = 100.f*success_download_cnt/int(card_download_list.size());
+	
+	card_progress_timer->setPercentage(download_percent);
+	
+	if(is_successed || success_download_cnt >= card_download_list.size())
+	{
+		startFileDownloadSet();
 	}
 }
 

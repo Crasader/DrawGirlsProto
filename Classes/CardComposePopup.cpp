@@ -179,9 +179,15 @@ CCTableViewCell* CardComposePopup::tableCellAtIndex( CCTableView *table, unsigne
 	card_img->setPosition(ccp(0,10));
 	center_node->addChild(card_img);
 	
+	string back_filename;
+	bool is_have = mySGD->isHasGottenCards(t_info.compose_card_number.getV());
+	if(is_have)
+		back_filename = "cardcomposition_cell_open.png";
+	else
+		back_filename = "cardcomposition_cell.png";
 	
-	CCSprite* n_case = CCSprite::create("cardcomposition_cell.png");
-	CCSprite* s_case = CCSprite::create("cardcomposition_cell.png");
+	CCSprite* n_case = CCSprite::create(back_filename.c_str());
+	CCSprite* s_case = CCSprite::create(back_filename.c_str());
 	s_case->setColor(ccGRAY);
 	
 	CCMenuItemSprite* t_item = CCMenuItemSprite::create(n_case, s_case, this, menu_selector(CardComposePopup::menuAction));
@@ -192,31 +198,38 @@ CCTableViewCell* CardComposePopup::tableCellAtIndex( CCTableView *table, unsigne
 	center_node->addChild(scroll_menu);
 	scroll_menu->setTouchPriority(touch_priority-2);
 	
-	
-	CCClippingNode* sil_clipping = CCClippingNode::create(CCSprite::create("cardcomposition_cell_mask.png"));
-	sil_clipping->setAlphaThreshold(0.1f);
-	sil_clipping->setPosition(ccp(0,0));
-	center_node->addChild(sil_clipping);
-	
-	EffectSprite* sil_img = EffectSprite::createWithTexture(mySIL->addImage(ccsf("card%d_invisible.png", t_info.compose_card_number.getV())));
-	sil_img->setColorOpacitySilhouette(0, 0, 0, int(255*0.3f));
-	sil_img->setScale(0.32f);
-	sil_img->setPosition(ccp(0,10));
-	sil_clipping->addChild(sil_img);
-	
-	CCSprite* cover_img = CCSprite::create("cardcomposition_cell_front.png");
-	cover_img->setPosition(ccp(0,0));
-	center_node->addChild(cover_img);
+	if(!is_have)
+	{
+		CCClippingNode* sil_clipping = CCClippingNode::create(CCSprite::create("cardcomposition_cell_mask.png"));
+		sil_clipping->setAlphaThreshold(0.1f);
+		sil_clipping->setPosition(ccp(0,0));
+		center_node->addChild(sil_clipping);
+		
+		EffectSprite* sil_img = EffectSprite::createWithTexture(mySIL->addImage(ccsf("card%d_invisible.png", t_info.compose_card_number.getV())));
+		sil_img->setColorOpacitySilhouette(0, 0, 0, int(255*0.3f));
+		sil_img->setScale(0.32f);
+		sil_img->setPosition(ccp(0,10));
+		sil_clipping->addChild(sil_img);
+		
+		CCSprite* cover_img = CCSprite::create("cardcomposition_cell_front.png");
+		cover_img->setPosition(ccp(0,0));
+		center_node->addChild(cover_img);
+	}
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(NSDS_GS(kSDS_CI_int1_name_s, t_info.compose_card_number.getV()).c_str(), mySGD->getFont().c_str(), 13);
 	title_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
 	title_label->setPosition(ccp(0, 106-18));
 	center_node->addChild(title_label);
 	
-	KSLabelTTF* bottom_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_necessaryCardAndNeedExp), t_info.material_card_list.size(), t_info.need_exp.getV()), mySGD->getFont().c_str(), 10);
-	bottom_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
+	StyledLabelTTF* bottom_label = StyledLabelTTF::create(t_info.msg.getV().c_str(), mySGD->getFont().c_str(), 10, 999, StyledAlignment::kCenterAlignment);
+	bottom_label->setAnchorPoint(ccp(0.5f,0.5f));
 	bottom_label->setPosition(ccp(0, 27-106));
 	center_node->addChild(bottom_label);
+	
+//	KSLabelTTF* bottom_label = KSLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_necessaryCardAndNeedExp), t_info.material_card_list.size(), t_info.need_exp.getV()), mySGD->getFont().c_str(), 10);
+//	bottom_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);
+//	bottom_label->setPosition(ccp(0, 27-106));
+//	center_node->addChild(bottom_label);
 	
 	return cell;
 }

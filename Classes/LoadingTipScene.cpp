@@ -1384,7 +1384,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 	{
 		int condition_value = NSDS_GI(stage_number, kSDS_SI_missionOptionCount_i);
 		
-		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
+		StyledLabelTTF* t_condition_label = StyledLabelTTF::create(ccsf(getLocal(LK::kMyLocalKey_missionCondition13), condition_value), mySGD->getFont().c_str(), 15, 999, StyledAlignment::kCenterAlignment);
 		t_condition_label->setAnchorPoint(ccp(0.5f,0.5f));
 		t_condition_label->setPosition(ccpFromSize(mission_back->getContentSize()/2.f) + ccp(0,-8));
 		mission_back->addChild(t_condition_label);

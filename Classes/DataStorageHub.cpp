@@ -810,6 +810,8 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_premiumGachaList] = "pglst";
 	return_value[kDSH_Key_normalGachaDataTime] = "ngdt";
 	return_value[kDSH_Key_premiumGachaDataTime] = "pgdt";
+	
+	return_value[kDSH_Key_cardGachaTryCnt_int1] = "cgtrycnt%d";
 }
 
 //void DataStorageHub::changedCcbAnimationManager()

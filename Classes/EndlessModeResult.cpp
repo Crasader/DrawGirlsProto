@@ -270,30 +270,31 @@ bool EndlessModeResult::init()
 //				
 //				ani_func();
 				
-				right_gold_color = ccc3(255, 255, 20);
-				left_gold_color = ccc3(255, 20, 20);
-				
-				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
-				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
-				
-				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
-													 {
-														 left_gold_content->setString(ccsf("%d", t_i));
-													 }, [=](int t_i)
-													 {
-														 left_gold_content->setString(ccsf("%d", t_i));
-														 left_content_list[7] = KS::insert_separator(t_after_gold);
-														 after_func();
-													 }));
-				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
-													 mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2, 0.5f, [=](int t_i)
-													 {
-														 right_gold_content->setString(ccsf("%d", t_i));
-													 }, [=](int t_i)
-													 {
-														 right_gold_content->setString(ccsf("%d", t_i));
-														 right_content_list[7] = KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2);
-													 }));
+//				right_gold_color = ccc3(255, 255, 20);
+//				left_gold_color = ccc3(255, 20, 20);
+//				
+//				right_gold_content->runAction(CCTintTo::create(0.5f, 255, 255, 20));
+//				left_gold_content->runAction(CCTintTo::create(0.5f, 255, 20, 20));
+//				
+//				addChild(KSGradualValue<int>::create(keep_base_gold, t_after_gold, 0.5f, [=](int t_i)
+//													 {
+//														 left_gold_content->setString(ccsf("%d", t_i));
+//													 }, [=](int t_i)
+//													 {
+//														 left_gold_content->setString(ccsf("%d", t_i));
+//														 left_content_list[7] = KS::insert_separator(t_after_gold);
+//														 after_func();
+//													 }));
+//				addChild(KSGradualValue<int>::create(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt(),
+//													 mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2, 0.5f, [=](int t_i)
+//													 {
+//														 right_gold_content->setString(ccsf("%d", t_i));
+//													 }, [=](int t_i)
+//													 {
+//														 right_gold_content->setString(ccsf("%d", t_i));
+//														 right_content_list[7] = KS::insert_separator(mySGD->temp_replay_data.get(mySGD->getReplayKey(kReplayKey_takeGold), Json::Value()).asInt() + keep_base_gold/2);
+//													 }));
+				after_func();
 			};
 		}
 		
@@ -524,7 +525,7 @@ bool EndlessModeResult::init()
 		param2["memberID"] = myHSP->getMemberID();
 		param2["score"] = left_total_score.getV();//mySGD->getScore();
 		param2["nick"] = myDSH->getStringForKey(kDSH_Key_nick);
-		param2["level"] = mySGD->endless_my_level.getV();
+		param2["level"] = mySGD->getUserdataCharLevel();
 		param2["autoLevel"] = 1;
 		param2["flag"] = myDSH->getStringForKey(kDSH_Key_flag);
 		param2["victory"] = mySGD->endless_my_victory.getV();
@@ -922,6 +923,7 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 		param["memberID"] = myHSP->getMemberID();
 		param["win"] = mySGD->getUserdataEndlessIngWin();//mySGD->getUserdataAutoLevel();
 		param["highPiece"] = mySGD->getUserdataHighPiece();
+		param["level"] = mySGD->getUserdataCharLevel();
 		command_list.push_back(CommandParam("getendlessplayriver", param, json_selector(this, EndlessModeResult::resultGetEndlessPlayData)));
 		
 		TRACE();
@@ -2992,9 +2994,10 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 	for(int i=0;i<cards.size();i++)
 	{
 		Json::Value t_card = cards[i];
+		NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+		NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 		if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
 			continue;
-		NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 		NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 		NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 		NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
@@ -3004,7 +3007,6 @@ void EndlessModeResult::saveStageInfo(Json::Value result_data)
 		
 //		NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 //		NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-		NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 		
 //		Json::Value t_card_missile = t_card["missile"];
 //		NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);

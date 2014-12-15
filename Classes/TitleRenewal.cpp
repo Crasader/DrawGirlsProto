@@ -728,6 +728,8 @@ void TitleRenewalScene::successLogin()
 {
 	TRACE();
 
+	myHSP->analyticsSetUserId(myHSP->getSocialID(), false);
+	
 	state_label->setVisible(true);
 	CCSequence* t_seq = CCSequence::create(CCTintTo::create(0.5f, 255, 255, 255), CCTintTo::create(0.5f, 150, 150, 150), NULL);
 	CCRepeatForever* t_repeat = CCRepeatForever::create(t_seq);
@@ -1379,6 +1381,21 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		
 		mySGD->setCardGachaMsgLeft(result_data["cardGachaMsg"]["left"].asString());
 		mySGD->setCardGachaMsgRight(result_data["cardGachaMsg"]["right"].asString());
+		mySGD->setManyGachaMsgLeft(result_data["manyGachaMsg"]["left"].asString());
+		mySGD->setManyGachaMsgRight(result_data["manyGachaMsg"]["right"].asString());
+		
+		mySGD->setNoCreateItemComboCnt(result_data["noCreateItemComboCnt"].asInt());
+		string diary_store_url = "";
+		diary_store_url = result_data["diaryStoreUrl"].asString();
+		Json::Value json_diary_store_url;
+		Json::Reader t_reader;
+		t_reader.parse(diary_store_url, json_diary_store_url);
+		json_diary_store_url.get(myHSP->getStoreID(), "").asString();
+		if(diary_store_url == "")
+			diary_store_url = result_data["diaryStoreUrl"]["default"].asString();
+		mySGD->setDiaryStoreUrl(diary_store_url);
+		
+		mySGD->setCdnUrl(result_data["cdnURL"].asString());
 	}
 	else
 	{
@@ -1555,15 +1572,15 @@ void TitleRenewalScene::resultGetHellModeList(Json::Value result_data)
 				for(int i=0;i<cards.size();i++)
 				{
 					Json::Value t_card = cards[i];
+					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 					if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
 						continue;
-					NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 					NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_grade_i, t_card["no"].asInt(), t_card["grade"].asInt(), false);
 					NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-					NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 					
 					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card["no"].asInt(), t_card["haveAdult"].asBool(), false);
 					NSDS_SI(kSDS_CI_int1_exp_i, t_card["no"].asInt(), t_card["exp"].asInt(), false);
@@ -2826,9 +2843,10 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
 				continue;
-			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
@@ -2844,7 +2862,6 @@ void TitleRenewalScene::resultLoadedCardData( Json::Value result_data )
 				CCLOG("piece : %d | grade : %d | card : %d", t_card["piece"].asInt(), t_card["grade"].asInt(), t_card["no"].asInt());
 			}
 			
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 //			Json::Value t_card_missile = t_card["missile"];
 //			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);

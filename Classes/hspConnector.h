@@ -264,12 +264,12 @@ public:
 	int registerGamePadCallback(jsonSelType func);
 	int checkInspection();
 	
-	void analyticsPurchase(string itemCode, float payment, float unitCost, string currency, int level);
-	void analyticsTraceMoneyAcquisition(string itemCode, string type, int amount, int level);
-	void analyticsTraceMoneyConsumption(string itemCode, string type, int amount, int level);
-	void analyticsTraceLevelUp(int l);
-	void analyticsTraceFriendCount(int f);
-	void analyticsSetUserId(string userId, bool t); // t = true (userid)
+	void analyticsPurchase(string itemCode, float payment, float unitCost, string currency, int level); // 앱내에서 아이템을 구매했을 때 호출합니다.
+	void analyticsTraceMoneyAcquisition(string itemCode, string type, int amount, int level); // 머니를 획득했을 때 호출합니다.
+	void analyticsTraceMoneyConsumption(string itemCode, string type, int amount, int level); // 머니를 소비했을 때 호출합니다.
+	void analyticsTraceLevelUp(int l); // 레벨업이 되었을 때 호출합니다.
+	void analyticsTraceFriendCount(int f); // 친구수를 설정합니다.
+	void analyticsSetUserId(string userId, bool t); // t = true (userid) // 사용자를 구분하는 ID를 입력합니다. initializeSdk에서 “useLoggingUserId=true”로 설정한 경우 반드시 이 API를 이용하여 사용자 ID를 SDK에 전달해야 합니다.
 	
 protected:
 	void registerGamePadCallback(CCObject* target, jsonSelType func);

@@ -23,6 +23,7 @@
 #include "CCMenuLambda.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
+#include "FiveRocksCpp.h"
 
 CharacterStrengthPopup* CharacterStrengthPopup::create(int t_touch_priority, int t_character_idx, function<void()> t_end_func)
 {
@@ -246,7 +247,7 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	target_menu = CCMenuLambda::create();
 	target_menu->setPosition(CCPointZero);
 	selected_card_back->addChild(target_menu);
-	target_menu->setTouchPriority(touch_priority-2);
+	target_menu->setTouchPriority(touch_priority-3);
 	
 	CCLabelTTF* t_button_label = CCLabelTTF::create();
 	KSLabelTTF* strength_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_doStrengthen), mySGD->getFont().c_str(), 16);
@@ -540,7 +541,9 @@ void CharacterStrengthPopup::expUpAction()
 												 
 												 CCPoint t_offset = card_table->getContentOffset();
 												 card_table->reloadData();
-												 card_table->setContentOffset(t_offset);
+												 if(card_table->minContainerOffset().y > 0)
+													 t_offset.y = card_table->minContainerOffset().y;
+												 card_table->setContentOffset(ccp(t_offset.x, t_offset.y));
 												 
 												 loading_layer->removeFromParent();
 												 is_menu_enable = true;
@@ -569,6 +572,9 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->network_check_cnt = 0;
+		
+		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0)
+			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("Char %d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("Stage %d", mySGD->getUserdataHighPiece()));
 		
 		// 카드정보 갱신
 		Json::Value cardData = result_data["cardData"];
@@ -690,6 +696,9 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 																				  }, [=](CCPoint t_p)
 																				  {
 																					  target_item_list[i]->setPosition(t_p);
+																					  
+																					  AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
+																					  
 																					  auto t_ccb = KS::loadCCBI<CCSprite*>(this, "cha_strength_bomb.ccbi");
 																					  target_item_list[i]->getNormalImage()->addChild(t_ccb.first,999);
 																					  t_ccb.first->setPosition(ccpFromSize(target_item_list[i]->getNormalImage()->getContentSize()/2.f));
@@ -893,7 +902,7 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																		for(int i=0;i<target_item_list.size();i++)
 																		{
 																			target_item_list[i]->setTag(i);
-																			target_item_list[i]->setPosition(ccp(23 + i*28, 23.5f));
+																			target_item_list[i]->setPosition(ccp(20 + i*26.4f, 23.5f));
 																		}
 																		
 																		addChild(KSTimer::create(0.1f, [=]()

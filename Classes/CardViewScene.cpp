@@ -456,7 +456,7 @@ bool CardViewScene::init()
 																						Diary19Popup* t_popup = Diary19Popup::create(-999, [=]()
 																																	 {
 																																		 is_actioned = false;
-																																	 });
+																																	 }, true);
 																						addChild(t_popup, 999);
 																					}
 																				}

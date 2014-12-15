@@ -1332,6 +1332,7 @@ private:
 	COMMON_VAR(int, isDiaryLinkOn, IsDiaryLinkOn);
 	
 	COMMON_VAR(int, onAdultTag, OnAdultTag);
+	COMMON_VAR(int, noCreateItemComboCnt, NoCreateItemComboCnt);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
@@ -1345,6 +1346,10 @@ private:
 	
 	COMMON_VAR_STR(cardGachaMsgLeft, CardGachaMsgLeft);
 	COMMON_VAR_STR(cardGachaMsgRight, CardGachaMsgRight);
+	COMMON_VAR_STR(manyGachaMsgLeft, ManyGachaMsgLeft);
+	COMMON_VAR_STR(manyGachaMsgRight, ManyGachaMsgRight);
+	COMMON_VAR_STR(diaryStoreUrl, DiaryStoreUrl);
+	COMMON_VAR_STR(cdnUrl, CdnUrl);
 };
 
 #endif

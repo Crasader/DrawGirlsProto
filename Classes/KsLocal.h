@@ -510,7 +510,8 @@ enum class LK
 	kMyLocalKey_patternContent1017,
 	kMyLocalKey_patternContent1018,
 	kMyLocalKey_patternContent1019,
-	kMyLocalKey_patternContent1020,
+    kMyLocalKey_patternContent1020,
+    kMyLocalKey_patternContent1021,
 	kMyLocalKey_patternContent1022,
 	kMyLocalKey_patternContent1023,
 	kMyLocalKey_patternContent1024,
@@ -1288,7 +1289,11 @@ enum class LK
 	kMyLocalKey_composeUsedCardIsRemove,
 	kMyLocalKey_notEnoughtP1,
 	kMyLocalKey_controlTip_bossPrison_title,
-	kMyLocalKey_controlTip_bossPrison_content
+	kMyLocalKey_controlTip_bossPrison_content,
+	kMyLocalKey_shortageMaterialCard,
+	kMyLocalKey_sDiary,
+	kMyLocalKey_toShowAdultImgForSdiaryNeed,
+	kMyLocalKey_download
 };
 class KsLocal
 {

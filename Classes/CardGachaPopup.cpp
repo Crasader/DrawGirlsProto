@@ -19,6 +19,7 @@
 #include "StyledLabelTTF.h"
 #include "LoadingLayer.h"
 #include "ASPopupView.h"
+#include "FiveRocksCpp.h"
 
 CardGachaPopup* CardGachaPopup::create(int t_touch_priority)
 {
@@ -86,31 +87,37 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	left_character->setPosition(ccp(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, -(320*gray->getScaleY() - 320)/2.f));
 	addChild(left_character, kCardGachaPopupZorder_gray);
 	
-	CCSprite* left_talk = CCSprite::create("gacha_talkbox.png");
-	left_talk->setAnchorPoint(ccp(0,0));
-	left_talk->setPosition(ccp(left_character->getContentSize().width*0.2f, left_character->getContentSize().height*0.8f));
-	left_character->addChild(left_talk);
-	
-	StyledLabelTTF* left_talk_label = StyledLabelTTF::create(mySGD->getCardGachaMsgLeft().c_str(), mySGD->getFont().c_str(), 10, 0, StyledAlignment::kCenterAlignment);
-	left_talk_label->setAnchorPoint(ccp(0.5f,0.5f));
-	left_talk_label->setPosition(left_talk->getPosition() + ccpFromSize(left_talk->getContentSize()/2.f) + ccp(0,5));
-	left_character->addChild(left_talk_label);
+	if(mySGD->getCardGachaMsgLeft() != "")
+	{
+		CCSprite* left_talk = CCSprite::create("gacha_talkbox.png");
+		left_talk->setAnchorPoint(ccp(0,0));
+		left_talk->setPosition(ccp(left_character->getContentSize().width*0.2f, left_character->getContentSize().height*0.8f));
+		left_character->addChild(left_talk);
+		
+		StyledLabelTTF* left_talk_label = StyledLabelTTF::create(mySGD->getCardGachaMsgLeft().c_str(), mySGD->getFont().c_str(), 10, 0, StyledAlignment::kCenterAlignment);
+		left_talk_label->setAnchorPoint(ccp(0.5f,0.5f));
+		left_talk_label->setPosition(left_talk->getPosition() + ccpFromSize(left_talk->getContentSize()/2.f) + ccp(0,5));
+		left_character->addChild(left_talk_label);
+	}
 	
 	right_character = CCSprite::create("cardgacha_cha2.png");
 	right_character->setAnchorPoint(ccp(1,0));
 	right_character->setPosition(ccp(480+(480*screen_scale_x - 480)/2.f + right_character->getContentSize().width, -(320*gray->getScaleY() - 320)/2.f));
 	addChild(right_character, kCardGachaPopupZorder_gray);
 	
-	CCSprite* right_talk = CCSprite::create("gacha_talkbox.png");
-	right_talk->setFlipX(true);
-	right_talk->setAnchorPoint(ccp(1,0));
-	right_talk->setPosition(ccp(right_character->getContentSize().width*0.8f, right_character->getContentSize().height*0.8f));
-	right_character->addChild(right_talk);
-	
-	StyledLabelTTF* right_talk_label = StyledLabelTTF::create(mySGD->getCardGachaMsgRight().c_str(), mySGD->getFont().c_str(), 10, 0, StyledAlignment::kCenterAlignment);
-	right_talk_label->setAnchorPoint(ccp(0.5f,0.5f));
-	right_talk_label->setPosition(right_talk->getPosition() + ccp(-right_talk->getContentSize().width/2.f, right_talk->getContentSize().height/2.f + 5.f));
-	right_character->addChild(right_talk_label);
+	if(mySGD->getCardGachaMsgRight() != "")
+	{
+		CCSprite* right_talk = CCSprite::create("gacha_talkbox.png");
+		right_talk->setFlipX(true);
+		right_talk->setAnchorPoint(ccp(1,0));
+		right_talk->setPosition(ccp(right_character->getContentSize().width*0.8f, right_character->getContentSize().height*0.8f));
+		right_character->addChild(right_talk);
+		
+		StyledLabelTTF* right_talk_label = StyledLabelTTF::create(mySGD->getCardGachaMsgRight().c_str(), mySGD->getFont().c_str(), 10, 0, StyledAlignment::kCenterAlignment);
+		right_talk_label->setAnchorPoint(ccp(0.5f,0.5f));
+		right_talk_label->setPosition(right_talk->getPosition() + ccp(-right_talk->getContentSize().width/2.f, right_talk->getContentSize().height/2.f + 5.f));
+		right_character->addChild(right_talk_label);
+	}
 	
 //	main_case = CCSprite::create("mainpopup2_back.png");
 //	main_case->setPosition(ccp(240,160-14.f));
@@ -121,16 +128,16 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	addChild(main_case, kCardGachaPopupZorder_main_case);
 	
 	CCSprite* title_back = CCSprite::create("cardgacha_title.png");
-	title_back->setPosition(ccp(0,110));
+	title_back->setPosition(ccp(0,116));
 	main_case->addChild(title_back);
 	
-	KSLabelTTF* title_main = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 22);
+	KSLabelTTF* title_main = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardGacha), mySGD->getFont().c_str(), 25);
 	title_main->enableOuterStroke(ccBLACK, 1.5f, 255, true);
 	title_main->setGradientColor(ccc4(255, 255, 170, 255), ccc4(255, 140, 0, 255), ccp(0,-1));
 	title_main->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,10));
 	title_back->addChild(title_main);
 	
-	StyledLabelTTF* title_msg = StyledLabelTTF::create(mySGD->card_gacha_msg.getV().c_str(), mySGD->getFont().c_str(), 14, 999, StyledAlignment::kCenterAlignment);
+	StyledLabelTTF* title_msg = StyledLabelTTF::create(mySGD->card_gacha_msg.getV().c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
 	title_msg->setPosition(ccpFromSize(title_back->getContentSize()/2.f) + ccp(0,-6));
 	title_back->addChild(title_msg);
 	
@@ -141,11 +148,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	card_type_size = mySGD->card_gacha_list.size();
 	
 	CCSprite* gacha_case_back = CCSprite::create("cardgacha_case_back.png");
-	gacha_case_back->setPosition(ccp(0,-7));
+	gacha_case_back->setPosition(ccp(0,3));
 	main_case->addChild(gacha_case_back);
 	
 	CCSprite* gacha_case_center = CCSprite::create("cardgacha_case_center.png");
-	gacha_case_center->setPosition(ccp(0,-7));
+	gacha_case_center->setPosition(ccp(0,3));
 	main_case->addChild(gacha_case_center);
 	
 	CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
@@ -167,17 +174,17 @@ void CardGachaPopup::myInit(int t_touch_priority)
 		change_origin.y = -(screen_scale_y-1.f)*320.f/2.f;
 	CCSize win_size = CCDirector::sharedDirector()->getWinSize();
 	
-	clipping_node = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width*t_card_img->getScale() + 10, 320*gray->getScaleY() + 16.5f)));
+	clipping_node = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width*t_card_img->getScale() + 10, 320*gray->getScaleY() + 6.5f)));
 	clipping_node->setRectYH(CCRectMake(change_origin.x, change_origin.y, win_size.width*change_scale, win_size.height*change_scale));
 	clipping_node->setAlphaThreshold(0.1f);
-	clipping_node->setPosition(ccp(0,-16.5f));
+	clipping_node->setPosition(ccp(0,-6.5f));
 	main_case->addChild(clipping_node);
 	
 	clipping_node->addChild(t_card_img);
 	
 	
 	mask_rect = CCSprite::create("whitepaper2.png", CCRectMake(0, 0, t_card_img->getContentSize().width*t_card_img->getScale() + 10, t_card_img->getContentSize().height*t_card_img->getScale() + 10));
-	mask_rect->setPosition(ccp(0,-16.5f));
+	mask_rect->setPosition(ccp(0,-6.5f));
 	main_case->addChild(mask_rect);
 	
 	mask_bounding_rect = mask_rect->boundingBox();
@@ -186,7 +193,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	
 	
 	CCSprite* gacha_case_front = CCSprite::create("cardgacha_case_front.png");
-	gacha_case_front->setPosition(ccp(0,-7));
+	gacha_case_front->setPosition(ccp(0,3));
 	main_case->addChild(gacha_case_front);
 	
 	CCSprite* light_img = KS::loadCCBI<CCSprite*>(this, "cardgacha_light.ccbi").first;
@@ -217,7 +224,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	stop_button = CCControlButton::create(t_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	stop_button->setPreferredSize(CCSizeMake(92, 45));
 	stop_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::myStopAction), CCControlEventTouchUpInside);
-	stop_button->setPosition(ccp(0, -124));
+	stop_button->setPosition(ccp(0, -113));
 	main_case->addChild(stop_button);
 	
 	stop_button->setTouchPriority(touch_priority-1);
@@ -232,7 +239,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	ok_button = CCControlButton::create(t4_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	ok_button->setPreferredSize(CCSizeMake(92, 45));
 	ok_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::okAction), CCControlEventTouchUpInside);
-	ok_button->setPosition(ccp(0, -124));
+	ok_button->setPosition(ccp(0, -113));
 	main_case->addChild(ok_button, 1);
 	
 	ok_button->setTouchPriority(touch_priority-1);
@@ -295,7 +302,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	one_button = CCControlButton::create(t2_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	one_button->setPreferredSize(CCSizeMake(165, 55));
 	one_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::oneAction), CCControlEventTouchUpInside);
-	one_button->setPosition(ccp(-80, -124));
+	one_button->setPosition(ccp(-80, -113));
 	main_case->addChild(one_button);
 	
 	one_button->setTouchPriority(touch_priority-1);
@@ -340,7 +347,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	five_button = CCControlButton::create(t3_label, CCScale9Sprite::create("subbutton_purple4.png", CCRectMake(0, 0, 92, 45), CCRectMake(45, 22, 2, 1)));
 	five_button->setPreferredSize(CCSizeMake(165, 55));
 	five_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CardGachaPopup::fiveAction), CCControlEventTouchUpInside);
-	five_button->setPosition(ccp(80, -124));
+	five_button->setPosition(ccp(80, -113));
 	main_case->addChild(five_button);
 	
 	five_button->setTouchPriority(touch_priority-1);
@@ -348,8 +355,8 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	
 	step_cnt = kCardGachaAnimationStep_ready;
 	
-	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
-	close_button->setPosition(ccp(240,140) + ccp(-20-10,-2));
+	close_button = CommonButton::createCloseButton(touch_priority-1);
+	close_button->setPosition(ccp(185,-113));
 	close_button->setFunction([=](CCObject* sender)
 							  {
 								  if(!is_menu_enable)
@@ -359,11 +366,11 @@ void CardGachaPopup::myInit(int t_touch_priority)
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
-								  CardSettingPopup* t_popup = CardSettingPopup::create();
-								  t_popup->setHideFinalAction(target_final, delegate_final);
-								  getParent()->addChild(t_popup, getZOrder());
-								  
-								  target_final = NULL;
+//								  CardSettingPopup* t_popup = CardSettingPopup::create();
+//								  t_popup->setHideFinalAction(target_final, delegate_final);
+//								  getParent()->addChild(t_popup, getZOrder());
+//								  
+//								  target_final = NULL;
 								  
 								  addChild(KSGradualValue<float>::create(-(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width*0.2f, -(480*screen_scale_x - 480)/2.f - left_character->getContentSize().width, 0.25f, [=](float t_f)
 																		 {
@@ -429,6 +436,7 @@ void CardGachaPopup::oneAction(CCObject *t_sender, CCControlEvent t_event)
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 	param["count"] = 1;
 	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -445,11 +453,18 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
+		myDSH->setIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV(), myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()) + 1, true);
+		
+		close_button->setVisible(false);
+		
 		take_card_number_list.clear();
 		
 		Json::Value cardlist = result_data["cardlist"];
 		for(int i=0;i<cardlist.size();i++)
 		{
+			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("Try %d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV())), ccsf("Card %d", cardlist[i]["data"]["cardNo"].asInt()));
+			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;
 			t_prt = cardlist[i]["data"]["cardNo"].asInt();
@@ -462,6 +477,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -501,6 +517,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 				param["count"] = 1;
 				if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 					param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -519,6 +536,7 @@ void CardGachaPopup::resultOne(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 										 param["count"] = 1;
 										 if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) > 0)
 											 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardPass_exchangeID_s);
@@ -547,6 +565,7 @@ void CardGachaPopup::fiveAction(CCObject *t_sender, CCControlEvent t_event)
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["gachaNo"] = mySGD->card_gacha_no.getV();
+	param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 	param["count"] = 5;
 	param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 	
@@ -560,11 +579,17 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 	{
 		loading_layer->removeFromParent();
 		
+		myDSH->setIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV(), myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()) + 5, true);
+		close_button->setVisible(false);
+		
 		take_card_number_list.clear();
 		
 		Json::Value cardlist = result_data["cardlist"];
 		for(int i=0;i<cardlist.size();i++)
 		{
+			if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass9) <= 0)
+				fiverocks::FiveRocksBridge::trackEvent("UseGem", "CardGacha", ccsf("Try %d", myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV()-5+i+1)), ccsf("Card %d", cardlist[i]["data"]["cardNo"].asInt()));
+			
 			mySGD->refreshCardData(cardlist[i]["data"]);
 			KSProtectVar<int> t_prt;
 			t_prt = cardlist[i]["data"]["cardNo"].asInt();
@@ -577,6 +602,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 			mySGD->refreshGoodsData(exchangeResult[i]["type"].asString(), exchangeResult[i]["count"].asInt());
 		}
 		
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		one_button->setVisible(false);
 		five_button->setVisible(false);
@@ -616,6 +642,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 				Json::Value param;
 				param["memberID"] = myHSP->getSocialID();
 				param["gachaNo"] = mySGD->card_gacha_no.getV();
+				param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 				param["count"] = 5;
 				param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 				
@@ -631,6 +658,7 @@ void CardGachaPopup::resultFive(Json::Value result_data)
 										 Json::Value param;
 										 param["memberID"] = myHSP->getSocialID();
 										 param["gachaNo"] = mySGD->card_gacha_no.getV();
+										 param["number"] = myDSH->getIntegerForKey(kDSH_Key_cardGachaTryCnt_int1, mySGD->card_gacha_no.getV());
 										 param["count"] = 5;
 										 param["exchangeID"] = NSDS_GS(kSDS_GI_shopGachaCardDozen_exchangeID_s);
 										 
@@ -648,6 +676,8 @@ void CardGachaPopup::myStopAction(CCObject* t_sender, CCControlEvent t_event)
 	is_menu_enable = false;
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
+	
+//	AudioEngine::sharedInstance()->stopEffect("se_mapgacha.mp3");
 	
 	step_cnt = kCardGachaAnimationStep_slowing;
 	stop_button->setVisible(false);
@@ -733,12 +763,14 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 			
 			one_button->setVisible(true);
 			five_button->setVisible(true);
+			close_button->setVisible(true);
 			
 			is_menu_enable = true;
 		};
 	}
 	else
 	{
+//		AudioEngine::sharedInstance()->playEffect("se_mapgacha.mp3", true);
 		step_cnt = kCardGachaAnimationStep_fasting;
 		schedule(schedule_selector(CardGachaPopup::cardMoving));
 		
@@ -792,7 +824,7 @@ void CardGachaPopup::okAction(CCObject* t_sender, CCControlEvent t_event)
 														  {
 															  grade_card_take->setOpacity(t_i);
 														  }));
-	grade_card_take->addChild(KSGradualValue<CCPoint>::create(ccp(0,10), ccp(0,14), 0.3f, [=](CCPoint t_p)
+	grade_card_take->addChild(KSGradualValue<CCPoint>::create(ccp(0,20), ccp(0,24), 0.3f, [=](CCPoint t_p)
 															  {
 																  grade_card_take->setPosition(t_p);
 															  }, [=](CCPoint t_p)
@@ -828,29 +860,31 @@ void CardGachaPopup::cardMoving()
 		card_que.erase(t_iter);
 		remove_list.pop_front();
 		
+		AudioEngine::sharedInstance()->playEffect("se_flipcard.mp3");
+		
 		if(remove_list.empty() && step_cnt == kCardGachaAnimationStep_takeCardCreate)
 		{
 			CCSprite* last_card = card_que.back();
 			
-			CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
-			t_card_img->setPosition(last_card->getPosition() + ccp(mask_rect->getContentSize().width, 0));
-			t_card_img->setScale(0.25f);
-			clipping_node->addChild(t_card_img);
+			small_cover = CCSprite::create("cardgacha_card.png");//mySIL->getLoadedImg(ccsf("card%d_visible.png", take_card_number_list.front().getV()));
+			small_cover->setPosition(last_card->getPosition() + ccp(mask_rect->getContentSize().width, 0));
+			small_cover->setScale((320*0.25f)/small_cover->getContentSize().width);
+			clipping_node->addChild(small_cover);
 			
-			card_que.push_back(t_card_img);
+			card_que.push_back(small_cover);
 			
-			cover_clipping = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width, t_card_img->getContentSize().height)));
-			cover_clipping->setAlphaThreshold(0.1f);
-			cover_clipping->setPosition(ccpFromSize(t_card_img->getContentSize()/2.f));
-			t_card_img->addChild(cover_clipping);
-			
-			cover_img = CCSprite::create("cardgacha_card.png");
-			cover_img->setPosition(ccp(0,0));
-			cover_clipping->addChild(cover_img);
+//			cover_clipping = CCClippingNode::create(CCSprite::create("whitePaper.png", CCRectMake(0, 0, t_card_img->getContentSize().width, t_card_img->getContentSize().height)));
+//			cover_clipping->setAlphaThreshold(0.1f);
+//			cover_clipping->setPosition(ccpFromSize(t_card_img->getContentSize()/2.f));
+//			t_card_img->addChild(cover_clipping);
+//			
+//			cover_img = CCSprite::create("cardgacha_card.png");
+//			cover_img->setPosition(ccp(0,0));
+//			cover_clipping->addChild(cover_img);
 			
 			step_cnt = kCardGachaAnimationStep_positioning;
 			unschedule(schedule_selector(CardGachaPopup::cardMoving));
-			positioning_value = t_card_img->getPositionX();
+			positioning_value = small_cover->getPositionX();
 			schedule(schedule_selector(CardGachaPopup::cardPositioning));
 		}
 		else
@@ -869,12 +903,12 @@ void CardGachaPopup::cardMoving()
 
 void CardGachaPopup::cardPositioning()
 {
-	if(moving_speed >= 0.55f)
+	if(moving_speed >= 1.05f)
 	{
 		moving_speed -= 0.05f;
 	}
 	else
-		moving_speed = 0.5f;
+		moving_speed = 1.f;
 	
 	deque<deque<CCSprite*>::iterator> remove_list;
 	remove_list.clear();
@@ -915,6 +949,8 @@ void CardGachaPopup::cardPositioning()
 		card_que.erase(t_iter);
 		remove_list.pop_front();
 		
+		AudioEngine::sharedInstance()->playEffect("se_flipcard.mp3");
+		
 		CCSprite* last_card = card_que.back();
 		
 		CCSprite* t_card_img = mySIL->getLoadedImg(ccsf("card%d_visible.png", mySGD->card_gacha_list[rand()%card_type_size].getV()));
@@ -931,19 +967,19 @@ void CardGachaPopup::cardPositioning()
 		
 		addChild(KSTimer::create(0.3f, [=]()
 		{
-			CCSprite* take_card_img = (CCSprite*)cover_clipping->getParent();
-			addChild(KSGradualValue<float>::create(0.f, 250.f, 0.3f, [=](float t_f)
+			CCSprite* take_card_img = small_cover;
+			addChild(KSGradualValue<float>::create(0.f, 250.f, 0.2f, [=](float t_f)
 			{
 				take_card_img->setPositionY(t_f);
-				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-				cover_img->setPositionY(t_f/take_card_img->getScale());
+//				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+//				cover_img->setPositionY(t_f/take_card_img->getScale());
 			}, [=](float t_f)
 			{
 				take_card_img->setPositionY(t_f);
-				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
-				cover_img->setPositionY(t_f/take_card_img->getScale());
+//				cover_clipping->setPositionY(take_card_img->getContentSize().height/2.f - t_f/take_card_img->getScale());
+//				cover_img->setPositionY(t_f/take_card_img->getScale());
 				
-				addChild(KSTimer::create(0.3f, [=]()
+				addChild(KSTimer::create(0.2f, [=]()
 				 {
 					 t_gray = CCSprite::create("back_gray.png");
 					 t_gray->setOpacity(0);
@@ -956,6 +992,11 @@ void CardGachaPopup::cardPositioning()
 					 big_card_img->setScale(0.5f);
 					 big_card_img->setPosition(ccp(0,400));
 					 main_case->addChild(big_card_img);
+					 
+					 CCSprite* t_cover_img = CCSprite::create("cardgacha_card.png");
+					 t_cover_img->setScale(320/t_cover_img->getContentSize().width);
+					 t_cover_img->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f));
+					 big_card_img->addChild(t_cover_img);
 					 
 					 CCSprite* top_case = CCSprite::create("diary_frame_top.png");
 					 top_case->setPosition(ccpFromSize(big_card_img->getContentSize()/2.f) + ccp(0,215));
@@ -981,7 +1022,7 @@ void CardGachaPopup::cardPositioning()
 															  t_gray->setOpacity(t_i);
 														  }));
 					 
-					 addChild(KSGradualValue<float>::create(400, 10, 0.5f, [=](float t_f)
+					 addChild(KSGradualValue<float>::create(400, 20, 0.3f, [=](float t_f)
 					{
 						big_card_img->setPositionY(t_f);
 					}, [=](float t_f)
@@ -989,7 +1030,7 @@ void CardGachaPopup::cardPositioning()
 						big_card_img->setPositionY(t_f);
 						
 						take_card_img->setPositionY(0);
-						cover_img->setPositionY(take_card_img->getContentSize().height/2.f);
+//						cover_img->setPositionY(take_card_img->getContentSize().height/2.f);
 						
 						int t_grade = NSDS_GI(kSDS_CI_int1_grade_i, take_card_number_list.front().getV());
 						
@@ -1001,8 +1042,10 @@ void CardGachaPopup::cardPositioning()
 							zoom_3->setColor(ccc3(175,243,142));
 						zoom_3->setScale(1.5f);
 						zoom_3->setOpacity(0);
-						zoom_3->setPosition(ccp(0,10));
+						zoom_3->setPosition(ccp(0,20));
 						main_case->addChild(zoom_3);
+						
+						AudioEngine::sharedInstance()->playEffect("se_clearreward.mp3");
 						
 						zoom_3->addChild(KSGradualValue<float>::create(1.5f, 1.3f, 11.f/30.f, [=](float t_f)
 					   {
@@ -1031,6 +1074,7 @@ void CardGachaPopup::cardPositioning()
 							 zoom_3->setOpacity(t_i);
 							 zoom_3->addChild(KSTimer::create(17.f/30.f, [=]()
 							  {
+								  t_cover_img->removeFromParent();
 								  zoom_3->addChild(KSGradualValue<int>::create(255, 0, 3.f/30.f, [=](int t_i)
 								   {
 									   zoom_3->setOpacity(t_i);
@@ -1046,7 +1090,7 @@ void CardGachaPopup::cardPositioning()
 						zoom_5->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
 						zoom_5->setScale(2.f);
 						zoom_5->setOpacity(0);
-						zoom_5->setPosition(ccp(0,10));
+						zoom_5->setPosition(ccp(0,20));
 						main_case->addChild(zoom_5);
 						
 						zoom_5->addChild(KSGradualValue<float>::create(2.f, 0.7f, 6.f/30.f, [=](float t_f)
@@ -1095,7 +1139,7 @@ void CardGachaPopup::cardPositioning()
 						zoom_6->setBlendFunc({GL_SRC_ALPHA, GL_ONE});
 						zoom_6->setScale(2.f);
 						zoom_6->setOpacity(0);
-						zoom_6->setPosition(ccp(0,10));
+						zoom_6->setPosition(ccp(0,20));
 						main_case->addChild(zoom_6);
 						
 						zoom_6->addChild(KSTimer::create(4.f/30.f, [=]()
@@ -1152,7 +1196,7 @@ void CardGachaPopup::cardPositioning()
 						else if(t_grade == 4)
 							grade_card_take->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 						grade_card_take->enableOuterStroke(ccBLACK, 2.f, 255, true);
-						grade_card_take->setPosition(ccp(0,10));
+						grade_card_take->setPosition(ccp(0,20));
 						grade_card_take->setScale(3.f);
 						grade_card_take->setOpacity(0);
 						main_case->addChild(grade_card_take);

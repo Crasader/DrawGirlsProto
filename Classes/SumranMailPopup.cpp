@@ -567,6 +567,8 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		}else{
 			presentIcon = CCSprite::create("postbox_friendinvite.png");
 		}
+		if(!presentIcon)presentIcon = CCSprite::create("postbox_present.png");
+		
 		profileImg->addChild(presentIcon);
 		presentIcon->setPosition(ccpFromSize(profileImg->getContentSize()) / 2.f);
 		//profileImg->setScale(30.f / profileImg->getContentSize().width);
@@ -678,21 +680,24 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				CCSprite* spr;
 																				KSLabelTTF* rewardName = KSLabelTTF::create("",mySGD->getFont().c_str(), 13);
 																				if(rewardType=="fr" || rewardType=="pr" || rewardType=="r")rewardName->setString("젬");
-																				else if(rewardType=="g")rewardName->setString("골드");
-																				else if(rewardType=="h")rewardName->setString("하트");
-																				else if(rewardType=="i6")rewardName->setString("더블");
-																				else if(rewardType=="i9")rewardName->setString("신발");
-																				else if(rewardType=="i11")rewardName->setString("자석");
-																				else if(rewardType=="p1")rewardName->setString("부활석");
-																				else if(rewardType=="p2")rewardName->setString("맵뽑기권");
-																				else if(rewardType=="p3")rewardName->setString("업그레이드권");
-																				else if(rewardType=="p4")rewardName->setString("아이템뽑기권");
-																				else if(rewardType=="p5")rewardName->setString("99프로뽑기권");
-																				else if(rewardType=="p6")rewardName->setString("생명의돌");
-																				else if(rewardType=="p7")rewardName->setString("일반뽑기권");
-																				else if(rewardType=="p8")rewardName->setString("고급뽑기권");
+																				else if(rewardType=="g")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_gold));
+																				else if(rewardType=="h")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_heart));
+																				else if(rewardType=="i6")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_doubleItem));
+																				else if(rewardType=="i9")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpItem));
+																				else if(rewardType=="i11")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpItem));
+																				else if(rewardType=="p1")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p1));
+																				else if(rewardType=="p2")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p2));
+																				else if(rewardType=="p3")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p3));
+																				else if(rewardType=="p4")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p4));
+																				else if(rewardType=="p5")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p5));
+																				else if(rewardType=="p6")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p6));
+																				else if(rewardType=="p7")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p7));
+																				else if(rewardType=="p8")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p8));
+																				else if(rewardType=="p9")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p9));
+																				else if(rewardType=="p10")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p10));
+																				else if(rewardType=="p11")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p11));
 																				else if(rewardType=="cd")rewardName->setString("");
-																				else rewardName->setString("??");
+																				else rewardName->setString("");
 																				
 																				KSLabelTTF* count = KSLabelTTF::create(CCString::createWithFormat("x%d",rewardCount)->getCString(), mySGD->getFont().c_str(), 13);
 																				if(rewardType=="cd"){
@@ -703,7 +708,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				}else{
 																					spr= CCSprite::create(CCString::createWithFormat("icon_%s.png",rewardType.c_str())->getCString());
                                                                                     
-                                                                                    if(!spr)spr = CCSprite::create("icon_box.png");
+																					if(!spr)spr = CCSprite::create("icon_box.png");
                                                                                     
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}
@@ -1113,9 +1118,10 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
 				continue;
-			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
@@ -1125,7 +1131,6 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 			
 //			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 //			Json::Value t_card_missile = t_card["missile"];
 //			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
@@ -1615,9 +1620,10 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 		for(int i=0;i<cards.size();i++)
 		{
 			Json::Value t_card = cards[i];
+			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
+			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			if(NSDS_GI(kSDS_CI_int1_version_i, t_card["no"].asInt()) >= t_card["version"].asInt())
 				continue;
-			NSDS_SI(kSDS_GI_serial_int1_cardNumber_i, t_card["serial"].asInt(), t_card["no"].asInt());
 			NSDS_SI(kSDS_CI_int1_serial_i, t_card["no"].asInt(), t_card["serial"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_version_i, t_card["no"].asInt(), t_card["version"].asInt(), false);
 			NSDS_SI(kSDS_CI_int1_rank_i, t_card["no"].asInt(), t_card["rank"].asInt(), false);
@@ -1627,7 +1633,6 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			
 //			NSDS_SI(kSDS_CI_int1_theme_i, t_card["no"].asInt(), 1, false);
 			NSDS_SI(kSDS_CI_int1_stage_i, t_card["no"].asInt(), t_card["piece"].asInt(), false);
-			NSDS_SI(t_card["piece"].asInt(), kSDS_SI_level_int1_card_i, t_card["grade"].asInt(), t_card["no"].asInt());
 			
 //			Json::Value t_card_missile = t_card["missile"];
 //			NSDS_SS(kSDS_CI_int1_missile_type_s, t_card["no"].asInt(), t_card_missile["type"].asString().c_str(), false);
