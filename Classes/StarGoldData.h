@@ -408,6 +408,7 @@ class HeartTime;
 #define SGD_KEY	0xD9
 #define mySGD StarGoldData::sharedInstance()
 class KSLabelTTF;
+class SnowBackNode;
 class StarGoldData : public CCObject
 {
 public:
@@ -1105,6 +1106,9 @@ public:
 	
 	bool is_god_of_death;
 	vector<CardComposeInfo> card_compose_list;
+	
+	SnowBackNode* snow_node;
+	bool is_snow_inited;
 	
 private:
 	

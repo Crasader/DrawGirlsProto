@@ -96,6 +96,8 @@ public:
     
     virtual void onEnterTransitionDidFinish();
 	
+	virtual void onExitTransitionDidStart();
+	
 private:
 	
 //	int is_unlock_puzzle;

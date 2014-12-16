@@ -60,6 +60,7 @@ private:
 	CCSprite* price_icon;
 	KSLabelTTF* price_value;
 	CCMenuLambda* target_menu;
+	KSLabelTTF* need_card_count_2_label;
 	
 	CCTableView* card_table;
 	

@@ -129,6 +129,12 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	card_list_back->addChild(card_table);
 	card_table->setTouchPriority(touch_priority-1);
 	
+	need_card_count_2_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_needCardCount2), mySGD->getFont().c_str(), 20);
+	need_card_count_2_label->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
+	card_list_back->addChild(need_card_count_2_label);
+	
+	need_card_count_2_label->setVisible(card_data_list.empty());
+	
 	
 	CCScale9Sprite* card_list_tab = CCScale9Sprite::create("tabbutton_up.png", CCRectMake(0, 0, 74, 33), CCRectMake(36, 16, 2, 1));
 	card_list_tab->setContentSize(CCSizeMake(95, 33));
@@ -358,7 +364,7 @@ CCTableViewCell* CharacterStrengthPopup::tableCellAtIndex( CCTableView *table, u
 		n_label->setPosition(ccp(n_node->getContentSize().width-16, 12));
 		n_frame->addChild(n_label);
 		
-		KSLabelTTF* n_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count), mySGD->getFont().c_str(), 9);
+		KSLabelTTF* n_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count-1), mySGD->getFont().c_str(), 9);
 		n_count_label->setPosition(ccp(n_node->getContentSize().width-4, n_node->getContentSize().height-1));
 		n_frame->addChild(n_count_label);
 		
@@ -382,7 +388,7 @@ CCTableViewCell* CharacterStrengthPopup::tableCellAtIndex( CCTableView *table, u
 		s_label->setPosition(ccp(s_node->getContentSize().width-16, 12));
 		s_frame->addChild(s_label);
 		
-		KSLabelTTF* s_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count), mySGD->getFont().c_str(), 9);
+		KSLabelTTF* s_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count-1), mySGD->getFont().c_str(), 9);
 		s_count_label->setPosition(ccp(s_node->getContentSize().width-4, s_node->getContentSize().height-1));
 		s_frame->addChild(s_count_label);
 		
@@ -553,6 +559,7 @@ void CharacterStrengthPopup::expUpAction()
 												 if(card_table->minContainerOffset().y > 0)
 													 t_offset.y = card_table->minContainerOffset().y;
 												 card_table->setContentOffset(ccp(t_offset.x, t_offset.y));
+												 need_card_count_2_label->setVisible(card_data_list.empty());
 												 
 												 loading_layer->removeFromParent();
 												 is_menu_enable = true;
@@ -901,6 +908,7 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																									 CCPoint t_offset = card_table->getContentOffset();
 																									 card_table->reloadData();
 																									 card_table->setContentOffset(t_offset);
+																									 need_card_count_2_label->setVisible(card_data_list.empty());
 																									 
 																									 is_menu_enable = true;
 																									 
@@ -921,6 +929,7 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 	CCPoint t_offset = card_table->getContentOffset();
 	card_table->reloadData();
 	card_table->setContentOffset(t_offset);
+	need_card_count_2_label->setVisible(card_data_list.empty());
 	
 	is_menu_enable = true;
 }

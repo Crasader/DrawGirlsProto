@@ -14,6 +14,7 @@
 #include "FiveRocksCpp.h"
 #include "KSLabelTTF.h"
 #include "CharacterExpUp.h"
+#include "SnowBackNode.h"
 
 void StarGoldData::withdraw()
 {
@@ -4046,6 +4047,9 @@ void StarGoldData::myInit()
 	
 	rewind_cnt_per_frame = 2.0;
 	character_magnetic = 0.0;
+	
+	is_snow_inited = false;
+	snow_node = new SnowBackNode();
 }
 
 long long StarGoldData::getIntroducerID()

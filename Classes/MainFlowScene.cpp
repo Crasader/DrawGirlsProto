@@ -64,6 +64,7 @@
 #include "ManyGachaPopup.h"
 #include "AccountManagerPopup.h"
 #include "FiveRocksCpp.h"
+#include "SnowBackNode.h"
 
 #include "InvenPopup.h"
 
@@ -5779,6 +5780,10 @@ void MainFlowScene::topPuzzleMode()
 void MainFlowScene::onEnterTransitionDidFinish()
 {
     CCLayer::onEnterTransitionDidFinish();
+	
+	mySGD->snow_node->myInit();
+	addChild(mySGD->snow_node, 9999);
+	
     TRACE();
 }
 
@@ -6329,9 +6334,20 @@ void MainFlowScene::tableRefresh()
 	puzzle_table->setContentOffset(origin_offset);
 }
 
+void MainFlowScene::onExitTransitionDidStart()
+{
+	mySGD->snow_node->onExitTransitionDidStart();
+	mySGD->snow_node->onExit();
+	
+	mySGD->snow_node->setParent(NULL);
+	
+	m_pChildren->removeObject(mySGD->snow_node);
+}
+
 MainFlowScene::~MainFlowScene()
 {
 	CCLOG("~MainFlowScene");
+	
 	hspConnector::get()->removeTarget(this);
 }
 
