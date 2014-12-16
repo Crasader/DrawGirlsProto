@@ -224,6 +224,9 @@ int PatternTutorialContent::getTitleLocalKeyForPatternNumber(int t_pattern)
 		return_value = int(LK::kMyLocalKey_warning1019);
 	else if(t_pattern == 1020)
 		return_value = int(LK::kMyLocalKey_warning1020);
+	else if(t_pattern == 1021)
+		return_value = int(LK::kMyLocalKey_warning1021);
+
 	else if(t_pattern == 1022)
 		return_value = int(LK::kMyLocalKey_warning1022);
 	else if(t_pattern == 1023)
