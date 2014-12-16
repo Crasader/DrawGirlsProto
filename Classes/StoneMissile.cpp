@@ -673,6 +673,8 @@ void Chain::update(float dt)
 		if(m_params.depth >= 1)
 		{
 			KSCumberBase* nearCumber = myGD->getNearestCumberWithExclude(pos, m_targeted);
+			
+			// 가까이에 타겟이 있고 빈사상태가 아니면...
 			if(nearCumber && ccpLength(pos - nearCumber->getPosition()) < m_params.chainDistance && nearCumber->getDeadState() == false)
 			{
 				m_targeted.push_back(nearCumber);
@@ -689,9 +691,21 @@ void Chain::update(float dt)
 				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
 				
 			}
+			
 			else
 			{
-				removeFromParent();
+				float ny = m_targetNode->getPosition().y;
+				float nx = m_targetNode->getPosition().x;
+				
+//				m_targetNode = nearCumber;
+				m_params.power *= 0.6f;
+				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
+																							 m_params.power,
+																							 m_params.subPower, 2, 1, m_params.ao);
+				m_chainMissile->beautifier(m_params.level);
+				addChild(m_chainMissile);
+				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
+
 			}
 			
 		}
