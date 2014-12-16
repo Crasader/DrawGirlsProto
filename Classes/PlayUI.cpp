@@ -1450,33 +1450,44 @@ void PlayUI::setPercentage (float t_p, bool t_b)
 		
 		if(clr_cdt_type == kCLEAR_littlePercent && t_p*100.f >= t_beforePercentage*100.f + clr_cdt_cnt.getV())
 		{
-			if(t_b && t_p >= t_t_beforePercentage + 0.001f)
-				myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
-			
-			conditionFail();
-			
-			mySGD->fail_code = kFC_missionfail;
-			
-			stopCounting();
-			int boss_count = myGD->getMainCumberCount();
-			for(int i=0;i<boss_count;i++)
+			if(mySGD->isTimeEvent(kTimeEventType_clear) && !is_on_clear_time_event && !isGameover && clearPercentage.getV() == mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p > mySGD->getTimeEventFloatValue(kTimeEventType_clear)/100.f && t_p <= 0.85f)
 			{
-				myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+				
 			}
-			// timeover
-			isGameover = true;
-			myGD->communication("CP_setGameover");
-			myGD->removeAllPattern();
-			myGD->communication("Main_allStopSchedule");
-			AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
-			
-			addResultCCB("ui_missonfail.ccbi");
-			AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
-			
-			endGame(false);
-			
-			myGD->setIsGameover(true); // ks 가 추가함. 타이밍을 뒤로 ...
-			return;
+			else if(!isGameover && t_p > clearPercentage.getV())
+			{
+				
+			}
+			else
+			{
+				if(t_b && t_p >= t_t_beforePercentage + 0.001f)
+					myGD->communication("GIM_showPercentFloatingCoin", last_get_percentage);
+				
+				conditionFail();
+				
+				mySGD->fail_code = kFC_missionfail;
+				
+				stopCounting();
+				int boss_count = myGD->getMainCumberCount();
+				for(int i=0;i<boss_count;i++)
+				{
+					myGD->communication("MP_bombCumber", myGD->getMainCumberCCNodeVector()[i]);
+				}
+				// timeover
+				isGameover = true;
+				myGD->communication("CP_setGameover");
+				myGD->removeAllPattern();
+				myGD->communication("Main_allStopSchedule");
+				AudioEngine::sharedInstance()->playEffect("sound_stamp.mp3", false);
+				
+				addResultCCB("ui_missonfail.ccbi");
+				AudioEngine::sharedInstance()->playEffect("ment_mission_fail.mp3", false, true);
+				
+				endGame(false);
+				
+				myGD->setIsGameover(true); // ks 가 추가함. 타이밍을 뒤로 ...
+				return;
+			}
 		}
 		
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();

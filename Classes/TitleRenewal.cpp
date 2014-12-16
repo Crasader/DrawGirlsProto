@@ -122,6 +122,15 @@ bool TitleRenewalScene::init()
 		addChild(splash);
 		TRACE();
 		
+		string build_type = myHSP->getBuildType();
+		if(build_type != "real")
+		{
+			KSLabelTTF* build_type_label = KSLabelTTF::create(build_type.c_str(), mySGD->getFont().c_str(), 20);
+			build_type_label->setColor(ccBLACK);
+			build_type_label->setPosition(ccpFromSize(splash->getContentSize()/2.f) + ccp(0,-50));
+			splash->addChild(build_type_label);
+		}
+		
 		addChild(KSTimer::create(1.f, [=]()
 														 {TRACE();
 															 

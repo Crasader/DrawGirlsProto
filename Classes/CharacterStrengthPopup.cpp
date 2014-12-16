@@ -287,9 +287,6 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	main_case->addChild(strength_button);
 	strength_button->setTouchPriority(touch_priority-2);
 	
-	strength_button->setEnabled(false);
-	strength_button->setColor(ccGRAY);
-	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
 	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_button->setFunction([=](CCObject* sender)
@@ -451,26 +448,41 @@ void CharacterStrengthPopup::strengthAction(CCObject* t_sender, CCControlEvent t
 	
 	AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 	
-	loading_layer = LoadingLayer::create(touch_priority-3);
-	addChild(loading_layer);
-	loading_layer->startLoading();
-	
-	Json::Value param;
-	param["memberID"] = myHSP->getSocialID();
-	param["characterNo"] = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx);
-	param["exp"] = up_exp_value.getV();
-	bool is_use_pass = mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) > 0;
-	param["usePass"] = is_use_pass;
-	if(is_use_pass)
-		param["gold"] = 0;
-	else
-		param["gold"] = up_exp_value.getV() * mySGD->getGoldPerExp();
-	for(int i=0;i<target_card_number_list.size();i++)
+	if(target_card_number_list.empty())
 	{
-		param["cards"][i] = target_card_number_list[i];
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_pleaseSelectMaterialCard)), 9999);
+		
+		is_menu_enable = true;
 	}
-	
-	myHSP->command("strengthCharacter", param, json_selector(this, CharacterStrengthPopup::resultStrength));
+	else if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0 && mySGD->getGoodsValue(GoodsType::kGoodsType_gold) < up_exp_value.getV() * mySGD->getGoldPerExp())
+	{
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_goldNotEnought)), 9999);
+		
+		is_menu_enable = true;
+	}
+	else
+	{
+		loading_layer = LoadingLayer::create(touch_priority-3);
+		addChild(loading_layer);
+		loading_layer->startLoading();
+		
+		Json::Value param;
+		param["memberID"] = myHSP->getSocialID();
+		param["characterNo"] = NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx);
+		param["exp"] = up_exp_value.getV();
+		bool is_use_pass = mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) > 0;
+		param["usePass"] = is_use_pass;
+		if(is_use_pass)
+			param["gold"] = 0;
+		else
+			param["gold"] = up_exp_value.getV() * mySGD->getGoldPerExp();
+		for(int i=0;i<target_card_number_list.size();i++)
+		{
+			param["cards"][i] = target_card_number_list[i];
+		}
+		
+		myHSP->command("strengthCharacter", param, json_selector(this, CharacterStrengthPopup::resultStrength));
+	}
 }
 
 void CharacterStrengthPopup::expUpAction()
@@ -535,9 +547,6 @@ void CharacterStrengthPopup::expUpAction()
 													 price_back->addChild(price_icon);
 													 price_back->addChild(price_value);
 												 }
-												 
-												 strength_button->setColor(ccGRAY);
-												 strength_button->setEnabled(false);
 												 
 												 CCPoint t_offset = card_table->getContentOffset();
 												 card_table->reloadData();
@@ -842,22 +851,10 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 		price_value->setString(KS::insert_separator(up_exp_value.getV() * mySGD->getGoldPerExp()).c_str());
 		price_value->setPosition(ccp(price_icon->getContentSize().width*price_icon->getScale()/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f-1));
 		price_icon->setPosition(ccp(-price_value->getContentSize().width/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f));
-		
-		if(mySGD->getGoodsValue(GoodsType::kGoodsType_gold) < up_exp_value.getV() * mySGD->getGoldPerExp())
-		{
-			strength_button->setColor(ccGRAY);
-			strength_button->setEnabled(false);
-		}
-		else
-		{
-			strength_button->setColor(ccWHITE);
-			strength_button->setEnabled(true);
-		}
 	}
 	else
 	{
-		strength_button->setColor(ccWHITE);
-		strength_button->setEnabled(true);
+		
 	}
 	
 	CCMenuItemSpriteLambda* t_item = CCMenuItemSpriteLambda::create(n_node, s_node, [=](CCObject* sender)
@@ -884,20 +881,6 @@ void CharacterStrengthPopup::cardAction(CCObject *t_sender)
 																		target_item_list.erase(target_item_list.begin() + idx);
 																		
 																		is_full = false;
-																		
-																		if(target_item_list.size() <= 0)
-																		{
-																			strength_button->setColor(ccGRAY);
-																			strength_button->setEnabled(false);
-																		}
-																		else
-																		{
-																			if(mySGD->getGoodsValue(GoodsType::kGoodsType_gold) >= up_exp_value.getV() * mySGD->getGoldPerExp())
-																			{
-																				strength_button->setColor(ccWHITE);
-																				strength_button->setEnabled(true);
-																			}
-																		}
 																		
 																		for(int i=0;i<target_item_list.size();i++)
 																		{

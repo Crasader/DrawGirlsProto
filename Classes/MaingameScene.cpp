@@ -3776,11 +3776,9 @@ void Maingame::showDamageMissile( CCPoint t_position, int t_damage, int t_sub_dm
 	
 	if(t_sub_dmg > 0)
 	{
-		KSLabelTTF* sub_dmg_label = KSLabelTTF::create(ccsf("+%d", t_sub_dmg), mySGD->getFont().c_str(), 12);
+		CCLabelBMFont* sub_dmg_label = CCLabelBMFont::create(ccsf("+%d", t_sub_dmg), "missile_damage_bonus.fnt");
 		sub_dmg_label->setAnchorPoint(ccp(0.f,0.5f));
-		sub_dmg_label->setColor(ccBLUE);
-		sub_dmg_label->enableOuterStroke(ccBLACK, 0.5f, 100, true);
-		sub_dmg_label->setPosition(ccp(-3,0));
+		sub_dmg_label->setPosition(ccp(-3,-10));
 		sub_dmg_label->setScale(0);
 		container->addChild(sub_dmg_label);
 		
