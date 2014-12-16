@@ -66,6 +66,9 @@ public:
 	}
     
     virtual void onEnterTransitionDidFinish();
+	
+	virtual void onExitTransitionDidStart();
+	
 private:
 	
 	int keep_card_number;

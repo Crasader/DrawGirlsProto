@@ -48,6 +48,7 @@
 #include "LabelTTFMarquee.h"
 #include "FiveRocksCpp.h"
 #include "RealTimeMessage.h"
+#include "SnowBackNode.h"
 
 CCScene* PuzzleScene::scene()
 {
@@ -2408,6 +2409,8 @@ void PuzzleScene::tryGababoReward(CCNode* t_loading, function<void()> success_fu
 void PuzzleScene::onEnterTransitionDidFinish()
 {
     CCLayer::onEnterTransitionDidFinish();
+	mySGD->snow_node->myInit();
+	addChild(mySGD->snow_node, 9999);
     TRACE();
 }
 
@@ -3681,6 +3684,16 @@ void PuzzleScene::alertAction(int t1, int t2)
 	{
 		CCDirector::sharedDirector()->end();
 	}
+}
+
+void PuzzleScene::onExitTransitionDidStart()
+{
+	mySGD->snow_node->onExitTransitionDidStart();
+	mySGD->snow_node->onExit();
+	
+	mySGD->snow_node->setParent(NULL);
+	
+	m_pChildren->removeObject(mySGD->snow_node);
 }
 
 void PuzzleScene::keyBackClicked()

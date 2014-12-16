@@ -1337,6 +1337,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2598,6 +2599,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
