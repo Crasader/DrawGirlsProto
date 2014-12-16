@@ -498,7 +498,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		int missileM = MAX(1, missileNumbersInt * 0.8f);
+		int missileM = MAX(1, missileNumbersInt * 0.8f * 0.75f);
 		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
