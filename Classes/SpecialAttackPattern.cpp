@@ -999,7 +999,7 @@ void GodOfDeath::myInit(CCPoint t_sp, KSCumberBase* cb, const std::string& patte
 	m_followFrames = m_pattern.get("followFrames", 60).asFloat();
 	m_followSpeed = m_pattern.get("followSpeed", 2).asFloat();
 	m_unFollowSpeed = m_pattern.get("unFollowSpeed", 0.6f).asFloat();
-	
+	m_duration = m_pattern.get("duration", 9999999).asInt();
 	m_alpha = 5;
 	m_isFollow = false;
 	m_frameCount = 0;
@@ -1035,6 +1035,24 @@ void GodOfDeath::update(float dt)
 //		addChild(KSTimer::create(1.5f, [=](){
 //			
 //		}));
+	}
+	if(m_frameCount >= m_duration)
+	{
+		addChild(KSGradualValue<float>::create(255.f, 0.f, 0.3f, [=](float t){
+			KS::setOpacity(m_godOfDeathSprite, t);
+//			m_godOfDeathSprite->setOpacity(t);
+			
+		}, [=](float t)
+																					 {
+																						 KS::setOpacity(m_godOfDeathSprite, t);
+//																						 m_godOfDeathSprite->setOpacity(t);
+																						 m_godOfDeathSprite->removeFromParent();
+																						 m_godOfDeathSprite = nullptr;
+
+																						 
+																					 }));
+		stopMyAction();
+		return;
 	}
 	m_frameCount++;
 	float spd = m_followSpeed;

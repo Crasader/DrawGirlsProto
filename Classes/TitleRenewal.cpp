@@ -1405,6 +1405,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		mySGD->setDiaryStoreUrl(diary_store_url);
 		
 		mySGD->setCdnUrl(result_data["cdnURL"].asString());
+		mySGD->setGodOfDeathType(result_data["godOfDeathType"].asInt());
 	}
 	else
 	{
