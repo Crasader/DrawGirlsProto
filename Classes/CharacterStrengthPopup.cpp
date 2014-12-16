@@ -585,6 +585,14 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0)
 			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("Char %d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("Stage %d", mySGD->getUserdataHighPiece()));
 		
+		// 재화 갱신
+		Json::Value properties_data = result_data["exchangeResult"]["list"];
+		int properties_size = properties_data.size();
+		for(int i=0;i<properties_size;i++)
+		{
+			mySGD->refreshGoodsData(properties_data[i]["type"].asString(), properties_data[i]["count"].asInt());
+		}
+		
 		// 카드정보 갱신
 		Json::Value cardData = result_data["cardData"];
 		int card_data_size = cardData.size();

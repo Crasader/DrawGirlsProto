@@ -2606,11 +2606,11 @@ void PlayUI::addGameTime30Sec ()
 }
 bool PlayUI::beRevivedJack ()
 {
-	if(jack_life > 0)
+	if(jack_life.getV() > 0)
 	{
 		addGameTime30Sec();
 		
-		jack_life--;
+		jack_life = jack_life.getV()-1;
 		jack_life_node->removeChild((CCNode*)jack_array->lastObject(), true);
 		jack_array->removeLastObject();
 		
@@ -2618,7 +2618,7 @@ bool PlayUI::beRevivedJack ()
 //		jack_life_node->runAction(t_move);
 		jack_life_hide_count = 0;
 		
-		if(jack_life <= 0)
+		if(jack_life.getV() <= 0)
 		{
 			myGD->showDetailMessage("warning_over_02.ccbi", "h");
 			
@@ -3391,68 +3391,45 @@ void PlayUI::counting ()
 				
 				t_is_die = true;
 				
-				mySGD->is_god_of_death = true;
-				Json::Value pd;
-				pd["speed"] = 3.f;
-				myGD->attachGodOfDeath(myGD->getMainCumberVector()[0], pd);
-				
-//				myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
-//				
-//				KSLabelTTF* time_over_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_failTitleTimeover), mySGD->getFont().c_str(), 45);
-//				time_over_label->setGradientColor(ccc4(255, 115, 250, 255), ccc4(215, 60, 130, 255), ccp(0,-1));
-//				time_over_label->enableOuterStroke(ccc3(65, 5, 35), 2.5f, 255, true);
-//				time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93));
-//				time_over_label->setOpacity(0);
-//				addChild(time_over_label);
-//				
-//				KSLabelTTF* shadow = CommonAnimation::applyBigShadow(time_over_label, time_over_label->getFontSize());
-//				shadow->setOpacityOuterStroke(0);
-//				
-//				time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 13.f/30.f, [=](float t)
-//																		{
-//																			float convert_t;
-//																			if (t < 1 / 2.75)
-//																			{
-//																				convert_t = 7.5625f * t * t;
-//																			} else if (t < 2 / 2.75)
-//																			{
-//																				t -= 1.5f / 2.75f;
-//																				convert_t = 7.5625f * t * t + 0.75f;
-//																			} else if(t < 2.5 / 2.75)
-//																			{
-//																				t -= 2.25f / 2.75f;
-//																				convert_t = 7.5625f * t * t + 0.9375f;
-//																			}
-//																			
-//																			t -= 2.625f / 2.75f;
-//																			convert_t = 7.5625f * t * t + 0.984375f;
-//																			
-//																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y+93-93*convert_t));
-//																			time_over_label->setOpacity(t*255);
-//																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
-//																		}, [=](float t)
-//																		{
-//																			time_over_label->setPosition(ccp(240,myDSH->ui_center_y));
-//																			time_over_label->setOpacity(255);
-//																			shadow->setOpacityOuterStroke(255 * 0.3f*(t));
-//																			
-//																			time_over_label->addChild(KSTimer::create(32.f/30.f, [=]()
-//																													  {
-//																														  time_over_label->addChild(KSGradualValue<float>::create(0.f, 1.f, 5.f/30.f, [=](float t)
-//																																												  {
-//																																													  time_over_label->setScale(1.f+t*0.6f);
-//																																													  time_over_label->setOpacity(255-t*255);
-//																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-//																																												  }, [=](float t)
-//																																												  {
-//																																													  time_over_label->setScale(1.6f);
-//																																													  time_over_label->setOpacity(0);
-//																																													  shadow->setOpacityOuterStroke(255 * 0.3f*(1-t));
-//																																													  
-//																																													  time_over_label->removeFromParent();
-//																																												  }));
-//																													  }));
-//																		}));
+				int god_of_death_type = mySGD->getGodOfDeathType();
+				if(god_of_death_type == 2)
+				{
+					mySGD->is_god_of_death = true;
+					Json::Value pd;
+					pd["speed"] = 3.f;
+					myGD->attachGodOfDeath(myGD->getMainCumberVector()[0], pd);
+				}
+				else if(god_of_death_type == 1)
+				{
+					if(jack_life.getV() == 0)
+					{
+						if(!is_used_heartUpItem && mySGD->isUsingItem(kIC_heartUp))
+						{
+							myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+							
+							showTimeover();
+						}
+						else
+						{
+							mySGD->is_god_of_death = true;
+							Json::Value pd;
+							pd["speed"] = 3.f;
+							myGD->attachGodOfDeath(myGD->getMainCumberVector()[0], pd);
+						}
+					}
+					else
+					{
+						myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+						
+						showTimeover();
+					}
+				}
+				else if(god_of_death_type == 0)
+				{
+					myGD->communication("Jack_startDieEffect", DieType::kDieType_timeover);
+					
+					showTimeover();
+				}
 			}
 		}
 	}

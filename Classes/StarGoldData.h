@@ -1333,6 +1333,7 @@ private:
 	
 	COMMON_VAR(int, onAdultTag, OnAdultTag);
 	COMMON_VAR(int, noCreateItemComboCnt, NoCreateItemComboCnt);
+	COMMON_VAR(int, godOfDeathType, GodOfDeathType);
 	
 	COMMON_VAR_STR(iosMenu, IosMenu);
 	COMMON_VAR_STR(goldBalance, GoldBalance);
