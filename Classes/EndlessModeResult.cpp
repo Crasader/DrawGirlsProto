@@ -33,6 +33,7 @@
 #include "FiveRocksCpp.h"
 #include "CharacterExpUp.h"
 #include "TakeCardToDiary.h"
+#include "HeartTime.h"
 
 enum EndlessModeResultZorder
 {
@@ -918,6 +919,19 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 		param3["memberID"] = myHSP->getMemberID();
 		
 		command_list.push_back(CommandParam("starttransaction", param3, nullptr));
+		
+		Json::Value heart_param;
+		heart_param["memberID"] = myHSP->getMemberID();
+//		if(/*!(mySGD->endless_my_victory.getV() > 0 || */myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+		heart_param["use"] = true;
+		command_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
+												{
+													if(result_data["result"]["code"].asInt() == GDSUCCESS)
+													{
+														mySGD->heartRefreshSuccess(result_data);
+														((MainFlowScene*)getParent())->heart_time->refreshHeartTime();
+													}
+												}));
 		
 		Json::Value param;
 		param["memberID"] = myHSP->getMemberID();

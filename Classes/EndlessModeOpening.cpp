@@ -449,7 +449,7 @@ void EndlessModeOpening::setMain()
 								  
 									Json::Value heart_param;
 									heart_param["memberID"] = myHSP->getMemberID();
-									if(!(mySGD->endless_my_victory.getV() > 0 || myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) == 1))
+									if(/*!(mySGD->endless_my_victory.getV() > 0 || */myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
 										heart_param["use"] = true;
 									transaction_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
 																		  {
