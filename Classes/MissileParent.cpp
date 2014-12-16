@@ -361,7 +361,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		//LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
 		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
-		addChild(KSIntervalCall::create(30, missileNumbers * 3, [=](int seq){
+		addChild(KSIntervalCall::create(30, missileNumbers * 2, [=](int seq){
 			int dirs = 2 + MIN((grade-1), 3);
 			if(myGD->getIsGameover() == false)
 			{
@@ -370,7 +370,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					float rad = deg2Rad(360.f / dirs * r);
 					
 					rad += addRad;
-					StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power / 3.f, missile_sub_damage / 3.f, ao);
+					StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power * 1 / (dirs - 1), missile_sub_damage * 1 / (dirs - 1), ao);
 					jack_missile_node->addChild(sm);
 					sm->beautifier(level);
 				}
@@ -417,7 +417,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
 			SpreadMissile* sm = SpreadMissile::create(target, myGD->getJackPoint().convertToCCP(),
 																								fileName,
-																								1.8f + 0.3f * grade, power, missile_sub_damage,
+																								1.8f + 0.3f * grade, power / (adderForGrade - 3), missile_sub_damage / (adderForGrade - 3),
 																								adderForGrade, // 방향.
 																								level,
 																								ao);
@@ -441,7 +441,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			auto creator = [=](){
 //				float mNumber = MIN(i, 100);
 				RangeAttack* ra = RangeAttack::create(initPosition, fileName, radius, MIN(120 * 10 / 35.f * radius, 3000),
-																							power / 3.f, missile_sub_damage / 3.f, ao);
+																							power * 2 / 3.f, missile_sub_damage * 2 / 3.f, ao);
 				jack_missile_node->addChild(ra);
 				
 			};
@@ -477,7 +477,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 					//				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
 					SpiritAttack* sa = SpiritAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint2), fileName,
-																									3 + grade * 1, power / 2.f, missile_sub_damage / 2.f, 1.2f, 30, ao);
+																									5 + grade * 1, power *2 / 3.f, missile_sub_damage * 2 / 3.f, 1.2f, 30, ao);
 					sa->beautifier(level);
 					jack_missile_node->addChild(sa);
 				}
@@ -498,7 +498,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		int missileM = MAX(1, missileNumbersInt * 0.8f);
+		int missileM = MAX(1, missileNumbersInt * 0.8f * 0.75f);
 		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
@@ -692,10 +692,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			float ny = nearCumber->getPosition().y;
 			float nx = nearCumber->getPosition().x;
 			int j = 0;
-			for(int i=missileNumbersInt; i>=0; i-=20, j++)
+			for(int i=missileNumbersInt; i>=0; i-=15, j++)
 			{
 				auto creator = [=](){
-					int mNumber = MIN(i, 20);
+					int mNumber = MIN(i, 15);
 					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
 																								atan2f(ny - myGD->getJackPointCCP().y,
 																											 nx - myGD->getJackPointCCP().x),// 방향
@@ -810,6 +810,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			jack_missile_node->addChild(ms);
 		};
 		int j = 0;
+		missileNumbersInt /= 3.f;
 		for(int i=missileNumbersInt; i>=0; i-=1, j++)
 		{
 			addChild(KSTimer::create(0.40 * (j), [=](){

@@ -1200,6 +1200,7 @@ protected:
 	float m_alpha;
 	bool m_killed;
 	float m_unFollowSpeed;
+	int m_duration;
 	//bool m_isTarget;
 	//float m_dirAngle;
 	CCSprite* m_godOfDeathSprite;
