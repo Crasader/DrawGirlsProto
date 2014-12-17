@@ -648,7 +648,7 @@ void Boomerang::update(float dt)
 
 void Chain::update(float dt)
 {
-	
+	m_frameCount++;
 	bool invalidRange;
 	bool emptyMonster = !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
 	IntPoint missilePoint = ccp2ip(m_chainMissile->getMissilePosition());
@@ -664,6 +664,7 @@ void Chain::update(float dt)
 		 )
 	{
 		removeFromParent();
+		return;
 	}
 	else if(m_chainMissile->m_touched == true)
 	{
@@ -685,7 +686,7 @@ void Chain::update(float dt)
 				m_params.power *= 0.6f;
 				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
 																							 m_params.power,
-																							 m_params.subPower, 2, 20, m_params.ao);
+																							 m_params.subPower, 2, 5, m_params.ao);
 				m_chainMissile->beautifier(m_params.level);
 				addChild(m_chainMissile);
 				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
@@ -694,6 +695,7 @@ void Chain::update(float dt)
 			
 			else
 			{
+				// 자기 자신 여러방...
 				float ny = m_targetNode->getPosition().y;
 				float nx = m_targetNode->getPosition().x;
 				
@@ -717,10 +719,17 @@ void Chain::update(float dt)
 	}
 	else
 	{
-		float diffRad = ccpToAngle((m_targetNode->getPosition() - m_chainMissile->getMissilePosition()));
-		
-		float deltaRad = toPositiveAngle(diffRad) - toPositiveAngle(m_currentRad);
-		m_currentRad += deltaRad;
+		float missile2MonsterRad = ccpToAngle((m_targetNode->getPosition() - m_chainMissile->getMissilePosition()));
+		float Cangle = toPositiveAngle(toPositiveAngle(missile2MonsterRad) - toPositiveAngle(m_currentRad) );
+		float deltaRad = Cangle;
+		if(Cangle >= M_PI)
+		{
+			deltaRad = Cangle - 2 * M_PI;
+		}
+//		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+		m_currentRad += clampf(deltaRad, deg2Rad(-1.5f), deg2Rad(1.5f));
+//		m_centerRad += clampf(signRad, deg2Rad(-5.5f), deg2Rad(5.5f));
+//		m_currentRad += deltaRad;
 		
 		m_chainMissile->setMissilePosition(m_chainMissile->getMissilePosition() + ccp(cosf(m_currentRad) * m_params.speed, sinf(m_currentRad) * m_params.speed));
 		m_chainMissile->setRotation(-rad2Deg(m_currentRad) - 90.f);
@@ -749,7 +758,7 @@ void Chain::update(float dt)
 				m_targetNode = nearCumber;
 				m_chainMissile = StaticMissile::create(pos, m_params.fileName,
 																							 m_params.power,
-																							 m_params.subPower, 2, 20, m_params.ao);
+																							 m_params.subPower, 2, 5, m_params.ao);
 				m_chainMissile->beautifier(m_params.level);
 				addChild(m_chainMissile);
 				m_currentRad = atan2f(ny - pos.y, nx - pos.x);
@@ -758,13 +767,24 @@ void Chain::update(float dt)
 			else
 			{
 				removeFromParent();
-				
+				return;
 			}
 		}
 		
 		
 	}
 	
+	if(m_frameCount == 80)
+	{
+		
+		addChild(KSGradualValue<float>::create(255.f, 0.f, 0.3f, [=](float t){
+			KS::setOpacity(m_chainMissile, t);
+		}, [=](float t) {
+			KS::setOpacity(m_chainMissile, t);
+			removeFromParent();
+			
+		}));
+	}
 	
 	
 	
