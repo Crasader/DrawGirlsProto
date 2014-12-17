@@ -722,10 +722,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			float ny = nearCumber->getPosition().y;
 			float nx = nearCumber->getPosition().x;
 			int j = 0;
-			for(int i=missileNumbersInt; i>=0; i-=18, j++)
+			for(int i=missileNumbersInt; i>=0; i-=16, j++)
 			{
 				auto creator = [=](){
-					int mNumber = MIN(i, 18);
+					int mNumber = MIN(i, 16);
 					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
 																								atan2f(ny - myGD->getJackPointCCP().y,
 																											 nx - myGD->getJackPointCCP().x),// 방향

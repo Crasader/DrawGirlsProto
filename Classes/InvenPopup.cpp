@@ -643,7 +643,7 @@ void InvenPopup::menuAction(CCObject* pSender)
 								   }
 								   
 								   Json::Value t_faceInfo = t_card["faceInfo"];
-								   if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+								   if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 								   {
 									   NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 									   NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
@@ -888,13 +888,18 @@ void InvenPopup::menuAction(CCObject* pSender)
 								   }
 								   
 								   Json::Value t_faceInfo = t_card["faceInfo"];
-								   if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+								   if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 								   {
 									   NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 									   NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
 									   
 									   if(NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card["no"].asInt()) != (t_faceInfo["ccbiID"].asString() + ".ccbi"))
 									   {
+											 if(t_faceInfo["ccbiID"].asString() == "")
+											 {
+												 CCLog("null");
+											 }
+											 
 										   DownloadFile t_df1;
 										   t_df1.size = t_faceInfo["size"].asInt();
 										   t_df1.img = t_faceInfo["ccbi"].asString().c_str();
