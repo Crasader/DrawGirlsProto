@@ -4382,6 +4382,7 @@ public:
 	bool init(const Params& params)
 	{
 		StoneAttack::init();
+		m_frameCount = 0;
 		m_params = params;
 		m_originalDepth = params.depth;
 		//		m_missileStep = 1;
@@ -4415,7 +4416,7 @@ public:
 		
 		m_targetNode = nearCumber;
 		m_targeted.push_back(m_targetNode);
-		m_chainMissile = StaticMissile::create(params.initPosition, params.fileName, params.power, params.subPower, 2, 20, params.ao);
+		m_chainMissile = StaticMissile::create(params.initPosition, params.fileName, params.power, params.subPower, 2, 0, params.ao);
 		m_chainMissile->beautifier(params.level);
 		addChild(m_chainMissile);
 		m_currentRad = atan2f(ny - m_params.initPosition.y, nx - m_params.initPosition.x);
@@ -4452,6 +4453,7 @@ public:
 	
 protected:
 	Params m_params;
+	int m_frameCount;
 	int m_originalDepth;
 	int m_missileStep; // 미사일 단계
 	float m_currentRad;
