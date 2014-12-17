@@ -1231,9 +1231,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p6] = "생명의돌";
 	obj[LK::kMyLocalKey_p7] = "일반뽑기권";
 	obj[LK::kMyLocalKey_p8] = "고급뽑기권";
-	obj[LK::kMyLocalKey_p9] = "카드환생권";
-	obj[LK::kMyLocalKey_p10] = "카드뽑기권";
-	obj[LK::kMyLocalKey_p11] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p9] = "카드뽑기권";
+	obj[LK::kMyLocalKey_p10] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p11] = "카드환생권";
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
 	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
@@ -2493,9 +2493,9 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_p6] = "Stone of life";
 	obj[LK::kMyLocalKey_p7] = "Regular draw ticket";
 	obj[LK::kMyLocalKey_p8] = "Advanced draw ticket";
-	obj[LK::kMyLocalKey_p9] = "카드합성권";
-	obj[LK::kMyLocalKey_p10] = "카드뽑기권";
-	obj[LK::kMyLocalKey_p11] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p9] = "카드뽑기권";
+	obj[LK::kMyLocalKey_p10] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p11] = "카드환생권";
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "How to fill your territory gauge!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "Try to take over the blue silhouetted area, not the part with the black background!";
 	obj[LK::kMyLocalKey_expTake] = "Experience obtained!";
