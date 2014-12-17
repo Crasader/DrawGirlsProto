@@ -522,7 +522,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		int missileM = MAX(1, missileNumbersInt * 0.8f * 0.75f);
+		int missileM = MAX(1, missileNumbersInt * 0.9f * 0.75f);
 		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
@@ -722,10 +722,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			float ny = nearCumber->getPosition().y;
 			float nx = nearCumber->getPosition().x;
 			int j = 0;
-			for(int i=missileNumbersInt; i>=0; i-=15, j++)
+			for(int i=missileNumbersInt; i>=0; i-=18, j++)
 			{
 				auto creator = [=](){
-					int mNumber = MIN(i, 15);
+					int mNumber = MIN(i, 18);
 					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
 																								atan2f(ny - myGD->getJackPointCCP().y,
 																											 nx - myGD->getJackPointCCP().x),// 방향
@@ -846,7 +846,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			jack_missile_node->addChild(ms);
 		};
 		int j = 0;
-		missileNumbersInt /= 3.f;
+		missileNumbersInt *= 2 / 3.f;
 		for(int i=missileNumbersInt; i>=0; i-=1, j++)
 		{
 			addChild(KSTimerControl::create(0.40 * (j), [=](){
