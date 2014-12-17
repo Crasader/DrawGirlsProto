@@ -115,16 +115,16 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	card_list_back->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-75,0));
 	main_case->addChild(card_list_back, 1);
 
-//	CCSprite* list_back_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 275, 175));
+//	CCSprite* list_back_img = CCSprite::create("whitePaper.png", CCRectMake(0, 0, 275, 164));
 //	list_back_img->setOpacity(100);
-//	list_back_img->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
+//	list_back_img->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(0,-7));
 //	card_list_back->addChild(list_back_img);
 
 	
-	card_table = CCTableView::create(this, CCSizeMake(275, 175));
+	card_table = CCTableView::create(this, CCSizeMake(275, 164));
 	card_table->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
 	card_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-87.5f));
+	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-88.5f));
 	card_table->setDelegate(this);
 	card_list_back->addChild(card_table);
 	card_table->setTouchPriority(touch_priority-1);
