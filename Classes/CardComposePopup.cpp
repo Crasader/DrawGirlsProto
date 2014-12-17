@@ -262,6 +262,8 @@ void CardComposePopup::menuAction(CCObject* t_sender)
 	
 	int t_tag = ((CCNode*)t_sender)->getTag();
 	
+	myDSH->setIntegerForKey(kDSH_Key_composeListOffsetX, compose_table->getContentOffset().x);
+	
 	ComposeDetailPopup* t_popup = ComposeDetailPopup::create(touch_priority, t_tag);
 	t_popup->setHideFinalAction(target_final, delegate_final);
 	getParent()->addChild(t_popup, getZOrder());

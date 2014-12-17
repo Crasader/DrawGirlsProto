@@ -205,6 +205,12 @@ bool InvenPopup::init()
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p6), goodsToImageFile(kGoodsType_pass6), mySGD->getGoodsValue(kGoodsType_pass6)));
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p7), goodsToImageFile(kGoodsType_pass7), mySGD->getGoodsValue(kGoodsType_pass7)));
 
+	/*
+	 obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass9] = "<font newline=15>카드뽑기권을 %d개를 드립니다.";
+	 obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass10] = "<font newline=15>캐릭강화권을 %d개를 드립니다.";
+	 obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass11] = "<font newline=15>카드환생권을 %d개를 드립니다.";
+	 obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass12] = "<font newline=15>쩌리권을 %d개를 드립니다.";
+	 */
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p8), goodsToImageFile(kGoodsType_pass8), mySGD->getGoodsValue(kGoodsType_pass8)));
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p9), goodsToImageFile(kGoodsType_pass9), mySGD->getGoodsValue(kGoodsType_pass9)));
 	m_itemList.push_back(HasItem(getLocal(LK::kMyLocalKey_p10), goodsToImageFile(kGoodsType_pass10), mySGD->getGoodsValue(kGoodsType_pass10)));

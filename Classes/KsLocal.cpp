@@ -1160,7 +1160,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_hellMode] = "헬모드";
 	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 특별한 캐릭터를 얻을 수 있어요.";
 	obj[LK::kMyLocalKey_hellNotOpen] = "<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>";
-	obj[LK::kMyLocalKey_mycharacter] = "내캐릭터";
+	obj[LK::kMyLocalKey_mycharacter] = "캐릭터";
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
 	obj[LK::kMyLocalKey_changeCharacter] = "캐릭터변경";
 	obj[LK::kMyLocalKey_selectCharacter] = "캐릭터선택";
@@ -1231,9 +1231,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_p6] = "생명의돌";
 	obj[LK::kMyLocalKey_p7] = "일반뽑기권";
 	obj[LK::kMyLocalKey_p8] = "고급뽑기권";
-	obj[LK::kMyLocalKey_p9] = "카드환생권";
-	obj[LK::kMyLocalKey_p10] = "카드뽑기권";
-	obj[LK::kMyLocalKey_p11] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p9] = "카드뽑기권";
+	obj[LK::kMyLocalKey_p10] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p11] = "카드환생권";
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "영역게이지를 채우는법!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "검은색 배경은 NO! 파란색 실루엣을 획득하세요!";
 	obj[LK::kMyLocalKey_expTake] = "경험치 획득!";
@@ -1332,12 +1332,12 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
-	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.\n2장이상 보유해야 한장을 사용할 수 있어요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
-	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
@@ -2495,9 +2495,9 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_p6] = "Stone of life";
 	obj[LK::kMyLocalKey_p7] = "Regular draw ticket";
 	obj[LK::kMyLocalKey_p8] = "Advanced draw ticket";
-	obj[LK::kMyLocalKey_p9] = "카드합성권";
-	obj[LK::kMyLocalKey_p10] = "카드뽑기권";
-	obj[LK::kMyLocalKey_p11] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p9] = "카드뽑기권";
+	obj[LK::kMyLocalKey_p10] = "캐릭강화권";
+	obj[LK::kMyLocalKey_p11] = "카드환생권";
 	obj[LK::kMyLocalKey_controlTip_100percent_title] = "How to fill your territory gauge!";
 	obj[LK::kMyLocalKey_controlTip_100percent_content] = "Try to take over the blue silhouetted area, not the part with the black background!";
 	obj[LK::kMyLocalKey_expTake] = "Experience obtained!";
@@ -2596,12 +2596,12 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
-	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.\n2장이상 보유해야 한장을 사용할 수 있어요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
-	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
