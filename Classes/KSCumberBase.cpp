@@ -2347,7 +2347,7 @@ COLLISION_CODE KSCumberBase::crashWithX( IntPoint check_position )
 		return COLLISION_CODE::kCOLLISION_NEWLINE;
 	}
 	IntPoint jackPoint = myGD->getJackPoint();
-	if(jackPoint.x == check_position.x && jackPoint.y == check_position.y)
+	if((jackPoint - check_position).length() < 2)
 	{
 		return COLLISION_CODE::kCOLLISION_JACK;
 	}
