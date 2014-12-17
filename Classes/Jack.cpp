@@ -1847,6 +1847,8 @@ void Jack::startDieEffect( int die_type ) /* after coding */
 			
 		}
 
+		myGD->communication("SW_stopAllSW");
+		
 		myGD->communication("UI_endFever");
 		myGD->communication("UI_stopCombo");
 
@@ -2322,11 +2324,11 @@ void Jack::dieEffect()
 			}
 			else
 			{
-//				if(mySGD->is_endless_mode || continue_on_count < 2)
-//				{
+				if(!mySGD->is_endless_mode || continue_on_count < 3)
+				{
 					continue_on_count = continue_on_count.getV() + 1;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
-//				}
+				}
 //				else
 //				{
 //					jackImg->setVisible(false);
@@ -2646,8 +2648,10 @@ void Jack::myInit()
 	Json::Reader json_reader;
 	json_reader.parse(script_str, script_json);
 	
-	
-	continue_on_count = 0;
+	if(mySGD->is_endless_mode)
+		continue_on_count = mySGD->getUserdataEndlessContinueCnt();
+	else
+		continue_on_count = 0;
 	before_x_direction = directionStop;
 	before_x_cnt = 0;
 	keep_direction = kKeepDirection_empty;

@@ -139,6 +139,12 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	card_list_back->addChild(card_table);
 	card_table->setTouchPriority(touch_priority-1);
 	
+	need_card_count_2_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_needCardCount2), mySGD->getFont().c_str(), 20);
+	need_card_count_2_label->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
+	card_list_back->addChild(need_card_count_2_label);
+	
+	need_card_count_2_label->setVisible(card_data_list.empty());
+	
 	CCScale9Sprite* card_list_tab = CCScale9Sprite::create("tabbutton_up.png", CCRectMake(0, 0, 74, 33), CCRectMake(36, 16, 2, 1));
 	card_list_tab->setContentSize(CCSizeMake(95, 33));
 	card_list_tab->setPosition(ccp(card_list_back->getContentSize().width/2.f, card_list_back->getContentSize().height-2.5f));
@@ -168,16 +174,45 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	{
 		CardSortInfo t_info = mySGD->getHasGottenCardDataForCardNumber(t_material_list[i].getV());
 		CCPoint t_position = ccp(0,0);
-		if(i == 0)
-			t_position = ccp(37,117);
-		else if(i == 1)
-			t_position = ccp(60,48);
-		else if(i == 2)
-			t_position = ccp(102,105);
+		float t_scale = 1.f;
+		if(material_count == 1)
+		{
+			t_position = ccpFromSize(necessary_back->getContentSize()/2.f);
+		}
+		else if(material_count == 2)
+		{
+			if(i == 0)
+				t_position = ccp(40,110);
+			else if(i == 1)
+				t_position = ccp(95,52);
+		}
+		else if(material_count == 3)
+		{
+			if(i == 0)
+				t_position = ccp(37,117);
+			else if(i == 1)
+				t_position = ccp(60,48);
+			else if(i == 2)
+				t_position = ccp(102,105);
+		}
+		else if(material_count == 4)
+		{
+			t_scale = 0.8f;
+			if(i == 0)
+				t_position = ccp(32,121);
+			else if(i == 1)
+				t_position = ccp(45,55);
+			else if(i == 2)
+				t_position = ccp(92,110);
+			else if(i == 3)
+				t_position = ccp(107,44);
+		}
+		
 		if(t_info.count.getV() >= 1)
 		{
 			CCClippingNode* clipping_node = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
 			clipping_node->setAlphaThreshold(0.1f);
+			clipping_node->setScale(t_scale);
 			clipping_node->setPosition(t_position);
 			
 			GraySprite* t_card = GraySprite::createWithTexture(mySIL->addImage(ccsf("card%d_visible.png", t_info.card_number.getV())));
@@ -207,6 +242,7 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			is_necessary_on = false;
 			CCSprite* not_have_back = CCSprite::create("cardsetting_off.png");
 			not_have_back->setPosition(t_position);
+			not_have_back->setScale(t_scale);
 			necessary_back->addChild(not_have_back);
 			
 			KSLabelTTF* need_ment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_necessaryPlease), mySGD->getFont().c_str(), 11);
@@ -263,6 +299,8 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	
 	card_table->reloadData();
 	selected_table->reloadData();
+	
+	need_card_count_2_label->setVisible(card_data_list.empty());
 	
 	CCLabelTTF* t_button_label = CCLabelTTF::create();
 	KSLabelTTF* compose_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_doCompose), mySGD->getFont().c_str(), 16);
@@ -417,7 +455,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 			n_label->setPosition(ccp(n_node->getContentSize().width-16, 12));
 			n_frame->addChild(n_label);
 			
-			KSLabelTTF* n_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count), mySGD->getFont().c_str(), 9);
+			KSLabelTTF* n_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count-1), mySGD->getFont().c_str(), 9);
 			n_count_label->setPosition(ccp(n_node->getContentSize().width-4, n_node->getContentSize().height-1));
 			n_frame->addChild(n_count_label);
 			
@@ -441,7 +479,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 			s_label->setPosition(ccp(s_node->getContentSize().width-16, 12));
 			s_frame->addChild(s_label);
 			
-			KSLabelTTF* s_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count), mySGD->getFont().c_str(), 9);
+			KSLabelTTF* s_count_label = KSLabelTTF::create(ccsf("%d", t_info->count.getV() - target_count-1), mySGD->getFont().c_str(), 9);
 			s_count_label->setPosition(ccp(s_node->getContentSize().width-4, s_node->getContentSize().height-1));
 			s_frame->addChild(s_count_label);
 			
@@ -702,6 +740,8 @@ void ComposeDetailPopup::cardAction(CCObject *t_sender)
 	card_table->reloadData();
 	card_table->setContentOffset(t_offset);
 	
+	need_card_count_2_label->setVisible(card_data_list.empty());
+	
 	is_menu_enable = true;
 }
 
@@ -737,6 +777,8 @@ void ComposeDetailPopup::unselectedAction(CCObject* t_sender)
 	CCPoint t_offset = card_table->getContentOffset();
 	card_table->reloadData();
 	card_table->setContentOffset(t_offset);
+	
+	need_card_count_2_label->setVisible(card_data_list.empty());
 	
 	is_menu_enable = true;
 }

@@ -49,6 +49,7 @@ private:
 	CCScale9Sprite* take_back;
 	
 	CCTableView* card_table;
+	KSLabelTTF* need_card_count_2_label;
 	CCTableView* selected_table;
 	
 	LoadingLayer* loading_layer;

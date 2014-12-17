@@ -469,7 +469,7 @@ void CharacterStrengthPopup::strengthAction(CCObject* t_sender, CCControlEvent t
 	else
 	{
 		loading_layer = LoadingLayer::create(touch_priority-3);
-		addChild(loading_layer);
+		addChild(loading_layer, 9999);
 		loading_layer->startLoading();
 		
 		Json::Value param;
@@ -561,8 +561,36 @@ void CharacterStrengthPopup::expUpAction()
 												 card_table->setContentOffset(ccp(t_offset.x, t_offset.y));
 												 need_card_count_2_label->setVisible(card_data_list.empty());
 												 
-												 loading_layer->removeFromParent();
 												 is_menu_enable = true;
+												 
+												 CCSprite* character_title_back = (CCSprite*)character_img->getParent();
+												 KSLabelTTF* strength_success = KSLabelTTF::create(getLocal(LK::kMyLocalKey_strengthComplete), mySGD->getFont().c_str(), 30);
+												 strength_success->setPosition(ccp(character_title_back->getContentSize().width/2.f, character_title_back->getContentSize().height/2.f-1));
+												 character_title_back->addChild(strength_success);
+												 
+												 strength_success->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
+												 strength_success->enableOuterStroke(ccBLACK, 2.f, 255, true);
+												 strength_success->setScale(0.f);
+												 
+												 strength_success->addChild(KSGradualValue<float>::create(0.f, 1.f, 0.3f, [=](float t_f)
+																										  {
+																											  strength_success->setScale(t_f);
+																										  }, [=](float t_f)
+																										  {
+																											  strength_success->setScale(t_f);
+																											  strength_success->addChild(KSTimer::create(0.5f, [=]()
+																																						 {
+																																							 strength_success->addChild(KSGradualValue<float>::create(1.f, 0.f, 0.2f, [=](float t_f)
+																																																					  {
+																																																						  strength_success->setScale(t_f);
+																																																					  }, [=](float t_f)
+																																																					  {
+																																																						  strength_success->setScale(t_f);
+																																																						  strength_success->removeFromParent();
+																																																					  }));
+																																						 }));
+																										  }));
+												 
 											 }));
 	}
 	else
@@ -588,6 +616,8 @@ void CharacterStrengthPopup::resultStrength(Json::Value result_data)
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
 		mySGD->network_check_cnt = 0;
+		
+		loading_layer->removeFromParent();
 		
 		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass10) <= 0)
 			fiverocks::FiveRocksBridge::trackEvent("UseGold", "CharStrength", ccsf("Char %d", NSDS_GI(kSDS_GI_characterInfo_int1_no_i, character_idx)), ccsf("Stage %d", mySGD->getUserdataHighPiece()));

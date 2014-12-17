@@ -231,7 +231,7 @@ void CardGachaPopup::myInit(int t_touch_priority)
 	stop_button->setVisible(false);
 	
 	CCLabelTTF* t4_label = CCLabelTTF::create();
-	KSLabelTTF* ok_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_onePercentGame10), mySGD->getFont().c_str(), 15);
+	KSLabelTTF* ok_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_ok), mySGD->getFont().c_str(), 15);
 	ok_label->enableOuterStroke(ccBLACK, 1.f, 255, true);
 	ok_label->setPosition(ccp(0,0));
 	t4_label->addChild(ok_label);

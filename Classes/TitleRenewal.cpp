@@ -2583,7 +2583,7 @@ void TitleRenewalScene::resultGetMonsterList(Json::Value result_data)
 
 void TitleRenewalScene::resultGetUserData( Json::Value result_data )
 {
-	KS::KSLog("%", result_data);
+//	CCLog("%s", result_data.toStyledString().c_str());
 	
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{

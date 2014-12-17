@@ -3500,6 +3500,8 @@ string StarGoldData::getUserdataTypeToKey(UserdataType t_type)
 		return_value = "score";
 	else if(t_type == kUserdataType_endlessData_victory)
 		return_value = "victory";
+	else if(t_type == kUserdataType_endlessData_continueCnt)
+		return_value = "continueCnt";
 	
 	else if(t_type == kUserdataType_achieve_mapGacha)
 		return_value = "aMapGacha";
@@ -3599,12 +3601,16 @@ void StarGoldData::initUserdata(Json::Value result_data)
 		{
 			userdata_storage[(UserdataType)i] = result_data["archiveData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 		}
-		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score || i == kUserdataType_endlessData_victory)
+		else if(i == kUserdataType_endlessData_ingWin || i == kUserdataType_endlessData_ingWeek || i == kUserdataType_endlessData_score || i == kUserdataType_endlessData_victory || i == kUserdataType_endlessData_continueCnt)
 		{
 			userdata_storage[(UserdataType)i] = result_data["endlessData"].get(getUserdataTypeToKey((UserdataType)i), Json::Value()).asInt();
 			if(i == kUserdataType_endlessData_ingWin)
 			{
 				endless_my_victory = userdata_storage[(UserdataType)i].getV();
+			}
+			else if(i == kUserdataType_endlessData_continueCnt && endless_my_victory.getV() == 0)
+			{
+				userdata_storage[(UserdataType)i] = 0;
 			}
 		}
 		else if(i >= kUserdataType_missileInfo_nextPrice && i <= kUserdataType_missileInfo_isMaxLevel)
@@ -4401,6 +4407,12 @@ void StarGoldData::setUserdataEndlessIngWeek(int t_i)
 int StarGoldData::getUserdataEndlessIngWeek(){	return userdata_storage[kUserdataType_endlessData_ingWeek].getV();	}
 int StarGoldData::getUserdataEndlessScore(){	return userdata_storage[kUserdataType_endlessData_score].getV();	}
 int StarGoldData::getUserdataEndlessVictory(){	return userdata_storage[kUserdataType_endlessData_victory].getV();	}
+
+void StarGoldData::setUserdataEndlessContinueCnt(int t_i)
+{
+	userdata_storage[kUserdataType_endlessData_continueCnt] = t_i;
+}
+int StarGoldData::getUserdataEndlessContinueCnt(){	return userdata_storage[kUserdataType_endlessData_continueCnt].getV();	}
 
 void StarGoldData::setUserdataAchieveMapGacha(int t_i)
 {
