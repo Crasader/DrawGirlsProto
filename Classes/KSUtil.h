@@ -355,7 +355,50 @@ public:
 		}
 	}
 };
-
+class KSTimerControl : public CCNode
+{
+protected:
+	std::function<void(void)> f;
+	std::function<bool(void)> stopFunction;
+	float m_s;
+	float m_timer;
+public:
+	virtual ~KSTimerControl(){}
+	void after()
+	{
+		unscheduleUpdate();
+		removeFromParent();
+		f();
+	}
+	static KSTimerControl* create(float s, std::function<void(void)> __f, std::function<bool(void)> __stopFunction)
+	{
+		KSTimerControl* kt = new KSTimerControl;
+		kt->init(s, __f, __stopFunction);
+		kt->autorelease();
+		return kt;
+	}
+	bool init(float s, std::function<void(void)> __f, std::function<bool(void)> __cf)
+	{
+		f = __f;
+		stopFunction = __cf;
+		m_s = s;
+		m_timer = 0;
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt)
+	{
+		m_timer += 1.f/60.f;
+		if(stopFunction() == true)
+		{
+			removeFromParent();
+		}
+		if(m_timer >= m_s)
+		{
+			after();
+		}
+	}
+};
 template <typename T>
 class KSGradualValue : public CCNode
 {

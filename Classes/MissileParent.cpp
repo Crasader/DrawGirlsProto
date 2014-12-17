@@ -327,8 +327,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 //				jack_missile_node->addChild(lw);
 				
 			};
-			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+			// 죽고 ----------------------------------- 제어 가능한 상태
+			addChild(KSTimerControl::create(0.30 * (i + 1), [=](){
 				creator();
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 		}
 	}
@@ -349,9 +353,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				}
 			};
 			
-			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+			addChild(KSTimerControl::create(0.30 * (i + 1), [=](){
 				if(myGD->getIsGameover() == false)
 					creator();
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 		}
 	}
@@ -361,21 +368,27 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 		//LaserAttack* la = LaserAttack::create(0, 400, 33.f, AttackOption::kNoOption);
 		float addRad = ks19937::getDoubleValue(0, M_PI * 2.f);
-		addChild(KSIntervalCall::create(30, missileNumbers * 2, [=](int seq){
-			int dirs = 2 + MIN((grade-1), 3);
-			if(myGD->getIsGameover() == false)
-			{
-				for(int r=0; r<dirs; r++)
+		for(int i=0; i<missileNumbers * 2; i++)
+		{
+			addChild(KSTimerControl::create(0.5f * (i + 1), [=](){
+				int dirs = 2 + MIN((grade-1), 3);
+				if(myGD->getIsGameover() == false)
 				{
-					float rad = deg2Rad(360.f / dirs * r);
-					
-					rad += addRad;
-					StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power * 1 / (dirs - 1), missile_sub_damage * 1 / (dirs - 1), ao);
-					jack_missile_node->addChild(sm);
-					sm->beautifier(level);
+					for(int r=0; r<dirs; r++)
+					{
+						float rad = deg2Rad(360.f / dirs * r);
+						
+						rad += addRad;
+						StraightMissile* sm = StraightMissile::create(initPosition, fileName.c_str(), rad, 2.f, power * 1 / (dirs - 1), missile_sub_damage * 1 / (dirs - 1), ao);
+						jack_missile_node->addChild(sm);
+						sm->beautifier(level);
+					}
 				}
-			}
-		}));
+			}, [=](){
+				return myGD->B_V["Jack_isDie"]();
+			}));
+		}
+		
 
 		
 //		LaserWrapper* lw = LaserWrapper::create(2 + MIN((grade-1), 3), 60*2 + missileNumbers * 60,
@@ -385,46 +398,51 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	}
 	else if(stoneType == StoneType::kStoneType_spread)
 	{
-		addChild(KSIntervalCall::create(20, missileNumbers, [=](int seq){
-			if(myGD->getIsGameover() == true)
-				return;
-			
-			int adderForGrade = 0;
-			if(grade == 1){
-				adderForGrade = 4;
-			}
-			else if(grade == 2){
-				adderForGrade = 6;
-			}
-			else if(grade == 3){
-				adderForGrade = 8;
-			}
-			else if(grade == 4){
-				adderForGrade = 10;
-			}
-			else if(grade >= 5){
-				adderForGrade = 12;
-			}
-			else{
-				adderForGrade = 0;
-			}
-			string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-			//			string fileName = boost::str(boost::format("me_redial%||.ccbi") % level);
-			KSCumberBase* target = nullptr;
-			std::vector<KSCumberBase*> targets;
-			targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
-			targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
-			target = targets[ks19937::getIntValue(0, targets.size() - 1)];
-			SpreadMissile* sm = SpreadMissile::create(target, myGD->getJackPoint().convertToCCP(),
-																								fileName,
-																								1.8f + 0.3f * grade, power / (adderForGrade - 3), missile_sub_damage / (adderForGrade - 3),
-																								adderForGrade, // 방향.
-																								level,
-																								ao);
-//			sm->beautifier(level);
-			jack_missile_node->addChild(sm);
-			
-		}));
+		for(int i=0; i<missileNumbers; i++)
+		{
+			addChild(KSTimerControl::create(0.33f * (i + 1), [=](){
+				if(myGD->getIsGameover() == true)
+					return;
+				
+				int adderForGrade = 0;
+				if(grade == 1){
+					adderForGrade = 4;
+				}
+				else if(grade == 2){
+					adderForGrade = 6;
+				}
+				else if(grade == 3){
+					adderForGrade = 8;
+				}
+				else if(grade == 4){
+					adderForGrade = 10;
+				}
+				else if(grade >= 5){
+					adderForGrade = 12;
+				}
+				else{
+					adderForGrade = 0;
+				}
+				string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
+				//			string fileName = boost::str(boost::format("me_redial%||.ccbi") % level);
+				KSCumberBase* target = nullptr;
+				std::vector<KSCumberBase*> targets;
+				targets.insert(targets.end(), myGD->getMainCumberVector().begin(), myGD->getMainCumberVector().end());
+				targets.insert(targets.end(), myGD->getSubCumberVector().begin(), myGD->getSubCumberVector().end());
+				target = targets[ks19937::getIntValue(0, targets.size() - 1)];
+				SpreadMissile* sm = SpreadMissile::create(target, myGD->getJackPoint().convertToCCP(),
+																									fileName,
+																									1.8f + 0.3f * grade, power / (adderForGrade - 3), missile_sub_damage / (adderForGrade - 3),
+																									adderForGrade, // 방향.
+																									level,
+																									ao);
+				//			sm->beautifier(level);
+				jack_missile_node->addChild(sm);
+			}, [=](){
+				return myGD->B_V["Jack_isDie"]();
+			}));
+		}
+		
 	}
 	else if(stoneType == StoneType::kStoneType_range)
 	{
@@ -445,12 +463,15 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				jack_missile_node->addChild(ra);
 				
 			};
-			addChild(KSTimer::create(0.80 * (j), [=](){
+			addChild(KSTimerControl::create(0.80 * (j), [=](){
 				if(myGD->getIsGameover() == false)
 				{
 					creator();
 				}
-			}));
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
+			} ));
 			
 		}
 		
@@ -482,11 +503,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					jack_missile_node->addChild(sa);
 				}
 			};
-			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+			addChild(KSTimerControl::create(0.30 * (i + 1), [=](){
 				if(myGD->getIsGameover() == false)
 				{
 					creator();
 				}
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 		}
 	}
@@ -498,7 +522,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
 		int subType = mInfo.get("subType", 1).asInt();
 		
-		int missileM = MAX(1, missileNumbersInt * 0.8f * 0.75f);
+		int missileM = MAX(1, missileNumbersInt * 0.9f * 0.75f);
 		for(int i=0; i<missileM; i++)
 		{
 			auto creator = [=](){
@@ -570,9 +594,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				gm->beautifier(level);
 				jack_missile_node->addChild(gm);
 			};
-			addChild(KSTimer::create(0.30 * (i + 1), [=](){
+			addChild(KSTimerControl::create(0.30 * (i + 1), [=](){
 				if(myGD->getIsGameover() == false)
 					creator();
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 		}
 	}
@@ -668,9 +695,12 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				ms->beautifier(level);
 				jack_missile_node->addChild(ms);
 			};
-			addChild(KSTimer::create(0.50 * (i + 1), [=](){
+			addChild(KSTimerControl::create(0.50 * (i + 1), [=](){
 				if(myGD->getIsGameover() == false)
 					creator();
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 		}
 	}
@@ -692,10 +722,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			float ny = nearCumber->getPosition().y;
 			float nx = nearCumber->getPosition().x;
 			int j = 0;
-			for(int i=missileNumbersInt; i>=0; i-=15, j++)
+			for(int i=missileNumbersInt; i>=0; i-=18, j++)
 			{
 				auto creator = [=](){
-					int mNumber = MIN(i, 15);
+					int mNumber = MIN(i, 18);
 					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
 																								atan2f(ny - myGD->getJackPointCCP().y,
 																											 nx - myGD->getJackPointCCP().x),// 방향
@@ -707,11 +737,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					//		ms->beautifier(level);
 					jack_missile_node->addChild(ms);
 				};
-				addChild(KSTimer::create(0.80 * (j), [=](){
+				addChild(KSTimerControl::create(0.80 * (j), [=](){
 					if(myGD->getIsGameover() == false)
 					{
 						creator();
 					}
+				}, [=](){
+					bool jackDie = myGD->B_V["Jack_isDie"]();
+					return jackDie;
 				}));
 				
 			}
@@ -763,11 +796,14 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			for(int i=missileNumbersInt; i>=0; i-=10, j++)
 			{
 				int mNumber = MIN(i, 10);
-				addChild(KSTimer::create(0.80 * (j), [=](){
+				addChild(KSTimerControl::create(0.80 * (j), [=](){
 					if(myGD->getIsGameover() == false)
 					{
 						creator(mNumber);
 					}
+				}, [=](){
+					bool jackDie = myGD->B_V["Jack_isDie"]();
+					return jackDie;
 				}));
 				
 			}
@@ -810,14 +846,17 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			jack_missile_node->addChild(ms);
 		};
 		int j = 0;
-		missileNumbersInt /= 3.f;
+		missileNumbersInt *= 2 / 3.f;
 		for(int i=missileNumbersInt; i>=0; i-=1, j++)
 		{
-			addChild(KSTimer::create(0.40 * (j), [=](){
+			addChild(KSTimerControl::create(0.40 * (j), [=](){
 				if(myGD->getIsGameover() == false)
 				{
 					creator();
 				}
+			}, [=](){
+				bool jackDie = myGD->B_V["Jack_isDie"]();
+				return jackDie;
 			}));
 			
 		}
