@@ -1160,7 +1160,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_hellMode] = "헬모드";
 	obj[LK::kMyLocalKey_hellMarquee] = "헬모드를 클리어하면 특별한 캐릭터를 얻을 수 있어요.";
 	obj[LK::kMyLocalKey_hellNotOpen] = "<font color=961 strokesize=1 strokecolor=000 strokeopacity=100>%d스테이지</font><font strokesize=1 strokecolor=000 strokeopacity=100 newline=15> 클리어 후</font><font strokesize=1 strokecolor=000 strokeopacity=100>오픈 됩니다.</font>";
-	obj[LK::kMyLocalKey_mycharacter] = "내캐릭터";
+	obj[LK::kMyLocalKey_mycharacter] = "캐릭터";
 	obj[LK::kMyLocalKey_missileUpgrade2] = "미사일\n업그레이드";
 	obj[LK::kMyLocalKey_changeCharacter] = "캐릭터변경";
 	obj[LK::kMyLocalKey_selectCharacter] = "캐릭터선택";
@@ -1337,7 +1337,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
-	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
@@ -2601,7 +2601,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
-	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
