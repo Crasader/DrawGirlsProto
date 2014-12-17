@@ -126,7 +126,22 @@ void CardComposePopup::myInit(int t_touch_priority)
 	main_inner->addChild(compose_table);
 	compose_table->setTouchPriority(touch_priority-1);
 	
-	
+	if(compose_table->minContainerOffset().x > 0.f)
+	{
+		compose_table->setContentOffset(ccp(0, compose_table->getContentOffset().y));
+		myDSH->setIntegerForKey(kDSH_Key_composeListOffsetX, compose_table->getContentOffset().x);
+	}
+	else
+	{
+		float offset_x = myDSH->getIntegerForKey(kDSH_Key_composeListOffsetX);
+		if(offset_x < compose_table->minContainerOffset().x) // compose_table->maxContainerOffset().x
+			compose_table->setContentOffset(ccp(compose_table->minContainerOffset().x, compose_table->getContentOffset().y));
+		else if(offset_x > compose_table->maxContainerOffset().x)
+			compose_table->setContentOffset(ccp(compose_table->maxContainerOffset().x, compose_table->getContentOffset().y));
+		else
+			compose_table->setContentOffset(ccp(offset_x, compose_table->getContentOffset().y));
+		myDSH->setIntegerForKey(kDSH_Key_composeListOffsetX, compose_table->getContentOffset().x);
+	}
 	
 	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
 	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
@@ -139,11 +154,13 @@ void CardComposePopup::myInit(int t_touch_priority)
 								  
 								  AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 								  
-								  CardSettingPopup* t_popup = CardSettingPopup::create();
-								  t_popup->setHideFinalAction(target_final, delegate_final);
-								  getParent()->addChild(t_popup, getZOrder());
+//								  CardSettingPopup* t_popup = CardSettingPopup::create();
+//								  t_popup->setHideFinalAction(target_final, delegate_final);
+//								  getParent()->addChild(t_popup, getZOrder());
+//								  
+//								  target_final = NULL;
 								  
-								  target_final = NULL;
+								  myDSH->setIntegerForKey(kDSH_Key_composeListOffsetX, compose_table->getContentOffset().x);
 								  
 								  CommonAnimation::closePopup(this, main_case, gray, [=](){}, [=]()
 															  {

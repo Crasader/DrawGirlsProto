@@ -1295,7 +1295,9 @@ enum class LK
 	kMyLocalKey_toShowAdultImgForSdiaryNeed,
 	kMyLocalKey_download,
 	kMyLocalKey_pleaseSelectMaterialCard,
-	kMyLocalKey_needCardCount2
+	kMyLocalKey_needCardCount2,
+	kMyLocalKey_strengthComplete,
+	kMyLocalKey_nCountRest
 };
 class KsLocal
 {

@@ -412,6 +412,11 @@ bool EndlessModeResult::init()
 		Json::Value p1_data;
 		p1_data["character"] = mySGD->getUserdataSelectedCharNO();
 		p1_data["highPiece"] = mySGD->getUserdataHighPiece();
+		
+		if(left_total_score.getV() <= right_total_score.getV())
+			mySGD->setUserdataEndlessContinueCnt(0);
+		
+		p1_data["continueCnt"] = mySGD->getUserdataEndlessContinueCnt();
 		param["data"] = p1_data;
 		
 		send_command_list.push_back(CommandParam("finishendlessplay", param, [=](Json::Value result_data)
@@ -2793,6 +2798,7 @@ void EndlessModeResult::reSetEndlessRank()
 	Json::Value p1_data;
 	p1_data["character"] = mySGD->getUserdataSelectedCharNO();
 	p1_data["highPiece"] = mySGD->getUserdataHighPiece();
+	p1_data["continueCnt"] = mySGD->getUserdataEndlessContinueCnt();
 	param["data"] = p1_data;
 
 	myHSP->command("finishendlessplay", param, [=](Json::Value result_data)

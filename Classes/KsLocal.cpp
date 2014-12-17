@@ -193,7 +193,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_cgpAllPopupTitle] = "CGP 전체 팝업 보상";
 	obj[LK::kMyLocalKey_shop] = "상점";
 	obj[LK::kMyLocalKey_ranking] = "랭킹";
-	obj[LK::kMyLocalKey_mycard] = "내카드";
+	obj[LK::kMyLocalKey_mycard] = "카드";
 	obj[LK::kMyLocalKey_todaymission] = "오늘의 임무";
 	obj[LK::kMyLocalKey_event] = "이벤트";
 	obj[LK::kMyLocalKey_openStage] = "스페셜 스테이지";
@@ -307,7 +307,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_locked] = "잠김";
 	obj[LK::kMyLocalKey_titleLoadingBegin] = "";
 	obj[LK::kMyLocalKey_titleLoading1] = "각 스테이지 별로 각기 다른 4장의 이미지를 획득해 보세요.";
-	obj[LK::kMyLocalKey_titleLoading2] = "공공장소나 대중교통 이용 시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 내 카드 메뉴에서 확인 할 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading2] = "공공장소나 대중교통 이용 시에는 '대중교통 모드'로 Play 하세요. 획득한 이미지는 카드 메뉴에서 확인 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading3] = "파란색 실루엣 영역을 획득해야 % 가 증가해요.";
 	obj[LK::kMyLocalKey_titleLoading4] = "'영역 다시 뽑기' 를 해서 넓은 영역으로 play 를 시작하면 높은 등급의 카드를 획득하기가 쉬워져요";
 	obj[LK::kMyLocalKey_titleLoading5] = "'대중교통 모드' 는 play 중에 일시정지 버튼을 탭해서 설정할 수 있습니다.";
@@ -326,7 +326,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading19] = "스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요.";
 	obj[LK::kMyLocalKey_titleLoading6] = "한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다.";
 	obj[LK::kMyLocalKey_titleLoading20] = "이어하기는 횟수 제한 없이 사용할 수 있습니다. 목표한 등급을 꼭 획득하세요!";
-	obj[LK::kMyLocalKey_titleLoading21] = "내카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading21] = "카드 목록에서 카드 이미지를 터치하면 카드 상세 내용을 보실 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading22] = "다이어리에는 캐릭터마다 재미있는 특징들이 숨어있어요.";
 	obj[LK::kMyLocalKey_titleLoading23] = "85% 로 클리어 하면 별 1개를 획득합니다.";
 	obj[LK::kMyLocalKey_titleLoading24] = "change를 모두 모은 후 클리어하면 별 3개를 획득합니다.";
@@ -358,7 +358,7 @@ void KsLocal::ko()
 	else
 	{
 		obj[LK::kMyLocalKey_titleLoading45] = "친구를 초대하고 추천인 보상을 받으세요. 추천을 받은 횟수에 따라 더 많은 보상을 받을 수 있습니다.";
-		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 내카드>다이어리에서 보낼 수 있습니다.";
+		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 카드>다이어리에서 보낼 수 있습니다.";
 	}
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
@@ -755,7 +755,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass3] = "<font newline=15>업그레이드 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass4] = "<font newline=15>아이템뽑기 이용권 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass5] = "<font newline=15>1프로찬스 이용권 %d개를 드립니다.";
-	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass6] = "<font newline=15>생명의 돌을 %d개를 드립니다.<font newline=15>생명의 돌은 내카드 다이어리에서 사용하세요.";
+	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass6] = "<font newline=15>생명의 돌을 %d개를 드립니다.<font newline=15>생명의 돌은 카드 다이어리에서 사용하세요.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass7] = "<font newline=15>일반뽑기권을 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypePass8] = "<font newline=15>고급뽑기권을 %d개를 드립니다.";
 	obj[LK::kMyLocalKey_endlessSeqWinRewardGoodsTypeMany] = "<font newline=15>선물상자를 드립니다.";
@@ -765,7 +765,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_cardSettingPerfectCardMent] = "퍼펙트\n클리어시!";
 	obj[LK::kMyLocalKey_cardSettingSpecialCardTitle] = "스페셜 카드";
 	obj[LK::kMyLocalKey_cardSettingSpecialCardContent] = "이벤트를 통해 얻을 수 있는 카드입니다.";
-	obj[LK::kMyLocalKey_cardSettingSpecialCardToMyCard] = "내 카드 보기";
+	obj[LK::kMyLocalKey_cardSettingSpecialCardToMyCard] = "카드 보기";
 	obj[LK::kMyLocalKey_endlessTutorialMent1] = "<font newline=16>PVP모드가<font newline=16>오픈되었어요!";
 	obj[LK::kMyLocalKey_endlessTutorialMent2] = "<font newline=16>내 정보 입니다.";
 	obj[LK::kMyLocalKey_endlessTutorialMent3] = "<font>목록에서 <font color=961>다른 친구를 선택<font newline=16>해보세요.<font newline=16>다른 친구의 정보를 볼 수 있어요.";
@@ -852,7 +852,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_touch] = "터치";
 	obj[LK::kMyLocalKey_sound] = "사운드";
 	obj[LK::kMyLocalKey_elementalValue] = "속성(%s)";
-	obj[LK::kMyLocalKey_myCardCount] = "내카드수 ";
+	obj[LK::kMyLocalKey_myCardCount] = "카드수 ";
 	obj[LK::kMyLocalKey_diaryView] = "다이어리 보기";
 	obj[LK::kMyLocalKey_cardTakeCnt] = "보유장수";
 	obj[LK::kMyLocalKey_buttonTutorialMent] = "<font newline=20>땅을 획득하려면<font color=961 newline=20>꾸욱 버튼을 누른상태에서<font newline=20>조이스틱을 움직여주세요!";
@@ -1041,7 +1041,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_scenarioMent62] = "모두 게임오버 되었을 때는\n피격점수로 승패를 가릅니다.\n튜토리얼을 마치겠습니다. 그럼 전 이만!";
 	obj[LK::kMyLocalKey_kindTutorial1] = "업적 메뉴에서는 게임 중 달성한 업적을\n확인하고 보상을 받을 수 있습니다.\n앞으로 해야 할 업적들이 정말 많군요!";
 	obj[LK::kMyLocalKey_kindTutorial2] = "모든보상받기 버튼을 누르면 달성한 업적\n보상을 모두 한번에 받을 수 있어요!";
-	obj[LK::kMyLocalKey_kindTutorial3] = "하하! 또 만나네요.\n내카드에서는 스테이지에서 획득한 카드를\n확인할 수 있어요.";
+	obj[LK::kMyLocalKey_kindTutorial3] = "하하! 또 만나네요.\n카드에서는 스테이지에서 획득한 카드를\n확인할 수 있어요.";
 	obj[LK::kMyLocalKey_kindTutorial4] = "내가 획득한 카드나 다이어리 보기 버튼을\n터치하면 카드의 상세 내용을 확인할 수\n있는 다이어리로 이동합니다.";
 	obj[LK::kMyLocalKey_kindTutorial5] = "상단의 정렬버튼을 눌러 여러가지 옵션으로\n정렬기능을 이용할 수도 있습니다.";
 	obj[LK::kMyLocalKey_kindTutorial6] = "어머! 여기서 또 만나네요?\n이번엔 랭킹에 대해 설명해 드릴께요.\n \n월드주간랭킹은 일주일 동안 획득한 스테이지\n점수를 합산하여 랭킹이 산정됩니다.";
@@ -1274,7 +1274,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_damage] = "데미지";
 	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 	obj[LK::kMyLocalKey_reConnectAlert5] = "서버와의 접속에 오류가 발생하였습니다.\n다시 시도합니다.";
-	obj[LK::kMyLocalKey_castingCancelChance] = "캐스팅 취소 찬스!!";
+	obj[LK::kMyLocalKey_castingCancelChance] = "공격저지 준비완료!!";
     
     obj[LK::kMyLocalKey_patternContent1021] = "어디든 쫓아오며 닿는순간 죽어요.";
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
@@ -1323,8 +1323,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	obj[LK::kMyLocalKey_cardCompose] = "카드환생";
 	obj[LK::kMyLocalKey_detailContextShow] = "카드를 환생시켜 새로운 카드를 만들 수 있습니다.";
-	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
-	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
+	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수재료카드 %d장과\n%dEXP가 필요해요!";
+	obj[LK::kMyLocalKey_necessaryCard] = "필수재료카드";
 	obj[LK::kMyLocalKey_doCompose] = "환생하기";
 	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
 	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
@@ -1332,12 +1332,14 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
-	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수 카드가 부족해요.";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
+	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -1620,7 +1622,7 @@ void KsLocal::en()
 	else
 	{
 		obj[LK::kMyLocalKey_titleLoading45] = "친구를 초대하고 추천인 보상을 받으세요. 추천을 받은 횟수에 따라 더 많은 보상을 받을 수 있습니다.";
-		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 내카드>다이어리에서 보낼 수 있습니다.";
+		obj[LK::kMyLocalKey_titleLoading46] = "친구에게 카드를 선물해 보세요. 카드 선물은 카드>다이어리에서 보낼 수 있습니다.";
 	}
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
@@ -2536,7 +2538,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_damage] = "Damage";
 	obj[LK::kMyLocalKey_todayMissionOnlyNormalStage] = "일반스테이지에서만 누적됩니다.";
 	obj[LK::kMyLocalKey_reConnectAlert5] = "An error occurred in the connection to the server.\nTry again.";
-	obj[LK::kMyLocalKey_castingCancelChance] = "캐스팅 취소 찬스!!";
+	obj[LK::kMyLocalKey_castingCancelChance] = "공격저지 준비완료!!";
     
     obj[LK::kMyLocalKey_patternContent1021] = "어디든 쫓아오며 닿는순간 죽어요.";
 	obj[LK::kMyLocalKey_patternContent1022] = "가로,세로로 레이저를 쏴요.";
@@ -2585,8 +2587,8 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_fiveGacha] = "5장뽑기";
 	obj[LK::kMyLocalKey_cardCompose] = "카드환생";
 	obj[LK::kMyLocalKey_detailContextShow] = "카드를 환생시켜 새로운 카드를 만들 수 있습니다.";
-	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수카드 %d장과\n%dEXP가 필요해요!";
-	obj[LK::kMyLocalKey_necessaryCard] = "필수카드";
+	obj[LK::kMyLocalKey_necessaryCardAndNeedExp] = "필수재료카드 %d장과\n%dEXP가 필요해요!";
+	obj[LK::kMyLocalKey_necessaryCard] = "필수재료카드";
 	obj[LK::kMyLocalKey_doCompose] = "환생하기";
 	obj[LK::kMyLocalKey_necessaryPlease] = "필요해요!";
 	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
@@ -2594,12 +2596,14 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
 	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
-	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수 카드가 부족해요.";
+	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
 	obj[LK::kMyLocalKey_download] = "다운로드";
 	obj[LK::kMyLocalKey_pleaseSelectMaterialCard] = "재료카드를 선택해주세요.";
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만 재료로 나옵니다.";
+	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
+	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

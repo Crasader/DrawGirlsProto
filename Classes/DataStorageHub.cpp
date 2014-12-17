@@ -812,6 +812,7 @@ void DataStorageHub::initReturnPair()
 	return_value[kDSH_Key_premiumGachaDataTime] = "pgdt";
 	
 	return_value[kDSH_Key_cardGachaTryCnt_int1] = "cgtrycnt%d";
+	return_value[kDSH_Key_composeListOffsetX] = "cplstofstx";
 }
 
 //void DataStorageHub::changedCcbAnimationManager()

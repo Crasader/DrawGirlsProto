@@ -13,14 +13,18 @@
 #include "hspConnector.h"
 #include "ScrollBar.h"
 #include "StarGoldData.h"
+#include "DownloadFile.h"
+#include "StageImgLoader.h"
 
 USING_NS_CC;
 USING_NS_CC_EXT;
 using namespace std;
 class ScrollBar;
+class LoadingLayer;
+class ConvexGraph;
 enum TagNumber
 {
-	myChar, myCard, closeTag
+	myChar, myCard, closeTag, gacha, compose
 };
 class InvenPopup : public CCLayer, public CCTableViewDataSource, public CCTableViewDelegate
 {
@@ -172,6 +176,17 @@ private:
 	
 	std::vector<MyInfo> m_infoList;
 	CCTableView* m_infoTable;
+	LoadingLayer* card_loading;
+	vector<DownloadFile> card_download_list;
+	int ing_download_cnt;
+	int success_download_cnt;
+	vector<DownloadImgInfo> download_set;
+	vector<int> is_enable_index;
+	void startFileDownloadSet();
+	void checkDownloading();
+	ConvexGraph* card_progress_timer;
+	bool is_downloading;
+	int download_type;
 	
 	
 	CCObject* target_final;
@@ -196,7 +211,6 @@ private:
 	
 	bool is_menu_enable;
 	CCTableView* reward_table;
-
 };
 
 #endif /* defined(__DGproto__InvenPopup__) */

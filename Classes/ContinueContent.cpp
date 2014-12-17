@@ -352,19 +352,20 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 	{
 		if(mySGD->is_endless_mode)
 		{
-			if(mySGD->getGoodsValue(kGoodsType_gold) >= mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"))
+			if(mySGD->getGoodsValue(kGoodsType_pass1) > 0)
 			{
 				LoadingLayer* t_popup = LoadingLayer::create(touch_priority-200, true);
 				t_popup->setPosition(ccp(-240, -myDSH->ui_center_y));
 				addChild(t_popup, 9999);
 				
-				mySGD->addChangeGoods("rp_g", kGoodsType_gold, -mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"), "", CCString::createWithFormat("%d", mySGD->endless_my_victory.getV())->getCString(), "이어하기(PvP)");
+				mySGD->addChangeGoods("rp_p", kGoodsType_pass1, 0, "", CCString::createWithFormat("%d", mySD->getSilType())->getCString(), "이어하기(패스권)");
 				mySGD->changeGoods([=](Json::Value result_data)
 								   {
 									   t_popup->removeFromParent();
 									   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									   {
 										   mySGD->pvp_continue_cnt++;
+										   mySGD->setUserdataEndlessContinueCnt(myGD->getCommunication("Jack_getContinueOnCount"));
 //										   giveup_button->setEnabled(false);
 										   continue_button->setEnabled(false);
 										   
@@ -811,7 +812,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		counting_label->setPosition(ccpFromSize(back_in->getContentSize()/2.f) + ccp(0,-6));
 		
-		c_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_onContinue));
+		c_label->setString(ccsf((getLocal(LK::kMyLocalKey_onContinue) + string("\n") + getLocal(LK::kMyLocalKey_nCountRest)).c_str(), 3-mySGD->getUserdataEndlessContinueCnt()));
 		c_label->setAnchorPoint(ccp(0,0.5f));
 		c_label->setPosition(ccp(0,0));
 		
@@ -819,10 +820,26 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		c_label->addChild(price_node);
 		r_label->addChild(c_label);
 		
-		price_type = CCSprite::create("price_gold_img.png");
+		take_count = KSLabelTTF::create(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)), mySGD->getFont().c_str(), 11);
+		take_count->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+		
+		float wide_value = take_count->getContentSize().width - 40;
+		if(wide_value < 0)
+			wide_value = 0;
+		
+		take_back = CCScale9Sprite::create("common_count.png", CCRectMake(0, 0, 60, 20), CCRectMake(29, 9, 2, 2));
+		take_back->setContentSize(CCSizeMake(60+wide_value, 20));
+		take_back->setAnchorPoint(ccp(1.f,0.5f));
+		take_back->setPosition(ccp(78,18));
+		r_label->addChild(take_back);
+		
+		take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
+		take_back->addChild(take_count);
+		
+		price_type = CCSprite::create("pass_ticket1.png");
 		price_type->setPosition(ccp(price_type->getContentSize().width/2.f,0));
 		price_node->addChild(price_type);
-		price_label = CCLabelTTF::create(CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"))->getCString(), mySGD->getFont().c_str(), 15);
+		price_label = CCLabelTTF::create(/*CCString::createWithFormat("%d", mySGD->getPlayContinueFeeEndless()*myGD->getCommunication("Jack_getContinueOnCount"))->getCString()*/"1", mySGD->getFont().c_str(), 15);
 		price_label->setAnchorPoint(ccp(0,0.5f));
 		price_label->setPosition(ccp(price_type->getContentSize().width+2,0));
 		price_node->addChild(price_label);
@@ -831,7 +848,7 @@ void ContinueContent::myInit(int t_touch_priority, function<void(void)> t_end, f
 		
 		continue_button = CCControlButton::create(r_label, c_back);
 		continue_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ContinueContent::continueAction), CCControlEventTouchUpInside);
-		continue_button->setPreferredSize(CCSizeMake(150,44));
+		continue_button->setPreferredSize(CCSizeMake(150,42));
 		continue_button->setPosition(ccp(back_case->getContentSize().width/2.f,back_case->getContentSize().height/2.f-62));
 		back_case->addChild(continue_button, 2);
 		
