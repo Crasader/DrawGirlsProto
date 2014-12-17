@@ -131,10 +131,10 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	card_list_back->setPosition(ccpFromSize(main_case->getContentSize()/2.f) + ccp(-75,0));
 	main_case->addChild(card_list_back, 1);
 	
-	card_table = CCTableView::create(this, CCSizeMake(275, 175));
+	card_table = CCTableView::create(this, CCSizeMake(275, 164));
 	card_table->setDirection(CCScrollViewDirection::kCCScrollViewDirectionVertical);
 	card_table->setVerticalFillOrder(kCCTableViewFillTopDown);
-	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-87.5f));
+	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-88.5f));
 	card_table->setDelegate(this);
 	card_list_back->addChild(card_table);
 	card_table->setTouchPriority(touch_priority-1);

@@ -187,6 +187,7 @@ private:
 	ConvexGraph* card_progress_timer;
 	bool is_downloading;
 	int download_type;
+	int keep_version;
 	
 	
 	CCObject* target_final;

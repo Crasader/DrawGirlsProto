@@ -118,6 +118,7 @@ private:
 	ConvexGraph* card_progress_timer;
 	LoadingLayer* card_loading;
 	bool is_downloading;
+	int keep_version;
 	
 	CCScale9Sprite* take_count_back;
 	KSLabelTTF* title_label;

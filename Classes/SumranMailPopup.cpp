@@ -560,8 +560,26 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 		
 		if(mail["reward"].isArray() && mail["reward"].size()==1){
 			string rType = mail["reward"][0]["type"].asString();
+			int rCnt =mail["reward"][0]["count"].asInt();
 			if(rType=="fr" || rType=="pr")rType="r";
-			presentIcon= CCSprite::create(CCString::createWithFormat("icon_%s.png",rType.c_str())->getCString());
+			
+			if(rType=="cp"){
+				
+				int charIndex=1;
+				for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++){
+					if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i,i)==rCnt){
+						charIndex=i;
+					}
+				}
+				auto left_character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, charIndex) + ".ccbi");
+				CCSprite* _temp = CCSprite::create();
+				(left_character_ccb.first)->setPositionY(-10);
+				_temp->addChild(left_character_ccb.first);
+				_temp->setScale(0.5f);
+				presentIcon=_temp;
+			}else{
+				presentIcon= CCSprite::create(CCString::createWithFormat("icon_%s.png",rType.c_str())->getCString());
+			}
 		}else if(mail["reward"].isArray() && mail["reward"].size()>1){
 			presentIcon = CCSprite::create("postbox_present.png");
 		}else{
@@ -696,6 +714,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				else if(rewardType=="p9")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p9));
 																				else if(rewardType=="p10")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p10));
 																				else if(rewardType=="p11")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p11));
+																				else if(rewardType=="cp")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_character));
 																				else if(rewardType=="cd")rewardName->setString("");
 																				else rewardName->setString("");
 																				
@@ -703,6 +722,21 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				if(rewardType=="cd"){
 																					spr = mySIL->getLoadedImg(ccsf("card%d_visible.png", rewardCount));// mySIL->getUnsafeLoadedImg(CCString::createWithFormat("card%d_thumbnail.png",rewardCount)->getCString());
 																					spr->setScale(0.4f*0.3f);
+																					count->setString("");
+																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
+																				}else if(rewardType=="cp"){
+																					int charIndex=1;
+																					for(int i=1;i<=NSDS_GI(kSDS_GI_characterCount_i);i++){
+																						if(NSDS_GI(kSDS_GI_characterInfo_int1_no_i,i)==rewardCount){
+																							charIndex=i;
+																						}
+																					}
+																					auto left_character_ccb = KS::loadCCBIForFullPath<CCSprite*>(this, mySIL->getDocumentPath() + NSDS_GS(kSDS_GI_characterInfo_int1_resourceInfo_ccbiID_s, charIndex) + ".ccbi");
+																					CCSprite* _temp = CCSprite::create();
+																					(left_character_ccb.first)->setPositionY(-10);
+																					_temp->addChild(left_character_ccb.first);
+																					_temp->setScale(0.5f);
+																					spr=_temp;
 																					count->setString("");
 																					spr->setPosition(ccp(back->getContentSize().width/2.f,back->getContentSize().height/2.f));
 																				}else{
@@ -714,6 +748,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				}
 																				
 																				
+																				if(!spr)spr = CCSprite::create("icon_box.png");
 																				
 																				count->setPosition(ccp(back->getContentSize().width/2.f,16));
 																				rewardName->setPosition(ccp(back->getContentSize().width/2.f,53));
@@ -1273,7 +1308,7 @@ void SumranMailPopup::resultGetCardInfo(Json::Value result_data)
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
@@ -1777,7 +1812,7 @@ void SumranMailPopup::resultLoadedCardInfo (Json::Value result_data)
 			}
 			
 			Json::Value t_faceInfo = t_card["faceInfo"];
-			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+			if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 			{
 				NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 				NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);

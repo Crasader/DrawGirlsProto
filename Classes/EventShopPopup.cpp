@@ -256,6 +256,7 @@ void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
 									{
 										myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										fiverocks::FiveRocksBridge::trackPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										fiverocks::FiveRocksBridge::trackEvent("GetGem", "Get_Purchase", ccsf("ShopPurchaseEventGemCode%d", t_index+1), ccsf("Stage %04d", mySGD->getUserdataHighPiece()));
 										myHSP->analyticsPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
 									}
@@ -328,6 +329,7 @@ void EventShopPopup::menuAction(CCObject* sender)
 									{
                                         myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 										fiverocks::FiveRocksBridge::trackPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+										fiverocks::FiveRocksBridge::trackEvent("GetGem", "Get_Purchase", ccsf("ShopPurchaseEventGemCode%d", t_index+1), ccsf("Stage %04d", mySGD->getUserdataHighPiece()));
 										myHSP->analyticsPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
 									}

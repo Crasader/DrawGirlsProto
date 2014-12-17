@@ -1275,7 +1275,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 										}
 										
 										Json::Value t_faceInfo = t_card["faceInfo"];
-										if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+										if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 										{
 											NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 											NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
@@ -1367,14 +1367,20 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 			addChild(card_loading, 9999);
 			card_loading->startLoading();
 			
-			myHSP->command("getcardcomposelist", Json::Value(), [=](Json::Value result_data)
+			Json::Value param;
+			param["version"] = NSDS_GI(kSDS_GI_cardCompose_version_i);
+			
+			myHSP->command("getcardcomposelist", param, [=](Json::Value result_data)
 						   {
 							   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 							   {
+								   keep_version = result_data["version"].asInt();
+								   
 								   mySGD->card_compose_list.clear();
 								   card_download_list.clear();
 								   
 								   Json::Value t_list = result_data["list"];
+								   NSDS_SI(kSDS_GI_cardCompose_listCnt_i, t_list.size(), false);
 								   for(int i=0;i<t_list.size();i++)
 									{
 										Json::Value t_info_json = t_list[i];
@@ -1385,13 +1391,23 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 										t_info.need_exp = t_info_json["needExp"].asInt();
 										t_info.compose_card_number = t_info_json["cardNo"].asInt();
 										t_info.need_stone = t_info_json["needStone"].asInt();
+										
+										NSDS_SI(kSDS_GI_cardCompose_list_int1_no_i, i+1, t_info_json["no"].asInt(), false);
+										NSDS_SS(kSDS_GI_cardCompose_list_int1_title_s, i+1, t_info_json["title"].asString(), false);
+										NSDS_SS(kSDS_GI_cardCompose_list_int1_msg_s, i+1, t_info_json["msg"].asString(), false);
+										NSDS_SI(kSDS_GI_cardCompose_list_int1_needExp_i, i+1, t_info_json["needExp"].asInt(), false);
+										NSDS_SI(kSDS_GI_cardCompose_list_int1_cardNo_i, i+1, t_info_json["cardNo"].asInt(), false);
+										NSDS_SI(kSDS_GI_cardCompose_list_int1_needStone_i, i+1, t_info_json["needStone"].asInt(), false);
+										
 										Json::Value material = t_info_json["materialCards"];
+										NSDS_SI(kSDS_GI_cardCompose_list_int1_materialCardsCnt_i, i+1, material.size(), false);
 										t_info.material_card_list.clear();
 										for(int j=0;j<material.size();j++)
 										{
 											KSProtectVar<int> t_p;
 											t_p = material[j].asInt();
 											t_info.material_card_list.push_back(t_p);
+											NSDS_SI(kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i, i+1, j+1, material[j].asInt(), false);
 										}
 										
 										mySGD->card_compose_list.push_back(t_info);
@@ -1504,7 +1520,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 										}
 										
 										Json::Value t_faceInfo = t_card["faceInfo"];
-										if(!t_faceInfo.isNull() && t_faceInfo.asString() != "")
+										if(!t_faceInfo.isNull() && t_faceInfo.asString() != "" && t_faceInfo.asString() != " ")
 										{
 											NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card["no"].asInt(), true, false);
 											NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card["no"].asInt(), t_faceInfo["ccbiID"].asString() + ".ccbi", false);
@@ -1547,6 +1563,7 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 									}
 								   
 								   mySDS->fFlush(kSDS_CI_int1_ability_int2_type_i);
+								   mySDS->fFlush(kSDS_GI_base);
 								   
 								   if(card_download_list.size() > 0)
 								   {
@@ -1572,6 +1589,8 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 								   }
 								   else
 								   {
+									   NSDS_SI(kSDS_GI_cardCompose_version_i, keep_version);
+									   
 									   card_loading->removeFromParent();
 									   
 									   CardComposePopup* t_popup = CardComposePopup::create(-200);
@@ -1582,6 +1601,41 @@ void CardSettingPopup::menuAction(CCObject* pSender)
 									   hidePopup();
 								   }
 							   }
+							   else if(result_data["result"]["code"].asInt() == GDSAMEVERSION)
+								{
+									mySGD->card_compose_list.clear();
+									
+									int list_cnt = NSDS_GI(kSDS_GI_cardCompose_listCnt_i);
+									for(int i=0;i<list_cnt;i++)
+									{
+										CardComposeInfo t_info;
+										t_info.compose_no = NSDS_GI(kSDS_GI_cardCompose_list_int1_no_i, i+1);
+										t_info.title = NSDS_GS(kSDS_GI_cardCompose_list_int1_title_s, i+1);
+										t_info.msg = NSDS_GS(kSDS_GI_cardCompose_list_int1_msg_s, i+1);
+										t_info.need_exp = NSDS_GI(kSDS_GI_cardCompose_list_int1_needExp_i, i+1);
+										t_info.compose_card_number = NSDS_GI(kSDS_GI_cardCompose_list_int1_cardNo_i, i+1);
+										t_info.need_stone = NSDS_GI(kSDS_GI_cardCompose_list_int1_needStone_i, i+1);
+										
+										int mate_cnt = NSDS_GI(kSDS_GI_cardCompose_list_int1_materialCardsCnt_i, i+1);
+										for(int j=0;j<mate_cnt;j++)
+										{
+											KSProtectVar<int> t_p;
+											t_p = NSDS_GI(kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i, i+1, j+1);
+											t_info.material_card_list.push_back(t_p);
+										}
+										
+										mySGD->card_compose_list.push_back(t_info);
+									}
+									
+									card_loading->removeFromParent();
+									
+									CardComposePopup* t_popup = CardComposePopup::create(-200);
+									t_popup->setHideFinalAction(target_final, delegate_final);
+									getParent()->addChild(t_popup, getZOrder());
+									
+									target_final = NULL;
+									hidePopup();
+								}
 							   else
 							   {
 								   is_menu_enable = true;
@@ -1717,6 +1771,8 @@ void CardSettingPopup::startFileDownloadSet()
 		}
 		else if(download_type == kCSS_MT_cardCompose)
 		{
+			NSDS_SI(kSDS_GI_cardCompose_version_i, keep_version);
+			
 			CardComposePopup* t_popup = CardComposePopup::create(-200);
 			t_popup->setHideFinalAction(target_final, delegate_final);
 			getParent()->addChild(t_popup, getZOrder());
