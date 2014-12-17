@@ -788,6 +788,7 @@ void ShopPopup::buyStartPack(CCObject* sender)
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											fiverocks::FiveRocksBridge::trackPurchase("ShopPurchaseStartPack", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											fiverocks::FiveRocksBridge::trackEvent("GetGem", "Get_Purchase", "ShopPurchaseStartPack", ccsf("Stage %04d", mySGD->getUserdataHighPiece()));
 											myHSP->analyticsPurchase("ShopPurchaseStartPack", t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 											myHSP->IgawAdbrixBuy("ShopPurchaseStartPack");
 										}
@@ -1072,6 +1073,7 @@ void ShopPopup::buyEventPack(CCObject* sender)
 										{
                                             myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 											fiverocks::FiveRocksBridge::trackPurchase("ShopPurchaseEventPack", t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+											fiverocks::FiveRocksBridge::trackEvent("GetGem", "Get_Purchase", "ShopPurchaseEventPack", ccsf("Stage %04d", mySGD->getUserdataHighPiece()));
 											myHSP->analyticsPurchase("ShopPurchaseEventPack", t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 											myHSP->IgawAdbrixBuy("ShopPurchaseEventPack");
 										}
@@ -2386,6 +2388,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 											{
                                                 myHSP->getAdXConnectEventInstance("Sale", t_info["price"].asString().c_str(), t_info["currency"].asString().c_str());
 												fiverocks::FiveRocksBridge::trackPurchase(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1), t_info["currency"].asString().c_str(), t_info["price"].asDouble(), "");
+												fiverocks::FiveRocksBridge::trackEvent("GetGem", "Get_Purchase", ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1), ccsf("Stage %04d", mySGD->getUserdataHighPiece()));
 												myHSP->analyticsPurchase(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 												myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1));
 											}
