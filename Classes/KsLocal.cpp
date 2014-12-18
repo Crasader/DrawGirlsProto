@@ -1283,9 +1283,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
 	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
-	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
-	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
-	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 공격 저지 하기";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 영역 작게 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 공격을 목표횟수만큼 저지시키세요!";
 	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
 	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
@@ -1340,6 +1340,10 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
+	obj[LK::kMyLocalKey_kindTutorial47] = "몬스터의 공격을 목표횟수만큼 저지해야하는 미션이군.";
+	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
+	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가?";
+	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2547,9 +2551,9 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
 	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
-	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
-	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
-	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 공격 저지 하기";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 영역 작게 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 공격을 목표횟수만큼 저지시키세요!";
 	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
 	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
@@ -2604,6 +2608,10 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
+	obj[LK::kMyLocalKey_kindTutorial47] = "몬스터의 공격을 목표횟수만큼 저지해야하는 미션이군.";
+	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
+	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가요?";
+	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
