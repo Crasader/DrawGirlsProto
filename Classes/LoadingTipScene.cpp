@@ -1547,6 +1547,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			no_item->setPosition(center_position + ccp(-50,0));
 			ok_menu->addChild(no_item);
 			
+			StoryLayer::startStory(this, "mission14",nullptr);
 			
 //			StoryLayer::startStory(this, "mission13",nullptr);
 		}
@@ -1593,6 +1594,7 @@ CCNode* LoadingTipScene::getMissionTipImage()
 			no_item->setPosition(center_position + ccp(-50,0));
 			ok_menu->addChild(no_item);
 			
+			StoryLayer::startStory(this, "mission15",nullptr);
 			
 			//			StoryLayer::startStory(this, "mission13",nullptr);
 		}

@@ -292,6 +292,9 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 //												}
 //												else
 //												{
+												bool keep_bool = mySGD->is_on_maingame;
+												mySGD->is_on_maingame = true;
+												
 													ShopPopup* t_popup = ShopPopup::create();
 													t_popup->setScale(myDSH->screen_convert_rate);
 													t_popup->setShopCode(kSC_p1);
@@ -319,6 +322,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
 																			  
 																			  is_menu_enable = true;
 																			  schedule(schedule_selector(ContinueContent::countingSchedule));
+																			  mySGD->is_on_maingame = keep_bool;
 																		  });
 													t_popup->is_continue = true;
 													t_popup->continue_end = [=]()
@@ -398,14 +402,17 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 			}
 			else
 			{
+				bool keep_bool = mySGD->is_on_maingame;
+				mySGD->is_on_maingame = true;
+				
 				ShopPopup* t_popup = ShopPopup::create();
 				t_popup->setScale(myDSH->screen_convert_rate);
-				t_popup->setShopCode(kSC_gold);
+				t_popup->setShopCode(kSC_p1);
 				t_popup->setCloseFunc([=]()
 									  {
 										  if(take_count)
 										  {
-											  take_count->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_ruby)));
+											  take_count->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)));
 											  float wide_value = take_count->getContentSize().width - 40;
 											  if(wide_value < 0)
 												  wide_value = 0;
@@ -413,19 +420,17 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 											  take_count->setPosition(ccpFromSize(take_back->getContentSize()/2.f));
 										  }
 										  
-										  if(take_count2)
-										  {
-											  take_count2->setString(ccsf(myLoc->getLocalForKey(LK::kMyLocalKey_takeCount), mySGD->getGoodsValue(kGoodsType_pass1)));
-											  float wide_value = take_count2->getContentSize().width - 40;
-											  if(wide_value < 0)
-												  wide_value = 0;
-											  take_back2->setContentSize(CCSizeMake(60+wide_value, 20));
-											  take_count2->setPosition(ccpFromSize(take_back2->getContentSize()/2.f));
-										  }
-										  
 										  is_menu_enable = true;
 										  schedule(schedule_selector(ContinueContent::countingSchedule));
+										  
+										  mySGD->is_on_maingame = keep_bool;
 									  });
+//				t_popup->is_continue = true;
+//				t_popup->continue_end = [=]()
+//				{
+//					continueAction(NULL, CCControlEventTouchUpInside);
+//				};
+				
 				getParent()->addChild(t_popup);
 			}
 		}
@@ -595,6 +600,8 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 //																	 schedule(schedule_selector(ContinueContent::countingSchedule));
 //																	 is_menu_enable = true;
 //																 }), 9999);
+				bool keep_bool = mySGD->is_on_maingame;
+				mySGD->is_on_maingame = true;
 				
 				ShopPopup* t_popup = ShopPopup::create();
 				t_popup->setScale(myDSH->screen_convert_rate);
@@ -623,6 +630,8 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 										  
 										  is_menu_enable = true;
 										  schedule(schedule_selector(ContinueContent::countingSchedule));
+										  
+										  mySGD->is_on_maingame = keep_bool;
 									  });
 				t_popup->is_continue = true;
 				t_popup->continue_end = [=]()

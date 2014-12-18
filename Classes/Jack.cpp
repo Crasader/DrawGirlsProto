@@ -2329,11 +2329,11 @@ void Jack::dieEffect()
 					continue_on_count = continue_on_count.getV() + 1;
 					myGD->communication("UI_showContinuePopup", this, callfunc_selector(Jack::endGame), this, callfunc_selector(Jack::continueGame));
 				}
-//				else
-//				{
-//					jackImg->setVisible(false);
-//					endGame();
-//				}
+				else
+				{
+					jackImg->setVisible(false);
+					endGame();
+				}
 			}
 		}
 	}
