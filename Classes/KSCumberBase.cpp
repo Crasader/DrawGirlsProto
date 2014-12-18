@@ -1329,7 +1329,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
   			m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
-			TRACE();
+//			TRACE();
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 			if(w == 0 && attackCondition)
 			{

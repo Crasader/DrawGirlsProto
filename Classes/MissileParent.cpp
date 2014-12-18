@@ -339,7 +339,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	else if(stoneType == StoneType::kStoneType_mine)
 	{
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-		for(int i=0; i<missileNumbersInt; i++)
+		for(int i=0; i<missileNumbersInt * 3 / 5.f; i++)
 		{
 			auto creator = [=](){
 				IntPoint mapPoint;
@@ -347,7 +347,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 				if(found == true)
 				{
 					
-					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint), fileName.c_str(), 15 + 3 * grade, power, missile_sub_damage, ao);
+					MineAttack* ma = MineAttack::create(myGD->getJackPoint().convertToCCP(),
+																							ip2ccp(mapPoint),
+																							fileName.c_str(),
+																							15 + 3 * grade, power * 2 / 3.f, missile_sub_damage * 2 / 3.f, ao);
 					ma->beautifier(level);
 					jack_missile_node->addChild(ma);
 				}
@@ -498,7 +501,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 					//				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
 					SpiritAttack* sa = SpiritAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint2), fileName,
-																									5 + grade * 1, power *2 / 3.f, missile_sub_damage * 2 / 3.f, 1.2f, 30, ao);
+																									5 + grade * 2 / 3.f, power * 1 / 2.f, missile_sub_damage * 1 / 2.f, 1.2f, 30, ao);
 					sa->beautifier(level);
 					jack_missile_node->addChild(sa);
 				}
@@ -722,10 +725,10 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			float ny = nearCumber->getPosition().y;
 			float nx = nearCumber->getPosition().x;
 			int j = 0;
-			for(int i=missileNumbersInt; i>=0; i-=16, j++)
+			for(int i=missileNumbersInt; i>=0; i-=17, j++)
 			{
 				auto creator = [=](){
-					int mNumber = MIN(i, 16);
+					int mNumber = MIN(i, 17);
 					CircleDance* ms = CircleDance::create(myGD->getJackPointCCP(), fileName, MAX(mNumber, 10.f) * 1.2f,
 																								atan2f(ny - myGD->getJackPointCCP().y,
 																											 nx - myGD->getJackPointCCP().x),// 방향
@@ -787,7 +790,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 		
 	
 		
-		missileNumbersInt *= 1.5f;
+		missileNumbersInt *= 2.0f;
 		addChild(KSTimer::create(0.0f, [=](){
 			KSCumberBase* nearCumber = getNearestCumber(myGD->getJackPointCCP());
 			float ny = nearCumber->getPosition().y;
