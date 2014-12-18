@@ -1617,13 +1617,13 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	setMapData = t_setMapData;
 	checkBeforeNewLine = t_checkBeforeNewLine;
 	
-	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f;
+	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+9)/10.f;
 	
-	TUTO_TouchOutWidth = 10.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
-	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	TUTO_TouchOutWidth = 10.0*(joystick_size_value);
+	TUTO_JOYSTICK_FOLLOW_DISTANCE = 70.0*(joystick_size_value);
 	
-	minimumDistanceJ = 8.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
-	JoystickCenterLimit = 30.0*((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	minimumDistanceJ = 8.0*(joystick_size_value);
+	JoystickCenterLimit = 30.0*(joystick_size_value);
 	
 	regular_spectrum = 70.f;
 	irregular_spectrum = 20.f;
@@ -1643,12 +1643,12 @@ void TutoControler::myInit(TutoCharacter* t_char, int t_height, function<TutoMap
 	
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
-	control_circle->setScale(((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f));
+	control_circle->setScale(joystick_size_value);
 	control_circle->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_circle);
 	
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
-	control_ball->setScale(((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f));
+	control_ball->setScale(joystick_size_value);
 	control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_ball);
 	

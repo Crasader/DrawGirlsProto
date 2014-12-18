@@ -1783,7 +1783,7 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	
 //	CCLog("device width : %.2lf", myHSP->getScreenRealWidth());
 	
-	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f;
+	joystick_size_value = (myDSH->getIntegerForKey(kDSH_Key_joystickSize)+9)/10.f; // -5
 	
 	TouchOutWidth = 10.0*joystick_size_value;
 	JOYSTICK_FOLLOW_DISTANCE = 65.0*joystick_size_value;
@@ -1812,12 +1812,12 @@ void ControlJoystickButton::myInit( CCObject* t_main, SEL_CallFunc d_readyBack, 
 	ControlCommon::myInit(t_main, d_readyBack, t_jack);
 	beforeDirection = directionStop;
 	control_circle = CCSprite::create("control_joystick_big_circle.png");
-	control_circle->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	control_circle->setScale(joystick_size_value);
 	control_circle->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_circle);
 
 	control_ball = CCSprite::create("control_joystick_big_ball.png");
-	control_ball->setScale((myDSH->getIntegerForKey(kDSH_Key_joystickSize)+10)/10.f);
+	control_ball->setScale(joystick_size_value);
 	control_ball->setVisible(!isControlJoystickNotFixed || !isAlwaysInvisibleJoystick);
 	addChild(control_ball);
 	
