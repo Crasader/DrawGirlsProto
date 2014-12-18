@@ -846,7 +846,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 			jack_missile_node->addChild(ms);
 		};
 		int j = 0;
-		missileNumbersInt *= 2 / 3.f;
+		missileNumbersInt *= 3 / 5.f;
 		for(int i=missileNumbersInt; i>=0; i-=1, j++)
 		{
 			addChild(KSTimerControl::create(0.40 * (j), [=](){
