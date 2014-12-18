@@ -1330,8 +1330,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
 	obj[LK::kMyLocalKey_composeUsedCardIsRemove] = "환생에 사용된 카드는\n모두 사라집니다.";
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
-	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
-	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "100% 하는 법";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 검은 영역에 가두세요";
 	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.\n2장이상 보유해야 한장을 사용할 수 있어요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
@@ -2594,8 +2594,8 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_notEnoughtEXP] = "이런.. EXP가 부족해요.\n조금 더 모아주세요.";
 	obj[LK::kMyLocalKey_composeUsedCardIsRemove] = "환생에 사용된 카드는\n모두 사라집니다.";
 	obj[LK::kMyLocalKey_notEnoughtP1] = "부활석이 부족합니다.";
-	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "보스 가두는 법";
-	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 이렇게 가두세요!!";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_title] = "100% 하는 법";
+	obj[LK::kMyLocalKey_controlTip_bossPrison_content] = "보스를 검은 영역에 가두세요!!";
 	obj[LK::kMyLocalKey_shortageMaterialCard] = "필수재료카드가 부족해요.\n2장이상 보유해야 한장을 사용할 수 있어요.";
 	obj[LK::kMyLocalKey_sDiary] = "S 다이어리";
 	obj[LK::kMyLocalKey_toShowAdultImgForSdiaryNeed] = "성인버전의 이미지를 보려면\nS 다이어리가 필요합니다.";
