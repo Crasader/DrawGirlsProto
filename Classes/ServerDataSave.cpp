@@ -821,6 +821,21 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_hellMode_int1_balance_s)			rv = "hl%dbalance";
 	else if(t_key == kSDS_GI_realTimeMessageVersion_i)			rv = "rtmv";
 	else if(t_key == kSDS_GI_card_version_i)					rv = "cardVersion";
+	else if(t_key == kSDS_GI_cardGacha_version_i)				rv = "cgver";
+	else if(t_key == kSDS_GI_cardGacha_no_i)					rv = "cgno";
+	else if(t_key == kSDS_GI_cardGacha_msg_s)					rv = "cgmsg";
+	else if(t_key == kSDS_GI_cardGacha_listCnt_i)				rv = "cglistcnt";
+	else if(t_key == kSDS_GI_cardGacha_list_int1_no_i)			rv = "cglist%dno";
+	else if(t_key == kSDS_GI_cardCompose_version_i)				rv = "ccpver";
+	else if(t_key == kSDS_GI_cardCompose_listCnt_i)				rv = "ccplistcnt";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_no_i)		rv = "ccplist%dno";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_title_s)		rv = "ccplist%dtitle";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_msg_s)		rv = "ccplist%dmsg";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_needExp_i)	rv = "ccplist%dndx";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_cardNo_i)	rv = "ccplist%dcdno";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_needStone_i)	rv = "ccplist%dndst";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCardsCnt_i)		rv = "ccplist%dmtrlcdcnt";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i)	rv = "ccplist%dmtrlcd%dno";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";

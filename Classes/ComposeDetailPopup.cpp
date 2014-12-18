@@ -549,7 +549,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 		ScrollMenu* selected_menu = ScrollMenu::create(t_item, NULL);
 		selected_menu->setPosition(ccp(0,0));
 		cell->addChild(selected_menu);
-		selected_menu->setTouchPriority(touch_priority-2-idx);
+		selected_menu->setTouchPriority(touch_priority-3-idx);
 	}
 	
 	

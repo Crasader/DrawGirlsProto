@@ -1917,7 +1917,7 @@ void ShopPopup::showPopup()
 
 void ShopPopup::endShowPopup()
 {
-	if(!mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
+	if(!mySGD->is_on_maingame && !mySGD->getUserdataIsFirstBuy() && mySGD->isPossibleShowPurchasePopup(kPurchaseGuideType_firstPurchase) && mySGD->getUserdataTotalPlayCount() >= mySGD->getFirstPurchasePlayCount() && !mySGD->getUserdataIsVIP())
 	{
 		FirstPurchasePopup* t_popup = FirstPurchasePopup::create(touch_priority-100, [=](){is_menu_enable = true;}, [=](){is_menu_enable = true;});
 		addChild(t_popup, kSP_Z_popup);
@@ -3510,7 +3510,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 
 
 	
-	addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realBuy),[=](){
+	getParent()->addChild(ASPopupView::getCommonNoti(-99999,myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_realBuy),[=](){
 		
 		buy_action();
 
@@ -3518,7 +3518,7 @@ void ShopPopup::createCheckBuyPopup(function<void()> buy_action)
 
 		is_menu_enable = true;
 
-	}));
+	}), getZOrder()+1);
 	
 	
 }
