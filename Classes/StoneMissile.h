@@ -4130,7 +4130,7 @@ public:
 		
 		for(int i=0; i<m_dotNumber; i++)
 		{
-			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, 13, 5, ao);
+			StaticMissile* satell = StaticMissile::create(CCPointZero, fileName.c_str(), m_power, m_subPower, 13, 10, ao);
 //			CCSprite* satell = CCSprite::create(fileName.c_str());
 			float rad = 2 * M_PI / m_dotNumber * i;
 			Satellite t;

@@ -339,7 +339,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 	else if(stoneType == StoneType::kStoneType_mine)
 	{
 		string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
-		for(int i=0; i<missileNumbersInt; i++)
+		for(int i=0; i<missileNumbersInt * 3 / 5.f; i++)
 		{
 			auto creator = [=](){
 				IntPoint mapPoint;
@@ -501,7 +501,7 @@ void MissileParent::createJackMissileWithStone(StoneType stoneType, int level, f
 					string fileName = ccsf("jack_missile_%02d_%02d.png", subType, level);
 					//				string fileName = boost::str(boost::format("me_pet%||.ccbi") % level);
 					SpiritAttack* sa = SpiritAttack::create(myGD->getJackPoint().convertToCCP(), ip2ccp(mapPoint2), fileName,
-																									5 + grade * 1, power * 1 / 2.f, missile_sub_damage * 1 / 2.f, 1.2f, 30, ao);
+																									5 + grade * 2 / 3.f, power * 1 / 2.f, missile_sub_damage * 1 / 2.f, 1.2f, 30, ao);
 					sa->beautifier(level);
 					jack_missile_node->addChild(sa);
 				}
