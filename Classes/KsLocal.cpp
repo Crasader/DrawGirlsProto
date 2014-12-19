@@ -84,6 +84,7 @@ void KsLocal::setLocal()
 void KsLocal::ko()
 {
 	std::map<LK, std::string> obj;
+	obj[LK::kNothingMessage] = "";
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
 	obj[LK::kReGacha] = "다시 뽑기";
 	obj[LK::kRewardConfirm] = "확인";
@@ -1352,6 +1353,7 @@ void KsLocal::ko()
 void KsLocal::en()
 {
 	std::map<LK, std::string> obj;
+	obj[LK::kNothingMessage] = "";
 	obj[LK::kItem1] = "The game is starting...";
 	obj[LK::kReGacha] = "Draw again";
 	obj[LK::kRewardConfirm] = "Ok";
