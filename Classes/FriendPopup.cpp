@@ -1137,7 +1137,7 @@ void FriendPopup::setListMenu()
 				}
 
 				
-				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf("친구는 %d명까지 등록가능합니다.", mySGD->getGameFriendMax()), mySGD->getFont().c_str(), 11.f);
+				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf(getLocal(LK::kFriendMax), mySGD->getGameFriendMax()), mySGD->getFont().c_str(), 11.f);
 				leftMent->setAnchorPoint(ccp(0.f, 0.5f));
 				m_friendListContainer->addChild(leftMent);
 				setFormSetter(leftMent);
@@ -1149,7 +1149,7 @@ void FriendPopup::setListMenu()
 				m_friendListContainer->addChild(rightMentBack);
 				setFormSetter(rightMentBack);
 				
-				KSLabelTTF* rightMent = KSLabelTTF::create(ccsf("내 친구 수 %d", m_friendList.size()), mySGD->getFont().c_str(), 11.f);
+				KSLabelTTF* rightMent = KSLabelTTF::create(ccsf(getLocal(LK::kFriendMyFriends), m_friendList.size()), mySGD->getFont().c_str(), 11.f);
 				rightMent->setAnchorPoint(ccp(0.f, 0.5f));
 				m_friendListContainer->addChild(rightMent);
 				setFormSetter(rightMent);

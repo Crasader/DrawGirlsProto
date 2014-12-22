@@ -108,6 +108,9 @@ enum class LK
 	kFriendSuccess,
 	kFriendFriendRequested,
 	kFriendHeartSended,
+	kFriendMax,
+	kFriendMyFriends,
+	
 	
 
 	kMyLocalKey_tutorial1,

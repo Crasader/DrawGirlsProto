@@ -175,6 +175,8 @@ void KsLocal::ko()
 	obj[LK::kFriendSuccess] = "성공";
 	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
 	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
+	obj[LK::kFriendMax] = "친구는 %d명까지 등록가능합니다.";
+	obj[LK::kFriendMyFriends] = "내 친구 수 %d";
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "서버에 접속 중입니다...";
@@ -1447,7 +1449,8 @@ void KsLocal::en()
 	obj[LK::kFriendSuccess] = "성공";
 	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
 	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
-
+	obj[LK::kFriendMax] = "친구는 %d명까지 등록가능합니다.";
+	obj[LK::kFriendMyFriends] = "내 친구 수 %d";
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "Server Online";
