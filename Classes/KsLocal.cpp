@@ -323,7 +323,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading15] = "매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요.";
 	obj[LK::kMyLocalKey_titleLoading16] = "게임 내에서는 이름 대신 닉네임을 사용합니다.";
 	obj[LK::kMyLocalKey_titleLoading17] = "99% 라 너무 아쉽다면, 보너스 뽑기에 도전 해 보세요.";
-	obj[LK::kMyLocalKey_titleLoading18] = "보너스팩을 플레이하면 특별한 이미지와 선물을 받을 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading18] = "매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요.";
 	obj[LK::kMyLocalKey_titleLoading19] = "스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요.";
 	obj[LK::kMyLocalKey_titleLoading6] = "한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다.";
 	obj[LK::kMyLocalKey_titleLoading20] = "이어하기는 횟수 제한 없이 사용할 수 있습니다. 목표한 등급을 꼭 획득하세요!";
@@ -1592,7 +1592,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_titleLoading15] = "There are new events each week. Please check the public forum.";
 	obj[LK::kMyLocalKey_titleLoading16] = "Use a nickname instead of your real one in the game.";
 	obj[LK::kMyLocalKey_titleLoading17] = "If 99% isn't good enough, try a Bonus Draw.";
-	obj[LK::kMyLocalKey_titleLoading18] = "보너스팩을 플레이하면 특별한 이미지와 선물을 받을 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading18] = "There are new events each week. Please check the public forum.";
 	obj[LK::kMyLocalKey_titleLoading19] = "If you are having trouble completing the mission in a stage, using the Item Draw to obtain an item to use.";
 	obj[LK::kMyLocalKey_titleLoading6] = "The more area you take at one time, the more missiles are launched. Combos are applied depending on how successful your attack it.";
 	obj[LK::kMyLocalKey_titleLoading20] = "이어하기는 횟수 제한 없이 사용할 수 있습니다. 목표한 등급을 꼭 획득하세요!";

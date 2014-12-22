@@ -115,6 +115,8 @@ private:
 	void failDownloadAction();
 	void checkDownloading();
 	
+	int fiverocks_download_step;
+	
 	vector<DownloadImgInfo> download_set;
 	void startFileDownloadSet();
 	vector<int> is_enable_index;

@@ -449,7 +449,7 @@ void EndlessModeOpening::setMain()
 								  
 									Json::Value heart_param;
 									heart_param["memberID"] = myHSP->getMemberID();
-									if(/*!(mySGD->endless_my_victory.getV() > 0 || */myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
+								  if(/*!(mySGD->endless_my_victory.getV() > 0 || */myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1 && !mySGD->isTimeEvent(TimeEventType::kTimeEventType_heart))
 										heart_param["use"] = true;
 									transaction_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
 																		  {
@@ -472,6 +472,20 @@ void EndlessModeOpening::setMain()
 								  myHSP->command(transaction_list);
 //								  myHSP->command("getendlessplayriver", param, this,json_selector(this, EndlessModeOpening::resultGetEndlessPlayData));
 							  });
+	
+	if(mySGD->isTimeEvent(kTimeEventType_heart))
+	{
+		KSLabelTTF* t_label = ready_button->getTitleLabel();
+		
+		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
+		time_event_back->setPosition(ccp(95.5f, 29.f));
+		t_label->addChild(time_event_back);
+		time_event_back->setScale(0.7f);
+		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
+		time_event_back_lbl->disableOuterStroke();
+		time_event_back->addChild(time_event_back_lbl);
+		time_event_back_lbl->setPosition(ccpFromSize(time_event_back->getContentSize()) / 2.f + ccp(3, -5.f));
+	}
 	
 	CommonAnimation::openPopup(this, main_case, gray, [=](){
 		
