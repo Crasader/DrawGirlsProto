@@ -836,6 +836,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_cardCompose_list_int1_needStone_i)	rv = "ccplist%dndst";
 	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCardsCnt_i)		rv = "ccplist%dmtrlcdcnt";
 	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i)	rv = "ccplist%dmtrlcd%dno";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_materialPieces_int2_no_i)	rv = "ccplist%dmtrlpc%dno";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";

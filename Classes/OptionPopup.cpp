@@ -50,6 +50,7 @@
 #include "AttendancePopup.h"
 
 #include "LoadingTipScene.h"
+#include "FiveRocksCpp.h"
 
 USING_NS_CC_EXT;
 
@@ -1869,6 +1870,7 @@ void OptionPopup::menuAction(CCObject* pSender)
 		
 		string msg = msgInfo["msg"].asString();
 		GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
+		fiverocks::FiveRocksBridge::trackEvent("Game", "KakaoMsg", ccsf("Friends %d", mySGD->getFriendsCnt()), "");
 		int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msg.c_str(),msgInfo["url"].asString());
 		
 		

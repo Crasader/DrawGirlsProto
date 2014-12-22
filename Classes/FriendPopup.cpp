@@ -30,6 +30,7 @@
 #include "GDWebSprite.h"
 #include "StoryLayer.h"
 #include "StageImgLoader.h"
+#include "FiveRocksCpp.h"
 
 enum FriendPopupZorder{
 	kFriendPopupZorder_gray = 1,
@@ -713,6 +714,8 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 						return;
 					}
 					
+					fiverocks::FiveRocksBridge::trackEvent("Game", "Friend", "InviteFriend", ccsf("Friends %d", mySGD->getFriendsCnt()));
+					
 					if(input_text1)
 					{
 						input_text1->setVisible(false);
@@ -826,7 +829,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 																								}));
 						return;
 					}
-					
+					fiverocks::FiveRocksBridge::trackEvent("Game", "Friend", "SendHeart", ccsf("Friends %d", mySGD->getFriendsCnt()));
 					if(input_text1)
 					{
 						input_text1->setVisible(false);
@@ -1722,6 +1725,7 @@ void FriendPopup::setVoteFriendMenu()
 					string msg = msgInfo["msg"].asString();
 					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
 					CCLOG("%s",msg.c_str());
+					fiverocks::FiveRocksBridge::trackEvent("Game", "KakaoMsg", ccsf("Friends %d", mySGD->getFriendsCnt()), "");
 					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msg.c_str(),msgInfo["url"].asString());
 					
 					if(ret == 0) {

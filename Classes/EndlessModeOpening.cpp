@@ -330,7 +330,7 @@ void EndlessModeOpening::setMain()
 	record_back->setPosition(ccp(right_back->getContentSize().width/2.f, 60.f));
 	right_info_node->addChild(record_back);
 	
-	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* record_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessInfoScore), mySGD->getFont().c_str(), 10);
 	record_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	record_title->setAnchorPoint(ccp(0,0.5f));
 	record_title->setPosition(ccp(5, record_back->getContentSize().height/2.f));
@@ -342,7 +342,7 @@ void EndlessModeOpening::setMain()
 	highscore_back->setPosition(ccp(right_back->getContentSize().width/2.f, 37.f));
 	right_info_node->addChild(highscore_back);
 	
-	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* highscore_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighScore), mySGD->getFont().c_str(), 10);
 	highscore_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	highscore_title->setAnchorPoint(ccp(0,0.5f));
 	highscore_title->setPosition(ccp(5, highscore_back->getContentSize().height/2.f));
@@ -360,7 +360,7 @@ void EndlessModeOpening::setMain()
 	straight_back->setPosition(ccp(right_back->getContentSize().width/2.f, 14.f));
 	right_info_node->addChild(straight_back);
 	
-	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 11);
+	KSLabelTTF* straight_title = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_endlessHighStraight), mySGD->getFont().c_str(), 10);
 	straight_title->enableOuterStroke(ccBLACK, 0.5f, 150, true);
 	straight_title->setAnchorPoint(ccp(0,0.5f));
 	straight_title->setPosition(ccp(5, straight_back->getContentSize().height/2.f));
@@ -2193,7 +2193,7 @@ void EndlessModeOpening::putInformation(Json::Value info)
 	}
 	record_content = StyledLabelTTF::create(CCString::createWithFormat(myLoc->getLocalForKey(LK::kMyLocalKey_endlessInfoScoreValue2), win_count, lose_count, win_rate)->getCString(),
 																					mySGD->getFont().c_str(),
-																					11.f, 0, StyledAlignment::kRightAlignment);
+																					9.f, 0, StyledAlignment::kRightAlignment);
 	record_content->setAnchorPoint(ccp(1,0.5f));
 	record_content->setPosition(ccp(record_back->getContentSize().width-5, record_back->getContentSize().height/2.f));
 	record_back->addChild(record_content);
