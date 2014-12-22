@@ -48,6 +48,7 @@ private:
 	CCSprite* top_cover;
 	CCSprite* bottom_cover;
 	CCSprite* gray;
+	CCScale9Sprite* exp_back;
 	
 	void myInit(int t_take_card_number, std::function<void()> t_end_func);
 	

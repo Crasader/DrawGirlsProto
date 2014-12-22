@@ -85,6 +85,17 @@ void TakeCardToDiary::myInit(int t_take_card_number, std::function<void()> t_end
 	CCSequence* t_seq2 = CCSequence::create(t_delay2, t_fade2, t_call2, NULL);
 	
 	bottom_cover->runAction(t_seq2);
+	
+	exp_back->addChild(KSTimer::create(0.6f, [=]()
+	{
+		exp_back->addChild(KSGradualValue<int>::create(0, 255, 0.3f, [=](int t_i)
+													   {
+														   KS::setOpacity(exp_back, t_i);
+													   }, [=](int t_i)
+													   {
+														   KS::setOpacity(exp_back, t_i);
+													   }));
+	}));
 }
 
 
@@ -412,7 +423,7 @@ void TakeCardToDiary::setLeftPage(CCNode *target, int card_number)
 	
 	top_cover = left_top_paper;
 	
-	CCScale9Sprite* exp_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
+	exp_back = CCScale9Sprite::create("common_in.png", CCRectMake(0, 0, 20, 20), CCRectMake(9, 9, 2, 2));
 	KSLabelTTF* exp_label = KSLabelTTF::create(ccsf("EXP %s", KS::insert_separator(NSDS_GI(kSDS_CI_int1_exp_i, card_number)).c_str()), mySGD->getFont().c_str(), 11);
 	exp_label->setGradientColor(ccc4(255, 255, 40, 255), ccc4(255, 160, 20, 255), ccp(0,-1));
 	exp_label->enableOuterStroke(ccBLACK, 1.f, int(255*0.6f), true);

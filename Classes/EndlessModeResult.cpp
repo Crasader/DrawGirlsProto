@@ -928,7 +928,8 @@ void EndlessModeResult::controlButtonAction(CCObject* sender, CCControlEvent t_e
 		Json::Value heart_param;
 		heart_param["memberID"] = myHSP->getMemberID();
 //		if(/*!(mySGD->endless_my_victory.getV() > 0 || */myDSH->getIntegerForKey(kDSH_Key_isShowEndlessModeTutorial) != 1)
-		heart_param["use"] = true;
+		if(!mySGD->isTimeEvent(kTimeEventType_heart))
+			heart_param["use"] = true;
 		command_list.push_back(CommandParam("getheart", heart_param, [=](Json::Value result_data)
 												{
 													if(result_data["result"]["code"].asInt() == GDSUCCESS)
@@ -1364,6 +1365,18 @@ void EndlessModeResult::setMain()
 	next_button->setPosition(ccp(right_back->getPositionX(), 45));
 	next_button->setTouchPriority(touch_priority-2);
 	main_case->addChild(next_button);
+	
+	if(mySGD->isTimeEvent(kTimeEventType_heart))
+	{
+		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
+		time_event_back->setPosition(ccp(85.f, 20.f));
+		t_next_node->addChild(time_event_back);
+		time_event_back->setScale(0.7f);
+		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
+		time_event_back_lbl->disableOuterStroke();
+		time_event_back->addChild(time_event_back_lbl);
+		time_event_back_lbl->setPosition(ccpFromSize(time_event_back->getContentSize()) / 2.f + ccp(3, -5.f));
+	}
 	
 	if(left_total_score.getV() <= right_total_score.getV())
 	{
@@ -2894,6 +2907,8 @@ void EndlessModeResult::resultGetEndlessPlayData(Json::Value result_data)
 		ready_loading = NULL;
 		
 		addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError)), 999);
+		
+		is_menu_enable = true;
 	}
 	TRACE();
 }

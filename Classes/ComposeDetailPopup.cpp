@@ -312,11 +312,11 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	price_back->setPosition(ccp(0,-9.5f));
 	t_button_label->addChild(price_back);
 	
-	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) > 0)
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 	{
 		price_icon = CCSprite::create("icon_p11.png");
 		price_icon->setScale(0.8f);
-		price_value = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11)).c_str(), mySGD->getFont().c_str(), 14);
+		price_value = KSLabelTTF::create(KS::insert_separator(mySGD->card_compose_list[compose_idx].need_stone.getV()).c_str(), mySGD->getFont().c_str(), 14);
 		price_value->setPosition(ccp(price_icon->getContentSize().width*price_icon->getScale()/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f-1));
 		price_icon->setPosition(ccp(-price_value->getContentSize().width/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f));
 		price_back->addChild(price_icon);
@@ -612,7 +612,7 @@ void ComposeDetailPopup::composeAction(CCObject* t_sender, CCControlEvent t_even
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_notEnoughtEXP)), 9999);
 		is_menu_enable = true;
 	}
-	else if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) <= 0 && mySGD->getGoodsValue(GoodsType::kGoodsType_pass1) < mySGD->card_compose_list[compose_idx].need_stone.getV())
+	else if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) < mySGD->card_compose_list[compose_idx].need_stone.getV() && mySGD->getGoodsValue(GoodsType::kGoodsType_pass1) < mySGD->card_compose_list[compose_idx].need_stone.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_notEnoughtP1)), 9999);
 		is_menu_enable = true;
@@ -792,7 +792,7 @@ void ComposeDetailPopup::composeOn()
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["no"] = mySGD->card_compose_list[compose_idx].compose_no.getV();
-	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) > 0)
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopComposeCardPass_exchangeID_s);
 	else
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopComposeCardStone_exchangeID_s);
@@ -816,7 +816,7 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		
 		string fiverocks_goods_type;
 		
-		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) <= 0)
+		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 			fiverocks_goods_type = "p11";
 		else
 			fiverocks_goods_type = "p1";

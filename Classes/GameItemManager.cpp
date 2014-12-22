@@ -1535,7 +1535,17 @@ void FloatingCoin::ting()
 	float after_y = /*coin_img->getPositionY()*/ting_y + start_speed;
 	float before_y = getPositionY() - ting_y;
 //	coin_img->setPositionY(MAX(coin_img->getPositionY() + start_speed, 0.f));
-	setPositionY(getPositionY() + start_speed);
+	
+	float t_after_y = getPositionY() + start_speed;
+	if(t_after_y > 429.f)
+		t_after_y = 429.f;
+	else if(t_after_y < 1.f)
+		t_after_y = 1.f;
+	if(before_y > 429.f)
+		before_y = 429.f;
+	else if(before_y < 1.f)
+		before_y = 1.f;
+	setPositionY(t_after_y);
 	
 	ting_y = ting_y + start_speed;
 	if(after_y < 0)

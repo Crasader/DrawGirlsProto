@@ -565,7 +565,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
         fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join", myHSP->getStoreID().c_str());
-        
+		fiverocks_download_step = 0;
 		is_menu_enable = true;
 		
 		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_connectingServer));
@@ -1144,6 +1144,12 @@ void TitleRenewalScene::checkReceive()
 						state_label->setString(tip_list[recent_tip_index].c_str());
 						
 						addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
+						
+						if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
+						{
+							fiverocks_download_step = 1;
+							fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_StartDownload", myHSP->getStoreID().c_str());
+						}
 						
 						ing_download_cnt = 1;
 						success_download_cnt = 0;
@@ -3919,6 +3925,26 @@ void TitleRenewalScene::checkDownloading()
 	float download_percent = 100.f*success_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
 	if(download_percent > 100.f)
 		download_percent = 100.f;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
+	{
+		if(fiverocks_download_step == 1 && download_percent >= 30.f)
+		{
+			fiverocks_download_step = 2;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download30", myHSP->getStoreID().c_str());
+		}
+		else if(fiverocks_download_step == 2 && download_percent >= 50.f)
+		{
+			fiverocks_download_step = 3;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download50", myHSP->getStoreID().c_str());
+		}
+		else if(fiverocks_download_step == 3 && download_percent >= 99.5f)
+		{
+			fiverocks_download_step = 4;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download100", myHSP->getStoreID().c_str());
+		}
+	}
+	
 	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 	
 	progress_timer->setPercentage(download_percent);

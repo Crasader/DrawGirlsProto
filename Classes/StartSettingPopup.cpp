@@ -980,7 +980,7 @@ void StartSettingPopup::setMain()
 	if(mySGD->isTimeEvent(kTimeEventType_heart))
 	{
 		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
-		time_event_back->setPosition(ccp(0,-20) + ccp(88.5f, 20.5f));
+		time_event_back->setPosition(ccp(0,-20) + ccp(92.f, 20.5f));
 		t_label->addChild(time_event_back);
 		setFormSetter(time_event_back);
 		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
