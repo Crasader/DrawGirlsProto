@@ -172,6 +172,9 @@ void KsLocal::ko()
 	obj[LK::kFriendCardGiftErrorMessage] = "<font color=#FFFFFF newline=13>카드선물은 %d 시간에 한번 가능합니다.</font><font color=#FFFFFF>앞으로 %d시간 %d분 남았습니다.</font>";
 	
 	obj[LK::kFriendNickInputPlz] = "닉네임을 입력해주세요.";
+	obj[LK::kFriendSuccess] = "성공";
+	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
+	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "서버에 접속 중입니다...";
@@ -1441,6 +1444,10 @@ void KsLocal::en()
 	obj[LK::kFriendCardGiftErrorMessage] = "<font color=#FFFFFF newline=13>카드선물은 %d 시간에 한번 가능합니다.</font><font color=#FFFFFF>앞으로 %d시간 %d분 남았습니다.</font>";
 	
 	obj[LK::kFriendNickInputPlz] = "Please enter a nickname.";
+	obj[LK::kFriendSuccess] = "성공";
+	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
+	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
+
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "Server Online";

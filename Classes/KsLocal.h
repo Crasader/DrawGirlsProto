@@ -105,6 +105,10 @@ enum class LK
 	kFriendNothingExist,
 	kFriendCardGiftErrorMessage,
 	kFriendNickInputPlz,
+	kFriendSuccess,
+	kFriendFriendRequested,
+	kFriendHeartSended,
+	
 
 	kMyLocalKey_tutorial1,
 	kMyLocalKey_tutorial2,

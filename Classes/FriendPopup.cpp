@@ -720,7 +720,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
 //					m_votedFriendList[idx]["reqexist"] = true;
-					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 요청했습니다.", [=](){
+					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, getLocal(LK::kFriendSuccess), getLocal(LK::kFriendFriendRequested), [=](){
 						input_text1->setVisible(true);
 						
 						
@@ -833,7 +833,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					}
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
-					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 하트를 보냈습니다.", [=](){
+					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, getLocal(LK::kFriendSuccess), getLocal(LK::kFriendHeartSended), [=](){
 						if(input_text1)
 						{
 							input_text1->setVisible(true);
