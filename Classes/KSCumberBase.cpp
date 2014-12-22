@@ -105,7 +105,7 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
-				validPosition = true;
+//				validPosition = true;
 				// 즉사 시킴.
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -288,7 +288,7 @@ void KSCumberBase::straightMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -480,7 +480,7 @@ void KSCumberBase::followMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				m_follow.lastMapCollisionTime = m_follow.timer;
@@ -662,7 +662,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -847,7 +847,7 @@ void KSCumberBase::circleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -1012,7 +1012,7 @@ void KSCumberBase::snakeMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -2347,7 +2347,7 @@ COLLISION_CODE KSCumberBase::crashWithX( IntPoint check_position )
 		return COLLISION_CODE::kCOLLISION_NEWLINE;
 	}
 	IntPoint jackPoint = myGD->getJackPoint();
-	if((jackPoint - check_position).length() < 2)
+	if((jackPoint - check_position).length() < 2 && myGD->getJackState() != jackStateNormal)
 	{
 		return COLLISION_CODE::kCOLLISION_JACK;
 	}
