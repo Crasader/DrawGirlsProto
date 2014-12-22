@@ -2116,7 +2116,7 @@ public:
 	{
 		// 여기서 몬스터와 부딪힌거 검사하면서 터짐.
 		bool isEnable = true;
-		bool emptyMonster = false;
+		bool emptyMonster = m_step == 2 && !myGD->isValidMainCumber(m_targetNode) && !myGD->isValidSubCumber(m_targetNode);
 		IntPoint missilePoint = ccp2ip(m_mine->getPosition());
 		bool invalidRange = (missilePoint.x < mapLoopRange::mapWidthInnerBegin - 20 || missilePoint.x > mapLoopRange::mapWidthInnerEnd + 20 ||
 												 missilePoint.y < mapLoopRange::mapHeightInnerBegin -20 || missilePoint.y > mapLoopRange::mapHeightInnerEnd + 20);

@@ -388,7 +388,30 @@ void TitleRenewalScene::realInit()
 //#endif
 	TRACE();
 	CCLOG("logintype ================ %d", param["LoginType"].asInt());
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
+	if(loginType == HSPLoginTypeX::HSPLoginTypeUNKNOWN)
+	{
+		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	}
+	else
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getSocialID();
+		CCLOG("member eeeee id %s", hspConnector::get()->getSocialID().c_str());
+		KS::KSLog("member eeeee id %", hspConnector::get()->getSocialID().c_str());
+#ifdef LQTEST
+		param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
+#else
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
+#endif
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+
+		
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+#endif
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )

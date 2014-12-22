@@ -823,8 +823,7 @@ IntRectSTL MapScanner::newRectChecking(mapType (*mapArray)[217], vector<pair<Int
 	
 //	CCLOG("loop count : %d", loopCnt);
 	
-	IntRectSTL r_rect = IntRectSTL((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
-	return r_rect;
+	return IntRectSTL((origin.x-1)*pixelSize, (origin.y-1)*pixelSize, size.width*pixelSize, size.height*pixelSize);
 }
 
 
@@ -894,7 +893,7 @@ public:
 
 
 
-void MapScanner::bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint)
+void MapScanner::bfsCheck(mapType beforeType, mapType afterType, const IntPoint& startPoint)
 {
 	BFS_Point s_p;
 	s_p.x = startPoint.x;
