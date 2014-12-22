@@ -1680,7 +1680,8 @@ void FriendPopup::setVoteFriendMenu()
 					int newY = y;
 					
 					CCSprite* stampSprite = CCSprite::create("friend_gain.png");
-					m_friendVoteContainer->addChild(stampSprite);
+					m_friendVoteContainer->addChild(stampSprite, 2);
+					
 					stampSprite->setPosition(ccp(newX, newY));
 					
 				}
