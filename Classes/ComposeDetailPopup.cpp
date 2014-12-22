@@ -94,6 +94,7 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	is_full = false;
 	
 	vector<KSProtectVar<int>> t_material_list = mySGD->card_compose_list[compose_idx].material_card_list;
+	vector<KSProtectVar<int>> t_material_piece_list = mySGD->card_compose_list[compose_idx].material_piece_list;
 	int material_count = t_material_list.size();
 	
 	card_data_list.clear();
@@ -208,6 +209,13 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 				t_position = ccp(107,44);
 		}
 		
+		int t_stage_number = t_material_piece_list[i].getV();
+		int t_puzzle_number = 0;
+		if(t_stage_number != 0)
+		{
+			t_puzzle_number = NSDS_GI(t_stage_number, kSDS_SI_puzzle_i);
+		}
+		
 		if(t_info.count.getV() >= 1)
 		{
 			CCClippingNode* clipping_node = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
@@ -236,6 +244,26 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			
 			if(t_info.count.getV() < 2)
 				is_necessary_on = false;
+			
+			if(t_stage_number != 0)
+			{
+				KSLabelTTF* puzzle_label = KSLabelTTF::create(ccsf("Puzzle %d", t_puzzle_number), mySGD->getFont().c_str(), 12);
+				puzzle_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				puzzle_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f) + ccp(0,6));
+				frame_img->addChild(puzzle_label);
+				
+				KSLabelTTF* stage_label = KSLabelTTF::create(ccsf("Stage %d", t_stage_number), mySGD->getFont().c_str(), 12);
+				stage_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				stage_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f) + ccp(0,-6));
+				frame_img->addChild(stage_label);
+			}
+			else
+			{
+				KSLabelTTF* special_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardSettingSpecialCardTitle), mySGD->getFont().c_str(), 12);
+				special_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				special_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f));
+				frame_img->addChild(special_label);
+			}
 		}
 		else
 		{
@@ -247,14 +275,34 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			
 			KSLabelTTF* need_ment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_necessaryPlease), mySGD->getFont().c_str(), 11);
 			need_ment->enableOuterStroke(ccBLACK, 0.5f, int(255*0.6f), true);
-			need_ment->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,4));
+			need_ment->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,14));
 			not_have_back->addChild(need_ment);
 			
 			KSLabelTTF* no_label = KSLabelTTF::create(ccsf("No.%d", t_material_list[i].getV()), mySGD->getFont().c_str(), 12);
 			no_label->setColor(ccc3(255, 220, 150));
 			no_label->enableOuterStroke(ccBLACK, 0.5f, int(255*0.6f), true);
-			no_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-8));
+			no_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,2));
 			not_have_back->addChild(no_label);
+			
+			if(t_stage_number != 0)
+			{
+				KSLabelTTF* puzzle_label = KSLabelTTF::create(ccsf("Puzzle %d", t_puzzle_number), mySGD->getFont().c_str(), 12);
+				puzzle_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				puzzle_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-10));
+				not_have_back->addChild(puzzle_label);
+				
+				KSLabelTTF* stage_label = KSLabelTTF::create(ccsf("Stage %d", t_stage_number), mySGD->getFont().c_str(), 12);
+				stage_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				stage_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-22));
+				not_have_back->addChild(stage_label);
+			}
+			else
+			{
+				KSLabelTTF* special_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardSettingSpecialCardTitle), mySGD->getFont().c_str(), 12);
+				special_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				special_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-16));
+				not_have_back->addChild(special_label);
+			}
 		}
 	}
 	

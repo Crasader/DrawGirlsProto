@@ -250,6 +250,7 @@ enum SDS_KEY
 	kSDS_GI_cardCompose_list_int1_needStone_i,
 	kSDS_GI_cardCompose_list_int1_materialCardsCnt_i,
 	kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i,
+	kSDS_GI_cardCompose_list_int1_materialPieces_int2_no_i,
 	kSDS_GI_end = 1999,
 	kSDS_SI_base = 2000,
 	kSDS_SI_version_i,

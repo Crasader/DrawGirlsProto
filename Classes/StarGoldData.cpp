@@ -3642,6 +3642,11 @@ void StarGoldData::initUserdata(Json::Value result_data)
 			initCharacterLevel(userdata_storage[(UserdataType)i].getV());
 	}
 	
+	if(result_data["friendList"].isNull() || result_data["friendList"].empty() || result_data["friendList"].asString() == "")
+		setFriendsCnt(0);
+	else
+		setFriendsCnt(result_data["friendList"].size());
+	
 	setIntroducerID(result_data.get("introducerID", 0).asInt64());
 }
 

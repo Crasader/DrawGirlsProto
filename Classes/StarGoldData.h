@@ -402,6 +402,7 @@ public:
 	KSProtectVar<int> need_exp;
 	KSProtectVar<int> compose_card_number;
 	KSProtectVar<int> need_stone;
+	vector<KSProtectVar<int>> material_piece_list;
 };
 
 class HeartTime;
@@ -1358,6 +1359,7 @@ private:
 	COMMON_VAR_STR(manyGachaMsgRight, ManyGachaMsgRight);
 	COMMON_VAR_STR(diaryStoreUrl, DiaryStoreUrl);
 	COMMON_VAR_STR(cdnUrl, CdnUrl);
+	COMMON_VAR(int, friendsCnt, FriendsCnt);
 };
 
 #endif
