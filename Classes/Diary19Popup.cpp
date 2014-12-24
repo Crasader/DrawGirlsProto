@@ -106,30 +106,34 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f));
 	back_in->addChild(content_label);
 	
-	
-//	t_loading = LoadingLayer::create(touch_priority-100);
-//	addChild(t_loading, 999);
-//	t_loading->startLoading();
-//	
-//	Json::Value mdc_param;
-//	mdc_param["memberID"] = myHSP->getSocialID();
-//	
-//	myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
-	
-	CCLabelTTF* r_label = CCLabelTTF::create();
-	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_download), mySGD->getFont().c_str(), 13);
-	rightnow_label->disableOuterStroke();
-	r_label->addChild(rightnow_label);
-	
-	CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
-	
-	CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
-	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
-	rightnow_button->setPreferredSize(CCSizeMake(100,44));
-	rightnow_button->setPosition(ccp(0,-50));
-	m_container->addChild(rightnow_button);
-	
-	rightnow_button->setTouchPriority(touch_priority);
+	if(!is_ingame)
+	{
+		t_loading = LoadingLayer::create(touch_priority-100);
+		addChild(t_loading, 999);
+		t_loading->startLoading();
+		
+		Json::Value mdc_param;
+		mdc_param["memberID"] = myHSP->getSocialID();
+		
+		myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
+	}
+	else
+	{
+		CCLabelTTF* r_label = CCLabelTTF::create();
+		KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_download), mySGD->getFont().c_str(), 13);
+		rightnow_label->disableOuterStroke();
+		r_label->addChild(rightnow_label);
+		
+		CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
+		
+		CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
+		rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
+		rightnow_button->setPreferredSize(CCSizeMake(100,44));
+		rightnow_button->setPosition(ccp(0,-50));
+		m_container->addChild(rightnow_button);
+		
+		rightnow_button->setTouchPriority(touch_priority);
+	}
 	
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){

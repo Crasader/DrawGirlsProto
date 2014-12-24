@@ -90,6 +90,21 @@ public class KSActivityBase extends Cocos2dxActivity{
 	    startActivity(intent);
 	}
 	
+	public void diaryAppExeNA(final String memberID, final String diaryCode, final int cardNumber)
+	{
+		ComponentName compName = new ComponentName("com.litqoo.DgDiary.NA","com.litqoo.DgDiary.NA.DgDiary"); 
+	    Intent intent = new Intent(Intent.ACTION_MAIN);
+	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+	    intent.addCategory(Intent.CATEGORY_LAUNCHER);
+	    intent.setComponent(compName);
+	    
+	    intent.putExtra("memberID", memberID);
+	    intent.putExtra("diaryCode", diaryCode);
+	    intent.putExtra("cardNumber", cardNumber);
+	    
+	    startActivity(intent);
+	}
+	
 	private int getLeftMargin() {
 		Size b = getFitScreen();
 		DisplayMetrics displayMetrics = new DisplayMetrics();

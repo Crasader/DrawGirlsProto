@@ -203,7 +203,7 @@ void GraphDog::setLanguage(string lang){
 	CCUserDefault::sharedUserDefault()->flush();
 }
 
-bool GraphDog::isExistApp()
+int GraphDog::isExistApp()
 {
 #if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	jboolean ret = false;
@@ -231,7 +231,26 @@ bool GraphDog::isExistApp()
 //		minfo.env->DeleteLocalRef(minfo.classID);
 //	}
 	
-	return (bool)ret;
+	if((bool)ret)
+		return 1; // T build
+	else
+	{
+		JniMethodInfo __minfo;
+		if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "isExistApp", "(Ljava/lang/String;)Z"))
+		{
+			jstring param1 = __minfo.env->NewStringUTF("com.litqoo.DgDiary.NA");
+			
+			ret = __minfo.env->CallBooleanMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1);
+			__minfo.env->DeleteLocalRef(__minfo.classID);
+			__minfo.env->DeleteLocalRef(param1);
+		}
+		
+		if((bool)ret)
+			return 2; // N build
+		else
+			return 0;
+	}
+	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	return (bool)[[UIApplication sharedApplication]canOpenURL:[NSURL URLWithString:@"DgDiary://"]];
 #endif
@@ -265,6 +284,62 @@ void GraphDog::openDiaryApp(string t_memberID, string t_diaryCode, int t_card_nu
 //		minfo.env->DeleteGlobalRef(jobj);
 //		minfo.env->DeleteLocalRef(minfo.classID);
 //	}
+	
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	UIPasteboard* pasteborad1 = [UIPasteboard pasteboardWithName:@"memberID" create:YES];
+	if(pasteborad1 != nil)
+		pasteborad1.string = [NSString stringWithUTF8String:t_memberID.c_str()];
+	else
+		NSLog(@"Can't create pasteboard1");
+	
+	UIPasteboard* pasteborad2 = [UIPasteboard pasteboardWithName:@"diaryCode" create:YES];
+	if(pasteborad2 != nil)
+		pasteborad2.string = [NSString stringWithUTF8String:t_diaryCode.c_str()];
+	else
+		NSLog(@"Can't create pasteboard2");
+	
+	UIPasteboard* pasteborad3 = [UIPasteboard pasteboardWithName:@"cardNumber" create:YES];
+	if(pasteborad3 != nil)
+	{
+		string t_card_string = ccsf("%d", t_card_number);
+		pasteborad3.string = [NSString stringWithUTF8String:t_card_string.c_str()];
+	}
+	else
+		NSLog(@"Can't create pasteboard3");
+	
+	
+	[[UIApplication sharedApplication]openURL:[NSURL URLWithString:@"DgDiary://"]];
+#endif
+}
+
+void GraphDog::openDiaryAppNA(string t_memberID, string t_diaryCode, int t_card_number)
+{
+#if CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
+	//	JniMethodInfo minfo;
+	//	jobject jobj;
+	
+	//	if(JniHelper::getStaticMethodInfo(minfo, packageName.c_str(), "getActivity", "()V"))
+	//	{
+	//		jobj = minfo.env->NewGlobalRef(minfo.env->CallStaticObjectMethod(minfo.classID, minfo.methodID));
+	JniMethodInfo __minfo;
+	//		__minfo.classID = 0;
+	//		__minfo.env = 0;
+	//		__minfo.methodID = 0;
+	
+	
+	if(JniHelper::getMethodInfo(__minfo, JNIKelper::getInstance()->getClassName().c_str(), "diaryAppExeNA", "(Ljava/lang/String;Ljava/lang/String;I)V"))
+	{
+		jstring param1 = __minfo.env->NewStringUTF(t_memberID.c_str());
+		jstring param2 = __minfo.env->NewStringUTF(t_diaryCode.c_str());
+		
+		__minfo.env->CallVoidMethod(JNIKelper::getInstance()->getJobj(), __minfo.methodID, param1, param2, t_card_number);
+		__minfo.env->DeleteLocalRef(__minfo.classID);
+		__minfo.env->DeleteLocalRef(param1);
+		__minfo.env->DeleteLocalRef(param2);
+	}
+	//		minfo.env->DeleteGlobalRef(jobj);
+	//		minfo.env->DeleteLocalRef(minfo.classID);
+	//	}
 	
 #elif CC_TARGET_PLATFORM == CC_PLATFORM_IOS
 	UIPasteboard* pasteborad1 = [UIPasteboard pasteboardWithName:@"memberID" create:YES];

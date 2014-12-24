@@ -1428,7 +1428,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		Json::Value json_diary_store_url;
 		Json::Reader t_reader;
 		t_reader.parse(diary_store_url, json_diary_store_url);
-		json_diary_store_url.get(myHSP->getStoreID(), "").asString();
+		diary_store_url = json_diary_store_url.get(myHSP->getStoreID(), "").asString();
 		if(diary_store_url == "")
 			diary_store_url = result_data["diaryStoreUrl"]["default"].asString();
 		mySGD->setDiaryStoreUrl(diary_store_url);

@@ -425,7 +425,9 @@ bool CardViewScene::init()
 																					is_actioned = true;
 																					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																					
-																					if(graphdog->isExistApp())
+																					int exist_app_type = graphdog->isExistApp();
+																					
+																					if(exist_app_type > 0)
 																					{
 																						// 다이어리 앱 설치되어 있음
 																						
@@ -440,7 +442,10 @@ bool CardViewScene::init()
 																									   {
 																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																										   {
-																											   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+																											   if(exist_app_type == 1)
+																												   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+																											   else if(exist_app_type == 2)
+																												   graphdog->openDiaryAppNA(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
 																										   }
 																										   else
 																										   {
