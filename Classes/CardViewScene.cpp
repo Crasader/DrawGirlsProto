@@ -443,9 +443,9 @@ bool CardViewScene::init()
 																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
 																										   {
 																											   if(exist_app_type == 1)
-																												   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+																												   graphdog->openDiaryApp("","",-1);//t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
 																											   else if(exist_app_type == 2)
-																												   graphdog->openDiaryAppNA(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+																												   graphdog->openDiaryAppNA("","",-1);//t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
 																										   }
 																										   else
 																										   {
