@@ -92,7 +92,7 @@ public class KSActivityBase extends Cocos2dxActivity{
 	
 	public void diaryAppExeNA(final String memberID, final String diaryCode, final int cardNumber)
 	{
-		ComponentName compName = new ComponentName("com.litqoo.DgDiary.NA","com.litqoo.DgDiary.NA.DgDiary"); 
+		ComponentName compName = new ComponentName("com.litqoo.DgDiary.NA","com.litqoo.DgDiary.NA.DgDiaryNA"); 
 	    Intent intent = new Intent(Intent.ACTION_MAIN);
 	    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//|Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 	    intent.addCategory(Intent.CATEGORY_LAUNCHER);
