@@ -700,4 +700,5 @@ void CumberParent::hideBosses()
 //		mainCumber->stopAllActions();
 //		mainCumber->unscheduleAllSelectors();
 	}
+	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
 }

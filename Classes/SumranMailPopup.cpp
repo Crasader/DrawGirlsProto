@@ -2081,9 +2081,9 @@ void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
 			addChild(ll, 100);
 			myHSP->command("addfriend", param, [=](Json::Value v){
 				ll->removeFromParent();
-				if(v["result"]["code"] != GDSUCCESS)
+				if(v["result"]["code"].asInt() == GDSUCCESS)
 					return;
-				if(v["result"]["code"] == GDFRIENDMAX)
+				if(v["result"]["code"].asInt() == GDFRIENDMAX)
 				{
 					std::string resultMessage = v["result"]["message"].asString();
 					// 내가 50명 넘음
