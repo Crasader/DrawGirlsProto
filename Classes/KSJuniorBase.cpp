@@ -186,6 +186,9 @@ bool KSJuniorBase::startDamageReaction(float damage, float angle, bool castCance
 			CCPoint t = getPosition();
 			ret.first->setPosition(t);
 			getParent()->addChild(ret.first, 11);
+			getParent()->addChild(KSTimer::create(1.f, [=](){
+				ret.first->removeFromParent();
+			}));
 			
 			scheduleOnce(schedule_selector(ThisClassType::removeFromParent), 0.1f);
 		}
