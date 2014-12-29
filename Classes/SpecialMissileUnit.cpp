@@ -578,7 +578,7 @@ void AlongOfTheLine::update (float dt)
 			}
 			IntPoint jackPoint = myGD->getJackPoint();
 			
-			if(i->alongPath.point == jackPoint)
+			if( (i->alongPath.point - jackPoint).length() <= 1)
 			{
 				myGD->communication("CP_jackCrashDie");
 				myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
