@@ -24,7 +24,10 @@ enum AttackOption
 	kJackSpeedUp = 1 << 4,
 	kUnbeatable = 1 << 5,
 	kPoisonedNiddle = 1 << 6,
-	kPlusScore = 1 << 7	
+	kPlusScore = 1 << 7,
+	kNoShockWave = 1 << 8,
+	kStopTime = 1 << 9,
+	kSilent = 1 << 10,
 };
 inline AttackOption operator|(AttackOption a, AttackOption b)
 {
@@ -57,66 +60,142 @@ public:
 		scheduleUpdate();
 		return true;	
 	}
-	void update(float dt)
-	{
-		m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
-		m_durationFrame--;
-		if(m_durationFrame <= 0)
-		{
-			removeFromParent();
-			return;
-		}
-
-		
-		bool emptyMonster = !myGD->isValidMainCumber(m_target) && !myGD->isValidSubCumber(m_target);
-		if(emptyMonster)
-		{
-			removeFromParent();
-			return;
-		}
-		if(m_jiggleInterval == 0)
-		{
-			m_jiggleInterval = m_initJiggleInterval;
-			CCPoint effectPosition = m_target->getPosition();
-			effectPosition.x += rand()%21 - 10;
-			effectPosition.y += rand()%21 - 10;
-			CCPoint damagePosition = effectPosition;
-			float damage = m_power;
-
-
-			// directionAngle : Degree 단위.
-			// 피격에니메이션.
-			myGD->communication("MP_explosion", damagePosition, ccc4f(0, 0, 0, 0), 0.f);
-			// 화면 번쩍 번쩍
-			myGD->communication("VS_setLight");
-			// 데미지 표시해주는 것. 데미지 숫자 뜸.
-			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, m_subPower);
-
-			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
-			//combo_cnt++;
-
-			int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
-			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
-			double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-			if(score_rate < 1.0)
-				score_rate = 1.0;
-			score_rate -= 1.0;
-			int sub_score = addScore*score_rate;
-			
-			myGD->communication("UI_addScore", addScore, sub_score);
-			//myGD->communication("UI_setComboCnt", combo_cnt);
-			//myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
-
-			myGD->communication("Main_startShake", 0.f);
-		}	
-	}
+	void update(float dt);
+	
 protected:
 	KSCumberBase* m_target;
-	float m_durationFrame;
 	int m_power;
 	int m_subPower;
 	int m_jiggleInterval;
-	int m_initJiggleInterval;		
+	int m_initJiggleInterval;
+	CC_SYNTHESIZE(int, m_durationFrame, DurationFrame);
+};
+
+class NoShockWave : public CCNode
+{
+public:
+	static NoShockWave* create(KSCumberBase* target, int durationFrame)
+	{
+		NoShockWave* obj = new NoShockWave();
+		obj->init(target, durationFrame);
+		obj->autorelease();
+		return obj;
+	}
+	bool __attribute__ ((noinline)) init(KSCumberBase* target, int durationFrame)
+	{
+		m_durationFrame = durationFrame;
+		
+		
+		m_target = target;
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt);
+	
+protected:
+	KSCumberBase* m_target;
+
+	CC_SYNTHESIZE(int, m_durationFrame, DurationFrame);
+};
+
+
+
+class StopTime : public CCNode
+{
+public:
+	static StopTime* create(KSCumberBase* target, int durationFrame)
+	{
+		StopTime* obj = new StopTime();
+		obj->init(target, durationFrame);
+		obj->autorelease();
+		return obj;
+	}
+	bool __attribute__ ((noinline)) init(KSCumberBase* target, int durationFrame)
+	{
+		m_durationFrame = durationFrame;
+		
+		
+		m_target = target;
+		
+		myGD->communication("UI_stopCounting");
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt);
+	
+protected:
+	KSCumberBase* m_target;
+	
+	CC_SYNTHESIZE(int, m_durationFrame, DurationFrame);
+};
+
+class Silent : public CCNode
+{
+public:
+	static Silent* create(KSCumberBase* target, int durationFrame)
+	{
+		Silent* obj = new Silent();
+		obj->init(target, durationFrame);
+		obj->autorelease();
+		return obj;
+	}
+	bool __attribute__ ((noinline)) init(KSCumberBase* target, int durationFrame)
+	{
+		m_durationFrame = durationFrame;
+		
+		
+		m_target = target;
+		scheduleUpdate();
+		return true;
+	}
+	void update(float dt);
+	
+protected:
+	KSCumberBase* m_target;
+	
+	CC_SYNTHESIZE(int, m_durationFrame, DurationFrame);
+};
+
+class MonsterSpeedDown : public CCNode
+{
+public:
+	static MonsterSpeedDown* create(KSCumberBase* target, float radius, int durationFrame, int power, int subPower)
+	{
+		MonsterSpeedDown* obj = new MonsterSpeedDown();
+		obj->init(target, radius, durationFrame, power, subPower);
+		obj->autorelease();
+		return obj;
+	}
+	bool init(KSCumberBase* target, float radius, int durationFrame, int power, int subPower)
+	{
+		
+		m_radius = radius;
+		m_durationFrame = durationFrame;
+		m_power = power;
+		m_subPower = subPower;
+		m_decreaseRatio = 0.95f;
+		m_target = target;
+		m_target->setSpeedRatioForStone(nullptr, m_target->getSpeedRatioForStone() * m_decreaseRatio);
+	
+		
+		addChild(KSTimer::create(m_durationFrame / 60.f, [=](){
+			m_target->setSpeedRatioForStone(nullptr, m_target->getSpeedRatioForStone() * 1.f / m_decreaseRatio);
+			
+			removeFromParent();
+		}));
+		
+//		scheduleUpdate();
+		return true;
+	}
+	
+protected:
+	float m_radius;
+	float m_durationFrame;
+	int m_power;
+	int m_subPower;
+	float m_decreaseRatio;
+	KSCumberBase* m_target;
+//	map<CCNode*, bool> m_applied; // 몬스터가 적용이 됐는지.
 };
 
 class MonsterSpeedDownZone : public CCNode
@@ -403,9 +482,64 @@ public:
 		CCPoint cumberPosition = cumber->getPosition();
 		if(m_option & AttackOption::kPoisonedNiddle)
 		{
-			getParent()->addChild(PoisonedNiddle::create(cumber, 500, 20, subdamage));
+			if(cumber->getPoisonedNiddle())
+			{
+				cumber->getPoisonedNiddle()->setDurationFrame(cumber->getPoisonedNiddle()->getDurationFrame() + 60);
+			}
+			else
+			{
+				auto p = PoisonedNiddle::create(cumber, 30, 20, subdamage);
+				getParent()->addChild(p);
+				cumber->setPoisonedNiddle(p);
+			}
 			// 특정 간격으로 데미지를 깎는다. 부가 기능은  ㄴ ㄴ해.
 		}
+		if(m_option & AttackOption::kNoShockWave)
+		{
+			// 파동 발생 안시킴
+			if(cumber->getNoShockWave())
+			{
+				cumber->getNoShockWave()->setDurationFrame(cumber->getNoShockWave()->getDurationFrame() + 60);
+			}
+			else
+			{
+				auto p = NoShockWave::create(cumber, 30);
+				getParent()->addChild(p);
+				cumber->setNoShockWave(p);
+			}
+		}
+
+		if(m_option & AttackOption::kStopTime)
+		{
+			// 파동 발생 안시킴
+			if(cumber->getStopTime())
+			{
+				cumber->getStopTime()->setDurationFrame(cumber->getStopTime()->getDurationFrame() + 60);
+			}
+			else
+			{
+				auto p = StopTime::create(cumber, 30);
+				getParent()->addChild(p);
+				cumber->setStopTime(p);
+			}
+		}
+		
+		if(m_option & AttackOption::kSilent)
+		{
+			// 파동 발생 안시킴
+			if(cumber->getSilent())
+			{
+				cumber->getSilent()->setDurationFrame(cumber->getSilent()->getDurationFrame() + 60);
+			}
+			else
+			{
+				auto p = Silent::create(cumber, 30);
+				getParent()->addChild(p);
+				cumber->setSilent(p);
+			}
+		}
+
+		
 		if((m_option & AttackOption::kGold))
 		{
 			FeverCoin* t_fc = FeverCoin::create(ccp2ip(cumberPosition), nullptr, nullptr);
@@ -417,7 +551,7 @@ public:
 		if(m_option & AttackOption::kMonsterSpeedDown)
 		{
 			// 몬스터 속도 하락시킴. n 초간 p% 감소하는 형태.
-			getParent()->addChild(MonsterSpeedDownZone::create(cumberPosition, 100, 500, 5, subdamage));
+			getParent()->addChild(MonsterSpeedDown::create(cumber, 100, 500, 5, subdamage));
 		}
 		// directionAngle : Degree 단위.
 		// 피격에니메이션.

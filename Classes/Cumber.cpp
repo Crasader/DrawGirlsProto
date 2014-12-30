@@ -697,6 +697,8 @@ void CumberParent::hideBosses()
 	{
 		mainCumber->setVisible(false);
 		mainCumber->onExit();
+		mainCumber->getPoisonedNiddle()->removeFromParent();
+		mainCumber->setPoisonedNiddle(nullptr);
 //		mainCumber->stopAllActions();
 //		mainCumber->unscheduleAllSelectors();
 	}

@@ -16,6 +16,8 @@
 #include "PassiveOp.h"
 #include "ServerDataSave.h"
 
+#include "StoneMissile.h"
+
 class KSJuniorBase;
 
 
@@ -131,7 +133,7 @@ void KSCumberBase::randomMoving(float dt)
 			{
 				//                        CCLOG("collision!!");
 				//                        myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -318,7 +320,7 @@ void KSCumberBase::straightMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -531,7 +533,7 @@ void KSCumberBase::followMoving(float dt)
 				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -698,7 +700,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -870,7 +872,7 @@ void KSCumberBase::circleMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -1035,7 +1037,7 @@ void KSCumberBase::snakeMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -3108,6 +3110,10 @@ void KSCumberBase::setSpeedRatioForStone(CCNode* stonePointer, float speedRatio)
 	m_slowStonePointer = stonePointer;
 	m_speedRatioForStone = speedRatio;
 }
+float KSCumberBase::getSpeedRatioForStone()
+{
+	return m_speedRatioForStone;
+}
 CCNode* KSCumberBase::getSlowStonePointer()
 {
 	return m_slowStonePointer;
@@ -3186,3 +3192,48 @@ void KSCumberBase::SnakeMoving::setRelocation(const CCPoint& cumberP, Well512& m
 		valid = true;
 	}
 }
+
+
+PoisonedNiddle* KSCumberBase::getPoisonedNiddle()
+{
+	return m_poisonedNiddle;
+}
+
+void KSCumberBase::setPoisonedNiddle(PoisonedNiddle* pn)
+{
+	m_poisonedNiddle = pn;
+}
+
+
+NoShockWave* KSCumberBase::getNoShockWave()
+{
+	return m_noShockWave;
+}
+
+void KSCumberBase::setNoShockWave(NoShockWave* pn)
+{
+	m_noShockWave = pn;
+}
+
+StopTime* KSCumberBase::getStopTime()
+{
+	return m_stopTime;
+}
+
+void KSCumberBase::setStopTime(StopTime* pn)
+{
+	m_stopTime = pn;
+}
+
+Silent* KSCumberBase::getSilent()
+{
+	return m_silent;
+}
+
+void KSCumberBase::setSilent(Silent* pn)
+{
+	m_silent = pn;
+}
+
+
+
