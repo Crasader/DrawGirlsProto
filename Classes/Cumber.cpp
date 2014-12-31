@@ -1,4 +1,4 @@
-//
+ //
 //  Cumber.cpp
 //  DrawingJack
 //
@@ -697,7 +697,8 @@ void CumberParent::hideBosses()
 	{
 		mainCumber->setVisible(false);
 		mainCumber->onExit();
-		mainCumber->getPoisonedNiddle()->removeFromParent();
+		if(mainCumber->getPoisonedNiddle())
+			mainCumber->getPoisonedNiddle()->removeFromParent();
 		mainCumber->setPoisonedNiddle(nullptr);
 //		mainCumber->stopAllActions();
 //		mainCumber->unscheduleAllSelectors();

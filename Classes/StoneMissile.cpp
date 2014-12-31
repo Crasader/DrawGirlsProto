@@ -131,9 +131,11 @@ void PoisonedNiddle::update(float dt)
 void NoShockWave::update(float dt)
 {
 	m_durationFrame--;
-	if(m_durationFrame <= 0)
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
 	{
-		m_target->setNoShockWave(nullptr);
+		if(emptyMonster == false)
+			m_target->setNoShockWave(nullptr);
 		removeFromParent();
 		return;
 	}
@@ -144,9 +146,16 @@ void NoShockWave::update(float dt)
 void Silent::update(float dt)
 {
 	m_durationFrame--;
-	if(m_durationFrame <= 0)
+	
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
 	{
-		m_target->setSilent(nullptr);
+		if(emptyMonster == false)
+		{
+			m_target->setSilent(nullptr);
+			m_target->setSlience(false);
+		}
+		
 		removeFromParent();
 		return;
 	}
@@ -155,9 +164,11 @@ void Silent::update(float dt)
 void StopTime::update(float dt)
 {
 	m_durationFrame--;
-	if(m_durationFrame <= 0)
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
 	{
-		m_target->setStopTime(nullptr);
+		if(emptyMonster == false)
+			m_target->setStopTime(nullptr);
 		bool haveStopTime = false;
 		
 		for(auto cumber : myGD->getMainCumberVector())
@@ -182,7 +193,7 @@ void StopTime::update(float dt)
 		}
 		if(haveStopTime == false)
 		{
-			myGD->communication("UI_stopCounting");
+			myGD->communication("UI_resumeCounting");
 		}
 
 		removeFromParent();

@@ -2969,11 +2969,13 @@ void KSCumberBase::setSlience( bool s )
 	
 	if(s)
 	{
-		getEmotion()->goSlience();
+		if(getEmotion())
+			getEmotion()->goSlience();
 	}
 	else
 	{
-		getEmotion()->releaseSlience();
+		if(getEmotion())
+			getEmotion()->releaseSlience();
 	}
 }
 

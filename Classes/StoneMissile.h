@@ -145,6 +145,7 @@ public:
 		
 		
 		m_target = target;
+		m_target->setSlience(true);
 		scheduleUpdate();
 		return true;
 	}
@@ -511,7 +512,7 @@ public:
 
 		if(m_option & AttackOption::kStopTime)
 		{
-			// 파동 발생 안시킴
+			// 시간 안흐름
 			if(cumber->getStopTime())
 			{
 				cumber->getStopTime()->setDurationFrame(cumber->getStopTime()->getDurationFrame() + 60);
