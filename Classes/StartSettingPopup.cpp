@@ -2946,6 +2946,12 @@ void StartSettingPopup::startButtonAction(CCObject *sender, CCControlEvent t_eve
 	
 	is_menu_enable = false;
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 0))
+	{
+		myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 0, true);
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick", myHSP->getStoreID().c_str());
+	}
+	
 	callStart();
 }
 
@@ -3444,6 +3450,12 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 1))
+		{
+			myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 1, true);
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick_success", myHSP->getStoreID().c_str());
+		}
+		
 		if(mySGD->is_endless_mode && mySGD->endless_my_victory.getV() == 0)
 			mySGD->pvp_continue_cnt = 0;
 		mySGD->ingame_continue_cnt = 0;
@@ -3455,6 +3467,12 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 1))
+		{
+//			myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 1, true);
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick_fail", myHSP->getStoreID().c_str());
+		}
+		
 		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 			((MainFlowScene*)getParent())->heart_time->backHeart();
 		else

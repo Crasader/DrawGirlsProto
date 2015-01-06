@@ -188,7 +188,10 @@ typedef enum t_DSH_Key{
 	kDSH_Key_premiumGachaDataTime,
 	
 	kDSH_Key_cardGachaTryCnt_int1,
-	kDSH_Key_composeListOffsetX
+	kDSH_Key_composeListOffsetX,
+	kDSH_Key_fiverocksCheck_int1,
+//	kDSH_Key_isChangedCardInfoToNew,
+//	kDSH_Key_isChangingCardInfo
 }DSH_Key;
 
 enum SpecialTutorialCode{

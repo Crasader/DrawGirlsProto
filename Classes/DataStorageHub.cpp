@@ -813,6 +813,10 @@ void DataStorageHub::initReturnPair()
 	
 	return_value[kDSH_Key_cardGachaTryCnt_int1] = "cgtrycnt%d";
 	return_value[kDSH_Key_composeListOffsetX] = "cplstofstx";
+	return_value[kDSH_Key_fiverocksCheck_int1] = "fvrkchk%d";
+	
+//	return_value[kDSH_Key_isChangedCardInfoToNew] = "ichgdcitn";
+//	return_value[kDSH_Key_isChangingCardInfo] = "ichgici";
 }
 
 //void DataStorageHub::changedCcbAnimationManager()
