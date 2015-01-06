@@ -1059,6 +1059,159 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
+//			주석 풀고 fFlush 들 수정해줘야 함
+//			if(mySDS->isCheckOldUser() && !myDSH->getBoolForKey(kDSH_Key_isChangedCardInfoToNew)) // CARDINFO 가 있으면서 새버전으로 변화시킨적 없다면
+//			{
+//				CCLog("change new card info");
+//				CCLog("CARDINFO : \n%s", mySDS->getSavedServerDataFile("CARDINFO").toStyledString().c_str());
+//				
+//				myDSH->setBoolForKey(kDSH_Key_isChangingCardInfo, true);
+//				
+//				vector<int> change_card_list;
+//				change_card_list.clear();
+//				
+//				function<void(int)> add_card_number_func = [&](int t_card_no)
+//				{
+//					auto t_iter = find(change_card_list.begin(), change_card_list.end(), t_card_no);
+//					if(t_iter == change_card_list.end())
+//						change_card_list.push_back(t_card_no);
+//				};
+//				
+//				// 소지중인 카드들 번호
+//				int has_card_count = mySGD->getHasGottenCardsSize();
+//				for(int i=0;i<has_card_count;i++)
+//				{
+//					CardSortInfo t_info = mySGD->getHasGottenCardData(i);
+//					int t_card_number = t_info.card_number.getV();
+//					add_card_number_func(t_card_number);
+//				}
+//				
+//				// 열려있는 퍼즐들의 각 스테이지들의 카드들 번호
+//				int puzzle_cnt = mySGD->getPuzzleHistorySize();
+//				for(int i=0;i<puzzle_cnt;i++)
+//				{
+//					PuzzleHistory t_history = mySGD->getPuzzleHistoryForIndex(i);
+//					if(t_history.is_open.getV())
+//					{
+//						int t_puzzle_number = t_history.puzzle_number.getV();
+//						int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+//						int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+//						
+//						for(int t_stage_number=t_start_stage;t_stage_number<t_start_stage+t_stage_count;t_stage_number++)
+//						{
+//							int t_card_count = NSDS_GI(t_stage_number, kSDS_SI_cardCount_i);
+//							for(int j=1;j<=t_card_count;j++)
+//							{
+//								int t_card_number = NSDS_GI(t_stage_number, kSDS_SI_level_int1_card_i, j);
+//								add_card_number_func(t_card_number);
+//							}
+//						}
+//					}
+//				}
+//				
+//				// 헬모드 카드들 번호
+//				int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+//				for(int i=0;i<hell_count;i++)
+//				{
+//					int t_stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
+//					int t_card_count = NSDS_GI(t_stage_number, kSDS_SI_cardCount_i);
+//					for(int j=1;j<=t_card_count;j++)
+//					{
+//						int t_card_number = NSDS_GI(t_stage_number, kSDS_SI_level_int1_card_i, j);
+//						add_card_number_func(t_card_number);
+//					}
+//				}
+//				
+//				// 합성 카드들 번호
+//				int compose_count = NSDS_GI(kSDS_GI_cardCompose_listCnt_i);
+//				for(int i=0;i<compose_count;i++)
+//				{
+//					int t_card_number = NSDS_GI(kSDS_GI_cardCompose_list_int1_cardNo_i, i+1);
+//					add_card_number_func(t_card_number);
+//				}
+//				
+//				CCLog("//////////////////// START CARD LIST ////////////////////////");
+//				for(int i=0;i<change_card_list.size();i++)
+//				{
+//					CCLog("%d", change_card_list[i]);
+//					
+//					int t_card_number = change_card_list[i];
+//					
+//					NSDS_SI(kSDS_CI_int1_serial_i, t_card_number, NSDS_GI(kSDS_CI_int1_serial_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_version_i, t_card_number, NSDS_GI(kSDS_CI_int1_version_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_rank_i, t_card_number, NSDS_GI(kSDS_CI_int1_rank_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_grade_i, t_card_number, NSDS_GI(kSDS_CI_int1_grade_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_stage_i, t_card_number, NSDS_GI(kSDS_CI_int1_stage_i, t_card_number), false);
+//					
+//					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card_number, NSDS_GB(kSDS_CI_int1_haveAdult_b, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_exp_i, t_card_number, NSDS_GI(kSDS_CI_int1_exp_i, t_card_number), false);
+//					
+//					NSDS_SS(kSDS_CI_int1_imgInfo_s, t_card_number, NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card_number), false);
+//					
+//					NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number, NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number), false);
+//					if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number))
+//					{
+//						int loop_seq = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card_number);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card_number, loop_seq, false);
+//						
+//						for(int j=0;j<loop_seq;j++)
+//							NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card_number, j, NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card_number, j), false);
+//						
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number), false);
+//						
+//						NSDS_SS(kSDS_CI_int1_aniInfoDetailImg_s, t_card_number, NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card_number), false);
+//						
+//					}
+//					
+//					NSDS_SS(kSDS_CI_int1_script_s, t_card_number, NSDS_GS(kSDS_CI_int1_script_s, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_profile_s, t_card_number, NSDS_GS(kSDS_CI_int1_profile_s, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_name_s, t_card_number, NSDS_GS(kSDS_CI_int1_name_s, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card_number, NSDS_GI(kSDS_CI_int1_mPrice_ruby_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card_number, NSDS_GI(kSDS_CI_int1_mPrice_pass_i, t_card_number), false);
+//					
+//					NSDS_SI(kSDS_CI_int1_type_i, t_card_number, NSDS_GI(kSDS_CI_int1_type_i, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_category_s, t_card_number, NSDS_GS(kSDS_CI_int1_category_s, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_level_i, t_card_number, NSDS_GI(kSDS_CI_int1_level_i, t_card_number), false);
+//					
+//					int sound_cnt = NSDS_GI(kSDS_CI_int1_soundCnt_i, t_card_number);
+//					NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card_number, sound_cnt, false);
+//					for(int j=1;j<=sound_cnt;j++)
+//					{
+//						NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card_number, j, NSDS_GS(kSDS_CI_int1_soundType_int1_s, t_card_number, j), false);
+//					}
+//					
+//					NSDS_SI(kSDS_CI_int1_characterNo_i, t_card_number, NSDS_GI(kSDS_CI_int1_characterNo_i, t_card_number), false);
+//					
+//					bool is_sil = NSDS_GB(kSDS_CI_int1_silImgInfoIsSil_b, t_card_number);
+//					NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card_number, is_sil, false);
+//					if(is_sil)
+//					{
+//						NSDS_SS(kSDS_CI_int1_silImgInfoImg_s, t_card_number, NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card_number), false);
+//					}
+//					
+//					bool have_face_info = NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number);
+//					NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card_number, have_face_info, false);
+//					if(have_face_info)
+//					{
+//						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number), false);
+//						
+//						NSDS_SS(kSDS_CI_int1_faceInfoCcbi_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card_number), false);
+//						NSDS_SS(kSDS_CI_int1_faceInfoPlist_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card_number), false);
+//						NSDS_SS(kSDS_CI_int1_faceInfoPvrccz_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card_number), false);
+//					}
+//					mySDS->fFlush(t_card_number, kSDS_CI_base);
+//				}
+//				CCLog("////////////////////// END CARD LIST ////////////////////////");
+//				
+//				
+//				myDSH->setBoolForKey(kDSH_Key_isChangedCardInfoToNew, true);
+//				myDSH->setBoolForKey(kDSH_Key_isChangingCardInfo, false);
+//			}
+			
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
 			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
             

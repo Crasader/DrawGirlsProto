@@ -456,11 +456,16 @@ public:
 	void removeCache();
 	
 	string getRKey (SDS_KEY t_key);
+//	string getRKey (SDS_KEY t_key, bool is_write = true);
 	
 	Json::Value getSavedServerData(Json::Value t_key_list);
 	Json::Value getSavedServerDataFile(string t_filename);
 	void saveServerData(Json::Value t_data_list);
 	void saveServerDataFile(string t_filename, Json::Value t_data);
+	
+//	bool isCheckOldUser();
+//	bool isOldCardInfoTypeForWrite();
+//	bool isOldCardInfoTypeForRead();
 	
 private:
 	map<string, KSProtectVar<bool>> sds_cache_bool;
@@ -474,19 +479,10 @@ private:
 	map<string, KSProtectStr> sds_cache_string;
 	map<string, KSProtectStr>::iterator iter_string;
 	
-//	map<string, bool> sds_cache_bool;
-//	map<string, bool>::iterator iter_bool;
-//	map<string, int> sds_cache_int;
-//	map<string, int>::iterator iter_int;
-//	map<string, float> sds_cache_float;
-//	map<string, float>::iterator iter_float;
-//	map<string, double> sds_cache_double;
-//	map<string, double>::iterator iter_double;
-//	map<string, string> sds_cache_string;
-//	map<string, string>::iterator iter_string;
-	
+//	int is_old_user;
 	SaveData * myDefault;
 	SDS_SET getKeySet (SDS_KEY t_key);
+//	SDS_SET getKeySet (SDS_KEY t_key, bool is_write = true);
 	SaveDataFile getSDF (SDS_KEY t_key);
 	void myInit ();
 };
