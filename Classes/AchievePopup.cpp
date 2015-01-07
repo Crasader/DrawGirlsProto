@@ -695,14 +695,17 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	int state_value = -1; // complete
 	
 	AchievementCode recent_code;
-	
+	bool low_level_completed = false;//히든업적이 1단계라도 달성한게 있는지 확인할때
 	for(int i=0;i<achieve_list[idx].achieve_list.size();i++)
 	{
 		state_value = 0;
 		
 		recent_code = achieve_list[idx].achieve_list[i];
 		if(myAchieve->isCompleted(recent_code))
+		{
 			state_value = -1;
+			low_level_completed = true;
+		}
 		else if(myAchieve->isAchieve(recent_code))
 		{
 			state_value = 1;
@@ -718,14 +721,22 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 	}
 	
 	string cell_back_filename;
-	if(state_value == -1)
+	if(state_value == -1) // completed
 		cell_back_filename = "rank_normal1.png";
-	else if(state_value == 1)
+	else if(state_value == 1) // achieved
 		cell_back_filename = "rank_normal1.png";
 	else if(recent_code > kAchievementCode_hidden_base && recent_code < kAchievementCode_hidden_end)
 	{
-		state_value = 2;
-		cell_back_filename = "achievement_cell_hidden.png";
+		if(low_level_completed)
+		{
+			state_value = 3;
+			cell_back_filename = "rank_normal2.png";
+		}
+		else
+		{
+			state_value = 2;
+			cell_back_filename = "achievement_cell_hidden.png";
+		}
 	}
 	else
 		cell_back_filename = "rank_normal2.png";
@@ -871,6 +882,8 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 		cell_back->addChild(cell_title);
 		
 		KSLabelTTF* cell_content = KSLabelTTF::create(myAchieve->getContent(recent_code).c_str(), mySGD->getFont().c_str(), 9);
+		if(state_value == 3)
+			cell_content->setString(getLocal(LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease));
 		if(state_value != 1 && state_value != -1)
 		{
 			cell_content->disableOuterStroke();
@@ -958,6 +971,39 @@ CCTableViewCell* AchievePopup::tableCellAtIndex( CCTableView *table, unsigned in
 			get_menu->setPosition(ccp(360,cell_back->getContentSize().height/2.f));
 			cell_back->addChild(get_menu);
 			get_menu->setTouchPriority(-188);
+			
+			string reward_type_str;
+			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);
+			if(reward_type == kAchieveRewardType_ruby)
+				reward_type_str = "price_ruby_img.png";
+			else if(reward_type == kAchieveRewardType_gold)
+				reward_type_str = "price_gold_img.png";
+			else if(reward_type == kAchieveRewardType_package)
+				reward_type_str = "price_package_img.png";
+			
+			CCSprite* reward_value_back = CCSprite::create("achievement_reward_label_back.png");
+			reward_value_back->setPosition(ccp(cell_back->getContentSize().width+33, cell_back->getContentSize().height/2.f - 7));
+			cell_back->addChild(reward_value_back);
+			
+			KSLabelTTF* reward_value = KSLabelTTF::create(CCString::createWithFormat("%d", myAchieve->getRewardValue(recent_code))->getCString(),
+														  mySGD->getFont().c_str(), 10);
+			reward_value->setPosition(ccpFromSize(reward_value_back->getContentSize()/2.f) + ccp(0,-1));
+			reward_value_back->addChild(reward_value);
+			
+			CCSprite* reward_type_img = CCSprite::create(reward_type_str.c_str());
+			reward_type_img->setPosition(ccp(cell_back->getContentSize().width+33, cell_back->getContentSize().height/2.f + 5));
+			cell_back->addChild(reward_type_img);
+		}
+		else if(state_value == 3)
+		{
+			CCSprite* n_success = CCSprite::create("achievement_button_ing.png");
+			KSLabelTTF* n_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_reward), mySGD->getFont().c_str(), 12.5f);
+			n_label->enableOuterStroke(ccBLACK, 0.3f, 50, true);
+			n_label->setPosition(ccpFromSize(n_success->getContentSize()/2.f) + ccp(13,0));
+			n_success->addChild(n_label);
+			n_success->setPosition(ccp(360,cell_back->getContentSize().height/2.f));
+			cell_back->addChild(n_success);
+			
 			
 			string reward_type_str;
 			AchieveRewardType reward_type = AchieveConditionReward::sharedInstance()->getRewardType(recent_code);

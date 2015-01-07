@@ -1114,6 +1114,8 @@ public:
 	SnowBackNode* snow_node;
 	bool is_snow_inited;
 	
+	bool is_restarted;
+	
 private:
 	
 	vector<CollectionCardInfo> normal_puzzle_cards;

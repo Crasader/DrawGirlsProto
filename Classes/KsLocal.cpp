@@ -369,7 +369,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
+//	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
 //	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "게임시작";
@@ -1350,6 +1350,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
 	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가?";
 	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -1643,7 +1644,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
+//	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
 	//	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "Start Game";
@@ -2624,6 +2625,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
 	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가요?";
 	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

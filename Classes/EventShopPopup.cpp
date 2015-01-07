@@ -23,6 +23,7 @@
 #include "StyledLabelTTF.h"
 #include "LabelTTFMarquee.h"
 #include "FiveRocksCpp.h"
+#include "TitleRenewal.h"
 
 enum EventShopProductCode
 {
@@ -242,6 +243,7 @@ void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
 	
 	createCheckBuyPopup([=]()
 						{
+							mySGD->is_restarted = false;
 							loading_layer = LoadingLayer::create();
 							addChild(loading_layer, 999);
 							
@@ -249,6 +251,7 @@ void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
 							param["productid"] = mySGD->getEventInappProduct(t_index);
 							hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
 								KS::KSLog("in-app test \n%", v);
+								
 								if(v["issuccess"].asInt())
 								{
 									Json::Value t_info = mySGD->getProductInfo(mySGD->getEventInappProduct(t_index));
@@ -260,10 +263,29 @@ void EventShopPopup::controlAction(CCObject* sender, CCControlEvent t_event)
 										myHSP->analyticsPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
 									}
+									
+									if(mySGD->is_restarted)
+									{
+										mySGD->resetLabels();
+										AudioEngine::sharedInstance()->stopAllEffects();
+										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+										
+										return;
+									}
+									
 									requestItemDelivery();
 								}
 								else
 								{
+									if(mySGD->is_restarted)
+									{
+										mySGD->resetLabels();
+										AudioEngine::sharedInstance()->stopAllEffects();
+										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+										
+										return;
+									}
+									
 									loading_layer->removeFromParent();
 									
 //									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
@@ -294,6 +316,8 @@ void EventShopPopup::menuAction(CCObject* sender)
 	
 	createCheckBuyPopup([=]()
 						{
+							mySGD->is_restarted = false;
+							
 							loading_layer = LoadingLayer::create();
 							addChild(loading_layer, 999);
 							
@@ -333,10 +357,29 @@ void EventShopPopup::menuAction(CCObject* sender)
 										myHSP->analyticsPurchase(ccsf("ShopPurchaseEventGemCode%d", t_index+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 										myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseEventGemCode%d", t_index+1));
 									}
+									
+									if(mySGD->is_restarted)
+									{
+										mySGD->resetLabels();
+										AudioEngine::sharedInstance()->stopAllEffects();
+										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+										
+										return;
+									}
+									
 									requestItemDelivery();
 								}
 								else
 								{
+									if(mySGD->is_restarted)
+									{
+										mySGD->resetLabels();
+										AudioEngine::sharedInstance()->stopAllEffects();
+										CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+										
+										return;
+									}
+									
 									loading_layer->removeFromParent();
 									
 									addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
