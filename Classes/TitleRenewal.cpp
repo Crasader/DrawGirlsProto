@@ -80,6 +80,8 @@ bool TitleRenewalScene::init()
 //	
 //	CCLog("test2 : \n%s", mySDS->getSavedServerData(t_key_list).toStyledString().c_str());
 	
+	mySGD->is_restarted = true;
+	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	mySGD->is_endless_mode = false;
 	mySGD->is_hell_mode = false;

@@ -22,6 +22,7 @@
 #include "CommonAnimation.h"
 #include "StyledLabelTTF.h"
 #include "FiveRocksCpp.h"
+#include "TitleRenewal.h"
 
 FirstPurchasePopup* FirstPurchasePopup::create(int t_touch_priority, function<void()> t_end_func, function<void()> t_purchase_func)
 {
@@ -255,6 +256,8 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 	
 	AudioEngine::sharedInstance()->playEffect("se_buy.mp3", false);
 	
+	mySGD->is_restarted = false;
+	
 	inapp_loading = LoadingLayer::create(-9999, true);
 	addChild(inapp_loading);
 	
@@ -303,11 +306,29 @@ void FirstPurchasePopup::purchaseAction(CCObject* sender, CCControlEvent t_event
 				myHSP->analyticsPurchase("ShopPurchaseFirstGem", t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 				myHSP->IgawAdbrixBuy("ShopPurchaseFirstGem");
 			}
-            
+			
+			if(mySGD->is_restarted)
+			{
+				mySGD->resetLabels();
+				AudioEngine::sharedInstance()->stopAllEffects();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				
+				return;
+			}
+			
 			requestItemDelivery();
 		}
 		else
 		{
+			if(mySGD->is_restarted)
+			{
+				mySGD->resetLabels();
+				AudioEngine::sharedInstance()->stopAllEffects();
+				CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+				
+				return;
+			}
+			
 			CCLOG("FirstPurchase purchaseProduct fail");
 			inapp_loading->removeFromParent();
 //			mySGD->clearChangeUserdata();
