@@ -873,7 +873,7 @@ AttackOption MissileParent::getAttackOption(StoneType st, int grade)
 { 
 	if(st == StoneType::kStoneType_guided)
 	{
-		return AttackOption::kStiffen | AttackOption::kPoisonedNiddle;
+		return AttackOption::kStiffen;
 	}
 	else if(st == StoneType::kStoneType_spread)
 	{
