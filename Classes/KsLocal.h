@@ -1309,7 +1309,8 @@ enum class LK
 	kMyLocalKey_pleaseSelectMaterialCard,
 	kMyLocalKey_needCardCount2,
 	kMyLocalKey_strengthComplete,
-	kMyLocalKey_nCountRest
+	kMyLocalKey_nCountRest,
+	kMyLocalKey_nextLevelHiddenAchievementFindPlease
 };
 class KsLocal
 {

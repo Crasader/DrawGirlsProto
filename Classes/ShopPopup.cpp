@@ -1875,6 +1875,17 @@ bool ShopPopup::init()
 			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			
+			for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
+			{
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
+				   mySGD->getUserdataAchieveItemBuyCount() >= myAchieve->getCondition((AchievementCode)i))
+				{
+					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
 		}
 		myAchieve->updateAchieve(nullptr);
 	}

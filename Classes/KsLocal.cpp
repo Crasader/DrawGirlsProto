@@ -1350,6 +1350,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
 	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가?";
 	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -2624,6 +2625,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
 	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가요?";
 	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !
