@@ -73,6 +73,7 @@ private:
 	KSProtectVar<int> right_total_score;
 	
 	function<void(function<void()>)> gold_calc_func;
+	bool is_after_check_gift;
 	function<void(function<void()>)> gift_func;
 	
 	ccColor3B left_gold_color;

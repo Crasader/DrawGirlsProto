@@ -129,6 +129,9 @@ bool AppDelegate::applicationDidFinishLaunching()
 //	std::chrono::time_point<std::chrono::system_clock> start, end;
 //    start = std::chrono::system_clock::now();
 	
+	AudioEngine::sharedInstance()->setSoundOnOff(!myDSH->getBoolForKey(kDSH_Key_bgmOff));
+	AudioEngine::sharedInstance()->setEffectOnOff(!myDSH->getBoolForKey(kDSH_Key_effectOff));
+	
 	if(myDSH->getIntegerForKey(kDSH_Key_clientVersion) < mySGD->client_version)
 	{
 		bool is_check_terms = myDSH->getBoolForKey(kDSH_Key_isCheckTerms);
