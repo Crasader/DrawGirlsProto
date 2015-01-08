@@ -806,7 +806,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_onePercentGame9] = "100% 달성!!";
 	obj[LK::kMyLocalKey_onePercentGame10] = "카드 받기";
 	obj[LK::kMyLocalKey_endlessRewardInfo] = "보상내용";
-	obj[LK::kMyLocalKey_gababoContent1] = "<font color=#FFFFFF size=12>가위 바위 보 중</font><font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>";
+	obj[LK::kMyLocalKey_gababoContent1] = "<font color=#FFFFFF size=12>가위 바위 보 중 </font><font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>";
 	obj[LK::kMyLocalKey_gababoContent2] = "<font size=12>연승보상</font>";
 	obj[LK::kMyLocalKey_gababoContent3] = "보상";
 	obj[LK::kMyLocalKey_gababoContent4] = "1승";
@@ -817,8 +817,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_gababoContent9] = "나";
 	obj[LK::kMyLocalKey_gababoContent10] = "<font color=#FFFFFF size=12 newline=14>이런, 무승부네요!</font><font color=#FFAA14 size=12>한번 더!</font>";
 	obj[LK::kMyLocalKey_gababoContent11] = "<font color=#FFFFFF size=12 newline=14>와우! 이겼어요!</font><font color=#FFAA14 size=12>더 좋은 보상을 향해 한번 더!</font>";
-	obj[LK::kMyLocalKey_gababoContent12] = "<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font><font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font><font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>";
-	obj[LK::kMyLocalKey_gababoContent13] = "<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font><font color=#FFFFFF size=12>너무 상심마세요!</font><font color=#FFAA14 size=12 newline=14>보너스게임은</font><font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font><font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>";
+	obj[LK::kMyLocalKey_gababoContent12] = "<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요! </font><font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어 시마다</font><font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>";
+	obj[LK::kMyLocalKey_gababoContent13] = "<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font><font color=#FFFFFF size=12>너무 상심마세요! </font><font color=#FFAA14 size=12 newline=14>보너스게임은</font><font color=#FFAA14 size=12 newline=14> 퍼펙트 클리어 시마다 할 수 있어요!</font><font color=#FFFFFF size=12> 다음엔 꼭 저를 이겨보세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent14] = "루우비~!";
 	obj[LK::kMyLocalKey_gababoContent15] = "<font color=#FFFFFF size=12 newline=14>보너스 게임에</font><font color=#FFFFFF size=12 newline=14>오신 것을 환영합니다.</font><font color=#FFFFFF size=12 newline=14>전 히바리라고 해요.</font><font color=#FFFFFF size=12 newline=14>하나의 피스를 퍼펙트 클리어</font><font color=#FFFFFF size=12 newline=28>하시다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>게임 설명은 최초 1회만</font><font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent16] = "다 음";
