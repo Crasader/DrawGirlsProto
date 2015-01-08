@@ -2372,7 +2372,7 @@ void KSCumberBase::onCanceledCasting()
 //	myGD->communication("Main_showDetailMessage", std::string());
 	TRACE();
 	m_lastCastTime = m_cumberTimer;
-	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
+//	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
 void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )

@@ -588,6 +588,7 @@ public:
 			CCLog("cast cancel");
 			
 			cumber->setDamageMeasure(0.f);
+			myGD->showDetailMessage("warning_boss_success.ccbi", "i"); 
 			myGD->communication("UI_setIsCasting", false);
 			myGD->communication("UI_castingCancel");
 		}
