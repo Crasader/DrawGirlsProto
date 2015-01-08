@@ -1581,7 +1581,7 @@ public:
 		// 몬스터가 맞는 조건
 		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
 		Json::Value mInfo = NSDS_GS(kSDS_GI_characterInfo_int1_missileInfo_int2_s, t_history.characterIndex.getV(), t_history.characterLevel.getV());
-		if(distance <= 10 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
+		if(distance <= 6 * mInfo.get("guiderangebonus", 1.f).asFloat()) // 원래 4
 		{
 			AudioEngine::sharedInstance()->playEffect("se_monattacked.mp3", false);
 			
@@ -1631,22 +1631,16 @@ public:
 			
 			// 유도하귀
 			{
-				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
-				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
-//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
-				
-				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
-				float tempTt = tt - m_currentRad;
-				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				float missile2MonsterRad = ccpToAngle((m_targetNode->getPosition() - missilePosition));
+				float Cangle = toPositiveAngle(toPositiveAngle(missile2MonsterRad) - toPositiveAngle(m_currentRad) );
+				float deltaRad = Cangle;
+				if(Cangle >= M_PI)
+				{
+					deltaRad = Cangle - 2 * M_PI;
+				}
+				//		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+				m_currentRad += clampf(deltaRad, deg2Rad(-0.5f), deg2Rad(0.5f));
 				float missileSpeed = m_initSpeed * 1.3f;
-				if(isNearMonster)
-				{
-					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
-				}
-				else 
-				{
-					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
-				}
 //				m_currentRad = m_currentRad + tt - m_currentRad;
 				m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
 																																					sin(m_currentRad) * missileSpeed));
@@ -2374,22 +2368,17 @@ public:
 			
 			// 유도하귀
 			{
-				float tt = atan2f(diffPosition.y, diffPosition.x); // 미사일에서 몬스터까지의 각도
-				//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
-				//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
-				
-				//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
-				float tempTt = tt - m_currentRad;
-				bool sign = tt - m_currentRad > 0  ? 1 : -1;
+				float missile2MonsterRad = ccpToAngle((m_targetNode->getPosition() - missilePosition));
+				float Cangle = toPositiveAngle(toPositiveAngle(missile2MonsterRad) - toPositiveAngle(m_currentRad) );
+				float deltaRad = Cangle;
+				if(Cangle >= M_PI)
+				{
+					deltaRad = Cangle - 2 * M_PI;
+				}
+				//		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+				m_currentRad += clampf(deltaRad, deg2Rad(-0.5f), deg2Rad(0.5f));
 				float missileSpeed = 2.f * 1.3f;
-				if(isNearMonster)
-				{
-					m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
-				}
-				else
-				{
-					//m_currentRad += clampf((tt - m_currentRad), deg2Rad(-0.8f), deg2Rad(0.8f)); // , deg2Rad(-15), deg2Rad(15));
-				}
+				
 				m_mine->setPosition(m_mine->getPosition() + ccp(cos(m_currentRad) * missileSpeed,
 																																					sin(m_currentRad) * missileSpeed));
 				m_mine->setRotation(-rad2Deg(m_currentRad) - 90);
