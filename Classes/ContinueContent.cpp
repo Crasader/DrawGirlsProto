@@ -191,7 +191,7 @@ void ContinueContent::continueAction2(cocos2d::CCObject *sender, CCControlEvent 
                                                                                   {
                                                                                       mySGD->clearChangeGoods();
                                                                                       mySGD->clearChangeUserdata();
-                                                                                      addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=]()
+                                                                                      addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError), [=]()
                                                                                                                                                     {
                                                                                                                                                         schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                                                                                     },ccp(0.01f,0.01f)), 9999999);
@@ -391,7 +391,7 @@ void ContinueContent::continueAction(cocos2d::CCObject *sender, CCControlEvent t
 									   else
 									   {
 										   mySGD->clearChangeGoods();
-										   addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase), [=]()
+										   addChild(ASPopupView::getCommonNoti(touch_priority-200, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_endlessServerError), [=]()
                                                                                             {
                                                                                                 schedule(schedule_selector(ContinueContent::countingSchedule));
                                                                                             },ccp(0.01f,0.01f)), 9999999);
