@@ -54,6 +54,8 @@ bool EndlessModeResult::init()
 		return false;
 	}
 	
+	is_after_check_gift = false;
+	
 	left_table = NULL;
 	right_table = NULL;
 	
@@ -435,6 +437,12 @@ bool EndlessModeResult::init()
 																 EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, after_func, result_data);
 																 addChild(t_popup, 999);
 															 };
+															 
+															 if(is_after_check_gift)
+															 {
+																 EndlessSeqWinRewardPopup* t_popup = EndlessSeqWinRewardPopup::create(-999, [=](){is_menu_enable = true;}, result_data);
+																 addChild(t_popup, 999);
+															 }
 														 }
 														 TRACE();
 													 }
@@ -1785,6 +1793,7 @@ void EndlessModeResult::startCalcAnimation()
 																																						 next_button->setVisible(true);
 																																					 }
 																																				 }
+																																				 is_after_check_gift = true;
 																																			 }));
 																								  });
 																			   }
@@ -1909,6 +1918,7 @@ void EndlessModeResult::startCalcAnimation()
 																																						 next_button->setVisible(true);
 																																					 }
 																																				 }
+																																				 is_after_check_gift = true;
 																																			 }));
 																								  });
 																			   }

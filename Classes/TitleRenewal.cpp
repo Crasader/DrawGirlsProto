@@ -341,6 +341,8 @@ void TitleRenewalScene::endSplash()
 	}
 	else
 	{
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_before", myHSP->getStoreID().c_str());
+		
 		termsFunctor = [=](Json::Value result_data)
 		{
 			TRACE();
@@ -348,11 +350,13 @@ void TitleRenewalScene::endSplash()
 			GraphDogLib::JsonToLog("isUsimKorean", result_data);
 			if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
 			{
+				fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_after_success", myHSP->getStoreID().c_str());
 				myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
 				realInit();
 			}
 			else // 내국인이면서 동의안함. 꺼버리기
 			{
+				fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_after_fail_retry", myHSP->getStoreID().c_str());
 				myHSP->getIsUsimKorean(termsFunctor);
 				//									   exit(1);
 			}
@@ -4875,6 +4879,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	}
 	else if(tag == kTitleRenewal_MT_nick)
 	{
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_try", myHSP->getStoreID().c_str());
 		string comp_not_ok = "";
 		if(input_text->getText() != comp_not_ok)
 		{
@@ -4882,7 +4887,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		}
 		else
 		{
-			
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_empty", myHSP->getStoreID().c_str());
 			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																					myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 			
@@ -4910,6 +4915,7 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_O_GDSUCCESS", myHSP->getStoreID().c_str());
 										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
@@ -4926,6 +4932,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDDUPLICATEDNICK", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_sameNick), nullptr, CCPointZero, true), 999);
 										 
@@ -4933,6 +4940,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDFAULTYNICK", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_invalidNick), nullptr, CCPointZero, true), 999);
 
@@ -4940,6 +4948,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_O_GDALREADYMEMBER", myHSP->getStoreID().c_str());
 										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
@@ -4955,6 +4964,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDLONGNAME", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_longNick), nullptr, CCPointZero, true), 999);
 										 
@@ -4963,12 +4973,14 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDSHORTNAME", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 															myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 										 is_menu_enable = true;
 									 }
 									 else
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_else_retry", myHSP->getStoreID().c_str());
 										 joinAction();
 									 }
 								 });
