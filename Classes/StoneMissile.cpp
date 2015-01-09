@@ -65,6 +65,7 @@ void PoisonedNiddle::update(float dt)
 				CCLog("cast cancel");
 				
 				cumber->setDamageMeasure(0.f);
+				myGD->showDetailMessage("warning_boss_success.ccbi", "i"); 
 				myGD->communication("UI_setIsCasting", false);
 				myGD->communication("UI_castingCancel");
 			}
@@ -677,28 +678,29 @@ void CircleDance::update(float dt)
 		
 		// 유도하귀
 		{
+			
+			
 			float tt;
 			if(isNearMonster)
 			{
-				// 미사일에서 몬스터까지의 각도
-				tt = atan2f(nearCumber->getPosition().y - m_missileSprite->getPosition().y,
-										nearCumber->getPosition().x - m_missileSprite->getPosition().x);
+				
+				float missile2MonsterRad = ccpToAngle((nearCumber->getPosition() - m_missileSprite->getPosition()));
+				float Cangle = toPositiveAngle(toPositiveAngle(missile2MonsterRad) - toPositiveAngle(m_currentRad) );
+				float deltaRad = Cangle;
+				if(Cangle >= M_PI)
+				{
+					deltaRad = Cangle - 2 * M_PI;
+				}
+				//		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+				m_currentRad += clampf(deltaRad, deg2Rad(-0.7f), deg2Rad(0.7f));
+				
+				
 			}
 			else
 			{
-				tt = m_currentRad;
+				
 			}
-			//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
-			//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
 			
-			//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
-			float tempTt = tt - m_currentRad;
-			bool sign = tt - m_currentRad > 0  ? 1 : -1;
-			float missileSpeed = m_initSpeed * 1.3f;
-			if(isNearMonster)
-			{
-				m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
-			}
 		}
 		
 		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_currentRad) * m_initSpeed, sin(m_currentRad) * m_initSpeed));
