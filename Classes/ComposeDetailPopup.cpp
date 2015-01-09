@@ -138,7 +138,12 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-88.5f));
 	card_table->setDelegate(this);
 	card_list_back->addChild(card_table);
-	card_table->setTouchPriority(touch_priority-1);
+	card_table->setTouchPriority(touch_priority-3);
+	
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority-2);
+	t_suction->setNotSwallowRect(CCRectMake(card_table->getPositionX(), card_table->getPositionY(), 275, 164));
+	t_suction->setTouchEnabled(true);
+	card_list_back->addChild(t_suction);
 	
 	need_card_count_2_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_needCardCount2), mySGD->getFont().c_str(), 20);
 	need_card_count_2_label->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
@@ -418,12 +423,12 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	compose_button->setPosition(ccp(necessary_back->getPositionX(), 50));
 	compose_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ComposeDetailPopup::composeAction), CCControlEventTouchUpInside);
 	main_case->addChild(compose_button);
-	compose_button->setTouchPriority(touch_priority-2);
+	compose_button->setTouchPriority(touch_priority-4);
 	
 //	compose_button->setEnabled(false);
 //	compose_button->setColor(ccGRAY);
 	
-	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-4);
 	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_button->setFunction([=](CCObject* sender)
 							  {
@@ -537,7 +542,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 			t_card_menu->setPosition(card_position);
 			cell->addChild(t_card_menu);
-			t_card_menu->setTouchPriority(touch_priority-2);
+			t_card_menu->setTouchPriority(touch_priority-1);
 			
 			if(is_full || t_info->count.getV() - target_count <= 1)
 			{
@@ -597,7 +602,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 		ScrollMenu* selected_menu = ScrollMenu::create(t_item, NULL);
 		selected_menu->setPosition(ccp(0,0));
 		cell->addChild(selected_menu);
-		selected_menu->setTouchPriority(touch_priority-3-idx);
+		selected_menu->setTouchPriority(touch_priority-4-idx);
 	}
 	
 	

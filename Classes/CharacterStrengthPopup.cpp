@@ -127,7 +127,12 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-88.5f));
 	card_table->setDelegate(this);
 	card_list_back->addChild(card_table);
-	card_table->setTouchPriority(touch_priority-1);
+	card_table->setTouchPriority(touch_priority-3);
+	
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority-2);
+	t_suction->setNotSwallowRect(CCRectMake(card_table->getPositionX(), card_table->getPositionY(), 275, 164));
+	t_suction->setTouchEnabled(true);
+	card_list_back->addChild(t_suction);
 	
 	need_card_count_2_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_needCardCount2), mySGD->getFont().c_str(), 20);
 	need_card_count_2_label->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
@@ -253,7 +258,7 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	target_menu = CCMenuLambda::create();
 	target_menu->setPosition(CCPointZero);
 	selected_card_back->addChild(target_menu);
-	target_menu->setTouchPriority(touch_priority-3);
+	target_menu->setTouchPriority(touch_priority-4);
 	
 	CCLabelTTF* t_button_label = CCLabelTTF::create();
 	KSLabelTTF* strength_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_doStrengthen), mySGD->getFont().c_str(), 16);
@@ -291,9 +296,9 @@ void CharacterStrengthPopup::myInit(int t_touch_priority, int t_character_idx, f
 	strength_button->setPosition(ccp(character_back->getPositionX(), 50));
 	strength_button->addTargetWithActionForControlEvents(this, cccontrol_selector(CharacterStrengthPopup::strengthAction), CCControlEventTouchUpInside);
 	main_case->addChild(strength_button);
-	strength_button->setTouchPriority(touch_priority-2);
+	strength_button->setTouchPriority(touch_priority-4);
 	
-	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-4);
 	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_button->setFunction([=](CCObject* sender)
 							  {
@@ -398,7 +403,7 @@ CCTableViewCell* CharacterStrengthPopup::tableCellAtIndex( CCTableView *table, u
 		ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 		t_card_menu->setPosition(card_position);
 		cell->addChild(t_card_menu);
-		t_card_menu->setTouchPriority(touch_priority-2);
+		t_card_menu->setTouchPriority(touch_priority-1);
 		
 		if(is_max || is_full || t_info->count.getV() - target_count <= 1)
 		{
@@ -468,7 +473,7 @@ void CharacterStrengthPopup::strengthAction(CCObject* t_sender, CCControlEvent t
 	}
 	else
 	{
-		loading_layer = LoadingLayer::create(touch_priority-3);
+		loading_layer = LoadingLayer::create(touch_priority-5);
 		addChild(loading_layer, 9999);
 		loading_layer->startLoading();
 		
