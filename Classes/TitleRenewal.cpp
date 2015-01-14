@@ -80,6 +80,8 @@ bool TitleRenewalScene::init()
 //	
 //	CCLog("test2 : \n%s", mySDS->getSavedServerData(t_key_list).toStyledString().c_str());
 	
+	mySGD->is_restarted = true;
+	
 	mySGD->ui_scene_code = kUISceneCode_empty;
 	mySGD->is_endless_mode = false;
 	mySGD->is_hell_mode = false;
@@ -339,6 +341,8 @@ void TitleRenewalScene::endSplash()
 	}
 	else
 	{
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_before", myHSP->getStoreID().c_str());
+		
 		termsFunctor = [=](Json::Value result_data)
 		{
 			TRACE();
@@ -346,11 +350,13 @@ void TitleRenewalScene::endSplash()
 			GraphDogLib::JsonToLog("isUsimKorean", result_data);
 			if(!result_data["korean"].asBool()) // 내국인이면서 동의했음 or 외국인
 			{
+				fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_after_success", myHSP->getStoreID().c_str());
 				myDSH->setBoolForKey(kDSH_Key_isCheckTerms, true);
 				realInit();
 			}
 			else // 내국인이면서 동의안함. 꺼버리기
 			{
+				fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T00_Terms_after_fail_retry", myHSP->getStoreID().c_str());
 				myHSP->getIsUsimKorean(termsFunctor);
 				//									   exit(1);
 			}
@@ -388,7 +394,30 @@ void TitleRenewalScene::realInit()
 //#endif
 	TRACE();
 	CCLOG("logintype ================ %d", param["LoginType"].asInt());
+#if CC_TARGET_PLATFORM == CC_PLATFORM_IOS
+	HSPLoginTypeX loginType = (HSPLoginTypeX)myHSP->getLoginType();
+	if(loginType == HSPLoginTypeX::HSPLoginTypeUNKNOWN)
+	{
+		hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+	}
+	else
+	{
+		Json::Value param;
+		param["memberID"] = hspConnector::get()->getSocialID();
+		CCLOG("member eeeee id %s", hspConnector::get()->getSocialID().c_str());
+		KS::KSLog("member eeeee id %", hspConnector::get()->getSocialID().c_str());
+#ifdef LQTEST
+		param["loginType"] = newOAuthTypeToServerOAuthType( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GUEST) );
+#else
+		param["loginType"] = newOAuthTypeToServerOAuthType ( getSavedOAuthType((int)HSP_OAUTHPROVIDER_GAMECENTER) );
+#endif
+		hspConnector::get()->command("login", param, json_selector(this, TitleRenewalScene::resultHSLogin));
+
+		
+	}
+#elif CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID
 	hspConnector::get()->login(param, param, std::bind(&TitleRenewalScene::resultLogin, this, std::placeholders::_1));
+#endif
 }
 
 void TitleRenewalScene::resultLogin( Json::Value result_data )
@@ -565,7 +594,7 @@ void TitleRenewalScene::resultHSLogin(Json::Value result_data)
 	else if(result_data["result"]["code"].asInt() == GDNEEDJOIN)
 	{
         fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join", myHSP->getStoreID().c_str());
-        
+		fiverocks_download_step = 0;
 		is_menu_enable = true;
 		
 		state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_connectingServer));
@@ -1036,6 +1065,159 @@ void TitleRenewalScene::checkReceive()
 	{
 		if(command_list.empty())
 		{
+//			주석 풀고 fFlush 들 수정해줘야 함
+//			if(mySDS->isCheckOldUser() && !myDSH->getBoolForKey(kDSH_Key_isChangedCardInfoToNew)) // CARDINFO 가 있으면서 새버전으로 변화시킨적 없다면
+//			{
+//				CCLog("change new card info");
+//				CCLog("CARDINFO : \n%s", mySDS->getSavedServerDataFile("CARDINFO").toStyledString().c_str());
+//				
+//				myDSH->setBoolForKey(kDSH_Key_isChangingCardInfo, true);
+//				
+//				vector<int> change_card_list;
+//				change_card_list.clear();
+//				
+//				function<void(int)> add_card_number_func = [&](int t_card_no)
+//				{
+//					auto t_iter = find(change_card_list.begin(), change_card_list.end(), t_card_no);
+//					if(t_iter == change_card_list.end())
+//						change_card_list.push_back(t_card_no);
+//				};
+//				
+//				// 소지중인 카드들 번호
+//				int has_card_count = mySGD->getHasGottenCardsSize();
+//				for(int i=0;i<has_card_count;i++)
+//				{
+//					CardSortInfo t_info = mySGD->getHasGottenCardData(i);
+//					int t_card_number = t_info.card_number.getV();
+//					add_card_number_func(t_card_number);
+//				}
+//				
+//				// 열려있는 퍼즐들의 각 스테이지들의 카드들 번호
+//				int puzzle_cnt = mySGD->getPuzzleHistorySize();
+//				for(int i=0;i<puzzle_cnt;i++)
+//				{
+//					PuzzleHistory t_history = mySGD->getPuzzleHistoryForIndex(i);
+//					if(t_history.is_open.getV())
+//					{
+//						int t_puzzle_number = t_history.puzzle_number.getV();
+//						int t_start_stage = NSDS_GI(t_puzzle_number, kSDS_PZ_startStage_i);
+//						int t_stage_count = NSDS_GI(t_puzzle_number, kSDS_PZ_stageCount_i);
+//						
+//						for(int t_stage_number=t_start_stage;t_stage_number<t_start_stage+t_stage_count;t_stage_number++)
+//						{
+//							int t_card_count = NSDS_GI(t_stage_number, kSDS_SI_cardCount_i);
+//							for(int j=1;j<=t_card_count;j++)
+//							{
+//								int t_card_number = NSDS_GI(t_stage_number, kSDS_SI_level_int1_card_i, j);
+//								add_card_number_func(t_card_number);
+//							}
+//						}
+//					}
+//				}
+//				
+//				// 헬모드 카드들 번호
+//				int hell_count = NSDS_GI(kSDS_GI_hellMode_listCount_i);
+//				for(int i=0;i<hell_count;i++)
+//				{
+//					int t_stage_number = NSDS_GI(kSDS_GI_hellMode_int1_pieceNo_i, i+1);
+//					int t_card_count = NSDS_GI(t_stage_number, kSDS_SI_cardCount_i);
+//					for(int j=1;j<=t_card_count;j++)
+//					{
+//						int t_card_number = NSDS_GI(t_stage_number, kSDS_SI_level_int1_card_i, j);
+//						add_card_number_func(t_card_number);
+//					}
+//				}
+//				
+//				// 합성 카드들 번호
+//				int compose_count = NSDS_GI(kSDS_GI_cardCompose_listCnt_i);
+//				for(int i=0;i<compose_count;i++)
+//				{
+//					int t_card_number = NSDS_GI(kSDS_GI_cardCompose_list_int1_cardNo_i, i+1);
+//					add_card_number_func(t_card_number);
+//				}
+//				
+//				CCLog("//////////////////// START CARD LIST ////////////////////////");
+//				for(int i=0;i<change_card_list.size();i++)
+//				{
+//					CCLog("%d", change_card_list[i]);
+//					
+//					int t_card_number = change_card_list[i];
+//					
+//					NSDS_SI(kSDS_CI_int1_serial_i, t_card_number, NSDS_GI(kSDS_CI_int1_serial_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_version_i, t_card_number, NSDS_GI(kSDS_CI_int1_version_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_rank_i, t_card_number, NSDS_GI(kSDS_CI_int1_rank_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_grade_i, t_card_number, NSDS_GI(kSDS_CI_int1_grade_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_stage_i, t_card_number, NSDS_GI(kSDS_CI_int1_stage_i, t_card_number), false);
+//					
+//					NSDS_SB(kSDS_CI_int1_haveAdult_b, t_card_number, NSDS_GB(kSDS_CI_int1_haveAdult_b, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_exp_i, t_card_number, NSDS_GI(kSDS_CI_int1_exp_i, t_card_number), false);
+//					
+//					NSDS_SS(kSDS_CI_int1_imgInfo_s, t_card_number, NSDS_GS(kSDS_CI_int1_imgInfo_s, t_card_number), false);
+//					
+//					NSDS_SB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number, NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number), false);
+//					if(NSDS_GB(kSDS_CI_int1_aniInfoIsAni_b, t_card_number))
+//					{
+//						int loop_seq = NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card_number);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopLength_i, t_card_number, loop_seq, false);
+//						
+//						for(int j=0;j<loop_seq;j++)
+//							NSDS_SI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card_number, j, NSDS_GI(kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i, t_card_number, j), false);
+//						
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutWidth_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutHeight_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailCutLength_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionX_i, t_card_number), false);
+//						NSDS_SI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number, NSDS_GI(kSDS_CI_int1_aniInfoDetailPositionY_i, t_card_number), false);
+//						
+//						NSDS_SS(kSDS_CI_int1_aniInfoDetailImg_s, t_card_number, NSDS_GS(kSDS_CI_int1_aniInfoDetailImg_s, t_card_number), false);
+//						
+//					}
+//					
+//					NSDS_SS(kSDS_CI_int1_script_s, t_card_number, NSDS_GS(kSDS_CI_int1_script_s, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_profile_s, t_card_number, NSDS_GS(kSDS_CI_int1_profile_s, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_name_s, t_card_number, NSDS_GS(kSDS_CI_int1_name_s, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_mPrice_ruby_i, t_card_number, NSDS_GI(kSDS_CI_int1_mPrice_ruby_i, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_mPrice_pass_i, t_card_number, NSDS_GI(kSDS_CI_int1_mPrice_pass_i, t_card_number), false);
+//					
+//					NSDS_SI(kSDS_CI_int1_type_i, t_card_number, NSDS_GI(kSDS_CI_int1_type_i, t_card_number), false);
+//					NSDS_SS(kSDS_CI_int1_category_s, t_card_number, NSDS_GS(kSDS_CI_int1_category_s, t_card_number), false);
+//					NSDS_SI(kSDS_CI_int1_level_i, t_card_number, NSDS_GI(kSDS_CI_int1_level_i, t_card_number), false);
+//					
+//					int sound_cnt = NSDS_GI(kSDS_CI_int1_soundCnt_i, t_card_number);
+//					NSDS_SI(kSDS_CI_int1_soundCnt_i, t_card_number, sound_cnt, false);
+//					for(int j=1;j<=sound_cnt;j++)
+//					{
+//						NSDS_SS(kSDS_CI_int1_soundType_int1_s, t_card_number, j, NSDS_GS(kSDS_CI_int1_soundType_int1_s, t_card_number, j), false);
+//					}
+//					
+//					NSDS_SI(kSDS_CI_int1_characterNo_i, t_card_number, NSDS_GI(kSDS_CI_int1_characterNo_i, t_card_number), false);
+//					
+//					bool is_sil = NSDS_GB(kSDS_CI_int1_silImgInfoIsSil_b, t_card_number);
+//					NSDS_SB(kSDS_CI_int1_silImgInfoIsSil_b, t_card_number, is_sil, false);
+//					if(is_sil)
+//					{
+//						NSDS_SS(kSDS_CI_int1_silImgInfoImg_s, t_card_number, NSDS_GS(kSDS_CI_int1_silImgInfoImg_s, t_card_number), false);
+//					}
+//					
+//					bool have_face_info = NSDS_GB(kSDS_CI_int1_haveFaceInfo_b, t_card_number);
+//					NSDS_SB(kSDS_CI_int1_haveFaceInfo_b, t_card_number, have_face_info, false);
+//					if(have_face_info)
+//					{
+//						NSDS_SS(kSDS_CI_int1_faceInfo_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfo_s, t_card_number), false);
+//						
+//						NSDS_SS(kSDS_CI_int1_faceInfoCcbi_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoCcbi_s, t_card_number), false);
+//						NSDS_SS(kSDS_CI_int1_faceInfoPlist_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoPlist_s, t_card_number), false);
+//						NSDS_SS(kSDS_CI_int1_faceInfoPvrccz_s, t_card_number, NSDS_GS(kSDS_CI_int1_faceInfoPvrccz_s, t_card_number), false);
+//					}
+//					mySDS->fFlush(t_card_number, kSDS_CI_base);
+//				}
+//				CCLog("////////////////////// END CARD LIST ////////////////////////");
+//				
+//				
+//				myDSH->setBoolForKey(kDSH_Key_isChangedCardInfoToNew, true);
+//				myDSH->setBoolForKey(kDSH_Key_isChangingCardInfo, false);
+//			}
+			
 			fiverocks::FiveRocksBridge::setUserId(myHSP->getSocialID().c_str());
 			fiverocks::FiveRocksBridge::setUserLevel(mySGD->getUserdataCharLevel());
             
@@ -1144,6 +1326,12 @@ void TitleRenewalScene::checkReceive()
 						state_label->setString(tip_list[recent_tip_index].c_str());
 						
 						addChild(KSTimer::create(4.f, [=](){changeTipMent();}));
+						
+						if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
+						{
+							fiverocks_download_step = 1;
+							fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_StartDownload", myHSP->getStoreID().c_str());
+						}
 						
 						ing_download_cnt = 1;
 						success_download_cnt = 0;
@@ -1399,7 +1587,7 @@ void TitleRenewalScene::resultGetCommonSetting(Json::Value result_data)
 		Json::Value json_diary_store_url;
 		Json::Reader t_reader;
 		t_reader.parse(diary_store_url, json_diary_store_url);
-		json_diary_store_url.get(myHSP->getStoreID(), "").asString();
+		diary_store_url = json_diary_store_url.get(myHSP->getStoreID(), "").asString();
 		if(diary_store_url == "")
 			diary_store_url = result_data["diaryStoreUrl"]["default"].asString();
 		mySGD->setDiaryStoreUrl(diary_store_url);
@@ -3919,6 +4107,26 @@ void TitleRenewalScene::checkDownloading()
 	float download_percent = 100.f*success_download_cnt/int(character_download_list.size() + monster_download_list.size() + card_download_list.size() + puzzle_download_list.size());
 	if(download_percent > 100.f)
 		download_percent = 100.f;
+	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 0)
+	{
+		if(fiverocks_download_step == 1 && download_percent >= 30.f)
+		{
+			fiverocks_download_step = 2;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download30", myHSP->getStoreID().c_str());
+		}
+		else if(fiverocks_download_step == 2 && download_percent >= 50.f)
+		{
+			fiverocks_download_step = 3;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download50", myHSP->getStoreID().c_str());
+		}
+		else if(fiverocks_download_step == 3 && download_percent >= 99.5f)
+		{
+			fiverocks_download_step = 4;
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_Download100", myHSP->getStoreID().c_str());
+		}
+	}
+	
 	download_state->setString(CCSTR_CWF("%.0f%%", download_percent)->getCString());
 	
 	progress_timer->setPercentage(download_percent);
@@ -4671,6 +4879,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 	}
 	else if(tag == kTitleRenewal_MT_nick)
 	{
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_try", myHSP->getStoreID().c_str());
 		string comp_not_ok = "";
 		if(input_text->getText() != comp_not_ok)
 		{
@@ -4678,7 +4887,7 @@ void TitleRenewalScene::menuAction( CCObject* sender )
 		}
 		else
 		{
-			
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_empty", myHSP->getStoreID().c_str());
 			addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																					myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 			
@@ -4706,6 +4915,7 @@ void TitleRenewalScene::joinAction()
 								 {
 									 if(result_data["result"]["code"].asInt() == GDSUCCESS)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_O_GDSUCCESS", myHSP->getStoreID().c_str());
 										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
@@ -4722,6 +4932,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDDUPLICATEDNICK)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDDUPLICATEDNICK", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_sameNick), nullptr, CCPointZero, true), 999);
 										 
@@ -4729,6 +4940,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDFAULTYNICK)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDFAULTYNICK", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_invalidNick), nullptr, CCPointZero, true), 999);
 
@@ -4736,6 +4948,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDALREADYMEMBER)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_O_GDALREADYMEMBER", myHSP->getStoreID().c_str());
 										 //state_label->setString(myLoc->getLocalForKey(LK::kMyLocalKey_successLogin));
 										 myDSH->setStringForKey(kDSH_Key_nick, input_text->getText());
                                          myDSH->setStringForKey(kDSH_Key_flag, flag->getFlag());
@@ -4751,6 +4964,7 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDLONGNAME)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDLONGNAME", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 																												 myLoc->getLocalForKey(LK::kMyLocalKey_longNick), nullptr, CCPointZero, true), 999);
 										 
@@ -4759,12 +4973,14 @@ void TitleRenewalScene::joinAction()
 									 }
 									 else if(result_data["result"]["code"].asInt() == GDSHORTNAME)
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_GDSHORTNAME", myHSP->getStoreID().c_str());
 										 addChild(ASPopupView::getCommonNoti(-999, myLoc->getLocalForKey(LK::kMyLocalKey_nicknameError),
 															myLoc->getLocalForKey(LK::kMyLocalKey_shortNick), nullptr, CCPointZero, true), 999);
 										 is_menu_enable = true;
 									 }
 									 else
 									 {
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T01_Join_nick_X_else_retry", myHSP->getStoreID().c_str());
 										 joinAction();
 									 }
 								 });

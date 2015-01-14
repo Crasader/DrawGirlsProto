@@ -176,7 +176,7 @@ public:
         sl->addChild(KSGradualValue<float>::create(0, 150, 1, [sl](int a){
 			sl->black->setOpacity(a);
 		}, [sl](int a){
-            CCLOG("play %s",sl->storyID.c_str());
+			
 			sl->playScript();
 		}));
         TRACE();
@@ -185,7 +185,7 @@ public:
 	
 	void loadStory(){
 		
-        CCLOG("load story");
+		CCLOG("load story");
 		
 		beginScene("puzzle1");
 		addScript("",getLocal(LK::kStory_1_1),kCCTextAlignmentCenter,kObjTypeText,kBoxBig);
@@ -401,8 +401,8 @@ public:
 		//9퍼센트
 		beginScene("mission9");
 		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
-		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial23),kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial24),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial23),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial24),kCCTextAlignmentRight,kObjTypeText);
 		
 		//10점수
 		beginScene("mission10");
@@ -413,8 +413,8 @@ public:
 		//11콤보
 		beginScene("mission11");
 		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
-		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial27),kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial28),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial27),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial28),kCCTextAlignmentRight,kObjTypeText);
 		
 		//12골드
 		beginScene("mission12");
@@ -425,8 +425,20 @@ public:
 		//13턴수
 		beginScene("mission13");
 		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
-		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial31),kCCTextAlignmentLeft,kObjTypeText);
-		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial32),kCCTextAlignmentRight,kObjTypeText);
+		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial31),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial32),kCCTextAlignmentRight,kObjTypeText);
+		
+		//14 공격저지
+		beginScene("mission14");
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_ikaruga_1.png",getLocal(LK::kMyLocalKey_kindTutorial47),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_katsuragi_1.png",getLocal(LK::kMyLocalKey_kindTutorial48),kCCTextAlignmentRight,kObjTypeText);
+		
+		//15 영역작게먹기
+		beginScene("mission15");
+		//addSpot("missionPannel","rect",0.5f,kObjTypeNone);
+		addScript("kt_cha_hibari_1.png",getLocal(LK::kMyLocalKey_kindTutorial49),kCCTextAlignmentLeft,kObjTypeText);
+		addScript("kt_cha_yagyu_1.png",getLocal(LK::kMyLocalKey_kindTutorial50),kCCTextAlignmentRight,kObjTypeText);
 		
 		
 		//랭킹팝업 튜토리얼
@@ -523,7 +535,6 @@ public:
 	
 	void beginScene(string _storyID){
 		//string cliLang = MyLocal::sharedInstance()->getLocalCode()->getCString();
-		//CCLOG("Scene %s,",this->storyID.c_str());
 		if(this->storyID == _storyID){
 			isAdd=true;
 			findedStory=true;
@@ -613,7 +624,7 @@ public:
 				actor = CCSprite::create(script["image"].asString().c_str());
 				actor->setStringData(script["image"].asString().c_str());
 				back->addChild(actor, 10);
-				CCLOG("addChild actor %s", actor->getStringData().c_str());
+				//CCLOG("addChild actor %s", actor->getStringData().c_str());
 			}
 			
 			
@@ -646,7 +657,7 @@ public:
 					
 				},[actor](float t){
 					
-					CCLog("action pos is %f",actor->getPositionX());
+					//CCLog("action pos is %f",actor->getPositionX());
 					
 				}));
 			}
@@ -658,7 +669,7 @@ public:
 		TypingBox* typing_box;
 		
         TRACE();
-        CCLOG("test1 %d",this->storySeq);
+        //CCLOG("test1 %d",this->storySeq);
 		if(script["box"].asInt()==kBoxBig){
 			if(script["align"].asInt()==kCCTextAlignmentLeft){
 				typing_box = TypingBox::create(-9999, "kt_talkbox_purple_right.png", CCRectMake(0, 0, 85, 115), CCRectMake(40, 76, 23, 14), CCRectMake(40, 26, 23, 64), CCSizeMake(210, 60), ccp(241, 78));
@@ -679,23 +690,18 @@ public:
 		back->addChild(typing_box, 11);
 		
         TRACE();
-        CCLOG("%s",script.toStyledString().c_str());
+        //CCLOG("%s",script.toStyledString().c_str());
 		typing_box->startTyping(script["script"].asString().c_str(),[this](){
 
             this->addChild(KSTimer::create(0.1,[this](){
                 TRACE();
-                CCLOG("test2-0 %d",this->storySeq);
                 this->clearScript();
-                CCLOG("test2-1 %d",this->storySeq);
                 TRACE();
                 
-                CCLOG("test3-1 %d",this->storySeq);
                 this->playScript();
-                CCLOG("test3-2 %d",this->storySeq);
                 TRACE();
                 TRACE();
-                CCLOG("test2-2 %d",this->storySeq);
-
+							
             }));
            		});
         TRACE();
@@ -819,13 +825,11 @@ public:
 	int m_sss;
 	void playScript(){
         TRACE();
-        CCLOG("test3-1 %d",this->storySeq);
         TRACE();
 		if(storySeq>=storyData.size()){
 			
             TRACE();
-			CCLOG("clear last1 %s",this->storyID.c_str());
-            TRACE();
+			      TRACE();
 			addChild(KSGradualValue<float>::create(0, 50, 0.5, [this](int a){
                 CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
                 float screen_scale_x = screen_size.width/screen_size.height/1.5f;
@@ -838,19 +842,17 @@ public:
                 top->setPositionY(320+(screen_scale_y*(320)-320)/2.f-50+a);
 				black->setOpacity(150-a*3.f);
 			}, [this](int a){
-				CCLOG("all finish");
 				if(callbackFunc)callbackFunc();
 				this->removeFromParent();
 				
 			}));
             TRACE();
-			CCLOG("clear last2 %s",this->storyID.c_str());
-            TRACE();
+			      TRACE();
 			return;
 		}
 		
 		
-        CCLOG("get script");
+		
 		Json::Value script = storyData[storySeq];
 		
 		
@@ -868,9 +870,9 @@ public:
 
 	void clearScript(){
         int nowSeq = this->storySeq;
-        CCLOG("test4-1 %d",nowSeq);
+		
 		Json::Value script = storyData[nowSeq];
-        CCLOG("test4-2 %d",nowSeq);
+		
         
         TRACE();
 		CCSize screen_size = CCEGLView::sharedOpenGLView()->getFrameSize();
@@ -878,13 +880,11 @@ public:
 		if(screen_scale_x < 1.f)
 			screen_scale_x = 1.f;
 		
-        CCLOG("test4-3 %d",nowSeq);
         TRACE();
 		float screen_scale_y = myDSH->ui_top/320.f/myDSH->screen_convert_rate;
 		
 		CCArray *cr = back->getChildren();
 		
-        CCLOG("test4-4 %d",nowSeq);
 		
         TRACE();
 		for(int i=0;i<cr->count();i++){
@@ -892,16 +892,12 @@ public:
 			
             TRACE();
 			if(obj->getTag()==kObjTypeText && script["clear"].asInt()&kObjTypeText){
-				CCLOG("remove text");
-                CCLOG("test4-5 %d",nowSeq);
 				obj->removeFromParent();
 				
 			}else if((obj->getTag()==kObjTypeActorLeft && script["clear"].asInt()&kObjTypeActorLeft) || (obj->getTag()==kObjTypeActorRight && script["clear"].asInt()&kObjTypeActorRight)){
                 
                 
-                CCLOG("test4-6 %d",nowSeq);
 				
-				CCLOG("move actor %s", obj->getStringData().c_str());
 				back->addChild(KSGradualValue<float>::create(1.f,0.f,0.3f,[this,obj,screen_scale_x](float t){
 					CCNode *myobj = obj;
 					if(myobj->getAnchorPoint().x==0.f){
@@ -912,23 +908,18 @@ public:
 					
 				},[this,obj](float t){
 						CCNode *myobj = obj;
-						CCLOG("remove actor %s",myobj->getStringData().c_str());
 						myobj->removeFromParent();
 				}));
 			}else if(obj->getTag()==kObjTypeTitle && script["clear"].asInt()&kObjTypeTitle){
                 
-                CCLOG("test4-7 %d",nowSeq);
-				CCLOG("remove title");
-				obj->removeFromParent();
+					obj->removeFromParent();
 			}else if(obj->getTag()==kObjTypeSpot && script["clear"].asInt()&kObjTypeSpot){
 				
-                CCLOG("test4-8 %d",nowSeq);
-                CCLOG("remove spot");
+				
 				obj->removeFromParent();
 			}else if(obj->getTag()==kObjTypeImage && script["clear"].asInt()&kObjTypeImage){
 				
-				CCLOG("test4-8 %d",nowSeq);
-				CCLOG("remove spot");
+				
 				obj->removeFromParent();
 			}
 			
@@ -936,7 +927,7 @@ public:
 			
 		}
         
-        CCLOG("test4-9 %d",nowSeq);
+		
         this->storySeq++;
         TRACE();
 		

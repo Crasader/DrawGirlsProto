@@ -430,7 +430,7 @@ private:
 	
 	IntRectSTL newRectChecking(mapType (*mapArray)[217], vector<pair<IntPointSTL, mapType>>* checkingIndex, const IntMoveStateSTL& start);
 	
-	void bfsCheck(mapType beforeType, mapType afterType, IntPoint startPoint);
+	void bfsCheck(mapType beforeType, mapType afterType, const IntPoint& startPoint);
 	
 	BFS_Point directionVector(IntDirection direction);
 	

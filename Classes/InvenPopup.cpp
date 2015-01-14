@@ -768,6 +768,7 @@ void InvenPopup::menuAction(CCObject* pSender)
 								   NSDS_SI(kSDS_GI_cardCompose_list_int1_needStone_i, i+1, t_info_json["needStone"].asInt(), false);
 								   
 								   Json::Value material = t_info_json["materialCards"];
+								   Json::Value material_piece = t_info_json["materialPiece"];
 								   NSDS_SI(kSDS_GI_cardCompose_list_int1_materialCardsCnt_i, i+1, material.size(), false);
 								   t_info.material_card_list.clear();
 								   for(int j=0;j<material.size();j++)
@@ -775,7 +776,11 @@ void InvenPopup::menuAction(CCObject* pSender)
 									   KSProtectVar<int> t_p;
 									   t_p = material[j].asInt();
 									   t_info.material_card_list.push_back(t_p);
+									   KSProtectVar<int> t_p2;
+									   t_p2 = material_piece[j].asInt();
+									   t_info.material_piece_list.push_back(t_p2);
 									   NSDS_SI(kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i, i+1, j+1, material[j].asInt(), false);
+									   NSDS_SI(kSDS_GI_cardCompose_list_int1_materialPieces_int2_no_i, i+1, j+1, material_piece[j].asInt(), false);
 								   }
 								   
 								   mySGD->card_compose_list.push_back(t_info);
@@ -995,6 +1000,9 @@ void InvenPopup::menuAction(CCObject* pSender)
 									   KSProtectVar<int> t_p;
 									   t_p = NSDS_GI(kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i, i+1, j+1);
 									   t_info.material_card_list.push_back(t_p);
+									   KSProtectVar<int> t_p2;
+									   t_p2 = NSDS_GI(kSDS_GI_cardCompose_list_int1_materialPieces_int2_no_i, i+1, j+1);
+									   t_info.material_piece_list.push_back(t_p2);
 								   }
 								   
 								   mySGD->card_compose_list.push_back(t_info);

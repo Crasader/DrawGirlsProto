@@ -30,6 +30,7 @@
 #include "GDWebSprite.h"
 #include "StoryLayer.h"
 #include "StageImgLoader.h"
+#include "FiveRocksCpp.h"
 
 enum FriendPopupZorder{
 	kFriendPopupZorder_gray = 1,
@@ -713,6 +714,8 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 						return;
 					}
 					
+					fiverocks::FiveRocksBridge::trackEvent("Game", "Friend", "InviteFriend", ccsf("Friends %d", mySGD->getFriendsCnt()));
+					
 					if(input_text1)
 					{
 						input_text1->setVisible(false);
@@ -720,7 +723,7 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
 //					m_votedFriendList[idx]["reqexist"] = true;
-					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 요청했습니다.", [=](){
+					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, getLocal(LK::kFriendSuccess), getLocal(LK::kFriendFriendRequested), [=](){
 						input_text1->setVisible(true);
 						
 						
@@ -826,14 +829,14 @@ CCTableViewCell* FriendPopup::tableCellAtIndex( CCTableView *table, unsigned int
 																								}));
 						return;
 					}
-					
+					fiverocks::FiveRocksBridge::trackEvent("Game", "Friend", "SendHeart", ccsf("Friends %d", mySGD->getFriendsCnt()));
 					if(input_text1)
 					{
 						input_text1->setVisible(false);
 					}
 					m_sendList.push_back(memberInfo["memberID"].asString());
 					// 성공 적으로 보냈다.
-					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, "성공", "성공적으로 하트를 보냈습니다.", [=](){
+					auto successPopup = ASPopupView::getCommonNoti(m_touchPriority - 2, getLocal(LK::kFriendSuccess), getLocal(LK::kFriendHeartSended), [=](){
 						if(input_text1)
 						{
 							input_text1->setVisible(true);
@@ -1134,7 +1137,7 @@ void FriendPopup::setListMenu()
 				}
 
 				
-				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf("친구는 %d명까지 등록가능합니다.", mySGD->getGameFriendMax()), mySGD->getFont().c_str(), 11.f);
+				KSLabelTTF* leftMent = KSLabelTTF::create(ccsf(getLocal(LK::kFriendMax), mySGD->getGameFriendMax()), mySGD->getFont().c_str(), 11.f);
 				leftMent->setAnchorPoint(ccp(0.f, 0.5f));
 				m_friendListContainer->addChild(leftMent);
 				setFormSetter(leftMent);
@@ -1146,7 +1149,7 @@ void FriendPopup::setListMenu()
 				m_friendListContainer->addChild(rightMentBack);
 				setFormSetter(rightMentBack);
 				
-				KSLabelTTF* rightMent = KSLabelTTF::create(ccsf("내 친구 수 %d", m_friendList.size()), mySGD->getFont().c_str(), 11.f);
+				KSLabelTTF* rightMent = KSLabelTTF::create(ccsf(getLocal(LK::kFriendMyFriends), m_friendList.size()), mySGD->getFont().c_str(), 11.f);
 				rightMent->setAnchorPoint(ccp(0.f, 0.5f));
 				m_friendListContainer->addChild(rightMent);
 				setFormSetter(rightMent);
@@ -1677,7 +1680,8 @@ void FriendPopup::setVoteFriendMenu()
 					int newY = y;
 					
 					CCSprite* stampSprite = CCSprite::create("friend_gain.png");
-					m_friendVoteContainer->addChild(stampSprite);
+					m_friendVoteContainer->addChild(stampSprite, 2);
+					
 					stampSprite->setPosition(ccp(newX, newY));
 					
 				}
@@ -1722,6 +1726,7 @@ void FriendPopup::setVoteFriendMenu()
 					string msg = msgInfo["msg"].asString();
 					GraphDogLib::ReplaceString(msg,"[p1]",myDSH->getStringForKey(kDSH_Key_nick).c_str());
 					CCLOG("%s",msg.c_str());
+					fiverocks::FiveRocksBridge::trackEvent("Game", "KakaoMsg", ccsf("Friends %d", mySGD->getFriendsCnt()), "");
 					int ret = hspConnector::get()->sendKakaoMsg(msgInfo["title"].asString(),msg.c_str(),msgInfo["url"].asString());
 					
 					if(ret == 0) {

@@ -1116,6 +1116,7 @@ void SumranMailPopup::rewardDown(Json::Value reward, std::function<void(bool)> f
 }
 
 void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> func){
+	
 	if(reward.isArray()){
 		
 		
@@ -1123,6 +1124,10 @@ void SumranMailPopup::takedCheck(Json::Value reward, std::function<void(void)> f
 			if(reward[i].get("type","box").asString()=="cd"){
 				takedCard(reward[i]["count"].asInt(),func);
 				return;
+			}
+			else if(reward[i].get("type", "box").asString() == "cp")
+			{
+				mySGD->refreshCharacterHistory(reward[i]["result"]);
 			}
 		}
 	}
@@ -2076,9 +2081,9 @@ void SumranMailPopup::confirmMessage(int btnIndex,Json::Value mail){
 			addChild(ll, 100);
 			myHSP->command("addfriend", param, [=](Json::Value v){
 				ll->removeFromParent();
-				if(v["result"]["code"] != GDSUCCESS)
+				if(v["result"]["code"].asInt() == GDSUCCESS)
 					return;
-				if(v["result"]["code"] == GDFRIENDMAX)
+				if(v["result"]["code"].asInt() == GDFRIENDMAX)
 				{
 					std::string resultMessage = v["result"]["message"].asString();
 					// 내가 50명 넘음

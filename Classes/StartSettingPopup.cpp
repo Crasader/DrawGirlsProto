@@ -980,7 +980,7 @@ void StartSettingPopup::setMain()
 	if(mySGD->isTimeEvent(kTimeEventType_heart))
 	{
 		CCSprite* time_event_back = CCSprite::create("startsetting_event.png");
-		time_event_back->setPosition(ccp(0,-20) + ccp(88.5f, 20.5f));
+		time_event_back->setPosition(ccp(0,-20) + ccp(92.f, 20.5f));
 		t_label->addChild(time_event_back);
 		setFormSetter(time_event_back);
 		KSLabelTTF* time_event_back_lbl = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_heartFree), mySGD->getFont().c_str(), 10.f);
@@ -2946,6 +2946,12 @@ void StartSettingPopup::startButtonAction(CCObject *sender, CCControlEvent t_eve
 	
 	is_menu_enable = false;
 	
+	if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 0))
+	{
+		myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 0, true);
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick", myHSP->getStoreID().c_str());
+	}
+	
 	callStart();
 }
 
@@ -3444,6 +3450,12 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 {
 	if(result_data["result"]["code"].asInt() == GDSUCCESS)
 	{
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 1))
+		{
+			myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 1, true);
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick_success", myHSP->getStoreID().c_str());
+		}
+		
 		if(mySGD->is_endless_mode && mySGD->endless_my_victory.getV() == 0)
 			mySGD->pvp_continue_cnt = 0;
 		mySGD->ingame_continue_cnt = 0;
@@ -3455,6 +3467,12 @@ void StartSettingPopup::finalStartAction(Json::Value result_data)
 	}
 	else
 	{
+		if(myDSH->getIntegerForKey(kDSH_Key_showedScenario) == 3 && !myDSH->getBoolForKey(kDSH_Key_fiverocksCheck_int1, 1))
+		{
+//			myDSH->setBoolForKey(kDSH_Key_fiverocksCheck_int1, 1, true);
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T04_StartSetting_startClick_fail", myHSP->getStoreID().c_str());
+		}
+		
 		if(mySGD->is_endless_mode || mySGD->is_hell_mode)
 			((MainFlowScene*)getParent())->heart_time->backHeart();
 		else
@@ -3477,28 +3495,31 @@ void StartSettingPopup::popupCloseCardSetting()
 
 void StartSettingPopup::buySuccessItem(int t_clicked_item_idx, int cnt)
 {
-	bool is_it_possible_achieve = false;
+//	bool is_it_possible_achieve = false;
 	
-	for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
+	if(myAchieve->isAchieve(kAchievementCode_hidden_shopper1) || myAchieve->isCompleted(kAchievementCode_hidden_shopper1))
 	{
-		if(!myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i))
-			is_it_possible_achieve = true;
-		
-		if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
-		   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
+		for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
 		{
-			myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
-			AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
-			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
-			myAchieve->updateAchieve(nullptr);
+			//		if(!myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i))
+			//			is_it_possible_achieve = true;
+			
+			if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
+			   mySGD->getUserdataAchieveItemBuyCount() + cnt >= myAchieve->getCondition((AchievementCode)i))
+			{
+				myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+				AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+				CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				myAchieve->updateAchieve(nullptr);
+			}
 		}
 	}
 	
-	if(is_it_possible_achieve)
-	{
+//	if(is_it_possible_achieve)
+//	{
 		mySGD->setUserdataAchieveItemBuyCount(mySGD->getUserdataAchieveItemBuyCount() + cnt);
 		mySGD->changeUserdata(nullptr);
-	}
+//	}
 	
 	string fiverocks_param1;
 	if(item_list[t_clicked_item_idx] == kIC_baseSpeedUp)

@@ -4935,7 +4935,7 @@ void Maingame::refreshReplayPosition(int temp_time)
 		CCSprite* t_continue = CCSprite::create("endless_change.png");
 		t_continue->setScale(0.f);
 		t_continue->setOpacity(0);
-		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 215.f*replay_thumb_texture->getScale())));
+		t_continue->setPosition(ccpAdd(replay_base_position, ccp(160.f*replay_thumb_texture->getScale(), 300.f*replay_thumb_texture->getScale()))); // 215.f 였음
 		replay_all_node->addChild(t_continue);
 		
 		CCScaleTo* t_scale1 = CCScaleTo::create(0.3f, 1.f);
@@ -4944,13 +4944,13 @@ void Maingame::refreshReplayPosition(int temp_time)
 		
 		CCDelayTime* t_delay1 = CCDelayTime::create(0.2f);
 		
-		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
-		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
-		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+//		CCScaleTo* t_scale2 = CCScaleTo::create(0.3f, 0.f);
+//		CCFadeTo* t_fade2 = CCFadeTo::create(0.3f, 0);
+//		CCSpawn* t_spawn2 = CCSpawn::create(t_scale2, t_fade2, NULL);
+//		
+//		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
 		
-		CCCallFunc* t_call = CCCallFunc::create(t_continue, callfunc_selector(CCSprite::removeFromParent));
-		
-		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, t_spawn2, t_call, NULL);
+		CCSequence* t_seq = CCSequence::create(t_spawn1, t_delay1, /*t_spawn2, t_call, */NULL);
 		
 		t_continue->runAction(t_seq);
 		

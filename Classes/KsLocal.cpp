@@ -84,6 +84,7 @@ void KsLocal::setLocal()
 void KsLocal::ko()
 {
 	std::map<LK, std::string> obj;
+	obj[LK::kNothingMessage] = "";
 	obj[LK::kItem1] = "게임을 시작 중 입니다...";
 	obj[LK::kReGacha] = "다시 뽑기";
 	obj[LK::kRewardConfirm] = "확인";
@@ -171,6 +172,11 @@ void KsLocal::ko()
 	obj[LK::kFriendCardGiftErrorMessage] = "<font color=#FFFFFF newline=13>카드선물은 %d 시간에 한번 가능합니다.</font><font color=#FFFFFF>앞으로 %d시간 %d분 남았습니다.</font>";
 	
 	obj[LK::kFriendNickInputPlz] = "닉네임을 입력해주세요.";
+	obj[LK::kFriendSuccess] = "성공";
+	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
+	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
+	obj[LK::kFriendMax] = "친구는 %d명까지 등록가능합니다.";
+	obj[LK::kFriendMyFriends] = "내 친구 수 %d";
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "서버에 접속 중입니다...";
@@ -322,7 +328,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading15] = "매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요.";
 	obj[LK::kMyLocalKey_titleLoading16] = "게임 내에서는 이름 대신 닉네임을 사용합니다.";
 	obj[LK::kMyLocalKey_titleLoading17] = "99% 라 너무 아쉽다면, 보너스 뽑기에 도전 해 보세요.";
-	obj[LK::kMyLocalKey_titleLoading18] = "보너스팩을 플레이하면 특별한 이미지와 선물을 받을 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading18] = "매주 새로운 이벤트가 열립니다. 공식 카페를 확인해 주세요.";
 	obj[LK::kMyLocalKey_titleLoading19] = "스테이지별 임무 clear 가 어렵다면 아이템 뽑기를 통해 임무 전용 아이템을 사용해 보세요.";
 	obj[LK::kMyLocalKey_titleLoading6] = "한 번에 많은 영역을 획득할 수록 여러 개의 미사일이 발사되며, 공격을 성공한 만큼 콤보가 적용됩니다.";
 	obj[LK::kMyLocalKey_titleLoading20] = "이어하기는 횟수 제한 없이 사용할 수 있습니다. 목표한 등급을 꼭 획득하세요!";
@@ -363,7 +369,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
+//	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
 //	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "게임시작";
@@ -800,7 +806,7 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_onePercentGame9] = "100% 달성!!";
 	obj[LK::kMyLocalKey_onePercentGame10] = "카드 받기";
 	obj[LK::kMyLocalKey_endlessRewardInfo] = "보상내용";
-	obj[LK::kMyLocalKey_gababoContent1] = "<font color=#FFFFFF size=12>가위 바위 보 중</font><font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>";
+	obj[LK::kMyLocalKey_gababoContent1] = "<font color=#FFFFFF size=12>가위 바위 보 중 </font><font color=#FFAA14 size=12>하나를 선택 해 주세요.</font>";
 	obj[LK::kMyLocalKey_gababoContent2] = "<font size=12>연승보상</font>";
 	obj[LK::kMyLocalKey_gababoContent3] = "보상";
 	obj[LK::kMyLocalKey_gababoContent4] = "1승";
@@ -811,8 +817,8 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_gababoContent9] = "나";
 	obj[LK::kMyLocalKey_gababoContent10] = "<font color=#FFFFFF size=12 newline=14>이런, 무승부네요!</font><font color=#FFAA14 size=12>한번 더!</font>";
 	obj[LK::kMyLocalKey_gababoContent11] = "<font color=#FFFFFF size=12 newline=14>와우! 이겼어요!</font><font color=#FFAA14 size=12>더 좋은 보상을 향해 한번 더!</font>";
-	obj[LK::kMyLocalKey_gababoContent12] = "<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요!</font><font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어시마다</font><font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>";
-	obj[LK::kMyLocalKey_gababoContent13] = "<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font><font color=#FFFFFF size=12>너무 상심마세요!</font><font color=#FFAA14 size=12 newline=14>보너스게임은</font><font color=#FFAA14 size=12 newline=14>퍼펙트 클리어시마다 할 수 있어요!</font><font color=#FFFFFF size=12>다음엔 꼭 저를 이겨보세요!</font>";
+	obj[LK::kMyLocalKey_gababoContent12] = "<font color=#FFFFFF size=12 newline=14>와우! 4판 모두 이기다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>최고의 보상을 드릴게요! </font><font color=#FFAA14 size=12 newline=14>보너스 게임은 퍼펙트 클리어 시마다</font><font color=#FFAA14 size=12 newline=14>할 수 있어요!</font><font color=#FFFFFF size=12>그럼 다음에 또 만나요!</font>";
+	obj[LK::kMyLocalKey_gababoContent13] = "<font color=#FFFFFF size=12 newline=14>이런이런... 지고 말았네요.</font><font color=#FFFFFF size=12>너무 상심마세요! </font><font color=#FFAA14 size=12 newline=14>보너스게임은</font><font color=#FFAA14 size=12 newline=14> 퍼펙트 클리어 시마다 할 수 있어요!</font><font color=#FFFFFF size=12> 다음엔 꼭 저를 이겨보세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent14] = "루우비~!";
 	obj[LK::kMyLocalKey_gababoContent15] = "<font color=#FFFFFF size=12 newline=14>보너스 게임에</font><font color=#FFFFFF size=12 newline=14>오신 것을 환영합니다.</font><font color=#FFFFFF size=12 newline=14>전 히바리라고 해요.</font><font color=#FFFFFF size=12 newline=14>하나의 피스를 퍼펙트 클리어</font><font color=#FFFFFF size=12 newline=28>하시다니 정말 대단해요!</font><font color=#FFAA14 size=12 newline=14>게임 설명은 최초 1회만</font><font color=#FFAA14 size=12> 해드리니 잘 봐주세요!</font>";
 	obj[LK::kMyLocalKey_gababoContent16] = "다 음";
@@ -1283,9 +1289,9 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
 	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
-	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
-	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
-	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 공격 저지 하기";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 영역 작게 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 공격을 목표횟수만큼 저지시키세요!";
 	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
 	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
@@ -1340,6 +1346,11 @@ void KsLocal::ko()
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
+	obj[LK::kMyLocalKey_kindTutorial47] = "몬스터의 공격을 목표횟수만큼 저지해야하는 미션이군.";
+	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
+	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가?";
+	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 		// add friend !
@@ -1348,6 +1359,7 @@ void KsLocal::ko()
 void KsLocal::en()
 {
 	std::map<LK, std::string> obj;
+	obj[LK::kNothingMessage] = "";
 	obj[LK::kItem1] = "The game is starting...";
 	obj[LK::kReGacha] = "Draw again";
 	obj[LK::kRewardConfirm] = "Ok";
@@ -1435,6 +1447,11 @@ void KsLocal::en()
 	obj[LK::kFriendCardGiftErrorMessage] = "<font color=#FFFFFF newline=13>카드선물은 %d 시간에 한번 가능합니다.</font><font color=#FFFFFF>앞으로 %d시간 %d분 남았습니다.</font>";
 	
 	obj[LK::kFriendNickInputPlz] = "Please enter a nickname.";
+	obj[LK::kFriendSuccess] = "성공";
+	obj[LK::kFriendFriendRequested] = "성공적으로 요청했습니다.";
+	obj[LK::kFriendHeartSended] = "성공적으로 하트를 보냈습니다.";
+	obj[LK::kFriendMax] = "친구는 %d명까지 등록가능합니다.";
+	obj[LK::kFriendMyFriends] = "내 친구 수 %d";
 	
 	
 	obj[LK::kMyLocalKey_connectingServer] = "Server Online";
@@ -1586,7 +1603,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_titleLoading15] = "There are new events each week. Please check the public forum.";
 	obj[LK::kMyLocalKey_titleLoading16] = "Use a nickname instead of your real one in the game.";
 	obj[LK::kMyLocalKey_titleLoading17] = "If 99% isn't good enough, try a Bonus Draw.";
-	obj[LK::kMyLocalKey_titleLoading18] = "보너스팩을 플레이하면 특별한 이미지와 선물을 받을 수 있습니다.";
+	obj[LK::kMyLocalKey_titleLoading18] = "There are new events each week. Please check the public forum.";
 	obj[LK::kMyLocalKey_titleLoading19] = "If you are having trouble completing the mission in a stage, using the Item Draw to obtain an item to use.";
 	obj[LK::kMyLocalKey_titleLoading6] = "The more area you take at one time, the more missiles are launched. Combos are applied depending on how successful your attack it.";
 	obj[LK::kMyLocalKey_titleLoading20] = "이어하기는 횟수 제한 없이 사용할 수 있습니다. 목표한 등급을 꼭 획득하세요!";
@@ -1627,7 +1644,7 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_titleLoading47] = "PvP모드에서는 달성한 연승에 따라 다양한 보상을 받을 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading48] = "6스테이지까지 완료하면 PvP모드를 플레이 할 수 있습니다.";
 	obj[LK::kMyLocalKey_titleLoading49] = "설정 메뉴에서 조작 옵션을 나에게 맞게 설정할 수 있습니다.";
-	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
+//	obj[LK::kMyLocalKey_titleLoading50] = "성인 전용 S 다이어리는 정식 심의 중입니다. 곧 오픈되니 조금만 기다려주세요!";
 	//	obj[LK::kMyLocalKey_titleLoading51] = "더욱 화끈한 그림을 원한다면 S다이어리 앱을 설치하세요.";
 	obj[LK::kMyLocalKey_titleLoadingEnd] = "";
 	obj[LK::kMyLocalKey_gamestart] = "Start Game";
@@ -2547,9 +2564,9 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_attackRightNow] = "지금 공격하세요!!";
 	obj[LK::kMyLocalKey_missionCondition14] = "<font>캐스팅을 <font color=961>%d회<font> 취소시키세요!";
 	obj[LK::kMyLocalKey_missionCondition15] = "<font color=961>%d%%<font color=999>이하로만 영역을 획득하세요!";
-	obj[LK::kMyLocalKey_missionTitle14] = "목표 캐스팅취소";
-	obj[LK::kMyLocalKey_missionTitle15] = "목표 조금씩 먹기";
-	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 캐스팅을 취소시키세요!";
+	obj[LK::kMyLocalKey_missionTitle14] = "목표 공격 저지 하기";
+	obj[LK::kMyLocalKey_missionTitle15] = "목표 영역 작게 먹기";
+	obj[LK::kMyLocalKey_missionDiscription14] = "<font>몬스터의 공격을 목표횟수만큼 저지시키세요!";
 	obj[LK::kMyLocalKey_missionDiscription15] = "<font>영역을 조금씩 획득하세요!";
 	obj[LK::kMyLocalKey_missionFailContextCasting] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d회</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>가 모자라요!</font>";
 	obj[LK::kMyLocalKey_missionFailContextLittlePercent] = "<font strokecolor=#410523 strokesize=2.5 strokeopacity=255>아쉽군요. </font><font color=961 strokecolor=#410523 strokesize=2.5 strokeopacity=255>%d%%</font><font strokecolor=#410523 strokesize=2.5 strokeopacity=255>이하로만 먹어야해요!</font>";
@@ -2604,6 +2621,11 @@ void KsLocal::en()
 	obj[LK::kMyLocalKey_needCardCount2] = "2장 이상 보유한 카드만\n재료로 나옵니다.";
 	obj[LK::kMyLocalKey_strengthComplete] = "강화 완료";
 	obj[LK::kMyLocalKey_nCountRest] = "(%d회 남음)";
+	obj[LK::kMyLocalKey_kindTutorial47] = "몬스터의 공격을 목표횟수만큼 저지해야하는 미션이군.";
+	obj[LK::kMyLocalKey_kindTutorial48] = "응. 몬스터를 타격해서 공격저지 게이지를 채운다음 몬스터가 공격준비를 할때 미사일로 타격하면돼!";
+	obj[LK::kMyLocalKey_kindTutorial49] = "작게영역먹기라니? 그럼 100%는 할수없는건가요?";
+	obj[LK::kMyLocalKey_kindTutorial50] = "클리어를 하는 마지막 영역획득엔 적용되지 않으니 안심해!";
+	obj[LK::kMyLocalKey_nextLevelHiddenAchievementFindPlease] = "다음 단계의 숨겨진 업적을 찾아보세요.";
 	//obj\[LK::(.*)\] = \"(.*)\";  -> \1✄\2
 	
 	// add friend !

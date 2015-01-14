@@ -31,6 +31,7 @@
 #include "FiveRocksCpp.h"
 #include "CardGachaPopup.h"
 #include "ConvexGraph.h"
+#include "TitleRenewal.h"
 
 enum ShopPopup_Zorder{
 	kSP_Z_gray = 0,
@@ -777,6 +778,8 @@ void ShopPopup::buyStartPack(CCObject* sender)
 							}
 							else
 							{
+								mySGD->is_restarted = false;
+								
 								Json::Value param;
 								param["productid"] = NSDS_GS(kSDS_GI_shopStartPack_pID_s);
 								hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -792,10 +795,29 @@ void ShopPopup::buyStartPack(CCObject* sender)
 											myHSP->analyticsPurchase("ShopPurchaseStartPack", t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 											myHSP->IgawAdbrixBuy("ShopPurchaseStartPack");
 										}
+										
+										if(mySGD->is_restarted)
+										{
+											mySGD->resetLabels();
+											AudioEngine::sharedInstance()->stopAllEffects();
+											CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+											
+											return;
+										}
+										
 										requestItemDeliveryStartPack();
 									}
 									else
 									{
+										if(mySGD->is_restarted)
+										{
+											mySGD->resetLabels();
+											AudioEngine::sharedInstance()->stopAllEffects();
+											CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+											
+											return;
+										}
+										
 										loading_layer->removeFromParent();
 										
 //										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
@@ -1062,6 +1084,8 @@ void ShopPopup::buyEventPack(CCObject* sender)
 							}
 							else
 							{
+								mySGD->is_restarted = false;
+								
 								Json::Value param;
 								param["productid"] = NSDS_GS(kSDS_GI_shopEventPack_pID_s);
 								hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
@@ -1077,10 +1101,29 @@ void ShopPopup::buyEventPack(CCObject* sender)
 											myHSP->analyticsPurchase("ShopPurchaseEventPack", t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 											myHSP->IgawAdbrixBuy("ShopPurchaseEventPack");
 										}
+										
+										if(mySGD->is_restarted)
+										{
+											mySGD->resetLabels();
+											AudioEngine::sharedInstance()->stopAllEffects();
+											CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+											
+											return;
+										}
+										
 										requestItemDeliveryEventPack();
 									}
 									else
 									{
+										if(mySGD->is_restarted)
+										{
+											mySGD->resetLabels();
+											AudioEngine::sharedInstance()->stopAllEffects();
+											CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+											
+											return;
+										}
+										
 										loading_layer->removeFromParent();
 										
 //										addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);
@@ -1875,6 +1918,17 @@ bool ShopPopup::init()
 			myAchieve->changeIngCount((AchievementCode)i, myAchieve->getCondition((AchievementCode)i));
 			AchieveNoti* t_noti = AchieveNoti::create(AchievementCode(i));
 			CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+			
+			for(int i=kAchievementCode_hidden_shopper2;i<=kAchievementCode_hidden_shopper3;i++)
+			{
+				if(!myAchieve->isNoti(AchievementCode(i)) && !myAchieve->isCompleted((AchievementCode)i) && !myAchieve->isAchieve((AchievementCode)i) &&
+				   mySGD->getUserdataAchieveItemBuyCount() >= myAchieve->getCondition((AchievementCode)i))
+				{
+					myAchieve->changeIngCount(AchievementCode(i), myAchieve->getCondition((AchievementCode)i));
+					AchieveNoti* t_noti = AchieveNoti::create((AchievementCode)i);
+					CCDirector::sharedDirector()->getRunningScene()->addChild(t_noti);
+				}
+			}
 		}
 		myAchieve->updateAchieve(nullptr);
 	}
@@ -2322,6 +2376,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 			
 			createCheckBuyPopup([=]()
 								{
+									mySGD->is_restarted = false;
 									loading_layer = LoadingLayer::create();
 									addChild(loading_layer, kSP_Z_popup);
 									
@@ -2381,6 +2436,7 @@ void ShopPopup::menuAction(CCObject* pSender)
 									param["productid"] = mySGD->getInappProduct(tag-kSP_MT_content1);
 									hspConnector::get()->purchaseProduct(param, Json::Value(), [=](Json::Value v){
 										KS::KSLog("in-app test \n%", v);
+										
 										if(v["issuccess"].asInt())
 										{
                                             Json::Value t_info = mySGD->getProductInfo(mySGD->getInappProduct(tag-kSP_MT_content1));
@@ -2392,10 +2448,29 @@ void ShopPopup::menuAction(CCObject* pSender)
 												myHSP->analyticsPurchase(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1), t_info["price"].asFloat(), t_info["price"].asFloat(), t_info["currency"].asString(), mySGD->getUserdataCharLevel());
 												myHSP->IgawAdbrixBuy(ccsf("ShopPurchaseGemCode%d", tag-kSP_MT_content1+1));
 											}
+											
+											if(mySGD->is_restarted)
+											{
+												mySGD->resetLabels();
+												AudioEngine::sharedInstance()->stopAllEffects();
+												CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+												
+												return;
+											}
+											
 											requestItemDelivery();
 										}
 										else
 										{
+											if(mySGD->is_restarted)
+											{
+												mySGD->resetLabels();
+												AudioEngine::sharedInstance()->stopAllEffects();
+												CCDirector::sharedDirector()->replaceScene(TitleRenewalScene::scene());
+												
+												return;
+											}
+											
 											loading_layer->removeFromParent();
 											
 //											addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_failPurchase)), 9999);

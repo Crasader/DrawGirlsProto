@@ -425,31 +425,36 @@ bool CardViewScene::init()
 																					is_actioned = true;
 																					AudioEngine::sharedInstance()->playEffect("se_button1.mp3", false);
 																					
-																					if(graphdog->isExistApp())
+																					int exist_app_type = graphdog->isExistApp();
+																					
+																					if(exist_app_type > 0)
 																					{
 																						// 다이어리 앱 설치되어 있음
 																						
-																						LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
-																						addChild(t_loading, 9999);
-																						t_loading->startLoading();
+//																						LoadingLayer* t_loading = LoadingLayer::create(-9999, true);
+//																						addChild(t_loading, 9999);
+//																						t_loading->startLoading();
 																						
-																						Json::Value t_param;
-																						t_param["memberID"] = myHSP->getMemberID();
-																						
-																						myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
-																									   {
-																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
-																										   {
-																											   graphdog->openDiaryApp(t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
-																										   }
-																										   else
-																										   {
-																											   CCLOG("failed makediarycode");
-																										   }
-																										   
-																										   t_loading->removeFromParent();
-																										   is_actioned = false;
-																									   });
+//																						Json::Value t_param;
+//																						t_param["memberID"] = myHSP->getMemberID();
+//																						
+//																						myHSP->command("makediarycode", t_param, [=](Json::Value result_data)
+//																									   {
+//																										   if(result_data["result"]["code"].asInt() == GDSUCCESS)
+//																										   {
+																											   if(exist_app_type == 1)
+																												   graphdog->openDiaryApp("","",-1);//t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+																											   else if(exist_app_type == 2)
+																												   graphdog->openDiaryAppNA("","",-1);//t_param["memberID"].asString(), result_data["diaryCode"].asString(), card_number); // 다이어리 앱 실행 result_data["diaryCode"].asString() 과 myHSP->getMemberID() 를 보내줌
+//																										   }
+//																										   else
+//																										   {
+//																											   CCLOG("failed makediarycode");
+//																										   }
+//																										   
+//																										   t_loading->removeFromParent();
+//																										   is_actioned = false;
+//																									   });
 																					}
 																					else
 																					{

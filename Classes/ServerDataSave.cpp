@@ -2,6 +2,7 @@
 //
 
 #include "ServerDataSave.h"
+//#include "DataStorageHub.h"
 #define LZZ_INLINE inline
 ServerDataSave * ServerDataSave::sharedInstance ()
 {
@@ -36,17 +37,43 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string r_key)
 bool ServerDataSave::gbfk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getBoolForKey(key_set.f_key, key_set.r_key.c_str());
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string t_key, int key_val1)
 {
 	string c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(t_key.c_str(), key_val1)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(t_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1)+t_key;
+//		else
+//			c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(t_key.c_str(), key_val1)->getCString();
+//	}
 	
 	iter_bool = sds_cache_bool.find(c_key);
 	if(iter_bool != sds_cache_bool.end())
 		return iter_bool->second.getV();
 	
 	string bool_string = myDefault->getValue(f_key, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
+//	string bool_string;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		bool_string = myDefault->getValue(f_key, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			bool_string = myDefault->getValue(f_key, key_val1, t_key.c_str(), "false");
+//		else
+//			bool_string = myDefault->getValue(f_key, CCString::createWithFormat(t_key.c_str(), key_val1)->getCString(), "false");
+//	}
+	
 	if(bool_string == "false")
 	{
 		sds_cache_bool[c_key] = false;
@@ -61,6 +88,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, string t_key, int key_va
 bool ServerDataSave::gbfk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getBoolForKey(key_set.f_key, key_set.r_key.c_str(), key_val1);
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string r_key)
@@ -86,6 +114,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string r_key)
 bool ServerDataSave::gbfk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getBoolForKey(key_set.f_key, i1, key_set.r_key);
 }
 bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string t_key, int key_val1)
@@ -111,6 +140,7 @@ bool ServerDataSave::getBoolForKey (SaveDataFile f_key, int i1, string t_key, in
 bool ServerDataSave::gbfk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getBoolForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setBoolForKey (SaveDataFile f_key, string r_key, bool t_b, bool diskWrite)
@@ -133,9 +163,30 @@ void ServerDataSave::setBoolForKey (SaveDataFile f_key, string r_key, int key_va
 	string bool_string;
 	if(t_b)			bool_string = "true";
 	else			bool_string = "false";
-	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
 	
+	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
 	string c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
+//		c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, r_key.c_str(), bool_string, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), bool_string, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key)+CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//		}
+//	}
+	
 	sds_cache_bool[c_key] = t_b;
 }
 void ServerDataSave::sbfk (SDS_KEY fr_key, int key_val1, bool t_b, bool diskWrite)
@@ -188,40 +239,94 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key)
 int ServerDataSave::gifk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getIntegerForKey(key_set.f_key, key_set.r_key);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_val1)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
 		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
+//	int return_value;
+//	
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, r_key.c_str(), 0);
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0);
+//	}
+	
 	sds_cache_int[c_key] = return_value;
 	return return_value;
 }
 int ServerDataSave::gifk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getIntegerForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
 	
 	iter_int = sds_cache_int.find(c_key);
 	if(iter_int != sds_cache_int.end())
 		return iter_int->second.getV();
 	
 	int return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);
+//	int return_value;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), 0);
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0);
+//	}
+	
 	sds_cache_int[c_key] = return_value;
 	return return_value;
 }
 int ServerDataSave::gifk (SDS_KEY fr_key, int key_val1, int key_val2)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getIntegerForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key)
@@ -239,6 +344,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key)
 int ServerDataSave::gifk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getIntegerForKey(key_set.f_key, i1, key_set.r_key);
 }
 int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
@@ -256,6 +362,7 @@ int ServerDataSave::getIntegerForKey (SaveDataFile f_key, int i1, string r_key, 
 int ServerDataSave::gifk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getIntegerForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int val1, bool diskWrite)
@@ -273,8 +380,28 @@ void ServerDataSave::sifk (SDS_KEY fr_key, int val1, bool diskWrite)
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, r_key.c_str(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//		}
+//	}
+	
 	sds_cache_int[c_key] = val1;
 }
 void ServerDataSave::sifk (SDS_KEY fr_key, int key_val1, int val1, bool diskWrite)
@@ -285,8 +412,28 @@ void ServerDataSave::sifk (SDS_KEY fr_key, int key_val1, int val1, bool diskWrit
 void ServerDataSave::setIntegerForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, int val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//		}
+//	}
+	
 	sds_cache_int[c_key] = val1;
 }
 void ServerDataSave::sifk (SDS_KEY fr_key, int key_val1, int key_val2, int val1, bool diskWrite)
@@ -333,40 +480,93 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key)
 double ServerDataSave::gdfk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getDoubleForKey(key_set.f_key, key_set.r_key);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
 		return iter_double->second.getV();
 	
 	double return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
+//	double return_value;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, r_key.c_str(), 0.0);
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), 0.0);
+//	}
+	
 	sds_cache_double[c_key] = return_value;
 	return return_value;
 }
 double ServerDataSave::gdfk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getDoubleForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
 	
 	iter_double = sds_cache_double.find(c_key);
 	if(iter_double != sds_cache_double.end())
 		return iter_double->second.getV();
 	
 	double return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0.0);
+//	double return_value;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0.0);
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), 0.0);
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), 0.0);
+//	}
+	
 	sds_cache_double[c_key] = return_value;
 	return return_value;
 }
 double ServerDataSave::gdfk (SDS_KEY fr_key, int key_val1, int key_val2)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getDoubleForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key)
@@ -384,6 +584,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key
 double ServerDataSave::gdfk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getDoubleForKey(key_set.f_key, i1, key_set.r_key);
 }
 double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
@@ -401,6 +602,7 @@ double ServerDataSave::getDoubleForKey (SaveDataFile f_key, int i1, string r_key
 double ServerDataSave::gdfk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getDoubleForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, double val1, bool diskWrite)
@@ -418,8 +620,28 @@ void ServerDataSave::sdfk (SDS_KEY fr_key, double val1, bool diskWrite)
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, double val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, r_key.c_str(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//		}
+//	}
+	
 	sds_cache_double[c_key] = val1;
 }
 void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, double val1, bool diskWrite)
@@ -430,8 +652,28 @@ void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, double val1, bool diskW
 void ServerDataSave::setDoubleForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, double val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1, diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//		}
+//	}
+	
 	sds_cache_double[c_key] = val1;
 }
 void ServerDataSave::sdfk (SDS_KEY fr_key, int key_val1, int key_val2, double val1, bool diskWrite)
@@ -478,40 +720,93 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key)
 string ServerDataSave::gsfk (SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getStringForKey(key_set.f_key, key_set.r_key);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key, int key_val1)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
 		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
+//	string return_value;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, r_key.c_str(), "");
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), "");
+//	}
+	
 	sds_cache_string[c_key] = return_value;
 	return return_value;
 }
 string ServerDataSave::gsfk (SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getStringForKey(key_set.f_key, key_set.r_key, key_val1);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2)
 {
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	string c_key;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		else
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
 	
 	iter_string = sds_cache_string.find(c_key);
 	if(iter_string != sds_cache_string.end())
 		return iter_string->second.getV();
 	
 	string return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), "");
+//	string return_value;
+//	if(isOldCardInfoTypeForRead())
+//	{
+//		return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), "");
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//			return_value = myDefault->getValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), "");
+//		else
+//			return_value = myDefault->getValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), "");
+//	}
+	
 	sds_cache_string[c_key] = return_value;
 	return return_value;
 }
 string ServerDataSave::gsfk (SDS_KEY fr_key, int key_val1, int key_val2)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getStringForKey(key_set.f_key, key_set.r_key, key_val1, key_val2);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key)
@@ -529,6 +824,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key
 string ServerDataSave::gsfk (int i1, SDS_KEY fr_key)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getStringForKey(key_set.f_key, i1, key_set.r_key);
 }
 string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key, int key_val1)
@@ -546,6 +842,7 @@ string ServerDataSave::getStringForKey (SaveDataFile f_key, int i1, string r_key
 string ServerDataSave::gsfk (int i1, SDS_KEY fr_key, int key_val1)
 {
 	SDS_SET key_set = getKeySet(fr_key);
+//	SDS_SET key_set = getKeySet(fr_key, false);
 	return getStringForKey(key_set.f_key, i1, key_set.r_key, key_val1);
 }
 void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, string val1, bool diskWrite)
@@ -563,8 +860,28 @@ void ServerDataSave::ssfk (SDS_KEY fr_key, string val1, bool diskWrite)
 void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, int key_val1, string val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, r_key.c_str(), val1.c_str(), diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + r_key.c_str();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1)->getCString(), val1.c_str(), diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1)->getCString();
+//		}
+//	}
+	
 	sds_cache_string[c_key] = val1;
 }
 void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, string val1, bool diskWrite)
@@ -575,8 +892,28 @@ void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, string val1, bool diskW
 void ServerDataSave::setStringForKey (SaveDataFile f_key, string r_key, int key_val1, int key_val2, string val1, bool diskWrite)
 {
 	myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1.c_str(), diskWrite);
-	
 	string c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+	
+//	string c_key;
+//	if(isOldCardInfoTypeForWrite())
+//	{
+//		myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1.c_str(), diskWrite);
+//		c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//	}
+//	else
+//	{
+//		if(f_key == kSDF_cardInfo)
+//		{
+//			myDefault->setKeyValue(f_key, key_val1, CCString::createWithFormat(r_key.c_str(), key_val2)->getCString(), val1.c_str(), diskWrite);
+//			c_key = myDefault->getSyncKey(f_key, key_val1) + CCString::createWithFormat(r_key.c_str(), key_val2)->getCString();
+//		}
+//		else
+//		{
+//			myDefault->setKeyValue(f_key, CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString(), val1.c_str(), diskWrite);
+//			c_key = myDefault->getSyncKey(f_key) + CCString::createWithFormat(r_key.c_str(), key_val1, key_val2)->getCString();
+//		}
+//	}
+	
 	sds_cache_string[c_key] = val1;
 }
 void ServerDataSave::ssfk (SDS_KEY fr_key, int key_val1, int key_val2, string val1, bool diskWrite)
@@ -615,7 +952,14 @@ SDS_SET ServerDataSave::getKeySet (SDS_KEY t_key)
 	rv.r_key = getRKey(t_key).c_str();
 	return rv;
 }
-string ServerDataSave::getRKey (SDS_KEY t_key)
+//SDS_SET ServerDataSave::getKeySet (SDS_KEY t_key, bool is_write/* = true*/)
+//{
+//	SDS_SET rv;
+//	rv.f_key = getSDF(t_key);
+//	rv.r_key = getRKey(t_key, is_write).c_str();
+//	return rv;
+//}
+string ServerDataSave::getRKey (SDS_KEY t_key/*, bool is_write/* = true*/)
 {
 	string rv;
 	
@@ -836,6 +1180,7 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_GI_cardCompose_list_int1_needStone_i)	rv = "ccplist%dndst";
 	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCardsCnt_i)		rv = "ccplist%dmtrlcdcnt";
 	else if(t_key == kSDS_GI_cardCompose_list_int1_materialCards_int2_no_i)	rv = "ccplist%dmtrlcd%dno";
+	else if(t_key == kSDS_GI_cardCompose_list_int1_materialPieces_int2_no_i)	rv = "ccplist%dmtrlpc%dno";
 	
 	else if(t_key == kSDS_SI_version_i)					rv = "version";
 	else if(t_key == kSDS_SI_puzzle_i)					rv = "puzzle";
@@ -868,61 +1213,125 @@ string ServerDataSave::getRKey (SDS_KEY t_key)
 	else if(t_key == kSDS_SI_autoBalanceTry_i)			rv = "%d_autoBalanceTry";
 	else if(t_key == kSDS_SI_type_s)					rv = "type";
 	
-	else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_grade";
-	else if(t_key == kSDS_CI_int1_grade_i)						rv = "%d_rank";
-	else if(t_key == kSDS_CI_int1_durability_i)					rv = "%d_durability";
-	else if(t_key == kSDS_CI_int1_theme_i)						rv = "%d_theme";
-	else if(t_key == kSDS_CI_int1_stage_i)						rv = "%d_stage";
-	else if(t_key == kSDS_CI_int1_reward_i)						rv = "%d_reward";
-	else if(t_key == kSDS_CI_int1_missile_type_s)				rv = "%d_missile_type";
-	else if(t_key == kSDS_CI_int1_missile_power_i)				rv = "%d_missile_power";
-	else if(t_key == kSDS_CI_int1_missile_dex_i)				rv = "%d_missile_dex";
-	else if(t_key == kSDS_CI_int1_missile_speed_d)				rv = "%d_missile_speed";
-	else if(t_key == kSDS_CI_int1_passive_s)					rv = "%d_passive";
-	else if(t_key == kSDS_CI_int1_abilityCnt_i)					rv = "%d_ability_cnt";
-	else if(t_key == kSDS_CI_int1_ability_int2_type_i)			rv = "%d_ability_%d_type";
-	else if(t_key == kSDS_CI_int1_abilityAttackOptionPower_i)	rv = "%d_ability_attack_option_power";
-	else if(t_key == kSDS_CI_int1_abilityAddTimeOptionSec_i)	rv = "%d_ability_addTime_option_sec";
-	else if(t_key == kSDS_CI_int1_abilityFastOptionSec_i)		rv = "%d_ability_fast_option_sec";
-	else if(t_key == kSDS_CI_int1_abilitySilenceOptionSec_i)	rv = "%d_ability_silence_option_sec";
-	else if(t_key == kSDS_CI_int1_abilityDoubleItemOptionPercent_i)			rv = "%d_ability_doubleItem_option_percent";
-	else if(t_key == kSDS_CI_int1_abilityLongTimeOptionSec_i)				rv = "%d_ability_longTime_option_sec";
-	else if(t_key == kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i)	rv = "%d_ability_baseSpeedUp_option_unit";
-	else if(t_key == kSDS_CI_int1_imgInfo_s)					rv = "%d_imgInfo";
-	else if(t_key == kSDS_CI_int1_thumbnailInfo_s)				rv = "%d_thumbnailInfo";
-	else if(t_key == kSDS_CI_int1_aniInfoIsAni_b)				rv = "%d_aniInfo_isAni";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailLoopLength_i)	rv = "%d_aniInfo_detail_loopLength";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i)	rv = "%d_aniInfo_detail_loopSeq";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailCutWidth_i)		rv = "%d_aniInfo_detail_cutWidth";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailCutHeight_i)		rv = "%d_aniInfo_detail_cutHeight";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailCutLength_i)		rv = "%d_aniInfo_detail_cutLength";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailPositionX_i)		rv = "%d_aniInfo_detail_positionX";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailPositionY_i)		rv = "%d_aniInfo_detail_positionY";
-	else if(t_key == kSDS_CI_int1_aniInfoDetailImg_s)			rv = "%d_aniInfo_detail_img";
-	else if(t_key == kSDS_CI_int1_script_s)						rv = "%d_script";
-	else if(t_key == kSDS_CI_int1_silImgInfoIsSil_b)			rv = "%d_silImgInfo_isSil";
-	else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "%d_silImgInfo_img";
-	else if(t_key == kSDS_CI_int1_profile_s)			rv = "%d_profile";
-	else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
-	else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "%d_mPrice_ruby";
-	else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "%d_mPrice_pass";
-	else if(t_key == kSDS_CI_int1_type_i)						rv = "%d_type";
-	else if(t_key == kSDS_CI_int1_category_s)					rv = "%d_category";
-	else if(t_key == kSDS_CI_int1_level_i)						rv = "%d_level";
-	else if(t_key == kSDS_CI_int1_soundCnt_i)					rv = "%d_soundCnt";
-	else if(t_key == kSDS_CI_int1_soundType_int1_s)				rv = "%d_soundType_%d";
-	else if(t_key == kSDS_CI_int1_characterNo_i)				rv = "%d_characterNo";
-	else if(t_key == kSDS_CI_int1_serial_i)						rv = "%d_serial";
-	else if(t_key == kSDS_CI_int1_haveFaceInfo_b)				rv = "%d_haveFaceInfo";
-	else if(t_key == kSDS_CI_int1_faceInfo_s)					rv = "%d_faceInfo";
-	else if(t_key == kSDS_CI_int1_faceInfoCcbi_s)				rv = "%d_faceInfoCcbi";
-	else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
-	else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
-	else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "%d_haveAdult";
-	else if(t_key == kSDS_CI_int1_exp_i)						rv = "%d_exp";
-	else if(t_key == kSDS_CI_int1_version_i)					rv = "%d_version";
-	
-	//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
+//	else if(t_key >= kSDS_CI_base && t_key <= kSDS_CI_end)
+//	{
+//		if((is_write && isOldCardInfoTypeForWrite()) || (!is_write && isOldCardInfoTypeForRead()))
+//		{
+			else if(t_key == kSDS_CI_int1_rank_i)						rv = "%d_grade";
+			else if(t_key == kSDS_CI_int1_grade_i)						rv = "%d_rank";
+			else if(t_key == kSDS_CI_int1_durability_i)					rv = "%d_durability";
+			else if(t_key == kSDS_CI_int1_theme_i)						rv = "%d_theme";
+			else if(t_key == kSDS_CI_int1_stage_i)						rv = "%d_stage";
+			else if(t_key == kSDS_CI_int1_reward_i)						rv = "%d_reward";
+			else if(t_key == kSDS_CI_int1_missile_type_s)				rv = "%d_missile_type";
+			else if(t_key == kSDS_CI_int1_missile_power_i)				rv = "%d_missile_power";
+			else if(t_key == kSDS_CI_int1_missile_dex_i)				rv = "%d_missile_dex";
+			else if(t_key == kSDS_CI_int1_missile_speed_d)				rv = "%d_missile_speed";
+			else if(t_key == kSDS_CI_int1_passive_s)					rv = "%d_passive";
+			else if(t_key == kSDS_CI_int1_abilityCnt_i)					rv = "%d_ability_cnt";
+			else if(t_key == kSDS_CI_int1_ability_int2_type_i)			rv = "%d_ability_%d_type";
+			else if(t_key == kSDS_CI_int1_abilityAttackOptionPower_i)	rv = "%d_ability_attack_option_power";
+			else if(t_key == kSDS_CI_int1_abilityAddTimeOptionSec_i)	rv = "%d_ability_addTime_option_sec";
+			else if(t_key == kSDS_CI_int1_abilityFastOptionSec_i)		rv = "%d_ability_fast_option_sec";
+			else if(t_key == kSDS_CI_int1_abilitySilenceOptionSec_i)	rv = "%d_ability_silence_option_sec";
+			else if(t_key == kSDS_CI_int1_abilityDoubleItemOptionPercent_i)			rv = "%d_ability_doubleItem_option_percent";
+			else if(t_key == kSDS_CI_int1_abilityLongTimeOptionSec_i)				rv = "%d_ability_longTime_option_sec";
+			else if(t_key == kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i)	rv = "%d_ability_baseSpeedUp_option_unit";
+			else if(t_key == kSDS_CI_int1_imgInfo_s)					rv = "%d_imgInfo";
+			else if(t_key == kSDS_CI_int1_thumbnailInfo_s)				rv = "%d_thumbnailInfo";
+			else if(t_key == kSDS_CI_int1_aniInfoIsAni_b)				rv = "%d_aniInfo_isAni";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailLoopLength_i)	rv = "%d_aniInfo_detail_loopLength";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i)	rv = "%d_aniInfo_detail_loopSeq";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailCutWidth_i)		rv = "%d_aniInfo_detail_cutWidth";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailCutHeight_i)		rv = "%d_aniInfo_detail_cutHeight";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailCutLength_i)		rv = "%d_aniInfo_detail_cutLength";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailPositionX_i)		rv = "%d_aniInfo_detail_positionX";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailPositionY_i)		rv = "%d_aniInfo_detail_positionY";
+			else if(t_key == kSDS_CI_int1_aniInfoDetailImg_s)			rv = "%d_aniInfo_detail_img";
+			else if(t_key == kSDS_CI_int1_script_s)						rv = "%d_script";
+			else if(t_key == kSDS_CI_int1_silImgInfoIsSil_b)			rv = "%d_silImgInfo_isSil";
+			else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "%d_silImgInfo_img";
+			else if(t_key == kSDS_CI_int1_profile_s)			rv = "%d_profile";
+			else if(t_key == kSDS_CI_int1_name_s)			rv = "%d_name";
+			else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "%d_mPrice_ruby";
+			else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "%d_mPrice_pass";
+			else if(t_key == kSDS_CI_int1_type_i)						rv = "%d_type";
+			else if(t_key == kSDS_CI_int1_category_s)					rv = "%d_category";
+			else if(t_key == kSDS_CI_int1_level_i)						rv = "%d_level";
+			else if(t_key == kSDS_CI_int1_soundCnt_i)					rv = "%d_soundCnt";
+			else if(t_key == kSDS_CI_int1_soundType_int1_s)				rv = "%d_soundType_%d";
+			else if(t_key == kSDS_CI_int1_characterNo_i)				rv = "%d_characterNo";
+			else if(t_key == kSDS_CI_int1_serial_i)						rv = "%d_serial";
+			else if(t_key == kSDS_CI_int1_haveFaceInfo_b)				rv = "%d_haveFaceInfo";
+			else if(t_key == kSDS_CI_int1_faceInfo_s)					rv = "%d_faceInfo";
+			else if(t_key == kSDS_CI_int1_faceInfoCcbi_s)				rv = "%d_faceInfoCcbi";
+			else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "%d_faceInfoPvrccz";
+			else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "%d_faceInfoPlist";
+			else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "%d_haveAdult";
+			else if(t_key == kSDS_CI_int1_exp_i)						rv = "%d_exp";
+			else if(t_key == kSDS_CI_int1_version_i)					rv = "%d_version";
+			
+			//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
+//		}
+//		else
+//		{
+//			if(t_key == kSDS_CI_int1_rank_i)						rv = "grade";
+//			else if(t_key == kSDS_CI_int1_grade_i)						rv = "rank";
+//			else if(t_key == kSDS_CI_int1_durability_i)					rv = "durability";
+//			else if(t_key == kSDS_CI_int1_theme_i)						rv = "theme";
+//			else if(t_key == kSDS_CI_int1_stage_i)						rv = "stage";
+//			else if(t_key == kSDS_CI_int1_reward_i)						rv = "reward";
+//			else if(t_key == kSDS_CI_int1_missile_type_s)				rv = "missile_type";
+//			else if(t_key == kSDS_CI_int1_missile_power_i)				rv = "missile_power";
+//			else if(t_key == kSDS_CI_int1_missile_dex_i)				rv = "missile_dex";
+//			else if(t_key == kSDS_CI_int1_missile_speed_d)				rv = "missile_speed";
+//			else if(t_key == kSDS_CI_int1_passive_s)					rv = "passive";
+//			else if(t_key == kSDS_CI_int1_abilityCnt_i)					rv = "ability_cnt";
+//			else if(t_key == kSDS_CI_int1_ability_int2_type_i)			rv = "ability_%d_type";
+//			else if(t_key == kSDS_CI_int1_abilityAttackOptionPower_i)	rv = "ability_attack_option_power";
+//			else if(t_key == kSDS_CI_int1_abilityAddTimeOptionSec_i)	rv = "ability_addTime_option_sec";
+//			else if(t_key == kSDS_CI_int1_abilityFastOptionSec_i)		rv = "ability_fast_option_sec";
+//			else if(t_key == kSDS_CI_int1_abilitySilenceOptionSec_i)	rv = "ability_silence_option_sec";
+//			else if(t_key == kSDS_CI_int1_abilityDoubleItemOptionPercent_i)			rv = "ability_doubleItem_option_percent";
+//			else if(t_key == kSDS_CI_int1_abilityLongTimeOptionSec_i)				rv = "ability_longTime_option_sec";
+//			else if(t_key == kSDS_CI_int1_abilityBaseSpeedUpOptionUnit_i)	rv = "ability_baseSpeedUp_option_unit";
+//			else if(t_key == kSDS_CI_int1_imgInfo_s)					rv = "imgInfo";
+//			else if(t_key == kSDS_CI_int1_thumbnailInfo_s)				rv = "thumbnailInfo";
+//			else if(t_key == kSDS_CI_int1_aniInfoIsAni_b)				rv = "aniInfo_isAni";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailLoopLength_i)	rv = "aniInfo_detail_loopLength";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailLoopSeq_int2_i)	rv = "aniInfo_detail_loopSeq";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailCutWidth_i)		rv = "aniInfo_detail_cutWidth";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailCutHeight_i)		rv = "aniInfo_detail_cutHeight";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailCutLength_i)		rv = "aniInfo_detail_cutLength";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailPositionX_i)		rv = "aniInfo_detail_positionX";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailPositionY_i)		rv = "aniInfo_detail_positionY";
+//			else if(t_key == kSDS_CI_int1_aniInfoDetailImg_s)			rv = "aniInfo_detail_img";
+//			else if(t_key == kSDS_CI_int1_script_s)						rv = "script";
+//			else if(t_key == kSDS_CI_int1_silImgInfoIsSil_b)			rv = "silImgInfo_isSil";
+//			else if(t_key == kSDS_CI_int1_silImgInfoImg_s)				rv = "silImgInfo_img";
+//			else if(t_key == kSDS_CI_int1_profile_s)			rv = "profile";
+//			else if(t_key == kSDS_CI_int1_name_s)			rv = "name";
+//			else if(t_key == kSDS_CI_int1_mPrice_ruby_i)				rv = "mPrice_ruby";
+//			else if(t_key == kSDS_CI_int1_mPrice_pass_i)				rv = "mPrice_pass";
+//			else if(t_key == kSDS_CI_int1_type_i)						rv = "type";
+//			else if(t_key == kSDS_CI_int1_category_s)					rv = "category";
+//			else if(t_key == kSDS_CI_int1_level_i)						rv = "level";
+//			else if(t_key == kSDS_CI_int1_soundCnt_i)					rv = "soundCnt";
+//			else if(t_key == kSDS_CI_int1_soundType_int1_s)				rv = "soundType_%d";
+//			else if(t_key == kSDS_CI_int1_characterNo_i)				rv = "characterNo";
+//			else if(t_key == kSDS_CI_int1_serial_i)						rv = "serial";
+//			else if(t_key == kSDS_CI_int1_haveFaceInfo_b)				rv = "haveFaceInfo";
+//			else if(t_key == kSDS_CI_int1_faceInfo_s)					rv = "faceInfo";
+//			else if(t_key == kSDS_CI_int1_faceInfoCcbi_s)				rv = "faceInfoCcbi";
+//			else if(t_key == kSDS_CI_int1_faceInfoPvrccz_s)				rv = "faceInfoPvrccz";
+//			else if(t_key == kSDS_CI_int1_faceInfoPlist_s)				rv = "faceInfoPlist";
+//			else if(t_key == kSDS_CI_int1_haveAdult_b)					rv = "haveAdult";
+//			else if(t_key == kSDS_CI_int1_exp_i)						rv = "exp";
+//			else if(t_key == kSDS_CI_int1_version_i)					rv = "version";
+//			
+//			//		else if(t_key == kSDS_CI_int1_silImgInfoSilData_s)			rv = "%d_silImgInfo_silData";
+//		}
+//	}
 	
 	else if(t_key == kSDS_AI_version_i)							rv = "version";
 	else if(t_key == kSDS_AI_count_i)							rv = "count";
@@ -1056,6 +1465,21 @@ void ServerDataSave::saveServerDataFile(string t_filename, Json::Value t_data)
 	
 }
 
+//bool ServerDataSave::isCheckOldUser()
+//{
+//	return is_old_user == 1;
+//}
+//
+//bool ServerDataSave::isOldCardInfoTypeForWrite()
+//{
+//	return isCheckOldUser() && !myDSH->getBoolForKey(kDSH_Key_isChangingCardInfo) && !myDSH->getBoolForKey(kDSH_Key_isChangedCardInfoToNew);
+//}
+//
+//bool ServerDataSave::isOldCardInfoTypeForRead()
+//{
+//	return isCheckOldUser() && !myDSH->getBoolForKey(kDSH_Key_isChangedCardInfoToNew);
+//}
+
 void ServerDataSave::fFlush(SaveDataFile f_key){			myDefault->fFlush(f_key);		}
 void ServerDataSave::fFlush(SaveDataFile f_key, int i1){	myDefault->fFlush(f_key, i1);	}
 void ServerDataSave::fFlush(SDS_KEY fr_key)
@@ -1091,6 +1515,23 @@ void ServerDataSave::removeCache()
 
 void ServerDataSave::myInit ()
 {
+//	is_old_user = -1;
+//	
+//	int data_file_cnt = myDSH->getIntegerForKey(kDSH_Key_dataFileCnt);
+//	for(int i=1;i<=data_file_cnt;i++)
+//	{
+//		string filename = myDSH->getStringForKey(kDSH_Key_dataFileName_int1, i);
+//		CCLog("data filename : %s", filename.c_str());
+//		if(filename == "CARDINFO")
+//		{
+//			is_old_user = 1;
+//			break;
+//		}
+//	}
+//	
+//	if(is_old_user == -1)
+//		is_old_user = 0;
+	
 	removeCache();
 	myDefault = SaveData::sharedObject();
 }

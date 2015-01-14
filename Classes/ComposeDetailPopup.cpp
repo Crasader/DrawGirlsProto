@@ -94,6 +94,7 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	is_full = false;
 	
 	vector<KSProtectVar<int>> t_material_list = mySGD->card_compose_list[compose_idx].material_card_list;
+	vector<KSProtectVar<int>> t_material_piece_list = mySGD->card_compose_list[compose_idx].material_piece_list;
 	int material_count = t_material_list.size();
 	
 	card_data_list.clear();
@@ -137,7 +138,12 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	card_table->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29) + ccp(-137.5f,-88.5f));
 	card_table->setDelegate(this);
 	card_list_back->addChild(card_table);
-	card_table->setTouchPriority(touch_priority-1);
+	card_table->setTouchPriority(touch_priority-3);
+	
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority-2);
+	t_suction->setNotSwallowRect(CCRectMake(card_table->getPositionX(), card_table->getPositionY(), 275, 164));
+	t_suction->setTouchEnabled(true);
+	card_list_back->addChild(t_suction);
 	
 	need_card_count_2_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_needCardCount2), mySGD->getFont().c_str(), 20);
 	need_card_count_2_label->setPosition(ccpFromSize(card_list_back->getContentSize()/2.f) + ccp(0,29));
@@ -208,6 +214,13 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 				t_position = ccp(107,44);
 		}
 		
+		int t_stage_number = t_material_piece_list[i].getV();
+		int t_puzzle_number = 0;
+		if(t_stage_number != 0)
+		{
+			t_puzzle_number = NSDS_GI(t_stage_number, kSDS_SI_puzzle_i);
+		}
+		
 		if(t_info.count.getV() >= 1)
 		{
 			CCClippingNode* clipping_node = CCClippingNode::create(CCSprite::create("cardsetting_mask.png"));
@@ -236,6 +249,26 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			
 			if(t_info.count.getV() < 2)
 				is_necessary_on = false;
+			
+			if(t_stage_number != 0)
+			{
+				KSLabelTTF* puzzle_label = KSLabelTTF::create(ccsf("Puzzle %d", t_puzzle_number), mySGD->getFont().c_str(), 12);
+				puzzle_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				puzzle_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f) + ccp(0,6));
+				frame_img->addChild(puzzle_label);
+				
+				KSLabelTTF* stage_label = KSLabelTTF::create(ccsf("Stage %d", t_stage_number), mySGD->getFont().c_str(), 12);
+				stage_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				stage_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f) + ccp(0,-6));
+				frame_img->addChild(stage_label);
+			}
+			else
+			{
+				KSLabelTTF* special_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardSettingSpecialCardTitle), mySGD->getFont().c_str(), 12);
+				special_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				special_label->setPosition(ccpFromSize(frame_img->getContentSize()/2.f));
+				frame_img->addChild(special_label);
+			}
 		}
 		else
 		{
@@ -247,14 +280,34 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 			
 			KSLabelTTF* need_ment = KSLabelTTF::create(getLocal(LK::kMyLocalKey_necessaryPlease), mySGD->getFont().c_str(), 11);
 			need_ment->enableOuterStroke(ccBLACK, 0.5f, int(255*0.6f), true);
-			need_ment->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,4));
+			need_ment->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,14));
 			not_have_back->addChild(need_ment);
 			
 			KSLabelTTF* no_label = KSLabelTTF::create(ccsf("No.%d", t_material_list[i].getV()), mySGD->getFont().c_str(), 12);
 			no_label->setColor(ccc3(255, 220, 150));
 			no_label->enableOuterStroke(ccBLACK, 0.5f, int(255*0.6f), true);
-			no_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-8));
+			no_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,2));
 			not_have_back->addChild(no_label);
+			
+			if(t_stage_number != 0)
+			{
+				KSLabelTTF* puzzle_label = KSLabelTTF::create(ccsf("Puzzle %d", t_puzzle_number), mySGD->getFont().c_str(), 12);
+				puzzle_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				puzzle_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-10));
+				not_have_back->addChild(puzzle_label);
+				
+				KSLabelTTF* stage_label = KSLabelTTF::create(ccsf("Stage %d", t_stage_number), mySGD->getFont().c_str(), 12);
+				stage_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				stage_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-22));
+				not_have_back->addChild(stage_label);
+			}
+			else
+			{
+				KSLabelTTF* special_label = KSLabelTTF::create(getLocal(LK::kMyLocalKey_cardSettingSpecialCardTitle), mySGD->getFont().c_str(), 12);
+				special_label->enableOuterStroke(ccBLACK, 0.5f, 255, true);
+				special_label->setPosition(ccpFromSize(not_have_back->getContentSize()/2.f) + ccp(0,-16));
+				not_have_back->addChild(special_label);
+			}
 		}
 	}
 	
@@ -312,11 +365,11 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	price_back->setPosition(ccp(0,-9.5f));
 	t_button_label->addChild(price_back);
 	
-	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) > 0)
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 	{
 		price_icon = CCSprite::create("icon_p11.png");
 		price_icon->setScale(0.8f);
-		price_value = KSLabelTTF::create(KS::insert_separator(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11)).c_str(), mySGD->getFont().c_str(), 14);
+		price_value = KSLabelTTF::create(KS::insert_separator(mySGD->card_compose_list[compose_idx].need_stone.getV()).c_str(), mySGD->getFont().c_str(), 14);
 		price_value->setPosition(ccp(price_icon->getContentSize().width*price_icon->getScale()/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f-1));
 		price_icon->setPosition(ccp(-price_value->getContentSize().width/2.f + price_back->getContentSize().width/2.f - 4, price_back->getContentSize().height/2.f));
 		price_back->addChild(price_icon);
@@ -370,12 +423,12 @@ void ComposeDetailPopup::myInit(int t_touch_priority, int t_compose_idx)
 	compose_button->setPosition(ccp(necessary_back->getPositionX(), 50));
 	compose_button->addTargetWithActionForControlEvents(this, cccontrol_selector(ComposeDetailPopup::composeAction), CCControlEventTouchUpInside);
 	main_case->addChild(compose_button);
-	compose_button->setTouchPriority(touch_priority-2);
+	compose_button->setTouchPriority(touch_priority-4);
 	
 //	compose_button->setEnabled(false);
 //	compose_button->setColor(ccGRAY);
 	
-	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-1);
+	CommonButton* close_button = CommonButton::createCloseButton(touch_priority-4);
 	close_button->setPosition(ccpFromSize(main_case->getContentSize()) + ccp(-20,-12));
 	close_button->setFunction([=](CCObject* sender)
 							  {
@@ -489,7 +542,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 			ScrollMenu* t_card_menu = ScrollMenu::create(t_card_item, NULL);
 			t_card_menu->setPosition(card_position);
 			cell->addChild(t_card_menu);
-			t_card_menu->setTouchPriority(touch_priority-2);
+			t_card_menu->setTouchPriority(touch_priority-1);
 			
 			if(is_full || t_info->count.getV() - target_count <= 1)
 			{
@@ -549,7 +602,7 @@ CCTableViewCell* ComposeDetailPopup::tableCellAtIndex( CCTableView *table, unsig
 		ScrollMenu* selected_menu = ScrollMenu::create(t_item, NULL);
 		selected_menu->setPosition(ccp(0,0));
 		cell->addChild(selected_menu);
-		selected_menu->setTouchPriority(touch_priority-3-idx);
+		selected_menu->setTouchPriority(touch_priority-4-idx);
 	}
 	
 	
@@ -612,7 +665,7 @@ void ComposeDetailPopup::composeAction(CCObject* t_sender, CCControlEvent t_even
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_notEnoughtEXP)), 9999);
 		is_menu_enable = true;
 	}
-	else if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) <= 0 && mySGD->getGoodsValue(GoodsType::kGoodsType_pass1) < mySGD->card_compose_list[compose_idx].need_stone.getV())
+	else if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) < mySGD->card_compose_list[compose_idx].need_stone.getV() && mySGD->getGoodsValue(GoodsType::kGoodsType_pass1) < mySGD->card_compose_list[compose_idx].need_stone.getV())
 	{
 		addChild(ASPopupView::getCommonNoti(touch_priority-100, getLocal(LK::kMyLocalKey_noti), getLocal(LK::kMyLocalKey_notEnoughtP1)), 9999);
 		is_menu_enable = true;
@@ -792,7 +845,7 @@ void ComposeDetailPopup::composeOn()
 	Json::Value param;
 	param["memberID"] = myHSP->getSocialID();
 	param["no"] = mySGD->card_compose_list[compose_idx].compose_no.getV();
-	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) > 0)
+	if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopComposeCardPass_exchangeID_s);
 	else
 		param["exchangeID"] = NSDS_GS(kSDS_GI_shopComposeCardStone_exchangeID_s);
@@ -816,7 +869,7 @@ void ComposeDetailPopup::resultCompose(Json::Value result_data)
 		
 		string fiverocks_goods_type;
 		
-		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) <= 0)
+		if(mySGD->getGoodsValue(GoodsType::kGoodsType_pass11) >= mySGD->card_compose_list[compose_idx].need_stone.getV())
 			fiverocks_goods_type = "p11";
 		else
 			fiverocks_goods_type = "p1";

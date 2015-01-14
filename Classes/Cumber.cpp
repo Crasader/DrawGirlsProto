@@ -1,4 +1,4 @@
-//
+ //
 //  Cumber.cpp
 //  DrawingJack
 //
@@ -697,7 +697,11 @@ void CumberParent::hideBosses()
 	{
 		mainCumber->setVisible(false);
 		mainCumber->onExit();
+		if(mainCumber->getPoisonedNiddle())
+			mainCumber->getPoisonedNiddle()->removeFromParent();
+		mainCumber->setPoisonedNiddle(nullptr);
 //		mainCumber->stopAllActions();
 //		mainCumber->unscheduleAllSelectors();
 	}
+	AudioEngine::sharedInstance()->stopEffect("se_missile.mp3");
 }

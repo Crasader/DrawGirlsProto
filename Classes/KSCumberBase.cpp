@@ -16,6 +16,8 @@
 #include "PassiveOp.h"
 #include "ServerDataSave.h"
 
+#include "StoneMissile.h"
+
 class KSJuniorBase;
 
 
@@ -105,7 +107,7 @@ void KSCumberBase::randomMoving(float dt)
 		{
 			if(collisionCode == kCOLLISION_JACK)
 			{
-				validPosition = true;
+//				validPosition = true;
 				// 즉사 시킴.
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
@@ -131,7 +133,7 @@ void KSCumberBase::randomMoving(float dt)
 			{
 				//                        CCLOG("collision!!");
 				//                        myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -288,7 +290,7 @@ void KSCumberBase::straightMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -318,7 +320,7 @@ void KSCumberBase::straightMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -480,7 +482,7 @@ void KSCumberBase::followMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 				m_follow.lastMapCollisionTime = m_follow.timer;
@@ -531,7 +533,7 @@ void KSCumberBase::followMoving(float dt)
 				dx = getSpeed() * cos(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 				dy = getSpeed() * sin(deg2Rad(m_directionAngleDegree)) * (1 + cnt / 30.f * (3.f / (0.5f * getSpeed()) - 1));
 								
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -662,7 +664,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -698,7 +700,7 @@ void KSCumberBase::rightAngleMoving(float dt)
 			}
 			else if(collisionCode == kCOLLISION_NEWLINE)
 			{
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -847,7 +849,7 @@ void KSCumberBase::circleMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -870,7 +872,7 @@ void KSCumberBase::circleMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -1012,7 +1014,7 @@ void KSCumberBase::snakeMoving(float dt)
 			if(collisionCode == kCOLLISION_JACK)
 			{
 				// 즉사 시킴.
-				validPosition = true;
+//				validPosition = true;
 				if(myGD->getJackState() != jackStateNormal && !myGD->getCommunicationBool("PM_isShortLine"))
 					myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
 			}
@@ -1035,7 +1037,7 @@ void KSCumberBase::snakeMoving(float dt)
 			{
 				//			CCLOG("collision!!");
 				//			myGD->communication("Jack_startDieEffect", DieType::kDieType_other);
-				if(!myGD->getCommunicationBool("PM_isShortLine"))
+				if(!myGD->getCommunicationBool("PM_isShortLine") && !getNoShockWave())
 				{
 					myGD->communication("SW_createSW", checkPosition, getAgility());
 					if(m_emotion)
@@ -1329,7 +1331,7 @@ void KSCumberBase::cumberAttack(float dt)
 		{
 			bool attackCondition = (m_cumberTimer > 10.f || myGD->Fcommunication("UI_getMapPercentage")*100.f > 7.f) &&
   			m_crashAttackTime + crashReattackTerm < m_cumberTimer; // 공격할 조건.
-			TRACE();
+//			TRACE();
 			float w = ProbSelector::sel(m_furyRule.percent, 1.0f - m_furyRule.percent, 0.0);
 			if(w == 0 && attackCondition)
 			{
@@ -2347,7 +2349,7 @@ COLLISION_CODE KSCumberBase::crashWithX( IntPoint check_position )
 		return COLLISION_CODE::kCOLLISION_NEWLINE;
 	}
 	IntPoint jackPoint = myGD->getJackPoint();
-	if((jackPoint - check_position).length() < 2)
+	if((jackPoint - check_position).length() < 2 && myGD->getJackState() != jackStateNormal)
 	{
 		return COLLISION_CODE::kCOLLISION_JACK;
 	}
@@ -2370,7 +2372,7 @@ void KSCumberBase::onCanceledCasting()
 //	myGD->communication("Main_showDetailMessage", std::string());
 	TRACE();
 	m_lastCastTime = m_cumberTimer;
-	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
+//	myGD->showDetailMessage("warning_boss_success.ccbi", "i"); // 말은 캐스팅 캔슬 됐다고 알려줌.
 }
 
 void KSCumberBase::settingScale( float startScale, float minScale, float maxScale )
@@ -2967,11 +2969,13 @@ void KSCumberBase::setSlience( bool s )
 	
 	if(s)
 	{
-		getEmotion()->goSlience();
+		if(getEmotion())
+			getEmotion()->goSlience();
 	}
 	else
 	{
-		getEmotion()->releaseSlience();
+		if(getEmotion())
+			getEmotion()->releaseSlience();
 	}
 }
 
@@ -3108,6 +3112,10 @@ void KSCumberBase::setSpeedRatioForStone(CCNode* stonePointer, float speedRatio)
 	m_slowStonePointer = stonePointer;
 	m_speedRatioForStone = speedRatio;
 }
+float KSCumberBase::getSpeedRatioForStone()
+{
+	return m_speedRatioForStone;
+}
 CCNode* KSCumberBase::getSlowStonePointer()
 {
 	return m_slowStonePointer;
@@ -3186,3 +3194,48 @@ void KSCumberBase::SnakeMoving::setRelocation(const CCPoint& cumberP, Well512& m
 		valid = true;
 	}
 }
+
+
+PoisonedNiddle* KSCumberBase::getPoisonedNiddle()
+{
+	return m_poisonedNiddle;
+}
+
+void KSCumberBase::setPoisonedNiddle(PoisonedNiddle* pn)
+{
+	m_poisonedNiddle = pn;
+}
+
+
+NoShockWave* KSCumberBase::getNoShockWave()
+{
+	return m_noShockWave;
+}
+
+void KSCumberBase::setNoShockWave(NoShockWave* pn)
+{
+	m_noShockWave = pn;
+}
+
+StopTime* KSCumberBase::getStopTime()
+{
+	return m_stopTime;
+}
+
+void KSCumberBase::setStopTime(StopTime* pn)
+{
+	m_stopTime = pn;
+}
+
+Silent* KSCumberBase::getSilent()
+{
+	return m_silent;
+}
+
+void KSCumberBase::setSilent(Silent* pn)
+{
+	m_silent = pn;
+}
+
+
+

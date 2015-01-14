@@ -12,6 +12,195 @@
 using namespace cocos2d;
 using namespace std;
 
+
+void PoisonedNiddle::update(float dt)
+{
+	m_jiggleInterval = MAX(0, m_jiggleInterval - 1);
+	m_durationFrame--;
+	if(m_durationFrame <= 0)
+	{
+		m_target->setPoisonedNiddle(nullptr);
+		removeFromParent();
+		return;
+	}
+	
+	
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster)
+	{
+		removeFromParent();
+		return;
+	}
+	if(m_jiggleInterval == 0)
+	{
+		m_jiggleInterval = m_initJiggleInterval;
+		CCPoint effectPosition = m_target->getPosition();
+		effectPosition.x += rand()%21 - 10;
+		effectPosition.y += rand()%21 - 10;
+		CCPoint damagePosition = effectPosition;
+		float damage = m_power;
+		
+		{
+			KSCumberBase* cumber = m_target;
+			// 캐스팅 캔슬.
+			
+			// directionAngle : Degree 단위.
+			// 피격에니메이션.
+			myGD->communication("MP_explosion", damagePosition, ccc4f(0, 0, 0, 0), 0.f);
+			// 화면 번쩍 번쩍
+			myGD->communication("VS_setLight");
+			
+			cumber->setDamageMeasure(cumber->getDamageMeasure() + damage );
+			
+			// 전체 피통의 10% 가 깎이면 캐스팅 취소함.
+			bool castingCancelSign = false;
+			if(cumber->getDamageMeasure() > cumber->getTotalHp() * 0.1f && (cumber->getAttackPattern() || cumber->getCharges().empty() == false))
+			{
+				castingCancelSign = true;
+			}
+			
+			if(castingCancelSign)
+			{
+				myGD->communication("MP_bombCumber", (CCObject*)cumber); // with startMoving
+				CCLog("cast cancel");
+				
+				cumber->setDamageMeasure(0.f);
+				myGD->showDetailMessage("warning_boss_success.ccbi", "i"); 
+				myGD->communication("UI_setIsCasting", false);
+				myGD->communication("UI_castingCancel");
+			}
+			
+			// 몬스터 리액션하라고.
+			
+			myGD->communication("CP_startDamageReaction", (CCNode*)cumber, damage, (float)(rand()%360-180.f), castingCancelSign,
+													false); // damage : 555
+			// 데미지 표시해주는 것. 데미지 숫자 뜸.
+			myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, (int)0);
+			
+			int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+			combo_cnt++;
+			
+			int damage_score = ((damage)/10*5+100)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);//(100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d);
+			int combo_score = (combo_cnt*10)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d); //damage_score*(combo_cnt-1);
+			
+			CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+			double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+			if(score_rate < 1.0)
+				score_rate = 1.0;
+			score_rate -= 1.0;
+			int sub_damage_score = damage_score*score_rate;
+			int sub_combo_score = combo_score*score_rate;
+			
+			mySGD->damage_score = mySGD->damage_score.getV() + damage_score + sub_damage_score;
+			mySGD->combo_score = mySGD->combo_score.getV() + combo_score + sub_combo_score;
+			
+			int addScore = damage_score + combo_score;
+			
+			myGD->communication("UI_addScore", addScore, sub_damage_score + sub_combo_score);
+			myGD->communication("UI_setComboCnt", combo_cnt);
+			myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
+			//				myGD->communication("Main_startShake", ks19937::getFloatValue(0, 360)); // 일단은 완전 랜덤으로.
+		}
+		
+		// directionAngle : Degree 단위.
+		// 피격에니메이션.
+		myGD->communication("MP_explosion", damagePosition, ccc4f(0, 0, 0, 0), 0.f);
+		// 화면 번쩍 번쩍
+		myGD->communication("VS_setLight");
+		// 데미지 표시해주는 것. 데미지 숫자 뜸.
+		myGD->communication("Main_showDamageMissile", damagePosition, (int)damage, m_subPower);
+		
+		int combo_cnt = myGD->getCommunication("UI_getComboCnt");
+		//combo_cnt++;
+		
+		int addScore = (100.f+damage)*NSDS_GD(mySD->getSilType(), kSDS_SI_scoreRate_d)*combo_cnt;
+		CharacterHistory t_history = mySGD->getSelectedCharacterHistory();
+		double score_rate = NSDS_GD(kSDS_GI_characterInfo_int1_statInfo_int2_score_d, t_history.characterIndex.getV(), t_history.characterLevel.getV());
+		if(score_rate < 1.0)
+			score_rate = 1.0;
+		score_rate -= 1.0;
+		int sub_score = addScore*score_rate;
+		
+		myGD->communication("UI_addScore", addScore, sub_score);
+		//myGD->communication("UI_setComboCnt", combo_cnt);
+		//myGD->communication("Main_showComboImage", damagePosition, combo_cnt);
+		
+		//			myGD->communication("Main_startShake", 0.f);
+	}
+}
+
+void NoShockWave::update(float dt)
+{
+	m_durationFrame--;
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
+	{
+		if(emptyMonster == false)
+			m_target->setNoShockWave(nullptr);
+		removeFromParent();
+		return;
+	}
+}
+
+
+
+void Silent::update(float dt)
+{
+	m_durationFrame--;
+	
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
+	{
+		if(emptyMonster == false)
+		{
+			m_target->setSilent(nullptr);
+			m_target->setSlience(false);
+		}
+		
+		removeFromParent();
+		return;
+	}
+}
+
+void StopTime::update(float dt)
+{
+	m_durationFrame--;
+	bool emptyMonster = !myGD->isValidMainCumber((CCNode*)m_target) && !myGD->isValidSubCumber((CCNode*)m_target);
+	if(emptyMonster || m_durationFrame <= 0)
+	{
+		if(emptyMonster == false)
+			m_target->setStopTime(nullptr);
+		bool haveStopTime = false;
+		
+		for(auto cumber : myGD->getMainCumberVector())
+		{
+			if(cumber->getStopTime())
+			{
+				haveStopTime = true;
+				break;
+			}
+		}
+		if(haveStopTime == false)
+		{
+			for(auto cumber : myGD->getSubCumberVector())
+			{
+				if(cumber->getStopTime())
+				{
+					haveStopTime = true;
+					break;
+				}
+				
+			}
+		}
+		if(haveStopTime == false)
+		{
+			myGD->communication("UI_resumeCounting");
+		}
+
+		removeFromParent();
+		return;
+	}
+}
 SpiritAttack* SpiritAttack::create(CCPoint initPosition, CCPoint goalPosition, const string& fileName, float tickCount, int power, int subPower,
 														float speed, int coolFrame, AttackOption ao)
 {
@@ -489,28 +678,29 @@ void CircleDance::update(float dt)
 		
 		// 유도하귀
 		{
+			
+			
 			float tt;
 			if(isNearMonster)
 			{
-				// 미사일에서 몬스터까지의 각도
-				tt = atan2f(nearCumber->getPosition().y - m_missileSprite->getPosition().y,
-										nearCumber->getPosition().x - m_missileSprite->getPosition().x);
+				
+				float missile2MonsterRad = ccpToAngle((nearCumber->getPosition() - m_missileSprite->getPosition()));
+				float Cangle = toPositiveAngle(toPositiveAngle(missile2MonsterRad) - toPositiveAngle(m_currentRad) );
+				float deltaRad = Cangle;
+				if(Cangle >= M_PI)
+				{
+					deltaRad = Cangle - 2 * M_PI;
+				}
+				//		float signRad = toPositiveAngle(diffRad) - toPositiveAngle(m_centerRad);
+				m_currentRad += clampf(deltaRad, deg2Rad(-0.7f), deg2Rad(0.7f));
+				
+				
 			}
 			else
 			{
-				tt = m_currentRad;
+				
 			}
-			//KS::KSLog("% ~ % : %", deg2Rad(-90), deg2Rad(90), tt);
-			//				tt = clampf(tt, deg2Rad(-90), deg2Rad(90));
 			
-			//m_currentRad += clampf(tt - m_currentRad, deg2Rad(-15), deg2Rad(15));
-			float tempTt = tt - m_currentRad;
-			bool sign = tt - m_currentRad > 0  ? 1 : -1;
-			float missileSpeed = m_initSpeed * 1.3f;
-			if(isNearMonster)
-			{
-				m_currentRad += clampf((tt - m_currentRad), deg2Rad(-2.5f), deg2Rad(2.5f));
-			}
 		}
 		
 		m_missileSprite->setPosition(m_missileSprite->getPosition() + ccp(cosf(m_currentRad) * m_initSpeed, sin(m_currentRad) * m_initSpeed));

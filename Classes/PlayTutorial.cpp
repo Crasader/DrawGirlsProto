@@ -1932,7 +1932,8 @@ bool PlayTutorial::init()
 //										 }));
 //									 }));
 									 
-									 
+									 if(!mySGD->is_option_tutorial)
+										 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_Ment4", myHSP->getStoreID().c_str());
 									 
 									 t_sm->addMent(true, "", "", myLoc->getLocalForKey(LK::kMyLocalKey_tutorial1), [=]()
 												   //"가운데 빨간 보석이 캐릭터 입니다.\n캐릭터를 이동시켜서 영역 가장자리를 이동할 수도 있고\n영역을 획득할 수도 있습니다.", [=]()
@@ -1940,6 +1941,9 @@ bool PlayTutorial::init()
 													   gray->runAction(CCFadeTo::create(0.3f, 0));
 													   controler->joystickSetVisible(true);
 													   mark_img->setVisible(true);
+													   
+													   if(!mySGD->is_option_tutorial)
+														   fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_Ment5", myHSP->getStoreID().c_str());
 													   
 //													   AudioEngine::sharedInstance()->playEffect("ment_tutorial3.mp3", false, true);
 //													   
@@ -1968,14 +1972,23 @@ bool PlayTutorial::init()
 	
 	function<void()> end_func2 = [=]()
 	{
+		if(!mySGD->is_option_tutorial)
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_Ment3", myHSP->getStoreID().c_str());
+		
 		typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent20), end_func3);
 	};
 	
 	function<void()> end_func1 = [=]()
 	{
+		if(!mySGD->is_option_tutorial)
+			fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_Ment2", myHSP->getStoreID().c_str());
+		
 		TypingBox::changeTypingBox(typing_box2, typing_box, asuka, ikaruga);
 		typing_box->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent19), end_func2);
 	};
+	
+	if(!mySGD->is_option_tutorial)
+		fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_JoystickSelect", myHSP->getStoreID().c_str());
 	
     JoystickPositionSelectPopup* t_popup = JoystickPositionSelectPopup::create(-99999, [=]()
                                                                                {
@@ -2006,7 +2019,10 @@ bool PlayTutorial::init()
                                                                                                                                          {
                                                                                                                                              t_gray->setOpacity(255);
                                                                                                                                              asuka->setPositionX(480+asuka->getContentSize().width - asuka->getContentSize().width*2.f/3.f*t);
-                                                                                                                                             
+																																			 
+																																			 if(!mySGD->is_option_tutorial)
+																																				 fiverocks::FiveRocksBridge::trackEvent("Game", "FirstUserTrace", "T05_Tutorial0_Ment1", myHSP->getStoreID().c_str());
+																																			 
                                                                                                                                              typing_box2->startTyping(myLoc->getLocalForKey(LK::kMyLocalKey_scenarioMent18), end_func1);
                                                                                                                                          }));
                                                                                });

@@ -24,12 +24,24 @@ THE SOFTWARE.
 package com.nhnent.SKSUMRAN;
 import io.fiverocks.android.FiveRocks;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.cocos2dx.lib.Cocos2dxGLSurfaceView;
 import org.json.JSONObject;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -73,7 +85,73 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 	private static native int getUserState();
 	private static LuaGLSurfaceView glSurfaceView;
 	
-	
+	protected String getHSPConfProp(String prop)
+	{
+		//***XML문서를 Document라는 객체로 인식.***
+        //1.문서를 읽기위한 공장을 만들어야 한다.
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        //2.빌더를 생성
+        DocumentBuilder builder = null;
+		try {
+			builder = factory.newDocumentBuilder();
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        //3.생성된 빌더를 통해서 xml문서를 Document객체로 파싱해서 가져온다.
+        //Document org에서 가져온다!!!
+
+        Document doc = null;
+		try {
+			InputStream in = getAssets().open("HSPConfiguration.xml");
+//			in.
+			doc = builder.parse(in);
+		} catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        Element root = doc.getDocumentElement();
+        //configuration 이라는 이름을 가진 요소들을 모두 가려내는 작업.
+        NodeList n_list = root.getElementsByTagName("configuration");
+        for(int i=0; i<n_list.getLength(); i++)
+        {
+        	Node s_node = n_list.item(i);
+        	NamedNodeMap Attrs = s_node.getAttributes();
+        	String key = null, value = null;
+            for (int j = 0; j < Attrs.getLength(); j++){
+               Node attr = Attrs.item(j);
+               if(attr.getNodeName().equals("key"))
+               {
+            	   key = attr.getNodeValue();
+               }
+               if(attr.getNodeName().equals("value"))
+               {
+            	   value = attr.getNodeValue();
+               } 
+            } 
+            
+            if(key.equals(prop))
+            {
+            	return value;
+            }
+        } 
+		return "";
+	}
+	protected String getBuildType()
+	{
+		String isDevelop = getHSPConfProp("LIT_DEVELOP_SERVER");
+		if(isDevelop.equals("true"))
+			return "dev";
+		
+		String launching_zone = getHSPConfProp("HSP_LAUNCHING_ZONE");
+		if(launching_zone.equals("ALPHA-KR"))
+			return "alpha";
+		else
+			return "real";
+	}		
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		String versionName = null;
@@ -135,8 +213,12 @@ public class DGproto extends KSActivityBase{//Cocos2dxActivity{
 			setRequestedOrientation(SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 		}
 
-		FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
-		FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());
+		if(getBuildType().equals("real"))
+		{
+			FiveRocks.init(this, FiveRocks_AppId, FiveRocks_AppKey);
+			FiveRocks.setGLSurfaceView(Cocos2dxGLSurfaceView.getInstance());			
+		}
+
 		//FiveRocks.setDebugEnabled(true);
 
 		if(com.litqoo.lib.hspConnector.setup(10331, "SKSUMRAN", versionName)){

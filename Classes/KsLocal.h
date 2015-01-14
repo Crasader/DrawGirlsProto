@@ -18,6 +18,7 @@ using namespace std;
 #define getLocal(X) (KsLocal::sharedInstance()->getLocalForKey(X))
 enum class LK
 {
+	kNothingMessage,
 	kItem1,
 	kReGacha,
 	kRewardConfirm,
@@ -104,6 +105,13 @@ enum class LK
 	kFriendNothingExist,
 	kFriendCardGiftErrorMessage,
 	kFriendNickInputPlz,
+	kFriendSuccess,
+	kFriendFriendRequested,
+	kFriendHeartSended,
+	kFriendMax,
+	kFriendMyFriends,
+	
+	
 
 	kMyLocalKey_tutorial1,
 	kMyLocalKey_tutorial2,
@@ -292,7 +300,7 @@ enum class LK
 	kMyLocalKey_titleLoading47,
 	kMyLocalKey_titleLoading48,
 	kMyLocalKey_titleLoading49,
-	kMyLocalKey_titleLoading50,
+//	kMyLocalKey_titleLoading50,
 //	kMyLocalKey_titleLoading51,
 	kMyLocalKey_titleLoadingEnd,
 	kMyLocalKey_gamestart,
@@ -916,6 +924,10 @@ enum class LK
 	kMyLocalKey_kindTutorial44,
 	kMyLocalKey_kindTutorial45,
 	kMyLocalKey_kindTutorial46,
+	kMyLocalKey_kindTutorial47,
+	kMyLocalKey_kindTutorial48,
+	kMyLocalKey_kindTutorial49,
+	kMyLocalKey_kindTutorial50,
 	kMyLocalKey_maxSpeed,
 	kMyLocalKey_showtime,
 	kMyLocalKey_miss,
@@ -1297,7 +1309,8 @@ enum class LK
 	kMyLocalKey_pleaseSelectMaterialCard,
 	kMyLocalKey_needCardCount2,
 	kMyLocalKey_strengthComplete,
-	kMyLocalKey_nCountRest
+	kMyLocalKey_nCountRest,
+	kMyLocalKey_nextLevelHiddenAchievementFindPlease
 };
 class KsLocal
 {

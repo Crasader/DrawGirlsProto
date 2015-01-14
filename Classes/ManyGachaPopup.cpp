@@ -3011,9 +3011,9 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 		else
 		{
 			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
 		}
 	}
 	else if(t_tag == ManyGachaPopupMenu::kCardGacha)

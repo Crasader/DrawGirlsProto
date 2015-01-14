@@ -67,13 +67,24 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 	m_container->addChild(back_case);
 	
 	back_in = CCScale9Sprite::create("common_grayblue.png", CCRectMake(0, 0, 26, 26), CCRectMake(12, 12, 2, 2));
-	back_in->setContentSize(CCSizeMake(251,64));
-	back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,10));
+	if(!is_ingame)
+	{
+		back_in->setContentSize(CCSizeMake(251,104));
+		back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,-10));
+	}
+	else
+	{
+		back_in->setContentSize(CCSizeMake(251,64));
+		back_in->setPosition(ccpFromSize(back_case->getContentSize()/2.f) + ccp(0,10));
+	}
 	back_case->addChild(back_in);
 	
 	string title_str, content_str;
 	title_str = myLoc->getLocalForKey(LK::kMyLocalKey_sDiary);
-	content_str = myLoc->getLocalForKey(LK::kMyLocalKey_toShowAdultImgForSdiaryNeed);
+	if(!is_ingame)
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_toDiary19Content);
+	else
+		content_str = myLoc->getLocalForKey(LK::kMyLocalKey_toShowAdultImgForSdiaryNeed);
 	
 	KSLabelTTF* title_label = KSLabelTTF::create(title_str.c_str(), mySGD->getFont().c_str(), 12);
 	title_label->disableOuterStroke();
@@ -101,35 +112,44 @@ void Diary19Popup::myInit(int t_touch_priority, function<void()> t_end_func, boo
 							  });
 	back_case->addChild(close_button);
 	
-	KSLabelTTF* content_label = KSLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12);
-	content_label->setAnchorPoint(ccp(0.5f,0.5f));
-	content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f));
-	back_in->addChild(content_label);
-	
-	
-//	t_loading = LoadingLayer::create(touch_priority-100);
-//	addChild(t_loading, 999);
-//	t_loading->startLoading();
-//	
-//	Json::Value mdc_param;
-//	mdc_param["memberID"] = myHSP->getSocialID();
-//	
-//	myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
-	
-	CCLabelTTF* r_label = CCLabelTTF::create();
-	KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_download), mySGD->getFont().c_str(), 13);
-	rightnow_label->disableOuterStroke();
-	r_label->addChild(rightnow_label);
-	
-	CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
-	
-	CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
-	rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
-	rightnow_button->setPreferredSize(CCSizeMake(100,44));
-	rightnow_button->setPosition(ccp(0,-50));
-	m_container->addChild(rightnow_button);
-	
-	rightnow_button->setTouchPriority(touch_priority);
+	if(!is_ingame)
+	{
+		StyledLabelTTF* content_label = StyledLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12, 999, StyledAlignment::kCenterAlignment);
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
+		content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f) + ccp(0,10));
+		back_in->addChild(content_label);
+		
+		t_loading = LoadingLayer::create(touch_priority-100);
+		addChild(t_loading, 999);
+		t_loading->startLoading();
+		
+		Json::Value mdc_param;
+		mdc_param["memberID"] = myHSP->getSocialID();
+		
+		myHSP->command("makediarycode", mdc_param, json_selector(this, Diary19Popup::resultMakeDiaryCode));
+	}
+	else
+	{
+		KSLabelTTF* content_label = KSLabelTTF::create(content_str.c_str(), mySGD->getFont().c_str(), 12);
+		content_label->setAnchorPoint(ccp(0.5f,0.5f));
+		content_label->setPosition(ccpFromSize(back_in->getContentSize() / 2.f));
+		back_in->addChild(content_label);
+		
+		CCLabelTTF* r_label = CCLabelTTF::create();
+		KSLabelTTF* rightnow_label = KSLabelTTF::create(myLoc->getLocalForKey(LK::kMyLocalKey_download), mySGD->getFont().c_str(), 13);
+		rightnow_label->disableOuterStroke();
+		r_label->addChild(rightnow_label);
+		
+		CCScale9Sprite* rightnow_back = CCScale9Sprite::create("achievement_button_success.png");
+		
+		CCControlButton* rightnow_button = CCControlButton::create(r_label, rightnow_back);
+		rightnow_button->addTargetWithActionForControlEvents(this, cccontrol_selector(Diary19Popup::buttonAction), CCControlEventTouchUpInside);
+		rightnow_button->setPreferredSize(CCSizeMake(100,44));
+		rightnow_button->setPosition(ccp(0,-50));
+		m_container->addChild(rightnow_button);
+		
+		rightnow_button->setTouchPriority(touch_priority);
+	}
 	
 	
 	CommonAnimation::openPopup(this, m_container, gray, [=](){
