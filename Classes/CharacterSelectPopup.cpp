@@ -147,8 +147,13 @@ bool CharacterSelectPopup::init()
 	character_table->setVerticalFillOrder(kCCTableViewFillTopDown);
 	character_table->setPosition(ccp(main_case->getContentSize().width/2.f, main_case->getContentSize().height*0.45f+2) - ccpFromSize(table_rect.size/2.f));
 	main_case->addChild(character_table);
-	character_table->setTouchPriority(touch_priority);
+	character_table->setTouchPriority(touch_priority-2);
 	character_table->setDelegate(this);
+	
+	TouchSuctionLayer* t_suction = TouchSuctionLayer::create(touch_priority-2);
+	t_suction->setNotSwallowRect(CCRectMake(character_table->getPositionX(), character_table->getPositionY(), table_rect.size.width, table_rect.size.height));
+	t_suction->setTouchEnabled(true);
+	main_case->addChild(t_suction);
 	
 	
 	CCSprite* n_gacha_img = CCSprite::create("subbutton_violet.png");
