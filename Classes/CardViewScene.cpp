@@ -455,6 +455,7 @@ bool CardViewScene::init()
 //																										   t_loading->removeFromParent();
 //																										   is_actioned = false;
 //																									   });
+																						is_actioned = false;
 																					}
 																					else
 																					{

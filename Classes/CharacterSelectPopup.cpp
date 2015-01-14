@@ -212,7 +212,7 @@ bool CharacterSelectPopup::init()
 	tab_menu->setPosition(ccp(0,0));
 	main_case->addChild(tab_menu);
 	tab_menu->addChild(gacha_menu);
-	tab_menu->setTouchPriority(touch_priority-1);
+	tab_menu->setTouchPriority(touch_priority-4);
 	
 	if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
 	{
