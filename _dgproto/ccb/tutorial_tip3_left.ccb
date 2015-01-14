@@ -683,7 +683,7 @@
 							</dict>
 							<dict>
 								<key>baseValue</key>
-								<integer>255</integer>
+								<integer>0</integer>
 								<key>name</key>
 								<string>opacity</string>
 								<key>type</key>
@@ -841,7 +841,7 @@
 							</dict>
 							<dict>
 								<key>baseValue</key>
-								<integer>255</integer>
+								<integer>0</integer>
 								<key>name</key>
 								<string>opacity</string>
 								<key>type</key>
@@ -2046,8 +2046,8 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>150</real>
-									<real>-80</real>
+									<real>-123.91974639892578</real>
+									<real>-59.745372772216797</real>
 								</array>
 								<key>name</key>
 								<string>position</string>
@@ -2425,7 +2425,7 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>156</real>
+									<real>-178.89999389648438</real>
 									<real>-45</real>
 								</array>
 								<key>name</key>
@@ -2494,6 +2494,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -3982,8 +3984,8 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>-303.64584350585938</real>
-									<real>-168.32560729980469</real>
+									<real>187.5</real>
+									<real>-45</real>
 								</array>
 								<key>name</key>
 								<string>position</string>
@@ -4040,6 +4042,8 @@
 								</array>
 							</dict>
 						</array>
+						<key>seqExpanded</key>
+						<true/>
 					</dict>
 					<dict>
 						<key>animatedProperties</key>
@@ -4687,8 +4691,8 @@
 							<dict>
 								<key>baseValue</key>
 								<array>
-									<real>52.430789947509766</real>
-									<real>4.9893689155578613</real>
+									<real>71.800003051757812</real>
+									<real>-19.5</real>
 								</array>
 								<key>name</key>
 								<string>position</string>
