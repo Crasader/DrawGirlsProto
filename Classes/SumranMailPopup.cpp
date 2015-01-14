@@ -702,7 +702,7 @@ CCTableViewCell * SumranMailPopup::tableCellAtIndex (CCTableView * table, unsign
 																				else if(rewardType=="h")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_heart));
 																				else if(rewardType=="i6")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_doubleItem));
 																				else if(rewardType=="i9")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpItem));
-																				else if(rewardType=="i11")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_baseSpeedUpItem));
+																				else if(rewardType=="i11")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_magneticItem));
 																				else if(rewardType=="p1")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p1));
 																				else if(rewardType=="p2")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p2));
 																				else if(rewardType=="p3")rewardName->setString(myLoc->getLocalForKey(LK::kMyLocalKey_p3));
