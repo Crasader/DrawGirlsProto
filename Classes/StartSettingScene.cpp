@@ -1630,12 +1630,12 @@ void StartSettingScene::menuAction(CCObject* sender)
 		}
 		else if(tag == kStartSettingMenuTag_rubyShop)
 		{
-			ShopPopup* t_shop = ShopPopup::create();
-			t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
-			t_shop->targetHeartTime(heart_time);
-			t_shop->setShopCode(kSC_ruby);
-			t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
-			addChild(t_shop, kStartSettingZorder_popup);
+//			ShopPopup* t_shop = ShopPopup::create();
+//			t_shop->setHideFinalAction(this, callfunc_selector(StartSettingScene::popupClose));
+//			t_shop->targetHeartTime(heart_time);
+//			t_shop->setShopCode(kSC_ruby);
+//			t_shop->setShopBeforeCode(kShopBeforeCode_startsetting);
+//			addChild(t_shop, kStartSettingZorder_popup);
 		}
 		else if(tag == kStartSettingMenuTag_goldShop)
 		{

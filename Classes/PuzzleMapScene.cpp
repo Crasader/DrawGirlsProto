@@ -2129,11 +2129,11 @@ void PuzzleMapScene::menuAction(CCObject* pSender)
 	}
 	else if(tag == kPMS_MT_rubyShop)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::popupClose));
-		t_shop->targetHeartTime((HeartTime*)(getChildByTag(kPMS_MT_top)->getChildByTag(kPMS_MT_heartTime)));
-		t_shop->setShopCode(kSC_ruby);
-		addChild(t_shop, kPMS_Z_popup);
+//		ShopPopup* t_shop = ShopPopup::create();
+//		t_shop->setHideFinalAction(this, callfunc_selector(PuzzleMapScene::popupClose));
+//		t_shop->targetHeartTime((HeartTime*)(getChildByTag(kPMS_MT_top)->getChildByTag(kPMS_MT_heartTime)));
+//		t_shop->setShopCode(kSC_ruby);
+//		addChild(t_shop, kPMS_Z_popup);
 	}
 	else if(tag == kPMS_MT_goldShop)
 	{

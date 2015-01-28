@@ -588,12 +588,12 @@ void StageSettingPopup::menuAction(CCObject* pSender)
 	}
 	else if(tag == kSSP_MT_rubyShop)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(NULL, NULL);
-		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kSSP_MT_heartTime)));
-		t_shop->setShopCode(kSC_ruby);
-		addChild(t_shop, kSSP_Z_popup);
-		is_menu_enable = true;
+//		ShopPopup* t_shop = ShopPopup::create();
+//		t_shop->setHideFinalAction(NULL, NULL);
+//		t_shop->targetHeartTime((HeartTime*)(top_case->getChildByTag(kSSP_MT_heartTime)));
+//		t_shop->setShopCode(kSC_ruby);
+//		addChild(t_shop, kSSP_Z_popup);
+//		is_menu_enable = true;
 	}
 	else if(tag == kSSP_MT_goldShop)
 	{

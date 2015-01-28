@@ -2231,7 +2231,7 @@ void PuzzleScene::menuAction(CCObject* sender)
 		else if(tag == kPuzzleMenuTag_rubyShop)
 		{
 //			addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_afterOpenCBT), [=](){is_menu_enable = true;}), 9999);
-			showShopPopup(kSC_ruby);
+//			showShopPopup(kSC_ruby);
 		}
 		else if(tag == kPuzzleMenuTag_goldShop)
 		{
@@ -3390,16 +3390,16 @@ void PuzzleScene::setTop()
 	
 	mySGD->setStarLabel(ruby_label);
 	
-	CCSprite* n_ruby = CCSprite::create("mainflow_top_shop.png");
-	CCSprite* s_ruby = CCSprite::create("mainflow_top_shop.png");
-	s_ruby->setColor(ccGRAY);
-	
-	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(PuzzleScene::menuAction));
-	ruby_item->setTag(kPuzzleMenuTag_rubyShop);
-	
-	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
-	ruby_menu->setPosition(ccp(top_ruby->getContentSize().width/2.f+28,top_ruby->getContentSize().height/2.f));
-	top_ruby->addChild(ruby_menu);
+//	CCSprite* n_ruby = CCSprite::create("mainflow_top_shop.png");
+//	CCSprite* s_ruby = CCSprite::create("mainflow_top_shop.png");
+//	s_ruby->setColor(ccGRAY);
+//	
+//	CCMenuItem* ruby_item = CCMenuItemSprite::create(n_ruby, s_ruby, this, menu_selector(PuzzleScene::menuAction));
+//	ruby_item->setTag(kPuzzleMenuTag_rubyShop);
+//	
+//	CCMenu* ruby_menu = CCMenu::createWithItem(ruby_item);
+//	ruby_menu->setPosition(ccp(top_ruby->getContentSize().width/2.f+28,top_ruby->getContentSize().height/2.f));
+//	top_ruby->addChild(ruby_menu);
 	
 	
 	CCSprite* n_option = CCSprite::create("mainflow_new_option.png");

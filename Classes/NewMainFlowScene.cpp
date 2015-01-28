@@ -2325,12 +2325,12 @@ void NewMainFlowScene::menuAction(CCObject* sender)
 	
 	if(tag == kNewMainFlowMenuTag_rubyShop)
 	{
-		ShopPopup* t_shop = ShopPopup::create();
-		t_shop->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::popupClose));
-		t_shop->targetHeartTime(heart_time);
-		t_shop->setShopCode(kSC_ruby);
-		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
-		addChild(t_shop, kNewMainFlowZorder_popup);
+//		ShopPopup* t_shop = ShopPopup::create();
+//		t_shop->setHideFinalAction(this, callfunc_selector(NewMainFlowScene::popupClose));
+//		t_shop->targetHeartTime(heart_time);
+//		t_shop->setShopCode(kSC_ruby);
+//		t_shop->setShopBeforeCode(kShopBeforeCode_mainflow);
+//		addChild(t_shop, kNewMainFlowZorder_popup);
 	}
 	else if(tag == kNewMainFlowMenuTag_goldShop)
 	{

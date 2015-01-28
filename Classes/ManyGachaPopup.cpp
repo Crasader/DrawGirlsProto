@@ -1366,12 +1366,12 @@ void ManyGachaPopup::resultNormalRefreshExchange(Json::Value result_data)
 																							 {
 																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
 																								 {
-																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																									 t_shop->setHideFinalAction(target_final, delegate_final);
 																								 }
 																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
 																								 {
-																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																									 t_shop->setHideFinalAction(target_final, delegate_final);
 																								 }
 																								 target_final = NULL;
@@ -2226,12 +2226,12 @@ void ManyGachaPopup::premiumAction(CCObject* sender, CCControlEvent t_event)
 															{
 																if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
 																{
-																	ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																	ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																	t_shop->setHideFinalAction(target_final, delegate_final);
 																}
 																else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
 																{
-																	ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																	ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																	t_shop->setHideFinalAction(target_final, delegate_final);
 																}
 																target_final = NULL;
@@ -2354,12 +2354,12 @@ void ManyGachaPopup::resultPremiumProperties(Json::Value result_data)
 																							 {
 																								 if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
 																								 {
-																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 ShopPopup* t_shop = (ShopPopup*)(((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																									 t_shop->setHideFinalAction(target_final, delegate_final);
 																								 }
 																								 else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
 																								 {
-																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby));
+																									 ShopPopup* t_shop = (ShopPopup*)(((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold));
 																									 t_shop->setHideFinalAction(target_final, delegate_final);
 																								 }
 																								 target_final = NULL;
@@ -2953,68 +2953,68 @@ void ManyGachaPopup::menuAction(CCObject* sender)
 		delegate_final = NULL;
 		hidePopup();
 		
-		chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
-		std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
-		///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
-		time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
-		
-		int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
-		
-		bool is_on_time_startPack = sub_time <= expireSec;
-		bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-		///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
-		bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
-		bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
-		bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
-		bool is_on_time_eventPack = false;
-		
-		tm* now_tm = localtime(&now_time_t);
-		string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
-		string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
-		
-		int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
-		int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
-		
-		if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
-		   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
-		   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
-		   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
-		{
-			is_on_time_eventPack = true;
-		}
-		
-		bool is_useable_eventPack = true;
-		if(is_have_eventPack && is_on_time_eventPack)
-		{
-			if(is_just_one)
-			{
-				if(!is_buyed_eventPack)
-					is_useable_eventPack = true;
-				else
-					is_useable_eventPack = false;
-			}
-			else
-				is_useable_eventPack = true;
-		}
-		else
-		{
-			is_useable_eventPack = false;
-		}
-		
-		if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
-		{
+//		chrono::time_point<std::chrono::system_clock> now_time = chrono::system_clock::now();
+//		std::time_t now_time_t = chrono::system_clock::to_time_t(now_time);
+//		///////////////////////// 스타트팩 보여줄 수 있는지 판단 /////////////////////////////////////
+//		time_t sub_time = now_time_t - myDSH->getIntegerForKey(kDSH_Key_savedStartPackFirstTime);
+//		
+//		int expireSec = NSDS_GI(kSDS_GI_shopStartPack_expireSec_i);
+//		
+//		bool is_on_time_startPack = sub_time <= expireSec;
+//		bool is_buyed_startPack = NSDS_GI(kSDS_GI_shopStartPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+//		///////////////////////// 이벤트팩 보여줄 수 있는지 판단 ////////////////////////////////////
+//		bool is_have_eventPack = NSDS_GB(kSDS_GI_shopEventPack_isHave_b);
+//		bool is_just_one = NSDS_GB(kSDS_GI_shopEventPack_isJustOne_b);
+//		bool is_buyed_eventPack = NSDS_GI(kSDS_GI_shopEventPack_no_i) == mySGD->getUserdataOnlyOneBuyPack();
+//		bool is_on_time_eventPack = false;
+//		
+//		tm* now_tm = localtime(&now_time_t);
+//		string startDate = NSDS_GS(kSDS_GI_shopEventPack_startDate_s);
+//		string endDate = NSDS_GS(kSDS_GI_shopEventPack_endDate_s);
+//		
+//		int now_time_number = atoi((string("") + ccsf("%04d", now_tm->tm_year+1900) + ccsf("%02d", now_tm->tm_mon+1) + ccsf("%02d", now_tm->tm_mday)).c_str());
+//		int now_time_hms = atoi((string("") + ccsf("%02d", now_tm->tm_hour) + ccsf("%02d", now_tm->tm_min) + ccsf("%02d", now_tm->tm_sec)).c_str());
+//		
+//		if(atoi(startDate.substr(0,8).c_str()) <= now_time_number &&
+//		   atoi(endDate.substr(0,8).c_str()) >= now_time_number &&
+//		   NSDS_GI(kSDS_GI_shopEventPack_startTime_i) <= now_time_hms &&
+//		   NSDS_GI(kSDS_GI_shopEventPack_endTime_i) >= now_time_hms)
+//		{
+//			is_on_time_eventPack = true;
+//		}
+//		
+//		bool is_useable_eventPack = true;
+//		if(is_have_eventPack && is_on_time_eventPack)
+//		{
+//			if(is_just_one)
+//			{
+//				if(!is_buyed_eventPack)
+//					is_useable_eventPack = true;
+//				else
+//					is_useable_eventPack = false;
+//			}
+//			else
+//				is_useable_eventPack = true;
+//		}
+//		else
+//		{
+//			is_useable_eventPack = false;
+//		}
+//		
+//		if((!is_buyed_startPack && is_on_time_startPack) || is_useable_eventPack)
+//		{
+//			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
+//				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
+//			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
+//				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
+//		}
+//		else
+//		{
 			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
+				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
 			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_eventPack);
-		}
-		else
-		{
-			if(mySGD->ui_scene_code == kUISceneCode_mainFlow)
-				((MainFlowScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
-			else if(mySGD->ui_scene_code == kUISceneCode_puzzle)
-				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_ruby);
-		}
+				((PuzzleScene*)CCDirector::sharedDirector()->getRunningScene()->getChildByTag(1))->showShopPopup(kSC_gold);
+//		}
 	}
 	else if(t_tag == ManyGachaPopupMenu::kCardGacha)
 	{

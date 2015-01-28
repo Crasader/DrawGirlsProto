@@ -528,23 +528,23 @@ void RankUpPopup::rankupAction(CCObject* sender, CCControlEvent t_event)
 	}
 	else
 	{
-//		is_menu_enable = true;
-//		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
+		is_menu_enable = true;
+		addChild(ASPopupView::getCommonNoti(-9999, myLoc->getLocalForKey(LK::kMyLocalKey_noti), myLoc->getLocalForKey(LK::kMyLocalKey_rubyNotEnought)), 9999);
 		
-		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, GoodsType::kGoodsType_ruby, [=]()
-															{
-																ShopPopup* t_popup = ShopPopup::create();
-																t_popup->setScale(myDSH->screen_convert_rate);
-																t_popup->setShopCode(kSC_ruby);
-																t_popup->setCloseFunc([=]()
-																					  {
-																						  is_menu_enable = true;
-																					  });
-																addChild(t_popup);
-															}, [=]()
-															{
-																is_menu_enable = true;
-															}), 9999);
+//		addChild(ASPopupView::getNotEnoughtGoodsGoShopPopup(-9999, GoodsType::kGoodsType_ruby, [=]()
+//															{
+//																ShopPopup* t_popup = ShopPopup::create();
+//																t_popup->setScale(myDSH->screen_convert_rate);
+//																t_popup->setShopCode(kSC_ruby);
+//																t_popup->setCloseFunc([=]()
+//																					  {
+//																						  is_menu_enable = true;
+//																					  });
+//																addChild(t_popup);
+//															}, [=]()
+//															{
+//																is_menu_enable = true;
+//															}), 9999);
 	}
 	
 //	mySGD->addChangeGoods(kGoodsType_gold, -mySGD->getItemGachaReplayGoldFee(), "아이템뽑기");
